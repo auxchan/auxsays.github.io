@@ -3244,7 +3244,16 @@
     parser_profile: windows_release_health
     official_source_type: release_health
     source_capture_status: adapter_enabled
-    record_limit: 6
+    # The ingestion WINDOW. One record now means one cumulative update, and the official
+    # release-history tables reach back to 2021 -- but a 2021 cumulative update has no
+    # "should I install this?" left in it, and ~150 such pages would bury the ones that do.
+    # Measured: this window yields 71 records across the four live servicing trains.
+    history_since: '2025-12-01'
+    # Records WRITTEN per run (progressive backfill; the run still SCANS the wider
+    # BACKFILL_SCAN_LIMIT window). 6 was right when one record meant one servicing TRAIN and
+    # there were only four of them. Against 71 in-window updates a cap of 6 would take three
+    # months to reach the current patch. Still well below BACKFILL_SCAN_LIMIT.
+    record_limit: 70
     known_issues_capture: true
     status_url_template: https://learn.microsoft.com/en-us/windows/release-health/status-windows-11-{version_slug}
     include_prereleases: false
@@ -3259,8 +3268,8 @@
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: true, platform_specific_installers: false, archived_release_history: true}
     keywords: [release health, known issues, safeguard hold, rollout, cumulative update, security]
   generated_record:
-    canonical_url_pattern: /updates/microsoft/microsoft-windows-11/{version_slug}/
-    title_pattern: '{software} {version} official update breakdown'
+    canonical_url_pattern: /updates/microsoft/microsoft-windows-11/{version_slug}/{target_build}/
+    title_pattern: '{software} {version} (Build {target_build}) official update breakdown'
   community_future:
     possible_sources: [Microsoft Learn known issues, Windows forums, Reddit]
     difficulty: Medium-High

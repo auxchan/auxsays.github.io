@@ -145,8 +145,10 @@ jobs:
             --allow auxsays/_data/patch_ingest_state.json \
             --allow auxsays/updates/generated \
             --allow 'auxsays/updates/microsoft/microsoft-powerpoint/*/index.md' \
+            --allow 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \
             --site-path auxsays/updates/generated \
             --site-path 'auxsays/updates/microsoft/microsoft-powerpoint/*/index.md' \
+            --site-path 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \
             --validate 'python auxsays/scripts/validate_ingestion_sources.py' \
             --validate 'python auxsays/scripts/validate_logo_assets.py' \
             --validate 'python auxsays/scripts/qa_patch_records.py' \
@@ -156,6 +158,7 @@ jobs:
             --deploy-recovery \
             --recovery-site-path auxsays/updates/generated \
             --recovery-site-path 'auxsays/updates/microsoft/microsoft-powerpoint/*/index.md' \
+            --recovery-site-path 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \
             --recovery-commit-grep 'Ingest official patch records'
 
       - name: Mark dry run as unchanged

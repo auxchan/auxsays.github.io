@@ -12,6 +12,20 @@ on:
         required: false
         default: false
         type: boolean
+      update_version:
+        description: "Optional exact update_version(s), comma separated. Narrows the record walk to
+          those patches. The runner has always supported --update-version; this input forwards it,
+          so a specific record can be revisited without waiting for the time-bounded newest-first
+          traversal to come back round to it."
+        required: false
+        type: string
+      since:
+        description: "Optional YYYY-MM-DD lower bound for HISTORICAL REPLAY. Replaces the routine
+          --since-days 45 horizon for this run only. Dispatch-only by construction: the scheduled
+          path below passes no inputs, so routine monitoring stays recent and bounded. Refused
+          before 2025-01-01, which is older than any record AUXSAYS tracks."
+        required: false
+        type: string
   schedule:
     # Temporary bounded-recovery cadence: every 6 hours (was 4h). A run can take up to the 300-min
     # job timeout; a 6h (360-min) interval leaves 60 min after the job bound before the next slot is
@@ -88,6 +102,28 @@ jobs:
         run: |
           args=(--since-days 45 --max-pages 5)
 
+          # HISTORICAL REPLAY, bounded and dispatch-only. `--since` already existed in the runner
+          # and already reaches every collector through CollectorContext.since, so there is no new
+          # replay framework here -- only a way to reach the one that was already built. The
+          # scheduled path passes no inputs, so this branch is unreachable from cron and routine
+          # monitoring keeps the 45-day horizon. Validated as a real date and floored, because an
+          # unbounded or malformed lower bound would turn every scheduled-shape run into a full
+          # corpus walk.
+          raw_since="${{ github.event.inputs.since }}"
+          since="$(printf '%s' "$raw_since" | tr -d '\r' | xargs)"
+          if [ -n "$since" ]; then
+            if ! printf '%s' "$since" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then
+              echo "::error::Invalid since '$since'. Use YYYY-MM-DD."
+              exit 2
+            fi
+            if [ "$since" \< "2025-01-01" ]; then
+              echo "::error::since '$since' is before the 2025-01-01 floor."
+              exit 2
+            fi
+            args+=(--since "$since")
+            echo "Historical replay: lower bound $since (overrides the routine 45-day horizon)."
+          fi
+
           raw_product_id="${{ github.event.inputs.product_id }}"
           product_id="$(printf '%s' "$raw_product_id" | tr -d '\r' | sed -E 's/^[[:space:]]*product_id:[[:space:]]*//' | xargs)"
 
@@ -105,6 +141,20 @@ jobs:
 
           if [ "$product_id" != "" ]; then
             args+=(--product-id "$product_id")
+          fi
+
+          # Optional targeted mode. The collector already filters its record walk by
+          # target_versions; this only forwards the flag, so a targeted run takes exactly the same
+          # authority path as an ordinary one -- discovery, normalization, edition authority,
+          # concreteness, role, dedupe, evidence writeback, reconciliation.
+          raw_versions="${{ github.event.inputs.update_version }}"
+          versions="$(printf '%s' "$raw_versions" | tr -d '\r' | xargs)"
+          if [ -n "$versions" ]; then
+            IFS=',' read -ra wanted <<< "$versions"
+            for v in "${wanted[@]}"; do
+              trimmed="$(printf '%s' "$v" | xargs)"
+              if [ -n "$trimmed" ]; then args+=(--update-version "$trimmed"); fi
+            done
           fi
 
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -263,6 +313,8 @@ jobs:
             --allow auxsays/_data/evidence_method_health.yml \
             --allow auxsays/_data/update_linked_evidence.yml \
             --allow auxsays/_data/recent_powerpoint_reports.yml \
+            --allow auxsays/_data/acrobat_update_linked_evidence.yml \
+            --allow auxsays/_data/recent_acrobat_reports.yml \
             --allow 'auxsays/updates/generated/*obs-studio*.md' \
             --allow 'auxsays/updates/generated/*davinci*.md' \
             --allow 'auxsays/updates/generated/*premiere-pro*.md' \

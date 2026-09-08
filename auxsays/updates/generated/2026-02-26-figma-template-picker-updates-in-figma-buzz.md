@@ -17,8 +17,8 @@ update_version: Template picker updates in Figma Buzz
 update_logo_text: FIG
 update_published_at: '2026-02-26T00:00:00.000Z'
 update_last_checked: '2026-07-24T08:44:34Z'
-source_last_checked: '2026-07-24T08:44:34Z'
-official_body_last_checked: '2026-07-24T08:44:34Z'
+source_last_checked: '2026-09-03T07:00:03Z'
+official_body_last_checked: '2026-09-03T07:00:03Z'
 record_last_updated: '2026-07-24T08:44:34Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-24T08:44:34Z'
+  url: https://www.figma.com/release-notes/?title=template-picker-updates-in-figma-buzz
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-03T07:00:03Z'
   url: https://www.figma.com/release-notes/?title=template-picker-updates-in-figma-buzz
   status: captured-from-rss-feed
   body_captured: true

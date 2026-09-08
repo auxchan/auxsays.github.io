@@ -210,10 +210,24 @@ def run() -> int:  # noqa: PLR0915
         if isinstance(_d, dict):
             _fronts.append(_d)
     _canon = counted_evidence_counts(_rows, windows_targets=windows_targets_from_front_matter(_fronts))
-    _win = _canon.get(("microsoft-windows-11", "25H2", ""), 0)
+    # Compared against THAT record's own patch identity. `count_of` returns the first matching
+    # record's count, while the canonical side was read from ("microsoft-windows-11", "25H2", "") --
+    # a key `counted_evidence_counts` never emits for a build-aware product, so it was structurally
+    # 0 and the control only passed while the record side happened to be 0 as well. It failed the
+    # moment 25H2 legitimately gained reports: the same vacuous-pin defect the two controls above
+    # were already rewritten to avoid, one layer deeper.
+    _win_path = next(iter(sorted(gen.glob("*windows-11-25h2*.md"))), None)
+    _win_front = {}
+    if _win_path is not None:
+        _wfr, _wb = split_front_matter(_win_path.read_text(encoding="utf-8"))
+        _win_front = yaml.safe_load(_wfr) or {}
+    _win = _canon.get(("microsoft-windows-11",
+                       str(_win_front.get("update_version") or ""),
+                       str(_win_front.get("target_os_build") or "")), 0)
     check("C Windows 25H2 is still converged to its current cumulative update",
           count_of("*windows-11-25h2*.md") == _win,
-          f"record={count_of('*windows-11-25h2*.md')} canonical={_win}")
+          f"record={count_of('*windows-11-25h2*.md')} canonical={_win} "
+          f"({_win_path.name if _win_path else 'no record'})")
 
     # ---------------- the migration outcome ----------------
     # One Creative COW thread that states no version was counted for Resolve 11, 15 AND 16. The

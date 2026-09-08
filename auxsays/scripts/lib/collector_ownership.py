@@ -57,7 +57,10 @@ ALLOWED_METHODS: dict[str, set[str]] = {
         "adobe_community_bug_tab_index", "adobe_community_known_url_recheck",
     },
     "obs-studio": {"github_issues", "known_watchlist"},
-    "microsoft-windows-11": {"learn_qna_search_rss"},
+    # techcommunity_windows_sitemap is the SECOND source family for Windows -- a different
+    # community, not a second route into Learn Q&A. See microsoft_windows.TECHCOMMUNITY_METHOD_ID
+    # for the bake-off that chose it.
+    "microsoft-windows-11": {"learn_qna_search_rss", "techcommunity_windows_sitemap"},
     "microsoft-powerpoint": {"learn_qna_search_rss", "learn_qna_powerpoint_tags", "reddit_search",
                              "stack_exchange_search", "github_officedev_issues",
                              "tech_community_discussions", "open_web_discovery"},
@@ -79,7 +82,10 @@ ALLOWED_SOURCE_TYPES: dict[str, set[str]] = {
     "adobe-acrobat-reader": {"adobe_community_bug_report", "reddit_community_report"},
     "adobe-acrobat-pro": {"adobe_community_bug_report", "reddit_community_report"},
     "obs-studio": {"github_issue", "curated_watchlist"},
-    "microsoft-windows-11": {"microsoft_learn_qna"},
+    # microsoft_tech_community is a genuinely separate community from microsoft_learn_qna, which is
+    # what makes it count toward the two-family coverage floor -- unlike learn_qna_powerpoint_tags
+    # below, which deliberately shares its family because it reads the same community.
+    "microsoft-windows-11": {"microsoft_learn_qna", "microsoft_tech_community"},
     # learn_qna_powerpoint_tags deliberately shares the microsoft_learn_qna source_type: it is the
     # same community, discovered a different way, and one report must not become two identities.
     "microsoft-powerpoint": {"microsoft_learn_qna", "reddit_community_report", "stack_exchange_question",

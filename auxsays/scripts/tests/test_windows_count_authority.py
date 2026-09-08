@@ -71,10 +71,17 @@ def check(label: str, condition: bool, detail: str = "") -> None:
 
 def row(pid=WIN, ver="25H2", *, kb=CUR_KB, build=CUR_BUILD, feat="25H2", rid=None,
         url=None, date="2026-08-20T00:00:00Z", counted=True, matched=True,
-        target_build="", source_type="microsoft learn qna"):
+        target_build=None, source_type="microsoft learn qna"):
+    # DEFAULTS TO THE ROW'S OWN MATCHED BUILD. Windows became build-aware -- canonical identity is
+    # (product_id, update_version, target_build) -- so a counted row carrying no build belongs to
+    # no patch and `require_build` refuses it. Defaulting to `build` is what the production
+    # collector writes: the gate proves which record the row belongs to, and that record's build is
+    # its identity. Pass target_build="" explicitly to construct the refused-row case on purpose.
+    if target_build is None and pid == WIN:
+        target_build = build
     return {
         "id": rid or f"r-{kb}-{build}-{url or date}",
-        "product_id": pid, "update_version": ver, "target_build": target_build,
+        "product_id": pid, "update_version": ver, "target_build": target_build or "",
         "source_url": url or f"https://learn.microsoft.com/answers/{kb}-{date}",
         "source_type": source_type, "source_date": date, "captured_at": date,
         "counted": counted, "patch_version_matched": matched,
@@ -87,7 +94,11 @@ def row(pid=WIN, ver="25H2", *, kb=CUR_KB, build=CUR_BUILD, feat="25H2", rid=Non
 
 
 def record(path: Path, pid=WIN, ver="25H2", *, kb=CUR_KB, build=CUR_BUILD,
-           released=RELEASED, count=0, prose="", target_build=""):
+           released=RELEASED, count=0, prose="", target_build=None):
+    # Same reason as `row`: a build-aware record states its exact build. It IS the OS build the
+    # record tracks, so it defaults to it rather than being an independent knob.
+    if target_build is None and pid == WIN:
+        target_build = build
     data = {
         "layout": "aux-update", "update_entry": True,
         "product_id": pid, "update_version": ver, "update_product": "Windows 11",
@@ -111,10 +122,14 @@ def canonical(rows, records):
         rows, windows_targets=windows_targets_from_front_matter(records))
 
 
-def consensus(rows, rec_front, pid, ver):
-    """What the consensus writer selects -- the second historical authority."""
+def consensus(rows, rec_front, pid, ver, build=CUR_BUILD):
+    """What the consensus writer selects -- the second historical authority.
+
+    `build` names which PATCH's group to select. It used to be hard-coded empty, which was the
+    whole identity while Windows was version-only; now `_group_rows` keys by the canonical triple,
+    so an empty build selects a group that does not exist and every count reads 0."""
     groups = acr._group_rows(rows, is_candidate_mode=False)
-    inc, exc = acr._filter_rows(groups.get(patch_key(pid, ver, "")) or [],
+    inc, exc = acr._filter_rows(groups.get(patch_key(pid, ver, build)) or [],
                                 product_id=pid, version=ver, is_candidate_mode=False,
                                 record=None if rec_front is None else dict(rec_front))
     return len(inc), exc
@@ -160,7 +175,11 @@ def historical_predicate(rows):
             continue
         if r.get("patch_version_matched") is not True:
             continue
-        k = patch_key(pid, ver, r.get("target_build"))
+        # The OLD key shape too, not just the old predicate: at 435c2620 Windows was NOT in
+        # BUILD_AWARE_PRODUCTS, so patch_key collapsed its build slot to '' whatever the row said.
+        # Passing the row's build here would silently modernise the reproduction and split the 32
+        # into three keys -- which is the FIX, not the historical behaviour this is demonstrating.
+        k = patch_key(pid, ver, "")
         counts[k] = counts.get(k, 0) + 1
     return counts
 
@@ -182,21 +201,42 @@ def run() -> int:
     with tempfile.TemporaryDirectory() as td:
         rec_path = Path(td) / "w25.md"
         front = record(rec_path, count=32, prose="9 user reports found for Windows 11 25H2.")
-        key = patch_key(WIN, "25H2", "")
+        # The two SUPERSEDED cumulative updates now have records of their own -- that is the point
+        # of per-update records, and without them here the superseded rows would fail closed with
+        # `windows_record_missing_target_identity` and this fixture would prove the weaker claim.
+        old_a = record(Path(td) / "w25a.md", kb=OLD_KB_A, build=OLD_BUILD_A,
+                       released="2026-06-23T00:00:00Z")
+        old_b = record(Path(td) / "w25b.md", kb=OLD_KB_B, build=OLD_BUILD_B,
+                       released="2026-07-28T00:00:00Z")
+        key = patch_key(WIN, "25H2", CUR_BUILD)      # the CURRENT patch
+        old_key = patch_key(WIN, "25H2", "")          # the pre-build-aware collapsed key
 
         ungated = historical_predicate(rows_25)                       # the OLD authority A
-        gated = canonical(rows_25, [front])                           # the canonical predicate
+        gated = canonical(rows_25, [front, old_a, old_b])            # the canonical predicate
         sel, exc = consensus(rows_25, front, WIN, "25H2")             # authority B
         check("C1 the OLD ungated authority counted all three cumulative updates",
-              ungated.get(key) == 32, str(ungated.get(key)))
+              ungated.get(old_key) == 32, str(ungated.get(old_key)))
         check("C1 the consensus selector counted only the current patch",
               sel == 12, str(sel))
-        check("C1 they DID disagree before the fix", ungated.get(key) != sel)
+        check("C1 they DID disagree before the fix", ungated.get(old_key) != sel)
         check("C1 the canonical predicate now equals the consensus selector",
               gated.get(key) == sel == 12, f"canonical={gated.get(key)} selector={sel}")
-        check("C1 every dropped row was a patch rollover, not a new rule",
-              exc and all(r.get("_exclusion_reason") == "stale_due_to_patch_rollover" for r in exc),
-              str({r.get("_exclusion_reason") for r in exc}))
+        # This used to assert that all 20 superseded rows were EXCLUDED from the current patch's
+        # group with reason `stale_due_to_patch_rollover`. They are no longer excluded from it --
+        # they were never in it. Windows identity is now the canonical triple, so a report about
+        # KB5095093/26200.8737 groups under 26200.8737, and the gate never has to reject it from
+        # 26200.9168's population. Separation by identity is strictly stronger than rejection by
+        # rule, so assert the stronger property, plus the thing that makes it an improvement rather
+        # than a loss: those rows are not dropped, they count on THEIR OWN patch.
+        check("C1 no row has to be rejected from the current patch -- none belongs to it",
+              exc == [], str([r.get("_exclusion_reason") for r in exc]))
+        check("C1 the superseded reports are not dropped; each counts on its own patch",
+              gated.get(patch_key(WIN, "25H2", OLD_BUILD_A)) == 10
+              and gated.get(patch_key(WIN, "25H2", OLD_BUILD_B)) == 10,
+              str({k: v for k, v in gated.items()}))
+        check("C1 and the three populations are disjoint and complete",
+              sum(v for k, v in gated.items() if k[0] == WIN) == 32,
+              str(sum(v for k, v in gated.items() if k[0] == WIN)))
 
     # ---------- C2: the real 26H1 disagreement ----------
     print("\n[C2] 26H1: same contract on the smaller record")
@@ -207,9 +247,10 @@ def run() -> int:
     with tempfile.TemporaryDirectory() as td:
         rec_path = Path(td) / "w26.md"
         front = record(rec_path, ver="26H1", kb="KB5121000", build="28000.2704", count=2)
-        key = patch_key(WIN, "26H1", "")
-        check("C2 the OLD authority counted 2", historical_predicate(rows_26).get(key) == 2)
-        sel, _e = consensus(rows_26, front, WIN, "26H1")
+        key = patch_key(WIN, "26H1", "28000.2704")
+        check("C2 the OLD authority counted 2",
+              historical_predicate(rows_26).get(patch_key(WIN, "26H1", "")) == 2)
+        sel, _e = consensus(rows_26, front, WIN, "26H1", "28000.2704")
         check("C2 the consensus selector counted 1", sel == 1, str(sel))
         check("C2 canonical == selector == 1",
               canonical(rows_26, [front]).get(key) == sel == 1)
@@ -220,7 +261,7 @@ def run() -> int:
         front = record(Path(td) / "r.md")
         base = [row(rid="op", url="https://x/thread")]
         reply = row(rid="reply", url="https://x/thread#answer-2")
-        key = patch_key(WIN, "25H2", "")
+        key = patch_key(WIN, "25H2", CUR_BUILD)
         check("C3 the reply counts alongside the original",
               canonical(base + [reply], [front]).get(key) == 2,
               str(canonical(base + [reply], [front]).get(key)))
@@ -231,7 +272,7 @@ def run() -> int:
     print("\n[C4] a duplicate row counts once")
     with tempfile.TemporaryDirectory() as td:
         front = record(Path(td) / "r.md")
-        key = patch_key(WIN, "25H2", "")
+        key = patch_key(WIN, "25H2", CUR_BUILD)
         dup = row(rid="dup", url="https://x/same")
         # the pipeline marks a duplicate by clearing `counted`; assert the predicate honours it
         check("C4 a row flagged not-counted is excluded",
@@ -242,7 +283,7 @@ def run() -> int:
     print("\n[C5] evidence belonging to another patch never counts")
     with tempfile.TemporaryDirectory() as td:
         front = record(Path(td) / "r.md")
-        key = patch_key(WIN, "25H2", "")
+        key = patch_key(WIN, "25H2", CUR_BUILD)
         check("C5 a superseded OS build does not count",
               canonical([row(kb=OLD_KB_A, build=OLD_BUILD_A, rid="old")], [front]).get(key, 0) == 0)
         check("C5 a KB from a different train does not count",
@@ -254,7 +295,7 @@ def run() -> int:
     print("\n[C6-C8] official notes, generic discussion and excluded rows never count")
     with tempfile.TemporaryDirectory() as td:
         front = record(Path(td) / "r.md")
-        key = patch_key(WIN, "25H2", "")
+        key = patch_key(WIN, "25H2", CUR_BUILD)
         official = row(rid="off", source_type="official release notes", counted=False)
         generic = row(rid="gen", matched=False)
         excluded = row(rid="exc", counted=False)
@@ -303,7 +344,7 @@ def run() -> int:
         record(rec_path, count=32, prose="9 user reports found for Windows 11 25H2.")
         n, details = reconcile_record_counts(rows_25, gen)
         after = yaml.safe_load(rec_path.read_text(encoding="utf-8").split("---", 2)[1])
-        key = patch_key(WIN, "25H2", "")
+        key = patch_key(WIN, "25H2", CUR_BUILD)
         canon = canonical(rows_25, [after]).get(key)
         check("N1 update_report_count equals the canonical population",
               after["update_report_count"] == canon == 12,
@@ -406,29 +447,67 @@ def run() -> int:
     for st in wb_steps:
         toks = str(st.get("run") or "").replace("\\\n", " ").split()
         allows += [toks[i + 1].strip("'\"") for i, t in enumerate(toks[:-1]) if t == "--allow"]
-    target = "auxsays/updates/generated/2026-06-23-windows-11-25h2.md"
-    check("N5 an --allow entry actually authorizes a Windows record path",
-          any(fnmatch.fnmatch(target, pat) for pat in allows),
-          f"allow entries: {allows}")
+    live_windows = sorted(
+        f"auxsays/updates/generated/{p.name}"
+        for p in (_REPO / "auxsays" / "updates" / "generated").glob("*windows-11*.md")
+        if str((load_front_matter_and_body(p)[0] or {}).get("product_id") or "").strip() == WIN)
+    check("N5 there are live Windows records to authorize", bool(live_windows),
+          "no windows record found in the generated tree")
+    unauthorized = [t for t in live_windows
+                    if not any(fnmatch.fnmatch(t, pat) for pat in allows)]
+    check("N5 every live Windows record path is authorized by an --allow entry",
+          not unauthorized, f"unauthorized: {unauthorized[:3]} allow entries: {allows}")
 
-    # ---------- N6: the promotion structurally cannot rewrite Windows verdict prose ----------
-    print("\n[N6] the unattended promotion cannot touch editorial prose")
-    # The workflow comment claims this; nothing enforced it. Adding a Windows branch to
-    # _record_coherence_fields let an unattended cron step overwrite quick_verdict,
-    # update_decision_body, practical_recommendations, release_summary and official_summary on all
-    # three live Windows records with every test and QA still green. Pin the property.
+    # ---------- N6: the promotion may state the verdict, never restate the OFFICIAL source ----
+    print("\n[N6] the unattended promotion writes count projections but never official prose")
+    # HISTORY, and why this assertion changed shape. It used to demand
+    # `_record_coherence_fields(WIN, ...) == {}` -- no Windows branch at all -- because a Windows
+    # branch had once let an unattended cron step overwrite quick_verdict, update_decision_body,
+    # practical_recommendations, release_summary AND official_summary with every test green.
+    #
+    # A blanket ban was the wrong shape for that, and the cost came due: with the branch absent, a
+    # Windows record kept the shape it was BORN with however much evidence it gathered, so the live
+    # 25H2 page published `quick_verdict: "... consensus is deferred until the consensus refresh
+    # pipeline is active"` directly above `consensus_report: "14 user reports found"`. Both written
+    # by this same function, in one run. A verdict that states a report count is a COUNT PROJECTION
+    # (PR #75) -- freezing it at "deferred" while the count moves is the same incoherence the
+    # zero-count retraction fence exists to prevent, running in the other direction.
+    #
+    # So the line moves to where the real distinction is. Windows is an OFFICIAL-INGESTED product:
+    # release_summary / official_summary / description are Microsoft's release-health prose, owned
+    # by the ingestion adapter, and a consensus promotion restating them is the actual defect the
+    # original incident describes. Count-derived decision fields are not that -- they are
+    # regenerated from exactly the population the count comes from, which is what obs-studio's
+    # branch already does. Ban the official prose; require the projections.
     from collections import Counter  # noqa: PLC0415
     win_record = {"update_product": "Windows 11", "product_id": WIN, "update_version": "25H2"}
-    check("N6 _record_coherence_fields yields nothing for Windows",
-          acr._record_coherence_fields(WIN, "25H2", 12, win_record, Counter({"bsod": 3})) == {},
-          str(acr._record_coherence_fields(WIN, "25H2", 12, win_record, Counter({"bsod": 3}))))
-    editorial = {"quick_verdict", "update_decision_label", "update_decision_body",
-                 "practical_recommendations", "release_summary", "official_summary"}
+    coherence = acr._record_coherence_fields(WIN, "25H2", 12, win_record, Counter({"bsod": 3}),
+                                             build="26200.9168")
+    official_prose = {"release_summary", "official_summary", "description", "update_feed_title",
+                      "update_detail_title", "update_source_url", "update_published_at"}
+    check("N6 the Windows branch restates no official-source prose",
+          not (official_prose & set(coherence)), str(official_prose & set(coherence)))
+    check("N6 the Windows branch does state a verdict",
+          str(coherence.get("update_decision_label") or "").strip() != ""
+          and str(coherence.get("quick_verdict") or "").strip() != "",
+          str(coherence))
+    # The verdict must name the EXACT cumulative update. 28 records share "25H2", so a verdict
+    # keyed on the train alone is four different sentences that read as one contradiction.
+    check("N6 the Windows verdict names the exact build",
+          "26200.9168" in str(coherence.get("quick_verdict") or ""),
+          str(coherence.get("quick_verdict")))
+    # Zero reports must still yield NOTHING, so retraction owns the empty case unopposed.
+    check("N6 no verdict is invented at zero reports",
+          acr._record_coherence_fields(WIN, "25H2", 0, win_record, Counter(), build="26200.9168") == {},
+          str(acr._record_coherence_fields(WIN, "25H2", 0, win_record, Counter(), build="26200.9168")))
     proposed = acr._proposed_record_fields(
         WIN, "25H2", [row(rid=f"p{i}", url=f"https://x/p{i}") for i in range(12)],
-        win_record, "2026-08-27T00:00:00Z", build="")
-    leaked = editorial & set(proposed)
-    check("N6 the promotion proposes no editorial field for Windows", not leaked, str(leaked))
+        win_record, "2026-08-27T00:00:00Z", build="26200.9168")
+    leaked = official_prose & set(proposed)
+    check("N6 the whole promotion proposes no official-source field for Windows", not leaked, str(leaked))
+    check("N6 the promotion's summary names the exact build",
+          "26200.9168" in str(proposed.get("update_consensus_summary") or ""),
+          str(proposed.get("update_consensus_summary"))[:160])
 
     # ---------- QA recurrence guard ----------
     print("\n[QA] the contradiction is caught behaviourally, not by reading source text")
@@ -503,7 +582,7 @@ def run() -> int:
               "windows_targets" in str(exc), str(exc))
     with tempfile.TemporaryDirectory() as td:
         front = record(Path(td) / "r.md")
-        key = patch_key(WIN, "25H2", "")
+        key = patch_key(WIN, "25H2", CUR_BUILD)
         rows = [row(rid="ok")]
         check("C11 a supplied map with no entry for the patch still fails closed",
               counted_evidence_counts(rows, windows_targets={}).get(key, 0) == 0)

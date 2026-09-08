@@ -15,7 +15,7 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict
-from lib.patch_identity import key_from, patch_key
+from lib.patch_identity import key_from, patch_display_label, patch_key
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -856,7 +856,10 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
     consensus_label = _consensus_label(sentiments)
     confidence = _confidence(count)
     now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    version_label = ver
+    # Build-aware products name the exact patch here, not just the version -- otherwise four
+    # sibling Windows 25H2 pages each publish "25H2 has N user reports" with a different N.
+    # Collapses to the bare version for every product without a build contract.
+    version_label = patch_display_label(ver, build, pid)
     product_label = str((record or {}).get("update_product") or pid).strip()
     summary = _public_summary(
         pid=pid,
@@ -915,11 +918,11 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
             ),
         },
     }
-    fields.update(_record_coherence_fields(pid, ver, count, record, themes))
+    fields.update(_record_coherence_fields(pid, ver, count, record, themes, build=build))
     return fields
 
 
-def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter) -> dict[str, Any]:
+def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "") -> dict[str, Any]:
     if count <= 0:
         return {}
     if not record:
@@ -999,6 +1002,34 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
                 "Test with a backup scene collection and profile before production use.",
                 "Check plugin, capture-device, and audio-routing behavior before a live stream or paid recording.",
                 "Keep a rollback installer available if your setup is already stable.",
+            ],
+            "source_freshness_note": "",
+        }
+
+    if pid == WINDOWS_PRODUCT_ID:
+        # Without this branch the function fell through to `return {}`, so a Windows record kept
+        # the DEFERRED shape it was born with no matter how much evidence it accumulated: the live
+        # 25H2 page published `quick_verdict: "... Confirmed patch-specific consensus is deferred
+        # until the consensus refresh pipeline is active."` directly above `consensus_report: "14
+        # user reports found"`. Both sentences came from this writer, in the same run. The verdict
+        # is a count projection (PR #75); leaving it frozen at "deferred" while the count moves is
+        # the same incoherence the zero-count retraction fence prevents, running the other way.
+        report_word = "report" if count == 1 else "reports"
+        # Name the exact cumulative update, never the train: 28 records share "25H2".
+        patch_label = patch_display_label(ver, build, pid)
+        return {
+            "quick_verdict": f"WAIT: {product_label} {patch_label} has {count} user {report_word} found.",
+            "update_decision_label": "WAIT",
+            "update_decision_body": (
+                f"{_issue_cluster_sentence(themes)} This page covers one cumulative update, not the "
+                f"whole {ver} servicing train; reports about a later update are counted on that "
+                "update's own page."
+            ),
+            "practical_recommendations": [
+                "Pause updates if this machine is doing deadline-sensitive or production work.",
+                "Check Microsoft's known-issue and safeguard-hold list for this KB before installing.",
+                "Keep the uninstall path in mind: a cumulative update can be removed from Settings "
+                "> Windows Update > Update history for a limited window after installation.",
             ],
             "source_freshness_note": "",
         }

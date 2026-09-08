@@ -700,8 +700,14 @@ def run() -> int:
     print("=" * 96)
     layout3 = (ROOT / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
     row3 = (ROOT / "_includes" / "patch-table-row.html").read_text(encoding="utf-8")
-    check("Q.1 the section is headed 'Recent PowerPoint reports'",
-          "Recent PowerPoint reports" in layout3)
+    # The heading is now product-aware, because a second product (Acrobat) publishes Level 3 through
+    # the same block and a section headed with another product's name is a factual error about
+    # whose reports these are. PowerPoint must still be what a PowerPoint page renders.
+    check("Q.1 the section heading names the product, and defaults to PowerPoint",
+          "Recent {{ l3_product }} reports" in layout3
+          and "assign l3_product = 'PowerPoint'" in layout3)
+    check("Q.1b and it switches to Acrobat only on an Acrobat record",
+          "contains 'acrobat'" in layout3 and "assign l3_product = 'Acrobat'" in layout3)
     check("Q.2 the page carries the not-attributed qualifier",
           "Not attributed to this update." in layout3)
     check("Q.3 the page explains the reporters did not identify the update as the cause",
@@ -711,8 +717,17 @@ def run() -> int:
     check("Q.5 each card names the release WINDOW it was reported during",
           "release window" in layout3 and "window_build" in layout3)
     # Causal phrasing must not appear anywhere near the Level-3 block.
+    # Scope the scan to the Level-3 SECTION by its own closing tag. This used to slice from
+    # "recent-reports-card" up to id="verdict", which silently assumed the verdict box renders
+    # AFTER the Level-3 card. The patch page now puts the decision first and demotes Level 3 to
+    # subordinate context below it, so that marker no longer appears downstream: the `in` guard
+    # fell through and the slice quietly became the whole tail of the file. It would still have
+    # PASSED -- none of the banned phrases appears in the tail -- while no longer testing the
+    # Level-3 block at all. A block's own closing tag does not move when the page is reordered.
     l3_block = layout3[layout3.index("recent-reports-card"):]
-    l3_block = l3_block[:l3_block.index("id=\"verdict\"")] if 'id="verdict"' in l3_block else l3_block
+    _end = l3_block.find("</section>")
+    assert _end > 0, "Level-3 section has no closing tag -- the slice would be unbounded"
+    l3_block = l3_block[:_end]
     for phrase in ("caused by", "problems with build", "regression", "suspected",
                    "likely caused", "evidence against", "linked to this update"):
         check(f"Q.6 no causal phrasing in the Level-3 block: {phrase!r}",
@@ -879,9 +894,17 @@ def run() -> int:
           "assign win_start = r.window_start | default: ''" in layout_r)
     check("R.30 and the raw properties are no longer compared to '' directly",
           "r.window_end != ''" not in layout_r and "r.window_start != ''" not in layout_r)
-    open_window = [r for r in real_l3 if not str(r.get("window_end") or "")]
-    check("R.31 the open-ended window really is present, so R.28 is not vacuous",
-          bool(open_window), f"{len(open_window)} rows with no window_end")
+    # Non-vacuity, asserted on BEHAVIOUR rather than on whichever build happens to be newest today.
+    # The original form required an open-ended row to exist in the live file; a later release closed
+    # that window and the control started failing for a reason that had nothing to do with the guard.
+    open_row = l3.RecentReport(report_id="x", product_id="microsoft-powerpoint",
+                               report_title="t", window_start="2026-08-26", window_end="")
+    check("R.31 an open-ended window omits window_end entirely, which is why R.28 is needed",
+          "window_end" not in open_row.as_dict()
+          and open_row.as_dict().get("window_start") == "2026-08-26")
+    live_open = [r for r in real_l3 if not str(r.get("window_end") or "")]
+    check("R.31b and the live file is consistent either way",
+          all("window_start" in r for r in live_open), f"{len(live_open)} open rows")
 
     print()
     print("=" * 96)

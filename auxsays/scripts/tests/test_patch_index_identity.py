@@ -441,16 +441,22 @@ def run() -> int:
     print("\n[I9] version-only products are unaffected")
     check("I9 patch_key collapses the build slot for a non-build-aware product",
           patch_key("obs-studio", "31.0.4", "99999.99999") == ("obs-studio", "31.0.4", ""))
-    check("I9 ...and for every other live product id",
+    check("I9 ...and for every other version-only product id",
           all(patch_key(p, "1.0", "9.9") == (p, "1.0", "") for p in
-              ("adobe-premiere-pro", "blackmagic-davinci", "microsoft-windows-11",
+              ("adobe-premiere-pro", "blackmagic-davinci",
                "adobe-acrobat-pro", "adobe-acrobat-reader", "obs-studio")))
     # Phrased as "these products are not build-aware" rather than "only PowerPoint is", so
     # legitimately adding Word/Excel/Outlook later does not read as a regression here.
-    check("I9 the products these writebacks serve are all version-only",
+    # microsoft-windows-11 left the list when it BECAME build-aware -- one record is now one
+    # cumulative update, not one servicing train -- so it is asserted from the other side below.
+    check("I9 the version-only writebacks this suite drives serve version-only products",
           not any(is_build_aware(p) for p in
                   ("obs-studio", "adobe-premiere-pro", "blackmagic-davinci",
-                   "microsoft-windows-11", "adobe-acrobat-pro", "adobe-acrobat-reader")))
+                   "adobe-acrobat-pro", "adobe-acrobat-reader")))
+    check("I9 a build-aware product does NOT collapse its build slot",
+          patch_key("microsoft-windows-11", "25H2", "26200.9168")
+          == ("microsoft-windows-11", "25H2", "26200.9168")
+          and is_build_aware("microsoft-windows-11"))
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
         rec = write_record(root, "obs-studio", "31.0.4")

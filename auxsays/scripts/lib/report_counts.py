@@ -24,7 +24,7 @@ from typing import Any, Iterable
 
 from patch_collectors.base import (WINDOWS_PRODUCT_ID, load_front_matter_and_body,
                                    windows_identity_gate, write_front_matter_and_body)
-from .patch_identity import patch_key, require_build
+from .patch_identity import patch_display_label, patch_key, require_build
 from .write_update_record import (DEFAULT_CONSENSUS, DEFERRED_CONSENSUS_REPORT,
                                   deferred_quick_verdict)
 
@@ -150,7 +150,21 @@ def _as_int(value: Any) -> int:
 # shape, so on a coherent tree it rewrites nothing.
 ZERO_COUNT_PROJECTION_FIELDS = ("update_consensus_summary", "accepted_report_sources",
                                 "evidence_samples", "evidence_sample_visible_limit",
-                                "evidence_source_limitations")
+                                "evidence_source_limitations",
+                                # The install VERDICT is a count projection too. It was left out
+                                # while the products that wrote it (davinci/obs/premiere) were the
+                                # ones whose prose might be hand-authored -- and the fence below
+                                # already keeps this away from premiere, which is the one that is.
+                                # A Windows record whose population empties otherwise keeps
+                                # publishing `update_decision_label: WAIT` with zero reports;
+                                # qa_patch_records names that exactly
+                                # (`official_only_zero_reports_recommendation_language`) and it
+                                # fired on 5 live records the moment a retraction happened.
+                                # The rendered page is not currently wrong -- the layout forces
+                                # INSUFFICIENT DATA at zero -- so this is stored-state hygiene, and
+                                # it matters because a gate that always warns stops being read.
+                                "update_decision_label", "update_decision_body",
+                                "practical_recommendations")
 
 # RETRACTION IS ONLY SAFE WHERE RESTORATION IS AUTOMATIC.
 #
@@ -240,7 +254,8 @@ def retract_zero_count_projections(data: dict[str, Any]) -> list[str]:
     if verdict_states_a_count(data):
         data["quick_verdict"] = deferred_quick_verdict(
             str(data.get("update_product") or data.get("product_id") or "").strip(),
-            str(data.get("update_version") or "").strip())
+            patch_display_label(data.get("update_version"), data.get("target_build"),
+                                data.get("product_id")))
         changed.append("quick_verdict")
     if str(data.get("update_consensus_label") or "").strip() != DEFAULT_CONSENSUS:
         data["update_consensus_label"] = DEFAULT_CONSENSUS

@@ -377,17 +377,21 @@ def run() -> int:
         gen.mkdir(parents=True)
         rec = gen / "2026-08-14-obs-studio-32-2-2.md"
         obs_record(rec, count=7, sources=3, samples=3, prose_count=7)
-        keep = gen / "2026-06-23-windows-11-26h1.md"          # keeps the canonical map non-empty
+        # Windows is build-aware: one record is one cumulative update, so both the record and the
+        # row must state the exact build. They previously carried none, which was correct while a
+        # Windows record meant a whole servicing train.
+        keep = gen / "2026-08-11-windows-11-26h1-28000-2704.md"   # keeps the canonical map non-empty
         keep.write_text("---" + NEWLINE + yaml.safe_dump(
             {"layout": "aux-update", "update_entry": True, "product_id": "microsoft-windows-11",
              "update_version": "26H1", "update_product": "Windows 11",
              "update_report_count": 1, "confirmed_patch_specific_report_count": 1,
              "target_kb": "KB5121000", "target_os_build": "28000.2704",
+             "target_build": "28000.2704",
              "target_feature_version": "26H1",
              "target_release_date": "2026-08-11T00:00:00Z"}, sort_keys=False)
             + "---" + NEWLINE + "body" + NEWLINE, encoding="utf-8")
         live = [{"id": "w1", "product_id": "microsoft-windows-11", "update_version": "26H1",
-                 "target_build": "", "counted": True, "patch_version_matched": True,
+                 "target_build": "28000.2704", "counted": True, "patch_version_matched": True,
                  "source_url": "https://x/w1", "matched_kb": "KB5121000",
                  "matched_os_build": "28000.2704", "matched_feature_version": "26H1",
                  "source_date": "2026-08-20T00:00:00Z", "captured_at": "2026-08-20T00:00:00Z",
@@ -439,12 +443,17 @@ def run() -> int:
             "update_consensus_label": DEFAULT_CONSENSUS,
             "quick_verdict": "TEST FIRST: OBS Studio 32.2.2 has 7 user reports found.",
         }, sort_keys=False) + "---" + NEWLINE + "body" + NEWLINE, encoding="utf-8")
-        keep2 = gen2 / "2026-06-23-windows-11-26h1.md"
+        # Must carry target_build for the same reason `keep` above does -- and load-bearing here:
+        # without it the Windows row matches no record, the canonical count map comes back EMPTY,
+        # and the retraction's global `bool(counts)` fence then blocks the OBS repair this block
+        # exists to prove. The fence working is the reason this fixture must be realistic.
+        keep2 = gen2 / "2026-08-11-windows-11-26h1-28000-2704.md"
         keep2.write_text("---" + NEWLINE + yaml.safe_dump(
             {"layout": "aux-update", "update_entry": True, "product_id": "microsoft-windows-11",
              "update_version": "26H1", "update_product": "Windows 11",
              "update_report_count": 1, "confirmed_patch_specific_report_count": 1,
              "target_kb": "KB5121000", "target_os_build": "28000.2704",
+             "target_build": "28000.2704",
              "target_feature_version": "26H1",
              "target_release_date": "2026-08-11T00:00:00Z"}, sort_keys=False)
             + "---" + NEWLINE + "body" + NEWLINE, encoding="utf-8")

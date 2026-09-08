@@ -38,7 +38,16 @@ except ImportError:  # pragma: no cover - direct-script import path used by some
     from normalize import slugify  # type: ignore
 
 # Products whose patch identity REQUIRES an exact vendor build. Explicit allowlist, never inferred.
-BUILD_AWARE_PRODUCTS: frozenset[str] = frozenset({"microsoft-powerpoint"})
+BUILD_AWARE_PRODUCTS: frozenset[str] = frozenset({
+    "microsoft-powerpoint",
+    # Windows 11: one record is one CUMULATIVE UPDATE inside a servicing train, and several
+    # cumulative updates ship under one feature version (25H2 alone shipped 26200.8737,
+    # .8973, .9168 and .9278 in three months). Keyed by version alone they collide exactly as
+    # this module warns -- and they did: a single mutating 25H2 record rolled its target KB
+    # forward monthly, so 34 of 38 counted community reports described superseded updates
+    # that had no page, and the live page asserted two different "latest OS build" values.
+    "microsoft-windows-11",
+})
 
 # Field names that carry the exact build on a record's front matter / an evidence row.
 BUILD_FIELD = "target_build"
@@ -107,6 +116,28 @@ def require_build(product_id: Any, update_version: Any, target_build: Any = "",
     if not build:
         raise MissingBuildIdentity(pid, update_version, detail)
     return build
+
+
+def patch_display_label(update_version: Any, target_build: Any = "", product_id: Any = "") -> str:
+    """How a patch NAMES ITSELF in public prose: '2607' normally, '25H2 (Build 26200.9168)' when
+    build-aware.
+
+    A build-aware product's records share a version by design, so prose keyed on the version alone
+    cannot distinguish them. Measured live: four Windows 25H2 pages each said "Windows 11 25H2 has
+    N user reports found" with N of 14, 10, 10 and 4, and two PowerPoint 2607 pages said 1 and 3.
+    Every one of those sentences is true of its own patch and reads as a contradiction next to its
+    siblings -- the reader has no way to tell that four different cumulative updates are speaking.
+
+    Unlike ``permalink_path`` and ``record_version_slug`` this is DISPLAY, not identity, so a
+    missing build degrades to the version rather than raising: prose that omits the build is
+    imprecise, while refusing to render a verdict at all would withhold real decision intelligence
+    over a formatting concern. The write paths that must not degrade already fail closed on their
+    own."""
+    version = str(update_version or "").strip()
+    if not is_build_aware(product_id):
+        return version
+    build = normalize_build(target_build)
+    return f"{version} (Build {build})" if build else version
 
 
 def record_version_slug(update_version: Any, target_build: Any = "", product_id: Any = "") -> str:

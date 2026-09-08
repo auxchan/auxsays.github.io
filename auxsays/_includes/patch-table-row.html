@@ -79,14 +79,29 @@
   row is associated to exactly one release window, so matching on the build alone is sufficient and
   a version fallback would only add an unguarded third site.
 {%- endcomment -%}
+{%- comment -%}
+  Per-PRODUCT tier files, and a per-product key. Acrobat has no second build token -- its canonical
+  identity IS the DC version -- so the joined key carries the version in the build slot. A new
+  variable rather than a third `assign row_build` site, which is an asserted invariant here.
+{%- endcomment -%}
+{%- assign row_tier_build = row_build -%}
+{%- assign row_tier_product = 'PowerPoint or Office' -%}
+{%- assign row_tier_name = 'PowerPoint' -%}
 {%- assign row_t2_all = site.data.update_linked_evidence.reports | default: empty -%}
-{%- capture row_t2_key %}{{ item.product_id }}|{{ item.update_version }}|{{ row_build }}{% endcapture -%}
+{%- assign row_l3_all = site.data.recent_powerpoint_reports.reports | default: empty -%}
+{%- if item.product_id contains 'acrobat' -%}
+  {%- assign row_tier_build = item.update_version -%}
+  {%- assign row_tier_product = 'Acrobat' -%}
+  {%- assign row_tier_name = 'Acrobat' -%}
+  {%- assign row_t2_all = site.data.acrobat_update_linked_evidence.reports | default: empty -%}
+  {%- assign row_l3_all = site.data.recent_acrobat_reports.reports | default: empty -%}
+{%- endif -%}
+{%- capture row_t2_key %}{{ item.product_id }}|{{ item.update_version }}|{{ row_tier_build }}{% endcapture -%}
 {%- assign row_t2 = row_t2_all | where: "associated_patch_key", row_t2_key -%}
 {%- assign row_t2_count = row_t2 | size -%}
-{%- assign row_l3_all = site.data.recent_powerpoint_reports.reports | default: empty -%}
 {%- assign row_l3 = row_l3_all | where: "release_window_key", row_t2_key -%}
 {%- assign row_l3_count = row_l3 | size -%}
-<td data-label="Reports" class="patch-cell-num">{{ report_count_num }}{% if row_t2_count > 0 %} <span class="patch-cell-num__linked" title="Update-linked reports: the reporter ties the problem to a PowerPoint or Office update but never states the exact build. Not counted toward consensus.">&middot; {{ row_t2_count }} update-linked</span>{% endif %}{% if row_l3_count > 0 %} <span class="patch-cell-num__recent" title="Recent PowerPoint reports: concrete problems reported while this release was current. The reporters did not identify this update as the cause. Not counted toward consensus.">&middot; {{ row_l3_count }} recent</span>{% endif %}</td>
+<td data-label="Reports" class="patch-cell-num">{{ report_count_num }}{% if row_t2_count > 0 %} <span class="patch-cell-num__linked" title="Update-linked reports: the reporter ties the problem to a {{ row_tier_product }} update but never states the exact build. Not counted toward consensus.">&middot; {{ row_t2_count }} update-linked</span>{% endif %}{% if row_l3_count > 0 %} <span class="patch-cell-num__recent" title="Recent {{ row_tier_name }} reports: concrete problems reported while this release was current. The reporters did not identify this update as the cause. Not counted toward consensus.">&middot; {{ row_l3_count }} recent</span>{% endif %}</td>
 <td data-label="Evidence"><span class="patch-evidence patch-evidence--rank{{ evidence_rank }}">{{ evidence_strength }}</span></td>
 <td data-label="Details" class="patch-col-details"><a class="patch-details-link" href="{{ item.url | relative_url }}">View patch <span aria-hidden="true">→</span></a></td>
 </tr>
