@@ -380,7 +380,12 @@ describe("persistent world local-review shell", () => {
     const searchTrigger = screen.getByRole("button", { name: /Find a factor/ });
     fireEvent.click(within(inspector).getByRole("button", { name: "Close factor details" }));
     expect(screen.queryByRole("complementary", { name: "Persistent world factor details" })).toBeNull();
-    await waitFor(() => expect(document.activeElement).toBe(searchTrigger));
+    const detailsToggle = screen.getByRole("button", { name: "Info stays closed until requested" });
+    await waitFor(() => expect(document.activeElement).toBe(detailsToggle));
+    fireEvent.click(screen.getByRole("button", { name: /05Real Wage Purchasing Power/ }));
+    expect(screen.queryByRole("complementary", { name: "Persistent world factor details" })).toBeNull();
+    fireEvent.click(detailsToggle);
+    expect(screen.getByRole("complementary", { name: "Persistent world factor details" })).toBeTruthy();
 
     fireEvent.click(searchTrigger);
     const dialog = screen.getByRole("dialog", { name: "Find a factor" });
@@ -404,6 +409,46 @@ describe("persistent world local-review shell", () => {
       await waitFor(() => expect(surface.getAttribute("data-reduced-motion")).toBe("true"));
       expect(surface.getAttribute("data-orbit-drag-state")).toBe("IDLE");
       expect(surface.getAttribute("data-topology-fingerprint")).toBe("fnv1a32:88684cdb");
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
+  it("keeps mobile node navigation visible until the user enables details", async () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    try {
+      window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
+      render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+      const surface = await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
+      const infoToggle = screen.getByRole("button", { name: "Info stays closed until requested" });
+      expect(infoToggle.hasAttribute("disabled")).toBe(false);
+      fireEvent.click(screen.getByRole("button", { name: /Consumer DemandMaster-defined system/ }));
+      expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:consumer-demand");
+      expect(screen.queryByRole("complementary", { name: "Persistent world factor details" })).toBeNull();
+      fireEvent.click(infoToggle);
+      const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+      expect(within(inspector).getByRole("heading", { name: "Consumer Demand" })).toBeTruthy();
+      fireEvent.click(screen.getByRole("button", { name: /01Real Personal Consumption/ }));
+      expect(within(inspector).getByRole("heading", { name: "Real Personal Consumption" })).toBeTruthy();
+      expect(screen.getByRole("button", { name: "Info opens automatically while navigating" }).getAttribute("aria-pressed")).toBe("true");
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
+  it("lets mobile users select automatic info before entering a node", async () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    try {
+      window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
+      render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+      const infoToggle = await screen.findByRole("button", { name: "Info stays closed until requested" }, { timeout: 15_000 });
+      fireEvent.click(infoToggle);
+      expect(screen.getByRole("button", { name: "Info opens automatically while navigating" }).getAttribute("aria-pressed")).toBe("true");
+      fireEvent.click(screen.getByRole("button", { name: /Consumer DemandMaster-defined system/ }));
+      const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+      expect(within(inspector).getByRole("heading", { name: "Consumer Demand" })).toBeTruthy();
     } finally {
       window.matchMedia = original;
     }
@@ -450,8 +495,12 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:employer-labor-demand");
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("12");
-    fireEvent.click(screen.getByRole("button", { name: "Trace" }));
-    expect(surface.getAttribute("data-trace-mode")).toBe("true");
+    const detailsToggle = screen.getByRole("button", { name: "Info opens automatically while navigating" });
+    expect(detailsToggle.getAttribute("aria-pressed")).toBe("true");
+    fireEvent.click(detailsToggle);
+    expect(screen.queryByRole("complementary", { name: "Persistent world factor details" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Info stays closed until requested" }));
+    expect(surface.getAttribute("data-trace-mode")).toBe("false");
     expect(surface.getAttribute("data-topology-fingerprint")).toBe("fnv1a32:88684cdb");
     expect(surface.getAttribute("data-presentation-layout-version")).toBe("employment-spatial-presentation-1.1.0");
     expect(surface.getAttribute("data-projection-version")).toBe("perspective-depth-1.1.0");

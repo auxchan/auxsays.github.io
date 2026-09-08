@@ -72,12 +72,14 @@ export function PersistentWorldShell() {
   const reducedMotion = useReducedMotion();
   const workspaceRef = useRef<HTMLDivElement>(null);
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const detailsToggleRef = useRef<HTMLButtonElement>(null);
   const searchDialogRef = useRef<HTMLDivElement>(null);
+  const initialDetailsOpen = useRef(!window.matchMedia("(max-width: 900px), (hover: none), (pointer: coarse)").matches).current;
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model, !publicBeta));
-  const [inspectorOpen, setInspectorOpen] = useState(() => Boolean(selectionFromHash(model, !publicBeta)));
+  const [detailsFollowNavigation, setDetailsFollowNavigation] = useState(initialDetailsOpen);
+  const [inspectorOpen, setInspectorOpen] = useState(() => Boolean(selectionFromHash(model, !publicBeta)) && initialDetailsOpen);
   const [fullWorld, setFullWorld] = useState(false);
   const [viewMode, setViewMode] = useState<PersistentWorldViewMode>("TOP_DOWN");
-  const [traceMode, setTraceMode] = useState(false);
   const [resetVersion, setResetVersion] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
   const [fullscreenFallback, setFullscreenFallback] = useState(false);
@@ -112,7 +114,7 @@ export function PersistentWorldShell() {
     const restore = () => {
       const id = selectionFromHash(model, !publicBeta);
       setSelectedId(id);
-      setInspectorOpen(Boolean(id));
+      setInspectorOpen(Boolean(id) && detailsFollowNavigation);
       setFullWorld(false);
       setDeepDiveOpen(false);
       setRoutePulseVersion((current) => current + 1);
@@ -127,7 +129,7 @@ export function PersistentWorldShell() {
     window.addEventListener("popstate", restore);
     window.addEventListener("hashchange", restore);
     return () => { window.removeEventListener("popstate", restore); window.removeEventListener("hashchange", restore); };
-  }, [model, publicBeta]);
+  }, [detailsFollowNavigation, model, publicBeta]);
 
   useEffect(() => {
     const update = () => setFullscreen(document.fullscreenElement === workspaceRef.current);
@@ -157,7 +159,7 @@ export function PersistentWorldShell() {
     const url = `${window.location.pathname}${window.location.search}${hash}`;
     const update = () => {
       setSelectedId(id);
-      setInspectorOpen(Boolean(id));
+      setInspectorOpen(Boolean(id) && detailsFollowNavigation);
       setFullWorld(false);
       setDeepDiveOpen(false);
       setRoutePulseVersion((current) => current + 1);
@@ -197,17 +199,24 @@ export function PersistentWorldShell() {
   }
 
   function closeInspector() {
+    setDetailsFollowNavigation(false);
     setInspectorOpen(false);
     requestAnimationFrame(() => {
       const activeChoice = document.querySelector<HTMLButtonElement>('.sm-pw-access button[aria-current="true"]');
-      (activeChoice ?? searchTriggerRef.current)?.focus();
+      (detailsToggleRef.current ?? activeChoice ?? searchTriggerRef.current)?.focus();
     });
+  }
+
+  function toggleDetailsFollowNavigation() {
+    const next = !detailsFollowNavigation;
+    setDetailsFollowNavigation(next);
+    setInspectorOpen(Boolean(selected) && next);
+    if (!next) setDeepDiveOpen(false);
   }
 
   function resetWorld() {
     navigate(null);
     setFullWorld(false);
-    setTraceMode(false);
     setResetVersion((current) => current + 1);
   }
 
@@ -262,7 +271,7 @@ export function PersistentWorldShell() {
         <button type="button" aria-current={!selected ? "location" : undefined} onClick={() => navigate(null)}>Employment outcome</button>
         {path.filter((item) => item.depth > 0).map((item) => <span key={item.id}><i aria-hidden="true">›</i><button type="button" aria-current={item.id === selectedId ? "location" : undefined} onClick={() => navigate(item.id)}>{placementLabel(model, item)}</button></span>)}
       </nav>
-      <div ref={workspaceRef} className={`sm-pw-workspace ${selected && inspectorOpen ? "has-inspector" : ""} ${fullscreenFallback ? "is-fullscreen-fallback" : ""}`} data-fullscreen={fullscreenActive}>
+      <div ref={workspaceRef} className={`sm-pw-workspace ${selected && inspectorOpen ? "has-inspector" : ""} ${fullscreenFallback ? "is-fullscreen-fallback" : ""}`} data-fullscreen={fullscreenActive} data-details-follow-navigation={detailsFollowNavigation}>
         <PersistentWorldMinimap model={model} selectedPlacementId={selectedId} onSelect={navigate} />
         <aside className={`sm-pw-inspector ${selected && inspectorOpen ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected || !inspectorOpen} data-panel-motion="settled-fade">
           {selected && factor && inspectorOpen && <div key={selected.id} className="sm-pw-inspector__content">
@@ -296,14 +305,14 @@ export function PersistentWorldShell() {
             </div>}
           </div>}
         </aside>
-        <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} viewMode={viewMode} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} routePulseVersion={routePulseVersion} publicBeta={publicBeta} onSelect={navigate} onNavigateParent={navigateUp} onReset={resetWorld} />
+        <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} viewMode={viewMode} traceMode={false} reducedMotion={reducedMotion} resetVersion={resetVersion} routePulseVersion={routePulseVersion} publicBeta={publicBeta} onSelect={navigate} onNavigateParent={navigateUp} onReset={resetWorld} />
         <div className="sm-pw-controls" aria-label="Persistent world view controls">
           <button type="button" disabled={!selected} onClick={navigateUp}>Up one level</button>
           <button type="button" onClick={resetWorld}>Reset</button>
           <button type="button" aria-pressed={viewMode === "TOP_DOWN"} onClick={() => setViewMode("TOP_DOWN")}>Top-down</button>
           <button type="button" aria-pressed={viewMode === "CINEMATIC_2_5D"} onClick={() => setViewMode("CINEMATIC_2_5D")}>Cinematic 2.5D</button>
           <button type="button" aria-pressed={fullWorld} onClick={() => setFullWorld((current) => !current)}>{fullWorld ? "Normal overview" : "Full-world view"}</button>
-          <button type="button" aria-pressed={traceMode} disabled={!selected} onClick={() => setTraceMode((current) => !current)}>Trace</button>
+          <button ref={detailsToggleRef} type="button" aria-label={detailsFollowNavigation ? "Info opens automatically while navigating" : "Info stays closed until requested"} aria-pressed={detailsFollowNavigation} onClick={toggleDetailsFollowNavigation}>Info: {detailsFollowNavigation ? "Auto" : "Manual"}</button>
           <button type="button" aria-label={fullscreenActive ? "Exit full screen" : "Enter full screen"} aria-pressed={fullscreenActive} onClick={() => void toggleFullscreen()}><span aria-hidden="true">⛶</span> {fullscreenActive ? "Exit" : "Full screen"}</button>
         </div>
       </div>
