@@ -48,6 +48,7 @@ from .base import (
     WINDOWS_PRODUCT_ID,
     ROOT,
     append_evidence_rows,
+    finalize_method_health_delta,
     counted_rows,
     date_part,
     exact_version_match,
@@ -1097,7 +1098,14 @@ class WindowsLearnQnaCollector(ProductCollector):
                 "method_health": health,
             }
             if context.write:
-                added, total, rows = append_evidence_rows(accepted)
+                persisted: list[dict[str, Any]] = []
+                already_held: list[dict[str, Any]] = []
+                added, total, rows = append_evidence_rows(
+                    accepted, out_added=persisted, out_already_held=already_held)
+                # The health rows were built before the append and could not know the delta; this is
+                # where it becomes knowable. Both methods' rows are in `health`, and attribution is
+                # by source_type, so each family gets its own true count.
+                finalize_method_health_delta(health, persisted, already_held)
                 structured_count = len(counted_rows(rows, PRODUCT_ID, record.update_version))
                 result.update({
                     "evidence_rows_added": added,

@@ -278,6 +278,62 @@ def run() -> int:
           "assign l3_src = site.data.recent_acrobat_reports" in LAYOUT
           and "assign t2_all = site.data.acrobat_update_linked_evidence" in LAYOUT)
 
+    # ---------- R: practical recommendations reach the reader ----------
+    print("\n[R] practical_recommendations render under the verdict, de-duplicated")
+    # The field was consumed ONLY by the fallback that substitutes item one into an empty decision
+    # body -- and the producer writes body and list in the same dict literal while the retraction
+    # removes them together, so an empty body with a populated list cannot occur. Measured over all
+    # 1125 records: 75 carry the field and the fallback fires on 0. It rendered on no page at all.
+    rec_block = LAYOUT_EMITTED.index('update-decision-actions__list')
+    verdict_at = LAYOUT_EMITTED.index('<div id="verdict"')
+    reasoning_at = LAYOUT_EMITTED.index('update-decision-reasoning')
+    check("R1 the list is rendered, not just item one",
+          "for rec in page.practical_recommendations" in LAYOUT_EMITTED,
+          "only the `| first` fallback consumes the field")
+    check("R2 it sits with the primary decision content, not in methodology or context",
+          verdict_at < rec_block < reasoning_at,
+          f"verdict@{verdict_at} block@{rec_block} reasoning@{reasoning_at}")
+    check("R3 the block is gated on survivors, so a record without recommendations renders nothing",
+          "if rec_rendered > 0" in LAYOUT_EMITTED)
+    check("R4 an item duplicating the verdict body is dropped, in both directions",
+          "rec_body_probe contains rec_probe" in LAYOUT_EMITTED
+          and "rec_probe contains rec_body_probe" in LAYOUT_EMITTED)
+    # Byte-exact comparison missed a verdict body repeated verbatim as a bullet when the two
+    # differed only by a smart apostrophe, a double space or a trailing period.
+    for token in ("replace: '’', \"'\"", "replace: '.', ''", "replace: '  ', ' '"):
+        check(f"R4 the comparison is normalised ({token})", token in LAYOUT_EMITTED,
+              "an unnormalised compare lets a verbatim repeat through")
+    # The real restatements are not whole-string copies: a DaVinci body ends "...or test on copied
+    # projects." and its bullet opens "Test on copied projects before moving client work...".
+    # Measured over all 226 items: whole-string containment catches 0, the four-word prefix 24.
+    check("R4 a four-word prefix already present in the body is dropped",
+          "rec_probe | split: ' ' | slice: 0, 4 | join: ' '" in LAYOUT_EMITTED
+          and "rec_body_probe contains rec_prefix" in LAYOUT_EMITTED,
+          "whole-string containment alone drops nothing on the real corpus")
+    check("R5 empty items are skipped", "if rec_text == ''" in LAYOUT_EMITTED)
+    check("R6 an item repeated inside one list is shown once",
+          "rec_seen contains rec_key" in LAYOUT_EMITTED)
+    check("R7 recommendation text is escaped", "rec_text | escape" in LAYOUT_EMITTED)
+    check("R8 the fallback that substitutes item one is preserved, so dedupe covers it",
+          "page.practical_recommendations | first" in LAYOUT_EMITTED)
+    for cls in ("update-decision-actions", "update-decision-actions__list"):
+        check(f"R9 {cls} is styled rather than left to browser defaults",
+              f".{cls} {{" in CSS, "no rule; the list would render unstyled in the verdict box")
+    # The block renders INSIDE .update-decision-box__header, whose `p` rule is (0,1,1) and sets
+    # color / font-weight / margin. A bare `.update-decision-actions__label` is (0,1,0) and loses
+    # regardless of source order: measured in a browser, the muted colour, the 700 weight and both
+    # margins were all inert. A string-presence check cannot see that, so pin the SCOPING.
+    check("R9 the label selector outranks .update-decision-box__header p",
+          ".update-decision-box__header .update-decision-actions__label {" in CSS
+          and ".update-decision-actions__label {" not in CSS.replace(
+              ".update-decision-box__header .update-decision-actions__label {", ""),
+          "an unscoped label rule loses the cascade inside the verdict header")
+    check("R10 the styling uses existing tokens only",
+          "var(--aux-text-muted)" in CSS.split(
+              ".update-decision-box__header .update-decision-actions__label {")[1][:400]
+          and "var(--text-1)" in CSS.split(".update-decision-actions__list li {")[1][:300],
+          "a parallel colour system was introduced")
+
     print()
     print("=" * 78)
     total = _PASS + _FAIL

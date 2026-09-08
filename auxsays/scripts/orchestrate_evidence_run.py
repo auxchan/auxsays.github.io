@@ -57,8 +57,8 @@ from lib.method_routing import fallback_justified, plan_methods  # noqa: E402
 from lib.patch_identity import is_build_aware, patch_key, require_build  # noqa: E402
 from lib.report_counts import reconcile_record_counts  # noqa: E402
 from patch_collectors.base import (  # noqa: E402
-    CollectorContext, append_evidence_rows, generated_records, load_evidence,
-    method_health_row, normalize_evidence_row, upsert_method_health,
+    CollectorContext, append_evidence_rows, finalize_method_health_delta, generated_records,
+    load_evidence, method_health_row, normalize_evidence_row, upsert_method_health,
 )
 
 
@@ -761,8 +761,14 @@ class Pipeline:
             state.evidence_changes = {"mode": "dry", "would_add": len(counted)}
             state.health_changes = {"mode": "dry", "would_upsert": len(health)}
         else:
-            added, dupes, _ = append_evidence_rows(counted, self.evidence_path) if counted \
+            persisted: list[dict[str, Any]] = []
+            already_held: list[dict[str, Any]] = []
+            added, dupes, _ = append_evidence_rows(
+                counted, self.evidence_path, out_added=persisted, out_already_held=already_held) if counted \
                 else (0, 0, load_evidence(self.evidence_path) if self.evidence_path.exists() else [])
+            # Between the append and the upsert is the only moment the real delta is known and the
+            # health rows are still mutable. See base.finalize_method_health_delta.
+            finalize_method_health_delta(health, persisted, already_held)
             changed, total, _ = upsert_method_health(health, self.health_path)
             state.evidence_changes = {"mode": "write", "added": added, "duplicates": dupes}
             state.health_changes = {"mode": "write", "changed": changed, "total": total}

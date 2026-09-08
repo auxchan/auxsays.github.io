@@ -48,6 +48,7 @@ from .base import (
     PatchRecord,
     ProductCollector,
     append_evidence_rows,
+    finalize_method_health_delta,
     date_part,
     exact_version_match,
     generated_records,
@@ -1560,7 +1561,11 @@ class PowerPointLearnQnaCollector(ProductCollector):
             if context.write:
                 # Evidence-only pilot: append accepted rows; NEVER change the PowerPoint
                 # record's verdict / consensus fields here (activation is a separate step).
-                added, total, _rows = append_evidence_rows(accepted)
+                persisted: list[dict[str, Any]] = []
+                already_held: list[dict[str, Any]] = []
+                added, total, _rows = append_evidence_rows(
+                    accepted, out_added=persisted, out_already_held=already_held)
+                finalize_method_health_delta(health, persisted, already_held)
                 result.update({"evidence_rows_added": added, "evidence_rows_total": total})
             results.append(result)
         return results
