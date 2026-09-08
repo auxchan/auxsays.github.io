@@ -143,6 +143,105 @@ reports:
   window_start: '2025-11-13'
   window_version: 25.001.20918
 - attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|18.011.20040|18.011.20040
+  report_date: '2018-06-18'
+  report_excerpt: Acrobat 2017 crashes immediately after opening Hi, I've installed Acrobat and it closes
+    immediately after opening. I've completely uninstalled the program , ran the acrobat cleanup wizard,
+    downloaded from the website and re-installed with the same issue. I've also tried to...
+  report_id: adobe-acrobat-pro:14889e55e3ce5d1d
+  report_title: Acrobat 2017 crashes immediately after opening
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-2017-crashes-immediately-after-opening-1228617
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.011.20040
+  window_end: '2018-07-10'
+  window_start: '2018-05-14'
+  window_version: 18.011.20040
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|18.011.20040|18.011.20040
+  report_date: '2018-06-06'
+  report_excerpt: Acrobat Pro DC lag issues and freeze [2018] We have an individual who needs to do a
+    lot of work on subdivision engineering plans (editing them/viewing). The PDF's he gets constantly
+    lag and freeze up. If you're scrolling through them they freeze before you get 5 or 6 pages...
+  report_id: adobe-acrobat-pro:6bad99642b30777e
+  report_title: Acrobat Pro DC lag issues and freeze [2018]
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-lag-issues-and-freeze-2018-1229166
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.011.20040
+  window_end: '2018-07-10'
+  window_start: '2018-05-14'
+  window_version: 18.011.20040
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|18.009.20044|18.009.20044
+  report_date: '2017-11-20'
+  report_excerpt: Acrobat PDF Form document with digital signature fields does not launch Hello, Since
+    Friday, November 17th, 2017, we cannot open adobe acrobat form documents that contains digital signature
+    fields. When we try to open the document, Adobe Acrobat application is not responding....
+  report_id: adobe-acrobat-pro:d678801b38e9e2be
+  report_title: Acrobat PDF Form document with digital signature fields does not launch
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-pdf-form-document-with-digital-signature-fields-does-not-launch-1312463
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.009.20044
+  window_end: '2017-11-29'
+  window_start: '2017-11-14'
+  window_version: 18.009.20044
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|17.012.20098|17.012.20098
+  report_date: '2017-10-26'
+  report_excerpt: Adobe Acrobat Pro DC crashes constantly Please download the attached file to view this
+    post
+  report_id: adobe-acrobat-pro:f8f720eac469eef0
+  report_title: Adobe Acrobat Pro DC crashes constantly
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-dc-crashes-constantly-1311410
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 17.012.20098
+  window_end: '2017-11-14'
+  window_start: '2017-08-29'
+  window_version: 17.012.20098
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|17.012.20098|17.012.20098
+  report_date: '2017-10-09'
+  report_excerpt: Acrobat Pro DC Crashing Acrobat is constantly crashing on Mac OS Sierra. Originally
+    it was when I tried to save something to Document Cloud, but now I can't even keep it open. I've been
+    struggling with this for over a week. Deleted preferences, uninstalled/reinstalled, logged...
+  report_id: adobe-acrobat-pro:aed4a80cbd8df5e4
+  report_title: Acrobat Pro DC Crashing
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-crashing-1311280
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 17.012.20098
+  window_end: '2017-11-14'
+  window_start: '2017-08-29'
+  window_version: 17.012.20098
+- attribution_state: not_established
   captured_at: '2026-09-08T16:56:50Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
@@ -262,3 +361,43 @@ reports:
   window_end: '2025-11-20'
   window_start: '2025-11-13'
   window_version: 25.001.20918
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:54:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|18.011.20055|18.011.20055
+  report_date: '2018-07-12'
+  report_excerpt: Can't Update Acrobat Reader DC Hi. My first question so please be gentle! There is much
+    publicity today about Windows Updates and others. Two leading experts have said how important it is
+    to update Adobe Acrobat Reader but I can't find any mention of ReaderDC. I've just...
+  report_id: adobe-acrobat-reader:bf5c459b8f1d0ef9
+  report_title: Can't Update Acrobat Reader DC
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/can-t-update-acrobat-reader-dc-1514431
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.011.20055
+  window_end: '2018-08-14'
+  window_start: '2018-07-10'
+  window_version: 18.011.20055
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:54:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|18.011.20038|18.011.20038
+  report_date: '2018-04-08'
+  report_excerpt: Can't open any PDF file. Get error report, says problem with software PLS HELP! I just
+    tried to open PDF files and I cant get one to open, or any of the old ones I have stored on my computer.
+    I have MacOS Sierra 10.12. I don't know what happned but I tried to reinstall Acrobat...
+  report_id: adobe-acrobat-reader:93f139cd890d9789
+  report_title: Can't open any PDF file. Get error report, says problem with software PLS HELP!
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/can-t-open-any-pdf-file-get-error-report-says-problem-with-software-pls-help-1317326
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.011.20038
+  window_end: '2018-05-14'
+  window_start: '2018-02-23'
+  window_version: 18.011.20038

@@ -10503,14 +10503,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 8
-  accepted_candidates: 2
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 2
-  public_counted_reports: 2
-  accepted_reports: 2
-  rejected_reports: 6
+  accepted_candidates: 3
+  duplicate_existing_evidence: 2
+  evidence_rows_added: 1
+  public_counted_reports: 3
+  accepted_reports: 3
+  rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-09-01T11:36:44Z'
+  last_run: '2026-09-08T22:33:25Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20093
@@ -10558,7 +10558,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-09-01T11:36:44Z'
+  last_run: '2026-09-08T22:33:25Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20095
@@ -10599,14 +10599,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 13
-  accepted_candidates: 2
-  duplicate_existing_evidence: 0
+  accepted_candidates: 4
+  duplicate_existing_evidence: 2
   evidence_rows_added: 2
-  public_counted_reports: 2
-  accepted_reports: 2
-  rejected_reports: 11
+  public_counted_reports: 4
+  accepted_reports: 4
+  rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-09-01T11:36:44Z'
+  last_run: '2026-09-08T22:33:25Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20098
@@ -10648,13 +10648,13 @@ methods:
   status: success
   candidates_found: 13
   accepted_candidates: 1
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 1
+  duplicate_existing_evidence: 1
+  evidence_rows_added: 0
   public_counted_reports: 1
   accepted_reports: 1
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-09-01T11:36:44Z'
+  last_run: '2026-09-08T22:33:25Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.009.20044
@@ -10744,13 +10744,13 @@ methods:
   status: success
   candidates_found: 12
   accepted_candidates: 1
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 1
+  duplicate_existing_evidence: 1
+  evidence_rows_added: 0
   public_counted_reports: 1
   accepted_reports: 1
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-09-01T11:36:44Z'
+  last_run: '2026-09-08T22:33:25Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20038
@@ -10791,14 +10791,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 16
-  accepted_candidates: 1
-  duplicate_existing_evidence: 0
+  accepted_candidates: 2
+  duplicate_existing_evidence: 1
   evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 15
+  public_counted_reports: 2
+  accepted_reports: 2
+  rejected_reports: 14
   blocked_reason: ''
-  last_run: '2026-09-01T05:04:42Z'
+  last_run: '2026-09-08T22:33:25Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20040
@@ -10839,14 +10839,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 13
-  accepted_candidates: 1
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 12
+  accepted_candidates: 4
+  duplicate_existing_evidence: 1
+  evidence_rows_added: 3
+  public_counted_reports: 4
+  accepted_reports: 4
+  rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-31T05:30:42Z'
+  last_run: '2026-09-08T22:33:25Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20055
@@ -13256,13 +13256,13 @@ methods:
   status: success
   candidates_found: 14
   accepted_candidates: 4
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 4
+  duplicate_existing_evidence: 3
+  evidence_rows_added: 1
   public_counted_reports: 4
   accepted_reports: 4
   rejected_reports: 10
   blocked_reason: ''
-  last_run: '2026-08-29T07:22:12Z'
+  last_run: '2026-09-08T22:54:00Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 18.009.20044
@@ -13351,14 +13351,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 15
-  accepted_candidates: 2
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 2
-  public_counted_reports: 2
-  accepted_reports: 2
-  rejected_reports: 13
+  accepted_candidates: 3
+  duplicate_existing_evidence: 2
+  evidence_rows_added: 1
+  public_counted_reports: 3
+  accepted_reports: 3
+  rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-27T22:34:31Z'
+  last_run: '2026-09-08T22:54:00Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 18.011.20038
@@ -13399,14 +13399,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 15
-  accepted_candidates: 1
-  duplicate_existing_evidence: 0
+  accepted_candidates: 2
+  duplicate_existing_evidence: 1
   evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 14
+  public_counted_reports: 2
+  accepted_reports: 2
+  rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-08-27T22:34:31Z'
+  last_run: '2026-09-08T22:54:00Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 18.011.20040
@@ -13447,14 +13447,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 16
-  accepted_candidates: 1
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 15
+  accepted_candidates: 6
+  duplicate_existing_evidence: 1
+  evidence_rows_added: 5
+  public_counted_reports: 6
+  accepted_reports: 6
+  rejected_reports: 10
   blocked_reason: ''
-  last_run: '2026-08-27T22:34:31Z'
+  last_run: '2026-09-08T22:54:00Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 18.011.20055
