@@ -151,6 +151,12 @@ export function persistentWorldCanvasResizeRequired(currentWidth: number, curren
   return currentWidth !== nextWidth || currentHeight !== nextHeight;
 }
 
+/** Keeps high-density phone screens crisp without allocating a desktop-sized bitmap. */
+export function persistentWorldCanvasPixelRatio(devicePixelRatio: number, viewportWidth: number) {
+  const safeRatio = Number.isFinite(devicePixelRatio) && devicePixelRatio > 0 ? devicePixelRatio : 1;
+  return Math.min(viewportWidth <= 620 ? 1.35 : viewportWidth <= 900 ? 1.6 : 2, safeRatio);
+}
+
 const OVERVIEW_SCALE = .205;
 const AMBIENT_EDGE = "#315b67";
 export const PERSISTENT_RIGHT_CONTROL_LABEL_INSET = 190;
@@ -318,7 +324,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     const previousSemanticSet = new Set(previousSemantic); const transitionSemanticSet = new Set([...previousSemantic, ...semantic]);
     delete host.dataset.cameraSettleMs; if (reducedMotion) { cameraRef.current = destination; cameraVelocityRef.current = { x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 }; cameraMomentumRef.current = { x: 0, y: 0 }; }
     const resize = () => {
-      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
+      const bounds = host.getBoundingClientRect(); const ratio = persistentWorldCanvasPixelRatio(window.devicePixelRatio || 1, bounds.width); destination = persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
       const nextWidth = Math.max(1, Math.round(bounds.width * ratio)); const nextHeight = Math.max(1, Math.round(bounds.height * ratio));
       const bitmapChanged = persistentWorldCanvasResizeRequired(canvas.width, canvas.height, nextWidth, nextHeight);
       if (bitmapChanged) {
