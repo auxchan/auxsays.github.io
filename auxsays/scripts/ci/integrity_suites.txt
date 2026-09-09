@@ -106,14 +106,14 @@ auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 # left it fully green, because every token it looked for survived in the prose describing those
 # guards. It now asserts against `run:` scalars with comments stripped. The sabotage that used to
 # pass now fails 10 checks.
-auxsays/scripts/tests/test_writer_queue_concurrency.py = 69
+auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
 auxsays/scripts/tests/test_methodology_notes_rendering.py = 61
 # The reaper's shell, EXECUTED against a scripted fake `gh` rather than grepped -- extracted
 # from the workflow YAML so it cannot drift from what CI runs. The sabotage that the
 # structural suite originally missed fails 6 checks here. Needs `bash`, which ubuntu-latest
 # and this repo's Windows dev setup both provide; it reports and fails if bash is absent
 # rather than passing vacuously.
-auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 23
+auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
 
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --

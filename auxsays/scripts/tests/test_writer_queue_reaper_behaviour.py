@@ -59,7 +59,12 @@ if [ "$1" = "workflow" ]; then
   exit 0
 fi
 case "$q" in
-  *'select(.status == "queued"'*)                              echo "$SIM_INFLIGHT" ;;
+  # Answer the occupancy query DIFFERENTLY depending on whether it asks about `pending`. A
+  # concurrency-blocked run reports `status: "pending"`, so a query that omits that state is blind
+  # to exactly the run the guard protects. Returning "occupied" only to a pending-aware query makes
+  # the scenario discriminate: a blind reaper sees a free lane and dispatches.
+  *'.status == "pending"'*)      echo "$SIM_INFLIGHT_PENDING" ;;
+  *'select(.status =='*)         echo "$SIM_INFLIGHT" ;;
   *'.conclusion == \"success\"'*|*'conclusion == "success"'*)  echo "$SIM_COVERING" ;;
   *'conclusion == \"cancelled\"'*|*'conclusion == "cancelled"'*)
       case "$q" in
@@ -96,6 +101,9 @@ def run_scenario(script: str, env_decl: dict, **sim) -> tuple[int, str, list[str
             "GROUP_MEMBERS": " ".join(str(env_decl.get("GROUP_MEMBERS", "")).split()),
             "REAPABLE": str(env_decl.get("REAPABLE", "")),
             "SIM_INFLIGHT": sim.get("inflight", "0"),
+            # Defaults to the plain occupancy answer so every other scenario is unaffected; the
+            # pending-blindness scenario overrides it to make the two queries disagree.
+            "SIM_INFLIGHT_PENDING": sim.get("inflight_pending", sim.get("inflight", "0")),
             "SIM_COVERING": sim.get("covering", ""),
             "SIM_EVICTED_OBS": sim.get("evicted_obs", ""),
             "SIM_EVICTED_ING": sim.get("evicted_ing", ""),
@@ -122,6 +130,14 @@ SCENARIOS = [
     ("the same eviction is NOT repaired while the lane is occupied -- the pending slot "
      "belongs to the group, so adding an entrant would destroy someone else's queued run",
      {"inflight": "1", "evicted_obs": "101 2026-09-09T03:00:00Z"}, []),
+    # DISCRIMINATING: the lane looks FREE to a query that omits `pending` and OCCUPIED to one that
+    # includes it. A reaper blind to `pending` therefore dispatches here and fails this scenario.
+    # This is a real production defect, not a hypothetical: the first live tick reported
+    # "1 run(s) queued or in progress" while run 34333264915 sat pending in the very slot the guard
+    # exists to protect, because `pending` was missing from the state list.
+    ("a run held PENDING by the concurrency group occupies the lane",
+     {"inflight": "0", "inflight_pending": "1",
+      "evicted_obs": "101 2026-09-09T03:00:00Z"}, []),
     ("a cancelled run that HAD jobs is never resurrected -- it may already have committed",
      {"evicted_obs": "101 2026-09-09T03:00:00Z", "jobs": "2"}, []),
     ("a later SUCCESSFUL routine run covers the loss, so no duplicate cycle is queued",

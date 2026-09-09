@@ -91,8 +91,15 @@ jobs:
           # terminating: it cannot pile re-dispatches on top of each other.
           busy=0
           for wf in ${GROUP_MEMBERS}; do
+            # `pending` IS THE ONE THAT MATTERS and it was missing from the first version of this
+            # list. A run held back by a concurrency group reports `status: "pending"`, not
+            # `queued` -- confirmed against the live API on run 34333264915, which this guard
+            # counted as absent while it sat in the very slot the guard exists to protect. The
+            # first production tick therefore reported "1 run(s) queued or in progress" when two
+            # runs were holding the lane. `queued`, `waiting` and `requested` are the other
+            # non-terminal states GitHub can report before a run completes.
             n="$(gh api "repos/${REPO}/actions/workflows/${wf}/runs?per_page=20" --jq \
-              '[.workflow_runs[] | select(.status == "queued" or .status == "in_progress" or .status == "waiting")] | length' 2>/dev/null)" || n=""
+              '[.workflow_runs[] | select(.status == "pending" or .status == "queued" or .status == "in_progress" or .status == "waiting" or .status == "requested")] | length' 2>/dev/null)" || n=""
             if [ -z "${n}" ]; then
               echo "::warning title=Reaper::could not read runs for ${wf}; treating the lane as busy"
               busy=$((busy + 1))
