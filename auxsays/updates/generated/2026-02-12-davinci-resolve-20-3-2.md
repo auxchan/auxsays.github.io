@@ -1,8 +1,7 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 20.3.2 official update breakdown
-description: Published Apr 14, 2026. AUXSAYS is tracking DaVinci Resolve 20.3.2 as a separate stable/Studio evidence
-  record from the Public Beta 1 page.
+description: Published Apr 14, 2026. AUXSAYS is tracking DaVinci Resolve 20.3.2 as a separate stable/Studio evidence record from the Public Beta 1 page.
 permalink: /updates/blackmagic-design/blackmagic-davinci/20-3-2/
 update_entry: true
 company_id: blackmagic-design
@@ -20,7 +19,7 @@ update_published_at: '2026-02-12T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-06-02T21:25:17Z'
 official_body_last_checked: '2026-06-02T21:25:17Z'
-record_last_updated: '2026-06-06T10:28:36.231460Z'
+record_last_updated: '2026-09-09T20:41:00.218514Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -28,22 +27,18 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.3.2
 update_detail_title: DaVinci Resolve 20.3.2
 update_consensus_label: Negative
-update_report_count: 27
+update_report_count: 29
 update_consensus_confidence: Medium
 quick_verdict: 'WAIT: DaVinci Resolve 20.3.2 has 27 user reports found.'
-official_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
-  Beta 1. The official source capture should be refreshed before relying on this page for full release-note detail.
-release_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
-  Beta 1. Use this page for stable/Studio evidence and the beta page for beta-build risk.
-consensus_report: '27 user reports found for DaVinci Resolve 20.3.2. Current reports mention render/export failures,
-  startup or application crashes, and installation problems. Current reports are Reddit-heavy, so production users
-  should test before updating. Sources represented: r/davinciresolve and Creative COW DaVinci Resolve.'
+official_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta 1. The official source capture should be refreshed before relying on this page for full release-note detail.
+release_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta 1. Use this page for stable/Studio evidence and the beta page for beta-build risk.
+consensus_report: '27 user reports found for DaVinci Resolve 20.3.2. Current reports mention render/export failures, startup or application crashes, and installation problems. Current reports are Reddit-heavy, so production users should test before updating. Sources represented: r/davinciresolve and Creative COW DaVinci Resolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 27
-evidence_last_checked: '2026-06-06T10:28:11Z'
+confirmed_patch_specific_report_count: 29
+evidence_last_checked: '2026-09-09T20:37:52Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -125,8 +120,7 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
-  source. It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source. It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -173,10 +167,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update adds new trim editor options for dynamic trimming, improved kerning for subtitles, and new
-  colorspace and gamma options for Fujifilm camera footage. It also includes improved magic mask caching, as well
-  as better metadata retention and timeline rendering for immersive and stereo 3D projects. This version requires
-  a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
+  This software update adds new trim editor options for dynamic trimming, improved kerning for subtitles, and new colorspace and gamma options for Fujifilm camera footage. It also includes improved magic mask caching, as well as better metadata retention and timeline rendering for immersive and stereo 3D projects. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -187,10 +178,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.2 has 27 user reports found. User reports show a repeat pattern.
-  Current reports mention render/export failures, startup or application crashes, and installation problems. Production
-  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
-  so production users should test before updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.2 has 27 user reports found. User reports show a repeat pattern. Current reports mention render/export failures, startup or application crashes, and installation problems. Production editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production users should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1t2vhf6/whats_going_on_with_these_captions/
@@ -237,8 +225,7 @@ status_change_type: new
 notification_message: ''
 update_channel_label: Stable / Studio evidence record
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures, startup or application crashes, and installation
-  problems. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures, startup or application crashes, and installation problems. Production editors with active delivery deadlines should wait or test on copied projects.
 record_note: This page covers DaVinci Resolve 20.3.2. Beta reports are excluded from this record.
 evidence_sample_visible_limit: 5
 accepted_report_sources:
@@ -335,8 +322,7 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sp7wvs/fusion_compositions_break_when_copied_between/
-  source_title: Fusion compositions break when copied between projects via Dynamic Project Switching — looking for
-    a quick fix or better workflow
+  source_title: Fusion compositions break when copied between projects via Dynamic Project Switching — looking for a quick fix or better workflow
   source_date: '2026-04-18'
   version_matched: 20.3.2
   patch_version_matched: true

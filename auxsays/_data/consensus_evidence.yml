@@ -30606,3 +30606,174 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.9278'
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vvfejj-why-is-davinci-resolve-21-studio-crashing
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vvfejj/why_is_davinci_resolve_21_studio_crashing_so_much/
+  parent_title: Why is DaVinci Resolve 21 Studio crashing so much this week?
+  report_title: Why is DaVinci Resolve 21 Studio crashing so much this week?
+  report_text_excerpt: Why is DaVinci Resolve 21 Studio crashing so much this week? Hey everyone, I’m working on a brand new Mac Mini M4 with 32GB RAM and 512GB storage, running DaVinci Resolve 21 Studio. I’ve had several crashes just this week. They mostly happen when I’m trying to adjust or...
+  captured_at: '2026-09-09T20:35:32Z'
+  source_date: '2026-08-22'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w74qwg-import-fcpxml-timeline-unable-to-find-inh
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w74qwg/import_fcpxml_timeline_unable_to_find_inherited/
+  parent_title: Import fcpxml Timeline "Unable to find inherited value for key "library". Line 4."
+  report_title: Import fcpxml Timeline "Unable to find inherited value for key "library". Line 4."
+  report_text_excerpt: Import fcpxml Timeline "Unable to find inherited value for key "library". Line 4." I'm using Davinci Resolve Studio 21 and I've been trying to import interviews I've recorded in Streamyard and Riverside and I keep getting the error in the title. It used to work in DRS 19 & 20....
+  captured_at: '2026-09-09T20:35:32Z'
+  source_date: '2026-09-04'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve Studio 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vywcqr-vst-plugins-now-work-in-fairlight-on-linu
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vywcqr/vst_plugins_now_work_in_fairlight_on_linux_i/
+  parent_title: VST plugins now work in Fairlight on Linux. I built the host that's missing, it's free and open source.
+  report_title: VST plugins now work in Fairlight on Linux. I built the host that's missing, it's free and open source.
+  report_text_excerpt: VST plugins now work in Fairlight on Linux. I built the host that's missing, it's free and open source. Self-promotion, and I'm the author. Free, MIT licensed, no paid tier, nothing to sign up for. Not a devtool, but a fix that BM should've done for Linux user - but hasn't...
+  captured_at: '2026-09-09T20:35:32Z'
+  source_date: '2026-08-26'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve Studio 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vf9vvg-grade-shows-correctly-on-clip-thumbnails
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vf9vvg/grade_shows_correctly_on_clip_thumbnails_but_not/
+  parent_title: Grade shows correctly on clip thumbnails but NOT in viewer or export — tried every known fix, still stuck
+  report_title: Grade shows correctly on clip thumbnails but NOT in viewer or export — tried every known fix, still stuck
+  report_text_excerpt: 'Grade shows correctly on clip thumbnails but NOT in viewer or export — tried every known fix, still stuck Hi everyone, really hoping someone can help at this point. Setup: DaVinci Resolve Studio 21, using the CinePrint 16 PowerGrade (by Tom Bolles) on a timeline clip. Added a...'
+  captured_at: '2026-09-09T20:35:32Z'
+  source_date: '2026-08-04'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve Studio 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rrpstt-slow-performance-on-a-semi-beefy-pc
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rrpstt/slow_performance_on_a_semi_beefy_pc/
+  parent_title: Slow performance on a semi beefy pc?
+  report_title: Slow performance on a semi beefy pc?
+  report_text_excerpt: Slow performance on a semi beefy pc? So i have been editing for around 4 years now, and I'm starting to get pretty good. However, once my projects get any bigger than like 5-6 minutes, the performance of resolve gets super bad, like super super bad. Everytime I try doing...
+  captured_at: '2026-09-09T20:37:52Z'
+  source_date: '2026-03-12'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t9zt2c-weird-pixel-artifacts-on-fusion-compositi
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t9zt2c/weird_pixel_artifacts_on_fusion_compositions/
+  parent_title: Weird Pixel Artifacts on Fusion Compositions
+  report_title: Weird Pixel Artifacts on Fusion Compositions
+  report_text_excerpt: Weird Pixel Artifacts on Fusion Compositions Hi everyone! I'm trying to export a video with some simple animated fusion comps and I'm getting these super weird flickering pixel artifacts - both on the timeline and after exporting. Has anyone had this problem and if yes - what...
+  captured_at: '2026-09-09T20:37:52Z'
+  source_date: '2026-05-11'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v5o79j-davinci-resolve-2021-unsupported-gpu-proc
+  product_id: blackmagic-davinci
+  update_version: 20.2.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v5o79j/davinci_resolve_2021_unsupported_gpu_processing/
+  parent_title: 'DaVinci Resolve 20/21: "Unsupported GPU Processing Mode" - RX 6600 detected by Windows but not by Resolve'
+  report_title: 'DaVinci Resolve 20/21: "Unsupported GPU Processing Mode" - RX 6600 detected by Windows but not by Resolve'
+  report_text_excerpt: 'DaVinci Resolve 20/21: "Unsupported GPU Processing Mode" - RX 6600 detected by Windows but not by Resolve Hi everyone, I''m trying to run DaVinci Resolve (both 20.2.2 and 21.0.3 Free), but every time I launch it I get this error: "Unsupported GPU Processing Mode" "Please review...'
+  captured_at: '2026-09-09T20:45:15Z'
+  source_date: '2026-07-24'
+  target_release_date: '2025-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
