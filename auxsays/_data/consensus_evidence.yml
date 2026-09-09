@@ -30172,3 +30172,56 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-20-013-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-freezes-during-creating-comments-1255710
+  product_id: adobe-acrobat-pro
+  update_version: 20.013.20074
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-freezes-during-creating-comments-1255710
+  parent_title: Acrobat DC freezes during creating comments
+  report_title: Acrobat DC freezes during creating comments
+  report_text_excerpt: Acrobat DC freezes during creating comments I have installed Windows 10 Pro build 20H2. Acrobat DC (20.013.20074). During copy comments from MS Word Acrobat freezes and everything dissapears. Acrobat windows is getting white and not responding. Waiting doesnt help. I have...
+  captured_at: '2026-09-09T05:45:49Z'
+  source_date: '2021-02-01'
+  target_release_date: '2020-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.013.20074
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-013-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-cant-install-acrobat-dc-in-cc-1254918
+  product_id: adobe-acrobat-pro
+  update_version: 20.013.20074
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/cant-install-acrobat-dc-in-cc-1254918
+  parent_title: Cant install Acrobat DC in CC
+  report_title: Cant install Acrobat DC in CC
+  report_text_excerpt: 'Cant install Acrobat DC in CC I''ev tried everything, use the tools from adobe tools, using the cmd to check the system files, but nothing works Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW071 ......'
+  captured_at: '2026-09-09T05:45:49Z'
+  source_date: '2021-01-07'
+  target_release_date: '2020-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.013.20074
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
