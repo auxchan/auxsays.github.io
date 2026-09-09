@@ -2,6 +2,29 @@ schema_version: 1
 note: Update-linked user reports. These are REAL community reports about a PowerPoint update whose exact
   build was never stated. They are shown to readers and are deliberately NOT counted toward consensus.
 reports:
+- associated_patch_key: adobe-acrobat-pro|23.001.20143|23.001.20143
+  associated_target_build: 23.001.20143
+  associated_update_version: 23.001.20143
+  association_basis: release_window_containment
+  captured_at: '2026-09-09T05:45:49Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  report_date: '2023-05-11'
+  report_excerpt: I cannot open files in 32-bit Acrobat Pro DC that were optimized in 64-bit Acrobat Pro
+    DC I got a new laptop with 64-bit Windows 11, RAM 32 GB, 32-bit Adobe Acrobat Pro DC. I know it is
+    not supported anymore. I cannot open PDFs optimized on my old laptop with 64-bit Adobe...
+  report_id: adobe-acrobat-pro:eb0ee5157457028e
+  report_title: I cannot open files in 32-bit Acrobat Pro DC that were optimized in 64-bit Acrobat Pro
+    DC
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/i-cannot-open-files-in-32-bit-acrobat-pro-dc-that-were-optimized-in-64-bit-acrobat-pro-dc-1281789
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: got updated
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution
 - associated_patch_key: adobe-acrobat-reader|25.001.21078|25.001.21078
   associated_target_build: 25.001.21078
   associated_update_version: 25.001.21078
@@ -22,5 +45,50 @@ reports:
   source_url: https://community.adobe.com/questions-12/websaver-ca-coupons-to-print-can-t-1623765
   strict_exclusion_reason: missing_exact_patch_version_match
   update_link_evidence: until new upgrade
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution
+- associated_patch_key: adobe-acrobat-reader|20.009.20067|20.009.20067
+  associated_target_build: 20.009.20067
+  associated_update_version: 20.009.20067
+  association_basis: release_window_containment
+  captured_at: '2026-09-09T06:55:24Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  report_date: '2020-06-10'
+  report_excerpt: Cannot print PDFs through Adobe DC on a Mac Hi all, After a long support call I was
+    told that the only way Adobe Acrobat DC can print on a Macintosh was to choose 'print as image.' When
+    I questioned the veracity of this during the support call, I was told unequivocally that if...
+  report_id: adobe-acrobat-reader:44f1411aad041507
+  report_title: Cannot print PDFs through Adobe DC on a Mac
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/cannot-print-pdfs-through-adobe-dc-on-a-mac-1248356
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: after updating
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution
+- associated_patch_key: adobe-acrobat-reader|17.009.20044|17.009.20044
+  associated_target_build: 17.009.20044
+  associated_update_version: 17.009.20044
+  association_basis: release_window_containment
+  captured_at: '2026-09-09T02:25:01Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  report_date: '2017-06-03'
+  report_excerpt: Adobe Acrobat Reader DC crashes on copying pdf content with not saved changes to another
+    directory using PDDocCopyToFile method from Adobe plugin. Currently custom adobe plugin should copy
+    pdf content if pdf document was updated but not saved in Adobe Reader/Acrobat otherwise...
+  report_id: adobe-acrobat-reader:0d704a3300712835
+  report_title: Adobe Acrobat Reader DC crashes on copying pdf content with not saved changes to another
+    directory using PDDocCopyToFile method from Adobe plugin.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-18/adobe-acrobat-reader-dc-crashes-on-copying-pdf-content-with-not-saved-changes-to-another-directory-using-pddoccopytofile-method-from-adobe-plugin-594475
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: was updated
   update_link_reason: update_named_as_cause
   update_link_signal: explicit_update_attribution
