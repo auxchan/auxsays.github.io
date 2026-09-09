@@ -35,6 +35,7 @@ from .base import (
     date_part,
     exact_version_match,
     generated_records,
+    newest_first,
     load_front_matter_and_body,
     make_evidence_row,
     method_health_row,
@@ -290,7 +291,15 @@ class DavinciCollector(ProductCollector):
     product_id = PRODUCT_ID
 
     def collect(self, context: CollectorContext) -> list[dict[str, Any]]:
-        records = generated_records(PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions))
+        # NEWEST-FIRST. `generated_records` returns filename order, i.e. oldest-first from 2014,
+        # and this collector `break`s when its 1200 s budget expires -- so every scheduled run spent
+        # its whole budget on 2014-2018 records and never reached the current ones. Measured on run
+        # 34377762747: versions 10.1.5 through 15.0.1, 77 of 77 candidates rejected as
+        # `missing_exact_patch_version_match`, 87 of 120 records never reached, and the newest
+        # release 21.1 never searched by any method. Acrobat (PR #102-#105) and Windows already walk
+        # newest-first; DaVinci was the collector that never got it.
+        records = newest_first(generated_records(
+            PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions)))
         results: list[dict[str, Any]] = []
         for record in records:
             _b = rb.get_run_budget()
