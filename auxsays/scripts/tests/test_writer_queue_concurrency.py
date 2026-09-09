@@ -437,6 +437,13 @@ def main() -> int:
               "a per-workflow guard lets the reaper evict the run it exists to protect")
         # Assert the actual COMPARISON, not the presence of the variable: replacing the guard with
         # `if false; then` leaves every token intact and slipped past an earlier version of this.
+        # A concurrency-blocked run reports `status: "pending"`, NOT `queued`. Omitting it made the
+        # guard blind to exactly the run it protects: the first production tick counted 1 while two
+        # runs held the lane (verified on run 34333264915).
+        for state in ("pending", "queued", "in_progress"):
+            check(f"8j1 the occupancy check counts runs in state {state!r}",
+                  f'.status == "{state}"' in shell,
+                  "a concurrency-blocked run is `pending`, not `queued`")
         check("8j2 and the occupancy check is a real comparison that can fire",
               '[ "${busy}" -gt 0 ]' in shell,
               "a guard rewritten to `if false` keeps all its tokens")
