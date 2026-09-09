@@ -4,6 +4,26 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
+  captured_at: '2026-09-09T16:36:26Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.002.21901|26.002.21901
+  report_date: '2026-09-09'
+  report_excerpt: Acrobat freezes after opening a document, killing Acrobat Licensing Service background
+    process makes it run again (win11) Hello, we have multiple people with Adobe Acrobat that get random
+    freezes upon opening some .pdf files. It doesn't happen everytime and apparently killing...
+  report_id: adobe-acrobat-pro:635a0df77ea10b38
+  report_title: Acrobat freezes after opening a document, killing Acrobat Licensing Service background
+    process makes it run again (win11)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-freezes-after-opening-a-document-killing-acrobat-licensing-service-background-process-makes-it-run-again-win11-1641080
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21901
+  window_start: '2026-09-08'
+  window_version: 26.002.21901
+- attribution_state: not_established
   captured_at: '2026-09-04T11:14:55Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
@@ -23,7 +43,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-08T16:36:18Z'
+  captured_at: '2026-09-09T16:36:26Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -43,7 +63,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-08T16:36:18Z'
+  captured_at: '2026-09-09T16:36:26Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -63,7 +83,7 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
-  captured_at: '2026-09-08T16:36:18Z'
+  captured_at: '2026-09-09T16:36:26Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -83,7 +103,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-09-08T16:36:18Z'
+  captured_at: '2026-09-09T16:36:26Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -142,6 +162,46 @@ reports:
   window_end: '2025-11-20'
   window_start: '2025-11-13'
   window_version: 25.001.20918
+- attribution_state: not_established
+  captured_at: '2026-09-09T14:09:12Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|20.012.20041|20.012.20041
+  report_date: '2020-08-11'
+  report_excerpt: Adobe Acrobat Pro DC crashes while trying to embed video files I didn´t find any useful
+    workaround. It always crashes when trying to embed video files to a pdf. I tried with mov, mp4 and
+    even gif files and it always shuts down. I am on a Macbook Air 2018. All softwares are up...
+  report_id: adobe-acrobat-pro:030eecad8c16c5ae
+  report_title: Adobe Acrobat Pro DC crashes while trying to embed video files
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-dc-crashes-while-trying-to-embed-video-files-1250223
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 20.012.20041
+  window_end: '2020-08-19'
+  window_start: '2020-08-11'
+  window_version: 20.012.20041
+- attribution_state: not_established
+  captured_at: '2026-09-09T14:09:12Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|20.009.20063|20.009.20063
+  report_date: '2020-05-19'
+  report_excerpt: Acrobat Pro DC crashes while trying to start a multimedia file Hello, I have a problem
+    with Acrobat Pro DC. Everytime I export an interactive InDesign file to PDF and I open it with Acrobat,
+    it closes by the time I try to start the multimedia files in it. There are no error's...
+  report_id: adobe-acrobat-pro:637bfbbc803e0854
+  report_title: Acrobat Pro DC crashes while trying to start a multimedia file
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-crashes-while-trying-to-start-a-multimedia-file-1247548
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 20.009.20063
+  window_end: '2020-05-21'
+  window_start: '2020-05-12'
+  window_version: 20.009.20063
 - attribution_state: not_established
   captured_at: '2026-09-09T03:32:08Z'
   classification: recent_report
@@ -362,7 +422,27 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
-  captured_at: '2026-09-08T16:56:50Z'
+  captured_at: '2026-09-09T16:56:54Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.002.21901|26.002.21901
+  report_date: '2026-09-09'
+  report_excerpt: Acrobat freezes after opening a document, killing Acrobat Licensing Service background
+    process makes it run again (win11) Hello, we have multiple people with Adobe Acrobat that get random
+    freezes upon opening some .pdf files. It doesn't happen everytime and apparently killing...
+  report_id: adobe-acrobat-reader:cf85cc7c366fdd0f
+  report_title: Acrobat freezes after opening a document, killing Acrobat Licensing Service background
+    process makes it run again (win11)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-freezes-after-opening-a-document-killing-acrobat-licensing-service-background-process-makes-it-run-again-win11-1641080
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21901
+  window_start: '2026-09-08'
+  window_version: 26.002.21901
+- attribution_state: not_established
+  captured_at: '2026-09-09T16:56:54Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -382,7 +462,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-08T16:56:50Z'
+  captured_at: '2026-09-09T16:56:54Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -402,7 +482,27 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-08T16:56:50Z'
+  captured_at: '2026-09-09T08:06:07Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21691|26.001.21691
+  report_date: '2026-07-16'
+  report_excerpt: A running instance of Acrobat has caused an error I try to open an PDf doc...system
+    then hangs and then I get a pop-up window " a running instance of abobe has caused an error" Adobe
+    themselves worked on it yesterday. I am seriously thinking of canceling my subscription
+  report_id: adobe-acrobat-reader:936e9098cc1e2e47
+  report_title: A running instance of Acrobat has caused an error
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/a-running-instance-of-acrobat-has-caused-an-error-1632340
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21691
+  window_end: '2026-07-23'
+  window_start: '2026-06-25'
+  window_version: 26.001.21691
+- attribution_state: not_established
+  captured_at: '2026-09-09T16:56:54Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -501,6 +601,46 @@ reports:
   window_end: '2022-06-14'
   window_start: '2022-04-12'
   window_version: 22.001.20117
+- attribution_state: not_established
+  captured_at: '2026-09-09T10:35:29Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|21.005.20048|21.005.20048
+  report_date: '2021-06-10'
+  report_excerpt: 'Adobe Reader Error 10:10 (IE 11) Hello. I have about 250 machines on our domain and
+    starting a few days ago, my users cannot open a PDF within Internet Explorer. Trying to do so gives
+    the following: "There is a problem with Adobe Reader. If it is running, please exit and try...'
+  report_id: adobe-acrobat-reader:cd6777a4164774aa
+  report_title: Adobe Reader Error 10:10 (IE 11)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-reader-error-10-10-ie-11-1523872
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 21.005.20048
+  window_end: '2021-06-23'
+  window_start: '2021-06-08'
+  window_version: 21.005.20048
+- attribution_state: not_established
+  captured_at: '2026-09-09T10:35:29Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|21.001.20155|21.001.20155
+  report_date: '2021-05-18'
+  report_excerpt: 'Acrobat Reader DC crashes on startup Hi, today I opened Reader DC but after opening
+    it, it immediately freezes with a white screen. If I try to close it it says: ''''Adobe Acrobat Reader
+    DC has stopped working'''' with two alternatives: Close program or wait for the program to...'
+  report_id: adobe-acrobat-reader:8abe9f89ea8dba74
+  report_title: Acrobat Reader DC crashes on startup
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-dc-crashes-on-startup-1523712
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 21.001.20155
+  window_end: '2021-06-08'
+  window_start: '2021-05-11'
+  window_version: 21.001.20155
 - attribution_state: not_established
   captured_at: '2026-09-09T06:55:24Z'
   classification: recent_report

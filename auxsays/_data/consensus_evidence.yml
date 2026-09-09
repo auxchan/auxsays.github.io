@@ -30331,3 +30331,278 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-24-002-20857-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-acrobat-fill-and-sign-feature-crashes-program-1294
+  product_id: adobe-acrobat-reader
+  update_version: 24.002.20857
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-acrobat-fill-and-sign-feature-crashes-program-1294883
+  parent_title: Acrobat acrobat Fill and Sign feature crashes program.
+  report_title: Acrobat acrobat Fill and Sign feature crashes program.
+  report_text_excerpt: Acrobat acrobat Fill and Sign feature crashes program. once i click on fill and sign, the program closes by itself. i uninstalled the program and reinstall it back but it did not help. i have the version, 24.002.20857. can you assist on that please
+  captured_at: '2026-09-09T08:06:07Z'
+  source_date: '2024-07-16'
+  target_release_date: '2024-06-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20857
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-20-013-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-cant-install-acrobat-dc-in-cc-1254918
+  product_id: adobe-acrobat-reader
+  update_version: 20.013.20074
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/cant-install-acrobat-dc-in-cc-1254918
+  parent_title: Cant install Acrobat DC in CC
+  report_title: Cant install Acrobat DC in CC
+  report_text_excerpt: 'Cant install Acrobat DC in CC I''ev tried everything, use the tools from adobe tools, using the cmd to check the system files, but nothing works Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW071 ......'
+  captured_at: '2026-09-09T09:18:44Z'
+  source_date: '2021-01-07'
+  target_release_date: '2020-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.013.20074
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-021-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-install-font-pack-1902120058-or-1500720033-on-a
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/unable-to-install-font-pack-1902120058-or-1500720033-on-acrobat-classic-track-20-001-30002-54973-1521197
+  parent_title: Unable to Install Font Pack 1902120058 or 1500720033 on Acrobat Classic Track 20.001.30002.54973
+  report_title: Unable to Install Font Pack 1902120058 or 1500720033 on Acrobat Classic Track 20.001.30002.54973
+  report_text_excerpt: Unable to Install Font Pack 1902120058 or 1500720033 on Acrobat Classic Track 20.001.30002.54973 As previously reported by others there does not seem to be a reliable installer for the newer versions of Adobe Reader. I need to install the classic track Adobe Reader with the...
+  captured_at: '2026-09-09T09:18:44Z'
+  source_date: '2020-08-28'
+  target_release_date: '2019-12-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '1902120058'
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-021-20049-adobe-community-bug-report-https-community-adobe-com-questions-9-cannot-install-acrobat-adobe-reader-dc-i-have-tried-all-th
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20049
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/cannot-install-acrobat-adobe-reader-dc-i-have-tried-all-the-solutions-1241257
+  parent_title: Cannot Install Acrobat Adobe Reader DC ( I have tried all the solutions)
+  report_title: Cannot Install Acrobat Adobe Reader DC ( I have tried all the solutions)
+  report_text_excerpt: Cannot Install Acrobat Adobe Reader DC ( I have tried all the solutions) Hi all, I have been on hold to talk to someone at Adobe for about an hour after being told it would be a 12 minute wait. I have tried all of the solutions that have been posted in the other similar...
+  captured_at: '2026-09-09T09:18:44Z'
+  source_date: '2019-10-31'
+  target_release_date: '2019-10-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20049
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-012-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-fails-to-print-intermittently-for-one-user-1
+  product_id: adobe-acrobat-reader
+  update_version: 19.012.20040
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-fails-to-print-intermittently-for-one-user-1518185
+  parent_title: Adobe Reader fails to print intermittently for one user
+  report_title: Adobe Reader fails to print intermittently for one user
+  report_text_excerpt: Adobe Reader fails to print intermittently for one user We have 1 user on a terminal server who is having intermittent problems printing PDFs with Adobe Acrobat Reader DC 19.012.20040. When this occurs, it affects all PDF documents but he has no problems printing in other...
+  captured_at: '2026-09-09T09:18:44Z'
+  source_date: '2019-09-12'
+  target_release_date: '2019-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20040
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-21-005-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-has-stopped-working-1524070
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-has-stopped-working-1524070
+  parent_title: Adobe Acrobat Reader DC has stopped working
+  report_title: Adobe Acrobat Reader DC has stopped working
+  report_text_excerpt: Adobe Acrobat Reader DC has stopped working This week we noticed that we have several machines that have Acrobat Reader DC version 21.005.20058 that are now getting this error every time we try to launch the application. It has worked perfectly prior to this last week. If I do...
+  captured_at: '2026-09-09T10:35:29Z'
+  source_date: '2021-07-22'
+  target_release_date: '2021-07-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-21-005-20048-adobe-community-bug-report-https-community-adobe-com-questions-12-there-is-a-problem-with-acrobat-reader-if-it-is-running-p
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20048
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/there-is-a-problem-with-acrobat-reader-if-it-is-running-please-exit-and-try-again-10-10-1523861
+  parent_title: There is a problem with Acrobat/Reader. If it is running, please exit and try again. (10:10)
+  report_title: There is a problem with Acrobat/Reader. If it is running, please exit and try again. (10:10)
+  report_text_excerpt: 'There is a problem with Acrobat/Reader. If it is running, please exit and try again. (10:10) Hello all, After updating Adobe Reader DC to version 21.005.20048. I am unable to open PDFs in IE. Error: There is a problem with Acrobat/Reader. If it is running, please exit and try...'
+  captured_at: '2026-09-09T10:35:29Z'
+  source_date: '2021-06-10'
+  target_release_date: '2021-06-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20048
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20048-adobe-community-bug-report-https-community-adobe-com-questions-12-can-t-sign-document-1523976
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20048
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/can-t-sign-document-1523976
+  parent_title: Can't sign document
+  report_title: Can't sign document
+  report_text_excerpt: Can't sign document Hello, I have de Adobe Acrobat Reader DC - Português (21.005.20048) version on Windows 10. When I try com sign an interative document, the Sign botton doesn't work. I click on the interative rectangle to select the signature I want. Done. Select the...
+  captured_at: '2026-09-09T10:35:29Z'
+  source_date: '2021-07-05'
+  target_release_date: '2021-06-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20048
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5997991-file-history-problems-after-installing
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5997991/file-history-problems-after-installing-kb5124008-k
+  parent_title: File History problems after installing KB5124008, KB5126052, andKB890830 - Microsoft Q&A
+  report_title: File History problems after installing KB5124008, KB5126052, andKB890830 - Microsoft Q&A
+  report_text_excerpt: File History problems after installing KB5124008, KB5126052, andKB890830 - Microsoft Q&A Ran Windows Update on two sepearate Windows 11 computers that were all up to date as of Saturday morning - broke File History Today I ran File History on 2 computers - both ran correctly....
+  captured_at: '2026-09-09T13:00:03Z'
+  source_date: '2026-09-09'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5997567-unusual-windows-update-experience-has
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5997567/unusual-windows-update-experience-has-anyone-else
+  parent_title: Unusual Windows Update Experience Has anyone else had this happen? - Microsoft Q&A
+  report_title: Unusual Windows Update Experience Has anyone else had this happen? - Microsoft Q&A
+  report_text_excerpt: Unusual Windows Update Experience Has anyone else had this happen? - Microsoft Q&A Was running Windows 26H2 26300.9278 when I noticed today that Point in Time had not created any snapshots since I upgraded to 26H2. After asking AI about it it said it was a known issue and that...
+  captured_at: '2026-09-09T13:00:20Z'
+  source_date: '2026-09-08'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.9278'
+  match_basis: exact_os_build
+  matched_os_build: '26100.9278'
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.9278'

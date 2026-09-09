@@ -12,8 +12,30 @@ on:
         required: false
         default: false
         type: boolean
-  schedule:
-    - cron: "17 */6 * * *"
+  # NO `schedule:` HERE, DELIBERATELY -- this lane is chained, not independently scheduled.
+  #
+  # This workflow used to declare `cron: "17 */6 * * *"`, byte-identical to the expression in
+  # obs-evidence-collection.yml. GitHub does not deliver two crons in the same minute (measured gaps
+  # were 277-688 s), so they never collided on arrival. They collided in the QUEUE: the writer
+  # concurrency group `auxsays-main-writeback` holds at most one run in progress and ONE run
+  # pending, and with `cancel-in-progress: false` it is the PENDING run that a new entrant destroys.
+  # Writer runs here take 54-197 minutes against a 6-hour cadence, so whichever cron was due while
+  # the other lane was still running went into that single pending slot and was cancelled by the
+  # following arrival.
+  #
+  # Measured over 236 writer runs before this change: 14 SCHEDULED runs were cancelled, and 7 of
+  # them were displaced by another SCHEDULED run -- production destroying production with no human
+  # involved. An evicted run is cancelled before a runner is allocated, so its `jobs` array is
+  # EMPTY: no checkout, no collector, no writeback, not even an `always()` handler. There is no
+  # failure log, which is why nobody noticed.
+  #
+  # Routine ingestion is now dispatched by the `chain-ingest` job at the end of the scheduled
+  # evidence run, so the two lanes are ordered instead of racing, and only ONE writer holds a cron.
+  # `workflow_dispatch` is kept for ad-hoc use; a no-input dispatch is behaviourally identical to
+  # the old scheduled path, because every production branch below gates on the inputs being absent.
+  #
+  # This alone is NOT the whole repair: two runs of the SAME workflow can still evict each other
+  # (runs 34311698674 and 34311764894 did). `writer-queue-reaper.yml` closes that half.
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true

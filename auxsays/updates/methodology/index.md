@@ -143,7 +143,37 @@ permalink: /updates/methodology/
         {%- endcomment -%}
         <span>{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} newly stored{% if item.duplicate_existing_evidence and item.duplicate_existing_evidence > 0 %} &middot; {{ item.duplicate_existing_evidence }} already held{% endif %}</small></span>
         <span>{{ item.public_counted_reports | default: 0 }}</span>
-        <span>{% if item.blocked_reason != blank %}{{ item.blocked_reason }}{% else %}{{ item.notes }}{% endif %}<small>{% if item.blocked_reason != blank and item.notes != blank %}{{ item.notes }}{% endif %}</small></span>
+        {%- comment -%}
+          `!= blank` is a NO-OP in this Liquid. Measured, not inferred, against liquid 4.0.4 -- the
+          version `auxsays/Gemfile`'s `jekyll ~> 4.4` resolves to and `pages.yml` builds with.
+          `blank` is not a value: it parses to `Liquid::Expression::MethodLiteral(:blank?)`, and
+          because neither String nor NilClass responds to `blank?` without ActiveSupport, the
+          comparison never finds anything equal to it. So `== blank` is ALWAYS false and
+          `!= blank` ALWAYS true -- for `''`, for nil, for an absent key, for whitespace, for
+          `false`, for `0`, for text. (It is tempting to describe `blank` as nil; that is wrong and
+          the difference is observable -- if it were nil then `nil != blank` would be false and a
+          null-valued field would have taken the correct branch. It does not.) Rendering THIS line
+          verbatim through that gem confirmed all of it.
+
+          The consequence was live on 636 of 1496 rows: a row whose `blocked_reason` was empty still
+          took the first branch, so the primary text printed NOTHING while the row's real note was
+          demoted into `<small>`. The remaining 860 rows looked right only because both always-true
+          guards happened to select the intended branch -- correct by accident, not by logic.
+
+          Normalise first, then compare against a literal. That is the idiom already used for
+          `mh_build` a few lines above (PR #67/#68), and it is deterministic: `default: ''`
+          substitutes for nil AND for the empty string, `strip` catches whitespace-only values, so a
+          single comparison decides the branch. `<small>` now sits inside its own condition, so a
+          row with no secondary text emits no element rather than an empty `<small></small>`, and a
+          note identical to the reason is not printed twice.
+
+          Scoped deliberately to this cell. The other `blank` comparisons in this file (last_run,
+          last_checked, polling_frequency, last_error_display) are all LATENT -- no live row reaches
+          the wrong branch -- and a repo-wide blank rewrite is not in scope here.
+        {%- endcomment -%}
+        {%- assign mh_reason = item.blocked_reason | default: '' | strip -%}
+        {%- assign mh_note = item.notes | default: '' | strip -%}
+        <span>{% if mh_reason != '' %}{{ mh_reason }}{% else %}{{ mh_note }}{% endif %}{% if mh_reason != '' and mh_note != '' and mh_note != mh_reason %}<small>{{ mh_note }}</small>{% endif %}</span>
       </div>
       {% endfor %}
     </div>
