@@ -28530,3 +28530,216 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-15-020-20042-adobe-community-bug-report-https-community-adobe-com-questions-12-app-v-5-package-for-reader-dc-rdrcef-stopped-working-inpa
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20042
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/app-v-5-package-for-reader-dc-rdrcef-stopped-working-inpageerror-1509367
+  parent_title: App-V 5 package for Reader DC - RdrCEF stopped working, InPageError
+  report_title: App-V 5 package for Reader DC - RdrCEF stopped working, InPageError
+  report_text_excerpt: 'App-V 5 package for Reader DC - RdrCEF stopped working, InPageError We have followed the white paper solution ( App-V Deployment: Reader DC — Enterprise Administration Guide ) for creating a virtual app-v 5 package for Acrobat Reader DC (15.020.20042), and when we use the...'
+  captured_at: '2026-09-09T00:09:03Z'
+  source_date: '2017-03-15'
+  target_release_date: '2016-11-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20042
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-020-20042-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-automatically-installing-on-compu
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20042
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-automatically-installing-on-computers-1507501
+  parent_title: Adobe Acrobat Reader DC Automatically Installing on Computers?
+  report_title: Adobe Acrobat Reader DC Automatically Installing on Computers?
+  report_text_excerpt: Adobe Acrobat Reader DC Automatically Installing on Computers? To start, we do not use Adobe Acrobat in our office; instead, we use another PDF editor. Please excuse any incorrect technical jargon going forward; I'm not the dedicated IT tech, I'm simply the office admin and...
+  captured_at: '2026-09-09T00:09:03Z'
+  source_date: '2016-12-08'
+  target_release_date: '2016-11-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20042
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-020-20042-adobe-community-bug-report-https-community-adobe-com-questions-624-creating-aip-for-acrobat-dc-1502020042-673597
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20042
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/creating-aip-for-acrobat-dc-1502020042-673597
+  parent_title: Creating AIP for Acrobat DC 1502020042
+  report_title: Creating AIP for Acrobat DC 1502020042
+  report_text_excerpt: Creating AIP for Acrobat DC 1502020042 I am trying to roll out Acrobat Reader 1502020042 to address this issue https://helpx.adobe.com/acrobat/release-note/acrobat-dc-november-03-2016.html We are only a small company and deploy software using GPO. Unfortunately I have not been...
+  captured_at: '2026-09-09T00:09:03Z'
+  source_date: '2016-11-04'
+  target_release_date: '2016-11-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '1502020042'
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-open-and-print-pdf-files-1507509
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/unable-to-open-and-print-pdf-files-1507509
+  parent_title: Unable to  open and print PDF files
+  report_title: Unable to  open and print PDF files
+  report_text_excerpt: Unable to open and print PDF files I am running Windows 7 OS and Acrobat Reader DC ver 15.020.20039. When I go to open a PDF file, nothing happens. When I attempt to print the pdf file nothing happens or I get a black screen. I have attempted to "fix" the Acrobat Reader by...
+  captured_at: '2026-09-09T00:09:03Z'
+  source_date: '2016-12-12'
+  target_release_date: '2016-10-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-017-20053-adobe-community-bug-report-https-community-adobe-com-questions-18-out-of-memory-errors-when-creating-pdf-from-entire-websit
+  product_id: adobe-acrobat-reader
+  update_version: 15.017.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/out-of-memory-errors-when-creating-pdf-from-entire-website-597475
+  parent_title: Out of memory errors when creating PDF from entire website
+  report_title: Out of memory errors when creating PDF from entire website
+  report_text_excerpt: Out of memory errors when creating PDF from entire website I am using Acrobat DC 15.017.20053 and am receiving Out of Memory errors when trying to create a PDF from an entire website. The process loads approximately 8-10,000 pages and then crashes. The PC still has plenty of...
+  captured_at: '2026-09-09T00:09:03Z'
+  source_date: '2016-09-20'
+  target_release_date: '2016-08-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.017.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-017-20053-adobe-community-bug-report-https-community-adobe-com-questions-18-adobe-acrobat-dc-august-2016-15-017-20053-win10-issues-59
+  product_id: adobe-acrobat-reader
+  update_version: 15.017.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/adobe-acrobat-dc-august-2016-15-017-20053-win10-issues-598092
+  parent_title: Adobe Acrobat DC August 2016 (15.017.20053) WIN10 Issues
+  report_title: Adobe Acrobat DC August 2016 (15.017.20053) WIN10 Issues
+  report_text_excerpt: 'Adobe Acrobat DC August 2016 (15.017.20053) WIN10 Issues Hello, I have a Windows 10 Home x64 bit laptop running Version: 1607 and OS Build: 14393.105. Adobe Acrobat DC is installing on this PC with version DC August 2016 (15.017.20053). ​ The computer has major issues with...'
+  captured_at: '2026-09-09T00:09:03Z'
+  source_date: '2016-09-02'
+  target_release_date: '2016-08-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.017.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-017-20050-adobe-community-bug-report-https-community-adobe-com-questions-18-problems-closing-acrobat-dc-599186
+  product_id: adobe-acrobat-reader
+  update_version: 15.017.20050
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/problems-closing-acrobat-dc-599186
+  parent_title: Problems closing Acrobat DC
+  report_title: Problems closing Acrobat DC
+  report_text_excerpt: Problems closing Acrobat DC Anyone else having issues when trying to close a document in Acrobat DC (15.017.20050) while running Windows 7? Trying to close a document - or quitting the program with an open document seems to make it lose it's mind. Acrobat DC is not responding...
+  captured_at: '2026-09-09T00:09:03Z'
+  source_date: '2016-07-28'
+  target_release_date: '2016-07-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.017.20050
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-016-20045-adobe-community-bug-report-https-community-adobe-com-questions-18-freezing-when-highlighting-pdfs-595574
+  product_id: adobe-acrobat-reader
+  update_version: 15.016.20045
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/freezing-when-highlighting-pdfs-595574
+  parent_title: Freezing when highlighting PDFs
+  report_title: Freezing when highlighting PDFs
+  report_text_excerpt: Freezing when highlighting PDFs We are having issues highlighting scanned documents, more specifically documents that Adobe does not recognize as text. When freehanding after several marks, the application freezes and becomes unresponsive causing us to close out of the...
+  captured_at: '2026-09-09T00:09:03Z'
+  source_date: '2016-07-13'
+  target_release_date: '2016-06-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20045
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1

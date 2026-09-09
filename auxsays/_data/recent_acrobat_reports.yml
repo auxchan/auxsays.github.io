@@ -401,3 +401,43 @@ reports:
   window_end: '2018-05-14'
   window_start: '2018-02-23'
   window_version: 18.011.20038
+- attribution_state: not_established
+  captured_at: '2026-09-09T00:09:03Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|15.016.20045|15.016.20045
+  report_date: '2016-07-05'
+  report_excerpt: Unable to print PDFs. when i click on the print button, nothing happens. i don't even
+    get to the print set-up box. any ideas? i've run through all the general printing troubleshooting
+    pages. have even uninstalled and reinstalled acrobat.
+  report_id: adobe-acrobat-reader:60b33e74900ca24e
+  report_title: Unable to print PDFs.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-18/unable-to-print-pdfs-608216
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 15.016.20045
+  window_end: '2016-07-12'
+  window_start: '2016-06-02'
+  window_version: 15.016.20045
+- attribution_state: not_established
+  captured_at: '2026-09-09T00:09:03Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|15.016.20045|15.016.20045
+  report_date: '2016-06-29'
+  report_excerpt: Unable to start correctly Adobe Reader DC is getting an error message when opening pdf
+    files. "The Application was unable to start correctly (0xc00000a5). Click OK to close the application"
+    Clicking OK allows the file to be opened normally, but I am still unable to save the...
+  report_id: adobe-acrobat-reader:443454a04eff139f
+  report_title: Unable to start correctly
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-18/unable-to-start-correctly-592682
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 15.016.20045
+  window_end: '2016-07-12'
+  window_start: '2016-06-02'
+  window_version: 15.016.20045
