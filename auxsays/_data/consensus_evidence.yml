@@ -30777,3 +30777,33 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-file-history-problems-after
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/file-history-problems-after-installing-kb5124008-kb5126052kb5126146-kb5122878-an/4554623
+  parent_title: File History problems after installing KB5124008, KB5126052,KB5126146, KB5122878, and KB890830
+  report_title: File History problems after installing KB5124008, KB5126052,KB5126146, KB5122878, and KB890830
+  report_text_excerpt: File History problems after installing KB5124008, KB5126052,KB5126146, KB5122878, and KB890830 This morning, I ran Windows Update on two Windows 10/11 computers, but the file history feature stopped working completely after the update.Previously, after updating KB5121003 and...
+  captured_at: '2026-09-09T22:55:52Z'
+  source_date: '2026-09-08'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
