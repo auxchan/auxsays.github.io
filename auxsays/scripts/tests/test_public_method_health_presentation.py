@@ -283,9 +283,13 @@ def run() -> int:
                   "<small>" not in version_cell, version_cell)
             for junk in ("Build ", "None", "null", "target_build"):
                 check(f"M5 {label}: no {junk!r} placeholder in the row", junk not in rendered)
-        # The NOTES cell already emits <small></small> on main -- that is the methodology page's own
-        # `!= blank` no-op on blocked_reason, reported as backlog and deliberately not touched here.
-        # Assert it is unchanged rather than pretending this fix cleaned it up.
+        # The NOTES cell used to emit <small></small> here, because the methodology page compared
+        # `item.blocked_reason != blank` and that is a no-op in this Liquid. It was reported as
+        # backlog by the build-label change and has since been repaired: the cell now normalises
+        # both fields and emits <small> only when there is genuinely a secondary note. This check
+        # is about the BUILD LABEL, so what it asserts is that the build change does not perturb the
+        # Notes cell either way -- the two renders must agree, whatever the Notes logic emits. See
+        # test_methodology_notes_rendering.py for the Notes contract itself.
         if old_rows is not None:
             check("M5 the Notes-cell <small> behaviour is untouched by this change",
                   [r.count("<small></small>") for r in new_rows]

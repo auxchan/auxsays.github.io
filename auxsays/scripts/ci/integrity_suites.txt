@@ -88,6 +88,33 @@ auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
+# --- writer-lane governance and the methodology Notes render -----------------------
+# Both were added with the writer-queue repair, and both are proven non-vacuous by MEASUREMENT
+# rather than assertion. Against the pre-fix tree (HEAD workflows, no reaper, patch-ingest still
+# carrying its own cron) the concurrency suite reports 40/52 passed, 12 failed -- 52 and not 69
+# because section 8's reaper checks sit inside `if reaper:` and cannot run when the file is
+# absent. Against the current tree with ONLY patch-ingest's cron restored it reports 65/69, 4
+# failed. The Notes suite reports 39/61, 22 failed on the `!= blank` markup, including the exact
+# live figure of 636 phantom rows.
+#
+# An earlier version of this comment claimed "7 checks" for the concurrency suite without saying
+# which counterfactual it meant, and neither reading gave 7. The numbers above are what the two
+# named trees actually produce.
+#
+# The concurrency suite was also VACUOUS when first written: it grepped raw workflow text, so
+# deleting the reaper's in-flight guard, its zero-job eviction test and its one-per-tick `break`
+# left it fully green, because every token it looked for survived in the prose describing those
+# guards. It now asserts against `run:` scalars with comments stripped. The sabotage that used to
+# pass now fails 10 checks.
+auxsays/scripts/tests/test_writer_queue_concurrency.py = 69
+auxsays/scripts/tests/test_methodology_notes_rendering.py = 61
+# The reaper's shell, EXECUTED against a scripted fake `gh` rather than grepped -- extracted
+# from the workflow YAML so it cannot drift from what CI runs. The sabotage that the
+# structural suite originally missed fails 6 checks here. Needs `bash`, which ubuntu-latest
+# and this repo's Windows dev setup both provide; it reports and fails if bash is absent
+# rather than passing vacuously.
+auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 23
+
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
 # "diagnostic" names the domain, not a weaker guarantee.

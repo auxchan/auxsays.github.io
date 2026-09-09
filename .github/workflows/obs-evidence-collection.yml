@@ -450,3 +450,52 @@ jobs:
               echo "- no run summary was produced"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+  chain-ingest:
+    # ROUTINE PATCH INGESTION, ORDERED RATHER THAN RACING.
+    #
+    # patch-ingest.yml used to carry its own `cron: "17 */6 * * *"` -- the same expression this
+    # workflow declares. Both are writers, both share `auxsays-main-writeback`, and that group keeps
+    # at most ONE pending run: a new entrant cancels whatever was queued. Because a writer run takes
+    # 54-197 minutes against a 6-hour cadence, the second cron of each slot routinely landed in the
+    # pending slot and was destroyed by the next arrival. 14 scheduled runs were lost that way, 7 of
+    # them to another scheduled run.
+    #
+    # Dispatching ingestion from the END of this run removes the race: this run has finished its
+    # writeback, so ingestion enters a lane that is about to be free, and it enters ONCE per cycle
+    # rather than competing for the same slot. `needs:` both lanes and `always()` so ingestion still
+    # happens when collection fails or is skipped -- one writer failing must not starve the next.
+    #
+    # Gated to THE ROUTINE CYCLE, which is not the same thing as `github.event_name == 'schedule'`.
+    # `writer-queue-reaper.yml` recovers an evicted scheduled run by re-dispatching it, so the
+    # recovered run arrives as `workflow_dispatch` carrying no inputs. Gating on the event name
+    # alone would skip ingestion on exactly those recovered cycles -- reintroducing the silent loss
+    # one level up, in the workflow written to stop it.
+    #
+    # So the gate is "schedule, OR a dispatch with no inputs", which is the same definition of
+    # routine the rest of this workflow already uses (`github.event.inputs.dry_run != 'true'` at
+    # :170, :192, :217 and elsewhere; :108 states the contract -- the scheduled path passes no
+    # inputs). A TARGETED dispatch still does not drag a full ingestion run behind it;
+    # patch-ingest.yml keeps its own workflow_dispatch for that.
+    needs: [collect, powerpoint-orchestrated]
+    if: >-
+      ${{ always() && (github.event_name == 'schedule' ||
+          (github.event.inputs.product_id == '' &&
+           github.event.inputs.update_version == '' &&
+           github.event.inputs.since == '' &&
+           github.event.inputs.dry_run != 'true')) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch routine patch ingestion
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # No inputs: that is exactly the path the deleted cron took, and every production branch
+          # in patch-ingest.yml gates on the inputs being absent.
+          gh workflow run patch-ingest.yml --ref main \
+            --repo "${{ github.repository }}"
+          echo "- Dispatched \`patch-ingest.yml\` (routine cycle)" >> "$GITHUB_STEP_SUMMARY"
