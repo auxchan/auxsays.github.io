@@ -244,6 +244,14 @@ export function resolvePremiumLabels(candidates: readonly LabelCandidate[], widt
       if (!collides(resolved)) accepted.push(resolved);
     });
   }
+  // Orbiting overview labels are required but intentionally have no guide-rail
+  // side. Clamp them continuously at the viewport edge instead of dropping
+  // them when the orbit carries their natural anchor beyond the mobile frame.
+  for (const candidate of ordered.filter((item) => item.required && !item.side)) {
+    const x = Math.max(8 + candidate.width / 2, Math.min(width - 8 - candidate.width / 2, candidate.x));
+    const y = Math.max(8 + candidate.height / 2, Math.min(height - 8 - candidate.height / 2, candidate.y));
+    accepted.push({ ...candidate, x, y, left: x - candidate.width / 2, top: y - candidate.height / 2 });
+  }
   return accepted;
 }
 
