@@ -402,6 +402,26 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
+  captured_at: '2026-09-09T08:06:07Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21691|26.001.21691
+  report_date: '2026-07-16'
+  report_excerpt: A running instance of Acrobat has caused an error I try to open an PDf doc...system
+    then hangs and then I get a pop-up window " a running instance of abobe has caused an error" Adobe
+    themselves worked on it yesterday. I am seriously thinking of canceling my subscription
+  report_id: adobe-acrobat-reader:936e9098cc1e2e47
+  report_title: A running instance of Acrobat has caused an error
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/a-running-instance-of-acrobat-has-caused-an-error-1632340
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21691
+  window_end: '2026-07-23'
+  window_start: '2026-06-25'
+  window_version: 26.001.21691
+- attribution_state: not_established
   captured_at: '2026-09-08T16:56:50Z'
   classification: recent_report
   product_id: adobe-acrobat-reader

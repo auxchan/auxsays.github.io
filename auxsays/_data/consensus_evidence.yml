@@ -30331,3 +30331,30 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-24-002-20857-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-acrobat-fill-and-sign-feature-crashes-program-1294
+  product_id: adobe-acrobat-reader
+  update_version: 24.002.20857
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-acrobat-fill-and-sign-feature-crashes-program-1294883
+  parent_title: Acrobat acrobat Fill and Sign feature crashes program.
+  report_title: Acrobat acrobat Fill and Sign feature crashes program.
+  report_text_excerpt: Acrobat acrobat Fill and Sign feature crashes program. once i click on fill and sign, the program closes by itself. i uninstalled the program and reinstall it back but it did not help. i have the version, 24.002.20857. can you assist on that please
+  captured_at: '2026-09-09T08:06:07Z'
+  source_date: '2024-07-16'
+  target_release_date: '2024-06-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20857
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
