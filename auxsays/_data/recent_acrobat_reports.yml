@@ -4,244 +4,6 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-09-04T11:14:55Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.002.21869|26.002.21869
-  report_date: '2026-09-03'
-  report_excerpt: Adobe Acrobat Error 43 I have a PDF located on a dropbox server accessible to about
-    4-5 people. 3 people were on the document leaving comments as a way to proof. When one of them went
-    to save, the entire document got corrupted. The file was NOT a read only file. This issue...
-  report_id: adobe-acrobat-pro:73a1b8dd447a43ca
-  report_title: Adobe Acrobat Error 43
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/adobe-acrobat-error-43-1640295
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.002.21869
-  window_start: '2026-08-31'
-  window_version: 26.002.21869
-- attribution_state: not_established
-  captured_at: '2026-09-08T16:36:18Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.002.21869|26.002.21869
-  report_date: '2026-09-03'
-  report_excerpt: 'Acrobat crashes trying to print I am running Acrobat desktop version 26.1 on a Windows
-    11 enterprise Dell laptop. I created a PDF report from an outside source and when I open the file
-    in Acrobat I get this message: This appears to be a scanned document. Use Scan & OCR to make...'
-  report_id: adobe-acrobat-pro:39596b99cdab47ba
-  report_title: Acrobat crashes trying to print
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.002.21869
-  window_end: '2026-09-07'
-  window_start: '2026-08-31'
-  window_version: 26.002.21869
-- attribution_state: not_established
-  captured_at: '2026-09-08T16:36:18Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.001.21789|26.001.21789
-  report_date: '2026-08-21'
-  report_excerpt: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall Hi Folks,
-    sorry, I posted this concern before but without any results. That's why I'm trying again since I need
-    Acrobat and diminishes my workflow and, after all, paying for it. This happens for...
-  report_id: adobe-acrobat-pro:69932f4d997b1d8c
-  report_title: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-randomly-stalls-grays-out-not-responding-recurs-after-reinstall-1638120
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.001.21789
-  window_end: '2026-08-31'
-  window_start: '2026-08-11'
-  window_version: 26.001.21789
-- attribution_state: not_established
-  captured_at: '2026-09-08T16:36:18Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.001.21662|26.001.21662
-  report_date: '2026-06-15'
-  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
-    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
-    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
-  report_id: adobe-acrobat-pro:53a94fe29e117c82
-  report_title: No save the content adobe Acrobat
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.001.21662
-  window_end: '2026-06-17'
-  window_start: '2026-06-09'
-  window_version: 26.001.21662
-- attribution_state: not_established
-  captured_at: '2026-09-08T16:36:18Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.001.21563|26.001.21563
-  report_date: '2026-05-27'
-  report_excerpt: Acrobat DC Pro super slow / stalls For a while now Acrobat DC Pro is sluggish / stops
-    / not responding / need to close ("not responding") I repaired ... re-installed ... updated ... turned
-    off Protection Mode in preferences ... sometimes can't even scroll down to security in...
-  report_id: adobe-acrobat-pro:d359c779b947e00d
-  report_title: Acrobat DC Pro super slow / stalls
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-dc-pro-super-slow-stalls-1625320
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.001.21563
-  window_end: '2026-06-05'
-  window_start: '2026-05-18'
-  window_version: 26.001.21563
-- attribution_state: not_established
-  captured_at: '2026-09-07T04:36:48Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|25.001.21111|25.001.21111
-  report_date: '2026-01-20'
-  report_excerpt: 'Acrobat issue I have an active Creative Cloud All Apps subscription including Acrobat
-    Pro. Adobe Acrobat Classic crashes immediately after launch on Windows 11. The app opens, shows the
-    Home screen, and then closes. I have: - disabled GPU acceleration - disabled New Acrobat...'
-  report_id: adobe-acrobat-pro:06300781d57f58b8
-  report_title: Acrobat issue
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-issue-1621017
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 25.001.21111
-  window_end: '2026-02-06'
-  window_start: '2026-01-20'
-  window_version: 25.001.21111
-- attribution_state: not_established
-  captured_at: '2026-09-08T20:51:15Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|25.001.20918|25.001.20918
-  report_date: '2025-11-18'
-  report_excerpt: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1 I recently updated to
-    Tahoe 26.1 on my Macbook pro and now everytime I double click an editable field to update it crashs
-    (quits). Tried multiple files and also reinstalling Acrobat etc... but no luck. It ppears to...
-  report_id: adobe-acrobat-pro:62f72baaf9c666e8
-  report_title: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-trying-to-edit-forms-in-tahoe-26-1-1305727
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 25.001.20918
-  window_end: '2025-11-20'
-  window_start: '2025-11-13'
-  window_version: 25.001.20918
-- attribution_state: not_established
-  captured_at: '2026-09-08T22:33:25Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|18.011.20040|18.011.20040
-  report_date: '2018-06-18'
-  report_excerpt: Acrobat 2017 crashes immediately after opening Hi, I've installed Acrobat and it closes
-    immediately after opening. I've completely uninstalled the program , ran the acrobat cleanup wizard,
-    downloaded from the website and re-installed with the same issue. I've also tried to...
-  report_id: adobe-acrobat-pro:14889e55e3ce5d1d
-  report_title: Acrobat 2017 crashes immediately after opening
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-2017-crashes-immediately-after-opening-1228617
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 18.011.20040
-  window_end: '2018-07-10'
-  window_start: '2018-05-14'
-  window_version: 18.011.20040
-- attribution_state: not_established
-  captured_at: '2026-09-08T22:33:25Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|18.011.20040|18.011.20040
-  report_date: '2018-06-06'
-  report_excerpt: Acrobat Pro DC lag issues and freeze [2018] We have an individual who needs to do a
-    lot of work on subdivision engineering plans (editing them/viewing). The PDF's he gets constantly
-    lag and freeze up. If you're scrolling through them they freeze before you get 5 or 6 pages...
-  report_id: adobe-acrobat-pro:6bad99642b30777e
-  report_title: Acrobat Pro DC lag issues and freeze [2018]
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-lag-issues-and-freeze-2018-1229166
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 18.011.20040
-  window_end: '2018-07-10'
-  window_start: '2018-05-14'
-  window_version: 18.011.20040
-- attribution_state: not_established
-  captured_at: '2026-09-08T22:33:25Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|18.009.20044|18.009.20044
-  report_date: '2017-11-20'
-  report_excerpt: Acrobat PDF Form document with digital signature fields does not launch Hello, Since
-    Friday, November 17th, 2017, we cannot open adobe acrobat form documents that contains digital signature
-    fields. When we try to open the document, Adobe Acrobat application is not responding....
-  report_id: adobe-acrobat-pro:d678801b38e9e2be
-  report_title: Acrobat PDF Form document with digital signature fields does not launch
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-pdf-form-document-with-digital-signature-fields-does-not-launch-1312463
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 18.009.20044
-  window_end: '2017-11-29'
-  window_start: '2017-11-14'
-  window_version: 18.009.20044
-- attribution_state: not_established
-  captured_at: '2026-09-08T22:33:25Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|17.012.20098|17.012.20098
-  report_date: '2017-10-26'
-  report_excerpt: Adobe Acrobat Pro DC crashes constantly Please download the attached file to view this
-    post
-  report_id: adobe-acrobat-pro:f8f720eac469eef0
-  report_title: Adobe Acrobat Pro DC crashes constantly
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-dc-crashes-constantly-1311410
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 17.012.20098
-  window_end: '2017-11-14'
-  window_start: '2017-08-29'
-  window_version: 17.012.20098
-- attribution_state: not_established
-  captured_at: '2026-09-08T22:33:25Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|17.012.20098|17.012.20098
-  report_date: '2017-10-09'
-  report_excerpt: Acrobat Pro DC Crashing Acrobat is constantly crashing on Mac OS Sierra. Originally
-    it was when I tried to save something to Document Cloud, but now I can't even keep it open. I've been
-    struggling with this for over a week. Deleted preferences, uninstalled/reinstalled, logged...
-  report_id: adobe-acrobat-pro:aed4a80cbd8df5e4
-  report_title: Acrobat Pro DC Crashing
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-crashing-1311280
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 17.012.20098
-  window_end: '2017-11-14'
-  window_start: '2017-08-29'
-  window_version: 17.012.20098
-- attribution_state: not_established
   captured_at: '2026-09-08T16:56:50Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
@@ -441,3 +203,321 @@ reports:
   window_end: '2016-07-12'
   window_start: '2016-06-02'
   window_version: 15.016.20045
+- attribution_state: not_established
+  captured_at: '2026-09-04T11:14:55Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.002.21869|26.002.21869
+  report_date: '2026-09-03'
+  report_excerpt: Adobe Acrobat Error 43 I have a PDF located on a dropbox server accessible to about
+    4-5 people. 3 people were on the document leaving comments as a way to proof. When one of them went
+    to save, the entire document got corrupted. The file was NOT a read only file. This issue...
+  report_id: adobe-acrobat-pro:73a1b8dd447a43ca
+  report_title: Adobe Acrobat Error 43
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-error-43-1640295
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21869
+  window_start: '2026-08-31'
+  window_version: 26.002.21869
+- attribution_state: not_established
+  captured_at: '2026-09-08T16:36:18Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.002.21869|26.002.21869
+  report_date: '2026-09-03'
+  report_excerpt: 'Acrobat crashes trying to print I am running Acrobat desktop version 26.1 on a Windows
+    11 enterprise Dell laptop. I created a PDF report from an outside source and when I open the file
+    in Acrobat I get this message: This appears to be a scanned document. Use Scan & OCR to make...'
+  report_id: adobe-acrobat-pro:39596b99cdab47ba
+  report_title: Acrobat crashes trying to print
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21869
+  window_end: '2026-09-07'
+  window_start: '2026-08-31'
+  window_version: 26.002.21869
+- attribution_state: not_established
+  captured_at: '2026-09-08T16:36:18Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21789|26.001.21789
+  report_date: '2026-08-21'
+  report_excerpt: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall Hi Folks,
+    sorry, I posted this concern before but without any results. That's why I'm trying again since I need
+    Acrobat and diminishes my workflow and, after all, paying for it. This happens for...
+  report_id: adobe-acrobat-pro:69932f4d997b1d8c
+  report_title: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-randomly-stalls-grays-out-not-responding-recurs-after-reinstall-1638120
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21789
+  window_end: '2026-08-31'
+  window_start: '2026-08-11'
+  window_version: 26.001.21789
+- attribution_state: not_established
+  captured_at: '2026-09-08T16:36:18Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21662|26.001.21662
+  report_date: '2026-06-15'
+  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
+    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
+    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
+  report_id: adobe-acrobat-pro:53a94fe29e117c82
+  report_title: No save the content adobe Acrobat
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21662
+  window_end: '2026-06-17'
+  window_start: '2026-06-09'
+  window_version: 26.001.21662
+- attribution_state: not_established
+  captured_at: '2026-09-08T16:36:18Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21563|26.001.21563
+  report_date: '2026-05-27'
+  report_excerpt: Acrobat DC Pro super slow / stalls For a while now Acrobat DC Pro is sluggish / stops
+    / not responding / need to close ("not responding") I repaired ... re-installed ... updated ... turned
+    off Protection Mode in preferences ... sometimes can't even scroll down to security in...
+  report_id: adobe-acrobat-pro:d359c779b947e00d
+  report_title: Acrobat DC Pro super slow / stalls
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-pro-super-slow-stalls-1625320
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21563
+  window_end: '2026-06-05'
+  window_start: '2026-05-18'
+  window_version: 26.001.21563
+- attribution_state: not_established
+  captured_at: '2026-09-07T04:36:48Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|25.001.21111|25.001.21111
+  report_date: '2026-01-20'
+  report_excerpt: 'Acrobat issue I have an active Creative Cloud All Apps subscription including Acrobat
+    Pro. Adobe Acrobat Classic crashes immediately after launch on Windows 11. The app opens, shows the
+    Home screen, and then closes. I have: - disabled GPU acceleration - disabled New Acrobat...'
+  report_id: adobe-acrobat-pro:06300781d57f58b8
+  report_title: Acrobat issue
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-issue-1621017
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21111
+  window_end: '2026-02-06'
+  window_start: '2026-01-20'
+  window_version: 25.001.21111
+- attribution_state: not_established
+  captured_at: '2026-09-08T20:51:15Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|25.001.20918|25.001.20918
+  report_date: '2025-11-18'
+  report_excerpt: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1 I recently updated to
+    Tahoe 26.1 on my Macbook pro and now everytime I double click an editable field to update it crashs
+    (quits). Tried multiple files and also reinstalling Acrobat etc... but no luck. It ppears to...
+  report_id: adobe-acrobat-pro:62f72baaf9c666e8
+  report_title: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-trying-to-edit-forms-in-tahoe-26-1-1305727
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20918
+  window_end: '2025-11-20'
+  window_start: '2025-11-13'
+  window_version: 25.001.20918
+- attribution_state: not_established
+  captured_at: '2026-09-09T01:17:22Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|19.008.20071|19.008.20071
+  report_date: '2018-10-04'
+  report_excerpt: Spinning beachball - Acrobat Pro DC (not responding) A few seconds after opening Acrobat
+    Pro DC on my Mac running Mojave, I get the spinning beach ball and force quit applications box shows
+    that the app is not responding and I have to force quit. I tried. - rebooting my mac -...
+  report_id: adobe-acrobat-pro:57a1c1b616a9f777
+  report_title: Spinning beachball - Acrobat Pro DC (not responding)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/spinning-beachball-acrobat-pro-dc-not-responding-1231909
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 19.008.20071
+  window_end: '2018-10-08'
+  window_start: '2018-10-02'
+  window_version: 19.008.20071
+- attribution_state: not_established
+  captured_at: '2026-09-09T01:17:22Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|19.008.20071|19.008.20071
+  report_date: '2018-10-03'
+  report_excerpt: Emailing File from Within Acrobat DC Pro I am having issues with sending a file from
+    within Acrobat DC Pro. As of yesterday all I had to do was click on the envelope icon and it would
+    launch Microsoft Outlook and automatically attache the pdf. Now when I click on the envelope...
+  report_id: adobe-acrobat-pro:f8f2a47a880a9385
+  report_title: Emailing File from Within Acrobat DC Pro
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/emailing-file-from-within-acrobat-dc-pro-1231508
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 19.008.20071
+  window_end: '2018-10-08'
+  window_start: '2018-10-02'
+  window_version: 19.008.20071
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|18.011.20040|18.011.20040
+  report_date: '2018-06-18'
+  report_excerpt: Acrobat 2017 crashes immediately after opening Hi, I've installed Acrobat and it closes
+    immediately after opening. I've completely uninstalled the program , ran the acrobat cleanup wizard,
+    downloaded from the website and re-installed with the same issue. I've also tried to...
+  report_id: adobe-acrobat-pro:14889e55e3ce5d1d
+  report_title: Acrobat 2017 crashes immediately after opening
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-2017-crashes-immediately-after-opening-1228617
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.011.20040
+  window_end: '2018-07-10'
+  window_start: '2018-05-14'
+  window_version: 18.011.20040
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|18.011.20040|18.011.20040
+  report_date: '2018-06-06'
+  report_excerpt: Acrobat Pro DC lag issues and freeze [2018] We have an individual who needs to do a
+    lot of work on subdivision engineering plans (editing them/viewing). The PDF's he gets constantly
+    lag and freeze up. If you're scrolling through them they freeze before you get 5 or 6 pages...
+  report_id: adobe-acrobat-pro:6bad99642b30777e
+  report_title: Acrobat Pro DC lag issues and freeze [2018]
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-lag-issues-and-freeze-2018-1229166
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.011.20040
+  window_end: '2018-07-10'
+  window_start: '2018-05-14'
+  window_version: 18.011.20040
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|18.009.20044|18.009.20044
+  report_date: '2017-11-20'
+  report_excerpt: Acrobat PDF Form document with digital signature fields does not launch Hello, Since
+    Friday, November 17th, 2017, we cannot open adobe acrobat form documents that contains digital signature
+    fields. When we try to open the document, Adobe Acrobat application is not responding....
+  report_id: adobe-acrobat-pro:d678801b38e9e2be
+  report_title: Acrobat PDF Form document with digital signature fields does not launch
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-pdf-form-document-with-digital-signature-fields-does-not-launch-1312463
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.009.20044
+  window_end: '2017-11-29'
+  window_start: '2017-11-14'
+  window_version: 18.009.20044
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|17.012.20098|17.012.20098
+  report_date: '2017-10-26'
+  report_excerpt: Adobe Acrobat Pro DC crashes constantly Please download the attached file to view this
+    post
+  report_id: adobe-acrobat-pro:f8f720eac469eef0
+  report_title: Adobe Acrobat Pro DC crashes constantly
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-dc-crashes-constantly-1311410
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 17.012.20098
+  window_end: '2017-11-14'
+  window_start: '2017-08-29'
+  window_version: 17.012.20098
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:33:25Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|17.012.20098|17.012.20098
+  report_date: '2017-10-09'
+  report_excerpt: Acrobat Pro DC Crashing Acrobat is constantly crashing on Mac OS Sierra. Originally
+    it was when I tried to save something to Document Cloud, but now I can't even keep it open. I've been
+    struggling with this for over a week. Deleted preferences, uninstalled/reinstalled, logged...
+  report_id: adobe-acrobat-pro:aed4a80cbd8df5e4
+  report_title: Acrobat Pro DC Crashing
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-crashing-1311280
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 17.012.20098
+  window_end: '2017-11-14'
+  window_start: '2017-08-29'
+  window_version: 17.012.20098
+- attribution_state: not_established
+  captured_at: '2026-09-09T01:17:22Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|17.009.20044|17.009.20044
+  report_date: '2017-05-24'
+  report_excerpt: Can't print from Acrobat Pro I have not been able to print to a paper printer for many,
+    many months now but finally, the last straw came today when I discovered I can no longer re-print
+    PDF pages in Acrobat, from one page size to another. There no longer appears to be chat...
+  report_id: adobe-acrobat-pro:94cd83497ba7c6cc
+  report_title: Can't print from Acrobat Pro
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/can-t-print-from-acrobat-pro-1306504
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 17.009.20044
+  window_end: '2017-07-12'
+  window_start: '2017-04-11'
+  window_version: 17.009.20044
+- attribution_state: not_established
+  captured_at: '2026-09-09T01:17:22Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|15.023.20070|15.023.20070
+  report_date: '2017-03-14'
+  report_excerpt: What is the latest version of Adobe Acrobat Pro DC ? Hello, What is the latest version
+    of Acrobat Pro DC and can somebody give de dll's and their versions and time-stamp and size ? We are
+    facing a lot of internet explorer 11 crashes on Windows 7 in combination with Acrobat Pro...
+  report_id: adobe-acrobat-pro:78ced2debd5c7ded
+  report_title: What is the latest version of Adobe Acrobat Pro DC ?
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/what-is-the-latest-version-of-adobe-acrobat-pro-dc-1289085
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 15.023.20070
+  window_end: '2017-04-11'
+  window_start: '2017-02-21'
+  window_version: 15.023.20070

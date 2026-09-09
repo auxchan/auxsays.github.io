@@ -28743,3 +28743,532 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-17-009-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-install-of-acrobat-dc-from-cc-menu-fails-1309404
+  product_id: adobe-acrobat-pro
+  update_version: 17.009.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/install-of-acrobat-dc-from-cc-menu-fails-1309404
+  parent_title: install of Acrobat DC from CC menu fails
+  report_title: install of Acrobat DC from CC menu fails
+  report_text_excerpt: 'install of Acrobat DC from CC menu fails I''m running the beta 6 of macOS 10.13, and that may be relevant, but maybe it''s not too. At around 43% installed there is an error. Here''s the full error report: Exit Code: 7 Please see specific errors below for troubleshooting. For...'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2017-08-17'
+  target_release_date: '2017-07-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-009-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-anyone-knows-how-to-fix-acrobat-cc-install-1310836
+  product_id: adobe-acrobat-pro
+  update_version: 17.009.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/anyone-knows-how-to-fix-acrobat-cc-install-1310836
+  parent_title: Anyone knows how to fix Acrobat CC install?
+  report_title: Anyone knows how to fix Acrobat CC install?
+  report_text_excerpt: 'Anyone knows how to fix Acrobat CC install? I had Acrobat installed, but it was no longer working (Mac OS Sierra 10.12.6). So I uninstall it and now, when installing, I got this error: Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR:...'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2017-09-05'
+  target_release_date: '2017-07-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-009-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-dc-crashes-on-macos-10-12-1308755
+  product_id: adobe-acrobat-pro
+  update_version: 17.009.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-dc-crashes-on-macos-10-12-1308755
+  parent_title: Adobe Acrobat DC crashes on MacOs 10.12
+  report_title: Adobe Acrobat DC crashes on MacOs 10.12
+  report_text_excerpt: Adobe Acrobat DC crashes on MacOs 10.12 Version 17.009.20058 with MacOs 10.12.06 After reboot, désinstallation, ré-installation re-reboot, Acrobat still starts and then crashes. The rainbow wheel rotates endlessly... any ideas ? Thanks !
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2017-08-20'
+  target_release_date: '2017-07-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-9-fill-sign-doesn-t-work-in-acrobat-pro-dc-but-does-in-acrob
+  product_id: adobe-acrobat-pro
+  update_version: 17.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/fill-sign-doesn-t-work-in-acrobat-pro-dc-but-does-in-acrobat-reader-dc-what-gives-1306107
+  parent_title: Fill & Sign doesn't work in Acrobat Pro DC but does in Acrobat Reader DC, what gives?
+  report_title: Fill & Sign doesn't work in Acrobat Pro DC but does in Acrobat Reader DC, what gives?
+  report_text_excerpt: Fill & Sign doesn't work in Acrobat Pro DC but does in Acrobat Reader DC, what gives? I work on a Macbook Pro with OSX 11.6. I'm using Acrobat Pro DC (fully updated) and have a current subscription to CC. Never-the-less, Fill & Sign has stopped working in Acrobat Pro DC. My...
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2017-04-16'
+  target_release_date: '2017-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-617-cannot-install-acrobat-pro-dc-windows-10-545456
+  product_id: adobe-acrobat-pro
+  update_version: 15.023.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-617/cannot-install-acrobat-pro-dc-windows-10-545456
+  parent_title: Cannot Install Acrobat Pro DC; Windows 10
+  report_title: Cannot Install Acrobat Pro DC; Windows 10
+  report_text_excerpt: 'Cannot Install Acrobat Pro DC; Windows 10 Greetings: I get the following message when I tried to install Acrobat Pro DC: Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW071 ... -------------------------------------- Summary...'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2017-01-16'
+  target_release_date: '2017-01-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.023.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-9-since-last-automatic-release-update-of-acrobat-dc-15-023-2
+  product_id: adobe-acrobat-pro
+  update_version: 15.023.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/since-last-automatic-release-update-of-acrobat-dc-15-023-20053-1266809
+  parent_title: Since last automatic release update of acrobat DC (15.023.20053 ) ,
+  report_title: Since last automatic release update of acrobat DC (15.023.20053 ) ,
+  report_text_excerpt: 'Since last automatic release update of acrobat DC (15.023.20053 ) , I am not able anymore to create/modify/sign on / .... => to do anything with my pdf. Error Popup : ? RunInsideAppSandBox@LinguisticManager@devtech@@SAXXZ can not be found in library of dynamic links C:\Program...'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2017-01-14'
+  target_release_date: '2017-01-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.023.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-017-20053-adobe-community-bug-report-https-community-adobe-com-questions-18-out-of-memory-errors-when-creating-pdf-from-entire-websit
+  product_id: adobe-acrobat-pro
+  update_version: 15.017.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/out-of-memory-errors-when-creating-pdf-from-entire-website-597475
+  parent_title: Out of memory errors when creating PDF from entire website
+  report_title: Out of memory errors when creating PDF from entire website
+  report_text_excerpt: Out of memory errors when creating PDF from entire website I am using Acrobat DC 15.017.20053 and am receiving Out of Memory errors when trying to create a PDF from an entire website. The process loads approximately 8-10,000 pages and then crashes. The PC still has plenty of...
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-09-20'
+  target_release_date: '2016-08-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.017.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-017-20053-adobe-community-bug-report-https-community-adobe-com-questions-18-adobe-acrobat-dc-august-2016-15-017-20053-win10-issues-59
+  product_id: adobe-acrobat-pro
+  update_version: 15.017.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/adobe-acrobat-dc-august-2016-15-017-20053-win10-issues-598092
+  parent_title: Adobe Acrobat DC August 2016 (15.017.20053) WIN10 Issues
+  report_title: Adobe Acrobat DC August 2016 (15.017.20053) WIN10 Issues
+  report_text_excerpt: 'Adobe Acrobat DC August 2016 (15.017.20053) WIN10 Issues Hello, I have a Windows 10 Home x64 bit laptop running Version: 1607 and OS Build: 14393.105. Adobe Acrobat DC is installing on this PC with version DC August 2016 (15.017.20053). ​ The computer has major issues with...'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-09-02'
+  target_release_date: '2016-08-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.017.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-016-20045-adobe-community-bug-report-https-community-adobe-com-questions-18-freezing-when-highlighting-pdfs-595574
+  product_id: adobe-acrobat-pro
+  update_version: 15.016.20045
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/freezing-when-highlighting-pdfs-595574
+  parent_title: Freezing when highlighting PDFs
+  report_title: Freezing when highlighting PDFs
+  report_text_excerpt: Freezing when highlighting PDFs We are having issues highlighting scanned documents, more specifically documents that Adobe does not recognize as text. When freehanding after several marks, the application freezes and becomes unresponsive causing us to close out of the...
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-07-13'
+  target_release_date: '2016-06-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20045
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-18-acrobat-dc-15-016-20039-crashes-600545
+  product_id: adobe-acrobat-pro
+  update_version: 15.016.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/acrobat-dc-15-016-20039-crashes-600545
+  parent_title: Acrobat DC 15.016.20039 crashes
+  report_title: Acrobat DC 15.016.20039 crashes
+  report_text_excerpt: Acrobat DC 15.016.20039 crashes I have a Mac with Acrobat DC 15.016.20039 installed and the application is continually crashing. It will just randomly close with only a apple error message stating Acrobat quit unexpectedly. I have tried reinstalling the application twice and...
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-06-09'
+  target_release_date: '2016-05-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-18-fatal-errors-acrobat-dc-600867
+  product_id: adobe-acrobat-pro
+  update_version: 15.016.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/fatal-errors-acrobat-dc-600867
+  parent_title: Fatal Errors Acrobat DC
+  report_title: Fatal Errors Acrobat DC
+  report_text_excerpt: 'Fatal Errors Acrobat DC Hi I can''t install and update the Acrobat DC. What is wrong? -------------------------------------- Summary -------------------------------------- - 0 fatal error(s), 2 error(s) ----------- Payload: Adobe Acrobat DC 15.16.20039.0 Acrobat DC/Acrobat DC...'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-06-02'
+  target_release_date: '2016-05-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-18-acrobat-dc-not-installable-on-mac-el-capitan-601019
+  product_id: adobe-acrobat-pro
+  update_version: 15.016.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/acrobat-dc-not-installable-on-mac-el-capitan-601019
+  parent_title: acrobat dc not installable on Mac el capitan
+  report_title: acrobat dc not installable on Mac el capitan
+  report_text_excerpt: 'acrobat dc not installable on Mac el capitan as my acrobat dc wouldn''t restart after touchdown (tried restarting mac, too), I deinstalled/reinstalled it, but the installation stalled: Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003,...'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-05-29'
+  target_release_date: '2016-05-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-18-cant-print-since-acrobat-update-on-mac-601420
+  product_id: adobe-acrobat-pro
+  update_version: 15.016.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/cant-print-since-acrobat-update-on-mac-601420
+  parent_title: cant print since acrobat update on mac
+  report_title: cant print since acrobat update on mac
+  report_text_excerpt: cant print since acrobat update on mac After an automatic update on acrobat dc mac version, the print feature no longer works. version 15.016.20039
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-05-17'
+  target_release_date: '2016-05-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-18-error-to-certify-to-sign-601525
+  product_id: adobe-acrobat-pro
+  update_version: 15.016.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/error-to-certify-to-sign-601525
+  parent_title: error to certify to sign
+  report_title: error to certify to sign
+  report_text_excerpt: error to certify to sign I have installed adobe acrobat standart DC. From TOOLS, CERTIFICATES, TO SIGN FOXGLOVE the document. On having updated ADOBE ACROBAT STANTART DC version 15.016.20039 already we cannot sign.
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-05-12'
+  target_release_date: '2016-05-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-010-20060-adobe-community-bug-report-https-community-adobe-com-questions-617-updating-acrobat-to-current-fails-465694
+  product_id: adobe-acrobat-pro
+  update_version: 15.010.20060
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-617/updating-acrobat-to-current-fails-465694
+  parent_title: Updating Acrobat to current fails
+  report_title: Updating Acrobat to current fails
+  report_text_excerpt: Updating Acrobat to current fails I recently upgraded from Snow Leopard (10.6) to El Capitan (OSX 10.11). When the OS upgrade completed, the Adobe Application Manager alerted that there were new updates. Photoshop, Illustrator and Indesign updated fine. But, Acrobat CC failed....
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-04-15'
+  target_release_date: '2016-03-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20060
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-617-cannot-install-adobe-acrobat-dc-for-mac-467906
+  product_id: adobe-acrobat-pro
+  update_version: 15.010.20056
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-617/cannot-install-adobe-acrobat-dc-for-mac-467906
+  parent_title: Cannot install Adobe Acrobat DC for MAC
+  report_title: Cannot install Adobe Acrobat DC for MAC
+  report_text_excerpt: 'Cannot install Adobe Acrobat DC for MAC I am trying everything I can think of. All I get, after trying to install the Acrobat DC application is an error and this ; Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW006 ......'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-03-12'
+  target_release_date: '2016-01-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20056
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-dc-install-issue-1316421
+  product_id: adobe-acrobat-pro
+  update_version: 15.010.20056
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-dc-install-issue-1316421
+  parent_title: Adobe Acrobat DC Install Issue
+  report_title: Adobe Acrobat DC Install Issue
+  report_text_excerpt: Adobe Acrobat DC Install Issue Having a problem installing Acrobat DC on a computer. I have the Adobe log files, is there a way to upload the log files? The OS is Windows 7 SP1 64-bit 8 GB of RAM 111 GB of free HDD space The log files I have are - Adobe Acrobat DC 15.010.20056...
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2018-03-06'
+  target_release_date: '2016-01-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20056
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-installation-acrobat-dc-failed-on-el-capitan-10-11-3-5943
+  product_id: adobe-acrobat-pro
+  update_version: 15.010.20056
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/installation-acrobat-dc-failed-on-el-capitan-10-11-3-594365
+  parent_title: Installation Acrobat DC failed on El Capitan 10.11.3
+  report_title: Installation Acrobat DC failed on El Capitan 10.11.3
+  report_text_excerpt: 'Installation Acrobat DC failed on El Capitan 10.11.3 Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW006 ... -------------------------------------- Summary -------------------------------------- - 0 fatal error(s), 2 error(s)...'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-01-20'
+  target_release_date: '2016-01-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20056
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-acrobat-fails-to-install-from-both-the-cloud-app-and-dire
+  product_id: adobe-acrobat-pro
+  update_version: 15.010.20056
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/acrobat-fails-to-install-from-both-the-cloud-app-and-direct-download-from-adobe-com-604847
+  parent_title: Acrobat fails to install from both the Cloud app and direct download from adobe.com
+  report_title: Acrobat fails to install from both the Cloud app and direct download from adobe.com
+  report_text_excerpt: 'Acrobat fails to install from both the Cloud app and direct download from adobe.com I''ve tried a number of times and it always fails and gives me the following message... Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW071 ......'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2016-03-01'
+  target_release_date: '2016-01-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20056
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-008-20082-adobe-community-bug-report-https-community-adobe-com-questions-617-error-installing-acrobatpro-dc-with-os-x-10-10-5-479044
+  product_id: adobe-acrobat-pro
+  update_version: 15.008.20082
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-617/error-installing-acrobatpro-dc-with-os-x-10-10-5-479044
+  parent_title: ERROR Installing AcrobatPro DC with OS X 10.10.5
+  report_title: ERROR Installing AcrobatPro DC with OS X 10.10.5
+  report_text_excerpt: 'ERROR Installing AcrobatPro DC with OS X 10.10.5 Hi, we are in trouble with installation of AcrobatPro DC with OS X 10.10.5. Below we report the error given. Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW006 ......'
+  captured_at: '2026-09-09T01:17:22Z'
+  source_date: '2015-09-08'
+  target_release_date: '2015-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.008.20082
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
