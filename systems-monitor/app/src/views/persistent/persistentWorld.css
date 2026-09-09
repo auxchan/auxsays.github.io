@@ -41,9 +41,9 @@
 [data-aux-product="systems-monitor"] .sm-pw-beta-boundary { margin: 0; padding: 10px 22px; border-bottom: 1px solid #17343e; background: rgba(10,43,53,.72); color: #9fc3c5; font-size: 12px; line-height: 1.45; }
 [data-aux-product="systems-monitor"] .sm-pw-beta-boundary strong { color: #d8efec; }
 [data-aux-product="systems-monitor"] .sm-pw-workspace { position: relative; min-height: 720px; height: clamp(720px,78vh,920px); display: grid; grid-template-columns: 0 minmax(0,1fr); transition: grid-template-columns 340ms cubic-bezier(.22,.85,.25,1); }
-[data-aux-product="systems-monitor"] .sm-pw-workspace:fullscreen,[data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback { width: 100vw; height: 100vh; min-height: 100vh; grid-template-rows: minmax(0,1fr); background: #06151d; }
+[data-aux-product="systems-monitor"] .sm-pw-workspace:fullscreen,[data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback { width: 100vw; height: 100vh; height: 100dvh; min-height: 100vh; min-height: 100dvh; grid-template-rows: minmax(0,1fr); background: #06151d; }
 [data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback { position: fixed; z-index: 9999; inset: 0; }
-[data-aux-product="systems-monitor"] .sm-pw-workspace:fullscreen .sm-pw-surface,[data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback .sm-pw-surface { min-height: 100vh; }
+[data-aux-product="systems-monitor"] .sm-pw-workspace:fullscreen .sm-pw-surface,[data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback .sm-pw-surface { min-height: 100vh; min-height: 100dvh; }
 [data-aux-product="systems-monitor"] .sm-pw-workspace.has-inspector { grid-template-columns: minmax(290px,350px) minmax(0,1fr); }
 [data-aux-product="systems-monitor"] .sm-pw-minimap { position: absolute; z-index: 5; top: 14px; right: 14px; width: 156px; padding: 9px 9px 8px; border: 1px solid rgba(74,136,145,.38); border-radius: 14px; background: rgba(4,21,28,.82); box-shadow: 0 15px 35px rgba(0,0,0,.28); backdrop-filter: blur(8px); pointer-events: auto; }
 [data-aux-product="systems-monitor"] .sm-pw-minimap header { display: flex; justify-content: space-between; gap: 8px; }
