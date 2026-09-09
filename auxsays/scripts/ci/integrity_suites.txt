@@ -53,7 +53,7 @@ auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
 auxsays/scripts/tests/test_collector_write_authority.py = 104
-auxsays/scripts/tests/test_davinci_bare_version_identity.py = 55
+auxsays/scripts/tests/test_davinci_bare_version_identity.py = 56
 # Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
 # scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
 # been searched once. Wiring is asserted from the AST, not by grepping the file, and a budget

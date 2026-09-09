@@ -239,8 +239,15 @@ def run() -> int:  # noqa: PLR0915
           count_of("*davinci-resolve-11.md") == 0, str(count_of("*davinci-resolve-11.md")))
     check("M Resolve 15 no longer counts a points counter",
           count_of("*davinci-resolve-15.md") == 0, str(count_of("*davinci-resolve-15.md")))
-    check("M Resolve 20 lost exactly the RAM row (27 -> 26)",
-          count_of("*davinci-resolve-20.md") == 26, str(count_of("*davinci-resolve-20.md")))
+    # The same pin, one line up, and live: 26 was the count the day the RAM row was removed
+    # (27 - 1). Resolve 20 is a CURRENT major and still collects, so equality here would break on
+    # the next legitimate report exactly as `len(dv) == 234` did -- it is the same fuse, not yet
+    # lit. What this check is named for is that the RAM row went and the rest stayed, and a floor
+    # states that; that the RAM row has not come BACK is stated by the survivor check below, which
+    # refuses any stored row the shipped predicate rejects.
+    dv20_now = count_of("*davinci-resolve-20.md")
+    check("M Resolve 20 lost the RAM row and kept the rest (floor 26 = 27 - 1)",
+          dv20_now >= 26, f"{dv20_now} (floor 26; growth is legitimate, loss is not)")
 
     for pattern in ("*davinci-resolve-11.md", "*davinci-resolve-15.md"):
         for path in sorted(gen.glob(pattern)):
@@ -259,11 +266,28 @@ def run() -> int:  # noqa: PLR0915
                   f"decision={data.get('update_decision_label')!r}")
 
     # The evidence store keeps everything the predicate still accepts -- this is a precision fix,
-    # not a purge. 587 of the original 590 rows survive.
+    # not a purge.
     ev = yaml.safe_load((_REPO / "auxsays" / "_data" / "consensus_evidence.yml").read_text(encoding="utf-8")) or {}
     dv = [r for r in (ev.get("evidence") or []) if r.get("product_id") == "blackmagic-davinci"]
-    check("M only the three proven false identities were removed",
-          len(dv) == 234, f"{len(dv)} davinci rows (expected 234 = 237 - 3)")
+    # This was `len(dv) == 234` -- the store as it stood the day the migration landed (237 - 3).
+    # It is the THIRD pin in this file to break on ordinary corpus growth, after the OBS and
+    # Windows controls above, and it broke the same way: the DaVinci collector appends accepted
+    # evidence on a schedule (a bot commits "Update automated patch evidence" to main), the store
+    # legitimately reached 241, and the check reported a purge that had not happened. An absolute
+    # count of a live corpus measures how recently it was collected, not whether the three false
+    # identities were removed. Bumping 234 to 241 would only reset the same fuse, so it is asserted
+    # as a FLOOR for the same reason OBS is: growth is legitimate, loss is not.
+    check("M the migration was a precision fix, not a purge",
+          len(dv) >= 234, f"{len(dv)} davinci rows (floor 234 = 237 - 3 the day it landed)")
+    # NON-VACUITY for the survivor check below, which is the assertion that actually proves no
+    # false identity is left in the store. "No survivor is refused" is trivially true of an EMPTY
+    # store, and equally true of one that kept only DOTTED versions -- which is precisely what a
+    # required-adjacency rule would have produced (the docstring measures the cost: 6-9 legitimate
+    # bare rows dropped). The bare 1-2 digit major is the only shape this predicate can get wrong,
+    # so the survivor check means something only while bare rows are still in the store.
+    bare = [r for r in dv if str(r.get("update_version") or "").isdigit()]
+    check("M legitimate bare-version rows survived, so the survivor check is not vacuous",
+          len(bare) > 0, f"{len(bare)} bare-version rows of {len(dv)} davinci rows")
     check("M no surviving DaVinci row is refused by the shipped predicate",
           not [r for r in dv
                if exact_version_match(
