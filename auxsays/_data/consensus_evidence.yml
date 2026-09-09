@@ -30225,3 +30225,109 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-20-009-20067-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-still-crashing-after-installing-20-0
+  product_id: adobe-acrobat-reader
+  update_version: 20.009.20067
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-still-crashing-after-installing-20-009-20067-hotfix-patch-1520523
+  parent_title: Adobe Acrobat Reader Still Crashing After Installing 20.009.20067 Hotfix Patch
+  report_title: Adobe Acrobat Reader Still Crashing After Installing 20.009.20067 Hotfix Patch
+  report_text_excerpt: Adobe Acrobat Reader Still Crashing After Installing 20.009.20067 Hotfix Patch My Adobe Acrobat Reader DC is still freezing and crashing each time I open a .pdf file. I have successfully installed the latest 20.009.20067 Hotfix Patch, and it is still crashing like before.
+  captured_at: '2026-09-09T06:55:24Z'
+  source_date: '2020-06-17'
+  target_release_date: '2020-06-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.009.20067
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-20-006-20042-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-crashing-when-scanning-document-from-brother-mfc-890
+  product_id: adobe-acrobat-reader
+  update_version: 20.006.20042
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-crashing-when-scanning-document-from-brother-mfc-8900-1245126
+  parent_title: Adobe Crashing When Scanning Document from Brother MFC 8900
+  report_title: Adobe Crashing When Scanning Document from Brother MFC 8900
+  report_text_excerpt: Adobe Crashing When Scanning Document from Brother MFC 8900 I have the latest version of Adobe Acrobat, 20.006.20042, running on Windows 10. Acrobat is freezing and then crashing every time I open up the
+  captured_at: '2026-09-09T06:55:24Z'
+  source_date: '2020-03-21'
+  target_release_date: '2020-03-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.006.20042
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-006-20042-adobe-community-bug-report-https-community-adobe-com-questions-12-error-when-updating-it-has-probably-been-updated-by-other
+  product_id: adobe-acrobat-reader
+  update_version: 20.006.20042
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/error-when-updating-it-has-probably-been-updated-by-other-means-1520425
+  parent_title: Error when updating. "It has probably been updated by other means"
+  report_title: Error when updating. "It has probably been updated by other means"
+  report_text_excerpt: Error when updating. "It has probably been updated by other means" We have a lot of computers running Adobe Acrobat Reader DC 20.006.20042. When trying to update using our w indows server update services the update fails on every computer. While trying to update using the...
+  captured_at: '2026-09-09T06:55:24Z'
+  source_date: '2020-06-10'
+  target_release_date: '2020-03-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.006.20042
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-006-20042-adobe-community-bug-report-https-community-adobe-com-questions-12-3-pages-are-shown-blank-with-an-error-a-number-is-out-of
+  product_id: adobe-acrobat-reader
+  update_version: 20.006.20042
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/3-pages-are-shown-blank-with-an-error-a-number-is-out-of-range-good-in-android-and-chrome-1519610
+  parent_title: 3 pages are shown blank with an error "A number is out of range", good in Android and Chrome
+  report_title: 3 pages are shown blank with an error "A number is out of range", good in Android and Chrome
+  report_text_excerpt: 3 pages are shown blank with an error "A number is out of range", good in Android and Chrome There may be some issues (though strange for ISO/IEC doc) but even if there is it should show the page as it is shown in Chrome and Acrobat for android. The problem also occurs in...
+  captured_at: '2026-09-09T06:55:24Z'
+  source_date: '2020-03-22'
+  target_release_date: '2020-03-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.006.20042
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: browser/plugin handoff failure
+  workflow_area: browser integration
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
