@@ -326,6 +326,38 @@ def generated_records(product_id: str, target_versions: set[str] | None = None, 
     return records
 
 
+def newest_first(records: list[PatchRecord]) -> list[PatchRecord]:
+    """Most recently released patch first.
+
+    `generated_records` above returns the corpus in FILENAME order, and every generated filename is
+    date-prefixed, so its natural order is oldest-first: 2014 before 2026. Every collector is bounded
+    by a per-collector wall-clock budget (`AUXSAYS_COLLECTOR_DEADLINE_SECONDS`, 1200 s) and simply
+    `break`s when it expires, so an oldest-first walk spends its entire budget re-scraping the
+    historical head of the corpus and never reaches the patches a reader is actually looking at.
+
+    This is not hypothetical and it is not a tail problem. Measured on DaVinci before this helper was
+    used there: scheduled run 34377762747 processed versions 10.1.5 through 15.0.1 -- records
+    published 2014-05-09 to 2018-09-03 -- rejected 77 of 77 candidates as
+    `missing_exact_patch_version_match`, and stopped. 87 of 120 records were never reached; the
+    newest release, 21.1, had never been searched once by any method; and the walk's high-water mark
+    was RECEDING, because each newly ingested record lengthens the corpus ahead of the recent tail.
+
+    Reversing the order does not create budget, it spends it where the value is. Old records keep
+    whatever remains, and they are the ones that already carry evidence. Deterministic: ties break on
+    version, so two runs walk the same order.
+
+    NOTE ON DUPLICATION. `adobe_acrobat_community.py:130` and `microsoft_windows.py:1038` each carry
+    their own private copy of this function, which is where the idea was proven (PRs #102-#105).
+    They are deliberately NOT refactored to call this one: both products are frozen, and "the
+    implementation could be cleaner" is not a licence to touch frozen code. This shared copy exists
+    so the next collector inherits the fix instead of rediscovering it.
+    """
+    return sorted(records,
+                  key=lambda r: (str(getattr(r, "update_published_at", "") or ""),
+                                 str(getattr(r, "update_version", "") or "")),
+                  reverse=True)
+
+
 def load_evidence(path: Path = EVIDENCE_PATH) -> list[dict[str, Any]]:
     if not path.exists():
         return []

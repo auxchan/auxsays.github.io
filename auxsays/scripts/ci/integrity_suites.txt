@@ -54,6 +54,11 @@ auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
 auxsays/scripts/tests/test_collector_write_authority.py = 104
 auxsays/scripts/tests/test_davinci_bare_version_identity.py = 55
+# Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
+# scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
+# been searched once. Wiring is asserted from the AST, not by grepping the file, and a budget
+# simulation over the real corpus proves the pre-fix order missed the newest release.
+auxsays/scripts/tests/test_collector_traversal_order.py = 16
 auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
 auxsays/scripts/tests/test_method_health_append_delta.py = 55
