@@ -30358,3 +30358,111 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-20-013-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-cant-install-acrobat-dc-in-cc-1254918
+  product_id: adobe-acrobat-reader
+  update_version: 20.013.20074
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/cant-install-acrobat-dc-in-cc-1254918
+  parent_title: Cant install Acrobat DC in CC
+  report_title: Cant install Acrobat DC in CC
+  report_text_excerpt: 'Cant install Acrobat DC in CC I''ev tried everything, use the tools from adobe tools, using the cmd to check the system files, but nothing works Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW071 ......'
+  captured_at: '2026-09-09T09:18:44Z'
+  source_date: '2021-01-07'
+  target_release_date: '2020-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.013.20074
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-021-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-install-font-pack-1902120058-or-1500720033-on-a
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/unable-to-install-font-pack-1902120058-or-1500720033-on-acrobat-classic-track-20-001-30002-54973-1521197
+  parent_title: Unable to Install Font Pack 1902120058 or 1500720033 on Acrobat Classic Track 20.001.30002.54973
+  report_title: Unable to Install Font Pack 1902120058 or 1500720033 on Acrobat Classic Track 20.001.30002.54973
+  report_text_excerpt: Unable to Install Font Pack 1902120058 or 1500720033 on Acrobat Classic Track 20.001.30002.54973 As previously reported by others there does not seem to be a reliable installer for the newer versions of Adobe Reader. I need to install the classic track Adobe Reader with the...
+  captured_at: '2026-09-09T09:18:44Z'
+  source_date: '2020-08-28'
+  target_release_date: '2019-12-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '1902120058'
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-021-20049-adobe-community-bug-report-https-community-adobe-com-questions-9-cannot-install-acrobat-adobe-reader-dc-i-have-tried-all-th
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20049
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/cannot-install-acrobat-adobe-reader-dc-i-have-tried-all-the-solutions-1241257
+  parent_title: Cannot Install Acrobat Adobe Reader DC ( I have tried all the solutions)
+  report_title: Cannot Install Acrobat Adobe Reader DC ( I have tried all the solutions)
+  report_text_excerpt: Cannot Install Acrobat Adobe Reader DC ( I have tried all the solutions) Hi all, I have been on hold to talk to someone at Adobe for about an hour after being told it would be a 12 minute wait. I have tried all of the solutions that have been posted in the other similar...
+  captured_at: '2026-09-09T09:18:44Z'
+  source_date: '2019-10-31'
+  target_release_date: '2019-10-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20049
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-012-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-fails-to-print-intermittently-for-one-user-1
+  product_id: adobe-acrobat-reader
+  update_version: 19.012.20040
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-fails-to-print-intermittently-for-one-user-1518185
+  parent_title: Adobe Reader fails to print intermittently for one user
+  report_title: Adobe Reader fails to print intermittently for one user
+  report_text_excerpt: Adobe Reader fails to print intermittently for one user We have 1 user on a terminal server who is having intermittent problems printing PDFs with Adobe Acrobat Reader DC 19.012.20040. When this occurs, it affects all PDF documents but he has no problems printing in other...
+  captured_at: '2026-09-09T09:18:44Z'
+  source_date: '2019-09-12'
+  target_release_date: '2019-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20040
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
