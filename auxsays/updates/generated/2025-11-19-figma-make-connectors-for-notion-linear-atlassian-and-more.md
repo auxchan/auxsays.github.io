@@ -17,8 +17,8 @@ update_version: Make connectors for Notion, Linear, Atlassian, and more
 update_logo_text: FIG
 update_published_at: '2025-11-19T00:00:00.000Z'
 update_last_checked: '2026-08-03T13:18:17Z'
-source_last_checked: '2026-08-03T13:18:17Z'
-official_body_last_checked: '2026-08-03T13:18:17Z'
+source_last_checked: '2026-09-09T14:05:01Z'
+official_body_last_checked: '2026-09-09T14:05:01Z'
 record_last_updated: '2026-08-03T13:18:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-03T13:18:17Z'
+  url: https://www.figma.com/release-notes/?title=make-connectors-notion-linear-atlassian
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-09T14:05:01Z'
   url: https://www.figma.com/release-notes/?title=make-connectors-notion-linear-atlassian
   status: captured-from-rss-feed
   body_captured: true
