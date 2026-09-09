@@ -13160,13 +13160,13 @@ methods:
   status: success
   candidates_found: 10
   accepted_candidates: 1
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 1
+  duplicate_existing_evidence: 1
+  evidence_rows_added: 0
   public_counted_reports: 1
   accepted_reports: 1
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-30T21:23:21Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 17.012.20095
@@ -13207,14 +13207,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 15
-  accepted_candidates: 3
-  duplicate_existing_evidence: 0
+  accepted_candidates: 6
+  duplicate_existing_evidence: 3
   evidence_rows_added: 3
-  public_counted_reports: 3
-  accepted_reports: 3
-  rejected_reports: 12
+  public_counted_reports: 6
+  accepted_reports: 6
+  rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-29T07:22:12Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 17.012.20098
@@ -13495,14 +13495,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 14
-  accepted_candidates: 1
-  duplicate_existing_evidence: 0
+  accepted_candidates: 2
+  duplicate_existing_evidence: 1
   evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 13
+  public_counted_reports: 2
+  accepted_reports: 2
+  rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-11T19:38:14Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 18.011.20058
@@ -13592,13 +13592,13 @@ methods:
   status: success
   candidates_found: 16
   accepted_candidates: 3
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 3
+  duplicate_existing_evidence: 3
+  evidence_rows_added: 0
   public_counted_reports: 3
   accepted_reports: 3
   rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-08-10T02:52:52Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 19.008.20071
@@ -13639,14 +13639,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 12
-  accepted_candidates: 2
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 2
-  public_counted_reports: 2
-  accepted_reports: 2
-  rejected_reports: 10
+  accepted_candidates: 3
+  duplicate_existing_evidence: 2
+  evidence_rows_added: 1
+  public_counted_reports: 3
+  accepted_reports: 3
+  rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-10T02:52:52Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 19.008.20074
@@ -13687,14 +13687,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 11
-  accepted_candidates: 3
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 3
-  public_counted_reports: 3
-  accepted_reports: 3
-  rejected_reports: 8
+  accepted_candidates: 5
+  duplicate_existing_evidence: 3
+  evidence_rows_added: 2
+  public_counted_reports: 5
+  accepted_reports: 5
+  rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-10T02:52:52Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 19.008.20080
@@ -13735,14 +13735,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 13
-  accepted_candidates: 2
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 2
-  public_counted_reports: 2
-  accepted_reports: 2
-  rejected_reports: 11
+  accepted_candidates: 3
+  duplicate_existing_evidence: 2
+  evidence_rows_added: 1
+  public_counted_reports: 3
+  accepted_reports: 3
+  rejected_reports: 10
   blocked_reason: ''
-  last_run: '2026-08-10T02:52:52Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 19.008.20081
@@ -13783,14 +13783,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 10
-  accepted_candidates: 1
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 9
+  accepted_candidates: 4
+  duplicate_existing_evidence: 1
+  evidence_rows_added: 3
+  public_counted_reports: 4
+  accepted_reports: 4
+  rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-10T02:52:52Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 19.010.20064
@@ -13928,13 +13928,13 @@ methods:
   status: success
   candidates_found: 14
   accepted_candidates: 2
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 2
+  duplicate_existing_evidence: 2
+  evidence_rows_added: 0
   public_counted_reports: 2
   accepted_reports: 2
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-10T02:52:52Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 19.010.20098
@@ -14071,14 +14071,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 17
-  accepted_candidates: 3
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 3
-  public_counted_reports: 3
-  accepted_reports: 3
-  rejected_reports: 14
+  accepted_candidates: 5
+  duplicate_existing_evidence: 3
+  evidence_rows_added: 2
+  public_counted_reports: 5
+  accepted_reports: 5
+  rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-10T02:52:52Z'
+  last_run: '2026-09-09T04:36:20Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 19.012.20034

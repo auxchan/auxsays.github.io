@@ -4,346 +4,6 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-09-08T16:56:50Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|26.002.21869|26.002.21869
-  report_date: '2026-09-03'
-  report_excerpt: Adobe Acrobat Error 43 I have a PDF located on a dropbox server accessible to about
-    4-5 people. 3 people were on the document leaving comments as a way to proof. When one of them went
-    to save, the entire document got corrupted. The file was NOT a read only file. This issue...
-  report_id: adobe-acrobat-reader:4699fa76e20af4fa
-  report_title: Adobe Acrobat Error 43
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/adobe-acrobat-error-43-1640295
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.002.21869
-  window_end: '2026-09-07'
-  window_start: '2026-08-31'
-  window_version: 26.002.21869
-- attribution_state: not_established
-  captured_at: '2026-09-08T16:56:50Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|26.002.21869|26.002.21869
-  report_date: '2026-09-03'
-  report_excerpt: 'Acrobat crashes trying to print I am running Acrobat desktop version 26.1 on a Windows
-    11 enterprise Dell laptop. I created a PDF report from an outside source and when I open the file
-    in Acrobat I get this message: This appears to be a scanned document. Use Scan & OCR to make...'
-  report_id: adobe-acrobat-reader:2c9e108cf1ba6450
-  report_title: Acrobat crashes trying to print
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.002.21869
-  window_end: '2026-09-07'
-  window_start: '2026-08-31'
-  window_version: 26.002.21869
-- attribution_state: not_established
-  captured_at: '2026-09-08T16:56:50Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|26.001.21662|26.001.21662
-  report_date: '2026-06-15'
-  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
-    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
-    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
-  report_id: adobe-acrobat-reader:79ad8d6f436754cf
-  report_title: No save the content adobe Acrobat
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.001.21662
-  window_end: '2026-06-17'
-  window_start: '2026-06-09'
-  window_version: 26.001.21662
-- attribution_state: not_established
-  captured_at: '2026-09-07T04:56:42Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|25.001.21208|25.001.21208
-  report_date: '2026-02-12'
-  report_excerpt: Adobe crashing after trying to print a document So when i start my adobe acrobat reader
-    all of the tabs load up from previous session and i have no idea when it is done so when i click print
-    to a certain document it says it cannot open a document. it says that several times...
-  report_id: adobe-acrobat-reader:7a44245dcfacee71
-  report_title: Adobe crashing after trying to print a document
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/adobe-crashing-after-trying-to-print-a-document-1549754
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 25.001.21208
-  window_end: '2026-02-17'
-  window_start: '2026-02-12'
-  window_version: 25.001.21208
-- attribution_state: not_established
-  captured_at: '2026-09-07T04:56:42Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|25.001.21111|25.001.21111
-  report_date: '2026-01-29'
-  report_excerpt: I cannot install Acrobate reader on my PC (Win 11) I have uninstalled Acrobat reader
-    from my PC due to an error message that I was receiving. Ever since, I am trying to install it again
-    from the download page of Adobe, but I have no luck. I start the installation, the...
-  report_id: adobe-acrobat-reader:9077a504f8be61d7
-  report_title: I cannot install Acrobate reader on my PC (Win 11)
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/i-cannot-install-acrobate-reader-on-my-pc-win-11-1547623
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 25.001.21111
-  window_end: '2026-02-06'
-  window_start: '2026-01-20'
-  window_version: 25.001.21111
-- attribution_state: not_established
-  captured_at: '2026-09-08T21:13:04Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|25.001.20918|25.001.20918
-  report_date: '2025-11-18'
-  report_excerpt: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1 I recently updated to
-    Tahoe 26.1 on my Macbook pro and now everytime I double click an editable field to update it crashs
-    (quits). Tried multiple files and also reinstalling Acrobat etc... but no luck. It ppears to...
-  report_id: adobe-acrobat-reader:7a53ca84831ba0cd
-  report_title: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-trying-to-edit-forms-in-tahoe-26-1-1305727
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 25.001.20918
-  window_end: '2025-11-20'
-  window_start: '2025-11-13'
-  window_version: 25.001.20918
-- attribution_state: not_established
-  captured_at: '2026-09-09T02:25:01Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|19.008.20074|19.008.20074
-  report_date: '2018-10-10'
-  report_excerpt: Can't open PDF file in adobe acrobat reader DC I am trying to open a file in adobe acrobat
-    reader DC but i keep getting an error message that says that there was an error opening this document.
-    the file is damaged and could not be repaired. does anyone know how to go about...
-  report_id: adobe-acrobat-reader:11d01d70390014d3
-  report_title: Can't open PDF file in adobe acrobat reader DC
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/can-t-open-pdf-file-in-adobe-acrobat-reader-dc-1514999
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 19.008.20074
-  window_end: '2018-10-22'
-  window_start: '2018-10-08'
-  window_version: 19.008.20074
-- attribution_state: not_established
-  captured_at: '2026-09-08T22:54:00Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|18.011.20055|18.011.20055
-  report_date: '2018-07-12'
-  report_excerpt: Can't Update Acrobat Reader DC Hi. My first question so please be gentle! There is much
-    publicity today about Windows Updates and others. Two leading experts have said how important it is
-    to update Adobe Acrobat Reader but I can't find any mention of ReaderDC. I've just...
-  report_id: adobe-acrobat-reader:bf5c459b8f1d0ef9
-  report_title: Can't Update Acrobat Reader DC
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/can-t-update-acrobat-reader-dc-1514431
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 18.011.20055
-  window_end: '2018-08-14'
-  window_start: '2018-07-10'
-  window_version: 18.011.20055
-- attribution_state: not_established
-  captured_at: '2026-09-08T22:54:00Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|18.011.20038|18.011.20038
-  report_date: '2018-04-08'
-  report_excerpt: Can't open any PDF file. Get error report, says problem with software PLS HELP! I just
-    tried to open PDF files and I cant get one to open, or any of the old ones I have stored on my computer.
-    I have MacOS Sierra 10.12. I don't know what happned but I tried to reinstall Acrobat...
-  report_id: adobe-acrobat-reader:93f139cd890d9789
-  report_title: Can't open any PDF file. Get error report, says problem with software PLS HELP!
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/can-t-open-any-pdf-file-get-error-report-says-problem-with-software-pls-help-1317326
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 18.011.20038
-  window_end: '2018-05-14'
-  window_start: '2018-02-23'
-  window_version: 18.011.20038
-- attribution_state: not_established
-  captured_at: '2026-09-09T02:25:01Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|18.011.20038|18.011.20038
-  report_date: '2018-02-28'
-  report_excerpt: Acrobat Reader DC and Adobe Acrobat DC Cleaner Tool has stopped working... I am in the
-    process configuring an uninstaller for Adobe Reader in case we have failed installation within our
-    company. I found your cleaner tool, which is exactly what I needed! However, after the tool...
-  report_id: adobe-acrobat-reader:2c12800d8091dae1
-  report_title: Acrobat Reader DC and Adobe Acrobat DC Cleaner Tool has stopped working...
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-624/acrobat-reader-dc-and-adobe-acrobat-dc-cleaner-tool-has-stopped-working-674915
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 18.011.20038
-  window_end: '2018-05-14'
-  window_start: '2018-02-23'
-  window_version: 18.011.20038
-- attribution_state: not_established
-  captured_at: '2026-09-09T02:25:01Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|17.009.20044|17.009.20044
-  report_date: '2017-05-29'
-  report_excerpt: Update Adobe Acrobat Reader Can't update. My anti virus program warns me to update AAR.
-    However, when I try to update it, I only see a 'Failed for Unknown Reasons' error message. When I
-    open AAR and check for updates, and try and install them, I only receive a message saying I...
-  report_id: adobe-acrobat-reader:49eb801c118318ad
-  report_title: Update Adobe Acrobat Reader
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/update-adobe-acrobat-reader-1510259
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 17.009.20044
-  window_end: '2017-07-12'
-  window_start: '2017-04-11'
-  window_version: 17.009.20044
-- attribution_state: not_established
-  captured_at: '2026-09-09T02:25:01Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|15.023.20056|15.023.20056
-  report_date: '2017-01-24'
-  report_excerpt: 'Re: Adobe Acrobat Reader DC has stopped working I still get the problem after installing
-    the patch. It seems to often (but not always) happen when I am trying to highlight, insert a text
-    box, or draw with the pencil tool. I do this frequently for articles. Very frustrating as...'
-  report_id: adobe-acrobat-reader:b3b5ebadb34fdf53
-  report_title: 'Re: Adobe Acrobat Reader DC has stopped working'
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/re-adobe-acrobat-reader-dc-has-stopped-working-1508345
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 15.023.20056
-  window_end: '2017-02-21'
-  window_start: '2017-01-19'
-  window_version: 15.023.20056
-- attribution_state: not_established
-  captured_at: '2026-09-09T02:25:01Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|15.023.20056|15.023.20056
-  report_date: '2017-01-19'
-  report_excerpt: Adobe Acrobat Reader DC crashes when trying to save pdf Hi , We have Windows Server
-    2008 R2 on which Adobe Acrobat Reader DC is installed.And when users are trying to save their invoice
-    from SAP as a PDF using DC, it crashes and we are getting a message "Adobe Acrobat Reader...
-  report_id: adobe-acrobat-reader:3f3218de6a6ad984
-  report_title: Adobe Acrobat Reader DC crashes when trying to save pdf
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-crashes-when-trying-to-save-pdf-1508340
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 15.023.20056
-  window_end: '2017-02-21'
-  window_start: '2017-01-19'
-  window_version: 15.023.20056
-- attribution_state: not_established
-  captured_at: '2026-09-09T02:25:01Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|15.023.20053|15.023.20053
-  report_date: '2017-01-12'
-  report_excerpt: 'Adobe Acrobat Reader DC has stopped working Shortly after I launch acrobat reader dc
-    or open a pdf file with acrobat reader dc the program halts and I get a message saying: "Adobe Acrobat
-    Reader DC has stopped working A problem caused the program to stop working correctly....'
-  report_id: adobe-acrobat-reader:929ca16d813cbc32
-  report_title: Adobe Acrobat Reader DC has stopped working
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-has-stopped-working-1508439
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 15.023.20053
-  window_end: '2017-01-19'
-  window_start: '2017-01-10'
-  window_version: 15.023.20053
-- attribution_state: not_established
-  captured_at: '2026-09-09T00:09:03Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|15.016.20045|15.016.20045
-  report_date: '2016-07-05'
-  report_excerpt: Unable to print PDFs. when i click on the print button, nothing happens. i don't even
-    get to the print set-up box. any ideas? i've run through all the general printing troubleshooting
-    pages. have even uninstalled and reinstalled acrobat.
-  report_id: adobe-acrobat-reader:60b33e74900ca24e
-  report_title: Unable to print PDFs.
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-18/unable-to-print-pdfs-608216
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 15.016.20045
-  window_end: '2016-07-12'
-  window_start: '2016-06-02'
-  window_version: 15.016.20045
-- attribution_state: not_established
-  captured_at: '2026-09-09T00:09:03Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|15.016.20045|15.016.20045
-  report_date: '2016-06-29'
-  report_excerpt: Unable to start correctly Adobe Reader DC is getting an error message when opening pdf
-    files. "The Application was unable to start correctly (0xc00000a5). Click OK to close the application"
-    Clicking OK allows the file to be opened normally, but I am still unable to save the...
-  report_id: adobe-acrobat-reader:443454a04eff139f
-  report_title: Unable to start correctly
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-18/unable-to-start-correctly-592682
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 15.016.20045
-  window_end: '2016-07-12'
-  window_start: '2016-06-02'
-  window_version: 15.016.20045
-- attribution_state: not_established
-  captured_at: '2026-09-09T02:25:01Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|15.016.20039|15.016.20039
-  report_date: '2016-05-11'
-  report_excerpt: Adobe Acrobat Reader DC has stopped working. After an automatic WIndows 10 update last
-    night, now I can't look at pdfs. The file will open but ta message window opens saying it has stopped
-    working and will close the program.
-  report_id: adobe-acrobat-reader:c03599d924b6a4ee
-  report_title: Adobe Acrobat Reader DC has stopped working.
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-has-stopped-working-1507220
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 15.016.20039
-  window_end: '2016-05-19'
-  window_start: '2016-05-10'
-  window_version: 15.016.20039
-- attribution_state: not_established
   captured_at: '2026-09-04T11:14:55Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
@@ -701,3 +361,383 @@ reports:
   window_end: '2017-04-11'
   window_start: '2017-02-21'
   window_version: 15.023.20070
+- attribution_state: not_established
+  captured_at: '2026-09-08T16:56:50Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.002.21869|26.002.21869
+  report_date: '2026-09-03'
+  report_excerpt: Adobe Acrobat Error 43 I have a PDF located on a dropbox server accessible to about
+    4-5 people. 3 people were on the document leaving comments as a way to proof. When one of them went
+    to save, the entire document got corrupted. The file was NOT a read only file. This issue...
+  report_id: adobe-acrobat-reader:4699fa76e20af4fa
+  report_title: Adobe Acrobat Error 43
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-error-43-1640295
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21869
+  window_end: '2026-09-07'
+  window_start: '2026-08-31'
+  window_version: 26.002.21869
+- attribution_state: not_established
+  captured_at: '2026-09-08T16:56:50Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.002.21869|26.002.21869
+  report_date: '2026-09-03'
+  report_excerpt: 'Acrobat crashes trying to print I am running Acrobat desktop version 26.1 on a Windows
+    11 enterprise Dell laptop. I created a PDF report from an outside source and when I open the file
+    in Acrobat I get this message: This appears to be a scanned document. Use Scan & OCR to make...'
+  report_id: adobe-acrobat-reader:2c9e108cf1ba6450
+  report_title: Acrobat crashes trying to print
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21869
+  window_end: '2026-09-07'
+  window_start: '2026-08-31'
+  window_version: 26.002.21869
+- attribution_state: not_established
+  captured_at: '2026-09-08T16:56:50Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21662|26.001.21662
+  report_date: '2026-06-15'
+  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
+    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
+    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
+  report_id: adobe-acrobat-reader:79ad8d6f436754cf
+  report_title: No save the content adobe Acrobat
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21662
+  window_end: '2026-06-17'
+  window_start: '2026-06-09'
+  window_version: 26.001.21662
+- attribution_state: not_established
+  captured_at: '2026-09-07T04:56:42Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.21208|25.001.21208
+  report_date: '2026-02-12'
+  report_excerpt: Adobe crashing after trying to print a document So when i start my adobe acrobat reader
+    all of the tabs load up from previous session and i have no idea when it is done so when i click print
+    to a certain document it says it cannot open a document. it says that several times...
+  report_id: adobe-acrobat-reader:7a44245dcfacee71
+  report_title: Adobe crashing after trying to print a document
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-crashing-after-trying-to-print-a-document-1549754
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21208
+  window_end: '2026-02-17'
+  window_start: '2026-02-12'
+  window_version: 25.001.21208
+- attribution_state: not_established
+  captured_at: '2026-09-07T04:56:42Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.21111|25.001.21111
+  report_date: '2026-01-29'
+  report_excerpt: I cannot install Acrobate reader on my PC (Win 11) I have uninstalled Acrobat reader
+    from my PC due to an error message that I was receiving. Ever since, I am trying to install it again
+    from the download page of Adobe, but I have no luck. I start the installation, the...
+  report_id: adobe-acrobat-reader:9077a504f8be61d7
+  report_title: I cannot install Acrobate reader on my PC (Win 11)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/i-cannot-install-acrobate-reader-on-my-pc-win-11-1547623
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21111
+  window_end: '2026-02-06'
+  window_start: '2026-01-20'
+  window_version: 25.001.21111
+- attribution_state: not_established
+  captured_at: '2026-09-08T21:13:04Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.20918|25.001.20918
+  report_date: '2025-11-18'
+  report_excerpt: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1 I recently updated to
+    Tahoe 26.1 on my Macbook pro and now everytime I double click an editable field to update it crashs
+    (quits). Tried multiple files and also reinstalling Acrobat etc... but no luck. It ppears to...
+  report_id: adobe-acrobat-reader:7a53ca84831ba0cd
+  report_title: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-trying-to-edit-forms-in-tahoe-26-1-1305727
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20918
+  window_end: '2025-11-20'
+  window_start: '2025-11-13'
+  window_version: 25.001.20918
+- attribution_state: not_established
+  captured_at: '2026-09-09T04:36:20Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|19.008.20080|19.008.20080
+  report_date: '2018-10-29'
+  report_excerpt: Printing problem Hello, Im trying to print graphic PDF in A3 format. PDF has got 2 pages
+    and i need to print on both sides. I select print but i get only second page of PDF. First page is
+    blank. Our Printer is TOSHIBA e-STUDIO2505AC. When i try to print it with old Adobe...
+  report_id: adobe-acrobat-reader:31ceb5efb837121c
+  report_title: Printing problem
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/printing-problem-1232556
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 19.008.20080
+  window_end: '2018-11-13'
+  window_start: '2018-10-22'
+  window_version: 19.008.20080
+- attribution_state: not_established
+  captured_at: '2026-09-09T02:25:01Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|19.008.20074|19.008.20074
+  report_date: '2018-10-10'
+  report_excerpt: Can't open PDF file in adobe acrobat reader DC I am trying to open a file in adobe acrobat
+    reader DC but i keep getting an error message that says that there was an error opening this document.
+    the file is damaged and could not be repaired. does anyone know how to go about...
+  report_id: adobe-acrobat-reader:11d01d70390014d3
+  report_title: Can't open PDF file in adobe acrobat reader DC
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/can-t-open-pdf-file-in-adobe-acrobat-reader-dc-1514999
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 19.008.20074
+  window_end: '2018-10-22'
+  window_start: '2018-10-08'
+  window_version: 19.008.20074
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:54:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|18.011.20055|18.011.20055
+  report_date: '2018-07-12'
+  report_excerpt: Can't Update Acrobat Reader DC Hi. My first question so please be gentle! There is much
+    publicity today about Windows Updates and others. Two leading experts have said how important it is
+    to update Adobe Acrobat Reader but I can't find any mention of ReaderDC. I've just...
+  report_id: adobe-acrobat-reader:bf5c459b8f1d0ef9
+  report_title: Can't Update Acrobat Reader DC
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/can-t-update-acrobat-reader-dc-1514431
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.011.20055
+  window_end: '2018-08-14'
+  window_start: '2018-07-10'
+  window_version: 18.011.20055
+- attribution_state: not_established
+  captured_at: '2026-09-08T22:54:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|18.011.20038|18.011.20038
+  report_date: '2018-04-08'
+  report_excerpt: Can't open any PDF file. Get error report, says problem with software PLS HELP! I just
+    tried to open PDF files and I cant get one to open, or any of the old ones I have stored on my computer.
+    I have MacOS Sierra 10.12. I don't know what happned but I tried to reinstall Acrobat...
+  report_id: adobe-acrobat-reader:93f139cd890d9789
+  report_title: Can't open any PDF file. Get error report, says problem with software PLS HELP!
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/can-t-open-any-pdf-file-get-error-report-says-problem-with-software-pls-help-1317326
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.011.20038
+  window_end: '2018-05-14'
+  window_start: '2018-02-23'
+  window_version: 18.011.20038
+- attribution_state: not_established
+  captured_at: '2026-09-09T02:25:01Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|18.011.20038|18.011.20038
+  report_date: '2018-02-28'
+  report_excerpt: Acrobat Reader DC and Adobe Acrobat DC Cleaner Tool has stopped working... I am in the
+    process configuring an uninstaller for Adobe Reader in case we have failed installation within our
+    company. I found your cleaner tool, which is exactly what I needed! However, after the tool...
+  report_id: adobe-acrobat-reader:2c12800d8091dae1
+  report_title: Acrobat Reader DC and Adobe Acrobat DC Cleaner Tool has stopped working...
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-624/acrobat-reader-dc-and-adobe-acrobat-dc-cleaner-tool-has-stopped-working-674915
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 18.011.20038
+  window_end: '2018-05-14'
+  window_start: '2018-02-23'
+  window_version: 18.011.20038
+- attribution_state: not_established
+  captured_at: '2026-09-09T04:36:20Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|17.012.20098|17.012.20098
+  report_date: '2017-10-30'
+  report_excerpt: Printing In Adobe Reader I have used the printer to print plenty and yes it works BUT
+    as soon as i try to print the whole document it wont work. I can print single pages etc but soon as
+    i try to print the whole document it puts it in Que and does NOTHING i cant print 346 pages...
+  report_id: adobe-acrobat-reader:616c9c68f977f53d
+  report_title: Printing In Adobe Reader
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/printing-in-adobe-reader-1511739
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 17.012.20098
+  window_end: '2017-11-14'
+  window_start: '2017-08-29'
+  window_version: 17.012.20098
+- attribution_state: not_established
+  captured_at: '2026-09-09T02:25:01Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|17.009.20044|17.009.20044
+  report_date: '2017-05-29'
+  report_excerpt: Update Adobe Acrobat Reader Can't update. My anti virus program warns me to update AAR.
+    However, when I try to update it, I only see a 'Failed for Unknown Reasons' error message. When I
+    open AAR and check for updates, and try and install them, I only receive a message saying I...
+  report_id: adobe-acrobat-reader:49eb801c118318ad
+  report_title: Update Adobe Acrobat Reader
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/update-adobe-acrobat-reader-1510259
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 17.009.20044
+  window_end: '2017-07-12'
+  window_start: '2017-04-11'
+  window_version: 17.009.20044
+- attribution_state: not_established
+  captured_at: '2026-09-09T02:25:01Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|15.023.20056|15.023.20056
+  report_date: '2017-01-24'
+  report_excerpt: 'Re: Adobe Acrobat Reader DC has stopped working I still get the problem after installing
+    the patch. It seems to often (but not always) happen when I am trying to highlight, insert a text
+    box, or draw with the pencil tool. I do this frequently for articles. Very frustrating as...'
+  report_id: adobe-acrobat-reader:b3b5ebadb34fdf53
+  report_title: 'Re: Adobe Acrobat Reader DC has stopped working'
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/re-adobe-acrobat-reader-dc-has-stopped-working-1508345
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 15.023.20056
+  window_end: '2017-02-21'
+  window_start: '2017-01-19'
+  window_version: 15.023.20056
+- attribution_state: not_established
+  captured_at: '2026-09-09T02:25:01Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|15.023.20056|15.023.20056
+  report_date: '2017-01-19'
+  report_excerpt: Adobe Acrobat Reader DC crashes when trying to save pdf Hi , We have Windows Server
+    2008 R2 on which Adobe Acrobat Reader DC is installed.And when users are trying to save their invoice
+    from SAP as a PDF using DC, it crashes and we are getting a message "Adobe Acrobat Reader...
+  report_id: adobe-acrobat-reader:3f3218de6a6ad984
+  report_title: Adobe Acrobat Reader DC crashes when trying to save pdf
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-crashes-when-trying-to-save-pdf-1508340
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 15.023.20056
+  window_end: '2017-02-21'
+  window_start: '2017-01-19'
+  window_version: 15.023.20056
+- attribution_state: not_established
+  captured_at: '2026-09-09T02:25:01Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|15.023.20053|15.023.20053
+  report_date: '2017-01-12'
+  report_excerpt: 'Adobe Acrobat Reader DC has stopped working Shortly after I launch acrobat reader dc
+    or open a pdf file with acrobat reader dc the program halts and I get a message saying: "Adobe Acrobat
+    Reader DC has stopped working A problem caused the program to stop working correctly....'
+  report_id: adobe-acrobat-reader:929ca16d813cbc32
+  report_title: Adobe Acrobat Reader DC has stopped working
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-has-stopped-working-1508439
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 15.023.20053
+  window_end: '2017-01-19'
+  window_start: '2017-01-10'
+  window_version: 15.023.20053
+- attribution_state: not_established
+  captured_at: '2026-09-09T00:09:03Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|15.016.20045|15.016.20045
+  report_date: '2016-07-05'
+  report_excerpt: Unable to print PDFs. when i click on the print button, nothing happens. i don't even
+    get to the print set-up box. any ideas? i've run through all the general printing troubleshooting
+    pages. have even uninstalled and reinstalled acrobat.
+  report_id: adobe-acrobat-reader:60b33e74900ca24e
+  report_title: Unable to print PDFs.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-18/unable-to-print-pdfs-608216
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 15.016.20045
+  window_end: '2016-07-12'
+  window_start: '2016-06-02'
+  window_version: 15.016.20045
+- attribution_state: not_established
+  captured_at: '2026-09-09T00:09:03Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|15.016.20045|15.016.20045
+  report_date: '2016-06-29'
+  report_excerpt: Unable to start correctly Adobe Reader DC is getting an error message when opening pdf
+    files. "The Application was unable to start correctly (0xc00000a5). Click OK to close the application"
+    Clicking OK allows the file to be opened normally, but I am still unable to save the...
+  report_id: adobe-acrobat-reader:443454a04eff139f
+  report_title: Unable to start correctly
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-18/unable-to-start-correctly-592682
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 15.016.20045
+  window_end: '2016-07-12'
+  window_start: '2016-06-02'
+  window_version: 15.016.20045
+- attribution_state: not_established
+  captured_at: '2026-09-09T02:25:01Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|15.016.20039|15.016.20039
+  report_date: '2016-05-11'
+  report_excerpt: Adobe Acrobat Reader DC has stopped working. After an automatic WIndows 10 update last
+    night, now I can't look at pdfs. The file will open but ta message window opens saying it has stopped
+    working and will close the program.
+  report_id: adobe-acrobat-reader:c03599d924b6a4ee
+  report_title: Adobe Acrobat Reader DC has stopped working.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-has-stopped-working-1507220
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 15.016.20039
+  window_end: '2016-05-19'
+  window_start: '2016-05-10'
+  window_version: 15.016.20039
