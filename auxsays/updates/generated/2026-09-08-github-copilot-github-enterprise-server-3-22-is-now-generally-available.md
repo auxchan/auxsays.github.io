@@ -18,8 +18,8 @@ update_version: GitHub Enterprise Server 3.22 is now generally available
 update_logo_text: GIT
 update_published_at: '2026-09-08T21:52:42Z'
 update_last_checked: '2026-09-09T05:41:48Z'
-source_last_checked: '2026-09-09T14:05:04Z'
-official_body_last_checked: '2026-09-09T14:05:04Z'
+source_last_checked: '2026-09-09T18:50:54Z'
+official_body_last_checked: '2026-09-09T18:50:54Z'
 record_last_updated: '2026-09-09T05:41:48Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -103,6 +103,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-09T14:05:04Z'
+  url: https://github.blog/changelog/2026-09-08-github-enterprise-server-3-22-is-now-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-09T18:50:54Z'
   url: https://github.blog/changelog/2026-09-08-github-enterprise-server-3-22-is-now-generally-available
   status: captured-from-rss-feed
   body_captured: true
