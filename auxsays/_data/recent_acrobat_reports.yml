@@ -522,6 +522,46 @@ reports:
   window_start: '2022-04-12'
   window_version: 22.001.20117
 - attribution_state: not_established
+  captured_at: '2026-09-09T10:35:29Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|21.005.20048|21.005.20048
+  report_date: '2021-06-10'
+  report_excerpt: 'Adobe Reader Error 10:10 (IE 11) Hello. I have about 250 machines on our domain and
+    starting a few days ago, my users cannot open a PDF within Internet Explorer. Trying to do so gives
+    the following: "There is a problem with Adobe Reader. If it is running, please exit and try...'
+  report_id: adobe-acrobat-reader:cd6777a4164774aa
+  report_title: Adobe Reader Error 10:10 (IE 11)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-reader-error-10-10-ie-11-1523872
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 21.005.20048
+  window_end: '2021-06-23'
+  window_start: '2021-06-08'
+  window_version: 21.005.20048
+- attribution_state: not_established
+  captured_at: '2026-09-09T10:35:29Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|21.001.20155|21.001.20155
+  report_date: '2021-05-18'
+  report_excerpt: 'Acrobat Reader DC crashes on startup Hi, today I opened Reader DC but after opening
+    it, it immediately freezes with a white screen. If I try to close it it says: ''''Adobe Acrobat Reader
+    DC has stopped working'''' with two alternatives: Close program or wait for the program to...'
+  report_id: adobe-acrobat-reader:8abe9f89ea8dba74
+  report_title: Acrobat Reader DC crashes on startup
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-dc-crashes-on-startup-1523712
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 21.001.20155
+  window_end: '2021-06-08'
+  window_start: '2021-05-11'
+  window_version: 21.001.20155
+- attribution_state: not_established
   captured_at: '2026-09-09T06:55:24Z'
   classification: recent_report
   product_id: adobe-acrobat-reader

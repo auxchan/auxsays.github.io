@@ -30466,3 +30466,83 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-21-005-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-has-stopped-working-1524070
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-has-stopped-working-1524070
+  parent_title: Adobe Acrobat Reader DC has stopped working
+  report_title: Adobe Acrobat Reader DC has stopped working
+  report_text_excerpt: Adobe Acrobat Reader DC has stopped working This week we noticed that we have several machines that have Acrobat Reader DC version 21.005.20058 that are now getting this error every time we try to launch the application. It has worked perfectly prior to this last week. If I do...
+  captured_at: '2026-09-09T10:35:29Z'
+  source_date: '2021-07-22'
+  target_release_date: '2021-07-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-21-005-20048-adobe-community-bug-report-https-community-adobe-com-questions-12-there-is-a-problem-with-acrobat-reader-if-it-is-running-p
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20048
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/there-is-a-problem-with-acrobat-reader-if-it-is-running-please-exit-and-try-again-10-10-1523861
+  parent_title: There is a problem with Acrobat/Reader. If it is running, please exit and try again. (10:10)
+  report_title: There is a problem with Acrobat/Reader. If it is running, please exit and try again. (10:10)
+  report_text_excerpt: 'There is a problem with Acrobat/Reader. If it is running, please exit and try again. (10:10) Hello all, After updating Adobe Reader DC to version 21.005.20048. I am unable to open PDFs in IE. Error: There is a problem with Acrobat/Reader. If it is running, please exit and try...'
+  captured_at: '2026-09-09T10:35:29Z'
+  source_date: '2021-06-10'
+  target_release_date: '2021-06-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20048
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20048-adobe-community-bug-report-https-community-adobe-com-questions-12-can-t-sign-document-1523976
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20048
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/can-t-sign-document-1523976
+  parent_title: Can't sign document
+  report_title: Can't sign document
+  report_text_excerpt: Can't sign document Hello, I have de Adobe Acrobat Reader DC - Português (21.005.20048) version on Windows 10. When I try com sign an interative document, the Sign botton doesn't work. I click on the interative rectangle to select the signature I want. Done. Select the...
+  captured_at: '2026-09-09T10:35:29Z'
+  source_date: '2021-07-05'
+  target_release_date: '2021-06-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20048
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
