@@ -33,6 +33,13 @@ function selectionFromHash(model: ReturnType<typeof createPersistentWorld>, allo
   return allowFixtures || persistentWorldPublicPlacementVisible(model, id) ? id : null;
 }
 
+/** Opens the map as the primary mobile surface while retaining an explicit URL override. */
+export function persistentWorldInitialImmersive(search: string, mobileViewport: boolean) {
+  const preference = new URLSearchParams(search).get("immersive");
+  if (preference === "0") return false;
+  return preference === "1" || mobileViewport;
+}
+
 function placementLabel(model: ReturnType<typeof createPersistentWorld>, placement: PersistentWorldPlacement) {
   return persistentWorldPlacementLabel(model, placement);
 }
@@ -74,7 +81,8 @@ export function PersistentWorldShell() {
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
   const detailsToggleRef = useRef<HTMLButtonElement>(null);
   const searchDialogRef = useRef<HTMLDivElement>(null);
-  const initialDetailsOpen = useRef(!window.matchMedia("(max-width: 900px), (hover: none), (pointer: coarse)").matches).current;
+  const mobileViewport = useRef(window.matchMedia("(max-width: 900px), (hover: none), (pointer: coarse)").matches).current;
+  const initialDetailsOpen = useRef(!mobileViewport).current;
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model, !publicBeta));
   const [detailsFollowNavigation, setDetailsFollowNavigation] = useState(initialDetailsOpen);
   const [inspectorOpen, setInspectorOpen] = useState(() => Boolean(selectionFromHash(model, !publicBeta)) && initialDetailsOpen);
@@ -82,7 +90,7 @@ export function PersistentWorldShell() {
   const [viewMode, setViewMode] = useState<PersistentWorldViewMode>("TOP_DOWN");
   const [resetVersion, setResetVersion] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
-  const [fullscreenFallback, setFullscreenFallback] = useState(false);
+  const [fullscreenFallback, setFullscreenFallback] = useState(() => persistentWorldInitialImmersive(window.location.search, mobileViewport));
   const [changeWindow, setChangeWindow] = useState<PersistentTimeWindow>("RECENT");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);

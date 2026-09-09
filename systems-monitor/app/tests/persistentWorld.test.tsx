@@ -8,7 +8,7 @@ import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceP
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
 import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasPixelRatio, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldFullWorldScale, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldOverviewScale, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTapWithinTolerance, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, persistentWorldTargetCamera, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
-import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
+import { persistentWorldInitialImmersive, persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
 
@@ -463,6 +463,10 @@ describe("persistent world local-review shell", () => {
       window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
       render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
       const surface = await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
+      const workspace = surface.closest(".sm-pw-workspace");
+      expect(workspace?.classList.contains("is-fullscreen-fallback")).toBe(true);
+      expect(workspace?.getAttribute("data-fullscreen")).toBe("true");
+      expect(screen.getByRole("button", { name: "Exit full screen" })).toBeTruthy();
       const infoToggle = screen.getByRole("button", { name: "Info stays closed until requested" });
       expect(infoToggle.hasAttribute("disabled")).toBe(false);
       fireEvent.click(screen.getByRole("button", { name: /Consumer DemandMaster-defined system/ }));
@@ -477,6 +481,13 @@ describe("persistent world local-review shell", () => {
     } finally {
       window.matchMedia = original;
     }
+  });
+
+  it("supports direct immersive links and a mobile page-mode override", () => {
+    expect(persistentWorldInitialImmersive("", true)).toBe(true);
+    expect(persistentWorldInitialImmersive("?immersive=1", false)).toBe(true);
+    expect(persistentWorldInitialImmersive("?immersive=0", true)).toBe(false);
+    expect(persistentWorldInitialImmersive("", false)).toBe(false);
   });
 
   it("lets mobile users select automatic info before entering a node", async () => {
