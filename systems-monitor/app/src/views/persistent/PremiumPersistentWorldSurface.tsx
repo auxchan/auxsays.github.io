@@ -167,6 +167,7 @@ export function persistentWorldCanvasPixelRatio(devicePixelRatio: number, viewpo
 const OVERVIEW_SCALE = .205;
 const OVERVIEW_WORLD_DIAMETER = 2500;
 const OVERVIEW_FRAME_GUTTER = 92;
+const FULL_WORLD_MAX_SCALE = .17;
 const AMBIENT_EDGE = "#315b67";
 export const PERSISTENT_RIGHT_CONTROL_LABEL_INSET = 190;
 
@@ -176,6 +177,26 @@ export function persistentWorldOverviewScale(viewportWidth: number, viewportHeig
   const height = Number.isFinite(viewportHeight) && viewportHeight > 0 ? viewportHeight : 720;
   const fittedScale = (Math.min(width, height) - OVERVIEW_FRAME_GUTTER) / OVERVIEW_WORLD_DIAMETER;
   return Math.max(.075, Math.min(OVERVIEW_SCALE, fittedScale));
+}
+
+/** Fits every resident placement inside the viewport in either projection. */
+export function persistentWorldFullWorldScale(model: PersistentWorldReadModel, viewportWidth: number, viewportHeight: number, viewMode: PersistentWorldViewMode, spatial = createPersistentWorldSpatialLayout(model)) {
+  const width = Number.isFinite(viewportWidth) && viewportWidth > 0 ? viewportWidth : 980;
+  const height = Number.isFinite(viewportHeight) && viewportHeight > 0 ? viewportHeight : 720;
+  const cinematic = viewMode === "CINEMATIC_2_5D";
+  const pitch = cinematic ? -.18 : 0;
+  const yaw = cinematic ? .06 : 0;
+  const projector = createPersistentProjector({ x: 0, y: 0, z: 0, scale: 1, rotation: 0, pitch, yaw }, { zoom: 1, panX: 0, panY: 0 }, 0, 0);
+  let extentX = 1;
+  let extentY = 1;
+  for (const placement of Object.values(model.placements)) {
+    const point = projector(placement, cinematic ? spatial.zByPlacementId[placement.id] ?? 0 : 0);
+    extentX = Math.max(extentX, Math.abs(point.x));
+    extentY = Math.max(extentY, Math.abs(point.y));
+  }
+  const padding = Math.min(72, Math.max(40, Math.min(width, height) * .1));
+  const fittedScale = Math.min((width - padding * 2) / (extentX * 2), (height - padding * 2) / (extentY * 2));
+  return Math.max(.02, Math.min(FULL_WORLD_MAX_SCALE, fittedScale));
 }
 
 /** Keeps exact-ten side labels clear of the persistent vertical control rail. */
@@ -204,7 +225,7 @@ function hoverWhy(model: PersistentWorldReadModel, placement: PersistentWorldPla
 export function persistentWorldTargetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewMode: PersistentWorldViewMode, viewportWidth = 980, viewportHeight = 720, spatial = createPersistentWorldSpatialLayout(model)): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
   const cinematic = viewMode === "CINEMATIC_2_5D";
-  if (!selected || fullWorld) return { x: 0, y: 0, z: 0, scale: fullWorld ? .17 : persistentWorldOverviewScale(viewportWidth, viewportHeight), rotation: 0, pitch: cinematic ? fullWorld ? -.18 : -.14 : 0, yaw: cinematic ? fullWorld ? .06 : -.04 : 0 };
+  if (!selected || fullWorld) return { x: 0, y: 0, z: 0, scale: fullWorld ? persistentWorldFullWorldScale(model, viewportWidth, viewportHeight, viewMode, spatial) : persistentWorldOverviewScale(viewportWidth, viewportHeight), rotation: 0, pitch: cinematic ? fullWorld ? -.18 : -.14 : 0, yaw: cinematic ? fullWorld ? .06 : -.04 : 0 };
   const rotation = persistentFocusRotation(selected.sector) + (selected.depth >= 2 ? (selected.order - 5.5) * .008 : 0);
   const z = cinematic ? spatial.zByPlacementId[selected.id] ?? 0 : 0;
   const pitch = cinematic ? selected.depth === 1 ? .52 : selected.depth === 2 ? .68 : .78 : 0;
@@ -495,7 +516,8 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
             }
           }
           const focusedExactTenChild = Boolean(focusPlacement && focusPlacement.depth < 3 && placement.parentPlacementId === focusPlacement.id && placement.depth === focusPlacement.depth + 1);
-          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: focusedExactTenChild && viewMode === "TOP_DOWN", side: labelSide, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
+          const requiredOverviewDriver = placement.depth === 1 && (!selectedPlacementId || fullWorld);
+          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: requiredOverviewDriver || (focusedExactTenChild && viewMode === "TOP_DOWN"), side: labelSide, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
         }
         context.globalAlpha = 1;
       }

@@ -7,7 +7,7 @@ import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactua
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
-import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasPixelRatio, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldOverviewScale, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTapWithinTolerance, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, persistentWorldTargetCamera, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasPixelRatio, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldFullWorldScale, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldOverviewScale, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTapWithinTolerance, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, persistentWorldTargetCamera, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
@@ -171,6 +171,14 @@ describe("premium persistent-world visual language", () => {
     expect(new Set(lane.map((item) => item.x))).toEqual(new Set([100]));
     expect(lane[1].top - (lane[0].top + lane[0].height)).toBe(8);
     expect(lane[2].top - (lane[1].top + lane[1].height)).toBe(8);
+
+    const orbitLabels = resolvePremiumLabels([
+      { id: "orbit-left", text: "Left", x: -20, y: 80, priority: 70, width: 120, height: 22, accent: "#fff", required: true },
+      { id: "orbit-right", text: "Right", x: 420, y: 120, priority: 70, width: 120, height: 22, accent: "#fff", required: true }
+    ], 400, 240);
+    expect(orbitLabels.map((item) => item.id)).toEqual(["orbit-left", "orbit-right"]);
+    expect(Math.min(...orbitLabels.map((item) => item.left))).toBeGreaterThanOrEqual(8);
+    expect(Math.max(...orbitLabels.map((item) => item.left + item.width))).toBeLessThanOrEqual(392);
   });
 
   it("normalizes every sector into the same focus-camera orientation", () => {
@@ -195,6 +203,22 @@ describe("premium persistent-world visual language", () => {
       expect(Math.max(...projected.map((point) => point.x))).toBeLessThanOrEqual(width - 45);
       expect(Math.min(...projected.map((point) => point.y))).toBeGreaterThanOrEqual(45);
       expect(Math.max(...projected.map((point) => point.y))).toBeLessThanOrEqual(height - 45);
+    }
+  });
+
+  it("fits every resident placement into Full-world view on portrait and landscape mobile screens", () => {
+    const model = createPersistentWorld();
+    const spatial = createPersistentWorldSpatialLayout(model);
+    for (const viewMode of ["TOP_DOWN", "CINEMATIC_2_5D"] as const) {
+      for (const [width, height] of [[390, 844], [844, 390], [980, 720]] as const) {
+        const camera = persistentWorldTargetCamera(model, null, true, viewMode, width, height, spatial);
+        expect(camera.scale).toBeCloseTo(persistentWorldFullWorldScale(model, width, height, viewMode, spatial));
+        const projected = Object.values(model.placements).map((placement) => projectPersistentPlacement(placement, viewMode === "CINEMATIC_2_5D" ? spatial.zByPlacementId[placement.id] ?? 0 : 0, camera, { zoom: 1, panX: 0, panY: 0 }, width, height));
+        expect(Math.min(...projected.map((point) => point.x))).toBeGreaterThanOrEqual(39);
+        expect(Math.max(...projected.map((point) => point.x))).toBeLessThanOrEqual(width - 39);
+        expect(Math.min(...projected.map((point) => point.y))).toBeGreaterThanOrEqual(39);
+        expect(Math.max(...projected.map((point) => point.y))).toBeLessThanOrEqual(height - 39);
+      }
     }
   });
 
