@@ -17,8 +17,8 @@ update_version: Everything we covered at Schema by Figma
 update_logo_text: FIG
 update_published_at: '2025-10-28T00:00:00.000Z'
 update_last_checked: '2026-08-03T23:56:32Z'
-source_last_checked: '2026-08-03T23:56:32Z'
-official_body_last_checked: '2026-08-03T23:56:32Z'
+source_last_checked: '2026-09-10T00:02:28Z'
+official_body_last_checked: '2026-09-10T00:02:28Z'
 record_last_updated: '2026-08-03T23:56:32Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-03T23:56:32Z'
+  url: https://www.figma.com/release-notes/?title=everything-we-covered-at-schema-by-figma
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-10T00:02:28Z'
   url: https://www.figma.com/release-notes/?title=everything-we-covered-at-schema-by-figma
   status: captured-from-rss-feed
   body_captured: true
