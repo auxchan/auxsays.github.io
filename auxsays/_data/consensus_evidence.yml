@@ -31252,3 +31252,52 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9278'
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w3otmy-is-the-resolve-site-broken
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w3otmy/is_the_resolve_site_broken/
+  parent_title: Is the Resolve site broken?
+  report_title: Is the Resolve site broken?
+  report_text_excerpt: Is the Resolve site broken? Trying to download Resolve 21 on a new laptop, and the download link goes nowhere. Half the time I get a 502 Bad Gateway error too. In firefox it will show me the version/platform chooser but the button goes nowhere....
+  captured_at: '2026-09-10T17:36:53Z'
+  source_date: '2026-08-31'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vz4s9x-how-would-you-fix-this-exposure-shiftpump
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vz4s9x/how_would_you_fix_this_exposure_shiftpumping_in/
+  parent_title: How would you fix this exposure shift/pumping in DaVinci Resolve?
+  report_title: How would you fix this exposure shift/pumping in DaVinci Resolve?
+  report_text_excerpt: How would you fix this exposure shift/pumping in DaVinci Resolve? Hello fellow editors, I am quite new to DaVinci Resolve and I could really use some advice on how to approach this shot. Unfortunately, I can't show the full frame because the footage is for/from an external...
+  captured_at: '2026-09-10T17:36:53Z'
+  source_date: '2026-08-26'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve Studio 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
