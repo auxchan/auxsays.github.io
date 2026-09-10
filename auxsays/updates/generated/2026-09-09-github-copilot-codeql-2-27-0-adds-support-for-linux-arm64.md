@@ -17,8 +17,8 @@ update_version: CodeQL 2.27.0 adds support for Linux ARM64
 update_logo_text: GIT
 update_published_at: '2026-09-09T21:45:06Z'
 update_last_checked: '2026-09-10T00:02:42Z'
-source_last_checked: '2026-09-10T13:42:49Z'
-official_body_last_checked: '2026-09-10T13:42:49Z'
+source_last_checked: '2026-09-10T18:48:26Z'
+official_body_last_checked: '2026-09-10T18:48:26Z'
 record_last_updated: '2026-09-10T00:02:42Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -114,6 +114,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-10T13:42:49Z'
+  url: https://github.blog/changelog/2026-09-09-codeql-2-27-0-adds-support-for-linux-arm64
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-10T18:48:26Z'
   url: https://github.blog/changelog/2026-09-09-codeql-2-27-0-adds-support-for-linux-arm64
   status: captured-from-rss-feed
   body_captured: true
