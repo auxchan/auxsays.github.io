@@ -1,11 +1,11 @@
 {
-  "schemaVersion": "level4-p0-review-status-0.1.0",
+  "schemaVersion": "level4-p0-review-status-0.2.0",
   "scope": "Layoffs & Job Destruction",
-  "asOfStartingCommit": "c9c84a221b024d038c315a4058a414f58dc10dea",
+  "asOfStartingCommit": "9815a89e37d0f684145a74acfbcb4067e5f46a90",
   "authority": "REVIEW_EVIDENCE_ONLY",
   "promotionAuthority": "NONE",
   "taxonomy": {
-    "level2Parents": 10,
+    "level3Parents": 10,
     "level4Placements": 100,
     "uniqueLevel4CanonicalFactors": 64,
     "repeatedLevel4Placements": 36,
@@ -13,17 +13,22 @@
     "rendererFixturePlacementsInScope": 0
   },
   "classification": {
-    "status": "PARTIAL_GOVERNED_FACTOR_BY_FACTOR_REVIEW",
-    "A_DIRECT_OBS": 12,
-    "B_CALC": 0,
-    "C_EVENT_OR_STRUCTURAL": 0,
-    "D_TAXONOMY_OR_SOURCE_PROBLEM": 0,
-    "unclassifiedCanonicalFactors": 52,
-    "unclassifiedPlacements": 83,
-    "note": "The first bounded batch classifies only canonical factors whose taxonomy meaning matches an exact direct official measurement. Classification does not accept or publish an observation, history, or relationship."
+    "status": "COMPLETE_GOVERNED_REVIEW_CANDIDATE_NOT_PROMOTED",
+    "A_DIRECT_OBS": 38,
+    "B_CALC": 12,
+    "C_EVENT_OR_STRUCTURAL": 5,
+    "D_TAXONOMY_OR_SOURCE_PROBLEM": 9,
+    "unclassifiedCanonicalFactors": 0,
+    "unclassifiedPlacements": 0,
+    "note": "All 64 canonical factors have an explicit A/B/C/D classification. Classification does not accept or publish an observation, history, calculation, or relationship."
   },
   "sourcePosture": {
     "profiledRecords": 77,
+    "profiledRecordMeaning": "UI-side factor/source state records, not unique canonical factors or acquisition adapters",
+    "expandedAcquisitionBindings": 48,
+    "recordsWithSourceBindings": 42,
+    "sourceIdentifiedPlaceholders": 35,
+    "sourceOnlyRecordsOutsideCurrentTaxonomy": 9,
     "ACCEPTED": 1,
     "SOURCE_ENABLED_PENDING_ACCEPTANCE": 17,
     "BLOCKED": 24,
@@ -33,7 +38,10 @@
   },
   "history": {
     "acceptedComparableHistoriesForNewLevel4Factors": 0,
-    "status": "PENDING_ACCEPTED_COMPARABLE_OBSERVATIONS"
+    "status": "REVISION_SAFE_BACKBONE_IMPLEMENTED_ACCEPTANCE_BLOCKED",
+    "acceptanceAuthority": "NONE",
+    "materialityAuthority": "NONE",
+    "note": "Candidate history can now be retained and replayed without overwrite, but no new observation can be promoted until an explicit governed acceptance rule exists."
   },
   "relationships": {
     "hierarchyTethersInWholeWorld": 1110,
@@ -59,13 +67,17 @@
   },
   "humanQa": {
     "HUMAN_LEVEL4_LAYOFFS_QA": "PENDING",
-    "HUMAN_ORIENTATION_UX_QA": "PENDING"
+    "HUMAN_ORIENTATION_UX_QA": "PENDING",
+    "HUMAN_PHASE4B_STRUCTURAL_PATH_QA": "PENDING"
   },
   "blockers": [
-    "L4-001_GOVERNED_ABCD_CLASSIFICATION_INCOMPLETE",
     "L4-002_ACCEPTED_COMPARABLE_HISTORY_MISSING",
     "L4-003_ACCEPTED_STRUCTURAL_RELATIONSHIPS_MISSING",
-    "L4-004_SOURCE_PROFILE_AND_OFFLINE_SNAPSHOT_RECONCILIATION_REQUIRED",
-    "L4-005_NON_BLS_DOL_COLLECTOR_ACTIVATION_REQUIRES_APPROVED_SELECTORS_OR_CREDENTIALS"
+    "L4-004_NINE_SOURCE_ONLY_RECORDS_REQUIRE_CANONICALIZATION_OR_REVIEW_REMOVAL",
+    "L4-005_NON_BLS_DOL_COLLECTOR_ACTIVATION_REQUIRES_APPROVED_SELECTORS_OR_CREDENTIALS",
+    "L4-006_OBSERVATION_ACCEPTANCE_AUTHORITY_NONE",
+    "L4-007_MATERIALITY_PROFILES_REQUIRE_GOVERNED_THRESHOLDS",
+    "L4-008_BEA_LIVE_INTAKE_BLOCKED_MISSING_AUXSAYS_BEA_USER_ID",
+    "L4-009_INDUSTRY_TO_COMMODITY_HANDOFF_NOT_IMPLEMENTED_OR_ACCEPTED"
   ]
 }
