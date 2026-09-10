@@ -17,8 +17,8 @@ update_version: Figma integration for Zapier
 update_logo_text: FIG
 update_published_at: '2025-09-24T00:00:00.000Z'
 update_last_checked: '2026-08-06T13:14:31Z'
-source_last_checked: '2026-08-06T13:14:31Z'
-official_body_last_checked: '2026-08-06T13:14:31Z'
+source_last_checked: '2026-09-10T23:13:05Z'
+official_body_last_checked: '2026-09-10T23:13:05Z'
 record_last_updated: '2026-08-06T13:14:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-06T13:14:31Z'
+  url: https://www.figma.com/release-notes/?title=figma-integration-for-zapier
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-10T23:13:05Z'
   url: https://www.figma.com/release-notes/?title=figma-integration-for-zapier
   status: captured-from-rss-feed
   body_captured: true
