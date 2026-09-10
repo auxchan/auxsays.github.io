@@ -80,6 +80,18 @@ jobs:
       - name: Validate ingestion source config
         run: python auxsays/scripts/validate_ingestion_sources.py
 
+      # RUN-LEVEL HEALTH IS NOW PART OF THE STEP'S OUTCOME.
+      #
+      # `patch_ingest.py` used to return 0 unless `--strict` was passed, and this workflow never
+      # passed it. Production run 34391487960 logged four `[ERROR] elgato-*: HTTP 403` lines and
+      # concluded SUCCESS. A green lane was not evidence that official patch discovery worked.
+      #
+      # `--strict` is still NOT passed, deliberately: it exits non-zero when ANY enabled source
+      # errors, which would pin this lane red for as long as one vendor blocks us. The script now
+      # classifies the RUN instead -- healthy / degraded / failed -- and returns non-zero only for
+      # `failed`, meaning nothing trustworthy was collected at all. A `degraded` run keeps the
+      # healthy vendors' records, exits 0, and announces itself through a `::warning` annotation
+      # and the step summary, so it can no longer pass as an undifferentiated green tick.
       - name: Run enabled patch ingestion
         if: ${{ github.event.inputs.source == '' || github.event.inputs.source == null }}
         run: |

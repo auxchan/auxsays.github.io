@@ -87,6 +87,12 @@ auxsays/scripts/tests/test_teams_record_cleanup.py = 6
 auxsays/scripts/tests/test_transactional_writeback.py = 10
 auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
 auxsays/scripts/tests/test_validate_ingestion_sources.py = 30
+# A green patch-ingestion run must not hide an enabled source that failed. Covers the nine
+# required counterfactuals (healthy / quiet / 403 / transport failure / parser rot / mixed /
+# all-failed / disabled / aged-out), the failure-MODE-change case Elgato actually exhibited,
+# a simulation of the pre-fix semantics, and a mutation harness whose catches are asserted to
+# be semantic rather than crashes.
+auxsays/scripts/tests/test_ingestion_run_health.py = 69
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
 auxsays/scripts/tests/test_windows_count_authority.py = 96
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
