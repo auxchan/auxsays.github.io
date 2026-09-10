@@ -31053,3 +31053,202 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vpu8os-unusable-level-of-lag-on-m4-pro-and-ive-t
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vpu8os/unusable_level_of_lag_on_m4_pro_and_ive_tried/
+  parent_title: Unusable level of lag on M4 Pro - and I’ve tried everything.
+  report_title: Unusable level of lag on M4 Pro - and I’ve tried everything.
+  report_text_excerpt: 'Unusable level of lag on M4 Pro - and I’ve tried everything. TLDR (Specs + tests at end): I just switched to resolve and the same workflow that was unquestionably smooth on FCPX is unusably laggy on resolve. I’ll have to switch back to FCPX if I can’t figure out what’s going...'
+  captured_at: '2026-09-10T12:26:20Z'
+  source_date: '2026-08-16'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vjls37-planar-tracker-crashing-instantly-when-us
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vjls37/planar_tracker_crashing_instantly_when_using/
+  parent_title: Planar Tracker crashing instantly when using occlusion mask
+  report_title: Planar Tracker crashing instantly when using occlusion mask
+  report_text_excerpt: 'Planar Tracker crashing instantly when using occlusion mask Resolve: 21.0 CPU: AMD Ryzen 1600 GPU: Radeon RX 580, drivers updated to latest RAM: 32GB Footage: any and all formats I''ve tried. Steps to recreate: open a clip in Fusion add a planar tracker node add & shape a...'
+  captured_at: '2026-09-10T12:26:20Z'
+  source_date: '2026-08-09'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21.0'
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-26h1-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998459-kb5124008-win-11-25h2-build-26200-9445
+  product_id: microsoft-windows-11
+  update_version: 26H1
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5998459/kb5124008-win-11-25h2-build-26200-9445-breaks-plan
+  parent_title: KB5124008 (Win 11 25H2, build 26200.9445) breaks Plan9/virtiofs host share attachment for Hyper-V based sandbox VMs - Microsoft Q&A
+  report_title: KB5124008 (Win 11 25H2, build 26200.9445) breaks Plan9/virtiofs host share attachment for Hyper-V based sandbox VMs - Microsoft Q&A
+  report_text_excerpt: KB5124008 (Win 11 25H2, build 26200.9445) breaks Plan9/virtiofs host share attachment for Hyper-V based sandbox VMs - Microsoft Q&A Summary After installing KB5124008 on Windows 11 25H2 (build 26200.9445, x64), a third-party application that hosts a lightweight Hyper-V based...
+  captured_at: '2026-09-10T12:34:57Z'
+  source_date: '2026-09-09'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '28000.2954'
+  match_basis: exact_os_build
+  matched_kb: KB5124012
+  matched_os_build: '28000.2954'
+  matched_feature_version: 26H1
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '28000.2954'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998917-kb5124008-26200-9445-breaks-machine-se
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5998917/kb5124008-26200-9445-breaks-machine-secure-channel
+  parent_title: KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A
+  report_title: KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A
+  report_text_excerpt: KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A After installing KB5124008 (OS Build 26200.9445) on Windows 11 domain-joined workstations, affected machines lose their domain secure channel and users can no...
+  captured_at: '2026-09-10T12:35:01Z'
+  source_date: '2026-09-10'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998474-i-didnt-get-the-novelties-from-the-kb5
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5998474/i-didnt-get-the-novelties-from-the-kb5124008-26200
+  parent_title: I didn't get the novelties from the KB5124008 26200.9445 update after I installed it after a lot of hassle - Microsoft Q&A
+  report_title: I didn't get the novelties from the KB5124008 26200.9445 update after I installed it after a lot of hassle - Microsoft Q&A
+  report_text_excerpt: I didn't get the novelties from the KB5124008 26200.9445 update after I installed it after a lot of hassle - Microsoft Q&A So, today I finally managed to install the update KB5124008 26200.9445, but it was after a lot of suffering, I had to install it through the Microsoft...
+  captured_at: '2026-09-10T12:35:01Z'
+  source_date: '2026-09-09'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998351-always-on-vpn-fails-after-installing-k
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5998351/always-on-vpn-fails-after-installing-kb5124008-on
+  parent_title: Always On VPN fails after installing KB5124008 on Windows 11 - Microsoft Q&A
+  report_title: Always On VPN fails after installing KB5124008 on Windows 11 - Microsoft Q&A
+  report_text_excerpt: Always On VPN fails after installing KB5124008 on Windows 11 - Microsoft Q&A Hello, We are experiencing an issue with Always On VPN after installing the September 2026 Windows 11 security update KB5124008 . Environment Windows 11 clients (24H2/25H2) Always On VPN Certificate-...
+  captured_at: '2026-09-10T12:35:01Z'
+  source_date: '2026-09-09'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5124008
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5124008
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998897-file-explorer-reverts-to-legacy-window
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5998897/file-explorer-reverts-to-legacy-windows-10-ribbon
+  parent_title: File Explorer reverts to legacy Windows 10 ribbon after KB5120998 (build 26200.9278) — 766 corrupt OOBE payloads in component store; RestoreHealth fails with 0x800f0915 - Microsoft Q&A
+  report_title: File Explorer reverts to legacy Windows 10 ribbon after KB5120998 (build 26200.9278) — 766 corrupt OOBE payloads in component store; RestoreHealth fails with 0x800f0915 - Microsoft Q&A
+  report_text_excerpt: 'File Explorer reverts to legacy Windows 10 ribbon after KB5120998 (build 26200.9278) — 766 corrupt OOBE payloads in component store; RestoreHealth fails with 0x800f0915 - Microsoft Q&A Environment: Windows 11 25H2, x64. Build 26200.9278 (KB5120998) was installed on Sep 8,...'
+  captured_at: '2026-09-10T12:35:15Z'
+  source_date: '2026-09-10'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9278'
+  match_basis: exact_os_build
+  matched_kb: KB5120998
+  matched_os_build: '26200.9278'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9278'
