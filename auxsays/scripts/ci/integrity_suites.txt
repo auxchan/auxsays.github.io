@@ -128,6 +128,7 @@ auxsays/scripts/tests/test_adobe_acrobat_community_collector.py = 146
 auxsays/scripts/tests/test_adobe_photoshop_adapter.py = 63
 auxsays/scripts/tests/test_adobe_release_notes_adapter.py = 8
 auxsays/scripts/tests/test_blackmagic_support_downloads.py = 10
+auxsays/scripts/tests/test_css_design_tokens.py = 21
 auxsays/scripts/tests/test_davinci_creative_cow_source.py = 23
 auxsays/scripts/tests/test_davinci_reddit_source.py = 27
 auxsays/scripts/tests/test_elgato_help_center_adapter.py = 75
