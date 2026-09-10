@@ -17,8 +17,8 @@ update_version: Require User Agreement to Company Policies & Support for Multipl
 update_logo_text: FIG
 update_published_at: '2025-10-09T00:00:00.000Z'
 update_last_checked: '2026-08-04T18:04:09Z'
-source_last_checked: '2026-08-04T18:04:09Z'
-official_body_last_checked: '2026-08-04T18:04:09Z'
+source_last_checked: '2026-09-10T06:50:23Z'
+official_body_last_checked: '2026-09-10T06:50:23Z'
 record_last_updated: '2026-08-04T18:04:09Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -72,6 +72,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-04T18:04:09Z'
+  url: https://www.figma.com/release-notes/?title=Require%20User%20Agreement%20to%20Company%20Policies%20%26%20Support%20for%20Multiple%20IdPs
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-10T06:50:23Z'
   url: https://www.figma.com/release-notes/?title=Require%20User%20Agreement%20to%20Company%20Policies%20%26%20Support%20for%20Multiple%20IdPs
   status: captured-from-rss-feed
   body_captured: true
