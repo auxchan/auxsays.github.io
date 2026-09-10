@@ -31301,3 +31301,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1utwlro-small-red-section-at-the-beginning-of-the
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1utwlro/small_red_section_at_the_beginning_of_the_render/
+  parent_title: Small red section at the beginning of the Render Cache line — just a technical curiosity
+  report_title: Small red section at the beginning of the Render Cache line — just a technical curiosity
+  report_text_excerpt: Small red section at the beginning of the Render Cache line — just a technical curiosity Hi everyone, I am trying to understand a small and curious Render Cache behavior in DaVinci Resolve Studio 20. To be clear, everything works perfectly. There are no playback problems, no...
+  captured_at: '2026-09-10T21:59:55Z'
+  source_date: '2026-07-11'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve Studio 20
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
