@@ -70,7 +70,8 @@ def _bucket(state: dict[str, Any], product_id: str) -> dict[str, Any]:
 
 
 def observed_status(result: dict[str, Any] | None, error: dict[str, Any] | None,
-                    prior: dict[str, Any], *, tolerance: int | None = None) -> str:
+                    prior: dict[str, Any], *, tolerance: int | None = None,
+                    already_persisted: bool = False) -> str:
     """The status THIS run observed, independent of whether the run was allowed to persist it.
 
     THIS IS THE FIX FOR THE WORST BUG IN THE FIRST VERSION OF THIS MODULE. Health used to be read
@@ -94,7 +95,12 @@ def observed_status(result: dict[str, Any] | None, error: dict[str, Any] | None,
     if result is None:
         return "unknown"
     fetched = int(result.get("candidate_count") or 0)
-    streak = 0 if fetched > 0 else int(prior.get("consecutive_empty_extractions") or 0) + 1
+    # On a WRITE run the bucket was already advanced by `update_source_*` during the loop, so
+    # adding 1 here would count this check twice and could declare a source `broken` a full run
+    # early. On a DRY run nothing was persisted, so the increment has to happen here instead.
+    streak = 0 if fetched > 0 else (
+        int(prior.get("consecutive_empty_extractions") or 0)
+        + (0 if already_persisted else 1))
     return classify_success(
         fetched, 0, 0, consecutive_empty=streak,
         tolerance=DEFAULT_EMPTY_EXTRACTION_TOLERANCE if tolerance is None else int(tolerance),
@@ -103,7 +109,8 @@ def observed_status(result: dict[str, Any] | None, error: dict[str, Any] | None,
 
 def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
                 results: list[dict[str, Any]] | None = None,
-                errors: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+                errors: list[dict[str, Any]] | None = None,
+                *, already_persisted: bool = False) -> list[dict[str, Any]]:
     """One structured health row per source that ran, scored on THIS RUN'S observation.
 
     Persisted state supplies only the history a single run cannot see for itself -- the no-record
@@ -123,10 +130,11 @@ def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
         ing = source.get("ingestion") or {}
         b = _bucket(state, pid)
         res, err = by_result.get(pid), by_error.get(pid)
-        status = observed_status(res, err, b, tolerance=ing.get("empty_extraction_tolerance"))
+        status = observed_status(res, err, b, tolerance=ing.get("empty_extraction_tolerance"),
+                                 already_persisted=already_persisted)
         fetched = int((res or {}).get("candidate_count") or 0)
-        streak = 0 if fetched > 0 else int(b.get("consecutive_empty_extractions") or 0) + (
-            0 if res is None and err is None else 1)
+        bump = 0 if (already_persisted or (res is None and err is None)) else 1
+        streak = 0 if fetched > 0 else int(b.get("consecutive_empty_extractions") or 0) + bump
         rows.append({
             "source_id": pid,
             "product_id": pid,
@@ -140,7 +148,8 @@ def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
             "error": str((err or {}).get("error") or ""),
             "records_fetched": fetched,
             "records_written": int(len((res or {}).get("written") or []) or 0),
-            "consecutive_failures": int(b.get("consecutive_failures") or 0) + (1 if err else 0),
+            "consecutive_failures": int(b.get("consecutive_failures") or 0) + (
+                0 if already_persisted else (1 if err else 0)),
             "consecutive_empty_extractions": streak,
             "last_success_at": str(b.get("last_success_at") or ""),
             "last_extraction_at": str(b.get("last_extraction_at") or ""),
