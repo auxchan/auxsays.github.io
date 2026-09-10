@@ -1,0 +1,2388 @@
+{
+  "authority": "REVIEW_EVIDENCE_ONLY",
+  "canonicalFactors": [
+    {
+      "canonicalFactorId": "factor:canonical:average-weekly-hours",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS CES publishes the total-private average weekly hours observation directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Average Weekly Hours",
+      "placementCount": 3,
+      "placementPaths": [
+        "Layoffs & Discharges > Average Weekly Hours",
+        "Continued Claims / Insured Unemployment > Average Weekly Hours",
+        "Temporary Layoffs > Average Weekly Hours"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "CES0500000002",
+          "sourceId": "bls-ces",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:borrowing-costs",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Federal Reserve H.15 publishes official borrowing-rate observations directly once the intended instrument and maturity are selected.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Borrowing Costs",
+      "placementCount": 1,
+      "placementPaths": [
+        "Establishment Death / Closure Losses > Borrowing Costs"
+      ],
+      "promotionBlocker": "Exact H.15 instrument and maturity are not selected.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-h15",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "The Administrative Office of the U.S. Courts publishes business bankruptcy filing counts directly in Table F-2.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Business Bankruptcy Filings",
+      "placementCount": 1,
+      "placementPaths": [
+        "Firm Death / Shutdown Stress > Business Bankruptcy Filings"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "F2:US:BUSINESS:ALL",
+          "sourceId": "uscourts-f2",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+      "claimClass": "B_CALC",
+      "definition": "Stress is not an official observation; it requires a governed deterministic transformation of accepted business-bankruptcy filings.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Business Bankruptcy Stress",
+      "placementCount": 3,
+      "placementPaths": [
+        "Initial UI Claims > Business Bankruptcy Stress",
+        "Permanent Job Losers > Business Bankruptcy Stress",
+        "Establishment Death / Closure Losses > Business Bankruptcy Stress"
+      ],
+      "promotionBlocker": "No accepted normalization window or materiality profile.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-failure-stress",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "definition": "The label ambiguously mixes legal filings, firm deaths, closures, and financial distress, which are not interchangeable official measurements.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Business Failure Stress",
+      "placementCount": 1,
+      "placementPaths": [
+        "Layoffs & Discharges > Business Failure Stress"
+      ],
+      "promotionBlocker": "Narrow or replace the concept before source selection.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-formation",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Census Business Formation Statistics publishes explicitly defined formation statistics directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Business Formations",
+      "placementCount": 2,
+      "placementPaths": [
+        "Continued Claims / Insured Unemployment > Business Formations",
+        "Business Failure / Bankruptcy Stress > Business Formation"
+      ],
+      "promotionBlocker": "Credential, rights, retrieval, and observation acceptance are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-formation-dynamism",
+      "claimClass": "B_CALC",
+      "definition": "Dynamism combines official entry, exit, or formation components and must disclose its formula and scope.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Business Formation / Dynamism",
+      "placementCount": 1,
+      "placementPaths": [
+        "Establishment Death / Closure Losses > Business Formation / Dynamism"
+      ],
+      "promotionBlocker": "No accepted component set or calculation contract.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "CALC_INPUT",
+          "selector": "BFS:T:BF_BF4Q:SA",
+          "sourceId": "census-bfs",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:candi-credit-conditions",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "definition": "The concept duplicates or ambiguously combines C&I lending standards, loan demand, rates, and terms.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "C&I Credit Conditions",
+      "placementCount": 1,
+      "placementPaths": [
+        "Permanent Job Losers > C&I Credit Conditions"
+      ],
+      "promotionBlocker": "Canonicalize to a specific SLOOS question or separately governed calculation.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:candi-lending-standards",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "The Federal Reserve SLOOS publishes respondent-weighted lending-standard results directly for specified borrower classes.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "C&I Lending Standards",
+      "placementCount": 5,
+      "placementPaths": [
+        "Layoffs & Discharges > C&I Lending Standards",
+        "Gross Job Losses > C&I Lending Standards",
+        "Establishment Death / Closure Losses > C&I Lending Standards",
+        "Firm Death / Shutdown Stress > C&I Lending Standards",
+        "Business Failure / Bankruptcy Stress > C&I Lending Standards"
+      ],
+      "promotionBlocker": "Exact borrower class, question wording, and vintage selector are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-sloos",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:candi-loan-demand",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "The Federal Reserve SLOOS publishes respondent-weighted C&I loan-demand results directly for specified borrower classes.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "C&I Loan Demand",
+      "placementCount": 1,
+      "placementPaths": [
+        "Business Failure / Bankruptcy Stress > C&I Loan Demand"
+      ],
+      "promotionBlocker": "Exact borrower class, question wording, and vintage selector are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-sloos",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:capacity-utilization",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Federal Reserve G.17 publishes capacity-utilization rates directly for defined aggregates and industries.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Capacity Utilization",
+      "placementCount": 1,
+      "placementPaths": [
+        "Temporary Layoffs > Capacity Utilization"
+      ],
+      "promotionBlocker": "Exact aggregate and G.17 series selector are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-g17",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:consumer-demand",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "definition": "Consumer demand is a broad latent concept and is not interchangeable with PCE or retail sales.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Consumer Demand",
+      "placementCount": 3,
+      "placementPaths": [
+        "Initial UI Claims > Consumer Demand",
+        "Continued Claims / Insured Unemployment > Consumer Demand",
+        "Temporary Layoffs > Consumer Demand"
+      ],
+      "promotionBlocker": "Replace with a defined observable or governed composite.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:consumer-spending",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BEA publishes personal consumption expenditures directly under defined NIPA concepts.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Consumer Spending",
+      "placementCount": 2,
+      "placementPaths": [
+        "Layoffs & Discharges > Consumer Spending",
+        "Gross Job Losses > Consumer Spending"
+      ],
+      "promotionBlocker": "Exact NIPA table, line, price basis, units, and vintage are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "bea-nipa",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:corporate-profitability",
+      "claimClass": "B_CALC",
+      "definition": "Profitability is a ratio rather than the same measurement as corporate profits.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Corporate Profitability",
+      "placementCount": 2,
+      "placementPaths": [
+        "Permanent Job Losers > Corporate Profitability",
+        "Establishment Death / Closure Losses > Corporate Profitability"
+      ],
+      "promotionBlocker": "Numerator, denominator, sector scope, and formula are not accepted.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:corporate-profits",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BEA publishes corporate-profits estimates directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Corporate Profits",
+      "placementCount": 4,
+      "placementPaths": [
+        "Layoffs & Discharges > Corporate Profits",
+        "Gross Job Losses > Corporate Profits",
+        "Firm Death / Shutdown Stress > Corporate Profits",
+        "Business Failure / Bankruptcy Stress > Corporate Profits"
+      ],
+      "promotionBlocker": "Exact NIPA table, line, adjustment, and vintage are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "bea-nipa",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:disaster-external-shock",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "definition": "FEMA and NOAA publish event and declaration records rather than a single economic observation.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Disaster / External Shock",
+      "placementCount": 1,
+      "placementPaths": [
+        "Establishment Death / Closure Losses > Disaster / External Shock"
+      ],
+      "promotionBlocker": "Event-to-economic-scope rules and rights acceptance are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:disaster-operational-shock",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "definition": "Official event evidence requires a governed geographic and temporal join before operational relevance can be claimed.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Disaster / Operational Shock",
+      "placementCount": 1,
+      "placementPaths": [
+        "Initial UI Claims > Disaster / Operational Shock"
+      ],
+      "promotionBlocker": "No accepted geographic/temporal exposure join.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:disaster-weather-shock",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "definition": "NOAA publishes weather-event records, not an economy-wide shock index.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Disaster / Weather Shock",
+      "placementCount": 1,
+      "placementPaths": [
+        "Temporary Layoffs > Disaster / Weather Shock"
+      ],
+      "promotionBlocker": "Event definition, geographic join, and materiality rules are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:energy-input-shock",
+      "claimClass": "B_CALC",
+      "definition": "Shock status must be calculated from an accepted underlying energy-price or availability series.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Energy / Input Shock",
+      "placementCount": 1,
+      "placementPaths": [
+        "Temporary Layoffs > Energy / Input Shock"
+      ],
+      "promotionBlocker": "Exact product, route, rights scope, baseline, and threshold are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:establishment-closures",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS BED publishes jobs lost at closing establishments directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Establishment Closures",
+      "placementCount": 2,
+      "placementPaths": [
+        "Gross Job Losses > Establishment Closures",
+        "Establishment Death / Closure Losses > Closing Establishment Losses"
+      ],
+      "promotionBlocker": "Historical observations and release vintages are not accepted.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BDS0000000000000000110006LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE",
+          "selector": "JOB_DESTRUCTION_DEATHS",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Separate official scope that must not be merged with the primary series."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:establishment-contractions",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS BED publishes jobs lost at contracting establishments directly; Census BDS provides a separately governed annual counterpart.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Establishment Contractions",
+      "placementCount": 1,
+      "placementPaths": [
+        "Gross Job Losses > Establishment Contractions"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BDS0000000000000000110005LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE",
+          "selector": "JOB_DESTRUCTION_CONTINUERS",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Separate official scope that must not be merged with the primary series."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:establishment-deaths",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS BED and Census BDS publish direct, non-interchangeable establishment-death or exit measures.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Establishment Deaths",
+      "placementCount": 3,
+      "placementPaths": [
+        "Initial UI Claims > Establishment Deaths",
+        "Permanent Job Losers > Establishment Deaths",
+        "Firm Death / Shutdown Stress > Establishment Deaths"
+      ],
+      "promotionBlocker": "Choose the primary definition; do not merge BED job losses with BDS exit counts.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BDS0000000000000000110008LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE",
+          "selector": "ESTABS_EXIT",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Separate official scope that must not be merged with the primary series."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:firm-age-size",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "definition": "Firm age and size are structural classification dimensions rather than one scalar state.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Firm Age / Size",
+      "placementCount": 1,
+      "placementPaths": [
+        "Firm Death / Shutdown Stress > Firm Age / Size"
+      ],
+      "promotionBlocker": "Dimension buckets and downstream use are not accepted.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:firm-age-size-vulnerability",
+      "claimClass": "B_CALC",
+      "definition": "Vulnerability requires a deterministic comparison of accepted BDS cohort observations.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Firm Age / Size Vulnerability",
+      "placementCount": 1,
+      "placementPaths": [
+        "Establishment Death / Closure Losses > Firm Age / Size Vulnerability"
+      ],
+      "promotionBlocker": "Cohort denominator, comparison window, and threshold are not accepted.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "CALC_INPUT",
+          "selector": "FIRMDEATH_ESTABS",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:firm-deaths",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Census BDS publishes firm-death counts directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Firm Deaths",
+      "placementCount": 1,
+      "placementPaths": [
+        "Permanent Job Losers > Firm Deaths"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "FIRMDEATH_FIRMS",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:gross-job-losses",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS BED and Census BDS publish gross job-loss/job-destruction measurements directly with separately governed cadence and adjustment semantics.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Gross Job Losses",
+      "placementCount": 2,
+      "placementPaths": [
+        "Initial UI Claims > Gross Job Losses",
+        "Permanent Job Losers > Gross Job Losses"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BDS0000000000000000110004LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE",
+          "selector": "JOB_DESTRUCTION",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Separate official scope that must not be merged with the primary series."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:hires-rate",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS JOLTS publishes the hires rate directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Hires Rate",
+      "placementCount": 2,
+      "placementPaths": [
+        "Layoffs & Discharges > Hires Rate",
+        "Continued Claims / Insured Unemployment > Hires Rate"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "JTS000000000000000HIR",
+          "sourceId": "bls-jolts",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:import-exposure",
+      "claimClass": "B_CALC",
+      "definition": "Industry import exposure must be calculated from trade observations and an authoritative trade-to-industry allocation.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Import Exposure",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Import Exposure"
+      ],
+      "promotionBlocker": "No accepted product/industry crosswalk, denominator, or calculation.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industrial-production",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Federal Reserve G.17 publishes industrial-production indexes directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industrial Production",
+      "placementCount": 1,
+      "placementPaths": [
+        "Temporary Layoffs > Industrial Production"
+      ],
+      "promotionBlocker": "Exact G.17 aggregate and series selector are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-g17",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-capacity-utilization",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Federal Reserve G.17 publishes industry utilization rates directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry Capacity Utilization",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Industry Capacity Utilization"
+      ],
+      "promotionBlocker": "Industry code and exact series selector are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-g17",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-credit-conditions",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "definition": "SLOOS is not an industry-granular official measure and cannot support this title directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry Credit Conditions",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Industry Credit Conditions"
+      ],
+      "promotionBlocker": "Narrow to aggregate C&I context or identify a valid industry source.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "FALLBACK_ACQUISITION_METHOD",
+          "selector": "selector-pending",
+          "sourceId": "fed-sloos",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Context-only fallback that cannot satisfy the canonical scope directly."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-gross-job-losses",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS BED publishes industry gross-job-loss observations once exact series metadata is joined.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry Gross Job Losses",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Industry Gross Job Losses"
+      ],
+      "promotionBlocker": "Exact industry series ID and metadata join are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-input-prices",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS PPI publishes scoped industry/input price indexes directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry Input Prices",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Industry Input Prices"
+      ],
+      "promotionBlocker": "Exact PPI series and input scope are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-layoffs-and-discharges",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS JOLTS publishes industry layoffs-and-discharges observations directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry Layoffs & Discharges",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Industry Layoffs & Discharges"
+      ],
+      "promotionBlocker": "Exact industry series ID and level/rate choice are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-new-orders",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Census M3 publishes scoped new-order estimates directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry New Orders",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Industry New Orders"
+      ],
+      "promotionBlocker": "Exact table/series, industry scope, credential, and rights are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-output",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BEA GDP-by-Industry and Federal Reserve G.17 publish scoped output measures directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry Output",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Industry Output"
+      ],
+      "promotionBlocker": "Industry, measure, units, and vintage selector are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "bea-gdp-industry",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+      "claimClass": "B_CALC",
+      "definition": "Contraction is a deterministic negative change in accepted CES industry employment levels.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry Payroll Contraction",
+      "placementCount": 3,
+      "placementPaths": [
+        "Initial UI Claims > Industry Payroll Contraction",
+        "Permanent Job Losers > Industry Payroll Contraction",
+        "Temporary Layoffs > Industry Payroll Contraction"
+      ],
+      "promotionBlocker": "Industry series, comparison interval, and revision-aware formula are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-sales-shipments",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Census M3 publishes scoped shipment observations directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry Sales / Shipments",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Industry Sales / Shipments"
+      ],
+      "promotionBlocker": "Exact table/series, industry scope, credential, and rights are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-unit-labor-costs",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS Productivity and Costs publishes industry measures directly for supported industries.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Industry Unit Labor Costs",
+      "placementCount": 1,
+      "placementPaths": [
+        "Industry Payroll Contraction > Industry Unit Labor Costs"
+      ],
+      "promotionBlocker": "Exact industry series and measure are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:initial-claims",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "DOL ETA publishes national initial unemployment-insurance claims directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Initial UI Claims",
+      "placementCount": 1,
+      "placementPaths": [
+        "Continued Claims / Insured Unemployment > Initial Claims"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "DOL-UI-SA-INITIAL",
+          "sourceId": "dol-ui-claims",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "ACCEPTED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:input-costs",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "definition": "No single PPI measures all input costs; the industry, input basket, price concept, and weights are missing.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Input Costs",
+      "placementCount": 1,
+      "placementPaths": [
+        "Firm Death / Shutdown Stress > Input Costs"
+      ],
+      "promotionBlocker": "Specify scope and weighting before source selection.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:interest-rates",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Federal Reserve H.15 publishes official market interest rates directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Interest Rates",
+      "placementCount": 2,
+      "placementPaths": [
+        "Firm Death / Shutdown Stress > Interest Rates",
+        "Business Failure / Bankruptcy Stress > Interest Rates"
+      ],
+      "promotionBlocker": "Exact instrument, maturity, and aggregation are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-h15",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:inventory-sales-balance",
+      "claimClass": "B_CALC",
+      "definition": "The balance is a governed comparison between accepted inventory and sales observations.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Inventory / Sales Balance",
+      "placementCount": 1,
+      "placementPaths": [
+        "Temporary Layoffs > Inventory / Sales Balance"
+      ],
+      "promotionBlocker": "Component series and calculation are not accepted.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:inventory-sales-imbalance",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "definition": "The label duplicates inventory/sales balance while embedding an unsupported adverse conclusion.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Inventory / Sales Imbalance",
+      "placementCount": 1,
+      "placementPaths": [
+        "Firm Death / Shutdown Stress > Inventory / Sales Imbalance"
+      ],
+      "promotionBlocker": "Canonicalize to the neutral ratio or define a governed threshold.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:inventory-sales-ratio",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Census MTIS publishes the inventories-to-sales ratio directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Inventory / Sales Ratio",
+      "placementCount": 1,
+      "placementPaths": [
+        "Business Failure / Bankruptcy Stress > Inventory / Sales Ratio"
+      ],
+      "promotionBlocker": "Exact series/table, credential, rights, and vintage are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:job-openings-rate",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS JOLTS publishes the job openings rate directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Job Openings Rate",
+      "placementCount": 2,
+      "placementPaths": [
+        "Layoffs & Discharges > Job Openings Rate",
+        "Continued Claims / Insured Unemployment > Job Openings Rate"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "JTS000000000000000JOR",
+          "sourceId": "bls-jolts",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS JOLTS publishes both the layoffs-and-discharges level and rate directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Layoffs & Discharges",
+      "placementCount": 1,
+      "placementPaths": [
+        "Initial UI Claims > Layoffs & Discharges"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "JTS000000000000000LDL",
+          "sourceId": "bls-jolts",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "JTS000000000000000LDR",
+          "sourceId": "bls-jolts",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:manufacturing-output",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Federal Reserve G.17 publishes manufacturing production indexes directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Manufacturing Output",
+      "placementCount": 1,
+      "placementPaths": [
+        "Temporary Layoffs > Manufacturing Output"
+      ],
+      "promotionBlocker": "Exact manufacturing aggregate and series selector are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-g17",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:new-orders",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Census M3 publishes new-order estimates directly for defined scopes.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "New Orders",
+      "placementCount": 2,
+      "placementPaths": [
+        "Temporary Layoffs > New Orders",
+        "Gross Job Losses > New Orders"
+      ],
+      "promotionBlocker": "Exact series/table, credential, rights, and vintage are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:payroll-growth",
+      "claimClass": "B_CALC",
+      "definition": "Growth is deterministically calculated from accepted CES payroll-employment levels.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Payroll Growth",
+      "placementCount": 1,
+      "placementPaths": [
+        "Continued Claims / Insured Unemployment > Payroll Growth"
+      ],
+      "promotionBlocker": "Exact employment series, interval, and revision-aware formula are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:permanent-job-losers",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS CPS publishes the permanent-job-losers estimate directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Permanent Job Losers",
+      "placementCount": 1,
+      "placementPaths": [
+        "Initial UI Claims > Permanent Job Losers"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "LNS13026638",
+          "sourceId": "bls-cps",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:producer-input-costs",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "definition": "The label conflates input prices with firms' realized costs and duplicates producer input prices.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Producer Input Costs",
+      "placementCount": 1,
+      "placementPaths": [
+        "Business Failure / Bankruptcy Stress > Producer Input Costs"
+      ],
+      "promotionBlocker": "Canonicalize to a selected price index or define a weighted cost calculation.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:producer-input-prices",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS PPI publishes producer-price indexes directly for selected inputs and commodities.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Producer Input Prices",
+      "placementCount": 2,
+      "placementPaths": [
+        "Gross Job Losses > Producer Input Prices",
+        "Establishment Death / Closure Losses > Producer Input Prices"
+      ],
+      "promotionBlocker": "Exact PPI series and input scope are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:productivity-automation",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "definition": "BLS productivity does not directly measure automation; the current identity conflates two different concepts.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Productivity / Automation",
+      "placementCount": 1,
+      "placementPaths": [
+        "Permanent Job Losers > Productivity / Automation"
+      ],
+      "promotionBlocker": "Split productivity from automation and source each independently.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BEA publishes real GDP/output percent-change measures directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Real Output Growth",
+      "placementCount": 6,
+      "placementPaths": [
+        "Layoffs & Discharges > Real Output Growth",
+        "Initial UI Claims > Real Output Growth",
+        "Continued Claims / Insured Unemployment > Real Output Growth",
+        "Permanent Job Losers > Real Output Growth",
+        "Gross Job Losses > Real Output Growth",
+        "Business Failure / Bankruptcy Stress > Real Output Growth"
+      ],
+      "promotionBlocker": "Exact NIPA table/line, period convention, and vintage are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "bea-nipa",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:regional-employment-growth",
+      "claimClass": "B_CALC",
+      "definition": "Growth is calculated from accepted regional employment levels and must preserve geography and vintages.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Regional Employment Growth",
+      "placementCount": 1,
+      "placementPaths": [
+        "Continued Claims / Insured Unemployment > Regional Employment Growth"
+      ],
+      "promotionBlocker": "Regional series, geography, interval, and revision-aware formula are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:retail-sales",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Census MARTS publishes retail and food-services sales estimates directly.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Retail Sales",
+      "placementCount": 1,
+      "placementPaths": [
+        "Layoffs & Discharges > Retail Sales"
+      ],
+      "promotionBlocker": "Exact variable, adjustment, credential, rights, and vintage are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:sales-revenue",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "definition": "No universal official series measures this title; sales, shipments, and revenue across Census programs have incompatible scopes.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Sales / Revenue",
+      "placementCount": 2,
+      "placementPaths": [
+        "Firm Death / Shutdown Stress > Sales / Revenue",
+        "Business Failure / Bankruptcy Stress > Sales / Revenue"
+      ],
+      "promotionBlocker": "Narrow to a defined program, industry, and measure.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:sales-revenue-growth",
+      "claimClass": "B_CALC",
+      "definition": "Growth must be calculated after a scope-compatible official sales or shipments observation is selected.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Sales / Revenue Growth",
+      "placementCount": 1,
+      "placementPaths": [
+        "Establishment Death / Closure Losses > Sales / Revenue Growth"
+      ],
+      "promotionBlocker": "Underlying series, scope, interval, and formula are not accepted.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:temporary-help-employment",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS CES publishes temporary help services employment directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Temporary Help Employment",
+      "placementCount": 1,
+      "placementPaths": [
+        "Continued Claims / Insured Unemployment > Temporary Help Employment"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "CES6056132001",
+          "sourceId": "bls-ces",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:temporary-layoffs",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS CPS publishes the job-losers-on-temporary-layoff estimate directly.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Temporary Layoffs",
+      "placementCount": 1,
+      "placementPaths": [
+        "Initial UI Claims > Temporary Layoffs"
+      ],
+      "promotionBlocker": "Observation acceptance and comparable history remain pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "LNS13023653",
+          "sourceId": "bls-cps",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:trade-external-shock",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "definition": "The concept is event or structural evidence with bounded scope, not a single continuous official series.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Trade / External Shock",
+      "placementCount": 1,
+      "placementPaths": [
+        "Firm Death / Shutdown Stress > Trade / External Shock"
+      ],
+      "promotionBlocker": "Event taxonomy, affected scope, and structural join are not accepted.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "STRUCTURAL_SOURCE",
+          "selector": "FTD:IMP:BOPGS:SA",
+          "sourceId": "census-ftd",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official event or structural evidence; not a scalar observation."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:trade-import-pressure",
+      "claimClass": "B_CALC",
+      "definition": "Pressure is calculated from accepted trade observations and a defined domestic-market denominator.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Import / Trade Pressure",
+      "placementCount": 2,
+      "placementPaths": [
+        "Permanent Job Losers > Import / Trade Pressure",
+        "Gross Job Losses > Trade / Import Pressure"
+      ],
+      "promotionBlocker": "Product scope, denominator, crosswalk, interval, and threshold are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "CALC_INPUT",
+          "selector": "FTD:IMP:BOPGS:SA",
+          "sourceId": "census-ftd",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ],
+      "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:unit-labor-costs",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "BLS Productivity and Costs publishes unit-labor-cost measures directly for specified sectors.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "Unit Labor Costs",
+      "placementCount": 3,
+      "placementPaths": [
+        "Layoffs & Discharges > Unit Labor Costs",
+        "Gross Job Losses > Unit Labor Costs",
+        "Business Failure / Bankruptcy Stress > Unit Labor Costs"
+      ],
+      "promotionBlocker": "Exact sector and series ID are pending.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    }
+  ],
+  "counts": {
+    "activationStates": {
+      "ACCEPTED": 1,
+      "BLOCKED": 24,
+      "SOURCE_ENABLED_PENDING_ACCEPTANCE": 17,
+      "SOURCE_IDENTIFIED": 35
+    },
+    "canonicalLevel4Factors": 64,
+    "expandedSourceBindings": 48,
+    "factorSourceStateRecords": 77,
+    "level3Parents": 10,
+    "level4Placements": 100,
+    "recordsWithSourceBindings": 42,
+    "sourceIdentifiedPlaceholders": 35,
+    "sourceOnlyRecords": 9,
+    "sourceRoles": {
+      "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE": 4,
+      "CALC_INPUT": 14,
+      "FALLBACK_ACQUISITION_METHOD": 1,
+      "LEGACY_DUPLICATE_SHOULD_REMOVE": 1,
+      "PRIMARY_OBSERVATION_SOURCE": 27,
+      "STRUCTURAL_SOURCE": 1
+    }
+  },
+  "factorSourceStateRecords": [
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:average-weekly-hours",
+      "label": "Average Weekly Hours",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "CES0500000002",
+          "sourceId": "bls-ces",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:borrowing-costs",
+      "label": "Borrowing Costs",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-h15",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings",
+      "label": "Business Bankruptcy Filings",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "F2:US:BUSINESS:ALL",
+          "sourceId": "uscourts-f2",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+      "label": "Business Bankruptcy Stress",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:business-failure-bankruptcy-stress",
+      "label": "Business Failure / Bankruptcy Stress",
+      "recordKind": "LEVEL3_PARENT",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:business-failure-stress",
+      "label": "Business Failure Stress",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:business-formation",
+      "label": "Business Formations",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:business-formation-dynamism",
+      "label": "Business Formation / Dynamism",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "CALC_INPUT",
+          "selector": "BFS:T:BF_BF4Q:SA",
+          "sourceId": "census-bfs",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:business-formations",
+      "label": "Business formations within four quarters",
+      "recordKind": "SOURCE_ONLY",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "LEGACY_DUPLICATE_SHOULD_REMOVE",
+          "selector": "BFS:T:BF_BF4Q:SA",
+          "sourceId": "census-bfs",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Ambiguous, duplicate, or taxonomy-mismatched binding requiring review removal or canonicalization."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:candi-credit-conditions",
+      "label": "C&I Credit Conditions",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:candi-lending-standards",
+      "label": "C&I Lending Standards",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-sloos",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:candi-loan-demand",
+      "label": "C&I Loan Demand",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-sloos",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:capacity-utilization",
+      "label": "Capacity Utilization",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-g17",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:consumer-demand",
+      "label": "Consumer Demand",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:consumer-spending",
+      "label": "Consumer Spending",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "bea-nipa",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:continued-claims-insured-unemployment",
+      "label": "Continued Claims / Insured Unemployment",
+      "recordKind": "LEVEL3_PARENT",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "CALC_INPUT",
+          "selector": "DOL-UI-SA-CONTINUED",
+          "sourceId": "dol-ui-claims",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "CALC_INPUT",
+          "selector": "DOL-UI-SA-IUR",
+          "sourceId": "dol-ui-claims",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:corporate-profitability",
+      "label": "Corporate Profitability",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:corporate-profits",
+      "label": "Corporate Profits",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "bea-nipa",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:courts-business-chapter-11",
+      "label": "Business bankruptcy cases, Chapter 11",
+      "recordKind": "SOURCE_ONLY",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "CALC_INPUT",
+          "selector": "F2:US:BUSINESS:CH11",
+          "sourceId": "uscourts-f2",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:courts-business-chapter-12",
+      "label": "Business bankruptcy cases, Chapter 12",
+      "recordKind": "SOURCE_ONLY",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "CALC_INPUT",
+          "selector": "F2:US:BUSINESS:CH12",
+          "sourceId": "uscourts-f2",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:courts-business-chapter-13",
+      "label": "Business bankruptcy cases, Chapter 13",
+      "recordKind": "SOURCE_ONLY",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "CALC_INPUT",
+          "selector": "F2:US:BUSINESS:CH13",
+          "sourceId": "uscourts-f2",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:courts-business-chapter-7",
+      "label": "Business bankruptcy cases, Chapter 7",
+      "recordKind": "SOURCE_ONLY",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "CALC_INPUT",
+          "selector": "F2:US:BUSINESS:CH7",
+          "sourceId": "uscourts-f2",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:disaster-external-shock",
+      "label": "Disaster / External Shock",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:disaster-operational-shock",
+      "label": "Disaster / Operational Shock",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:disaster-weather-shock",
+      "label": "Disaster / Weather Shock",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:energy-input-shock",
+      "label": "Energy / Input Shock",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:establishment-birth-job-gains",
+      "label": "Jobs gained at establishment births",
+      "recordKind": "SOURCE_ONLY",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "CALC_INPUT",
+          "selector": "BDS0000000000000000110007LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:establishment-closures",
+      "label": "Establishment Closures",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BDS0000000000000000110006LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE",
+          "selector": "JOB_DESTRUCTION_DEATHS",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Separate official scope that must not be merged with the primary series."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:establishment-contractions",
+      "label": "Establishment Contractions",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BDS0000000000000000110005LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE",
+          "selector": "JOB_DESTRUCTION_CONTINUERS",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Separate official scope that must not be merged with the primary series."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:establishment-death-closure-losses",
+      "label": "Establishment Death / Closure Losses",
+      "recordKind": "LEVEL3_PARENT",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:establishment-deaths",
+      "label": "Establishment Deaths",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BDS0000000000000000110008LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE",
+          "selector": "ESTABS_EXIT",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Separate official scope that must not be merged with the primary series."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:establishment-expansions",
+      "label": "Jobs gained at expanding establishments",
+      "recordKind": "SOURCE_ONLY",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "CALC_INPUT",
+          "selector": "BDS0000000000000000110002LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:establishment-openings",
+      "label": "Jobs gained at opening establishments",
+      "recordKind": "SOURCE_ONLY",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "CALC_INPUT",
+          "selector": "BDS0000000000000000110003LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:firm-age-size",
+      "label": "Firm Age / Size",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:firm-age-size-vulnerability",
+      "label": "Firm Age / Size Vulnerability",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "CALC_INPUT",
+          "selector": "FIRMDEATH_ESTABS",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:firm-death-shutdown-stress",
+      "label": "Firm Death / Shutdown Stress",
+      "recordKind": "LEVEL3_PARENT",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "CALC_INPUT",
+          "selector": "FIRMDEATH_EMP",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:firm-deaths",
+      "label": "Firm Deaths",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "FIRMDEATH_FIRMS",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:gross-job-gains",
+      "label": "Gross job gains",
+      "recordKind": "SOURCE_ONLY",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "CALC_INPUT",
+          "selector": "BDS0000000000000000110001LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:gross-job-losses",
+      "label": "Gross Job Losses",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BDS0000000000000000110004LQ5",
+          "sourceId": "bls-bed",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE",
+          "selector": "JOB_DESTRUCTION",
+          "sourceId": "census-bds",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Separate official scope that must not be merged with the primary series."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:hires-rate",
+      "label": "Hires Rate",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "JTS000000000000000HIR",
+          "sourceId": "bls-jolts",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:import-exposure",
+      "label": "Import Exposure",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:industrial-production",
+      "label": "Industrial Production",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-g17",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:industry-capacity-utilization",
+      "label": "Industry Capacity Utilization",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-g17",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:industry-credit-conditions",
+      "label": "Industry Credit Conditions",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "FALLBACK_ACQUISITION_METHOD",
+          "selector": "selector-pending",
+          "sourceId": "fed-sloos",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Context-only fallback that cannot satisfy the canonical scope directly."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:industry-gross-job-losses",
+      "label": "Industry Gross Job Losses",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:industry-input-prices",
+      "label": "Industry Input Prices",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:industry-layoffs-and-discharges",
+      "label": "Industry Layoffs & Discharges",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:industry-new-orders",
+      "label": "Industry New Orders",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:industry-output",
+      "label": "Industry Output",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "bea-gdp-industry",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+      "label": "Industry Payroll Contraction",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:industry-sales-shipments",
+      "label": "Industry Sales / Shipments",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:industry-unit-labor-costs",
+      "label": "Industry Unit Labor Costs",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "ACCEPTED",
+      "canonicalFactorId": "factor:canonical:initial-claims",
+      "label": "Initial UI Claims",
+      "recordKind": "LEVEL3_PARENT",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "DOL-UI-SA-INITIAL",
+          "sourceId": "dol-ui-claims",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:input-costs",
+      "label": "Input Costs",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:interest-rates",
+      "label": "Interest Rates",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-h15",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:inventory-sales-balance",
+      "label": "Inventory / Sales Balance",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:inventory-sales-imbalance",
+      "label": "Inventory / Sales Imbalance",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:inventory-sales-ratio",
+      "label": "Inventory / Sales Ratio",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:job-openings-rate",
+      "label": "Job Openings Rate",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "JTS000000000000000JOR",
+          "sourceId": "bls-jolts",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+      "label": "Layoffs & Discharges",
+      "recordKind": "LEVEL3_PARENT",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "JTS000000000000000LDL",
+          "sourceId": "bls-jolts",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        },
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "JTS000000000000000LDR",
+          "sourceId": "bls-jolts",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:manufacturing-output",
+      "label": "Manufacturing Output",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "fed-g17",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:new-orders",
+      "label": "New Orders",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:payroll-growth",
+      "label": "Payroll Growth",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:permanent-job-losers",
+      "label": "Permanent Job Losers",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "LNS13026638",
+          "sourceId": "bls-cps",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:producer-input-costs",
+      "label": "Producer Input Costs",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:producer-input-prices",
+      "label": "Producer Input Prices",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:productivity-automation",
+      "label": "Productivity / Automation",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "label": "Real Output Growth",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": false,
+          "origin": "sources_bea_fed_courts.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "selector-pending",
+          "sourceId": "bea-nipa",
+          "status": "SELECTOR_PENDING",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:regional-employment-growth",
+      "label": "Regional Employment Growth",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:retail-sales",
+      "label": "Retail Sales",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:sales-revenue",
+      "label": "Sales / Revenue",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:sales-revenue-growth",
+      "label": "Sales / Revenue Growth",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:temporary-help-employment",
+      "label": "Temporary Help Employment",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "CES6056132001",
+          "sourceId": "bls-ces",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:temporary-layoffs",
+      "label": "Temporary Layoffs",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "LNS13023653",
+          "sourceId": "bls-cps",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:trade-external-shock",
+      "label": "Trade / External Shock",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "STRUCTURAL_SOURCE",
+          "selector": "FTD:IMP:BOPGS:SA",
+          "sourceId": "census-ftd",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official event or structural evidence; not a scalar observation."
+        }
+      ]
+    },
+    {
+      "activationState": "BLOCKED",
+      "canonicalFactorId": "factor:canonical:trade-import-pressure",
+      "label": "Import / Trade Pressure",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "CALC_INPUT",
+          "selector": "FTD:IMP:BOPGS:SA",
+          "sourceId": "census-ftd",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:unit-labor-costs",
+      "label": "Unit Labor Costs",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    }
+  ],
+  "generatedAt": "2026-09-09T00:00:00Z",
+  "promotionAuthority": "NONE",
+  "reconciliation": {
+    "actualCanonicalLevel4FactorCount": 64,
+    "actualExpandedAcquisitionBindingCount": 48,
+    "explanation": "The reported 77 are UI-side factor/source state records, not 77 unique Level-4 factors and not 77 acquisition adapters. They comprise in-taxonomy Level-3/Level-4 identities plus source-only records created by configured series that do not resolve to a current taxonomy identity.",
+    "requiredCleanup": "Source-only records must be canonicalized, retained explicitly as CALC input, or removed through review before this pattern is copied to other branches.",
+    "sourceIdentifiedRecordsWithoutBinding": [
+      "factor:canonical:business-bankruptcy-stress",
+      "factor:canonical:business-failure-bankruptcy-stress",
+      "factor:canonical:business-failure-stress",
+      "factor:canonical:business-formation",
+      "factor:canonical:candi-credit-conditions",
+      "factor:canonical:consumer-demand",
+      "factor:canonical:corporate-profitability",
+      "factor:canonical:disaster-external-shock",
+      "factor:canonical:disaster-operational-shock",
+      "factor:canonical:disaster-weather-shock",
+      "factor:canonical:energy-input-shock",
+      "factor:canonical:establishment-death-closure-losses",
+      "factor:canonical:firm-age-size",
+      "factor:canonical:import-exposure",
+      "factor:canonical:industry-gross-job-losses",
+      "factor:canonical:industry-input-prices",
+      "factor:canonical:industry-layoffs-and-discharges",
+      "factor:canonical:industry-new-orders",
+      "factor:canonical:industry-payroll-contraction",
+      "factor:canonical:industry-sales-shipments",
+      "factor:canonical:industry-unit-labor-costs",
+      "factor:canonical:input-costs",
+      "factor:canonical:inventory-sales-balance",
+      "factor:canonical:inventory-sales-imbalance",
+      "factor:canonical:inventory-sales-ratio",
+      "factor:canonical:new-orders",
+      "factor:canonical:payroll-growth",
+      "factor:canonical:producer-input-costs",
+      "factor:canonical:producer-input-prices",
+      "factor:canonical:productivity-automation",
+      "factor:canonical:regional-employment-growth",
+      "factor:canonical:retail-sales",
+      "factor:canonical:sales-revenue",
+      "factor:canonical:sales-revenue-growth",
+      "factor:canonical:unit-labor-costs"
+    ],
+    "sourceOnlyRecords": [
+      "factor:canonical:business-formations",
+      "factor:canonical:courts-business-chapter-11",
+      "factor:canonical:courts-business-chapter-12",
+      "factor:canonical:courts-business-chapter-13",
+      "factor:canonical:courts-business-chapter-7",
+      "factor:canonical:establishment-birth-job-gains",
+      "factor:canonical:establishment-expansions",
+      "factor:canonical:establishment-openings",
+      "factor:canonical:gross-job-gains"
+    ]
+  },
+  "schemaVersion": "layoffs-level4-canonical-audit-1.0.0"
+}

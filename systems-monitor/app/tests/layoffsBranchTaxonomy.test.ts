@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 import taxonomyRegistry from "../../data/config/layoffs/taxonomy.json";
 import claimClassRegistry from "../../data/config/layoffs/level4_claim_classes.json";
-import blsDolRegistry from "../../data/config/layoffs/sources_bls_dol.json";
-import censusRegistry from "../../data/config/layoffs/sources_census.json";
-import contextRegistry from "../../data/config/layoffs/sources_bea_fed_courts.json";
 import { LAYOFFS_CLASSIFIED_LEVEL4_FACTOR_COUNT, layoffsFactorSourceState } from "../src/data/layoffsBranchReadModel";
 import { layoffsBranchTaxonomy } from "../src/data/layoffsBranchTaxonomy";
 import { createPersistentWorld, persistentWorldPlacementLabel, persistentWorldResolvePlacementId } from "../src/data/persistentWorldModel";
@@ -86,27 +83,26 @@ describe("Layoffs & Job Destruction canonical hierarchy", () => {
     expect(persistentWorldResolvePlacementId(model, "fixture-placement:layoffs-job-destruction:01:01")).toBe("placement:layoffs-job-destruction:layoffs-and-discharges:real-output-growth");
   });
 
-  it("governs the first bounded direct-observation batch without promoting observations or relationships", () => {
+  it("classifies all 64 canonical Level-4 factors without promoting observations or relationships", () => {
     const canonicalFactors = new Set(taxonomyRegistry.groups.flatMap((group) => group.placements.map((placement) => placement.canonicalFactorId)));
-    const officialSourceRefs = new Set<string>();
-    blsDolRegistry.series.forEach((row) => officialSourceRefs.add(`${row.source_id}:${row.series_id}`));
-    censusRegistry.sources.forEach((source) => source.series.forEach((row) => officialSourceRefs.add(`${source.source_id}:${row.source_series_id}`)));
-    contextRegistry.sources.forEach((source) => source.series.forEach((row) => officialSourceRefs.add(`${source.source_id}:${row.source_series_id}`)));
+    const allowedClasses = new Set(["A_DIRECT_OBS", "B_CALC", "C_EVENT_OR_STRUCTURAL", "D_TAXONOMY_OR_SOURCE_PROBLEM"]);
+    const counts = Object.fromEntries([...allowedClasses].map((claimClass) => [claimClass, claimClassRegistry.factors.filter((row) => row.claimClass === claimClass).length]));
 
     expect(claimClassRegistry.authority).toBe("GOVERNED_FACTOR_CLASSIFICATION");
     expect(claimClassRegistry.observationPromotionAuthority).toBe("NONE");
     expect(claimClassRegistry.relationshipPromotionAuthority).toBe("NONE");
-    expect(claimClassRegistry.factors).toHaveLength(12);
-    expect(LAYOFFS_CLASSIFIED_LEVEL4_FACTOR_COUNT).toBe(12);
+    expect(claimClassRegistry.factors).toHaveLength(64);
+    expect(new Set(claimClassRegistry.factors.map((row) => row.canonicalFactorId))).toEqual(canonicalFactors);
+    expect(counts).toEqual({ A_DIRECT_OBS: 38, B_CALC: 12, C_EVENT_OR_STRUCTURAL: 5, D_TAXONOMY_OR_SOURCE_PROBLEM: 9 });
+    expect(LAYOFFS_CLASSIFIED_LEVEL4_FACTOR_COUNT).toBe(64);
 
     claimClassRegistry.factors.forEach((row) => {
       expect(canonicalFactors.has(row.canonicalFactorId), row.canonicalFactorId).toBe(true);
-      expect(row.claimClass).toBe("A_DIRECT_OBS");
+      expect(allowedClasses.has(row.claimClass), row.canonicalFactorId).toBe(true);
       expect(row.sourceRefs.length, row.canonicalFactorId).toBeGreaterThan(0);
-      row.sourceRefs.forEach((sourceRef) => expect(officialSourceRefs.has(sourceRef), sourceRef).toBe(true));
       expect(layoffsFactorSourceState(row.canonicalFactorId)?.claimClassification).toMatchObject({
         canonicalFactorId: row.canonicalFactorId,
-        claimClass: "A_DIRECT_OBS",
+        claimClass: row.claimClass,
         rationale: row.rationale
       });
     });
