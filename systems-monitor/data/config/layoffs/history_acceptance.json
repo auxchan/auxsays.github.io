@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "layoffs-history-acceptance-1.0.0",
+  "authority": "NONE",
+  "reviewedAt": "2026-09-09",
+  "defaultDecision": "REJECT_UNLESS_EXPLICITLY_LISTED",
+  "automaticRoutinePromotionEnabled": false,
+  "rules": [],
+  "existingAcceptedScopes": [
+    {
+      "canonicalFactorId": "factor:canonical:initial-claims",
+      "sourceSeriesId": "DOL-UI-SA-INITIAL",
+      "scope": "The single previously accepted 2026-08-08 observation only; it does not authorize acceptance of later releases or historical backfill."
+    }
+  ],
+  "requiredRuleFields": [
+    "ruleId",
+    "authority",
+    "acceptedAt",
+    "canonicalFactorId",
+    "sourceId",
+    "sourceSeriesId",
+    "unit",
+    "frequency",
+    "geography",
+    "seasonalAdjustment",
+    "rightsState",
+    "effectiveFrom"
+  ],
+  "note": "This ledger is intentionally closed. Live retrieval creates immutable candidates; it cannot create accepted history until an authorized rule is added."
+}
