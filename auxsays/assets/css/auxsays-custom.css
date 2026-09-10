@@ -4843,6 +4843,8 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 }
 .update-linked-list { margin: 0; padding: 0; list-style: none; }
 .update-linked-item { padding: 0.6rem 0; border-top: 1px solid var(--aux-border); }
+/* The rule separates adjacent reports; on the first one it drew a line under the intro paragraph. */
+.update-linked-item:first-child { border-top: 0; padding-top: 0; }
 .update-linked-item__title { font-weight: 600; }
 .update-linked-item__meta {
   display: block;
@@ -4878,7 +4880,8 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   align-items: baseline;
   gap: 0.5rem;
 }
-.recent-reports-card__title {
+.recent-reports-card__title,
+.update-linked-card__title {
   margin: 0;
   font-size: 0.95rem;
   font-weight: 600;
@@ -4899,6 +4902,7 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 }
 .recent-reports-list { margin: 0; padding: 0; list-style: none; }
 .recent-reports-item { padding: 0.55rem 0; border-top: 1px solid var(--aux-border); }
+.recent-reports-item:first-child { border-top: 0; padding-top: 0; }
 .recent-reports-item__title { font-weight: 600; }
 .recent-reports-item__meta,
 .recent-reports-item__window,

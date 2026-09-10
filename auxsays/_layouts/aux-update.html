@@ -811,6 +811,11 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         {%- assign t2_count = t2_rows | size -%}
         {% if t2_count > 0 %}
         <section class="update-linked-card" aria-label="Update-linked user reports">
+          {%- comment -%} Level 3 below has a real heading element; this card had only its aria-label,
+            so it was missing from the heading outline. The two cards are peers and now sit at the same
+            heading level. The text repeats the aria-label, not the "Update-linked reports" count label
+            below it. {%- endcomment -%}
+          <h2 class="update-linked-card__title">Update-linked user reports</h2>
           <dl class="update-linked-card__counts">
             <div class="update-linked-count">
               <dt>Confirmed patch-specific reports</dt>
