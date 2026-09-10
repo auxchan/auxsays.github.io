@@ -30807,3 +30807,125 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wbshk6-is-resolve-211-finally-stable-enough-to-u
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wbshk6/is_resolve_211_finally_stable_enough_to_update/
+  parent_title: Is Resolve 21.1 finally stable enough to update from 20?
+  report_title: Is Resolve 21.1 finally stable enough to update from 20?
+  report_text_excerpt: Is Resolve 21.1 finally stable enough to update from 20? Title ^ I'm still running 20.3.1 and didn't update to 21 because a) I don't need photo editing on my NLE and b) I saw lots of posts at the time of release about it being incredibly buggy and crash-prone which is...
+  captured_at: '2026-09-10T00:11:14Z'
+  source_date: '2026-09-09'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wazcmw-davinci-resolve-211-your-gpu-memory-is-fu
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wazcmw/davinci_resolve_211_your_gpu_memory_is_full/
+  parent_title: DaVinci Resolve 21.1 - Your GPU memory is full
+  report_title: DaVinci Resolve 21.1 - Your GPU memory is full
+  report_text_excerpt: DaVinci Resolve 21.1 - Your GPU memory is full Hi all, I upgraded from 21 to 21.1 this evening, and now I'm finding that every time I open a project, I get a dialogue box saying "Your GPU memory is full" and it won't display the video. I have upgraded NVIDIA drivers to latest...
+  captured_at: '2026-09-10T00:11:14Z'
+  source_date: '2026-09-08'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w927vk-why-isnt-my-gpu-being-recognized-resolve
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w927vk/why_isnt_my_gpu_being_recognized_resolve_21/
+  parent_title: Why isn't my GPU being recognized? (Resolve 21, Debian 13 KDE)
+  report_title: Why isn't my GPU being recognized? (Resolve 21, Debian 13 KDE)
+  report_text_excerpt: Why isn't my GPU being recognized? (Resolve 21, Debian 13 KDE) Hello, I used to be able to use Davinci Resolve when I used to run Windows 11 on my laptop, however after I switched to Debian, I installed it via the help of a script called 'makeresolvedeb' on my Debian system...
+  captured_at: '2026-09-10T00:11:14Z'
+  source_date: '2026-09-06'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w7nwz2-why-davinci-resolve-21-is-making-my-image
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w7nwz2/why_davinci_resolve_21_is_making_my_imagens_get/
+  parent_title: Why davinci resolve 21 is making my imagens get bugged or something
+  report_title: Why davinci resolve 21 is making my imagens get bugged or something
+  report_text_excerpt: Why davinci resolve 21 is making my imagens get bugged or something Disculpen mi inglés, no es mi idioma principal. Tengo un error en DaVinci Resolve 21 (FREE) que hace que algunas imágenes PNG tengan una resolución mayor a la normal. He configurado correctamente el contenedor...
+  captured_at: '2026-09-10T00:11:14Z'
+  source_date: '2026-09-05'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1slsb48-freeze-pink-screen-hard-reboot
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1slsb48/freeze_pink_screen_hard_reboot/
+  parent_title: Freeze, Pink Screen, Hard Reboot
+  report_title: Freeze, Pink Screen, Hard Reboot
+  report_text_excerpt: Freeze, Pink Screen, Hard Reboot I’m working on a MacBook Pro with M1 Max. Running Sonoma 14.7.2. I have resolve 20 running. Twice now I’ve experienced a complete freeze of my computer. The monitors don’t respond, the screen, flashes pink, and the computer hard boots. Both...
+  captured_at: '2026-09-10T00:14:16Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1

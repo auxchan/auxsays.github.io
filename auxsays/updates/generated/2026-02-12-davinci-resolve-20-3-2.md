@@ -19,7 +19,7 @@ update_published_at: '2026-02-12T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-06-02T21:25:17Z'
 official_body_last_checked: '2026-06-02T21:25:17Z'
-record_last_updated: '2026-09-09T20:41:00.218514Z'
+record_last_updated: '2026-09-10T00:16:48.828678Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,7 +27,7 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.3.2
 update_detail_title: DaVinci Resolve 20.3.2
 update_consensus_label: Negative
-update_report_count: 29
+update_report_count: 30
 update_consensus_confidence: Medium
 quick_verdict: 'WAIT: DaVinci Resolve 20.3.2 has 27 user reports found.'
 official_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta 1. The official source capture should be refreshed before relying on this page for full release-note detail.
@@ -37,8 +37,8 @@ evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 29
-evidence_last_checked: '2026-09-09T20:37:52Z'
+confirmed_patch_specific_report_count: 30
+evidence_last_checked: '2026-09-10T00:14:16Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
