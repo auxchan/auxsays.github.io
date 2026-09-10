@@ -18,8 +18,8 @@ update_version: Enterprise managed permissions for GitHub Copilot agent operatio
 update_logo_text: GIT
 update_published_at: '2026-09-09T20:08:14Z'
 update_last_checked: '2026-09-10T00:02:42Z'
-source_last_checked: '2026-09-10T00:02:42Z'
-official_body_last_checked: '2026-09-10T00:02:42Z'
+source_last_checked: '2026-09-10T04:10:59Z'
+official_body_last_checked: '2026-09-10T04:10:59Z'
 record_last_updated: '2026-09-10T00:02:42Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -79,6 +79,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-09-10T00:02:42Z'
+  url: https://github.blog/changelog/2026-09-09-enterprise-managed-permissions-for-github-copilot-agent-operations
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-10T04:10:59Z'
   url: https://github.blog/changelog/2026-09-09-enterprise-managed-permissions-for-github-copilot-agent-operations
   status: captured-from-rss-feed
   body_captured: true

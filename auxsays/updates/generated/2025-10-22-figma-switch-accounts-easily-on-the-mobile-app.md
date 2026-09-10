@@ -17,8 +17,8 @@ update_version: Switch accounts easily on the mobile app
 update_logo_text: FIG
 update_published_at: '2025-10-22T00:00:00.000Z'
 update_last_checked: '2026-08-04T07:28:25Z'
-source_last_checked: '2026-08-04T07:28:25Z'
-official_body_last_checked: '2026-08-04T07:28:25Z'
+source_last_checked: '2026-09-10T04:10:56Z'
+official_body_last_checked: '2026-09-10T04:10:56Z'
 record_last_updated: '2026-08-04T07:28:25Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-04T07:28:25Z'
+  url: https://www.figma.com/release-notes/?title=switch-accounts-easily-on-the-mobile-app
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-10T04:10:56Z'
   url: https://www.figma.com/release-notes/?title=switch-accounts-easily-on-the-mobile-app
   status: captured-from-rss-feed
   body_captured: true
