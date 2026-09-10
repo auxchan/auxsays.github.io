@@ -31,13 +31,14 @@
      --aux-cyan) failed more quietly: the declaration was dropped, so those elements inherited
      whatever colour surrounded them.
 
-     THEY MUST LIVE HERE, ABOVE LINE 24. The next line begins `--radius-xl: 28px@font-face {`
-     -- a missing semicolon that swallows the following 933 lines into that custom property's
-     value -- so this rule's only live declarations are the ones above that point. Defining these
-     aliases below it (e.g. beside --radius-lg, or in the duplicated :root inside the swallowed
-     region) parses without error and has no effect whatsoever. Measured, not assumed: walking
-     brace depth from line 7 puts the matching `}` on line 960 and terminates the --radius-xl
-     value on line 958.
+     Their POSITION here was once load-bearing and no longer is. When these aliases were added,
+     the next declaration read `--radius-xl: 28px@font-face {` -- a missing semicolon that
+     swallowed the rest of the rule into that property's value -- so anything defined below it
+     parsed without error and had no effect whatsoever; the first attempt at this fix landed
+     there and was inert. That splice is gone (the dead region in #115, the two radius tokens
+     below on 2026-09-09), so every declaration in this rule is now live and ordering no longer
+     decides whether a token applies. Keeping them above the palette-derived radius block is
+     just tidiness now, not a constraint.
 
      Aliasing at the source fixes all 37 `var(--aux-…)` usages at once, rather than rewriting
      ~20 declarations across a dozen selectors and risking a missed one. */
@@ -52,27 +53,48 @@
      comes from having no gradient, no shadow, a smaller radius and a position below the decision. */
   --aux-surface-muted: rgba(255,255,255,.022);
   --aux-accent-muted: var(--border-strong);
-  /* --radius-xl and --radius-lg are DELIBERATELY NOT DEFINED HERE.
+  /* PANEL GEOMETRY. --radius-xl and --radius-lg were restored 2026-09-09, closing the last
+     live effect of the `--radius-xl: 28px@font-face {` splice.
 
-     This rule used to read `--radius-xl: 28px@font-face {` on the next line: a missing semicolon
-     that spliced a duplicated copy of the whole file header plus ~900 lines of rules INTO that
-     custom property's value. Lines 56-967 were therefore text inside a property value, not CSS.
-     Measured three ways before removing them: a brace-depth walk (value terminated at the `;` on
-     line 968), md5/diff against the live copy that resumes at line 971 (byte-identical at a fixed
-     line offset, with the only differences being live-ONLY additions -- the live copy is the newer
-     one), and a real browser, which reported the SAME 920 CSSOM rules with the region present and
-     absent. Deleting it changed nothing, because none of it was ever CSS.
+     THE SPLICE. A missing semicolon after `28px` spliced a duplicated copy of the file header
+     plus ~900 lines of rules INTO this custom property's value, so the value ran on until the
+     next top-level `;`. Two things followed. The ~900 lines were inert text, not CSS -- #115
+     deleted them. And the terminating `;` belonged to the `--radius-lg: 22px` that came next,
+     so that declaration was eaten too: BOTH tokens were undefined in the live cascade for as
+     long as the splice existed, and #115 chose to leave them that way.
 
-     What the splice also did was leave `--radius-xl` holding a garbage value and swallow the
-     `--radius-lg: 22px` that followed, so BOTH have been undefined in the live cascade for as long
-     as the splice existed. Restoring them is not a cleanup, it is a visual change: measured in
-     Chromium, defining them moves `.panel`, the vendor-status card and the confirmed-sources card
-     from `border-radius: 0px` to `28px`. Every panel on the site currently renders square-cornered
-     and that is the accepted appearance, so this repair preserves it exactly -- the same edit with
-     the tokens restored produced three computed-style deltas, and this one produces zero.
+     WHERE THESE VALUES COME FROM. Not from a guess, and not from reading the usages backwards.
+     The swallowed region contained an intact duplicate of this very :root, and that duplicate
+     still read `--radius-xl: 28px;` WITH its semicolon: the pasted copy was clean, and it was
+     the OUTER copy that lost the semicolon at the seam. Diffed line by line before restoring
+     (against the pre-#115 blob, since the region is deleted now):
+       * of the 912 swallowed lines, the 884 site-rule lines matched live rules further down
+         100% byte-identically -- 0 lines existed only in the swallowed copy, and every
+         difference was a live-ONLY addition, so the live copy was strictly the newer one;
+       * of the 19 declarations in the duplicated :root, 18 were byte-identical to their
+         counterparts elsewhere in the outer rule -- 16 above the splice, and --radius-lg and
+         --radius-md just below it. The 19th was `--radius-xl`, held as `28px` in the duplicate
+         and as the corrupted `28px@font-face {` in the outer copy.
+     So the duplicate was the only uncorrupted record of --radius-xl in CSS CODE; #115 preserved
+     the value too, but only as comment prose, which no cascade reads. --radius-lg
+     took a different route: `--radius-lg: 22px;` sat just BELOW the splice as ordinary text, but
+     was inert because the splice had consumed its `;` as the terminator of --radius-xl's value.
+     #115 then deleted that line along with the dead region, which is how a declaration that was
+     merely unreachable became genuinely absent. The duplicate corroborates the 22px.
 
-     Do not 'fix' this by adding them back on its own. Rounding the panels is a design decision;
-     make it deliberately, and re-measure the components above when you do. */
+     THIS IS A DELIBERATE VISUAL CHANGE, measured in Chromium over a controlled A/B build whose
+     only difference was this file (1278 pages; 4 other files differed, all build timestamps):
+       --radius-xl  UNDEFINED -> 28px   .panel            7237 elements on 1260 of 1278 pages
+       --radius-lg  UNDEFINED -> 22px   .featured-card       2, .article-card 3,
+                                        .article-rail-card   3, .article-related-card 6
+     Nothing else moved. .update-side-card, .update-summary and .update-consensus also reference
+     --radius-lg but match 0 elements anywhere in the built site, so they are dead selectors.
+     --radius-md is defined but referenced by nothing.
+
+     Panels render round-cornered again, which is what the surrounding design intends. Changing
+     either value is a design decision: re-measure the components above when you do. */
+  --radius-xl: 28px;
+  --radius-lg: 22px;
   --radius-md: 16px;
 }
 
