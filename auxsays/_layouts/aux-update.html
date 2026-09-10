@@ -187,9 +187,65 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   monitoring card uses. Staleness and collection health are reported separately because they are
   separate facts: evidence can be old while collection is perfectly healthy, which is exactly the
   case on those 10 pages.
+
+  Those figures are a snapshot of a CLOCK-DEPENDENT gate, not a fixed property: `report_evidence_stale`
+  compares `evidence_last_checked` against `site.time`, so the population moves with every build.
+  Re-measured 2026-09-09 the same way: 148 pages render the notice -- 60 stale AND unhealthy, 53 on
+  health alone, and 35 on STALENESS ALONE. The stale-only class is the one that grew (10 -> 35), which
+  is precisely why the sentence had to stop asserting collection health it had not checked.
 {%- endcomment -%}
+{%- comment -%}
+  WHO OWNS "this is a sample, not telemetry". The evidence-summary card one screen above already
+  says "This is a verified report sample, not live consensus telemetry." and prints
+  "Last evidence checked: <date>". The freshness aside repeated both -- the same caveat in two large
+  boxes, which the layout sprint explicitly forbids. #114 moved the aside below the verdict but left
+  the wording untouched, so the duplication survived the move.
+
+  The card owns it: it is the box that already carries the count, the evidence strength and the
+  staleness date, so the qualifier belongs beside the number it qualifies. The aside keeps only what
+  the gate actually proves -- freshness and collection health.
+
+  The handoff is a FLAG, not an assumption. Measured on the 2026-09-09 corpus there are 0 pages where
+  the aside fires and the card's sentence does not, but that is a coincidence of the data, not a
+  property of the layout: `report_bearing_count` can exceed `report_count` by design (see its
+  definition above), and the card's sentence is gated on `report_count`. So `sample_framing_shown`
+  mirrors the card's own gate, and the aside restores the clause only when that gate is false.
+
+  SCOPE OF THAT CLAIM, stated precisely because the first draft overclaimed it. On every page the
+  aside can render, exactly one box carries the qualifier. It does NOT say every page carries it:
+  the aside is gated on `evidence_state_class == 'pilot'`, so a NON-pilot record whose
+  `report_bearing_count` exceeds its `report_count` has no aside to restore anything into and states
+  the qualifier nowhere. The flag rescues the card's blind spot only inside the aside's own gate,
+  which is the only box that exists to rescue it. 0 such records today; if one ever appears the fix
+  belongs in the card's gate, not here.
+
+  THE ASIDE BODY MUST NOT RE-NAME THE SAMPLE. `freshness_detail` is interpolated OUTSIDE the unless
+  guard (see the rule below about writing tag delimiters here), so wording placed in it is NOT
+  covered by the handoff at all -- the guard only wraps the clause that follows it. The
+  first draft of this repair left "This report sample has not been revalidated recently" there, which
+  put "report sample" back in the aside on 93 of the pages the card was already qualifying -- the
+  same two-boxes-one-claim defect, one noun quieter. The detail strings now say "This evidence",
+  and test_patch_page_hierarchy F12 keeps them that way. The aside names freshness and collection
+  health; naming what the evidence IS belongs to the card.
+
+  The flag is computed HERE and not inside the card, and the card's if / paragraph / endif block is
+  left byte-identical on purpose. test_consensus_sample_honesty reconstructs a synthetic pre-fix
+  template by regex-excising exactly that block -- that is how it proves its own C6 controls are not
+  vacuous -- and it raises rather than degrading if the excision misses. An `assign` inserted between
+  the opening if and the paragraph breaks that reconstruction and takes the whole suite down with it.
+
+  Do not write literal Liquid tag delimiters in this prose either. A `comment` block is still
+  tokenised, so a KNOWN tag inside it is parsed for real: an empty `if` is a SyntaxError that makes
+  the entire template refuse to render. The static layout test cannot see that -- only the suites
+  that render through the Liquid gem can -- so name tags in words here, never in braces.
+
+  Because the condition is therefore written twice, test_patch_page_hierarchy F9 pins the two copies
+  to the same text: they cannot drift without a check failing.
+{%- endcomment -%}
+{% assign sample_framing_shown = false %}
+{% if consensus_established == false and report_count > 0 %}{% assign sample_framing_shown = true %}{% endif %}
 {% assign freshness_headline = 'Evidence freshness needs revalidation.' %}
-{% assign freshness_detail = 'This report sample has not been revalidated recently. Collection itself is reporting healthy.' %}
+{% assign freshness_detail = 'This evidence has not been revalidated recently. Collection itself is reporting healthy.' %}
 {% if method_health_blocked %}
   {% assign freshness_headline = 'Collection blocked.' %}
   {% assign freshness_detail = 'Some collection methods are currently blocked or returning errors.' %}
@@ -198,7 +254,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   {% assign freshness_detail = 'Some collection methods reported partial or low-confidence results.' %}
 {% endif %}
 {% if report_evidence_stale and method_health_blocked_or_pending %}
-  {% capture freshness_detail %}{{ freshness_detail }} This sample has also not been revalidated recently.{% endcapture %}
+  {% capture freshness_detail %}{{ freshness_detail }} This evidence has also not been revalidated recently.{% endcapture %}
 {% endif %}
 {% if report_bearing_count > 0 and evidence_state_class == 'pilot' %}
   {% if report_evidence_stale or method_health_blocked_or_pending or source_freshness_note_warns %}
@@ -693,13 +749,28 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           it?" -- the decision comes first and its supporting audit trail comes after it.
 
           Nothing here is hidden or weakened: Level 2 keeps its "exact tracked build unresolved"
-          framing, Level 3 keeps "not attributed to this update", and the freshness notice keeps
-          its wording. Only their position changed.
+          framing and Level 3 keeps "not attributed to this update". Only their position changed.
+
+          The freshness notice below was NOT left alone: #114 moved it without deduplicating it, so it
+          went on repeating the evidence-summary card's "verified report sample / not live telemetry"
+          caveat one screen further down. It now states only freshness and collection health -- the
+          two things its gate actually establishes -- and defers the sample qualifier to the card that
+          owns it. Nothing it proved before is lost; a claim it was making twice is now made once.
         {%- endcomment -%}
         {% if show_report_freshness_notice %}
-        <aside class="update-evidence-freshness-notice" aria-label="Evidence freshness notice">
-          <strong>Verified report sample: {{ freshness_headline }}</strong>
-          <p>{{ freshness_detail }} Report counts are preserved from structured evidence and are not live telemetry.</p>
+        {%- comment -%}
+          The region name has to cover BOTH states the box reports. Measured on the 2026-09-09
+          corpus, 113 of the 148 pages that render this aside show a collection-health headline
+          ("Collection blocked." on 103, "Collection degraded." on 10) and only 35 show the
+          freshness one -- so "Evidence freshness notice" mis-named the region on the majority of
+          them. That was survivable while the heading opened with a qualifier; now that the heading
+          is just the derived state, the region name is the only framing a screen-reader user gets
+          when navigating by landmark, so it has to be true of every branch.
+        {%- endcomment -%}
+        <aside class="update-evidence-freshness-notice"
+               aria-label="Evidence freshness and collection health">
+          <strong>{{ freshness_headline }}</strong>
+          <p>{{ freshness_detail }}{% unless sample_framing_shown %} Report counts are preserved from structured evidence and are not live telemetry.{% endunless %}</p>
         </aside>
         {% endif %}
 

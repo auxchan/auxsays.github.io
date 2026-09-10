@@ -30,8 +30,12 @@ Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_patch_page_hier
 """
 from __future__ import annotations
 
+import json
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 import traceback
 from pathlib import Path
 
@@ -95,6 +99,161 @@ def live_root_span(css: str) -> tuple[int, int]:
 def block_index(marker: str) -> int:
     """Position of a block in the layout source, asserted to be unique enough to be meaningful."""
     return LAYOUT.index(marker)
+
+
+def at(marker: str) -> int:
+    """Offset of `marker` in the EMITTING markup, or -1 when absent.
+
+    Never raises. An ordering check whose needle has been deleted must fail that one check; using
+    `str.index` there aborts the module and silently takes every later assertion with it, which
+    reads as a crash rather than as the coverage loss it actually is.
+    """
+    return LAYOUT_EMITTED.find(marker)
+
+
+# --------------------------------------------------------------- real Liquid render of both boxes
+
+CARD_SENTENCE = "This is a verified report sample, not live consensus telemetry."
+ASIDE_CLAUSE = "Report counts are preserved from structured evidence and are not live telemetry."
+
+# render! rather than render, so a Liquid error RAISES instead of being embedded in the output where
+# a "the sentence is absent" assertion would read straight past it and pass.
+_RENDER_RB = """
+require 'liquid'
+require 'json'
+
+module Shims
+  def relative_url(i) = "/" + i.to_s.sub(%r{\\A/}, "")
+  def absolute_url(i) = "https://auxsays.test/" + i.to_s.sub(%r{\\A/}, "")
+  def jsonify(i) = JSON.generate(i)
+  def markdownify(i) = i.to_s
+end
+Liquid::Template.register_filter(Shims)
+
+payload = JSON.parse(File.read(ARGV[0]))
+tpl = Liquid::Template.parse(payload['template'])
+out = {}
+payload['cases'].each do |name, vars|
+  out[name] = tpl.render!('site' => payload['site'], 'page' => vars, 'content' => '')
+end
+print JSON.generate(out)
+"""
+
+
+def count_framing(html: str) -> int:
+    """How many times the sample qualifier reaches the reader on this page."""
+    return html.count(CARD_SENTENCE) + html.count(ASIDE_CLAUSE)
+
+
+def aside_of(html: str):
+    m = re.search(r'<aside class="update-evidence-freshness-notice".*?</aside>', html, re.S)
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", m.group(0))).strip() if m else None
+
+
+def html_excerpt(html: str) -> str:
+    card = re.search(r'<p class="consensus-chart-meta consensus-sample-note">(.*?)</p>', html, re.S)
+    return f"card={'yes' if card else 'no'} aside={aside_of(html)!r}"
+
+
+def _page(**over) -> dict:
+    """A minimal but REAL page hash: every field the gate block reads, and nothing it does not."""
+    base = {
+        "product_id": "obs-studio", "update_version": "31.0.4", "target_build": "",
+        "update_product": "OBS Studio", "update_consensus_label": "Negative",
+        "update_published_at": "2025-06-27T00:00:00Z",
+        "update_source_url": "https://example.test/notes",
+        "consensus_collection_status": "pilot_initial_sample",
+        "evidence_state": "pilot_sample",
+        "update_report_count": 1,
+        "confirmed_patch_specific_report_count": 1,
+        # source_type must also appear in a method-health row for that row to count
+        "accepted_report_sources": [{"source_type": "forum_thread"}],
+        "evidence_last_checked": "2026-01-01T00:00:00Z",   # deliberately ancient => stale
+    }
+    base.update(over)
+    return base
+
+
+FRESH = "2099-01-01T00:00:00Z"   # far future => never stale, whatever the build clock says
+
+
+def render_gate_matrix():
+    """Render the WHOLE layout over one case per gate branch. Returns (liquid_ok, cases).
+
+    The case list is built and RETURNED even when ruby is missing, with each `_rendered` carrying the
+    reason instead of HTML. Two things follow, both deliberate. The suite emits the same number of
+    checks in every environment, so a missing tool cannot present itself as CHECK COUNT DRIFT against
+    the governed manifest. And every case still runs its L0 render-success assertion, which fails
+    with the real cause -- rather than the six of ten cases that would otherwise pass quietly,
+    because "the sentence is absent" is trivially true of output that was never produced.
+    """
+    src = LAYOUT.split("---", 2)[-1]          # drop the `layout: aux-base` front matter
+    # Strip the two include tags. L2 asserts neither include emits an equivalent sentence, so this
+    # can neither hide an occurrence nor invent one -- it only removes the need for a file system.
+    src = re.sub(r"\{%-?\s*include\s.*?-?%\}", "", src, flags=re.S)
+
+    def health(status: str) -> dict:
+        return {"methods": [{"product_id": "obs-studio", "update_version": "31.0.4",
+                             "target_build": "", "source_type": "forum_thread", "status": status}]}
+
+    healthy = health("success")
+    # `official` is not a curiosity: consensus_collection_status is deferred_official_only on 942 of
+    # the 1141 shipped records, i.e. 83% of the corpus, and a pilot-only matrix would never touch it.
+    official = {"consensus_collection_status": "deferred_official_only", "evidence_state": None}
+    cases = [
+        # name,                 page,                                            health,   expect
+        ("fresh+healthy",       _page(evidence_last_checked=FRESH),              healthy,  1),
+        ("stale-only",          _page(),                                         healthy,  1),
+        ("fresh+blocked",       _page(evidence_last_checked=FRESH),              health("blocked"), 1),
+        ("stale+blocked",       _page(),                                         health("blocked"), 1),
+        ("fresh+degraded",      _page(evidence_last_checked=FRESH),              health("partial"), 1),
+        # report_count 0 with confirmed 4: the card's gate is false, so the aside must restore it.
+        ("divergence",          _page(update_report_count=0,
+                                      confirmed_patch_specific_report_count=4),  healthy,  1),
+        # mature consensus needs no sample qualifier, and the aside is not a pilot box
+        ("live consensus",      _page(update_report_count=5,
+                                      confirmed_patch_specific_report_count=5,
+                                      consensus_collection_status="live_consensus",
+                                      evidence_state="live"),                    healthy,  0),
+        ("no reports at all",   _page(update_report_count=0,
+                                      confirmed_patch_specific_report_count=0),  healthy,  0),
+        # the 83% class: no aside (not pilot), so the card is the only owner and must carry it alone
+        ("official+reports",    _page(**official),                               healthy,  1),
+        # THE DOCUMENTED BLIND SPOT, pinned deliberately. A non-pilot record whose bearing count
+        # exceeds its report count states the qualifier NOWHERE: the card's gate is false and there
+        # is no aside to restore it into. aux-update.html says so in as many words; if the card's
+        # gate is ever widened this case flips to 1 and forces that comment to be updated with it.
+        ("official+divergence", _page(update_report_count=0,
+                                      confirmed_patch_specific_report_count=4,
+                                      **official),                               healthy,  0),
+    ]
+
+    ruby = shutil.which("ruby")
+    if not ruby:
+        return False, [(n, dict(p, _rendered="<<RENDER FAILED: ruby is not on PATH>>"), e)
+                       for n, p, _h, e in cases]
+
+    out = []
+    with tempfile.TemporaryDirectory() as td:
+        script = Path(td) / "render.rb"
+        script.write_text(_RENDER_RB, encoding="utf-8")
+        for name, page, hp, expect in cases:
+            payload = Path(td) / "p.json"
+            payload.write_text(json.dumps({
+                "template": src,
+                "site": {"time": "2026-09-09T00:00:00Z", "data": {"evidence_method_health": hp}},
+                "cases": {name: page},
+            }), encoding="utf-8")
+            proc = subprocess.run([ruby, str(script), str(payload)],
+                                  capture_output=True, text=True, encoding="utf-8",
+                                  errors="replace", timeout=180)
+            page = dict(page)
+            if proc.returncode != 0:
+                page["_rendered"] = f"<<RENDER FAILED: {(proc.stderr or '')[-300:]}>>"
+            else:
+                page["_rendered"] = json.loads(proc.stdout)[name]
+            out.append((name, page, expect))
+    return True, out
 
 
 def run() -> int:
@@ -188,9 +347,128 @@ def run() -> int:
     check("F7 the old unconditional blocked-or-pending claim no longer RENDERS",
           "Some collection methods are currently blocked or pending." not in LAYOUT_EMITTED,
           "still present in emitting markup")
-    check("F8 the invariant sentence renders exactly once",
-          LAYOUT_EMITTED.count("are not live telemetry") == 1,
-          str(LAYOUT_EMITTED.count("are not live telemetry")))
+    # DEDUPLICATION. The evidence-summary card already says "This is a verified report sample, not
+    # live consensus telemetry." and prints the staleness date; the aside said the same thing again
+    # one screen below the verdict. #114 moved the aside without deduplicating it. The card owns the
+    # qualifier now -- it is the box carrying the count the qualifier qualifies -- and the aside
+    # restores the clause ONLY when the card's own gate (`report_count > 0`) did not fire. That is a
+    # flag rather than an assumption, because `report_bearing_count` can exceed `report_count`.
+    check("F8 the aside no longer repeats the card's sample framing unconditionally",
+          "{% unless sample_framing_shown %} Report counts are preserved from structured "
+          "evidence and are not live telemetry.{% endunless %}" in LAYOUT_EMITTED)
+    # The flag mirrors the card's gate rather than being set inside the card, because
+    # test_consensus_sample_honesty regex-excises that block verbatim to build its pre-fix control.
+    # Mirroring means the condition is written twice, so pin the two copies to the same text here --
+    # otherwise the card could stop emitting the sentence while the aside still believes it did.
+    CARD_GATE = "{% if consensus_established == false and report_count > 0 %}"
+    check("F9 the flag is set by the card's OWN gate, written identically",
+          LAYOUT_EMITTED.count(
+              CARD_GATE + "{% assign sample_framing_shown = true %}{% endif %}") == 1
+          and LAYOUT_EMITTED.count(CARD_GATE) == 2,
+          f"gate occurrences={LAYOUT_EMITTED.count(CARD_GATE)}")
+    check("F9b ...and the second occurrence is the card that actually prints the sentence",
+          at(CARD_GATE + '\n          <p class="consensus-chart-meta consensus-sample-note">') > -1)
+    # `at` and not `.index`, deliberately: a missing needle must fail THIS check, not raise and take
+    # the other 78 assertions of the suite down with it.
+    o_init = at("{% assign sample_framing_shown = false %}")
+    o_set = at("{% assign sample_framing_shown = true %}")
+    o_use = at("{% unless sample_framing_shown %}")
+    check("F10 the flag is initialised false before either box renders",
+          -1 < o_init < o_set < o_use, f"init={o_init} set={o_set} use={o_use}")
+    check("F11 the aside's heading is the derived state, not a second 'verified report sample' label",
+          "<strong>{{ freshness_headline }}</strong>" in LAYOUT_EMITTED
+          and "Verified report sample" not in LAYOUT_EMITTED)
+
+    # F12 -- THE LEAK THE FIRST DRAFT LEFT BEHIND. Deduplicating only the clause inside the unless
+    # guard was not enough: `freshness_detail` is interpolated BEFORE that guard opens, so any
+    # wording put in it renders unconditionally. The first draft's stale-only detail read "This
+    # report sample has not been revalidated recently", which returned "report sample" to the aside
+    # on 93 of the pages whose card was already saying it -- the same defect, one noun quieter.
+    # The aside may describe freshness and collection health; naming what the evidence IS is the
+    # card's job. Assert over the DERIVED strings, which is where the wording actually lives.
+    detail_literals = re.findall(r"\{%\s*assign\s+freshness_detail\s*=\s*'([^']*)'\s*%\}",
+                                 LAYOUT_EMITTED)
+    detail_literals += re.findall(r"\{%\s*capture\s+freshness_detail\s*%\}(.*?)\{%\s*endcapture\s*%\}",
+                                  LAYOUT_EMITTED, re.S)
+    check("F12a the aside's detail strings were actually found", len(detail_literals) >= 4,
+          f"found {len(detail_literals)}: {detail_literals}")
+    leaky = [d for d in detail_literals if "sample" in d.lower()]
+    check("F12b no aside detail string re-names the sample", not leaky, str(leaky))
+    check("F12c ...and the headlines do not either",
+          not [h for h in re.findall(r"\{%\s*assign\s+freshness_headline\s*=\s*'([^']*)'\s*%\}",
+                                     LAYOUT_EMITTED) if "sample" in h.lower()])
+
+    # F13 -- the mirror is only sound while the variables it mirrors hold still. F9 pins the two
+    # gate copies as TEXT; that is satisfied by a layout in which something reassigns report_count
+    # or consensus_established between them, which would desynchronise the flag from the card with
+    # every other check still green. Assert the DATAFLOW, not just the spelling.
+    span = LAYOUT_EMITTED[o_set:at(CARD_GATE + '\n          <p class="consensus-chart-meta')]
+    # Every writing form, not just `assign`: a capture or an increment rebinds the same name and
+    # would desynchronise the mirror just as effectively, with F9's text check still green.
+    reassigned = [v for v in ("report_count", "consensus_established", "report_bearing_count")
+                  if re.search(r"\{%\s*(?:assign|capture|increment|decrement)\s+" + v + r"\b", span)]
+    check("F13 no gate variable is reassigned between the mirror and the card",
+          o_set > -1 and not reassigned, f"reassigned in span: {reassigned}")
+
+    # ---------- L: the two boxes, RENDERED together ----------
+    # Everything above is string matching over the template source. That could not have caught the
+    # F12 leak, and it cannot observe the one property this repair exists to guarantee: how many
+    # times the sample qualifier reaches a READER on one page.
+    #
+    # No existing suite could either. test_consensus_sample_honesty renders the real template, but
+    # `consensus_block()` slices it at the first include tag -- and the freshness aside lives ~170
+    # lines BELOW that cut, so the card and the aside had never been rendered in the same pass
+    # anywhere in CI. "At most once per page" was argued, never observed.
+    #
+    # This renders the WHOLE layout through the real Liquid gem, over a matrix that walks every gate
+    # branch, and counts occurrences in the emitted HTML. The two includes are stripped rather than
+    # resolved -- L2 proves that is sound by asserting neither of them emits an equivalent sentence,
+    # so removing them cannot hide or invent one.
+    print("\n[L] the sample qualifier is rendered at most once per page, and once where required")
+    liquid_ok, cases = render_gate_matrix()
+    check("L1 the liquid gem is available, so these assertions run for real", liquid_ok,
+          "install liquid 4.0.4; CI does this explicitly and must not skip these silently")
+
+    include_prose = []
+    for inc in sorted((_AUX / "_includes").glob("*.html")):
+        emitted = re.sub(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", "",
+                         inc.read_text(encoding="utf-8"), flags=re.S).lower()
+        if "report sample" in emitted or "live telemetry" in emitted:
+            include_prose.append(inc.name)
+    check("L2 no include emits an equivalent sentence, so stripping them is sound",
+          not include_prose, str(include_prose))
+
+    for name, page, expect in cases:
+        html = page["_rendered"]
+        # L0 FIRST, and per case. Every assertion below is of the form "this sentence is/is not in
+        # the output", and all of them are trivially satisfiable by output that does not exist. A
+        # missing gem made six of these ten cases pass silently; this makes the render itself the
+        # thing under test before its content is judged.
+        rendered = "RENDER FAILED" not in html
+        check(f"L0 {name}: the render actually produced HTML", rendered, html[:200])
+        if not rendered:
+            continue
+        n = count_framing(html)
+        check(f"L3 {name}: qualifier renders at most once (got {n})", n <= 1, html_excerpt(html))
+        if expect == 1:
+            check(f"L4 {name}: report-bearing page states it exactly once (got {n})", n == 1,
+                  html_excerpt(html))
+        else:
+            check(f"L4 {name}: qualifier correctly absent (got {n})", n == 0, html_excerpt(html))
+        aside = aside_of(html)
+        check(f"L5 {name}: the aside never re-names the sample",
+              aside is None or "sample" not in aside.lower(), str(aside))
+
+    # THE RESTORE PATH IS REACHABLE. Without this the unless body would be unobservable dead code on
+    # the whole corpus -- present in the source, provably emitted by nothing, which is exactly the
+    # vacuous-guard trap this repo keeps re-learning. The divergence case (report_count 0,
+    # confirmed 4) suppresses the card and forces the aside to carry it.
+    div = next(p for n, p, _ in cases if n == "divergence")
+    check("L6 the divergence case really does suppress the card",
+          "RENDER FAILED" not in div["_rendered"]
+          and "not live consensus telemetry" not in div["_rendered"])
+    check("L7 ...and the aside really does restore the qualifier",
+          "are not live telemetry" in div["_rendered"], html_excerpt(div["_rendered"]))
 
     # ---------- P: Acrobat prose ----------
     print("\n[P] no machine enum or duplicated identity reaches the reader")
@@ -214,8 +492,20 @@ def run() -> int:
           "Not attributed to this update." in LAYOUT)
     check("C3 Level 3 still names the release window it was reported during",
           "release window" in LAYOUT)
-    check("C4 the freshness caveat still says report counts are not live telemetry",
-          "not live telemetry" in LAYOUT)
+    # The "not live telemetry" qualifier was NOT deleted from the page -- it moved to a single owner.
+    # Assert it survives in the evidence-summary card, which is where it is now stated.
+    check("C4 the sample/telemetry qualifier survives, owned by the evidence-summary card",
+          "This is a verified report sample, not live consensus telemetry." in LAYOUT_EMITTED
+          and LAYOUT_EMITTED.count(
+              "This is a verified report sample, not live consensus telemetry.") == 1)
+    o_note = at('class="consensus-chart-meta consensus-sample-note"')
+    o_verdict = at('id="verdict"')
+    o_aside = at('class="update-evidence-freshness-notice"')
+    check("C4b ...inside the evidence card, above the verdict",
+          -1 < o_note < o_verdict < o_aside,
+          f"note={o_note} verdict={o_verdict} aside={o_aside}")
+    check("C4c the card still prints the staleness date next to it",
+          "Last evidence checked: {{ evidence_checked_label }}" in LAYOUT_EMITTED)
     check("C5 the freshness caveat renders exactly once",
           LAYOUT_EMITTED.count("Evidence freshness needs revalidation") == 1,
           str(LAYOUT_EMITTED.count("Evidence freshness needs revalidation")))
