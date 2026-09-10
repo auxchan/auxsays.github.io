@@ -92,7 +92,7 @@ auxsays/scripts/tests/test_validate_ingestion_sources.py = 30
 # all-failed / disabled / aged-out), the failure-MODE-change case Elgato actually exhibited,
 # a simulation of the pre-fix semantics, and a mutation harness whose catches are asserted to
 # be semantic rather than crashes.
-auxsays/scripts/tests/test_ingestion_run_health.py = 72
+auxsays/scripts/tests/test_ingestion_run_health.py = 89
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
 auxsays/scripts/tests/test_windows_count_authority.py = 96
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92

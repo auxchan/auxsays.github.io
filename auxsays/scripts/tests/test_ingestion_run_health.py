@@ -254,6 +254,49 @@ def main() -> int:
           row_w[0]["status"] == "no_results",
           f"streak={at_tolerance} status={row_w[0]['status']}")
 
+    print(NEWLINE + "[TR] the threshold boundary, walked through the REAL write-run sequence")
+    # A write run persists via `update_source_*` and THEN reports via `source_rows`. Both halves
+    # must agree on where the threshold falls, check by check, or the reported status and the
+    # persisted status diverge at exactly the boundary that matters.
+    def write_run_check(state, pid):
+        """One production-shaped check: persist, then report with already_persisted=True."""
+        succeed(state, pid, fetched=0,
+                at=f"2026-10-{len(state.get('sources', {}).get(pid, {}).get('seen', [])) + 1:02d}T00:00:00Z")
+        row = H.source_rows(state, [src(pid)], [res(pid, fetched=0)], [], already_persisted=True)[0]
+        return state["sources"][pid], row
+
+    st = fresh()
+    for _ in range(T - 1):
+        write_run_check(st, "edge")
+    bucket, row = write_run_check(st, "edge")            # A: tolerance - 1  ->  tolerance
+    check("TR-A streak reaches EXACTLY the tolerance after tolerance-1 plus one no-record run",
+          bucket["consecutive_empty_extractions"] == T, str(bucket["consecutive_empty_extractions"]))
+    check("TR-A at exactly the tolerance the PERSISTED status is still no_results",
+          bucket["status"] == "no_results", bucket["status"])
+    check("TR-A and the REPORTED row agrees -- it does not fire one run early",
+          row["status"] == "no_results", f"row={row['status']} bucket={bucket['status']}")
+    check("TR-A reported streak equals persisted streak",
+          row["consecutive_empty_extractions"] == bucket["consecutive_empty_extractions"],
+          f"row={row['consecutive_empty_extractions']} bucket={bucket['consecutive_empty_extractions']}")
+    bucket, row = write_run_check(st, "edge")            # B: tolerance  ->  tolerance + 1
+    check("TR-B one further no-record run crosses the threshold",
+          bucket["consecutive_empty_extractions"] == T + 1, str(bucket["consecutive_empty_extractions"]))
+    check("TR-B the persisted status becomes broken exactly here, as designed",
+          bucket["status"] == "broken", bucket["status"])
+    check("TR-B and the reported row becomes broken on the SAME run, not a run later",
+          row["status"] == "broken", f"row={row['status']} bucket={bucket['status']}")
+    check("TR-B reported streak still equals persisted streak after crossing",
+          row["consecutive_empty_extractions"] == bucket["consecutive_empty_extractions"],
+          f"row={row['consecutive_empty_extractions']} bucket={bucket['consecutive_empty_extractions']}")
+    # The same boundary for a source that USED to extract: it must cross into `stale`, not `broken`.
+    st = fresh(); succeed(st, "was", fetched=4, at="2026-01-01T00:00:00Z")
+    for _ in range(T):
+        write_run_check(st, "was")
+    bucket, row = write_run_check(st, "was")
+    check("TR-B' a source that previously extracted crosses into stale, not broken",
+          bucket["status"] == "stale" and row["status"] == "stale",
+          f"row={row['status']} bucket={bucket['status']}")
+
     print(NEWLINE + "[FC] an unobserved source must fail CLOSED, never open")
     # If a source reaches `attempted` but yields neither a result nor an error -- a control-flow gap,
     # a future refactor, a `continue` added in the wrong place -- the honest answer is "unknown",
@@ -366,9 +409,13 @@ def main() -> int:
             mod = types.SimpleNamespace()
 
             def fetch(source, **_kw):
-                what = behaviour[str(source.get("product_id"))]
+                pid = str(source.get("product_id"))
+                what = behaviour[pid]
                 if what == "raise":
                     raise RuntimeError("HTTP 403 while fetching official source")
+                if what == "records":
+                    return [{"record_id": f"{pid}:r{i}", "version": f"1.{i}", "title": f"{pid} 1.{i}",
+                             "source_url": f"https://example.invalid/{pid}/{i}"} for i in range(2)]
                 return []          # a successful fetch that extracts nothing
             mod.fetch = fetch
             return mod
@@ -382,8 +429,12 @@ def main() -> int:
         prev_argv = sys.argv
         sys.argv = ["patch_ingest.py", "--config", str(tmp / "cfg.yml"),
                     "--state", str(tmp / "state.json"), "--output", str(tmp / "out"), *argv_extra]
+        import io
+        import contextlib
+        buf = io.StringIO()
         try:
-            code = PI.main()
+            with contextlib.redirect_stdout(buf):
+                code = PI.main()
         finally:
             sys.argv = prev_argv
             PI.adapter_module = original
@@ -392,6 +443,10 @@ def main() -> int:
             else:
                 os.environ["GITHUB_STEP_SUMMARY"] = prev
         state = json.loads((tmp / "state.json").read_text(encoding="utf-8"))
+        text = buf.getvalue()
+        run_main.stdout = text
+        start = text.find("{")
+        run_main.report = json.loads(text[start:]) if start >= 0 else {}
         return code, state, (summary.read_text(encoding="utf-8") if summary.exists() else "")
 
     code, state, summary = run_main([("alpha", True, "raise")])
@@ -434,6 +489,51 @@ def main() -> int:
     check("E2E9 a scope that matches nothing does not overwrite a stored verdict",
           state.get("last_run_health") == "failed", str(state.get("last_run_health")))
     check("E2E10 and does not crash rendering the not-evaluated summary", code == 0, f"code={code}")
+
+    # E -- one hard-failing source plus a healthy one. An adversarial mutation that made DEGRADED
+    # exit non-zero survived the suite: nothing asserted this case end to end.
+    code, state, summary = run_main([("good", True, "records"), ("dead", True, "raise")],
+                                    argv_extra=("--dry-run",))
+    rep = run_main.report
+    check("E2E-E1 a mixed run is degraded", rep.get("run_health") == "degraded",
+          str(rep.get("run_health")))
+    check("E2E-E2 and exits ZERO -- the healthy vendor's work must not be thrown away",
+          code == 0, f"return code {code}")
+    check("E2E-E3 the healthy source's output is preserved in the report",
+          any(r.get("product_id") == "good" and r.get("candidate_count") == 2
+              for r in rep.get("results") or []), str(rep.get("results"))[:160])
+    check("E2E-E4 a warning names the failing source",
+          "::warning" in run_main.stdout and "dead" in run_main.stdout, run_main.stdout[:200])
+
+    # THE PRODUCTION BUG AT THE WIRING LEVEL. Run 34436159379 persisted streak 1 while reporting 2.
+    # The unit checks pass `already_persisted` themselves, so they cannot see `patch_ingest.main()`
+    # passing the wrong value -- an adversarial mutation doing exactly that survived. This drives a
+    # WRITE run through main() and compares what it REPORTED against what it PERSISTED.
+    code, state, summary = run_main([("wired", True, "raise")])
+    reported = next((r for r in run_main.report.get("source_health") or []
+                     if r.get("source_id") == "wired"), {})
+    persisted = state["sources"]["wired"]
+    check("E2E-W1 a write run's reported streak equals its persisted streak",
+          reported.get("consecutive_empty_extractions") == persisted.get("consecutive_empty_extractions"),
+          f"reported={reported.get('consecutive_empty_extractions')} "
+          f"persisted={persisted.get('consecutive_empty_extractions')}")
+    check("E2E-W2 and its reported failure count equals its persisted one",
+          reported.get("consecutive_failures") == persisted.get("consecutive_failures"),
+          f"reported={reported.get('consecutive_failures')} persisted={persisted.get('consecutive_failures')}")
+
+    # D -- a dry run must PROJECT the check it is making, because it persists nothing. At a streak of
+    # exactly the tolerance, one more empty check crosses the threshold; a dry run that forgot to
+    # project would still call it quiet.
+    seeded = {"sources": {"edge": {"seen": [], "status": "no_results", "last_success_at": "x",
+                                   "consecutive_empty_extractions": T, "consecutive_failures": 0}}}
+    code, state, summary = run_main([("edge", True, "empty")], argv_extra=("--dry-run",),
+                                    seed_state=seeded)
+    dry_row = next((r for r in run_main.report.get("source_health") or []
+                    if r.get("source_id") == "edge"), {})
+    check("E2E-D1 a dry run at the tolerance projects this check and sees the crossing",
+          dry_row.get("status") == "broken", f"dry-run status={dry_row.get('status')}")
+    check("E2E-D2 while persisting nothing", state["sources"]["edge"]["consecutive_empty_extractions"] == T,
+          str(state["sources"]["edge"]["consecutive_empty_extractions"]))
 
     print(NEWLINE + "[P] the PRE-FIX semantics, simulated, must fail these same questions")
     # Running this suite against the old `lib.state` raises ImportError, and an ImportError is a
