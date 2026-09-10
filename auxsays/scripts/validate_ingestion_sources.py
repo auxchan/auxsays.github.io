@@ -109,6 +109,16 @@ def _validate_entry(errors: list[str], warnings: list[str], source: dict[str, An
         if not isinstance(keywords, list) or not all(isinstance(item, str) for item in keywords):
             errors.append(f"{label}: ingestion.keywords must be null or a list of strings")
 
+    # How many consecutive no-record checks this source may post before its silence is treated as
+    # rot (`lib.state.classify_success`). It is an advertised escape hatch for a genuinely rare
+    # publisher, so it has to be validated: a string or a negative number here would either raise
+    # deep inside a production run or, worse, quietly disable the rot detection for that source.
+    tolerance = ingestion.get("empty_extraction_tolerance")
+    if tolerance is not None:
+        if isinstance(tolerance, bool) or not isinstance(tolerance, int) or tolerance < 0:
+            errors.append(f"{label}: ingestion.empty_extraction_tolerance must be null or a "
+                          f"non-negative integer, got {tolerance!r}")
+
     request = ingestion.get("request")
     if request is not None and not isinstance(request, dict):
         errors.append(f"{label}: ingestion.request must be an object when present")

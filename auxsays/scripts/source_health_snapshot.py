@@ -77,6 +77,23 @@ def status_for(source: dict[str, Any], source_state: dict[str, Any], last_error:
     checked = bool(source_state.get("last_checked_at"))
     written = int(source_state.get("last_records_written") or 0)
 
+    # THE EXTRACTION VERDICT OUTRANKS "no new records", and it has to, because the two are
+    # indistinguishable from the counts alone. This branch used to return "Active / No new records"
+    # for ANY run that extracted nothing, which is how Netlify came to be published as Active with
+    # today's timestamp while its parser had matched nothing since 2026-04-29: the fetch really did
+    # succeed every time, and `fetched == 0` really was true, so the page said the source was fine.
+    #
+    # `lib.state.classify_success` now separates a quiet check (`no_results`) from a source that has
+    # produced nothing for many consecutive checks (`broken` if it never worked, `stale` if it
+    # stopped). Ask it first; only fall through to "No new records" when the answer really is that
+    # the source is merely quiet.
+    if explicit == "broken":
+        return "Error", "Parser found nothing on this source"
+    if explicit == "stale":
+        since = str(source_state.get("last_extraction_at") or "")[:10]
+        return "Error", (f"No records extracted since {since}" if since
+                         else "No records extracted for many checks")
+
     if checked and fetched == 0 and written == 0:
         # A successful run with no extracted/written records is not a degraded
         # source. It means the source was reachable but no eligible new update

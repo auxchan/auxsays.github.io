@@ -33,6 +33,7 @@ if str(SCRIPT_DIR) not in sys.path:
 from lib.http import fetch_text
 from lib.normalize import split_front_matter, strip_tags, utc_now
 from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION
+from lib import ingest_health
 from lib.write_update_record import refresh_existing_record, write_record
 from lib.version_landing import ensure_for_record
 
@@ -376,6 +377,10 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
             if deferred_source_urls:
                 promoted = [url for url in promoted if url not in deferred_source_urls]
             scan["inspected"] = promoted
+        # A source may declare how long its own silence stays plausible. Without an override the
+        # shared default applies; a source that genuinely publishes rarely can raise it rather than
+        # forcing a universal cadence threshold onto every vendor.
+        tolerance = source.get("ingestion", {}).get("empty_extraction_tolerance")
         update_source_success(
             state,
             product_id,
@@ -385,6 +390,7 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
             fetched=candidate_count,
             written=len(written) + len(refreshed),
             skipped=len(skipped),
+            **({"tolerance": int(tolerance)} if tolerance is not None else {}),
         )
 
     created_count = len(written) if write else len(would_create)
@@ -439,9 +445,11 @@ def main() -> int:
 
     results = []
     errors = []
+    attempted: list[dict[str, Any]] = []
     for source in sources:
         if not should_run(source, args):
             continue
+        attempted.append(source)
         try:
             # Dry-run and production share run_source (write=False vs True) so a dry-run
             # scans the SAME resolved candidate window and reports the exact create/refresh/
@@ -462,8 +470,10 @@ def main() -> int:
                     error=sanitize_error_message(exc),
                 )
             print(f"[ERROR] {error['product_id']}: {error['error']}", file=sys.stderr)
-            if args.strict:
-                break
+            # DELIBERATELY NO `break` HERE. `--strict` used to abandon the loop on the first error,
+            # so one blocked vendor discarded the valid discovery of every source that had not run
+            # yet. Strictness is about what the run REPORTS, not about how much work it throws away;
+            # the exit code is decided once, below, from the health of everything that ran.
 
     state["last_run_finished_at"] = utc_now()
     state["last_results"] = results
@@ -472,7 +482,34 @@ def main() -> int:
     if not args.dry_run:
         save_state(args.state, state)
 
-    print(json.dumps({"results": results, "errors": errors, "linked_body_refreshes": linked_body_refreshes}, indent=2))
+    # RUN-LEVEL HEALTH. Per-source state was already honest -- Elgato has carried
+    # `status: failing, consecutive_failures: 13` for days -- but nothing read it back at the end of
+    # the run, so the process exited 0 and the workflow reported success regardless. This is the
+    # step that makes the conclusion agree with the telemetry.
+    health_rows = ingest_health.source_rows(state, attempted, results, errors)
+    verdict = ingest_health.classify_run(health_rows)
+    # A run that scored nothing must not overwrite a real verdict. A `--source` typo, or a probe of
+    # a staged `enabled: false` product, used to persist `healthy` over a stored `failed` -- into a
+    # file the writeback commits to main, while the per-source buckets in that same file still read
+    # `failing, consecutive_failures: 13`.
+    if verdict != ingest_health.RUN_NOT_EVALUATED:
+        state["last_run_health"] = verdict
+        state["last_run_source_health"] = health_rows
+        if not args.dry_run:
+            save_state(args.state, state)
+    ingest_health.annotate(health_rows, verdict)
+    ingest_health.write_step_summary(ingest_health.summarise(health_rows, verdict))
+
+    print(json.dumps({"results": results, "errors": errors,
+                      "linked_body_refreshes": linked_body_refreshes,
+                      "run_health": verdict, "source_health": health_rows}, indent=2))
+
+    # A DEGRADED run exits 0 on purpose: healthy vendors produced real records this run and
+    # discarding them would be a worse failure than the one being fixed. It is not silent -- the
+    # annotation and step summary above make it visible on the run page. Only a run with nothing
+    # trustworthy in it fails the lane.
+    if verdict == ingest_health.RUN_FAILED:
+        return 1
     if errors and args.strict:
         return 1
     return 0
