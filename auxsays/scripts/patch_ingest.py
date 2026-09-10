@@ -486,7 +486,10 @@ def main() -> int:
     # `status: failing, consecutive_failures: 13` for days -- but nothing read it back at the end of
     # the run, so the process exited 0 and the workflow reported success regardless. This is the
     # step that makes the conclusion agree with the telemetry.
-    health_rows = ingest_health.source_rows(state, attempted, results, errors)
+    # On a write run the per-source buckets were already advanced during the loop; on a dry
+    # run nothing was persisted and the streaks must be projected forward here instead.
+    health_rows = ingest_health.source_rows(state, attempted, results, errors,
+                                            already_persisted=not args.dry_run)
     verdict = ingest_health.classify_run(health_rows)
     # A run that scored nothing must not overwrite a real verdict. A `--source` typo, or a probe of
     # a staged `enabled: false` product, used to persist `healthy` over a stored `failed` -- into a

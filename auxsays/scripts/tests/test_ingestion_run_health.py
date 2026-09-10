@@ -227,6 +227,33 @@ def main() -> int:
     check("8c but it raises no annotation against production",
           not any("staged-thing" in m for m in emitted), str(emitted))
 
+    print(NEWLINE + "[DC] the streak must not be counted twice on a write run")
+    # On a write run `update_source_*` already advanced the bucket during the loop. Re-deriving the
+    # streak afterwards double-counted the check: production run 34436159379 persisted
+    # `consecutive_empty_extractions: 1` for the Elgato buckets while the reported row said 2, and a
+    # source could therefore be declared `broken` a full run early. A dry run persists nothing, so
+    # there the increment must still happen.
+    st = fresh()
+    fail(st, "elg", error="HTTP 403 while sfetching official source".replace("sf", "f"))
+    bucket_streak = st["sources"]["elg"]["consecutive_empty_extractions"]
+    wrote = H.source_rows(st, [src("elg")], [], [err("elg")], already_persisted=True)
+    check("DC1 a write run reports the streak the bucket already holds",
+          wrote[0]["consecutive_empty_extractions"] == bucket_streak,
+          f"row={wrote[0]['consecutive_empty_extractions']} bucket={bucket_streak}")
+    dry = H.source_rows(st, [src("elg")], [], [err("elg")], already_persisted=False)
+    check("DC2 a dry run projects one further check, because it persists nothing",
+          dry[0]["consecutive_empty_extractions"] == bucket_streak + 1,
+          f"row={dry[0]['consecutive_empty_extractions']} bucket={bucket_streak}")
+    # And the same must hold for the classification, not just the reported number.
+    st2 = fresh()
+    for i in range(T):
+        succeed(st2, "rot", fetched=0, at=f"2026-09-{i + 1:02d}T00:00:00Z")
+    at_tolerance = st2["sources"]["rot"]["consecutive_empty_extractions"]
+    row_w = H.source_rows(st2, [src("rot")], [res("rot", fetched=0)], [], already_persisted=True)
+    check("DC3 at exactly the tolerance a write run does not prematurely say broken",
+          row_w[0]["status"] == "no_results",
+          f"streak={at_tolerance} status={row_w[0]['status']}")
+
     print(NEWLINE + "[FC] an unobserved source must fail CLOSED, never open")
     # If a source reaches `attempted` but yields neither a result nor an error -- a control-flow gap,
     # a future refactor, a `continue` added in the wrong place -- the honest answer is "unknown",
