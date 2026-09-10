@@ -30929,3 +30929,127 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v3hmr0-effects-slowing-down-davinci-resolve-rend
+  product_id: blackmagic-davinci
+  update_version: 21.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v3hmr0/effects_slowing_down_davinci_resolve_render/
+  parent_title: Effects slowing down Davinci Resolve Render?
+  report_title: Effects slowing down Davinci Resolve Render?
+  report_text_excerpt: Effects slowing down Davinci Resolve Render? Beginner here! So, I am working on an edit which includes some basic effect that I put on other short mini clips that (for some reason with ALL the Optimisation tips applied) SLOW DOWN MY RENDER bY 1 FpS pEr SeCoNd! Pls help me.......
+  captured_at: '2026-09-10T05:34:19Z'
+  source_date: '2026-07-22'
+  target_release_date: '2026-06-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-3-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vjq4ae-screenshotsexports-of-the-color-page-view
+  product_id: blackmagic-davinci
+  update_version: 20.3.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vjq4ae/screenshotsexports_of_the_color_page_viewer_wont/
+  parent_title: Screenshots/exports of the Color page viewer won't upload to Claude.ai (Resolve 20.3.3, macOS) — anyone else hit this?
+  report_title: Screenshots/exports of the Color page viewer won't upload to Claude.ai (Resolve 20.3.3, macOS) — anyone else hit this?
+  report_text_excerpt: Screenshots/exports of the Color page viewer won't upload to Claude.ai (Resolve 20.3.3, macOS) — anyone else hit this? Running into something weird and specific enough that I think it's worth asking here rather than just assuming it's on Claude's end. I use Claude as a...
+  captured_at: '2026-09-10T05:38:34Z'
+  source_date: '2026-08-09'
+  target_release_date: '2026-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v434gz-m4-pro-macbook-pro-can-barely-play-resolv
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v434gz/m4_pro_macbook_pro_can_barely_play_resolves/
+  parent_title: 'M4 Pro MacBook Pro can barely play Resolve’s Relight or AI Speed Warp: is this normal?'
+  report_title: 'M4 Pro MacBook Pro can barely play Resolve’s Relight or AI Speed Warp: is this normal?'
+  report_text_excerpt: 'M4 Pro MacBook Pro can barely play Resolve’s Relight or AI Speed Warp: is this normal? I just bought a 14-inch MacBook Pro with the full M4 Pro, 20-core GPU, 48 GB unified memory and 2 TB SSD. It’s a clean installation running DaVinci Resolve Studio 21. I bought it...'
+  captured_at: '2026-09-10T05:44:32Z'
+  source_date: '2026-07-23'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve Studio 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vz43jt-crashing-when-sending-video-over-decklink
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vz43jt/crashing_when_sending_video_over_decklink_8k_pro/
+  parent_title: Crashing when sending video over DeckLink 8k Pro
+  report_title: Crashing when sending video over DeckLink 8k Pro
+  report_text_excerpt: Crashing when sending video over DeckLink 8k Pro Hello! Resolve is crashing EVERY time I double click an audio file to open in the source viewer, but I've isolated this down to when I'm sending video over the DeckLink 8k Pro. If I disable output the issue disappears, and re-...
+  captured_at: '2026-09-10T05:46:16Z'
+  source_date: '2026-08-26'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sh2lwa-i-cant-get-my-videos-to-play-without-the
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sh2lwa/i_cant_get_my_videos_to_play_without_the_timeline/
+  parent_title: I Can’t Get My Videos To Play Without The Timeline Crashing
+  report_title: I Can’t Get My Videos To Play Without The Timeline Crashing
+  report_text_excerpt: I Can’t Get My Videos To Play Without The Timeline Crashing update - It happens whenever I try to apply an effect like texts, blurs etc. I’m using the free version of DaVinci Resolve 20.3.2. I edit really light because I only have the Intel(R) UHD Graphics 630 to work with and...
+  captured_at: '2026-09-10T05:46:16Z'
+  source_date: '2026-04-09'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
