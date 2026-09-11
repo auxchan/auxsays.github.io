@@ -31362,3 +31362,77 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wd67zz-autosubs-380-not-launching-from-davinci-r
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wd67zz/autosubs_380_not_launching_from_davinci_resolve/
+  parent_title: AutoSubs 3.8.0 not launching from DaVinci Resolve 21 on Windows — solved with a custom Lua loader
+  report_title: AutoSubs 3.8.0 not launching from DaVinci Resolve 21 on Windows — solved with a custom Lua loader
+  report_text_excerpt: 'AutoSubs 3.8.0 not launching from DaVinci Resolve 21 on Windows — solved with a custom Lua loader The problem I was trying to use AutoSubs 3.8.0 with DaVinci Resolve 21 on Windows . Normally, AutoSubs can be launched from: Workspace → Scripts → Utility → AutoSubs However, on...'
+  captured_at: '2026-09-11T17:29:26Z'
+  source_date: '2026-09-11'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1veowse-render-cache-unsatisfying-experience-is-t
+  product_id: blackmagic-davinci
+  update_version: '20.3'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1veowse/render_cache_unsatisfying_experience_is_there/
+  parent_title: Render Cache unsatisfying experience, is there something than can be done to improve it?
+  report_title: Render Cache unsatisfying experience, is there something than can be done to improve it?
+  report_text_excerpt: Render Cache unsatisfying experience, is there something than can be done to improve it? Hi everyone! I've always used Premiere Pro or Avid for editing and Resolve for grading but in recent times for commercial work I'm trying to do everything in Resolve, and there is one...
+  captured_at: '2026-09-11T17:36:34Z'
+  source_date: '2026-08-03'
+  target_release_date: '2025-12-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.3'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tybsea-bug-en-davinci-resolve-2032
+  product_id: blackmagic-davinci
+  update_version: '20.3'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tybsea/bug_en_davinci_resolve_2032/
+  parent_title: Bug en davinci resolve 20.3.2
+  report_title: Bug en davinci resolve 20.3.2
+  report_text_excerpt: Bug en davinci resolve 20.3.2 Estoy intentando diagnosticar un problema muy extraño en una MacBook Pro M3 Max (36 GB RAM, 1 TB SSD) con DaVinci Resolve Studio 20.3.2. El comportamiento ocurre en todos los proyectos y con cualquier tipo de material, incluso aplicando una...
+  captured_at: '2026-09-11T17:36:34Z'
+  source_date: '2026-06-06'
+  target_release_date: '2025-12-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.3'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1

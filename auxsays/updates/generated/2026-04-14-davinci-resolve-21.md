@@ -20,7 +20,7 @@ update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
 update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 40 user reports found. User reports show a repeat pattern. Current reports mention render/export failures, installation problems, and performance slowdowns. Production editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production users should test before updating.'
-update_report_count: 53
+update_report_count: 54
 update_consensus_confidence: High
 status_change_type: new
 notification_message: ''
@@ -188,7 +188,7 @@ consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 official_source_captured: true
-confirmed_patch_specific_report_count: 53
+confirmed_patch_specific_report_count: 54
 known_issues_present: null
 official_checksums_body: ''
 source_last_checked: '2026-07-01T15:14:39Z'
@@ -221,8 +221,8 @@ official_source_attempts:
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-evidence_last_checked: '2026-09-10T17:36:53Z'
-record_last_updated: '2026-09-10T17:39:18.174230Z'
+evidence_last_checked: '2026-09-11T17:29:26Z'
+record_last_updated: '2026-09-11T17:32:02.081909Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
