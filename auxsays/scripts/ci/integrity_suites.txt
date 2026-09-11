@@ -40,6 +40,13 @@
 auxsays/scripts/tests/test_acrobat_vendor_authority.py = 49
 auxsays/scripts/tests/test_audit_consensus_evidence.py = 18
 auxsays/scripts/tests/test_automation_writeback.py = 134
+# A stored evidence row may not disappear, and may stop being accepted only by an audited in-place
+# withdrawal. Every in-tree gate compares the records against the SAME store a purge rewrote, so a
+# coherent 98% DaVinci deletion passed QA, the audit and this whole manifest, and the real writeback
+# pushed it. This suite drives the actual writeback against a throwaway bare origin, executes the
+# ci-integrity step against a stubbed git (it does not grep it), evaluates its concurrency group
+# per event, and pins no count of the live store.
+auxsays/scripts/tests/test_evidence_loss_guard.py = 80
 auxsays/scripts/tests/test_ci_integrity_runner.py = 39
 
 # --- PowerPoint collection expansion: same-author context + OfficeDev issues -----
@@ -53,7 +60,7 @@ auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
 auxsays/scripts/tests/test_collector_write_authority.py = 104
-auxsays/scripts/tests/test_davinci_bare_version_identity.py = 56
+auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
 # Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
 # scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
 # been searched once. Wiring is asserted from the AST, not by grepping the file, and a budget
