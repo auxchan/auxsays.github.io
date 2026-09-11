@@ -155,6 +155,10 @@ auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
 auxsays/scripts/tests/test_monitoring_status.py = 44
 auxsays/scripts/tests/test_orchestration_production_adoption.py = 75
 auxsays/scripts/tests/test_orchestration_r1.py = 55
+# Evaluates the cascade over the REAL rendered patch layout under both prefers-color-scheme values,
+# rather than grepping for a token. Needs ruby + liquid like the hierarchy suite; without them it
+# still reports all 64 checks, failing R1 and everything that depends on the render.
+auxsays/scripts/tests/test_patch_heading_contrast.py = 64
 auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
 auxsays/scripts/tests/test_patch_ingest_record_limit.py = 78
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
