@@ -28046,7 +28046,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-broken-file-history-after-ju
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -28076,7 +28075,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8973'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5996120-after-update-os-to-26200-8894-suffer-b
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -28105,7 +28103,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8894'
-
 - id: acrobat-25-001-20756-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-freezes-after-performing-any-operations-1506925
   product_id: adobe-acrobat-reader
   update_version: 25.001.20756
@@ -28132,7 +28129,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-installation-failure-1303160
   product_id: adobe-acrobat-pro
   update_version: 18.011.20055
@@ -28211,7 +28207,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20040-adobe-community-bug-report-https-community-adobe-com-questions-624-updating-adobe-acrobat-pro-dc-w-rum-675663
   product_id: adobe-acrobat-pro
   update_version: 18.011.20040
@@ -28238,7 +28233,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-9-after-update-i-can-t-open-any-pdf-form-from-irs-1312789
   product_id: adobe-acrobat-pro
   update_version: 17.012.20098
@@ -28291,7 +28285,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-012-20093-adobe-community-bug-report-https-community-adobe-com-questions-9-escript-api-is-crashing-on-i9-form-1309446
   product_id: adobe-acrobat-pro
   update_version: 17.012.20093
@@ -28318,7 +28311,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-installation-failure-1303160
   product_id: adobe-acrobat-reader
   update_version: 18.011.20055
@@ -28449,7 +28441,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-ie-plugin-doesn-t-save-file-on-network-path-dc-mui-update
   product_id: adobe-acrobat-reader
   update_version: 18.011.20040
@@ -28476,7 +28467,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20038-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-dc-not-letting-me-digitally-sign-a-document
   product_id: adobe-acrobat-reader
   update_version: 18.011.20038
@@ -28503,7 +28493,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-problem-opening-pdf-s-from-multiple-sources-1511892
   product_id: adobe-acrobat-reader
   update_version: 18.009.20044
@@ -28530,7 +28519,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-020-20042-adobe-community-bug-report-https-community-adobe-com-questions-12-app-v-5-package-for-reader-dc-rdrcef-stopped-working-inpa
   product_id: adobe-acrobat-reader
   update_version: 15.020.20042
@@ -28609,7 +28597,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-open-and-print-pdf-files-1507509
   product_id: adobe-acrobat-reader
   update_version: 15.020.20039
@@ -28636,7 +28623,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-017-20053-adobe-community-bug-report-https-community-adobe-com-questions-18-out-of-memory-errors-when-creating-pdf-from-entire-websit
   product_id: adobe-acrobat-reader
   update_version: 15.017.20053
@@ -28689,7 +28675,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-017-20050-adobe-community-bug-report-https-community-adobe-com-questions-18-problems-closing-acrobat-dc-599186
   product_id: adobe-acrobat-reader
   update_version: 15.017.20050
@@ -28716,7 +28701,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-016-20045-adobe-community-bug-report-https-community-adobe-com-questions-18-freezing-when-highlighting-pdfs-595574
   product_id: adobe-acrobat-reader
   update_version: 15.016.20045
@@ -28743,7 +28727,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-009-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-install-of-acrobat-dc-from-cc-menu-fails-1309404
   product_id: adobe-acrobat-pro
   update_version: 17.009.20058
@@ -28822,7 +28805,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-9-fill-sign-doesn-t-work-in-acrobat-pro-dc-but-does-in-acrob
   product_id: adobe-acrobat-pro
   update_version: 17.009.20044
@@ -28849,7 +28831,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-617-cannot-install-acrobat-pro-dc-windows-10-545456
   product_id: adobe-acrobat-pro
   update_version: 15.023.20053
@@ -28902,7 +28883,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-017-20053-adobe-community-bug-report-https-community-adobe-com-questions-18-out-of-memory-errors-when-creating-pdf-from-entire-websit
   product_id: adobe-acrobat-pro
   update_version: 15.017.20053
@@ -28955,7 +28935,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-016-20045-adobe-community-bug-report-https-community-adobe-com-questions-18-freezing-when-highlighting-pdfs-595574
   product_id: adobe-acrobat-pro
   update_version: 15.016.20045
@@ -28982,7 +28961,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-18-acrobat-dc-15-016-20039-crashes-600545
   product_id: adobe-acrobat-pro
   update_version: 15.016.20039
@@ -29113,7 +29091,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-010-20060-adobe-community-bug-report-https-community-adobe-com-questions-617-updating-acrobat-to-current-fails-465694
   product_id: adobe-acrobat-pro
   update_version: 15.010.20060
@@ -29140,7 +29117,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-617-cannot-install-adobe-acrobat-dc-for-mac-467906
   product_id: adobe-acrobat-pro
   update_version: 15.010.20056
@@ -29245,7 +29221,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-008-20082-adobe-community-bug-report-https-community-adobe-com-questions-617-error-installing-acrobatpro-dc-with-os-x-10-10-5-479044
   product_id: adobe-acrobat-pro
   update_version: 15.008.20082
@@ -29272,7 +29247,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-012-20093-adobe-community-bug-report-https-community-adobe-com-questions-9-escript-api-is-crashing-on-i9-form-1309446
   product_id: adobe-acrobat-reader
   update_version: 17.012.20093
@@ -29299,7 +29273,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-problems-with-reader-dc-17-009-20044-in-win7-1509831
   product_id: adobe-acrobat-reader
   update_version: 17.009.20044
@@ -29326,7 +29299,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-9-since-last-automatic-release-update-of-acrobat-dc-15-023-2
   product_id: adobe-acrobat-reader
   update_version: 15.023.20053
@@ -29353,7 +29325,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-very-slow-and-unresponsive-spinning-beach-ball
   product_id: adobe-acrobat-reader
   update_version: 15.016.20039
@@ -29510,7 +29481,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-617-cannot-install-adobe-acrobat-dc-for-mac-467906
   product_id: adobe-acrobat-reader
   update_version: 15.010.20056
@@ -29615,7 +29585,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-008-20082-adobe-community-bug-report-https-community-adobe-com-questions-12-windows-10-cannot-open-pdf-files-in-reader-dc-1507074
   product_id: adobe-acrobat-reader
   update_version: 15.008.20082
@@ -29668,7 +29637,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-20-006-20042-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-crashing-when-scanning-document-from-brother-mfc-890
   product_id: adobe-acrobat-pro
   update_version: 20.006.20042
@@ -29695,7 +29663,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-010-20091-adobe-community-bug-report-https-community-adobe-com-questions-9-postscript-crashing-since-last-update-acrobat-pro-dc-12357
   product_id: adobe-acrobat-pro
   update_version: 19.010.20091
@@ -29748,7 +29715,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-010-20064-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-pro-freezing-and-crashing-1234048
   product_id: adobe-acrobat-pro
   update_version: 19.010.20064
@@ -29827,7 +29793,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-012-20034-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-dc-19-012-20034-cannot-open-pdfs-in-ie-11-15
   product_id: adobe-acrobat-reader
   update_version: 19.012.20034
@@ -29880,7 +29845,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-010-20064-adobe-community-bug-report-https-community-adobe-com-questions-9-19-010-20064-not-responding-1233321
   product_id: adobe-acrobat-reader
   update_version: 19.010.20064
@@ -29959,7 +29923,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-008-20081-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-19-008-20081-non-responsive-1234346
   product_id: adobe-acrobat-reader
   update_version: 19.008.20081
@@ -29986,7 +29949,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-008-20080-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-crash-when-moving-between-2-monitors-mac-os-x-moja
   product_id: adobe-acrobat-reader
   update_version: 19.008.20080
@@ -30039,7 +30001,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-008-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-reader-dc-fill-sign-in-infinite-loading-loop
   product_id: adobe-acrobat-reader
   update_version: 19.008.20074
@@ -30066,7 +30027,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-dc-hangs-when-opening-files-on-corporate-net
   product_id: adobe-acrobat-reader
   update_version: 18.011.20058
@@ -30093,7 +30053,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-9-after-update-i-can-t-open-any-pdf-form-from-irs-1312789
   product_id: adobe-acrobat-reader
   update_version: 17.012.20098
@@ -30172,7 +30131,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-20-013-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-freezes-during-creating-comments-1255710
   product_id: adobe-acrobat-pro
   update_version: 20.013.20074
@@ -30225,7 +30183,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-20-009-20067-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-still-crashing-after-installing-20-0
   product_id: adobe-acrobat-reader
   update_version: 20.009.20067
@@ -30252,7 +30209,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-20-006-20042-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-crashing-when-scanning-document-from-brother-mfc-890
   product_id: adobe-acrobat-reader
   update_version: 20.006.20042
@@ -30331,7 +30287,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-24-002-20857-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-acrobat-fill-and-sign-feature-crashes-program-1294
   product_id: adobe-acrobat-reader
   update_version: 24.002.20857
@@ -30358,7 +30313,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-20-013-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-cant-install-acrobat-dc-in-cc-1254918
   product_id: adobe-acrobat-reader
   update_version: 20.013.20074
@@ -30385,7 +30339,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-021-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-install-font-pack-1902120058-or-1500720033-on-a
   product_id: adobe-acrobat-reader
   update_version: 19.021.20058
@@ -30412,7 +30365,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-021-20049-adobe-community-bug-report-https-community-adobe-com-questions-9-cannot-install-acrobat-adobe-reader-dc-i-have-tried-all-th
   product_id: adobe-acrobat-reader
   update_version: 19.021.20049
@@ -30439,7 +30391,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-012-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-fails-to-print-intermittently-for-one-user-1
   product_id: adobe-acrobat-reader
   update_version: 19.012.20040
@@ -30466,7 +30417,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-21-005-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-has-stopped-working-1524070
   product_id: adobe-acrobat-reader
   update_version: 21.005.20058
@@ -30493,7 +30443,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-21-005-20048-adobe-community-bug-report-https-community-adobe-com-questions-12-there-is-a-problem-with-acrobat-reader-if-it-is-running-p
   product_id: adobe-acrobat-reader
   update_version: 21.005.20048
@@ -30546,7 +30495,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5997991-file-history-problems-after-installing
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -30576,7 +30524,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5997567-unusual-windows-update-experience-has
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -30606,7 +30553,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.9278'
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vvfejj-why-is-davinci-resolve-21-studio-crashing
   product_id: blackmagic-davinci
   update_version: '21'
@@ -30703,7 +30649,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rrpstt-slow-performance-on-a-semi-beefy-pc
   product_id: blackmagic-davinci
   update_version: 20.3.2
@@ -30752,7 +30697,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v5o79j-davinci-resolve-2021-unsupported-gpu-proc
   product_id: blackmagic-davinci
   update_version: 20.2.2
@@ -30777,7 +30721,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-file-history-problems-after
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -30807,7 +30750,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wbshk6-is-resolve-211-finally-stable-enough-to-u
   product_id: blackmagic-davinci
   update_version: '21'
@@ -30904,7 +30846,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1slsb48-freeze-pink-screen-hard-reboot
   product_id: blackmagic-davinci
   update_version: 20.3.2
@@ -30929,7 +30870,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v3hmr0-effects-slowing-down-davinci-resolve-rend
   product_id: blackmagic-davinci
   update_version: 21.0.1
@@ -30954,7 +30894,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-3-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vjq4ae-screenshotsexports-of-the-color-page-view
   product_id: blackmagic-davinci
   update_version: 20.3.3
@@ -30979,7 +30918,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v434gz-m4-pro-macbook-pro-can-barely-play-resolv
   product_id: blackmagic-davinci
   update_version: '21'
@@ -31004,7 +30942,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vz43jt-crashing-when-sending-video-over-decklink
   product_id: blackmagic-davinci
   update_version: 20.3.2
@@ -31053,7 +30990,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vpu8os-unusable-level-of-lag-on-m4-pro-and-ive-t
   product_id: blackmagic-davinci
   update_version: '21'
@@ -31102,7 +31038,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-26h1-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998459-kb5124008-win-11-25h2-build-26200-9445
   product_id: microsoft-windows-11
   update_version: 26H1
@@ -31133,7 +31068,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '28000.2954'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998917-kb5124008-26200-9445-breaks-machine-se
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -31221,7 +31155,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998897-file-explorer-reverts-to-legacy-window
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -31252,7 +31185,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9278'
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w3otmy-is-the-resolve-site-broken
   product_id: blackmagic-davinci
   update_version: '21'
@@ -31301,7 +31233,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1utwlro-small-red-section-at-the-beginning-of-the
   product_id: blackmagic-davinci
   update_version: '20'
@@ -31323,6 +31254,27 @@ evidence:
   issue_theme: render/export failure
   workflow_area: render/export
   platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-31-1-1-github-issue-13888
+  product_id: obs-studio
+  update_version: 31.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13888
+  parent_title: 'libobs-d3d11: gs_vertexbuffer_destroy leaves curVertexBuffer dangling; use-after-free crash in update_async_texrender when a plugin uses gs_render_start(true)'
+  report_title: 'libobs-d3d11: gs_vertexbuffer_destroy leaves curVertexBuffer dangling; use-after-free crash in update_async_texrender when a plugin uses gs_render_start(true)'
+  report_text_excerpt: 's driver independent, reproduced before and after a driver update) ### OBS Studio version 31.1.1 (also present in current master as far as we can tell from the source) ### Summary `gs_vertexbuffer_destroy` in libobs-d3d11 clears the device''s `lastVertexBuffer` cache but not `curV'
+  captured_at: '2026-09-11T05:58:40Z'
+  patch_version_matched: true
+  matched_version: 31.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
   severity: medium
   sentiment: negative
   source_weight: 1
