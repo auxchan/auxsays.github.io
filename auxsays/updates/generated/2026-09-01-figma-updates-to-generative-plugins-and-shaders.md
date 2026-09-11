@@ -17,8 +17,8 @@ update_version: Updates to generative plugins and shaders
 update_logo_text: FIG
 update_published_at: '2026-09-01T00:00:00.000Z'
 update_last_checked: '2026-09-01T17:36:56Z'
-source_last_checked: '2026-09-11T18:54:45Z'
-official_body_last_checked: '2026-09-11T18:54:45Z'
+source_last_checked: '2026-09-11T23:04:48Z'
+official_body_last_checked: '2026-09-11T23:04:48Z'
 record_last_updated: '2026-09-01T17:36:56Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,11 +71,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-09-10T19:46:43Z'
-  url: https://www.figma.com/release-notes/?title=updates-to-generative-plugins-shaders
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-09-10T23:13:05Z'
   url: https://www.figma.com/release-notes/?title=updates-to-generative-plugins-shaders
   status: captured-from-rss-feed
@@ -92,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-11T18:54:45Z'
+  url: https://www.figma.com/release-notes/?title=updates-to-generative-plugins-shaders
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-11T23:04:48Z'
   url: https://www.figma.com/release-notes/?title=updates-to-generative-plugins-shaders
   status: captured-from-rss-feed
   body_captured: true
