@@ -25,6 +25,7 @@ ALIASES = {
     "bds-firm-death-establishments": "firm-age-size-vulnerability",
     "bds-firm-death-employment": "firm-death-shutdown-stress",
     "business-formations-four-quarters": "business-formation",
+    "business-formations": "business-formation",
 }
 
 
@@ -52,6 +53,8 @@ def build_audit(config_root: Path) -> dict[str, Any]:
     bls_dol = load(config_root / "layoffs" / "sources_bls_dol.json")
     census = load(config_root / "layoffs" / "sources_census.json")
     context = load(config_root / "layoffs" / "sources_bea_fed_courts.json")
+    dispositions = load(config_root / "layoffs" / "source_only_dispositions.json")
+    disposition_by_id = {row["sourceOnlyId"]: row for row in dispositions["records"]}
 
     class_by_id = {row["canonicalFactorId"]: row for row in classes["factors"]}
     child_ids = {row["canonicalFactorId"] for group in taxonomy["groups"] for row in group["placements"]}
@@ -88,8 +91,11 @@ def build_audit(config_root: Path) -> dict[str, Any]:
 
     for source in census["sources"]:
         for row in source["series"]:
-            for placement in row["placement_candidates"]:
-                factor_id = canonical_id(f"factor:{placement}")
+            source_factor_id = canonical_id(row["canonical_factor"])
+            configured_targets = [f"factor:{placement}" for placement in row["placement_candidates"]]
+            if source_factor_id in child_ids:
+                configured_targets.insert(0, row["canonical_factor"])
+            for factor_id in dict.fromkeys(canonical_id(target) for target in configured_targets):
                 record = state.setdefault(factor_id, _blank_state(factor_id, row["label"], "SOURCE_ONLY"))
                 role = _role_for(
                     factor_id, class_by_id, source_id=source["source_id"],
@@ -145,11 +151,26 @@ def build_audit(config_root: Path) -> dict[str, Any]:
     activation_counts = Counter(row["activationState"] for row in records)
     role_counts = Counter(binding["role"] for row in records for binding in row["sourceBindings"])
     orphan_ids = [row["canonicalFactorId"] for row in records if row["recordKind"] == "SOURCE_ONLY"]
-    if len(records) != 77 or len(canonical_rows) != 64:
-        raise ValueError("Layoffs source audit no longer matches the reviewed 77-state/64-factor boundary")
+    superseded_alias_ids = {
+        factor_id for factor_id, disposition in disposition_by_id.items()
+        if disposition["disposition"] == "ALIAS_SUPERSEDED"
+    }
+    if set(orphan_ids) | superseded_alias_ids != set(disposition_by_id):
+        missing = sorted(set(orphan_ids) - set(disposition_by_id))
+        stale = sorted(set(disposition_by_id) - (set(orphan_ids) | superseded_alias_ids))
+        raise ValueError(
+            "source-only disposition registry does not match the audited source-only identities; "
+            f"missing={missing}; stale={stale}; orphans={sorted(orphan_ids)}"
+        )
+    for row in records:
+        if row["recordKind"] == "SOURCE_ONLY":
+            row["sourceOnlyDisposition"] = disposition_by_id[row["canonicalFactorId"]]
+    disposition_counts = Counter(disposition_by_id[factor_id]["disposition"] for factor_id in orphan_ids)
+    if len(records) != 76 or len(canonical_rows) != 64:
+        raise ValueError("Layoffs source audit no longer matches the reviewed 76-state/64-factor boundary")
     return {
         "schemaVersion": "layoffs-level4-canonical-audit-1.0.0",
-        "generatedAt": "2026-09-09T00:00:00Z",
+        "generatedAt": "2026-09-10T00:00:00Z",
         "authority": "REVIEW_EVIDENCE_ONLY",
         "promotionAuthority": "NONE",
         "counts": {
@@ -161,16 +182,23 @@ def build_audit(config_root: Path) -> dict[str, Any]:
             "sourceIdentifiedPlaceholders": sum(not row["sourceBindings"] for row in records),
             "expandedSourceBindings": sum(len(row["sourceBindings"]) for row in records),
             "sourceOnlyRecords": len(orphan_ids),
+            "sourceOnlyRecordsWithDisposition": len(orphan_ids),
+            "sourceOnlyIdentitiesReviewed": len(disposition_by_id),
+            "supersededSourceOnlyAliases": len(superseded_alias_ids),
+            "sourceOnlyDispositionTypes": dict(sorted(disposition_counts.items())),
             "activationStates": dict(sorted(activation_counts.items())),
             "sourceRoles": dict(sorted(role_counts.items())),
         },
         "reconciliation": {
-            "explanation": "The reported 77 are UI-side factor/source state records, not 77 unique Level-4 factors and not 77 acquisition adapters. They comprise in-taxonomy Level-3/Level-4 identities plus source-only records created by configured series that do not resolve to a current taxonomy identity.",
+            "explanation": "The historical 77 count described UI-side factor/source state records, not 77 unique Level-4 factors or acquisition adapters. Canonicalizing the plural business-formations alias leaves 76 active records: the in-taxonomy identities plus eight explicitly typed source-only inputs/context records.",
             "actualCanonicalLevel4FactorCount": 64,
             "actualExpandedAcquisitionBindingCount": sum(len(row["sourceBindings"]) for row in records),
             "sourceIdentifiedRecordsWithoutBinding": [row["canonicalFactorId"] for row in records if not row["sourceBindings"]],
             "sourceOnlyRecords": orphan_ids,
-            "requiredCleanup": "Source-only records must be canonicalized, retained explicitly as CALC input, or removed through review before this pattern is copied to other branches."
+            "sourceOnlyDispositions": [disposition_by_id[factor_id] for factor_id in orphan_ids],
+            "supersededAliasDispositions": [disposition_by_id[factor_id] for factor_id in sorted(superseded_alias_ids)],
+            "allReviewedDispositions": [disposition_by_id[factor_id] for factor_id in sorted(disposition_by_id)],
+            "requiredCleanup": "All nine reported identities now have an explicit non-activating alias, calculation-input, or context-only disposition. The plural business-formations binding canonicalizes to the visible singular factor while preserving the legacy identity in this disposition registry."
         },
         "canonicalFactors": canonical_rows,
         "factorSourceStateRecords": records,
@@ -253,7 +281,7 @@ def render_markdown(audit: dict[str, Any]) -> str:
         f"- {counts['sourceIdentifiedPlaceholders']} source-identified placeholders without a configured binding.",
         f"- {counts['sourceOnlyRecords']} configured source identities outside the current taxonomy.",
         "",
-        "The historical `77 source profiles` label was imprecise: 77 is the size of the UI-side factor/source-state map, not the number of canonical factors or acquisition adapters. The machine-readable reconciliation is `data/config/layoffs/level4_source_profile_roles.json`.",
+        "The historical `77 source profiles` label was imprecise: 77 was the pre-cleanup UI-side factor/source-state count, not the number of canonical factors or acquisition adapters. Canonicalizing the legacy plural business-formations identity leaves 76 active records and preserves all nine reviewed dispositions in `data/config/layoffs/source_only_dispositions.json`.",
         "",
         "## All 64 canonical factors",
         "",
@@ -283,10 +311,13 @@ def render_markdown(audit: dict[str, Any]) -> str:
         "The following source-only records do not resolve to a current taxonomy identity and therefore cannot remain unexplained:",
         "",
     ]
-    lines.extend(f"- `{factor_id}`" for factor_id in audit["reconciliation"]["sourceOnlyRecords"])
+    lines.extend(
+        f"- `{row['sourceOnlyId']}` — **{row['disposition']}**; target `{row['canonicalTarget']}`; no activation effect."
+        for row in audit["reconciliation"]["allReviewedDispositions"]
+    )
     lines += [
         "",
-        "`business-formations` is a legacy plural alias and should canonicalize to the singular factor after review. The four BED gain/opening records and four Courts chapter records are useful calculation/corroboration inputs, but they are not current Level-4 placements and must remain explicitly typed as such.",
+        "`business-formations` is now canonicalized to the singular factor while its legacy identity remains recorded. Three BED component records are calculation-input-only; BED gross gains and the four Courts chapter records are context-only. None becomes a new Level-4 placement, accepted formula input, or accepted observation.",
         "",
         "## Promotion boundary",
         "",

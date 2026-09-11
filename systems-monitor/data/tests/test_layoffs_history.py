@@ -104,6 +104,8 @@ class LayoffsHistoryTests(unittest.TestCase):
         self.assertEqual("↑", change["directionGlyph"])
         self.assertEqual("UNKNOWN", change["materiality"]["status"])
         self.assertFalse(change["economicSignalEligible"])
+        self.assertEqual("UNKNOWN", change["destinationImpact"]["status"])
+        self.assertFalse(change["forecastVintageEligible"])
         interpretation = deterministic_interpretation(
             change,
             source_measure="BLS JOLTS layoffs and discharges, seasonally adjusted.",
@@ -143,6 +145,56 @@ class LayoffsHistoryTests(unittest.TestCase):
         self.assertEqual("1680", latest[0]["value"])
         self.assertEqual(1, latest[0]["revisionNumber"])
         self.assertEqual(original[0]["observationId"], latest[0]["supersedesObservationId"])
+
+    def test_forecast_replay_excludes_current_revised_history(self):
+        rows = promote_candidate_batch(
+            batch(candidate("2026-06", "1700", "R1", "2026-07-01T12:00:00Z", "2026-07-01T12:01:00Z")),
+            authorized_ledger(),
+            accepted_at="2026-07-01T12:02:00Z",
+        )
+        self.assertEqual("CURRENT_REVISED_HISTORY", rows[0]["historyUseClass"])
+        self.assertEqual([], observations_as_of(rows, mode="FORECAST_AS_OF", cutoff="2026-08-01T00:00:00Z"))
+
+    def test_forecast_replay_requires_explicit_authorized_vintage_class(self):
+        ledger = authorized_ledger()
+        ledger["rules"][0].update({
+            "historyUseClass": "VINTAGE_RECONSTRUCTED",
+            "forecastVintageEligible": True,
+            "vintageEvidenceId": "archive-artifact:test-jolts-r1",
+        })
+        rows = promote_candidate_batch(
+            batch(candidate("2026-06", "1700", "R1", "2026-07-01T12:00:00Z", "2026-07-01T12:01:00Z")),
+            ledger,
+            accepted_at="2026-07-01T12:02:00Z",
+        )
+        replay = observations_as_of(rows, mode="FORECAST_AS_OF", cutoff="2026-08-01T00:00:00Z")
+        self.assertEqual(1, len(replay))
+        self.assertTrue(replay[0]["forecastVintageEligible"])
+
+    def test_materiality_registry_without_accepted_governance_stays_unknown(self):
+        rows = promote_candidate_batch(
+            batch(
+                candidate("2026-06", "1700", "R1", "2026-07-01T12:00:00Z", "2026-07-01T12:01:00Z"),
+                candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z"),
+            ),
+            authorized_ledger(),
+            accepted_at="2026-08-01T12:02:00Z",
+        )
+        registry = {
+            "authority": "ARBITRARY",
+            "profiles": [{
+                "sourceSeriesId": "JTS000000000000000LDL",
+                "frequency": "monthly",
+                "absoluteDeltaThreshold": "1",
+            }],
+        }
+        change = comparable_change(
+            rows,
+            canonical_factor_id="factor:canonical:layoffs-and-discharges",
+            source_series_id="JTS000000000000000LDL",
+            materiality_profiles=registry,
+        )
+        self.assertEqual("UNKNOWN", change["materiality"]["status"])
 
     def test_immutable_identity_and_artifact_hash_are_enforced(self):
         rows = promote_candidate_batch(

@@ -20,16 +20,21 @@ class LayoffsLevel4AuditTests(unittest.TestCase):
         actual = json.loads(AUDIT_PATH.read_text(encoding="utf-8"))
         self.assertEqual(expected, actual)
 
-    def test_reconciles_64_factors_100_placements_and_77_ui_state_records(self):
+    def test_reconciles_64_factors_100_placements_and_76_active_ui_state_records(self):
         audit = json.loads(AUDIT_PATH.read_text(encoding="utf-8"))
         counts = audit["counts"]
         self.assertEqual(64, counts["canonicalLevel4Factors"])
         self.assertEqual(100, counts["level4Placements"])
-        self.assertEqual(77, counts["factorSourceStateRecords"])
+        self.assertEqual(76, counts["factorSourceStateRecords"])
         self.assertEqual(48, counts["expandedSourceBindings"])
         self.assertEqual(42, counts["recordsWithSourceBindings"])
-        self.assertEqual(35, counts["sourceIdentifiedPlaceholders"])
-        self.assertEqual(9, counts["sourceOnlyRecords"])
+        self.assertEqual(34, counts["sourceIdentifiedPlaceholders"])
+        self.assertEqual(8, counts["sourceOnlyRecords"])
+        self.assertEqual(8, counts["sourceOnlyRecordsWithDisposition"])
+        self.assertEqual(9, counts["sourceOnlyIdentitiesReviewed"])
+        self.assertEqual(1, counts["supersededSourceOnlyAliases"])
+        self.assertEqual(0, len(audit["reconciliation"]["sourceOnlyRecords"]) - len(audit["reconciliation"]["sourceOnlyDispositions"]))
+        self.assertTrue(all(row["decisionStatus"] == "IMPLEMENTED_NON_ACTIVATING" for row in audit["reconciliation"]["allReviewedDispositions"]))
         self.assertEqual(100, sum(row["placementCount"] for row in audit["canonicalFactors"]))
 
     def test_every_binding_has_an_explicit_role_and_every_factor_is_classified(self):

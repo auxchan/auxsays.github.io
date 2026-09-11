@@ -9,7 +9,8 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-REPLAY_MODES = {"PUBLICLY_AVAILABLE_AS_OF", "OPERATIONALLY_KNOWN_AS_OF", "LATEST_REVISED_TRUTH"}
+REPLAY_MODES = {"PUBLICLY_AVAILABLE_AS_OF", "OPERATIONALLY_KNOWN_AS_OF", "LATEST_REVISED_TRUTH", "FORECAST_AS_OF"}
+FORECAST_HISTORY_CLASSES = {"ORIGINAL_RELEASE_VALUE", "VINTAGE_RECONSTRUCTED"}
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 REQUIRED_RULE_FIELDS = {
     "ruleId",
@@ -77,6 +78,9 @@ def load_acceptance_ledger(path: Path) -> dict[str, Any]:
         _utc(rule["effectiveFrom"])
         if rule["authority"] != ledger["authority"] or rule["authority"] in {"", "NONE"} or rule["rightsState"] != "ALLOW":
             raise ValueError("history acceptance rule lacks authority or accepted rights")
+        if rule.get("forecastVintageEligible"):
+            if rule.get("historyUseClass") not in FORECAST_HISTORY_CLASSES or not rule.get("vintageEvidenceId"):
+                raise ValueError("forecast-vintage acceptance rule lacks exact vintage authority")
     return ledger
 
 
@@ -155,9 +159,11 @@ def observations_as_of(
     eligible: list[dict[str, Any]] = []
     for row in history:
         _validate_accepted_observation(row)
-        if mode == "PUBLICLY_AVAILABLE_AS_OF" and _utc(row["publicTime"]) > cutoff_time:
+        if mode in {"PUBLICLY_AVAILABLE_AS_OF", "FORECAST_AS_OF"} and _utc(row["publicTime"]) > cutoff_time:
             continue
         if mode == "OPERATIONALLY_KNOWN_AS_OF" and _utc(row["acceptedTime"]) > cutoff_time:
+            continue
+        if mode == "FORECAST_AS_OF" and not _forecast_row_eligible(row):
             continue
         eligible.append(dict(row))
     latest: dict[tuple[str, str, str], dict[str, Any]] = {}
@@ -213,8 +219,18 @@ def comparable_change(
         "percentDelta": None if percent is None else str(percent.quantize(Decimal("0.0001"))),
         "direction": direction,
         "directionGlyph": {"UP": "↑", "DOWN": "↓", "FLAT": "→"}[direction],
+        "magnitude": {
+            "absoluteDelta": str(delta),
+            "percentDelta": None if percent is None else str(percent.quantize(Decimal("0.0001"))),
+            "unit": current["unit"],
+        },
         "revisionFlag": current["revisionNumber"] > 0,
         "materiality": materiality,
+        "destinationImpact": {
+            "status": "UNKNOWN",
+            "reason": "NO_ACCEPTED_DESTINATION_CONTEXT_RELATIONSHIP",
+        },
+        "forecastVintageEligible": _forecast_row_eligible(previous) and _forecast_row_eligible(current),
         "replayMode": mode,
         "knowledgeCutoff": cutoff,
         "economicSignalEligible": False,
@@ -317,6 +333,10 @@ def _accepted_observation(
         "acceptanceRuleId": rule["ruleId"],
         "acceptanceAuthority": rule["authority"],
         "rightsState": rule["rightsState"],
+        "historyUseClass": rule.get("historyUseClass", "CURRENT_REVISED_HISTORY"),
+        "forecastVintageEligible": bool(rule.get("forecastVintageEligible", False)),
+        "vintageEvidenceId": rule.get("vintageEvidenceId"),
+        "sourceRevisionStatus": candidate.get("revision_status", "UNKNOWN"),
     }
     row["objectHash"] = _sha(row)
     _validate_accepted_observation(row)
@@ -341,6 +361,11 @@ def _validate_accepted_observation(row: dict[str, Any]) -> None:
         raise ValueError("accepted history observation requires HTTPS provenance")
     if not (_utc(row["publicTime"]) <= _utc(row["retrievedTime"]) <= _utc(row["acceptedTime"])):
         raise ValueError("accepted observation time ordering is invalid")
+    if row.get("forecastVintageEligible"):
+        if row.get("historyUseClass") not in FORECAST_HISTORY_CLASSES:
+            raise ValueError("forecast-eligible observation has an ineligible history class")
+        if row.get("publicationTimeKind") != "official" or not row.get("vintageEvidenceId"):
+            raise ValueError("forecast-eligible observation lacks official vintage evidence")
     _decimal(row["value"])
     _period_key(row["validTime"], row["frequency"])
     expected = _sha({key: value for key, value in row.items() if key != "objectHash"})
@@ -354,24 +379,48 @@ def _materiality(
     percent: Decimal | None,
     registry: dict[str, Any] | None,
 ) -> dict[str, Any]:
-    if not registry or registry.get("authority") == "NONE":
+    if not registry or registry.get("authority") == "NONE" or registry.get("status") != "ACCEPTED":
         return {"status": "UNKNOWN", "reason": "UNAVAILABLE_PENDING_GOVERNANCE", "profileId": None}
     matches = [
         row for row in registry.get("profiles", [])
-        if row.get("sourceSeriesId") == current["sourceSeriesId"] and row.get("frequency") == current["frequency"]
+        if row.get("decisionStatus") == "ACCEPTED"
+        and row.get("authority") == registry.get("authority")
+        and row.get("canonicalFactorId") == current["canonicalFactorId"]
+        and row.get("sourceSeriesId") == current["sourceSeriesId"]
+        and row.get("frequency") == current["frequency"]
+        and row.get("unit") == current["unit"]
+        and row.get("geography") == current["geography"]
+        and row.get("seasonalAdjustment") == current["seasonalAdjustment"]
+        and row.get("profileVersion")
+        and row.get("effectiveFrom")
     ]
     if len(matches) != 1:
         return {"status": "UNKNOWN", "reason": "NO_UNIQUE_PROFILE", "profileId": None}
     profile = matches[0]
+    try:
+        _utc(profile["effectiveFrom"])
+    except ValueError:
+        return {"status": "UNKNOWN", "reason": "INVALID_PROFILE_EFFECTIVE_TIME", "profileId": None}
     threshold = _decimal(profile["absoluteDeltaThreshold"])
+    if not threshold.is_finite() or threshold <= 0 or not profile.get("profileId"):
+        return {"status": "UNKNOWN", "reason": "INVALID_GOVERNED_THRESHOLD", "profileId": None}
     status = "MATERIAL" if abs(delta) >= threshold else "NOT_MATERIAL"
     return {"status": status, "reason": "ABSOLUTE_DELTA_THRESHOLD", "profileId": profile["profileId"], "threshold": str(threshold)}
 
 
 def _revision_key(row: dict[str, Any], mode: str) -> tuple[Any, ...]:
-    if mode == "PUBLICLY_AVAILABLE_AS_OF":
+    if mode in {"PUBLICLY_AVAILABLE_AS_OF", "FORECAST_AS_OF"}:
         return (_utc(row["publicTime"]), row["revisionNumber"], row["observationId"])
     return (_utc(row["acceptedTime"]), row["revisionNumber"], row["observationId"])
+
+
+def _forecast_row_eligible(row: dict[str, Any]) -> bool:
+    return (
+        row.get("forecastVintageEligible") is True
+        and row.get("historyUseClass") in FORECAST_HISTORY_CLASSES
+        and row.get("publicationTimeKind") == "official"
+        and bool(row.get("vintageEvidenceId"))
+    )
 
 
 def _period_key(value: str, frequency: str) -> tuple[int, int, int]:

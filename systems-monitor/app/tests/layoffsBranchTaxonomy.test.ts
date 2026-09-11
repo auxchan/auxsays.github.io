@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import taxonomyRegistry from "../../data/config/layoffs/taxonomy.json";
 import claimClassRegistry from "../../data/config/layoffs/level4_claim_classes.json";
-import { LAYOFFS_CLASSIFIED_LEVEL4_FACTOR_COUNT, layoffsFactorSourceState } from "../src/data/layoffsBranchReadModel";
+import { LAYOFFS_CLASSIFIED_LEVEL4_FACTOR_COUNT, layoffsFactorSourceState, layoffsFactorSourceStates } from "../src/data/layoffsBranchReadModel";
 import { layoffsBranchTaxonomy } from "../src/data/layoffsBranchTaxonomy";
 import { createPersistentWorld, persistentWorldPlacementLabel, persistentWorldResolvePlacementId } from "../src/data/persistentWorldModel";
 
@@ -106,5 +106,13 @@ describe("Layoffs & Job Destruction canonical hierarchy", () => {
         rationale: row.rationale
       });
     });
+  });
+
+  it("canonicalizes the legacy plural business-formations source identity without adding a source-only node", () => {
+    expect(Object.keys(layoffsFactorSourceStates)).toHaveLength(76);
+    expect(layoffsFactorSourceState("factor:canonical:business-formations")).toBeUndefined();
+    expect(layoffsFactorSourceState("factor:canonical:business-formation")?.series).toEqual(
+      expect.arrayContaining([expect.objectContaining({ sourceId: "census-bfs", seriesId: "BFS:T:BF_BF4Q:SA" })])
+    );
   });
 });

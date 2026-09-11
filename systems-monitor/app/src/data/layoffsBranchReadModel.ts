@@ -57,7 +57,8 @@ const configuredAliases: Readonly<Record<string, string>> = Object.freeze({
   "bds-firm-deaths": "firm-deaths",
   "bds-firm-death-establishments": "firm-age-size-vulnerability",
   "bds-firm-death-employment": "firm-death-shutdown-stress",
-  "business-formations-four-quarters": "business-formation"
+  "business-formations-four-quarters": "business-formation",
+  "business-formations": "business-formation"
 });
 
 function canonicalId(configured: string) {
@@ -93,8 +94,10 @@ for (const row of blsDolRegistry.series) {
 
 for (const source of censusRegistry.sources) {
   for (const row of source.series) {
-    for (const placement of row.placement_candidates) {
-      const id = canonicalId(`factor:${placement}`);
+    const sourceFactorId = canonicalId(row.canonical_factor);
+    const canonicalTargets = new Set(row.placement_candidates.map((placement) => canonicalId(`factor:${placement}`)));
+    if (mutable.has(sourceFactorId)) canonicalTargets.add(sourceFactorId);
+    for (const id of canonicalTargets) {
       const state = mutable.get(id) ?? { activationState: "SOURCE_IDENTIFIED" as const, series: [] };
       state.series.push({ sourceId: source.source_id, seriesId: row.source_series_id, label: row.label, unit: row.unit, cadence: source.cadence, adjustment: row.seasonal_adjustment, evidenceUrl: source.evidence_url, methodologyUrl: source.methodology_url });
       state.activationState = "BLOCKED";

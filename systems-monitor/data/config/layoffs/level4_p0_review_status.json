@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "level4-p0-review-status-0.2.0",
+  "schemaVersion": "level4-p0-review-status-0.3.0",
   "scope": "Layoffs & Job Destruction",
-  "asOfStartingCommit": "9815a89e37d0f684145a74acfbcb4067e5f46a90",
+  "asOfStartingCommit": "a5766b12a534db186bb6e55f850de5cd4d5f964c",
   "authority": "REVIEW_EVIDENCE_ONLY",
   "promotionAuthority": "NONE",
   "taxonomy": {
@@ -23,25 +23,37 @@
     "note": "All 64 canonical factors have an explicit A/B/C/D classification. Classification does not accept or publish an observation, history, calculation, or relationship."
   },
   "sourcePosture": {
-    "profiledRecords": 77,
+    "profiledRecords": 76,
     "profiledRecordMeaning": "UI-side factor/source state records, not unique canonical factors or acquisition adapters",
     "expandedAcquisitionBindings": 48,
     "recordsWithSourceBindings": 42,
-    "sourceIdentifiedPlaceholders": 35,
-    "sourceOnlyRecordsOutsideCurrentTaxonomy": 9,
+    "sourceIdentifiedPlaceholders": 34,
+    "sourceOnlyRecordsOutsideCurrentTaxonomy": 8,
+    "sourceOnlyIdentitiesReviewed": 9,
+    "supersededSourceOnlyAliases": 1,
     "ACCEPTED": 1,
     "SOURCE_ENABLED_PENDING_ACCEPTANCE": 17,
     "BLOCKED": 24,
-    "SOURCE_IDENTIFIED": 35,
+    "SOURCE_IDENTIFIED": 34,
     "recordsWithExactSeriesTableOrSelector": 42,
     "acceptedExternalObservationRefs": 1
   },
   "history": {
     "acceptedComparableHistoriesForNewLevel4Factors": 0,
-    "status": "REVISION_SAFE_BACKBONE_IMPLEMENTED_ACCEPTANCE_BLOCKED",
+    "status": "REVISION_SAFE_BACKBONE_AND_CLOSED_ACCEPTANCE_SIMULATOR_IMPLEMENTED_NOT_ACTIVATED",
     "acceptanceAuthority": "NONE",
     "materialityAuthority": "NONE",
-    "note": "Candidate history can now be retained and replayed without overwrite, but no new observation can be promoted until an explicit governed acceptance rule exists."
+    "candidateBatchRows": 282,
+    "exactProposedScopeRows": 200,
+    "decisionReadyRowsIfTaylorApproves": 154,
+    "contingentRows": 33,
+    "blockedRows": 13,
+    "outsideProposedScopeRows": 82,
+    "forecastVintageEligibleRows": 0,
+    "decisionReadyExactSeries": 8,
+    "descriptiveSeriesAfterPreconditions": 9,
+    "structurallyComparableSeriesIfAllBlockersResolve": 12,
+    "note": "The simulator writes no accepted data. Taylor authority is still required; DOL additionally requires accepted-seed migration and freshness/release-identity repair, while BED is blocked by missing central source/rights policy."
   },
   "relationships": {
     "hierarchyTethersInWholeWorld": 1110,
@@ -63,7 +75,9 @@
     "routeIllumination": "IMPLEMENTED_REQUIRES_HUMAN_QA",
     "explorationBackForward": "IMPLEMENTED_REQUIRES_HUMAN_QA",
     "searchAndJump": "IMPLEMENTED_REQUIRES_HUMAN_QA",
-    "progressiveInspector": "IMPLEMENTED_REQUIRES_HUMAN_QA"
+    "progressiveInspector": "IMPLEMENTED_REQUIRES_HUMAN_QA",
+    "temporalHistoryPresentation": "READY_FOR_ACCEPTED_HISTORY_INTEGRATION_BUT_NO_ACCEPTED_HISTORY_EXISTS",
+    "forecastVintageStatusPresentation": "MODEL_READY_UI_NOT_WIRED"
   },
   "humanQa": {
     "HUMAN_LEVEL4_LAYOFFS_QA": "PENDING",
@@ -73,11 +87,13 @@
   "blockers": [
     "L4-002_ACCEPTED_COMPARABLE_HISTORY_MISSING",
     "L4-003_ACCEPTED_STRUCTURAL_RELATIONSHIPS_MISSING",
-    "L4-004_NINE_SOURCE_ONLY_RECORDS_REQUIRE_CANONICALIZATION_OR_REVIEW_REMOVAL",
     "L4-005_NON_BLS_DOL_COLLECTOR_ACTIVATION_REQUIRES_APPROVED_SELECTORS_OR_CREDENTIALS",
     "L4-006_OBSERVATION_ACCEPTANCE_AUTHORITY_NONE",
     "L4-007_MATERIALITY_PROFILES_REQUIRE_GOVERNED_THRESHOLDS",
     "L4-008_BEA_LIVE_INTAKE_BLOCKED_MISSING_AUXSAYS_BEA_USER_ID",
-    "L4-009_INDUSTRY_TO_COMMODITY_HANDOFF_NOT_IMPLEMENTED_OR_ACCEPTED"
+    "L4-009_INDUSTRY_TO_COMMODITY_HANDOFF_NOT_IMPLEMENTED_OR_ACCEPTED",
+    "L4-010_BED_CENTRAL_SOURCE_AND_RIGHTS_POLICY_MISSING",
+    "L4-011_DOL_ACCEPTED_SEED_MIGRATION_AND_FRESHNESS_RELEASE_IDENTITY_REQUIRED",
+    "L4-012_EXACT_ARCHIVE_VINTAGE_ARTIFACTS_NOT_INGESTED"
   ]
 }

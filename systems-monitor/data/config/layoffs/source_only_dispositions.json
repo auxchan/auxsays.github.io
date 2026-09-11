@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "layoffs-source-only-dispositions-1.0.0",
+  "reviewedAt": "2026-09-10",
+  "authority": "IDENTITY_AND_ROLE_REVIEW_ONLY",
+  "activationEffect": "NONE",
+  "records": [
+    {
+      "sourceOnlyId": "factor:canonical:business-formations",
+      "disposition": "ALIAS_SUPERSEDED",
+      "canonicalTarget": "factor:canonical:business-formation",
+      "sourceRole": "PRIMARY_OBSERVATION_SOURCE_CANDIDATE_FOR_CANONICAL_TARGET",
+      "uiPlacementEligible": false,
+      "acceptanceEligible": false,
+      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
+      "reason": "The plural source-side identity is a legacy duplicate of the visible singular taxonomy factor; canonicalization must occur before any source binding or acceptance decision."
+    },
+    {
+      "sourceOnlyId": "factor:canonical:courts-business-chapter-7",
+      "disposition": "SECONDARY_CONTEXT_ONLY",
+      "canonicalTarget": "factor:canonical:business-bankruptcy-stress",
+      "sourceRole": "CORROBORATING_COMPONENT_NOT_FORMULA_INPUT",
+      "uiPlacementEligible": false,
+      "acceptanceEligible": false,
+      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
+      "reason": "The visible factor already uses the F-2 all-business-chapters series; no governed chapter-mix calculation exists."
+    },
+    {
+      "sourceOnlyId": "factor:canonical:courts-business-chapter-11",
+      "disposition": "SECONDARY_CONTEXT_ONLY",
+      "canonicalTarget": "factor:canonical:business-bankruptcy-stress",
+      "sourceRole": "CORROBORATING_COMPONENT_NOT_FORMULA_INPUT",
+      "uiPlacementEligible": false,
+      "acceptanceEligible": false,
+      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
+      "reason": "The visible factor already uses the F-2 all-business-chapters series; no governed chapter-mix calculation exists."
+    },
+    {
+      "sourceOnlyId": "factor:canonical:courts-business-chapter-12",
+      "disposition": "SECONDARY_CONTEXT_ONLY",
+      "canonicalTarget": "factor:canonical:business-bankruptcy-stress",
+      "sourceRole": "CORROBORATING_COMPONENT_NOT_FORMULA_INPUT",
+      "uiPlacementEligible": false,
+      "acceptanceEligible": false,
+      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
+      "reason": "The visible factor already uses the F-2 all-business-chapters series; no governed chapter-mix calculation exists."
+    },
+    {
+      "sourceOnlyId": "factor:canonical:courts-business-chapter-13",
+      "disposition": "SECONDARY_CONTEXT_ONLY",
+      "canonicalTarget": "factor:canonical:business-bankruptcy-stress",
+      "sourceRole": "CORROBORATING_COMPONENT_NOT_FORMULA_INPUT",
+      "uiPlacementEligible": false,
+      "acceptanceEligible": false,
+      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
+      "reason": "The visible factor already uses the F-2 all-business-chapters series; no governed chapter-mix calculation exists."
+    },
+    {
+      "sourceOnlyId": "factor:canonical:establishment-expansions",
+      "disposition": "CALC_INPUT_ONLY",
+      "canonicalTarget": "factor:canonical:gross-job-gains",
+      "sourceRole": "ACCOUNTING_COMPONENT_PENDING_FORMULA_GOVERNANCE",
+      "uiPlacementEligible": false,
+      "acceptanceEligible": false,
+      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
+      "reason": "Expansions are an official component of gross job gains, but no accepted calculation contract currently consumes them."
+    },
+    {
+      "sourceOnlyId": "factor:canonical:establishment-openings",
+      "disposition": "CALC_INPUT_ONLY",
+      "canonicalTarget": "factor:canonical:gross-job-gains",
+      "sourceRole": "ACCOUNTING_COMPONENT_PENDING_FORMULA_GOVERNANCE",
+      "uiPlacementEligible": false,
+      "acceptanceEligible": false,
+      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
+      "reason": "Openings are an official component of gross job gains, but no accepted calculation contract currently consumes them."
+    },
+    {
+      "sourceOnlyId": "factor:canonical:establishment-birth-job-gains",
+      "disposition": "CALC_INPUT_ONLY",
+      "canonicalTarget": "factor:canonical:establishment-openings",
+      "sourceRole": "NON_ADDITIVE_SUBSET_PENDING_FORMULA_GOVERNANCE",
+      "uiPlacementEligible": false,
+      "acceptanceEligible": false,
+      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
+      "reason": "Confirmed births are a lagged subset of openings and must not be added to openings or gross gains as an independent component."
+    },
+    {
+      "sourceOnlyId": "factor:canonical:gross-job-gains",
+      "disposition": "SECONDARY_CONTEXT_ONLY",
+      "canonicalTarget": "factor:canonical:gross-job-losses",
+      "sourceRole": "ACCOUNTING_COMPARATOR_NOT_CURRENT_LAYOFFS_NODE",
+      "uiPlacementEligible": false,
+      "acceptanceEligible": false,
+      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
+      "reason": "Gross job gains can contextualize aggregate job-loss accounting, but it is not a current Layoffs Level-4 factor or an accepted formula input."
+    }
+  ],
+  "summary": {
+    "reportedSourceOnlyIdentities": 9,
+    "activeSourceOnlyRecordsAfterAliasCleanup": 8,
+    "resolvedDispositions": 9,
+    "unresolvedDispositions": 0,
+    "aliasSuperseded": 1,
+    "calculationInputOnly": 3,
+    "secondaryContextOnly": 5
+  },
+  "boundary": "These dispositions resolve identity and intended source role only. They do not accept observations, create formulas, add UI nodes, or authorize publication."
+}

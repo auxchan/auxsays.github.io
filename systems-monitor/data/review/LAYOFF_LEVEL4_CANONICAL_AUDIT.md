@@ -6,12 +6,12 @@ Status: **REVIEW EVIDENCE — NO OBSERVATION OR RELATIONSHIP PROMOTION**
 
 - 100 reviewed Layoffs Level-4 placements.
 - 64 canonical Level-4 factors.
-- 77 UI-side factor/source state records.
+- 76 UI-side factor/source state records.
 - 48 expanded acquisition bindings across 42 records.
-- 35 source-identified placeholders without a configured binding.
-- 9 configured source identities outside the current taxonomy.
+- 34 source-identified placeholders without a configured binding.
+- 8 configured source identities outside the current taxonomy.
 
-The historical `77 source profiles` label was imprecise: 77 is the size of the UI-side factor/source-state map, not the number of canonical factors or acquisition adapters. The machine-readable reconciliation is `data/config/layoffs/level4_source_profile_roles.json`.
+The historical `77 source profiles` label was imprecise: 77 was the pre-cleanup UI-side factor/source-state count, not the number of canonical factors or acquisition adapters. Canonicalizing the legacy plural business-formations identity leaves 76 active records and preserves all nine reviewed dispositions in `data/config/layoffs/source_only_dispositions.json`.
 
 ## All 64 canonical factors
 
@@ -22,7 +22,7 @@ The historical `77 source profiles` label was imprecise: 77 is the size of the U
 | `factor:canonical:business-bankruptcy-filings` — Business Bankruptcy Filings | A_DIRECT_OBS | 1 | SOURCE_ENABLED_PENDING_ACCEPTANCE | EXACT | uscourts-f2 (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:business-bankruptcy-stress` — Business Bankruptcy Stress | B_CALC | 3 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:business-failure-stress` — Business Failure Stress | D_TAXONOMY_OR_SOURCE_PROBLEM | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
-| `factor:canonical:business-formation` — Business Formations | A_DIRECT_OBS | 2 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
+| `factor:canonical:business-formation` — Business Formations | A_DIRECT_OBS | 2 | BLOCKED | EXACT | census-bfs (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:business-formation-dynamism` — Business Formation / Dynamism | B_CALC | 1 | BLOCKED | EXACT | census-bfs (CALC_INPUT) |
 | `factor:canonical:candi-credit-conditions` — C&I Credit Conditions | D_TAXONOMY_OR_SOURCE_PROBLEM | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:candi-lending-standards` — C&I Lending Standards | A_DIRECT_OBS | 5 | BLOCKED | PENDING_OR_UNMAPPED | fed-sloos (PRIMARY_OBSERVATION_SOURCE) |
@@ -92,9 +92,8 @@ The historical `77 source profiles` label was imprecise: 77 is the size of the U
 | `factor:canonical:business-bankruptcy-stress` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:business-failure-bankruptcy-stress` | LEVEL3_PARENT | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:business-failure-stress` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
-| `factor:canonical:business-formation` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
+| `factor:canonical:business-formation` | LEVEL4_CANONICAL | BLOCKED | census-bfs:BFS:T:BF_BF4Q:SA | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:business-formation-dynamism` | LEVEL4_CANONICAL | BLOCKED | census-bfs:BFS:T:BF_BF4Q:SA | CALC_INPUT |
-| `factor:canonical:business-formations` | SOURCE_ONLY | BLOCKED | census-bfs:BFS:T:BF_BF4Q:SA | LEGACY_DUPLICATE_SHOULD_REMOVE |
 | `factor:canonical:candi-credit-conditions` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:candi-lending-standards` | LEVEL4_CANONICAL | BLOCKED | fed-sloos:selector-pending | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:candi-loan-demand` | LEVEL4_CANONICAL | BLOCKED | fed-sloos:selector-pending | PRIMARY_OBSERVATION_SOURCE |
@@ -168,17 +167,17 @@ The historical `77 source profiles` label was imprecise: 77 is the size of the U
 
 The following source-only records do not resolve to a current taxonomy identity and therefore cannot remain unexplained:
 
-- `factor:canonical:business-formations`
-- `factor:canonical:courts-business-chapter-11`
-- `factor:canonical:courts-business-chapter-12`
-- `factor:canonical:courts-business-chapter-13`
-- `factor:canonical:courts-business-chapter-7`
-- `factor:canonical:establishment-birth-job-gains`
-- `factor:canonical:establishment-expansions`
-- `factor:canonical:establishment-openings`
-- `factor:canonical:gross-job-gains`
+- `factor:canonical:business-formations` — **ALIAS_SUPERSEDED**; target `factor:canonical:business-formation`; no activation effect.
+- `factor:canonical:courts-business-chapter-11` — **SECONDARY_CONTEXT_ONLY**; target `factor:canonical:business-bankruptcy-stress`; no activation effect.
+- `factor:canonical:courts-business-chapter-12` — **SECONDARY_CONTEXT_ONLY**; target `factor:canonical:business-bankruptcy-stress`; no activation effect.
+- `factor:canonical:courts-business-chapter-13` — **SECONDARY_CONTEXT_ONLY**; target `factor:canonical:business-bankruptcy-stress`; no activation effect.
+- `factor:canonical:courts-business-chapter-7` — **SECONDARY_CONTEXT_ONLY**; target `factor:canonical:business-bankruptcy-stress`; no activation effect.
+- `factor:canonical:establishment-birth-job-gains` — **CALC_INPUT_ONLY**; target `factor:canonical:establishment-openings`; no activation effect.
+- `factor:canonical:establishment-expansions` — **CALC_INPUT_ONLY**; target `factor:canonical:gross-job-gains`; no activation effect.
+- `factor:canonical:establishment-openings` — **CALC_INPUT_ONLY**; target `factor:canonical:gross-job-gains`; no activation effect.
+- `factor:canonical:gross-job-gains` — **SECONDARY_CONTEXT_ONLY**; target `factor:canonical:gross-job-losses`; no activation effect.
 
-`business-formations` is a legacy plural alias and should canonicalize to the singular factor after review. The four BED gain/opening records and four Courts chapter records are useful calculation/corroboration inputs, but they are not current Level-4 placements and must remain explicitly typed as such.
+`business-formations` is now canonicalized to the singular factor while its legacy identity remains recorded. Three BED component records are calculation-input-only; BED gross gains and the four Courts chapter records are context-only. None becomes a new Level-4 placement, accepted formula input, or accepted observation.
 
 ## Promotion boundary
 
