@@ -21,9 +21,23 @@ permissions:
 
 # Deliberately NOT `auxsays-main-writeback`. Sharing that group would let a PR test run queue behind
 # -- or cancel -- evidence collection and Pages deployment. Superseded runs for the same PR are
-# cancelled; runs on main are keyed by ref so a push run is never cancelled by an unrelated PR.
+# cancelled: the replacement re-judges the WHOLE pull request against its base, so nothing is lost.
+#
+# Every push run is keyed by the WINDOW it judges (`before` and `after`), not by ref. Keying by ref
+# used to be harmless, because every gate here re-tested the whole tree; the evidence-loss step is
+# the first that judges a window. With one shared group for main, a second push cancelled the first
+# push's run before it reached that step, and the first window -- including any evidence it lost --
+# was never judged by anything. A queued run does not fix it either: a group holds one pending run,
+# and a third entrant cancels it. Keying by `after` alone is not enough: force-push main away and
+# back, and the re-push of an old tip lands in the old tip's group with a different `before`. The
+# event name is in the key too, so a manual dispatch on a commit cannot cancel that commit's push.
+#
+# The two `||` halves are one key written for GitHub's expression syntax: a pull request yields its
+# number twice (so its superseded runs still share a group); a push yields `before` and `after`; a
+# dispatch, which has no `before`, yields an empty field and its commit.
 concurrency:
-  group: ci-integrity-${{ github.event.pull_request.number || github.ref }}
+  group: >-
+    ci-integrity-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.before }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 env:
@@ -119,6 +133,42 @@ jobs:
 
       - name: Validate evidence method health
         run: python auxsays/scripts/validate_evidence_method_health.py
+
+      # A stored evidence row may not disappear, and may stop being accepted only by an audited
+      # withdrawal: the row stays, with `counted: false` and a named `exclusion_reason`. (That is the
+      # store's rows; editing a row's identity fields can still move a report between records -- see
+      # lib/evidence_loss.py, WHAT THIS DOES NOT SEE.) The gates above cannot see a violation of
+      # that, because each compares the records against the SAME store a purge rewrote -- a coherent
+      # 98% DaVinci deletion passed all of them. The one reference a change cannot also rewrite is
+      # the commit it replaces, so that is what this compares against.
+      #
+      # The base comes from the event, never from `main`: comparing against `main` silently becomes
+      # comparing the change with itself the moment it merges (#68, #92). The checkout is depth 1,
+      # so the base commit is fetched by sha -- anonymously, since the repository is public, and
+      # into .git only, which the checkout-unmodified proof below does not see.
+      #
+      # This is the pull-request half. The automation writeback enforces the same predicate on
+      # every scheduled lane, whose GITHUB_TOKEN pushes never trigger this workflow.
+      - name: Refuse unexplained evidence loss
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          case "$EVENT_NAME" in
+            pull_request) BASE="$PR_BASE_SHA" ;;
+            push)         BASE="$PUSH_BEFORE_SHA" ;;
+            *)            BASE="" ;;
+          esac
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+            # workflow_dispatch carries no base: judge the checked-out commit against its parent.
+            git fetch --no-tags --quiet --depth=2 origin "$GITHUB_SHA"
+            BASE="$(git rev-parse HEAD^1)"
+          else
+            git fetch --no-tags --quiet --depth=1 origin "$BASE"
+          fi
+          echo "evidence-loss base: $BASE ($EVENT_NAME)"
+          python auxsays/scripts/check_evidence_loss.py --base "$BASE"
 
       # Belt and braces alongside the runner's own hash check: this also catches anything the QA
       # gates above might write to a TRACKED path.
