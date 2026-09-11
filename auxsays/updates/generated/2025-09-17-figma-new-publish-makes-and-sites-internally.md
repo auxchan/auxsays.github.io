@@ -17,8 +17,8 @@ update_version: 'New: Publish Makes and Sites internally'
 update_logo_text: FIG
 update_published_at: '2025-09-17T00:00:00.000Z'
 update_last_checked: '2026-08-11T03:48:07Z'
-source_last_checked: '2026-08-11T03:48:07Z'
-official_body_last_checked: '2026-08-11T03:48:07Z'
+source_last_checked: '2026-09-11T06:52:40Z'
+official_body_last_checked: '2026-09-11T06:52:40Z'
 record_last_updated: '2026-08-11T03:48:07Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-11T03:48:07Z'
+  url: https://www.figma.com/release-notes/?title=publish-make-sites-internally
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-11T06:52:40Z'
   url: https://www.figma.com/release-notes/?title=publish-make-sites-internally
   status: captured-from-rss-feed
   body_captured: true

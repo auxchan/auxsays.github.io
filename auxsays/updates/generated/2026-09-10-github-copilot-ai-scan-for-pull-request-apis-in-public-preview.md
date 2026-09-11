@@ -17,8 +17,8 @@ update_version: AI Scan for pull request APIs in public preview
 update_logo_text: GIT
 update_published_at: '2026-09-10T20:20:58Z'
 update_last_checked: '2026-09-10T23:13:08Z'
-source_last_checked: '2026-09-10T23:13:08Z'
-official_body_last_checked: '2026-09-10T23:13:08Z'
+source_last_checked: '2026-09-11T06:52:44Z'
+official_body_last_checked: '2026-09-11T06:52:44Z'
 record_last_updated: '2026-09-10T23:13:08Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-09-10T23:13:08Z'
+  url: https://github.blog/changelog/2026-09-10-ai-scan-for-pull-request-apis-in-public-preview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-11T06:52:44Z'
   url: https://github.blog/changelog/2026-09-10-ai-scan-for-pull-request-apis-in-public-preview
   status: captured-from-rss-feed
   body_captured: true
