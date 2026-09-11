@@ -195,7 +195,7 @@ describe("Level-3 framework acceptance machine gate", () => {
   it("regression-locks the four accepted bindings and three source-identified records", () => {
     const expectedConnected = [
       ["Labor-Force Participation", "LNS11300000", "61.4 percent"],
-      ["Initial Claims", "DOL-UI-SA-INITIAL", "209,000 claims"],
+      ["Initial Claims", "DOL-UI-SA-INITIAL", "207,000 claims"],
       ["Job Openings", "JTS000000000000000JOL", "7,359 thousands"],
       ["Hires", "JTS000000000000000HIL", "5,348 thousands"]
     ] as const;

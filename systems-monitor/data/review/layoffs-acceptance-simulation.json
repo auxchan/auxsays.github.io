@@ -139,17 +139,15 @@
       "sourceSeriesId": "CES6056132001"
     },
     {
-      "blockReasons": [
-        "MISSING_EXPLICIT_ALLOW_RIGHTS_POLICY"
-      ],
-      "blocked": 4,
+      "blockReasons": [],
+      "blocked": 0,
       "candidateRows": 4,
       "canonicalFactorId": "factor:canonical:gross-job-losses",
       "contingent": 0,
       "currentVintageCapability": "LEVEL_0",
-      "decisionReadyIfTaylorApproves": 0,
-      "descriptiveHistoryCandidates": 0,
-      "descriptiveHistoryCandidatesAfterPreconditions": 0,
+      "decisionReadyIfTaylorApproves": 4,
+      "descriptiveHistoryCandidates": 4,
+      "descriptiveHistoryCandidatesAfterPreconditions": 4,
       "forecastVintageEligible": 0,
       "officialVintageCeiling": "LEVEL_2",
       "rejected": 0,
@@ -158,17 +156,15 @@
       "sourceSeriesId": "BDS0000000000000000110004LQ5"
     },
     {
-      "blockReasons": [
-        "MISSING_EXPLICIT_ALLOW_RIGHTS_POLICY"
-      ],
-      "blocked": 4,
+      "blockReasons": [],
+      "blocked": 0,
       "candidateRows": 4,
       "canonicalFactorId": "factor:canonical:establishment-contractions",
       "contingent": 0,
       "currentVintageCapability": "LEVEL_0",
-      "decisionReadyIfTaylorApproves": 0,
-      "descriptiveHistoryCandidates": 0,
-      "descriptiveHistoryCandidatesAfterPreconditions": 0,
+      "decisionReadyIfTaylorApproves": 4,
+      "descriptiveHistoryCandidates": 4,
+      "descriptiveHistoryCandidatesAfterPreconditions": 4,
       "forecastVintageEligible": 0,
       "officialVintageCeiling": "LEVEL_2",
       "rejected": 0,
@@ -177,17 +173,15 @@
       "sourceSeriesId": "BDS0000000000000000110005LQ5"
     },
     {
-      "blockReasons": [
-        "MISSING_EXPLICIT_ALLOW_RIGHTS_POLICY"
-      ],
-      "blocked": 4,
+      "blockReasons": [],
+      "blocked": 0,
       "candidateRows": 4,
       "canonicalFactorId": "factor:canonical:establishment-closures",
       "contingent": 0,
       "currentVintageCapability": "LEVEL_0",
-      "decisionReadyIfTaylorApproves": 0,
-      "descriptiveHistoryCandidates": 0,
-      "descriptiveHistoryCandidatesAfterPreconditions": 0,
+      "decisionReadyIfTaylorApproves": 4,
+      "descriptiveHistoryCandidates": 4,
+      "descriptiveHistoryCandidatesAfterPreconditions": 4,
       "forecastVintageEligible": 0,
       "officialVintageCeiling": "LEVEL_2",
       "rejected": 0,
@@ -196,17 +190,15 @@
       "sourceSeriesId": "BDS0000000000000000110006LQ5"
     },
     {
-      "blockReasons": [
-        "MISSING_EXPLICIT_ALLOW_RIGHTS_POLICY"
-      ],
-      "blocked": 1,
+      "blockReasons": [],
+      "blocked": 0,
       "candidateRows": 1,
       "canonicalFactorId": "factor:canonical:establishment-deaths",
       "contingent": 0,
       "currentVintageCapability": "LEVEL_0",
-      "decisionReadyIfTaylorApproves": 0,
-      "descriptiveHistoryCandidates": 0,
-      "descriptiveHistoryCandidatesAfterPreconditions": 0,
+      "decisionReadyIfTaylorApproves": 1,
+      "descriptiveHistoryCandidates": 1,
+      "descriptiveHistoryCandidatesAfterPreconditions": 1,
       "forecastVintageEligible": 0,
       "officialVintageCeiling": "LEVEL_2_PARTIAL",
       "rejected": 0,
@@ -237,21 +229,21 @@
   "counts": {
     "acceptedObservationsWritten": 0,
     "ambiguousMatches": 0,
-    "blockedWithinProposedScope": 13,
-    "comparableHistoryReadySeries": 8,
-    "comparableHistoryReadySeriesAfterPreconditions": 9,
+    "blockedWithinProposedScope": 0,
+    "comparableHistoryReadySeries": 11,
+    "comparableHistoryReadySeriesAfterPreconditions": 12,
     "constraintRejectedWithinProposedScope": 0,
     "contingentWithinProposedScope": 33,
-    "decisionReadyIfTaylorApproves": 154,
-    "decisionReadySeries": 8,
-    "descriptiveHistoryCandidates": 154,
-    "descriptiveHistoryCandidatesAfterPreconditions": 187,
-    "descriptiveSeriesAfterPreconditions": 9,
+    "decisionReadyIfTaylorApproves": 167,
+    "decisionReadySeries": 12,
+    "descriptiveHistoryCandidates": 167,
+    "descriptiveHistoryCandidatesAfterPreconditions": 200,
+    "descriptiveSeriesAfterPreconditions": 13,
     "forecastVintageEligible": 0,
-    "forecastVintageIneligible": 187,
+    "forecastVintageIneligible": 200,
     "invalidCandidates": 0,
     "outsideProposedScope": 82,
-    "rejectedOrHeldByCurrentPreconditions": 46,
+    "rejectedOrHeldByCurrentPreconditions": 33,
     "structuralMatches": 200,
     "structurallyComparableSeriesIfAllBlockersResolve": 12
   },
@@ -267,13 +259,21 @@
   },
   "input": {
     "batchCandidates": 282,
-    "batchPayloadSha256": "6dcbe1d8a85686bbb4fc6403ea7c0f5bb03998517e05319f7676e079e166e192",
+    "batchPayloadSha256": "c0a8f857cb549462548a77653ad74d7c1309f68c42c6b0be910b9862955042f8",
     "batchRunId": "db5e1c8d-5825-4756-9626-5c0acdeb09c9",
     "batchSchemaVersion": "layoffs-source-candidate-batch-1.0.0",
     "proposalRules": 13,
     "sourceDiagnostics": {
       "blsSkippedMissingValues": 5,
-      "dolSkippedMissingValues": 57
+      "dolFreshness": {
+        "newestObservationPeriod": "2026-08-15",
+        "observationAgeHours": 624.97,
+        "retrievedTime": "2026-09-10T00:58:12.132990Z",
+        "staleAfterHours": 336,
+        "status": "STALE"
+      },
+      "dolSkippedMissingValues": 57,
+      "dolSourceReleaseMarker": "DOL-UI-r539cyNational-2026-09-10"
     }
   },
   "outsideProposedScope": [
@@ -309,11 +309,10 @@
     }
   ],
   "reasonCounts": {
-    "EXACT_ARCHIVE_VINTAGE_EVIDENCE_ABSENT": 187,
-    "EXISTING_ACCEPTED_SEED_MIGRATION_AND_FRESHNESS_REQUIRED": 33,
-    "MISSING_EXPLICIT_ALLOW_RIGHTS_POLICY": 13
+    "EXACT_ARCHIVE_VINTAGE_EVIDENCE_ABSENT": 200,
+    "EXISTING_ACCEPTED_SEED_MIGRATION_AND_FRESHNESS_REQUIRED": 33
   },
-  "reportSha256": "37b090607d5cc6a53fc3a20a79ed364a5086296627b01586d058e88d7207100c",
+  "reportSha256": "b6310e0e083513f62d591ceb0260dae9e456e56364bffaf86facfd54ca2624a8",
   "schemaVersion": "layoffs-acceptance-simulation-1.0.0",
   "simulatedAt": "2026-09-10T00:58:12.166444Z",
   "validationFailures": []

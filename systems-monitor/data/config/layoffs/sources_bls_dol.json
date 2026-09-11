@@ -14,7 +14,8 @@
       "endpoint": "https://oui.doleta.gov/unemploy/wkclaims/report.asp",
       "method": "POST_FORM_XML",
       "credential_requirement": "NONE",
-      "parser_version": "layoffs-dol-national-xml-v1"
+      "parser_version": "layoffs-dol-national-xml-v1",
+      "stale_after_hours": 336
     }
   },
   "source_profiles": [

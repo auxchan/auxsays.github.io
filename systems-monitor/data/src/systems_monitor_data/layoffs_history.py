@@ -11,6 +11,13 @@ from typing import Any, Iterable
 
 REPLAY_MODES = {"PUBLICLY_AVAILABLE_AS_OF", "OPERATIONALLY_KNOWN_AS_OF", "LATEST_REVISED_TRUTH", "FORECAST_AS_OF"}
 FORECAST_HISTORY_CLASSES = {"ORIGINAL_RELEASE_VALUE", "VINTAGE_RECONSTRUCTED"}
+REQUIRED_RIGHTS_OPERATIONS = (
+    "ingestion",
+    "raw_retention",
+    "derived_retention",
+    "transformation",
+    "internal_analytical_use",
+)
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 REQUIRED_RULE_FIELDS = {
     "ruleId",
@@ -23,8 +30,20 @@ REQUIRED_RULE_FIELDS = {
     "frequency",
     "geography",
     "seasonalAdjustment",
-    "rightsState",
     "effectiveFrom",
+    "parserVersion",
+    "validatorProfileId",
+    "rightsPolicyId",
+    "rawArtifactSourceId",
+    "methodologyUrl",
+    "allowedPublicationTimeKinds",
+    "allowedRevisionStatuses",
+    "descriptiveBackfillAuthority",
+    "descriptiveBackfillStart",
+    "descriptiveBackfillEnd",
+    "historyUseClass",
+    "forecastVintageEligible",
+    "requiresCurrentSourceFreshness",
 }
 COMPARABILITY_FIELDS = (
     "canonicalFactorId",
@@ -54,7 +73,7 @@ CANONICAL_ALIASES = {
 }
 
 
-def load_acceptance_ledger(path: Path) -> dict[str, Any]:
+def load_acceptance_ledger(path: Path, *, rights_registry: dict[str, Any] | None = None) -> dict[str, Any]:
     ledger = json.loads(path.read_text(encoding="utf-8"))
     if ledger.get("schemaVersion") != "layoffs-history-acceptance-1.0.0":
         raise ValueError("history acceptance ledger schema is unsupported")
@@ -67,6 +86,14 @@ def load_acceptance_ledger(path: Path) -> dict[str, Any]:
         raise ValueError("history acceptance ledger must declare routine-promotion state")
     if ledger.get("authority") == "NONE" and rules:
         raise ValueError("an authority-free ledger cannot promote observations")
+    if ledger.get("authority") != "NONE" and rights_registry is None:
+        raise ValueError("an active acceptance ledger requires the central rights registry")
+    rights_by_source = {
+        row.get("source_id"): row
+        for row in (rights_registry or {}).get("policies", [])
+        if isinstance(row, dict)
+    }
+    profiles = {row.get("validatorProfileId"): row for row in ledger.get("validatorProfiles", []) if isinstance(row, dict)}
     seen: set[str] = set()
     for rule in rules:
         if not isinstance(rule, dict) or not REQUIRED_RULE_FIELDS.issubset(rule):
@@ -76,8 +103,30 @@ def load_acceptance_ledger(path: Path) -> dict[str, Any]:
         seen.add(rule["ruleId"])
         _utc(rule["acceptedAt"])
         _utc(rule["effectiveFrom"])
-        if rule["authority"] != ledger["authority"] or rule["authority"] in {"", "NONE"} or rule["rightsState"] != "ALLOW":
+        if rule["authority"] != ledger["authority"] or rule["authority"] in {"", "NONE"}:
             raise ValueError("history acceptance rule lacks authority or accepted rights")
+        if rule["rightsPolicyId"] != rule["sourceId"]:
+            raise ValueError("history acceptance rule lacks an exact source rights policy")
+        rights = rights_by_source.get(rule["rightsPolicyId"])
+        if not rights or any(rights.get("decisions", {}).get(operation) != "ALLOW" for operation in REQUIRED_RIGHTS_OPERATIONS):
+            raise ValueError("history acceptance rule does not pass the central rights registry")
+        profile = profiles.get(rule["validatorProfileId"])
+        if not profile or profile.get("parserVersion") != rule["parserVersion"] or profile.get("methodologyUrl") != rule["methodologyUrl"]:
+            raise ValueError("history acceptance rule lacks its exact validator profile")
+        if not isinstance(rule["allowedPublicationTimeKinds"], list) or not rule["allowedPublicationTimeKinds"]:
+            raise ValueError("history acceptance rule lacks publication-time bounds")
+        if not isinstance(rule["allowedRevisionStatuses"], list) or not rule["allowedRevisionStatuses"]:
+            raise ValueError("history acceptance rule lacks revision bounds")
+        if rule["descriptiveBackfillAuthority"] != ledger["authority"]:
+            raise ValueError("history acceptance backfill lacks authority")
+        _period_key(rule["descriptiveBackfillStart"], rule["frequency"])
+        _period_key(rule["descriptiveBackfillEnd"], rule["frequency"])
+        if _period_key(rule["descriptiveBackfillStart"], rule["frequency"]) > _period_key(rule["descriptiveBackfillEnd"], rule["frequency"]):
+            raise ValueError("history acceptance backfill window is inverted")
+        if rule["historyUseClass"] != "CURRENT_REVISED_HISTORY" or rule["forecastVintageEligible"] is not False:
+            raise ValueError("Taylor authority is bounded to descriptive current-revised history")
+        if not isinstance(rule["requiresCurrentSourceFreshness"], bool):
+            raise ValueError("history acceptance rule must declare its freshness gate")
         if rule.get("forecastVintageEligible"):
             if rule.get("historyUseClass") not in FORECAST_HISTORY_CLASSES or not rule.get("vintageEvidenceId"):
                 raise ValueError("forecast-vintage acceptance rule lacks exact vintage authority")
@@ -96,6 +145,8 @@ def promote_candidate_batch(
     _utc(accepted_at)
     if batch.get("activationStatus") != "NOT_ACCEPTED_NOT_PUBLISHABLE":
         raise ValueError("candidate batch crossed its staging boundary")
+    if batch.get("schemaVersion") != "layoffs-source-candidate-batch-1.0.0":
+        raise ValueError("candidate batch schema is unsupported")
     candidates = batch.get("candidates")
     if not isinstance(candidates, list):
         raise ValueError("candidate batch has no candidate list")
@@ -105,6 +156,11 @@ def promote_candidate_batch(
     history = [dict(row) for row in existing_history]
     for row in history:
         _validate_accepted_observation(row)
+    raw_by_hash = {
+        row.get("sha256"): row
+        for row in batch.get("rawArtifacts", [])
+        if isinstance(row, dict) and row.get("sha256")
+    }
     promoted: list[dict[str, Any]] = []
     for candidate in candidates:
         matches = [rule for rule in rules if _rule_matches(rule, candidate)]
@@ -113,10 +169,22 @@ def promote_candidate_batch(
         if len(matches) != 1:
             raise ValueError("candidate is covered by multiple acceptance rules")
         rule = matches[0]
-        if _utc(candidate["retrieved_time"]) < _utc(rule["effectiveFrom"]):
+        _validate_candidate_against_rule(candidate, rule, raw_by_hash)
+        mode = _acceptance_mode(candidate, rule)
+        if mode is None:
             continue
+        if mode == "ROUTINE" and rule["requiresCurrentSourceFreshness"]:
+            freshness = batch.get("sourceDiagnostics", {}).get("dolFreshness", {})
+            if freshness.get("status") != "CURRENT":
+                continue
         if _utc(rule["acceptedAt"]) > _utc(accepted_at):
             raise ValueError("runner acceptance time precedes rule acceptance")
+        identity = _accepted_identity(candidate)
+        prior = next((row for row in history + promoted if row.get("observationId") == identity), None)
+        if prior is not None:
+            if not _candidate_matches_accepted(candidate, rule, prior):
+                raise ValueError("immutable observation identity was reused with different content")
+            continue
         observation = _accepted_observation(candidate, rule, accepted_at, history + promoted)
         promoted.append(observation)
     return promoted
@@ -271,6 +339,72 @@ def history_artifact(history: Iterable[dict[str, Any]], *, generated_at: str) ->
     return payload
 
 
+def migrate_existing_dol_seed(snapshot: dict[str, Any]) -> dict[str, Any]:
+    """Migrate the one already accepted 209,000 claims record without broadening it."""
+
+    payload = snapshot.get("payload", {})
+    metrics = payload.get("extensions", {}).get("auxsays.phase2.metrics", [])
+    metric = next((row for row in metrics if row.get("id") == "US_LABOR_INITIAL_UI_CLAIMS"), None)
+    if not metric:
+        raise ValueError("accepted DOL seed metric is missing")
+    if (
+        metric.get("value") != 209000
+        or metric.get("validTime") != "2026-08-08"
+        or metric.get("sourceRefs") != ["dol-ui-claims"]
+        or metric.get("sourceSeriesIds") != ["DOL-UI-SA-INITIAL"]
+    ):
+        raise ValueError("accepted DOL seed no longer matches the authorized identity")
+    provenance_ids = metric.get("provenanceRefs", [])
+    provenance_registry = payload.get("extensions", {}).get("auxsays.phase3.provenance", {})
+    if len(provenance_ids) != 1 or provenance_ids[0] not in provenance_registry:
+        raise ValueError("accepted DOL seed provenance is missing")
+    provenance = provenance_registry[provenance_ids[0]]
+    source = payload.get("sources", {}).get("dol-ui-claims", {})
+    if (
+        provenance.get("sourceId") != "dol-ui-claims"
+        or provenance.get("seriesIds") != ["DOL-UI-SA-INITIAL"]
+        or provenance.get("vintageId") != "DOL-UI-2026-08-13-advance"
+        or provenance.get("revisionNumber") != 0
+    ):
+        raise ValueError("accepted DOL seed provenance changed")
+    row = {
+        "observationId": hashlib.sha256(
+            b"factor:canonical:initial-claims|DOL-UI-SA-INITIAL|DOL-UI-2026-08-13-advance|2026-08-08"
+        ).hexdigest(),
+        "canonicalFactorId": "factor:canonical:initial-claims",
+        "sourceId": "dol-ui-claims",
+        "sourceSeriesId": "DOL-UI-SA-INITIAL",
+        "releaseId": "DOL-UI-2026-08-13-advance",
+        "artifactSha256": provenance["artifactSha256"],
+        "value": "209000",
+        "unit": "claims",
+        "frequency": "weekly",
+        "geography": "US",
+        "seasonalAdjustment": "seasonally adjusted",
+        "validTime": "2026-08-08",
+        "publicTime": provenance["publishedAt"],
+        "retrievedTime": provenance["retrievedAt"],
+        "acceptedTime": provenance["acceptedAt"],
+        "vintageId": provenance["vintageId"],
+        "revisionNumber": 0,
+        "supersedesObservationId": None,
+        "publicationTimeKind": "official",
+        "provenanceUrl": provenance["evidenceUrl"],
+        "evidenceUrl": provenance["evidenceUrl"],
+        "methodologyUrl": source["methodologyUrl"],
+        "acceptanceRuleId": "MIGRATED_EXISTING_ACCEPTED_DOL_UI_2026_08_08",
+        "acceptanceAuthority": "HUMAN_ACCEPTED_FACTUAL_SNAPSHOT_2026_08_18",
+        "rightsState": "ALLOW",
+        "historyUseClass": "ORIGINAL_RELEASE_VALUE",
+        "forecastVintageEligible": False,
+        "vintageEvidenceId": None,
+        "sourceRevisionStatus": "advance",
+    }
+    row["objectHash"] = _sha(row)
+    _validate_accepted_observation(row)
+    return row
+
+
 def _rule_matches(rule: dict[str, Any], candidate: dict[str, Any]) -> bool:
     mapping = {
         "sourceId": "source_id",
@@ -283,6 +417,80 @@ def _rule_matches(rule: dict[str, Any], candidate: dict[str, Any]) -> bool:
     return rule["canonicalFactorId"] == canonical_factor_id(candidate["canonical_factor"]) and all(
         rule[key] == candidate.get(candidate_key) for key, candidate_key in mapping.items()
     )
+
+
+def _validate_candidate_against_rule(
+    candidate: dict[str, Any],
+    rule: dict[str, Any],
+    raw_by_hash: dict[str, dict[str, Any]],
+) -> None:
+    if candidate.get("accepted_time") is not None or candidate.get("publication_eligible") is not False:
+        raise ValueError("candidate already crossed the acceptance boundary")
+    raw = raw_by_hash.get(candidate.get("artifact_sha256"))
+    if not raw:
+        raise ValueError("candidate raw artifact is not declared")
+    if raw.get("source_id") != rule["rawArtifactSourceId"] or raw.get("parser_version") != rule["parserVersion"]:
+        raise ValueError("candidate parser or raw source is outside authority")
+    if candidate.get("methodology_url") != rule["methodologyUrl"]:
+        raise ValueError("candidate methodology is outside authority")
+    if candidate.get("publication_time_kind") not in rule["allowedPublicationTimeKinds"]:
+        raise ValueError("candidate publication-time kind is outside authority")
+    if candidate.get("revision_status") not in rule["allowedRevisionStatuses"]:
+        raise ValueError("candidate revision status is outside authority")
+    for field in ("provenance_url", "evidence_url", "methodology_url"):
+        if not str(candidate.get(field, "")).startswith("https://"):
+            raise ValueError("accepted candidates require HTTPS evidence")
+    if not str(candidate.get("release_id", "")).strip():
+        raise ValueError("candidate release identity is missing")
+
+
+def _acceptance_mode(candidate: dict[str, Any], rule: dict[str, Any]) -> str | None:
+    if _utc(candidate["retrieved_time"]) >= _utc(rule["effectiveFrom"]):
+        return "ROUTINE"
+    period = _period_key(candidate["observation_period"], rule["frequency"])
+    if (
+        rule["descriptiveBackfillAuthority"] == rule["authority"]
+        and _period_key(rule["descriptiveBackfillStart"], rule["frequency"])
+        <= period
+        <= _period_key(rule["descriptiveBackfillEnd"], rule["frequency"])
+    ):
+        return "DESCRIPTIVE_BACKFILL"
+    return None
+
+
+def _accepted_identity(candidate: dict[str, Any]) -> str:
+    return hashlib.sha256(
+        f"{canonical_factor_id(candidate['canonical_factor'])}|{candidate['source_series_id']}|{candidate['release_id']}|{candidate['observation_period']}".encode("utf-8")
+    ).hexdigest()
+
+
+def _candidate_matches_accepted(candidate: dict[str, Any], rule: dict[str, Any], row: dict[str, Any]) -> bool:
+    expected = {
+        "canonicalFactorId": canonical_factor_id(candidate["canonical_factor"]),
+        "sourceId": candidate["source_id"],
+        "sourceSeriesId": candidate["source_series_id"],
+        "releaseId": candidate["release_id"],
+        "artifactSha256": candidate["artifact_sha256"],
+        "value": str(_decimal(candidate["value"])),
+        "unit": candidate["unit"],
+        "frequency": candidate["frequency"],
+        "geography": candidate["geography"],
+        "seasonalAdjustment": candidate["seasonal_adjustment"],
+        "validTime": candidate["observation_period"],
+        "publicTime": candidate["public_time"],
+        "retrievedTime": candidate["retrieved_time"],
+        "publicationTimeKind": candidate["publication_time_kind"],
+        "provenanceUrl": candidate["provenance_url"],
+        "evidenceUrl": candidate["evidence_url"],
+        "methodologyUrl": candidate["methodology_url"],
+        "acceptanceRuleId": rule["ruleId"],
+        "acceptanceAuthority": rule["authority"],
+        "rightsState": "ALLOW",
+        "historyUseClass": rule["historyUseClass"],
+        "forecastVintageEligible": False,
+        "sourceRevisionStatus": candidate["revision_status"],
+    }
+    return all(row.get(key) == value for key, value in expected.items())
 
 
 def _accepted_observation(
@@ -304,9 +512,7 @@ def _accepted_observation(
     siblings.sort(key=lambda row: (row["revisionNumber"], row["acceptedTime"]))
     revision_number = 0 if not siblings else siblings[-1]["revisionNumber"] + 1
     supersedes = None if not siblings else siblings[-1]["observationId"]
-    identity = hashlib.sha256(
-        f"{canonical_factor_id(candidate['canonical_factor'])}|{candidate['source_series_id']}|{candidate['release_id']}|{candidate['observation_period']}".encode("utf-8")
-    ).hexdigest()
+    identity = _accepted_identity(candidate)
     row = {
         "observationId": identity,
         "canonicalFactorId": canonical_factor_id(candidate["canonical_factor"]),
@@ -332,7 +538,7 @@ def _accepted_observation(
         "methodologyUrl": candidate["methodology_url"],
         "acceptanceRuleId": rule["ruleId"],
         "acceptanceAuthority": rule["authority"],
-        "rightsState": rule["rightsState"],
+        "rightsState": "ALLOW",
         "historyUseClass": rule.get("historyUseClass", "CURRENT_REVISED_HISTORY"),
         "forecastVintageEligible": bool(rule.get("forecastVintageEligible", False)),
         "vintageEvidenceId": rule.get("vintageEvidenceId"),

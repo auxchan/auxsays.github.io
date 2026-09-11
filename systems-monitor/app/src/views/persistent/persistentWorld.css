@@ -117,6 +117,16 @@
 [data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary dl div,[data-aux-product="systems-monitor"] .sm-pw-inspector__connector dl div { display: grid; grid-template-columns: 94px minmax(0,1fr); gap: 10px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary dt,[data-aux-product="systems-monitor"] .sm-pw-inspector__connector dt { color: #6fa4ae; font-size: 10px; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary dd,[data-aux-product="systems-monitor"] .sm-pw-inspector__connector dd { margin: 0; color: #dcebef; font-size: 12px; line-height: 1.35; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal { margin: 14px 0; padding-top: 12px; border-top: 1px solid rgba(111,228,208,.16); }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal dl { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal dl div { display: block; padding: 9px; border: 1px solid rgba(111,228,208,.14); border-radius: 9px; background: rgba(1,20,27,.3); }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal dd { margin-top: 3px; font-variant-numeric: tabular-nums; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal dd small { margin-top: 2px; text-transform: none; letter-spacing: 0; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal details { margin: 10px 0; border: 1px solid rgba(111,228,208,.14); border-radius: 9px; overflow: hidden; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal summary { padding: 9px 10px; color: #a9d6d2; cursor: pointer; font-size: 11px; font-weight: 750; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal ol { list-style: none; margin: 0; padding: 0 10px 8px; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal li { display: grid; grid-template-columns: 72px minmax(0,1fr) auto; gap: 7px; padding: 5px 0; border-top: 1px solid rgba(111,228,208,.09); color: #cfe6e3; font-size: 10px; font-variant-numeric: tabular-nums; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__temporal li small { margin: 0; font-size: 8px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__connector { border-left: 2px solid rgba(111,228,208,.34); padding-left: 14px !important; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__connector p { margin: 8px 0 0; color: #8fb0b7; font-size: 12px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__credit { display: grid; gap: 5px; margin-top: 22px; padding-top: 16px; border-top: 1px solid #17343e; }

@@ -516,9 +516,9 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(surface.getAttribute("data-resident-relationship-count")).toBe("3110");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("11");
-    expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
-    expect(surface.getAttribute("data-connected-placement-count")).toBe("5");
-    expect(surface.getAttribute("data-connected-canonical-factor-count")).toBe("4");
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("19");
+    expect(surface.getAttribute("data-connected-placement-count")).toBe("19");
+    expect(surface.getAttribute("data-connected-canonical-factor-count")).toBe("11");
     expect(surface.getAttribute("data-lod-mode")).toBe("OVERVIEW");
     expect(surface.getAttribute("data-view-mode")).toBe("TOP_DOWN");
     expect(screen.getByRole("button", { name: "Top-down" }).getAttribute("aria-pressed")).toBe("true");
@@ -602,7 +602,7 @@ describe("persistent world local-review shell", () => {
     const inspector = await screen.findByRole("complementary", { name: "Persistent world factor details" }, { timeout: 15_000 });
     const surface = screen.getByRole("application", { name: "U.S. systems factor map" });
     const topologyFingerprint = surface.getAttribute("data-topology-fingerprint");
-    expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("19");
     expect(within(inspector).getAllByText("61.4%").length).toBeGreaterThan(0);
     expect(within(inspector).queryByText("61.4 percent")).toBeNull();
     Object.defineProperty(surface, "getBoundingClientRect", { configurable: true, value: () => ({ x: 0, y: 0, left: 0, top: 0, right: 980, bottom: 720, width: 980, height: 720, toJSON: () => ({}) }) });
@@ -611,7 +611,7 @@ describe("persistent world local-review shell", () => {
     expect(within(hover).getByText("Labor-Force Participation")).toBeTruthy();
     expect(within(hover).getByText("61.4%")).toBeTruthy();
     expect(within(hover).queryByText(/Labor-Force Participation\s*·\s*61\.4%/)).toBeNull();
-    expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("19");
     expect(surface.getAttribute("data-topology-fingerprint")).toBe(topologyFingerprint);
     const factualLinks = within(inspector).getAllByRole("link", { name: "Open factual record" });
     expect(factualLinks.length).toBeGreaterThan(0);

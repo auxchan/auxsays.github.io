@@ -1,6 +1,8 @@
 import activeFactualSnapshot from "../../../data/review/local-active-pdi-test-snapshot.json";
 import { createSnapshotViewModel } from "./snapshotViewModelFactory";
 import { validatePublicSnapshot } from "./validatePublicSnapshot";
+import { layoffsBranchTaxonomy, layoffsCanonicalFactorId } from "./layoffsBranchTaxonomy";
+import { layoffsAcceptedFactorSummaries, LAYOFFS_ACCEPTED_HISTORY_AS_OF, LAYOFFS_DOL_SOURCE_FRESHNESS } from "./layoffsAcceptedHistoryReadModel";
 
 export type PersistentTimeWindow = "RECENT" | "24H" | "7D" | "30D" | "90D" | "1Y";
 export type PersistentChangeKind = "NEW_OFFICIAL_OBSERVATION" | "REVISION" | "SOURCE_STALE";
@@ -49,6 +51,7 @@ function exactEvidenceUrl(metric: (typeof snapshot.extensions)["auxsays.phase2.m
 
 function observationNotices(): PersistentChangeNotice[] {
   return snapshot.extensions["auxsays.phase2.metrics"].flatMap((metric) => {
+    if (metric.id === "US_LABOR_INITIAL_UI_CLAIMS") return [];
     const placementId = placementByMetricId[metric.id];
     const source = snapshot.sources[metric.sourceRefs[0]];
     const provenance = snapshot.extensions["auxsays.phase3.provenance"]?.[metric.provenanceRefs[0]];
@@ -76,11 +79,12 @@ function observationNotices(): PersistentChangeNotice[] {
 }
 
 function revisionNotices(): PersistentChangeNotice[] {
-  return (snapshot.extensions["auxsays.phase3.revisionEvidence"] ?? []).map((revision) => {
+  return (snapshot.extensions["auxsays.phase3.revisionEvidence"] ?? []).flatMap((revision) => {
+    if (revision.indicatorId === "US_LABOR_INITIAL_UI_CLAIMS") return [];
     const first = revision.releases[0];
     const latest = revision.releases[revision.releases.length - 1];
     const absoluteDelta = latest.value - first.value;
-    return {
+    return [{
       id: `accepted-revision:${revision.id}`,
       kind: "REVISION",
       factorLabel: revision.label,
@@ -101,13 +105,77 @@ function revisionNotices(): PersistentChangeNotice[] {
       evidenceUrl: latest.evidenceUrl,
       methodologyUrl: snapshot.sources[revision.sourceId]?.methodologyUrl,
       sourceHealthOnly: false,
-    };
+    }];
   });
+}
+
+const slug = (value: string) => value.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+function acceptedPlacementId(canonicalFactorId: string) {
+  for (const group of layoffsBranchTaxonomy) {
+    if (layoffsCanonicalFactorId(group.label) === canonicalFactorId) return `placement:layoffs-job-destruction:${group.id}`;
+    const child = group.placements.find((row) => row.canonicalFactorId === canonicalFactorId);
+    if (child) return `placement:layoffs-job-destruction:${group.id}:${slug(child.label)}`;
+  }
+  return "placement:layoffs-job-destruction";
+}
+
+function acceptedHistoryNotices(): PersistentChangeNotice[] {
+  return layoffsAcceptedFactorSummaries.flatMap((factor) => factor.series.flatMap((series) => {
+    const sourceLabel = `${series.provider} · ${series.dataset}`;
+    const relative = series.relativeDeltaPercent === undefined ? "" : ` (${series.relativeDeltaPercent >= 0 ? "+" : ""}${series.relativeDeltaPercent.toFixed(2)}%)`;
+    const change: PersistentChangeNotice = {
+      id: `accepted-history:${series.sourceId}:${series.sourceSeriesId}:${series.current.validTime}`,
+      kind: "NEW_OFFICIAL_OBSERVATION",
+      factorLabel: series.seriesLabel,
+      placementId: acceptedPlacementId(series.canonicalFactorId),
+      knownAt: series.current.acceptedTime,
+      officialPublishedAt: series.current.publicTime,
+      validTime: series.current.validTime,
+      currentDisplay: series.currentDisplay,
+      previousDisplay: series.previousDisplay,
+      absoluteDelta: series.absoluteDelta,
+      relativeDeltaPercent: series.relativeDeltaPercent,
+      comparisonBasis: `${series.current.validTime} compared with the previous compatible ${series.frequency} observation, ${series.previous.validTime}.`,
+      impactClass: "UNKNOWN",
+      economicSignalEligible: false,
+      headline: `${series.seriesLabel}: ${series.directionGlyph} ${series.direction.toLowerCase()}`,
+      summary: `${series.currentDisplay}, from ${series.previousDisplay}; factual change ${series.absoluteDelta >= 0 ? "+" : ""}${series.absoluteDelta.toLocaleString("en-US")}${relative}. Materiality and destination impact remain unknown.`,
+      sourceLabel,
+      evidenceUrl: series.current.evidenceUrl,
+      methodologyUrl: series.current.methodologyUrl,
+      sourceHealthOnly: false,
+    };
+    const revisions: PersistentChangeNotice[] = series.revisions.map(({ current, previous }) => ({
+      id: `accepted-history-revision:${current.observationId}`,
+      kind: "REVISION",
+      factorLabel: series.seriesLabel,
+      placementId: acceptedPlacementId(series.canonicalFactorId),
+      knownAt: current.acceptedTime,
+      officialPublishedAt: current.publicTime,
+      validTime: current.validTime,
+      currentDisplay: `${Number(current.value).toLocaleString("en-US")} ${current.unit}`,
+      previousDisplay: `${Number(previous.value).toLocaleString("en-US")} ${previous.unit}`,
+      absoluteDelta: Number(current.value) - Number(previous.value),
+      relativeDeltaPercent: Number(previous.value) === 0 ? undefined : (Number(current.value) - Number(previous.value)) / Math.abs(Number(previous.value)) * 100,
+      comparisonBasis: `Revision ${current.revisionNumber} supersedes the accepted revision ${previous.revisionNumber} for the same ${current.validTime} period.`,
+      impactClass: "UNKNOWN",
+      economicSignalEligible: false,
+      headline: `${series.seriesLabel} revised`,
+      summary: `${Number(previous.value).toLocaleString("en-US")} ${previous.unit} was revised to ${Number(current.value).toLocaleString("en-US")} ${current.unit}. This is revision evidence, not a materiality or impact signal.`,
+      sourceLabel,
+      evidenceUrl: current.evidenceUrl,
+      methodologyUrl: current.methodologyUrl,
+      sourceHealthOnly: false,
+    }));
+    return [change, ...revisions];
+  }));
 }
 
 function sourceHealthNotices(): PersistentChangeNotice[] {
   const health = snapshot.extensions["auxsays.phase3.sourceHealth"] ?? {};
   return Object.entries(health).flatMap(([sourceId, state]) => {
+    if (sourceId === "dol-ui-claims") return [];
     if (state.retrievalPathHealth !== "stale") return [];
     const source = snapshot.sources[sourceId];
     const placementId = sourceId === "dol-ui-claims" ? placementByMetricId.US_LABOR_INITIAL_UI_CLAIMS : outcomePlacementId;
@@ -129,8 +197,32 @@ function sourceHealthNotices(): PersistentChangeNotice[] {
   });
 }
 
-export const PERSISTENT_TEMPORAL_AS_OF = snapshot.snapshot.evaluatedAt;
+function acceptedSourceHealthNotices(): PersistentChangeNotice[] {
+  if (LAYOFFS_DOL_SOURCE_FRESHNESS.status !== "STALE") return [];
+  return [{
+    id: `source-health:dol-ui-claims:${LAYOFFS_DOL_SOURCE_FRESHNESS.retrievedTime}:stale`,
+    kind: "SOURCE_STALE",
+    factorLabel: "Unemployment Insurance Weekly Claims",
+    placementId: acceptedPlacementId("factor:canonical:initial-claims"),
+    knownAt: LAYOFFS_ACCEPTED_HISTORY_AS_OF,
+    validTime: LAYOFFS_DOL_SOURCE_FRESHNESS.newestObservationPeriod,
+    comparisonBasis: "Operational source freshness; not an economic comparison.",
+    impactClass: "UNKNOWN",
+    economicSignalEligible: false,
+    headline: "Structured retrieval path is stale",
+    summary: `The repaired DOL XML source ends at ${LAYOFFS_DOL_SOURCE_FRESHNESS.newestObservationPeriod}; the ${LAYOFFS_DOL_SOURCE_FRESHNESS.observationAgeHours}-hour observation age exceeds the governed ${LAYOFFS_DOL_SOURCE_FRESHNESS.staleAfterHours}-hour limit. Routine current acceptance fails closed while accepted history remains available.`,
+    sourceLabel: "U.S. Department of Labor · Unemployment Insurance Weekly Claims",
+    methodologyUrl: "https://oui.doleta.gov/unemploy/claims.asp",
+    sourceHealthOnly: true,
+  }];
+}
+
+export const PERSISTENT_TEMPORAL_AS_OF = Date.parse(LAYOFFS_ACCEPTED_HISTORY_AS_OF) > Date.parse(snapshot.snapshot.evaluatedAt)
+  ? LAYOFFS_ACCEPTED_HISTORY_AS_OF
+  : snapshot.snapshot.evaluatedAt;
 export const persistentChangeNotices: readonly PersistentChangeNotice[] = Object.freeze([
+  ...acceptedHistoryNotices(),
+  ...acceptedSourceHealthNotices(),
   ...observationNotices(),
   ...sourceHealthNotices(),
   ...revisionNotices(),

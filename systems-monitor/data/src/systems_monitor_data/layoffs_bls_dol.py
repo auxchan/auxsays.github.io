@@ -7,7 +7,7 @@ import re
 import urllib.parse
 import uuid
 import xml.etree.ElementTree as ET
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import date, datetime, timezone
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -211,6 +211,7 @@ def parse_dol_national_xml(
     except ValueError as exc:
         raise ValueError("DOL run date is malformed") from exc
 
+    source_release_id = _dol_source_release_id(run_date)
     observations: list[SourceObservationCandidate] = []
     skipped = 0
     for week in root.findall("week"):
@@ -231,7 +232,7 @@ def parse_dol_national_xml(
             observations.append(
                 _candidate(
                     spec,
-                    release_id=release_id,
+                    release_id=source_release_id,
                     artifact_sha256=artifact_sha256,
                     value=value,
                     observation_period=observation_period,
@@ -239,7 +240,7 @@ def parse_dol_national_xml(
                     retrieved_time=retrieved_time,
                     accepted_time=accepted_time,
                     publication_time_kind=publication_time_kind,
-                    revision_status="advance_or_revised_as_published",
+                    revision_status="as_published",
                     provenance_url=provenance_url,
                 )
             )
@@ -249,8 +250,102 @@ def parse_dol_national_xml(
     missing_series = {spec.series_id for spec in selected} - observed_ids
     if missing_series:
         raise ValueError(f"DOL XML omitted populated data for requested series: {sorted(missing_series)}")
+    newest_by_series = {
+        series_id: max(row.observation_period for row in observations if row.source_series_id == series_id)
+        for series_id in observed_ids
+    }
+    observations = [
+        replace(
+            row,
+            revision_status="advance" if row.observation_period == newest_by_series[row.source_series_id] else "revised_as_published",
+        )
+        for row in observations
+    ]
     observations.sort(key=lambda row: (row.source_series_id, row.observation_period), reverse=True)
-    return ParsedSourceBatch(tuple(observations), skipped, f"{release_id}|rundate={run_date}")
+    return ParsedSourceBatch(tuple(observations), skipped, source_release_id)
+
+
+def dol_source_freshness(
+    observations: Iterable[SourceObservationCandidate],
+    *,
+    retrieved_time: str,
+    stale_after_hours: int,
+) -> dict[str, Any]:
+    selected = tuple(row for row in observations if row.source_id == "dol-ui-claims")
+    if not selected:
+        raise ValueError("DOL freshness requires DOL observations")
+    newest_period = max(row.observation_period for row in selected)
+    newest_time = datetime.combine(date.fromisoformat(newest_period), datetime.min.time(), tzinfo=timezone.utc)
+    age_hours = (_utc(retrieved_time) - newest_time).total_seconds() / 3600
+    if age_hours < 0:
+        raise ValueError("DOL newest observation cannot follow retrieval")
+    return {
+        "status": "CURRENT" if age_hours <= stale_after_hours else "STALE",
+        "newestObservationPeriod": newest_period,
+        "retrievedTime": retrieved_time,
+        "observationAgeHours": round(age_hours, 3),
+        "staleAfterHours": stale_after_hours,
+    }
+
+
+def repair_dol_candidate_batch(
+    batch: dict[str, Any],
+    *,
+    registry_path: Path,
+    raw_root: Path,
+) -> dict[str, Any]:
+    """Reparse the declared DOL evidence using source-stable release identity.
+
+    The repair is deterministic and acceptance-neutral. It never changes a BLS
+    candidate and it does not turn a candidate into accepted evidence.
+    """
+
+    if batch.get("activationStatus") != "NOT_ACCEPTED_NOT_PUBLISHABLE":
+        raise ValueError("DOL repair requires a non-publishable candidate batch")
+    acquisition, specs = load_layoffs_bls_dol_registry(registry_path)
+    dol_specs = tuple(spec for spec in specs if spec.source_id == "dol-ui-claims")
+    raw_rows = [row for row in batch.get("rawArtifacts", []) if row.get("source_id") == "dol-ui-claims"]
+    if len(raw_rows) != 1:
+        raise ValueError("DOL repair requires exactly one declared raw artifact")
+    raw = raw_rows[0]
+    raw_path = raw_root / raw["relative_path"]
+    payload = raw_path.read_bytes()
+    if hashlib.sha256(payload).hexdigest() != raw.get("sha256"):
+        raise ValueError("DOL raw artifact hash does not match its declaration")
+    parsed = parse_dol_national_xml(
+        payload,
+        dol_specs,
+        release_id=raw["release_id"],
+        artifact_sha256=raw["sha256"],
+        retrieved_time=raw["retrieved_time"],
+        accepted_time=None,
+        provenance_url=raw["request_identity"],
+    )
+    repaired_rows: list[dict[str, Any]] = []
+    by_series = {spec.series_id: spec for spec in dol_specs}
+    for observation in parsed.observations:
+        row = asdict(observation)
+        row["value"] = str(observation.value)
+        row["activation_state"] = "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+        row["publication_eligible"] = False
+        row["registry_state_before_retrieval"] = by_series[observation.source_series_id].activation_state
+        repaired_rows.append(row)
+    existing_bls = [row for row in batch.get("candidates", []) if row.get("source_id") != "dol-ui-claims"]
+    diagnostics = dict(batch.get("sourceDiagnostics", {}))
+    freshness = dol_source_freshness(
+        parsed.observations,
+        retrieved_time=raw["retrieved_time"],
+        stale_after_hours=int(acquisition["dol_ui"].get("stale_after_hours", 336)),
+    )
+    diagnostics.update({
+        "dolSkippedMissingValues": parsed.skipped_missing_values,
+        "dolSourceReleaseMarker": parsed.source_release_marker,
+        "dolFreshness": freshness,
+    })
+    repaired = dict(batch)
+    repaired["sourceDiagnostics"] = diagnostics
+    repaired["candidates"] = existing_bls + repaired_rows
+    return repaired
 
 
 class BlsDolLayoffsCollector:
@@ -379,6 +474,12 @@ def collect_layoffs_bls_dol_candidates(
         "sourceDiagnostics": {
             "blsSkippedMissingValues": bls_batch.skipped_missing_values,
             "dolSkippedMissingValues": dol_batch.skipped_missing_values,
+            "dolSourceReleaseMarker": dol_batch.source_release_marker,
+            "dolFreshness": dol_source_freshness(
+                dol_batch.observations,
+                retrieved_time=dol_artifact.retrieved_time,
+                stale_after_hours=int(acquisition["dol_ui"].get("stale_after_hours", 336)),
+            ),
         },
         "candidates": candidates,
     }
@@ -447,6 +548,11 @@ def _candidate(
         evidence_url=spec.human_evidence_url,
         methodology_url=spec.methodology_url,
     )
+
+
+def _dol_source_release_id(run_date: str) -> str:
+    parsed = datetime.strptime(run_date, "%m/%d/%Y").date()
+    return f"DOL-UI-r539cyNational-{parsed.isoformat()}"
 
 
 def _validate_common_inputs(release_id: str, artifact_sha256: str, retrieved_time: str, accepted_time: str | None) -> None:

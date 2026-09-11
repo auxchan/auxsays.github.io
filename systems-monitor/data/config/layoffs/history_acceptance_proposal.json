@@ -246,11 +246,11 @@
       "seasonalAdjustment": "seasonally adjusted",
       "parserVersion": "layoffs-bls-json-v1",
       "validatorProfileId": "BLS_BED_EXACT_SERIES_V1",
-      "rightsPolicyId": null,
-      "currentAndFutureDecision": "BLOCKED_MISSING_EXPLICIT_RIGHTS_POLICY",
-      "descriptiveHistoricalDecision": "BLOCKED_MISSING_EXPLICIT_RIGHTS_POLICY",
+      "rightsPolicyId": "bls-bed",
+      "currentAndFutureDecision": "PROPOSE_APPROVE_AFTER_TAYLOR",
+      "descriptiveHistoricalDecision": "PROPOSE_APPROVE_CURRENT_REVISED_ONLY_AFTER_TAYLOR",
       "descriptiveBackfillWindow": "2025-Q1..2025-Q4",
-      "forecastVintageDecision": "INELIGIBLE_UNTIL_RIGHTS_AND_EXACT_ARCHIVE_ARTIFACT"
+      "forecastVintageDecision": "INELIGIBLE_UNTIL_EXACT_ARCHIVE_ARTIFACT"
     },
     {
       "ruleId": "PROPOSED_BED_CONTRACTIONS_V1",
@@ -263,11 +263,11 @@
       "seasonalAdjustment": "seasonally adjusted",
       "parserVersion": "layoffs-bls-json-v1",
       "validatorProfileId": "BLS_BED_EXACT_SERIES_V1",
-      "rightsPolicyId": null,
-      "currentAndFutureDecision": "BLOCKED_MISSING_EXPLICIT_RIGHTS_POLICY",
-      "descriptiveHistoricalDecision": "BLOCKED_MISSING_EXPLICIT_RIGHTS_POLICY",
+      "rightsPolicyId": "bls-bed",
+      "currentAndFutureDecision": "PROPOSE_APPROVE_AFTER_TAYLOR",
+      "descriptiveHistoricalDecision": "PROPOSE_APPROVE_CURRENT_REVISED_ONLY_AFTER_TAYLOR",
       "descriptiveBackfillWindow": "2025-Q1..2025-Q4",
-      "forecastVintageDecision": "INELIGIBLE_UNTIL_RIGHTS_AND_EXACT_ARCHIVE_ARTIFACT"
+      "forecastVintageDecision": "INELIGIBLE_UNTIL_EXACT_ARCHIVE_ARTIFACT"
     },
     {
       "ruleId": "PROPOSED_BED_CLOSURES_V1",
@@ -280,11 +280,11 @@
       "seasonalAdjustment": "seasonally adjusted",
       "parserVersion": "layoffs-bls-json-v1",
       "validatorProfileId": "BLS_BED_EXACT_SERIES_V1",
-      "rightsPolicyId": null,
-      "currentAndFutureDecision": "BLOCKED_MISSING_EXPLICIT_RIGHTS_POLICY",
-      "descriptiveHistoricalDecision": "BLOCKED_MISSING_EXPLICIT_RIGHTS_POLICY",
+      "rightsPolicyId": "bls-bed",
+      "currentAndFutureDecision": "PROPOSE_APPROVE_AFTER_TAYLOR",
+      "descriptiveHistoricalDecision": "PROPOSE_APPROVE_CURRENT_REVISED_ONLY_AFTER_TAYLOR",
       "descriptiveBackfillWindow": "2025-Q1..2025-Q4",
-      "forecastVintageDecision": "INELIGIBLE_UNTIL_RIGHTS_AND_EXACT_ARCHIVE_ARTIFACT"
+      "forecastVintageDecision": "INELIGIBLE_UNTIL_EXACT_ARCHIVE_ARTIFACT"
     },
     {
       "ruleId": "PROPOSED_BED_DEATHS_V1",
@@ -297,11 +297,11 @@
       "seasonalAdjustment": "seasonally adjusted",
       "parserVersion": "layoffs-bls-json-v1",
       "validatorProfileId": "BLS_BED_EXACT_SERIES_V1",
-      "rightsPolicyId": null,
-      "currentAndFutureDecision": "BLOCKED_MISSING_EXPLICIT_RIGHTS_POLICY",
-      "descriptiveHistoricalDecision": "BLOCKED_MISSING_EXPLICIT_RIGHTS_POLICY",
+      "rightsPolicyId": "bls-bed",
+      "currentAndFutureDecision": "PROPOSE_APPROVE_AFTER_TAYLOR",
+      "descriptiveHistoricalDecision": "PROPOSE_APPROVE_CURRENT_REVISED_ONLY_AFTER_TAYLOR",
       "descriptiveBackfillWindow": "2025-Q1..2025-Q1",
-      "forecastVintageDecision": "INELIGIBLE_UNTIL_RIGHTS_AND_EXACT_ARCHIVE_ARTIFACT"
+      "forecastVintageDecision": "INELIGIBLE_UNTIL_EXACT_ARCHIVE_ARTIFACT"
     },
     {
       "ruleId": "PROPOSED_DOL_INITIAL_CLAIMS_V1",

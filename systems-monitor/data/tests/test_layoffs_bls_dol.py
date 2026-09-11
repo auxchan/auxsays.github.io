@@ -11,6 +11,7 @@ from systems_monitor_data.layoffs_bls_dol import (
     load_layoffs_bls_dol_registry,
     parse_bls_api_response,
     parse_dol_national_xml,
+    dol_source_freshness,
 )
 
 
@@ -98,6 +99,38 @@ class LayoffsBlsDolTests(unittest.TestCase):
         self.assertEqual(Decimal("1.2"), by_id["DOL-UI-SA-IUR"].value)
         self.assertEqual({"2026-08-01"}, {row.observation_period for row in batch.observations})
         self.assertTrue(all(row.publication_time_kind == "conservative_retrieval_bound" for row in batch.observations))
+        self.assertEqual("DOL-UI-r539cyNational-2026-08-27", batch.source_release_marker)
+        self.assertTrue(all(row.release_id == batch.source_release_marker for row in batch.observations))
+        self.assertTrue(all(row.revision_status == "advance" for row in batch.observations))
+
+    def test_dol_release_identity_comes_from_source_and_freshness_fails_closed(self):
+        specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
+        payload = (FIXTURES / "layoffs_dol_xml_minimized.xml").read_bytes()
+        first = parse_dol_national_xml(
+            payload,
+            specs,
+            release_id="retrieval-one",
+            artifact_sha256="c" * 64,
+            retrieved_time="2026-08-27T15:00:00Z",
+            accepted_time=None,
+            provenance_url=self.acquisition["dol_ui"]["endpoint"],
+        )
+        retry = parse_dol_national_xml(
+            payload,
+            specs,
+            release_id="retrieval-two",
+            artifact_sha256="c" * 64,
+            retrieved_time="2026-08-27T15:00:00Z",
+            accepted_time=None,
+            provenance_url=self.acquisition["dol_ui"]["endpoint"],
+        )
+        self.assertEqual(
+            [row.observation_id for row in first.observations],
+            [row.observation_id for row in retry.observations],
+        )
+        freshness = dol_source_freshness(first.observations, retrieved_time="2026-09-20T00:00:00Z", stale_after_hours=336)
+        self.assertEqual("STALE", freshness["status"])
+        self.assertEqual("2026-08-01", freshness["newestObservationPeriod"])
 
     def test_future_official_publication_time_is_rejected(self):
         spec = next(spec for spec in self.specs if spec.series_id == "LNS13026638")
