@@ -104,6 +104,18 @@ a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; }
 
 .aux-page { min-height:100vh; position:relative; overflow-x:clip; }
+/* PATCH-PAGE HEADING COLOUR. The ground above is dark in every colour scheme, but Chirpy colours
+   h1-h5 with `var(--heading-color)`, which it flips on prefers-color-scheme: #cccccc for dark,
+   #2a2a2a for light. With an OS set to light, the patch-page title and the Level-2/Level-3 card
+   titles rendered #2a2a2a on #0a0d10 -- measured 1.36:1 and 1.30:1 in Chromium. The page owns its
+   ground, so it owns the heading token too: one value in both schemes, the same --text-0 every
+   explicitly coloured heading on this page already uses. Headings that set their own colour are
+   untouched, because this only replaces the theme's token.
+
+   Scoped to the aux-update layout on purpose. Every other aux-page layout has the same mismatch
+   (measured 2026-09-11: home, the patch feed, vendor, product, methodology, about), which makes it
+   a site-wide theme decision rather than part of this repair. */
+body.aux-update { --heading-color: var(--text-0); }
 .aux-bg {
   position:fixed; inset:0; pointer-events:none;
   background:
