@@ -31278,3 +31278,87 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wd9wok-davinci-resolve-fusion-cache-rendering-to
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wd9wok/davinci_resolve_fusion_cache_rendering_too_long/
+  parent_title: DaVinci Resolve Fusion + cache Rendering too long
+  report_title: DaVinci Resolve Fusion + cache Rendering too long
+  report_text_excerpt: 'DaVinci Resolve Fusion + cache Rendering too long I’m trying to figure out whether my Fusion performance/cache times are normal or if something is wrong with my Resolve setup or PC. DaVinci Resolve 21.0.2 My specs: RTX 3070 Ti (8GB VRAM) Intel i7-12700K 32GB DDR5 RAM Windows...'
+  captured_at: '2026-09-11T12:14:46Z'
+  source_date: '2026-09-11'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6000103-windows-11-update-wants-me-to-install
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6000103/windows-11-update-wants-me-to-install-25h2-again
+  parent_title: Windows 11 update wants me to install 25H2 again? - Microsoft Q&A
+  report_title: Windows 11 update wants me to install 25H2 again? - Microsoft Q&A
+  report_text_excerpt: Windows 11 update wants me to install 25H2 again? - Microsoft Q&A Hi, I already have windows pro 11 25H2 installed since last year and everything has been fine cut to this week with the new update KB5124008 and now it shows in windows update windows 11 25H2 the same exact...
+  captured_at: '2026-09-11T12:36:02Z'
+  source_date: '2026-09-11'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5124008
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5124008
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5999662-apple-music-app-installed-from-microso
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5999662/apple-music-app-installed-from-microsoft-store-no
+  parent_title: Apple Music App Installed from Microsoft Store No Longer Working on Windows 11, found issue after two days - Microsoft Q&A
+  report_title: Apple Music App Installed from Microsoft Store No Longer Working on Windows 11, found issue after two days - Microsoft Q&A
+  report_text_excerpt: Apple Music App Installed from Microsoft Store No Longer Working on Windows 11, found issue after two days - Microsoft Q&A after two days of testing all things, local windows 11 health of all apps and files, firewall and defender settings, found the issue with Apply Music,...
+  captured_at: '2026-09-11T12:36:02Z'
+  source_date: '2026-09-11'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9445'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
