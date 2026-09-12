@@ -17,8 +17,8 @@ update_version: New password protection for published Sites and Make
 update_logo_text: FIG
 update_published_at: '2025-08-21T00:00:00.000Z'
 update_last_checked: '2026-08-12T15:01:53Z'
-source_last_checked: '2026-08-12T15:01:53Z'
-official_body_last_checked: '2026-08-12T15:01:53Z'
+source_last_checked: '2026-09-12T12:55:56Z'
+official_body_last_checked: '2026-09-12T12:55:56Z'
 record_last_updated: '2026-08-12T15:01:53Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-12T15:01:53Z'
+  url: https://www.figma.com/release-notes/?title=new-password-protection-for-published-sites-and-make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-12T12:55:56Z'
   url: https://www.figma.com/release-notes/?title=new-password-protection-for-published-sites-and-make
   status: captured-from-rss-feed
   body_captured: true
