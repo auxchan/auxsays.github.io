@@ -88,7 +88,8 @@ def observed_status(result: dict[str, Any] | None, error: dict[str, Any] | None,
     status from what the run actually saw makes a dry run as truthful as a write run, and leaves the
     write path's behaviour identical because it observes exactly what it persists.
     """
-    from lib.state import DEFAULT_EMPTY_EXTRACTION_TOLERANCE, classify_error, classify_success
+    from lib.state import (DEFAULT_EMPTY_EXTRACTION_TOLERANCE, classify_error, classify_success,
+                           has_ever_extracted)
     if error is not None:
         # Two consecutive failures is `failing`; a first is `degraded`. Either way, impaired.
         return "failing" if int(prior.get("consecutive_failures") or 0) >= 1 else "degraded"
@@ -104,7 +105,11 @@ def observed_status(result: dict[str, Any] | None, error: dict[str, Any] | None,
     return classify_success(
         fetched, 0, 0, consecutive_empty=streak,
         tolerance=DEFAULT_EMPTY_EXTRACTION_TOLERANCE if tolerance is None else int(tolerance),
-        ever_extracted=bool(prior.get("last_extraction_at")))
+        ever_extracted=has_ever_extracted(prior),
+        # Observed this run, exactly like `fetched`. Reading a persisted mismatch flag here would
+        # reintroduce the dry-run defect this function exists to fix: a dry run would grade today's
+        # extraction against the last write run's evidence.
+        extraction_mismatch=bool(result.get("extraction_mismatch")))
 
 
 def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
@@ -122,6 +127,7 @@ def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
     since the source last actually produced a record -- which is NOT the same question as when the
     fetch last succeeded, and conflating the two is what let Netlify look current for months.
     """
+    from lib.state import mismatch_note
     by_result = {str(r.get("product_id") or ""): r for r in (results or [])}
     by_error = {str(e.get("product_id") or ""): e for e in (errors or [])}
     rows: list[dict[str, Any]] = []
@@ -133,8 +139,15 @@ def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
         status = observed_status(res, err, b, tolerance=ing.get("empty_extraction_tolerance"),
                                  already_persisted=already_persisted)
         fetched = int((res or {}).get("candidate_count") or 0)
+        mismatch = bool((res or {}).get("extraction_mismatch"))
+        upstream = int((res or {}).get("upstream_candidates") or 0)
         bump = 0 if (already_persisted or (res is None and err is None)) else 1
         streak = 0 if fetched > 0 else int(b.get("consecutive_empty_extractions") or 0) + bump
+        # The stored note describes the run that WROTE it. On a dry run, and on the first run that
+        # observes a mismatch, that note is about a different state of the world -- and it is what
+        # the annotation and the step summary quote. Say what this run saw instead, in the same
+        # words the bucket will carry, so the two surfaces cannot drift.
+        note = mismatch_note(upstream) if mismatch else str(b.get("last_health_note") or "")
         rows.append({
             "source_id": pid,
             "product_id": pid,
@@ -147,13 +160,19 @@ def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
             "error_type": str((err or {}).get("error_type") or b.get("last_error_type") or ""),
             "error": str((err or {}).get("error") or ""),
             "records_fetched": fetched,
+            # DELIBERATELY NOT FOLDED INTO records_fetched. `classify_run` decides FAILED vs
+            # DEGRADED on `records_fetched > 0`; counting upstream entries there would let a fleet
+            # that extracted nothing at all report DEGRADED and exit 0 because the pages it cannot
+            # parse are still full of links.
+            "upstream_candidates": upstream,
+            "extraction_mismatch": mismatch,
             "records_written": int(len((res or {}).get("written") or []) or 0),
             "consecutive_failures": int(b.get("consecutive_failures") or 0) + (
                 0 if already_persisted else (1 if err else 0)),
             "consecutive_empty_extractions": streak,
             "last_success_at": str(b.get("last_success_at") or ""),
             "last_extraction_at": str(b.get("last_extraction_at") or ""),
-            "health_note": str(b.get("last_health_note") or ""),
+            "health_note": note,
         })
     return rows
 

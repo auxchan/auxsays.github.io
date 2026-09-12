@@ -245,7 +245,7 @@ def resolve_scan_limit(source: dict[str, Any], args: argparse.Namespace) -> int:
     return value
 
 
-def _adapter_fetch(module: Any, source: dict[str, Any], limit: int, state: dict[str, Any], product_id: str, *, write: bool) -> list[dict[str, Any]]:
+def _adapter_fetch(module: Any, source: dict[str, Any], limit: int, state: dict[str, Any], product_id: str, *, write: bool, probe: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     """Call ``module.fetch``, giving adapters that sweep detail requests across runs a
     persisted per-source scan-progress dict.
 
@@ -260,16 +260,22 @@ def _adapter_fetch(module: Any, source: dict[str, Any], limit: int, state: dict[
     """
     fetch = module.fetch
     try:
-        accepts_scan_state = "scan_state" in inspect.signature(fetch).parameters
+        params = inspect.signature(fetch).parameters
     except (TypeError, ValueError):
-        accepts_scan_state = False
-    if not accepts_scan_state:
-        return fetch(source, limit=limit)
-    if write:
-        scan_state = source_state(state, product_id).setdefault("scan", {})
-    else:
-        scan_state = copy.deepcopy((source_state(state, product_id).get("scan") or {}))
-    return fetch(source, limit=limit, scan_state=scan_state)
+        params = {}
+    kwargs: dict[str, Any] = {"limit": limit}
+    if "scan_state" in params:
+        if write:
+            kwargs["scan_state"] = source_state(state, product_id).setdefault("scan", {})
+        else:
+            kwargs["scan_state"] = copy.deepcopy((source_state(state, product_id).get("scan") or {}))
+    # An adapter that can tell "the listing had entries I could not map" from "the listing had
+    # nothing" fills this dict. Passed only to adapters that declare the parameter, exactly like
+    # scan_state above, so every other adapter is called as before and reports no signal at all --
+    # and no signal means the tolerance path decides, never "broken".
+    if "probe" in params and probe is not None:
+        kwargs["probe"] = probe
+    return fetch(source, **kwargs)
 
 
 def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str, Any], *, write: bool = True) -> dict[str, Any]:
@@ -283,8 +289,13 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     module = adapter_module(adapter_name)
     per_run_limit = resolve_record_limit(source, args)
     scan_limit = resolve_scan_limit(source, args)
-    records = _adapter_fetch(module, source, scan_limit, state, product_id, write=write)
+    probe: dict[str, Any] = {}
+    records = _adapter_fetch(module, source, scan_limit, state, product_id, write=write, probe=probe)
     candidate_count = len(records)
+    upstream_candidates = int(probe.get("upstream_candidates") or 0)
+    # A mismatch claim only means anything when the extractor produced nothing. If records came
+    # back, extraction worked on this run whatever else the listing contained.
+    extraction_mismatch = bool(probe.get("extraction_mismatch")) and candidate_count == 0
     written = []
     skipped = []
     refreshed = []
@@ -390,6 +401,8 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
             fetched=candidate_count,
             written=len(written) + len(refreshed),
             skipped=len(skipped),
+            extraction_mismatch=extraction_mismatch,
+            upstream_candidates=upstream_candidates,
             **({"tolerance": int(tolerance)} if tolerance is not None else {}),
         )
 
@@ -401,6 +414,8 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         "record_limit": per_run_limit,
         "scan_limit": scan_limit,
         "candidate_count": candidate_count,
+        "upstream_candidates": upstream_candidates,
+        "extraction_mismatch": extraction_mismatch,
         "created": created_count,
         "skipped_existing": len(skipped),
         "deferred_count": len(deferred),
