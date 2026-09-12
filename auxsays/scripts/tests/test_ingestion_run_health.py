@@ -45,6 +45,7 @@ from lib import ingest_health as H  # noqa: E402
 from lib.state import (  # noqa: E402
     DEFAULT_EMPTY_EXTRACTION_TOLERANCE,
     classify_success,
+    has_ever_extracted,
     update_source_error,
     update_source_success,
 )
@@ -88,10 +89,19 @@ def status_of(state, pid):
     return ((state.get("sources") or {}).get(pid) or {}).get("status")
 
 
-def res(pid, *, fetched, written=0):
-    """A result dict shaped exactly as `run_source` returns one."""
-    return {"product_id": pid, "adapter": "html_changelog", "candidate_count": fetched,
-            "written": [f"w{i}" for i in range(written)], "status": "success"}
+def res(pid, *, fetched, written=0, mismatch=False, upstream=0):
+    """A result dict shaped exactly as `run_source` returns one.
+
+    `mismatch` defaults to False and `upstream` to 0 on purpose: every pre-existing caller omits
+    them, which is the same shape an adapter that reports no structural signal produces. If absent
+    ever came to mean "broken", the quiet-source checks in [2], [5] and [9] would go red.
+    """
+    row = {"product_id": pid, "adapter": "html_changelog", "candidate_count": fetched,
+           "written": [f"w{i}" for i in range(written)], "status": "success"}
+    if mismatch or upstream:
+        row["extraction_mismatch"] = bool(mismatch)
+        row["upstream_candidates"] = int(upstream)
+    return row
 
 
 def err(pid, message="HTTP 403 while fetching official source"):
@@ -408,14 +418,26 @@ def main() -> int:
         def fake_adapter_module(_name):
             mod = types.SimpleNamespace()
 
-            def fetch(source, **_kw):
+            # `probe` is declared explicitly, exactly as an instrumented adapter declares it, so
+            # the runner's signature check passes it. Behaviours that do not fill it leave it
+            # empty -- which is how every uninstrumented adapter behaves, and why the existing
+            # quiet-source cases below are unaffected by its presence.
+            def fetch(source, probe=None, **_kw):
                 pid = str(source.get("product_id"))
                 what = behaviour[pid]
                 if what == "raise":
                     raise RuntimeError("HTTP 403 while fetching official source")
-                if what == "records":
+                if what in ("records", "records-with-probe"):
+                    if what == "records-with-probe" and probe is not None:
+                        probe.update({"upstream_candidates": 7, "extraction_mismatch": True})
                     return [{"record_id": f"{pid}:r{i}", "version": f"1.{i}", "title": f"{pid} 1.{i}",
                              "source_url": f"https://example.invalid/{pid}/{i}"} for i in range(2)]
+                if what == "mismatch":
+                    # fetch fine, entries on the page, extractor maps none of them
+                    if probe is not None:
+                        probe.update({"upstream_candidates": 7, "matched_candidates": 0,
+                                      "extraction_mismatch": True})
+                    return []
                 return []          # a successful fetch that extracts nothing
             mod.fetch = fetch
             return mod
@@ -572,6 +594,219 @@ def main() -> int:
     check("P6 and a failing source no longer abandons the remaining sources",
           "if args.strict:\n                break" not in main_src,
           "the --strict break discarded healthy vendors' discovery")
+
+    print(NEWLINE + "[EX] structural extraction mismatch -- upstream entries exist, none are mapped")
+    # THE REMAINING HALF OF THE SILENT-GREEN DEFECT. A source whose fetch succeeds and whose
+    # extractor matches nothing was scored `no_results` -- trustworthy, publicly "Active / No new
+    # records" -- for `tolerance` runs before the streak could speak. Netlify sat there having
+    # NEVER extracted a record. The repair is evidence, not patience: when the adapter reports that
+    # the listing still carries entries it could not map, that is an extractor that does not fit.
+    check("EX1 a mismatch on the first quiet check is broken, not no_results",
+          classify_success(0, 0, 0, consecutive_empty=1, extraction_mismatch=True) == "broken",
+          classify_success(0, 0, 0, consecutive_empty=1, extraction_mismatch=True))
+    check("EX2 THE DISCRIMINATOR: identical inputs WITHOUT the signal stay no_results",
+          classify_success(0, 0, 0, consecutive_empty=1, extraction_mismatch=False) == "no_results",
+          "a new source that simply has not published yet must keep its grace period")
+    check("EX3 a mismatch claim cannot override records that were actually extracted",
+          classify_success(3, 3, 0, consecutive_empty=0, extraction_mismatch=True) == "healthy")
+
+    st = fresh()
+    update_source_success(st, "netlify", checked_at="2026-09-11T00:00:00Z", duration_ms=5,
+                          adapter="html_changelog", fetched=0, written=0, skipped=0,
+                          extraction_mismatch=True, upstream_candidates=9)
+    bucket = st["sources"]["netlify"]
+    check("EX4 the persisted status is broken on the FIRST such check",
+          bucket["status"] == "broken" and bucket["consecutive_empty_extractions"] == 1,
+          f"status={bucket['status']} streak={bucket['consecutive_empty_extractions']}")
+    check("EX4b the persisted evidence says parser mismatch, not a long quiet spell",
+          bucket["extraction_mismatch"] is True and bucket["last_upstream_candidates"] == 9
+          and "parser/extractor mismatch" in bucket["last_health_note"]
+          and "consecutive checks" not in bucket["last_health_note"],
+          bucket["last_health_note"][:130])
+    check("EX4c and no extraction timestamp is invented",
+          not bucket.get("last_extraction_at"))
+
+    rows = rows_for(st, [src("netlify"), src("github")],
+                    [res("netlify", fetched=0, mismatch=True, upstream=9), res("github", fetched=4)])
+    nrow = next(r for r in rows if r["source_id"] == "netlify")
+    check("EX5 the row is impaired, so the run is degraded rather than healthy",
+          H.classify_run(rows) == H.RUN_DEGRADED and nrow["status"] == "broken",
+          f"verdict={H.classify_run(rows)} netlify={nrow['status']}")
+    check("EX5b upstream entries are counted SEPARATELY from records fetched",
+          nrow["records_fetched"] == 0 and nrow["upstream_candidates"] == 9
+          and nrow["extraction_mismatch"] is True,
+          f"fetched={nrow['records_fetched']} upstream={nrow['upstream_candidates']}")
+    check("EX5c the row states what THIS run saw, not the stored note",
+          "extractor matched none" in nrow["health_note"], nrow["health_note"][:120])
+
+    only_mismatch = rows_for(fresh(), [src("netlify")],
+                             [res("netlify", fetched=0, mismatch=True, upstream=9)])
+    check("EX6 a fleet that mapped nothing at all is FAILED, not degraded",
+          H.classify_run(only_mismatch) == H.RUN_FAILED,
+          "upstream entries are not output; folding them into records_fetched would exit 0 here")
+
+    emitted: list[str] = []
+    H.annotate(rows, H.RUN_DEGRADED, emit=emitted.append)
+    check("EX7 the degraded run annotates the mismatched source by name and reason",
+          any("netlify" in m and "extractor matched none" in m for m in emitted),
+          str(emitted)[:200])
+
+    import source_health_snapshot as SHS
+    public = SHS.status_for({"product_id": "netlify", "enabled": True}, bucket, "")
+    check("EX8 the public row stops reading 'Active / No new records'",
+          public == ("Error", "Parser found nothing on this source"), str(public))
+    quiet = fresh()
+    update_source_success(quiet, "quiet", checked_at="2026-09-11T00:00:00Z", duration_ms=5,
+                          adapter="html_changelog", fetched=0, written=0, skipped=0)
+    check("EX8b while a genuinely quiet source is still published as Active",
+          SHS.status_for({"product_id": "quiet", "enabled": True},
+                         quiet["sources"]["quiet"], "") == ("Active", "No new records"),
+          "the public half must not sweep every zero-extraction source into Error")
+
+    legacy = {"seen": ["r1", "r2"], "status": "no_results", "consecutive_empty_extractions": T + 1}
+    check("EX9 a legacy source with a seen ledger but no last_extraction_at is STALE, not broken",
+          classify_success(0, 0, 0, consecutive_empty=T + 1,
+                           ever_extracted=has_ever_extracted(legacy)) == "stale",
+          "bool(seen) bootstraps history for sources older than the last_extraction_at field")
+    check("EX10 while a source with no history at all is still broken past tolerance",
+          classify_success(0, 0, 0, consecutive_empty=T + 1,
+                           ever_extracted=has_ever_extracted({"seen": []})) == "broken")
+    check("EX11 has_ever_extracted accepts either witness and rejects neither",
+          has_ever_extracted({"last_extraction_at": "2026-01-01T00:00:00Z"})
+          and has_ever_extracted({"seen": ["r"]}) and not has_ever_extracted({}),
+          "the two witnesses must be OR'd, not replaced")
+
+    stale_flag = {"seen": [], "extraction_mismatch": True, "consecutive_empty_extractions": 0}
+    check("EX12 the mismatch is read from THIS run, never from the persisted flag",
+          H.observed_status(res("x", fetched=0), None, stale_flag) == "no_results",
+          "reading the stored flag would make a dry run grade against the last write run")
+
+    # A source that HAS extracted before and whose upstream has now moved is `stale` -- "it used
+    # to work" -- not `broken` -- "the extractor never fitted". Immediacy is the repair; the
+    # vocabulary still has to mean what the docstring says it means.
+    veteran = fresh()
+    succeed(veteran, "moved", fetched=3, at="2026-08-01T00:00:00Z")
+    update_source_success(veteran, "moved", checked_at="2026-09-11T00:00:00Z", duration_ms=5,
+                          adapter="html_changelog", fetched=0, written=0, skipped=0,
+                          extraction_mismatch=True, upstream_candidates=12)
+    vb = veteran["sources"]["moved"]
+    check("EX13 a veteran source whose upstream moved is STALE immediately, not broken",
+          vb["status"] == "stale" and vb["consecutive_empty_extractions"] == 1, str(vb["status"]))
+    check("EX13b and it is still impaired, and published as an error with its last extraction date",
+          "stale" not in H.TRUSTWORTHY
+          and SHS.status_for({"product_id": "moved", "enabled": True}, vb, "")[0] == "Error",
+          str(SHS.status_for({"product_id": "moved", "enabled": True}, vb, "")))
+
+    # A transport failure observed nothing about the extractor, so the finding must not survive
+    # it in a file that gets committed.
+    fail(veteran, "moved", error="HTTP 403 while fetching official source")
+    check("EX14 a later fetch failure clears the mismatch it did not observe",
+          veteran["sources"]["moved"]["extraction_mismatch"] is False
+          and veteran["sources"]["moved"]["last_upstream_candidates"] == 0,
+          str({k: veteran["sources"]["moved"].get(k)
+               for k in ("status", "extraction_mismatch", "last_upstream_candidates")}))
+
+    shared = rows_for(st, [src("netlify")], [res("netlify", fetched=0, mismatch=True, upstream=9)])
+    check("EX15 the row and the bucket quote ONE sentence, not two that can drift",
+          shared[0]["health_note"] == st["sources"]["netlify"]["last_health_note"],
+          f"row={shared[0]['health_note'][:60]!r} bucket={st['sources']['netlify']['last_health_note'][:60]!r}")
+
+    print(NEWLINE + "[EXA] the adapter that can see the evidence actually reports it")
+    import inspect
+    from adapters import html_changelog as HC
+    from adapters import elgato_help_center as EHC
+    netlify_src = {"product_id": "netlify", "company_id": "netlify",
+                   "ingestion": {"parser_profile": "netlify_changelog"}}
+    base = "https://www.netlify.com/changelog/"
+    slug_listing = ("<a href='/changelog/social-media-share-buttons/'>One</a>"
+                    "<a href='/changelog/cursor-origin-git-provider/'>Two</a>"
+                    "<a href='/changelog/feed.xml'>RSS</a>")
+    dated_listing = "<a href='/changelog/2026/9/11/social-media-share-buttons/'>One</a>"
+    p_slug = HC.changelog_probe(netlify_src, base, slug_listing, HC._candidate_links(netlify_src, base, slug_listing))
+    check("EXA1 slug-only entries the date pattern cannot match report a mismatch",
+          p_slug["extraction_mismatch"] is True and p_slug["upstream_candidates"] == 2
+          and p_slug["matched_candidates"] == 0, str(p_slug))
+    p_dated = HC.changelog_probe(netlify_src, base, dated_listing, HC._candidate_links(netlify_src, base, dated_listing))
+    check("EXA2 the same profile against entries it CAN match reports no mismatch",
+          p_dated["extraction_mismatch"] is False and p_dated["matched_candidates"] == 1, str(p_dated))
+    generic_src = {"product_id": "g", "company_id": "g", "ingestion": {"parser_profile": "generic"}}
+    p_generic = HC.changelog_probe(generic_src, base, slug_listing, HC._candidate_links(generic_src, base, slug_listing))
+    check("EXA3 a generic profile can never accuse itself -- family IS its candidate rule",
+          p_generic["extraction_mismatch"] is False, str(p_generic))
+    p_feed = HC.changelog_probe(netlify_src, base, "<a href='/changelog/feed.xml'>RSS</a>", [])
+    check("EXA4 a feed link alone is not upstream content",
+          p_feed["upstream_candidates"] == 0 and p_feed["extraction_mismatch"] is False, str(p_feed))
+    check("EXA5 an empty listing claims nothing, so a quiet source keeps its grace period",
+          HC.changelog_probe(netlify_src, base, "<p>no entries yet</p>", [])["extraction_mismatch"] is False)
+
+    nav_listing = ("<a href='/changelog/?page=2'>Older</a><a href='/changelog/#top'>Back to top</a>"
+                   "<a href='/changelog/'>Changelog</a>")
+    p_nav = HC.changelog_probe(netlify_src, base, nav_listing, [])
+    check("EXA6 a page's own pagination and anchors are navigation, not upstream entries",
+          p_nav["upstream_candidates"] == 0 and p_nav["extraction_mismatch"] is False,
+          f"{p_nav} -- a listing that has published nothing would otherwise accuse itself")
+    dup_listing = ("<a href='/changelog/social-media-share-buttons/'>One</a>"
+                   "<a href='/changelog/social-media-share-buttons?utm=x'>One again</a>")
+    check("EXA7 the same entry linked twice is one entry",
+          HC.changelog_probe(netlify_src, base, dup_listing,
+                             HC._candidate_links(netlify_src, base, dup_listing))["upstream_candidates"] == 1)
+    check("EXA8 ONLY html_changelog opts in -- every other adapter reports nothing",
+          "probe" in inspect.signature(HC.fetch).parameters
+          and "probe" not in inspect.signature(EHC.fetch).parameters,
+          "the help-center sweep inspects a bounded window per run, so zero records in one window "
+          "is not evidence about the source; it keeps the tolerance path")
+
+    print(NEWLINE + "[EXE] end to end: the mismatch survives the wiring, write and dry run alike")
+    # A WRITE run, so persistence and reporting can be compared on the same run -- the parity the
+    # #137 defect broke. Its fleet is one mismatched source, so it is also the all-impaired case.
+    code, state, summary = run_main([("netlify", True, "mismatch")])
+    nb = state["sources"]["netlify"]
+    reported = next((r for r in run_main.report.get("source_health") or []
+                     if r.get("source_id") == "netlify"), {})
+    check("EXE1 a write run persists broken for the mismatched source on its FIRST run",
+          nb.get("status") == "broken" and nb.get("extraction_mismatch") is True
+          and nb.get("consecutive_empty_extractions") == 1,
+          f"status={nb.get('status')} flag={nb.get('extraction_mismatch')} "
+          f"streak={nb.get('consecutive_empty_extractions')}")
+    check("EXE2 and REPORTS the same status it persisted, with the upstream count",
+          reported.get("status") == "broken" and reported.get("upstream_candidates") == 7
+          and reported.get("records_fetched") == 0,
+          f"reported={reported.get('status')} upstream={reported.get('upstream_candidates')}")
+    check("EXE3 a fleet whose every source is mismatched is failed and exits non-zero",
+          code == 1 and run_main.report.get("run_health") == "failed",
+          f"code={code} verdict={run_main.report.get('run_health')}")
+    check("EXE4 the run page carries a warning naming it",
+          "::warning" in run_main.stdout and "netlify" in run_main.stdout, run_main.stdout[:160])
+    check("EXE5 and the step summary shows it as broken",
+          "netlify" in summary and "broken" in summary, summary[-200:])
+
+    # A DRY run of a mixed fleet: the #136 semantics this repair must not disturb. (Dry, because
+    # the fixture records carry only the fields the health layer reads, not the writer's.)
+    code, state, summary = run_main([("netlify", True, "mismatch"), ("good", True, "records")],
+                                    argv_extra=("--dry-run",))
+    dry = next((r for r in run_main.report.get("source_health") or []
+                if r.get("source_id") == "netlify"), {})
+    check("EXE6 a dry run reaches the identical broken verdict while persisting nothing",
+          dry.get("status") == "broken" and not state.get("sources", {}).get("netlify"),
+          f"dry={dry.get('status')} persisted={bool(state.get('sources', {}).get('netlify'))}")
+    check("EXE7 mixed healthy + mismatched stays DEGRADED and still exits zero",
+          run_main.report.get("run_health") == "degraded" and code == 0,
+          f"verdict={run_main.report.get('run_health')} code={code}")
+    check("EXE8 and the healthy source's output is preserved in the same run",
+          any(r.get("product_id") == "good" and r.get("candidate_count") == 2
+              for r in run_main.report.get("results") or []),
+          str(run_main.report.get("results"))[:160])
+
+    code, state, summary = run_main([("noisy", True, "records-with-probe")], argv_extra=("--dry-run",))
+    noisy = next((r for r in run_main.report.get("source_health") or []
+                  if r.get("source_id") == "noisy"), {})
+    check("EXE9 a probe claiming mismatch while records came back is ignored",
+          noisy.get("status") == "healthy" and code == 0,
+          f"status={noisy.get('status')} code={code}")
+    check("EXE9b and no mismatch is recorded against a source that extracted records",
+          noisy.get("extraction_mismatch") is False and noisy.get("records_fetched") == 2,
+          f"flag={noisy.get('extraction_mismatch')} -- a false diagnostic would be committed to "
+          "the tracked state file even though the status is right")
 
     print(NEWLINE + "[M] mutation harness -- a catch must be a SEMANTIC failure, not a crash")
     mutations = [

@@ -79,10 +79,43 @@ def is_seen(state: dict[str, Any], product_id: str, record_id: str) -> bool:
 DEFAULT_EMPTY_EXTRACTION_TOLERANCE = 12
 
 
+def mismatch_note(upstream_candidates: int) -> str:
+    """The one sentence that describes a structural extraction mismatch.
+
+    Shared so the persisted bucket, the health row, the `::warning` annotation and the step
+    summary cannot drift into four hand-maintained wordings of the same finding.
+    """
+    return (f"Fetch succeeded and the source still lists {int(upstream_candidates)} upstream "
+            "entries, but the extractor matched none of them. That is a parser/extractor "
+            "mismatch, not a quiet period: the page is reachable and its contents no longer fit "
+            "this source's extraction rules.")
+
+
+def has_ever_extracted(bucket: dict[str, Any]) -> bool:
+    """Has this source EVER produced a record, over its whole life?
+
+    `last_extraction_at` only exists from PR #136 onwards. A source that extracted records for
+    months before that field was invented carries no `last_extraction_at` at all, so a threshold
+    reading that field alone treats a veteran source as one that has never worked -- and would
+    report `broken` ("the extractor never fitted") for what is really `stale` ("it used to work").
+    The `seen` ledger is the durable lifetime record that predates the field, so it bootstraps the
+    answer for those sources.
+
+    It is a bootstrap, not a second opinion: a source with a `seen` ledger HAS extracted the
+    records in it, whenever that was. On the live fleet today the two agree everywhere -- every
+    bucket with `seen` also has `last_extraction_at` -- so this changes no current classification.
+    It exists so that the next source whose history predates the field is not mislabelled, which is
+    the general form of the defect recorded in `telemetry-defaults-that-flatter`: a new counter
+    starts at zero at deployment and lies about every subject older than itself.
+    """
+    return bool(bucket.get("last_extraction_at")) or bool(bucket.get("seen"))
+
+
 def classify_success(fetched: int, written: int, skipped: int,
                      *, consecutive_empty: int = 0,
                      tolerance: int = DEFAULT_EMPTY_EXTRACTION_TOLERANCE,
-                     ever_extracted: bool = False) -> str:
+                     ever_extracted: bool = False,
+                     extraction_mismatch: bool = False) -> str:
     """Classify a successful adapter run without pretending every success is equal.
 
     A FETCH that succeeds is not an EXTRACTION that succeeded, and the difference is the whole
@@ -111,6 +144,25 @@ def classify_success(fetched: int, written: int, skipped: int,
     """
     if fetched > 0:
         return "healthy"
+    # STRUCTURAL EVIDENCE BEATS THE CLOCK. `extraction_mismatch` means the adapter looked at the
+    # upstream listing, recognised entries that belong to this source, and mapped NONE of them --
+    # Netlify's 9 changelog entries against a detail pattern that requires a date path, or an
+    # Elgato help-center article whose version line the parser cannot read. That is not a quiet
+    # period that might end tomorrow; it is an extractor that does not fit the source as it is
+    # now, and waiting `tolerance` more checks to say so only delays the repair.
+    #
+    # The tolerance path below stays exactly as it was for every source that reports no such
+    # evidence, which is what keeps a genuinely new source that simply has not published yet --
+    # fetch fine, listing empty, nothing to map -- inside its grace period instead of being
+    # called broken on its first quiet check.
+    if extraction_mismatch:
+        # Impaired IMMEDIATELY -- that is the whole point -- but still labelled by the same
+        # vocabulary as the tolerance branch below. `broken` means "the extractor never fitted
+        # this source" and `stale` means "it did, and no longer does"; a source that has extracted
+        # before and whose upstream has now moved is the second, and calling it `broken` would
+        # throw away the distinction the docstring above draws and `has_ever_extracted` protects.
+        # Both are impaired, both publish as an error, and neither waits for the streak.
+        return "stale" if ever_extracted else "broken"
     if consecutive_empty > max(0, int(tolerance)):
         return "stale" if ever_extracted else "broken"
     return "no_results"
@@ -127,13 +179,16 @@ def update_source_success(
     written: int,
     skipped: int,
     tolerance: int = DEFAULT_EMPTY_EXTRACTION_TOLERANCE,
+    extraction_mismatch: bool = False,
+    upstream_candidates: int = 0,
 ) -> None:
     bucket = source_state(state, product_id)
     previous_failures = int(bucket.get("consecutive_failures") or 0)
     consecutive_empty = 0 if fetched > 0 else int(bucket.get("consecutive_empty_extractions") or 0) + 1
     status = classify_success(fetched, written, skipped,
                               consecutive_empty=consecutive_empty, tolerance=tolerance,
-                              ever_extracted=bool(bucket.get("last_extraction_at")))
+                              ever_extracted=has_ever_extracted(bucket),
+                              extraction_mismatch=extraction_mismatch)
     bucket.update({
         "status": status,
         "last_checked_at": checked_at,
@@ -154,11 +209,19 @@ def update_source_success(
         "last_records_written": int(written),
         "last_records_skipped": int(skipped),
         "last_run_duration_ms": int(duration_ms),
+        # What the adapter saw upstream, kept separate from what it managed to map. Two scalars,
+        # not a link dump: this file is committed on every write run.
+        "extraction_mismatch": bool(extraction_mismatch),
+        "last_upstream_candidates": int(upstream_candidates),
     })
     if fetched > 0:
         bucket["last_extraction_at"] = checked_at
         bucket["last_extraction_records"] = int(fetched)
         bucket["last_health_note"] = "Fetch succeeded."
+    elif extraction_mismatch:
+        # Said in terms of what was measured this run, not how long it has been going on. The
+        # streak is irrelevant here -- the evidence is that entries exist and none of them map.
+        bucket["last_health_note"] = mismatch_note(upstream_candidates)
     elif status in ("broken", "stale"):
         ever = "has never extracted a record" if status == "broken" else (
             f"last extracted a record at {bucket.get('last_extraction_at')}")
@@ -201,6 +264,11 @@ def update_source_error(
         "last_records_skipped": 0,
         "last_run_duration_ms": int(duration_ms),
         "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+        # A run that never reached the page observed nothing about the extractor. Leaving the
+        # previous run's finding in place would keep asserting, in a committed file, that N
+        # upstream entries went unmapped on a run that never fetched them.
+        "extraction_mismatch": False,
+        "last_upstream_candidates": 0,
     })
 
 

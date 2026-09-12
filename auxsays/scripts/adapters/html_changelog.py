@@ -15,6 +15,8 @@ from lib.normalize import strip_tags, normalize_date, first_nonempty
 DATE_RE = re.compile(r"([A-Z][a-z]{2,8}\s+\d{1,2},\s+\d{4}|\d{4}-\d{2}-\d{2})")
 NETLIFY_DETAIL_RE = re.compile(r"/changelog/\d{4}/\d{1,2}/\d{1,2}/[^/?#]+/?$", re.I)
 GENERIC_EXCLUDE_RE = re.compile(r"/(tag|tags|category|categories|author|page|feed|rss|atom)/", re.I)
+# Feeds and downloadable assets are never changelog ENTRIES, whatever path they sit under.
+FEED_OR_ASSET_RE = re.compile(r"\.(xml|rss|atom|json|zip|pdf|dmg|exe|pkg|png|jpe?g|svg)$", re.I)
 ADOBE_VERSION_HEADING_RE = re.compile(r"<h(?P<level>[2-4])\b[^>]*>(?P<title>.*?(?:version|v)\s*[0-9]+(?:\.[0-9]+){0,3}.*?)</h(?P=level)>", re.I | re.S)
 ADOBE_VERSION_RE = re.compile(r"(?:version|v)\s*([0-9]+(?:\.[0-9]+){0,3})", re.I)
 ADOBE_MONTH_RE = re.compile(r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})", re.I)
@@ -160,15 +162,74 @@ def _candidate_links(source: dict, source_url: str, html: str) -> list[str]:
     return links[:10]
 
 
-def fetch(source: dict, limit: int = 3) -> list[dict]:
+def _entry_key(url: str) -> str:
+    """A URL reduced to the page it identifies: no query, no fragment, no trailing slash."""
+    parsed = urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc.lower()}{parsed.path.rstrip('/')}"
+
+
+def _family_links(source_url: str, html: str) -> list[str]:
+    """Links on the listing that look like changelog/release ENTRIES for this same site.
+
+    This is the loose, shape-only question -- "does this page still publish entries?" -- asked
+    independently of whether the configured profile can map them. It is the generic rule every
+    html_changelog source already trusts to find its own entries, so it cannot invent upstream
+    content that the adapter would not otherwise consider.
+    """
+    base = _entry_key(source_url)
+    found: list[str] = []
+    for m in re.finditer(r"<a\b[^>]*href=[\"']([^\"']+)[\"'][^>]*>(.*?)</a>", html, flags=re.I | re.S):
+        href, text = m.group(1), strip_tags(m.group(2))
+        if not href or href.startswith("#") or href.startswith("mailto:"):
+            continue
+        absolute = urljoin(source_url, href)
+        # A feed is not an entry. Netlify's listing links /changelog/feed.xml, and counting it
+        # would let a page whose ONLY changelog link is its own feed claim upstream content.
+        if FEED_OR_ASSET_RE.search(urlparse(absolute).path):
+            continue
+        # `?page=2` and `#top` are the SAME page, so they are navigation, not entries. Comparing
+        # raw URLs let a listing that has published nothing yet point at its own pagination and
+        # claim upstream content -- which would call a brand-new source broken on its first check.
+        key = _entry_key(absolute)
+        if (_is_generic_changelog_detail_url(source_url, absolute, text)
+                and key != base and key not in found):
+            found.append(key)
+    return found
+
+
+def changelog_probe(source: dict, source_url: str, listing: str, matched: list[str]) -> dict:
+    """Structural evidence about THIS listing: entries present, versus entries mapped.
+
+    `extraction_mismatch` says the page still publishes entries and the configured extractor maps
+    none of them. That is Netlify exactly: the changelog moved to slug-only URLs, and
+    NETLIFY_DETAIL_RE still demands /changelog/YYYY/M/D/slug/, so every entry is invisible to it
+    while the fetch keeps succeeding.
+
+    It cannot fire for a `generic` profile, because there the family test IS the candidate test --
+    if the generic rule finds no entries, there is nothing claimed to be present. That is the
+    intended asymmetry: the signal only reports a profile narrower than the page it is aimed at.
+    """
+    family = _family_links(source_url, listing)
+    return {
+        "upstream_candidates": len(family),
+        "matched_candidates": len(matched),
+        "extraction_mismatch": bool(family) and not matched,
+    }
+
+
+def fetch(source: dict, limit: int = 3, probe: dict | None = None) -> list[dict]:
     ingestion = source.get("ingestion", {})
     profile = ingestion.get("parser_profile") or "generic"
     if profile.startswith("adobe_") and profile.endswith("_release_notes"):
+        # Heading-driven, not link-driven: there is no candidate-link population to compare
+        # against, so this path reports no signal and keeps the tolerance path.
         return _fetch_adobe_release_notes(source, limit=limit)
 
     source_url = ingestion["official_url"]
     listing = fetch_text(source_url, **_fetch_options(source)).text
     links = _candidate_links(source, source_url, listing)
+    if probe is not None:
+        probe.update(changelog_probe(source, source_url, listing, links))
 
     if not links:
         if not ingestion.get("allow_listing_snapshot", False):
