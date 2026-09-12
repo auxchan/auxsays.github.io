@@ -17,8 +17,8 @@ update_version: Send to Buzz from Figma Design
 update_logo_text: FIG
 update_published_at: '2025-09-05T00:00:00.000Z'
 update_last_checked: '2026-08-12T03:58:14Z'
-source_last_checked: '2026-08-12T03:58:14Z'
-official_body_last_checked: '2026-08-12T03:58:14Z'
+source_last_checked: '2026-09-12T06:41:17Z'
+official_body_last_checked: '2026-09-12T06:41:17Z'
 record_last_updated: '2026-08-12T03:58:14Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-12T03:58:14Z'
+  url: https://www.figma.com/release-notes/?title=send-to-buzz
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-12T06:41:17Z'
   url: https://www.figma.com/release-notes/?title=send-to-buzz
   status: captured-from-rss-feed
   body_captured: true
