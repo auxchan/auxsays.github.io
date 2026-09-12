@@ -17,8 +17,8 @@ update_version: Add VS Code Agents to Copilot usage metrics
 update_logo_text: GIT
 update_published_at: '2026-09-11T21:30:30Z'
 update_last_checked: '2026-09-11T23:04:51Z'
-source_last_checked: '2026-09-11T23:04:51Z'
-official_body_last_checked: '2026-09-11T23:04:51Z'
+source_last_checked: '2026-09-12T01:32:22Z'
+official_body_last_checked: '2026-09-12T01:32:22Z'
 record_last_updated: '2026-09-11T23:04:51Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -84,6 +84,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-09-11T23:04:51Z'
+  url: https://github.blog/changelog/2026-09-11-add-vs-code-agents-to-copilot-usage-metrics
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-12T01:32:22Z'
   url: https://github.blog/changelog/2026-09-11-add-vs-code-agents-to-copilot-usage-metrics
   status: captured-from-rss-feed
   body_captured: true
