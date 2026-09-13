@@ -31670,3 +31670,28 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wblwm2-changing-clip-image-orientation-no-longer
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wblwm2/changing_clip_image_orientation_no_longer_changes/
+  parent_title: Changing clip image orientation no longer changes aspect ratio since DaVinci Resolve 21.1
+  report_title: Changing clip image orientation no longer changes aspect ratio since DaVinci Resolve 21.1
+  report_text_excerpt: Changing clip image orientation no longer changes aspect ratio since DaVinci Resolve 21.1 Hi. Since DaVinci Resolve 21.1 update, I have an issue with vertical 9:16 videos that are saved by the camera as 16:9. Before this update, I used Image Orientation in the Clip Attributes...
+  captured_at: '2026-09-13T21:50:34Z'
+  source_date: '2026-09-09'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
