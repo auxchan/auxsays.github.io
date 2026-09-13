@@ -19,7 +19,7 @@ update_published_at: '2025-12-01T00:00:00Z'
 update_last_checked: '2026-07-21T08:49:00Z'
 source_last_checked: '2026-07-21T08:49:00Z'
 official_body_last_checked: '2026-07-21T08:49:00Z'
-record_last_updated: '2026-09-11T17:38:10.435845Z'
+record_last_updated: '2026-09-13T05:56:03.498293Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,7 +27,7 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.3
 update_detail_title: DaVinci Resolve 20.3
 update_consensus_label: Negative
-update_report_count: 5
+update_report_count: 6
 update_consensus_confidence: Low
 quick_verdict: 'WAIT: DaVinci Resolve 20.3 has 3 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.3 in its official support downloads feed.
@@ -37,8 +37,8 @@ evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 5
-evidence_last_checked: '2026-09-11T17:36:34Z'
+confirmed_patch_specific_report_count: 6
+evidence_last_checked: '2026-09-13T05:53:53Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1

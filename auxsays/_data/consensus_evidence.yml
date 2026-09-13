@@ -31278,7 +31278,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wd9wok-davinci-resolve-fusion-cache-rendering-to
   product_id: blackmagic-davinci
   update_version: 21.0.2
@@ -31303,7 +31302,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6000103-windows-11-update-wants-me-to-install
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -31362,7 +31360,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wd67zz-autosubs-380-not-launching-from-davinci-r
   product_id: blackmagic-davinci
   update_version: '21'
@@ -31387,7 +31384,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1veowse-render-cache-unsatisfying-experience-is-t
   product_id: blackmagic-davinci
   update_version: '20.3'
@@ -31433,6 +31429,159 @@ evidence:
   issue_theme: render/export failure
   workflow_area: render/export
   platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rncpqx-ai-speed-warp-timeline-preview-looks-bett
+  product_id: blackmagic-davinci
+  update_version: '20.3'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rncpqx/ai_speed_warp_timeline_preview_looks_better_than/
+  parent_title: AI Speed Warp Timeline preview looks better than Export
+  report_title: AI Speed Warp Timeline preview looks better than Export
+  report_text_excerpt: 'AI Speed Warp Timeline preview looks better than Export Hey Editors of Reddit, I need your help. I''ve recently been using the AI Speed warp for super slow-motion a lot, mainly for sports edits. And I''ve noticed a strange thing: The Playback-Preview in my timeline is a lot...'
+  captured_at: '2026-09-13T05:53:53Z'
+  source_date: '2026-03-07'
+  target_release_date: '2025-12-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.3'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6001139-failure-of-updates-kb5126052-kb5124008
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6001139/failure-of-updates-kb5126052-kb5124008-26200-9445
+  parent_title: Failure of updates KB5126052 & (KB5124008) (26200.9445) now microsoft apps won't work. - Microsoft Q&A
+  report_title: Failure of updates KB5126052 & (KB5124008) (26200.9445) now microsoft apps won't work. - Microsoft Q&A
+  report_text_excerpt: Failure of updates KB5126052 & (KB5124008) (26200.9445) now microsoft apps won't work. - Microsoft Q&A My computer is unable to complete the two updates listed above and comes up with installation error code 0x800706ba and 0x800706be. Since it has been trying to do these two...
+  captured_at: '2026-09-13T06:02:53Z'
+  source_date: '2026-09-12'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-kb5124008-issue-4555705
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/kb5124008-issue/4555705
+  parent_title: KB5124008 issue
+  report_title: KB5124008 issue
+  report_text_excerpt: KB5124008 issue KB5124008 (26200.9445) prevents HyperX headphones from connecting/working&amp;nbsp;I am experiencing a reproducible audio/headphone issue after installing the 2026-09 Security Update (KB5124008), OS Build 26200.9445.&amp;nbsp;My computer is an ASUS TUF Gaming...
+  captured_at: '2026-09-13T06:02:53Z'
+  source_date: '2026-09-11'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6000123-winui-3-app-ui-is-displayed-incorrectl
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6000123/winui-3-app-ui-is-displayed-incorrectly-in-kiosk-m
+  parent_title: WinUI 3 app UI is displayed incorrectly in kiosk mode after the Win 11 update. - Microsoft Q&A
+  report_title: WinUI 3 app UI is displayed incorrectly in kiosk mode after the Win 11 update. - Microsoft Q&A
+  report_text_excerpt: WinUI 3 app UI is displayed incorrectly in kiosk mode after the Win 11 update. - Microsoft Q&A we have a WinUI 3 application that runs in kiosk mode (implemented using shell launcher V2). We found that when the app runs in kiosk mode on Win11 OS build (26100.8875), the app UI...
+  captured_at: '2026-09-13T06:03:51Z'
+  source_date: '2026-09-11'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8875'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: obs-studio-32-2-2-github-issue-13891
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13891
+  parent_title: 'macOS: GPU clock and power gradually ramp to maximum while OBS window is visible, immediately drops when minimized'
+  report_title: 'macOS: GPU clock and power gradually ramp to maximum while OBS window is visible, immediately drops when minimized'
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/hUVOtZNOzsPjBWrM ### OBS Studio Crash Log URL _No response_ ### Expected Behavior ### O'
+  captured_at: '2026-09-13T06:18:20Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13893
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13893
+  parent_title: '[Windows 10] Poor frame pacing with WGC window capture'
+  report_title: '[Windows 10] Poor frame pacing with WGC window capture'
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ZQNfTwhFQPAlz90C ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
+  captured_at: '2026-09-13T06:18:20Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
   severity: medium
   sentiment: negative
   source_weight: 1
