@@ -17,8 +17,8 @@ update_version: See how users join your organization
 update_logo_text: FIG
 update_published_at: '2025-07-24T00:00:00.000Z'
 update_last_checked: '2026-08-14T03:53:39Z'
-source_last_checked: '2026-08-14T03:53:39Z'
-official_body_last_checked: '2026-08-14T03:53:39Z'
+source_last_checked: '2026-09-13T18:31:53Z'
+official_body_last_checked: '2026-09-13T18:31:53Z'
 record_last_updated: '2026-08-14T03:53:39Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-14T03:53:39Z'
+  url: https://www.figma.com/release-notes/?title=see-how-users-join-your-organization
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-13T18:31:53Z'
   url: https://www.figma.com/release-notes/?title=see-how-users-join-your-organization
   status: captured-from-rss-feed
   body_captured: true
