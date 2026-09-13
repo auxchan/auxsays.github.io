@@ -31585,3 +31585,88 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1we9yc4-variblur-creates-a-hard-vertical-edge-on
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1we9yc4/variblur_creates_a_hard_vertical_edge_on/
+  parent_title: VariBlur creates a hard vertical edge on transparent imagePost a reply
+  report_title: VariBlur creates a hard vertical edge on transparent imagePost a reply
+  report_text_excerpt: VariBlur creates a hard vertical edge on transparent imagePost a reply Hi everyone, I am seeing an unexpected hard vertical edge when using VariBlur on the Fusion page in DaVinci Resolve Studio 21 on macOS. I would appreciate some help understanding whether this is caused by...
+  captured_at: '2026-09-13T13:00:44Z'
+  source_date: '2026-09-12'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve Studio 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6001339-update-history-shows-kb5124008-success
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6001339/update-history-shows-kb5124008-successfully-instal
+  parent_title: Update history shows KB5124008 successfully installed, yet Windows Update tells me to restart to install that update... - Microsoft Q&A
+  report_title: Update history shows KB5124008 successfully installed, yet Windows Update tells me to restart to install that update... - Microsoft Q&A
+  report_text_excerpt: Update history shows KB5124008 successfully installed, yet Windows Update tells me to restart to install that update... - Microsoft Q&A The KB5124008 update has created loads of problems for me. It automatically installed itself three days ago, and killed my USB audio device....
+  captured_at: '2026-09-13T13:06:54Z'
+  source_date: '2026-09-12'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6001201-ctrl-c-and-ctrl-v-not-working-in-excel
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6001201/ctrl-c-and-ctrl-v-not-working-in-excel-after-updat
+  parent_title: Ctrl+C and Ctrl+V Not Working in Excel After Updating to 2016 Version 25H2 (OS Build 26200.9445) - Microsoft Q&A
+  report_title: Ctrl+C and Ctrl+V Not Working in Excel After Updating to 2016 Version 25H2 (OS Build 26200.9445) - Microsoft Q&A
+  report_text_excerpt: Ctrl+C and Ctrl+V Not Working in Excel After Updating to 2016 Version 25H2 (OS Build 26200.9445) - Microsoft Q&A As subject and i've tried all different ways i can find online but none of them works! this problem started from 9th Sep 2026. Please help solve and don't provide...
+  captured_at: '2026-09-13T13:06:54Z'
+  source_date: '2026-09-12'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9445'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
