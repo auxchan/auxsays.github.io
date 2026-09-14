@@ -252,6 +252,56 @@ class LayoffsHistoryTests(unittest.TestCase):
         retry = promote_candidate_batch(source, ledger, accepted_at="2026-08-01T12:03:00Z", existing_history=first)
         self.assertEqual([], retry)
 
+    def test_dol_semantic_retry_ignores_report_execution_transport_changes(self):
+        rights = json.loads(RIGHTS.read_text(encoding="utf-8"))
+        ledger = load_acceptance_ledger(ACCEPTANCE, rights_registry=rights)
+        release_id = "DOL-UI-r539cyNational-observation-2026-09-05-0123456789abcdef"
+
+        def dol_batch(artifact: str, public_time: str, retrieved_time: str) -> dict:
+            return {
+                "schemaVersion": "layoffs-source-candidate-batch-1.0.0",
+                "activationStatus": "NOT_ACCEPTED_NOT_PUBLISHABLE",
+                "rawArtifacts": [{"sha256": artifact, "source_id": "dol-ui-claims", "parser_version": "layoffs-dol-national-xml-v1"}],
+                "sourceDiagnostics": {"dolFreshness": {"status": "CURRENT"}},
+                "candidates": [{
+                    "observation_id": "transport-owned-candidate-id",
+                    "canonical_factor": "factor:canonical:initial-claims",
+                    "source_id": "dol-ui-claims",
+                    "source_series_id": "DOL-UI-SA-INITIAL",
+                    "release_id": release_id,
+                    "artifact_sha256": artifact,
+                    "value": "206000",
+                    "unit": "claims",
+                    "frequency": "weekly",
+                    "geography": "US",
+                    "seasonal_adjustment": "seasonally adjusted",
+                    "observation_period": "2026-09-05",
+                    "public_time": public_time,
+                    "retrieved_time": retrieved_time,
+                    "accepted_time": None,
+                    "publication_eligible": False,
+                    "publication_time_kind": "conservative_retrieval_bound",
+                    "revision_status": "current_revised_snapshot",
+                    "provenance_url": "https://oui.doleta.gov/unemploy/wkclaims/report.asp",
+                    "evidence_url": "https://www.dol.gov/ui/data.pdf",
+                    "methodology_url": "https://oui.doleta.gov/unemploy/claims.asp",
+                }],
+            }
+
+        first = promote_candidate_batch(
+            dol_batch("a" * 64, "2026-09-12T12:00:00Z", "2026-09-12T12:00:00Z"),
+            ledger,
+            accepted_at="2026-09-12T12:01:00Z",
+        )
+        retry = promote_candidate_batch(
+            dol_batch("b" * 64, "2026-09-13T12:00:00Z", "2026-09-13T12:00:00Z"),
+            ledger,
+            accepted_at="2026-09-13T12:01:00Z",
+            existing_history=first,
+        )
+        self.assertEqual(1, len(first))
+        self.assertEqual([], retry)
+
     def test_existing_dol_seed_migration_preserves_the_accepted_identity(self):
         snapshot = json.loads((CONFIG.parent / "review" / "factual-snapshot-candidate.json").read_text(encoding="utf-8"))
         seed = migrate_existing_dol_seed(snapshot)

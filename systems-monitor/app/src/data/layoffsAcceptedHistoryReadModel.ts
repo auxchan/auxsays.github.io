@@ -1,7 +1,7 @@
 import acceptedHistoryDocument from "../../../data/review/layoffs-accepted-history.json";
 import activationReportDocument from "../../../data/review/layoffs-history-activation-report.json";
 
-interface AcceptedHistoryRow {
+export interface AcceptedHistoryRow {
   observationId: string;
   canonicalFactorId: string;
   sourceId: string;
@@ -48,6 +48,7 @@ export interface LayoffsAcceptedSeriesSummary {
   acceptedPeriodCount: number;
   revisionChainCount: number;
   revisions: readonly { current: AcceptedHistoryRow; previous: AcceptedHistoryRow }[];
+  history: readonly AcceptedHistoryRow[];
   recentHistory: readonly AcceptedHistoryRow[];
 }
 
@@ -138,6 +139,7 @@ function buildSeriesSummary(rows: AcceptedHistoryRow[]): LayoffsAcceptedSeriesSu
     acceptedPeriodCount: periods.length,
     revisionChainCount: rows.filter((row) => row.supersedesObservationId).length,
     revisions: Object.freeze(revisions),
+    history: Object.freeze([...periods].reverse()),
     recentHistory: Object.freeze(periods.slice(-6).reverse()),
   });
 }

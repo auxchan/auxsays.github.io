@@ -11,6 +11,9 @@ const MotionQaHarness = import.meta.env.DEV
   ? lazy(() => import("../views/motion/MotionQaHarness").then((module) => ({ default: module.MotionQaHarness })))
   : null;
 const PersistentWorldShell = lazy(() => import("../views/persistent/PersistentWorldShell").then((module) => ({ default: module.PersistentWorldShell })));
+const LayoffsLevel4QaView = import.meta.env.DEV
+  ? lazy(() => import("../views/layoffs-qa/LayoffsLevel4QaView").then((module) => ({ default: module.LayoffsLevel4QaView })))
+  : null;
 
 class AppErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
   state = { error: null } as { error: Error | null };
@@ -23,9 +26,12 @@ function ValidatedApp() {
   const { route, navigate } = useRouteState(snapshot);
   if (variant === "loading") return <LoadingState />;
   if (variant === "snapshot-unavailable") return <ErrorState />;
+  const layoffsQa = import.meta.env.DEV && window.location.hash === "#layoffs-level4-qa";
   const explicitLegacyView = new URLSearchParams(window.location.search).has("view") || window.location.hash === "#workstream1a";
-  const persistentWorld = window.location.hash.startsWith("#persistent-world") || (import.meta.env.PROD && !explicitLegacyView);
-  const view = persistentWorld
+  const persistentWorld = !layoffsQa && (window.location.hash.startsWith("#persistent-world") || (import.meta.env.PROD && !explicitLegacyView));
+  const view = layoffsQa && LayoffsLevel4QaView
+    ? <LayoffsLevel4QaView />
+    : persistentWorld
     ? <PersistentWorldShell />
     : motionQa && MotionQaHarness
     ? <MotionQaHarness model={motionQa} route={route} />
@@ -34,7 +40,7 @@ function ValidatedApp() {
     : route.view === "outlook"
       ? <OutlookView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />
       : <SummaryView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />;
-  return <AppShell snapshot={snapshot} phase4b={phase4b} motionQa={motionQa} persistentWorld={persistentWorld} route={route} navigate={navigate} variant={variant} setVariant={setVariant}><DegradedState variant={variant} /><Suspense fallback={<LoadingState />}>{view}</Suspense></AppShell>;
+  return <AppShell snapshot={snapshot} phase4b={phase4b} motionQa={motionQa} layoffsQa={layoffsQa} persistentWorld={persistentWorld} route={route} navigate={navigate} variant={variant} setVariant={setVariant}><DegradedState variant={variant} /><Suspense fallback={<LoadingState />}>{view}</Suspense></AppShell>;
 }
 
 export function SystemsMonitorApp() {

@@ -300,8 +300,6 @@ export function PersistentWorldShell() {
                 <dl>
                   <div><dt>Previous compatible</dt><dd>{selectedBinding.temporalHistory.primary.previousDisplay}<small>{selectedBinding.temporalHistory.primary.previous.validTime}</small></dd></div>
                   <div><dt>Factual direction</dt><dd>{selectedBinding.temporalHistory.primary.directionGlyph} {selectedBinding.temporalHistory.primary.direction.toLowerCase()}<small>{selectedBinding.temporalHistory.primary.absoluteDelta >= 0 ? "+" : ""}{selectedBinding.temporalHistory.primary.absoluteDelta.toLocaleString("en-US")} {selectedBinding.temporalHistory.primary.unit}{selectedBinding.temporalHistory.primary.relativeDeltaPercent === undefined ? "" : ` · ${selectedBinding.temporalHistory.primary.relativeDeltaPercent >= 0 ? "+" : ""}${selectedBinding.temporalHistory.primary.relativeDeltaPercent.toFixed(2)}%`}</small></dd></div>
-                  <div><dt>Materiality</dt><dd>Unknown<small>No governed threshold</small></dd></div>
-                  <div><dt>Destination impact</dt><dd>Unknown<small>No accepted relationship</small></dd></div>
                 </dl>
                 <details><summary>Accepted descriptive history · {selectedBinding.temporalHistory.primary.acceptedPeriodCount} periods</summary><ol>{selectedBinding.temporalHistory.primary.recentHistory.map((row) => <li key={row.observationId}><time>{row.validTime}</time><span>{Number(row.value).toLocaleString("en-US")} {row.unit}</span><small>revision {row.revisionNumber}</small></li>)}</ol></details>
                 <small>CURRENT_REVISED_HISTORY · forecast-vintage ineligible</small>

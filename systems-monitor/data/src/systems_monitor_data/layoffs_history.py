@@ -490,6 +490,13 @@ def _candidate_matches_accepted(candidate: dict[str, Any], rule: dict[str, Any],
         "forecastVintageEligible": False,
         "sourceRevisionStatus": candidate["revision_status"],
     }
+    if str(candidate.get("release_id", "")).startswith("DOL-UI-r539cyNational-observation-"):
+        # r539cy's report execution date changes its raw bytes and retrieval
+        # timestamps without changing the populated observation. The stable
+        # semantic identity above makes an exact later retrieval idempotent;
+        # the originally accepted transport evidence remains immutable.
+        for transport_field in ("artifactSha256", "publicTime", "retrievedTime"):
+            expected.pop(transport_field)
     return all(row.get(key) == value for key, value in expected.items())
 
 

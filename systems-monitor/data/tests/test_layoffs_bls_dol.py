@@ -99,9 +99,11 @@ class LayoffsBlsDolTests(unittest.TestCase):
         self.assertEqual(Decimal("1.2"), by_id["DOL-UI-SA-IUR"].value)
         self.assertEqual({"2026-08-01"}, {row.observation_period for row in batch.observations})
         self.assertTrue(all(row.publication_time_kind == "conservative_retrieval_bound" for row in batch.observations))
-        self.assertEqual("DOL-UI-r539cyNational-2026-08-27", batch.source_release_marker)
-        self.assertTrue(all(row.release_id == batch.source_release_marker for row in batch.observations))
-        self.assertTrue(all(row.revision_status == "advance" for row in batch.observations))
+        self.assertRegex(batch.source_release_marker, r"^DOL-UI-r539cyNational-data-through-2026-08-01-[0-9a-f]{16}$")
+        self.assertEqual("2026-08-27", batch.source_report_run_date)
+        self.assertTrue(all(row.release_id.startswith("DOL-UI-r539cyNational-observation-2026-08-01-") for row in batch.observations))
+        self.assertEqual(3, len({row.release_id for row in batch.observations}))
+        self.assertTrue(all(row.revision_status == "current_revised_snapshot" for row in batch.observations))
 
     def test_dol_release_identity_comes_from_source_and_freshness_fails_closed(self):
         specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
@@ -131,6 +133,32 @@ class LayoffsBlsDolTests(unittest.TestCase):
         freshness = dol_source_freshness(first.observations, retrieved_time="2026-09-20T00:00:00Z", stale_after_hours=336)
         self.assertEqual("STALE", freshness["status"])
         self.assertEqual("2026-08-01", freshness["newestObservationPeriod"])
+
+    def test_dol_daily_report_run_date_does_not_manufacture_a_new_release(self):
+        specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
+        payload = (FIXTURES / "layoffs_dol_xml_minimized.xml").read_text(encoding="utf-8")
+        later_run = payload.replace('rundate="8/27/2026"', 'rundate="8/28/2026"')
+        kwargs = dict(
+            specs=specs,
+            release_id="retrieval-wrapper",
+            artifact_sha256="c" * 64,
+            retrieved_time="2026-08-28T15:00:00Z",
+            accepted_time=None,
+            provenance_url=self.acquisition["dol_ui"]["endpoint"],
+        )
+        first = parse_dol_national_xml(payload.encode(), **kwargs)
+        second = parse_dol_national_xml(later_run.encode(), **kwargs)
+        self.assertEqual(first.source_release_marker, second.source_release_marker)
+        self.assertEqual(
+            [row.observation_id for row in first.observations],
+            [row.observation_id for row in second.observations],
+        )
+        self.assertEqual(
+            [row.release_id for row in first.observations],
+            [row.release_id for row in second.observations],
+        )
+        self.assertEqual("2026-08-27", first.source_report_run_date)
+        self.assertEqual("2026-08-28", second.source_report_run_date)
 
     def test_future_official_publication_time_is_rejected(self):
         spec = next(spec for spec in self.specs if spec.series_id == "LNS13026638")

@@ -1,9 +1,9 @@
 {
   "schemaVersion": "level4-p0-review-status-0.3.0",
   "scope": "Layoffs & Job Destruction",
-  "asOfStartingCommit": "a5766b12a534db186bb6e55f850de5cd4d5f964c",
-  "authority": "REVIEW_EVIDENCE_ONLY",
-  "promotionAuthority": "NONE",
+  "asOfStartingCommit": "cfa4a23bb74b5721b4ce5d3964418175c04fce4e",
+  "authority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_11",
+  "promotionAuthority": "EXACT_NINE_SERIES_ONLY",
   "taxonomy": {
     "level3Parents": 10,
     "level4Placements": 100,
@@ -39,21 +39,23 @@
     "acceptedExternalObservationRefs": 1
   },
   "history": {
-    "acceptedComparableHistoriesForNewLevel4Factors": 0,
-    "status": "REVISION_SAFE_BACKBONE_AND_CLOSED_ACCEPTANCE_SIMULATOR_IMPLEMENTED_NOT_ACTIVATED",
-    "acceptanceAuthority": "NONE",
+    "acceptedComparableHistoriesForNewLevel4Factors": 8,
+    "acceptedExactSeries": 9,
+    "acceptedObservations": 188,
+    "status": "TAYLOR_AUTHORIZED_DESCRIPTIVE_HISTORY_ACTIVATED_HUMAN_QA_PENDING",
+    "acceptanceAuthority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_11",
     "materialityAuthority": "NONE",
     "candidateBatchRows": 282,
     "exactProposedScopeRows": 200,
-    "decisionReadyRowsIfTaylorApproves": 154,
-    "contingentRows": 33,
-    "blockedRows": 13,
+    "decisionReadyBedRowsIfTaylorApproves": 13,
+    "contingentRows": 0,
+    "blockedRows": 0,
     "outsideProposedScopeRows": 82,
     "forecastVintageEligibleRows": 0,
-    "decisionReadyExactSeries": 8,
-    "descriptiveSeriesAfterPreconditions": 9,
+    "decisionReadyBedExactSeries": 4,
+    "descriptiveSeriesAfterPreconditions": 13,
     "structurallyComparableSeriesIfAllBlockersResolve": 12,
-    "note": "The simulator writes no accepted data. Taylor authority is still required; DOL additionally requires accepted-seed migration and freshness/release-identity repair, while BED is blocked by missing central source/rights policy."
+    "note": "The nine-series Taylor scope is active and idempotent. BED rights pass and its 13 rows await separate Taylor authority. DOL accepted history remains valid, but the current structured source is stale and cannot promote newer rows."
   },
   "relationships": {
     "hierarchyTethersInWholeWorld": 1110,
@@ -76,24 +78,22 @@
     "explorationBackForward": "IMPLEMENTED_REQUIRES_HUMAN_QA",
     "searchAndJump": "IMPLEMENTED_REQUIRES_HUMAN_QA",
     "progressiveInspector": "IMPLEMENTED_REQUIRES_HUMAN_QA",
-    "temporalHistoryPresentation": "READY_FOR_ACCEPTED_HISTORY_INTEGRATION_BUT_NO_ACCEPTED_HISTORY_EXISTS",
-    "forecastVintageStatusPresentation": "MODEL_READY_UI_NOT_WIRED"
+    "temporalHistoryPresentation": "DEDICATED_EIGHT_FACTOR_HUMAN_QA_SURFACE_PENDING_TAYLOR_REVIEW",
+    "forecastVintageStatusPresentation": "ZERO_ELIGIBLE_ROWS_FORECASTING_LOCKED"
   },
   "humanQa": {
     "HUMAN_LEVEL4_LAYOFFS_QA": "PENDING",
     "HUMAN_ORIENTATION_UX_QA": "PENDING",
-    "HUMAN_PHASE4B_STRUCTURAL_PATH_QA": "PENDING"
+    "HUMAN_PHASE4B_STRUCTURAL_PATH_QA": "NOT_OPENED_NO_STRUCTURAL_PROOF"
   },
   "blockers": [
-    "L4-002_ACCEPTED_COMPARABLE_HISTORY_MISSING",
     "L4-003_ACCEPTED_STRUCTURAL_RELATIONSHIPS_MISSING",
     "L4-005_NON_BLS_DOL_COLLECTOR_ACTIVATION_REQUIRES_APPROVED_SELECTORS_OR_CREDENTIALS",
-    "L4-006_OBSERVATION_ACCEPTANCE_AUTHORITY_NONE",
     "L4-007_MATERIALITY_PROFILES_REQUIRE_GOVERNED_THRESHOLDS",
     "L4-008_BEA_LIVE_INTAKE_BLOCKED_MISSING_AUXSAYS_BEA_USER_ID",
     "L4-009_INDUSTRY_TO_COMMODITY_HANDOFF_NOT_IMPLEMENTED_OR_ACCEPTED",
-    "L4-010_BED_CENTRAL_SOURCE_AND_RIGHTS_POLICY_MISSING",
-    "L4-011_DOL_ACCEPTED_SEED_MIGRATION_AND_FRESHNESS_RELEASE_IDENTITY_REQUIRED",
-    "L4-012_EXACT_ARCHIVE_VINTAGE_ARTIFACTS_NOT_INGESTED"
+    "L4-011_DOL_CURRENT_RELEASE_ARTIFACT_INTAKE_REQUIRED_STRUCTURED_SOURCE_STALE",
+    "L4-012_EXACT_ARCHIVE_VINTAGE_ARTIFACTS_NOT_INGESTED",
+    "L4-013_BED_TAYLOR_ACCEPTANCE_AUTHORITY_NOT_GRANTED"
   ]
 }

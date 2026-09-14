@@ -68,6 +68,7 @@ class ParsedSourceBatch:
     observations: tuple[SourceObservationCandidate, ...]
     skipped_missing_values: int
     source_release_marker: str
+    source_report_run_date: str | None = None
 
 
 def load_layoffs_bls_dol_registry(path: Path) -> tuple[dict[str, Any], tuple[LayoffsSeriesSpec, ...]]:
@@ -211,7 +212,8 @@ def parse_dol_national_xml(
     except ValueError as exc:
         raise ValueError("DOL run date is malformed") from exc
 
-    source_release_id = _dol_source_release_id(run_date)
+    report_run_date = datetime.strptime(run_date, "%m/%d/%Y").date().isoformat()
+    provisional_snapshot_id = "DOL-UI-r539cyNational-structured-snapshot"
     observations: list[SourceObservationCandidate] = []
     skipped = 0
     for week in root.findall("week"):
@@ -232,7 +234,7 @@ def parse_dol_national_xml(
             observations.append(
                 _candidate(
                     spec,
-                    release_id=source_release_id,
+                    release_id=provisional_snapshot_id,
                     artifact_sha256=artifact_sha256,
                     value=value,
                     observation_period=observation_period,
@@ -250,19 +252,22 @@ def parse_dol_national_xml(
     missing_series = {spec.series_id for spec in selected} - observed_ids
     if missing_series:
         raise ValueError(f"DOL XML omitted populated data for requested series: {sorted(missing_series)}")
-    newest_by_series = {
-        series_id: max(row.observation_period for row in observations if row.source_series_id == series_id)
-        for series_id in observed_ids
-    }
+    source_release_id = _dol_structured_snapshot_id(observations)
     observations = [
         replace(
             row,
-            revision_status="advance" if row.observation_period == newest_by_series[row.source_series_id] else "revised_as_published",
+            observation_id=_candidate_identity(
+                row.source_series_id,
+                _dol_structured_observation_id(row),
+                row.observation_period,
+            ),
+            release_id=_dol_structured_observation_id(row),
+            revision_status="current_revised_snapshot",
         )
         for row in observations
     ]
     observations.sort(key=lambda row: (row.source_series_id, row.observation_period), reverse=True)
-    return ParsedSourceBatch(tuple(observations), skipped, source_release_id)
+    return ParsedSourceBatch(tuple(observations), skipped, source_release_id, report_run_date)
 
 
 def dol_source_freshness(
@@ -340,6 +345,7 @@ def repair_dol_candidate_batch(
     diagnostics.update({
         "dolSkippedMissingValues": parsed.skipped_missing_values,
         "dolSourceReleaseMarker": parsed.source_release_marker,
+        "dolReportRunDate": parsed.source_report_run_date,
         "dolFreshness": freshness,
     })
     repaired = dict(batch)
@@ -475,6 +481,7 @@ def collect_layoffs_bls_dol_candidates(
             "blsSkippedMissingValues": bls_batch.skipped_missing_values,
             "dolSkippedMissingValues": dol_batch.skipped_missing_values,
             "dolSourceReleaseMarker": dol_batch.source_release_marker,
+            "dolReportRunDate": dol_batch.source_report_run_date,
             "dolFreshness": dol_source_freshness(
                 dol_batch.observations,
                 retrieved_time=dol_artifact.retrieved_time,
@@ -523,9 +530,7 @@ def _candidate(
     revision_status: str,
     provenance_url: str,
 ) -> SourceObservationCandidate:
-    identity = hashlib.sha256(
-        f"{spec.series_id}|{release_id}|{observation_period}".encode("utf-8")
-    ).hexdigest()
+    identity = _candidate_identity(spec.series_id, release_id, observation_period)
     return SourceObservationCandidate(
         observation_id=identity,
         canonical_factor=spec.canonical_factor,
@@ -550,9 +555,34 @@ def _candidate(
     )
 
 
-def _dol_source_release_id(run_date: str) -> str:
-    parsed = datetime.strptime(run_date, "%m/%d/%Y").date()
-    return f"DOL-UI-r539cyNational-{parsed.isoformat()}"
+def _candidate_identity(series_id: str, release_id: str, observation_period: str) -> str:
+    return hashlib.sha256(f"{series_id}|{release_id}|{observation_period}".encode("utf-8")).hexdigest()
+
+
+def _dol_structured_snapshot_id(observations: Iterable[SourceObservationCandidate]) -> str:
+    """Identify r539cy data content without treating daily report execution as a release.
+
+    DOL's ``rundate`` changes when the report is executed even when the populated
+    weekly observations do not. A canonical content identity prevents unchanged
+    daily retrievals from manufacturing false releases or revisions.
+    """
+
+    selected = tuple(observations)
+    if not selected:
+        raise ValueError("DOL structured snapshot identity requires observations")
+    newest_period = max(row.observation_period for row in selected)
+    canonical = "\n".join(
+        f"{row.source_series_id}|{row.observation_period}|{row.value}"
+        for row in sorted(selected, key=lambda item: (item.source_series_id, item.observation_period))
+    )
+    digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
+    return f"DOL-UI-r539cyNational-data-through-{newest_period}-{digest}"
+
+
+def _dol_structured_observation_id(observation: SourceObservationCandidate) -> str:
+    semantic = f"{observation.source_series_id}|{observation.observation_period}|{observation.value}"
+    digest = hashlib.sha256(semantic.encode("utf-8")).hexdigest()[:16]
+    return f"DOL-UI-r539cyNational-observation-{observation.observation_period}-{digest}"
 
 
 def _validate_common_inputs(release_id: str, artifact_sha256: str, retrieved_time: str, accepted_time: str | None) -> None:
