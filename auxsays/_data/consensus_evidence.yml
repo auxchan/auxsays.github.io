@@ -31585,7 +31585,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1we9yc4-variblur-creates-a-hard-vertical-edge-on
   product_id: blackmagic-davinci
   update_version: '21'
@@ -31610,7 +31609,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6001339-update-history-shows-kb5124008-success
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -31670,7 +31668,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wblwm2-changing-clip-image-orientation-no-longer
   product_id: blackmagic-davinci
   update_version: '21'
@@ -31694,4 +31691,25 @@ evidence:
   platform: unknown
   severity: medium
   sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13896
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13896
+  parent_title: 'linux-v4l2: Adjusting camera controls (Zoom, Focus, etc.) triggers stream restarts on USB3 4k webcam (Elgato 4k facecam)'
+  report_title: 'linux-v4l2: Adjusting camera controls (Zoom, Focus, etc.) triggers stream restarts on USB3 4k webcam (Elgato 4k facecam)'
+  report_text_excerpt: '### Operating System Info Other ### Other OS CachyOS ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/VSSgX2ym6OQxeCBf ### OBS Studio Crash Log URL _No response_ ### Expected Behavior 1. Cl'
+  captured_at: '2026-09-14T14:06:16Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: linux
+  severity: medium
+  sentiment: negative
   source_weight: 1
