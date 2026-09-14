@@ -17,8 +17,8 @@ update_version: New variable filtering and edge-to-edge modal
 update_logo_text: FIG
 update_published_at: '2025-07-22T00:00:00.000Z'
 update_last_checked: '2026-08-14T08:59:57Z'
-source_last_checked: '2026-08-14T08:59:57Z'
-official_body_last_checked: '2026-08-14T08:59:57Z'
+source_last_checked: '2026-09-14T07:19:35Z'
+official_body_last_checked: '2026-09-14T07:19:35Z'
 record_last_updated: '2026-08-14T08:59:57Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-14T08:59:57Z'
+  url: https://www.figma.com/release-notes/?title=New%20variable%20filtering%20and%20edge-to-edge%20modal
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-14T07:19:35Z'
   url: https://www.figma.com/release-notes/?title=New%20variable%20filtering%20and%20edge-to-edge%20modal
   status: captured-from-rss-feed
   body_captured: true
