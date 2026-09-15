@@ -18,8 +18,8 @@ update_version: Auto-resolution and analysis updates in Copilot code review
 update_logo_text: GIT
 update_published_at: '2026-09-11T20:00:07Z'
 update_last_checked: '2026-09-11T23:04:51Z'
-source_last_checked: '2026-09-14T14:57:36Z'
-official_body_last_checked: '2026-09-14T14:57:36Z'
+source_last_checked: '2026-09-15T00:00:02Z'
+official_body_last_checked: '2026-09-15T00:00:02Z'
 record_last_updated: '2026-09-11T23:04:51Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -92,11 +92,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-09-13T14:14:44Z'
-  url: https://github.blog/changelog/2026-09-11-auto-resolution-and-analysis-updates-in-copilot-code-review
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-09-13T18:31:56Z'
   url: https://github.blog/changelog/2026-09-11-auto-resolution-and-analysis-updates-in-copilot-code-review
   status: captured-from-rss-feed
@@ -113,6 +108,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-14T14:57:36Z'
+  url: https://github.blog/changelog/2026-09-11-auto-resolution-and-analysis-updates-in-copilot-code-review
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-15T00:00:02Z'
   url: https://github.blog/changelog/2026-09-11-auto-resolution-and-analysis-updates-in-copilot-code-review
   status: captured-from-rss-feed
   body_captured: true
