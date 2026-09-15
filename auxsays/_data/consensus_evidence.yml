@@ -31744,3 +31744,28 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wge6on-davinci-resolve-21-randomly-switching-cam
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wge6on/davinci_resolve_21_randomly_switching_cameras/
+  parent_title: DaVinci Resolve 21 Randomly Switching Cameras During Render
+  report_title: DaVinci Resolve 21 Randomly Switching Cameras During Render
+  report_text_excerpt: DaVinci Resolve 21 Randomly Switching Cameras During Render Heyho! Since DaVinci Resolve 21, I've been encountering a problem when rendering 4K/large projects. Sometimes there are weird flickers in the rendered video, like in this video https://f.io/fs5pJb2T at 29:24:20. At...
+  captured_at: '2026-09-15T22:31:39Z'
+  source_date: '2026-09-14'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
