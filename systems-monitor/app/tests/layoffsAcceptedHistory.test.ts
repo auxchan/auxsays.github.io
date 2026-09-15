@@ -6,15 +6,16 @@ import {
   LAYOFFS_ACCEPTED_COMPARABLE_SERIES_COUNT,
   LAYOFFS_ACCEPTED_OBSERVATION_COUNT,
   LAYOFFS_DOL_SOURCE_FRESHNESS,
+  LAYOFFS_DOL_PRIMARY_FRESHNESS,
 } from "../src/data/layoffsAcceptedHistoryReadModel";
 import { persistentWorldFactualBindingForFactor } from "../src/data/persistentWorldFactualBindings";
 import { persistentChangeNotices } from "../src/data/persistentWorldTemporalReadModel";
 
 describe("Taylor-authorized Layoffs accepted history", () => {
   it("exposes only the exact accepted descriptive-history scope", () => {
-    expect(LAYOFFS_ACCEPTED_OBSERVATION_COUNT).toBe(188);
-    expect(LAYOFFS_ACCEPTED_COMPARABLE_FACTOR_COUNT).toBe(8);
-    expect(LAYOFFS_ACCEPTED_COMPARABLE_SERIES_COUNT).toBe(9);
+    expect(LAYOFFS_ACCEPTED_OBSERVATION_COUNT).toBe(203);
+    expect(LAYOFFS_ACCEPTED_COMPARABLE_FACTOR_COUNT).toBe(11);
+    expect(LAYOFFS_ACCEPTED_COMPARABLE_SERIES_COUNT).toBe(12);
     expect(new Set(layoffsAcceptedFactorSummaries.map((row) => row.canonicalFactorId))).toEqual(new Set([
       "factor:canonical:layoffs-and-discharges",
       "factor:canonical:job-openings-rate",
@@ -23,6 +24,10 @@ describe("Taylor-authorized Layoffs accepted history", () => {
       "factor:canonical:temporary-layoffs",
       "factor:canonical:average-weekly-hours",
       "factor:canonical:temporary-help-employment",
+      "factor:canonical:gross-job-losses",
+      "factor:canonical:establishment-contractions",
+      "factor:canonical:establishment-closures",
+      "factor:canonical:establishment-deaths",
       "factor:canonical:initial-claims",
     ]));
     for (const factor of layoffsAcceptedFactorSummaries) {
@@ -37,21 +42,22 @@ describe("Taylor-authorized Layoffs accepted history", () => {
 
   it("preserves the accepted 209,000 seed and the later 212,000 revision", () => {
     const claims = acceptedLayoffsHistoryForFactor("factor:canonical:initial-claims")!;
-    expect(claims.primary.current.value).toBe("207000");
-    expect(claims.primary.current.validTime).toBe("2026-08-15");
+    expect(claims.primary.current.value).toBe("206000");
+    expect(claims.primary.current.validTime).toBe("2026-09-05");
     expect(claims.primary.revisions).toHaveLength(1);
     expect(claims.primary.revisions[0].previous.value).toBe("209000");
     expect(claims.primary.revisions[0].current.value).toBe("212000");
     expect(claims.primary.revisions[0].current.revisionNumber).toBe(1);
-    expect(LAYOFFS_DOL_SOURCE_FRESHNESS.status).toBe("STALE");
+    expect(LAYOFFS_DOL_SOURCE_FRESHNESS.status).toBe("CURRENT");
+    expect(LAYOFFS_DOL_PRIMARY_FRESHNESS.status).toBe("STALE");
   });
 
   it("wires accepted comparable history into Level-4 readings without creating impact", () => {
     const binding = persistentWorldFactualBindingForFactor("factor:canonical:average-weekly-hours", "Average Weekly Hours");
     expect(binding).toMatchObject({ status: "CONNECTED", seriesId: "CES0500000002", displayValue: "34.4 hours" });
-    expect(binding.temporalHistory?.primary.previous.validTime).toBe("2026-07");
+    expect(binding.temporalHistory?.primary.previous?.validTime).toBe("2026-07");
     const historyNotices = persistentChangeNotices.filter((notice) => notice.id.startsWith("accepted-history:"));
-    expect(historyNotices).toHaveLength(9);
+    expect(historyNotices).toHaveLength(12);
     expect(historyNotices.every((notice) => notice.impactClass === "UNKNOWN" && notice.economicSignalEligible === false)).toBe(true);
   });
 });

@@ -35,13 +35,13 @@ export interface LayoffsAcceptedSeriesSummary {
   unit: string;
   frequency: AcceptedHistoryRow["frequency"];
   current: AcceptedHistoryRow;
-  previous: AcceptedHistoryRow;
+  previous?: AcceptedHistoryRow;
   currentDisplay: string;
-  previousDisplay: string;
-  absoluteDelta: number;
+  previousDisplay?: string;
+  absoluteDelta?: number;
   relativeDeltaPercent?: number;
-  direction: "UP" | "DOWN" | "FLAT";
-  directionGlyph: "↑" | "↓" | "→";
+  direction?: "UP" | "DOWN" | "FLAT";
+  directionGlyph?: "↑" | "↓" | "→";
   materialityStatus: "UNKNOWN";
   impactStatus: "UNKNOWN";
   forecastVintageEligible: false;
@@ -59,7 +59,7 @@ export interface LayoffsAcceptedFactorSummary {
 }
 
 const document = acceptedHistoryDocument as { schemaVersion: string; generatedAt: string; observations: AcceptedHistoryRow[] };
-const activation = activationReportDocument as { dolRepair?: { freshness?: { status?: string; newestObservationPeriod?: string; retrievedTime?: string; observationAgeHours?: number; staleAfterHours?: number } } };
+const activation = activationReportDocument as { dolRepair?: { freshness?: { status?: string; newestObservationPeriod?: string; retrievedTime?: string; observationAgeHours?: number; staleAfterHours?: number }; primaryFreshness?: { status?: string; newestObservationPeriod?: string }; overallStatus?: string; methods?: Record<string, unknown> } };
 if (document.schemaVersion !== "layoffs-accepted-history-1.0.0") throw new Error("Unsupported Layoffs accepted-history schema");
 
 const seriesIdentity: Readonly<Record<string, { label: string; provider: string; dataset: string }>> = Object.freeze({
@@ -71,12 +71,17 @@ const seriesIdentity: Readonly<Record<string, { label: string; provider: string;
   LNS13023653: { label: "Temporary layoffs", provider: "U.S. Bureau of Labor Statistics", dataset: "Current Population Survey" },
   CES0500000002: { label: "Average weekly hours", provider: "U.S. Bureau of Labor Statistics", dataset: "Current Employment Statistics" },
   CES6056132001: { label: "Temporary help employment", provider: "U.S. Bureau of Labor Statistics", dataset: "Current Employment Statistics" },
+  BDS0000000000000000110004LQ5: { label: "Gross job losses", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
+  BDS0000000000000000110005LQ5: { label: "Establishment contractions", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
+  BDS0000000000000000110006LQ5: { label: "Establishment closures", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
+  BDS0000000000000000110008LQ5: { label: "Establishment deaths", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
   "DOL-UI-SA-INITIAL": { label: "Initial unemployment-insurance claims", provider: "U.S. Department of Labor", dataset: "Unemployment Insurance Weekly Claims" },
 });
 
 const primarySeriesPriority = [
   "JTS000000000000000LDL", "JTS000000000000000LDR", "JTS000000000000000JOR", "JTS000000000000000HIR",
   "LNS13026638", "LNS13023653", "CES0500000002", "CES6056132001", "DOL-UI-SA-INITIAL",
+  "BDS0000000000000000110004LQ5", "BDS0000000000000000110005LQ5", "BDS0000000000000000110006LQ5", "BDS0000000000000000110008LQ5",
 ];
 
 function displayValue(value: string, unit: string) {
@@ -103,12 +108,12 @@ function latestRevisionByPeriod(rows: AcceptedHistoryRow[]) {
 
 function buildSeriesSummary(rows: AcceptedHistoryRow[]): LayoffsAcceptedSeriesSummary | undefined {
   const periods = latestRevisionByPeriod(rows);
-  if (periods.length < 2) return undefined;
+  if (periods.length < 1) return undefined;
   const current = periods.at(-1)!;
-  const previous = periods.at(-2)!;
+  const previous = periods.at(-2);
   const currentValue = Number(current.value);
-  const previousValue = Number(previous.value);
-  const absoluteDelta = currentValue - previousValue;
+  const previousValue = previous ? Number(previous.value) : undefined;
+  const absoluteDelta = previousValue === undefined ? undefined : currentValue - previousValue;
   const identity = seriesIdentity[current.sourceSeriesId];
   if (!identity) throw new Error(`Missing accepted-series identity for ${current.sourceSeriesId}`);
   const byId = new Map(rows.map((row) => [row.observationId, row]));
@@ -128,11 +133,11 @@ function buildSeriesSummary(rows: AcceptedHistoryRow[]): LayoffsAcceptedSeriesSu
     current,
     previous,
     currentDisplay: displayValue(current.value, current.unit),
-    previousDisplay: displayValue(previous.value, previous.unit),
+    previousDisplay: previous ? displayValue(previous.value, previous.unit) : undefined,
     absoluteDelta,
-    relativeDeltaPercent: previousValue === 0 ? undefined : absoluteDelta / Math.abs(previousValue) * 100,
-    direction: absoluteDelta > 0 ? "UP" : absoluteDelta < 0 ? "DOWN" : "FLAT",
-    directionGlyph: absoluteDelta > 0 ? "↑" : absoluteDelta < 0 ? "↓" : "→",
+    relativeDeltaPercent: previousValue === undefined || previousValue === 0 || absoluteDelta === undefined ? undefined : absoluteDelta / Math.abs(previousValue) * 100,
+    direction: absoluteDelta === undefined ? undefined : absoluteDelta > 0 ? "UP" : absoluteDelta < 0 ? "DOWN" : "FLAT",
+    directionGlyph: absoluteDelta === undefined ? undefined : absoluteDelta > 0 ? "↑" : absoluteDelta < 0 ? "↓" : "→",
     materialityStatus: "UNKNOWN",
     impactStatus: "UNKNOWN",
     forecastVintageEligible: false,
@@ -169,14 +174,19 @@ export function acceptedLayoffsHistoryForFactor(canonicalFactorId: string) {
 
 export function acceptedLayoffsHistoryFreshness(sourceId: string) {
   if (sourceId !== "dol-ui-claims") return "accepted descriptive history";
-  return activation.dolRepair?.freshness?.status === "STALE"
-    ? "accepted history · current structured source stale"
-    : "accepted descriptive history";
+  return activation.dolRepair?.overallStatus === "SUCCESS_WITH_PRIMARY_STALE"
+    ? "current via official release fallback · primary XML stale"
+    : activation.dolRepair?.freshness?.status === "STALE"
+      ? "accepted history · current structured source stale"
+      : "accepted descriptive history";
 }
 
 export const LAYOFFS_DOL_SOURCE_FRESHNESS = Object.freeze({ ...(activation.dolRepair?.freshness ?? {}) });
+export const LAYOFFS_DOL_PRIMARY_FRESHNESS = Object.freeze({ ...(activation.dolRepair?.primaryFreshness ?? {}) });
+export const LAYOFFS_DOL_ACQUISITION_STATUS = activation.dolRepair?.overallStatus ?? "UNAVAILABLE";
 
 export const LAYOFFS_ACCEPTED_OBSERVATION_COUNT = document.observations.length;
-export const LAYOFFS_ACCEPTED_COMPARABLE_FACTOR_COUNT = layoffsAcceptedFactorSummaries.length;
-export const LAYOFFS_ACCEPTED_COMPARABLE_SERIES_COUNT = seriesSummaries.length;
+export const LAYOFFS_ACCEPTED_HISTORY_FACTOR_COUNT = layoffsAcceptedFactorSummaries.length;
+export const LAYOFFS_ACCEPTED_COMPARABLE_FACTOR_COUNT = layoffsAcceptedFactorSummaries.filter((factor) => factor.series.some((series) => Boolean(series.previous))).length;
+export const LAYOFFS_ACCEPTED_COMPARABLE_SERIES_COUNT = seriesSummaries.filter((series) => Boolean(series.previous)).length;
 export const LAYOFFS_ACCEPTED_HISTORY_AS_OF = document.generatedAt;

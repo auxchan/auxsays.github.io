@@ -2,8 +2,8 @@
   "schemaVersion": "level4-p0-review-status-0.3.0",
   "scope": "Layoffs & Job Destruction",
   "asOfStartingCommit": "cfa4a23bb74b5721b4ce5d3964418175c04fce4e",
-  "authority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_11",
-  "promotionAuthority": "EXACT_NINE_SERIES_ONLY",
+  "authority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_14",
+  "promotionAuthority": "EXACT_THIRTEEN_SERIES_ONLY",
   "taxonomy": {
     "level3Parents": 10,
     "level4Placements": 100,
@@ -31,23 +31,25 @@
     "sourceOnlyRecordsOutsideCurrentTaxonomy": 8,
     "sourceOnlyIdentitiesReviewed": 9,
     "supersededSourceOnlyAliases": 1,
-    "ACCEPTED": 1,
-    "SOURCE_ENABLED_PENDING_ACCEPTANCE": 17,
+    "ACCEPTED": 5,
+    "SOURCE_ENABLED_PENDING_ACCEPTANCE": 13,
     "BLOCKED": 24,
     "SOURCE_IDENTIFIED": 34,
     "recordsWithExactSeriesTableOrSelector": 42,
     "acceptedExternalObservationRefs": 1
   },
   "history": {
-    "acceptedComparableHistoriesForNewLevel4Factors": 8,
-    "acceptedExactSeries": 9,
-    "acceptedObservations": 188,
+    "acceptedFactorsWithHistory": 12,
+    "acceptedComparableHistoriesForNewLevel4Factors": 11,
+    "acceptedExactSeries": 13,
+    "acceptedComparableSeries": 12,
+    "acceptedObservations": 203,
     "status": "TAYLOR_AUTHORIZED_DESCRIPTIVE_HISTORY_ACTIVATED_HUMAN_QA_PENDING",
-    "acceptanceAuthority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_11",
+    "acceptanceAuthority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_14",
     "materialityAuthority": "NONE",
-    "candidateBatchRows": 282,
+    "candidateBatchRows": 251,
     "exactProposedScopeRows": 200,
-    "decisionReadyBedRowsIfTaylorApproves": 13,
+    "acceptedBedRows": 13,
     "contingentRows": 0,
     "blockedRows": 0,
     "outsideProposedScopeRows": 82,
@@ -55,7 +57,10 @@
     "decisionReadyBedExactSeries": 4,
     "descriptiveSeriesAfterPreconditions": 13,
     "structurallyComparableSeriesIfAllBlockersResolve": 12,
-    "note": "The nine-series Taylor scope is active and idempotent. BED rights pass and its 13 rows await separate Taylor authority. DOL accepted history remains valid, but the current structured source is stale and cannot promote newer rows."
+    "dolAcquisitionStatus": "SUCCESS_WITH_PRIMARY_STALE",
+    "dolPrimaryNewestPeriod": "2026-08-15",
+    "dolFallbackNewestPeriod": "2026-09-05",
+    "note": "The thirteen-series Taylor scope is active and idempotent. Exactly 13 BED rows were accepted. Official DOL fallback promoted 206,000 for 2026-09-05 and revised 207,000 for 2026-08-29 while the primary XML remains visibly stale."
   },
   "relationships": {
     "hierarchyTethersInWholeWorld": 1110,
@@ -78,7 +83,7 @@
     "explorationBackForward": "IMPLEMENTED_REQUIRES_HUMAN_QA",
     "searchAndJump": "IMPLEMENTED_REQUIRES_HUMAN_QA",
     "progressiveInspector": "IMPLEMENTED_REQUIRES_HUMAN_QA",
-    "temporalHistoryPresentation": "DEDICATED_EIGHT_FACTOR_HUMAN_QA_SURFACE_PENDING_TAYLOR_REVIEW",
+    "temporalHistoryPresentation": "CONSOLIDATED_TWELVE_FACTOR_HUMAN_QA_SURFACE_PENDING_TAYLOR_REVIEW",
     "forecastVintageStatusPresentation": "ZERO_ELIGIBLE_ROWS_FORECASTING_LOCKED"
   },
   "humanQa": {
@@ -92,8 +97,6 @@
     "L4-007_MATERIALITY_PROFILES_REQUIRE_GOVERNED_THRESHOLDS",
     "L4-008_BEA_LIVE_INTAKE_BLOCKED_MISSING_AUXSAYS_BEA_USER_ID",
     "L4-009_INDUSTRY_TO_COMMODITY_HANDOFF_NOT_IMPLEMENTED_OR_ACCEPTED",
-    "L4-011_DOL_CURRENT_RELEASE_ARTIFACT_INTAKE_REQUIRED_STRUCTURED_SOURCE_STALE",
-    "L4-012_EXACT_ARCHIVE_VINTAGE_ARTIFACTS_NOT_INGESTED",
-    "L4-013_BED_TAYLOR_ACCEPTANCE_AUTHORITY_NOT_GRANTED"
+    "L4-012_EXACT_ARCHIVE_VINTAGE_ARTIFACTS_NOT_INGESTED"
   ]
 }

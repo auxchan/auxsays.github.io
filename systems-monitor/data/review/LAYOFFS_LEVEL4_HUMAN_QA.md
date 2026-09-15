@@ -1,62 +1,55 @@
-# Layoffs Level-4 Human QA
+# LAYOFFS LEVEL-4 PILOT HUMAN QA
 
 Status: `HUMAN_LEVEL4_LAYOFFS_QA = PENDING`
 
-Local review URL:
+Loopback review URL:
 
 `http://127.0.0.1:4173/systems-monitor/__local-review/layoffs-level4`
 
-Start the loopback-only review server from `systems-monitor/app` with:
-
-`npm run dev:layoffs-qa`
+Start from `systems-monitor/app` with `npm run dev:layoffs-qa`.
 
 ## Review boundary
 
-This is a Human-QA package, not an approval. The surface is built from the 188
-Taylor-accepted immutable observations and exposes eight canonical factors and
-nine governed exact series. It contains factual comparisons only. Node titles
-remain identity-only. Forecast-vintage observations and accepted structural
-relationships remain zero.
+This is a Human-QA package, not an approval. It exposes 203 immutable accepted
+observations across 12 canonical factors and 13 exact series. Eleven factors
+and 12 series have a previous compatible period; Establishment Deaths has one
+accepted period and therefore no direction or delta.
 
-The Initial Claims section deliberately labels 207,000 for 2026-08-15 as
-**accepted historical data**, not the current national reading. The current
-structured DOL source is stale even though the accepted history remains valid.
+All accepted rows are descriptive evidence. Materiality is `UNKNOWN`,
+destination impact is `UNKNOWN`, forecast is unavailable, forecast-vintage
+eligible rows remain zero, and accepted structural relationships remain zero.
 
-## Eight-factor temporal state
+## BED activation result
 
-| Canonical factor | Exact series | Accepted current | Previous comparable | Factual direction / delta | History/source state |
-|---|---|---:|---:|---|---|
-| Layoffs and Discharges | `JTS000000000000000LDL` | 1,666 thousand persons, 2026-07 | 1,785, 2026-06 | ↓ −119 | Accepted descriptive history |
-| Layoffs and Discharges | `JTS000000000000000LDR` | 1.0%, 2026-07 | 1.1%, 2026-06 | ↓ −0.1 percentage point | Accepted descriptive history |
-| Job Openings Rate | `JTS000000000000000JOR` | 4.4%, 2026-07 | 4.3%, 2026-06 | ↑ +0.1 percentage point | Accepted descriptive history |
-| Hires Rate | `JTS000000000000000HIR` | 3.2%, 2026-07 | 3.4%, 2026-06 | ↓ −0.2 percentage point | Accepted descriptive history |
-| Permanent Job Losers | `LNS13026638` | 1,777 thousand persons, 2026-08 | 1,715, 2026-07 | ↑ +62 | Accepted descriptive history |
-| Temporary Layoffs | `LNS13023653` | 839 thousand persons, 2026-08 | 921, 2026-07 | ↓ −82 | Accepted descriptive history |
-| Average Weekly Hours | `CES0500000002` | 34.4 hours, 2026-08 | 34.3, 2026-07 | ↑ +0.1 hour | Accepted descriptive history |
-| Temporary Help Employment | `CES6056132001` | 2,519.5 thousand persons, 2026-08 | 2,512.7, 2026-07 | ↑ +6.8 | Accepted descriptive history |
-| Initial Claims | `DOL-UI-SA-INITIAL` | 207,000 claims, 2026-08-15 | 212,000, 2026-08-08 | ↓ −5,000 | Accepted history; current structured source `STALE` |
+Taylor authority is active only for Gross Job Losses
+`BDS0000000000000000110004LQ5`, Establishment Contractions
+`BDS0000000000000000110005LQ5`, Establishment Closures
+`BDS0000000000000000110006LQ5`, and Establishment Deaths
+`BDS0000000000000000110008LQ5`. The accepted backfill contains 4, 4, 4, and 1
+rows respectively, all `CURRENT_REVISED_HISTORY`. An identical second pass
+added zero observations and did not rewrite history.
 
-Initial Claims also exposes the accepted 2026-08-08 revision chain:
-209,000 revision 0 → 212,000 revision 1.
+## DOL current-source result
+
+The official `r539cyNational` XML remains `STALE` through 2026-08-15. The
+official DOL release fallback is `CURRENT` through 2026-09-05, so overall DOL
+acquisition is `SUCCESS_WITH_PRIMARY_STALE`. Accepted current Initial Claims
+are 206,000 for 2026-09-05; the release also supplies the revised prior-week
+value of 207,000 for 2026-08-29. The accepted 2026-08-08 revision chain remains
+209,000 -> 212,000.
 
 ## Taylor checklist
 
-For each factor, verify without self-marking PASS:
-
-- Is the canonical factor identity clear?
-- Does the accepted value match its official evidence?
-- Is the previous observation comparable by cadence, unit, geography, source,
-  and seasonal-adjustment state?
-- Is the factual arrow correct?
-- Is the arithmetic delta correct?
-- Is the represented period understandable?
-- Is accepted history kept distinct from current source freshness?
-- Are revisions clear without overwhelming the primary reading?
-- Are source provenance and evidence status discoverable?
-- Does the map keep hierarchy lines from becoming analytical claims?
-- Is the inspector concise?
-- Do the expanded history and methodology sections contain enough technical
-  evidence?
-
-For Initial Claims, additionally verify that the stale warning prevents the
-2026-08-15 accepted value from being read as the current national value.
+- Verify each canonical name, icon, exact series ID, and hierarchy placement.
+- Verify current value, represented period, previous compatible period, arrow,
+  and arithmetic delta where comparison exists.
+- Confirm Establishment Deaths says comparison unavailable rather than
+  manufacturing a direction.
+- Confirm Initial Claims presents the current official fallback while retaining
+  the stale-primary-XML warning.
+- Verify revisions, evidence links, provenance, publication basis, methodology,
+  and accepted-history status remain understandable under progressive detail.
+- Confirm node titles remain identity-only and the surface makes no materiality,
+  destination-impact, causal, structural, or forecasting assertion.
+- Record Taylor's Human-QA outcome separately; this artifact must remain
+  `PENDING` until that review occurs.

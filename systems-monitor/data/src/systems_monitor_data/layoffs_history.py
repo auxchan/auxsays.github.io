@@ -94,6 +94,9 @@ def load_acceptance_ledger(path: Path, *, rights_registry: dict[str, Any] | None
         if isinstance(row, dict)
     }
     profiles = {row.get("validatorProfileId"): row for row in ledger.get("validatorProfiles", []) if isinstance(row, dict)}
+    accepted_authorities = {ledger.get("authority"), *ledger.get("inheritedAuthorities", [])}
+    if any(not isinstance(authority, str) or authority in {"", "NONE"} for authority in accepted_authorities):
+        raise ValueError("history acceptance authority chain is invalid")
     seen: set[str] = set()
     for rule in rules:
         if not isinstance(rule, dict) or not REQUIRED_RULE_FIELDS.issubset(rule):
@@ -103,7 +106,7 @@ def load_acceptance_ledger(path: Path, *, rights_registry: dict[str, Any] | None
         seen.add(rule["ruleId"])
         _utc(rule["acceptedAt"])
         _utc(rule["effectiveFrom"])
-        if rule["authority"] != ledger["authority"] or rule["authority"] in {"", "NONE"}:
+        if rule["authority"] not in accepted_authorities:
             raise ValueError("history acceptance rule lacks authority or accepted rights")
         if rule["rightsPolicyId"] != rule["sourceId"]:
             raise ValueError("history acceptance rule lacks an exact source rights policy")
@@ -113,11 +116,20 @@ def load_acceptance_ledger(path: Path, *, rights_registry: dict[str, Any] | None
         profile = profiles.get(rule["validatorProfileId"])
         if not profile or profile.get("parserVersion") != rule["parserVersion"] or profile.get("methodologyUrl") != rule["methodologyUrl"]:
             raise ValueError("history acceptance rule lacks its exact validator profile")
+        allowed_parser_versions = set(rule.get("allowedParserVersions", [rule["parserVersion"]]))
+        allowed_profile_ids = set(rule.get("allowedValidatorProfileIds", [rule["validatorProfileId"]]))
+        profiled_parser_versions = {
+            profiles[profile_id].get("parserVersion")
+            for profile_id in allowed_profile_ids
+            if profile_id in profiles and profiles[profile_id].get("methodologyUrl") == rule["methodologyUrl"]
+        }
+        if allowed_parser_versions != profiled_parser_versions:
+            raise ValueError("history acceptance alternate parser lacks an exact validator profile")
         if not isinstance(rule["allowedPublicationTimeKinds"], list) or not rule["allowedPublicationTimeKinds"]:
             raise ValueError("history acceptance rule lacks publication-time bounds")
         if not isinstance(rule["allowedRevisionStatuses"], list) or not rule["allowedRevisionStatuses"]:
             raise ValueError("history acceptance rule lacks revision bounds")
-        if rule["descriptiveBackfillAuthority"] != ledger["authority"]:
+        if rule["descriptiveBackfillAuthority"] not in accepted_authorities:
             raise ValueError("history acceptance backfill lacks authority")
         _period_key(rule["descriptiveBackfillStart"], rule["frequency"])
         _period_key(rule["descriptiveBackfillEnd"], rule["frequency"])
@@ -165,6 +177,13 @@ def promote_candidate_batch(
     for candidate in candidates:
         matches = [rule for rule in rules if _rule_matches(rule, candidate)]
         if not matches:
+            identity_matches = [
+                rule for rule in rules
+                if rule["sourceId"] == candidate.get("source_id")
+                and rule["sourceSeriesId"] == candidate.get("source_series_id")
+            ]
+            if identity_matches:
+                raise ValueError("manual_review_needed: candidate metadata is outside exact authority")
             continue
         if len(matches) != 1:
             raise ValueError("candidate is covered by multiple acceptance rules")
@@ -179,6 +198,15 @@ def promote_candidate_batch(
                 continue
         if _utc(rule["acceptedAt"]) > _utc(accepted_at):
             raise ValueError("runner acceptance time precedes rule acceptance")
+        semantic_prior = next((
+            row for row in history + promoted
+            if row.get("canonicalFactorId") == canonical_factor_id(candidate["canonical_factor"])
+            and row.get("sourceSeriesId") == candidate["source_series_id"]
+            and row.get("validTime") == candidate["observation_period"]
+            and row.get("value") == str(_decimal(candidate["value"]))
+        ), None)
+        if semantic_prior is not None and rule.get("historyUseClass") == "CURRENT_REVISED_HISTORY":
+            continue
         identity = _accepted_identity(candidate)
         prior = next((row for row in history + promoted if row.get("observationId") == identity), None)
         if prior is not None:
@@ -188,6 +216,28 @@ def promote_candidate_batch(
         observation = _accepted_observation(candidate, rule, accepted_at, history + promoted)
         promoted.append(observation)
     return promoted
+
+
+def bound_candidate_batch_to_series(batch: dict[str, Any], source_series_ids: Iterable[str]) -> dict[str, Any]:
+    """Return an acceptance-neutral batch restricted to exact governed IDs."""
+
+    requested = {series_id for series_id in source_series_ids if isinstance(series_id, str) and series_id}
+    if not requested:
+        raise ValueError("exact-series activation scope cannot be empty")
+    candidates = batch.get("candidates")
+    if not isinstance(candidates, list):
+        raise ValueError("candidate batch has no candidate list")
+    available = {row.get("source_series_id") for row in candidates if isinstance(row, dict)}
+    missing = requested - available
+    if missing:
+        raise ValueError(f"exact-series activation scope is absent from candidate batch: {sorted(missing)}")
+    bounded = dict(batch)
+    bounded["candidates"] = [row for row in candidates if row.get("source_series_id") in requested]
+    bounded["activationScope"] = {
+        "mode": "EXACT_SOURCE_SERIES_IDS",
+        "sourceSeriesIds": sorted(requested),
+    }
+    return bounded
 
 
 def append_history(
@@ -429,7 +479,8 @@ def _validate_candidate_against_rule(
     raw = raw_by_hash.get(candidate.get("artifact_sha256"))
     if not raw:
         raise ValueError("candidate raw artifact is not declared")
-    if raw.get("source_id") != rule["rawArtifactSourceId"] or raw.get("parser_version") != rule["parserVersion"]:
+    allowed_parser_versions = set(rule.get("allowedParserVersions", [rule["parserVersion"]]))
+    if raw.get("source_id") != rule["rawArtifactSourceId"] or raw.get("parser_version") not in allowed_parser_versions:
         raise ValueError("candidate parser or raw source is outside authority")
     if candidate.get("methodology_url") != rule["methodologyUrl"]:
         raise ValueError("candidate methodology is outside authority")
@@ -550,6 +601,7 @@ def _accepted_observation(
         "forecastVintageEligible": bool(rule.get("forecastVintageEligible", False)),
         "vintageEvidenceId": rule.get("vintageEvidenceId"),
         "sourceRevisionStatus": candidate.get("revision_status", "UNKNOWN"),
+        "acquisitionMethod": candidate.get("acquisition_method", "UNSPECIFIED"),
     }
     row["objectHash"] = _sha(row)
     _validate_accepted_observation(row)

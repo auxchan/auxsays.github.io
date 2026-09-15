@@ -1,70 +1,35 @@
-# DOL Initial Claims freshness forensics
+# DOL Initial Claims freshness and fallback report
 
 Forensic date: 2026-09-14
 
-Status: **structured source remains stale; identity defect repaired; no value
-manually injected; zero rows promoted.**
+Status: **official fallback succeeded; primary structured XML remains stale.**
 
-## Root cause
+The primary `r539cyNational` XML still contains blank claims cells after
+2026-08-15 and remains `STALE` under the unchanged 336-hour threshold. Its
+health warning was not disabled or relabeled. Report-run time remains separate
+from semantic observation identity.
 
-The collector did not truncate, misparse, paginate, filter, or misdate newer
-observations. The official `r539cyNational` XML returned all 52 calendar rows,
-but its populated seasonally adjusted claims data stopped at 2026-08-15.
-Rows for 2026-08-22, 2026-08-29, and 2026-09-05 existed with blank/NBSP claims
-cells. The parser correctly skipped those empty values.
+Because the primary was stale, the collector triggered the bounded official
+DOL release fallback. The official USDOL distribution release had deterministic
+HTML text, a publication timestamp, and the exact seasonally adjusted Initial
+Claims sentence; no OCR, LLM extraction, news article, FRED, or third-party
+substitute was used.
 
-The primary blocker is therefore a lagging/degraded official structured
-endpoint. DOL's claims page also reports database technical issues. The current
-DOL weekly PDF was available and reported 2026-09-05, but this repository has
-no accepted deterministic standard-library parser for that PDF. The structured
-XML remains the history/backfill lane until a release-artifact intake is
-separately implemented and validated.
+The same failover boundary also covers a bounded-retrieval or primary-parser
+failure. In that case the primary method remains explicitly `BROKEN`; a current,
+fully validated official release may supply the canonical Initial Claims rows
+without changing that primary-method diagnosis. Regression coverage exercises
+this path through collection and the later repair pass.
 
-## Repo-owned defect and repair
+| Method | Status | Newest period | Result |
+|---|---|---|---|
+| Primary official XML | `STALE` | 2026-08-15 | History lane retained; warning active |
+| Official weekly release fallback | `CURRENT` | 2026-09-05 | 206,000 advance; 207,000 revised for 2026-08-29 |
+| Official archive | `NOT_NEEDED` | n/a | Third governed method when required |
+| Overall | `SUCCESS_WITH_PRIMARY_STALE` | 2026-09-05 | Current observation available without hiding primary degradation |
 
-The XML `rundate` was previously treated as a weekly release identity. A
-read-only replay on 2026-09-14 returned the same 33 populated Initial Claims
-weeks and the same values as the 2026-09-10 artifact; only `rundate` changed.
-It is a report-execution date, not a release/vintage identity.
-
-The parser now:
-
-- derives a stable, content-addressed structured-snapshot identity from
-  populated series/period/value tuples;
-- records the report run date separately;
-- prevents unchanged daily executions from manufacturing false releases or
-  revisions; and
-- classifies r539cy observations as `current_revised_snapshot` instead of
-  falsely calling the newest populated stale row `advance`.
-
-Freshness continues to fail closed at the governed 336-hour threshold. The
-threshold was not increased.
-
-## Retrieval result
-
-| Item | Result |
-|---|---|
-| Stored XML retrieval | 2026-09-10T00:58:12.132990Z |
-| Stored XML report run date | 2026-09-10 |
-| Read-only replay date | 2026-09-14 |
-| Stored and replayed newest populated Initial Claims period | 2026-08-15 |
-| Stored and replayed newest populated value | 207,000 seasonally adjusted claims |
-| Stored observation age | 624.97 hours |
-| Governed stale threshold | 336 hours |
-| Structured source freshness | `STALE` |
-| Newest official period verified in the current DOL weekly release | 2026-09-05 |
-| Newest official value verified | 206,000 seasonally adjusted claims |
-| Newest acquired/promotable period | 2026-08-15 |
-| Newly promoted rows | 0 |
-
-The current official release also reports 207,000 for 2026-08-29 after revision
-and 204,000 for 2026-08-22. These values are forensic cross-checks only; they
-were not injected into accepted history.
-
-## Remaining blocker
-
-Implement a deterministic intake for the immutable DOL weekly release/archive
-artifact, with an actual publication/release identity, then cross-check the
-r539cy history lane and promote only through the existing Taylor-authorized
-acceptance rule. Until then, the UI must continue to distinguish accepted
-historical data from the stale current-source state.
+The fallback stores the official URL, content hash, semantic release identity,
+publication time, retrieval time, parser version, and method. Semantic
+observation identity is based on series, period, and value, so retrieval URL,
+method, or transport time does not manufacture a revision. The accepted
+209,000 -> 212,000 chain for 2026-08-08 remains intact.

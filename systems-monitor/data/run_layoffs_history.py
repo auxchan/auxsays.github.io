@@ -15,6 +15,7 @@ if str(SRC) not in sys.path:
 
 from systems_monitor_data.layoffs_history import (  # noqa: E402
     append_history,
+    bound_candidate_batch_to_series,
     history_artifact,
     load_acceptance_ledger,
     migrate_existing_dol_seed,
@@ -45,6 +46,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--history", type=Path, default=ROOT / "review" / "layoffs-accepted-history.json")
     parser.add_argument("--report", type=Path, default=ROOT / "review" / "layoffs-history-activation-report.json")
     parser.add_argument("--accepted-at", default=None)
+    parser.add_argument(
+        "--series-id",
+        action="append",
+        default=[],
+        help="Promote only this exact source series ID; repeat for a bounded multi-series activation.",
+    )
     args = parser.parse_args(argv)
 
     accepted_at = args.accepted_at or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -72,6 +79,8 @@ def main(argv: list[str] | None = None) -> int:
         raw_root=args.raw_root,
     )
     _write_atomic(args.candidate, candidate)
+    if args.series_id:
+        candidate = bound_candidate_batch_to_series(candidate, args.series_id)
     seed = migrate_existing_dol_seed(_load(args.seed_snapshot))
     seeded = append_history(existing, [seed])
     seed_migrated = len(seeded) > len(existing)
@@ -132,20 +141,24 @@ def main(argv: list[str] | None = None) -> int:
         "dolRepair": {
             "sourceReleaseMarker": candidate.get("sourceDiagnostics", {}).get("dolSourceReleaseMarker"),
             "freshness": candidate.get("sourceDiagnostics", {}).get("dolFreshness"),
+            "primaryFreshness": candidate.get("sourceDiagnostics", {}).get("dolPrimaryFreshness"),
+            "overallStatus": candidate.get("sourceDiagnostics", {}).get("dolAcquisitionOverallStatus"),
+            "methods": candidate.get("sourceDiagnostics", {}).get("dolAcquisitionMethods", {}),
             "seedValue": "209000",
             "revisedValue": next(
                 (row["value"] for row in combined if row["sourceSeriesId"] == "DOL-UI-SA-INITIAL" and row["validTime"] == "2026-08-08" and row["revisionNumber"] == 1),
                 None,
             ),
             "routineRuleActive": True,
-            "staleCurrentRetrievalFailsClosed": candidate.get("sourceDiagnostics", {}).get("dolFreshness", {}).get("status") != "CURRENT",
+            "primaryStaleWarningActive": candidate.get("sourceDiagnostics", {}).get("dolPrimaryFreshness", candidate.get("sourceDiagnostics", {}).get("dolFreshness", {})).get("status") == "STALE",
+            "currentObservationAvailable": candidate.get("sourceDiagnostics", {}).get("dolFreshness", {}).get("status") == "CURRENT",
         },
         "bedRights": {
             "exactPolicyPresent": bed_rights is not None,
             "modelFeatureUse": None if bed_rights is None else bed_rights.get("decisions", {}).get("model_feature_use"),
             "modelTrainingUse": None if bed_rights is None else bed_rights.get("decisions", {}).get("model_training_ml_use"),
             "acceptedObservationCount": len([row for row in combined if row["sourceId"] == "bls-bed"]),
-            "remainingBlocker": "TAYLOR_ACCEPTANCE_AUTHORITY_NOT_GRANTED",
+            "remainingBlocker": None if len([row for row in combined if row["sourceId"] == "bls-bed"]) else "NO_AUTHORIZED_BED_OBSERVATIONS_ACCEPTED",
         },
         "vintageQualifiedObservationCount": len(forecast_eligible),
         "materialityState": "UNKNOWN",

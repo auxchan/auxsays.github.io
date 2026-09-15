@@ -6,6 +6,7 @@ from pathlib import Path
 from _support import CONFIG
 from systems_monitor_data.layoffs_history import (
     append_history,
+    bound_candidate_batch_to_series,
     comparable_change,
     deterministic_interpretation,
     history_artifact,
@@ -108,9 +109,31 @@ class LayoffsHistoryTests(unittest.TestCase):
             ledger,
             accepted_at="2026-09-12T12:02:00Z",
         )
-        self.assertEqual("TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_11", ledger["authority"])
-        self.assertEqual(9, len(ledger["rules"]))
+        self.assertEqual("TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_14", ledger["authority"])
+        self.assertEqual(13, len(ledger["rules"]))
         self.assertEqual([], rows)
+
+    def test_exact_series_scope_excludes_unrelated_rows_before_promotion(self):
+        authorized = candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z")
+        unrelated = dict(authorized, observation_id="unrelated", source_series_id="JTS-NOT-AUTHORIZED")
+        bounded = bound_candidate_batch_to_series(batch(authorized, unrelated), ["JTS000000000000000LDL"])
+        self.assertEqual(["JTS000000000000000LDL"], [row["source_series_id"] for row in bounded["candidates"]])
+        promoted = promote_candidate_batch(
+            bounded,
+            authorized_ledger(),
+            accepted_at="2026-08-01T12:02:00Z",
+        )
+        self.assertEqual(1, len(promoted))
+
+    def test_authorized_series_with_metadata_mismatch_requires_manual_review(self):
+        mismatched = candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z")
+        mismatched["geography"] = "CA"
+        with self.assertRaisesRegex(ValueError, "manual_review_needed"):
+            promote_candidate_batch(
+                batch(mismatched),
+                authorized_ledger(),
+                accepted_at="2026-08-01T12:02:00Z",
+            )
 
     def test_explicit_rule_builds_native_cadence_change_without_materiality_or_impact(self):
         rows = promote_candidate_batch(
@@ -250,6 +273,22 @@ class LayoffsHistoryTests(unittest.TestCase):
         source = batch(candidate("2026-07", "1760", "R2", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z"))
         first = promote_candidate_batch(source, ledger, accepted_at="2026-08-01T12:02:00Z")
         retry = promote_candidate_batch(source, ledger, accepted_at="2026-08-01T12:03:00Z", existing_history=first)
+        self.assertEqual([], retry)
+
+    def test_descriptive_history_ignores_fresh_transport_of_unchanged_bls_value(self):
+        ledger = authorized_ledger()
+        first_batch = batch(candidate("2026-07", "1760", "retrieval-one", "2026-08-01T12:00:00Z", "2026-08-01T12:01:00Z"))
+        first = promote_candidate_batch(first_batch, ledger, accepted_at="2026-08-01T12:02:00Z")
+        replayed = candidate("2026-07", "1760", "retrieval-two", "2026-08-02T12:00:00Z", "2026-08-02T12:01:00Z")
+        replay_batch = batch(replayed)
+        replay_batch["rawArtifacts"][0]["sha256"] = "b" * 64
+        replayed["artifact_sha256"] = "b" * 64
+        retry = promote_candidate_batch(
+            replay_batch,
+            ledger,
+            accepted_at="2026-08-02T12:02:00Z",
+            existing_history=first,
+        )
         self.assertEqual([], retry)
 
     def test_dol_semantic_retry_ignores_report_execution_transport_changes(self):

@@ -2,7 +2,7 @@ import activeFactualSnapshot from "../../../data/review/local-active-pdi-test-sn
 import { createSnapshotViewModel } from "./snapshotViewModelFactory";
 import { validatePublicSnapshot } from "./validatePublicSnapshot";
 import { layoffsBranchTaxonomy, layoffsCanonicalFactorId } from "./layoffsBranchTaxonomy";
-import { layoffsAcceptedFactorSummaries, LAYOFFS_ACCEPTED_HISTORY_AS_OF, LAYOFFS_DOL_SOURCE_FRESHNESS } from "./layoffsAcceptedHistoryReadModel";
+import { layoffsAcceptedFactorSummaries, LAYOFFS_ACCEPTED_HISTORY_AS_OF, LAYOFFS_DOL_PRIMARY_FRESHNESS, LAYOFFS_DOL_SOURCE_FRESHNESS } from "./layoffsAcceptedHistoryReadModel";
 
 export type PersistentTimeWindow = "RECENT" | "24H" | "7D" | "30D" | "90D" | "1Y";
 export type PersistentChangeKind = "NEW_OFFICIAL_OBSERVATION" | "REVISION" | "SOURCE_STALE";
@@ -122,6 +122,7 @@ function acceptedPlacementId(canonicalFactorId: string) {
 
 function acceptedHistoryNotices(): PersistentChangeNotice[] {
   return layoffsAcceptedFactorSummaries.flatMap((factor) => factor.series.flatMap((series) => {
+    if (!series.previous || series.previousDisplay === undefined || series.absoluteDelta === undefined || !series.direction || !series.directionGlyph) return [];
     const sourceLabel = `${series.provider} · ${series.dataset}`;
     const relative = series.relativeDeltaPercent === undefined ? "" : ` (${series.relativeDeltaPercent >= 0 ? "+" : ""}${series.relativeDeltaPercent.toFixed(2)}%)`;
     const change: PersistentChangeNotice = {
@@ -198,19 +199,19 @@ function sourceHealthNotices(): PersistentChangeNotice[] {
 }
 
 function acceptedSourceHealthNotices(): PersistentChangeNotice[] {
-  if (LAYOFFS_DOL_SOURCE_FRESHNESS.status !== "STALE") return [];
+  if (LAYOFFS_DOL_PRIMARY_FRESHNESS.status !== "STALE") return [];
   return [{
-    id: `source-health:dol-ui-claims:${LAYOFFS_DOL_SOURCE_FRESHNESS.retrievedTime}:stale`,
+    id: `source-health:dol-ui-claims:${LAYOFFS_DOL_PRIMARY_FRESHNESS.newestObservationPeriod}:stale`,
     kind: "SOURCE_STALE",
     factorLabel: "Unemployment Insurance Weekly Claims",
     placementId: acceptedPlacementId("factor:canonical:initial-claims"),
     knownAt: LAYOFFS_ACCEPTED_HISTORY_AS_OF,
-    validTime: LAYOFFS_DOL_SOURCE_FRESHNESS.newestObservationPeriod,
+    validTime: LAYOFFS_DOL_PRIMARY_FRESHNESS.newestObservationPeriod,
     comparisonBasis: "Operational source freshness; not an economic comparison.",
     impactClass: "UNKNOWN",
     economicSignalEligible: false,
     headline: "Structured retrieval path is stale",
-    summary: `The repaired DOL XML source ends at ${LAYOFFS_DOL_SOURCE_FRESHNESS.newestObservationPeriod}; the ${LAYOFFS_DOL_SOURCE_FRESHNESS.observationAgeHours}-hour observation age exceeds the governed ${LAYOFFS_DOL_SOURCE_FRESHNESS.staleAfterHours}-hour limit. Routine current acceptance fails closed while accepted history remains available.`,
+    summary: `The DOL XML source ends at ${LAYOFFS_DOL_PRIMARY_FRESHNESS.newestObservationPeriod} and remains stale. Current Initial Claims are available through the separately identified official release fallback ending ${LAYOFFS_DOL_SOURCE_FRESHNESS.newestObservationPeriod}; fallback success does not change primary method health.`,
     sourceLabel: "U.S. Department of Labor · Unemployment Insurance Weekly Claims",
     methodologyUrl: "https://oui.doleta.gov/unemploy/claims.asp",
     sourceHealthOnly: true,

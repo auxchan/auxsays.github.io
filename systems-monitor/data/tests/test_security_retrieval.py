@@ -15,6 +15,14 @@ class SecurityRetrievalTests(unittest.TestCase):
     def test_https_allowlist(self):
         self.assertEqual("https://api.bls.gov/path", validate_url("https://api.bls.gov/path", resolver=resolver_for("23.1.1.1")))
 
+    def test_official_dol_distribution_host_is_allowlisted(self):
+        url = "https://content.govdelivery.com/accounts/USDOL/bulletins/official"
+        self.assertEqual(url, validate_url(url, resolver=resolver_for("23.1.1.1")))
+
+    def test_dol_distribution_allowlist_is_path_scoped_to_usdol_bulletins(self):
+        with self.assertRaisesRegex(ValueError, "path"):
+            validate_url("https://content.govdelivery.com/accounts/OTHER/bulletins/x", resolver=resolver_for("23.1.1.1"))
+
     def test_http_rejected(self):
         with self.assertRaises(ValueError):
             validate_url("http://api.bls.gov/path", resolver=resolver_for("23.1.1.1"))

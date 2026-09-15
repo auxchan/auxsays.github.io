@@ -3,9 +3,13 @@ import {
   layoffsAcceptedFactorSummaries,
   LAYOFFS_ACCEPTED_HISTORY_AS_OF,
   LAYOFFS_ACCEPTED_OBSERVATION_COUNT,
+  LAYOFFS_DOL_ACQUISITION_STATUS,
+  LAYOFFS_DOL_PRIMARY_FRESHNESS,
   LAYOFFS_DOL_SOURCE_FRESHNESS,
   type LayoffsAcceptedSeriesSummary,
 } from "../../data/layoffsAcceptedHistoryReadModel";
+import { StructuralNodeIcon } from "../motion/StructuralNodeIcon";
+import type { StructuralNodeSymbol } from "../motion/structuralVisualLanguage";
 import "./layoffsLevel4Qa.css";
 
 const factorLabels: Readonly<Record<string, string>> = Object.freeze({
@@ -17,11 +21,16 @@ const factorLabels: Readonly<Record<string, string>> = Object.freeze({
   "factor:canonical:average-weekly-hours": "Average Weekly Hours",
   "factor:canonical:temporary-help-employment": "Temporary Help Employment",
   "factor:canonical:initial-claims": "Initial Claims",
+  "factor:canonical:gross-job-losses": "Gross Job Losses",
+  "factor:canonical:establishment-contractions": "Establishment Contractions",
+  "factor:canonical:establishment-closures": "Establishment Closures",
+  "factor:canonical:establishment-deaths": "Establishment Deaths",
 });
 
 const factorOrder = Object.keys(factorLabels);
 
 function displayDelta(series: LayoffsAcceptedSeriesSummary) {
+  if (series.absoluteDelta === undefined) return "No prior compatible accepted period";
   const sign = series.absoluteDelta > 0 ? "+" : "";
   const relative = series.relativeDeltaPercent === undefined
     ? ""
@@ -29,19 +38,38 @@ function displayDelta(series: LayoffsAcceptedSeriesSummary) {
   return `${sign}${series.absoluteDelta.toLocaleString("en-US")} ${series.unit}${relative}`;
 }
 
+const factorSymbols: Readonly<Record<string, StructuralNodeSymbol>> = Object.freeze({
+  "factor:canonical:layoffs-and-discharges": "separations", "factor:canonical:job-openings-rate": "openings",
+  "factor:canonical:hires-rate": "hire", "factor:canonical:permanent-job-losers": "unemployment",
+  "factor:canonical:temporary-layoffs": "unemployment", "factor:canonical:average-weekly-hours": "clock",
+  "factor:canonical:temporary-help-employment": "people", "factor:canonical:initial-claims": "claims",
+  "factor:canonical:gross-job-losses": "factory", "factor:canonical:establishment-contractions": "factory",
+  "factor:canonical:establishment-closures": "factory", "factor:canonical:establishment-deaths": "factory",
+});
+
+const hierarchyPlacement: Readonly<Record<string, string>> = Object.freeze({
+  "factor:canonical:gross-job-losses": "Layoffs & Job Destruction › Gross Job Losses",
+  "factor:canonical:establishment-contractions": "Layoffs & Job Destruction › Gross Job Losses › Establishment Contractions",
+  "factor:canonical:establishment-closures": "Layoffs & Job Destruction › Gross Job Losses › Establishment Closures",
+  "factor:canonical:establishment-deaths": "Layoffs & Job Destruction › Firm Death / Shutdown Stress › Establishment Deaths",
+});
+
 function SeriesQa({ series }: { series: LayoffsAcceptedSeriesSummary }) {
+  const fallback = series.sourceId === "dol-ui-claims" && LAYOFFS_DOL_ACQUISITION_STATUS === "SUCCESS_WITH_PRIMARY_STALE";
   const stale = series.sourceId === "dol-ui-claims" && LAYOFFS_DOL_SOURCE_FRESHNESS.status === "STALE";
-  return <article className="sm-l4qa-series" data-source-state={stale ? "stale" : "accepted-history"}>
+  const comparable = Boolean(series.previous && series.previousDisplay !== undefined && series.direction && series.directionGlyph);
+  return <article className="sm-l4qa-series" data-source-state={fallback ? "fallback" : stale ? "stale" : "accepted-history"}>
     <header>
       <div><span>{series.seriesLabel}</span><code>{series.sourceSeriesId}</code></div>
-      <strong>{stale ? "ACCEPTED HISTORICAL DATA" : "ACCEPTED DESCRIPTIVE HISTORY"}</strong>
+      <strong>{fallback ? "CURRENT · OFFICIAL FALLBACK" : stale ? "ACCEPTED HISTORICAL DATA" : "ACCEPTED DESCRIPTIVE HISTORY"}</strong>
     </header>
+    {fallback && <p className="sm-l4qa-fallback"><b>Primary XML: STALE through {LAYOFFS_DOL_PRIMARY_FRESHNESS.newestObservationPeriod}.</b> Current accepted value is from the official DOL weekly release fallback through {LAYOFFS_DOL_SOURCE_FRESHNESS.newestObservationPeriod}.</p>}
     {stale && <p className="sm-l4qa-stale"><b>Current source state: STALE.</b> The accepted value below remains valid history, but it is not presented as the current national reading.</p>}
     <dl className="sm-l4qa-facts">
       <div><dt>{stale ? "Newest accepted historical value" : "Current accepted value"}</dt><dd>{series.currentDisplay}</dd></div>
       <div><dt>Observation period</dt><dd>{series.current.validTime}</dd></div>
-      <div><dt>Previous comparable value</dt><dd>{series.previousDisplay}<small>{series.previous.validTime}</small></dd></div>
-      <div><dt>Factual direction</dt><dd>{series.directionGlyph} {series.direction.toLowerCase()}<small>{displayDelta(series)}</small></dd></div>
+      <div><dt>Previous comparable value</dt><dd>{comparable ? series.previousDisplay : "Unavailable"}{series.previous && <small>{series.previous.validTime}</small>}</dd></div>
+      <div><dt>Factual direction</dt><dd>{comparable ? <>{series.directionGlyph} {series.direction!.toLowerCase()}</> : "Not yet comparable"}<small>{displayDelta(series)}</small></dd></div>
       <div><dt>History / source state</dt><dd>{acceptedLayoffsHistoryFreshness(series.sourceId)}</dd></div>
       <div><dt>Revision status</dt><dd>{stale ? `accepted artifact: ${series.current.sourceRevisionStatus.replaceAll("_", " ")}` : series.current.sourceRevisionStatus.replaceAll("_", " ")}<small>{stale ? "Current-release classification unavailable; structured source stale" : `${series.revisionChainCount} accepted revision chain${series.revisionChainCount === 1 ? "" : "s"}`}</small></dd></div>
       <div><dt>Source</dt><dd>{series.provider}<small>{series.dataset}</small></dd></div>
@@ -69,7 +97,7 @@ export function LayoffsLevel4QaView() {
     <header className="sm-l4qa-hero"><div><span>Layoffs Level-4</span><h1>Accepted-history Human QA</h1><p>Verify factual identity, values, periods, comparisons, revisions, freshness, and source evidence. This surface is limited to factual source QA.</p></div><dl><div><dt>Human QA</dt><dd>PENDING</dd></div><div><dt>Canonical factors</dt><dd>{ordered.length}</dd></div><div><dt>Exact series</dt><dd>{ordered.reduce((count, factor) => count + factor.series.length, 0)}</dd></div><div><dt>Accepted observations</dt><dd>{LAYOFFS_ACCEPTED_OBSERVATION_COUNT}</dd></div></dl></header>
     <aside className="sm-l4qa-boundary"><strong>Review boundary</strong><span>Node titles remain identity-only. Historical acceptance does not establish a live reading when the current structured source is stale.</span><small>Accepted-history artifact generated {LAYOFFS_ACCEPTED_HISTORY_AS_OF}</small></aside>
     <main className="sm-l4qa-grid">{ordered.map((factor, index) => <section key={factor.canonicalFactorId} className="sm-l4qa-factor" aria-labelledby={`l4qa-factor-${index}`}>
-      <header><span>{String(index + 1).padStart(2, "0")} / {String(ordered.length).padStart(2, "0")}</span><div><h2 id={`l4qa-factor-${index}`}>{factorLabels[factor.canonicalFactorId] ?? factor.canonicalFactorId}</h2><code>{factor.canonicalFactorId}</code></div><b>{factor.series.length} exact series</b></header>
+      <header><span className="sm-l4qa-factor-icon"><StructuralNodeIcon symbol={factorSymbols[factor.canonicalFactorId] ?? "labor-market"} /></span><div><small>{String(index + 1).padStart(2, "0")} / {String(ordered.length).padStart(2, "0")}</small><h2 id={`l4qa-factor-${index}`}>{factorLabels[factor.canonicalFactorId] ?? factor.canonicalFactorId}</h2><code>{factor.canonicalFactorId}</code><em>{hierarchyPlacement[factor.canonicalFactorId] ?? `Layoffs & Job Destruction › ${factorLabels[factor.canonicalFactorId] ?? factor.canonicalFactorId}`}</em></div><b>{factor.series.length} exact series</b></header>
       <div>{factor.series.map((series) => <SeriesQa key={series.sourceSeriesId} series={series} />)}</div>
     </section>)}</main>
   </div>;
