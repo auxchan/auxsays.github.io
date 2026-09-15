@@ -31713,3 +31713,34 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998917-solved-kb5124008-26200-9445-breaks-mac
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5998917/solved-kb5124008-26200-9445-breaks-machine-secure
+  parent_title: (SOLVED) KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A
+  report_title: (SOLVED) KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A
+  report_text_excerpt: (SOLVED) KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A After installing KB5124008 (OS Build 26200.9445) on Windows 11 domain-joined workstations, affected machines lose their domain secure channel and users...
+  captured_at: '2026-09-15T12:58:16Z'
+  source_date: '2026-09-14'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
