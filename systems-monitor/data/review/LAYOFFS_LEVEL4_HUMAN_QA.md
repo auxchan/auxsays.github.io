@@ -8,6 +8,13 @@ Loopback review URL:
 
 Start from `systems-monitor/app` with `npm run dev:layoffs-qa`.
 
+The `FAIL_MINOR / REPAIR_REQUIRED` presentation review was addressed on
+2026-09-15: the shared badge now reports 12 factors, history counts are labeled
+as accepted periods, readings use "latest accepted" language, reused canonical
+factors expose all Layoffs placements, rate deltas use percentage points, and
+human-readable people/job counts retain their source-native unit in Deep Dive.
+Final human visual review remains pending.
+
 ## Review boundary
 
 This is a Human-QA package, not an approval. It exposes 203 immutable accepted
@@ -33,15 +40,15 @@ added zero observations and did not rewrite history.
 
 The official `r539cyNational` XML remains `STALE` through 2026-08-15. The
 official DOL release fallback is `CURRENT` through 2026-09-05, so overall DOL
-acquisition is `SUCCESS_WITH_PRIMARY_STALE`. Accepted current Initial Claims
+acquisition is `SUCCESS_WITH_PRIMARY_STALE`. The latest accepted Initial Claims
 are 206,000 for 2026-09-05; the release also supplies the revised prior-week
 value of 207,000 for 2026-08-29. The accepted 2026-08-08 revision chain remains
 209,000 -> 212,000.
 
 ## Taylor checklist
 
-- Verify each canonical name, icon, exact series ID, and hierarchy placement.
-- Verify current value, represented period, previous compatible period, arrow,
+- Verify each canonical name, icon, exact series ID, and hierarchy placement list.
+- Verify latest accepted value, represented period, previous compatible period, arrow,
   and arithmetic delta where comparison exists.
 - Confirm Establishment Deaths says comparison unavailable rather than
   manufacturing a direction.

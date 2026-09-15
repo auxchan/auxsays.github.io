@@ -5,6 +5,7 @@ import type { MotionQaReadModel } from "../data/motionQaReadModel";
 import { breadcrumbNodes, type RouteState } from "../state/routeSchema";
 import { FactualCandidateNotice, FixtureNotice, FreshnessLabel } from "../shared/Semantic";
 import { SystemIcon } from "../shared/SystemIcon";
+import { LAYOFFS_ACCEPTED_HISTORY_FACTOR_COUNT } from "../data/layoffsAcceptedHistoryReadModel";
 
 export function PrimaryViewSwitcher({ view, onChange }: { view: PrimaryView; onChange: (view: PrimaryView) => void }) {
   const views: Array<[PrimaryView, string]> = [
@@ -92,7 +93,7 @@ export function AppShell({ children, snapshot, phase4b, motionQa, layoffsQa = fa
     return <div className="sm-app-shell sm-app-shell--immersive sm-app-shell--layoffs-qa">
       <a className="sm-skip" href="#systems-monitor-content">Skip to Layoffs Level-4 QA</a>
       <div className="sm-motion-warning" role="status"><SystemIcon name="database" size={18} /><strong>LOCAL HUMAN QA — PENDING</strong><span>Accepted descriptive history · factual evidence only</span></div>
-      <header className="sm-immersive-header"><a className="sm-parent-brand" href="/">AUXSAYS <span>/ U.S. Systems Monitor</span></a><div className="sm-review-status" aria-label="Layoffs Level-4 review status"><span>8 factors</span><span>Human QA pending</span></div></header>
+      <header className="sm-immersive-header"><a className="sm-parent-brand" href="/">AUXSAYS <span>/ U.S. Systems Monitor</span></a><div className="sm-review-status" aria-label="Layoffs Level-4 review status"><span>{LAYOFFS_ACCEPTED_HISTORY_FACTOR_COUNT} factors</span><span>Human QA pending</span></div></header>
       <main id="systems-monitor-content" className="sm-immersive-main" tabIndex={-1}>{children}</main>
       <footer className="sm-immersive-footer"><span>Local review only · accepted evidence is immutable</span><span>Gate B open · Human QA pending</span></footer>
     </div>;

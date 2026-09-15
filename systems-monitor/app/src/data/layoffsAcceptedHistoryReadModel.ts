@@ -84,8 +84,10 @@ const primarySeriesPriority = [
   "BDS0000000000000000110004LQ5", "BDS0000000000000000110005LQ5", "BDS0000000000000000110006LQ5", "BDS0000000000000000110008LQ5",
 ];
 
-function displayValue(value: string, unit: string) {
+export function displayAcceptedLayoffsValue(value: string, unit: string) {
   const numeric = Number(value);
+  if (unit === "thousands of persons") return `${(numeric * 1_000).toLocaleString("en-US", { maximumFractionDigits: 4 })} people`;
+  if (unit === "thousands of jobs") return `${(numeric * 1_000).toLocaleString("en-US", { maximumFractionDigits: 4 })} jobs`;
   const formatted = Number.isInteger(numeric)
     ? numeric.toLocaleString("en-US")
     : numeric.toLocaleString("en-US", { maximumFractionDigits: 4 });
@@ -132,8 +134,8 @@ function buildSeriesSummary(rows: AcceptedHistoryRow[]): LayoffsAcceptedSeriesSu
     frequency: current.frequency,
     current,
     previous,
-    currentDisplay: displayValue(current.value, current.unit),
-    previousDisplay: previous ? displayValue(previous.value, previous.unit) : undefined,
+    currentDisplay: displayAcceptedLayoffsValue(current.value, current.unit),
+    previousDisplay: previous ? displayAcceptedLayoffsValue(previous.value, previous.unit) : undefined,
     absoluteDelta,
     relativeDeltaPercent: previousValue === undefined || previousValue === 0 || absoluteDelta === undefined ? undefined : absoluteDelta / Math.abs(previousValue) * 100,
     direction: absoluteDelta === undefined ? undefined : absoluteDelta > 0 ? "UP" : absoluteDelta < 0 ? "DOWN" : "FLAT",

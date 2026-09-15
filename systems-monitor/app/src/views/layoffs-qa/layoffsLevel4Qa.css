@@ -19,7 +19,9 @@
 [data-aux-product="systems-monitor"] .sm-l4qa-factor > header small { color: #6ed9c6; font: 700 .68rem/1 ui-monospace, monospace; }
 [data-aux-product="systems-monitor"] .sm-l4qa-factor h2 { margin: 0 0 .2rem; font-size: 1.25rem; }
 [data-aux-product="systems-monitor"] .sm-l4qa-factor code { color: #78918e; font-size: .72rem; overflow-wrap: anywhere; }
-[data-aux-product="systems-monitor"] .sm-l4qa-factor em { display: block; margin-top: .35rem; color: #9ab2ae; font-size: .73rem; font-style: normal; }
+[data-aux-product="systems-monitor"] .sm-l4qa-placements { margin-top: .45rem; border: 0; }
+[data-aux-product="systems-monitor"] .sm-l4qa-placements > summary { padding: 0; color: #9ab2ae; font-size: .73rem; font-weight: 650; }
+[data-aux-product="systems-monitor"] .sm-l4qa-placements ul { display: grid; gap: .25rem; margin: .45rem 0 0; padding-left: 1.15rem; color: #8fa8a4; font-size: .72rem; }
 [data-aux-product="systems-monitor"] .sm-l4qa-factor > header b { color: #9ab2ae; font-size: .75rem; font-weight: 650; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series { padding: 1.25rem; border-top: 1px solid #182e34; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series:first-child { border-top: 0; }

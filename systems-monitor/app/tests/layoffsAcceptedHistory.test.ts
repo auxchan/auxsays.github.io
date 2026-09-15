@@ -7,6 +7,7 @@ import {
   LAYOFFS_ACCEPTED_OBSERVATION_COUNT,
   LAYOFFS_DOL_SOURCE_FRESHNESS,
   LAYOFFS_DOL_PRIMARY_FRESHNESS,
+  displayAcceptedLayoffsValue,
 } from "../src/data/layoffsAcceptedHistoryReadModel";
 import { persistentWorldFactualBindingForFactor } from "../src/data/persistentWorldFactualBindings";
 import { persistentChangeNotices } from "../src/data/persistentWorldTemporalReadModel";
@@ -59,5 +60,12 @@ describe("Taylor-authorized Layoffs accepted history", () => {
     const historyNotices = persistentChangeNotices.filter((notice) => notice.id.startsWith("accepted-history:"));
     expect(historyNotices).toHaveLength(12);
     expect(historyNotices.every((notice) => notice.impactClass === "UNKNOWN" && notice.economicSignalEligible === false)).toBe(true);
+  });
+
+  it("presents source-scaled counts in human units while preserving exact values", () => {
+    expect(displayAcceptedLayoffsValue("1666", "thousands of persons")).toBe("1,666,000 people");
+    expect(displayAcceptedLayoffsValue("2519.5", "thousands of persons")).toBe("2,519,500 people");
+    expect(displayAcceptedLayoffsValue("7245", "thousands of jobs")).toBe("7,245,000 jobs");
+    expect(displayAcceptedLayoffsValue("4.4", "percent")).toBe("4.4%");
   });
 });
