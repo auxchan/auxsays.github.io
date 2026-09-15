@@ -17,8 +17,8 @@ update_version: 'Dev Mode MCP Server Updates: Annotations and Code Connect Snipp
 update_logo_text: FIG
 update_published_at: '2025-07-01T00:00:00.000Z'
 update_last_checked: '2026-08-15T08:07:57Z'
-source_last_checked: '2026-08-15T08:07:57Z'
-official_body_last_checked: '2026-08-15T08:07:57Z'
+source_last_checked: '2026-09-15T07:18:25Z'
+official_body_last_checked: '2026-09-15T07:18:25Z'
 record_last_updated: '2026-08-15T08:07:57Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-15T08:07:57Z'
+  url: https://www.figma.com/release-notes/?title=Dev%20Mode%20MCP%20Server%20Updates%3A%20Annotations%20and%20Code%20Connect%20Snippets
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-15T07:18:25Z'
   url: https://www.figma.com/release-notes/?title=Dev%20Mode%20MCP%20Server%20Updates%3A%20Annotations%20and%20Code%20Connect%20Snippets
   status: captured-from-rss-feed
   body_captured: true
