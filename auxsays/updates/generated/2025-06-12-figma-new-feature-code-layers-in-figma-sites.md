@@ -17,8 +17,8 @@ update_version: 'New feature: Code layers in Figma Sites'
 update_logo_text: FIG
 update_published_at: '2025-06-12T00:00:00.000Z'
 update_last_checked: '2026-08-15T19:58:27Z'
-source_last_checked: '2026-08-15T19:58:27Z'
-official_body_last_checked: '2026-08-15T19:58:27Z'
+source_last_checked: '2026-09-15T19:05:46Z'
+official_body_last_checked: '2026-09-15T19:05:46Z'
 record_last_updated: '2026-08-15T19:58:27Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-15T19:58:27Z'
+  url: https://www.figma.com/release-notes/?title=figma-sites-code-layers
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-15T19:05:46Z'
   url: https://www.figma.com/release-notes/?title=figma-sites-code-layers
   status: captured-from-rss-feed
   body_captured: true
