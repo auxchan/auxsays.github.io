@@ -75,6 +75,11 @@ auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
 auxsays/scripts/tests/test_obs_consensus_projection.py = 49
+# The same projection-coherence class for DaVinci, whose count is moved by the scheduled lane's
+# unscoped reconcile while its rebuild authority lived only in a dispatch-only workflow. Pins the
+# lane step (scoped, after reconciliation, before the first QA) and drives the real writer over a
+# temp tree, asserting through the SHIPPED qa_patch_records predicates rather than copies of them.
+auxsays/scripts/tests/test_davinci_projection_coherence.py = 29
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 83

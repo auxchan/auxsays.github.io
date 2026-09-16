@@ -269,6 +269,69 @@ jobs:
             --product-id microsoft-windows-11 \
             --write-all --confirm-write
 
+      - name: Promote DaVinci consensus to its counted population
+        # DaVinci's projections had no authority in any SCHEDULED lane, and this is the lane that
+        # moves its number. The consensus step above runs an unscoped reconcile_record_counts, which
+        # writes update_report_count for every product; the five promotions above rebuild the
+        # count-derived fields for their own products; DaVinci had none here. Its only scoped
+        # promotion lives in davinci-updates.yml, which is workflow_dispatch-only, last ran
+        # 2026-06-18 (failed), and whose DaVinci step -- added by #76 on 2026-08-27 -- has therefore
+        # never executed in production.
+        #
+        # WHY IT WENT UNNOTICED FOR THREE WEEKS. Until #69 (fd0cfa98, 2026-08-27) the DaVinci
+        # collector itself wrote the whole projection through _apply_record_fields. #69 narrowed
+        # every in-collector write to COLLECTOR_WRITABLE_FIELDS = {evidence_last_checked,
+        # record_last_updated} and delegated counts and projections to "a later authority" -- which
+        # for DaVinci was never wired up. The gap stayed invisible while DaVinci discovery was
+        # starved, and opened the moment #131 (11817dee) restored newest-first traversal: the first
+        # divergent commit (9815a89e, count 40 -> 44 with the source list frozen at 40) came from the
+        # lane run created 25 seconds after that merge.
+        #
+        # This is not only cosmetic drift. reconcile_record_counts raising a DaVinci record above
+        # zero with no step to build its summary is the #70 wedge: runs 34717343799, 34807610424 and
+        # 34998144189 all died at "QA patch records" on
+        # 2026-08-05-davinci-resolve-21-0-4.md (report_count_without_consensus_summary +
+        # report_count_without_evidence_samples), and because QA precedes the writeback, EVERY
+        # product's evidence for those three cycles was discarded.
+        #
+        # POSITION IS LOAD-BEARING, for the same reason it is for the four steps above: after the
+        # reconcile, before the first QA, so QA validates the state the writers finished. Scoped to
+        # one --product-id so no other product's records are touched; an empty value is falsy in
+        # run_dry_run's filter and would promote the whole corpus, which #76 made exit 2.
+        #
+        # blackmagic-davinci is deliberately NOT added to CONSENSUS_PROMOTION_PRODUCTS here, and the
+        # reason is a safety property rather than test cost. Retraction is the only content-DELETING
+        # operation in this lane, and deletion is what manufactures the wedge shape: with membership,
+        # a population that dips to zero and refills leaves the record at its old count with
+        # update_consensus_summary and evidence_samples DELETED -- exactly the two blocking QA errors
+        # that killed runs 34717343799 / 34807610424 / 34998144189. That is survivable only while the
+        # promotion precedes QA, an ordering this repo has already broken twice (#70 for Windows,
+        # then again for PowerPoint). Step-only cannot reach that shape, because nothing is deleted.
+        #
+        # Measured cost if it is ever granted, so the next person has the real number: exactly TWO
+        # assertions fail -- R6 and R8 in test_windows_count_authority.py, whose premise ("a product
+        # with no promotion step") this step itself invalidates -- plus a governed count bump there
+        # from 96 to 100, because the N5b loop adds four checks for the new member. Reconciling with
+        # membership granted changes 0 records and retracts 0 today.
+        #
+        # THE RESIDUAL, stated exactly: a DaVinci record driven to a canonical zero by an audited
+        # withdrawal or a row deletion keeps its source list and its "has N user reports found"
+        # headline beside a count of 0, raising warnings no lane can clear (`--write-all` skips
+        # zero-count groups; retraction is refused to non-members). It reaches 0 of the 96 zero-count
+        # DaVinci records today. An empty or unreadable evidence store is NOT such a route: the
+        # `bool(counts)` fence blocks retraction for members and non-members alike, and it self-heals.
+        #
+        # This step also gives the 6-hourly lane authority over DaVinci prose that is not a count
+        # projection (_record_coherence_fields' davinci branch, and its update_version "21"
+        # sub-branch). Every live value already equals what the writer produces, and
+        # test_davinci_projection_coherence.py [D2] fails the build if that stops being true, so a
+        # hand edit surfaces as a failing check rather than as a silent revert six hours later.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id blackmagic-davinci \
+            --write-all --confirm-write
+
       - name: QA patch records
         id: qa
         if: ${{ github.event.inputs.dry_run != 'true' }}
