@@ -31769,3 +31769,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wh4w9b-how-to-perfectly-sync-path-displacement-w
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wh4w9b/how_to_perfectly_sync_path_displacement_with/
+  parent_title: How to perfectly sync Path Displacement with Write-On/Mask Length? (Spatial vs Parametric mismatch)
+  report_title: How to perfectly sync Path Displacement with Write-On/Mask Length? (Spatial vs Parametric mismatch)
+  report_text_excerpt: How to perfectly sync Path Displacement with Write-On/Mask Length? (Spatial vs Parametric mismatch) I am building a map hike animation in Fusion. I have a marker (a picture of hikers) that needs to follow a complex path, leaving a dotted trail exactly behind it. (I am using...
+  captured_at: '2026-09-16T04:00:19Z'
+  source_date: '2026-09-15'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve Studio 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
