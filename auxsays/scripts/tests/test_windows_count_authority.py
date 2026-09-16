@@ -711,9 +711,14 @@ def run() -> int:
         # R6: a product with NO promotion step must never be retracted -- its count can legitimately
         # dip and recover (revalidate_consensus_evidence can mark rows uncounted), and coming back
         # with the count restored but the summary gone is a blocking QA error with no automated exit.
-        # The fixture is blackmagic-davinci because obs-studio LEFT this category: it gained a
-        # scoped promotion step and joined CONSENSUS_PROMOTION_PRODUCTS, which is the pairing this
-        # test enforces -- membership and a rebuild path move together or not at all.
+        # The fixture is blackmagic-davinci because it is the product retraction is refused to.
+        # NOTE, since the premise moved: DaVinci now DOES have a scoped promotion step in the cron
+        # lane (added to repair its projection drift), it is simply still not retraction-eligible --
+        # the one product that is promoted but not a member. So this fixture no longer illustrates
+        # "a product the lane cannot regenerate"; it illustrates the narrower property the code
+        # actually implements, that `may_retract` is gated on CONSENSUS_PROMOTION_PRODUCTS. The
+        # pairing this file enforces is one-directional and lives in R7: every RETRACTABLE product
+        # needs a rebuild path, never the converse.
         dav = gen / "2026-04-14-davinci-resolve-21.md"
         dav_fm = {"layout": "aux-update", "update_entry": True, "product_id": "blackmagic-davinci",
                   "update_version": "21", "update_product": "DaVinci Resolve",
@@ -770,7 +775,11 @@ def run() -> int:
           WIN in CONSENSUS_PROMOTION_PRODUCTS)
     check("R8 obs-studio is retractable, because the lane now rebuilds it",
           "obs-studio" in CONSENSUS_PROMOTION_PRODUCTS)
-    check("R8 a product with no promotion step is not retractable",
+    # Label corrected when DaVinci gained a promotion step: it is now promoted but deliberately not
+    # retraction-eligible, because retraction is the only deleting operation here and a dip-and-
+    # refill would strand the record at count > 0 with its summary gone. Premiere is excluded for a
+    # different reason -- hand-authored prose, so it is promoted by nothing at all.
+    check("R8 a product may hold a rebuild path without being retraction-eligible",
           "blackmagic-davinci" not in CONSENSUS_PROMOTION_PRODUCTS
           and "adobe-premiere-pro" not in CONSENSUS_PROMOTION_PRODUCTS)
     # Acrobat moved to the other side of this line. It always HAD scoped promotion steps, so R7 was
