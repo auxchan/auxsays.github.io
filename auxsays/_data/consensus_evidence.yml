@@ -31794,3 +31794,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sh2dnb-resolve-202-build-13-rtx-5070-ti-slight-u
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sh2dnb/resolve_202_build_13_rtx_5070_ti_slight_ui/
+  parent_title: 'Resolve 20.2 Build 13 + RTX 5070 Ti: slight UI flicker only when aggressively moving the Qualifier over the Viewer'
+  report_title: 'Resolve 20.2 Build 13 + RTX 5070 Ti: slight UI flicker only when aggressively moving the Qualifier over the Viewer'
+  report_text_excerpt: 'Resolve 20.2 Build 13 + RTX 5070 Ti: slight UI flicker only when aggressively moving the Qualifier over the Viewer Hi, I noticed a very specific issue in DaVinci Resolve Studio 20.2 Build 13 on my desktop with an NVIDIA RTX 5070 Ti. S. O. Windows 11 pro This is not a general...'
+  captured_at: '2026-09-16T08:53:21Z'
+  source_date: '2026-04-09'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
