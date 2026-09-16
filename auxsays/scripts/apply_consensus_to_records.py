@@ -15,6 +15,7 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict
+from lib import patch_decision
 from lib.patch_identity import key_from, patch_display_label, patch_key
 from copy import deepcopy
 from datetime import datetime, timezone
@@ -636,20 +637,24 @@ def _top_theme_phrases(themes: Counter, *, limit: int = 3) -> list[str]:
     return phrases
 
 
-def _recommendation_prefix(pid: str, ver: str, consensus_label: str, count: int) -> str:
-    label = consensus_label.lower()
-    if count <= 0:
-        return "INSUFFICIENT DATA"
-    if _davinci_version_is_beta(ver) and label == "negative":
-        return "AVOID for production"
-    if label == "negative":
-        return "WAIT"
-    if label == "positive":
-        return "SAFE ENOUGH to test"
-    return "TEST FIRST"
+def _affected_workflow_sentence(pid: str, ver: str, consensus_label: str, themes: Counter,
+                                decision: str = "") -> str:
+    """The qualifying sentence. It may soften the decision; it may not reverse it.
 
+    The positive-sentiment sentence offers testing, and for the four products whose decision comes
+    from product policy rather than sentiment, a positive-sentiment record can carry a WAIT. That
+    combination would print "Most users can test the update" directly under a WAIT verdict -- a
+    second recommendation in prose, which is the same defect as a second verdict. It is not in the
+    corpus today (78 of the 80 policy-product records with evidence are Negative) but it was
+    representable, so the sentence now asks the decision first.
 
-def _affected_workflow_sentence(pid: str, ver: str, consensus_label: str, themes: Counter) -> str:
+    WHERE THE LINE IS. The moderate fallback below -- "should test first before upgrading
+    production systems" -- is NOT gated, and that is deliberate. It advises how to proceed if you
+    upgrade; it does not tell the reader they may. "Most users can test the update" does. A
+    qualification may describe the manner of an action the decision permits; it may not grant an
+    action the decision withholds. That is the whole distinction, and it is why only one of these
+    two sentences moved.
+    """
     label = consensus_label.lower()
     theme_words = " ".join(_top_theme_phrases(themes, limit=5)).lower()
     if pid == "blackmagic-davinci":
@@ -662,8 +667,10 @@ def _affected_workflow_sentence(pid: str, ver: str, consensus_label: str, themes
         return "Streamers and recording setups with stable scenes, plugins, or capture devices should wait or test on a backup profile."
     if label == "negative":
         return "Users with fragile production workflows should wait unless they need a specific fix."
-    if label == "positive":
+    if label == "positive" and patch_decision.permits_testing(decision):
         return "Most users can test the update, while critical workflows should still keep a rollback path."
+    if label == "positive":
+        return "Users with fragile production workflows should wait unless they need a specific fix."
     return "Users with fragile workflows should test first before upgrading production systems."
 
 
@@ -741,6 +748,7 @@ def _public_summary(
     consensus_label: str,
     confidence: str,
     themes: Counter,
+    decision: str,
 ) -> str:
     count = len(rows)
     version_label = ver
@@ -749,14 +757,21 @@ def _public_summary(
             f"INSUFFICIENT DATA: {product_label} {version_label} has no user reports found yet. "
             "Use the official source only until reports are available."
         )
-    verdict = _recommendation_prefix(pid, ver, consensus_label, count)
+    # HANDED the decision, never choosing one. This function used to call a local
+    # `_recommendation_prefix` that re-derived an action from sentiment with its own copy of the
+    # beta rule, and on a negative DaVinci beta it answered "AVOID for production" while the verdict
+    # said "WAIT for production systems". Both reached readers -- the verdict on the patch page, this
+    # summary on the feed. The caller now computes the decision ONCE for the record and gives the
+    # same string to every field, so the two cannot disagree about anything, including which version
+    # string they judged.
+    verdict = decision
     report_word = "report" if count == 1 else "reports"
     sample_sentence = "Small sample size." if count < 8 else "User reports show a repeat pattern."
     return " ".join([
         f"{verdict}: {product_label} {version_label} has {count} user {report_word} found.",
         sample_sentence,
         _issue_cluster_sentence(themes),
-        f"{_affected_workflow_sentence(pid, ver, consensus_label, themes)} {_source_limitation_sentence(rows, confidence)}",
+        f"{_affected_workflow_sentence(pid, ver, consensus_label, themes, decision)} {_source_limitation_sentence(rows, confidence)}",
     ])
 
 
@@ -861,6 +876,10 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
     # Collapses to the bare version for every product without a build contract.
     version_label = patch_display_label(ver, build, pid)
     product_label = str((record or {}).get("update_product") or pid).strip()
+    # ONE decision for this record, computed once, from the RAW version the verdict path has always
+    # judged. Computing it separately in the two writers would let them judge different version
+    # strings -- `ver` against `version_label` -- and quietly reacquire the ability to disagree.
+    decision = patch_decision.decision_label(pid, ver, consensus_label, count, record=record)
     summary = _public_summary(
         pid=pid,
         ver=version_label,
@@ -869,6 +888,7 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         consensus_label=consensus_label,
         confidence=confidence,
         themes=themes,
+        decision=decision,
     )
     report = _public_consensus_report(
         pid=pid,
@@ -918,25 +938,38 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
             ),
         },
     }
-    fields.update(_record_coherence_fields(pid, ver, count, record, themes, build=build))
+    fields.update(_record_coherence_fields(pid, ver, count, record, themes, build=build,
+                                           decision=decision))
     return fields
 
 
-def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "") -> dict[str, Any]:
+def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "", decision: str | None = None) -> dict[str, Any]:
+    """The verdict fields. `decision` arrives from the caller; this function does not choose one.
+
+    Each branch used to name its own action ("WAIT for production systems" here, "TEST FIRST" for
+    OBS) while `_public_summary` named another. Both are now the SAME string, because the caller
+    computes it once and hands it to both.
+
+    Omitting `decision` asks the same authority for it rather than inventing a policy: every branch
+    that consumes it is product-branded, so the sentiment label those branches never read is the
+    only input missing. `_proposed_record_fields` always passes it explicitly.
+    """
     if count <= 0:
         return {}
     if not record:
         return {}
 
+    if decision is None:
+        decision = patch_decision.decision_label(pid, ver, "", count, record=record)
     product_label = str(record.get("update_product") or pid).strip()
 
     if pid == "blackmagic-davinci":
         if _davinci_version_is_beta(ver):
             return {
                 "quick_verdict": (
-                    f"WAIT for production systems: {product_label} {ver} is a beta build with {count} user reports found."
+                    f"{decision}: {product_label} {ver} is a beta build with {count} user reports found."
                 ),
-                "update_decision_label": "WAIT for production systems",
+                "update_decision_label": decision,
                 "update_decision_body": (
                     "Use this beta only for non-critical testing. Active client projects should stay on a known-good stable build unless a Resolve 21 beta feature is worth the risk."
                 ),
@@ -950,9 +983,9 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
 
         fields = {
             "quick_verdict": (
-                f"WAIT: {product_label} {ver} has {count} user reports found."
+                f"{decision}: {product_label} {ver} has {count} user reports found."
             ),
-            "update_decision_label": "WAIT",
+            "update_decision_label": decision,
             "update_decision_body": (
                 f"{_issue_cluster_sentence(themes)} Production editors with active delivery deadlines should wait or test on copied projects."
             ),
@@ -983,20 +1016,20 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         return fields
 
     if pid == "obs-studio":
+        # `archived` still selects the PROSE. It no longer selects a decision: the archived->WAIT,
+        # maintained->TEST FIRST rule now lives in patch_decision, where the summary reads it too.
         archived = str(record.get("update_status") or "").strip().lower() == "archived"
         if archived:
-            decision_label = "WAIT"
             body = (
                 f"{product_label} {ver} is archived. Use a newer maintained OBS build unless you need this version for rollback testing or reproduction."
             )
         else:
-            decision_label = "TEST FIRST"
             body = (
                 "Test on a backup profile before using this OBS build for live streams or important recordings, especially if your setup depends on plugins, capture devices, audio routing, or large scene collections."
             )
         return {
-            "quick_verdict": f"{decision_label}: {product_label} {ver} has {count} user reports found.",
-            "update_decision_label": decision_label,
+            "quick_verdict": f"{decision}: {product_label} {ver} has {count} user reports found.",
+            "update_decision_label": decision,
             "update_decision_body": body,
             "practical_recommendations": [
                 "Test with a backup scene collection and profile before production use.",
@@ -1018,8 +1051,8 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         # Name the exact cumulative update, never the train: 28 records share "25H2".
         patch_label = patch_display_label(ver, build, pid)
         return {
-            "quick_verdict": f"WAIT: {product_label} {patch_label} has {count} user {report_word} found.",
-            "update_decision_label": "WAIT",
+            "quick_verdict": f"{decision}: {product_label} {patch_label} has {count} user {report_word} found.",
+            "update_decision_label": decision,
             "update_decision_body": (
                 f"{_issue_cluster_sentence(themes)} This page covers one cumulative update, not the "
                 f"whole {ver} servicing train; reports about a later update are counted on that "
@@ -1037,8 +1070,8 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
     if pid == "adobe-premiere-pro":
         report_word = "report" if count == 1 else "reports"
         return {
-            "quick_verdict": f"WAIT: {product_label} {ver} has {count} user {report_word} found.",
-            "update_decision_label": "WAIT",
+            "quick_verdict": f"{decision}: {product_label} {ver} has {count} user {report_word} found.",
+            "update_decision_label": decision,
             "update_decision_body": (
                 f"{_issue_cluster_sentence(themes)} Editors with active deadlines should wait or test on copied projects before moving production work to this build."
             ),
@@ -1054,7 +1087,9 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
 
 
 def _davinci_version_is_beta(version: str) -> bool:
-    return bool(re.search(r"\b(?:public\s+)?beta\b|b\d+\b", str(version or ""), flags=re.I))
+    # One beta definition for the repo (lib.patch_decision), shared with the summary path and with
+    # build_consensus_from_evidence. Kept as a name here because the prose helpers below read it.
+    return patch_decision.version_is_beta(version)
 
 
 def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False) -> list[dict[str, Any]]:

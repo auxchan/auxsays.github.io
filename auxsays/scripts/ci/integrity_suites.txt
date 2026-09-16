@@ -80,6 +80,13 @@ auxsays/scripts/tests/test_obs_consensus_projection.py = 49
 # lane step (scoped, after reconciliation, before the first QA) and drives the real writer over a
 # temp tree, asserting through the SHIPPED qa_patch_records predicates rather than copies of them.
 auxsays/scripts/tests/test_davinci_projection_coherence.py = 29
+# ONE decision per patch. Three generators each chose an install/wait/avoid word from their own
+# policy, so one DaVinci beta record shipped "WAIT for production systems" as its verdict beside
+# "AVOID for production" as its summary -- and both reached readers, on the patch page and on the
+# feed. Proves the single authority by SUBSTITUTING it and watching every decision-bearing field
+# move, which a grep for the module name cannot do, and pins the decisions themselves so that
+# "make them agree" cannot drift into "make them lenient".
+auxsays/scripts/tests/test_patch_decision_authority.py = 47
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 83

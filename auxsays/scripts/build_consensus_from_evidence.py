@@ -17,6 +17,7 @@ from typing import Any
 import yaml
 
 from patch_collectors.base import WINDOWS_PRODUCT_ID, load_front_matter_and_body, windows_identity_gate
+from lib import patch_decision
 from lib.report_counts import (format_reconcile_detail, reconcile_record_counts,
                                windows_targets_from_front_matter)
 
@@ -205,23 +206,49 @@ def top_theme_phrases(themes: Counter[str], *, limit: int = 3) -> list[str]:
 
 
 def version_is_beta(version: str) -> bool:
-    return bool(re.search(r"\b(?:public\s+)?beta\b|b\d+\b", str(version or ""), flags=re.I))
+    # One beta definition for the repo (lib.patch_decision). A second copy here is how a build
+    # could be a beta to the verdict and not to the summary.
+    return patch_decision.version_is_beta(version)
 
 
-def recommendation_prefix(product_id: str, version: str, label: str, total: int) -> str:
-    label = label.lower()
-    if total <= 0:
-        return "INSUFFICIENT DATA"
-    if product_id == "blackmagic-davinci" and version_is_beta(version) and label == "negative":
-        return "AVOID for production"
-    if label == "negative":
-        return "WAIT"
-    if label == "positive":
-        return "SAFE ENOUGH to test"
-    return "TEST FIRST"
+def record_status_index() -> dict[str, str]:
+    """patch_key -> update_status for every generated record.
+
+    Some decisions depend on record state: an archived OBS build is a WAIT, a maintained one a
+    TEST FIRST. This file never loaded records before, so asking the authority without one would
+    answer as if every build were maintained -- and `2026-04-02-obs-studio-32-1-1.md` (archived,
+    43 reports) would be a WAIT to the record writer and a TEST FIRST here. That is the same
+    divergence this module exists to end, so the state travels with the question.
+    """
+    if not GENERATED_DIR.exists():
+        return {}
+    index: dict[str, str] = {}
+    for path in sorted(GENERATED_DIR.glob("*.md")):
+        data = load_front_matter_and_body(path)[0]
+        product_id = str(data.get("product_id") or "").strip()
+        version = str(data.get("update_version") or "").strip()
+        if not product_id or not version:
+            continue
+        index[patch_key(product_id, version, data.get("target_build"))] = str(
+            data.get("update_status") or "").strip()
+    return index
 
 
-def affected_workflow_sentence(product_id: str, version: str, label: str, themes: Counter[str]) -> str:
+def recommendation_prefix(product_id: str, version: str, label: str, total: int,
+                          *, update_status: str = "") -> str:
+    # THE DECISION IS NOT CHOSEN HERE. This was the third independent implementation of one policy;
+    # the other two were `_recommendation_prefix` (now deleted) and `_record_coherence_fields` in
+    # apply_consensus_to_records. Three implementations of one decision are three chances to
+    # disagree, and they did: the DaVinci beta record shipped "WAIT for production systems" as its
+    # verdict beside "AVOID for production" as its summary.
+    return patch_decision.decision_label(product_id, version, label, total,
+                                         record={"update_status": update_status})
+
+
+def affected_workflow_sentence(product_id: str, version: str, label: str, themes: Counter[str],
+                               decision: str = "") -> str:
+    # Mirrors apply_consensus_to_records._affected_workflow_sentence: a qualification may soften the
+    # decision, never reverse it, so the positive-sentiment offer of testing asks the decision first.
     label = label.lower()
     theme_words = " ".join(top_theme_phrases(themes, limit=5)).lower()
     if product_id == "blackmagic-davinci":
@@ -234,8 +261,10 @@ def affected_workflow_sentence(product_id: str, version: str, label: str, themes
         return "Streamers and recording setups with stable scenes, plugins, or capture devices should wait or test on a backup profile."
     if label == "negative":
         return "Users with fragile production workflows should wait unless they need a specific fix."
-    if label == "positive":
+    if label == "positive" and patch_decision.permits_testing(decision):
         return "Most users can test the update, while critical workflows should still keep a rollback path."
+    if label == "positive":
+        return "Users with fragile production workflows should wait unless they need a specific fix."
     return "Users with fragile workflows should test first before upgrading production systems."
 
 
@@ -260,12 +289,18 @@ def issue_cluster_sentence(themes: Counter[str]) -> str:
     return "Current reports are too varied to group cleanly."
 
 
-def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str], target_build: str = "") -> str:
+def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str], target_build: str = "", update_status: str = "") -> str:
     total = len(items)
     label_name = product_label(product_id)
     # Build-aware products must name the exact patch: 28 Windows records share "25H2", so
     # "25H2 has N user reports" is four different sentences that read as one contradiction.
     # Collapses to the bare version for every product without a build contract.
+    #
+    # The RAW version is kept for the decision. The display label is for the reader; judging a patch
+    # by it would mean this file asks the authority about a different string than the record writer
+    # does -- the last surviving instance of the two-version-strings defect that let the verdict and
+    # the summary disagree. They are equal for every product today; equality is not the point.
+    raw_version = version
     version = patch_display_label(version, target_build, product_id)
     if total <= 0:
         return (
@@ -276,11 +311,13 @@ def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]]
     confidence_label = confidence(total)
     report_word = "report" if total == 1 else "reports"
     sample_sentence = "Small sample size." if total < 8 else "User reports show a repeat pattern."
+    decision = recommendation_prefix(product_id, raw_version, label, total,
+                                     update_status=update_status)
     return " ".join([
-        f"{recommendation_prefix(product_id, version, label, total)}: {label_name} {version} has {total} user {report_word} found.",
+        f"{decision}: {label_name} {version} has {total} user {report_word} found.",
         sample_sentence,
         issue_cluster_sentence(themes),
-        f"{affected_workflow_sentence(product_id, version, label, themes)} {source_limitation_sentence(items, confidence_label)}",
+        f"{affected_workflow_sentence(product_id, raw_version, label, themes, decision)} {source_limitation_sentence(items, confidence_label)}",
     ])
 
 
@@ -406,6 +443,7 @@ def main(argv: list[str] | None = None) -> int:
         groups[patch_key(product_id, version, item.get("target_build"))].append(item)
 
     aggregate = []
+    record_statuses = record_status_index()
     for (product_id, version, _build), items in sorted(groups.items()):  # noqa: B007
         sentiments = Counter(str(item.get("sentiment")).lower() for item in items)
         severities = Counter(str(item.get("severity") or "low").lower() for item in items)
@@ -426,7 +464,9 @@ def main(argv: list[str] | None = None) -> int:
             "consensus_label": consensus_label(sentiments),
             "confidence": confidence(len(items)),
             "evidence_state": evidence_state(len(items)),
-            "consensus_summary": consensus_summary(product_id, version, items, sentiments, themes, _build),
+            "consensus_summary": consensus_summary(
+                product_id, version, items, sentiments, themes, _build,
+                record_statuses.get(patch_key(product_id, version, _build), "")),
             "evidence_last_checked": latest_captured_at(items),
         })
 
