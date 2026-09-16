@@ -2,6 +2,30 @@ schema_version: 1
 note: Update-linked user reports. These are REAL community reports about a PowerPoint update whose exact
   build was never stated. They are shown to readers and are deliberately NOT counted toward consensus.
 reports:
+- associated_patch_key: adobe-acrobat-pro|26.002.21901|26.002.21901
+  associated_target_build: 26.002.21901
+  associated_update_version: 26.002.21901
+  association_basis: release_window_containment
+  captured_at: '2026-09-16T16:52:06Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  report_date: '2026-09-14'
+  report_excerpt: After the new update, alt symbols using my numpad no longer work when I make comments
+    (my primary function with the program). Is anyone else having this issue, and if so, have you found
+    any solutions? I am an editor and make suggestions by using the commenting features. I...
+  report_id: adobe-acrobat-pro:4cfebf6347596970
+  report_title: After the new update, alt symbols using my numpad no longer work when I make comments
+    (my primary function with the program). Is anyone else having this issue, and if so, have you found
+    any solutions?
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/after-the-new-update-alt-symbols-using-my-numpad-no-longer-work-when-i-make-comments-my-primary-function-with-the-program-is-anyone-else-having-this-issue-and-if-so-have-you-found-any-solutions-1641841
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: After the new update
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution
 - associated_patch_key: adobe-acrobat-pro|23.001.20143|23.001.20143
   associated_target_build: 23.001.20143
   associated_update_version: 23.001.20143
@@ -23,6 +47,30 @@ reports:
   source_url: https://community.adobe.com/questions-9/i-cannot-open-files-in-32-bit-acrobat-pro-dc-that-were-optimized-in-64-bit-acrobat-pro-dc-1281789
   strict_exclusion_reason: missing_exact_patch_version_match
   update_link_evidence: got updated
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution
+- associated_patch_key: adobe-acrobat-reader|26.002.21901|26.002.21901
+  associated_target_build: 26.002.21901
+  associated_update_version: 26.002.21901
+  association_basis: release_window_containment
+  captured_at: '2026-09-16T17:14:55Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  report_date: '2026-09-14'
+  report_excerpt: After the new update, alt symbols using my numpad no longer work when I make comments
+    (my primary function with the program). Is anyone else having this issue, and if so, have you found
+    any solutions? I am an editor and make suggestions by using the commenting features. I...
+  report_id: adobe-acrobat-reader:a051e4f6607e64df
+  report_title: After the new update, alt symbols using my numpad no longer work when I make comments
+    (my primary function with the program). Is anyone else having this issue, and if so, have you found
+    any solutions?
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/after-the-new-update-alt-symbols-using-my-numpad-no-longer-work-when-i-make-comments-my-primary-function-with-the-program-is-anyone-else-having-this-issue-and-if-so-have-you-found-any-solutions-1641841
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: After the new update
   update_link_reason: update_named_as_cause
   update_link_signal: explicit_update_attribution
 - associated_patch_key: adobe-acrobat-reader|25.001.21078|25.001.21078
