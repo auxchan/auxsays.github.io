@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 
 import yaml
 
+from lib import patch_decision
 from lib.patch_identity import patch_key
 
 from lib.report_counts import counted_evidence_counts, windows_targets_from_front_matter
@@ -349,6 +350,35 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
             add(warnings, path, "report_count_without_accepted_report_sources", "Record has report_count > 0 but no collapsed full accepted source list.")
         if isinstance(data.get("evidence_samples"), list) and len(data.get("evidence_samples") or []) > 5:
             add(errors, path, "too_many_representative_samples", "evidence_samples should contain no more than five representative items; put the full list in accepted_report_sources.")
+
+        # ONE ACTION PER RECORD. The writer can no longer produce two, but until now nothing looked
+        # at what was already ON DISK -- which is why `2026-04-14-davinci-resolve-21-public-beta-1`
+        # published "WAIT for production systems" as its verdict beside "AVOID for production" as
+        # its summary, the first reader-visible on the patch page and the second on the feed, and
+        # no check anywhere failed. Ten records corpus-wide carried more than one phrase.
+        #
+        # Compares ACTIONS, not phrasings: "WAIT" and "WAIT for production systems" are one
+        # instruction in two registers, and reporting those would bury the real conflicts.
+        #
+        # A WARNING, deliberately. This scanner runs in the scheduled lane AFTER the promotions and
+        # BEFORE the writeback, and `main` exits non-zero only on errors. An error here would wedge
+        # the lane and discard every product's evidence for that cycle whenever a promotion was
+        # skipped -- the failure mode that killed three runs in August. A warning surfaces the drift
+        # without holding the evidence hostage.
+        actions = {
+            patch_decision.action_of(data.get("update_decision_label")),
+            patch_decision.action_of(patch_decision.leading_decision(data.get("quick_verdict"))),
+            patch_decision.action_of(
+                patch_decision.leading_decision(data.get("update_consensus_summary"))),
+        }
+        actions.discard("")
+        if len(actions) > 1:
+            add(warnings, path, "record_names_conflicting_actions",
+                "Record names more than one action ("
+                + ", ".join(sorted(actions))
+                + f"): verdict {str(data.get('update_decision_label') or '(none)')!r}, summary "
+                f"opens {patch_decision.leading_decision(data.get('update_consensus_summary')) or '(none)'!r}. "
+                "One patch publishes one decision; supporting prose may qualify it, not replace it.")
 
     evidence_samples = data.get("evidence_samples")
     if evidence_samples is not None:
