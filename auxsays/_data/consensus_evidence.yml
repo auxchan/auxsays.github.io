@@ -31819,3 +31819,113 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1p1xn3k-normalize-audio-levels-not-staying-opened
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p1xn3k/normalize_audio_levels_not_staying_opened/
+  parent_title: Normalize audio levels not staying opened.
+  report_title: Normalize audio levels not staying opened.
+  report_text_excerpt: Normalize audio levels not staying opened. Every time I try to open it, it closes by itself, it started when I updated to davinci resolve 20.2.3. I tried downgrading to 20.2.2 and the problem still persist. I also reinstalled everything and still didn't work please help....
+  captured_at: '2026-09-16T12:20:21Z'
+  source_date: '2025-11-20'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1oaht7z-im-having-an-issue-where-when-i-click-exp
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1oaht7z/im_having_an_issue_where_when_i_click_export_the/
+  parent_title: I'm having an issue where when I click export, the Render time keeps ticking up, never renders? Seems to have something to do with my audio settings?
+  report_title: I'm having an issue where when I click export, the Render time keeps ticking up, never renders? Seems to have something to do with my audio settings?
+  report_text_excerpt: I'm having an issue where when I click export, the Render time keeps ticking up, never renders? Seems to have something to do with my audio settings? I'm in Resolve 20.1. Windows 10. Resolve has completely stopped working. Can't play videos, can't render. When I change my...
+  captured_at: '2026-09-16T12:27:17Z'
+  source_date: '2025-10-19'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6004289-two-culprits-security-update-from-9-9
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6004289/two-culprits-security-update-from-9-9-kb5124008-26
+  parent_title: 'Two culprits: Security Update from 9/9, (KB5124008)(26200.9445) and (KB5129195)(26200.9457) installed on 9/15 - Microsoft Q&A'
+  report_title: 'Two culprits: Security Update from 9/9, (KB5124008)(26200.9445) and (KB5129195)(26200.9457) installed on 9/15 - Microsoft Q&A'
+  report_text_excerpt: 'Two culprits: Security Update from 9/9, (KB5124008)(26200.9445) and (KB5129195)(26200.9457) installed on 9/15 - Microsoft Q&A 2026-09 Security Update from 9/9, (KB5124008)(26200.9445) and (KB5129195)(26200.9457) installed today, both managed to render File History useless. I...'
+  captured_at: '2026-09-16T12:32:42Z'
+  source_date: '2026-09-15'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6004331-cant-turn-on-file-history-in-windows-1
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6004331/cant-turn-on-file-history-in-windows-11-after-wind
+  parent_title: Can't turn on File History in Windows 11 after Windows Update - Microsoft Q&A
+  report_title: Can't turn on File History in Windows 11 after Windows Update - Microsoft Q&A
+  report_text_excerpt: Can't turn on File History in Windows 11 after Windows Update - Microsoft Q&A After 2 Windows Updates, 2026-09 Security Update (KB5124008) (26200.9445) and 2026-09 .NET Framework Security Update (KB5126052), I encountered several problems with being able to run File History....
+  captured_at: '2026-09-16T12:32:54Z'
+  source_date: '2026-09-15'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
