@@ -17,8 +17,8 @@ update_version: Here's everything we launched at Config 2025
 update_logo_text: FIG
 update_published_at: '2025-05-07T00:00:00.000Z'
 update_last_checked: '2026-08-16T08:09:21Z'
-source_last_checked: '2026-08-16T08:09:21Z'
-official_body_last_checked: '2026-08-16T08:09:21Z'
+source_last_checked: '2026-09-16T02:53:36Z'
+official_body_last_checked: '2026-09-16T02:53:36Z'
 record_last_updated: '2026-08-16T08:09:21Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-16T08:09:21Z'
+  url: https://www.figma.com/release-notes/?title=config-2025
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-16T02:53:36Z'
   url: https://www.figma.com/release-notes/?title=config-2025
   status: captured-from-rss-feed
   body_captured: true
