@@ -19,7 +19,7 @@ update_published_at: '2025-05-28T00:00:00Z'
 update_last_checked: '2026-07-22T08:47:09Z'
 source_last_checked: '2026-07-22T08:47:09Z'
 official_body_last_checked: '2026-07-22T08:47:09Z'
-record_last_updated: '2026-09-10T22:00:42.203110Z'
+record_last_updated: '2026-09-16T02:08:15.767315Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -29,10 +29,16 @@ update_detail_title: DaVinci Resolve 20
 update_consensus_label: Negative
 update_report_count: 27
 update_consensus_confidence: Medium
-quick_verdict: 'WAIT: DaVinci Resolve 20 has 26 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 20 has 27 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20 in its official support downloads feed.
-release_summary: This software update installs the final release of DaVinci Resolve Studio 20 which adds support for over 100 new features and AI tools such as AI IntelliScript, AI Animated Subtitles, AI Multicam SmartSwitch and AI Audio Assistant, as well as keyframe editing, voice over palette, multi layer compositing tools, new optical flow vector tools and major updates to Magic Mask and depth map. This version requires a DaVinci Resolve Studio license dongle or software activation code.
-consensus_report: '26 user reports found for DaVinci Resolve 20. Current reports mention render/export failures, startup or application crashes, and Magic Mask crashes. Current reports are Reddit-heavy, so production users should test before updating. Sources represented: r/davinciresolve.'
+release_summary: This software update installs the final release of DaVinci Resolve Studio 20 which adds support
+  for over 100 new features and AI tools such as AI IntelliScript, AI Animated Subtitles, AI Multicam SmartSwitch
+  and AI Audio Assistant, as well as keyframe editing, voice over palette, multi layer compositing tools, new optical
+  flow vector tools and major updates to Magic Mask and depth map. This version requires a DaVinci Resolve Studio
+  license dongle or software activation code.
+consensus_report: '27 user reports found for DaVinci Resolve 20. Current reports mention render/export failures,
+  startup or application crashes, and Magic Mask crashes. Current reports are Reddit-heavy, so production users
+  should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -78,6 +84,9 @@ status_events:
 - at: '2026-08-29T01:50:12.310895Z'
   label: User reports found
   note: User report count updated to 26.
+- at: '2026-09-16T02:08:15.767315Z'
+  label: User reports found
+  note: User report count updated to 27.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -87,7 +96,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source. It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
+  source. It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -114,7 +124,11 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update installs the final release of DaVinci Resolve Studio 20 which adds support for over 100 new features and AI tools such as AI IntelliScript, AI Animated Subtitles, AI Multicam SmartSwitch and AI Audio Assistant, as well as keyframe editing, voice over palette, multi layer compositing tools, new optical flow vector tools and major updates to Magic Mask and depth map. This version requires a DaVinci Resolve Studio license dongle or software activation code.
+  This software update installs the final release of DaVinci Resolve Studio 20 which adds support for over 100 new
+  features and AI tools such as AI IntelliScript, AI Animated Subtitles, AI Multicam SmartSwitch and AI Audio Assistant,
+  as well as keyframe editing, voice over palette, multi layer compositing tools, new optical flow vector tools
+  and major updates to Magic Mask and depth map. This version requires a DaVinci Resolve Studio license dongle or
+  software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -125,7 +139,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20 has 26 user reports found. User reports show a repeat pattern. Current reports mention render/export failures, startup or application crashes, and Magic Mask crashes. Production editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production users should test before updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 20 has 27 user reports found. User reports show a repeat pattern.
+  Current reports mention render/export failures, startup or application crashes, and Magic Mask crashes. Production
+  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
+  so production users should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1ssp7xa/davinci_resolve_gpu_render_failing_everywhere/
@@ -153,7 +170,8 @@ evidence_samples:
   outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1uctwky/got_tuxedo_drivers_davinci_resolve_studio_fully/
-  source_title: Got Tuxedo drivers + DaVinci Resolve Studio fully working on Fedora 44 KDE (XMG/Schenker Pro 16 VE M25) . Sharing my scripts
+  source_title: Got Tuxedo drivers + DaVinci Resolve Studio fully working on Fedora 44 KDE (XMG/Schenker Pro 16
+    VE M25) . Sharing my scripts
   counted: true
   version_matched: '20'
   patch_version_matched: true
@@ -352,7 +370,8 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1uctwky/got_tuxedo_drivers_davinci_resolve_studio_fully/
-  source_title: Got Tuxedo drivers + DaVinci Resolve Studio fully working on Fedora 44 KDE (XMG/Schenker Pro 16 VE M25) . Sharing my scripts
+  source_title: Got Tuxedo drivers + DaVinci Resolve Studio fully working on Fedora 44 KDE (XMG/Schenker Pro 16
+    VE M25) . Sharing my scripts
   source_date: '2026-06-22'
   version_matched: '20'
   patch_version_matched: true
@@ -370,7 +389,8 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1su1r06/rtx_5060_ti_black_screen_signal_loss_under_heavy/
-  source_title: RTX 5060 Ti black screen / signal loss under heavy GPU load in DaVinci Resolve — BIOS update fixed it but still crashing after system restore [Help]
+  source_title: RTX 5060 Ti black screen / signal loss under heavy GPU load in DaVinci Resolve — BIOS update fixed
+    it but still crashing after system restore [Help]
   source_date: '2026-04-24'
   version_matched: '20'
   patch_version_matched: true
@@ -397,9 +417,19 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1v5o79j/davinci_resolve_2021_unsupported_gpu_processing/
-  source_title: 'DaVinci Resolve 20/21: "Unsupported GPU Processing Mode" - RX 6600 detected by Windows but not by Resolve'
+  source_title: 'DaVinci Resolve 20/21: "Unsupported GPU Processing Mode" - RX 6600 detected by Windows but not
+    by Resolve'
   source_date: '2026-07-24'
   version_matched: '20'
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1utwlro/small_red_section_at_the_beginning_of_the_render/
+  source_title: Small red section at the beginning of the Render Cache line — just a technical curiosity
+  source_date: '2026-07-11'
+  version_matched: DaVinci Resolve Studio 20
   patch_version_matched: true
   issue: render/export failures
   workflow_area: render/export
@@ -407,7 +437,8 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures, startup or application crashes, and Magic Mask crashes. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures, startup or application crashes, and Magic
+  Mask crashes. Production editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
