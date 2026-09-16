@@ -17,8 +17,8 @@ update_version: All users are now on UI3
 update_logo_text: FIG
 update_published_at: '2025-04-30T00:00:00.000Z'
 update_last_checked: '2026-08-16T08:09:21Z'
-source_last_checked: '2026-08-16T08:09:21Z'
-official_body_last_checked: '2026-08-16T08:09:21Z'
+source_last_checked: '2026-09-16T05:11:34Z'
+official_body_last_checked: '2026-09-16T05:11:34Z'
 record_last_updated: '2026-08-16T08:09:21Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-16T08:09:21Z'
+  url: https://www.figma.com/release-notes/?title=all-ui3
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-16T05:11:34Z'
   url: https://www.figma.com/release-notes/?title=all-ui3
   status: captured-from-rss-feed
   body_captured: true
