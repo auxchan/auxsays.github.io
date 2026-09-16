@@ -17,8 +17,8 @@ update_version: Improvements to File Browser
 update_logo_text: FIG
 update_published_at: '2025-03-25T00:00:00.000Z'
 update_last_checked: '2026-08-17T03:04:03Z'
-source_last_checked: '2026-08-17T03:04:03Z'
-official_body_last_checked: '2026-08-17T03:04:03Z'
+source_last_checked: '2026-09-16T23:31:24Z'
+official_body_last_checked: '2026-09-16T23:31:24Z'
 record_last_updated: '2026-08-17T03:04:03Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-17T03:04:03Z'
+  url: https://www.figma.com/release-notes/?title=Improvements%20to%20File%20Browser
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-16T23:31:24Z'
   url: https://www.figma.com/release-notes/?title=Improvements%20to%20File%20Browser
   status: captured-from-rss-feed
   body_captured: true

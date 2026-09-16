@@ -17,8 +17,8 @@ update_version: Updates to Figma Slides
 update_logo_text: FIG
 update_published_at: '2025-03-19T00:00:00.000Z'
 update_last_checked: '2026-08-17T08:26:31Z'
-source_last_checked: '2026-08-17T08:26:31Z'
-official_body_last_checked: '2026-08-17T08:26:31Z'
+source_last_checked: '2026-09-16T23:31:24Z'
+official_body_last_checked: '2026-09-16T23:31:24Z'
 record_last_updated: '2026-08-17T08:26:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-17T08:26:31Z'
+  url: https://www.figma.com/release-notes/?title=slides-is-out-of-beta
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-16T23:31:24Z'
   url: https://www.figma.com/release-notes/?title=slides-is-out-of-beta
   status: captured-from-rss-feed
   body_captured: true

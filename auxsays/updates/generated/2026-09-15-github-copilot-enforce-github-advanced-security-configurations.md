@@ -17,8 +17,8 @@ update_version: Enforce GitHub Advanced Security configurations
 update_logo_text: GIT
 update_published_at: '2026-09-15T19:31:58Z'
 update_last_checked: '2026-09-15T23:47:13Z'
-source_last_checked: '2026-09-16T19:10:29Z'
-official_body_last_checked: '2026-09-16T19:10:29Z'
+source_last_checked: '2026-09-16T23:31:27Z'
+official_body_last_checked: '2026-09-16T23:31:27Z'
 record_last_updated: '2026-09-15T23:47:13Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,11 +75,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-09-16T02:53:40Z'
-  url: https://github.blog/changelog/2026-09-15-enforce-github-advanced-security-configurations
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-09-16T05:11:37Z'
   url: https://github.blog/changelog/2026-09-15-enforce-github-advanced-security-configurations
   status: captured-from-rss-feed
@@ -96,6 +91,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-16T19:10:29Z'
+  url: https://github.blog/changelog/2026-09-15-enforce-github-advanced-security-configurations
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-16T23:31:27Z'
   url: https://github.blog/changelog/2026-09-15-enforce-github-advanced-security-configurations
   status: captured-from-rss-feed
   body_captured: true
