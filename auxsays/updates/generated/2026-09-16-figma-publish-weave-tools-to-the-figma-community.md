@@ -17,8 +17,8 @@ update_version: Publish Weave tools to the Figma Community
 update_logo_text: FIG
 update_published_at: '2026-09-16T00:00:00.000Z'
 update_last_checked: '2026-09-16T19:10:17Z'
-source_last_checked: '2026-09-17T07:07:22Z'
-official_body_last_checked: '2026-09-17T07:07:22Z'
+source_last_checked: '2026-09-17T13:58:09Z'
+official_body_last_checked: '2026-09-17T13:58:09Z'
 record_last_updated: '2026-09-16T19:10:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-17T07:07:22Z'
+  url: https://www.figma.com/release-notes/?title=publish-weave-tools-to-the-figma-community
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-17T13:58:09Z'
   url: https://www.figma.com/release-notes/?title=publish-weave-tools-to-the-figma-community
   status: captured-from-rss-feed
   body_captured: true
