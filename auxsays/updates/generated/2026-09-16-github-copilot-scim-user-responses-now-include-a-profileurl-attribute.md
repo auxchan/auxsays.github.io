@@ -18,8 +18,8 @@ update_version: SCIM user responses now include a profileUrl attribute
 update_logo_text: GIT
 update_published_at: '2026-09-16T20:19:58Z'
 update_last_checked: '2026-09-16T23:31:27Z'
-source_last_checked: '2026-09-17T13:58:22Z'
-official_body_last_checked: '2026-09-17T13:58:22Z'
+source_last_checked: '2026-09-17T19:17:40Z'
+official_body_last_checked: '2026-09-17T19:17:40Z'
 record_last_updated: '2026-09-16T23:31:27Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -96,6 +96,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-17T13:58:22Z'
+  url: https://github.blog/changelog/2026-09-16-scim-user-responses-now-include-a-profileurl-attribute
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-17T19:17:40Z'
   url: https://github.blog/changelog/2026-09-16-scim-user-responses-now-include-a-profileurl-attribute
   status: captured-from-rss-feed
   body_captured: true
