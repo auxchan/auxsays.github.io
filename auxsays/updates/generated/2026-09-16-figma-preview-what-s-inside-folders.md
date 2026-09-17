@@ -17,8 +17,8 @@ update_version: Preview what's inside folders
 update_logo_text: FIG
 update_published_at: '2026-09-16T00:00:00.000Z'
 update_last_checked: '2026-09-17T13:58:09Z'
-source_last_checked: '2026-09-17T19:17:26Z'
-official_body_last_checked: '2026-09-17T19:17:26Z'
+source_last_checked: '2026-09-17T23:40:27Z'
+official_body_last_checked: '2026-09-17T23:40:27Z'
 record_last_updated: '2026-09-17T13:58:09Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-17T19:17:26Z'
+  url: https://www.figma.com/release-notes/?title=preview-inside-folders
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-17T23:40:27Z'
   url: https://www.figma.com/release-notes/?title=preview-inside-folders
   status: captured-from-rss-feed
   body_captured: true

@@ -18,8 +18,8 @@ update_version: Create on-brand content with your Figma designs in Weave workflo
 update_logo_text: FIG
 update_published_at: '2026-09-17T00:00:00.000Z'
 update_last_checked: '2026-09-17T19:17:26Z'
-source_last_checked: '2026-09-17T19:17:26Z'
-official_body_last_checked: '2026-09-17T19:17:26Z'
+source_last_checked: '2026-09-17T23:40:27Z'
+official_body_last_checked: '2026-09-17T23:40:27Z'
 record_last_updated: '2026-09-17T19:17:26Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -72,6 +72,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-09-17T19:17:26Z'
+  url: https://www.figma.com/release-notes/?title=figma-node-on-brand-content
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-17T23:40:27Z'
   url: https://www.figma.com/release-notes/?title=figma-node-on-brand-content
   status: captured-from-rss-feed
   body_captured: true

@@ -17,8 +17,8 @@ update_version: Updates to Billing tab in Admin settings
 update_logo_text: FIG
 update_published_at: '2025-02-18T00:00:00.000Z'
 update_last_checked: '2026-08-18T08:11:31Z'
-source_last_checked: '2026-08-18T08:11:31Z'
-official_body_last_checked: '2026-08-18T08:11:31Z'
+source_last_checked: '2026-09-17T23:40:27Z'
+official_body_last_checked: '2026-09-17T23:40:27Z'
 record_last_updated: '2026-08-18T08:11:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-18T08:11:31Z'
+  url: https://www.figma.com/release-notes/?title=Updates%20to%20Billing%20tab%20in%20Admin%20settings
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-17T23:40:27Z'
   url: https://www.figma.com/release-notes/?title=Updates%20to%20Billing%20tab%20in%20Admin%20settings
   status: captured-from-rss-feed
   body_captured: true
