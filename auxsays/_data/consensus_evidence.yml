@@ -31942,3 +31942,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wi57pb-resolve-21-free-crashing-constantly-on-re
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wi57pb/resolve_21_free_crashing_constantly_on_rendering/
+  parent_title: Resolve 21 free - crashing constantly on rendering
+  report_title: Resolve 21 free - crashing constantly on rendering
+  report_text_excerpt: Resolve 21 free - crashing constantly on rendering Anyone else having this issue? I am using the latest version of Nvidia studio driver (rtx3070). I have to tone it down to 75% rendering speeds to get it to finish, and just now, while doing a downsampling export from 4k to...
+  captured_at: '2026-09-17T00:35:55Z'
+  source_date: '2026-09-16'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
