@@ -1,6 +1,11 @@
 # LAYOFFS LEVEL-4 PILOT HUMAN QA
 
-Status: `HUMAN_LEVEL4_LAYOFFS_QA = PENDING`
+Status: `HUMAN_LEVEL4_LAYOFFS_QA = PASS`
+
+Pilot status: `LAYOFFS DESCRIPTIVE/TEMPORAL LEVEL-4 PILOT = CLOSED / PASSED`
+
+Taylor approved the browser presentation on 2026-09-18 against implementation
+checkpoint `e7ed0e3b7b6b668953fe32a394bec349eb8599e4`.
 
 Loopback review URL:
 
@@ -13,7 +18,8 @@ The `FAIL_MINOR / REPAIR_REQUIRED` presentation review was addressed on
 as accepted periods, readings use "latest accepted" language, reused canonical
 factors expose all Layoffs placements, rate deltas use percentage points, and
 human-readable people/job counts retain their source-native unit in Deep Dive.
-Final human visual review remains pending.
+Taylor's final browser review confirmed that taxonomy-derived placement labels
+are present and legible and that the visual layout is acceptable.
 
 ## Review boundary
 
@@ -45,18 +51,10 @@ are 206,000 for 2026-09-05; the release also supplies the revised prior-week
 value of 207,000 for 2026-08-29. The accepted 2026-08-08 revision chain remains
 209,000 -> 212,000.
 
-## Taylor checklist
+## Closure boundary
 
-- Verify each canonical name, icon, exact series ID, and hierarchy placement list.
-- Verify latest accepted value, represented period, previous compatible period, arrow,
-  and arithmetic delta where comparison exists.
-- Confirm Establishment Deaths says comparison unavailable rather than
-  manufacturing a direction.
-- Confirm Initial Claims presents the current official fallback while retaining
-  the stale-primary-XML warning.
-- Verify revisions, evidence links, provenance, publication basis, methodology,
-  and accepted-history status remain understandable under progressive detail.
-- Confirm node titles remain identity-only and the surface makes no materiality,
-  destination-impact, causal, structural, or forecasting assertion.
-- Record Taylor's Human-QA outcome separately; this artifact must remain
-  `PENDING` until that review occurs.
+This PASS closes only the Layoffs descriptive/temporal Level-4 Human-QA pilot.
+Gate B remains `OPEN`; accepted structural relationships remain `0`;
+forecast-vintage observations remain `0`; materiality remains unauthorized;
+destination impact and forecasting remain unavailable; Phase 5 remains
+`LOCKED`.
