@@ -32124,7 +32124,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wgob5a-resolve-211-preset-bug-help
   product_id: blackmagic-davinci
   update_version: '21.1'
@@ -32362,6 +32361,48 @@ evidence:
   issue_theme: performance regression
   workflow_area: timeline / GPU performance
   platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13907
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13907
+  parent_title: 'macOS: OBS intermittently never enters shutdown — quit request is silently dropped (no "==== Shutting down ====")'
+  report_title: 'macOS: OBS intermittently never enters shutdown — quit request is silently dropped (no "==== Shutting down ====")'
+  report_text_excerpt: 'hutdown path is never entered. Two `sample(1)` captures taken while in this state (one on 32.2.1 with all plugins, one on 32.2.2 with a plugin removed) show the same picture. The main thread is sitting in the normal Cocoa/Qt event loop: ``` Thread_xxxxx: CrBrowserMain + start (in'
+  captured_at: '2026-09-18T06:01:39Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13907
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13907
+  parent_title: 'macOS: OBS intermittently never enters shutdown — quit request is silently dropped (no "==== Shutting down ====")'
+  report_title: 'macOS: OBS intermittently never enters shutdown — quit request is silently dropped (no "==== Shutting down ====")'
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/qNpL9kbe893hOYaI ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Issui'
+  captured_at: '2026-09-18T06:02:22Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: macos
   severity: medium
   sentiment: negative
   source_weight: 1
