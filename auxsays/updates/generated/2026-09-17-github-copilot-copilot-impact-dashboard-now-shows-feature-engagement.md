@@ -17,8 +17,8 @@ update_version: Copilot impact dashboard now shows feature engagement
 update_logo_text: GIT
 update_published_at: '2026-09-17T21:47:27Z'
 update_last_checked: '2026-09-17T23:40:30Z'
-source_last_checked: '2026-09-18T13:29:34Z'
-official_body_last_checked: '2026-09-18T13:29:34Z'
+source_last_checked: '2026-09-18T18:39:47Z'
+official_body_last_checked: '2026-09-18T18:39:47Z'
 record_last_updated: '2026-09-17T23:40:30Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -103,6 +103,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-18T13:29:34Z'
+  url: https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-18T18:39:47Z'
   url: https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement
   status: captured-from-rss-feed
   body_captured: true
