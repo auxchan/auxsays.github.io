@@ -32406,3 +32406,91 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6006784-windows-security-stuck-on-logo-securit
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6006784/windows-security-stuck-on-logo-securityhealthservi
+  parent_title: Windows Security stuck on logo; SecurityHealthService starts then stops, KB5007651 repeatedly reinstalls on Windows 11 25H2 - Microsoft Q&A
+  report_title: Windows Security stuck on logo; SecurityHealthService starts then stops, KB5007651 repeatedly reinstalls on Windows 11 25H2 - Microsoft Q&A
+  report_text_excerpt: Windows Security stuck on logo; SecurityHealthService starts then stops, KB5007651 repeatedly reinstalls on Windows 11 25H2 - Microsoft Q&A I am using Windows 11 25H2, build 26200.9457 . Windows Security does not open properly. It stays on the logo screen, and Event Viewer...
+  captured_at: '2026-09-18T12:19:42Z'
+  source_date: '2026-09-18'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6005908-microsoft-store-you-need-administrator
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6005908/microsoft-store-you-need-administrator-privileges
+  parent_title: 'Microsoft Store: “You need administrator privileges to pause updates” on Windows 11 Pro 25H2 - Microsoft Q&A'
+  report_title: 'Microsoft Store: “You need administrator privileges to pause updates” on Windows 11 Pro 25H2 - Microsoft Q&A'
+  report_text_excerpt: 'Microsoft Store: “You need administrator privileges to pause updates” on Windows 11 Pro 25H2 - Microsoft Q&A Same issue here. Microsoft Store refuses to pause app updates because it claims that I do not have administrator privileges, even though I am using a normal personal...'
+  captured_at: '2026-09-18T12:19:42Z'
+  source_date: '2026-09-17'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6006183-winui-3-full-screen-window-is-not-corr
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6006183/winui-3-full-screen-window-is-not-correctly-displa
+  parent_title: WinUI 3 full screen window is not correctly displayed in kiosk mode after Win11 update. - Microsoft Q&A
+  report_title: WinUI 3 full screen window is not correctly displayed in kiosk mode after Win11 update. - Microsoft Q&A
+  report_text_excerpt: WinUI 3 full screen window is not correctly displayed in kiosk mode after Win11 update. - Microsoft Q&A Here is an UI issue of our WinUI 3 application after we updated Win11 OS( Win 11 IoT LTSC Enterprise ) from "Win 11 OS build (26100.7623)" to "Win 11 OS build (26100.8875)":...
+  captured_at: '2026-09-18T12:20:58Z'
+  source_date: '2026-09-17'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26100.8875'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8875'
