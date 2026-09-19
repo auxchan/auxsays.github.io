@@ -32494,3 +32494,92 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8875'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6007474-2026-09-security-update-kb5129195-dest
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6007474/2026-09-security-update-kb5129195-destroys-windows
+  parent_title: 2026-09 Security Update KB5129195 destroys Windows 11 (omitting screenshot) - Microsoft Q&A
+  report_title: 2026-09 Security Update KB5129195 destroys Windows 11 (omitting screenshot) - Microsoft Q&A
+  report_text_excerpt: 2026-09 Security Update KB5129195 destroys Windows 11 (omitting screenshot) - Microsoft Q&A A PC has Windows 11 (genuine, supported) and the latest Secure Boot certificate updates (genuine, supported) previously installed successfully by Windows Update. On 2026-09-07, Windows...
+  captured_at: '2026-09-19T12:03:27Z'
+  source_date: '2026-09-19'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: boot failure
+  workflow_area: startup / boot
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6007956-file-history-backup-problems-with-last
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6007956/file-history-backup-problems-with-last-security-up
+  parent_title: File History Backup Problems with last security update - Microsoft Q&A
+  report_title: File History Backup Problems with last security update - Microsoft Q&A
+  report_text_excerpt: 'File History Backup Problems with last security update - Microsoft Q&A Title: File History will not turn on after September 2026 Windows updates Description: File History stopped working after the September 2026 Windows updates. My PC is running Windows 11 Version 25H2, OS...'
+  captured_at: '2026-09-19T12:03:27Z'
+  source_date: '2026-09-18'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6007753-secure-boot-violation-after-installing
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6007753/secure-boot-violation-after-installing-a-few-updat
+  parent_title: Secure boot violation after installing a few updates - Microsoft Q&A
+  report_title: Secure boot violation after installing a few updates - Microsoft Q&A
+  report_text_excerpt: Secure boot violation after installing a few updates - Microsoft Q&A Hello, I am currently dealing with an issue of a secure boot violation after installing a few updates today, I will list every update I've installed today now, if anyone knows what might be the problem that...
+  captured_at: '2026-09-19T12:03:27Z'
+  source_date: '2026-09-18'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
