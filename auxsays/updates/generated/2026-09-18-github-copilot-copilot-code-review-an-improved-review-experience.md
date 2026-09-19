@@ -17,8 +17,8 @@ update_version: 'Copilot code review: An improved review experience'
 update_logo_text: GIT
 update_published_at: '2026-09-18T20:17:22Z'
 update_last_checked: '2026-09-18T22:54:09Z'
-source_last_checked: '2026-09-19T17:55:30Z'
-official_body_last_checked: '2026-09-19T17:55:30Z'
+source_last_checked: '2026-09-19T22:56:00Z'
+official_body_last_checked: '2026-09-19T22:56:00Z'
 record_last_updated: '2026-09-18T22:54:09Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -107,6 +107,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-19T17:55:30Z'
+  url: https://github.blog/changelog/2026-09-18-copilot-code-review-an-improved-review-experience
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-19T22:56:00Z'
   url: https://github.blog/changelog/2026-09-18-copilot-code-review-an-improved-review-experience
   status: captured-from-rss-feed
   body_captured: true

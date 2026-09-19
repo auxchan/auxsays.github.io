@@ -17,8 +17,8 @@ update_version: Libraries modal refresh
 update_logo_text: FIG
 update_published_at: '2024-11-22T00:00:00.000Z'
 update_last_checked: '2026-08-21T03:04:03Z'
-source_last_checked: '2026-08-21T03:04:03Z'
-official_body_last_checked: '2026-08-21T03:04:03Z'
+source_last_checked: '2026-09-19T22:55:56Z'
+official_body_last_checked: '2026-09-19T22:55:56Z'
 record_last_updated: '2026-08-21T03:04:03Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-21T03:04:03Z'
+  url: https://www.figma.com/release-notes/?title=libraries-modal-refresh
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-19T22:55:56Z'
   url: https://www.figma.com/release-notes/?title=libraries-modal-refresh
   status: captured-from-rss-feed
   body_captured: true
