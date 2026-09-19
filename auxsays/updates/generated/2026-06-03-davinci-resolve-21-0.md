@@ -19,7 +19,7 @@ update_published_at: '2026-06-03T00:00:00Z'
 update_last_checked: '2026-06-03T05:20:18Z'
 source_last_checked: '2026-06-08T20:36:21Z'
 official_body_last_checked: '2026-06-08T20:36:21Z'
-record_last_updated: '2026-06-15T19:15:16.797315Z'
+record_last_updated: '2026-09-19T22:12:09.025470Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,24 +27,24 @@ update_status: current
 update_feed_title: DaVinci Resolve 21.0
 update_detail_title: DaVinci Resolve 21.0
 update_consensus_label: Negative
-update_report_count: 3
+update_report_count: 4
 update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 21.0 has 3 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 21.0 has 4 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0 in its official support downloads feed.
 release_summary: This software update installs the final release of DaVinci Resolve Studio 21 which adds support
   for new AI tools including IntelliSearch, CineFocus and tools for facial refinement. This update also adds support
   for the new Photo page for still images, Krokodove toolset to Fusion, new Fairlight folders, plus improvements
   for keyframing, MultiMaster trim passes, layer list node graphs and more. This version requires a DaVinci Resolve
   Studio license dongle, Blackmagic Cloud license or software activation code.
-consensus_report: '3 user reports found for DaVinci Resolve 21.0. Current reports mention render/export failures,
-  startup or application crashes, and plugin issues. Current reports are Reddit-heavy, so production users should
+consensus_report: '4 user reports found for DaVinci Resolve 21.0. Current reports mention startup or application
+  crashes, render/export failures, and plugin issues. Current reports are Reddit-heavy, so production users should
   test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 3
-evidence_last_checked: '2026-06-15T19:13:29Z'
+confirmed_patch_specific_report_count: 4
+evidence_last_checked: '2026-09-19T21:32:25Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -69,6 +69,9 @@ status_events:
 - at: '2026-06-15T19:15:16.797315Z'
   label: User reports found
   note: User report count updated to 3.
+- at: '2026-09-19T22:12:09.025470Z'
+  label: User reports found
+  note: User report count updated to 4.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -141,19 +144,11 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 21.0 has 3 user reports found. Small sample size. Current reports
-  mention render/export failures, startup or application crashes, and plugin issues. Production editors with active
+update_consensus_summary: 'WAIT: DaVinci Resolve 21.0 has 4 user reports found. Small sample size. Current reports
+  mention startup or application crashes, render/export failures, and plugin issues. Production editors with active
   export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production
   users should test before updating.'
 evidence_samples:
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1u0ms8b/collaborative_prjct_not_working/
-  source_title: Collaborative PRJCT NOT WORKING
-  counted: true
-  version_matched: '21.0'
-  patch_version_matched: true
-  issue: render/export failures
-  outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u41597/using_the_tracker_node_crashes_resolve_studio/
   source_title: Using the Tracker node crashes Resolve Studio
@@ -163,6 +158,14 @@ evidence_samples:
   issue: startup or application crashes in application stability
   outcome: high
 - source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u0ms8b/collaborative_prjct_not_working/
+  source_title: Collaborative PRJCT NOT WORKING
+  counted: true
+  version_matched: '21.0'
+  patch_version_matched: true
+  issue: render/export failures
+  outcome: medium
+- source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u6iivy/weird_bug_i_cant_seem_to_find_a_fix_for_on_the/
   source_title: Weird bug I can't seem to find a fix for on the internet. Please help.
   counted: true
@@ -170,6 +173,14 @@ evidence_samples:
   patch_version_matched: true
   issue: plugin issues in plugins / codecs
   outcome: medium
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vjls37/planar_tracker_crashing_instantly_when_using/
+  source_title: Planar Tracker crashing instantly when using occlusion mask
+  counted: true
+  version_matched: '21.0'
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  outcome: high
 evidence_sample_visible_limit: 5
 accepted_report_sources:
 - source_name: r/davinciresolve
@@ -199,11 +210,20 @@ accepted_report_sources:
   patch_version_matched: true
   issue: plugin issues in plugins / codecs
   workflow_area: plugins / codecs
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vjls37/planar_tracker_crashing_instantly_when_using/
+  source_title: Planar Tracker crashing instantly when using occlusion mask
+  source_date: '2026-08-09'
+  version_matched: '21.0'
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures, startup or application crashes, and plugin
+update_decision_body: Current reports mention startup or application crashes, render/export failures, and plugin
   issues. Production editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
