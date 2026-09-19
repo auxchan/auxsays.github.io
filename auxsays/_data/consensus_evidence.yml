@@ -32406,7 +32406,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6006784-windows-security-stuck-on-logo-securit
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -32465,7 +32464,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6006183-winui-3-full-screen-window-is-not-corr
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -32494,7 +32492,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8875'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6007474-2026-09-security-update-kb5129195-dest
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -32583,3 +32580,24 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
+- id: obs-studio-32-2-2-github-issue-13918
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13918
+  parent_title: 'macOS: every obs-websocket GetStats leaks ~200 autoreleased objects (os_get_free_space has no autorelease pool on the websocket thread) — ~2 MB/min at one poll per second'
+  report_title: 'macOS: every obs-websocket GetStats leaks ~200 autoreleased objects (os_get_free_space has no autorelease pool on the websocket thread) — ~2 MB/min at one poll per second'
+  report_text_excerpt: 'macOS 15 ### Other OS macOS 15.7.9 (24G830), Intel (x86_64 build) ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Not needed for this one: nothing is logged; the reproduction is a websocket client and the process''s resident size.'
+  captured_at: '2026-09-19T17:05:31Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
