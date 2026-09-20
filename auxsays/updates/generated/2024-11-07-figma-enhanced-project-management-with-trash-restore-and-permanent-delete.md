@@ -17,8 +17,8 @@ update_version: Enhanced Project Management with Trash, Restore, and Permanent D
 update_logo_text: FIG
 update_published_at: '2024-11-07T00:00:00.000Z'
 update_last_checked: '2026-08-21T14:18:20Z'
-source_last_checked: '2026-08-21T14:18:20Z'
-official_body_last_checked: '2026-08-21T14:18:20Z'
+source_last_checked: '2026-09-20T13:36:57Z'
+official_body_last_checked: '2026-09-20T13:36:57Z'
 record_last_updated: '2026-08-21T14:18:20Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-21T14:18:20Z'
+  url: https://www.figma.com/release-notes/?title=Enhanced%20Project%20Management%20with%20Trash%2C%20Restore%2C%20and%20Permanent%20Delete
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-20T13:36:57Z'
   url: https://www.figma.com/release-notes/?title=Enhanced%20Project%20Management%20with%20Trash%2C%20Restore%2C%20and%20Permanent%20Delete
   status: captured-from-rss-feed
   body_captured: true
