@@ -32885,3 +32885,28 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
+
+- id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vhedy0-what-did-i-do-wrong
+  product_id: blackmagic-davinci
+  update_version: 20.2.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vhedy0/what_did_i_do_wrong/
+  parent_title: What did I do wrong?
+  report_title: What did I do wrong?
+  report_text_excerpt: What did I do wrong? https://reddit.com/link/1vhedy0/video/5xikcckf2thh1/player Hello world, my 1st post here and quite new to Davinci, so pls bear with me. Please look at the video, I wanted to move the video inside the 9:16 box, with the help of some keyframes. I might have...
+  captured_at: '2026-09-20T17:01:35Z'
+  source_date: '2026-08-06'
+  target_release_date: '2025-09-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
