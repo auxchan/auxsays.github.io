@@ -32651,3 +32651,237 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w9tt1v-davinci-keeps-crashing-in-one-project
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w9tt1v/davinci_keeps_crashing_in_one_project/
+  parent_title: Davinci Keeps Crashing in One Project
+  report_title: Davinci Keeps Crashing in One Project
+  report_text_excerpt: 'Davinci Keeps Crashing in One Project Last update: I HAVE FINALLY FIGURED IT OUT. The whole time the problem was a damn app. App called Medal , used for clipping random moments in games. I didn''t think of this until now and wondered if that could be a problem, so I uninstalled...'
+  captured_at: '2026-09-20T12:06:31Z'
+  source_date: '2026-09-07'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w4kvvi-long-video-keeps-crushing-in-the-last-30
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w4kvvi/long_video_keeps_crushing_in_the_last_30_mins/
+  parent_title: Long Video keeps crushing in the last 30 mins
+  report_title: Long Video keeps crushing in the last 30 mins
+  report_text_excerpt: Long Video keeps crushing in the last 30 mins Hey guys, wanted to ask does anyone know like a method to export a long video in parts and then combine them in DaVinci Resolve? Cause I have a 2 hour video which really like to crash in the last 30 mins. It happened a couple of...
+  captured_at: '2026-09-20T12:06:31Z'
+  source_date: '2026-09-01'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vkctcb-i-cant-get-davinci-to-export
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vkctcb/i_cant_get_davinci_to_export/
+  parent_title: I cant get Davinci to export
+  report_title: I cant get Davinci to export
+  report_text_excerpt: I cant get Davinci to export Hello all. I have used davinci resolve for a while but lately I've ran into an issue where no matter how I try to export whether quick export or via the delivery page it says 10 fps for a few seconds then drops to 0 fps and the program crashes....
+  captured_at: '2026-09-20T12:06:31Z'
+  source_date: '2026-08-10'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wgm2a5-cannot-for-the-life-of-me-get-a-clean-exp
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wgm2a5/cannot_for_the_life_of_me_get_a_clean_export_in/
+  parent_title: Cannot for the life of me get a clean export in Resolve.
+  report_title: Cannot for the life of me get a clean export in Resolve.
+  report_text_excerpt: Cannot for the life of me get a clean export in Resolve. Working on a more demanding project than usual with 6K raw files and lots of effects. I only get about 2-3 minutes of playback before it starts dropping frames and eventually glitching out as pictured above. This is...
+  captured_at: '2026-09-20T12:18:24Z'
+  source_date: '2026-09-15'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 20
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w95can-ui-feels-low-fps-and-video-in-the-viewer
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w95can/ui_feels_low_fps_and_video_in_the_viewer_is_also/
+  parent_title: Ui feels low fps, and video in the viewer is also jittery
+  report_title: Ui feels low fps, and video in the viewer is also jittery
+  report_text_excerpt: Ui feels low fps, and video in the viewer is also jittery 2 days ago resolve was working fine. Yesterday i completed a project and when I started a new one my UI is laggy. The SLIDE IN text animations i make are also jitter and the video playing in the viewer is also jittery....
+  captured_at: '2026-09-20T12:18:24Z'
+  source_date: '2026-09-06'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 20
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vqlka0-instant-deliver-crash-resolution
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vqlka0/instant_deliver_crash_resolution/
+  parent_title: Instant deliver crash resolution
+  report_title: Instant deliver crash resolution
+  report_text_excerpt: Instant deliver crash resolution AMD 7500F, 9060XT, 32gb ddr5, Davinci resolve 20, I've recorded 4k footage and when imported i changed timeline resolution to 4k. edited everything and i just want to deliver my project, always the deliver option time line resolution option is...
+  captured_at: '2026-09-20T12:18:24Z'
+  source_date: '2026-08-17'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 20
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6008451-windows-11-25h2-cbs-component-store-in
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6008451/windows-11-25h2-cbs-component-store-inconsistency
+  parent_title: Windows 11 25H2 – CBS/Component Store inconsistency prevents repair installation and cumulative updates - Microsoft Q&A
+  report_title: Windows 11 25H2 – CBS/Component Store inconsistency prevents repair installation and cumulative updates - Microsoft Q&A
+  report_text_excerpt: Windows 11 25H2 – CBS/Component Store inconsistency prevents repair installation and cumulative updates - Microsoft Q&A Hello, I am looking for assistance with a Windows 11 25H2 servicing/CBS issue that I have been investigating extensively. The current Windows installation is...
+  captured_at: '2026-09-20T12:28:01Z'
+  source_date: '2026-09-20'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5129195
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5129195
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6008323-windows-cumulative-updates-kb5129195-f
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6008323/windows-cumulative-updates-kb5129195-fail-leading
+  parent_title: Windows Cumulative Updates KB5129195 fail leading to 0x139 KERNEL_SECURITY_CHECK_FAILURE - Microsoft Q&A
+  report_title: Windows Cumulative Updates KB5129195 fail leading to 0x139 KERNEL_SECURITY_CHECK_FAILURE - Microsoft Q&A
+  report_text_excerpt: Windows Cumulative Updates KB5129195 fail leading to 0x139 KERNEL_SECURITY_CHECK_FAILURE - Microsoft Q&A Every attempt to install the August/September 2026 cumulative updates on Windows 11 25H2 ends the same way. The machine restarts into the servicing phase, hits a...
+  captured_at: '2026-09-20T12:28:01Z'
+  source_date: '2026-09-19'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5129195
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5129195
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6008687-microsoft-store-error-0x80070422
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6008687/microsoft-store-error-0x80070422
+  parent_title: Microsoft Store Error 0x80070422 - Microsoft Q&A
+  report_title: Microsoft Store Error 0x80070422 - Microsoft Q&A
+  report_text_excerpt: Microsoft Store Error 0x80070422 - Microsoft Q&A Running Windows 11 Pro, Version 25H2, OS Build 26200.9457, Windows Feature Experience Pack 1000.26100.360.0 I have checked and reset it the Windows update Service, BITS, Orchestrator and they are all running fine. I have changed...
+  captured_at: '2026-09-20T12:28:01Z'
+  source_date: '2026-09-19'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
