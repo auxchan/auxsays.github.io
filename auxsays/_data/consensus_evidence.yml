@@ -32910,3 +32910,64 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6009009-dism-scanhealth-leaks-winsxstempinflig
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6009009/dism-scanhealth-leaks-winsxstempinflight-data-on-w
+  parent_title: DISM /ScanHealth leaks WinSxS\Temp\InFlight data on Windows 11 25H2 Build 26200.9457 - Microsoft Q&A
+  report_title: DISM /ScanHealth leaks WinSxS\Temp\InFlight data on Windows 11 25H2 Build 26200.9457 - Microsoft Q&A
+  report_text_excerpt: 'DISM /ScanHealth leaks WinSxS\Temp\InFlight data on Windows 11 25H2 Build 26200.9457 - Microsoft Q&A Running routine DISM component store maintenance on Windows 11 25H2, Build 26200.9457 (KB5129195), after KB5124008 (Build 26200.9445). BUG: DISM /Online /Cleanup-Image...'
+  captured_at: '2026-09-21T13:53:32Z'
+  source_date: '2026-09-20'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6008859-fil-history-will-not-work-since-2026-0
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6008859/fil-history-will-not-work-since-2026-09-security-u
+  parent_title: Fil History will not work since 2026-09 Security Update (KB5124008) (26200.9445 - Microsoft Q&A
+  report_title: Fil History will not work since 2026-09 Security Update (KB5124008) (26200.9445 - Microsoft Q&A
+  report_text_excerpt: Fil History will not work since 2026-09 Security Update (KB5124008) (26200.9445 - Microsoft Q&A File History will not work since the 2026-09 Security Update (KB5124008) (26200.9445. I have tried several external hard drives, but it does not work. I understand Microsoft is...
+  captured_at: '2026-09-21T13:53:47Z'
+  source_date: '2026-09-20'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
