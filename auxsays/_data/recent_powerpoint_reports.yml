@@ -4,6 +4,46 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
+  captured_at: '2026-09-22T00:02:09Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2608|20326.20158
+  report_date: '2026-09-21'
+  report_excerpt: 'Microsoft Graph API Powerpoint Viewer - Previewer is failing to load Microsoft Graph
+    API Powerpoint Viewer - Previewer is failing to load Description: Users are unable to view PowerPoint
+    slides on our platform. When navigating to a resource containing PowerPoint slides, the...'
+  report_id: microsoft-powerpoint:8471131dd7102958
+  report_title: Microsoft Graph API Powerpoint Viewer - Previewer is failing to load
+  source_family: Microsoft Q&A
+  source_report_id: '6010181'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6010181/microsoft-graph-api-powerpoint-viewer-previewer-is
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20326.20158'
+  window_start: '2026-09-18'
+  window_version: '2608'
+- attribution_state: not_established
+  captured_at: '2026-09-22T00:02:09Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2608|20326.20158
+  report_date: '2026-09-21'
+  report_excerpt: Issue about using the add-in of Powerpoint Issue about using the add-in of Powerpoint
+    I am using a personal Microsoft account for office 365. I have a problem when I am using adds-in in
+    the Powerpoint. It shows that I have no permission to use the adds-in (all adds-in does not...
+  report_id: microsoft-powerpoint:455b373194dad400
+  report_title: Issue about using the add-in of Powerpoint
+  source_family: Microsoft Q&A
+  source_report_id: '6010122'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6010122/issue-about-using-the-add-in-of-powerpoint
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20326.20158'
+  window_start: '2026-09-18'
+  window_version: '2608'
+- attribution_state: not_established
   captured_at: '2026-09-16T09:53:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
@@ -43,7 +83,7 @@ reports:
   window_start: '2026-09-01'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -64,7 +104,7 @@ reports:
   window_start: '2026-08-26'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -85,7 +125,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -126,7 +166,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -147,7 +187,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -169,7 +209,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -190,7 +230,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -442,7 +482,7 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -485,7 +525,7 @@ reports:
   window_start: '2025-01-30'
   window_version: '2501'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -506,7 +546,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -570,7 +610,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -591,7 +631,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-09-21T15:01:58Z'
+  captured_at: '2026-09-22T00:02:09Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
