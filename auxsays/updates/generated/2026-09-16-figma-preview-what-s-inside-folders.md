@@ -17,8 +17,8 @@ update_version: Preview what's inside folders
 update_logo_text: FIG
 update_published_at: '2026-09-16T00:00:00.000Z'
 update_last_checked: '2026-09-17T13:58:09Z'
-source_last_checked: '2026-09-21T15:04:52Z'
-official_body_last_checked: '2026-09-21T15:04:52Z'
+source_last_checked: '2026-09-22T00:03:59Z'
+official_body_last_checked: '2026-09-22T00:03:59Z'
 record_last_updated: '2026-09-17T13:58:09Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-09-20T13:36:57Z'
-  url: https://www.figma.com/release-notes/?title=preview-inside-folders
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-09-20T18:24:46Z'
   url: https://www.figma.com/release-notes/?title=preview-inside-folders
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-21T15:04:52Z'
+  url: https://www.figma.com/release-notes/?title=preview-inside-folders
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-22T00:03:59Z'
   url: https://www.figma.com/release-notes/?title=preview-inside-folders
   status: captured-from-rss-feed
   body_captured: true
