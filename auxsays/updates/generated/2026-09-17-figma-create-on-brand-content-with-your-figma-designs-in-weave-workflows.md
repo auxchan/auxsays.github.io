@@ -18,8 +18,8 @@ update_version: Create on-brand content with your Figma designs in Weave workflo
 update_logo_text: FIG
 update_published_at: '2026-09-17T00:00:00.000Z'
 update_last_checked: '2026-09-17T19:17:26Z'
-source_last_checked: '2026-09-22T00:03:59Z'
-official_body_last_checked: '2026-09-22T00:03:59Z'
+source_last_checked: '2026-09-22T07:08:14Z'
+official_body_last_checked: '2026-09-22T07:08:14Z'
 record_last_updated: '2026-09-17T19:17:26Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,11 +71,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-09-20T18:24:46Z'
-  url: https://www.figma.com/release-notes/?title=figma-node-on-brand-content
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-09-20T23:08:31Z'
   url: https://www.figma.com/release-notes/?title=figma-node-on-brand-content
   status: captured-from-rss-feed
@@ -92,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-22T00:03:59Z'
+  url: https://www.figma.com/release-notes/?title=figma-node-on-brand-content
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-22T07:08:14Z'
   url: https://www.figma.com/release-notes/?title=figma-node-on-brand-content
   status: captured-from-rss-feed
   body_captured: true
