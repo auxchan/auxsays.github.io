@@ -4,7 +4,27 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2608|20326.20158
+  report_date: '2026-09-22'
+  report_excerpt: 'PowerPoint desktop app will not open PowerPoint desktop app will not open I have an
+    issue with PowerPoint on my pc. When I try to open PowerPoint app I get an error message stating:
+    "PowerPoint couldn''t start last time. Safe mode could help you troubleshoot the problem, but...'
+  report_id: microsoft-powerpoint:e62db37fac4b43fc
+  report_title: PowerPoint desktop app will not open
+  source_family: Microsoft Q&A
+  source_report_id: '6010810'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6010810/powerpoint-desktop-app-will-not-open
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20326.20158'
+  window_start: '2026-09-18'
+  window_version: '2608'
+- attribution_state: not_established
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -24,7 +44,7 @@ reports:
   window_start: '2026-09-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -83,7 +103,7 @@ reports:
   window_start: '2026-09-01'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -104,7 +124,7 @@ reports:
   window_start: '2026-08-26'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -125,7 +145,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -166,7 +186,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -187,7 +207,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -209,7 +229,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -230,7 +250,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -482,7 +502,7 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -525,7 +545,7 @@ reports:
   window_start: '2025-01-30'
   window_version: '2501'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -546,7 +566,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -610,7 +630,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -631,7 +651,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-09-22T07:04:50Z'
+  captured_at: '2026-09-22T13:46:19Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
