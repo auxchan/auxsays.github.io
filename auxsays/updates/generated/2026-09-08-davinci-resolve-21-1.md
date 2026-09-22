@@ -17,8 +17,8 @@ update_version: '21.1'
 update_logo_text: DAV
 update_published_at: '2026-09-08T00:00:00Z'
 update_last_checked: '2026-09-08T06:44:15Z'
-source_last_checked: '2026-09-22T13:49:10Z'
-official_body_last_checked: '2026-09-22T13:49:10Z'
+source_last_checked: '2026-09-22T19:09:21Z'
+official_body_last_checked: '2026-09-22T19:09:21Z'
 record_last_updated: '2026-09-22T18:20:50.903502Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
@@ -31,16 +31,15 @@ update_report_count: 12
 update_consensus_confidence: Low-Medium
 quick_verdict: 'WAIT: DaVinci Resolve 21.1 has 12 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.1 Update in its official support downloads feed.
-release_summary: This software update expands still photography and camera support on the Photo page, as well as
-  adding enhanced multicam controls and an updated trim editor. In addition, there are over 25 new Krokodove shape
-  and 3D tools, updated Fusion macro controls and new project archive and media management options. Blackmagic Cloud
-  Presentations has also been updated with subtitle support, annotation sharing and comment replies. DaVinci Resolve
-  Studio 21.1 adds new individual MultiMaster trims on the color page, integration with AI assistants and 20 new
-  scripting APIs with built-in console support. This version requires a DaVinci Resolve Studio license dongle, Blackmagic
-  Cloud license or software activation code.
-consensus_report: '12 user reports found for DaVinci Resolve 21.1. Current reports mention startup or application
-  crashes, installation problems, and performance slowdowns. Current reports are Reddit-heavy, so production users
-  should test before updating. Sources represented: r/davinciresolve.'
+release_summary: This software update expands still photography and camera support on the Photo page, as well as adding enhanced
+  multicam controls and an updated trim editor. In addition, there are over 25 new Krokodove shape and 3D tools, updated Fusion
+  macro controls and new project archive and media management options. Blackmagic Cloud Presentations has also been updated
+  with subtitle support, annotation sharing and comment replies. DaVinci Resolve Studio 21.1 adds new individual MultiMaster
+  trims on the color page, integration with AI assistants and 20 new scripting APIs with built-in console support. This version
+  requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
+consensus_report: '12 user reports found for DaVinci Resolve 21.1. Current reports mention startup or application crashes,
+  installation problems, and performance slowdowns. Current reports are Reddit-heavy, so production users should test before
+  updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -77,8 +76,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
-  source. It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
+  It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -91,11 +90,6 @@ official_sources:
   trust_level: official
   extraction_status: version_metadata_captured
 official_source_attempts:
-- at: '2026-09-21T07:03:08Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-09-21T15:04:53Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
@@ -116,6 +110,11 @@ official_source_attempts:
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
+- at: '2026-09-22T19:09:21Z'
+  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+  status: captured-from-official-blackmagic-support-api
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve Studio 21.1 Update
 
   Channel: Stable
@@ -125,13 +124,12 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update expands still photography and camera support on the Photo page, as well as adding enhanced
-  multicam controls and an updated trim editor. In addition, there are over 25 new Krokodove shape and 3D tools,
-  updated Fusion macro controls and new project archive and media management options. Blackmagic Cloud Presentations
-  has also been updated with subtitle support, annotation sharing and comment replies. DaVinci Resolve Studio 21.1
-  adds new individual MultiMaster trims on the color page, integration with AI assistants and 20 new scripting APIs
-  with built-in console support. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud
-  license or software activation code.
+  This software update expands still photography and camera support on the Photo page, as well as adding enhanced multicam
+  controls and an updated trim editor. In addition, there are over 25 new Krokodove shape and 3D tools, updated Fusion macro
+  controls and new project archive and media management options. Blackmagic Cloud Presentations has also been updated with
+  subtitle support, annotation sharing and comment replies. DaVinci Resolve Studio 21.1 adds new individual MultiMaster trims
+  on the color page, integration with AI assistants and 20 new scripting APIs with built-in console support. This version
+  requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -142,10 +140,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 21.1 has 12 user reports found. User reports show a repeat pattern.
-  Current reports mention startup or application crashes, installation problems, and performance slowdowns. Production
-  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
-  so production users should test before updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 21.1 has 12 user reports found. User reports show a repeat pattern. Current
+  reports mention startup or application crashes, installation problems, and performance slowdowns. Production editors with
+  active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production users
+  should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1wgob5a/resolve_211_preset_bug_help/
@@ -301,8 +299,8 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention startup or application crashes, installation problems, and performance
-  slowdowns. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention startup or application crashes, installation problems, and performance slowdowns.
+  Production editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.

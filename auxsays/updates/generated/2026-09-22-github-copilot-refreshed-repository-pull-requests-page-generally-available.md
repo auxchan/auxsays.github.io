@@ -18,8 +18,8 @@ update_version: Refreshed repository pull requests page generally available
 update_logo_text: GIT
 update_published_at: '2026-09-22T01:25:53Z'
 update_last_checked: '2026-09-22T07:08:17Z'
-source_last_checked: '2026-09-22T13:49:12Z'
-official_body_last_checked: '2026-09-22T13:49:12Z'
+source_last_checked: '2026-09-22T19:09:24Z'
+official_body_last_checked: '2026-09-22T19:09:24Z'
 record_last_updated: '2026-09-22T07:08:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-22T13:49:12Z'
+  url: https://github.blog/changelog/2026-09-21-refreshed-repository-pull-requests-page-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-22T19:09:24Z'
   url: https://github.blog/changelog/2026-09-21-refreshed-repository-pull-requests-page-generally-available
   status: captured-from-rss-feed
   body_captured: true
