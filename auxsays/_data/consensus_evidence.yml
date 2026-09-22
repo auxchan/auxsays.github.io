@@ -32971,3 +32971,101 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
+
+- id: blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wjrlst-resolve-211-immediately-crashes
+  product_id: blackmagic-davinci
+  update_version: '21.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wjrlst/resolve_211_immediately_crashes/
+  parent_title: Resolve 21.1 immediately crashes
+  report_title: Resolve 21.1 immediately crashes
+  report_text_excerpt: Resolve 21.1 immediately crashes As soon as I try to put ProRes 4444 files in it immediately crashes without even seeing a report. RED files seem to be fine which is crazy. I’ve tried everything from 1080p timeline, deleting cash. Nothing as worked so far. As soon as a ProRes...
+  captured_at: '2026-09-22T17:39:44Z'
+  source_date: '2026-09-18'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wnfcw7-my-software-is-always-buggy
+  product_id: blackmagic-davinci
+  update_version: '21.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wnfcw7/my_software_is_always_buggy/
+  parent_title: My software is always buggy
+  report_title: My software is always buggy
+  report_text_excerpt: My software is always buggy When I change something in davinci resolve I cant see the changes happening in preview window. Sometimes the preview window is completely black. I have to restart the program to view the changes. And it crashes a lot. The program doesnt seem to use...
+  captured_at: '2026-09-22T17:39:44Z'
+  source_date: '2026-09-22'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w7hxzy-the-never-stopping-crashes
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w7hxzy/the_never_stopping_crashes/
+  parent_title: The Never Stopping Crashes
+  report_title: The Never Stopping Crashes
+  report_text_excerpt: The Never Stopping Crashes Hey everyone, I will get straight to the point. I have been working on this video in Davinci, which felt completely normal at first but then it started crashing randomly, when dragging a clip, zooming in/out or even just browsing thru the timeline....
+  captured_at: '2026-09-22T17:42:08Z'
+  source_date: '2026-09-04'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vpu8os-unusable-level-of-lag-on-m4-pro-and-ive-t
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vpu8os/unusable_level_of_lag_on_m4_pro_and_ive_tried/
+  parent_title: Unusable level of lag on M4 Pro - and I’ve tried everything.
+  report_title: Unusable level of lag on M4 Pro - and I’ve tried everything.
+  report_text_excerpt: 'Unusable level of lag on M4 Pro - and I’ve tried everything. TLDR (Specs + tests at end): I just switched to resolve and the same workflow that was unquestionably smooth on FCPX is unusably laggy on resolve. I’ll have to switch back to FCPX if I can’t figure out what’s going...'
+  captured_at: '2026-09-22T17:42:08Z'
+  source_date: '2026-08-16'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
