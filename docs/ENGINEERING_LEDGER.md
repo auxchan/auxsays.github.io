@@ -156,8 +156,17 @@ product-agnostic hard-stop branch in `_record_coherence_fields` that survives a 
 count, and a hard-stop summary. **Not done:** threading the state through
 `build_consensus_from_evidence.record_status_index` so all three call sites agree; retraction-fence
 protection (`ZERO_COUNT_PROJECTION_FIELDS` deletes `update_decision_label` at zero count); the
-layout's `official_only_zero_reports` override, which currently forces `INSUFFICIENT DATA` and
-would erase an AVOID at zero count; a QA exemption; tests; governed manifest count.
+zero-report override, which forces `INSUFFICIENT DATA` in **two** places —
+`_layouts/aux-update.html:288-290` and `_includes/patch-table-row.html:32` — and so would erase an
+AVOID on both the detail page and the product table; a QA exemption; tests; governed manifest count.
+
+**Note for whoever resumes** A patch withdrawn on release day has zero reports by definition, which
+puts it squarely in that override's population (994 of 1,200 records at `2cb56aee`). Getting the
+authority right is necessary and not sufficient — the templates decide what the reader sees. Also
+confirmed: no existing field can carry this state. `official_safeguard_hold_count` is the nearest,
+and it is `0` on all 15 records that carry it, has never once matched its extractor, is scoped per
+feature-version rather than per build, and is cohort-shaped — the exact thing that must not convert
+a patch globally.
 
 **Known residual (design)** The promotion work-list is built from evidence rows, so a record with a
 hard stop and zero community reports is never visited by the writer. Closing that needs the
