@@ -125,7 +125,11 @@ layout: aux-base
       {% assign home_patch_limit = 10 %}
       {% assign home_patch_count = 0 %}
       {% assign home_product_seen = '|' %}
-      <div class="home-patch-list home-patch-list--signals">
+      <p class="home-watchlist-note" data-home-watchlist-note hidden>
+        <span class="home-watchlist-note__mark" aria-hidden="true"></span>
+        Your watched products are shown first.
+      </p>
+      <div class="home-patch-list home-patch-list--signals" data-home-signal-list>
         {% comment %}
           Homepage Patch Signals is intentionally stricter than the full Patch Feed.
           It promotes one actionable signal per product, not every official-only capture.
@@ -234,8 +238,9 @@ layout: aux-base
                 {% assign stage_label = item.intelligence_stage_label | default: item.intelligence_stage | default: '' | replace: '_', ' ' | capitalize %}
                 {% assign item_official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
                 {% assign item_official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
-                <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal>
+                <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal data-product-id="{{ item_product_identity }}">
                   <span class="home-patch-dot home-patch-dot--{{ consensus_key }}" aria-hidden="true"></span>
+                  <span class="home-watch-flag" data-home-watch-flag hidden>Watching</span>
                   <span class="home-patch-copy">
                     <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
                     <em>

@@ -116,6 +116,135 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   search?.addEventListener('input', scheduleArticleFilters, { passive: true });
 
+  // My Patch Watchlist: the visitor's own product list, local to this browser.
+  //
+  // Local-first by design -- no account, no backend, no API. The only thing stored is a list of
+  // canonical product ids, which is the identity the whole site already keys on, so a watch made
+  // on a patch page is the same watch the feed filters by. Nothing here is personal information
+  // and nothing leaves the browser.
+  const WATCHLIST_KEY = 'auxsays.patchWatchlist.v1';
+  // Product ids are slugs (`obs-studio`, `microsoft-windows-11`). Anything else in storage was not
+  // written by this feature, so it is ignored rather than trusted.
+  const PRODUCT_ID_RE = /^[a-z0-9][a-z0-9-]{0,63}$/;
+
+  const readWatchlist = () => {
+    // Storage can be unavailable (private mode, blocked cookies, embedded webview) and its contents
+    // can be anything a previous version or another tab wrote. Every failure degrades to "nothing
+    // watched" rather than throwing, because a broken list must never break the page around it.
+    let raw = null;
+    try {
+      raw = window.localStorage.getItem(WATCHLIST_KEY);
+    } catch (error) {
+      return new Set();
+    }
+    if (!raw) return new Set();
+    let parsed = null;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (error) {
+      return new Set();
+    }
+    if (!Array.isArray(parsed)) return new Set();
+    const clean = new Set();
+    parsed.forEach((entry) => {
+      // Strings only. Coercing first would let `[1,2,3]` through, because "1" is slug-shaped --
+      // and a number in this list is malformed data, never a product id.
+      if (typeof entry !== 'string') return;
+      const id = entry.trim().toLowerCase();
+      if (PRODUCT_ID_RE.test(id)) clean.add(id);
+    });
+    return clean;
+  };
+
+  const writeWatchlist = (ids) => {
+    try {
+      window.localStorage.setItem(WATCHLIST_KEY, JSON.stringify(Array.from(ids).sort()));
+      return true;
+    } catch (error) {
+      // Fail soft: the in-memory state still drives this page, it just will not survive a reload.
+      return false;
+    }
+  };
+
+  const watchlistCount = () => readWatchlist().size;
+  const isWatched = (productId) => readWatchlist().has(String(productId || '').trim().toLowerCase());
+
+  const setWatched = (productId, watched) => {
+    const id = String(productId || '').trim().toLowerCase();
+    if (!PRODUCT_ID_RE.test(id)) return false;
+    const ids = readWatchlist();
+    // A Set makes a repeated watch a no-op, so the same product cannot appear twice in storage.
+    if (watched) ids.add(id); else ids.delete(id);
+    writeWatchlist(ids);
+    return watched;
+  };
+
+  const watchToggles = () => Array.from(document.querySelectorAll('[data-watch-product]'));
+
+  const syncWatchControls = () => {
+    const ids = readWatchlist();
+    watchToggles().forEach((button) => {
+      const id = String(button.dataset.watchProduct || '').trim().toLowerCase();
+      const name = button.dataset.watchLabel || 'this product';
+      const watched = ids.has(id);
+      button.setAttribute('aria-pressed', watched ? 'true' : 'false');
+      button.classList.toggle('is-watching', watched);
+      // The accessible name carries the product, so a screen reader hears which product it is
+      // rather than ten identical "Watch product" buttons.
+      button.setAttribute('aria-label', watched ? `Watching ${name}. Select to stop watching.` : `Watch ${name}`);
+      const text = button.querySelector('[data-watch-text]');
+      if (text) text.textContent = watched ? (button.dataset.watchTextOn || 'Watching') : (button.dataset.watchTextOff || 'Watch product');
+    });
+    document.querySelectorAll('[data-watchlist-count]').forEach((node) => {
+      node.textContent = String(ids.size);
+    });
+    document.dispatchEvent(new CustomEvent('auxsays:watchlist-change', { detail: { size: ids.size } }));
+  };
+
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-watch-product]');
+    if (!button) return;
+    // Several of these sit inside cards that are themselves links; watching must not navigate.
+    event.preventDefault();
+    event.stopPropagation();
+    const id = button.dataset.watchProduct;
+    setWatched(id, !isWatched(id));
+    syncWatchControls();
+  });
+
+  // Another tab changed the list: reflect it here rather than showing two different truths.
+  window.addEventListener('storage', (event) => {
+    if (event.key === WATCHLIST_KEY) syncWatchControls();
+  });
+
+  if (watchToggles().length || document.querySelector('[data-watchlist-count]')) syncWatchControls();
+
+  // Homepage: surface the visitor's products inside Patch Signals without becoming a second feed.
+  // Watched signals are marked and moved to the front; nothing is removed, so a first-time visitor
+  // with no local state sees exactly what they saw before, and everyone still discovers the major
+  // updates outside their own list.
+  const homeSignalList = document.querySelector('[data-home-signal-list]');
+  if (homeSignalList) {
+    const applyHomeWatchlist = () => {
+      const ids = readWatchlist();
+      const items = Array.from(homeSignalList.querySelectorAll('[data-home-patch-signal]'));
+      const watched = [];
+      items.forEach((item) => {
+        const hit = ids.has(String(item.dataset.productId || '').trim().toLowerCase());
+        item.classList.toggle('is-watched', hit);
+        const flag = item.querySelector('[data-home-watch-flag]');
+        if (flag) flag.hidden = !hit;
+        if (hit) watched.push(item);
+      });
+      // Move watched items to the front, preserving their order relative to each other.
+      watched.reverse().forEach((item) => homeSignalList.prepend(item));
+      const note = document.querySelector('[data-home-watchlist-note]');
+      if (note) note.hidden = watched.length === 0;
+    };
+    applyHomeWatchlist();
+    document.addEventListener('auxsays:watchlist-change', applyHomeWatchlist);
+  }
+
   // Patch Feed controls: company/software hierarchy filters, compact type/category controls, and sorting.
   const patchFeed = document.getElementById('patch-feed');
   const patchArchiveFeed = document.getElementById('patch-archive-feed');
@@ -131,7 +260,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const lane = String(value || '').trim().toLowerCase();
     if (lane === 'core') return 'company';
     if (lane === 'expansion') return 'software';
-    if (lane === 'edge') return 'watchlist';
+    // `edge` is a COVERAGE TIER -- how deeply AUXSAYS tracks a company -- and it used to display as
+    // "Watchlist". That word now belongs to the visitor's own product list, and one name cannot
+    // mean both the site's classification and the reader's personal selection.
+    if (lane === 'edge') return 'emerging';
     return lane;
   };
   const normalizeStatus = (value) => {
@@ -148,8 +280,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLane = 'all';
     let currentCompany = 'all';
     let currentSoftware = 'all';
+    let watchlistOnly = false;
+    let watchedIds = readWatchlist();
     const riskRank = { negative: 3, moderate: 2, positive: 1, 'insufficient-data': 0, insufficient: 0 };
-    const priorityRank = { company: 3, software: 2, watchlist: 1, core: 3, expansion: 2, edge: 1 };
+    const priorityRank = { company: 3, software: 2, emerging: 1, core: 3, expansion: 2, edge: 1 };
 
     const includesToken = (tokens, token) => {
       if (!token || token === 'all') return true;
@@ -168,7 +302,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const companyPass = currentCompany === 'all' || companyId === currentCompany;
       const softwarePass = currentSoftware === 'all' || productId === currentSoftware;
       const queryPass = !query || haystack.includes(query);
-      return filterPass && lanePass && companyPass && softwarePass && queryPass;
+      // My Watchlist is the visitor's own list, so it filters on the canonical product id and
+      // nothing else -- not the title, the logo, the company or the slug.
+      const watchlistPass = !watchlistOnly || watchedIds.has(productId);
+      return filterPass && lanePass && companyPass && softwarePass && queryPass && watchlistPass;
     };
 
     const matchesCompanyFilters = (card, query) => {
@@ -183,11 +320,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const companyPass = currentCompany === 'all' || companyId === currentCompany;
       const softwarePass = currentSoftware === 'all' || includesToken(productIds, currentSoftware);
       const queryPass = !query || haystack.includes(query);
+      // NO watchlist gate here, deliberately. These are the company DISCOVERY cards -- the only
+      // place to ADD products -- and they ship with data-product-id="", so filtering them by the
+      // visitor's list would empty the grid exactly when someone is trying to build that list.
       return filterPass && lanePass && companyPass && softwarePass && queryPass;
     };
 
     const applyPatchFeed = () => {
       const query = (patchSearch?.value || '').toLowerCase().trim();
+      watchedIds = readWatchlist();
       const visibleUpdates = [];
       const visibleSources = [];
 
@@ -218,6 +359,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (patchFeed) patchFeed.appendChild(currentFragment);
       if (patchArchiveFeed) patchArchiveFeed.appendChild(archiveFragment);
+
+      // Two different silences, two different answers. "You have not chosen anything yet" needs a
+      // way to start choosing; "nothing is happening to your products" is good news and must not
+      // read as a broken page.
+      const emptyPanel = document.getElementById('patch-watchlist-empty');
+      if (emptyPanel) {
+        const showEmpty = watchlistOnly && visibleUpdates.length === 0;
+        emptyPanel.hidden = !showEmpty;
+        if (showEmpty) {
+          const nothingWatched = watchedIds.size === 0;
+          emptyPanel.querySelectorAll('[data-watchlist-empty="none-watched"]').forEach((n) => { n.hidden = !nothingWatched; });
+          emptyPanel.querySelectorAll('[data-watchlist-empty="no-matches"]').forEach((n) => { n.hidden = nothingWatched; });
+        }
+      }
 
       sourceCards.forEach((card) => {
         const isVisible = matchesCompanyFilters(card, query);
@@ -282,6 +437,28 @@ document.addEventListener('DOMContentLoaded', () => {
       currentSort = String(chip.dataset.sort || 'latest').toLowerCase();
       schedulePatchFeed();
     }));
+
+    // My Watchlist is a toggle, not a member of a one-of-many chip row: it narrows whatever the
+    // other filters already selected rather than replacing them, so the visitor can still search
+    // or sort inside their own list.
+    const watchlistChip = document.querySelector('[data-watchlist-filter]');
+    watchlistChip?.addEventListener('click', () => {
+      watchlistOnly = !watchlistOnly;
+      watchlistChip.classList.toggle('is-active', watchlistOnly);
+      watchlistChip.setAttribute('aria-pressed', watchlistOnly ? 'true' : 'false');
+      schedulePatchFeed();
+    });
+
+    document.querySelector('[data-watchlist-action="clear"]')?.addEventListener('click', () => {
+      writeWatchlist(new Set());
+      syncWatchControls();
+      schedulePatchFeed();
+    });
+
+    // Watching a product from a discovery card re-filters immediately; the list the visitor is
+    // looking at is the list they are building.
+    document.addEventListener('auxsays:watchlist-change', schedulePatchFeed);
+
     applyPatchFeed();
   }
 

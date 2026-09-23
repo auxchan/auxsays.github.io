@@ -2741,7 +2741,7 @@ body.aux-update { --heading-color: var(--text-0); }
 
 .patch-priority-label--company,
 .patch-priority-label--software,
-.patch-priority-label--watchlist {
+.patch-priority-label--emerging {
   text-transform: uppercase;
   letter-spacing: .16em;
 }
@@ -4966,4 +4966,99 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   color: var(--text-1);
   font-size: .92rem;
   line-height: 1.5;
+}
+
+/* --- My Patch Watchlist -------------------------------------------------------------------
+   Tracking, not rating. No stars: a star reads as a score, and this is "I use this product".
+   Uses the existing chip/panel language -- same radii, same gold accent, same borders. */
+
+.patch-watch-toggle {
+  display: inline-flex; align-items: center; gap: .55rem;
+  margin-top: .9rem; padding: .55rem 1rem;
+  border: 1px solid var(--border-subtle); border-radius: 999px;
+  background: rgba(255,255,255,.025); color: var(--text-1);
+  font: inherit; font-size: .88rem; letter-spacing: .02em;
+  cursor: pointer; transition: border-color .18s ease, background .18s ease, color .18s ease;
+}
+.patch-watch-toggle--inline { margin-top: .75rem; }
+.patch-watch-toggle:hover { border-color: rgba(240,202,103,.42); color: var(--text-0); }
+.patch-watch-toggle:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 3px; }
+.patch-watch-toggle.is-watching {
+  border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.12); color: var(--text-0);
+}
+
+/* The mark is the state, so it must not rely on colour alone: empty ring -> filled check. */
+.patch-watch-toggle__mark {
+  width: .78rem; height: .78rem; border-radius: 50%;
+  border: 1.5px solid currentColor; flex: none; position: relative;
+}
+.patch-watch-toggle.is-watching .patch-watch-toggle__mark {
+  border-color: var(--accent-1); background: var(--accent-1);
+}
+.patch-watch-toggle.is-watching .patch-watch-toggle__mark::after {
+  content: ""; position: absolute; left: .21rem; top: .05rem;
+  width: .18rem; height: .38rem; border: solid #17140e;
+  border-width: 0 1.6px 1.6px 0; transform: rotate(45deg);
+}
+
+/* Discovery cards: the product names already listed on a company card ARE the watch control. */
+.patch-source-tags--watchable { display: flex; flex-wrap: wrap; gap: .4rem; }
+.patch-watch-tag {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .3rem .6rem; border-radius: 999px;
+  border: 1px solid var(--border-subtle); background: rgba(255,255,255,.03);
+  color: var(--text-1); font: inherit; font-size: .76rem; cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, color .18s ease;
+}
+.patch-watch-tag:hover { border-color: rgba(240,202,103,.42); color: var(--text-0); }
+.patch-watch-tag:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+.patch-watch-tag.is-watching { border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.12); color: var(--text-0); }
+/* `.patch-source-tags span:empty { display:none !important }` (above) exists to drop empty legacy
+   tag spans. The state mark is deliberately empty, so it has to opt back in or the watched state
+   on discovery cards would be carried by colour alone. */
+.patch-source-tags .patch-watch-tag__mark { display: block !important; }
+.patch-watch-tag__mark {
+  width: .6rem; height: .6rem; border-radius: 50%; border: 1.5px solid currentColor; flex: none;
+}
+.patch-watch-tag.is-watching .patch-watch-tag__mark { border-color: var(--accent-1); background: var(--accent-1); }
+.patch-watch-tag-more { font-size: .76rem; color: var(--text-1); align-self: center; }
+
+.patch-chip--watchlist { display: inline-flex; align-items: center; gap: .4rem; }
+.patch-chip-count {
+  min-width: 1.15rem; padding: 0 .3rem; border-radius: 999px;
+  background: rgba(255,255,255,.08); font-size: .72rem; line-height: 1.35;
+}
+.patch-chip--watchlist.is-active .patch-chip-count { background: rgba(240,202,103,.22); }
+.patch-chip--quiet { opacity: .72; font-size: .78rem; }
+.patch-chip--quiet:hover { opacity: 1; }
+
+/* An author `display` beats the UA sheet's `[hidden] { display:none }`, so any component that
+   ships hidden and declares its own display must say so explicitly -- otherwise the "Your
+   watchlist is empty" panel greets every visitor above a full feed. */
+.patch-watchlist-empty[hidden],
+.home-watchlist-note[hidden] { display: none !important; }
+
+.patch-watchlist-empty { padding: 1.6rem 1.5rem; display: grid; gap: .55rem; }
+.patch-watchlist-empty h2 { margin: 0; font-size: 1.05rem; color: var(--text-0); }
+.patch-watchlist-empty p { margin: 0; color: var(--text-1); font-size: .9rem; }
+.patch-watchlist-empty a { justify-self: start; margin-top: .3rem; }
+
+/* Homepage: watched signals are marked and hoisted. Nothing is hidden. */
+.home-watchlist-note {
+  display: flex; align-items: center; gap: .45rem;
+  margin: 0 0 .6rem; font-size: .78rem; color: var(--text-1);
+}
+.home-watchlist-note__mark {
+  width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent-1); flex: none;
+}
+.home-watch-flag {
+  align-self: center; padding: .1rem .42rem; border-radius: 999px;
+  border: 1px solid rgba(240,202,103,.4); background: rgba(240,202,103,.12);
+  color: var(--text-0); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase;
+}
+.home-patch-item.is-watched { border-color: rgba(240,202,103,.28); }
+
+@media (max-width: 640px) {
+  .patch-watch-toggle { width: 100%; justify-content: center; }
+  .patch-watchlist-empty { padding: 1.25rem 1.1rem; }
 }

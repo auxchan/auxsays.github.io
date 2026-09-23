@@ -88,7 +88,17 @@ layout: aux-base
           <button class="patch-chip is-active" data-priority="all">All</button>
           <button class="patch-chip" data-priority="company">Company</button>
           <button class="patch-chip" data-priority="software">Software</button>
-          <button class="patch-chip" data-priority="watchlist">Watchlist</button>
+          <button class="patch-chip" data-priority="emerging">Emerging</button>
+        </div>
+      </div>
+
+      <div class="patch-control-block">
+        <span class="patch-label">Your list</span>
+        <div class="patch-chips" id="patch-watchlist-chips">
+          <button class="patch-chip patch-chip--watchlist" type="button" data-watchlist-filter="mine" aria-pressed="false">
+            My Watchlist<span class="patch-chip-count" data-watchlist-count aria-hidden="true">0</span>
+          </button>
+          <button class="patch-chip patch-chip--quiet" type="button" data-watchlist-action="clear">Clear</button>
         </div>
       </div>
 
@@ -147,7 +157,7 @@ layout: aux-base
       {% elsif normalized_priority == 'expansion' %}
         {% assign normalized_priority = 'software' %}
       {% elsif normalized_priority == 'edge' %}
-        {% assign normalized_priority = 'watchlist' %}
+        {% assign normalized_priority = 'emerging' %}
       {% endif %}
       {% assign priority_display_label = 'Company' %}
       {% assign company_product_names = company_products | map: "product_name" | join: " " %}
@@ -181,9 +191,14 @@ layout: aux-base
           </span>
           <span class="patch-source-priority patch-source-priority--company">{{ priority_display_label }}</span>
         </div>
-        <div class="patch-source-tags">
-          {% for product in company_products limit: 4 %}<span>{{ product.product_name }}</span>{% endfor %}
-          {% if company_products.size > 4 %}<span>+{{ company_products.size | minus: 4 }} more</span>{% endif %}
+        <div class="patch-source-tags patch-source-tags--watchable">
+          {% comment %}
+            The product tags double as the watch control. Building a list should not mean opening
+            ten product pages, and a dedicated row of buttons per card would make the discovery
+            grid unreadable -- so the names already listed here became the affordance.
+          {% endcomment %}
+          {% for product in company_products limit: 4 %}<button type="button" class="patch-watch-tag" data-watch-product="{{ product.id }}" data-watch-label="{{ product.product_name }}" aria-pressed="false"><span class="patch-watch-tag__mark" aria-hidden="true"></span>{{ product.product_name }}</button>{% endfor %}
+          {% if company_products.size > 4 %}<span class="patch-watch-tag-more">+{{ company_products.size | minus: 4 }} more</span>{% endif %}
         </div>
         <p>{{ company.summary }}</p>
         <p class="patch-source-reason">Hierarchy: {{ company.company_name }} → software → patches/updates{% if company_update_count > 0 %} • {{ company_update_count }} tracked patch record{% if company_update_count != 1 %}s{% endif %}{% endif %}.</p>
@@ -197,6 +212,21 @@ layout: aux-base
     </div>
   </section>
   {% endif %}
+
+  <section class="panel patch-watchlist-empty" id="patch-watchlist-empty" hidden>
+    <div data-watchlist-empty="none-watched">
+      <h2>Your watchlist is empty.</h2>
+      <p>Choose the software you actually use and AUXSAYS will show its patch intelligence first.
+        Use the <strong>Watch product</strong> control on any product below, or on a product page.</p>
+      <a class="patch-source-link patch-source-link--primary" href="#patch-source-grid">Browse tracked software →</a>
+    </div>
+    <div data-watchlist-empty="no-matches" hidden>
+      <h2>No current patches for your watched products.</h2>
+      <p>Nothing new is affecting the products you watch. Clear the <strong>My Watchlist</strong>
+        filter to see every tracked patch, or add more products.</p>
+      <a class="patch-source-link patch-source-link--primary" href="#patch-source-grid">Add more software →</a>
+    </div>
+  </section>
 
   <section class="patch-feed patch-feed--current reveal-up" id="patch-feed">
     {% for item in current_pages %}
