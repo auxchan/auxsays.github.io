@@ -18,8 +18,8 @@ update_version: New features and improvements in Copilot for JetBrains
 update_logo_text: GIT
 update_published_at: '2026-09-23T00:34:18Z'
 update_last_checked: '2026-09-23T07:01:02Z'
-source_last_checked: '2026-09-23T07:01:02Z'
-official_body_last_checked: '2026-09-23T07:01:02Z'
+source_last_checked: '2026-09-23T13:54:02Z'
+official_body_last_checked: '2026-09-23T13:54:02Z'
 record_last_updated: '2026-09-23T07:01:02Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -103,6 +103,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-09-23T07:01:02Z'
+  url: https://github.blog/changelog/2026-09-22-new-features-and-improvements-in-copilot-for-jetbrains
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-23T13:54:02Z'
   url: https://github.blog/changelog/2026-09-22-new-features-and-improvements-in-copilot-for-jetbrains
   status: captured-from-rss-feed
   body_captured: true
