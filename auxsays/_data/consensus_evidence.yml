@@ -33069,3 +33069,121 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6010539-started-giving-me-blue-green-black-scr
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6010539/started-giving-me-blue-green-black-screen
+  parent_title: Started giving me blue/green/black screen. - Microsoft Q&A
+  report_title: Started giving me blue/green/black screen. - Microsoft Q&A
+  report_text_excerpt: 'Started giving me blue/green/black screen. - Microsoft Q&A I have two questions: How is Windows 11 downloading and trying to install an update even though Windows Update is paused, or Windows Update is only supposed to start when I manually trigger it? Why does it keep asking...'
+  captured_at: '2026-09-23T12:40:44Z'
+  source_date: '2026-09-23'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: boot failure
+  workflow_area: startup / boot
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6011200-kernel-bugcheck-0x1e-av-nt-hvpgetcellm
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6011200/kernel-bugcheck-0x1e-av-nt-hvpgetcellmap-recurs-3x
+  parent_title: Kernel bugcheck 0x1E (AV_nt!HvpGetCellMap) recurs 3x on build 26100.9457 / 26200.9457, never on the two prior builds - Microsoft Q&A
+  report_title: Kernel bugcheck 0x1E (AV_nt!HvpGetCellMap) recurs 3x on build 26100.9457 / 26200.9457, never on the two prior builds - Microsoft Q&A
+  report_text_excerpt: Kernel bugcheck 0x1E (AV_nt!HvpGetCellMap) recurs 3x on build 26100.9457 / 26200.9457, never on the two prior builds - Microsoft Q&A Recurring BSOD on Windows 11 25H2 build 26200.9457 / kernel 10.0.26100.9457. Bugcheck 0x1E (KMODE_EXCEPTION_NOT_HANDLED), parameter 1 =...
+  captured_at: '2026-09-23T12:40:44Z'
+  source_date: '2026-09-23'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6011146-aggiornamento-della-sicurezza-kb512919
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6011146/aggiornamento-della-sicurezza-kb5129195-26200-9457
+  parent_title: Aggiornamento della sicurezza (KB5129195) (26200.9457) Errore di installazione - 0x80070002 - Microsoft Q&A
+  report_title: Aggiornamento della sicurezza (KB5129195) (26200.9457) Errore di installazione - 0x80070002 - Microsoft Q&A
+  report_text_excerpt: Aggiornamento della sicurezza (KB5129195) (26200.9457) Errore di installazione - 0x80070002 - Microsoft Q&A Aggiornamento della sicurezza (KB5129195) (26200.9457) Errore di installazione - 0x80070002
+  captured_at: '2026-09-23T12:40:44Z'
+  source_date: '2026-09-22'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6011494-im-having-problems-with-windows-11pro
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6011494/im-having-problems-with-windows-11pro-25h2-26200-9
+  parent_title: I'm having problems with Windows 11Pro 25H2 26200.9457/Pack 1000.26100.360.0 - Microsoft Q&A
+  report_title: I'm having problems with Windows 11Pro 25H2 26200.9457/Pack 1000.26100.360.0 - Microsoft Q&A
+  report_text_excerpt: I'm having problems with Windows 11Pro 25H2 26200.9457/Pack 1000.26100.360.0 - Microsoft Q&A I'm having problems with Windows 11. Sometimes it won't install my programs, sometimes updates don't work, and now my laptop, which has Windows 11 installed, was showing my account...
+  captured_at: '2026-09-23T12:40:44Z'
+  source_date: '2026-09-22'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
