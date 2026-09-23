@@ -42,6 +42,44 @@ When working in this repo:
 - Do not downgrade credibility protections to make a task easier.
 - If instructions conflict, stop and report the conflict before making broad changes.
 
+### Progress-first triage
+
+The objective is credible production software: useful features, strong automation, professional UX,
+sufficient regression protection, and sustained forward progress. It is not maximal investigation.
+
+A discovered issue **blocks the current lane** only if it is one of:
+
+- a meaningful current user-facing defect;
+- patch evidence / verdict / attribution / integrity corruption;
+- broken production automation or deployment;
+- a security or data-loss risk;
+- an architectural defect that will predictably cause substantial rework if development continues
+  on top of it.
+
+Everything else gets a **bounded** investigation. If it is not proven blocking after that
+investigation: document it in [`docs/ENGINEERING_LEDGER.md`](docs/ENGINEERING_LEDGER.md), defer it,
+and continue. Plausible future problems do not become mandatory current sprints.
+
+**Do not run the audit cascade.** Fix A → notice hypothetical B → pause → audit B → discover
+historical C → audit C → block the roadmap on D is the failure mode. Do instead: fix A → test A →
+production-verify A → ledger B/C/D if materially plausible → continue.
+
+**A normal defect is closed** after: reproducible symptom; identified root cause; smallest complete
+implementation; focused non-vacuous regression test; relevant governed/CI suites pass; production
+or deployment verification where applicable. After those six gates, **stop**. Do not reopen because
+another hypothetical variation exists — open a deferred ledger item instead. Every resolved ledger
+entry carries a **Reopen only if** with objective conditions.
+
+**Adversarial review budget.** Normal implementation needs no fleet of review agents. Material
+data-integrity, writer or deployment repair gets one adversarial review. A second is justified only
+if the first found an executable, demonstrable defect. Do not launch repeated broad reviews to
+raise confidence once the objective gates are green.
+
+**Before proposing a new blocker, answer:** Is it broken in production now? Does it materially
+affect users, evidence credibility, deployment, security or imminent architecture? Is there an
+objective reproduction? Will continuing make it substantially harder to fix? If those are
+predominantly *no* — ledger it and proceed.
+
 ## Current priority product stack
 
 Focus depth before expansion.
