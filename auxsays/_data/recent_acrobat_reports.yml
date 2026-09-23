@@ -4,7 +4,7 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-09-23T16:55:00Z'
+  captured_at: '2026-09-23T21:28:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -24,7 +24,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-09-23T16:55:00Z'
+  captured_at: '2026-09-23T21:28:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -45,7 +45,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-09-23T16:55:00Z'
+  captured_at: '2026-09-23T21:28:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -65,7 +65,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-23T16:55:00Z'
+  captured_at: '2026-09-23T21:28:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -85,7 +85,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-23T16:55:00Z'
+  captured_at: '2026-09-23T21:28:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -105,7 +105,7 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
-  captured_at: '2026-09-23T16:55:00Z'
+  captured_at: '2026-09-23T21:28:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -465,7 +465,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-09-23T17:15:35Z'
+  captured_at: '2026-09-23T21:49:04Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -485,7 +485,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-23T17:15:35Z'
+  captured_at: '2026-09-23T21:49:04Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -504,6 +504,26 @@ reports:
   window_end: '2026-09-07'
   window_start: '2026-08-31'
   window_version: 26.002.21869
+- attribution_state: not_established
+  captured_at: '2026-09-23T21:49:04Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21789|26.001.21789
+  report_date: '2026-08-21'
+  report_excerpt: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall Hi Folks,
+    sorry, I posted this concern before but without any results. That's why I'm trying again since I need
+    Acrobat and diminishes my workflow and, after all, paying for it. This happens for...
+  report_id: adobe-acrobat-reader:fb3c34fe8afa966f
+  report_title: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-randomly-stalls-grays-out-not-responding-recurs-after-reinstall-1638120
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21789
+  window_end: '2026-08-31'
+  window_start: '2026-08-11'
+  window_version: 26.001.21789
 - attribution_state: not_established
   captured_at: '2026-09-09T08:06:07Z'
   classification: recent_report

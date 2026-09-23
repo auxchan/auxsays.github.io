@@ -33241,3 +33241,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w6dgr0-why-is-my-2nd-screen-looking-like-that
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w6dgr0/why_is_my_2nd_screen_looking_like_that/
+  parent_title: Why is my 2nd screen looking like that?
+  report_title: Why is my 2nd screen looking like that?
+  report_text_excerpt: Why is my 2nd screen looking like that? Hi, i have had a problem for some time now using 2 screens in davinci resolve. The 2nd screen (left) has always some black parts, like it wouldnt load the graphics for some reason. Its only on the Fusion page though. Other pages (edit,...
+  captured_at: '2026-09-23T22:13:41Z'
+  source_date: '2026-09-03'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
