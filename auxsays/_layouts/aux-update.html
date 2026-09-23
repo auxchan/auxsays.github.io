@@ -492,6 +492,20 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       <p class="update-kicker">Patch intelligence record</p>
       <h1 class="update-title">{{ display_title }}</h1>
 
+      {% comment %}
+        Watching follows the PRODUCT, not this one historical patch: a visitor who cares about OBS
+        cares about the next OBS release, not about 31.0.4 forever.
+      {% endcomment %}
+      {% if page.product_id != blank %}
+      <button type="button" class="patch-watch-toggle patch-watch-toggle--inline" data-watch-product="{{ page.product_id }}"
+              data-watch-label="{{ product_name_clean | default: page.update_product | default: page.product_id }}"
+              data-watch-text-off="Watch {{ product_name_clean | default: page.update_product | default: 'product' }}" data-watch-text-on="Watching"
+              aria-pressed="false" aria-label="Watch {{ product_name_clean | default: page.update_product | default: page.product_id }}">
+        <span class="patch-watch-toggle__mark" aria-hidden="true"></span>
+        <span class="patch-watch-toggle__text" data-watch-text>Watch {{ product_name_clean | default: page.update_product | default: 'product' }}</span>
+      </button>
+      {% endif %}
+
       <div class="update-meta-strip">
         {% if product_name_clean != blank %}
           {% if product_url_clean != blank %}

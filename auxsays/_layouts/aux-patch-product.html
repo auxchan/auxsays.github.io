@@ -39,6 +39,15 @@ layout: aux-base
           <span>{{ product.category_label }}</span>
           <span>{{ cadence_label }}</span>
         </div>
+        {% if page.product_id != blank %}
+        <button type="button" class="patch-watch-toggle" data-watch-product="{{ page.product_id }}"
+                data-watch-label="{{ product.product_name | default: page.product_id }}"
+                data-watch-text-off="Watch product" data-watch-text-on="Watching"
+                aria-pressed="false" aria-label="Watch {{ product.product_name | default: page.product_id }}">
+          <span class="patch-watch-toggle__mark" aria-hidden="true"></span>
+          <span class="patch-watch-toggle__text" data-watch-text>Watch product</span>
+        </button>
+        {% endif %}
       </div>
       <div class="patch-intel-stat-card">
         {% if product_updates.size > 0 %}
