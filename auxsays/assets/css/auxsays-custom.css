@@ -5066,3 +5066,99 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   .patch-watch-toggle { width: 100%; justify-content: center; }
   .patch-watchlist-empty { padding: 1.25rem 1.1rem; }
 }
+
+/* --- My Patch Stack ------------------------------------------------------------------------
+   A compact operations board over the visitor's watchlist. Same panels, radii and gold accent as
+   the rest of the site -- no separate dashboard chrome, no dense enterprise grid. */
+
+.patch-stack-shell { display: grid; gap: 1.35rem; }
+
+.patch-stack-strip {
+  display: flex; flex-wrap: wrap; gap: 1.1rem;
+  margin: 1rem 0 0; padding-top: .9rem;
+  border-top: 1px solid var(--border-subtle);
+  font-size: .86rem; color: var(--text-1);
+}
+.patch-stack-strip[hidden] { display: none !important; }
+.patch-stack-strip strong { color: var(--text-0); font-size: 1.05rem; margin-right: .3rem; }
+
+.patch-stack-empty { padding: 1.7rem 1.5rem; display: grid; gap: .7rem; }
+.patch-stack-empty[hidden] { display: none !important; }
+.patch-stack-empty h2 { margin: 0; font-size: 1.15rem; color: var(--text-0); }
+.patch-stack-empty p { margin: 0; color: var(--text-1); }
+.patch-stack-chooser { margin-top: .5rem; }
+.patch-stack-chooser h3 {
+  margin: 0 0 .6rem; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--text-1);
+}
+.patch-stack-chooser-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+
+.patch-stack-body { display: grid; gap: 1.35rem; }
+.patch-stack-body[hidden] { display: none !important; }
+.patch-stack-attention, .patch-stack-all { padding: 1.45rem 1.5rem; }
+.patch-stack-none { margin: 0; color: var(--text-1); font-size: .9rem; }
+.patch-stack-none[hidden] { display: none !important; }
+
+.patch-stack-grid {
+  display: grid; gap: 1rem; margin-top: 1.1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.patch-stack-grid:empty { display: none; }
+
+.patch-stack-card { padding: 1.15rem 1.2rem; display: grid; gap: .6rem; align-content: start; }
+.patch-stack-card__head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: .7rem;
+}
+.patch-stack-card__name { margin: 0; font-size: 1.02rem; color: var(--text-0); }
+.patch-stack-card__name a { color: inherit; }
+.patch-stack-card__patch { margin: 0; font-size: .9rem; color: var(--text-0); }
+.patch-stack-card__patch span { color: var(--text-1); }
+.patch-stack-card__patch--none { color: var(--text-1); }
+.patch-stack-card__meta {
+  margin: 0; padding: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: .25rem .7rem;
+  font-size: .8rem; color: var(--text-1);
+}
+.patch-stack-card__meta li { display: inline-flex; align-items: center; gap: .35rem; }
+.patch-stack-card__meta li + li::before {
+  content: "·"; color: var(--border-strong); margin-right: .35rem;
+}
+.patch-stack-card__reason {
+  margin: 0; font-size: .82rem; color: var(--text-0);
+  padding: .4rem .6rem; border-radius: 10px;
+  border: 1px solid rgba(240,202,103,.28); background: rgba(240,202,103,.08);
+}
+.patch-stack-card__links { display: flex; flex-wrap: wrap; gap: .5rem .9rem; align-items: center; }
+
+.patch-stack-unwatch {
+  margin-left: auto; padding: .34rem .75rem; border-radius: 999px;
+  border: 1px solid var(--border-subtle); background: rgba(255,255,255,.03);
+  color: var(--text-1); font: inherit; font-size: .78rem; cursor: pointer;
+  transition: border-color .18s ease, color .18s ease;
+}
+.patch-stack-unwatch:hover { border-color: rgba(240,202,103,.42); color: var(--text-0); }
+.patch-stack-unwatch:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+
+/* The route into the dashboard from the feed: a destination, styled as a link rather than a chip. */
+.patch-stack-link {
+  display: inline-flex; align-items: baseline; gap: .45rem; margin-top: .7rem;
+  color: var(--accent-1); font-size: .86rem; text-decoration: none;
+}
+.patch-stack-link:hover { text-decoration: underline; }
+.patch-stack-link:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 3px; }
+.patch-stack-link__count { color: var(--text-1); font-size: .78rem; }
+.home-watchlist-note__link { margin-left: .4rem; color: var(--accent-1); }
+
+@media (max-width: 640px) {
+  .patch-stack-grid { grid-template-columns: 1fr; }
+  .patch-stack-attention, .patch-stack-all, .patch-stack-empty { padding: 1.2rem 1.05rem; }
+  .patch-stack-card__head { flex-direction: column; gap: .4rem; }
+  .patch-stack-unwatch { margin-left: 0; }
+}
+
+/* The heading-colour repair is scoped to `body.aux-update` (patch pages). This page renders on
+   aux-base, so its own headings would inherit Chirpy's OS-following --heading-color and sit at
+   ~1.36:1 on the fixed-dark ground in light mode. Scoped to this feature; the site-wide decision
+   is a separate piece of work. */
+.patch-stack-shell h1,
+.patch-stack-shell .section-head h2 { color: var(--text-0); }
