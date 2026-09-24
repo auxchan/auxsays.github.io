@@ -32601,7 +32601,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vjls37-planar-tracker-crashing-instantly-when-us
   product_id: blackmagic-davinci
   update_version: '21.0'
@@ -32626,7 +32625,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wkun5o-fbxmesh3d-not-visible-in-3d-viewer-but-re
   product_id: blackmagic-davinci
   update_version: '21'
@@ -32651,7 +32649,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w9tt1v-davinci-keeps-crashing-in-one-project
   product_id: blackmagic-davinci
   update_version: 21.0.4
@@ -32724,7 +32721,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wgm2a5-cannot-for-the-life-of-me-get-a-clean-exp
   product_id: blackmagic-davinci
   update_version: '20'
@@ -32797,7 +32793,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6008451-windows-11-25h2-cbs-component-store-in
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -32885,7 +32880,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
-
 - id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vhedy0-what-did-i-do-wrong
   product_id: blackmagic-davinci
   update_version: 20.2.1
@@ -32910,7 +32904,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6009009-dism-scanhealth-leaks-winsxstempinflig
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -32941,7 +32934,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6008859-fil-history-will-not-work-since-2026-0
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -32971,7 +32963,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
-
 - id: blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wjrlst-resolve-211-immediately-crashes
   product_id: blackmagic-davinci
   update_version: '21.1'
@@ -33020,7 +33011,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w7hxzy-the-never-stopping-crashes
   product_id: blackmagic-davinci
   update_version: 21.0.4
@@ -33069,7 +33059,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6010539-started-giving-me-blue-green-black-scr
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -33187,7 +33176,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
-
 - id: acrobat-26-002-21931-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-002-21931-64-bit-creates-10-000-user-objects-12
   product_id: adobe-acrobat-pro
   update_version: 26.002.21931
@@ -33214,7 +33202,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-26-002-21931-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-002-21931-64-bit-creates-10-000-user-objects-12
   product_id: adobe-acrobat-reader
   update_version: 26.002.21931
@@ -33241,7 +33228,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w6dgr0-why-is-my-2nd-screen-looking-like-that
   product_id: blackmagic-davinci
   update_version: 21.0.4
@@ -33262,6 +33248,144 @@ evidence:
   exclusion_reason: null
   issue_theme: unspecified issue
   workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6012629-bluetooth-classic-hfp-mic-and-speaker
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6012629/bluetooth-classic-hfp-mic-and-speaker-cannot-opera
+  parent_title: Bluetooth Classic (HFP) mic and speaker cannot operate simultaneously on Windows 11 25H2 — persists after September 2026 updates - Microsoft Q&A
+  report_title: Bluetooth Classic (HFP) mic and speaker cannot operate simultaneously on Windows 11 25H2 — persists after September 2026 updates - Microsoft Q&A
+  report_text_excerpt: 'Bluetooth Classic (HFP) mic and speaker cannot operate simultaneously on Windows 11 25H2 — persists after September 2026 updates - Microsoft Q&A Product: Windows 11 Enterprise, version 25H2 Current build: 26200.9457 (KB5129195, out-of-band) Affected component: Bluetooth...'
+  captured_at: '2026-09-24T12:49:33Z'
+  source_date: '2026-09-23'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5124010
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5124010
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6012230-windows-update-installation-error-0x80
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6012230/windows-update-installation-error-0x800f0922-kb512
+  parent_title: Windows Update Installation Error 0x800f0922 (KB5124010) - Microsoft Q&A
+  report_title: Windows Update Installation Error 0x800f0922 (KB5124010) - Microsoft Q&A
+  report_text_excerpt: Windows Update Installation Error 0x800f0922 (KB5124010) - Microsoft Q&A Hi, This is about the September 2026 pre‑release update (KB5124010) (26200.9550). Installation error – 0x800f0922 . The update downloads normally, but the installation gets stuck at around 40%. I have run...
+  captured_at: '2026-09-24T12:49:33Z'
+  source_date: '2026-09-23'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9550'
+  match_basis: exact_os_build
+  matched_kb: KB5124010
+  matched_os_build: '26200.9550'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6012040-the-kb5124010-file-history-update-stil
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6012040/the-kb5124010-file-history-update-still-seems-a-bi
+  parent_title: The KB5124010 file history update still seems a bit off.The problem with KB5101684 is still there. - Microsoft Q&A
+  report_title: The KB5124010 file history update still seems a bit off.The problem with KB5101684 is still there. - Microsoft Q&A
+  report_text_excerpt: 'The KB5124010 file history update still seems a bit off.The problem with KB5101684 is still there. - Microsoft Q&A Laptop: Windows 11 25H2 OS, Build 26200.9550 Desktop: Windows 10 22H2 OS, Build 19045.7663 I installed KB5124010, updated the file history, and it''s backed up...'
+  captured_at: '2026-09-24T12:49:33Z'
+  source_date: '2026-09-23'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9550'
+  match_basis: exact_os_build
+  matched_kb: KB5124010
+  matched_os_build: '26200.9550'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6012710-windows-security-app-microsoft-secheal
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6012710/windows-security-app-microsoft-sechealthui-stuck-a
+  parent_title: Windows Security App (Microsoft.SecHealthUI) stuck at 1000.26100.1.0 after KB5007651 and SecurityHealthSetup installation - Microsoft Q&A
+  report_title: Windows Security App (Microsoft.SecHealthUI) stuck at 1000.26100.1.0 after KB5007651 and SecurityHealthSetup installation - Microsoft Q&A
+  report_text_excerpt: Windows Security App (Microsoft.SecHealthUI) stuck at 1000.26100.1.0 after KB5007651 and SecurityHealthSetup installation - Microsoft Q&A I am troubleshooting a vulnerability reported by Qualys (QID 383341 / CVE-2025-47956). Microsoft documentation indicates that Windows...
+  captured_at: '2026-09-24T12:49:44Z'
+  source_date: '2026-09-24'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: obs-studio-32-2-2-github-issue-13929
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13929
+  parent_title: 'Video Capture Device: XRGB picks RGB24 over native RGB32 when the device lists RGB24 first (black source, "failed to connect pins")'
+  report_title: 'Video Capture Device: XRGB picks RGB24 over native RGB32 when the device lists RGB24 first (black source, "failed to connect pins")'
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lTSA2w8WX55gBXeh ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Selec'
+  captured_at: '2026-09-24T13:05:56Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: windows
   severity: medium
   sentiment: moderate
