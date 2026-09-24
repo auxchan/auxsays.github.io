@@ -287,11 +287,46 @@ def check_accessibility_and_collision() -> None:
 
     # G4: a pre-existing rule drops empty spans inside the discovery tags, which silently killed
     # the watched/unwatched mark there and left the state carried by colour alone.
-    kills_empty = ".patch-source-tags span:empty" in css
-    mark_opted_back_in = re.search(r"\.patch-source-tags\s+\.patch-watch-tag__mark\s*\{[^}]*display\s*:", css)
-    check("G4 the discovery state mark survives the empty-span rule",
-          (not kills_empty) or bool(mark_opted_back_in),
-          "`.patch-source-tags span:empty { display:none }` hides the mark unless it opts back in")
+    # Presence is not enough -- it has to WIN. The first attempt at this fix shipped a rule that
+    # existed and still lost: `.patch-source-tags span:empty` is (0,2,1) because `:empty` counts as
+    # a class, so a (0,2,0) selector loses even with !important on both sides.
+    def specificity(selector: str) -> tuple[int, int, int]:
+        sel = selector.strip()
+        ids = len(re.findall(r"#[\w-]+", sel))
+        classes = len(re.findall(r"\.[\w-]+", sel)) + len(re.findall(r"(?<!:):(?!:)[\w-]+", sel))
+        # Strip every id/class/pseudo/attribute token FIRST; whatever bare words remain are element
+        # types. Counting them in place matches fragments inside class names and inflates the type
+        # column, which silently made this comparison always true.
+        rest = re.sub(r"[#.][\w-]+|::?[\w-]+(?:\([^)]*\))?|\[[^\]]*\]", " ", sel)
+        types = len(re.findall(r"\b[a-z][\w-]*\b", rest))
+        return (ids, classes, types)
+
+    # Comments must go first, or prose inside them is counted as type selectors and every rule
+    # "wins" -- which made the first version of this check pass for the losing selector too.
+    bare = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    rules = [(sel.split("}")[-1].strip(), decl)
+             for sel, decl in re.findall(r"([^{}]*)\{([^}]*)\}", bare)]
+    killer = next((s for s, d in rules
+                   if ".patch-source-tags" in s and ":empty" in s and re.search(r"display\s*:\s*none", d)), "")
+    winner = next((s for s, d in rules
+                   if "patch-watch-tag__mark" in s and re.search(r"display\s*:\s*block", d)), "")
+    if not killer:
+        check("G4 the discovery state mark is not suppressed", True)
+    else:
+        killer_spec = max(specificity(p) for p in killer.split(",") if ":empty" in p)
+        winner_spec = max((specificity(p) for p in winner.split(",") if "__mark" in p), default=(0, 0, 0))
+        check("G4 the state mark's rule OUT-SPECIFIES the empty-span rule",
+              winner_spec > killer_spec,
+              f"mark {winner_spec} vs killer {killer_spec} -- a rule that merely exists still loses")
+
+    # G5: the stylesheet still parses. Writing the G4 comment above spliced prose OUTSIDE a comment
+    # -- the same shape as the `--radius-xl: 28px@font-face {` damage this repo has seen before, and
+    # the kind of thing a browser silently recovers from while the next rule disappears.
+    check("G5 stylesheet comments are balanced",
+          css.count("/*") == css.count("*/"), f"{css.count('/*')} opens vs {css.count('*/')} closes")
+    stray = [ln.strip() for ln in bare.splitlines()
+             if ln.strip() and not re.search(r"[{};@]", ln) and not re.match(r"^[.#\w\[:>,&*-]", ln.strip())]
+    check("G5 no content sits outside a rule or a comment", not stray, "; ".join(stray[:3]))
 
 
 def run() -> int:
