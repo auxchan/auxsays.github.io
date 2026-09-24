@@ -5015,8 +5015,12 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .patch-watch-tag.is-watching { border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.12); color: var(--text-0); }
 /* `.patch-source-tags span:empty { display:none !important }` (above) exists to drop empty legacy
    tag spans. The state mark is deliberately empty, so it has to opt back in or the watched state
-   on discovery cards would be carried by colour alone. */
-.patch-source-tags .patch-watch-tag__mark { display: block !important; }
+   on discovery cards would be carried by colour alone.
+
+   Specificity has to WIN, not merely exist: `.patch-source-tags span:empty` is (0,2,1) because
+   `:empty` counts as a class, so a (0,2,0) selector loses even with !important on both sides.
+   Three classes clears it. */
+.patch-source-tags .patch-watch-tag .patch-watch-tag__mark { display: block !important; }
 .patch-watch-tag__mark {
   width: .6rem; height: .6rem; border-radius: 50%; border: 1.5px solid currentColor; flex: none;
 }

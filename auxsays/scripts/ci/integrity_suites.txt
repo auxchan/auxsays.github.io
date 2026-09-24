@@ -97,7 +97,7 @@ auxsays/scripts/tests/test_patch_page_hierarchy.py = 128
 # empty states, and pins that the site's coverage TIER no longer calls itself "Watchlist" -- one
 # word cannot mean both the site's classification and the reader's selection. Storage behaviour
 # lives in the Node suite below, which this job cannot run.
-auxsays/scripts/tests/test_patch_watchlist.py = 33
+auxsays/scripts/tests/test_patch_watchlist.py = 35
 auxsays/scripts/tests/test_powerpoint_attribution.py = 65
 auxsays/scripts/tests/test_powerpoint_build_identity.py = 54
 auxsays/scripts/tests/test_powerpoint_build_roles.py = 108
