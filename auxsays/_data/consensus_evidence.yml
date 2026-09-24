@@ -33390,3 +33390,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w5hgz9-waveforms-on-log-footage-looks-weird-it-a
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w5hgz9/waveforms_on_log_footage_looks_weird_it_appears/
+  parent_title: Waveforms on Log Footage looks weird. It appears that it might be corrupted, but I am a beginner and cannot tell.
+  report_title: Waveforms on Log Footage looks weird. It appears that it might be corrupted, but I am a beginner and cannot tell.
+  report_text_excerpt: Waveforms on Log Footage looks weird. It appears that it might be corrupted, but I am a beginner and cannot tell. I am editing some old log footage just to get some practice as I have only been using Resolve for about a week or two. I have never seen waveforms like this. I do...
+  captured_at: '2026-09-24T18:08:39Z'
+  source_date: '2026-09-02'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
