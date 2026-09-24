@@ -100,6 +100,13 @@ layout: aux-base
           </button>
           <button class="patch-chip patch-chip--quiet" type="button" data-watchlist-action="clear">Clear</button>
         </div>
+        {%- comment -%}
+          A destination, not another filter chip: this leaves the feed rather than narrowing it, so
+          it reads as a link and sits after the controls instead of inside the chip row.
+        {%- endcomment -%}
+        <a class="patch-stack-link" href="{{ '/updates/my-stack/' | relative_url }}">
+          My Patch Stack <span class="patch-stack-link__count"><span data-watchlist-count>0</span> watched</span>
+        </a>
       </div>
 
       <div class="patch-control-block patch-control-block--wide">

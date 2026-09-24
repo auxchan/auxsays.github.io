@@ -98,6 +98,11 @@ auxsays/scripts/tests/test_patch_page_hierarchy.py = 128
 # word cannot mean both the site's classification and the reader's selection. Storage behaviour
 # lives in the Node suite below, which this job cannot run.
 auxsays/scripts/tests/test_patch_watchlist.py = 35
+# My Patch Stack: the personal dashboard over that same watchlist. Renders the shipped page with
+# Liquid and checks the half Jekyll owns -- a bounded payload (no 1,200-record dump), the newest
+# dated non-archived record per product, and a verdict derived exactly as patch-table-row does.
+# The client rendering is verified live; the storage contract it reuses is the Node suite's.
+auxsays/scripts/tests/test_patch_stack_dashboard.py = 28
 auxsays/scripts/tests/test_powerpoint_attribution.py = 65
 auxsays/scripts/tests/test_powerpoint_build_identity.py = 54
 auxsays/scripts/tests/test_powerpoint_build_roles.py = 108

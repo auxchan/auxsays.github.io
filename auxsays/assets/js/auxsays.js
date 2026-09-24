@@ -181,7 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const watchToggles = () => Array.from(document.querySelectorAll('[data-watch-product]'));
 
-  const syncWatchControls = () => {
+  // PAINTING AND BROADCASTING ARE SEPARATE, and they have to be. A listener that repaints in
+  // response to the change event must not re-broadcast it: the dispatch below is synchronous, so a
+  // listener calling the broadcasting version re-enters itself until the stack overflows. The
+  // dashboard re-renders its cards on every change and paints the new buttons, so it calls this.
+  const paintWatchControls = () => {
     const ids = readWatchlist();
     watchToggles().forEach((button) => {
       const id = String(button.dataset.watchProduct || '').trim().toLowerCase();
@@ -198,7 +202,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-watchlist-count]').forEach((node) => {
       node.textContent = String(ids.size);
     });
-    document.dispatchEvent(new CustomEvent('auxsays:watchlist-change', { detail: { size: ids.size } }));
+  };
+
+  const syncWatchControls = () => {
+    paintWatchControls();
+    document.dispatchEvent(new CustomEvent('auxsays:watchlist-change',
+      { detail: { size: readWatchlist().size } }));
   };
 
   document.addEventListener('click', (event) => {
@@ -243,6 +252,164 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     applyHomeWatchlist();
     document.addEventListener('auxsays:watchlist-change', applyHomeWatchlist);
+  }
+
+  // My Patch Stack: a dashboard over the SAME watchlist, rendered from a payload Jekyll built.
+  //
+  // It lives in this closure deliberately, so it reuses `readWatchlist`/`setWatched` rather than
+  // re-implementing the id validation and fail-soft storage rules a second time. Unwatch buttons
+  // carry `data-watch-product`, so the delegated handler above already drives them and the page
+  // re-renders off the same `auxsays:watchlist-change` event every other surface listens to.
+  const stackNode = document.getElementById('patch-stack-data');
+  if (stackNode) {
+    let catalogue = [];
+    try {
+      const parsed = JSON.parse(stackNode.textContent || '[]');
+      if (Array.isArray(parsed)) catalogue = parsed;
+    } catch (error) {
+      catalogue = [];
+    }
+    const byId = new Map(catalogue.filter((p) => p && p.id).map((p) => [String(p.id).toLowerCase(), p]));
+
+    const strip = document.querySelector('[data-stack-strip]');
+    const emptyPanel = document.querySelector('[data-stack-empty]');
+    const body = document.querySelector('[data-stack-body]');
+    const attentionGrid = document.querySelector('[data-stack-attention-grid]');
+    const attentionNone = document.querySelector('[data-stack-attention-none]');
+    const allGrid = document.querySelector('[data-stack-all-grid]');
+    const chooserTags = document.querySelector('[data-stack-chooser-tags]');
+
+    // An elevated signal is something the record ALREADY says. Nothing here invents a verdict or
+    // promotes negative sentiment into one: rank 0-2 is AVOID / WAIT / TEST FIRST as the shared
+    // verdict order defines them, and the official counts are the vendor's own.
+    //
+    // MONITORING DEGRADED is deliberately NOT an attention trigger. It is the ordinary state for
+    // most records, so including it would put almost every product in a section whose only job is
+    // to be short. Collection that has stopped or is blocked does qualify.
+    const attentionOf = (entry) => {
+      if (!entry || !entry.href) return '';
+      if (entry.rank === 0 || entry.rank === 1 || entry.rank === 2) return entry.verdict;
+      if ((entry.oa || 0) > 0) return `${entry.oa} active vendor issue${entry.oa === 1 ? '' : 's'}`;
+      if ((entry.os || 0) > 0) return `${entry.os} safeguard hold${entry.os === 1 ? '' : 's'}`;
+      if (entry.mon === 'COLLECTION BLOCKED') return 'Collection blocked';
+      if (entry.mon === 'COLLECTION STALE') return 'Collection stale';
+      return '';
+    };
+
+    const esc = (value) => String(value == null ? '' : value)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    // `esc` handles quoting, not schemes. Every href here is a site path, so anything that is not
+    // one is dropped rather than rendered as a link.
+    const safeHref = (value) => {
+      const url = String(value == null ? '' : value).trim();
+      return url.startsWith('/') && !url.startsWith('//') ? url : '';
+    };
+
+    const cardHtml = (entry, reason) => {
+      const name = esc(entry.name || entry.id);
+      const hist = esc(safeHref(entry.hist));
+      const parts = [];
+      parts.push(`<article class="panel patch-stack-card" data-stack-card="${esc(entry.id)}">`);
+      parts.push('<div class="patch-stack-card__head">');
+      parts.push(`<h3 class="patch-stack-card__name">${hist ? `<a href="${hist}">${name}</a>` : name}</h3>`);
+      if (entry.href) {
+        parts.push(`<span class="patch-verdict patch-verdict--rank${Number(entry.rank)}">${esc(entry.verdict)}</span>`);
+      }
+      parts.push('</div>');
+      if (entry.href) {
+        parts.push(`<p class="patch-stack-card__patch"><a href="${esc(safeHref(entry.href))}">${esc(entry.ver)}</a>`
+          + (entry.date ? ` <span>Released ${esc(entry.date)}</span>` : '') + '</p>');
+        const meta = [];
+        meta.push(`${Number(entry.n) || 0} confirmed report${Number(entry.n) === 1 ? '' : 's'}`);
+        if (entry.ev) meta.push(esc(entry.ev));
+        if (entry.checked) meta.push(`Evidence checked ${esc(entry.checked)}`);
+        if (entry.mon === 'COLLECTION BLOCKED') meta.push('Collection blocked');
+        else if (entry.mon === 'COLLECTION STALE') meta.push('Collection stale');
+        else if (entry.mon === 'MONITORING DEGRADED') meta.push('Monitoring degraded');
+        parts.push(`<ul class="patch-stack-card__meta"><li>${meta.join('</li><li>')}</li></ul>`);
+      } else {
+        parts.push('<p class="patch-stack-card__patch patch-stack-card__patch--none">No tracked patch records yet.</p>');
+      }
+      if (reason) parts.push(`<p class="patch-stack-card__reason">Needs attention: ${esc(reason)}</p>`);
+      parts.push('<div class="patch-card-links patch-stack-card__links">');
+      if (entry.href) parts.push(`<a class="patch-source-link patch-source-link--primary" href="${esc(safeHref(entry.href))}">View patch →</a>`);
+      if (hist) parts.push(`<a class="patch-source-link" href="${hist}">Product history →</a>`);
+      parts.push(`<button type="button" class="patch-stack-unwatch" data-watch-product="${esc(entry.id)}"`
+        + ` data-watch-label="${name}" data-watch-text-off="Watch product" data-watch-text-on="Watching"`
+        + ` aria-pressed="true"><span data-watch-text>Watching</span></button>`);
+      parts.push('</div></article>');
+      return parts.join('');
+    };
+
+    const renderStack = () => {
+      const watched = Array.from(readWatchlist())
+        .map((id) => byId.get(id))
+        .filter(Boolean)                              // unknown ids in storage simply have no card
+        .sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+
+      const isEmpty = watched.length === 0;
+      if (emptyPanel) emptyPanel.hidden = !isEmpty;
+      if (body) body.hidden = isEmpty;
+      if (strip) strip.hidden = isEmpty;
+
+      if (isEmpty) {
+        if (chooserTags && !chooserTags.childElementCount) {
+          chooserTags.innerHTML = catalogue
+            .filter((p) => p && p.id)
+            // A product with no record yet is still watchable -- the card has a branch for it --
+            // so the chooser lists all of them and simply leads with the ones that have patches.
+            .sort((a, b) => (a.href ? 0 : 1) - (b.href ? 0 : 1)
+              || String(a.name || '').localeCompare(String(b.name || '')))
+            .map((p) => `<button type="button" class="patch-watch-tag" data-watch-product="${esc(p.id)}"`
+              + ` data-watch-label="${esc(p.name)}" aria-pressed="false">`
+              + `<span class="patch-watch-tag__mark" aria-hidden="true"></span>${esc(p.name)}</button>`)
+            .join('');
+        }
+        return;
+      }
+
+      const flagged = watched.map((entry) => [entry, attentionOf(entry)]).filter(([, reason]) => reason);
+      const withEvidence = watched.filter((entry) => (Number(entry.n) || 0) > 0);
+
+      if (attentionGrid) attentionGrid.innerHTML = flagged.map(([entry, reason]) => cardHtml(entry, reason)).join('');
+      if (attentionNone) attentionNone.hidden = flagged.length > 0;
+      // Every watched product appears under Your Products, including the flagged ones, so the list
+      // is the whole stack rather than the leftovers.
+      if (allGrid) allGrid.innerHTML = watched.map((entry) => cardHtml(entry, '')).join('');
+
+      const setCount = (selector, value) => {
+        const node = document.querySelector(selector);
+        if (node) node.textContent = String(value);
+      };
+      setCount('[data-stack-count-watched]', watched.length);
+      setCount('[data-stack-count-attention]', flagged.length);
+      setCount('[data-stack-count-evidence]', withEvidence.length);
+    };
+
+    renderStack();
+    paintWatchControls();
+    document.addEventListener('auxsays:watchlist-change', () => {
+      // Only rescue focus this re-render actually destroyed. Treating "focus is on <body>" as
+      // lost would let a background tab's storage event yank the caret away from someone who was
+      // merely scrolling.
+      const hadFocus = document.activeElement;
+      const wasOnACard = !!(hadFocus && hadFocus.closest && hadFocus.closest('[data-stack-card]'));
+      renderStack();
+      paintWatchControls();
+      if (wasOnACard && !document.body.contains(hadFocus)) {
+        // The empty state replaces the grid when the last product goes, and `querySelector` finds
+        // headings inside a `hidden` section quite happily -- focusing one is a silent no-op that
+        // drops the reader at the top of the document.
+        const heading = ['.patch-stack-empty h2', '.patch-stack-attention h2', '.patch-stack-all h2', 'h1']
+          .map((sel) => document.querySelector(sel))
+          .find((el) => el && el.offsetParent !== null);
+        if (heading) {
+          heading.setAttribute('tabindex', '-1');
+          heading.focus({ preventScroll: true });
+        }
+      }
+    });
   }
 
   // Patch Feed controls: company/software hierarchy filters, compact type/category controls, and sorting.
