@@ -18,8 +18,8 @@ update_version: Changes to query results in the GitHub Actions API and UI
 update_logo_text: GIT
 update_published_at: '2026-09-25T18:17:06Z'
 update_last_checked: '2026-09-25T19:25:21Z'
-source_last_checked: '2026-09-25T19:25:21Z'
-official_body_last_checked: '2026-09-25T19:25:21Z'
+source_last_checked: '2026-09-25T23:47:05Z'
+official_body_last_checked: '2026-09-25T23:47:05Z'
 record_last_updated: '2026-09-25T19:25:21Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -79,6 +79,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-09-25T19:25:21Z'
+  url: https://github.blog/changelog/2026-09-25-changes-to-query-results-in-the-github-actions-api-and-ui
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-25T23:47:05Z'
   url: https://github.blog/changelog/2026-09-25-changes-to-query-results-in-the-github-actions-api-and-ui
   status: captured-from-rss-feed
   body_captured: true
