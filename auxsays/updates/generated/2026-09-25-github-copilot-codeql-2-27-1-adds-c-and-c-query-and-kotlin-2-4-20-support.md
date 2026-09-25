@@ -18,8 +18,8 @@ update_version: CodeQL 2.27.1 adds C and C++ query and Kotlin 2.4.20 support
 update_logo_text: GIT
 update_published_at: '2026-09-25T09:55:23Z'
 update_last_checked: '2026-09-25T14:11:16Z'
-source_last_checked: '2026-09-25T14:11:16Z'
-official_body_last_checked: '2026-09-25T14:11:16Z'
+source_last_checked: '2026-09-25T19:25:21Z'
+official_body_last_checked: '2026-09-25T19:25:21Z'
 record_last_updated: '2026-09-25T14:11:16Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -103,6 +103,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-09-25T14:11:16Z'
+  url: https://github.blog/changelog/2026-09-25-codeql-2-27-1-adds-c-and-c-query-and-kotlin-2-4-20-support
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-25T19:25:21Z'
   url: https://github.blog/changelog/2026-09-25-codeql-2-27-1-adds-c-and-c-query-and-kotlin-2-4-20-support
   status: captured-from-rss-feed
   body_captured: true

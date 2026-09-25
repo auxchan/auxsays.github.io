@@ -18,9 +18,9 @@ update_version: Default Enablement of Copilot Features for Copilot Business and 
 update_logo_text: GIT
 update_published_at: '2026-09-25T03:13:23Z'
 update_last_checked: '2026-09-25T07:12:47Z'
-source_last_checked: '2026-09-25T14:11:16Z'
-official_body_last_checked: '2026-09-25T14:11:16Z'
-record_last_updated: '2026-09-25T07:12:47Z'
+source_last_checked: '2026-09-25T19:25:21Z'
+official_body_last_checked: '2026-09-25T19:25:21Z'
+record_last_updated: '2026-09-25T19:25:21Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
@@ -95,6 +95,11 @@ official_source_attempts:
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
+- at: '2026-09-25T19:25:21Z'
+  url: https://github.blog/changelog/2026-09-24-default-enablement-of-copilot-features-for-copilot-business-and-enterprise
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: "We’re introducing a new global default policy for generally available GitHub Copilot features\
   \ and supported client capabilities in enterprise and organization Copilot settings. For the next 28 days, you can configure\
   \ this policy, but it won’t affect feature access for your users yet.\n\n\n What’s changing\n Today, you can configure the\
@@ -110,7 +115,7 @@ official_patch_notes_body: "We’re introducing a new global default policy for 
   \ enabled, disabled, or let organizations decide.\n Explicit decisions are preserved. If you’ve explicitly enabled or disabled\
   \ a feature, we won’t override that choice.\n Preview features remain opt-in. If you opt into a preview and it later becomes\
   \ generally available, your existing choice will be preserved.\n\n Join the discussion within GitHub Community .\n\n\n\n\
-  \ The post Default Enablement of Copilot Features for Copilot Business and Enterprise appeared first on The GitHub Blog\
+  \ The post Default Enablement of Copilot features for Copilot Business and Enterprise appeared first on The GitHub Blog\
   \ ."
 official_checksums_body: ''
 official_checksums_capture_status: not-present
