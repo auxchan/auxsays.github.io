@@ -33435,3 +33435,216 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w6b7nc-magic-mask-is-very-slow-in-fusion-page-wo
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w6b7nc/magic_mask_is_very_slow_in_fusion_page_works_fine/
+  parent_title: Magic Mask Is Very Slow in Fusion Page, Works fine in Color Page
+  report_title: Magic Mask Is Very Slow in Fusion Page, Works fine in Color Page
+  report_text_excerpt: Magic Mask Is Very Slow in Fusion Page, Works fine in Color Page Hello, for whatever reason, the Magic Mask on fusion page is very very slow , it works fine for the first 40 frames , then it goes down to 2 frames per second ...? On Color page however, it works as expected so...
+  captured_at: '2026-09-25T22:19:36Z'
+  source_date: '2026-09-03'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w4fphy-mein-davinci-playback-ist-sehr-laggy
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w4fphy/mein_davinci_playback_ist_sehr_laggy/
+  parent_title: Mein Davinci Playback ist sehr laggy
+  report_title: Mein Davinci Playback ist sehr laggy
+  report_text_excerpt: Mein Davinci Playback ist sehr laggy Moin ich habe ein problem Ich nutze seit ca zwei wochen davinci und mein playback laggt sehr stark bei so gut wie allem was ich mache Wenn ich mir den taskmanager angucke wärend ich etwas in davinci mache ist nicht meines rechner zu mehr...
+  captured_at: '2026-09-25T22:19:36Z'
+  source_date: '2026-09-01'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w23ivu-linux-is-there-a-way-to-enable-hdr-in-the
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w23ivu/linux_is_there_a_way_to_enable_hdr_in_the/
+  parent_title: '[Linux] Is there a way to enable HDR in the previews if the WM supports it?'
+  report_title: '[Linux] Is there a way to enable HDR in the previews if the WM supports it?'
+  report_text_excerpt: '[Linux] Is there a way to enable HDR in the previews if the WM supports it? I am using Davinci Resolve Studio 21.0.4 on Linux (NVidia RTX 5090 Mobile, HDR capable display, HDR enabled in KDE Plasma, distribution Fedora 44). I have a video made from HDR footage, and I can...'
+  captured_at: '2026-09-25T22:19:36Z'
+  source_date: '2026-08-30'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w1z1e2-teeths-edges-when-when-transferring-a-tex
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w1z1e2/teeths_edges_when_when_transferring_a_textured/
+  parent_title: Teeths edges when when transferring a textured design from Illustrator to DaVinci Resolve (SVG/PNG).
+  report_title: Teeths edges when when transferring a textured design from Illustrator to DaVinci Resolve (SVG/PNG).
+  report_text_excerpt: Teeths edges when when transferring a textured design from Illustrator to DaVinci Resolve (SVG/PNG). I'm having a edge-rendering issue when importing a design, and it seems like the Fusion engine is misinterpreting the geometry. My girlfriend painted the title of my film in...
+  captured_at: '2026-09-25T22:19:36Z'
+  source_date: '2026-08-29'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vuhkbf-extra-download-manager-download-failed
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vuhkbf/extra_download_manager_download_failed/
+  parent_title: Extra Download Manager - Download Failed
+  report_title: Extra Download Manager - Download Failed
+  report_text_excerpt: Extra Download Manager - Download Failed issue extras download manager keeps failing or getting stuck at 0% / 0 kb/s when downloading ai voice training and other ai models. anyone else had this issue or found a fix? my internet works normally for other large downloads. system...
+  captured_at: '2026-09-25T22:19:36Z'
+  source_date: '2026-08-21'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vqel0m-issue-using-window-color-node-and-source
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vqel0m/issue_using_window_color_node_and_source_cropping/
+  parent_title: Issue using window color node and source cropping
+  report_title: Issue using window color node and source cropping
+  report_text_excerpt: Issue using window color node and source cropping I'm having issues maintaining the position of windowed effects (in this case, red eye reduction) after applying source cropping (via inspector in photo workspace). I was able to position this effect correctly until I changed...
+  captured_at: '2026-09-25T22:19:36Z'
+  source_date: '2026-08-17'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vnatno-davinci-resolve-studio-2104-how-can-i-rem
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vnatno/davinci_resolve_studio_2104_how_can_i_remove_an/
+  parent_title: DaVinci Resolve Studio 21.0.4 — How can I remove an orphaned person/face association from IntelliSearch?
+  report_title: DaVinci Resolve Studio 21.0.4 — How can I remove an orphaned person/face association from IntelliSearch?
+  report_text_excerpt: DaVinci Resolve Studio 21.0.4 — How can I remove an orphaned person/face association from IntelliSearch? People Smart Bin showing the person APAGAR Manage Faces with no APAGAR Hi everyone, I’m having a strange problem with IntelliSearch / Face Recognition in DaVinci Resolve...
+  captured_at: '2026-09-25T22:19:36Z'
+  source_date: '2026-08-13'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vl2ehb-davinci-resolve-studio-crashes-instantly
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vl2ehb/davinci_resolve_studio_crashes_instantly_when/
+  parent_title: DaVinci Resolve Studio crashes instantly when importing media (Intel Arc B580)
+  report_title: DaVinci Resolve Studio crashes instantly when importing media (Intel Arc B580)
+  report_text_excerpt: DaVinci Resolve Studio crashes instantly when importing media (Intel Arc B580) I’ve been using the free version of DaVinci Resolve on my PC for over a year, and today I finally bought the Studio version. I backed up all my projects, uninstalled the free version, and installed...
+  captured_at: '2026-09-25T22:19:36Z'
+  source_date: '2026-08-11'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13934
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13934
+  parent_title: 'macOS (OpenGL): crash or hang in updateSwapchainFramebuffer — gl_update''s deferred block uses a display destroyed before it runs'
+  report_title: 'macOS (OpenGL): crash or hang in updateSwapchainFramebuffer — gl_update''s deferred block uses a display destroyed before it runs'
+  report_text_excerpt: 'de on any Mac. The same crash site is reported on an M1 in #11929. ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) Built by us from the 32.2.2 tag, x86_64, with the Xcode 16 / macOS 15 SDK floor relaxed and `ENABLE_METAL=OFF`, so the renderer is OpenGL (which is also'
+  captured_at: '2026-09-25T22:54:27Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
