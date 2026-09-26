@@ -320,6 +320,97 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1,200 set a channel label, so a channel taxonomy would have to be invented, and inventing one
   // is explicitly not this feature's job. `beta` is therefore computed at build time from the same
   // textual signal `lib/patch_decision.version_is_beta` uses, and is consumed here, not re-derived.
+  // How many releases an upgrade path shows before it starts counting the rest.
+  const PATH_LIMIT = 10;
+
+  // PARALLEL SERVICING LINES, read off the record data. No version parsing, no arithmetic: only
+  // equality between `update_version` strings and the order the records already have.
+  //
+  // Windows ships 26H1, 25H2, 24H2 and 23H2 side by side, so "newer by date" is not "later in a
+  // sequence" there. PowerPoint is also build-aware but its versions run one after another, so it
+  // IS a sequence. Build-awareness alone therefore cannot tell them apart, and grouping every
+  // build-aware product by version would shatter PowerPoint's real chronology into 17 singletons.
+  //
+  // What separates them is structural: a line that STOPS and RESTARTS further down a date-ordered
+  // window was running beside another one the whole time. Measured over the shipped payload, that
+  // fires for Windows (4 versions in non-contiguous blocks) and for nothing else -- PowerPoint's
+  // 17 versions are 17 contiguous blocks.
+  const parallelLines = (recs) => {
+    const blocks = new Map();
+    let prev = null;
+    recs.forEach((rec) => {
+      const version = rec[0];
+      if (version !== prev) blocks.set(version, (blocks.get(version) || 0) + 1);
+      prev = version;
+    });
+    let interleaved = false;
+    blocks.forEach((count) => { if (count > 1) interleaved = true; });
+    if (interleaved) return true;
+    // Interleaving needs a line to appear twice. Two lines that each appear once in the window are
+    // still parallel if they shipped on the same DAY -- but that signal only means anything where
+    // the version names a LINE. Every non-build-aware product here has a distinct version per
+    // record, so co-publication there is just two releases in one day, which GitHub does 18 times.
+    if (!recs.some((rec) => String(rec[1] || '') !== '')) return false;
+    const byDate = new Map();
+    let coPublished = false;
+    recs.forEach((rec) => {
+      const date = String(rec[2] || '');
+      if (!date) return;
+      if (!byDate.has(date)) byDate.set(date, rec[0]);
+      else if (byDate.get(date) !== rec[0]) coPublished = true;
+    });
+    return coPublished;
+  };
+
+  // Render-ready chronology: oldest first, with every adjacency the record data CANNOT order
+  // flagged rather than quietly presented as a step. `startDate` is the reader's own release, so
+  // the flag also covers the first step -- the collision that actually happens, because a reader
+  // can sit in a tied-date group with the record right above them.
+  const asSequence = (records, startDate) => {
+    let prevDate = String(startDate || '');
+    return records.slice().reverse().map((rec) => {
+      const date = String(rec[2] || '');
+      const tied = !!(prevDate && date && date === prevDate);
+      prevDate = date;
+      return { rec: rec, tied: tied };
+    });
+  };
+
+  // The set of releases newer than the reader, presented in the only shape the data supports.
+  const newerView = (newerRecs, allRecs, startDate, truncatedStart) => {
+    const hidden = Math.max(0, newerRecs.length - PATH_LIMIT);
+    const shown = newerRecs.slice(0, PATH_LIMIT);
+    if (parallelLines(allRecs)) {
+      // Grouped by line, with NO endpoint. `recs[0]` is the newest record by date, which on a
+      // parallel product can sit on an OLDER line than the reader's -- naming it as the end of a
+      // path would draw an arrow pointing backwards, underneath a sentence saying no clear update
+      // exists. Each group is internally ordered, which is safe: inside one line every record in
+      // the corpus has a distinct date.
+      const order = [];
+      const groups = new Map();
+      shown.forEach((rec) => {
+        if (!groups.has(rec[0])) { groups.set(rec[0], []); order.push(rec[0]); }
+        groups.get(rec[0]).push(rec);
+      });
+      return {
+        pathKind: 'newer',
+        parallel: true,
+        lines: order.map((version) => ({ version: version, steps: asSequence(groups.get(version), '') })),
+        path: [],
+        hidden: hidden,
+        truncatedStart: !!truncatedStart,
+      };
+    }
+    return {
+      pathKind: 'newer',
+      parallel: false,
+      lines: [],
+      path: asSequence(shown, startDate),
+      hidden: hidden,
+      truncatedStart: !!truncatedStart,
+    };
+  };
+
   const installedState = (entry, product) => {
     const recs = Array.isArray(product && product.recs) ? product.recs : [];
     if (!entry) return { state: '' };
@@ -338,10 +429,20 @@ document.addEventListener('DOMContentLoaded', () => {
       // STRICTLY newer than the oldest record published. An EQUAL date means a sibling record
       // straddles the window boundary and is still tracked; calling it vanished was a
       // confident wrong answer about a page the reader had just claimed.
-      if (entry.d && oldest && entry.d > oldest) return { state: 'INSTALLED VERSION NO LONGER TRACKED' };
-      return { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0] };
+      if (entry.d && oldest && entry.d > oldest) {
+        // The reader's release should have been in this window and is not. There is no position to
+        // measure anything from, so there is no chronology to show -- only the fact itself.
+        return { state: 'INSTALLED VERSION NO LONGER TRACKED', pathKind: '' };
+      }
+      // Older than everything published here. Every listed record is newer than the reader, but
+      // releases between theirs and this window exist and are not listed, so the run is marked
+      // truncated rather than presented as complete.
+      return Object.assign(
+        { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0], mine: null },
+        newerView(recs, recs, '', true)
+      );
     }
-    if (index === 0) return { state: 'CURRENT', latest: recs[0] };
+    if (index === 0) return { state: 'CURRENT', latest: recs[0], mine: recs[0], pathKind: '' };
 
     const newer = recs.slice(0, index);
     const installedIsBeta = !!recs[index][4];
@@ -350,18 +451,46 @@ document.addEventListener('DOMContentLoaded', () => {
     // non-monotonic: DaVinci 20.3.3 read UPDATE AVAILABLE while 20.3.2, further behind, did not.
     const newerStable = newer.filter((r) => !r[4]);
     if (installedIsBeta || !newerStable.length) {
-      return { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0] };
+      return Object.assign(
+        { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0], mine: recs[index] },
+        newerView(newer, recs, entry.d, false)
+      );
     }
     // Build-aware products run parallel trains: 26H1 is not "an update" to 25H2, it is a different
     // servicing line. Only a newer build of the SAME version is an unambiguous update.
     const buildAware = recs.some((r) => String(r[1] || '') !== '');
     const sameTrain = newerStable.filter((r) => r[0] === entry.v);
     if (buildAware && !sameTrain.length) {
-      return { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0] };
+      return Object.assign(
+        { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0], mine: recs[index] },
+        newerView(newer, recs, entry.d, false)
+      );
     }
     // The state was train-aware but the record displayed next to it was not, so 16 of 24 Windows
     // builds named another servicing train under the one sentence promising the same one.
-    return { state: 'UPDATE AVAILABLE', latest: (buildAware ? sameTrain[0] : newerStable[0]) || recs[0] };
+    //
+    // The applicable run is the SAME list the target is drawn from, so the path cannot end anywhere
+    // other than the release this state already named. Betas are not steps on it; they are counted
+    // so the panel can say so instead of silently dropping them.
+    const applicable = buildAware ? sameTrain : newerStable;
+    const hidden = Math.max(0, applicable.length - PATH_LIMIT);
+    return {
+      state: 'UPDATE AVAILABLE',
+      latest: applicable[0] || recs[0],
+      // The reader's OWN record, so the panel can open on it with the same per-release data every
+      // other row carries instead of re-deriving identity from the stored entry.
+      mine: recs[index],
+      // Only a train-scoped target needs the narrower label: it is the newest on the reader's line,
+      // not the newest tracked, and on Windows those are different records.
+      latestScope: buildAware ? 'line' : '',
+      pathKind: 'upgrade',
+      parallel: false,
+      lines: [],
+      path: asSequence(applicable.slice(0, PATH_LIMIT), entry.d),
+      hidden: hidden,
+      truncatedStart: false,
+      omittedBetas: newer.length - newerStable.length,
+    };
   };
 
   const paintInstalledControls = () => {
@@ -533,6 +662,122 @@ document.addEventListener('DOMContentLoaded', () => {
       return `${version}${build}${date}${beta}`;
     };
 
+    // What a release says about itself, straight out of the payload. Nothing is combined, scored or
+    // averaged: each line is one field the record already carries.
+    const recMeta = (rec) => {
+      const bits = [];
+      const reports = Number(rec[7]) || 0;
+      bits.push(`${reports} confirmed report${reports === 1 ? '' : 's'}`);
+      if (rec[8]) bits.push(esc(rec[8]));
+      const active = Number(rec[9]) || 0;
+      if (active > 0) bits.push(`${active} active vendor issue${active === 1 ? '' : 's'}`);
+      // The notes themselves live on the patch page. This says only that the vendor's own notes
+      // were captured for this release, which is a field, not a summary of them.
+      if (rec[10]) bits.push('Official notes captured');
+      return bits;
+    };
+
+    // ROLE is carried in TEXT, not only in the styling, so the two releases that matter are still
+    // identifiable without colour.
+    const ROLE_TEXT = { mine: 'Your version', target: 'Current target' };
+
+    const stepHtml = (step, role, showTie) => {
+      const rec = step.rec;
+      const href = esc(safeHref(rec[3]));
+      const out = [`<li class="patch-iv-step${role ? ` patch-iv-step--${role}` : ''}">`];
+      if (showTie) {
+        // Same publish date as the entry above it. The repository records no order inside a tied
+        // date, so presenting these as consecutive steps would be inventing one.
+        out.push('<p class="patch-iv-tied">Published the same day as the release above —'
+          + ' AUXSAYS does not record an order within a shared date.</p>');
+      }
+      out.push('<p class="patch-iv-step__head">');
+      if (role) out.push(`<span class="patch-iv-role">${ROLE_TEXT[role]}</span>`);
+      out.push(href ? `<a href="${href}">${recLabel(rec)}</a>` : recLabel(rec));
+      out.push('</p>');
+      if (rec[5]) {
+        out.push(`<p class="patch-iv-step__verdict"><span class="patch-verdict patch-verdict--rank${Number(rec[6])}">`
+          + `${esc(rec[5])}</span></p>`);
+      }
+      const meta = recMeta(rec);
+      if (meta.length) out.push(`<ul class="patch-iv-step__meta"><li>${meta.join('</li><li>')}</li></ul>`);
+      out.push('</li>');
+      return out.join('');
+    };
+
+    // THE UPGRADE PATH. Every record shown here, and the order they are shown in, comes from
+    // `installedState` -- the same call that produced the state and the target above it. Nothing is
+    // re-decided here, so the panel cannot disagree with the sentence it sits under.
+    const pathHtml = (product, entry, info) => {
+      if (!info || (info.pathKind !== 'upgrade' && info.pathKind !== 'newer')) return '';
+      const steps = info.path || [];
+      const lines = info.lines || [];
+      if (!steps.length && !lines.length) return '';
+      const upgrade = info.pathKind === 'upgrade';
+      const name = esc(product.name || product.id);
+      const hist = esc(safeHref(product.hist));
+      const out = [`<details class="patch-iv-path" data-iv-path="${esc(product.id)}">`];
+      // The accessible name opens with the visible words (WCAG 2.5.3) and then names the product,
+      // because a reader hears this summary once per card.
+      out.push(`<summary><span class="patch-iv-path__label">${upgrade
+        ? 'What changed since my version'
+        : 'Newer tracked releases'}</span><span class="patch-iv-for"> — ${name}</span></summary>`);
+
+      if (info.truncatedStart) {
+        out.push('<p class="patch-iv-note">Your release is older than the ones listed here, so the'
+          + ' releases in between are not shown.</p>');
+      }
+
+      // The notice opens a tied RUN rather than repeating on every member of it. GitHub publishes
+      // nine changelog entries on one day, which printed the same disclaimer eight times and buried
+      // the releases it was explaining.
+      const runOpeners = (steps) => steps.map((step, index) =>
+        step.tied && !(index > 0 && steps[index - 1].tied));
+
+      out.push('<ol class="patch-iv-steps">');
+      if (info.mine) out.push(stepHtml({ rec: info.mine, tied: false }, 'mine', false));
+      else {
+        out.push('<li class="patch-iv-step patch-iv-step--mine"><p class="patch-iv-step__head">'
+          + `<span class="patch-iv-role">${ROLE_TEXT.mine}</span>${esc(entry.v)}`
+          + (entry.b ? ` <span class="patch-iv-build">Build ${esc(entry.b)}</span>` : '') + '</p></li>');
+      }
+
+      if (upgrade || !info.parallel) {
+        const openers = runOpeners(steps);
+        steps.forEach((step, index) => {
+          out.push(stepHtml(step, upgrade && index === steps.length - 1 ? 'target' : '', openers[index]));
+        });
+      }
+      out.push('</ol>');
+
+      if (info.parallel) {
+        // Grouped by servicing line, with no endpoint. These lines run beside the reader's rather
+        // than after it, so there is no "next" release among them to point at.
+        out.push('<p class="patch-iv-note">These run as separate servicing lines rather than steps'
+          + ' after your release, so AUXSAYS does not place them in one sequence.</p>');
+        lines.forEach((line) => {
+          out.push(`<h4 class="patch-iv-line">${esc(line.version)}</h4>`);
+          out.push('<ol class="patch-iv-steps patch-iv-steps--line">');
+          const lineOpeners = runOpeners(line.steps);
+          line.steps.forEach((step, index) => out.push(stepHtml(step, '', lineOpeners[index])));
+          out.push('</ol>');
+        });
+      }
+
+      if (Number(info.omittedBetas) > 0) {
+        out.push(`<p class="patch-iv-note">${Number(info.omittedBetas)} preview release`
+          + `${Number(info.omittedBetas) === 1 ? ' is' : 's are'} tracked between these dates and`
+          + ' not shown here. AUXSAYS does not treat a preview as a step you have to take.</p>');
+      }
+      if (Number(info.hidden) > 0) {
+        out.push(`<p class="patch-iv-note">+ ${Number(info.hidden)} additional tracked release`
+          + `${Number(info.hidden) === 1 ? '' : 's'}`
+          + (hist ? ` — <a href="${hist}">open the full history</a>` : '') + '.</p>');
+      }
+      out.push('</details>');
+      return out.join('');
+    };
+
     const installedHtml = (product) => {
       const recs = Array.isArray(product.recs) ? product.recs : [];
       const id = esc(product.id);
@@ -543,12 +788,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!entry) {
         out.push('<p class="patch-iv-prompt">Current version <span>not set</span></p>');
       } else {
-        const { state, latest } = installedState(entry, product);
+        const info = installedState(entry, product);
+        const state = info.state;
+        const latest = info.latest;
         out.push('<dl class="patch-iv-compare">');
         out.push(`<dt>Your version</dt><dd>${esc(entry.v)}`
           + (entry.b ? ` <span class="patch-iv-build">Build ${esc(entry.b)}</span>` : '') + '</dd>');
         if (latest) {
-          out.push(`<dt>Latest tracked</dt><dd>${esc(latest[0])}`
+          // A train-scoped target is the newest release on the READER'S line, which on Windows is a
+          // different record from the newest tracked one -- 25H2 26200.9550 while 26H1 28000.3086
+          // also exists. Calling that "Latest tracked" was accurate only by luck.
+          out.push(`<dt>${info.latestScope === 'line' ? 'Latest on your line' : 'Latest tracked'}</dt>`
+            + `<dd>${esc(latest[0])}`
             + (String(latest[1] || '') ? ` <span class="patch-iv-build">Build ${esc(latest[1])}</span>` : '') + '</dd>');
         }
         out.push('</dl>');
@@ -556,6 +807,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // record already says -- being several releases behind is not itself advice to update.
         out.push(`<p class="patch-iv-state patch-iv-state--${esc(String(state).toLowerCase().replace(/[^a-z]+/g, '-'))}">`
           + `<strong>${esc(state)}</strong> ${esc(STATE_COPY[state] || '')}</p>`);
+        out.push(pathHtml(product, entry, info));
       }
 
       const shown = recs.slice(0, 24);
@@ -580,8 +832,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       out.push('</details>');
       if (entry) {
+        // WCAG 2.5.3: the accessible name must CONTAIN the visible label. "Clear your saved version
+        // for X" reads well but does not contain "Clear version", so voice control could not act on
+        // the words printed on the button.
         out.push(`<button type="button" class="patch-iv-clear" data-iv-clear="${id}"`
-          + ` aria-label="Clear your saved version for ${esc(product.name || product.id)}">Clear version</button>`);
+          + ` aria-label="Clear version for ${esc(product.name || product.id)}">Clear version</button>`);
       }
       out.push('</div>');
       return out.join('');
@@ -669,26 +924,51 @@ document.addEventListener('DOMContentLoaded', () => {
       const wantClear = active && active.dataset ? active.dataset.ivClear : '';
       const wantV = active && active.dataset ? String(active.dataset.ivV || '') : '';
       const wantB = active && active.dataset ? String(active.dataset.ivB || '') : '';
-      const openFor = Array.from(document.querySelectorAll('[data-stack-card]'))
-        .filter((card) => card.querySelector('.patch-iv-picker[open]'))
-        .map((card) => card.dataset.stackCard);
+      // A watched product renders TWICE -- once under Needs attention, once under Your products --
+      // so a card id alone does not identify the copy the reader is in. Keying by grid as well
+      // keeps an expanded panel expanded in the copy they opened it in, and stops focus teleporting
+      // them into the other grid on every change.
+      const copyKey = (node) => {
+        const card = node && node.closest ? node.closest('[data-stack-card]') : null;
+        if (!card) return '';
+        return `${card.closest('[data-stack-attention-grid]') ? 'attention' : 'all'}|${card.dataset.stackCard}`;
+      };
+      // Both disclosures in the card, not just the picker. The upgrade panel is opened by the very
+      // control whose activation re-renders the card, so leaving it out collapses it every time.
+      const DISCLOSURES = ['.patch-iv-picker', '.patch-iv-path'];
+      const openKeys = new Set();
+      document.querySelectorAll('[data-stack-card]').forEach((card) => {
+        const key = `${card.closest('[data-stack-attention-grid]') ? 'attention' : 'all'}|${card.dataset.stackCard}`;
+        DISCLOSURES.forEach((selector) => {
+          if (card.querySelector(`${selector}[open]`)) openKeys.add(`${key}|${selector}`);
+        });
+      });
+      const activeCopy = copyKey(active);
 
       renderStack();
       paintWatchControls();
 
-      openFor.forEach((cardId) => {
-        document.querySelectorAll('[data-stack-card="' + cardId + '"] .patch-iv-picker')
-          .forEach((node) => { node.open = true; });
+      document.querySelectorAll('[data-stack-card]').forEach((card) => {
+        const key = `${card.closest('[data-stack-attention-grid]') ? 'attention' : 'all'}|${card.dataset.stackCard}`;
+        DISCLOSURES.forEach((selector) => {
+          const node = card.querySelector(selector);
+          if (node && openKeys.has(`${key}|${selector}`)) node.open = true;
+        });
       });
       const sameOption = (node) => String(node.dataset.ivV || '') === wantV
         && String(node.dataset.ivB || '') === wantB;
+      const sameCopy = (node) => !activeCopy || copyKey(node) === activeCopy;
       const options = wantSet
         ? Array.from(document.querySelectorAll('[data-iv-set="' + wantSet + '"]'))
         : [];
+      const mine = options.filter(sameCopy);
+      const clearSummaries = wantClear
+        ? Array.from(document.querySelectorAll('[data-stack-card="' + wantClear + '"] .patch-iv-picker summary'))
+        : [];
       const target = wantSet
-        ? (options.find(sameOption) || options[0] || null)
+        ? (mine.find(sameOption) || options.find(sameOption) || mine[0] || options[0] || null)
         : (wantClear
-          ? document.querySelector('[data-stack-card="' + wantClear + '"] .patch-iv-picker summary')
+          ? (clearSummaries.filter(sameCopy)[0] || clearSummaries[0] || null)
           : null);
       if (target) target.focus({ preventScroll: true });
 

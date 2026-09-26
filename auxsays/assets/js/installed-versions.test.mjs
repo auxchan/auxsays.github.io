@@ -36,7 +36,7 @@ const build = (store) => {
   const fakeDocument = { dispatchEvent: (e) => events.push(e) };
   // eslint-disable-next-line no-new-func
   const factory = new Function('window', 'document', 'CustomEvent', 'PRODUCT_ID_RE', `${block}
-    return { readInstalled, writeInstalled, setInstalled, installedState };`);
+    return { readInstalled, writeInstalled, setInstalled, installedState, parallelLines, PATH_LIMIT };`);
   const api = factory(fakeWindow, fakeDocument, class { constructor(t, o) { this.type = t; this.detail = o && o.detail; } },
     /^[a-z0-9][a-z0-9-]{0,63}$/);
   return { ...api, events };
@@ -81,12 +81,29 @@ const BETA_TOP = {
   ],
   more: 0,
 };
+// Shaped like the real window: three servicing lines co-published on one date, and a line that
+// stops and restarts further down. A three-record fixture with distinct dates looked sequential,
+// which is the one thing Windows is not -- and no check could have told the difference.
 const WINDOWS = {
   id: 'microsoft-windows-11',
   recs: [
     ['26H1', '28000.2956', '2026-09-22', '/updates/w/26h1-28000-2956/', 0],
-    ['25H2', '26200.9550', '2026-09-14', '/updates/w/25h2-26200-9550/', 0],
+    ['25H2', '26200.9550', '2026-09-22', '/updates/w/25h2-26200-9550/', 0],
+    ['24H2', '26100.9550', '2026-09-22', '/updates/w/24h2-26100-9550/', 0],
+    ['26H1', '28000.2954', '2026-09-08', '/updates/w/26h1-28000-2954/', 0],
     ['25H2', '26200.9445', '2026-09-08', '/updates/w/25h2-26200-9445/', 0],
+  ],
+  more: 0,
+};
+
+// Build-aware and SEQUENTIAL: versions run one after another, none of them restarting. The rule
+// that protects Windows must leave this chronology alone.
+const POWERPOINT = {
+  id: 'microsoft-powerpoint',
+  recs: [
+    ['2609', '19231.20000', '2026-09-20', '/updates/pp/2609/', 0],
+    ['2608', '19127.20100', '2026-08-18', '/updates/pp/2608/', 0],
+    ['2607', '19029.20136', '2026-07-15', '/updates/pp/2607/', 0],
   ],
   more: 0,
 };
@@ -230,6 +247,127 @@ check('C11 a product with no tracked records yields no state at all',
   let threw = false;
   try { build(memoryStore(null)).installedState(null, OBS); } catch (e) { threw = true; }
   check('C12 no installed entry yields no state and does not throw', !threw);
+}
+
+// --- the upgrade path ---------------------------------------------------------------------------
+//
+// The chronology comes from the SAME call that produced the state and the target, so these check
+// what that one authority hands the renderer.
+
+const plan = (entry, product) => build(memoryStore(null)).installedState(entry, product);
+const versionsIn = (steps) => (steps || []).map((step) => step.rec[0]);
+
+check('P1 the newest release offers no path at all',
+  plan({ v: '32.2.2', b: '', d: '2026-08-14' }, OBS).pathKind === '');
+
+{
+  const info = plan({ v: '32.2.1', b: '', d: '2026-07-24' }, OBS);
+  check('P2 one release behind gives a one-step path that ends at the target',
+    info.pathKind === 'upgrade' && info.path.length === 1
+    && info.path[0].rec === info.latest, JSON.stringify(versionsIn(info.path)));
+}
+
+{
+  const info = plan({ v: '32.1.2', b: '', d: '2026-04-21' }, OBS);
+  check('P3 several releases behind gives the chain in publication order, oldest first',
+    info.pathKind === 'upgrade'
+    && JSON.stringify(versionsIn(info.path)) === JSON.stringify(['32.2.1', '32.2.2'])
+    && info.path[info.path.length - 1].rec === info.latest, JSON.stringify(versionsIn(info.path)));
+}
+
+{
+  // 20.2 -> 21.1 with `21 Public Beta 1` sitting in between.
+  const info = plan({ v: '20.2', b: '', d: '2026-01-10' }, DAVINCI);
+  check('P4 a preview release between two stables is not a step on the path',
+    info.pathKind === 'upgrade'
+    && versionsIn(info.path).every((v) => !String(v).toLowerCase().includes('beta'))
+    && info.omittedBetas === 1, JSON.stringify(versionsIn(info.path)) + ' betas=' + info.omittedBetas);
+}
+
+check('P5 when only a preview is newer there is no upgrade path, only newer releases',
+  plan({ v: '21', b: '', d: '2026-04-14' }, BETA_TOP).pathKind === 'newer');
+
+{
+  const info = plan({ v: '25H2', b: '26200.9445', d: '2026-09-08' }, WINDOWS);
+  check('P6 a Windows upgrade path holds only the reader OWN servicing line',
+    info.pathKind === 'upgrade'
+    && versionsIn(info.path).every((v) => v === '25H2')
+    && info.path[info.path.length - 1].rec === info.latest,
+    JSON.stringify(versionsIn(info.path)));
+  check('P7 and the target it ends at is labelled as the line, not as the newest tracked',
+    info.latestScope === 'line' && info.latest[0] === '25H2');
+}
+
+{
+  // Newest build of 25H2. What is left is 26H1 -- a different line, not a next step.
+  const info = plan({ v: '25H2', b: '26200.9550', d: '2026-09-22' }, WINDOWS);
+  check('P8 releases on other servicing lines are never rendered as one sequence',
+    info.pathKind === 'newer' && info.parallel === true && info.path.length === 0
+    && info.lines.length > 0, JSON.stringify({ kind: info.pathKind, path: info.path.length }));
+  check('P9 they are grouped by line, and each group holds exactly one line',
+    info.lines.every((line) => line.steps.every((step) => step.rec[0] === line.version)),
+    JSON.stringify(info.lines.map((l) => l.version)));
+}
+
+check('P10 the parallel-line rule fires for interleaved lines',
+  build(memoryStore(null)).parallelLines(WINDOWS.recs) === true);
+// The discriminator cannot be build-awareness: PowerPoint has builds too and IS a sequence.
+check('P11 and leaves a build-aware product whose versions run in order alone',
+  build(memoryStore(null)).parallelLines(POWERPOINT.recs) === false);
+check('P12 a build-aware sequential product still gets a real upgrade path',
+  JSON.stringify(versionsIn(plan({ v: '2607', b: '19029.20136', d: '2026-07-15' }, POWERPOINT).path))
+  === JSON.stringify(['2608', '2609']));
+
+{
+  const info = plan({ v: '30.0.0', b: '', d: '2020-01-01' }, OBS);
+  check('P13 a release older than the listed window says so rather than claiming a full run',
+    info.pathKind === 'newer' && info.truncatedStart === true);
+}
+check('P14 a release that vanished from the window offers no path to walk',
+  plan({ v: '32.9.9', b: '', d: '2026-06-01' }, OBS).pathKind === '');
+
+{
+  // Two releases published the same day. The repo records no order between them, so neither may be
+  // presented as the step after the other.
+  const TIED = { id: 'tied', recs: [
+    ['3.2', '', '2026-05-01', '/x/3-2/', 0],
+    ['3.1', '', '2026-05-01', '/x/3-1/', 0],
+    ['3.0', '', '2026-04-01', '/x/3-0/', 0],
+  ], more: 0 };
+  const info = plan({ v: '3.0', b: '', d: '2026-04-01' }, TIED);
+  check('P15 a tied publication date inside the path is flagged, not smoothed over',
+    info.path.length === 2 && info.path[0].tied === false && info.path[1].tied === true,
+    JSON.stringify(info.path.map((s) => [s.rec[0], s.tied])));
+  // The collision that actually happens: the reader sits in the tied group themselves.
+  const mine = plan({ v: '3.1', b: '', d: '2026-05-01' }, TIED);
+  check('P16 and the tie between the reader and the first step is flagged too',
+    mine.path.length === 1 && mine.path[0].tied === true,
+    JSON.stringify(mine.path.map((s) => [s.rec[0], s.tied])));
+}
+
+{
+  const many = [];
+  for (let i = 20; i >= 0; i -= 1) {
+    const day = String(i + 1).padStart(2, '0');
+    many.push([`1.${i}`, '', `2026-03-${day}`, `/m/1-${i}/`, 0]);
+  }
+  const BIG = { id: 'big', recs: many, more: 7 };
+  const api = build(memoryStore(null));
+  const info = api.installedState({ v: '1.0', b: '', d: '2026-03-01' }, BIG);
+  check('P17 a long run is bounded and says how many it did not show',
+    info.path.length === api.PATH_LIMIT && info.hidden === 20 - api.PATH_LIMIT,
+    `shown=${info.path.length} hidden=${info.hidden}`);
+  check('P18 the releases it keeps are the ones nearest the target',
+    info.path[info.path.length - 1].rec === info.latest,
+    JSON.stringify(versionsIn(info.path)));
+}
+
+{
+  const info = plan({ v: '32.1.2', b: '', d: '2026-04-21' }, OBS);
+  check('P19 the reader own release is never a step on their own path',
+    !info.path.some((step) => step.rec[0] === '32.1.2'));
+  check('P20 every step is the payload record itself, so no field is re-derived',
+    info.path.every((step) => OBS.recs.indexOf(step.rec) >= 0));
 }
 
 console.log();
