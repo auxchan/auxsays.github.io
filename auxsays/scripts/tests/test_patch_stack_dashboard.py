@@ -13,6 +13,10 @@ SHIPPED page with Liquid and checks the half that Jekyll owns:
       wording, heading hierarchy, and the `[hidden]` display guards that a previous sprint learned
       to need.
   [E] the entry points from the Patch Feed and the homepage.
+  [UP] the upgrade path: every release in the window carries the verdict the SHARED derivation
+      gives it (judged against an oracle written independently here from the corpus), the
+      parallel-servicing-line rule separates Windows from PowerPoint without looking at
+      build-awareness, and the payload still carries no release-note prose.
 
 The client rendering (cards appear, unwatch removes one immediately) is proven on the deployed
 site during delivery; the watchlist storage contract it reuses is proven by
@@ -320,6 +324,10 @@ def run() -> int:
     print()
     print("[IV] installed versions: the picker payload and the three integrations")
     RECORDS_CAP = 24
+    # Fixed width, asserted EXACTLY. When the tuple grew from 5 to 11 for the upgrade path, three
+    # checks below were gated on `len(rec) == 5` and quietly began measuring an empty list -- IV2
+    # passed over nothing at all. An exact width is what turned that into a visible failure.
+    REC_WIDTH = 11
     bad_shape, unsorted, over_cap, bad_more = [], [], [], []
     build_aware, beta_flagged = [], []
     for entry in entries:
@@ -328,25 +336,30 @@ def run() -> int:
             bad_shape.append(f"{entry.get('id')}: recs is not a list")
             continue
         for rec in recs:
-            if not (isinstance(rec, list) and len(rec) == 5
+            if not (isinstance(rec, list) and len(rec) == REC_WIDTH
                     and isinstance(rec[0], str) and isinstance(rec[1], str)
                     and isinstance(rec[2], str) and isinstance(rec[3], str)
-                    and rec[4] in (0, 1)):
+                    and rec[4] in (0, 1)
+                    and isinstance(rec[5], str) and rec[5]
+                    and isinstance(rec[6], int) and isinstance(rec[7], int)
+                    and isinstance(rec[8], str) and isinstance(rec[9], int)
+                    and rec[10] in (0, 1)):
                 bad_shape.append(f"{entry.get('id')}: {rec!r}")
                 break
-        dates = [r[2] for r in recs if isinstance(r, list) and len(r) == 5]
+        well_formed = [r for r in recs if isinstance(r, list) and len(r) == REC_WIDTH]
+        dates = [r[2] for r in well_formed]
         if dates != sorted(dates, reverse=True):
             unsorted.append(str(entry.get("id")))
         if len(recs) > RECORDS_CAP:
             over_cap.append(f"{entry.get('id')}: {len(recs)}")
         if not isinstance(entry.get("more"), int) or entry.get("more") < 0:
             bad_more.append(f"{entry.get('id')}: {entry.get('more')!r}")
-        if any(str(r[1] or "") for r in recs if isinstance(r, list) and len(r) == 5):
+        if any(str(r[1] or "") for r in well_formed):
             build_aware.append(str(entry.get("id")))
-        if any(r[4] == 1 for r in recs if isinstance(r, list) and len(r) == 5):
+        if any(r[4] == 1 for r in well_formed):
             beta_flagged.append(str(entry.get("id")))
 
-    check("IV1 every picker record is [version, build, date, url, beta]",
+    check("IV1 every picker record is [version, build, date, url, beta, verdict, rank, n, ev, oa, notes]",
           not bad_shape, "; ".join(bad_shape[:3]))
     check("IV2 picker records are newest-first", not unsorted, str(unsorted[:4]))
     check(f"IV3 the picker list is bounded at {RECORDS_CAP} per product",
@@ -436,6 +449,143 @@ def run() -> int:
           and "querySelector('[data-iv-set=" not in target_stmt
           and "dataset.ivV" in identity and "dataset.ivB" in identity,
           f"target chosen by: {target_stmt.strip()[:90]!r}")
+
+    print()
+    print("[UP] the upgrade path: per-release data, servicing lines, and what is NOT claimed")
+
+    # The per-release verdict is the SAME derivation the card uses, now applied to every record in
+    # the window. `expected_verdict` is written independently in Python straight from the corpus, so
+    # this is the payload being judged from outside rather than agreeing with itself.
+    by_url = {str(rec.get("url") or ""): rec for rec in records}
+    RANKS = (("AVOID", 0), ("WAIT", 1), ("TEST FIRST", 2), ("SECURITY UPDATE", 3),
+             ("SAFE ENOUGH", 4), ("OFFICIAL ONLY", 5), ("INSUFFICIENT DATA", 6), ("MANUAL WATCH", 7))
+    # `aux-update.html` refuses to render a notes body that looks like scraped page furniture. The
+    # flag has to refuse the same ones, or a panel claims notes exist where the page shows none.
+    POLLUTION = ("showvotefeedback", "function(", "document.", "window.", "queryselector",
+                 "content-rating-buttons")
+    verdict_drift, count_drift, rank_drift, notes_drift = [], [], [], []
+    reached = 0
+    for entry in entries:
+        for rec in (entry.get("recs") or []):
+            source = by_url.get(rec[3])
+            if source is None:
+                continue
+            reached += 1
+            want = expected_verdict(source)
+            if rec[5] != want:
+                verdict_drift.append(f"{entry.get('id')} {rec[0]}: {rec[5]!r} != {want!r}")
+            if rec[7] != int(source.get("update_report_count") or 0):
+                count_drift.append(f"{entry.get('id')} {rec[0]}: {rec[7]}")
+            want_rank, key = 99, str(rec[5]).upper()
+            for token, value in RANKS:
+                if token in key:
+                    want_rank = value
+                    break
+            if rec[6] != want_rank:
+                rank_drift.append(f"{entry.get('id')} {rec[0]}: {rec[6]} != {want_rank}")
+            body = str(source.get("official_patch_notes_body") or "").strip()
+            want_notes = 1 if (body and not any(t in body.lower() for t in POLLUTION)) else 0
+            if rec[10] != want_notes:
+                notes_drift.append(f"{entry.get('id')} {rec[0]}: {rec[10]} != {want_notes}")
+
+    check("UP1 the per-release checks actually reached the records they judge",
+          reached > 150, f"matched {reached} records to the corpus")
+    check("UP2 every release carries the verdict the shared derivation gives it",
+          not verdict_drift, "; ".join(verdict_drift[:3]))
+    check("UP3 every release carries its own report count", not count_drift, "; ".join(count_drift[:3]))
+    check("UP4 every release carries the rank its verdict maps to", not rank_drift, "; ".join(rank_drift[:3]))
+    check("UP5 the official-notes flag uses the same pollution gate as the patch page",
+          not notes_drift, "; ".join(notes_drift[:3]))
+
+    def parallel_lines(recs: list) -> bool:
+        """The rule `auxsays.js` uses, restated here over the rendered payload."""
+        blocks: dict = {}
+        prev = None
+        for rec in recs:
+            if rec[0] != prev:
+                blocks[rec[0]] = blocks.get(rec[0], 0) + 1
+            prev = rec[0]
+        if any(n > 1 for n in blocks.values()):
+            return True
+        if not any(str(rec[1] or "") for rec in recs):
+            return False
+        seen: dict = {}
+        for rec in recs:
+            date = str(rec[2] or "")
+            if not date:
+                continue
+            if date not in seen:
+                seen[date] = rec[0]
+            elif seen[date] != rec[0]:
+                return True
+        return False
+
+    classified = {str(e.get("id")): parallel_lines(e.get("recs") or [])
+                  for e in entries if e.get("recs")}
+    check("UP6 Windows is recognised as running parallel servicing lines",
+          classified.get("microsoft-windows-11") is True, str(sorted(classified)))
+    # The discriminator cannot be build-awareness. PowerPoint is build-aware too, and its versions
+    # run one after another -- grouping it by version would shatter a real chronology.
+    check("UP7 PowerPoint is build-aware yet sequential, so its chronology survives the rule",
+          "microsoft-powerpoint" in classified
+          and classified.get("microsoft-powerpoint") is False,
+          f"powerpoint={classified.get('microsoft-powerpoint')!r}")
+    swept = sorted(k for k, v in classified.items() if v and k != "microsoft-windows-11")
+    check("UP8 no other tracked product is swept into the parallel-line rule", not swept, str(swept))
+
+    # Ordering inside one line is only safe because the corpus has no two releases of one version on
+    # one date. If that ever changes, the per-line lists start asserting an order nobody recorded.
+    intra = []
+    for entry in entries:
+        per_line: dict = {}
+        for rec in (entry.get("recs") or []):
+            per_line.setdefault(rec[0], []).append(rec[2])
+        for version, dates in per_line.items():
+            if len(dates) != len(set(dates)):
+                intra.append(f"{entry.get('id')} {version}")
+    check("UP9 inside one servicing line every release has a distinct date",
+          not intra, "; ".join(intra[:3]))
+
+    payload_text = payload_match.group(1) if payload_match else ""
+    longest = max((len(str(rec[5])) + len(str(rec[8]))
+                   for e in entries for rec in (e.get("recs") or [])), default=0)
+    check("UP10 no release carries long-form text into the payload", longest <= 96, f"longest={longest}")
+    # `</SCRIPT>` closes this element as surely as `</script>`; the tokenizer does not care about
+    # case, and vendor prose reaches these strings.
+    check("UP11 nothing in the payload can close the script element that holds it",
+          payload_text and "</" not in payload_text, "a raw end-tag opener survived into the payload")
+    check("UP12 the neutraliser is not limited to one spelling of the tag",
+          "replace: '</', '<\\/'" in PAGE.read_text(encoding="utf-8"),
+          "the page still replaces only the exact string </script>")
+
+    path_fn = js.split("const pathHtml", 1)[1].split("const installedHtml", 1)[0]
+    step_fn = js.split("const stepHtml", 1)[1].split("const pathHtml", 1)[0]
+    check("UP13 the path renderer re-runs no part of the decision it renders",
+          "installedState(" not in path_fn and "update_decision" not in path_fn,
+          "the renderer is deciding something instead of rendering what it was given")
+    check("UP14 each release in a path shows the verdict its own record carries",
+          "rec[5]" in step_fn and "rec[6]" in step_fn)
+    check("UP15 no aggregate is computed across the releases in a path",
+          "reduce(" not in path_fn and "score" not in path_fn.lower()
+          and "average" not in path_fn.lower())
+    # GitHub publishes nine changelog entries on one day. Explaining the tie on every one of them
+    # printed the same disclaimer eight times and buried the releases it was explaining.
+    check("UP17 a run of same-date releases is explained once, not once per release",
+          "runOpeners" in path_fn and "steps[index - 1].tied" in path_fn
+          and "step.tied" not in step_fn,
+          "the tie notice is still emitted per step")
+    # WCAG 2.5.3. Every one of these controls repeats per card, so each needs the product in its
+    # accessible name -- and that name has to START from the words printed on the control, or voice
+    # control cannot act on what the reader can see.
+    names = re.findall(r"aria-label=\"([^\"$]*)\$\{", js)
+    check("UP18 each repeated control names its product without dropping its visible label",
+          'aria-label="Clear version for ' in js
+          and 'aria-label="Clear your saved version' not in js,
+          str(names[:4]))
+    limit = re.search(r"const PATH_LIMIT = (\d+)", js)
+    check("UP16 the visible path is bounded and says how many it did not show",
+          bool(limit) and 8 <= int(limit.group(1)) <= 12 and "hidden" in path_fn,
+          f"PATH_LIMIT={limit.group(1) if limit else None}")
 
     check("E4 unwatch reuses the shared watch control contract",
           'data-watch-product="${esc(entry.id)}"' in js)

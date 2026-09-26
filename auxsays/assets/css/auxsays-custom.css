@@ -5251,8 +5251,56 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 }
 tr.patch-row.is-your-version { background: rgba(240,202,103,.045); }
 
+/* The upgrade path: the releases AUXSAYS tracks between the reader's version and the target.
+   Every role here is spelled out in text as well, so none of this colour carries the meaning. */
+.patch-iv-path summary {
+  cursor: pointer; font-size: .8rem; color: var(--accent-1); list-style: none; padding: .2rem 0;
+}
+.patch-iv-path summary::-webkit-details-marker { display: none; }
+.patch-iv-path summary::before { content: "＋ "; }
+.patch-iv-path[open] summary::before { content: "− "; }
+.patch-iv-path summary:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+.patch-iv-path__label { font-weight: 600; }
+
+.patch-iv-steps {
+  margin: .45rem 0 0; padding: 0 0 0 .9rem; list-style: none;
+  display: grid; gap: .45rem; border-left: 1px solid var(--border-subtle);
+}
+.patch-iv-steps--line { margin-top: .3rem; }
+.patch-iv-step { position: relative; }
+.patch-iv-step::before {
+  content: ""; position: absolute; left: -1.16rem; top: .42rem;
+  width: .42rem; height: .42rem; border-radius: 50%;
+  border: 1px solid var(--border-subtle); background: var(--bg-0, #0b0f14);
+}
+.patch-iv-step--mine::before,
+.patch-iv-step--target::before { border-color: rgba(240,202,103,.65); background: rgba(240,202,103,.35); }
+.patch-iv-step__head { margin: 0; font-size: .84rem; color: var(--text-0); }
+.patch-iv-step__head a { color: inherit; }
+.patch-iv-step__verdict { margin: .18rem 0 0; }
+.patch-iv-role {
+  display: inline-block; margin-right: .4rem; padding: .06rem .36rem; border-radius: 999px;
+  border: 1px solid rgba(240,202,103,.4); background: rgba(240,202,103,.1);
+  color: var(--text-0); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.patch-iv-step__meta {
+  margin: .18rem 0 0; padding: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: .1rem .5rem; font-size: .72rem; color: var(--text-1);
+}
+.patch-iv-step__meta li + li::before { content: "· "; color: var(--border-subtle); }
+.patch-iv-tied, .patch-iv-note { margin: .3rem 0 0; font-size: .72rem; color: var(--text-1); }
+.patch-iv-tied { font-style: italic; }
+.patch-iv-line {
+  margin: .7rem 0 0; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-1);
+}
+
 @media (max-width: 640px) {
   .patch-iv-here { width: 100%; justify-content: center; margin-left: 0; }
   .patch-iv-compare { grid-template-columns: 1fr; gap: .1rem; }
   .patch-iv-compare dt { margin-top: .3rem; }
+  .patch-iv-steps { padding-left: .75rem; }
+  .patch-iv-step::before { left: -1.02rem; }
+  .patch-iv-step__meta { gap: .05rem .4rem; }
 }
