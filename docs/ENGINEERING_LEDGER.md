@@ -352,6 +352,54 @@ body instead of the security-specific one.
 
 ---
 
+### AUX-015 — Parallel servicing lines are detected structurally, not declared
+
+- **Status** Resolved · **Area** Presentation · **Severity** Medium
+
+**Symptom** "What changed since my version" must not render an ordered path across Windows'
+parallel servicing lines (26H1 / 25H2 / 24H2 / 23H2), because `recs[0]` is currently a 24H2 build
+and a path to it would point a 26H1 reader backwards. Build-awareness cannot be the discriminator:
+PowerPoint carries a `target_build` on every record and its 17 versions run strictly in order.
+
+**Resolution** `parallelLines()` in `auxsays/assets/js/auxsays.js` reads the structure instead. A
+version that occupies more than one non-contiguous block in the date-ordered window was running
+beside another one; co-publication on one date counts only where the product is build-aware, since
+every non-build-aware product has a distinct version per record. Measured over the shipped payload
+this fires for `microsoft-windows-11` and for nothing else. Pinned by `UP6`/`UP7`/`UP8` in
+`test_patch_stack_dashboard.py` against the real corpus, and by `P10`/`P11`/`P12` in
+`installed-versions.test.mjs`.
+
+**Reopen only if** a non-Windows product begins producing non-contiguous interleaved release
+lines, or Windows' servicing-line structure no longer matches the deterministic detector — either
+shows up as `UP6`, `UP7` or `UP8` failing against the corpus.
+
+---
+
+### AUX-016 — Two verdict-chain branches are indistinguishable on this corpus
+
+- **Status** Deferred · **Area** Patch decision presentation · **Severity** Low
+
+**Symptom** The payload derives each release's verdict with the fallback chain from
+`_includes/patch-table-row.html`: `update_decision_label` → `update_consensus_summary` split on
+`:` → `quick_verdict` split on `:` → `INSUFFICIENT DATA`. No record in the corpus has a
+`update_consensus_summary` and a `quick_verdict` that disagree before the first colon, so swapping
+those two `elsif` branches changes nothing that any check can observe.
+
+**Why deferred** The chain is not this sprint's to change (`§19` — no verdict authority changes),
+and the ambiguity is inert: both branches produce the same string on all 213 payload records.
+Writing a synthetic record to distinguish them would be testing a fixture, not the corpus.
+
+**Current impact** None observable. `UP2` still judges every release against an oracle written
+independently in Python, so a chain that produces a *wrong* label is caught; only the ordering of
+two branches that currently agree is unpinned.
+
+**Revisit trigger** A record appears whose `update_consensus_summary` and `quick_verdict` prefixes
+differ, or the shared derivation in `patch-table-row.html` is edited.
+
+**Must not block** Roadmap work, or any further Patch Stack presentation change.
+
+---
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.
