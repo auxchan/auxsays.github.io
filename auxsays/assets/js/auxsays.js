@@ -254,6 +254,181 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('auxsays:watchlist-change', applyHomeWatchlist);
   }
 
+  // My Installed Versions: which tracked build the reader is actually running.
+  //
+  // The reader never types a version. They pick a record AUXSAYS already tracks, so what is stored
+  // is a real patch identity -- product, version, and the build where the product has one -- and
+  // never a guess a semantic-version parser made. That is why there is no parser here.
+  const INSTALLED_KEY = 'auxsays.installedVersions.v1';
+
+  const readInstalled = () => {
+    // Same fail-soft contract as the watchlist: storage can be unavailable and its contents can be
+    // anything. A broken entry is dropped, never thrown, because Patch Stack must still render.
+    let raw = null;
+    try {
+      raw = window.localStorage.getItem(INSTALLED_KEY);
+    } catch (error) {
+      return {};
+    }
+    if (!raw) return {};
+    let parsed = null;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (error) {
+      return {};
+    }
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+    const clean = {};
+    Object.keys(parsed).forEach((key) => {
+      const id = String(key || '').trim().toLowerCase();
+      const entry = parsed[key];
+      if (!PRODUCT_ID_RE.test(id) || !entry || typeof entry !== 'object') return;
+      const version = String(entry.v == null ? '' : entry.v).trim();
+      const url = String(entry.u == null ? '' : entry.u).trim();
+      if (!version) return;
+      clean[id] = {
+        v: version,
+        b: String(entry.b == null ? '' : entry.b).trim(),
+        d: String(entry.d == null ? '' : entry.d).trim(),
+        u: url.startsWith('/') && !url.startsWith('//') ? url : '',
+      };
+    });
+    return clean;
+  };
+
+  const writeInstalled = (map) => {
+    try {
+      window.localStorage.setItem(INSTALLED_KEY, JSON.stringify(map));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const setInstalled = (productId, entry) => {
+    const id = String(productId || '').trim().toLowerCase();
+    if (!PRODUCT_ID_RE.test(id)) return false;
+    const map = readInstalled();
+    if (entry === null) delete map[id];
+    else map[id] = entry;
+    writeInstalled(map);
+    document.dispatchEvent(new CustomEvent('auxsays:installed-change', { detail: { id } }));
+    return true;
+  };
+
+  // The version string carries the only channel signal this repo actually has: three records in
+  // 1,200 set a channel label, so a channel taxonomy would have to be invented, and inventing one
+  // is explicitly not this feature's job. `beta` is therefore computed at build time from the same
+  // textual signal `lib/patch_decision.version_is_beta` uses, and is consumed here, not re-derived.
+  const installedState = (entry, product) => {
+    const recs = Array.isArray(product && product.recs) ? product.recs : [];
+    if (!entry) return { state: '' };
+    // rec shape: [version, build, date, url, beta]
+    // Nothing tracked means nothing to compare against. Reporting "newer releases exist" here
+    // would be an assertion about records that do not exist.
+    if (!recs.length) return { state: '' };
+    const sameIdentity = (r) => r[0] === entry.v && String(r[1] || '') === String(entry.b || '');
+    const index = recs.findIndex(sameIdentity);
+
+    if (index < 0) {
+      // Absent from the tracked list. Only call that "no longer tracked" when it SHOULD have been
+      // in the window we published: anything older than the window is simply older, and saying it
+      // vanished would be a confident wrong answer.
+      const oldest = recs.length ? String(recs[recs.length - 1][2] || '') : '';
+      // STRICTLY newer than the oldest record published. An EQUAL date means a sibling record
+      // straddles the window boundary and is still tracked; calling it vanished was a
+      // confident wrong answer about a page the reader had just claimed.
+      if (entry.d && oldest && entry.d > oldest) return { state: 'INSTALLED VERSION NO LONGER TRACKED' };
+      return { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0] };
+    }
+    if (index === 0) return { state: 'CURRENT', latest: recs[0] };
+
+    const newer = recs.slice(0, index);
+    const installedIsBeta = !!recs[index][4];
+    // "Never point a stable reader AT a beta" is satisfied by choosing a stable target, not by
+    // refusing to speak because a beta sits in between. Vetoing on any newer beta made the states
+    // non-monotonic: DaVinci 20.3.3 read UPDATE AVAILABLE while 20.3.2, further behind, did not.
+    const newerStable = newer.filter((r) => !r[4]);
+    if (installedIsBeta || !newerStable.length) {
+      return { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0] };
+    }
+    // Build-aware products run parallel trains: 26H1 is not "an update" to 25H2, it is a different
+    // servicing line. Only a newer build of the SAME version is an unambiguous update.
+    const buildAware = recs.some((r) => String(r[1] || '') !== '');
+    const sameTrain = newerStable.filter((r) => r[0] === entry.v);
+    if (buildAware && !sameTrain.length) {
+      return { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0] };
+    }
+    // The state was train-aware but the record displayed next to it was not, so 16 of 24 Windows
+    // builds named another servicing train under the one sentence promising the same one.
+    return { state: 'UPDATE AVAILABLE', latest: (buildAware ? sameTrain[0] : newerStable[0]) || recs[0] };
+  };
+
+  const paintInstalledControls = () => {
+    const map = readInstalled();
+    document.querySelectorAll('[data-iv-here]').forEach((button) => {
+      const id = String(button.dataset.ivHere || '').trim().toLowerCase();
+      const entry = map[id];
+      const isThis = !!entry && entry.v === (button.dataset.ivV || '')
+        && String(entry.b || '') === String(button.dataset.ivB || '');
+      button.setAttribute('aria-pressed', isThis ? 'true' : 'false');
+      button.classList.toggle('is-installed', isThis);
+      const text = button.querySelector('[data-iv-here-text]');
+      if (text) text.textContent = isThis ? 'This is your version' : 'I am on this version';
+      // Visible words FIRST, so voice control matches what the reader can actually see.
+      button.setAttribute('aria-label', isThis
+        ? 'This is your version. Select to clear it.'
+        : 'I am on this version. Save this release as your installed version.');
+    });
+    // Product history: mark the row the reader saved. Subtle, and added by the client so the
+    // history table itself stays what it was.
+    document.querySelectorAll('tr[data-record-url]').forEach((row) => {
+      const id = String(row.dataset.recordProduct || '').trim().toLowerCase();
+      const entry = map[id];
+      const mine = !!entry && entry.u && entry.u === row.dataset.recordUrl;
+      row.classList.toggle('is-your-version', mine);
+      let marker = row.querySelector('[data-iv-marker]');
+      if (mine && !marker) {
+        const cell = row.querySelector('.patch-cell-version');
+        if (cell) {
+          marker = document.createElement('span');
+          marker.className = 'patch-iv-yours';
+          marker.setAttribute('data-iv-marker', '');
+          marker.textContent = 'Your version';
+          cell.appendChild(marker);
+        }
+      } else if (!mine && marker) {
+        marker.remove();
+      }
+    });
+  };
+
+  document.addEventListener('click', (event) => {
+    const here = event.target.closest('[data-iv-here]');
+    if (!here) return;
+    event.preventDefault();
+    const id = here.dataset.ivHere;
+    const already = here.getAttribute('aria-pressed') === 'true';
+    setInstalled(id, already ? null : {
+      v: here.dataset.ivV || '',
+      b: here.dataset.ivB || '',
+      d: here.dataset.ivD || '',
+      u: here.dataset.ivU || '',
+    });
+  });
+
+  document.addEventListener('auxsays:installed-change', paintInstalledControls);
+  window.addEventListener('storage', (event) => {
+    // Broadcast rather than paint. This painter only touches the patch-page button and history
+    // rows, neither of which exists on the dashboard -- so painting alone left a second tab
+    // reading "Current version not set" over storage that had one. A dispatch writes nothing, so
+    // there is no loop.
+    if (event.key === INSTALLED_KEY) {
+      document.dispatchEvent(new CustomEvent('auxsays:installed-change', { detail: { id: '' } }));
+    }
+  });
+  if (document.querySelector('[data-iv-here], tr[data-record-url]')) paintInstalledControls();
+
   // My Patch Stack: a dashboard over the SAME watchlist, rendered from a payload Jekyll built.
   //
   // It lives in this closure deliberately, so it reuses `readWatchlist`/`setWatched` rather than
@@ -332,6 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
         parts.push('<p class="patch-stack-card__patch patch-stack-card__patch--none">No tracked patch records yet.</p>');
       }
       if (reason) parts.push(`<p class="patch-stack-card__reason">Needs attention: ${esc(reason)}</p>`);
+      parts.push(installedHtml(entry));
       parts.push('<div class="patch-card-links patch-stack-card__links">');
       if (entry.href) parts.push(`<a class="patch-source-link patch-source-link--primary" href="${esc(safeHref(entry.href))}">View patch →</a>`);
       if (hist) parts.push(`<a class="patch-source-link" href="${hist}">Product history →</a>`);
@@ -340,6 +516,75 @@ document.addEventListener('DOMContentLoaded', () => {
         + ` aria-pressed="true"><span data-watch-text>Watching</span></button>`);
       parts.push('</div></article>');
       return parts.join('');
+    };
+
+    const STATE_COPY = {
+      'CURRENT': 'You are on the newest tracked release.',
+      'UPDATE AVAILABLE': 'A newer tracked release of this version exists.',
+      'NEWER TRACKED VERSION EXISTS': 'Newer tracked releases exist.',
+      'INSTALLED VERSION NO LONGER TRACKED': 'AUXSAYS no longer tracks the release you saved.',
+    };
+
+    const recLabel = (rec) => {
+      const version = esc(rec[0]);
+      const build = String(rec[1] || '') ? ` <span class="patch-iv-build">Build ${esc(rec[1])}</span>` : '';
+      const beta = rec[4] ? ' <span class="patch-iv-beta">Beta / preview</span>' : '';
+      const date = rec[2] ? ` <span class="patch-iv-date">${esc(rec[2])}</span>` : '';
+      return `${version}${build}${date}${beta}`;
+    };
+
+    const installedHtml = (product) => {
+      const recs = Array.isArray(product.recs) ? product.recs : [];
+      const id = esc(product.id);
+      if (!recs.length) return '';
+      const entry = readInstalled()[String(product.id).toLowerCase()];
+      const out = ['<div class="patch-iv">'];
+
+      if (!entry) {
+        out.push('<p class="patch-iv-prompt">Current version <span>not set</span></p>');
+      } else {
+        const { state, latest } = installedState(entry, product);
+        out.push('<dl class="patch-iv-compare">');
+        out.push(`<dt>Your version</dt><dd>${esc(entry.v)}`
+          + (entry.b ? ` <span class="patch-iv-build">Build ${esc(entry.b)}</span>` : '') + '</dd>');
+        if (latest) {
+          out.push(`<dt>Latest tracked</dt><dd>${esc(latest[0])}`
+            + (String(latest[1] || '') ? ` <span class="patch-iv-build">Build ${esc(latest[1])}</span>` : '') + '</dd>');
+        }
+        out.push('</dl>');
+        // The STATE is a relationship between two records. The VERDICT stays whatever the patch
+        // record already says -- being several releases behind is not itself advice to update.
+        out.push(`<p class="patch-iv-state patch-iv-state--${esc(String(state).toLowerCase().replace(/[^a-z]+/g, '-'))}">`
+          + `<strong>${esc(state)}</strong> ${esc(STATE_COPY[state] || '')}</p>`);
+      }
+
+      const shown = recs.slice(0, 24);
+      out.push('<details class="patch-iv-picker">');
+      const productName = esc(product.name || product.id);
+      out.push(`<summary>${entry ? 'Change version' : 'Select version'}`
+        + `<span class="patch-iv-for"> for ${productName}</span></summary>`);
+      out.push('<ul class="patch-iv-list">');
+      shown.forEach((rec) => {
+        const current = entry && rec[0] === entry.v && String(rec[1] || '') === String(entry.b || '');
+        out.push(`<li><button type="button" class="patch-iv-option${current ? ' is-current' : ''}"`
+          + ` data-iv-set="${id}" data-iv-v="${esc(rec[0])}" data-iv-b="${esc(rec[1] || '')}"`
+          + ` data-iv-d="${esc(rec[2] || '')}" data-iv-u="${esc(safeHref(rec[3]))}"`
+          + `${current ? ' aria-current="true"' : ''}>${recLabel(rec)}</button></li>`);
+      });
+      out.push('</ul>');
+      if (Number(product.more) > 0 && product.hist) {
+        out.push(`<p class="patch-iv-more">${Number(product.more)} older tracked release`
+          + `${Number(product.more) === 1 ? '' : 's'} not listed — `
+          + `<a href="${esc(safeHref(product.hist))}">open the full history</a> and use `
+          + `<em>I am on this version</em> on the release you run.</p>`);
+      }
+      out.push('</details>');
+      if (entry) {
+        out.push(`<button type="button" class="patch-iv-clear" data-iv-clear="${id}"`
+          + ` aria-label="Clear your saved version for ${esc(product.name || product.id)}">Clear version</button>`);
+      }
+      out.push('</div>');
+      return out.join('');
     };
 
     const renderStack = () => {
@@ -382,10 +627,77 @@ document.addEventListener('DOMContentLoaded', () => {
         const node = document.querySelector(selector);
         if (node) node.textContent = String(value);
       };
+      const installedMap = readInstalled();
+      const versionsSet = watched.filter((entry) => installedMap[String(entry.id).toLowerCase()]);
+      const haveNewer = versionsSet.filter((entry) => {
+        const state = installedState(installedMap[String(entry.id).toLowerCase()], entry).state;
+        return state === 'UPDATE AVAILABLE' || state === 'NEWER TRACKED VERSION EXISTS';
+      });
       setCount('[data-stack-count-watched]', watched.length);
       setCount('[data-stack-count-attention]', flagged.length);
       setCount('[data-stack-count-evidence]', withEvidence.length);
+      setCount('[data-stack-count-versions]', versionsSet.length);
+      setCount('[data-stack-count-newer]', haveNewer.length);
     };
+
+    document.addEventListener('click', (event) => {
+      const setter = event.target.closest('[data-iv-set]');
+      if (setter) {
+        event.preventDefault();
+        setInstalled(setter.dataset.ivSet, {
+          v: setter.dataset.ivV || '',
+          b: setter.dataset.ivB || '',
+          d: setter.dataset.ivD || '',
+          u: setter.dataset.ivU || '',
+        });
+        return;
+      }
+      const clearer = event.target.closest('[data-iv-clear]');
+      if (clearer) {
+        event.preventDefault();
+        setInstalled(clearer.dataset.ivClear, null);
+      }
+    });
+
+    document.addEventListener('auxsays:installed-change', () => {
+      // renderStack() replaces both grids, so the control that fired this event is destroyed
+      // mid-activation -- and unlike the watchlist path, the trigger here is ALWAYS inside the
+      // replaced subtree. Without this a keyboard reader lands back on <body> with every picker
+      // slammed shut, and has to Tab from the top of the document to change what they just set.
+      const active = document.activeElement;
+      const wantSet = active && active.dataset ? active.dataset.ivSet : '';
+      const wantClear = active && active.dataset ? active.dataset.ivClear : '';
+      const openFor = Array.from(document.querySelectorAll('[data-stack-card]'))
+        .filter((card) => card.querySelector('.patch-iv-picker[open]'))
+        .map((card) => card.dataset.stackCard);
+
+      renderStack();
+      paintWatchControls();
+
+      openFor.forEach((cardId) => {
+        document.querySelectorAll('[data-stack-card="' + cardId + '"] .patch-iv-picker')
+          .forEach((node) => { node.open = true; });
+      });
+      const target = wantSet
+        ? document.querySelector('[data-iv-set="' + wantSet + '"]')
+        : (wantClear
+          ? document.querySelector('[data-stack-card="' + wantClear + '"] .patch-iv-picker summary')
+          : null);
+      if (target) target.focus({ preventScroll: true });
+
+      // Otherwise setting a version is a silent DOM swap: there was no live region on the page.
+      const live = document.querySelector('[data-stack-live]');
+      if (live && (wantSet || wantClear)) {
+        const id = String(wantSet || wantClear).toLowerCase();
+        const product = byId.get(id);
+        const saved = readInstalled()[id];
+        live.textContent = product
+          ? (saved
+            ? product.name + ': your version is now ' + saved.v + (saved.b ? ' build ' + saved.b : '') + '.'
+            : product.name + ': your saved version was cleared.')
+          : '';
+      }
+    });
 
     renderStack();
     paintWatchControls();

@@ -95,6 +95,51 @@ permalink: /updates/my-stack/
       ,"oa": {{ chosen.official_active_issue_count | default: 0 | plus: 0 }}
       ,"os": {{ chosen.official_safeguard_hold_count | default: 0 | plus: 0 }}
     {%- endif -%}
+    {%- comment -%}
+      The version picker offers records AUXSAYS already tracks, newest first, so what a reader
+      saves is a real patch identity -- version plus build where the product has one -- rather than
+      free text a parser would have to guess at.
+
+      Bounded on purpose: the newest 24 per product, with a count of what lies beyond and a link to
+      the full history, where any older record can still be claimed from its own patch page. GitHub
+      alone has 284 records; serialising every one of them onto this page to populate a dropdown
+      nobody scrolls would be the wrong trade.
+
+      `beta` carries the only channel signal this repo has. Three records in 1,200 set a channel
+      label, so the version string is it -- the same textual signal lib/patch_decision.version_is_beta
+      uses. It exists so a stable reader is never told a newer BETA is an update.
+    {%- endcomment -%}
+    {%- assign p_count = 0 -%}
+    {%- capture p_recs -%}
+      {%- for rec in stack_updates -%}
+        {%- if rec.product_id == p_id and rec.update_published_at and rec.update_status != 'archived' -%}
+          {%- assign p_count = p_count | plus: 1 -%}
+          {%- if p_count <= 24 -%}
+            {%- if p_count > 1 -%},{%- endif -%}
+            {%- assign rec_ver_key = rec.update_version | downcase -%}
+            {%- assign rec_ver_first = rec.update_version | slice: 0 -%}
+            {%- assign rec_is_beta = 0 -%}
+            {%- comment -%}
+              Only read the version string as a channel signal when it actually looks like a
+              version. For Figma and GitHub `update_version` is a changelog HEADLINE, so
+              "Preview what's inside folders" and "See AI credit usage in betas" were being
+              flagged as betas -- which then suppressed UPDATE AVAILABLE for everything below
+              them. "21 Public Beta 1" still matches; a sentence does not.
+            {%- endcomment -%}
+            {%- if rec_ver_first contains '0' or rec_ver_first contains '1' or rec_ver_first contains '2' or rec_ver_first contains '3' or rec_ver_first contains '4' or rec_ver_first contains '5' or rec_ver_first contains '6' or rec_ver_first contains '7' or rec_ver_first contains '8' or rec_ver_first contains '9' -%}
+              {%- if rec_ver_key contains 'beta' or rec_ver_key contains 'preview' or rec_ver_key contains 'insider' -%}
+                {%- assign rec_is_beta = 1 -%}
+              {%- endif -%}
+            {%- endif -%}
+            {%- if rec.release_channel_label -%}{%- assign rec_is_beta = 1 -%}{%- endif -%}
+            [{{ rec.update_version | default: '' | jsonify }},{{ rec.target_build | default: '' | jsonify }},{{ rec.update_published_at | date: "%Y-%m-%d" | jsonify }},{{ rec.url | jsonify }},{{ rec_is_beta }}]
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    ,"recs": [{{ p_recs }}]
+    {%- assign p_more = p_count | minus: 24 -%}
+    ,"more": {% if p_more > 0 %}{{ p_more }}{% else %}0{% endif %}
     }
   {%- endif -%}
 {%- endfor -%}
@@ -115,10 +160,18 @@ permalink: /updates/my-stack/
     <h1>My Patch Stack</h1>
     <p>The patch status of the software you actually use. Your list is stored in this browser only —
       no account, no sign-in, nothing sent anywhere.</p>
+    <p class="patch-stack-live visually-hidden" data-stack-live role="status" aria-live="polite"></p>
     <p class="patch-stack-strip" data-stack-strip hidden>
       <span><strong data-stack-count-watched>0</strong> watched products</span>
       <span><strong data-stack-count-attention>0</strong> need attention</span>
       <span><strong data-stack-count-evidence>0</strong> with report evidence</span>
+      <span><strong data-stack-count-versions>0</strong> versions set</span>
+      {%- comment -%}
+        "have newer tracked releases", never "updates required": the current AUXSAYS verdict on
+        several of those releases is WAIT, and a strip that counts them as required work would be
+        telling the reader the opposite of the decision on the card below it.
+      {%- endcomment -%}
+      <span><strong data-stack-count-newer>0</strong> have newer tracked releases</span>
     </p>
   </section>
 

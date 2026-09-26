@@ -5162,3 +5162,97 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
    is a separate piece of work. */
 .patch-stack-shell h1,
 .patch-stack-shell .section-head h2 { color: var(--text-0); }
+
+/* --- My Installed Versions ------------------------------------------------------------------
+   The reader's own build, compared against what AUXSAYS tracks. Same panels and accent as the
+   rest of the site; the comparison state is a relationship, never a verdict. */
+
+.patch-iv {
+  margin-top: .2rem; padding-top: .7rem;
+  border-top: 1px solid var(--border-subtle);
+  display: grid; gap: .5rem;
+}
+.patch-iv-prompt { margin: 0; font-size: .82rem; color: var(--text-1); }
+.patch-iv-prompt span { color: var(--text-0); }
+
+.patch-iv-compare { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .15rem .7rem; }
+.patch-iv-compare dt {
+  font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-1);
+  align-self: baseline;
+}
+.patch-iv-compare dd { margin: 0; font-size: .9rem; color: var(--text-0); }
+
+.patch-iv-build, .patch-iv-date, .patch-iv-beta { font-size: .74rem; color: var(--text-1); }
+.patch-iv-beta { color: var(--accent-1); }
+
+/* State words carry their own text, so the colour is reinforcement and never the message. */
+.patch-iv-state { margin: 0; font-size: .8rem; color: var(--text-1); }
+.patch-iv-state strong {
+  display: inline-block; margin-right: .35rem; padding: .12rem .45rem; border-radius: 999px;
+  font-size: .68rem; letter-spacing: .07em; text-transform: uppercase;
+  border: 1px solid var(--border-subtle); color: var(--text-0);
+}
+.patch-iv-state--current strong { border-color: rgba(95,212,229,.4); background: rgba(95,212,229,.12); }
+.patch-iv-state--update-available strong,
+.patch-iv-state--newer-tracked-version-exists strong { border-color: rgba(240,202,103,.45); background: rgba(240,202,103,.12); }
+.patch-iv-state--installed-version-no-longer-tracked strong { border-color: var(--border-subtle); background: rgba(255,255,255,.04); }
+
+.patch-iv-picker summary {
+  cursor: pointer; font-size: .8rem; color: var(--accent-1); list-style: none;
+  padding: .2rem 0;
+}
+.patch-iv-picker summary::-webkit-details-marker { display: none; }
+.patch-iv-picker summary::before { content: "＋ "; }
+.patch-iv-picker[open] summary::before { content: "− "; }
+.patch-iv-picker summary:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+
+.patch-iv-list {
+  margin: .4rem 0 0; padding: 0; list-style: none;
+  display: grid; gap: .2rem; max-height: 15rem; overflow-y: auto;
+}
+.patch-iv-option {
+  width: 100%; text-align: left; padding: .4rem .55rem; border-radius: 10px;
+  border: 1px solid transparent; background: rgba(255,255,255,.025);
+  color: var(--text-0); font: inherit; font-size: .82rem; cursor: pointer;
+}
+.patch-iv-option:hover { border-color: rgba(240,202,103,.35); }
+.patch-iv-option:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+.patch-iv-option.is-current { border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.1); }
+.patch-iv-more { margin: .5rem 0 0; font-size: .76rem; color: var(--text-1); }
+
+.patch-iv-clear {
+  justify-self: start; padding: .22rem .6rem; border-radius: 999px;
+  border: 1px solid var(--border-subtle); background: none; color: var(--text-1);
+  font: inherit; font-size: .74rem; cursor: pointer;
+}
+.patch-iv-clear:hover { color: var(--text-0); border-color: rgba(240,202,103,.4); }
+.patch-iv-clear:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+
+/* Patch page: claim this exact release. */
+.patch-iv-here {
+  display: inline-flex; align-items: center; gap: .5rem; margin: .75rem 0 0 .5rem;
+  padding: .55rem 1rem; border-radius: 999px;
+  border: 1px solid var(--border-subtle); background: rgba(255,255,255,.025);
+  color: var(--text-1); font: inherit; font-size: .88rem; cursor: pointer;
+  transition: border-color .18s ease, color .18s ease, background .18s ease;
+}
+.patch-iv-here:hover { border-color: rgba(240,202,103,.42); color: var(--text-0); }
+.patch-iv-here:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 3px; }
+.patch-iv-here.is-installed {
+  border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.12); color: var(--text-0);
+}
+
+/* Product history: the row the reader saved. */
+.patch-iv-yours {
+  display: inline-block; margin-left: .45rem; padding: .08rem .38rem; border-radius: 999px;
+  border: 1px solid rgba(240,202,103,.4); background: rgba(240,202,103,.1);
+  color: var(--text-0); font-size: .64rem; letter-spacing: .07em; text-transform: uppercase;
+  white-space: nowrap;
+}
+tr.patch-row.is-your-version { background: rgba(240,202,103,.045); }
+
+@media (max-width: 640px) {
+  .patch-iv-here { width: 100%; justify-content: center; margin-left: 0; }
+  .patch-iv-compare { grid-template-columns: 1fr; gap: .1rem; }
+  .patch-iv-compare dt { margin-top: .3rem; }
+}

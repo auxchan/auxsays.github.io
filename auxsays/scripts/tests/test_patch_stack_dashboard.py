@@ -233,7 +233,7 @@ def run() -> int:
           len(entries) == len(products), f"{len(entries)} entries vs {len(products)} products")
 
     allowed = {"id", "name", "hist", "href", "ver", "date", "verdict", "rank", "ev", "n",
-               "checked", "mon", "oa", "os"}
+               "checked", "mon", "oa", "os", "recs", "more"}
     extra = sorted({k for e in entries for k in e} - allowed)
     check("P5 the payload carries only dashboard fields, not whole records", not extra, str(extra))
 
@@ -316,6 +316,97 @@ def run() -> int:
 
     js = JS.read_text(encoding="utf-8")
     stack_block = js.split("patch-stack-data", 1)[1].split("Patch Feed controls", 1)[0]
+
+    print()
+    print("[IV] installed versions: the picker payload and the three integrations")
+    RECORDS_CAP = 24
+    bad_shape, unsorted, over_cap, bad_more = [], [], [], []
+    build_aware, beta_flagged = [], []
+    for entry in entries:
+        recs = entry.get("recs")
+        if not isinstance(recs, list):
+            bad_shape.append(f"{entry.get('id')}: recs is not a list")
+            continue
+        for rec in recs:
+            if not (isinstance(rec, list) and len(rec) == 5
+                    and isinstance(rec[0], str) and isinstance(rec[1], str)
+                    and isinstance(rec[2], str) and isinstance(rec[3], str)
+                    and rec[4] in (0, 1)):
+                bad_shape.append(f"{entry.get('id')}: {rec!r}")
+                break
+        dates = [r[2] for r in recs if isinstance(r, list) and len(r) == 5]
+        if dates != sorted(dates, reverse=True):
+            unsorted.append(str(entry.get("id")))
+        if len(recs) > RECORDS_CAP:
+            over_cap.append(f"{entry.get('id')}: {len(recs)}")
+        if not isinstance(entry.get("more"), int) or entry.get("more") < 0:
+            bad_more.append(f"{entry.get('id')}: {entry.get('more')!r}")
+        if any(str(r[1] or "") for r in recs if isinstance(r, list) and len(r) == 5):
+            build_aware.append(str(entry.get("id")))
+        if any(r[4] == 1 for r in recs if isinstance(r, list) and len(r) == 5):
+            beta_flagged.append(str(entry.get("id")))
+
+    check("IV1 every picker record is [version, build, date, url, beta]",
+          not bad_shape, "; ".join(bad_shape[:3]))
+    check("IV2 picker records are newest-first", not unsorted, str(unsorted[:4]))
+    check(f"IV3 the picker list is bounded at {RECORDS_CAP} per product",
+          not over_cap, "; ".join(over_cap[:3]))
+    check("IV4 `more` counts the records beyond the window", not bad_more, "; ".join(bad_more[:3]))
+
+    # Windows identity is (version, build). Losing the build would collapse several cumulative
+    # updates of one servicing train into a single indistinguishable entry.
+    check("IV5 build-aware products keep their build in the picker identity",
+          "microsoft-windows-11" in build_aware, str(build_aware))
+    win = next((e for e in entries if e.get("id") == "microsoft-windows-11"), {})
+    win_recs = [r for r in (win.get("recs") or []) if isinstance(r, list)]
+    win_versions = {r[0] for r in win_recs}
+    win_identities = {(r[0], r[1]) for r in win_recs}
+    check("IV6 Windows records sharing a version stay distinct by build",
+          len(win_identities) == len(win_recs) and len(win_versions) < len(win_recs),
+          f"{len(win_recs)} records, {len(win_versions)} versions, {len(win_identities)} identities")
+
+    # The beta flag is the only channel signal this repo has; it exists so a stable reader is never
+    # told a newer beta is an update.
+    check("IV7 the tracked beta release is flagged as beta",
+          "blackmagic-davinci" in beta_flagged, str(beta_flagged))
+
+    payload_bytes = len(payload_match.group(1)) if payload_match else 0
+    check(f"IV8 the payload stays bounded ({payload_bytes} bytes)", payload_bytes < 120000,
+          "a picker list must not become a dump of every record")
+
+    # The three integrations.
+    patch_layout = (AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
+    # The version attribute is ESCAPED: `update_version` is free text for several products
+    # (Figma and GitHub carry changelog headlines there), so it reaches an HTML attribute
+    # unsanitised otherwise. Pinning the escaped form keeps the escape from being dropped.
+    check("IV9 the patch page can claim its own exact release, version escaped",
+          'data-iv-here="{{ page.product_id }}"' in patch_layout
+          and "data-iv-v=\"{{ page.update_version | escape }}\"" in patch_layout
+          and "page.target_build" in patch_layout)
+    row = (AUX / "_includes" / "patch-table-row.html").read_text(encoding="utf-8")
+    check("IV10 history rows expose their record identity for the marker",
+          'data-record-url="{{ item.url }}"' in row and 'data-record-product="{{ item.product_id }}"' in row)
+    check("IV11 the strip counts versions set and newer releases",
+          "data-stack-count-versions" in html and "data-stack-count-newer" in html)
+    # The verdict on several of those releases is WAIT; counting them as required work would
+    # contradict the card underneath.
+    flat_all = re.sub(r"\s+", " ", html + js)
+    check("IV12 nothing claims updates are required",
+          "updates required" not in flat_all.lower())
+    # The comparison is a RELATIONSHIP between two records. The verdict stays whatever the patch
+    # record already says, so the installed-version logic must not contain a decision word at all:
+    # being several releases behind is not itself advice to update.
+    CONSERVATIVE = {"CURRENT", "UPDATE AVAILABLE", "NEWER TRACKED VERSION EXISTS",
+                    "INSTALLED VERSION NO LONGER TRACKED"}
+    iv_logic = js.split("const installedState", 1)[1].split("// My Patch Stack", 1)[0]
+    declared = set(re.findall(r"'(" + "|".join(sorted(CONSERVATIVE, key=len, reverse=True)) + r")'", js))
+    leaked = [w for w in ("WAIT", "TEST FIRST", "AVOID", "SAFE ENOUGH", "SECURITY UPDATE",
+                          "MANUAL WATCH", "OFFICIAL ONLY")
+              if w in iv_logic]
+    check("IV13 the comparison uses only the four conservative states",
+          declared == CONSERVATIVE, str(sorted(CONSERVATIVE - declared)))
+    check("IV14 the installed-version logic contains no verdict word",
+          not leaked, f"decision words found in installedState: {leaked}")
     check("E4 unwatch reuses the shared watch control contract",
           'data-watch-product="${esc(entry.id)}"' in js)
     check("E5 the dashboard reuses the watchlist reader rather than re-validating ids",
