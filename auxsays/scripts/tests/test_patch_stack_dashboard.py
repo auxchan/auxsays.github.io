@@ -407,6 +407,36 @@ def run() -> int:
           declared == CONSERVATIVE, str(sorted(CONSERVATIVE - declared)))
     check("IV14 the installed-version logic contains no verdict word",
           not leaked, f"decision words found in installedState: {leaked}")
+    # Live, UPDATE AVAILABLE read "A newer tracked release of this version exists." and the vague
+    # state read "Newer tracked releases exist." -- the same sentence twice, so the reader could
+    # see two different labels and no difference between them. The definite state is the only one
+    # allowed to sound definite; the vague one has to say why it is vague.
+    copy_block = js.split("const STATE_COPY", 1)[1].split("};", 1)[0]
+    copy_map = dict(re.findall(r"'([A-Z ]+)': '([^']+)'", copy_block))
+    check("IV15 every state explains itself in its own words",
+          len(set(copy_map.values())) == len(CONSERVATIVE) == len(copy_map),
+          f"{len(copy_map)} states, {len(set(copy_map.values()))} distinct sentences")
+    vague = copy_map.get("NEWER TRACKED VERSION EXISTS", "")
+    definite = copy_map.get("UPDATE AVAILABLE", "")
+    check("IV16 the vague state says why it is vague rather than paraphrasing the definite one",
+          "clear update" in vague and vague != definite and "stable" in definite,
+          f"vague={vague!r} definite={definite!r}")
+
+    # Every option button in a card carries the SAME data-iv-set (the product id), so restoring
+    # focus by that attribute alone returned the first option in the list, not the one the reader
+    # had just activated. The record identity is what tells the buttons apart.
+    # Pin the LOOKUP, not the surrounding block: `dataset.ivV` and `querySelectorAll` both occur
+    # elsewhere in the same listener, so a check over the whole block passes with the defect
+    # restored. This slice is the target assignment itself.
+    after = js.split("auxsays:installed-change", 1)[1]
+    target_stmt = after.split("const target", 1)[1].split(";", 1)[0]
+    identity = after.split("const target", 1)[0]
+    check("IV17 focus returns to the option the reader activated, by record identity",
+          "options.find" in target_stmt
+          and "querySelector('[data-iv-set=" not in target_stmt
+          and "dataset.ivV" in identity and "dataset.ivB" in identity,
+          f"target chosen by: {target_stmt.strip()[:90]!r}")
+
     check("E4 unwatch reuses the shared watch control contract",
           'data-watch-product="${esc(entry.id)}"' in js)
     check("E5 the dashboard reuses the watchlist reader rather than re-validating ids",

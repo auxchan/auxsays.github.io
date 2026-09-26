@@ -520,8 +520,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const STATE_COPY = {
       'CURRENT': 'You are on the newest tracked release.',
-      'UPDATE AVAILABLE': 'A newer tracked release of this version exists.',
-      'NEWER TRACKED VERSION EXISTS': 'Newer tracked releases exist.',
+      'UPDATE AVAILABLE': 'AUXSAYS tracks a newer stable release than yours.',
+      'NEWER TRACKED VERSION EXISTS': 'Newer releases are tracked, but none is a clear update to the one you run.',
       'INSTALLED VERSION NO LONGER TRACKED': 'AUXSAYS no longer tracks the release you saved.',
     };
 
@@ -667,6 +667,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const active = document.activeElement;
       const wantSet = active && active.dataset ? active.dataset.ivSet : '';
       const wantClear = active && active.dataset ? active.dataset.ivClear : '';
+      const wantV = active && active.dataset ? String(active.dataset.ivV || '') : '';
+      const wantB = active && active.dataset ? String(active.dataset.ivB || '') : '';
       const openFor = Array.from(document.querySelectorAll('[data-stack-card]'))
         .filter((card) => card.querySelector('.patch-iv-picker[open]'))
         .map((card) => card.dataset.stackCard);
@@ -678,8 +680,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('[data-stack-card="' + cardId + '"] .patch-iv-picker')
           .forEach((node) => { node.open = true; });
       });
+      const sameOption = (node) => String(node.dataset.ivV || '') === wantV
+        && String(node.dataset.ivB || '') === wantB;
+      const options = wantSet
+        ? Array.from(document.querySelectorAll('[data-iv-set="' + wantSet + '"]'))
+        : [];
       const target = wantSet
-        ? document.querySelector('[data-iv-set="' + wantSet + '"]')
+        ? (options.find(sameOption) || options[0] || null)
         : (wantClear
           ? document.querySelector('[data-stack-card="' + wantClear + '"] .patch-iv-picker summary')
           : null);
