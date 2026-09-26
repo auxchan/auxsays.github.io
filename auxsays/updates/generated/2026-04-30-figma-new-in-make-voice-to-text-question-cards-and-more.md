@@ -64,17 +64,12 @@ official_sources: []
 official_patch_notes_body: Make introduces new features for more control and context as you build.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-source_last_checked: '2026-08-25T19:54:39Z'
-official_body_last_checked: '2026-08-25T19:54:39Z'
+source_last_checked: '2026-09-26T23:23:05Z'
+official_body_last_checked: '2026-09-26T23:23:05Z'
 primary_official_source: https://www.figma.com/release-notes/
 fallback_official_sources:
 - https://forum.figma.com/product-updates-3
 official_source_attempts:
-- at: '2026-05-05T07:33:40Z'
-  url: https://www.figma.com/release-notes/?title=new-in-make-voice-to-text-question-cards-and-more
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-05-05T17:09:23Z'
   url: https://www.figma.com/release-notes/?title=new-in-make-voice-to-text-question-cards-and-more
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-25T19:54:39Z'
+  url: https://www.figma.com/release-notes/?title=new-in-make-voice-to-text-question-cards-and-more
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-26T23:23:05Z'
   url: https://www.figma.com/release-notes/?title=new-in-make-voice-to-text-question-cards-and-more
   status: captured-from-rss-feed
   body_captured: true
