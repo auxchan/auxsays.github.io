@@ -17,8 +17,8 @@ update_version: Usage metrics API adds pull request review stages
 update_logo_text: GIT
 update_published_at: '2026-09-25T21:09:40Z'
 update_last_checked: '2026-09-25T23:47:05Z'
-source_last_checked: '2026-09-26T13:42:24Z'
-official_body_last_checked: '2026-09-26T13:42:24Z'
+source_last_checked: '2026-09-26T18:43:10Z'
+official_body_last_checked: '2026-09-26T18:43:10Z'
 record_last_updated: '2026-09-25T23:47:05Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -104,6 +104,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-26T13:42:24Z'
+  url: https://github.blog/changelog/2026-09-25-usage-metrics-api-adds-pull-request-review-stages
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-26T18:43:10Z'
   url: https://github.blog/changelog/2026-09-25-usage-metrics-api-adds-pull-request-review-stages
   status: captured-from-rss-feed
   body_captured: true
