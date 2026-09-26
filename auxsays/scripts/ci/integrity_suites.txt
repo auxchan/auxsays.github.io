@@ -102,7 +102,7 @@ auxsays/scripts/tests/test_patch_watchlist.py = 35
 # Liquid and checks the half Jekyll owns -- a bounded payload (no 1,200-record dump), the newest
 # dated non-archived record per product, and a verdict derived exactly as patch-table-row does.
 # The client rendering is verified live; the storage contract it reuses is the Node suite's.
-auxsays/scripts/tests/test_patch_stack_dashboard.py = 42
+auxsays/scripts/tests/test_patch_stack_dashboard.py = 45
 auxsays/scripts/tests/test_powerpoint_attribution.py = 65
 auxsays/scripts/tests/test_powerpoint_build_identity.py = 54
 auxsays/scripts/tests/test_powerpoint_build_roles.py = 108
