@@ -102,7 +102,7 @@ auxsays/scripts/tests/test_patch_watchlist.py = 35
 # Liquid and checks the half Jekyll owns -- a bounded payload (no 1,200-record dump), the newest
 # dated non-archived record per product, and a verdict derived exactly as patch-table-row does.
 # The client rendering is verified live; the storage contract it reuses is the Node suite's.
-auxsays/scripts/tests/test_patch_stack_dashboard.py = 28
+auxsays/scripts/tests/test_patch_stack_dashboard.py = 42
 auxsays/scripts/tests/test_powerpoint_attribution.py = 65
 auxsays/scripts/tests/test_powerpoint_build_identity.py = 54
 auxsays/scripts/tests/test_powerpoint_build_roles.py = 108
@@ -231,6 +231,11 @@ auxsays/assets/js/patch-table-sort.test.mjs
 # already earned its keep: it caught `[1,2,3]` surviving the id filter, because String(1) is
 # slug-shaped.
 auxsays/assets/js/patch-watchlist.test.mjs
+# Same reason: Node. Executes the shipped installed-version helpers sliced out of auxsays.js (25
+# checks): set/change/clear, malformed and unavailable storage, and the four conservative
+# comparison states -- including the two that must never read as "update": a stable reader with a
+# newer BETA tracked, and a newer Windows servicing TRAIN rather than a newer build of the same one.
+auxsays/assets/js/installed-versions.test.mjs
 auxsays/scripts/tests/test_monitoring_status_render.py
 auxsays/tools/local-browser-capture/tests/capture-core.test.mjs
 auxsays/tools/local-playwright-capture/scripts/test-capture.mjs

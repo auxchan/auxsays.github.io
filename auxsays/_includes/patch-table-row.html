@@ -63,7 +63,9 @@
 {% endif %}
 {% assign verdict_class = decision_label | downcase | replace: ' ', '-' | replace: ':', '' %}
 {% assign row_build = item.target_build | default: '' %}
-<tr class="patch-row" data-date="{{ item.update_published_at }}" data-product="{{ product_name | escape }}" data-version="{{ item.update_version | escape }}{% if row_build != '' %}.{{ row_build | escape }}{% endif %}" data-verdict-rank="{{ verdict_rank }}" data-reports="{{ report_count_num }}" data-evidence-rank="{{ evidence_rank }}">
+{%- comment -%} data-record-url is the row's own identity, so the client can mark the release a
+  reader has saved as installed without this include learning anything about that feature. {%- endcomment -%}
+<tr class="patch-row" data-record-url="{{ item.url }}" data-record-product="{{ item.product_id }}" data-date="{{ item.update_published_at }}" data-product="{{ product_name | escape }}" data-version="{{ item.update_version | escape }}{% if row_build != '' %}.{{ row_build | escape }}{% endif %}" data-verdict-rank="{{ verdict_rank }}" data-reports="{{ report_count_num }}" data-evidence-rank="{{ evidence_rank }}">
 <td data-label="Date"><time datetime="{{ item.update_published_at }}">{{ item.update_published_at | date: "%b %-d, %Y" }}</time></td>
 {% if include.show_product %}{% capture product_page_url %}/updates/{{ item.company_id }}/{{ item.product_id }}/{% endcapture %}<td data-label="Product" class="patch-cell-product"><a href="{{ product_page_url | relative_url }}">{{ product_name }}</a></td>{% endif %}
 <td data-label="Version" class="patch-cell-version">{{ item.update_version }}{% if row_build != '' %} <span class="patch-cell-version__build">Build {{ row_build }}</span>{% endif %}</td>

@@ -504,6 +504,17 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         <span class="patch-watch-toggle__mark" aria-hidden="true"></span>
         <span class="patch-watch-toggle__text" data-watch-text>Watch {{ product_name_clean | default: page.update_product | default: 'product' }}</span>
       </button>
+      {%- comment -%}
+        Claiming THIS record as the build you run. It carries the exact patch identity -- version
+        plus target_build where the product has one -- so a Windows reader saves a specific
+        cumulative update rather than a servicing train.
+      {%- endcomment -%}
+      <button type="button" class="patch-iv-here" data-iv-here="{{ page.product_id }}"
+              data-iv-v="{{ page.update_version | escape }}" data-iv-b="{{ page.target_build | default: '' }}"
+              data-iv-d="{{ page.update_published_at | date: '%Y-%m-%d' }}" data-iv-u="{{ page.url }}"
+              aria-pressed="false">
+        <span data-iv-here-text>I am on this version</span>
+      </button>
       {% endif %}
 
       <div class="update-meta-strip">
