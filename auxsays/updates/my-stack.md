@@ -108,6 +108,13 @@ permalink: /updates/my-stack/
       `beta` carries the only channel signal this repo has. Three records in 1,200 set a channel
       label, so the version string is it -- the same textual signal lib/patch_decision.version_is_beta
       uses. It exists so a stable reader is never told a newer BETA is an update.
+
+      Tuple shape, fixed at 11 and pinned exactly by the suite:
+        [0] version  [1] build  [2] date  [3] url  [4] beta
+        [5] verdict  [6] rank   [7] reports  [8] evidence label
+        [9] official active issue count      [10] official notes captured (0/1)
+      0-4 drive the version picker; 5-10 exist so an upgrade path can show what AUXSAYS already
+      says about each release it lists, WITHOUT a second verdict computation on the client.
     {%- endcomment -%}
     {%- assign p_count = 0 -%}
     {%- capture p_recs -%}
@@ -132,7 +139,77 @@ permalink: /updates/my-stack/
               {%- endif -%}
             {%- endif -%}
             {%- if rec.release_channel_label -%}{%- assign rec_is_beta = 1 -%}{%- endif -%}
-            [{{ rec.update_version | default: '' | jsonify }},{{ rec.target_build | default: '' | jsonify }},{{ rec.update_published_at | date: "%Y-%m-%d" | jsonify }},{{ rec.url | jsonify }},{{ rec_is_beta }}]
+            {%- comment -%}
+              PER-RELEASE DECISION DATA, so an upgrade path can show what AUXSAYS already says about
+              each release between the reader's version and the target.
+
+              Liquid `assign` has NO loop scope -- every variable here is global and survives into
+              the next iteration -- so each one is reset unconditionally before it is used. A
+              conditional assignment alone would leak the previous record's verdict onto a record
+              that has none.
+
+              The derivation is the SAME fallback chain the `chosen` block above uses, which is
+              itself the chain from `_includes/patch-table-row.html`. It is a second copy, which is
+              a real cost; what stops the copies drifting is that the suite computes the expected
+              verdict INDEPENDENTLY in Python from the corpus and applies it to EVERY record here,
+              not just the one the card shows.
+            {%- endcomment -%}
+            {%- assign rec_verdict = rec.update_decision_label | default: '' | strip -%}
+            {%- if rec_verdict == '' and rec.update_consensus_summary contains ':' -%}
+              {%- assign rec_verdict = rec.update_consensus_summary | split: ':' | first | strip -%}
+            {%- elsif rec_verdict == '' and rec.quick_verdict contains ':' -%}
+              {%- assign rec_verdict = rec.quick_verdict | split: ':' | first | strip -%}
+            {%- elsif rec_verdict == '' -%}
+              {%- assign rec_verdict = 'INSUFFICIENT DATA' -%}
+            {%- endif -%}
+            {%- assign rec_n = rec.update_report_count | default: 0 | plus: 0 -%}
+            {%- assign rec_official_only = false -%}
+            {%- if rec.evidence_state == 'official_only' or rec.evidence_state_label == 'Official source only' -%}{%- assign rec_official_only = true -%}{%- endif -%}
+            {%- if rec_official_only and rec_n == 0 -%}{%- assign rec_verdict = 'INSUFFICIENT DATA' -%}{%- endif -%}
+            {%- assign rec_vkey = rec_verdict | upcase -%}
+            {%- assign rec_rank = 99 -%}
+            {%- if rec_vkey contains 'AVOID' -%}{%- assign rec_rank = 0 -%}
+            {%- elsif rec_vkey contains 'WAIT' -%}{%- assign rec_rank = 1 -%}
+            {%- elsif rec_vkey contains 'TEST FIRST' -%}{%- assign rec_rank = 2 -%}
+            {%- elsif rec_vkey contains 'SECURITY UPDATE' -%}{%- assign rec_rank = 3 -%}
+            {%- elsif rec_vkey contains 'SAFE ENOUGH' -%}{%- assign rec_rank = 4 -%}
+            {%- elsif rec_vkey contains 'OFFICIAL ONLY' -%}{%- assign rec_rank = 5 -%}
+            {%- elsif rec_vkey contains 'INSUFFICIENT DATA' -%}{%- assign rec_rank = 6 -%}
+            {%- elsif rec_vkey contains 'MANUAL WATCH' -%}{%- assign rec_rank = 7 -%}
+            {%- endif -%}
+            {%- assign rec_ev_state = rec.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' -%}
+            {%- assign rec_ev = rec.evidence_state_label | default: rec_ev_state | replace: '_', ' ' | capitalize -%}
+            {%- if rec_ev_state == 'pilot_sample' or rec_ev_state == 'static_sample' or rec_ev_state == 'pilot_initial_sample' or rec_ev_state == 'static_initial_sample' -%}{%- assign rec_ev = 'Verified reports' -%}
+            {%- elsif rec_ev_state == 'official_only' -%}{%- assign rec_ev = 'Official source only' -%}
+            {%- elsif rec_ev_state == 'consensus_live' -%}{%- assign rec_ev = 'Live consensus' -%}
+            {%- elsif rec_ev_state == 'insufficient_data' -%}{%- assign rec_ev = 'Insufficient data' -%}
+            {%- endif -%}
+            {%- comment -%}
+              OFFICIAL NOTES: a FLAG, never the prose.
+
+              `official_patch_notes_body` is raw vendor markdown, not a structured change list. Of
+              the 213 records this payload carries, 201 have a body that passes the pollution gate
+              but only 43 contain any bullet lines at all -- and those carry a median of 44 bullets,
+              some of which are the vendor's KNOWN ISSUES rather than changes, with markdown links
+              embedded in the text. Sampling two of them under a heading saying "official changes"
+              would be asserting a summary the record does not make.
+
+              So this carries only what the record structurally states: that official notes were
+              captured and are renderable, by the SAME `official_body_polluted` gate `aux-update.html`
+              uses to decide whether to render them at all. The notes themselves stay on the patch
+              page, one link away.
+            {%- endcomment -%}
+            {%- assign rec_body = rec.official_patch_notes_body | default: '' | strip -%}
+            {%- assign rec_notes = 0 -%}
+            {%- if rec_body != '' -%}
+              {%- assign rec_body_key = rec_body | downcase -%}
+              {%- assign rec_polluted = false -%}
+              {%- if rec_body_key contains 'showvotefeedback' or rec_body_key contains 'function(' or rec_body_key contains 'document.' or rec_body_key contains 'window.' or rec_body_key contains 'queryselector' or rec_body_key contains 'content-rating-buttons' -%}
+                {%- assign rec_polluted = true -%}
+              {%- endif -%}
+              {%- if rec_polluted == false -%}{%- assign rec_notes = 1 -%}{%- endif -%}
+            {%- endif -%}
+            [{{ rec.update_version | default: '' | jsonify }},{{ rec.target_build | default: '' | jsonify }},{{ rec.update_published_at | date: "%Y-%m-%d" | jsonify }},{{ rec.url | jsonify }},{{ rec_is_beta }},{{ rec_verdict | jsonify }},{{ rec_rank }},{{ rec_n }},{{ rec_ev | jsonify }},{{ rec.official_active_issue_count | default: 0 | plus: 0 }},{{ rec_notes }}]
           {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
@@ -151,8 +228,13 @@ permalink: /updates/my-stack/
   early, JSON.parse would throw, and the client's fail-soft would confidently report an empty stack
   to someone who has products. Version strings are sometimes free-text vendor prose, so this is a
   real input, not a hypothetical one.
+
+  Neutralising every `</` rather than the exact lowercase string `</script>`: the HTML tokenizer
+  matches an end tag CASE-INSENSITIVELY, so `</SCRIPT>` or `</ScRiPt>` in vendor text would close
+  this element while sailing past an exact-match replace. `\/` is a valid JSON escape for `/`, so
+  JSON.parse returns the identical string and nothing downstream can tell the difference.
 {%- endcomment -%}
-<script type="application/json" id="patch-stack-data">{{ stack_payload | replace: '</script>', '<\/script>' }}</script>
+<script type="application/json" id="patch-stack-data">{{ stack_payload | replace: '</', '<\/' }}</script>
 
 <section class="patch-shell patch-stack-shell">
   <section class="panel patch-hero reveal-up">
