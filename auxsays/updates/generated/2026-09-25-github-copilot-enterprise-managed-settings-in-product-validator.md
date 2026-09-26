@@ -17,8 +17,8 @@ update_version: Enterprise managed settings in-product validator
 update_logo_text: GIT
 update_published_at: '2026-09-25T23:24:57Z'
 update_last_checked: '2026-09-26T07:13:37Z'
-source_last_checked: '2026-09-26T07:13:37Z'
-official_body_last_checked: '2026-09-26T07:13:37Z'
+source_last_checked: '2026-09-26T13:42:24Z'
+official_body_last_checked: '2026-09-26T13:42:24Z'
 record_last_updated: '2026-09-26T07:13:37Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -78,6 +78,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-09-26T07:13:37Z'
+  url: https://github.blog/changelog/2026-09-25-enterprise-managed-settings-in-product-validator
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-26T13:42:24Z'
   url: https://github.blog/changelog/2026-09-25-enterprise-managed-settings-in-product-validator
   status: captured-from-rss-feed
   body_captured: true

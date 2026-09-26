@@ -17,8 +17,8 @@ update_version: Vertical wrap available in auto layout
 update_logo_text: FIG
 update_published_at: '2026-09-25T00:00:00.000Z'
 update_last_checked: '2026-09-25T19:25:08Z'
-source_last_checked: '2026-09-26T07:13:34Z'
-official_body_last_checked: '2026-09-26T07:13:34Z'
+source_last_checked: '2026-09-26T13:42:21Z'
+official_body_last_checked: '2026-09-26T13:42:21Z'
 record_last_updated: '2026-09-25T19:25:08Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-26T07:13:34Z'
+  url: https://www.figma.com/release-notes/?title=vertical-wrap-available-in-auto-layout
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-26T13:42:21Z'
   url: https://www.figma.com/release-notes/?title=vertical-wrap-available-in-auto-layout
   status: captured-from-rss-feed
   body_captured: true
