@@ -45,7 +45,7 @@ jobs:
       - name: Probe official Adobe endpoints
         run: |
           python auxsays/scripts/probe_photoshop_sources.py \
-            --gap "${{ inputs.gap_seconds }}" \
+            --gap 8 \
             --json probe-result.json
 
       - name: Upload measurements
