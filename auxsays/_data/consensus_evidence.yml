@@ -33981,3 +33981,28 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
+
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qxstro-bad-playback-performance-on-good-hardware
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qxstro/bad_playback_performance_on_good_hardware/
+  parent_title: Bad playback performance on good hardware
+  report_title: Bad playback performance on good hardware
+  report_text_excerpt: Bad playback performance on good hardware hey, so i've been having quite a lot of problem with timeline performance in davinci resolve studio 20.3.1. I've got a core ultra 255h, 32gb of ram(ram usage of resolve never goes to the 24gb it could theoretically use) and an rx...
+  captured_at: '2026-09-27T17:55:19Z'
+  source_date: '2026-02-06'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
