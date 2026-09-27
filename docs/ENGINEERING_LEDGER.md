@@ -271,14 +271,32 @@ warning-level during repair/writeback.
 
 ### AUX-010 — Site-wide heading contrast
 
-- **Status** Deferred (approved, not started) · **Area** Presentation · **Severity** Medium
+- **Status** Resolved · **Area** Presentation · **Severity** Medium
 
-**Symptom** The AUX-004 defect remains on every layout except patch pages: home 7/7 headings, feed
-1154/1154, vendor 4/6, product 2/4, methodology 13/13, about 1/3, at ~1.30–1.36:1 in OS light mode.
+**Symptom** The AUX-004 defect remained on every layout except patch pages: home, feed, vendor,
+product, methodology and about all rendered headings at 1.01–1.23:1 in OS light mode.
 
-**Why deferred** Sequenced behind patch-decision policy work by directive.
+**Root cause** AUXSAYS paints a fixed dark ground in every colour scheme, but Chirpy colours h1–h5
+with `var(--heading-color)` and flips that token on `prefers-color-scheme` (#2a2a2a light,
+#cccccc dark). AUX-004 took ownership of the token for patch pages only, leaving every other
+layout reading the theme's light-mode value on the dark ground.
 
-**Must not block** Nothing blocks it now except sequencing.
+**Repair** `body.aux-page { --heading-color: var(--text-0); }` — `aux-base.html` emits
+`<body class="aux-page {{ page.layout }}">` for every AUXSAYS layout, so that selector is exactly
+the AUXSAYS-owned ground. It replaces the narrower `body.aux-update` rule (same weight, same
+value). `vault.html` renders `body.vault-page` and keeps the theme's behaviour.
+
+**Verification** Production, both OS schemes, desktop and 390px: home 15.81:1, feed 15.81:1,
+vendor 6.43:1, product 6.43:1, methodology 15.81:1, about 9.09:1, patch page 15.81:1 — all at the
+same `#ece7dd` in either scheme. Setting the token back to the theme's value on a live product page
+recolours 2 of 378 elements, both headings, and moves zero geometry.
+`test_patch_heading_contrast.py` 64 → 111: [L] covers every representative layout, and [N]
+reproduces the defect on demand by narrowing the rule back to patch pages.
+
+**PR** #152 · **Merge** `d0d829d1`
+
+**Reopen only if** an AUXSAYS-owned fixed-dark layout again renders a general heading below 4.5:1
+in either OS colour scheme.
 
 ---
 
