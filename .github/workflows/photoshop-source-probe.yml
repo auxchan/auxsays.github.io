@@ -11,13 +11,12 @@ name: Photoshop Source Probe
 #
 # No write permissions, no token use, no repository mutation. It prints measurements.
 
+# Push-triggered on this sprint branch only: workflow_dispatch needs the file on the default
+# branch, and putting a throwaway probe there to measure one thing is the wrong trade.
 on:
-  workflow_dispatch:
-    inputs:
-      gap_seconds:
-        description: "Seconds between requests (the host rate-limits bursts)"
-        required: false
-        default: "8"
+  push:
+    branches:
+      - sprint/photoshop-ingestion
 
 permissions:
   contents: read
