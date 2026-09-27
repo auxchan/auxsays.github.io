@@ -33842,3 +33842,52 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wr36zn-davinci-resolve-creates-artifacts-when-ex
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wr36zn/davinci_resolve_creates_artifacts_when_exporting/
+  parent_title: DaVinci Resolve creates artifacts when exporting – AMD RX 9060 XT
+  report_title: DaVinci Resolve creates artifacts when exporting – AMD RX 9060 XT
+  report_text_excerpt: DaVinci Resolve creates artifacts when exporting – AMD RX 9060 XT Hey everyone, I’m having an issue with DaVinci Resolve and my AMD RX 9060 XT . The original video files look completely fine when I play them back. However, whenever I export a video from DaVinci Resolve and...
+  captured_at: '2026-09-27T06:14:56Z'
+  source_date: '2026-09-26'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wmwgbt-audio-and-lip-sync-lag-with-blackmagic-ca
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wmwgbt/audio_and_lip_sync_lag_with_blackmagic_camera_app/
+  parent_title: Audio and Lip Sync Lag with Blackmagic Camera App, iPhone 12, and DJI Mic Mini Bluetooth in DaVinci Resolve
+  report_title: Audio and Lip Sync Lag with Blackmagic Camera App, iPhone 12, and DJI Mic Mini Bluetooth in DaVinci Resolve
+  report_text_excerpt: 'Audio and Lip Sync Lag with Blackmagic Camera App, iPhone 12, and DJI Mic Mini Bluetooth in DaVinci Resolve Hey everyone, I need some help troubleshooting an audio sync issue. Recording Setup: Phone: iPhone 12 running the Blackmagic Camera app Microphone: DJI Mic Mini...'
+  captured_at: '2026-09-27T06:14:56Z'
+  source_date: '2026-09-22'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
