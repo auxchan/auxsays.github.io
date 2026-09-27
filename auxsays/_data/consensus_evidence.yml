@@ -33891,3 +33891,93 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6016326-windows-11-25h2-smartphone-bluetooth-p
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6016326/windows-11-25h2-smartphone-bluetooth-pairing-probl
+  parent_title: 'Windows 11 25H2: Smartphone Bluetooth pairing problem and other issues with File Explorer and svchost.exe - Microsoft Q&A'
+  report_title: 'Windows 11 25H2: Smartphone Bluetooth pairing problem and other issues with File Explorer and svchost.exe - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11 25H2: Smartphone Bluetooth pairing problem and other issues with File Explorer and svchost.exe - Microsoft Q&A System information Laptop: ASUS TUF Gaming F16 FX608JMR-RV024 Bluetooth/Wi-Fi adapter: Intel Wi-Fi 6E AX211 Windows Edition: Windows 11 Enterprise Version:...'
+  captured_at: '2026-09-27T13:04:06Z'
+  source_date: '2026-09-27'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9550'
+  match_basis: exact_os_build
+  matched_kb: KB5124010
+  matched_os_build: '26200.9550'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6016145-windows-11-25h2-26200-9550-bsod-irql-n
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6016145/windows-11-25h2-26200-9550-bsod-irql-not-less-or-e
+  parent_title: Windows 11 25H2 26200.9550 BSOD (IRQL_NOT_LESS_OR_EQUAL) - Microsoft Q&A
+  report_title: Windows 11 25H2 26200.9550 BSOD (IRQL_NOT_LESS_OR_EQUAL) - Microsoft Q&A
+  report_text_excerpt: Windows 11 25H2 26200.9550 BSOD (IRQL_NOT_LESS_OR_EQUAL) - Microsoft Q&A I've been getting BSOD often with the stop code IRQL_NOT_LESS_OR_EQUAL. I have no idea what's causing this. It's starting to be really annoying and since I have dealt with BSODs before i'll just attach...
+  captured_at: '2026-09-27T13:04:06Z'
+  source_date: '2026-09-26'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9550'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9550'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6015696-windows-update-fails-with-something-we
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6015696/windows-update-fails-with-something-went-wrong-upd
+  parent_title: Windows Update fails with "Something went wrong" — UpdateOrchestrator event log missing even after in-place repair - Microsoft Q&A
+  report_title: Windows Update fails with "Something went wrong" — UpdateOrchestrator event log missing even after in-place repair - Microsoft Q&A
+  report_text_excerpt: 'Windows Update fails with "Something went wrong" — UpdateOrchestrator event log missing even after in-place repair - Microsoft Q&A Windows 11 25H2 (build 26200.9457), originally upgraded from 21H2. Problem: Windows Update page in Settings shows "Something went wrong. Try to...'
+  captured_at: '2026-09-27T13:04:15Z'
+  source_date: '2026-09-27'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
