@@ -104,18 +104,20 @@ a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; }
 
 .aux-page { min-height:100vh; position:relative; overflow-x:clip; }
-/* PATCH-PAGE HEADING COLOUR. The ground above is dark in every colour scheme, but Chirpy colours
+/* AUXSAYS HEADING COLOUR. The ground above is dark in every colour scheme, but Chirpy colours
    h1-h5 with `var(--heading-color)`, which it flips on prefers-color-scheme: #cccccc for dark,
-   #2a2a2a for light. With an OS set to light, the patch-page title and the Level-2/Level-3 card
-   titles rendered #2a2a2a on #0a0d10 -- measured 1.36:1 and 1.30:1 in Chromium. The page owns its
-   ground, so it owns the heading token too: one value in both schemes, the same --text-0 every
-   explicitly coloured heading on this page already uses. Headings that set their own colour are
-   untouched, because this only replaces the theme's token.
+   #2a2a2a for light. With an OS set to light, headings rendered #2a2a2a on #0a0d10 -- measured
+   1.36:1 and 1.30:1 in Chromium, on the patch page first and then on every other layout.
 
-   Scoped to the aux-update layout on purpose. Every other aux-page layout has the same mismatch
-   (measured 2026-09-11: home, the patch feed, vendor, product, methodology, about), which makes it
-   a site-wide theme decision rather than part of this repair. */
-body.aux-update { --heading-color: var(--text-0); }
+   Wherever AUXSAYS owns the ground it owns the heading token too. `aux-base.html` emits
+   `<body class="aux-page {{ page.layout }}">` for every AUXSAYS layout, so `body.aux-page` IS that
+   ground: one value in both schemes, the same --text-0 every explicitly coloured heading here
+   already uses. Headings that set their own colour are untouched, because this only replaces the
+   theme's token, and `vault.html` renders `body.vault-page` so it keeps the theme's own behaviour.
+
+   This replaces the earlier `body.aux-update` rule rather than sitting beside it: same selector
+   weight, same value, and one owner is clearer than a general rule shadowed by a narrower copy. */
+body.aux-page { --heading-color: var(--text-0); }
 .aux-bg {
   position:fixed; inset:0; pointer-events:none;
   background:
@@ -5156,10 +5158,9 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   .patch-stack-unwatch { margin-left: 0; }
 }
 
-/* The heading-colour repair is scoped to `body.aux-update` (patch pages). This page renders on
-   aux-base, so its own headings would inherit Chirpy's OS-following --heading-color and sit at
-   ~1.36:1 on the fixed-dark ground in light mode. Scoped to this feature; the site-wide decision
-   is a separate piece of work. */
+/* Explicit, and kept explicit. `body.aux-page` now owns --heading-color for every AUXSAYS layout,
+   so these two would resolve to the same --text-0 without help; they stay because a component that
+   states its own heading colour does not silently change meaning if the shared token ever does. */
 .patch-stack-shell h1,
 .patch-stack-shell .section-head h2 { color: var(--text-0); }
 
