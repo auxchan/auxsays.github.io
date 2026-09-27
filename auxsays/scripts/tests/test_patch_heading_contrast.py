@@ -989,16 +989,22 @@ def _template(path: Path) -> str:
     return re.sub(r"\{%-?\s*seo\s*-?%\}", "", text)
 
 
-def render_page(page: dict = PAGE) -> tuple:
-    """-> (html or None, reason)."""
+def render_page(page: dict = PAGE, layout: Path = None, content: str = None) -> tuple:
+    """-> (html or None, reason).
+
+    `layout` names the inner template to render inside aux-base; it defaults to the patch layout.
+    `content` replaces the inner render entirely, for a page whose own layout IS aux-base and whose
+    body is markdown (the methodology page) -- there is no inner template to run in that case.
+    """
     ruby = shutil.which("ruby")
     if not ruby:
         return None, "ruby is not on PATH"
+    inner = content if content is not None else _template(layout or UPDATE_LAYOUT)
     with tempfile.TemporaryDirectory() as td:
         script = Path(td) / "render.rb"
         script.write_text(_RENDER_RB, encoding="utf-8")
         payload = Path(td) / "p.json"
-        payload.write_text(json.dumps({"update": _template(UPDATE_LAYOUT), "base": _template(BASE_LAYOUT),
+        payload.write_text(json.dumps({"update": inner, "base": _template(BASE_LAYOUT),
                                        "site": SITE, "page": page}), encoding="utf-8")
         proc = subprocess.run([ruby, str(script), str(payload)], capture_output=True, text=True,
                               encoding="utf-8", errors="replace", timeout=180)
@@ -1020,6 +1026,23 @@ TARGETS = [
     ("release-note heading", ".official-patch-notes.node-bullet-scope h2"),
     ("checksum heading", ".official-patch-notes.checksum-body h2"),
     ("control: official-sources subhead", "h3.update-source-subhead"),
+]
+
+
+# The surfaces AUX-010 names, each mapped to the layout that actually renders it. Every one of
+# these goes through aux-base.html, which is what emits `<body class="aux-page {{ page.layout }}">`.
+# `content` is set only for a page whose own layout is aux-base and whose headings come from
+# markdown; there is no inner template to render in that case, and the point being proved is the
+# body-level token, which is present either way.
+SURFACES = [
+    ("homepage", "aux-home", None),
+    ("patch feed", "aux-updates", None),
+    ("vendor page", "aux-patch-company", None),
+    ("product page", "aux-patch-product", None),
+    ("about", "aux-about", None),
+    ("articles", "aux-articles", None),
+    ("methodology (markdown on aux-base)", "aux-base",
+     "<h1>AUXSAYS Patch Feed Methodology</h1><h2>How evidence is counted</h2><h3>Sources</h3>"),
 ]
 
 
@@ -1261,9 +1284,13 @@ def run() -> int:
           dark is not None and dark[0] >= THRESHOLD,
           "n/a" if dark is None else f"{hexc(dark[1])} {dark[0]:.2f}:1")
 
-    # ---------- K: the repair is scoped to the patch layout ----------
-    print("\n[K] scope: the repair reaches the aux-update layout and nothing else")
-    other, other_reason = render_page(dict(PAGE, layout="aux-patch-product")) if html else (None, "no render")
+    # ---------- K: where the ownership starts, and where it stops ----------
+    print("\n[K] scope: AUXSAYS owns the token on its own ground, and only there")
+    # AUXSAYS owns every layout that renders through aux-base, so a NON-patch AUXSAYS layout must
+    # now get the AUXSAYS value rather than the theme's OS-following one. This check used to assert
+    # the opposite, because the repair was deliberately scoped to patch pages first.
+    other, other_reason = render_page(dict(PAGE, layout="aux-patch-product"),
+                                      _AUX / "_layouts" / "aux-patch-product.html") if html else (None, "no render")
     odom = parse_html(other or "<html><body></body></html>")
     obody = select(odom, "body")
     for scheme in ("light", "dark"):
@@ -1274,10 +1301,79 @@ def run() -> int:
             theme_only = Styler([theme_rules], {"scheme": scheme, "width": 1280})
             got = st.custom(obody[0], "--heading-color")
             want = theme_only.custom(obody[0], "--heading-color")
-            ok = got is not None and got == want and "aux-update" not in obody[0].classes
-            detail = f"body.{'.'.join(sorted(obody[0].classes))}: {got!r} vs theme {want!r} -- a " \
-                     f"site-wide fix is a separate, deliberate decision; update [K] with it"
-        check(f"K on a non-patch layout the heading token is still the theme's ({scheme})", ok, detail)
+            ok = (got is not None and "aux-page" in obody[0].classes
+                  and "aux-update" not in obody[0].classes
+                  and (scheme == "dark" or got != want))
+            detail = f"body.{'.'.join(sorted(obody[0].classes))}: {got!r} vs theme {want!r}"
+        check(f"K1 a non-patch AUXSAYS layout gets the AUXSAYS token, not the theme's ({scheme})",
+              ok, detail)
+
+    # ...and it stops at the AUXSAYS ground. `vault.html` is the one layout that does not render
+    # through aux-base: it emits `body.vault-page`, so nothing here may reach it.
+    vault_dom = parse_html('<html><body class="vault-page"><h1 id="v">x</h1></body></html>')
+    vbody = select(vault_dom, "body")[0]
+    for scheme in ("light", "dark"):
+        st = Styler(sheets, {"scheme": scheme, "width": 1280})
+        theme_only = Styler([theme_rules], {"scheme": scheme, "width": 1280})
+        got = st.custom(vbody, "--heading-color")
+        want = theme_only.custom(vbody, "--heading-color")
+        check(f"K2 a body outside the AUXSAYS ground keeps the theme's token ({scheme})",
+              got is not None and got == want, f"vault-page: {got!r} vs theme {want!r}")
+
+    # ---------- L: every representative AUXSAYS surface ----------
+    print(f"\n[L] every heading on every AUXSAYS surface clears {THRESHOLD}:1 in both schemes")
+    surface_doms: dict = {}
+    for label, layout_name, content in SURFACES:
+        lhtml, lreason = render_page(dict(PAGE, layout=layout_name),
+                                     _AUX / "_layouts" / f"{layout_name}.html", content)
+        check(f"L {label} renders on the {layout_name} layout", lhtml is not None, lreason)
+        if lhtml is None:
+            continue
+        ldom = parse_html(lhtml)
+        surface_doms[label] = ldom
+        lbody = select(ldom, "body")
+        check(f"L {label} carries the AUXSAYS ground class",
+              bool(lbody) and "aux-page" in lbody[0].classes,
+              lbody[0].attrs.get("class") if lbody else "no <body>")
+        lsheets, lnames, _unknown = sheets_for(ldom, site_rules, theme_rules)
+        if lnames != ["theme", "site"]:
+            lsheets = [theme_rules, site_rules]
+        lheadings = [n for n in ldom.walk() if re.fullmatch(r"h[1-6]", n.tag)]
+        for scheme, width in ENVS:
+            st = styler(lsheets, scheme, width)
+            bad = []
+            for h in lheadings:
+                try:
+                    ratio, fg, bg = st.worst_contrast(h)
+                except Unsupported as exc:
+                    bad.append(f"{h.label()}: {exc}")
+                    continue
+                if ratio < THRESHOLD:
+                    bad.append(f"{h.label()} {hexc(fg)} on {hexc(bg)} = {ratio:.2f}")
+            check(f"L {label} -- {len(lheadings)} heading(s), {scheme}, {width}px -- >= {THRESHOLD}:1",
+                  bool(lheadings) and not bad, "; ".join(bad[:3]) or "no headings rendered")
+
+    # ---------- N: mis-scoping the ownership rule brings the defect back ----------
+    print("\n[N] counterfactual: narrow the ownership rule back to patch pages only")
+    misscoped = [Rule(r.media, ["body.aux-update" if sel == "body.aux-page" else sel
+                                for sel in r.selectors], r.decls, r.order)
+                 for r in site_rules]
+    rescoped = sum(1 for r in site_rules for sel in r.selectors if sel == "body.aux-page")
+    nsheets = [misscoped if s is site_rules else s for s in sheets]
+    home = surface_doms.get("homepage")
+    worst_light = worst_dark = None
+    if home is not None:
+        hh = [n for n in home.walk() if re.fullmatch(r"h[1-6]", n.tag)]
+        if hh:
+            worst_light = min(styler(nsheets, "light", 1280).worst_contrast(h)[0] for h in hh)
+            worst_dark = min(styler(nsheets, "dark", 1280).worst_contrast(h)[0] for h in hh)
+    check("N1 the ownership rule exists to be mis-scoped", rescoped >= 1, f"rescoped {rescoped}")
+    check("N2 mis-scoped, a homepage heading fails in the light scheme (the AUX-010 defect)",
+          worst_light is not None and worst_light < THRESHOLD,
+          "n/a" if worst_light is None else f"worst = {worst_light:.2f}:1")
+    check("N3 ...while the dark scheme stays readable, so the defect is scheme-specific",
+          worst_dark is not None and worst_dark >= THRESHOLD,
+          "n/a" if worst_dark is None else f"worst = {worst_dark:.2f}:1")
 
     print()
     print("=" * 78)
