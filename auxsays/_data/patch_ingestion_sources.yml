@@ -1208,11 +1208,23 @@
     Dedicated fail-closed adobe_photoshop adapter is implemented and unit-tested (explicit
     desktop-Photoshop attribution, exact stable-version extraction, deterministic release
     date, ambiguity/beta rejection, official-only records). Activation stays disabled because
-    the official HelpX desktop release-notes page is not reachable from datacenter / GitHub
-    Actions egress (connection times out, zero bytes), and no stable official release-history
-    fallback exists that avoids per-version manual curation. enabled flips to true only once an
-    official source is proven reachable in CI and the adapter dry-run is byte-clean. Community
-    consensus is intentionally NOT implemented for Photoshop.
+    the official Adobe routes carrying Photoshop desktop release identity are not reachable
+    from CI egress. Re-measured 2026-09-27 from GitHub Actions (runner 132.196.54.161) with 8s between
+    requests, reproduced over two runs: every helpx.adobe.com route answers HTTP 403 Access
+    Denied from an edge filter in 0.08-0.14s -- canonical desktop release notes, the /en/
+    locale path, the legacy release-note path, whats-new, the AEM .model.json, the Creative
+    Cloud release notes, and a known-issues control. The block is host-scoped, not a dead
+    endpoint: www.adobe.com answers 200 from the same job, and the canonical page loads
+    normally in a real browser carrying version 27.10 plus its history. The four candidate
+    paths on the reachable www.adobe.com host answer HTTP 404, so Adobe does not publish
+    equivalent desktop release history there. Locally the same host served 67,998 bytes to a
+    cold client and then answered 403 to identical request shapes minutes later, so the filter
+    is reputation/rate based rather than header based -- no User-Agent or Accept variation
+    fixes it, and impersonating a browser harder is not a supportable production dependency.
+    Re-measure with auxsays/scripts/probe_photoshop_sources.py (Photoshop Source Probe
+    workflow, manual dispatch). enabled flips to true only once an official Adobe route
+    carrying release identity answers 200 from CI and the adapter dry-run is byte-clean.
+    Community consensus is intentionally NOT implemented for Photoshop.
 - company_id: adobe
   product_id: adobe-media-encoder
   company: Adobe

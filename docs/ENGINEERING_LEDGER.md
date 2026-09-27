@@ -418,6 +418,46 @@ differ, or the shared derivation in `patch-table-row.html` is edited.
 
 ---
 
+### AUX-017 — Photoshop activation blocker is an edge filter, not an egress failure
+
+- **Status** Deferred · **Area** Official ingestion · **Severity** Medium
+
+**Symptom** `adobe-photoshop` stays `enabled: false`. The recorded reason was that the canonical
+HelpX release-notes page "is not reachable from datacenter / GitHub Actions egress (connection
+times out, zero bytes)". That mechanism is wrong, and acting on it would send someone looking for
+an egress or timeout problem that does not exist.
+
+**Measured 2026-09-27** from GitHub Actions (runner `132.196.54.161`), 8s between requests,
+reproduced over two runs: every `helpx.adobe.com` route answers **HTTP 403 Access Denied** from an
+edge filter in 0.08–0.14s — canonical desktop release notes, the `/en/` locale path, the legacy
+release-note path, whats-new, the AEM `.model.json`, Creative Cloud release notes, and a
+known-issues control. `www.adobe.com` answers **200** in the same job, so the block is host-scoped
+rather than an egress failure, and the canonical page loads normally in a real browser carrying
+version 27.10 and its history. The four candidate paths on the reachable `www.adobe.com` host
+answer **404**: Adobe does not publish equivalent desktop release history there.
+
+Locally the same host served 67,998 bytes to a cold client and then answered 403 to *identical*
+request shapes minutes later, so the filter is reputation/rate based, not header based. No
+User-Agent or Accept variation defeats it, and impersonating a browser harder is not a supportable
+production dependency.
+
+**Why deferred** There is no official Adobe route carrying Photoshop desktop release identity that
+answers from CI, and the alternatives that would produce records — Wayback, caches, unofficial
+mirrors, hand-curated per-version URLs — are excluded as production authority by directive. The
+fail-closed `adobe_photoshop` adapter stays staged and unit-tested (63 checks).
+
+**Current impact** No Photoshop patch records, and none fabricated. Photoshop remains visible as a
+tracked product with no official ingestion. Community consensus deliberately not implemented.
+
+**Revisit trigger** Re-run the **Photoshop Source Probe** workflow (manual dispatch,
+`auxsays/scripts/probe_photoshop_sources.py`). Reopen when any official Adobe route carrying
+Photoshop desktop release identity answers 200 from CI — or if Adobe publishes a machine-readable
+release feed, or grants this repository's egress an allowlist arrangement.
+
+**Must not block** Roadmap work, or official ingestion for any other product.
+
+---
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.

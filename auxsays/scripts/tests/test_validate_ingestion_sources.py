@@ -120,9 +120,20 @@ def run() -> int:
         check("adobe-photoshop official_url targets the official Adobe HelpX desktop page",
               str(ing.get("official_url", "")).startswith("https://helpx.adobe.com/photoshop/"),
               str(ing.get("official_url")))
+        # The note is the only place the activation blocker is written down, so it has to name the
+        # MECHANISM and not just the conclusion. It previously said the page "times out, zero
+        # bytes"; re-measurement from CI showed a fast HTTP 403 from an edge filter, on
+        # helpx.adobe.com specifically, while www.adobe.com answered 200 in the same job. Someone
+        # acting on "times out" would have gone looking for an egress or timeout problem.
+        note = str(ps.get("source_health_note", "")).lower()
         check("adobe-photoshop source_health_note records the CI-unreachable / staged state",
-              "not reachable" in str(ps.get("source_health_note", "")).lower(),
-              str(ps.get("source_health_note", ""))[:80])
+              "not reachable" in note, str(ps.get("source_health_note", ""))[:80])
+        check("adobe-photoshop source_health_note names the measured failure mechanism",
+              "403" in note and "helpx.adobe.com" in note and "timed out" not in note,
+              str(ps.get("source_health_note", ""))[:140])
+        check("adobe-photoshop source_health_note says how to re-measure the blocker",
+              "probe_photoshop_sources.py" in note,
+              str(ps.get("source_health_note", ""))[-120:])
         mod = importlib.import_module("adapters.adobe_photoshop")
         check("adobe_photoshop adapter module imports and exposes fetch()",
               callable(getattr(mod, "fetch", None)))
