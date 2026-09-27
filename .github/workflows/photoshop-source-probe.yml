@@ -1,0 +1,59 @@
+name: Photoshop Source Probe
+
+# Answers one question that cannot be answered from a workstation: does an official Adobe
+# Photoshop release-history endpoint respond from GitHub Actions egress?
+#
+# `patch_ingestion_sources.yml` keeps adobe-photoshop disabled on that ground, and this workflow is
+# how the ground gets re-checked rather than remembered. It exists because the blocker recorded in
+# that file was wrong about the mechanism -- it said the canonical page "times out, zero bytes",
+# while measurement from CI shows a fast HTTP 403 from an edge filter on helpx.adobe.com
+# specifically, with www.adobe.com answering 200 in the same job.
+#
+# Manual only. No write permissions, no token use, no repository mutation: it prints measurements
+# and uploads them as an artifact.
+
+on:
+  workflow_dispatch:
+    inputs:
+      gap_seconds:
+        description: "Seconds between requests. The host rate-limits bursts, so do not lower this."
+        required: false
+        default: "8"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: photoshop-source-probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Egress identity
+        run: |
+          echo "runner public IP:"
+          curl -sS --max-time 10 https://api.ipify.org || echo "(ipify unavailable)"
+          echo
+
+      - name: Probe official Adobe endpoints
+        run: |
+          python auxsays/scripts/probe_photoshop_sources.py \
+            --gap "${{ inputs.gap_seconds || '8' }}" \
+            --json probe-result.json
+
+      - name: Upload measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: photoshop-source-probe
+          path: probe-result.json
+          if-no-files-found: warn
