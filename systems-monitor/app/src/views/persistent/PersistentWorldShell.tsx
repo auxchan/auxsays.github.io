@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPersistentWorld, persistentWorldPath, persistentWorldPlacementLabel, type PersistentWorldPlacement } from "../../data/persistentWorldModel";
 import { persistentWorldFactualBindingForFactor } from "../../data/persistentWorldFactualBindings";
+import { persistentBindingPresentationLabel, persistentChangePresentationLabel, persistentChangesForScope, persistentCoverageSummary, persistentSourceHealthExceptions, persistentVerifiedMovements, persistentWorldBranchRootId, type PersistentChangeScope } from "../../data/persistentWorldBriefing";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../../data/persistentWorldSourceCatalog";
 import { LAYOFFS_BLOCKED_FACTOR_COUNT, LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT } from "../../data/layoffsBranchReadModel";
 import { PERSISTENT_ACCEPTED_IMPACT_COUNT, persistentChangesForWindow, type PersistentChangeNotice, type PersistentTimeWindow } from "../../data/persistentWorldTemporalReadModel";
@@ -24,6 +25,18 @@ function useReducedMotion() {
   return reduced;
 }
 
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setMatches(media.matches);
+    media.addEventListener("change", update);
+    update();
+    return () => media.removeEventListener("change", update);
+  }, [query]);
+  return matches;
+}
+
 function selectionFromHash(model: ReturnType<typeof createPersistentWorld>, allowFixtures = true) {
   const prefix = "#persistent-world/";
   if (!window.location.hash.startsWith(prefix)) return null;
@@ -33,11 +46,10 @@ function selectionFromHash(model: ReturnType<typeof createPersistentWorld>, allo
   return allowFixtures || persistentWorldPublicPlacementVisible(model, id) ? id : null;
 }
 
-/** Opens the map as the primary mobile surface while retaining an explicit URL override. */
-export function persistentWorldInitialImmersive(search: string, mobileViewport: boolean) {
+/** Full-screen mode is an explicit preference so mobile users see the briefing first. */
+export function persistentWorldInitialImmersive(search: string, _mobileViewport: boolean) {
   const preference = new URLSearchParams(search).get("immersive");
-  if (preference === "0") return false;
-  return preference === "1" || mobileViewport;
+  return preference === "1";
 }
 
 function placementLabel(model: ReturnType<typeof createPersistentWorld>, placement: PersistentWorldPlacement) {
@@ -79,10 +91,15 @@ export function PersistentWorldShell() {
   const reducedMotion = useReducedMotion();
   const workspaceRef = useRef<HTMLDivElement>(null);
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const mobileSearchTriggerRef = useRef<HTMLButtonElement>(null);
+  const searchReturnFocusRef = useRef<HTMLButtonElement | null>(null);
   const detailsToggleRef = useRef<HTMLButtonElement>(null);
+  const mobileDetailsToggleRef = useRef<HTMLButtonElement>(null);
   const searchDialogRef = useRef<HTMLDivElement>(null);
-  const mobileViewport = useRef(window.matchMedia("(max-width: 900px), (hover: none), (pointer: coarse)").matches).current;
-  const initialDetailsOpen = useRef(!mobileViewport).current;
+  const inspectorRef = useRef<HTMLElement>(null);
+  const mobileInspectorViewport = useMediaQuery("(max-width: 900px)");
+  const compactToolbarViewport = useMediaQuery("(max-width: 620px)");
+  const initialDetailsOpen = useRef(!mobileInspectorViewport).current;
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model, !publicBeta));
   const [detailsFollowNavigation, setDetailsFollowNavigation] = useState(initialDetailsOpen);
   const [inspectorOpen, setInspectorOpen] = useState(() => Boolean(selectionFromHash(model, !publicBeta)) && initialDetailsOpen);
@@ -90,8 +107,9 @@ export function PersistentWorldShell() {
   const [viewMode, setViewMode] = useState<PersistentWorldViewMode>("TOP_DOWN");
   const [resetVersion, setResetVersion] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
-  const [fullscreenFallback, setFullscreenFallback] = useState(() => persistentWorldInitialImmersive(window.location.search, mobileViewport));
+  const [fullscreenFallback, setFullscreenFallback] = useState(() => persistentWorldInitialImmersive(window.location.search, mobileInspectorViewport));
   const [changeWindow, setChangeWindow] = useState<PersistentTimeWindow>("RECENT");
+  const [changeScope, setChangeScope] = useState<PersistentChangeScope>("BRANCH");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [deepDiveOpen, setDeepDiveOpen] = useState(false);
@@ -106,8 +124,13 @@ export function PersistentWorldShell() {
   const selectedCompactValue = compactPersistentValue(selectedBinding?.status === "CONNECTED" ? selectedBinding.displayValue : undefined);
   const selectedSourceProfile = selected && selected.depth >= 2 && factor ? persistentWorldCandidateSourceProfile(placementLabel(model, selected)) ?? persistentWorldCandidateSourceProfile(factor.label) : undefined;
   const path = useMemo(() => persistentWorldPath(model, selectedId), [model, selectedId]);
-  const visibleChanges = useMemo(() => persistentChangesForWindow(changeWindow), [changeWindow]);
-  const selectedChanges = useMemo(() => selected ? visibleChanges.filter((notice) => notice.placementId === selected.id) : [], [selected, visibleChanges]);
+  const branchId = useMemo(() => persistentWorldBranchRootId(model, selectedId), [model, selectedId]);
+  const windowChanges = useMemo(() => persistentChangesForWindow(changeWindow), [changeWindow]);
+  const visibleChanges = useMemo(() => persistentChangesForScope(windowChanges, model, branchId, changeScope), [branchId, changeScope, model, windowChanges]);
+  const selectedChanges = useMemo(() => selected ? windowChanges.filter((notice) => notice.placementId === selected.id) : [], [selected, windowChanges]);
+  const briefingMovements = useMemo(() => persistentVerifiedMovements(visibleChanges), [visibleChanges]);
+  const briefingExceptions = useMemo(() => persistentSourceHealthExceptions(visibleChanges), [visibleChanges]);
+  const coverage = useMemo(() => persistentCoverageSummary(model, factualBindings, branchId), [branchId, factualBindings, model]);
   const searchIndex = useMemo(() => buildPersistentWorldSearchIndex(model), [model]);
   const searchResults = useMemo(() => searchPersistentWorld(searchIndex, searchQuery), [searchIndex, searchQuery]);
   const visibleChoiceIds = useMemo(() => {
@@ -154,12 +177,17 @@ export function PersistentWorldShell() {
 
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); setSearchOpen(true); }
-      if (event.key === "Escape" && searchOpen) { event.preventDefault(); setSearchOpen(false); requestAnimationFrame(() => searchTriggerRef.current?.focus()); }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        searchReturnFocusRef.current = compactToolbarViewport ? mobileSearchTriggerRef.current : searchTriggerRef.current;
+        setSearchOpen(true);
+      }
+      if (event.key === "Escape" && searchOpen) { event.preventDefault(); closeSearch(); }
+      else if (event.key === "Escape" && mobileInspectorViewport && inspectorOpen) { event.preventDefault(); closeInspector(); }
     };
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
-  }, [searchOpen]);
+  }, [compactToolbarViewport, inspectorOpen, mobileInspectorViewport, searchOpen]);
 
   function navigate(id: string | null, options: { record?: boolean; replace?: boolean } = {}) {
     if (id && publicBeta && !persistentWorldPublicPlacementVisible(model, id)) return;
@@ -196,9 +224,29 @@ export function PersistentWorldShell() {
     setSearchQuery("");
   }
 
+  function openSearch(trigger: HTMLButtonElement) {
+    searchReturnFocusRef.current = trigger;
+    setSearchOpen(true);
+  }
+
+  function closeSearch() {
+    setSearchOpen(false);
+    requestAnimationFrame(() => (searchReturnFocusRef.current ?? searchTriggerRef.current)?.focus());
+  }
+
   function trapSearchFocus(event: ReactKeyboardEvent<HTMLDivElement>) {
     if (event.key !== "Tab") return;
     const focusable = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]),[href],select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter((item) => !item.hasAttribute("hidden"));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
+
+  function trapInspectorFocus(event: ReactKeyboardEvent<HTMLElement>) {
+    if (!mobileInspectorViewport || event.key !== "Tab") return;
+    const focusable = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button:not([disabled]),[href],[tabindex]:not([tabindex="-1"])')).filter((item) => !item.hasAttribute("hidden"));
     if (!focusable.length) return;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
@@ -211,7 +259,8 @@ export function PersistentWorldShell() {
     setInspectorOpen(false);
     requestAnimationFrame(() => {
       const activeChoice = document.querySelector<HTMLButtonElement>('.sm-pw-access button[aria-current="true"]');
-      (detailsToggleRef.current ?? activeChoice ?? searchTriggerRef.current)?.focus();
+      const preferred = compactToolbarViewport ? mobileDetailsToggleRef.current : detailsToggleRef.current;
+      (preferred ?? activeChoice ?? searchTriggerRef.current)?.focus();
     });
   }
 
@@ -220,6 +269,14 @@ export function PersistentWorldShell() {
     setDetailsFollowNavigation(next);
     setInspectorOpen(Boolean(selected) && next);
     if (!next) setDeepDiveOpen(false);
+  }
+
+  function toggleMobileInspector() {
+    if (!selected) return;
+    const next = !inspectorOpen;
+    setInspectorOpen(next);
+    if (!next) setDeepDiveOpen(false);
+    if (next) requestAnimationFrame(() => inspectorRef.current?.querySelector<HTMLElement>("button")?.focus());
   }
 
   function resetWorld() {
@@ -235,6 +292,7 @@ export function PersistentWorldShell() {
 
   function navigateToNotice(notice: PersistentChangeNotice) {
     navigate(notice.placementId === model.outcomePlacementId ? null : notice.placementId);
+    setInspectorOpen(notice.placementId !== model.outcomePlacementId);
   }
 
   async function toggleFullscreen() {
@@ -258,17 +316,15 @@ export function PersistentWorldShell() {
         <div className="sm-pw-header__facts"><span>{connectedBindingCount} mapped accepted observations</span><span>{PERSISTENT_ACCEPTED_IMPACT_COUNT} governed connector signals</span><details><summary>Coverage status</summary><div><strong>{PERSISTENT_WORLD_PROFILED_FACTOR_COUNT}</strong> candidate data paths cataloged<br /><strong>{LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT}</strong> source-enabled Layoffs candidates<br /><strong>{LAYOFFS_BLOCKED_FACTOR_COUNT}</strong> Layoffs candidate paths blocked<br /><strong>0</strong> accepted structural relationships</div></details></div>
       </header>
       <p className="sm-pw-beta-boundary"><strong>How to read this map:</strong> lines show hierarchy and drill-down only—not causality, influence, or economic impact. Verified observations appear only where an accepted source is explicitly shown. Configuration-pending Level-4 nodes remain visible for orientation, but are not factual claims or live readings.</p>
-      <div className="sm-pw-discovery">
-        <button ref={searchTriggerRef} type="button" className="sm-pw-search-trigger" aria-expanded={searchOpen} onClick={() => setSearchOpen(true)}><span aria-hidden="true">⌕</span> Find a factor <kbd>Ctrl K</kbd></button>
-        <div className="sm-pw-history" aria-label="Exploration history">
-          <button type="button" aria-label="Back in exploration history" disabled={exploration.index === 0} onClick={() => moveExploration(-1)}>←</button>
-          <button type="button" aria-label="Forward in exploration history" disabled={exploration.index >= exploration.ids.length - 1} onClick={() => moveExploration(1)}>→</button>
-          <span>Level {(selected?.depth ?? 0) + 1} of 4</span>
-        </div>
-      </div>
+      <section className="sm-pw-briefing" aria-labelledby="pw-briefing-title">
+        <header><span>Five-second briefing</span><h2 id="pw-briefing-title">{branchId ? coverage.scopeLabel : "All systems"}</h2><small>{branchId ? "Selected branch" : "Whole-system view"}</small></header>
+        <article className="sm-pw-briefing__moved"><h3>What moved?</h3>{briefingMovements.length ? <ol>{briefingMovements.map((notice) => <li key={notice.id}><button type="button" onClick={() => navigateToNotice(notice)}><strong>{notice.factorLabel}</strong><span>{notice.directionGlyph} {notice.absoluteDeltaDisplay}</span><small>{notice.validTime} · direction only; materiality not yet assessed</small></button></li>)}</ol> : <p>No accepted comparable movement in this scope and window.</p>}</article>
+        <article><h3>What is covered?</h3><strong>{coverage.acceptedHistoryFactors} accepted-history factors</strong><p>{coverage.comparableHistoryFactors} comparable · {coverage.acceptedReadingFactors} with accepted readings</p><small>{coverage.scopeLabel} · {coverage.totalFactors} reviewed factor concepts</small></article>
+        <article className="sm-pw-briefing__attention"><h3>What needs attention?</h3>{briefingExceptions.length ? briefingExceptions.slice(0, 2).map((notice) => <button type="button" key={notice.id} onClick={() => navigateToNotice(notice)}><strong>{notice.factorLabel}</strong><span>{notice.headline}</span><small>Primary method stale · official fallback remains current</small></button>) : <p>No source-health exception in this scope.</p>}</article>
+      </section>
       {searchOpen && <div ref={searchDialogRef} className="sm-pw-search" role="dialog" aria-modal="true" aria-label="Find a factor" onKeyDown={trapSearchFocus}>
         <div className="sm-pw-search__panel">
-          <header><label htmlFor="pw-factor-search">Find any factor</label><button type="button" aria-label="Close factor search" onClick={() => { setSearchOpen(false); requestAnimationFrame(() => searchTriggerRef.current?.focus()); }}>×</button></header>
+          <header><label htmlFor="pw-factor-search">Find any factor</label><button type="button" aria-label="Close factor search" onClick={closeSearch}>×</button></header>
           <input id="pw-factor-search" autoFocus value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Try initial claims, wages, oil, bankruptcy…" />
           <p>Searches stable names, definitions, hierarchy paths, and official source vocabulary.</p>
           {searchQuery.trim() ? <ol>{searchResults.map((result) => <li key={result.placementId}><button type="button" onClick={() => chooseSearchResult(result.placementId)}><strong>{result.label}</strong><span>{result.pathText}</span><small>{result.evidencePosture === "TEST_FIXTURE" ? "Fixture only" : result.evidencePosture === "CANDIDATE" ? "Reviewed candidate" : "Master-defined"}</small></button></li>)}</ol> : <div className="sm-pw-search__hint">Type a factor, source, or economic concept.</div>}
@@ -281,7 +337,7 @@ export function PersistentWorldShell() {
       </nav>
       <div ref={workspaceRef} className={`sm-pw-workspace ${selected && inspectorOpen ? "has-inspector" : ""} ${fullscreenFallback ? "is-fullscreen-fallback" : ""}`} data-fullscreen={fullscreenActive} data-details-follow-navigation={detailsFollowNavigation}>
         <PersistentWorldMinimap model={model} selectedPlacementId={selectedId} onSelect={navigate} />
-        <aside className={`sm-pw-inspector ${selected && inspectorOpen ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected || !inspectorOpen} data-panel-motion="settled-fade">
+        <aside ref={inspectorRef} className={`sm-pw-inspector ${selected && inspectorOpen ? "is-open" : ""}`} role={mobileInspectorViewport ? "dialog" : "complementary"} aria-modal={mobileInspectorViewport ? "true" : undefined} aria-label="Persistent world factor details" aria-hidden={!selected || !inspectorOpen} data-panel-motion="settled-fade" onKeyDown={trapInspectorFocus}>
           {selected && factor && inspectorOpen && <div key={selected.id} className="sm-pw-inspector__content">
             <header><span>{selected.depth === 1 ? "Master-defined taxonomy system" : selected.depth === 2 ? "Level-3 review candidate" : "Level-4 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={closeInspector}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
             {selectedMedia && <div className="sm-pw-inspector__portrait" style={{ "--pw-photo": `url(${selectedMedia.imageUrl})`, "--pw-accent": selectedAccent } as CSSProperties}>
@@ -304,15 +360,15 @@ export function PersistentWorldShell() {
                 <details><summary>Accepted descriptive history · {selectedBinding.temporalHistory.primary.acceptedPeriodCount} periods</summary><ol>{selectedBinding.temporalHistory.primary.recentHistory.map((row) => <li key={row.observationId}><time>{row.validTime}</time><span>{Number(row.value).toLocaleString("en-US")} {row.unit}</span><small>revision {row.revisionNumber}</small></li>)}</ol></details>
                 <small>CURRENT_REVISED_HISTORY · forecast-vintage ineligible</small>
               </div>}
-              <div className="sm-pw-inspector__data-actions">{selectedBinding.evidenceUrl && <a href={selectedBinding.evidenceUrl} target="_blank" rel="noreferrer">Original evidence</a>}{selectedBinding.methodologyUrl && <a href={selectedBinding.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}{selectedBinding.acquisitionProvenanceUrl && <a href={selectedBinding.acquisitionProvenanceUrl} target="_blank" rel="noreferrer">Acquisition record</a>}<a href="/systems-monitor/#workstream1a">Open factual record</a></div><small>Accepted evidence · {selectedBinding.freshness}</small>
+              <div className="sm-pw-inspector__data-actions">{selectedBinding.evidenceUrl && <a href={selectedBinding.evidenceUrl} target="_blank" rel="noreferrer">Original evidence</a>}{selectedBinding.methodologyUrl && <a href={selectedBinding.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}{selectedBinding.acquisitionProvenanceUrl && <a href={selectedBinding.acquisitionProvenanceUrl} target="_blank" rel="noreferrer">Acquisition record</a>}<a href="/systems-monitor/#workstream1a">Open factual record</a></div><small>{persistentBindingPresentationLabel(selectedBinding)} · {selectedBinding.freshness}</small>
             </section>
               : selectedBinding?.status === "SOURCE_ENABLED_PENDING_ACCEPTANCE" ? <section className="sm-pw-inspector__data-boundary is-staged"><h3>Data status</h3><strong>Source adapter available · acceptance pending</strong><p>The official series has a candidate retrieval path, but no value is shown until current runtime health, rights, provenance, units, timing, revision, and publication acceptance pass.</p>{selectedBinding.candidateSeries?.map((series) => <div key={`${series.sourceId}:${series.seriesId}`}><code>{series.seriesId}</code><div className="sm-pw-inspector__data-actions"><a href={series.evidenceUrl} target="_blank" rel="noreferrer">Official evidence</a>{series.methodologyUrl && <a href={series.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}</div></div>)}</section>
-              : selectedBinding?.status === "BLOCKED" ? <section className="sm-pw-inspector__data-boundary is-design"><h3>Current data</h3><strong>Official path identified · retrieval blocked</strong><p>{selectedBinding.blockedReason ?? "A required credential or source decision is not yet available. No placeholder value is shown."}</p>{selectedBinding.candidateSeries?.map((series) => <div key={`${series.sourceId}:${series.seriesId}`}><code>{series.seriesId}</code><div className="sm-pw-inspector__data-actions"><a href={series.evidenceUrl} target="_blank" rel="noreferrer">Review official dataset</a></div></div>)}</section>
-              : selectedBinding?.status === "SOURCE_IDENTIFIED" ? <section className="sm-pw-inspector__data-boundary is-staged"><h3>Current data</h3><strong>Official source identified</strong><p>Exact source intake or acceptance remains pending. No value is displayed until provenance and validation are complete.</p><code>{selectedBinding.candidateSeriesId}</code>{selectedSourceProfile && <dl><div><dt>Authority</dt><dd>{selectedSourceProfile.authority}</dd></div><div><dt>Dataset</dt><dd>{selectedSourceProfile.dataset}</dd></div><div><dt>Cadence</dt><dd>{selectedSourceProfile.cadence}</dd></div></dl>}<div className="sm-pw-inspector__data-actions">{selectedSourceProfile && <a href={selectedSourceProfile.evidenceUrl} target="_blank" rel="noreferrer">Review official dataset</a>}<a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></div></section>
+              : selectedBinding?.status === "BLOCKED" ? <section className="sm-pw-inspector__data-boundary is-design"><h3>Current data</h3><strong>Source currently blocked</strong><p>{selectedBinding.blockedReason ?? "A required credential or source decision is not yet available. No placeholder value is shown."}</p>{selectedBinding.candidateSeries?.map((series) => <div key={`${series.sourceId}:${series.seriesId}`}><code>{series.seriesId}</code><div className="sm-pw-inspector__data-actions"><a href={series.evidenceUrl} target="_blank" rel="noreferrer">Review official dataset</a></div></div>)}</section>
+              : selectedBinding?.status === "SOURCE_IDENTIFIED" ? <section className="sm-pw-inspector__data-boundary is-staged"><h3>Current data</h3><strong>Source identified · verified reading not yet available</strong><p>Exact source intake or acceptance remains pending. No value is displayed until provenance and validation are complete.</p><code>{selectedBinding.candidateSeriesId}</code>{selectedSourceProfile && <dl><div><dt>Authority</dt><dd>{selectedSourceProfile.authority}</dd></div><div><dt>Dataset</dt><dd>{selectedSourceProfile.dataset}</dd></div><div><dt>Cadence</dt><dd>{selectedSourceProfile.cadence}</dd></div></dl>}<div className="sm-pw-inspector__data-actions">{selectedSourceProfile && <a href={selectedSourceProfile.evidenceUrl} target="_blank" rel="noreferrer">Review official dataset</a>}<a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></div></section>
               : selectedSourceProfile?.readiness === "CANDIDATE_DATASET" ? <section className="sm-pw-inspector__data-boundary is-candidate"><h3>Candidate data path</h3><strong>{selectedSourceProfile.dataset}</strong><p>{selectedSourceProfile.summary}</p><dl><div><dt>Authority</dt><dd>{selectedSourceProfile.authority}</dd></div><div><dt>Expected cadence</dt><dd>{selectedSourceProfile.cadence}</dd></div><div><dt>Registration</dt><dd>Candidate · not enabled or accepted</dd></div></dl><div className="sm-pw-inspector__data-actions"><a href={selectedSourceProfile.evidenceUrl} target="_blank" rel="noreferrer">Review official dataset</a>{selectedSourceProfile.methodologyUrl && <a href={selectedSourceProfile.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}</div><small>No current value is shown until source registration, rights, mapping, validation, and provenance acceptance pass.</small></section>
-              : selectedSourceProfile?.readiness === "DERIVATION_REQUIRED" ? <section className="sm-pw-inspector__data-boundary is-design"><h3>Candidate data path</h3><strong>Derivation design required</strong><p>{selectedSourceProfile.summary}</p><dl><div><dt>Authority</dt><dd>{selectedSourceProfile.authority}</dd></div><div><dt>Registration</dt><dd>Source and calculation design pending</dd></div></dl><small>No single series is presented as the answer, and no placeholder value is shown.</small></section>
+              : selectedSourceProfile?.readiness === "DERIVATION_REQUIRED" ? <section className="sm-pw-inspector__data-boundary is-design"><h3>Candidate data path</h3><strong>Structural interpretation not yet available</strong><p>{selectedSourceProfile.summary}</p><dl><div><dt>Authority</dt><dd>{selectedSourceProfile.authority}</dd></div><div><dt>Registration</dt><dd>Source and calculation design pending</dd></div></dl><small>No single series is presented as the answer, and no placeholder value is shown.</small></section>
               : selectedBinding?.status === "FIXTURE_ONLY" ? <section className="sm-pw-inspector__data-boundary is-fixture"><h3>Configuration status</h3><strong>Configuration pending · not factual</strong><p>This Level-4 node is retained with its title, icon, and parent hierarchy tether while its economic identity and data configuration are reviewed. It has no official dataset, live value, accepted relationship, or temporal signal.</p></section>
-              : selected.depth === 3 ? <section className="sm-pw-inspector__data-boundary"><h3>Data status</h3><strong>Source mapping under review</strong><p>This is a reviewed candidate concept. AUXSAYS shows no value until an exact official dataset, parser, provenance, rights posture, and acceptance decision exist.</p></section>
+              : selected.depth === 3 ? <section className="sm-pw-inspector__data-boundary"><h3>Data status</h3><strong>Verified reading not yet available</strong><p>This is a reviewed candidate concept. AUXSAYS shows no value until an exact official dataset, parser, provenance, rights posture, and acceptance decision exist.</p></section>
               : selected.depth === 1 ? <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Aggregate system · multiple datasets</strong><p>Select one of the ten child factors to inspect its official dataset candidate, readiness state, and available factual reading.</p></section>
               : <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Dataset binding pending</strong><p>This placement has no accepted observation yet. AUXSAYS will not display a placeholder value or imply that a taxonomy node is a live feed.</p><a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></section>}
             <button type="button" className="sm-pw-inspector__deep-trigger" aria-expanded={deepDiveOpen} onClick={() => setDeepDiveOpen((current) => !current)}>{deepDiveOpen ? "Hide Deep Dive" : "Open Deep Dive"}<span aria-hidden="true">{deepDiveOpen ? "−" : "+"}</span></button>
@@ -326,13 +382,31 @@ export function PersistentWorldShell() {
         </aside>
         <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} viewMode={viewMode} traceMode={false} reducedMotion={reducedMotion} resetVersion={resetVersion} routePulseVersion={routePulseVersion} publicBeta={publicBeta} onSelect={navigate} onNavigateParent={navigateUp} onReset={resetWorld} />
         <div className="sm-pw-controls" aria-label="Persistent world view controls">
-          <button type="button" disabled={!selected} onClick={navigateUp}>Up one level</button>
-          <button type="button" onClick={resetWorld}>Reset</button>
-          <button type="button" aria-pressed={viewMode === "TOP_DOWN"} onClick={() => setViewMode("TOP_DOWN")}>Top-down</button>
-          <button type="button" aria-pressed={viewMode === "CINEMATIC_2_5D"} onClick={() => setViewMode("CINEMATIC_2_5D")}>Cinematic 2.5D</button>
-          <button type="button" aria-pressed={fullWorld} onClick={() => setFullWorld((current) => !current)}>{fullWorld ? "Normal overview" : "Full-world view"}</button>
-          <button ref={detailsToggleRef} type="button" aria-label={detailsFollowNavigation ? "Info opens automatically while navigating" : "Info stays closed until requested"} aria-pressed={detailsFollowNavigation} onClick={toggleDetailsFollowNavigation}>Info: {detailsFollowNavigation ? "Auto" : "Manual"}</button>
-          <button type="button" aria-label={fullscreenActive ? "Exit full screen" : "Enter full screen"} aria-pressed={fullscreenActive} onClick={() => void toggleFullscreen()}><span aria-hidden="true">⛶</span> {fullscreenActive ? "Exit" : "Full screen"}</button>
+          <div className="sm-pw-controls__desktop" hidden={compactToolbarViewport}>
+            <div className="sm-pw-controls__top" role="toolbar" aria-label="Map navigation controls">
+              <button type="button" aria-label="Back in exploration history" disabled={exploration.index === 0} onClick={() => moveExploration(-1)}><span aria-hidden="true">←</span></button>
+              <button type="button" aria-label="Forward in exploration history" disabled={exploration.index >= exploration.ids.length - 1} onClick={() => moveExploration(1)}><span aria-hidden="true">→</span></button>
+              <button type="button" aria-label="Up one level" disabled={!selected} onClick={navigateUp}><span aria-hidden="true">↑</span> Up</button>
+              <button ref={searchTriggerRef} type="button" className="sm-pw-search-trigger" aria-expanded={searchOpen} onClick={(event) => openSearch(event.currentTarget)}><span aria-hidden="true">⌕</span> Find a factor <kbd>Ctrl K</kbd></button>
+              <button type="button" onClick={resetWorld}><span aria-hidden="true">◎</span> Reset</button>
+              <span className="sm-pw-controls__level">Level {(selected?.depth ?? 0) + 1} of 4</span>
+            </div>
+            <div className="sm-pw-controls__bottom" role="toolbar" aria-label="Map view controls">
+              <button type="button" aria-pressed={viewMode === "TOP_DOWN"} onClick={() => setViewMode("TOP_DOWN")}>Top-down</button>
+              <button type="button" aria-pressed={viewMode === "CINEMATIC_2_5D"} onClick={() => setViewMode("CINEMATIC_2_5D")}>Cinematic 2.5D</button>
+              <button type="button" aria-pressed={fullWorld} onClick={() => setFullWorld((current) => !current)}>{fullWorld ? "Normal overview" : "Full-world view"}</button>
+              <button ref={detailsToggleRef} type="button" aria-label={detailsFollowNavigation ? "Info opens automatically while navigating" : "Info stays closed until requested"} aria-pressed={detailsFollowNavigation} onClick={toggleDetailsFollowNavigation}>Info: {detailsFollowNavigation ? "Auto" : "Manual"}</button>
+              <button type="button" aria-label={fullscreenActive ? "Exit full screen" : "Enter full screen"} aria-pressed={fullscreenActive} onClick={() => void toggleFullscreen()}><span aria-hidden="true">⛶</span> {fullscreenActive ? "Exit" : "Full screen"}</button>
+            </div>
+          </div>
+          <nav className="sm-pw-controls__mobile" aria-label="Mobile map toolbar" hidden={!compactToolbarViewport}>
+            <button type="button" disabled={exploration.index === 0} onClick={() => moveExploration(-1)}><span aria-hidden="true">←</span>Back</button>
+            <button type="button" disabled={!selected} onClick={navigateUp}><span aria-hidden="true">↑</span>Up</button>
+            <button ref={mobileSearchTriggerRef} type="button" onClick={(event) => openSearch(event.currentTarget)}><span aria-hidden="true">⌕</span>Search</button>
+            <button type="button" onClick={resetWorld}><span aria-hidden="true">◎</span>World</button>
+            <button ref={mobileDetailsToggleRef} type="button" disabled={!selected} aria-expanded={inspectorOpen} onClick={toggleMobileInspector}><span aria-hidden="true">ⓘ</span>Inspector</button>
+            <details><summary><span aria-hidden="true">•••</span>More</summary><div><button type="button" aria-pressed={viewMode === "TOP_DOWN"} onClick={() => setViewMode("TOP_DOWN")}>Top-down</button><button type="button" aria-pressed={viewMode === "CINEMATIC_2_5D"} onClick={() => setViewMode("CINEMATIC_2_5D")}>Cinematic</button><button type="button" aria-pressed={fullWorld} onClick={() => setFullWorld((current) => !current)}>{fullWorld ? "Normal overview" : "Full-world view"}</button><button type="button" aria-pressed={fullscreenActive} onClick={() => void toggleFullscreen()}>{fullscreenActive ? "Exit full screen" : "Full screen"}</button></div></details>
+          </nav>
         </div>
       </div>
       <div className="sm-pw-status" role="status">
@@ -342,15 +416,15 @@ export function PersistentWorldShell() {
     </section>
 
     <section className="sm-pw-changes" aria-labelledby="pw-changes-title">
-      <header><div><span>Temporal intelligence</span><h2 id="pw-changes-title">What changed</h2><p>Accepted observations and operational source events are kept separate. No connector is colored supportive or adverse without an accepted relationship and governed destination-context rule.</p></div><div className="sm-pw-changes__filters" aria-label="Change history window">{(["RECENT", "24H", "7D", "30D", "90D", "1Y"] as const).map((window) => <button type="button" key={window} aria-pressed={changeWindow === window} onClick={() => setChangeWindow(window)}>{window === "RECENT" ? "Recent" : window.toLowerCase()}</button>)}</div></header>
-      {visibleChanges.length ? <ol>{visibleChanges.map((notice) => <li key={notice.id} data-kind={notice.kind} data-impact={notice.impactClass}><button type="button" onClick={() => navigateToNotice(notice)}><span>{notice.sourceHealthOnly ? "Source health" : notice.impactClass}</span><strong>{notice.headline}</strong><p>{notice.summary}</p><small>{notice.validTime ? `${notice.validTime} · ` : ""}{notice.sourceLabel}</small></button>{notice.evidenceUrl && <a href={notice.evidenceUrl} target="_blank" rel="noreferrer">Original evidence</a>}</li>)}</ol> : <p className="sm-pw-changes__empty">No accepted change event occurred in this window.</p>}
+      <header><div><span>Temporal intelligence · {branchId && changeScope === "BRANCH" ? coverage.scopeLabel : "All systems"}</span><h2 id="pw-changes-title">What changed</h2><p>Accepted factual events and operational source exceptions are visually separate. Direction is descriptive; interpretation and materiality are not governed.</p></div><div><div className="sm-pw-changes__scope" aria-label="Change history scope"><button type="button" disabled={!branchId} aria-pressed={Boolean(branchId) && changeScope === "BRANCH"} onClick={() => setChangeScope("BRANCH")}>Selected branch</button><button type="button" aria-pressed={changeScope === "ALL" || !branchId} onClick={() => setChangeScope("ALL")}>All systems</button></div><div className="sm-pw-changes__filters" aria-label="Change history window">{(["RECENT", "24H", "7D", "30D", "90D", "1Y"] as const).map((window) => <button type="button" key={window} aria-pressed={changeWindow === window} onClick={() => setChangeWindow(window)}>{window === "RECENT" ? "Recent" : window.toLowerCase()}</button>)}</div></div></header>
+      {visibleChanges.length ? <ol>{visibleChanges.map((notice) => <li key={notice.id} data-kind={notice.kind} data-event-class={notice.sourceHealthOnly ? "OPERATIONAL" : "FACTUAL"}><button type="button" onClick={() => navigateToNotice(notice)}><span>{persistentChangePresentationLabel(notice)}</span><strong>{notice.headline}</strong><p>{notice.summary}</p><small>{notice.validTime ? `${notice.validTime} · ` : ""}{notice.sourceLabel}</small></button>{notice.evidenceUrl && <a href={notice.evidenceUrl} target="_blank" rel="noreferrer">Original evidence</a>}</li>)}</ol> : <p className="sm-pw-changes__empty">No accepted factual or source-health event occurred in this scope and window.</p>}
     </section>
 
     <section className="sm-pw-access" aria-labelledby="pw-access-title">
       <div><span>{selected ? "Current exact-ten neighborhood" : "Master-defined Level-1 systems"}</span><h2 id="pw-access-title">Explore without relying on the map</h2><p>These controls expose the same bounded hierarchy by keyboard and touch. Hierarchy tethers do not claim causality.</p></div>
       {visibleChoiceIds.length ? <ol>{visibleChoiceIds.map((id, index) => {
         const placement = model.placements[id]; const item = model.factors[placement.canonicalFactorId]; const binding = factualBindings[id];
-        return <li key={id}><button type="button" onClick={() => navigate(id)} aria-current={id === selectedId ? "true" : undefined}><span>{String(index + 1).padStart(2, "0")}</span><strong>{placementLabel(model, placement)}</strong><small>{binding?.status === "CONNECTED" ? "Accepted factual reading" : binding?.status === "SOURCE_ENABLED_PENDING_ACCEPTANCE" ? "Collector enabled · acceptance pending" : binding?.status === "BLOCKED" ? "Official path · retrieval blocked" : binding?.status === "FIXTURE_ONLY" ? "Fixture only · hierarchy tether" : item.evidencePosture === "CANDIDATE" ? "Source identified · no value" : "Master-defined system"}</small></button></li>;
+        return <li key={id}><button type="button" onClick={() => navigate(id)} aria-current={id === selectedId ? "true" : undefined}><span>{String(index + 1).padStart(2, "0")}</span><strong>{placementLabel(model, placement)}</strong><small>{item.evidencePosture === "MASTER_DEFINED" && !binding ? "Structural interpretation not yet available" : persistentBindingPresentationLabel(binding)}</small></button></li>;
       })}</ol> : <p className="sm-pw-access__pending">Level 4 is not yet available for this branch. Candidate identities and official source paths must pass review before they appear in the public beta.</p>}
     </section>
 

@@ -458,49 +458,70 @@ describe("persistent world local-review shell", () => {
 
   it("keeps mobile node navigation visible until the user enables details", async () => {
     const original = window.matchMedia;
-    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("max-width: 620px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
     try {
       window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
       render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
       const surface = await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
       const workspace = surface.closest(".sm-pw-workspace");
-      expect(workspace?.classList.contains("is-fullscreen-fallback")).toBe(true);
-      expect(workspace?.getAttribute("data-fullscreen")).toBe("true");
-      expect(screen.getByRole("button", { name: "Exit full screen" })).toBeTruthy();
-      const infoToggle = screen.getByRole("button", { name: "Info stays closed until requested" });
-      expect(infoToggle.hasAttribute("disabled")).toBe(false);
-      fireEvent.click(screen.getByRole("button", { name: /Consumer DemandMaster-defined system/ }));
+      expect(workspace?.classList.contains("is-fullscreen-fallback")).toBe(false);
+      expect(workspace?.getAttribute("data-fullscreen")).toBe("false");
+      expect(screen.getByRole("navigation", { name: "Mobile map toolbar" })).toBeTruthy();
+      const infoToggle = screen.getByRole("button", { name: /Inspector/ });
+      expect(infoToggle.hasAttribute("disabled")).toBe(true);
+      fireEvent.click(screen.getByRole("button", { name: /Consumer Demand/ }));
       expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:consumer-demand");
-      expect(screen.queryByRole("complementary", { name: "Persistent world factor details" })).toBeNull();
+      expect(infoToggle.hasAttribute("disabled")).toBe(false);
       fireEvent.click(infoToggle);
-      const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+      const inspector = screen.getByRole("dialog", { name: "Persistent world factor details" });
       expect(within(inspector).getByRole("heading", { name: "Consumer Demand" })).toBeTruthy();
-      fireEvent.click(screen.getByRole("button", { name: /01Real Personal Consumption/ }));
-      expect(within(inspector).getByRole("heading", { name: "Real Personal Consumption" })).toBeTruthy();
-      expect(screen.getByRole("button", { name: "Info opens automatically while navigating" }).getAttribute("aria-pressed")).toBe("true");
+      fireEvent.keyDown(window, { key: "Escape" });
+      expect(screen.queryByRole("dialog", { name: "Persistent world factor details" })).toBeNull();
+      await waitFor(() => expect(document.activeElement).toBe(infoToggle));
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
+  it("keeps desktop navigation visible when a wide viewport reports a coarse pointer", async () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    try {
+      window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
+      render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+      await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
+      const navigationToolbar = screen.getByRole("toolbar", { name: "Map navigation controls" });
+      const viewToolbar = screen.getByRole("toolbar", { name: "Map view controls" });
+      expect(within(navigationToolbar).getByRole("button", { name: "Back in exploration history" })).toBeTruthy();
+      expect(within(navigationToolbar).getByRole("button", { name: "Forward in exploration history" })).toBeTruthy();
+      expect(within(navigationToolbar).getByRole("button", { name: "Up one level" })).toBeTruthy();
+      expect(within(navigationToolbar).getByRole("button", { name: /Find a factor/ })).toBeTruthy();
+      expect(within(navigationToolbar).getByRole("button", { name: "Reset" })).toBeTruthy();
+      expect(within(viewToolbar).getByRole("button", { name: "Top-down" })).toBeTruthy();
+      expect(within(viewToolbar).getByRole("button", { name: "Enter full screen" })).toBeTruthy();
+      expect(screen.queryByRole("navigation", { name: "Mobile map toolbar" })).toBeNull();
     } finally {
       window.matchMedia = original;
     }
   });
 
   it("supports direct immersive links and a mobile page-mode override", () => {
-    expect(persistentWorldInitialImmersive("", true)).toBe(true);
+    expect(persistentWorldInitialImmersive("", true)).toBe(false);
     expect(persistentWorldInitialImmersive("?immersive=1", false)).toBe(true);
     expect(persistentWorldInitialImmersive("?immersive=0", true)).toBe(false);
     expect(persistentWorldInitialImmersive("", false)).toBe(false);
   });
 
-  it("lets mobile users select automatic info before entering a node", async () => {
+  it("lets mobile users open the selected node in a dialog inspector", async () => {
     const original = window.matchMedia;
-    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("max-width: 900px") || query.includes("max-width: 620px") || query.includes("hover: none") || query.includes("pointer: coarse"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
     try {
       window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
       render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-      const infoToggle = await screen.findByRole("button", { name: "Info stays closed until requested" }, { timeout: 15_000 });
+      const infoToggle = await screen.findByRole("button", { name: /Inspector/ }, { timeout: 15_000 });
+      fireEvent.click(screen.getByRole("button", { name: /Consumer Demand/ }));
       fireEvent.click(infoToggle);
-      expect(screen.getByRole("button", { name: "Info opens automatically while navigating" }).getAttribute("aria-pressed")).toBe("true");
-      fireEvent.click(screen.getByRole("button", { name: /Consumer DemandMaster-defined system/ }));
-      const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+      const inspector = screen.getByRole("dialog", { name: "Persistent world factor details" });
       expect(within(inspector).getByRole("heading", { name: "Consumer Demand" })).toBeTruthy();
     } finally {
       window.matchMedia = original;
@@ -544,7 +565,7 @@ describe("persistent world local-review shell", () => {
     fireEvent.pointerUp(canvas, { pointerId: 8, clientX: -20, clientY: -116 });
     expect(["DRIFTING", "IDLE"]).toContain(surface.getAttribute("data-orbit-drag-state"));
 
-    fireEvent.click(screen.getByRole("button", { name: /03Employer Labor DemandMaster-defined system/ }));
+    fireEvent.click(screen.getByRole("button", { name: /03Employer Labor DemandVerified reading not yet available/ }));
     expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:employer-labor-demand");
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("12");
@@ -562,10 +583,10 @@ describe("persistent world local-review shell", () => {
     expect(within(inspector).getByRole("heading", { name: "Employer Labor Demand" })).toBeTruthy();
     expect(window.location.hash).toContain("placement%3Aemployer-labor-demand");
 
-    fireEvent.click(screen.getByRole("button", { name: /01Job OpeningsAccepted factual reading/ }));
+    fireEvent.click(screen.getByRole("button", { name: /01Job OpeningsNot enough comparable history yet/ }));
     expect(surface.getAttribute("data-selected-placement-id")).toContain("job-openings");
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
-    expect(screen.getAllByText(/Fixture only · hierarchy tether/)).toHaveLength(10);
+    expect(screen.getAllByText(/Configuration pending · not factual/).length).toBeGreaterThanOrEqual(10);
     expect(within(inspector).getByRole("heading", { name: "Latest accepted reading" })).toBeTruthy();
     fireEvent.click(within(inspector).getByRole("button", { name: "Open Deep Dive" }));
     expect(within(inspector).getByRole("heading", { name: "How it connects" })).toBeTruthy();
@@ -644,15 +665,36 @@ describe("persistent world local-review shell", () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
     await screen.findByRole("heading", { name: "What changed" }, { timeout: 15_000 });
     expect(screen.getByText("0 governed connector signals")).toBeTruthy();
-    expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
-    const staleItem = screen.getByText("Structured retrieval path is stale").closest("li");
-    expect(staleItem?.getAttribute("data-impact")).toBe("UNKNOWN");
+    const changes = screen.getByRole("region", { name: "What changed" });
+    expect(within(changes).getByText("Structured retrieval path is stale")).toBeTruthy();
+    const staleItem = within(changes).getByText("Structured retrieval path is stale").closest("li");
+    expect(staleItem?.getAttribute("data-event-class")).toBe("OPERATIONAL");
     expect(staleItem?.getAttribute("data-kind")).toBe("SOURCE_STALE");
     fireEvent.click(screen.getByRole("button", { name: "24h" }));
-    expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
-    expect(screen.getByText("Structured retrieval path is stale").closest("li")?.getAttribute("data-impact")).toBe("UNKNOWN");
+    expect(within(changes).getByText("Structured retrieval path is stale")).toBeTruthy();
+    expect(within(changes).getByText("Structured retrieval path is stale").closest("li")?.getAttribute("data-event-class")).toBe("OPERATIONAL");
     fireEvent.click(screen.getByRole("button", { name: "1y" }));
-    expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
+    expect(within(changes).getByText("Structured retrieval path is stale")).toBeTruthy();
+  });
+
+  it("defaults change history to the selected branch and links briefing movements to the existing factor", async () => {
+    window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    await screen.findByRole("heading", { name: "What changed" }, { timeout: 15_000 });
+    fireEvent.click(screen.getByRole("button", { name: /04Layoffs & Job Destruction/ }));
+    const briefing = screen.getByRole("region", { name: "Layoffs & Job Destruction" });
+    expect(within(briefing).getByText("12 accepted-history factors")).toBeTruthy();
+    const selectedScope = screen.getByRole("button", { name: "Selected branch" });
+    const allScope = screen.getByRole("button", { name: "All systems" });
+    expect(selectedScope.getAttribute("aria-pressed")).toBe("true");
+    expect(allScope.getAttribute("aria-pressed")).toBe("false");
+    const branchCount = screen.getByRole("region", { name: "What changed" }).querySelectorAll("ol > li").length;
+    fireEvent.click(allScope);
+    expect(screen.getByRole("region", { name: "What changed" }).querySelectorAll("ol > li").length).toBeGreaterThan(branchCount);
+    fireEvent.click(selectedScope);
+    fireEvent.click(within(briefing).getByRole("button", { name: /Initial unemployment-insurance claims/ }));
+    const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+    expect(within(inspector).getByRole("heading", { name: /Initial (UI )?Claims/ })).toBeTruthy();
   });
 
   it("indexes all resident placements and ranks reviewed factors above fixtures", () => {

@@ -19,6 +19,9 @@ export interface PersistentChangeNotice {
   currentDisplay?: string;
   previousDisplay?: string;
   absoluteDelta?: number;
+  absoluteDeltaDisplay?: string;
+  direction?: "UP" | "DOWN" | "FLAT";
+  directionGlyph?: string;
   relativeDeltaPercent?: number;
   comparisonBasis: string;
   impactClass: PersistentImpactClass;
@@ -111,6 +114,14 @@ function revisionNotices(): PersistentChangeNotice[] {
 
 const slug = (value: string) => value.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+function acceptedDeltaDisplay(value: number, unit: string) {
+  const absolute = Math.abs(value);
+  if (unit === "thousands of persons") return `${Math.round(absolute * 1_000).toLocaleString("en-US")} people`;
+  if (unit === "thousands of jobs") return `${Math.round(absolute * 1_000).toLocaleString("en-US")} jobs`;
+  if (unit === "percent") return `${absolute.toLocaleString("en-US")} percentage points`;
+  return `${absolute.toLocaleString("en-US")} ${unit}`;
+}
+
 function acceptedPlacementId(canonicalFactorId: string) {
   for (const group of layoffsBranchTaxonomy) {
     if (layoffsCanonicalFactorId(group.label) === canonicalFactorId) return `placement:layoffs-job-destruction:${group.id}`;
@@ -136,6 +147,9 @@ function acceptedHistoryNotices(): PersistentChangeNotice[] {
       currentDisplay: series.currentDisplay,
       previousDisplay: series.previousDisplay,
       absoluteDelta: series.absoluteDelta,
+      absoluteDeltaDisplay: acceptedDeltaDisplay(series.absoluteDelta, series.unit),
+      direction: series.direction,
+      directionGlyph: series.directionGlyph,
       relativeDeltaPercent: series.relativeDeltaPercent,
       comparisonBasis: `${series.current.validTime} compared with the previous compatible ${series.frequency} observation, ${series.previous.validTime}.`,
       impactClass: "UNKNOWN",
@@ -227,7 +241,7 @@ export const persistentChangeNotices: readonly PersistentChangeNotice[] = Object
   ...observationNotices(),
   ...sourceHealthNotices(),
   ...revisionNotices(),
-].sort((left, right) => Date.parse(right.knownAt) - Date.parse(left.knownAt)));
+].sort((left, right) => Date.parse(right.officialPublishedAt ?? right.knownAt) - Date.parse(left.officialPublishedAt ?? left.knownAt) || left.id.localeCompare(right.id)));
 
 const windowMs: Readonly<Record<PersistentTimeWindow, number>> = Object.freeze({
   RECENT: 30 * 86_400_000,

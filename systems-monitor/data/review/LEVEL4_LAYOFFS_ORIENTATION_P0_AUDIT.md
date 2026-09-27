@@ -85,7 +85,12 @@ Hierarchy tethers remain navigation only. Candidate relationship evidence remain
 
 `HUMAN_LEVEL4_LAYOFFS_QA = PENDING`
 
-`HUMAN_ORIENTATION_UX_QA = PENDING`
+`HUMAN_ORIENTATION_UX_QA = PASS`
+
+Taylor approved the governed orientation UX on 2026-09-27. The persistent-world
+framework is frozen as `FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS`. This subsequent
+framework closure does not promote economic Level-4 content or alter the P0
+economic evidence boundaries recorded above.
 
 No Human QA result is inferred from automated tests.
 

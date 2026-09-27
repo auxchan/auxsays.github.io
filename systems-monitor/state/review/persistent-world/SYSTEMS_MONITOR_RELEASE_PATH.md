@@ -1,6 +1,20 @@
 # Systems Monitor Release Path
 
-Status: **LOCAL HUMAN QA AVAILABLE / PUBLIC ACTIVATION BLOCKED**
+Status: **FRAMEWORK FROZEN / PUBLIC ACTIVATION BLOCKED**
+
+Framework state: `FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS`
+
+Human orientation QA: **PASS**
+
+Human Level-3 framework QA: **PASS**
+
+Freeze recorded: 2026-09-27 by Taylor
+
+The freeze covers the persistent-world interaction and orientation framework.
+Only a reproducible verified defect may reopen the affected component. It does
+not approve Level-4 economic content, fixture replacement, structural
+relationships, causal interpretation, materiality, forecasting, Phase 5,
+public activation, or deployment.
 
 ## Current path
 
@@ -41,7 +55,7 @@ Local QA URL:
 - accepted factual structural relationships remain zero;
 - BEA credential/live evidence, Make handoff, common-cause proof, state
   transformation, and employment-exposure CALC remain incomplete;
-- Gate B and Human QA remain open;
+- Gate B remains open;
 - public activation and deployment are not authorized.
 
 No workflow, Patch Feed, generated record, or deployment file is changed by

@@ -171,6 +171,12 @@ const FULL_WORLD_MAX_SCALE = .17;
 const AMBIENT_EDGE = "#315b67";
 export const PERSISTENT_RIGHT_CONTROL_LABEL_INSET = 190;
 
+/** Mobile keeps type legible by dropping lower-priority labels, never shrinking them. */
+export function persistentWorldLabelRequired(viewportWidth: number, placementId: string, selectedPlacementId: string | null, selectedPath: ReadonlySet<string>, structurallyRequired: boolean) {
+  if (viewportWidth > 620) return structurallyRequired;
+  return placementId === selectedPlacementId || selectedPath.has(placementId);
+}
+
 /** Fits the complete Level-1 orbit inside the shorter mobile viewport dimension. */
 export function persistentWorldOverviewScale(viewportWidth: number, viewportHeight: number) {
   const width = Number.isFinite(viewportWidth) && viewportWidth > 0 ? viewportWidth : 980;
@@ -517,7 +523,8 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
           }
           const focusedExactTenChild = Boolean(focusPlacement && focusPlacement.depth < 3 && placement.parentPlacementId === focusPlacement.id && placement.depth === focusPlacement.depth + 1);
           const requiredOverviewDriver = placement.depth === 1 && (!selectedPlacementId || fullWorld);
-          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: requiredOverviewDriver || (focusedExactTenChild && viewMode === "TOP_DOWN"), side: labelSide, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
+          const structurallyRequired = requiredOverviewDriver || (focusedExactTenChild && viewMode === "TOP_DOWN");
+          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: persistentWorldLabelRequired(width, placement.id, selectedPlacementId, selectedPath, structurallyRequired), side: labelSide, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
         }
         context.globalAlpha = 1;
       }

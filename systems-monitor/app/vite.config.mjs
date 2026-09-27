@@ -28,6 +28,18 @@ function localPhase4bCheckpoint() {
       const loopbackOnly = host === "127.0.0.1" || host === "localhost" || host === "::1";
       server.middlewares.use((request, response, next) => {
         const pathname = (request.url ?? "").split("?", 1)[0];
+        if (pathname.endsWith("/__local-review/orientation")) {
+          if (!loopbackOnly) {
+            response.statusCode = 403;
+            response.end("Human Orientation UX QA requires a loopback-only development server.");
+            return;
+          }
+          response.statusCode = 200;
+          response.setHeader("Content-Type", "text/html; charset=utf-8");
+          response.setHeader("Cache-Control", "no-store");
+          response.end(`<!doctype html><meta charset="utf-8"><title>Loading Human Orientation UX QA</title><script>location.replace("/systems-monitor/#persistent-world");</script>`);
+          return;
+        }
         if (pathname.endsWith("/__local-review/layoffs-level4")) {
           if (!loopbackOnly) {
             response.statusCode = 403;

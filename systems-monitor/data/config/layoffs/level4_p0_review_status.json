@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "level4-p0-review-status-0.3.0",
+  "schemaVersion": "level4-p0-review-status-0.3.1",
   "scope": "Layoffs & Job Destruction",
   "asOfStartingCommit": "cfa4a23bb74b5721b4ce5d3964418175c04fce4e",
   "authority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_14",
@@ -76,13 +76,13 @@
     "topologyFingerprint": "fnv1a32:88684cdb"
   },
   "ux": {
-    "minimap": "IMPLEMENTED_REQUIRES_HUMAN_QA",
-    "levelIndicator": "IMPLEMENTED_REQUIRES_HUMAN_QA",
-    "persistentMainline": "IMPLEMENTED_REQUIRES_HUMAN_QA",
-    "routeIllumination": "IMPLEMENTED_REQUIRES_HUMAN_QA",
-    "explorationBackForward": "IMPLEMENTED_REQUIRES_HUMAN_QA",
-    "searchAndJump": "IMPLEMENTED_REQUIRES_HUMAN_QA",
-    "progressiveInspector": "IMPLEMENTED_REQUIRES_HUMAN_QA",
+    "minimap": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
+    "levelIndicator": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
+    "persistentMainline": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
+    "routeIllumination": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
+    "explorationBackForward": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
+    "searchAndJump": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
+    "progressiveInspector": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
     "temporalHistoryPresentation": "CONSOLIDATED_TWELVE_FACTOR_HUMAN_QA_SURFACE_PASSED",
     "forecastVintageStatusPresentation": "ZERO_ELIGIBLE_ROWS_FORECASTING_LOCKED"
   },
@@ -92,7 +92,13 @@
     "acceptedImplementationCheckpoint": "e7ed0e3b7b6b668953fe32a394bec349eb8599e4",
     "approvedBy": "Taylor",
     "approvedOn": "2026-09-18",
-    "HUMAN_ORIENTATION_UX_QA": "PENDING",
+    "HUMAN_ORIENTATION_UX_QA": "PASS",
+    "orientationApprovedBy": "Taylor",
+    "orientationApprovedOn": "2026-09-27",
+    "HUMAN_LEVEL3_FRAMEWORK_QA": "PASS",
+    "level3FrameworkApprovedBy": "Taylor",
+    "level3FrameworkApprovedOn": "2026-09-27",
+    "LEVEL3_FRAMEWORK_STATE": "FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS",
     "HUMAN_PHASE4B_STRUCTURAL_PATH_QA": "NOT_OPENED_NO_STRUCTURAL_PROOF"
   },
   "blockers": [
