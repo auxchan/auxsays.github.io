@@ -63,6 +63,21 @@ CANDIDATES = [
     ("cc-release-notes",
      "https://helpx.adobe.com/creative-cloud/release-note/cc-release-notes.html",
      "release-history"),
+    # www.adobe.com IS reachable from CI, so the last legitimate avenue is whether equivalent
+    # Photoshop desktop release-history content is served from that host. These are the shapes
+    # Adobe uses elsewhere; none is a guess at an origin hostname or an unofficial mirror.
+    ("www-same-path",
+     "https://www.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html",
+     "release-history"),
+    ("www-en-same-path",
+     "https://www.adobe.com/en/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html",
+     "release-history"),
+    ("www-product-release-notes",
+     "https://www.adobe.com/products/photoshop/release-notes.html",
+     "release-history"),
+    ("www-cc-release-notes",
+     "https://www.adobe.com/creative-cloud/release-note/cc-release-notes.html",
+     "release-history"),
     # Transport control: a DIFFERENT Adobe host. Distinguishes "Adobe blocks this egress" from
     # "helpx.adobe.com specifically blocks this egress".
     ("control-adobe-www",
