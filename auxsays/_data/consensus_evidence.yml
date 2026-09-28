@@ -34006,3 +34006,34 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6016816-windows-11-25h2-26200-8037-kb5079473-r
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6016816/windows-11-25h2-26200-8037-kb5079473-repeatedly-fa
+  parent_title: Windows 11 25H2 26200.8037 — KB5079473 repeatedly fails after in-place repair - Microsoft Q&A
+  report_title: Windows 11 25H2 26200.8037 — KB5079473 repeatedly fails after in-place repair - Microsoft Q&A
+  report_text_excerpt: Windows 11 25H2 26200.8037 — KB5079473 repeatedly fails after in-place repair - Microsoft Q&A Windows 11 25H2 26200.8037 — KB5079473 fails with 0x800705B9 / 0x80240069 despite in-place repair I am looking for advice from anyone who has encountered this particular Windows...
+  captured_at: '2026-09-28T15:02:59Z'
+  source_date: '2026-09-28'
+  target_release_date: '2026-03-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8037'
+  match_basis: exact_os_build
+  matched_kb: KB5079473
+  matched_os_build: '26200.8037'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8037'
