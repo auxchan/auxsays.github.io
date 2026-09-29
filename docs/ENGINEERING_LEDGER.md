@@ -458,6 +458,52 @@ release feed, or grants this repository's egress an allowlist arrangement.
 
 ---
 
+### AUX-018 — Microsoft Teams official ingestion activated, forward-only
+
+- **Status** Resolved · **Area** Official ingestion · **Severity** Medium
+
+**Prior contamination** The first Teams parser was identity-unaware and mislabeled the Public/New
+Teams **Mac** stream as generic "Microsoft Teams". Teams is not one version stream: the official
+page carries 37 tables across cloud x edition x platform, and the same calendar release ships a
+different build per platform.
+
+**Cleanup (already complete)** `7787548d` removed all 25 mislabeled records, reset the
+microsoft-teams state entry and left zero replacements. Re-verified before activation: suite green,
+zero records, no state entry, no `last_results` block, other 20 sources intact. The config prose
+claiming cleanup was still pending was stale and has been rewritten.
+
+**Scope** Exactly one identity: New Teams desktop / Windows / Public cloud, stable. The parser is
+table-anchored and never inherits identity across a table boundary. HTML comments are now stripped
+before tokenizing, so a commented-out `<h4>Windows</h4>` cannot arm a foreign table.
+
+**Activation boundary** The target table carries the full history — 63 builds back to 2023-10-12,
+all of them legitimately in-identity, so no identity check could stop them. `ingestion.record_floor_date`
+(`2026-08-01`), the same control the per-build PowerPoint lane uses, turns 63 candidates into 4.
+Validation now REQUIRES the key for this parser profile, so a typo cannot silently remove the guard.
+
+**The blocker the review caught** `write_update_record` copies only allow-listed fields onto a
+record, and `teams_edition` was in none of them — `target_platform` and `target_channel` survived
+only by accident of living in the Acrobat and Office tuples. Every written Teams record would have
+carried two thirds of its identity, and `test_teams_record_cleanup.py` asserts all three. That suite
+was green **only because zero Teams records existed**; the first ingest would have turned it red and
+the obvious repair would have been deleting real records. Now allow-listed, and pinned at the
+dict->disk boundary that hid it.
+
+**Production proof** Scheduled lane run 36540200598 selected Teams, wrote 2 records (`5e605d99`),
+deferred 2. Both carry Windows / Public cloud (Production) / New Teams, `update_report_count: 0`,
+`evidence_state: official_only`. Pages deployed; the live product page lists exactly those two and
+no Mac record. The cleanup suite is now 9/9 against **real** records rather than vacuously green.
+
+**PR** #155 · **Merge** `57922036` · **Ingest commit** `5e605d99`
+
+**Reopen only if** a generated Microsoft Teams record fails the New-Teams/Windows/Public-cloud
+identity contract, or the official Microsoft version-history source can no longer produce that
+identity deterministically. (A latent, unreached residual: the tokenizer would mis-scope if
+Microsoft ever shipped an unclosed or nested `<table>` in that section; today's page is well-formed,
+37 opens and 37 closes.)
+
+---
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.
