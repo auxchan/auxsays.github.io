@@ -3291,8 +3291,8 @@
   company: Microsoft
   software: Microsoft Teams
   public_category: Workplace Critical
-  enabled: false
-  recommended_priority: P1 identity-scoped adapter staged; re-activation blocked on cleanup of prior mixed-identity records
+  enabled: true
+  recommended_priority: P1 active; identity-scoped to New Teams desktop / Windows / Public cloud, forward-only from record_floor_date
   ingestion:
     type: html_release_notes
     adapter: microsoft_office_updates
@@ -3302,7 +3302,16 @@
     api_url: null
     parser_profile: microsoft_teams_version_history
     official_source_type: release_notes
-    source_capture_status: adapter_staged_identity_scoped
+    source_capture_status: adapter_enabled
+    # FORWARD-ONLY ACTIVATION BOUNDARY. The Windows/Public table carries the whole history: 63
+    # builds back to 2023-10-12 when Teams was activated, every one a legitimate member of the
+    # target identity. The runner writes record_limit new records per run while scanning a
+    # 200-wide window, so without this floor activation walks three years of builds onto the
+    # site two at a time. This admits the four releases published since 2026-08-01 as a small
+    # truthful baseline, and every future Windows/Public release automatically. Same control the
+    # per-build PowerPoint lane uses; validation REQUIRES the key for this profile, so a typo
+    # cannot silently remove the guard.
+    record_floor_date: '2026-08-01'
     include_prereleases: false
     version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$
     requires_javascript: false
@@ -3322,16 +3331,22 @@
     difficulty: Medium
     defer_until_official_ingestion_stable: true
   source_health_note: >-
-    Official source (learn.microsoft.com/officeupdates/teams-app-versioning) is CI-reachable
-    (HTTP 200, server-rendered). The Teams parser is now IDENTITY-SCOPED: it emits records only
-    for the single New Teams desktop client on Windows in the Public cloud, rejecting every other
-    platform (Mac / Web / VDI / Mobile), cloud (Government GCC/GCCH/DoD, Sovereign Gallatin), and
-    edition (Classic Teams), plus preview/targeted/beta rings and undated/invalid-date rows.
-    enabled is set to false because the PRIOR (non-identity-scoped) parser mislabeled Mac builds
-    as generic "Microsoft Teams" -- the existing generated records and the seen ledger are the
-    Public/New/Mac stream, not Windows. Re-activation is gated on a controlled cleanup (remove the
-    mislabeled Mac records and reset the Teams seen ledger) so the Windows/Public stream ingests
-    from a clean baseline. Community consensus is intentionally NOT implemented for Teams.
+    ACTIVE. Official source (learn.microsoft.com/officeupdates/teams-app-versioning) is
+    CI-reachable (HTTP 200, server-rendered, 481 KB). The parser is IDENTITY-SCOPED and
+    table-anchored: of the 37 tables on that page it trusts exactly one -- Public cloud ->
+    New Teams app version -> Windows -- and identity is never inherited across a table
+    boundary, so Mac / Web / VDI / Mobile, Government GCC/GCCH/DoD, Sovereign Gallatin,
+    Classic Teams and preview/targeted/beta rings cannot leak, nor can undated or
+    impossible-date rows. Every emitted record carries target_platform Windows,
+    target_channel "Public cloud (Production)" and teams_edition "New Teams".
+    The earlier blocker is CLEARED: the prior non-identity-scoped parser mislabeled Mac builds
+    as generic "Microsoft Teams", and that corpus was removed in 7787548d -- 25 records
+    deleted, the microsoft-teams state entry reset, zero replacements left behind. The clean
+    baseline is re-asserted every run by test_teams_record_cleanup.py.
+    Activation is FORWARD-ONLY from ingestion.record_floor_date, because the target table
+    carries the full history (63 builds back to 2023-10-12) and would otherwise backfill years
+    of releases two per scheduled run. Community consensus is intentionally NOT implemented
+    for Teams.
 - company_id: microsoft
   product_id: microsoft-powerpoint
   company: Microsoft
