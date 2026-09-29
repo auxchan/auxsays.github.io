@@ -59,7 +59,7 @@ auxsays/scripts/tests/test_update_linked_tier2.py = 243
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
-auxsays/scripts/tests/test_collector_write_authority.py = 104
+auxsays/scripts/tests/test_collector_write_authority.py = 112
 auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
 # Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
 # scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
@@ -68,7 +68,7 @@ auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
 auxsays/scripts/tests/test_collector_traversal_order.py = 16
 auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
-auxsays/scripts/tests/test_method_health_append_delta.py = 55
+auxsays/scripts/tests/test_method_health_append_delta.py = 58
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
 auxsays/scripts/tests/test_consensus_sample_honesty.py = 87
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
@@ -89,7 +89,7 @@ auxsays/scripts/tests/test_davinci_projection_coherence.py = 29
 auxsays/scripts/tests/test_patch_decision_authority.py = 47
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
-auxsays/scripts/tests/test_patch_index_identity.py = 83
+auxsays/scripts/tests/test_patch_index_identity.py = 93
 auxsays/scripts/tests/test_patch_page_hierarchy.py = 128
 # My Patch Watchlist: the visitor's own product list, local to their browser. Renders the shipped
 # patch layout to prove the control binds `page.product_id` (a patch page watches the PRODUCT, not
@@ -126,7 +126,7 @@ auxsays/scripts/tests/test_validate_ingestion_sources.py = 40
 # be semantic rather than crashes.
 auxsays/scripts/tests/test_ingestion_run_health.py = 128
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
-auxsays/scripts/tests/test_windows_count_authority.py = 96
+auxsays/scripts/tests/test_windows_count_authority.py = 100
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
@@ -173,6 +173,7 @@ auxsays/scripts/tests/test_elgato_help_center_adapter.py = 75
 auxsays/scripts/tests/test_failsoft_collection.py = 25
 auxsays/scripts/tests/test_http_credential_scope.py = 55
 auxsays/scripts/tests/test_microsoft_learn_qna_source.py = 28
+auxsays/scripts/tests/test_microsoft_teams_community.py = 85
 auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 78
 auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
 auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80

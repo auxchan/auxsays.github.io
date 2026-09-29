@@ -64,6 +64,10 @@ ALLOWED_METHODS: dict[str, set[str]] = {
     "microsoft-powerpoint": {"learn_qna_search_rss", "learn_qna_powerpoint_tags", "reddit_search",
                              "stack_exchange_search", "github_officedev_issues",
                              "tech_community_discussions", "open_web_discovery"},
+    # Two source families, reusing the shared method ids rather than minting Teams-specific ones:
+    # the acquisition-method registry catalogues each method once, and a per-product alias would
+    # make the same method look like two.
+    "microsoft-teams": {"learn_qna_search_rss", "tech_community_discussions"},
 }
 
 # Per-product allowed evidence source_type identities. Evidence rows carry ``source_type`` (not a
@@ -90,6 +94,9 @@ ALLOWED_SOURCE_TYPES: dict[str, set[str]] = {
     # same community, discovered a different way, and one report must not become two identities.
     "microsoft-powerpoint": {"microsoft_learn_qna", "reddit_community_report", "stack_exchange_question",
                              "github_officedev_issue", "microsoft_tech_community"},
+    # Teams counts two families for the coverage floor for the same reason Windows does:
+    # Tech Community is a different community, not a second route into Learn Q&A.
+    "microsoft-teams": {"microsoft_learn_qna", "microsoft_tech_community"},
 }
 
 # Per-product allowed permalink route slug(s). A record's public permalink is the canonical shape

@@ -169,6 +169,7 @@ SITES = [
     ("patch_collectors.microsoft_windows", "windows"),
     ("patch_collectors.adobe_acrobat_community", "acrobat"),
     ("collect_obs_reports", "obs"),
+    ("patch_collectors.microsoft_teams", "teams"),
 ]
 
 
