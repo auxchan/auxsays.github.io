@@ -114,10 +114,10 @@ auxsays/scripts/tests/test_premiere_editorial_protection.py = 13
 auxsays/scripts/tests/test_qa_patch_records.py = 30
 auxsays/scripts/tests/test_reader_evidence_identity.py = 17
 auxsays/scripts/tests/test_report_count_reconciliation.py = 17
-auxsays/scripts/tests/test_teams_record_cleanup.py = 6
+auxsays/scripts/tests/test_teams_record_cleanup.py = 9
 auxsays/scripts/tests/test_transactional_writeback.py = 10
 auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
-auxsays/scripts/tests/test_validate_ingestion_sources.py = 32
+auxsays/scripts/tests/test_validate_ingestion_sources.py = 40
 # A green patch-ingestion run must not hide an enabled source that failed. Covers the nine
 # required counterfactuals (healthy / quiet / 403 / transport failure / parser rot / mixed /
 # all-failed / disabled / aged-out), the failure-MODE-change case Elgato actually exhibited,
@@ -172,7 +172,7 @@ auxsays/scripts/tests/test_elgato_help_center_adapter.py = 75
 auxsays/scripts/tests/test_failsoft_collection.py = 25
 auxsays/scripts/tests/test_http_credential_scope.py = 55
 auxsays/scripts/tests/test_microsoft_learn_qna_source.py = 28
-auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 70
+auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 78
 auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
 auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80
 auxsays/scripts/tests/test_microsoft_windows_collector.py = 78

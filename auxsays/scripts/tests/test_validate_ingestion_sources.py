@@ -12,6 +12,7 @@ the real config is read-only.
 """
 from __future__ import annotations
 
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -149,14 +150,67 @@ def run() -> int:
               ting.get("adapter") == "microsoft_office_updates"
               and ting.get("parser_profile") == "microsoft_teams_version_history",
               str((ting.get("adapter"), ting.get("parser_profile"))))
-        check("microsoft-teams is staged disabled (re-activation gated on record cleanup)",
-              teams.get("enabled") is False, str(teams.get("enabled")))
+        check("microsoft-teams is ACTIVE (cleanup prerequisite satisfied; see AUX-018)",
+              teams.get("enabled") is True, str(teams.get("enabled")))
+        # The live Windows/Public table carries the full history -- 63 builds back to 2023-10-12
+        # at activation -- and every one satisfies the target identity, so no identity check would
+        # stop an unbounded backfill. Only the declared floor does.
+        check("microsoft-teams declares a forward-only record_floor_date",
+              isinstance(ting.get("record_floor_date"), str)
+              and re.fullmatch(r"\d{4}-\d{2}-\d{2}", ting.get("record_floor_date", "")),
+              str(ting.get("record_floor_date")))
         check("microsoft-teams official_url targets the official Learn version-history page",
               str(ting.get("official_url", "")).startswith("https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning"),
               str(ting.get("official_url")))
-        check("microsoft-teams source_health_note records the identity-scoped/staged state",
-              "identity-scoped" in str(teams.get("source_health_note", "")).lower(),
-              str(teams.get("source_health_note", ""))[:80])
+        note = str(teams.get("source_health_note", "")).lower()
+        check("microsoft-teams source_health_note records the identity-scoped state",
+              "identity-scoped" in note, str(teams.get("source_health_note", ""))[:80])
+        # The blocker this note described is gone. Prose that still says activation is gated on a
+        # cleanup that already happened sends the next person to redo destructive work.
+        check("microsoft-teams source_health_note no longer claims cleanup is pending",
+              "gated on a controlled cleanup" not in note and "forward-only" in note,
+              str(teams.get("source_health_note", ""))[:120])
+
+    # --- the floor is REQUIRED for this profile, so a key typo cannot remove the guard -------
+    # `_validate_entry` is the real per-source validator `validate()` runs; calling it directly
+    # keeps this a test of the shipped rule rather than of a copy of it.
+    def _teams_like(**ing):
+        base = {"adapter": "microsoft_office_updates",
+                "parser_profile": "microsoft_teams_version_history",
+                "official_url": "https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning",
+                "type": "html_release_notes"}
+        base.update(ing)
+        errs: list = []
+        vis._validate_entry(errs, [], {
+            "company_id": "microsoft", "product_id": "microsoft-teams", "company": "Microsoft",
+            "software": "Microsoft Teams", "public_category": "Workplace Critical",
+            "enabled": True, "ingestion": base})
+        return [e for e in errs if "record_floor_date" in e]
+
+    check("the Teams profile REQUIRES record_floor_date (absent key rejected)",
+          bool(_teams_like()), str(_teams_like())[:100])
+    check("a typo in the floor KEY is rejected, not silently ignored",
+          bool(_teams_like(record_floor_data="2026-08-01")),
+          str(_teams_like(record_floor_data="2026-08-01"))[:100])
+    check("a malformed floor VALUE is rejected",
+          bool(_teams_like(record_floor_date="2026-8-01")),
+          str(_teams_like(record_floor_date="2026-8-01"))[:100])
+    check("the correctly spelled, well-formed floor validates",
+          not _teams_like(record_floor_date="2026-08-01"),
+          str(_teams_like(record_floor_date="2026-08-01"))[:100])
+
+    # --- P. the enabled source is actually selected by the REAL ingestion registry ----------
+    # Flipping `enabled` in YAML is only half of activation; `should_run` is what the scheduled
+    # lane consults, and it is the function that decides whether Teams is ever fetched.
+    import argparse                                                # noqa: PLC0415 - test-only
+    import patch_ingest                                            # noqa: PLC0415 - test-only
+    scheduled = argparse.Namespace(source=[], all=False)
+    check("the scheduled lane selects microsoft-teams now that it is enabled",
+          teams is not None and patch_ingest.should_run(teams, scheduled) is True)
+    disabled = next((e for e in entries if e.get("enabled") is False), None)
+    check("...and still skips a source that is disabled",
+          disabled is not None and patch_ingest.should_run(disabled, scheduled) is False,
+          str(disabled and disabled.get("product_id")))
 
     print()
     print("=" * 60)

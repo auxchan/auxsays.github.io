@@ -363,6 +363,60 @@ def run() -> int:
     blob = " ".join(str(t0.get(k, "")) for k in ("body", "official_summary", "title")).lower()
     check("H27c. record carries no consensus/community/report language",
           not any(term in blob for term in ("consensus", "users report", "community", "complaint", "severity")), blob[:120])
+    # A commented-out heading must not arm a table. The heading branch reads whatever the token
+    # regex matched, so without comment stripping this emits the Mac build under the Windows
+    # identity -- the one failure mode this lane cannot absorb.
+    COMMENT_LEAK = """
+    <h2>Public cloud offerings</h2><h3>New Teams app version</h3>
+    <h4>Mac</h4><!-- superseded: <h4>Windows</h4> -->
+    <table><tr><td>2026</td><td>July 01</td><td>26183.1901.4874.5228</td></tr></table>
+    """
+    check("O8. a commented-out <h4>Windows</h4> cannot arm a foreign table",
+          T(COMMENT_LEAK) == [], str([r["version"] for r in T(COMMENT_LEAK)]))
+
+    # --- O. the forward-only activation boundary -------------------------------------------
+    # The live Windows/Public table carries the FULL history (63 builds back to 2023-10-12 at
+    # activation). The runner writes `record_limit` new records per run while scanning a 200-wide
+    # window, so without a floor, enabling Teams walks three years of builds onto the site two at
+    # a time -- every one of them a legitimate member of the target identity, so no identity check
+    # would ever catch it. The fixture's two accepted builds are dated 2026-07-01 and 2026-06-17.
+    def TF(floor, html=TEAMS_HTML, limit=50):
+        src = teams_source()
+        if floor is not None:
+            src["ingestion"]["record_floor_date"] = floor
+        return [r["version"] for r in
+                mso._records_from_teams_version_history(src, TEAMS_URL, html, limit)]
+
+    check("O1. no floor declared -> the boundary is inert and both builds are accepted",
+          TF(None) == TEAMS_ACCEPTED, str(TF(None)))
+    check("O2. a floor below both builds admits both",
+          TF("2026-01-01") == TEAMS_ACCEPTED, str(TF("2026-01-01")))
+    check("O3. a floor BETWEEN the two builds admits only the newer one",
+          TF("2026-06-20") == ["26183.1903.4892.4448"], str(TF("2026-06-20")))
+    check("O4. a floor on a build's own release date still admits that build",
+          "26183.1903.4892.4448" in TF("2026-07-01"), str(TF("2026-07-01")))
+    check("O5. a floor above every build admits nothing (and does not error)",
+          TF("2026-12-01") == [], str(TF("2026-12-01")))
+    # Ignoring a malformed floor would REMOVE the guard, which is the failure mode the floor
+    # exists to prevent -- a one-character typo would silently restore the unbounded backfill.
+    malformed_closed = []
+    for bad in ("2026-8-01", "2026-13-45", "01-08-2026", "", "soon"):
+        try:
+            TF(bad)
+            malformed_closed.append(f"{bad!r} was ACCEPTED")
+        except ValueError:
+            pass
+    check("O6. a malformed floor stops the lane instead of silently removing the guard",
+          not malformed_closed, "; ".join(malformed_closed))
+    # The floor is a DATE boundary, never a version comparison: Teams builds are YYDDD-prefixed
+    # and ordering them numerically is exactly the semantic-version guessing this repo refuses.
+    src_floor = teams_source()
+    src_floor["ingestion"]["record_floor_date"] = "2026-06-20"
+    kept = mso._records_from_teams_version_history(src_floor, TEAMS_URL, TEAMS_HTML, 50)
+    check("O7. the boundary is applied to the official release date, not the version string",
+          len(kept) == 1 and str(kept[0]["published_at"])[:10] >= "2026-06-20",
+          str([(r["version"], str(r["published_at"])[:10]) for r in kept]))
+
     check("Teams limit respected (limit=1 -> newest only)",
           [r["version"] for r in T(TEAMS_HTML, 1)] == ["26183.1903.4892.4448"], "limit=1")
 

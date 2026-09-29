@@ -477,7 +477,13 @@ def _records_from_teams_version_history(
     A version that appears with more than one distinct release date fails visibly (dropped).
     Returns [] when no qualifying row matches.
     """
-    html = html or ""
+    # Comments are stripped BEFORE tokenizing. The heading branch reads whatever the token regex
+    # matched, so a commented-out `<h4>Windows</h4>` -- the kind of thing that survives an editorial
+    # pass on a vendor docs page -- would set the platform and ARM the next table, letting a Mac or
+    # Government table be emitted under the Windows identity. Today's page has 43 comments and none
+    # contains a heading, so this is hardening rather than a fix for observed markup; it is applied
+    # because identity leakage is the one failure this lane cannot absorb.
+    html = re.sub(r"<!--.*?-->", " ", html or "", flags=re.S)
     cap = max(1, int(limit))
     h2 = h3 = h4 = ""
     armed = False                               # a fresh target <h4>Windows</h4> declared and
@@ -547,12 +553,27 @@ def _records_from_teams_version_history(
                 order.append(version)
             dates_by_version.setdefault(version, set()).add(published)
 
+    # FORWARD-ONLY BOUNDARY. The Windows/Public table carries the full history -- 63 builds back to
+    # 2023-10-12 when this was written -- and the runner writes `record_limit` new records per
+    # scheduled run while scanning a 200-wide window. Without a floor, activation does not ingest
+    # "the current release"; it walks three years of builds onto the site two at a time, because
+    # every one of them is a legitimate member of the target identity.
+    #
+    # Same control the per-build PowerPoint lane uses, and deliberately the same helper: the
+    # boundary is a declared release DATE in the source config, so it is explicit, auditable and
+    # repo-owned rather than an accident of whatever the per-run limit happens to be. It fails
+    # closed on a malformed value, because silently ignoring it would remove the guard entirely.
+    floor = _record_floor_date(source)
+
     records: list[dict[str, Any]] = []
     for version in order:
         dates = dates_by_version[version]
         if len(dates) != 1:
             continue  # same version, conflicting release dates -> fail visibly (drop, don't guess)
-        records.append(_teams_record(source, source_url, version, next(iter(dates))))
+        published = next(iter(dates))
+        if floor and published[:10] < floor:
+            continue  # older than the declared activation boundary -> never ingested
+        records.append(_teams_record(source, source_url, version, published))
         if len(records) >= cap:
             break
     return records

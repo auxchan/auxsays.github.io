@@ -146,9 +146,17 @@ def _validate_entry(errors: list[str], warnings: list[str], source: dict[str, An
     # ('record_floor_data') removes the only backfill guard, passes validation, and silently starts
     # ingesting the entire release-notes history.
     profile = str(ingestion.get("parser_profile") or "").strip()
-    if profile == "microsoft_365_powerpoint_release_notes" and "record_floor_date" not in ingestion:
-        errors.append(f"{label}: ingestion.record_floor_date is REQUIRED for the per-build "
-                      f"PowerPoint lane (forward-only ingestion guard); check the key spelling")
+    # Both lanes parse a page that carries the FULL release history of their identity, so both
+    # depend on the floor to stop activation from backfilling years of builds. Teams is the same
+    # shape as PowerPoint here: 63 Windows/Public builds back to 2023 sit in one table.
+    FLOOR_REQUIRED_PROFILES = {
+        "microsoft_365_powerpoint_release_notes": "per-build PowerPoint",
+        "microsoft_teams_version_history": "Teams Windows/Public",
+    }
+    if profile in FLOOR_REQUIRED_PROFILES and "record_floor_date" not in ingestion:
+        errors.append(f"{label}: ingestion.record_floor_date is REQUIRED for the "
+                      f"{FLOOR_REQUIRED_PROFILES[profile]} lane (forward-only ingestion guard); "
+                      f"check the key spelling")
     if "record_floor_date" in ingestion:
         floor_raw = ingestion.get("record_floor_date")
         floor_ok = False

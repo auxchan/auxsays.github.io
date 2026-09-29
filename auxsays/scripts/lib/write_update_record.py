@@ -81,6 +81,17 @@ ACROBAT_IDENTITY_FIELDS = (
     "security_bulletin_id",
 )
 
+# The Teams lane tracks ONE identity out of the many on Microsoft's version-history page, and the
+# edition is a third of it: New Teams and Classic Teams ship different builds on the same day for
+# the same platform and cloud. The adapter has always emitted `teams_edition`, but this allow-list
+# is what reaches disk, and the field was in none of the tuples -- so every written Teams record
+# carried platform and channel and silently dropped the edition. `test_teams_record_cleanup.py`
+# asserts the full three-part contract on each record, which was green only because zero Teams
+# records existed; activation would have made it red and invited someone to delete real records.
+TEAMS_IDENTITY_FIELDS = (
+    "teams_edition",
+)
+
 # Explicit cross-product applicability: the list of product_ids one official item applies
 # to, plus a human label. Opt-in. Lets a single official item feed several app pages while
 # preserving a common source identity and an auditable applicability list (never blind
@@ -134,7 +145,8 @@ ATTRIBUTION_LABELS = {
 # Attribution is deliberately NOT in this tuple: the loop that consumes it advances on any change,
 # which would silently downgrade a record the moment one parse failed to see the app block.
 OPTIONAL_STRUCTURED_FIELDS = (
-    OFFICE_APP_IDENTITY_FIELDS + ACROBAT_IDENTITY_FIELDS + APPLICABILITY_FIELDS
+    OFFICE_APP_IDENTITY_FIELDS + ACROBAT_IDENTITY_FIELDS + TEAMS_IDENTITY_FIELDS
+    + APPLICABILITY_FIELDS
 )
 
 
