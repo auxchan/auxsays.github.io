@@ -34037,3 +34037,62 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8037'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6018220-analysis-of-windows-11-s-constantly-br
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6018220/analysis-of-windows-11-s-constantly-breaking-struc
+  parent_title: Analysis of Windows 11’s Constantly Breaking Structure, Layers, and Numerous Software Errors - Microsoft Q&A
+  report_title: Analysis of Windows 11’s Constantly Breaking Structure, Layers, and Numerous Software Errors - Microsoft Q&A
+  report_text_excerpt: 'Analysis of Windows 11’s Constantly Breaking Structure, Layers, and Numerous Software Errors - Microsoft Q&A System Specifications, Version Operating System: Windows 11 Home Version: 26200.9550 What is the problem? The issue is persistent WinSxS and SSU corruption that has...'
+  captured_at: '2026-09-29T13:58:32Z'
+  source_date: '2026-09-28'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9550'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9550'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6017194-aggiornamento-della-sicurezza-kb512919
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6017194/aggiornamento-della-sicurezza-kb5129195-26200-9457
+  parent_title: Aggiornamento della sicurezza (KB5129195) (26200.9457) Errore di installazione - 0x80070002 - Microsoft Q&A
+  report_title: Aggiornamento della sicurezza (KB5129195) (26200.9457) Errore di installazione - 0x80070002 - Microsoft Q&A
+  report_text_excerpt: 'Aggiornamento della sicurezza (KB5129195) (26200.9457) Errore di installazione - 0x80070002 - Microsoft Q&A ENG: I''ve been trying to update for days, but it always fails. Can''t install it ITA: Impossibile installare l''aggiornamento, sto tentando da alcuni giorni ma va sempre...'
+  captured_at: '2026-09-29T13:58:43Z'
+  source_date: '2026-09-29'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
