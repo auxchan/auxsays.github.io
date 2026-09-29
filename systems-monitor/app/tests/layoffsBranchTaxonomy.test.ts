@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import taxonomyRegistry from "../../data/config/layoffs/taxonomy.json";
 import claimClassRegistry from "../../data/config/layoffs/level4_claim_classes.json";
 import { LAYOFFS_CLASSIFIED_LEVEL4_FACTOR_COUNT, layoffsFactorSourceState, layoffsFactorSourceStates } from "../src/data/layoffsBranchReadModel";
-import { layoffsBranchTaxonomy } from "../src/data/layoffsBranchTaxonomy";
+import { layoffsBranchTaxonomy, layoffsResolveCanonicalFactorId } from "../src/data/layoffsBranchTaxonomy";
 import { createPersistentWorld, persistentWorldPlacementLabel, persistentWorldResolvePlacementId } from "../src/data/persistentWorldModel";
 
 describe("Layoffs & Job Destruction canonical hierarchy", () => {
@@ -93,7 +93,7 @@ describe("Layoffs & Job Destruction canonical hierarchy", () => {
     expect(claimClassRegistry.relationshipPromotionAuthority).toBe("NONE");
     expect(claimClassRegistry.factors).toHaveLength(64);
     expect(new Set(claimClassRegistry.factors.map((row) => row.canonicalFactorId))).toEqual(canonicalFactors);
-    expect(counts).toEqual({ A_DIRECT_OBS: 38, B_CALC: 12, C_EVENT_OR_STRUCTURAL: 5, D_TAXONOMY_OR_SOURCE_PROBLEM: 9 });
+    expect(counts).toEqual({ A_DIRECT_OBS: 40, B_CALC: 11, C_EVENT_OR_STRUCTURAL: 5, D_TAXONOMY_OR_SOURCE_PROBLEM: 8 });
     expect(LAYOFFS_CLASSIFIED_LEVEL4_FACTOR_COUNT).toBe(64);
 
     claimClassRegistry.factors.forEach((row) => {
@@ -109,10 +109,32 @@ describe("Layoffs & Job Destruction canonical hierarchy", () => {
   });
 
   it("canonicalizes the legacy plural business-formations source identity without adding a source-only node", () => {
-    expect(Object.keys(layoffsFactorSourceStates)).toHaveLength(76);
+    expect(Object.keys(layoffsFactorSourceStates)).toHaveLength(74);
     expect(layoffsFactorSourceState("factor:canonical:business-formations")).toBeUndefined();
     expect(layoffsFactorSourceState("factor:canonical:business-formation")?.series).toEqual(
       expect.arrayContaining([expect.objectContaining({ sourceId: "census-bfs", seriesId: "BFS:T:BF_BF4Q:SA" })])
     );
+  });
+
+  it("resolves all five governed canonical renames without changing frozen placement IDs", () => {
+    const migrations = {
+      "factor:canonical:industry-payroll-contraction": "factor:canonical:payroll-contraction-breadth",
+      "factor:canonical:establishment-deaths": "factor:canonical:jobs-lost-at-establishment-deaths",
+      "factor:canonical:business-bankruptcy-stress": "factor:canonical:business-bankruptcy-filings-12-month-total",
+      "factor:canonical:consumer-demand": "factor:canonical:real-personal-consumption-expenditures-growth",
+      "factor:canonical:disaster-operational-shock": "factor:canonical:fema-disaster-declaration",
+    } as const;
+    Object.entries(migrations).forEach(([legacyId, canonicalId]) => {
+      expect(layoffsResolveCanonicalFactorId(legacyId)).toBe(canonicalId);
+      expect(layoffsFactorSourceState(legacyId)).toBe(layoffsFactorSourceState(canonicalId));
+    });
+
+    const model = createPersistentWorld();
+    expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:industry-payroll-contraction"].canonicalFactorId).toBe("factor:canonical:payroll-contraction-breadth");
+    expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:establishment-deaths"].canonicalFactorId).toBe("factor:canonical:jobs-lost-at-establishment-deaths");
+    expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:business-bankruptcy-stress"].canonicalFactorId).toBe("factor:canonical:business-bankruptcy-filings-12-month-total");
+    expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:consumer-demand"].canonicalFactorId).toBe("factor:canonical:real-personal-consumption-expenditures-growth");
+    expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:disaster-operational-shock"].canonicalFactorId).toBe("factor:canonical:fema-disaster-declaration");
+    expect(model.topologyFingerprint).toBe("fnv1a32:88684cdb");
   });
 });

@@ -20,18 +20,18 @@ class LayoffsLevel4AuditTests(unittest.TestCase):
         actual = json.loads(AUDIT_PATH.read_text(encoding="utf-8"))
         self.assertEqual(expected, actual)
 
-    def test_reconciles_64_factors_100_placements_and_76_active_ui_state_records(self):
+    def test_reconciles_64_factors_100_placements_and_74_active_ui_state_records(self):
         audit = json.loads(AUDIT_PATH.read_text(encoding="utf-8"))
         counts = audit["counts"]
         self.assertEqual(64, counts["canonicalLevel4Factors"])
         self.assertEqual(100, counts["level4Placements"])
-        self.assertEqual(76, counts["factorSourceStateRecords"])
-        self.assertEqual(48, counts["expandedSourceBindings"])
+        self.assertEqual(74, counts["factorSourceStateRecords"])
+        self.assertEqual(46, counts["expandedSourceBindings"])
         self.assertEqual(42, counts["recordsWithSourceBindings"])
-        self.assertEqual(34, counts["sourceIdentifiedPlaceholders"])
-        self.assertEqual(8, counts["sourceOnlyRecords"])
-        self.assertEqual(8, counts["sourceOnlyRecordsWithDisposition"])
-        self.assertEqual(9, counts["sourceOnlyIdentitiesReviewed"])
+        self.assertEqual(32, counts["sourceIdentifiedPlaceholders"])
+        self.assertEqual(6, counts["sourceOnlyRecords"])
+        self.assertEqual(6, counts["sourceOnlyRecordsWithDisposition"])
+        self.assertEqual(7, counts["sourceOnlyIdentitiesReviewed"])
         self.assertEqual(1, counts["supersededSourceOnlyAliases"])
         self.assertEqual(0, len(audit["reconciliation"]["sourceOnlyRecords"]) - len(audit["reconciliation"]["sourceOnlyDispositions"]))
         self.assertTrue(all(row["decisionStatus"] == "IMPLEMENTED_NON_ACTIVATING" for row in audit["reconciliation"]["allReviewedDispositions"]))
@@ -49,7 +49,7 @@ class LayoffsLevel4AuditTests(unittest.TestCase):
             "LEGACY_DUPLICATE_SHOULD_REMOVE",
         }
         bindings = [binding for row in audit["factorSourceStateRecords"] for binding in row["sourceBindings"]]
-        self.assertEqual(48, len(bindings))
+        self.assertEqual(46, len(bindings))
         self.assertTrue(all(binding["role"] in allowed_roles for binding in bindings))
         self.assertTrue(all(binding["whyNeeded"] for binding in bindings))
         self.assertTrue(all(row["claimClass"] for row in audit["canonicalFactors"]))

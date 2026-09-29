@@ -1,9 +1,9 @@
 {
-  "schemaVersion": "level4-p0-review-status-0.3.1",
+  "schemaVersion": "level4-p0-review-status-0.4.0",
   "scope": "Layoffs & Job Destruction",
-  "asOfStartingCommit": "cfa4a23bb74b5721b4ce5d3964418175c04fce4e",
-  "authority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_14",
-  "promotionAuthority": "EXACT_THIRTEEN_SERIES_ONLY",
+  "asOfStartingCommit": "14c540ef1db61122c136acb5772d5b9eaa1a640f",
+  "authority": "TAYLOR_INITIAL_UI_CLAIMS_EXACT_TEN_IMPLEMENTATION_2026_09_29",
+  "promotionAuthority": "EXISTING_ACCEPTED_REUSE_ONLY_FOR_INITIAL_UI_CLAIMS",
   "taxonomy": {
     "level3Parents": 10,
     "level4Placements": 100,
@@ -14,29 +14,43 @@
   },
   "classification": {
     "status": "COMPLETE_GOVERNED_REVIEW_CANDIDATE_NOT_PROMOTED",
-    "A_DIRECT_OBS": 38,
-    "B_CALC": 12,
+    "A_DIRECT_OBS": 40,
+    "B_CALC": 11,
     "C_EVENT_OR_STRUCTURAL": 5,
-    "D_TAXONOMY_OR_SOURCE_PROBLEM": 9,
+    "D_TAXONOMY_OR_SOURCE_PROBLEM": 8,
     "unclassifiedCanonicalFactors": 0,
     "unclassifiedPlacements": 0,
     "note": "All 64 canonical factors have an explicit A/B/C/D classification. Classification does not accept or publish an observation, history, calculation, or relationship."
   },
   "sourcePosture": {
-    "profiledRecords": 76,
+    "profiledRecords": 74,
     "profiledRecordMeaning": "UI-side factor/source state records, not unique canonical factors or acquisition adapters",
-    "expandedAcquisitionBindings": 48,
+    "expandedAcquisitionBindings": 46,
     "recordsWithSourceBindings": 42,
-    "sourceIdentifiedPlaceholders": 34,
-    "sourceOnlyRecordsOutsideCurrentTaxonomy": 8,
-    "sourceOnlyIdentitiesReviewed": 9,
+    "sourceIdentifiedPlaceholders": 32,
+    "sourceOnlyRecordsOutsideCurrentTaxonomy": 6,
+    "sourceOnlyIdentitiesReviewed": 7,
     "supersededSourceOnlyAliases": 1,
-    "ACCEPTED": 5,
-    "SOURCE_ENABLED_PENDING_ACCEPTANCE": 13,
-    "BLOCKED": 24,
-    "SOURCE_IDENTIFIED": 34,
+    "ACCEPTED": 12,
+    "SOURCE_ENABLED_PENDING_ACCEPTANCE": 8,
+    "BLOCKED": 21,
+    "SOURCE_IDENTIFIED": 33,
     "recordsWithExactSeriesTableOrSelector": 42,
     "acceptedExternalObservationRefs": 1
+  },
+  "initialUiClaims": {
+    "status": "READY_FOR_HUMAN_LEVEL4_INITIAL_UI_CLAIMS_QA",
+    "placements": 10,
+    "acceptedObservationPlacements": 5,
+    "governedCalculationsPendingMethodology": 1,
+    "sourceIdentifiedPendingAcceptance": 1,
+    "blockedCredential": 2,
+    "eventOrStructuralFactors": 1,
+    "unexplainedRendererFixtures": 0,
+    "canonicalMigrations": 5,
+    "acceptedStructuralRelationships": 0,
+    "gateB": "OPEN",
+    "forecasting": "LOCKED_UNAVAILABLE"
   },
   "history": {
     "acceptedFactorsWithHistory": 12,
@@ -83,7 +97,7 @@
     "explorationBackForward": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
     "searchAndJump": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
     "progressiveInspector": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
-    "temporalHistoryPresentation": "CONSOLIDATED_TWELVE_FACTOR_HUMAN_QA_SURFACE_PASSED",
+    "temporalHistoryPresentation": "INITIAL_UI_CLAIMS_EXACT_TEN_HUMAN_QA_SURFACE_PENDING",
     "forecastVintageStatusPresentation": "ZERO_ELIGIBLE_ROWS_FORECASTING_LOCKED"
   },
   "humanQa": {
@@ -99,6 +113,7 @@
     "level3FrameworkApprovedBy": "Taylor",
     "level3FrameworkApprovedOn": "2026-09-27",
     "LEVEL3_FRAMEWORK_STATE": "FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS",
+    "HUMAN_LEVEL4_INITIAL_UI_CLAIMS_QA": "PENDING",
     "HUMAN_PHASE4B_STRUCTURAL_PATH_QA": "NOT_OPENED_NO_STRUCTURAL_PROOF"
   },
   "blockers": [
@@ -107,6 +122,9 @@
     "L4-007_MATERIALITY_PROFILES_REQUIRE_GOVERNED_THRESHOLDS",
     "L4-008_BEA_LIVE_INTAKE_BLOCKED_MISSING_AUXSAYS_BEA_USER_ID",
     "L4-009_INDUSTRY_TO_COMMODITY_HANDOFF_NOT_IMPLEMENTED_OR_ACCEPTED",
-    "L4-012_EXACT_ARCHIVE_VINTAGE_ARTIFACTS_NOT_INGESTED"
+    "L4-012_EXACT_ARCHIVE_VINTAGE_ARTIFACTS_NOT_INGESTED",
+    "L4-013_PAYROLL_CONTRACTION_BREADTH_METHODOLOGY_NOT_TAYLOR_APPROVED",
+    "L4-014_USCOURTS_F2_RIGHTS_AND_IMMUTABLE_HISTORY_PENDING",
+    "L4-015_FEMA_EVENT_SOURCE_ACCEPTANCE_AND_IMMUTABLE_HISTORY_PENDING"
   ]
 }

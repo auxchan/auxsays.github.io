@@ -29,6 +29,13 @@
 [data-aux-product="systems-monitor"] .sm-l4qa-series > header div { display: grid; gap: .3rem; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series > header span { font-weight: 750; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series > header strong { padding: .4rem .55rem; border: 1px solid #356259; color: #83e2c8; font-size: .68rem; letter-spacing: .07em; }
+[data-aux-product="systems-monitor"] .sm-l4qa-disposition[data-source-state="pending"] { border-left: 4px solid #c9964d; background: #1b1813; }
+[data-aux-product="systems-monitor"] .sm-l4qa-disposition[data-source-state="pending"] > header strong { border-color: #8f6b35; color: #f0c276; }
+[data-aux-product="systems-monitor"] .sm-l4qa-disposition[data-source-state="blocked"] { border-left: 4px solid #c15f59; background: #1d1516; }
+[data-aux-product="systems-monitor"] .sm-l4qa-disposition[data-source-state="blocked"] > header strong { border-color: #8d4744; color: #f09a94; }
+[data-aux-product="systems-monitor"] .sm-l4qa-disposition[data-source-state="event"] { border-left: 4px solid #6b99cf; background: #101923; }
+[data-aux-product="systems-monitor"] .sm-l4qa-disposition[data-source-state="event"] > header strong { border-color: #476c96; color: #98c5f7; }
+[data-aux-product="systems-monitor"] .sm-l4qa-event-boundary { margin: 0 0 1rem; padding: .85rem 1rem; border: 1px solid #345878; background: #102334; color: #c8ddf1; line-height: 1.5; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series[data-source-state="stale"] { border-left: 4px solid #ef9f66; background: #1b1816; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series[data-source-state="fallback"] { border-left: 4px solid #58c7b1; background: #0d1e22; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series[data-source-state="stale"] > header strong { border-color: #a96038; color: #ffc29d; }

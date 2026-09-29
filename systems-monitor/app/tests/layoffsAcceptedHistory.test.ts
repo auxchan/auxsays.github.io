@@ -28,7 +28,7 @@ describe("Taylor-authorized Layoffs accepted history", () => {
       "factor:canonical:gross-job-losses",
       "factor:canonical:establishment-contractions",
       "factor:canonical:establishment-closures",
-      "factor:canonical:establishment-deaths",
+      "factor:canonical:jobs-lost-at-establishment-deaths",
       "factor:canonical:initial-claims",
     ]));
     for (const factor of layoffsAcceptedFactorSummaries) {
@@ -39,6 +39,13 @@ describe("Taylor-authorized Layoffs accepted history", () => {
         expect(series.current.historyUseClass).toBe("CURRENT_REVISED_HISTORY");
       }
     }
+  });
+
+  it("keeps accepted establishment-death history addressable through the legacy canonical alias", () => {
+    const legacy = acceptedLayoffsHistoryForFactor("factor:canonical:establishment-deaths");
+    const canonical = acceptedLayoffsHistoryForFactor("factor:canonical:jobs-lost-at-establishment-deaths");
+    expect(legacy).toBe(canonical);
+    expect(canonical?.primary.sourceSeriesId).toBe("BDS0000000000000000110008LQ5");
   });
 
   it("preserves the accepted 209,000 seed and the later 212,000 revision", () => {

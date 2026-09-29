@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "payroll-contraction-breadth-calibration-1.0.0",
+  "authority": "CALIBRATION_EVIDENCE_ONLY_TAYLOR_FINAL_METHODOLOGY_REQUIRED",
+  "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
+  "status": "GOVERNED_CALC_PENDING_METHODOLOGY_CALIBRATION",
+  "formula": "100 * count(i in V_t where E_i,t < E_i,t-1) / count(V_t)",
+  "inputContract": {
+    "publisher": "U.S. Bureau of Labor Statistics",
+    "program": "Current Employment Statistics",
+    "measure": "All employees, thousands, seasonally adjusted",
+    "geography": "US",
+    "frequency": "monthly",
+    "comparison": "previous compatible month",
+    "missingData": "exclude missing members from V_t and suppress when approved coverage threshold is not met",
+    "revisionPropagation": "recalculate affected months from newly accepted CES revisions; retain the calculation methodology version and append revision evidence",
+    "taxonomyVersioning": "universe membership and NAICS-basis changes require a new U_v version"
+  },
+  "simulation": {
+    "retrievedAt": "2026-09-29T17:02:31Z",
+    "endpoint": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+    "window": {"start": "2016-01", "end": "2025-12", "monthlyPeriods": 120},
+    "publicationStatus": "CALIBRATION_ONLY_NOT_ACCEPTED_NOT_PUBLISHABLE"
+  },
+  "options": [
+    {
+      "id": "OPTION_A",
+      "label": "Ten private-industry supersectors",
+      "description": "Broad stable mutually exclusive private-industry supersectors; no aggregate is combined with its child industries.",
+      "members": [
+        {"seriesId": "CES1000000001", "label": "Mining and logging", "exclusivePartition": "10"},
+        {"seriesId": "CES2000000001", "label": "Construction", "exclusivePartition": "20"},
+        {"seriesId": "CES3000000001", "label": "Manufacturing", "exclusivePartition": "30"},
+        {"seriesId": "CES4000000001", "label": "Trade, transportation, and utilities", "exclusivePartition": "40"},
+        {"seriesId": "CES5000000001", "label": "Information", "exclusivePartition": "50"},
+        {"seriesId": "CES5500000001", "label": "Financial activities", "exclusivePartition": "55"},
+        {"seriesId": "CES6000000001", "label": "Professional and business services", "exclusivePartition": "60"},
+        {"seriesId": "CES6500000001", "label": "Private education and health services", "exclusivePartition": "65"},
+        {"seriesId": "CES7000000001", "label": "Leisure and hospitality", "exclusivePartition": "70"},
+        {"seriesId": "CES8000000001", "label": "Other services", "exclusivePartition": "80"}
+      ],
+      "coverage": {"periods": 120, "at100Percent": 100.0, "atLeast95Percent": 100.0, "atLeast90Percent": 100.0, "atLeast80Percent": 100.0},
+      "historyDepth": "2016-01 through 2025-12 in the credential-free calibration window",
+      "missingSeriesPatterns": "None in the 120-period simulation.",
+      "revisionImplications": "All members are CES series subject to routine monthly revisions and annual benchmark revisions.",
+      "taxonomyBreaks": "A future CES/NAICS supersector definition change requires a new universe version and an explicit comparability review."
+    },
+    {
+      "id": "OPTION_B",
+      "label": "Twenty-one nonoverlapping private-industry partitions",
+      "description": "A more granular mutually exclusive partition using CES major industries or nonoverlapping children within each supersector.",
+      "members": [
+        {"seriesId": "CES1000000001", "label": "Mining and logging", "exclusivePartition": "10"},
+        {"seriesId": "CES2023600001", "label": "Construction of buildings", "exclusivePartition": "20/236"},
+        {"seriesId": "CES2023700001", "label": "Heavy and civil engineering construction", "exclusivePartition": "20/237"},
+        {"seriesId": "CES2023800001", "label": "Specialty trade contractors", "exclusivePartition": "20/238"},
+        {"seriesId": "CES3100000001", "label": "Durable goods manufacturing", "exclusivePartition": "30/31-33-durable"},
+        {"seriesId": "CES3200000001", "label": "Nondurable goods manufacturing", "exclusivePartition": "30/31-33-nondurable"},
+        {"seriesId": "CES4142000001", "label": "Wholesale trade", "exclusivePartition": "40/42"},
+        {"seriesId": "CES4200000001", "label": "Retail trade", "exclusivePartition": "40/44-45"},
+        {"seriesId": "CES4300000001", "label": "Transportation and warehousing", "exclusivePartition": "40/48-49"},
+        {"seriesId": "CES4422000001", "label": "Utilities", "exclusivePartition": "40/22"},
+        {"seriesId": "CES5000000001", "label": "Information", "exclusivePartition": "50"},
+        {"seriesId": "CES5552000001", "label": "Finance and insurance", "exclusivePartition": "55/52"},
+        {"seriesId": "CES5553000001", "label": "Real estate and rental and leasing", "exclusivePartition": "55/53"},
+        {"seriesId": "CES6054000001", "label": "Professional, scientific, and technical services", "exclusivePartition": "60/54"},
+        {"seriesId": "CES6055000001", "label": "Management of companies and enterprises", "exclusivePartition": "60/55"},
+        {"seriesId": "CES6056000001", "label": "Administrative and waste services", "exclusivePartition": "60/56"},
+        {"seriesId": "CES6561000001", "label": "Private educational services", "exclusivePartition": "65/61"},
+        {"seriesId": "CES6562000001", "label": "Health care and social assistance", "exclusivePartition": "65/62"},
+        {"seriesId": "CES7071000001", "label": "Arts, entertainment, and recreation", "exclusivePartition": "70/71"},
+        {"seriesId": "CES7072000001", "label": "Accommodation and food services", "exclusivePartition": "70/72"},
+        {"seriesId": "CES8000000001", "label": "Other services", "exclusivePartition": "80"}
+      ],
+      "coverage": {"periods": 120, "at100Percent": 100.0, "atLeast95Percent": 100.0, "atLeast90Percent": 100.0, "atLeast80Percent": 100.0},
+      "historyDepth": "2016-01 through 2025-12 in the credential-free calibration window",
+      "missingSeriesPatterns": "None in the 120-period simulation.",
+      "revisionImplications": "More member series increase revision surface; every affected breadth period must be recalculated after accepted CES revisions.",
+      "taxonomyBreaks": "Granular CES series are more exposed to NAICS recoding, title changes, and series discontinuities; each break requires a versioned crosswalk or a new universe version."
+    }
+  ],
+  "recommendation": {
+    "universe": "OPTION_A",
+    "minimumPublishableCoveragePercent": 95,
+    "reason": "Option A is easier to audit, avoids parent/child overlap, had complete coverage in the tested decade, and is less sensitive to granular NAICS breaks. A 95% threshold tolerates one temporarily missing member without permitting materially incomplete publication.",
+    "authorization": "RECOMMENDATION_ONLY_NOT_TAYLOR_APPROVED"
+  }
+}

@@ -3,6 +3,7 @@ export const LAYOFFS_JOB_DESTRUCTION_DRIVER_ID = "layoffs-job-destruction" as co
 export interface LayoffsBranchPlacementCandidate {
   readonly label: string;
   readonly canonicalFactorId: string;
+  readonly placementSlug: string;
 }
 
 export interface LayoffsBranchGroup {
@@ -22,7 +23,28 @@ export const layoffsCanonicalAliases: Readonly<Record<string, string>> = Object.
   "Initial UI Claims": "Initial Claims",
   "Closing Establishment Losses": "Establishment Closures",
   "Business Formations": "Business Formation",
-  "Import / Trade Pressure": "Trade / Import Pressure"
+  "Import / Trade Pressure": "Trade / Import Pressure",
+  "Industry Payroll Contraction": "Payroll Contraction Breadth",
+  "Establishment Deaths": "Jobs Lost at Establishment Deaths",
+  "Business Bankruptcy Stress": "Business Bankruptcy Filings, 12-Month Total",
+  "Consumer Demand": "Real Personal Consumption Expenditures Growth",
+  "Disaster / Operational Shock": "FEMA Disaster Declaration"
+});
+
+export const layoffsCanonicalFactorMigration: Readonly<Record<string, string>> = Object.freeze({
+  "factor:canonical:industry-payroll-contraction": "factor:canonical:payroll-contraction-breadth",
+  "factor:canonical:establishment-deaths": "factor:canonical:jobs-lost-at-establishment-deaths",
+  "factor:canonical:business-bankruptcy-stress": "factor:canonical:business-bankruptcy-filings-12-month-total",
+  "factor:canonical:consumer-demand": "factor:canonical:real-personal-consumption-expenditures-growth",
+  "factor:canonical:disaster-operational-shock": "factor:canonical:fema-disaster-declaration"
+});
+
+const stablePlacementSlugs: Readonly<Record<string, string>> = Object.freeze({
+  "Payroll Contraction Breadth": "industry-payroll-contraction",
+  "Jobs Lost at Establishment Deaths": "establishment-deaths",
+  "Business Bankruptcy Filings, 12-Month Total": "business-bankruptcy-stress",
+  "Real Personal Consumption Expenditures Growth": "consumer-demand",
+  "FEMA Disaster Declaration": "disaster-operational-shock"
 });
 
 export function layoffsCanonicalLabel(label: string) {
@@ -39,8 +61,12 @@ export function layoffsCanonicalFactorId(label: string) {
   return `factor:canonical:${slug(layoffsCanonicalLabel(label))}`;
 }
 
+export function layoffsResolveCanonicalFactorId(canonicalFactorId: string) {
+  return layoffsCanonicalFactorMigration[canonicalFactorId] ?? canonicalFactorId;
+}
+
 function placement(label: string): LayoffsBranchPlacementCandidate {
-  return Object.freeze({ label, canonicalFactorId: layoffsCanonicalFactorId(label) });
+  return Object.freeze({ label, canonicalFactorId: layoffsCanonicalFactorId(label), placementSlug: stablePlacementSlugs[label] ?? slug(label) });
 }
 
 function group(id: string, label: string, definition: string, sourceFamily: string, labels: readonly string[]): LayoffsBranchGroup {
@@ -60,28 +86,28 @@ export const layoffsBranchTaxonomy: readonly LayoffsBranchGroup[] = Object.freez
     "Initial UI Claims",
     "New entries into insured unemployment after a separation; this measures claims activity, not job destruction accounting.",
     "U.S. Department of Labor ETA; BLS JOLTS/CPS/CES/BED; BEA; disaster authorities",
-    ["Layoffs & Discharges", "Temporary Layoffs", "Permanent Job Losers", "Industry Payroll Contraction", "Gross Job Losses", "Establishment Deaths", "Business Bankruptcy Stress", "Real Output Growth", "Consumer Demand", "Disaster / Operational Shock"]
+    ["Layoffs & Discharges", "Temporary Layoffs", "Permanent Job Losers", "Payroll Contraction Breadth", "Gross Job Losses", "Jobs Lost at Establishment Deaths", "Business Bankruptcy Filings, 12-Month Total", "Real Output Growth", "Real Personal Consumption Expenditures Growth", "FEMA Disaster Declaration"]
   ),
   group(
     "continued-claims-insured-unemployment",
     "Continued Claims / Insured Unemployment",
     "The persistence of insured unemployment and the capacity of the labor market to return claimants to work.",
     "U.S. Department of Labor ETA; BLS JOLTS/CES; Census; BEA",
-    ["Initial Claims", "Hires Rate", "Job Openings Rate", "Payroll Growth", "Temporary Help Employment", "Average Weekly Hours", "Business Formations", "Real Output Growth", "Consumer Demand", "Regional Employment Growth"]
+    ["Initial Claims", "Hires Rate", "Job Openings Rate", "Payroll Growth", "Temporary Help Employment", "Average Weekly Hours", "Business Formations", "Real Output Growth", "Real Personal Consumption Expenditures Growth", "Regional Employment Growth"]
   ),
   group(
     "permanent-job-losers",
     "Permanent Job Losers",
     "People whose employment ended involuntarily and who do not expect recall to the former job.",
     "BLS CPS/BED/CES/Productivity; Census BDS/trade; U.S. Courts; Federal Reserve; BEA",
-    ["Establishment Deaths", "Firm Deaths", "Business Bankruptcy Stress", "Industry Payroll Contraction", "Gross Job Losses", "Productivity / Automation", "Import / Trade Pressure", "C&I Credit Conditions", "Corporate Profitability", "Real Output Growth"]
+    ["Jobs Lost at Establishment Deaths", "Firm Deaths", "Business Bankruptcy Filings, 12-Month Total", "Payroll Contraction Breadth", "Gross Job Losses", "Productivity / Automation", "Import / Trade Pressure", "C&I Credit Conditions", "Corporate Profitability", "Real Output Growth"]
   ),
   group(
     "temporary-layoffs",
     "Temporary Layoffs",
     "People separated from work who expect recall, distinguished from permanent job loss.",
     "BLS CPS/CES; Federal Reserve; Census; BEA; EIA and disaster authorities",
-    ["Average Weekly Hours", "Industrial Production", "Capacity Utilization", "New Orders", "Inventory / Sales Balance", "Consumer Demand", "Manufacturing Output", "Energy / Input Shock", "Disaster / Weather Shock", "Industry Payroll Contraction"]
+    ["Average Weekly Hours", "Industrial Production", "Capacity Utilization", "New Orders", "Inventory / Sales Balance", "Real Personal Consumption Expenditures Growth", "Manufacturing Output", "Energy / Input Shock", "Disaster / Weather Shock", "Payroll Contraction Breadth"]
   ),
   group(
     "gross-job-losses",
@@ -95,19 +121,19 @@ export const layoffsBranchTaxonomy: readonly LayoffsBranchGroup[] = Object.freez
     "Establishment Death / Closure Losses",
     "Employment losses associated with closing establishments and permanent establishment exits.",
     "BLS BED; Census BDS/BFS; U.S. Courts; BEA; Federal Reserve; BLS PPI; disaster authorities",
-    ["Closing Establishment Losses", "Business Bankruptcy Stress", "Corporate Profitability", "C&I Lending Standards", "Borrowing Costs", "Sales / Revenue Growth", "Producer Input Prices", "Business Formation / Dynamism", "Firm Age / Size Vulnerability", "Disaster / External Shock"]
+    ["Closing Establishment Losses", "Business Bankruptcy Filings, 12-Month Total", "Corporate Profitability", "C&I Lending Standards", "Borrowing Costs", "Sales / Revenue Growth", "Producer Input Prices", "Business Formation / Dynamism", "Firm Age / Size Vulnerability", "Disaster / External Shock"]
   ),
   group(
     "firm-death-shutdown-stress",
     "Firm Death / Shutdown Stress",
     "Conditions associated with permanent firm exit and shutdown pressure, without equating a stress signal to an observed closure.",
     "Census BDS; U.S. Courts; BLS BED; BEA; Federal Reserve; Census economic indicators",
-    ["Establishment Deaths", "Business Bankruptcy Filings", "Corporate Profits", "Interest Rates", "C&I Lending Standards", "Sales / Revenue", "Input Costs", "Inventory / Sales Imbalance", "Firm Age / Size", "Trade / External Shock"]
+    ["Jobs Lost at Establishment Deaths", "Business Bankruptcy Filings", "Corporate Profits", "Interest Rates", "C&I Lending Standards", "Sales / Revenue", "Input Costs", "Inventory / Sales Imbalance", "Firm Age / Size", "Trade / External Shock"]
   ),
   group(
     "industry-payroll-contraction",
     "Industry Payroll Contraction",
-    "Declines in payroll employment within an industry, interpreted with explicit source classifications and crosswalks.",
+    "Pending governed calculation: the share of a versioned, mutually exclusive national CES industry universe with lower accepted seasonally adjusted payroll employment than in the prior compatible month.",
     "BLS CES/JOLTS/BED/Productivity/PPI; BEA industry accounts; Census; Federal Reserve",
     ["Industry Output", "Industry Sales / Shipments", "Industry New Orders", "Industry Layoffs & Discharges", "Industry Gross Job Losses", "Industry Capacity Utilization", "Industry Unit Labor Costs", "Industry Input Prices", "Import Exposure", "Industry Credit Conditions"]
   ),
@@ -127,7 +153,7 @@ export const layoffsBranchPlacementMigration: Readonly<Record<string, string>> =
     [`placement:${LAYOFFS_JOB_DESTRUCTION_DRIVER_ID}:${legacyLevel2PlacementSlugs[groupIndex]}`, `placement:${LAYOFFS_JOB_DESTRUCTION_DRIVER_ID}:${item.id}`] as const,
     ...item.placements.map((candidate, placementIndex) => [
       `fixture-placement:${LAYOFFS_JOB_DESTRUCTION_DRIVER_ID}:${String(groupIndex + 1).padStart(2, "0")}:${String(placementIndex + 1).padStart(2, "0")}`,
-      `placement:${LAYOFFS_JOB_DESTRUCTION_DRIVER_ID}:${item.id}:${slug(candidate.label)}`
+      `placement:${LAYOFFS_JOB_DESTRUCTION_DRIVER_ID}:${item.id}:${candidate.placementSlug}`
     ] as const)
   ])
 ));

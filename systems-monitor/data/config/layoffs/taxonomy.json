@@ -14,7 +14,19 @@
     "Initial UI Claims": "Initial Claims",
     "Closing Establishment Losses": "Establishment Closures",
     "Business Formations": "Business Formation",
-    "Import / Trade Pressure": "Trade / Import Pressure"
+    "Import / Trade Pressure": "Trade / Import Pressure",
+    "Industry Payroll Contraction": "Payroll Contraction Breadth",
+    "Establishment Deaths": "Jobs Lost at Establishment Deaths",
+    "Business Bankruptcy Stress": "Business Bankruptcy Filings, 12-Month Total",
+    "Consumer Demand": "Real Personal Consumption Expenditures Growth",
+    "Disaster / Operational Shock": "FEMA Disaster Declaration"
+  },
+  "canonicalFactorMigrations": {
+    "factor:canonical:industry-payroll-contraction": "factor:canonical:payroll-contraction-breadth",
+    "factor:canonical:establishment-deaths": "factor:canonical:jobs-lost-at-establishment-deaths",
+    "factor:canonical:business-bankruptcy-stress": "factor:canonical:business-bankruptcy-filings-12-month-total",
+    "factor:canonical:consumer-demand": "factor:canonical:real-personal-consumption-expenditures-growth",
+    "factor:canonical:disaster-operational-shock": "factor:canonical:fema-disaster-declaration"
   },
   "groups": [
     {
@@ -130,8 +142,8 @@
         },
         {
           "order": 4,
-          "label": "Industry Payroll Contraction",
-          "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+          "label": "Payroll Contraction Breadth",
+          "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
           "placementId": "placement:layoffs-job-destruction:initial-ui-claims:industry-payroll-contraction",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:04"
         },
@@ -144,15 +156,15 @@
         },
         {
           "order": 6,
-          "label": "Establishment Deaths",
-          "canonicalFactorId": "factor:canonical:establishment-deaths",
+          "label": "Jobs Lost at Establishment Deaths",
+          "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
           "placementId": "placement:layoffs-job-destruction:initial-ui-claims:establishment-deaths",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:06"
         },
         {
           "order": 7,
-          "label": "Business Bankruptcy Stress",
-          "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+          "label": "Business Bankruptcy Filings, 12-Month Total",
+          "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
           "placementId": "placement:layoffs-job-destruction:initial-ui-claims:business-bankruptcy-stress",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:07"
         },
@@ -165,15 +177,15 @@
         },
         {
           "order": 9,
-          "label": "Consumer Demand",
-          "canonicalFactorId": "factor:canonical:consumer-demand",
+          "label": "Real Personal Consumption Expenditures Growth",
+          "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
           "placementId": "placement:layoffs-job-destruction:initial-ui-claims:consumer-demand",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:09"
         },
         {
           "order": 10,
-          "label": "Disaster / Operational Shock",
-          "canonicalFactorId": "factor:canonical:disaster-operational-shock",
+          "label": "FEMA Disaster Declaration",
+          "canonicalFactorId": "factor:canonical:fema-disaster-declaration",
           "placementId": "placement:layoffs-job-destruction:initial-ui-claims:disaster-operational-shock",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:10"
         }
@@ -246,8 +258,8 @@
         },
         {
           "order": 9,
-          "label": "Consumer Demand",
-          "canonicalFactorId": "factor:canonical:consumer-demand",
+          "label": "Real Personal Consumption Expenditures Growth",
+          "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
           "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:consumer-demand",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:09"
         },
@@ -271,8 +283,8 @@
       "placements": [
         {
           "order": 1,
-          "label": "Establishment Deaths",
-          "canonicalFactorId": "factor:canonical:establishment-deaths",
+          "label": "Jobs Lost at Establishment Deaths",
+          "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
           "placementId": "placement:layoffs-job-destruction:permanent-job-losers:establishment-deaths",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:01"
         },
@@ -285,15 +297,15 @@
         },
         {
           "order": 3,
-          "label": "Business Bankruptcy Stress",
-          "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+          "label": "Business Bankruptcy Filings, 12-Month Total",
+          "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
           "placementId": "placement:layoffs-job-destruction:permanent-job-losers:business-bankruptcy-stress",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:03"
         },
         {
           "order": 4,
-          "label": "Industry Payroll Contraction",
-          "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+          "label": "Payroll Contraction Breadth",
+          "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
           "placementId": "placement:layoffs-job-destruction:permanent-job-losers:industry-payroll-contraction",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:04"
         },
@@ -387,8 +399,8 @@
         },
         {
           "order": 6,
-          "label": "Consumer Demand",
-          "canonicalFactorId": "factor:canonical:consumer-demand",
+          "label": "Real Personal Consumption Expenditures Growth",
+          "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
           "placementId": "placement:layoffs-job-destruction:temporary-layoffs:consumer-demand",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:06"
         },
@@ -415,8 +427,8 @@
         },
         {
           "order": 10,
-          "label": "Industry Payroll Contraction",
-          "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+          "label": "Payroll Contraction Breadth",
+          "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
           "placementId": "placement:layoffs-job-destruction:temporary-layoffs:industry-payroll-contraction",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:10"
         }
@@ -521,8 +533,8 @@
         },
         {
           "order": 2,
-          "label": "Business Bankruptcy Stress",
-          "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+          "label": "Business Bankruptcy Filings, 12-Month Total",
+          "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
           "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:business-bankruptcy-stress",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:02"
         },
@@ -595,8 +607,8 @@
       "placements": [
         {
           "order": 1,
-          "label": "Establishment Deaths",
-          "canonicalFactorId": "factor:canonical:establishment-deaths",
+          "label": "Jobs Lost at Establishment Deaths",
+          "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
           "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:establishment-deaths",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:01"
         },
@@ -669,7 +681,7 @@
       "order": 9,
       "id": "industry-payroll-contraction",
       "label": "Industry Payroll Contraction",
-      "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+      "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
       "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction",
       "legacyPlacementId": "placement:layoffs-job-destruction:contraction-breadth",
       "sourceFamily": "BLS CES/JOLTS/BED/Productivity/PPI; BEA industry accounts; Census; Federal Reserve",

@@ -15,44 +15,24 @@
       "reason": "The plural source-side identity is a legacy duplicate of the visible singular taxonomy factor; canonicalization must occur before any source binding or acceptance decision."
     },
     {
-      "sourceOnlyId": "factor:canonical:courts-business-chapter-7",
+      "sourceOnlyId": "factor:canonical:bds-job-destruction",
       "disposition": "SECONDARY_CONTEXT_ONLY",
-      "canonicalTarget": "factor:canonical:business-bankruptcy-stress",
-      "sourceRole": "CORROBORATING_COMPONENT_NOT_FORMULA_INPUT",
+      "canonicalTarget": "factor:canonical:gross-job-losses",
+      "sourceRole": "NONINTERCHANGEABLE_ANNUAL_ALTERNATE",
       "uiPlacementEligible": false,
       "acceptanceEligible": false,
       "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
-      "reason": "The visible factor already uses the F-2 all-business-chapters series; no governed chapter-mix calculation exists."
+      "reason": "Census BDS annual job destruction is not interchangeable with the accepted quarterly BLS BED gross-job-loss series and is excluded from this exact-ten neighborhood."
     },
     {
-      "sourceOnlyId": "factor:canonical:courts-business-chapter-11",
+      "sourceOnlyId": "factor:canonical:bds-establishment-exits",
       "disposition": "SECONDARY_CONTEXT_ONLY",
-      "canonicalTarget": "factor:canonical:business-bankruptcy-stress",
-      "sourceRole": "CORROBORATING_COMPONENT_NOT_FORMULA_INPUT",
+      "canonicalTarget": "factor:canonical:jobs-lost-at-establishment-deaths",
+      "sourceRole": "NONINTERCHANGEABLE_ANNUAL_ALTERNATE",
       "uiPlacementEligible": false,
       "acceptanceEligible": false,
       "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
-      "reason": "The visible factor already uses the F-2 all-business-chapters series; no governed chapter-mix calculation exists."
-    },
-    {
-      "sourceOnlyId": "factor:canonical:courts-business-chapter-12",
-      "disposition": "SECONDARY_CONTEXT_ONLY",
-      "canonicalTarget": "factor:canonical:business-bankruptcy-stress",
-      "sourceRole": "CORROBORATING_COMPONENT_NOT_FORMULA_INPUT",
-      "uiPlacementEligible": false,
-      "acceptanceEligible": false,
-      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
-      "reason": "The visible factor already uses the F-2 all-business-chapters series; no governed chapter-mix calculation exists."
-    },
-    {
-      "sourceOnlyId": "factor:canonical:courts-business-chapter-13",
-      "disposition": "SECONDARY_CONTEXT_ONLY",
-      "canonicalTarget": "factor:canonical:business-bankruptcy-stress",
-      "sourceRole": "CORROBORATING_COMPONENT_NOT_FORMULA_INPUT",
-      "uiPlacementEligible": false,
-      "acceptanceEligible": false,
-      "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
-      "reason": "The visible factor already uses the F-2 all-business-chapters series; no governed chapter-mix calculation exists."
+      "reason": "Census BDS establishment-exit counts are not the accepted BLS BED jobs-lost measure and are excluded from this exact-ten neighborhood."
     },
     {
       "sourceOnlyId": "factor:canonical:establishment-expansions",
@@ -96,13 +76,13 @@
     }
   ],
   "summary": {
-    "reportedSourceOnlyIdentities": 9,
-    "activeSourceOnlyRecordsAfterAliasCleanup": 8,
-    "resolvedDispositions": 9,
+    "reportedSourceOnlyIdentities": 7,
+    "activeSourceOnlyRecordsAfterAliasCleanup": 6,
+    "resolvedDispositions": 7,
     "unresolvedDispositions": 0,
     "aliasSuperseded": 1,
     "calculationInputOnly": 3,
-    "secondaryContextOnly": 5
+    "secondaryContextOnly": 3
   },
   "boundary": "These dispositions resolve identity and intended source role only. They do not accept observations, create formulas, add UI nodes, or authorize publication."
 }

@@ -93,12 +93,12 @@
       "promotionBlocker": "Exact H.15 instrument and maturity are not selected."
     },
     {
-      "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
-      "claimClass": "B_CALC",
-      "rationale": "Stress is not an official observation; it requires a governed deterministic transformation of accepted business-bankruptcy filings.",
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "U.S. Courts F-2 directly publishes the national business-filings total for the rolling 12-month period.",
       "sourceRefs": ["uscourts-f2:F2:US:BUSINESS:ALL"],
-      "exactSourceDefensible": false,
-      "promotionBlocker": "No accepted normalization window or materiality profile."
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Official workbook schema and rights acceptance remain pending; no stress interpretation is permitted."
     },
     {
       "canonicalFactorId": "factor:canonical:business-failure-stress",
@@ -157,12 +157,12 @@
       "promotionBlocker": "Exact aggregate and G.17 series selector are pending."
     },
     {
-      "canonicalFactorId": "factor:canonical:consumer-demand",
-      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
-      "rationale": "Consumer demand is a broad latent concept and is not interchangeable with PCE or retail sales.",
-      "sourceRefs": ["bea-nipa", "census-marts"],
-      "exactSourceDefensible": false,
-      "promotionBlocker": "Replace with a defined observable or governed composite."
+      "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BEA NIPA table 1.1.1 line 2 directly publishes real personal consumption expenditures growth at a quarterly seasonally adjusted annual rate.",
+      "sourceRefs": ["bea-nipa:BEA:NIPA:T10101:2:Q"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Live API acquisition is blocked until AUXSAYS_BEA_USER_ID is configured and accepted history is built."
     },
     {
       "canonicalFactorId": "factor:canonical:consumer-spending",
@@ -197,12 +197,12 @@
       "promotionBlocker": "Event-to-economic-scope rules and rights acceptance are pending."
     },
     {
-      "canonicalFactorId": "factor:canonical:disaster-operational-shock",
+      "canonicalFactorId": "factor:canonical:fema-disaster-declaration",
       "claimClass": "C_EVENT_OR_STRUCTURAL",
-      "rationale": "Official event evidence requires a governed geographic and temporal join before operational relevance can be claimed.",
-      "sourceRefs": ["fema-openfema", "noaa-storm-events"],
-      "exactSourceDefensible": false,
-      "promotionBlocker": "No accepted geographic/temporal exposure join."
+      "rationale": "OpenFEMA directly publishes official disaster declaration events with source-native identity, dates, incident type, and designated geography; the event is not a scalar economic observation.",
+      "sourceRefs": ["fema-openfema:DisasterDeclarationsSummaries-v2"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Event-source acceptance remains pending; no claims impact, materiality, or causality may be inferred."
     },
     {
       "canonicalFactorId": "factor:canonical:disaster-weather-shock",
@@ -229,12 +229,12 @@
       "promotionBlocker": "Historical observations and release vintages are not accepted."
     },
     {
-      "canonicalFactorId": "factor:canonical:establishment-deaths",
+      "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
       "claimClass": "A_DIRECT_OBS",
-      "rationale": "BLS BED and Census BDS publish direct, non-interchangeable establishment-death or exit measures.",
-      "sourceRefs": ["bls-bed:BDS0000000000000000110008LQ5", "census-bds:ESTABS_EXIT"],
+      "rationale": "BLS BED directly publishes jobs lost at establishment deaths; this factor does not count establishment exits.",
+      "sourceRefs": ["bls-bed:BDS0000000000000000110008LQ5"],
       "exactSourceDefensible": true,
-      "promotionBlocker": "Choose the primary definition; do not merge BED job losses with BDS exit counts."
+      "promotionBlocker": "NONE_EXISTING_ACCEPTED_REUSE"
     },
     {
       "canonicalFactorId": "factor:canonical:firm-age-size",
@@ -325,12 +325,12 @@
       "promotionBlocker": "Industry, measure, units, and vintage selector are pending."
     },
     {
-      "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+      "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
       "claimClass": "B_CALC",
-      "rationale": "Contraction is a deterministic negative change in accepted CES industry employment levels.",
+      "rationale": "Pending governed calculation of the percentage of a versioned, mutually exclusive national CES industry universe whose accepted seasonally adjusted payroll employment is below the previous compatible month.",
       "sourceRefs": ["bls-ces"],
       "exactSourceDefensible": false,
-      "promotionBlocker": "Industry series, comparison interval, and revision-aware formula are pending."
+      "promotionBlocker": "Taylor has not yet authorized the final CES universe, member selectors, or minimum publishable coverage threshold."
     },
     {
       "canonicalFactorId": "factor:canonical:industry-sales-shipments",
@@ -439,10 +439,10 @@
     {
       "canonicalFactorId": "factor:canonical:real-output-growth",
       "claimClass": "A_DIRECT_OBS",
-      "rationale": "BEA publishes real GDP/output percent-change measures directly.",
-      "sourceRefs": ["bea-nipa"],
-      "exactSourceDefensible": false,
-      "promotionBlocker": "Exact NIPA table/line, period convention, and vintage are pending."
+      "rationale": "BEA NIPA table 1.1.1 line 1 directly publishes real GDP growth at a quarterly seasonally adjusted annual rate.",
+      "sourceRefs": ["bea-nipa:BEA:NIPA:T10101:1:Q"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Live API acquisition is blocked until AUXSAYS_BEA_USER_ID is configured and accepted history is built."
     },
     {
       "canonicalFactorId": "factor:canonical:regional-employment-growth",

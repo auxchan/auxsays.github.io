@@ -18,14 +18,41 @@
       "grace_period_hours": 72,
       "revision_behavior": "advance, second, third, annual, and comprehensive NIPA estimates can revise history; retain every vintage",
       "rights_policy": "BEA_ATTRIBUTION_REQUIRED",
-      "selector_status": "UNRESOLVED_EXACT_TABLE_LINE",
+      "selector_status": "VERIFIED_EXACT_TABLE_LINES_WITH_OTHER_SELECTORS_PENDING",
       "extraction_mode": "BEA_API_JSON",
-      "series": [],
-      "selector_candidates": [
+      "series": [
         {
           "canonical_factor": "factor:canonical:real-output-growth",
-          "required_decision": "Select exact NIPA table, line, level-versus-rate measure, frequency, and SAAR semantics."
+          "source_series_id": "BEA:NIPA:T10101:1:Q",
+          "label": "Real gross domestic product, percent change from preceding period",
+          "unit": "percent change at seasonally adjusted annual rate",
+          "dataset_name": "NIPA",
+          "table_name": "T10101",
+          "line_number": "1",
+          "line_description": "Gross domestic product",
+          "frequency_code": "Q",
+          "frequency": "quarterly",
+          "seasonal_adjustment": "seasonally adjusted annual rate",
+          "cl_unit": "Percent change from preceding period",
+          "unit_multiplier": "0"
         },
+        {
+          "canonical_factor": "factor:canonical:real-personal-consumption-expenditures-growth",
+          "source_series_id": "BEA:NIPA:T10101:2:Q",
+          "label": "Real personal consumption expenditures, percent change from preceding period",
+          "unit": "percent change at seasonally adjusted annual rate",
+          "dataset_name": "NIPA",
+          "table_name": "T10101",
+          "line_number": "2",
+          "line_description": "Personal consumption expenditures",
+          "frequency_code": "Q",
+          "frequency": "quarterly",
+          "seasonal_adjustment": "seasonally adjusted annual rate",
+          "cl_unit": "Percent change from preceding period",
+          "unit_multiplier": "0"
+        }
+      ],
+      "selector_candidates": [
         {
           "canonical_factor": "factor:canonical:consumer-spending",
           "required_decision": "Select exact personal-consumption table, line, unit, frequency, and nominal-versus-real semantics."
@@ -35,7 +62,12 @@
           "required_decision": "Select exact profits concept, valuation adjustments, table, line, unit, and frequency."
         }
       ],
-      "blocked_reason": "The official product and credential path are known, but exact table/line semantics have not been accepted."
+      "fallback_evaluation": {
+        "url": "https://apps.bea.gov/national/Release/XLS/Survey/Section1All_xls.xlsx",
+        "status": "EVALUATED_NOT_ACCEPTED",
+        "reason": "The official workbook is machine-readable, but no versioned sheet/cell schema or immutable release identity is implemented; it cannot silently bypass API validation."
+      },
+      "blocked_reason": "Exact T10101 lines 1 and 2 are verified for candidate intake, but live API acquisition is blocked until AUXSAYS_BEA_USER_ID is configured; no history is accepted."
     },
     {
       "source_id": "bea-gdp-industry",
@@ -130,7 +162,7 @@
       "source_id": "uscourts-f2",
       "publisher": "Administrative Office of the U.S. Courts",
       "product": "Table F-2, U.S. Bankruptcy Courts—Business and Nonbusiness Cases",
-      "endpoint": "https://www.uscourts.gov/data-news/data-tables/2026/06/30/statistical-tables-federal-judiciary/f-2",
+      "endpoint": "https://www.uscourts.gov/data-news/data-tables/2026/06/30/bankruptcy-filings/f-2",
       "evidence_url": "https://www.uscourts.gov/data-news/reports/statistical-reports/bankruptcy-filings-statistics",
       "methodology_url": "https://www.uscourts.gov/data-news/data-tables/data-definitions",
       "cadence": "quarterly rolling 12-month releases",
@@ -138,17 +170,13 @@
       "grace_period_hours": 168,
       "revision_behavior": "retain dated table pages and every workbook vintage by content hash",
       "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
-      "selector_status": "VERIFIED_OFFICIAL_PAGE_DISCOVERY_SCHEMA_REVIEW_PENDING",
+      "selector_status": "VERIFIED_NATIONAL_BUSINESS_ALL_CHAPTERS_SCHEMA_V1",
       "extraction_mode": "OFFICIAL_PAGE_XLSX",
       "series": [
-        {"canonical_factor": "factor:canonical:business-bankruptcy-filings", "source_series_id": "F2:US:BUSINESS:ALL", "label": "Business bankruptcy cases, all chapters", "unit": "filed cases", "chapter_header": "All Chapters", "placement_candidates": ["business-bankruptcy-filings", "business-bankruptcy-stress"]},
-        {"canonical_factor": "factor:courts-business-chapter-7", "source_series_id": "F2:US:BUSINESS:CH7", "label": "Business bankruptcy cases, Chapter 7", "unit": "filed cases", "chapter_header": "Chapter 7", "placement_candidates": ["business-bankruptcy-stress"]},
-        {"canonical_factor": "factor:courts-business-chapter-11", "source_series_id": "F2:US:BUSINESS:CH11", "label": "Business bankruptcy cases, Chapter 11", "unit": "filed cases", "chapter_header": "Chapter 11", "placement_candidates": ["business-bankruptcy-stress"]},
-        {"canonical_factor": "factor:courts-business-chapter-12", "source_series_id": "F2:US:BUSINESS:CH12", "label": "Business bankruptcy cases, Chapter 12", "unit": "filed cases", "chapter_header": "Chapter 12", "placement_candidates": ["business-bankruptcy-stress"]},
-        {"canonical_factor": "factor:courts-business-chapter-13", "source_series_id": "F2:US:BUSINESS:CH13", "label": "Business bankruptcy cases, Chapter 13", "unit": "filed cases", "chapter_header": "Chapter 13", "placement_candidates": ["business-bankruptcy-stress"]}
+        {"canonical_factor": "factor:canonical:business-bankruptcy-filings-12-month-total", "source_series_id": "F2:US:BUSINESS:ALL", "label": "Business bankruptcy filings, all chapters, 12-month total", "unit": "filed cases", "chapter_header": "All Chapters", "period_semantics": "rolling 12-month total ending on the dated F-2 table period", "geography": "US", "placement_candidates": ["business-bankruptcy-filings-12-month-total"]}
       ],
       "relationship_boundary": "CONTEXT_ONLY_NOT_FIRM_DEATH_NOT_CLOSURE_NOT_LAYOFFS",
-      "blocked_reason": "Workbook discovery is ready for review intake; values remain non-publishable until workbook schema and rights are accepted."
+      "blocked_reason": "Official page discovery and the current national all-business schema pass, but rights acceptance and accepted-history rules remain pending."
     }
   ]
 }

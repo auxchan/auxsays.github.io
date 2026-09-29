@@ -1,5 +1,6 @@
 import acceptedHistoryDocument from "../../../data/review/layoffs-accepted-history.json";
 import activationReportDocument from "../../../data/review/layoffs-history-activation-report.json";
+import { layoffsResolveCanonicalFactorId } from "./layoffsBranchTaxonomy";
 
 export interface AcceptedHistoryRow {
   observationId: string;
@@ -74,7 +75,7 @@ const seriesIdentity: Readonly<Record<string, { label: string; provider: string;
   BDS0000000000000000110004LQ5: { label: "Gross job losses", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
   BDS0000000000000000110005LQ5: { label: "Establishment contractions", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
   BDS0000000000000000110006LQ5: { label: "Establishment closures", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
-  BDS0000000000000000110008LQ5: { label: "Establishment deaths", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
+  BDS0000000000000000110008LQ5: { label: "Jobs lost at establishment deaths", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
   "DOL-UI-SA-INITIAL": { label: "Initial unemployment-insurance claims", provider: "U.S. Department of Labor", dataset: "Unemployment Insurance Weekly Claims" },
 });
 
@@ -108,7 +109,7 @@ function latestRevisionByPeriod(rows: AcceptedHistoryRow[]) {
   return [...byPeriod.values()].sort((left, right) => left.validTime.localeCompare(right.validTime));
 }
 
-function buildSeriesSummary(rows: AcceptedHistoryRow[]): LayoffsAcceptedSeriesSummary | undefined {
+function buildSeriesSummary(canonicalFactorId: string, rows: AcceptedHistoryRow[]): LayoffsAcceptedSeriesSummary | undefined {
   const periods = latestRevisionByPeriod(rows);
   if (periods.length < 1) return undefined;
   const current = periods.at(-1)!;
@@ -124,7 +125,7 @@ function buildSeriesSummary(rows: AcceptedHistoryRow[]): LayoffsAcceptedSeriesSu
     return previousRevision ? [{ current: row, previous: previousRevision }] : [];
   });
   return Object.freeze({
-    canonicalFactorId: current.canonicalFactorId,
+    canonicalFactorId,
     sourceId: current.sourceId,
     sourceSeriesId: current.sourceSeriesId,
     seriesLabel: identity.label,
@@ -153,11 +154,11 @@ function buildSeriesSummary(rows: AcceptedHistoryRow[]): LayoffsAcceptedSeriesSu
 
 const grouped = new Map<string, AcceptedHistoryRow[]>();
 for (const row of document.observations) {
-  const key = `${row.canonicalFactorId}\u0000${row.sourceSeriesId}`;
+  const key = `${layoffsResolveCanonicalFactorId(row.canonicalFactorId)}\u0000${row.sourceSeriesId}`;
   grouped.set(key, [...(grouped.get(key) ?? []), row]);
 }
 
-const seriesSummaries = [...grouped.values()].map(buildSeriesSummary).filter((row): row is LayoffsAcceptedSeriesSummary => Boolean(row));
+const seriesSummaries = [...grouped.entries()].map(([key, rows]) => buildSeriesSummary(key.split("\u0000")[0], rows)).filter((row): row is LayoffsAcceptedSeriesSummary => Boolean(row));
 const byFactor = new Map<string, LayoffsAcceptedSeriesSummary[]>();
 for (const row of seriesSummaries) byFactor.set(row.canonicalFactorId, [...(byFactor.get(row.canonicalFactorId) ?? []), row]);
 
@@ -171,7 +172,7 @@ export const layoffsAcceptedFactorSummaries: readonly LayoffsAcceptedFactorSumma
 const factorSummaryById = new Map(layoffsAcceptedFactorSummaries.map((row) => [row.canonicalFactorId, row]));
 
 export function acceptedLayoffsHistoryForFactor(canonicalFactorId: string) {
-  return factorSummaryById.get(canonicalFactorId);
+  return factorSummaryById.get(layoffsResolveCanonicalFactorId(canonicalFactorId));
 }
 
 export function acceptedLayoffsHistoryFreshness(sourceId: string) {

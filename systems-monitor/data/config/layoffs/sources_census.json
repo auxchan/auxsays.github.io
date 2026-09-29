@@ -37,7 +37,7 @@
           "label": "BDS annual job destruction",
           "unit": "jobs",
           "seasonal_adjustment": "not seasonally adjusted",
-          "placement_candidates": ["gross-job-losses"]
+          "placement_candidates": []
         },
         {
           "canonical_factor": "factor:bds-job-destruction-continuers",
@@ -61,7 +61,7 @@
           "label": "BDS establishment exits",
           "unit": "establishments",
           "seasonal_adjustment": "not seasonally adjusted",
-          "placement_candidates": ["establishment-deaths"]
+          "placement_candidates": []
         },
         {
           "canonical_factor": "factor:bds-firm-deaths",

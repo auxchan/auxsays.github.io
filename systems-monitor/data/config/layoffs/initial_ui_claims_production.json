@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "initial-ui-claims-production-1.0.0",
+  "authority": "TAYLOR_INITIAL_UI_CLAIMS_EXACT_TEN_IMPLEMENTATION_2026_09_29",
+  "parentPlacementId": "placement:layoffs-job-destruction:initial-ui-claims",
+  "humanQa": "PENDING",
+  "gateB": "OPEN",
+  "acceptedStructuralRelationships": 0,
+  "forecasting": "LOCKED_UNAVAILABLE",
+  "materiality": "UNAUTHORIZED",
+  "unexplainedRendererFixtures": 0,
+  "canonicalMigrations": [
+    {"from": "factor:canonical:industry-payroll-contraction", "to": "factor:canonical:payroll-contraction-breadth", "oldLabel": "Industry Payroll Contraction", "newLabel": "Payroll Contraction Breadth"},
+    {"from": "factor:canonical:establishment-deaths", "to": "factor:canonical:jobs-lost-at-establishment-deaths", "oldLabel": "Establishment Deaths", "newLabel": "Jobs Lost at Establishment Deaths"},
+    {"from": "factor:canonical:business-bankruptcy-stress", "to": "factor:canonical:business-bankruptcy-filings-12-month-total", "oldLabel": "Business Bankruptcy Stress", "newLabel": "Business Bankruptcy Filings, 12-Month Total"},
+    {"from": "factor:canonical:consumer-demand", "to": "factor:canonical:real-personal-consumption-expenditures-growth", "oldLabel": "Consumer Demand", "newLabel": "Real Personal Consumption Expenditures Growth"},
+    {"from": "factor:canonical:disaster-operational-shock", "to": "factor:canonical:fema-disaster-declaration", "oldLabel": "Disaster / Operational Shock", "newLabel": "FEMA Disaster Declaration"}
+  ],
+  "placements": [
+    {
+      "order": 1,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:layoffs-and-discharges",
+      "label": "Layoffs & Discharges",
+      "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+      "claimClass": "A_DIRECT_OBS",
+      "productionDisposition": "ACCEPTED_OBSERVATION",
+      "sourceIds": ["bls-jolts"],
+      "selectors": ["JTS000000000000000LDL", "JTS000000000000000LDR"],
+      "acceptedHistoryState": "EXISTING_ACCEPTED_REUSE",
+      "blocker": null
+    },
+    {
+      "order": 2,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:temporary-layoffs",
+      "label": "Temporary Layoffs",
+      "canonicalFactorId": "factor:canonical:temporary-layoffs",
+      "claimClass": "A_DIRECT_OBS",
+      "productionDisposition": "ACCEPTED_OBSERVATION",
+      "sourceIds": ["bls-cps"],
+      "selectors": ["LNS13023653"],
+      "acceptedHistoryState": "EXISTING_ACCEPTED_REUSE",
+      "blocker": null
+    },
+    {
+      "order": 3,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:permanent-job-losers",
+      "label": "Permanent Job Losers",
+      "canonicalFactorId": "factor:canonical:permanent-job-losers",
+      "claimClass": "A_DIRECT_OBS",
+      "productionDisposition": "ACCEPTED_OBSERVATION",
+      "sourceIds": ["bls-cps"],
+      "selectors": ["LNS13026638"],
+      "acceptedHistoryState": "EXISTING_ACCEPTED_REUSE",
+      "blocker": null
+    },
+    {
+      "order": 4,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:industry-payroll-contraction",
+      "label": "Payroll Contraction Breadth",
+      "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
+      "claimClass": "B_GOVERNED_CALC",
+      "productionDisposition": "GOVERNED_CALC_PENDING_METHODOLOGY_CALIBRATION",
+      "sourceIds": ["bls-ces"],
+      "selectors": [],
+      "acceptedHistoryState": "NONE_CALC_NOT_AUTHORIZED",
+      "blocker": "Taylor has not approved the final CES universe, member selectors, or minimum publishable coverage threshold."
+    },
+    {
+      "order": 5,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:gross-job-losses",
+      "label": "Gross Job Losses",
+      "canonicalFactorId": "factor:canonical:gross-job-losses",
+      "claimClass": "A_DIRECT_OBS",
+      "productionDisposition": "ACCEPTED_OBSERVATION",
+      "sourceIds": ["bls-bed"],
+      "selectors": ["BDS0000000000000000110004LQ5"],
+      "acceptedHistoryState": "EXISTING_ACCEPTED_REUSE",
+      "blocker": null
+    },
+    {
+      "order": 6,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:establishment-deaths",
+      "label": "Jobs Lost at Establishment Deaths",
+      "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
+      "claimClass": "A_DIRECT_OBS",
+      "productionDisposition": "ACCEPTED_OBSERVATION",
+      "sourceIds": ["bls-bed"],
+      "selectors": ["BDS0000000000000000110008LQ5"],
+      "acceptedHistoryState": "EXISTING_ACCEPTED_REUSE_VIA_CANONICAL_ALIAS",
+      "blocker": null
+    },
+    {
+      "order": 7,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:business-bankruptcy-stress",
+      "label": "Business Bankruptcy Filings, 12-Month Total",
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
+      "claimClass": "A_DIRECT_OBS",
+      "productionDisposition": "SOURCE_IDENTIFIED_PENDING_ACCEPTANCE",
+      "sourceIds": ["uscourts-f2"],
+      "selectors": ["F2:US:BUSINESS:ALL"],
+      "acceptedHistoryState": "NONE",
+      "blocker": "The live 2026-06-30 workbook schema now passes, but rights acceptance and immutable accepted-history rules remain pending."
+    },
+    {
+      "order": 8,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:real-output-growth",
+      "label": "Real Output Growth",
+      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "claimClass": "A_DIRECT_OBS",
+      "productionDisposition": "BLOCKED_CREDENTIAL",
+      "sourceIds": ["bea-nipa"],
+      "selectors": ["BEA:NIPA:T10101:1:Q"],
+      "acceptedHistoryState": "NONE",
+      "blocker": "AUXSAYS_BEA_USER_ID is missing; selector validation is complete but live acquisition and history acceptance cannot run."
+    },
+    {
+      "order": 9,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:consumer-demand",
+      "label": "Real Personal Consumption Expenditures Growth",
+      "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
+      "claimClass": "A_DIRECT_OBS",
+      "productionDisposition": "BLOCKED_CREDENTIAL",
+      "sourceIds": ["bea-nipa"],
+      "selectors": ["BEA:NIPA:T10101:2:Q"],
+      "acceptedHistoryState": "NONE",
+      "blocker": "AUXSAYS_BEA_USER_ID is missing; selector validation is complete but live acquisition and history acceptance cannot run."
+    },
+    {
+      "order": 10,
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims:disaster-operational-shock",
+      "label": "FEMA Disaster Declaration",
+      "canonicalFactorId": "factor:canonical:fema-disaster-declaration",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "productionDisposition": "EVENT_OR_STRUCTURAL_FACTOR",
+      "sourceIds": ["fema-openfema"],
+      "selectors": ["DisasterDeclarationsSummaries-v2"],
+      "acceptedHistoryState": "EVENT_SOURCE_IDENTIFIED_PENDING_ACCEPTANCE",
+      "blocker": "The event parser and schema contract are implemented; source acceptance and an immutable event-history run remain pending."
+    }
+  ]
+}

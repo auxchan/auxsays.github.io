@@ -17,16 +17,23 @@ ALIASES = {
     "insured-unemployment-rate": "continued-claims-insured-unemployment",
     "closing-establishment-losses": "establishment-closures",
     "establishment-death-job-losses": "establishment-deaths",
-    "bds-job-destruction": "gross-job-losses",
     "bds-job-destruction-continuers": "establishment-contractions",
     "bds-job-destruction-deaths": "establishment-closures",
-    "bds-establishment-exits": "establishment-deaths",
     "bds-firm-deaths": "firm-deaths",
     "bds-firm-death-establishments": "firm-age-size-vulnerability",
     "bds-firm-death-employment": "firm-death-shutdown-stress",
     "business-formations-four-quarters": "business-formation",
     "business-formations": "business-formation",
+    "industry-payroll-contraction": "payroll-contraction-breadth",
+    "establishment-deaths": "jobs-lost-at-establishment-deaths",
+    "establishment-death-job-losses": "jobs-lost-at-establishment-deaths",
+    "business-bankruptcy-stress": "business-bankruptcy-filings-12-month-total",
+    "business-bankruptcy-filings": "business-bankruptcy-filings-12-month-total",
+    "consumer-demand": "real-personal-consumption-expenditures-growth",
+    "disaster-operational-shock": "fema-disaster-declaration",
 }
+
+STATE_PRIORITY = {"SOURCE_IDENTIFIED": 0, "BLOCKED": 1, "SOURCE_ENABLED_PENDING_ACCEPTANCE": 2, "ACCEPTED": 3}
 
 
 def load(path: Path) -> dict[str, Any]:
@@ -53,6 +60,8 @@ def build_audit(config_root: Path) -> dict[str, Any]:
     bls_dol = load(config_root / "layoffs" / "sources_bls_dol.json")
     census = load(config_root / "layoffs" / "sources_census.json")
     context = load(config_root / "layoffs" / "sources_bea_fed_courts.json")
+    fema = load(config_root / "layoffs" / "sources_fema.json")
+    accepted_history = load(config_root.parent / "review" / "layoffs-accepted-history.json")
     dispositions = load(config_root / "layoffs" / "source_only_dispositions.json")
     disposition_by_id = {row["sourceOnlyId"]: row for row in dispositions["records"]}
 
@@ -79,6 +88,8 @@ def build_audit(config_root: Path) -> dict[str, Any]:
         slug = ALIASES.get(slug, slug)
         return slug_to_id.get(slug, f"factor:canonical:{slug}")
 
+    accepted_factor_ids = {canonical_id(row["canonicalFactorId"]) for row in accepted_history["observations"]}
+
     for row in bls_dol["series"]:
         factor_id = canonical_id(row["canonical_factor"])
         record = state.setdefault(factor_id, _blank_state(factor_id, row["label"], "SOURCE_ONLY"))
@@ -87,7 +98,7 @@ def build_audit(config_root: Path) -> dict[str, Any]:
             source_id=row["source_id"], selector=row["series_id"], role=role,
             status="EXACT_SELECTOR", exact=True, origin="sources_bls_dol.json",
         ))
-        record["activationState"] = "ACCEPTED" if row["activation_state"] == "ACCEPTED_EXISTING" else "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+        _promote(record, "ACCEPTED" if row["activation_state"] == "ACCEPTED_EXISTING" else "SOURCE_ENABLED_PENDING_ACCEPTANCE")
 
     for source in census["sources"]:
         for row in source["series"]:
@@ -95,6 +106,8 @@ def build_audit(config_root: Path) -> dict[str, Any]:
             configured_targets = [f"factor:{placement}" for placement in row["placement_candidates"]]
             if source_factor_id in child_ids:
                 configured_targets.insert(0, row["canonical_factor"])
+            elif not configured_targets:
+                configured_targets.append(row["canonical_factor"])
             for factor_id in dict.fromkeys(canonical_id(target) for target in configured_targets):
                 record = state.setdefault(factor_id, _blank_state(factor_id, row["label"], "SOURCE_ONLY"))
                 role = _role_for(
@@ -106,7 +119,7 @@ def build_audit(config_root: Path) -> dict[str, Any]:
                     source_id=source["source_id"], selector=row["source_series_id"], role=role,
                     status="EXACT_SELECTOR", exact=True, origin="sources_census.json",
                 ))
-                record["activationState"] = "BLOCKED"
+                _promote(record, "BLOCKED")
 
     for source in context["sources"]:
         for row in source.get("series", []):
@@ -117,7 +130,7 @@ def build_audit(config_root: Path) -> dict[str, Any]:
                 role=_role_for(factor_id, class_by_id, source_id=source["source_id"], source_only=factor_id not in child_ids, alternate=bool(record["sourceBindings"])),
                 status="EXACT_SELECTOR", exact=True, origin="sources_bea_fed_courts.json",
             ))
-            record["activationState"] = "SOURCE_ENABLED_PENDING_ACCEPTANCE"
+            _promote(record, "SOURCE_ENABLED_PENDING_ACCEPTANCE")
         for row in source.get("selector_candidates", []):
             factor_id = canonical_id(row["canonical_factor"])
             record = state.setdefault(factor_id, _blank_state(factor_id, row["required_decision"], "SOURCE_ONLY"))
@@ -126,7 +139,21 @@ def build_audit(config_root: Path) -> dict[str, Any]:
                 role=_role_for(factor_id, class_by_id, source_id=source["source_id"], source_only=factor_id not in child_ids, alternate=bool(record["sourceBindings"])),
                 status="SELECTOR_PENDING", exact=False, origin="sources_bea_fed_courts.json",
             ))
-            record["activationState"] = "BLOCKED"
+            _promote(record, "BLOCKED")
+
+    for source in fema["sources"]:
+        factor_id = canonical_id(source["canonicalFactorId"])
+        record = state.setdefault(factor_id, _blank_state(factor_id, source["product"], "LEVEL4_CANONICAL"))
+        record["sourceBindings"].append(_binding(
+            source_id=source["sourceId"], selector=source["datasetSelector"],
+            role="STRUCTURAL_SOURCE", status="EXACT_EVENT_DATASET", exact=True,
+            origin="sources_fema.json",
+        ))
+        _promote(record, "SOURCE_IDENTIFIED")
+
+    for factor_id in accepted_factor_ids:
+        if factor_id in state:
+            _promote(state[factor_id], "ACCEPTED")
 
     canonical_rows = []
     for factor_id in sorted(child_ids):
@@ -166,8 +193,8 @@ def build_audit(config_root: Path) -> dict[str, Any]:
         if row["recordKind"] == "SOURCE_ONLY":
             row["sourceOnlyDisposition"] = disposition_by_id[row["canonicalFactorId"]]
     disposition_counts = Counter(disposition_by_id[factor_id]["disposition"] for factor_id in orphan_ids)
-    if len(records) != 76 or len(canonical_rows) != 64:
-        raise ValueError("Layoffs source audit no longer matches the reviewed 76-state/64-factor boundary")
+    if len(records) != 74 or len(canonical_rows) != 64:
+        raise ValueError("Layoffs source audit no longer matches the reviewed 74-state/64-factor boundary")
     return {
         "schemaVersion": "layoffs-level4-canonical-audit-1.0.0",
         "generatedAt": "2026-09-10T00:00:00Z",
@@ -190,7 +217,7 @@ def build_audit(config_root: Path) -> dict[str, Any]:
             "sourceRoles": dict(sorted(role_counts.items())),
         },
         "reconciliation": {
-            "explanation": "The historical 77 count described UI-side factor/source state records, not 77 unique Level-4 factors or acquisition adapters. Canonicalizing the plural business-formations alias leaves 76 active records: the in-taxonomy identities plus eight explicitly typed source-only inputs/context records.",
+            "explanation": "The historical 77 count described UI-side factor/source state records, not 77 unique Level-4 factors or acquisition adapters. Narrowing Courts F-2 to one exact all-business binding and retaining the two noninterchangeable Census BDS identities as context-only leaves 74 governed records.",
             "actualCanonicalLevel4FactorCount": 64,
             "actualExpandedAcquisitionBindingCount": sum(len(row["sourceBindings"]) for row in records),
             "sourceIdentifiedRecordsWithoutBinding": [row["canonicalFactorId"] for row in records if not row["sourceBindings"]],
@@ -198,7 +225,7 @@ def build_audit(config_root: Path) -> dict[str, Any]:
             "sourceOnlyDispositions": [disposition_by_id[factor_id] for factor_id in orphan_ids],
             "supersededAliasDispositions": [disposition_by_id[factor_id] for factor_id in sorted(superseded_alias_ids)],
             "allReviewedDispositions": [disposition_by_id[factor_id] for factor_id in sorted(disposition_by_id)],
-            "requiredCleanup": "All nine reported identities now have an explicit non-activating alias, calculation-input, or context-only disposition. The plural business-formations binding canonicalizes to the visible singular factor while preserving the legacy identity in this disposition registry."
+            "requiredCleanup": "All seven reviewed source-only identities have an explicit non-activating alias, calculation-input, or context-only disposition. The plural business-formations binding canonicalizes to the visible singular factor while preserving the legacy identity in this disposition registry."
         },
         "canonicalFactors": canonical_rows,
         "factorSourceStateRecords": records,
@@ -213,6 +240,11 @@ def _blank_state(factor_id: str, label: str, kind: str) -> dict[str, Any]:
         "activationState": "SOURCE_IDENTIFIED",
         "sourceBindings": [],
     }
+
+
+def _promote(record: dict[str, Any], candidate: str) -> None:
+    if STATE_PRIORITY[candidate] > STATE_PRIORITY[record["activationState"]]:
+        record["activationState"] = candidate
 
 
 def _binding(*, source_id: str, selector: str, role: str, status: str, exact: bool, origin: str) -> dict[str, Any]:
@@ -281,7 +313,7 @@ def render_markdown(audit: dict[str, Any]) -> str:
         f"- {counts['sourceIdentifiedPlaceholders']} source-identified placeholders without a configured binding.",
         f"- {counts['sourceOnlyRecords']} configured source identities outside the current taxonomy.",
         "",
-        "The historical `77 source profiles` label was imprecise: 77 was the pre-cleanup UI-side factor/source-state count, not the number of canonical factors or acquisition adapters. Canonicalizing the legacy plural business-formations identity leaves 76 active records and preserves all nine reviewed dispositions in `data/config/layoffs/source_only_dispositions.json`.",
+        f"The historical `77 source profiles` label was imprecise: it described a pre-cleanup UI-side state count, not canonical factors or adapters. The current governed registry contains {counts['factorSourceStateRecords']} active records after narrowing Courts F-2 to the national all-business selector and separating noninterchangeable Census BDS identities.",
         "",
         "## All 64 canonical factors",
         "",
@@ -295,7 +327,7 @@ def render_markdown(audit: dict[str, Any]) -> str:
         )
     lines += [
         "",
-        "## Reconciled 77-record state map",
+        f"## Reconciled {counts['factorSourceStateRecords']}-record state map",
         "",
         "| Canonical/source-state record | Kind | State | Source bindings | Roles |",
         "|---|---|---|---|---|",
@@ -317,7 +349,7 @@ def render_markdown(audit: dict[str, Any]) -> str:
     )
     lines += [
         "",
-        "`business-formations` is now canonicalized to the singular factor while its legacy identity remains recorded. Three BED component records are calculation-input-only; BED gross gains and the four Courts chapter records are context-only. None becomes a new Level-4 placement, accepted formula input, or accepted observation.",
+        "`business-formations` is canonicalized to the singular factor while its legacy identity remains recorded. Three BED component records are calculation-input-only. BED gross gains and the two noninterchangeable Census BDS identities remain context-only. Courts F-2 is narrowed to one exact national all-business selector. None of these cleanup records becomes a new placement or accepted observation.",
         "",
         "## Promotion boundary",
         "",
