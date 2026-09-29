@@ -147,6 +147,8 @@ SITES = [
     ("patch_collectors.adobe_acrobat_community",
      lambda m: m.apply_consensus_writeback("adobe-acrobat-pro", "1.0"), "acrobat"),
     ("collect_obs_reports", lambda m: m.apply_consensus_writeback("1.0"), "obs"),
+    ("patch_collectors.microsoft_teams",
+     lambda m: m.apply_consensus_writeback("1.0"), "teams"),
 ]
 
 
@@ -507,7 +509,10 @@ def run() -> int:
                  and path.name != "apply_consensus_to_records.py"}
     check("doctrine: only the collector writebacks obtain the record index",
           idx_users <= {"adobe_premiere.py", "davinci.py", "microsoft_windows.py",
-                        "adobe_acrobat_community.py", "collect_obs_reports.py"}, str(idx_users))
+                        "adobe_acrobat_community.py", "collect_obs_reports.py",
+                        # Teams community evidence (default-off): its writeback reuses the
+                        # dry run's canonical resolution exactly as the others do.
+                        "microsoft_teams.py"}, str(idx_users))
 
     acr_src = (_SCRIPTS / "apply_consensus_to_records.py").read_text(encoding="utf-8")
     check("doctrine: the index parameter is typed as the identity TRIPLE everywhere",

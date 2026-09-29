@@ -300,6 +300,7 @@ def run() -> int:  # noqa: PLR0915
     collectors = {
         "microsoft_windows.py": True, "microsoft_powerpoint.py": True, "davinci.py": True,
         "adobe_premiere.py": True, "adobe_acrobat_community.py": True,
+        "microsoft_teams.py": True,
     }
     for name in collectors:
         src = (_REPO / "auxsays" / "scripts" / "patch_collectors" / name).read_text(encoding="utf-8")

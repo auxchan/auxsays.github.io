@@ -1893,14 +1893,15 @@ METHODS: list[dict[str, Any]] = [
         "discovery_model": ["query_search", "enumeration"],
         "transport": ["rest_json", "rss_xml"],
         "health_statuses": ["blocked", "broken", "low_confidence", "no_results", "partial", "success"],
-        "proven_on": ["microsoft-windows-11", "microsoft-powerpoint"],
+        "proven_on": ["microsoft-windows-11", "microsoft-powerpoint",
+            "microsoft-teams"],
         "strengths": [],
         "blind_spots": [
         "Recall is whatever the search index ranks for the phrasings chosen — 'a report is only ever as findable as the words its author happened to...",
         "A network/DNS failure and a refusal both land as method health 'blocked': the callers' mapping only splits out 'broken' (feed_parse_failed...",
         "blocked_signature is only shown the first 4000 characters of the body, which is why the old false-block 'looked intermittent rather than...",
         "No pagination at all: one request returns whatever the feed contains; there is no page walk and no way to reach older results",
-        "source_date comes from the feed pubDate, which is LAST ACTIVITY, not the original post date. This lane does not call lib/post_dates",
+        "source_date comes from the feed pubDate, which is LAST ACTIVITY, not the original post date. This lane does not call lib/post_dates, so a consumer that cares about WHICH patch a report can be evidence about has to re-derive the date itself -- microsoft_teams.py does this per segment and leaves the date empty when it cannot be established, because last activity is always later than the post and therefore makes a release-date gate permissive",
         "runtime_budget endpoint_family is hardcoded to 'windows_learn' even when the caller is PowerPoint, so budget telemetry attributes...",
     ],
         "failure_modes": [
@@ -1964,7 +1965,8 @@ METHODS: list[dict[str, Any]] = [
         "discovery_model": ["sitemap", "enumeration"],
         "transport": ["rss_xml"],
         "health_statuses": ["blocked", "broken", "low_confidence", "no_results", "partial", "success"],
-        "proven_on": ["microsoft-powerpoint", "techcommunity.microsoft.com"],
+        "proven_on": ["microsoft-powerpoint", "techcommunity.microsoft.com",
+            "microsoft-teams"],
         "strengths": [
         "Every sitemap URL carries a <lastmod>, so the corpus is date-enumerable — 'which is the one thing needed'",
         "Server-rendered HTTP 200 content; no SPA state, no auth, no browser automation",
@@ -1973,7 +1975,7 @@ METHODS: list[dict[str, Any]] = [
         "blind_spots": [
         "The board list is a measured snapshot: a PowerPoint thread on an unlisted board is unreachable",
         "URL-pattern filtering means a thread about PowerPoint whose URL slug never says so is invisible at the enumeration stage",
-        "<lastmod> is last activity, so the window admits old threads with new replies; the date placed on evidence comes from hydration, not from...",
+        "<lastmod> is last activity, so the window admits old threads with new replies; the date placed on evidence comes from hydration, not from the listing -- but thread_candidate FALLS BACK to the listing date when a page serves no dateCreated, so a consumer whose release-date gate depends on that date must derive it itself rather than trust original_post_date. microsoft_teams.py does, and leaves the date empty instead of falling back",
     ],
         "failure_modes": [
         "rate_limited on HTTP 429/503; http_<code>_error otherwise; network_unreachable on URLError",

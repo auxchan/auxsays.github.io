@@ -94,6 +94,14 @@ jobs:
           # product and its generated records have their own writeback --allow, so evidence, method
           # health and the record mutation commit together or not at all.
           AUXSAYS_ENABLE_POWERPOINT_CONSENSUS: "true"
+          # Teams community evidence: ACTIVE. ONE tracked identity -- New Teams / Windows / Public
+          # cloud / stable -- and a report counts only when the COMPLETE tracked build appears in
+          # text its own author wrote. A Mac, Web, VDI, mobile, Government, Sovereign, Classic or
+          # Insider report is a different product state and is refused by identity, not by inference;
+          # a build named as the fix, the working reference or the rollback target is refused by
+          # role. Bounded live dry run on the PR branch: 741 candidates judged, 5 accepted across 3
+          # of 4 tracked patches, both source families reachable on every record.
+          AUXSAYS_ENABLE_TEAMS_CONSENSUS: "true"
           # NO DOUBLE COLLECTION. PowerPoint is driven by the repo-owned orchestration graph in the
           # dedicated job below, so it is REMOVED from this runner's collector registry. The
           # exclusion is enforced inside build_collectors(), not by this step's arguments, so the
@@ -128,9 +136,9 @@ jobs:
           product_id="$(printf '%s' "$raw_product_id" | tr -d '\r' | sed -E 's/^[[:space:]]*product_id:[[:space:]]*//' | xargs)"
 
           case "$product_id" in
-            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|adobe-acrobat-reader|adobe-acrobat-pro|microsoft-windows-11|microsoft-powerpoint) ;;
+            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|adobe-acrobat-reader|adobe-acrobat-pro|microsoft-windows-11|microsoft-powerpoint|microsoft-teams) ;;
             *)
-              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, or microsoft-powerpoint."
+              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, microsoft-powerpoint, or microsoft-teams."
               exit 2
               ;;
           esac
@@ -332,6 +340,29 @@ jobs:
             --product-id blackmagic-davinci \
             --write-all --confirm-write
 
+      - name: Promote Teams consensus to its counted population
+        # Teams community evidence is ACTIVE, so its records now need the same treatment every other
+        # counted product gets. The Teams collector's in-collector writeback can only set freshness
+        # fields -- apply_collector_record_fields filters everything through
+        # COLLECTOR_WRITABLE_FIELDS -- so nothing before this step can produce
+        # update_consensus_summary or evidence_samples. Without it the FIRST run that accepts a Teams
+        # report reaches QA with report_count > 0 and neither field present, which is a blocking
+        # error, and because QA precedes the writeback it discards OBS, DaVinci, Acrobat, Premiere,
+        # Windows and PowerPoint evidence along with it. That is the #70 wedge, and it is the reason
+        # this step ships in the same change that activates the collector rather than after it.
+        #
+        # POSITION IS LOAD-BEARING, exactly as for the five steps above: after reconciliation, before
+        # the first QA, so QA validates the state the writers finished. Scoped to one --product-id;
+        # an empty value promotes the whole corpus, which #76 made exit 2. microsoft-teams has no
+        # branch in _record_coherence_fields, so this cannot rewrite verdict prose, and it writes no
+        # official identity field -- target_platform, target_channel, teams_edition, update_version
+        # and the official release date and provenance stay the official lane's alone.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-teams \
+            --write-all --confirm-write
+
       - name: QA patch records
         id: qa
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -384,6 +415,7 @@ jobs:
             --allow 'auxsays/updates/generated/*windows-11*.md' \
             --allow 'auxsays/updates/generated/*acrobat*.md' \
             --allow 'auxsays/updates/generated/*powerpoint*.md' \
+            --allow 'auxsays/updates/generated/*microsoft-teams*.md' \
             --validate 'python auxsays/scripts/qa_patch_records.py' \
             --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
             --validate 'python auxsays/scripts/validate_evidence_method_health.py' \

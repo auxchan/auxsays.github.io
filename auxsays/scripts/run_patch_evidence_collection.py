@@ -100,6 +100,8 @@ def acrobat_consensus_enabled(env: dict[str, str] | None = None) -> bool:
 # dry_run dispatch, so a scheduled ``--write`` never registers or writes PowerPoint evidence.
 POWERPOINT_CONSENSUS_PRODUCT_ID = "microsoft-powerpoint"
 POWERPOINT_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_POWERPOINT_CONSENSUS"
+TEAMS_CONSENSUS_PRODUCT_ID = "microsoft-teams"
+TEAMS_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_TEAMS_CONSENSUS"
 
 
 def powerpoint_consensus_enabled(env: dict[str, str] | None = None) -> bool:
@@ -115,6 +117,16 @@ def powerpoint_consensus_enabled(env: dict[str, str] | None = None) -> bool:
 
 
 ORCHESTRATED_PRODUCTS_ENV = "AUXSAYS_ORCHESTRATED_PRODUCTS"
+
+
+def teams_consensus_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for registering the Teams community collector.
+
+    Explicit true-only, the same shape as the other gated collectors: every other value --
+    absent, empty, "false", "0", "1", "yes", "on" -- returns False. This avoids the
+    bool(os.getenv(...)) pitfall where the string "false" is truthy."""
+    source = os.environ if env is None else env
+    return str(source.get(TEAMS_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
 
 
 def orchestrated_products(env: dict[str, str] | None = None) -> set[str]:
@@ -162,6 +174,9 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     if powerpoint_consensus_enabled(env):
         from patch_collectors.microsoft_powerpoint import PowerPointLearnQnaCollector
         collectors[POWERPOINT_CONSENSUS_PRODUCT_ID] = PowerPointLearnQnaCollector
+    if teams_consensus_enabled(env):
+        from patch_collectors.microsoft_teams import TeamsCommunityCollector
+        collectors[TEAMS_CONSENSUS_PRODUCT_ID] = TeamsCommunityCollector
     # NO DOUBLE COLLECTION. A product driven by the orchestration graph is REMOVED from this
     # registry, so the legacy path cannot also collect it in the same run. Enforcing it here rather
     # than by workflow discipline means there is exactly one authoritative execution path per

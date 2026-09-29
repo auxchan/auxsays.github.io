@@ -197,9 +197,16 @@ ZERO_COUNT_PROJECTION_FIELDS = ("update_consensus_summary", "accepted_report_sou
 # reports", still listing Adobe's own release announcement as the source, with QA exiting 0.
 # Measured blast radius before granting it: of 807 zero-count records across every product, ZERO
 # have `zero_count_projection_drift`, so this reaches exactly the records a change drives to zero.
+# microsoft-teams joins on the same terms as the rest: it is here BECAUSE the collection workflow
+# gained a scoped promotion step for it, not in the hope that one appears. An in-collector writeback
+# can only set freshness fields (COLLECTOR_WRITABLE_FIELDS), so a product that starts producing
+# counted evidence with no promotion step reaches QA with report_count > 0 and no summary -- the
+# blocking error that discards EVERY product's evidence for that cycle. All four live Teams records
+# already hold the exact zero shape, so membership retracts nothing today; it only means that when a
+# Teams population empties, the projections it published empty with it.
 CONSENSUS_PROMOTION_PRODUCTS = frozenset({"microsoft-powerpoint", "microsoft-windows-11",
                                           "obs-studio", "adobe-acrobat-pro",
-                                          "adobe-acrobat-reader"})
+                                          "adobe-acrobat-reader", "microsoft-teams"})
 
 
 def format_reconcile_detail(detail: dict[str, Any]) -> str:
