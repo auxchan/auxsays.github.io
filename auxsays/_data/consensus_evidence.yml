@@ -44565,3 +44565,53 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
+
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1r9y187-workflow-for-sending-timelines-with-multi
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1r9y187/workflow_for_sending_timelines_with_multicam_clips/
+  parent_title: workflow for sending timelines with multicam clips?
+  report_title: workflow for sending timelines with multicam clips?
+  report_text_excerpt: 'workflow for sending timelines with multicam clips? I am currently working on a big project (outcome: 40 min) that requires a kind of "tennis workflow" for me and the second editor. Both of us work on the same videos. (e.g. I create a V01 and he works off of this on a V02) We...'
+  captured_at: '2026-09-30T23:07:20Z'
+  source_date: '2026-02-20'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5982637-microsoft-teams-notifications-not-work
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5982637/microsoft-teams-notifications-not-working-after-te
+  parent_title: Microsoft Teams notifications not working after Teams recent update - Microsoft Q&A
+  report_title: Microsoft Teams notifications not working after Teams recent update - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams notifications not working after Teams recent update Microsoft Teams notifications not working after Teams recent update Troubleshooting:- 1. Offloaded, uninstalled and reinstalled Microsoft Teams. 2. Checked with users with latest Teams update and they are also...
+  captured_at: '2026-09-30T23:18:11Z'
+  source_date: '2026-08-22'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
