@@ -44204,3 +44204,78 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984300-when-using-a-logitech-headset-on-a-tea
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5984300/when-using-a-logitech-headset-on-a-teams-meeting-i
+  parent_title: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out - Microsoft Q&A
+  report_title: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out - Microsoft Q&A
+  report_text_excerpt: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out I have had several, seemingly random occurrences where I am on a Teams meeting, using my Logitech headset for both incoming and outgoing audio (as my speakers and...
+  captured_at: '2026-09-30T06:36:01Z'
+  source_date: '2026-08-24'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984300-when-using-a-logitech-headset-on-a-tea
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5984300/when-using-a-logitech-headset-on-a-teams-meeting-i
+  parent_title: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out - Microsoft Q&A
+  report_title: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out - Microsoft Q&A
+  report_text_excerpt: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out I have had several, seemingly random occurrences where I am on a Teams meeting, using my Logitech headset for both incoming and outgoing audio (as my speakers and...
+  captured_at: '2026-09-30T06:36:01Z'
+  source_date: '2026-08-24'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984300-when-using-a-logitech-headset-on-a-tea
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5984300/when-using-a-logitech-headset-on-a-teams-meeting-i
+  parent_title: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out - Microsoft Q&A
+  report_title: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out - Microsoft Q&A
+  report_text_excerpt: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out I have had several, seemingly random occurrences where I am on a Teams meeting, using my Logitech headset for both incoming and outgoing audio (as my speakers and...
+  captured_at: '2026-09-30T06:36:01Z'
+  source_date: '2026-08-24'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
