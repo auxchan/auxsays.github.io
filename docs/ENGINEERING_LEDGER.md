@@ -570,7 +570,35 @@ build works" contrast). 13 mutants killed across the identity scoping, the negat
 VDI aliases, the post-date authority, the derived sentiment, production activation and the promotion
 step's position.
 
-**PR** #158
+**Production proof** Write-enabled run 36637622010 on `e2a019b6`: the Teams collector registered,
+ran 445.7s, `ok: true`, two methods attempted, 618 candidates reviewed, 4 accepted. Per-method
+health is honest and per-method, not per-run: Learn Q&A `success` on three patches and `no_results`
+on the fourth, Tech Community `success` on one and `no_results` on three; no `blocked`, no `broken`,
+no budget stop for this collector (three other collectors did stop on theirs in the same run, so the
+framework was demonstrably live). Promotion wrote all four groups, 0 write-blocked, 4 included
+candidates. QA: 0 errors, 0 warnings over 1,219 records. Audit: 0 integrity errors. Writeback
+`cf3f62ba`, pushed first attempt, all three validators rc=0, `evidence_losses: []`; it touched the
+evidence store, the method-health file, and exactly the three Teams records that gained evidence --
+nothing else of this product's. Pages run 36647532625 deployed it.
+
+**What the identity gates refused on real production text** Of 421 persisted Teams rows: 388
+`missing_exact_patch_version_match`, 25 `reply_segment_not_counted_v1` (V1's non-counting reply rule
+holding in production), and one each of `platform_mac`, `platform_vdi`, `ring_preview` and
+`not_a_real_issue_report`. The four counted rows were re-derived independently from the AUTHORED
+text -- refetched and re-judged through the same segment authority, not from the stored excerpt --
+and all four pass identity, role, concreteness, specificity and date. Each stored `source_date`
+equals the page's own `dateCreated`, so the post-date fix is visible in the published record: the
+2026-08-03 patch's report publishes as 2026-08-24, the day it was written, not the 2026-09-01 feed
+stamp it arrived with.
+
+**Counts agree everywhere** For all four patches, canonical counted evidence == persisted
+`update_report_count` == `confirmed_patch_specific_report_count` == the population promotion used
+(1 / 2 / 1 / 0). No record publishes a count with no usable evidence. Official identity survived
+byte-for-byte: `update_version`, `target_platform`, `target_channel`, `teams_edition`,
+`update_published_at`, `update_source_url` and `permalink` are unchanged from their pre-run values
+on every record.
+
+**PR** #158 · **Merge** `e2a019b6` · **Production** `cf3f62ba` · **Pages** 36647532625
 
 **Reopen only if** a counted Microsoft Teams report is attributed to a participant who did not write
 it, to a foreign product state, or to a build in a non-failing role; or if the two counters
