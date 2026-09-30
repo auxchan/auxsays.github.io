@@ -17,8 +17,8 @@ update_version: Repository custom runner settings for Dependabot
 update_logo_text: GIT
 update_published_at: '2026-09-29T19:10:00Z'
 update_last_checked: '2026-09-30T00:39:03Z'
-source_last_checked: '2026-09-30T08:01:39Z'
-official_body_last_checked: '2026-09-30T08:01:39Z'
+source_last_checked: '2026-09-30T15:01:42Z'
+official_body_last_checked: '2026-09-30T15:01:42Z'
 record_last_updated: '2026-09-30T00:39:03Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-30T08:01:39Z'
+  url: https://github.blog/changelog/2026-09-29-repository-custom-runner-settings-for-dependabot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-30T15:01:42Z'
   url: https://github.blog/changelog/2026-09-29-repository-custom-runner-settings-for-dependabot
   status: captured-from-rss-feed
   body_captured: true
