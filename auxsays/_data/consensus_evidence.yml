@@ -44279,3 +44279,289 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
+
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1r69sn1-problem-with-ai-subtitles-from-audio-word
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1r69sn1/problem_with_ai_subtitles_from_audio_word/
+  parent_title: Problem with AI subtitles from audio "word highlight animation"
+  report_title: Problem with AI subtitles from audio "word highlight animation"
+  report_text_excerpt: Problem with AI subtitles from audio "word highlight animation" Losing my sanity over how buggy the subtitles are in this software... All i want is to use word highlight animation on the generated subtitles form audio transcript. The timings are perfect except for one bug that...
+  captured_at: '2026-09-30T13:29:16Z'
+  source_date: '2026-02-16'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6019398-cant-join-teams-meetings-on-commercial
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6019398/cant-join-teams-meetings-on-commercial-or-gcc-high
+  parent_title: Can't Join Teams Meetings on Commercial OR GCC High + Teams Meeting Pane Fails to Update - Microsoft Q&A
+  report_title: Can't Join Teams Meetings on Commercial OR GCC High + Teams Meeting Pane Fails to Update - Microsoft Q&A
+  report_text_excerpt: 'Can''t Join Teams Meetings on Commercial OR GCC High + Teams Meeting Pane Fails to Update Issue: Our domain users have been unable to join Teams meetings after an update put them on v26246.1604.5133.838. When you click "Join Meeting" the menu will stay on "Connecting.."...'
+  captured_at: '2026-09-30T13:35:22Z'
+  source_date: '2026-09-29'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26246.1604.5133.838
+  match_basis: 26246.1604.5133.838
+  counted: false
+  exclusion_reason: cloud_government
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5912329-how-to-fix-outlook-teams-and-search-ba
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5912329/how-to-fix-outlook-teams-and-search-bar-in-task-ba
+  parent_title: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon - Microsoft Q&A
+  report_title: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon - Microsoft Q&A
+  report_text_excerpt: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon I cannot get my search bar in the task bar to work, outlook and teams will also not open - Any suggestions?
+  captured_at: '2026-09-30T13:35:22Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6019398-cant-join-teams-meetings-on-commercial
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6019398/cant-join-teams-meetings-on-commercial-or-gcc-high
+  parent_title: Can't Join Teams Meetings on Commercial OR GCC High + Teams Meeting Pane Fails to Update - Microsoft Q&A
+  report_title: Can't Join Teams Meetings on Commercial OR GCC High + Teams Meeting Pane Fails to Update - Microsoft Q&A
+  report_text_excerpt: 'Can''t Join Teams Meetings on Commercial OR GCC High + Teams Meeting Pane Fails to Update Issue: Our domain users have been unable to join Teams meetings after an update put them on v26246.1604.5133.838. When you click "Join Meeting" the menu will stay on "Connecting.."...'
+  captured_at: '2026-09-30T13:35:22Z'
+  source_date: '2026-09-29'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26225.1806.5074.1452
+  match_basis: 26225.1806.5074.1452
+  counted: false
+  exclusion_reason: cloud_government
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5912329-how-to-fix-outlook-teams-and-search-ba
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5912329/how-to-fix-outlook-teams-and-search-bar-in-task-ba
+  parent_title: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon - Microsoft Q&A
+  report_title: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon - Microsoft Q&A
+  report_text_excerpt: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon I cannot get my search bar in the task bar to work, outlook and teams will also not open - Any suggestions?
+  captured_at: '2026-09-30T13:35:22Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6005558-i-think-we-have-two-accounts-for-micro
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6005558/i-think-we-have-two-accounts-for-microsoft-365-and
+  parent_title: I think we have two accounts for Microsoft 365 and we only need one. - Microsoft Q&A
+  report_title: I think we have two accounts for Microsoft 365 and we only need one. - Microsoft Q&A
+  report_text_excerpt: I think we have two accounts for Microsoft 365 and we only need one. we signed up in July 2026 for microsoft 365 for a yearly subscription for 129.99 plus tax, and the next payment will be due July 2027 automatic renewal on American Express ending in 1006. We just received an...
+  captured_at: '2026-09-30T13:35:22Z'
+  source_date: '2026-09-16'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5912329-how-to-fix-outlook-teams-and-search-ba
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5912329/how-to-fix-outlook-teams-and-search-bar-in-task-ba
+  parent_title: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon - Microsoft Q&A
+  report_title: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon - Microsoft Q&A
+  report_text_excerpt: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon I cannot get my search bar in the task bar to work, outlook and teams will also not open - Any suggestions?
+  captured_at: '2026-09-30T13:35:22Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5912329-how-to-fix-outlook-teams-and-search-ba
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5912329/how-to-fix-outlook-teams-and-search-bar-in-task-ba
+  parent_title: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon - Microsoft Q&A
+  report_title: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon - Microsoft Q&A
+  report_text_excerpt: How to fix Outlook, Teams and search bar in task bar not working on a new surface with snagdragon I cannot get my search bar in the task bar to work, outlook and teams will also not open - Any suggestions?
+  captured_at: '2026-09-30T13:35:22Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6019205-file-explorer-stuck-in-legacy-classic
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6019205/file-explorer-stuck-in-legacy-classic-ui-no-tabs-w
+  parent_title: File Explorer stuck in legacy/classic UI (no tabs), Windows 11 25H2, build 26200.9550 - Microsoft Q&A
+  report_title: File Explorer stuck in legacy/classic UI (no tabs), Windows 11 25H2, build 26200.9550 - Microsoft Q&A
+  report_text_excerpt: File Explorer stuck in legacy/classic UI (no tabs), Windows 11 25H2, build 26200.9550 - Microsoft Q&A File Explorer has reverted from the modern Windows 11 interface (tabs, modern command bar) to the legacy/classic appearance. The exact onset time/date could not be reliably...
+  captured_at: '2026-09-30T13:43:33Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5124010
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5124010
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9550'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020023-ncsi-problems-after-the-update-kb51291
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6020023/ncsi-problems-after-the-update-kb5129195
+  parent_title: NCSI problems after the update KB5129195 - Microsoft Q&A
+  report_title: NCSI problems after the update KB5129195 - Microsoft Q&A
+  report_text_excerpt: NCSI problems after the update KB5129195 - Microsoft Q&A Hello to the microsoft community, Since I have installed the update KB5129195 on Windows 11 Pro 25H2 with also Hyper-V installed, the NCSI (NlaSvc) service seems to have stopped working. Also the affected network adapter...
+  captured_at: '2026-09-30T13:44:01Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5129195
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5129195
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6019814-microsoft-print-to-pdf-problems
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6019814/microsoft-print-to-pdf-problems
+  parent_title: Microsoft Print To PDF Problems - Microsoft Q&A
+  report_title: Microsoft Print To PDF Problems - Microsoft Q&A
+  report_text_excerpt: Microsoft Print To PDF Problems - Microsoft Q&A Ever since the last MS update (2026-09 Security Update (KB5129195) (26200.9457)) I can't print to PDF. The print option Microsoft Print To PDF is there but when selected and I click on print, nothing happens. Had this problem...
+  captured_at: '2026-09-30T13:44:01Z'
+  source_date: '2026-09-29'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
