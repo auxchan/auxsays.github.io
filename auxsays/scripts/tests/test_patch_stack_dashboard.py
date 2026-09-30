@@ -409,14 +409,19 @@ def run() -> int:
     # The comparison is a RELATIONSHIP between two records. The verdict stays whatever the patch
     # record already says, so the installed-version logic must not contain a decision word at all:
     # being several releases behind is not itself advice to update.
+    # RELEASE ORDER NOT RECORDED is the fifth, and it is conservative in the same sense as the other
+    # four: it is a statement about the RECORDS, not advice. It exists because the corpus produced a
+    # same-line same-day pair that none of the original four could describe without asserting an
+    # order nobody published -- CURRENT claims the reader is newest, UPDATE AVAILABLE that the
+    # sibling is newer, NEWER TRACKED VERSION EXISTS that newer releases are tracked.
     CONSERVATIVE = {"CURRENT", "UPDATE AVAILABLE", "NEWER TRACKED VERSION EXISTS",
-                    "INSTALLED VERSION NO LONGER TRACKED"}
+                    "INSTALLED VERSION NO LONGER TRACKED", "RELEASE ORDER NOT RECORDED"}
     iv_logic = js.split("const installedState", 1)[1].split("// My Patch Stack", 1)[0]
     declared = set(re.findall(r"'(" + "|".join(sorted(CONSERVATIVE, key=len, reverse=True)) + r")'", js))
     leaked = [w for w in ("WAIT", "TEST FIRST", "AVOID", "SAFE ENOUGH", "SECURITY UPDATE",
                           "MANUAL WATCH", "OFFICIAL ONLY")
               if w in iv_logic]
-    check("IV13 the comparison uses only the four conservative states",
+    check("IV13 the comparison uses only the conservative states",
           declared == CONSERVATIVE, str(sorted(CONSERVATIVE - declared)))
     check("IV14 the installed-version logic contains no verdict word",
           not leaked, f"decision words found in installedState: {leaked}")
@@ -533,8 +538,12 @@ def run() -> int:
     swept = sorted(k for k, v in classified.items() if v and k != "microsoft-windows-11")
     check("UP8 no other tracked product is swept into the parallel-line rule", not swept, str(swept))
 
-    # Ordering inside one line is only safe because the corpus has no two releases of one version on
-    # one date. If that ever changes, the per-line lists start asserting an order nobody recorded.
+    # Ordering inside one line USED to be safe because the corpus had no two releases of one version
+    # on one date. It now does -- Windows 26H2 shipped 26300.9457 and 26300.9550 on 2026-09-29 --
+    # and both are legitimate official records. So the assertion is no longer "this cannot happen"
+    # but "when it happens the order is explicitly unresolved". The behaviour is proved in [SD]
+    # against the real function; this pins the STATEMENT that makes it possible, because the defect
+    # was a slice at the reader's index silently reading payload order as time.
     intra = []
     for entry in entries:
         per_line: dict = {}
@@ -543,8 +552,18 @@ def run() -> int:
         for version, dates in per_line.items():
             if len(dates) != len(set(dates)):
                 intra.append(f"{entry.get('id')} {version}")
-    check("UP9 inside one servicing line every release has a distinct date",
-          not intra, "; ".join(intra[:3]))
+    iv_src = js.split("const installedState", 1)[1].split("const paintInstalledControls", 1)[0]
+    print(f"    same-line same-day groups in the live payload: {intra or 'none'}")
+    check("UP9 a same-date sibling on the reader's line is excluded from the newer set",
+          "const newer = recs.slice(0, index).filter((r) => !isTied(r));" in iv_src,
+          iv_src[iv_src.find("const newer"):][:140])
+    check("UP9b the tie is found by DATE and line, never by array position",
+          "dateOf(r) === myDate && onMyLine(r)" in iv_src,
+          "tie detection is not derived from the records' dates")
+    check("UP9c and an unresolved order gets its own state rather than borrowing one",
+          "'RELEASE ORDER NOT RECORDED'" in iv_src
+          and "'RELEASE ORDER NOT RECORDED'" in js.split("const STATE_COPY", 1)[1][:900],
+          "the state is missing from installedState or from STATE_COPY")
 
     payload_text = payload_match.group(1) if payload_match else ""
     longest = max((len(str(rec[5])) + len(str(rec[8]))
@@ -572,8 +591,16 @@ def run() -> int:
     # printed the same disclaimer eight times and buried the releases it was explaining.
     check("UP17 a run of same-date releases is explained once, not once per release",
           "runOpeners" in path_fn and "steps[index - 1].tied" in path_fn
-          and "step.tied" not in step_fn,
+          and "if (showTie)" in step_fn
+          and "patch-iv-tied" not in step_fn.split("if (showTie)", 1)[0],
           "the tie notice is still emitted per step")
+    # The step renderer may READ step.tied -- but only to break the connector, never to print the
+    # notice a second time. "step.tied is absent from stepHtml" stopped being a useful proxy the
+    # moment a tied boundary needed its own class, so the statement itself is pinned instead.
+    check("UP17b step.tied reaches the markup only as the connector-breaking class",
+          step_fn.count("step.tied") == 1
+          and "step.tied ? ' patch-iv-step--tied' : ''" in step_fn,
+          f"{step_fn.count('step.tied')} uses of step.tied in stepHtml")
     # WCAG 2.5.3. Every one of these controls repeats per card, so each needs the product in its
     # accessible name -- and that name has to START from the words printed on the control, or voice
     # control cannot act on what the reader can see.
@@ -601,6 +628,199 @@ def run() -> int:
     check("E7 the dashboard repaints without re-broadcasting the change event",
           len(listener) == 2 and "syncWatchControls()" not in listener[1],
           "the listener calls the broadcasting helper and will recurse")
+
+    # ---------- SD: same-day releases inside one servicing line ----------
+    # Windows 26H2 published 26300.9457 and 26300.9550 on the SAME DAY. `recs` is sorted by date
+    # descending, so their relative order is whatever Liquid's stable sort left behind -- and
+    # `installedState` used to slice at the reader's index, which turned that accident into advice.
+    # These cases run the REAL function, because the defect was in what it returned, not in how it
+    # was written: a source-text assertion passes with the bug restored.
+    print("\n[SD] a shared publish date is not a release order")
+    node = shutil.which("node")
+
+    def states(cases):
+        """Run the real installedState over each {recs, entry} case. Returns a list of results."""
+        if not node:
+            return None
+        src = JS.read_text(encoding="utf-8")
+        start = src.index("const PATH_LIMIT")
+        end = src.index("const paintInstalledControls")
+        probe = (src[start:end]
+                 + "\nconst CASES = " + json.dumps(cases) + ";\n"
+                 + "console.log(JSON.stringify(CASES.map((c) => {\n"
+                 + "  const info = installedState(c.entry, { recs: c.recs });\n"
+                 + "  return { state: info.state, pathKind: info.pathKind || '',\n"
+                 + "           latest: info.latest ? [info.latest[0], info.latest[1]] : null,\n"
+                 + "           latestScope: info.latestScope || '',\n"
+                 + "           path: (info.path || []).map((s) => [s.rec[0], s.rec[1], !!s.tied]),\n"
+                 + "           lines: (info.lines || []).map((l) => l.version) };\n"
+                 + "})));\n")
+        res = subprocess.run([node, "-e", probe], capture_output=True, text=True,
+                             cwd=str(_REPO), timeout=120)
+        if res.returncode != 0:
+            raise AssertionError("node probe failed: " + (res.stderr or "")[-400:])
+        return json.loads(res.stdout.strip().splitlines()[-1])
+
+    def rec(version, build, date, beta=0, url=""):
+        return [version, build, date, url or f"/u/{version}-{build}", beta, "", 1, 0, "", 0, ""]
+
+    def ent(version, build, date):
+        return {"v": version, "b": build, "d": date, "u": f"/u/{version}-{build}"}
+
+    A1 = rec("26H2", "26300.9457", "2026-09-29")
+    A2 = rec("26H2", "26300.9550", "2026-09-29")
+    OLD = rec("25H2", "26200.9000", "2026-09-20")
+    LATER_SAME_LINE = rec("26H2", "26300.9800", "2026-10-05")
+    LATER_OTHER_LINE = rec("25H2", "26200.9999", "2026-10-05")
+    # Same day, DIFFERENT line. Windows publishes across lines on one date all the time, and such a
+    # record was never a step either -- but it is not an unordered sibling of the reader's release,
+    # it is a parallel one. Scoping the tie to the reader's own line is what keeps the two apart.
+    SAME_DAY_OTHER_LINE = rec("25H2", "26200.9001", "2026-09-29")
+
+    # node runs the real function. Without it these semantics would be asserted by reading source,
+    # which is exactly the kind of check that passes with the defect restored -- so its absence is a
+    # FAILURE, not a skip.
+    check("SD-0 a JavaScript runtime is available to exercise the real installedState", bool(node),
+          "node not on PATH")
+    if node:
+        forward = [A1, A2, OLD]          # 9457 listed first
+        reverse = [A2, A1, OLD]          # 9550 listed first -- the same corpus, sorted differently
+        results = states([
+            {"recs": forward, "entry": ent("26H2", "26300.9457", "2026-09-29")},   # 0
+            {"recs": forward, "entry": ent("26H2", "26300.9550", "2026-09-29")},   # 1
+            {"recs": reverse, "entry": ent("26H2", "26300.9457", "2026-09-29")},   # 2
+            {"recs": reverse, "entry": ent("26H2", "26300.9550", "2026-09-29")},   # 3
+            {"recs": [LATER_SAME_LINE, A1, A2, OLD],
+             "entry": ent("26H2", "26300.9457", "2026-09-29")},                    # 4
+            {"recs": [LATER_OTHER_LINE, A1, A2, OLD],
+             "entry": ent("26H2", "26300.9457", "2026-09-29")},                    # 5
+            {"recs": [A1, OLD], "entry": ent("26H2", "26300.9457", "2026-09-29")}, # 6 no sibling
+            {"recs": [LATER_SAME_LINE, A1, OLD],
+             "entry": ent("26H2", "26300.9457", "2026-09-29")},                    # 7 no sibling
+            {"recs": [SAME_DAY_OTHER_LINE, A1, OLD],
+             "entry": ent("26H2", "26300.9457", "2026-09-29")},                    # 8 cross-line tie
+            {"recs": [rec("21.0.5", "", "2026-10-05"), rec("21.0.4", "", "2026-09-20", beta=1),
+                      rec("21.0.3", "", "2026-09-10")],
+             "entry": ent("21.0.4", "", "2026-09-20")},                            # 9 beta reader
+        ])
+        UNRESOLVED = "RELEASE ORDER NOT RECORDED"
+
+        check("SD-B 26300.9457 installed: a same-day sibling is not a definite update target",
+              results[0]["state"] == UNRESOLVED and results[0]["latest"] is None,
+              f"{results[0]['state']!r} latest={results[0]['latest']!r}")
+        check("SD-C 26300.9550 installed behaves identically",
+              results[1]["state"] == UNRESOLVED and results[1]["latest"] is None,
+              f"{results[1]['state']!r} latest={results[1]['latest']!r}")
+        check("SD-D1 reversing the payload does not change either relationship",
+              results[2]["state"] == results[0]["state"]
+              and results[3]["state"] == results[1]["state"],
+              f"forward={[results[0]['state'], results[1]['state']]} "
+              f"reverse={[results[2]['state'], results[3]['state']]}")
+        check("SD-D2 and neither order produces a target to move to",
+              all(r["latest"] is None for r in results[:4]),
+              str([r["latest"] for r in results[:4]]))
+        # The set shown is the same set either way; only its print order follows the payload, and
+        # nothing in the output claims that order means anything.
+        check("SD-D3 the same sibling set is presented either way",
+              sorted(s[1] for s in results[0]["path"]) == sorted(s[1] for s in results[2]["path"])
+              == ["26300.9550"],
+              f"{results[0]['path']} vs {results[2]['path']}")
+        check("SD-D4 every sibling in that set is flagged as tied, in both orders",
+              all(s[2] for s in results[0]["path"]) and all(s[2] for s in results[2]["path"]),
+              f"{results[0]['path']} {results[2]['path']}")
+        check("SD-G the tied set opens exactly one same-day notice",
+              sum(1 for i, s in enumerate(results[0]["path"])
+                  if s[2] and not (i > 0 and results[0]["path"][i - 1][2])) == 1,
+              str(results[0]["path"]))
+        check("SD-E a STRICTLY later build on the reader's line is still a definite update",
+              results[4]["state"] == "UPDATE AVAILABLE"
+              and results[4]["latest"] == ["26H2", "26300.9800"]
+              and results[4]["latestScope"] == "line",
+              f"{results[4]['state']!r} -> {results[4]['latest']!r}")
+        check("SD-E2 and the same-day sibling is not a step on that path",
+              [s[1] for s in results[4]["path"]] == ["26300.9800"], str(results[4]["path"]))
+        check("SD-F a later build on ANOTHER servicing line is not a definite target",
+              results[5]["state"] == "NEWER TRACKED VERSION EXISTS", results[5]["state"])
+        check("SD-J1 with no sibling and nothing newer the reader is still CURRENT",
+              results[6]["state"] == "CURRENT", results[6]["state"])
+        check("SD-J2 with no sibling and a newer build the reader still gets the update",
+              results[7]["state"] == "UPDATE AVAILABLE", results[7]["state"])
+        check("SD-F2 a same-day release on ANOTHER line is a parallel sibling, not an unordered one",
+              results[8]["state"] == "NEWER TRACKED VERSION EXISTS"
+              and results[8]["pathKind"] != "tied", 
+              f"{results[8]['state']!r} pathKind={results[8]['pathKind']!r}")
+        check("SD-J3 a beta reader is still never pointed at a step",
+              results[9]["state"] == "NEWER TRACKED VERSION EXISTS", results[9]["state"])
+
+        # The REAL corpus, not a fixture: every same-line same-date group the payload actually
+        # carries must resolve to the unresolved state for EVERY member, in BOTH payload orders.
+        live_cases, live_labels = [], []
+        for entry in entries:
+            per_line: dict = {}
+            for r in (entry.get("recs") or []):
+                per_line.setdefault(r[0], []).append(r)
+            for version, group in per_line.items():
+                by_date: dict = {}
+                for r in group:
+                    by_date.setdefault(str(r[2] or ""), []).append(r)
+                for date, tied in by_date.items():
+                    if len(tied) < 2:
+                        continue
+                    recs_all = list(entry.get("recs") or [])
+                    # Permute ONLY the tied members, leaving every other record where the real
+                    # payload puts it. Reversing the whole array would invert the date sort the
+                    # payload guarantees, and then records genuinely older than the reader would sit
+                    # above them -- a different bug, not this one.
+                    slots = [i for i, r in enumerate(recs_all) if r in tied]
+                    swapped = list(recs_all)
+                    for slot, member in zip(slots, list(reversed([recs_all[i] for i in slots]))):
+                        swapped[slot] = member
+                    for member in tied:
+                        who = {"v": member[0], "b": member[1], "d": member[2], "u": member[3]}
+                        live_cases.append({"recs": recs_all, "entry": who})
+                        live_labels.append(f"{entry.get('id')} {version} {member[1]} {date}")
+                        live_cases.append({"recs": swapped, "entry": who})
+                        live_labels.append(f"{entry.get('id')} {version} {member[1]} {date} (swapped)")
+        # The count is PRINTED, so a corpus that stops carrying a tied group makes these two
+        # assertions visibly vacuous instead of quietly so -- the fixtures above carry the semantics
+        # either way, and the check count stays fixed so the governed manifest does not drift.
+        print(f"    live same-line same-day member-evaluations: {len(live_cases)}"
+              f" ({', '.join(sorted(set(l.split(' (')[0] for l in live_labels))[:4])})")
+        live = states(live_cases)
+        bad = [f"{live_labels[i]} -> {live[i]['state']}"
+               for i in range(len(live)) if live[i]["state"] != UNRESOLVED]
+        check("SD-A every live same-day sibling reports an unrecorded order, in both payload orders",
+              not bad, "; ".join(bad[:4]))
+        check("SD-A2 and none of them names a release to move to",
+              all(r["latest"] is None for r in live),
+              str([r["latest"] for r in live if r["latest"]][:3]))
+
+        # K. The repair reads DATES. It must not have quietly grown a build comparator: "26300.9550
+        # is bigger than 26300.9457" is version arithmetic, and AUXSAYS does not infer chronology
+        # from build magnitude. Pinned on the function body, so a comparator anywhere else in the
+        # file does not satisfy it and one added HERE cannot hide.
+        iv_body = js.split("const installedState", 1)[1].split("const paintInstalledControls", 1)[0]
+        arithmetic = [t for t in ("parseInt", "parseFloat", "localeCompare", "Number(r[1]",
+                                  "r[1] >", "r[1] <", "split('.')", 'split(".")')
+                      if t in iv_body]
+        check("SD-K no build-number comparison or semver parsing decides the relationship",
+              not arithmetic, str(arithmetic))
+
+        # The steps list draws a continuous rule down its left edge. That rule IS a claim -- "this
+        # follows that" -- so at a tied boundary it is cut. Scoped to the tied step only: every
+        # other adjacency in the list is a real date order and keeps its connector.
+        css_text = CSS.read_text(encoding="utf-8")
+        # The RULE BLOCK, not a character window: a comment inside the rule must not be able to push
+        # the declaration out of view and quietly turn this into a check that the selector exists.
+        tied_rule = (css_text.split(".patch-iv-step--tied::after", 1)[1].split("}", 1)[0]
+                     if ".patch-iv-step--tied::after" in css_text else "")
+        check("SD-L the connector is broken at a tied boundary, and only there",
+              "background: var(--bg-0" in tied_rule and "position: absolute" in tied_rule,
+              "no tied-boundary rule, or it does not mask the connector")
+        check("SD-L2 the mask follows the marker when the list reflows on a narrow screen",
+              css_text.count(".patch-iv-step--tied::after") == 2
+              and ".patch-iv-step--tied::after { left:" in css_text.split("@media (max-width: 640px)", 1)[1],
+              "the narrow-screen offset is missing, so the mask would sit off the line")
 
     print()
     print("=" * 78)

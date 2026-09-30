@@ -442,9 +442,50 @@ document.addEventListener('DOMContentLoaded', () => {
         newerView(recs, recs, '', true)
       );
     }
-    if (index === 0) return { state: 'CURRENT', latest: recs[0], mine: recs[0], pathKind: '' };
+    // CHRONOLOGY COMES FROM DATES, NEVER FROM ARRAY POSITION. `recs` is sorted by publish date
+    // descending, so a tie is broken by whatever order the pages happened to be in -- a sort
+    // accident, not a release sequence. Windows 26H2 published 26300.9457 and 26300.9550 both on
+    // 2026-09-29, and slicing at `index` turned that accident into advice: whichever sibling sorted
+    // first became "a newer stable release" for a reader on the other, and swapping the two records
+    // swapped the advice. A release AUXSAYS cannot place after yours is never a step.
+    const myDate = String(entry.d || recs[index][2] || '');
+    const dateOf = (r) => String((r && r[2]) || '');
+    const buildAware = recs.some((r) => String(r[1] || '') !== '');
+    // Scoped to the reader's OWN servicing line. A same-day release on a DIFFERENT Windows line is
+    // a parallel sibling and was never a step either; that is already handled further down by
+    // `sameTrain`, and nothing here changes it.
+    const onMyLine = (r) => !buildAware || r[0] === entry.v;
+    const tiedOnMyLine = !myDate ? [] : recs.filter((r, i) =>
+      i !== index && dateOf(r) === myDate && onMyLine(r));
+    const isTied = (r) => tiedOnMyLine.indexOf(r) >= 0;
 
-    const newer = recs.slice(0, index);
+    // Same-day siblings shown as what they are: a set with no recorded order. `asSequence` flags
+    // every one of them tied against the reader's own date, so the existing run notice opens once
+    // and the connector breaks at the boundary instead of drawing a step.
+    const tiedView = (siblings) => ({
+      pathKind: 'tied',
+      parallel: false,
+      lines: [],
+      path: asSequence(siblings.slice(0, PATH_LIMIT), myDate),
+      hidden: Math.max(0, siblings.length - PATH_LIMIT),
+      truncatedStart: false,
+      omittedBetas: 0,
+    });
+
+    const newer = recs.slice(0, index).filter((r) => !isTied(r));
+    if (!newer.length) {
+      // Nothing above the reader that the data can place after them. A same-day sibling on their
+      // line leaves them neither demonstrably current nor demonstrably behind -- and every other
+      // state has to claim one of those, so each would print a sentence the records do not support.
+      if (tiedOnMyLine.length) {
+        return Object.assign(
+          { state: 'RELEASE ORDER NOT RECORDED', latest: null, mine: recs[index], latestScope: '' },
+          tiedView(tiedOnMyLine)
+        );
+      }
+      return { state: 'CURRENT', latest: recs[0], mine: recs[index], pathKind: '' };
+    }
+
     const installedIsBeta = !!recs[index][4];
     // "Never point a stable reader AT a beta" is satisfied by choosing a stable target, not by
     // refusing to speak because a beta sits in between. Vetoing on any newer beta made the states
@@ -458,7 +499,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Build-aware products run parallel trains: 26H1 is not "an update" to 25H2, it is a different
     // servicing line. Only a newer build of the SAME version is an unambiguous update.
-    const buildAware = recs.some((r) => String(r[1] || '') !== '');
     const sameTrain = newerStable.filter((r) => r[0] === entry.v);
     if (buildAware && !sameTrain.length) {
       return Object.assign(
@@ -652,6 +692,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'UPDATE AVAILABLE': 'AUXSAYS tracks a newer stable release than yours.',
       'NEWER TRACKED VERSION EXISTS': 'Newer releases are tracked, but none is a clear update to the one you run.',
       'INSTALLED VERSION NO LONGER TRACKED': 'AUXSAYS no longer tracks the release you saved.',
+      // Deliberately states the limit rather than guessing past it. CURRENT would claim the reader
+      // is on the newest, UPDATE AVAILABLE that the sibling is newer, and NEWER TRACKED VERSION
+      // EXISTS that newer releases are tracked -- all three assert an order nobody recorded.
+      'RELEASE ORDER NOT RECORDED': 'Another release on your line published the same day. AUXSAYS does not record which came first.',
     };
 
     const recLabel = (rec) => {
@@ -684,7 +728,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const stepHtml = (step, role, showTie) => {
       const rec = step.rec;
       const href = esc(safeHref(rec[3]));
-      const out = [`<li class="patch-iv-step${role ? ` patch-iv-step--${role}` : ''}">`];
+      // `--tied` exists for the CONNECTOR, not for colour: the steps list draws a continuous rule
+      // down its left edge, which reads as sequence. Above a release AUXSAYS cannot place after the
+      // one before it, that rule is broken.
+      const out = [`<li class="patch-iv-step${role ? ` patch-iv-step--${role}` : ''}`
+        + `${step.tied ? ' patch-iv-step--tied' : ''}">`];
       if (showTie) {
         // Same publish date as the entry above it. The repository records no order inside a tied
         // date, so presenting these as consecutive steps would be inventing one.
@@ -709,7 +757,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // `installedState` -- the same call that produced the state and the target above it. Nothing is
     // re-decided here, so the panel cannot disagree with the sentence it sits under.
     const pathHtml = (product, entry, info) => {
-      if (!info || (info.pathKind !== 'upgrade' && info.pathKind !== 'newer')) return '';
+      if (!info || (info.pathKind !== 'upgrade' && info.pathKind !== 'newer'
+                    && info.pathKind !== 'tied')) return '';
       const steps = info.path || [];
       const lines = info.lines || [];
       if (!steps.length && !lines.length) return '';
@@ -719,9 +768,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const out = [`<details class="patch-iv-path" data-iv-path="${esc(product.id)}">`];
       // The accessible name opens with the visible words (WCAG 2.5.3) and then names the product,
       // because a reader hears this summary once per card.
-      out.push(`<summary><span class="patch-iv-path__label">${upgrade
-        ? 'What changed since my version'
-        : 'Newer tracked releases'}</span><span class="patch-iv-for"> — ${name}</span></summary>`);
+      // The tied label names the shared DATE, not a direction. "Newer tracked releases" over a set
+      // AUXSAYS cannot order would be the same wrong claim the state above it just refused to make.
+      const label = info.pathKind === 'tied'
+        ? 'Released the same day'
+        : (upgrade ? 'What changed since my version' : 'Newer tracked releases');
+      out.push(`<summary><span class="patch-iv-path__label">${label}</span>`
+        + `<span class="patch-iv-for"> — ${name}</span></summary>`);
 
       if (info.truncatedStart) {
         out.push('<p class="patch-iv-note">Your release is older than the ones listed here, so the'
