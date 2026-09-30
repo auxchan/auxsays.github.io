@@ -5197,6 +5197,8 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .patch-iv-state--update-available strong,
 .patch-iv-state--newer-tracked-version-exists strong { border-color: rgba(240,202,103,.45); background: rgba(240,202,103,.12); }
 .patch-iv-state--installed-version-no-longer-tracked strong { border-color: var(--border-subtle); background: rgba(255,255,255,.04); }
+/* Unresolved order is not a warning and not an all-clear, so it borrows neither palette. */
+.patch-iv-state--release-order-not-recorded strong { border-color: var(--border-subtle); background: rgba(255,255,255,.04); }
 
 .patch-iv-picker summary {
   cursor: pointer; font-size: .8rem; color: var(--accent-1); list-style: none;
@@ -5276,6 +5278,16 @@ tr.patch-row.is-your-version { background: rgba(240,202,103,.045); }
 }
 .patch-iv-step--mine::before,
 .patch-iv-step--target::before { border-color: rgba(240,202,103,.65); background: rgba(240,202,103,.35); }
+/* THE CONNECTOR IS A CLAIM. The rule down the left edge of the steps list reads as "this follows
+   that", so it is cut at a tied boundary -- and only there. The releases still list; the line
+   between them does not, because AUXSAYS records no order inside a shared date. */
+.patch-iv-step--tied::after {
+  /* Anchored to the list's own padding edge and over-hung by 3px each side, because the rule is a
+     sub-pixel hairline whose rendered position moves with zoom -- a 1px mask left a visible sliver
+     of it standing. It stops at the marker's top edge, so the marker itself is never painted over. */
+  content: ""; position: absolute; left: calc(-.9rem - 3px); top: -.55rem;
+  width: 5px; height: .97rem; background: var(--bg-0, #0b0f14);
+}
 .patch-iv-step__head { margin: 0; font-size: .84rem; color: var(--text-0); }
 .patch-iv-step__head a { color: inherit; }
 .patch-iv-step__verdict { margin: .18rem 0 0; }
@@ -5303,5 +5315,6 @@ tr.patch-row.is-your-version { background: rgba(240,202,103,.045); }
   .patch-iv-compare dt { margin-top: .3rem; }
   .patch-iv-steps { padding-left: .75rem; }
   .patch-iv-step::before { left: -1.02rem; }
+  .patch-iv-step--tied::after { left: calc(-.75rem - 3px); }
   .patch-iv-step__meta { gap: .05rem .4rem; }
 }

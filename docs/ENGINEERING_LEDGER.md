@@ -34,6 +34,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-018 | Resolved | Official ingestion | Medium | Microsoft Teams official ingestion activated, forward-only |
 | AUX-019 | Resolved | Community evidence | Medium | Microsoft Teams community evidence activated |
 | AUX-020 | Deferred | Evidence acceptance | Medium | PowerPoint's release-date gate reads the feed's last-activity stamp |
+| AUX-021 | Resolved | Presentation | High | Same-day releases on one servicing line were ordered by array position |
 
 ---
 
@@ -600,6 +601,51 @@ down rather than assumed harmless.
 whose accepted `source_date` is later than its thread's `dateCreated`.
 
 **Must not block** Roadmap work, or evidence acquisition for any other product.
+
+---
+
+### AUX-021 — Same-day releases on one servicing line were ordered by array position
+
+- **Status** Resolved · **Area** Presentation · **Severity** High
+- **First seen** 2026-09-30 · **Resolved** 2026-09-30
+
+**Symptom** Windows 11 26H2 published `26300.9457` and `26300.9550` on the same day, 2026-09-29.
+Both are official-source records and both are correct. `installedState` computed "newer" as
+`recs.slice(0, index)` -- array position -- and `recs` is built by
+`sort: "update_published_at" | reverse`, so a tie is broken by whatever order the pages happened to
+be in. A reader on whichever build sorted second was told a definite `UPDATE AVAILABLE` existed and
+shown the other as their `Current target`. Swapping the two records in the payload swapped the
+advice. `test_patch_stack_dashboard` UP9 caught it only as "this data cannot exist".
+
+**Root cause** Ordering inside one servicing line was safe only while no two releases of one version
+shared a date, and the presentation layer encoded that as an invariant rather than checking it. Once
+the corpus produced a tie, position stood in for chronology.
+
+**Resolution** Chronology comes from dates. A same-date record on the reader's OWN line is excluded
+from the newer set, and when nothing strictly later exists the relationship is reported as
+`RELEASE ORDER NOT RECORDED` -- a fifth conservative state, because each of the existing four would
+have had to assert an order nobody published. It names no target and is not counted as "newer
+available". The tied set reuses the existing `asSequence` / `step.tied` / `runOpeners` semantics, so
+the same-day notice still opens once per run, and the steps list's left-hand connector -- which
+reads as "this follows that" -- is masked at the tied boundary only. No build-number comparison and
+no version arithmetic: a tie is a tie.
+
+Explicitly unchanged: a strictly later build on the reader's line still produces `UPDATE AVAILABLE`;
+a release on another Windows line is still a parallel sibling, not a target; Windows stays the
+parallel-lines product and PowerPoint stays sequential; the beta/stable protections are untouched.
+
+**Verification** UP9 evolved from "same-date releases cannot exist" to pinning the statement that
+excludes them, and the behaviour is proved in a new `[SD]` section that runs the REAL function under
+node against both fixtures and the live payload, in both payload orders. 93 suites / 5,323 checks.
+Three mutants killed -- and the second of them caught nothing until a same-day record on a DIFFERENT
+line was added as `SD-F2`, which is the coverage gap the mutation pass existed to find. Reviewed in
+the browser at desktop and 390px with the real Windows payload, saving each of the two 26H2 builds
+in turn.
+
+**PR** #160
+
+**Reopen only if** a My Patch Stack relationship changes when two records that share a date swap
+places in the payload, or a same-day sibling is named as a target again.
 
 ---
 
