@@ -18,8 +18,8 @@ update_version: Bring business context with external custom properties
 update_logo_text: GIT
 update_published_at: '2026-09-29T18:40:27Z'
 update_last_checked: '2026-09-30T00:39:03Z'
-source_last_checked: '2026-09-30T15:01:42Z'
-official_body_last_checked: '2026-09-30T15:01:42Z'
+source_last_checked: '2026-10-01T00:30:35Z'
+official_body_last_checked: '2026-10-01T00:30:35Z'
 record_last_updated: '2026-09-30T00:39:03Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -98,6 +98,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-30T15:01:42Z'
+  url: https://github.blog/changelog/2026-09-29-bring-business-context-with-external-custom-properties
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-01T00:30:35Z'
   url: https://github.blog/changelog/2026-09-29-bring-business-context-with-external-custom-properties
   status: captured-from-rss-feed
   body_captured: true
