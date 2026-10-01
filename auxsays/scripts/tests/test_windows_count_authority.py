@@ -769,8 +769,12 @@ def run() -> int:
           set(CONSENSUS_PROMOTION_PRODUCTS) <= promoted,
           f"missing={sorted(set(CONSENSUS_PROMOTION_PRODUCTS) - promoted)} "
           f"workflow={sorted(promoted)}")
-    check("R7 adobe-premiere-pro is never promoted -- its prose is hand-authored",
-          "adobe-premiere-pro" not in promoted, str(sorted(promoted)))
+    # Premiere was the one product promoted by nothing at all, to protect hand-authored prose on
+    # 26.2. That protection ended when a withdrawal drove 26.2.2 to a real zero: only a
+    # retraction-eligible product may be emptied, and only its own scoped step rebuilds what
+    # reconciliation retracts, so it needed BOTH or neither.
+    check("R7 adobe-premiere-pro is promoted, so it may also be retracted",
+          "adobe-premiere-pro" in promoted, str(sorted(promoted)))
     check("R8 Windows is retractable, because the lane can rebuild it",
           WIN in CONSENSUS_PROMOTION_PRODUCTS)
     check("R8 obs-studio is retractable, because the lane now rebuilds it",
@@ -779,9 +783,12 @@ def run() -> int:
     # retraction-eligible, because retraction is the only deleting operation here and a dip-and-
     # refill would strand the record at count > 0 with its summary gone. Premiere is excluded for a
     # different reason -- hand-authored prose, so it is promoted by nothing at all.
+    # DaVinci still holds a rebuild path without retraction-eligibility -- a dip-and-refill would
+    # strand its record at count > 0 with the summary gone. Premiere no longer illustrates this
+    # side of the line; it moved to the other one, which R7 above now pins.
     check("R8 a product may hold a rebuild path without being retraction-eligible",
-          "blackmagic-davinci" not in CONSENSUS_PROMOTION_PRODUCTS
-          and "adobe-premiere-pro" not in CONSENSUS_PROMOTION_PRODUCTS)
+          "blackmagic-davinci" in promoted
+          and "blackmagic-davinci" not in CONSENSUS_PROMOTION_PRODUCTS)
     # Acrobat moved to the other side of this line. It always HAD scoped promotion steps, so R7 was
     # satisfied all along; only membership was missing. It was granted when vendor-authored posts
     # stopped being counted, because `--write-all` skips zero-count groups -- so without retraction

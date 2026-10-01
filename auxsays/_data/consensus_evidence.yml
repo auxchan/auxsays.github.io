@@ -64,8 +64,8 @@ evidence:
   patch_version_matched: true
   matched_version: null
   match_basis: null
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: source_report_no_longer_resolves
   issue_theme: ui lag and freezing
   workflow_area: editing interface
   platform: unknown
@@ -2940,8 +2940,8 @@ evidence:
   patch_version_matched: true
   matched_version: 26.2.2
   match_basis: embedded_listing_report_card
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: source_url_not_specific_report
   issue_theme: application crash or hang
   workflow_area: application stability
   platform: unknown
@@ -2971,8 +2971,8 @@ evidence:
   matched_version: 26.2.2
   match_basis: release_window_inferred
   version_match_confidence: inferred_release_window
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: source_url_not_specific_report
   issue_theme: media decode or audio/video issue
   workflow_area: media playback
   platform: unknown

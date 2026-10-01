@@ -204,9 +204,26 @@ ZERO_COUNT_PROJECTION_FIELDS = ("update_consensus_summary", "accepted_report_sou
 # blocking error that discards EVERY product's evidence for that cycle. All four live Teams records
 # already hold the exact zero shape, so membership retracts nothing today; it only means that when a
 # Teams population empties, the projections it published empty with it.
+# adobe-premiere-pro joins because a withdrawal drove one of its records to a real zero. Three rows
+# were withdrawn with reasons: a 26.2 report whose Adobe thread now returns "Page not found", and
+# both 26.2.2 rows, which carried the board LISTING url (`/t5/premiere-pro-discussions/bd-p/
+# premiere-pro?page=1`) rather than any report's own, because a listing card inherits the capture
+# page's url. That takes 26.2.2 to 0 counted rows while it still publishes a source list, evidence
+# samples, a WAIT decision and "has 2 user reports found" -- `zero_count_projection_drift` is True
+# for it. Without membership `reconcile_record_counts` may not retract, so the record would publish
+# zero reports beside the projections of two; with membership and the scoped step below it empties
+# coherently, and 26.2's projections rebuild from the two rows that survived.
+#
+# This is also what ends Premiere's manual dependency. Its records were kept out of promotion to
+# protect hand-authored prose on 26.2 -- and 26.2 is the ONLY record carrying any: a dry run reports
+# `fields_that_would_write: []` for 26.2.2, whose stored verdict already is, word for word, what the
+# premiere branch of `_record_coherence_fields` generates. Replacing 26.2's prose with that same
+# generator is the point rather than the cost: a record no automated lane may touch is a record that
+# can only be corrected by hand.
 CONSENSUS_PROMOTION_PRODUCTS = frozenset({"microsoft-powerpoint", "microsoft-windows-11",
                                           "obs-studio", "adobe-acrobat-pro",
-                                          "adobe-acrobat-reader", "microsoft-teams"})
+                                          "adobe-acrobat-reader", "microsoft-teams",
+                                          "adobe-premiere-pro"})
 
 
 def format_reconcile_detail(detail: dict[str, Any]) -> str:
