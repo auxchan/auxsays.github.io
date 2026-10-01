@@ -33842,7 +33842,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wr36zn-davinci-resolve-creates-artifacts-when-ex
   product_id: blackmagic-davinci
   update_version: '21'
@@ -33891,7 +33890,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6016326-windows-11-25h2-smartphone-bluetooth-p
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -33951,7 +33949,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9550'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6015696-windows-update-fails-with-something-we
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -33981,7 +33978,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
-
 - id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qxstro-bad-playback-performance-on-good-hardware
   product_id: blackmagic-davinci
   update_version: 20.3.1
@@ -34006,7 +34002,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6016816-windows-11-25h2-26200-8037-kb5079473-r
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -34037,7 +34032,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8037'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6018220-analysis-of-windows-11-s-constantly-br
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -34066,7 +34060,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9550'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6017194-aggiornamento-della-sicurezza-kb512919
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -34096,7 +34089,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6013888-microsoft-365-family-subscription-and
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -36593,7 +36585,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6014067-teams-messages-wont-go-through-desktop
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -39138,7 +39129,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998075-teams-desktop-shows-old-email-alias-we
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -41683,7 +41673,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984300-when-using-a-logitech-headset-on-a-tea
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -44204,7 +44193,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984300-when-using-a-logitech-headset-on-a-tea
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -44229,7 +44217,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984300-when-using-a-logitech-headset-on-a-tea
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -44254,7 +44241,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984300-when-using-a-logitech-headset-on-a-tea
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -44279,7 +44265,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1r69sn1-problem-with-ai-subtitles-from-audio-word
   product_id: blackmagic-davinci
   update_version: '20.2'
@@ -44304,7 +44289,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6019398-cant-join-teams-meetings-on-commercial
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -44353,7 +44337,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6019398-cant-join-teams-meetings-on-commercial
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -44402,7 +44385,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6005558-i-think-we-have-two-accounts-for-micro
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -44451,7 +44433,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5912329-how-to-fix-outlook-teams-and-search-ba
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -44476,7 +44457,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6019205-file-explorer-stuck-in-legacy-classic
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -44506,7 +44486,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9550'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020023-ncsi-problems-after-the-update-kb51291
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -44565,7 +44544,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
-
 - id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1r9y187-workflow-for-sending-timelines-with-multi
   product_id: blackmagic-davinci
   update_version: '20.1'
@@ -44590,7 +44568,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5982637-microsoft-teams-notifications-not-work
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -44614,4 +44591,67 @@ evidence:
   platform: Windows
   severity: ''
   sentiment: ''
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13971
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13971
+  parent_title: 'Startup crash in camera portal: on_registry_global_cb reads connection->obs_pw before it is assigned'
+  report_title: 'Startup crash in camera portal: on_registry_global_cb reads connection->obs_pw before it is assigned'
+  report_text_excerpt: ', PipeWire 1.6.6, NVIDIA 595.71.05 (open), RTX 5090, Ryzen 9 9950X ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) nixpkgs build of 32.1.2. The code below is unchanged on master (a8b04ac). ### OBS Studio Log URL https://obsproject.com/logs/5zka0J7GhCMwyOUv (a start t'
+  captured_at: '2026-10-01T05:57:00Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13972
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13972
+  parent_title: 'PipeWire camera source: frames have no timestamp, so video falls further behind audio after every stall'
+  report_title: 'PipeWire camera source: frames have no timestamp, so video falls further behind audio after every stall'
+  report_text_excerpt: ', PipeWire 1.6.6, NVIDIA 595.71.05 (open), RTX 5090, Ryzen 9 9950X ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) nixpkgs build of 32.1.2. The code below is unchanged on master (a8b04ac). ### OBS Studio Log URL https://obsproject.com/logs/2tRR4rPOJP6siH7q ### OBS St'
+  captured_at: '2026-10-01T05:57:00Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13970
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13970
+  parent_title: 'WHIP output: video RTP timestamps run ~66.6 ppm fast at 23.976 fps (rounded per-frame increments accumulate)'
+  report_title: 'WHIP output: video RTP timestamps run ~66.6 ppm fast at 23.976 fps (rounded per-frame increments accumulate)'
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/UUMXfhFHlV1IB1gd ### OBS Studio Crash Log URL _No response_ ### Expected Behavior At 23'
+  captured_at: '2026-10-01T05:59:08Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: macos
+  severity: medium
+  sentiment: negative
   source_weight: 1
