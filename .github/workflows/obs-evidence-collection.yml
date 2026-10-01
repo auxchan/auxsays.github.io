@@ -363,6 +363,32 @@ jobs:
             --product-id microsoft-teams \
             --write-all --confirm-write
 
+      - name: Promote Premiere consensus to its counted population
+        # Premiere was deliberately absent from every promotion step because record 26.2 carries
+        # hand-authored verdict prose that promotion would overwrite. That protection is now the
+        # defect: three evidence rows were withdrawn with reasons -- one whose Adobe thread returns
+        # "Page not found", and both 26.2.2 rows, which carried the board LISTING url rather than
+        # any report's own -- and 26.2.2 therefore reaches zero counted rows while still publishing
+        # a source list, evidence samples and "has 2 user reports found". Only a product in
+        # CONSENSUS_PROMOTION_PRODUCTS may be retracted, and only its own scoped step rebuilds what
+        # reconciliation retracts, so the membership and this step land together.
+        #
+        # What it replaces on 26.2 is prose, not facts: `_record_coherence_fields` has a premiere
+        # branch that generates the verdict, decision body and recommendations deterministically
+        # from the decision and the themes. 26.2.2's stored values already ARE that branch's output
+        # word for word -- a dry run reports `fields_that_would_write: []` for it.
+        #
+        # POSITION IS LOAD-BEARING, as for the six steps above: after reconciliation, before the
+        # first QA, so QA validates the state the writers finished rather than one halfway through.
+        # Scoped to one --product-id; an empty value promotes the whole corpus, which #76 made
+        # exit 2. Official identity is untouched -- update_version, update_published_at, the
+        # official sources and the release-note body are not in WRITEABLE_FIELDS.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id adobe-premiere-pro \
+            --write-all --confirm-write
+
       - name: QA patch records
         id: qa
         if: ${{ github.event.inputs.dry_run != 'true' }}

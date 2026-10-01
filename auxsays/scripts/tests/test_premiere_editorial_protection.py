@@ -140,6 +140,22 @@ def promotion_scopes() -> set[str]:
     return out
 
 
+def _counted_rows_for(product_id: str, version: str) -> int:
+    """Counted rows the STORE holds for this patch, by the repo's own predicate."""
+    from lib.report_counts import counted_evidence_counts  # noqa: PLC0415
+    doc = yaml.safe_load((_REPO / "auxsays" / "_data" / "consensus_evidence.yml")
+                         .read_text(encoding="utf-8")) or {}
+    counts = counted_evidence_counts(doc.get("evidence") or [], windows_targets={})
+    return int(counts.get((product_id, version, ""), 0))
+
+
+def _collect_steps() -> list[dict]:
+    """The collection lane's own steps, in order."""
+    doc = yaml.safe_load((_REPO / ".github" / "workflows" / "obs-evidence-collection.yml")
+                         .read_text(encoding="utf-8")) or {}
+    return list(((doc.get("jobs") or {}).get("collect") or {}).get("steps") or [])
+
+
 def run() -> int:
     print("=" * 78)
     print("Premiere Pro 26.2 editorial consensus is not automation's to write")
@@ -152,27 +168,60 @@ def run() -> int:
     data = front(PREMIERE)
 
     # ---------- the failure mode that actually occurred ----------
-    print(NEWLINE + "[P1] the editorial block is not generated boilerplate")
+    # WHAT CHANGED, AND WHY. The guard below used to assert that Premiere's editorial block is NOT
+    # generated -- that nothing automated may write it. That protection has been deliberately ended:
+    # keeping it meant Premiere's records could be corrected only by hand, and a record no automated
+    # lane may touch is a record that stays wrong. `adobe-premiere-pro` now has a scoped promotion
+    # step in the lane and is retraction-eligible, so `consensus_report`, `quick_verdict`,
+    # `update_decision_body` and `practical_recommendations` are generated from the counted
+    # population by the premiere branch of `_record_coherence_fields`.
+    #
+    # WHAT STILL MATTERS IS UNCHANGED. The 2026-05-15 damage was not caused by promotion existing;
+    # it was caused by an UNSCOPED `--write-all` reaching every product at once. That is still
+    # refused below, and so is any collector-stage write to an editorial field. What this suite now
+    # guards is the boundary that survives: official identity is not promotion's to rewrite.
+    print(NEWLINE + "[P1] the editorial block is generated, and says so honestly")
     report = str(data.get("consensus_report") or "")
     check("P1 consensus_report is present", bool(report.strip()), "empty")
-    check("P1 consensus_report is not the writer's generated sentence",
-          not GENERATED_REPORT_RE.match(report),
-          f"reads as generated: {report[:90]!r}")
-    # Deliberately NOT asserting the exact wording -- a human may legitimately rewrite this article.
-    # And deliberately NOT rejecting a leading digit: "26.2 shipped with timeline crashes..." is
-    # ordinary human prose about a version, and an earlier draft of this guard would have failed it.
-    # What replaces it is the field the scoped --write reproduction actually destroys, checked with
-    # the repo's OWN rule rather than a second opinion invented here.
-    check("P1 quick_verdict is not a count projection either",
-          not verdict_states_a_count(data), str(data.get("quick_verdict"))[:90])
+    count = int(data.get("update_report_count") or 0)
+    verdict = str(data.get("quick_verdict") or "")
+    stated = re.search(r"(\d+)\s+user report", verdict)
+    check("P1 a verdict that states a count states the PERSISTED one",
+          not stated or int(stated.group(1)) == count,
+          f"verdict says {stated.group(1) if stated else '-'}, count={count}")
+    check("P1 the record does not claim more reports than the store holds",
+          count == _counted_rows_for(PRODUCT, str(data.get("update_version") or "")),
+          f"record={count} store={_counted_rows_for(PRODUCT, str(data.get('update_version') or ''))}")
 
-    print(NEWLINE + "[P2] Premiere holds no automated consensus ownership")
+    print(NEWLINE + "[P2] Premiere's automated ownership is SCOPED, and stops at official identity")
     scopes = promotion_scopes()
-    check("P2 no workflow promotes adobe-premiere-pro", PRODUCT not in scopes, str(sorted(scopes)))
+    check("P2 exactly one scoped workflow promotion names adobe-premiere-pro",
+          PRODUCT in scopes, str(sorted(scopes)))
     check("P2 no production-reachable unscoped consensus write remains",
           "UNSCOPED" not in scopes, str(sorted(scopes)))
-    check("P2 Premiere is not retraction-eligible either",
-          PRODUCT not in CONSENSUS_PROMOTION_PRODUCTS, str(sorted(CONSENSUS_PROMOTION_PRODUCTS)))
+    check("P2 Premiere is retraction-eligible, because the lane can rebuild it",
+          PRODUCT in CONSENSUS_PROMOTION_PRODUCTS, str(sorted(CONSENSUS_PROMOTION_PRODUCTS)))
+    # The reason retraction is only safe WITH a promotion step: reconciliation deletes, and only a
+    # scoped promotion restores. Asserted as the pair, so neither can be granted without the other.
+    check("P2 retraction-eligibility and the promotion step move together",
+          (PRODUCT in CONSENSUS_PROMOTION_PRODUCTS) == (PRODUCT in scopes))
+
+    # OFFICIAL IDENTITY IS NOT PROMOTION'S TO WRITE. Driven through the real engine rather than
+    # asserted from a field list: a key added to WRITEABLE_FIELDS later must fail this.
+    import apply_consensus_to_records as _acr  # noqa: PLC0415
+    proposals = {}
+    for group in _acr.run_dry_run(evidence_path=_REPO / "auxsays" / "_data" / "consensus_evidence.yml",
+                                  product_id_filter=PRODUCT, is_candidate_mode=False,
+                                  records_index=_acr._index_generated_records(),
+                                  write_requested=True):
+        proposals.update(group.get("proposed_fields_if_written") or {})
+    OFFICIAL = ("update_version", "update_published_at", "update_source_url", "official_sources",
+                "official_patch_notes_body", "official_checksums_body", "permalink",
+                "official_source_type", "update_product", "product_id")
+    leaked = [f for f in OFFICIAL if f in proposals]
+    check("P2 promotion proposes no official identity field", not leaked, str(leaked))
+    check("P2 and it did propose SOMETHING, so the check is not vacuous",
+          bool(proposals), "promotion proposed nothing at all")
 
     print(NEWLINE + "[P3] the collector stage cannot reach editorial fields")
     import apply_consensus_to_records as acr  # noqa: PLC0415
@@ -232,6 +281,96 @@ def run() -> int:
     # Premiere suite. `test_powerpoint_write_path_safety.py` already fails on main for exactly that
     # reason. Blast radius is a property of a diff, not of the current tree; the sweep and
     # `git diff --stat` are what establish it.
+
+    # ---------- P6: the withdrawals, and the state they produced ----------
+    # Three rows were withdrawn with reasons. A withdrawal is counted:false PLUS a named reason with
+    # the row KEPT (lib/evidence_loss), so nothing downstream has to guess whether a missing row was
+    # withdrawn or lost. These assertions read the STORE, not a fixture.
+    print(NEWLINE + "[P6] the withdrawn rows, and the records that follow from them")
+    import yaml  # noqa: PLC0415
+    from lib.evidence_loss import is_audited_withdrawal  # noqa: PLC0415
+    store = yaml.safe_load((_REPO / "auxsays" / "_data" / "consensus_evidence.yml")
+                           .read_text(encoding="utf-8")) or {}
+    rows = [r for r in (store.get("evidence") or []) if r.get("product_id") == PRODUCT]
+    withdrawn = [r for r in rows if r.get("counted") is False]
+    check("P6 every non-counted Premiere row is an AUDITED withdrawal, never a bare flag",
+          withdrawn and all(is_audited_withdrawal(r) for r in withdrawn),
+          str([(str(r.get("id"))[:40], r.get("exclusion_reason")) for r in withdrawn
+               if not is_audited_withdrawal(r)]))
+
+    LISTING = "/t5/premiere-pro-discussions/bd-p/premiere-pro"
+    listing_rows = [r for r in rows if LISTING in str(r.get("source_url") or "")]
+    check("P6-H the board LISTING url is present in the store but counts for nothing",
+          listing_rows and not any(r.get("counted") is True for r in listing_rows),
+          str([(r.get("counted"), r.get("exclusion_reason")) for r in listing_rows]))
+    check("P6-H and it was withdrawn for the reason the collector itself uses",
+          all(str(r.get("exclusion_reason")) == "source_url_not_specific_report"
+              for r in listing_rows), str({str(r.get("exclusion_reason")) for r in listing_rows}))
+
+    # The row whose Adobe thread now returns "Page not found". A dead source is not a refused one.
+    dead = [r for r in rows if str(r.get("exclusion_reason") or "") == "source_report_no_longer_resolves"]
+    check("P6 the unresolvable report is withdrawn under its own distinct reason",
+          len(dead) == 1, str([r.get("id") for r in dead]))
+    check("P6 that reason is not reused for a transport refusal",
+          all("block" not in str(r.get("exclusion_reason") or "")
+              and "rate" not in str(r.get("exclusion_reason") or "") for r in dead))
+
+    # I. The rows that survived are the two whose Adobe threads still resolve, and they are what the
+    # record now publishes -- nothing was re-attributed and no URL was invented from a title.
+    counted = [r for r in rows if r.get("counted") is True]
+    check("P6-I exactly the two live 26.2 bug reports survive",
+          len(counted) == 2 and all(str(r.get("update_version")) == "26.2" for r in counted),
+          str([(r.get("update_version"), str(r.get("source_url"))[-40:]) for r in counted]))
+    import patch_collectors.adobe_premiere as _ap  # noqa: PLC0415
+    published = [str(s.get("source_url") or "") for s in (data.get("accepted_report_sources") or [])
+                 if isinstance(s, dict)]
+    check("P6-K every published source url is a SPECIFIC Adobe report, by the collector's own rule",
+          published and all(_ap.adobe_report_url_is_specific(_ap.canonical_adobe_url(u))
+                            for u in published), str(published))
+    check("P6-K the published list is exactly the surviving counted rows",
+          sorted(published) == sorted(str(r.get("source_url")) for r in counted),
+          f"published={sorted(published)} counted={sorted(str(r.get('source_url')) for r in counted)}")
+
+    # M/N. What promotion rebuilt, and what retraction emptied -- read from the two real records.
+    other = front(_REPO / "auxsays" / "updates" / "generated" / "2026-05-01-premiere-pro-26-2-2.md")
+    check("P6-M the surviving record's community fields were rebuilt from the counted population",
+          int(data.get("update_report_count") or 0) == len(counted)
+          and len(data.get("evidence_samples") or []) == len(counted)
+          and bool(str(data.get("update_consensus_summary") or "").strip()),
+          f"count={data.get('update_report_count')} samples={len(data.get('evidence_samples') or [])}")
+    check("P6-N the emptied record retracted its projections rather than keeping them",
+          int(other.get("update_report_count") or 0) == 0
+          and not (other.get("accepted_report_sources") or [])
+          and not (other.get("evidence_samples") or [])
+          and not str(other.get("update_consensus_summary") or "").strip(),
+          f"count={other.get('update_report_count')} "
+          f"sources={len(other.get('accepted_report_sources') or [])}")
+    check("P6-N and it fell back to the official-only shape, not a half-empty one",
+          str(other.get("evidence_state")) == "official_only"
+          and str(other.get("update_consensus_label")) == "Insufficient data",
+          f"{other.get('evidence_state')!r} {other.get('update_consensus_label')!r}")
+    check("P6 no record claims a theme frequency the counted population cannot support",
+          not (data.get("complaint_themes") or []) or len(data.get("complaint_themes") or [])
+          <= int(data.get("update_report_count") or 0),
+          str(data.get("complaint_themes")))
+
+    # R/S. The promotion step is scoped and positioned, like every other product's.
+    steps = _collect_steps()
+    prem_i = next((i for i, st in enumerate(steps)
+                   if "apply_consensus_to_records" in str(st.get("run") or "")
+                   and PRODUCT in str(st.get("run") or "")), -1)
+    reconcile_i = next((i for i, st in enumerate(steps)
+                        if "build_consensus_from_evidence" in str(st.get("run") or "")), -1)
+    qa = [i for i, st in enumerate(steps) if "qa_patch_records" in str(st.get("run") or "")]
+    check("P6-S the Premiere promotion runs after reconciliation", 0 <= reconcile_i < prem_i,
+          f"reconcile={reconcile_i} premiere={prem_i}")
+    check("P6-S nothing validates between reconciliation and it",
+          not [i for i in qa if reconcile_i < i < prem_i], f"qa={qa} premiere={prem_i}")
+    check("P6-S and QA still runs after it", any(i > prem_i for i in qa), str(qa))
+    check("P6-R the step names exactly one product, so it cannot reach another",
+          str(steps[prem_i].get("run") or "").count("--product-id") == 1
+          and "--write-all" in str(steps[prem_i].get("run") or ""),
+          str(steps[prem_i].get("run") or "")[:160])
 
     print()
     print("=" * 78)

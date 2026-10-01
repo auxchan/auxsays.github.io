@@ -347,8 +347,10 @@ def run() -> int:
     check("O11 every retractable product has a rebuild path in the lane",
           set(CONSENSUS_PROMOTION_PRODUCTS) <= promoted_products(),
           f"missing={sorted(set(CONSENSUS_PROMOTION_PRODUCTS) - promoted_products())}")
-    check("O11 adobe-premiere-pro is never promoted -- its prose is hand-authored",
-          "adobe-premiere-pro" not in promoted_products(), str(sorted(promoted_products())))
+    # Premiere joined the promoted set when a withdrawal drove 26.2.2 to a real zero: retraction
+    # deletes and only a scoped promotion restores, so membership without a step is a one-way door.
+    check("O11 adobe-premiere-pro is promoted, so its retraction has a rebuild path",
+          "adobe-premiere-pro" in promoted_products(), str(sorted(promoted_products())))
     reconcile_i = next((i for i, st in enumerate(steps)
                         if "build_consensus_from_evidence" in str(st.get("run") or "")), -1)
     obs_i = next((i for i, st in enumerate(steps)
