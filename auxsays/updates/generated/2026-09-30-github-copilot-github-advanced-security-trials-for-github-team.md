@@ -17,8 +17,8 @@ update_version: GitHub Advanced Security trials for GitHub Team
 update_logo_text: GIT
 update_published_at: '2026-09-30T16:48:24Z'
 update_last_checked: '2026-10-01T00:30:35Z'
-source_last_checked: '2026-10-01T06:58:18Z'
-official_body_last_checked: '2026-10-01T06:58:18Z'
+source_last_checked: '2026-10-01T15:57:11Z'
+official_body_last_checked: '2026-10-01T15:57:11Z'
 record_last_updated: '2026-10-01T00:30:35Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -78,6 +78,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-01T06:58:18Z'
+  url: https://github.blog/changelog/2026-09-30-github-advanced-security-trials-for-github-team
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-01T15:57:11Z'
   url: https://github.blog/changelog/2026-09-30-github-advanced-security-trials-for-github-team
   status: captured-from-rss-feed
   body_captured: true
