@@ -12,7 +12,7 @@ const exactTen = [
   "Gross Job Losses",
   "Jobs Lost at Establishment Deaths",
   "Business Bankruptcy Filings, 12-Month Total",
-  "Real Output Growth",
+  "Real GDP Growth",
   "Real Personal Consumption Expenditures Growth",
   "FEMA Disaster Declaration",
 ] as const;
@@ -40,10 +40,13 @@ describe("Initial UI Claims Level-4 Human QA surface", () => {
     expect(within(deaths).getByText("Layoffs & Job Destruction › Firm Death / Shutdown Stress › Jobs Lost at Establishment Deaths")).toBeTruthy();
 
     const breadth = screen.getByRole("heading", { name: "Payroll Contraction Breadth" }).closest("section")!;
-    expect(within(breadth).getAllByText(/GOVERNED CALC PENDING METHODOLOGY CALIBRATION/).length).toBeGreaterThan(0);
-    expect(within(breadth).getByText(/has not approved the final CES universe/)).toBeTruthy();
+    expect(within(breadth).getAllByText(/GOVERNED CALC METHOD APPROVED INPUT HISTORY PENDING/).length).toBeGreaterThan(0);
+    expect(within(breadth).getByText("PAYROLL_CONTRACTION_BREADTH_V1")).toBeTruthy();
+    expect(within(breadth).getByText("CES_PRIVATE_SUPERSECTORS_V1")).toBeTruthy();
+    expect(within(breadth).getByText(/10 of 10 compatible series/)).toBeTruthy();
+    expect(within(breadth).getByText(/All ten accepted, seasonally compatible inputs are required/)).toBeTruthy();
 
-    const output = screen.getByRole("heading", { name: "Real Output Growth" }).closest("section")!;
+    const output = screen.getByRole("heading", { name: "Real GDP Growth" }).closest("section")!;
     expect(within(output).getAllByText(/BLOCKED CREDENTIAL/).length).toBeGreaterThan(0);
     expect(within(output).getByText(/AUXSAYS_BEA_USER_ID is missing/)).toBeTruthy();
   });

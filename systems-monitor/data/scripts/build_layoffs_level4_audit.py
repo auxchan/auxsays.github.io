@@ -29,6 +29,7 @@ ALIASES = {
     "establishment-death-job-losses": "jobs-lost-at-establishment-deaths",
     "business-bankruptcy-stress": "business-bankruptcy-filings-12-month-total",
     "business-bankruptcy-filings": "business-bankruptcy-filings-12-month-total",
+    "real-output-growth": "real-gdp-growth",
     "consumer-demand": "real-personal-consumption-expenditures-growth",
     "disaster-operational-shock": "fema-disaster-declaration",
 }

@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "initial-ui-claims-production-1.0.0",
-  "authority": "TAYLOR_INITIAL_UI_CLAIMS_EXACT_TEN_IMPLEMENTATION_2026_09_29",
+  "schemaVersion": "initial-ui-claims-production-1.1.0",
+  "authority": "TAYLOR_INITIAL_UI_CLAIMS_FINAL_CORRECTIONS_2026_10_01",
   "parentPlacementId": "placement:layoffs-job-destruction:initial-ui-claims",
   "humanQa": "PENDING",
   "gateB": "OPEN",
@@ -13,7 +13,8 @@
     {"from": "factor:canonical:establishment-deaths", "to": "factor:canonical:jobs-lost-at-establishment-deaths", "oldLabel": "Establishment Deaths", "newLabel": "Jobs Lost at Establishment Deaths"},
     {"from": "factor:canonical:business-bankruptcy-stress", "to": "factor:canonical:business-bankruptcy-filings-12-month-total", "oldLabel": "Business Bankruptcy Stress", "newLabel": "Business Bankruptcy Filings, 12-Month Total"},
     {"from": "factor:canonical:consumer-demand", "to": "factor:canonical:real-personal-consumption-expenditures-growth", "oldLabel": "Consumer Demand", "newLabel": "Real Personal Consumption Expenditures Growth"},
-    {"from": "factor:canonical:disaster-operational-shock", "to": "factor:canonical:fema-disaster-declaration", "oldLabel": "Disaster / Operational Shock", "newLabel": "FEMA Disaster Declaration"}
+    {"from": "factor:canonical:disaster-operational-shock", "to": "factor:canonical:fema-disaster-declaration", "oldLabel": "Disaster / Operational Shock", "newLabel": "FEMA Disaster Declaration"},
+    {"from": "factor:canonical:real-output-growth", "to": "factor:canonical:real-gdp-growth", "oldLabel": "Real Output Growth", "newLabel": "Real GDP Growth"}
   ],
   "placements": [
     {
@@ -58,11 +59,16 @@
       "label": "Payroll Contraction Breadth",
       "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
       "claimClass": "B_GOVERNED_CALC",
-      "productionDisposition": "GOVERNED_CALC_PENDING_METHODOLOGY_CALIBRATION",
+      "productionDisposition": "GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING",
       "sourceIds": ["bls-ces"],
-      "selectors": [],
-      "acceptedHistoryState": "NONE_CALC_NOT_AUTHORIZED",
-      "blocker": "Taylor has not approved the final CES universe, member selectors, or minimum publishable coverage threshold."
+      "selectors": ["CES1000000001", "CES2000000001", "CES3000000001", "CES4000000001", "CES5000000001", "CES5500000001", "CES6000000001", "CES6500000001", "CES7000000001", "CES8000000001"],
+      "acceptedHistoryState": "NONE_METHOD_APPROVED_INPUT_HISTORY_PENDING",
+      "methodologyVersion": "PAYROLL_CONTRACTION_BREADTH_V1",
+      "universeVersion": "CES_PRIVATE_SUPERSECTORS_V1",
+      "coveragePolicy": "100_PERCENT_REQUIRED_10_OF_10",
+      "acceptedInputSeries": 0,
+      "calculatedHistoryDepth": 0,
+      "blocker": "Accepted production CES input history is unavailable for all ten governed series; calculation remains suppressed until immutable accepted observations for t and t-1 exist for 10 of 10 compatible series."
     },
     {
       "order": 5,
@@ -103,8 +109,8 @@
     {
       "order": 8,
       "placementId": "placement:layoffs-job-destruction:initial-ui-claims:real-output-growth",
-      "label": "Real Output Growth",
-      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "label": "Real GDP Growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
       "claimClass": "A_DIRECT_OBS",
       "productionDisposition": "BLOCKED_CREDENTIAL",
       "sourceIds": ["bea-nipa"],

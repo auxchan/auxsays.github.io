@@ -33,11 +33,15 @@ class InitialUiClaimsProductionTests(unittest.TestCase):
         rows = load("initial_ui_claims_production.json")["placements"]
         dispositions = [row["productionDisposition"] for row in rows]
         self.assertEqual(5, dispositions.count("ACCEPTED_OBSERVATION"))
-        self.assertEqual(1, dispositions.count("GOVERNED_CALC_PENDING_METHODOLOGY_CALIBRATION"))
+        self.assertEqual(1, dispositions.count("GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING"))
         self.assertEqual(1, dispositions.count("SOURCE_IDENTIFIED_PENDING_ACCEPTANCE"))
         self.assertEqual(2, dispositions.count("BLOCKED_CREDENTIAL"))
         self.assertEqual(1, dispositions.count("EVENT_OR_STRUCTURAL_FACTOR"))
         self.assertEqual("B_GOVERNED_CALC", rows[3]["claimClass"])
+        self.assertEqual("100_PERCENT_REQUIRED_10_OF_10", rows[3]["coveragePolicy"])
+        self.assertEqual(0, rows[3]["acceptedInputSeries"])
+        self.assertEqual(0, rows[3]["calculatedHistoryDepth"])
+        self.assertEqual(10, len(rows[3]["selectors"]))
         self.assertEqual("C_EVENT_OR_STRUCTURAL", rows[9]["claimClass"])
         self.assertTrue(all(row["acceptedHistoryState"] for row in rows))
         self.assertTrue(all(row["blocker"] for row in rows if row["productionDisposition"] != "ACCEPTED_OBSERVATION"))
@@ -46,7 +50,7 @@ class InitialUiClaimsProductionTests(unittest.TestCase):
         production = load("initial_ui_claims_production.json")
         taxonomy = load("taxonomy.json")
         migrations = {row["from"]: row["to"] for row in production["canonicalMigrations"]}
-        self.assertEqual(5, len(migrations))
+        self.assertEqual(6, len(migrations))
         all_ids = [row["canonicalFactorId"] for group in taxonomy["groups"] for row in group["placements"]]
         self.assertTrue(set(migrations).isdisjoint(all_ids))
         self.assertTrue(set(migrations.values()).issubset(all_ids))
@@ -57,6 +61,12 @@ class InitialUiClaimsProductionTests(unittest.TestCase):
                 labels_by_id.setdefault(row["canonicalFactorId"], set()).add(row["label"])
         for migration in production["canonicalMigrations"]:
             self.assertEqual({migration["newLabel"]}, labels_by_id[migration["to"]])
+
+        gdp_migration = next(row for row in production["canonicalMigrations"] if row["from"] == "factor:canonical:real-output-growth")
+        self.assertEqual("factor:canonical:real-gdp-growth", gdp_migration["to"])
+        gdp_placements = [row for group in taxonomy["groups"] for row in group["placements"] if row["canonicalFactorId"] == gdp_migration["to"]]
+        self.assertEqual(6, len(gdp_placements))
+        self.assertTrue(all(row["placementId"].endswith("real-output-growth") for row in gdp_placements))
 
     def test_existing_accepted_evidence_is_reused_without_copying_history(self):
         production = load("initial_ui_claims_production.json")

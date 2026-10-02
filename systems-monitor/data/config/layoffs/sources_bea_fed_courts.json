@@ -22,7 +22,7 @@
       "extraction_mode": "BEA_API_JSON",
       "series": [
         {
-          "canonical_factor": "factor:canonical:real-output-growth",
+          "canonical_factor": "factor:canonical:real-gdp-growth",
           "source_series_id": "BEA:NIPA:T10101:1:Q",
           "label": "Real gross domestic product, percent change from preceding period",
           "unit": "percent change at seasonally adjusted annual rate",

@@ -437,7 +437,7 @@
       "promotionBlocker": "Split productivity from automation and source each independently."
     },
     {
-      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
       "claimClass": "A_DIRECT_OBS",
       "rationale": "BEA NIPA table 1.1.1 line 1 directly publishes real GDP growth at a quarterly seasonally adjusted annual rate.",
       "sourceRefs": ["bea-nipa:BEA:NIPA:T10101:1:Q"],

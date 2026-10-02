@@ -4,7 +4,7 @@ import { layoffsFactorSourceState, type LayoffsFactorSourceState } from "./layof
 import { layoffsBranchTaxonomy } from "./layoffsBranchTaxonomy";
 
 export type InitialUiClaimsClass = "A_DIRECT_OBS" | "B_GOVERNED_CALC" | "C_EVENT_OR_STRUCTURAL";
-export type InitialUiClaimsDisposition = "ACCEPTED_OBSERVATION" | "GOVERNED_CALC_PENDING_METHODOLOGY_CALIBRATION" | "SOURCE_IDENTIFIED_PENDING_ACCEPTANCE" | "BLOCKED_CREDENTIAL" | "EVENT_OR_STRUCTURAL_FACTOR";
+export type InitialUiClaimsDisposition = "ACCEPTED_OBSERVATION" | "GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING" | "SOURCE_IDENTIFIED_PENDING_ACCEPTANCE" | "BLOCKED_CREDENTIAL" | "EVENT_OR_STRUCTURAL_FACTOR";
 
 export interface InitialUiClaimsProductionPlacement {
   order: number;
@@ -16,6 +16,11 @@ export interface InitialUiClaimsProductionPlacement {
   sourceIds: readonly string[];
   selectors: readonly string[];
   acceptedHistoryState: string;
+  methodologyVersion?: string;
+  universeVersion?: string;
+  coveragePolicy?: string;
+  acceptedInputSeries?: number;
+  calculatedHistoryDepth?: number;
   blocker: string | null;
   placementPaths: readonly string[];
   sourceState?: LayoffsFactorSourceState;

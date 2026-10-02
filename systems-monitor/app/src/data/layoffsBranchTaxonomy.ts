@@ -27,6 +27,7 @@ export const layoffsCanonicalAliases: Readonly<Record<string, string>> = Object.
   "Industry Payroll Contraction": "Payroll Contraction Breadth",
   "Establishment Deaths": "Jobs Lost at Establishment Deaths",
   "Business Bankruptcy Stress": "Business Bankruptcy Filings, 12-Month Total",
+  "Real Output Growth": "Real GDP Growth",
   "Consumer Demand": "Real Personal Consumption Expenditures Growth",
   "Disaster / Operational Shock": "FEMA Disaster Declaration"
 });
@@ -35,6 +36,7 @@ export const layoffsCanonicalFactorMigration: Readonly<Record<string, string>> =
   "factor:canonical:industry-payroll-contraction": "factor:canonical:payroll-contraction-breadth",
   "factor:canonical:establishment-deaths": "factor:canonical:jobs-lost-at-establishment-deaths",
   "factor:canonical:business-bankruptcy-stress": "factor:canonical:business-bankruptcy-filings-12-month-total",
+  "factor:canonical:real-output-growth": "factor:canonical:real-gdp-growth",
   "factor:canonical:consumer-demand": "factor:canonical:real-personal-consumption-expenditures-growth",
   "factor:canonical:disaster-operational-shock": "factor:canonical:fema-disaster-declaration"
 });
@@ -43,6 +45,7 @@ const stablePlacementSlugs: Readonly<Record<string, string>> = Object.freeze({
   "Payroll Contraction Breadth": "industry-payroll-contraction",
   "Jobs Lost at Establishment Deaths": "establishment-deaths",
   "Business Bankruptcy Filings, 12-Month Total": "business-bankruptcy-stress",
+  "Real GDP Growth": "real-output-growth",
   "Real Personal Consumption Expenditures Growth": "consumer-demand",
   "FEMA Disaster Declaration": "disaster-operational-shock"
 });
@@ -79,28 +82,28 @@ export const layoffsBranchTaxonomy: readonly LayoffsBranchGroup[] = Object.freez
     "Layoffs & Discharges",
     "Employer-initiated separations measured by the official JOLTS layoffs and discharges series.",
     "BLS JOLTS; BEA; Census; BLS CES/Productivity; Federal Reserve SLOOS; U.S. Courts",
-    ["Real Output Growth", "Consumer Spending", "Retail Sales", "Job Openings Rate", "Hires Rate", "Average Weekly Hours", "Corporate Profits", "C&I Lending Standards", "Unit Labor Costs", "Business Failure Stress"]
+    ["Real GDP Growth", "Consumer Spending", "Retail Sales", "Job Openings Rate", "Hires Rate", "Average Weekly Hours", "Corporate Profits", "C&I Lending Standards", "Unit Labor Costs", "Business Failure Stress"]
   ),
   group(
     "initial-ui-claims",
     "Initial UI Claims",
     "New entries into insured unemployment after a separation; this measures claims activity, not job destruction accounting.",
     "U.S. Department of Labor ETA; BLS JOLTS/CPS/CES/BED; BEA; disaster authorities",
-    ["Layoffs & Discharges", "Temporary Layoffs", "Permanent Job Losers", "Payroll Contraction Breadth", "Gross Job Losses", "Jobs Lost at Establishment Deaths", "Business Bankruptcy Filings, 12-Month Total", "Real Output Growth", "Real Personal Consumption Expenditures Growth", "FEMA Disaster Declaration"]
+    ["Layoffs & Discharges", "Temporary Layoffs", "Permanent Job Losers", "Payroll Contraction Breadth", "Gross Job Losses", "Jobs Lost at Establishment Deaths", "Business Bankruptcy Filings, 12-Month Total", "Real GDP Growth", "Real Personal Consumption Expenditures Growth", "FEMA Disaster Declaration"]
   ),
   group(
     "continued-claims-insured-unemployment",
     "Continued Claims / Insured Unemployment",
     "The persistence of insured unemployment and the capacity of the labor market to return claimants to work.",
     "U.S. Department of Labor ETA; BLS JOLTS/CES; Census; BEA",
-    ["Initial Claims", "Hires Rate", "Job Openings Rate", "Payroll Growth", "Temporary Help Employment", "Average Weekly Hours", "Business Formations", "Real Output Growth", "Real Personal Consumption Expenditures Growth", "Regional Employment Growth"]
+    ["Initial Claims", "Hires Rate", "Job Openings Rate", "Payroll Growth", "Temporary Help Employment", "Average Weekly Hours", "Business Formations", "Real GDP Growth", "Real Personal Consumption Expenditures Growth", "Regional Employment Growth"]
   ),
   group(
     "permanent-job-losers",
     "Permanent Job Losers",
     "People whose employment ended involuntarily and who do not expect recall to the former job.",
     "BLS CPS/BED/CES/Productivity; Census BDS/trade; U.S. Courts; Federal Reserve; BEA",
-    ["Jobs Lost at Establishment Deaths", "Firm Deaths", "Business Bankruptcy Filings, 12-Month Total", "Payroll Contraction Breadth", "Gross Job Losses", "Productivity / Automation", "Import / Trade Pressure", "C&I Credit Conditions", "Corporate Profitability", "Real Output Growth"]
+    ["Jobs Lost at Establishment Deaths", "Firm Deaths", "Business Bankruptcy Filings, 12-Month Total", "Payroll Contraction Breadth", "Gross Job Losses", "Productivity / Automation", "Import / Trade Pressure", "C&I Credit Conditions", "Corporate Profitability", "Real GDP Growth"]
   ),
   group(
     "temporary-layoffs",
@@ -114,7 +117,7 @@ export const layoffsBranchTaxonomy: readonly LayoffsBranchGroup[] = Object.freez
     "Gross Job Losses",
     "Employment losses at contracting and closing establishments before gross gains are netted against them.",
     "BLS BED; BEA; Census; Federal Reserve SLOOS; BLS Productivity/PPI",
-    ["Establishment Contractions", "Establishment Closures", "Real Output Growth", "Consumer Spending", "New Orders", "Corporate Profits", "C&I Lending Standards", "Unit Labor Costs", "Producer Input Prices", "Trade / Import Pressure"]
+    ["Establishment Contractions", "Establishment Closures", "Real GDP Growth", "Consumer Spending", "New Orders", "Corporate Profits", "C&I Lending Standards", "Unit Labor Costs", "Producer Input Prices", "Trade / Import Pressure"]
   ),
   group(
     "establishment-death-closure-losses",
@@ -142,7 +145,7 @@ export const layoffsBranchTaxonomy: readonly LayoffsBranchGroup[] = Object.freez
     "Business Failure / Bankruptcy Stress",
     "A leading stress context for potential business distress; it is not a direct measure of layoffs, firm death, or establishment death.",
     "U.S. Courts; BEA; Federal Reserve; Census; BLS Productivity/PPI",
-    ["Corporate Profits", "Interest Rates", "C&I Lending Standards", "C&I Loan Demand", "Sales / Revenue", "Producer Input Costs", "Unit Labor Costs", "Inventory / Sales Ratio", "Business Formation", "Real Output Growth"]
+    ["Corporate Profits", "Interest Rates", "C&I Lending Standards", "C&I Loan Demand", "Sales / Revenue", "Producer Input Costs", "Unit Labor Costs", "Inventory / Sales Ratio", "Business Formation", "Real GDP Growth"]
   )
 ]);
 

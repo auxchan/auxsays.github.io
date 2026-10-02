@@ -102,7 +102,7 @@ assign("census-trade", ["Import / Trade Pressure", "Trade / Import Pressure", "I
 assign("uscourts-f2", ["Business Bankruptcy Filings", "Business Bankruptcy Stress", "Business Bankruptcy Filings, 12-Month Total", "Business Failure / Bankruptcy Stress", "Business Failure Stress"]);
 assign("bea-industry", ["Industry Output"]);
 assign("census-economic", ["New Orders", "Inventory / Sales Balance", "Inventory / Sales Imbalance", "Inventory / Sales Ratio", "Sales / Revenue", "Sales / Revenue Growth", "Industry Sales / Shipments", "Industry New Orders"]);
-assign("bea-nipa", ["Real Output Growth", "Consumer Demand", "Real Personal Consumption Expenditures Growth", "Consumer Spending", "Corporate Profits", "Corporate Profitability"]);
+assign("bea-nipa", ["Real GDP Growth", "Consumer Demand", "Real Personal Consumption Expenditures Growth", "Consumer Spending", "Corporate Profits", "Corporate Profitability"]);
 assign("fema-openfema", ["FEMA Disaster Declaration"]);
 assign("fed-g17", ["Industry Capacity Utilization"]);
 assign("eia-open", ["Energy / Input Shock"]);

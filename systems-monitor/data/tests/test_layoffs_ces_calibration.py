@@ -18,7 +18,10 @@ class LayoffsCesCalibrationTests(unittest.TestCase):
         self.assertEqual([10, 21], [len(option["members"]) for option in self.document["options"]])
         self.assertEqual("OPTION_A", self.document["recommendation"]["universe"])
         self.assertEqual(95, self.document["recommendation"]["minimumPublishableCoveragePercent"])
-        self.assertEqual("RECOMMENDATION_ONLY_NOT_TAYLOR_APPROVED", self.document["recommendation"]["authorization"])
+        self.assertEqual("REJECTED_SUPERSEDED_BY_TAYLOR_DECISION_2026_10_01", self.document["recommendation"]["authorization"])
+        self.assertEqual("OPTION_A", self.document["decision"]["approvedUniverse"])
+        self.assertEqual(100, self.document["decision"]["requiredCoveragePercent"])
+        self.assertFalse(self.document["decision"]["calibrationHistoryAcceptedForProduction"])
         self.assertTrue(all(option["coverage"]["at100Percent"] == 100.0 for option in self.document["options"]))
 
     def test_coverage_simulation_reports_thresholds_and_missing_patterns(self):

@@ -311,7 +311,7 @@ sources:
     currentness: not asserted until an exact EIA route/facet is approved
 
 factorSourceMap:
-  real-output-growth: [bea_nipa]
+  real-gdp-growth: [bea_nipa]
   consumer-spending: [bea_nipa]
   consumer-demand: [bea_nipa, census_marts]
   retail-sales: [census_marts]
@@ -377,7 +377,7 @@ hierarchy:
     label: Layoffs & Discharges
     primarySourceCandidates: [bls_jolts]
     placements:
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
       - [consumer-spending, Consumer Spending]
       - [retail-sales, Retail Sales]
       - [job-openings-rate, Job Openings Rate]
@@ -398,7 +398,7 @@ hierarchy:
       - [gross-job-losses, Gross Job Losses]
       - [establishment-deaths, Establishment Deaths]
       - [business-failure-stress, Business Bankruptcy Stress]
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
       - [consumer-demand, Consumer Demand]
       - [disaster-operational-shock, Disaster / Operational Shock]
   - id: continued-claims-insured-unemployment
@@ -412,7 +412,7 @@ hierarchy:
       - [temporary-help-employment, Temporary Help Employment]
       - [average-weekly-hours, Average Weekly Hours]
       - [business-formations, Business Formations]
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
       - [consumer-demand, Consumer Demand]
       - [regional-employment-growth, Regional Employment Growth]
   - id: permanent-job-losers
@@ -428,7 +428,7 @@ hierarchy:
       - [trade-import-pressure, Import / Trade Pressure]
       - [ci-lending-standards, C&I Credit Conditions]
       - [corporate-profits, Corporate Profitability]
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
   - id: temporary-layoffs
     label: Temporary Layoffs
     primarySourceCandidates: [bls_cps]
@@ -449,7 +449,7 @@ hierarchy:
     placements:
       - [establishment-contractions, Establishment Contractions]
       - [establishment-closures, Establishment Closures]
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
       - [consumer-spending, Consumer Spending]
       - [new-orders, New Orders]
       - [corporate-profits, Corporate Profits]
@@ -512,7 +512,7 @@ hierarchy:
       - [unit-labor-costs, Unit Labor Costs]
       - [inventory-sales-ratio, Inventory / Sales Ratio]
       - [business-formations, Business Formation]
-      - [real-output-growth, Real Output Growth]
+      - [real-output-growth, Real GDP Growth]
 
 coverageGaps:
   - Industry Credit Conditions has no accepted official industry-granular series; SLOOS is an aggregate candidate only.

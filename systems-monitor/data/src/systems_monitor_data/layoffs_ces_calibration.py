@@ -9,10 +9,15 @@ def load_payroll_breadth_calibration(path: Path) -> dict[str, Any]:
     document = json.loads(path.read_text(encoding="utf-8"))
     if document.get("schemaVersion") != "payroll-contraction-breadth-calibration-1.0.0":
         raise ValueError("unsupported payroll breadth calibration schema")
-    if document.get("status") != "GOVERNED_CALC_PENDING_METHODOLOGY_CALIBRATION":
-        raise ValueError("payroll breadth must remain pending Taylor methodology approval")
-    if document.get("recommendation", {}).get("authorization") != "RECOMMENDATION_ONLY_NOT_TAYLOR_APPROVED":
-        raise ValueError("calibration recommendation cannot self-authorize")
+    if document.get("status") != "CALIBRATION_COMPLETE_METHOD_APPROVED_INPUT_HISTORY_PENDING":
+        raise ValueError("payroll breadth calibration must remain separate from production history")
+    decision = document.get("decision", {})
+    if decision.get("approvedUniverse") != "OPTION_A" or decision.get("requiredCoveragePercent") != 100:
+        raise ValueError("calibration decision must reflect the approved exact-ten universe and coverage")
+    if decision.get("calibrationHistoryAcceptedForProduction") is not False:
+        raise ValueError("calibration history cannot be accepted as production history")
+    if document.get("recommendation", {}).get("authorization") != "REJECTED_SUPERSEDED_BY_TAYLOR_DECISION_2026_10_01":
+        raise ValueError("the former 95 percent recommendation must remain explicitly rejected")
     for option in document.get("options", []):
         selectors = [member["seriesId"] for member in option["members"]]
         partitions = [member["exclusivePartition"] for member in option["members"]]

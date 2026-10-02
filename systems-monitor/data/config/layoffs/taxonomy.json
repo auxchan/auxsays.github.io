@@ -18,6 +18,7 @@
     "Industry Payroll Contraction": "Payroll Contraction Breadth",
     "Establishment Deaths": "Jobs Lost at Establishment Deaths",
     "Business Bankruptcy Stress": "Business Bankruptcy Filings, 12-Month Total",
+    "Real Output Growth": "Real GDP Growth",
     "Consumer Demand": "Real Personal Consumption Expenditures Growth",
     "Disaster / Operational Shock": "FEMA Disaster Declaration"
   },
@@ -25,6 +26,7 @@
     "factor:canonical:industry-payroll-contraction": "factor:canonical:payroll-contraction-breadth",
     "factor:canonical:establishment-deaths": "factor:canonical:jobs-lost-at-establishment-deaths",
     "factor:canonical:business-bankruptcy-stress": "factor:canonical:business-bankruptcy-filings-12-month-total",
+    "factor:canonical:real-output-growth": "factor:canonical:real-gdp-growth",
     "factor:canonical:consumer-demand": "factor:canonical:real-personal-consumption-expenditures-growth",
     "factor:canonical:disaster-operational-shock": "factor:canonical:fema-disaster-declaration"
   },
@@ -40,8 +42,8 @@
       "placements": [
         {
           "order": 1,
-          "label": "Real Output Growth",
-          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "label": "Real GDP Growth",
+          "canonicalFactorId": "factor:canonical:real-gdp-growth",
           "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:real-output-growth",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:01"
         },
@@ -170,8 +172,8 @@
         },
         {
           "order": 8,
-          "label": "Real Output Growth",
-          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "label": "Real GDP Growth",
+          "canonicalFactorId": "factor:canonical:real-gdp-growth",
           "placementId": "placement:layoffs-job-destruction:initial-ui-claims:real-output-growth",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:08"
         },
@@ -251,8 +253,8 @@
         },
         {
           "order": 8,
-          "label": "Real Output Growth",
-          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "label": "Real GDP Growth",
+          "canonicalFactorId": "factor:canonical:real-gdp-growth",
           "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:real-output-growth",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:08"
         },
@@ -346,8 +348,8 @@
         },
         {
           "order": 10,
-          "label": "Real Output Growth",
-          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "label": "Real GDP Growth",
+          "canonicalFactorId": "factor:canonical:real-gdp-growth",
           "placementId": "placement:layoffs-job-destruction:permanent-job-losers:real-output-growth",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:10"
         }
@@ -459,8 +461,8 @@
         },
         {
           "order": 3,
-          "label": "Real Output Growth",
-          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "label": "Real GDP Growth",
+          "canonicalFactorId": "factor:canonical:real-gdp-growth",
           "placementId": "placement:layoffs-job-destruction:gross-job-losses:real-output-growth",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:03"
         },
@@ -832,8 +834,8 @@
         },
         {
           "order": 10,
-          "label": "Real Output Growth",
-          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "label": "Real GDP Growth",
+          "canonicalFactorId": "factor:canonical:real-gdp-growth",
           "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:real-output-growth",
           "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:10"
         }

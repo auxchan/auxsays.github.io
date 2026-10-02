@@ -1076,19 +1076,19 @@
       "sourceStatus": "SOURCE_IDENTIFIED"
     },
     {
-      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
       "claimClass": "A_DIRECT_OBS",
       "definition": "BEA NIPA table 1.1.1 line 1 directly publishes real GDP growth at a quarterly seasonally adjusted annual rate.",
       "exactSelectorStatus": "EXACT",
-      "label": "Real Output Growth",
+      "label": "Real GDP Growth",
       "placementCount": 6,
       "placementPaths": [
-        "Layoffs & Discharges > Real Output Growth",
-        "Initial UI Claims > Real Output Growth",
-        "Continued Claims / Insured Unemployment > Real Output Growth",
-        "Permanent Job Losers > Real Output Growth",
-        "Gross Job Losses > Real Output Growth",
-        "Business Failure / Bankruptcy Stress > Real Output Growth"
+        "Layoffs & Discharges > Real GDP Growth",
+        "Initial UI Claims > Real GDP Growth",
+        "Continued Claims / Insured Unemployment > Real GDP Growth",
+        "Permanent Job Losers > Real GDP Growth",
+        "Gross Job Losses > Real GDP Growth",
+        "Business Failure / Bankruptcy Stress > Real GDP Growth"
       ],
       "promotionBlocker": "Live API acquisition is blocked until AUXSAYS_BEA_USER_ID is configured and accepted history is built.",
       "sourceBindings": [
@@ -2231,8 +2231,8 @@
     },
     {
       "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
-      "canonicalFactorId": "factor:canonical:real-output-growth",
-      "label": "Real Output Growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
+      "label": "Real GDP Growth",
       "recordKind": "LEVEL4_CANONICAL",
       "sourceBindings": [
         {

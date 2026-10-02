@@ -1,8 +1,9 @@
 {
   "schemaVersion": "payroll-contraction-breadth-calibration-1.0.0",
-  "authority": "CALIBRATION_EVIDENCE_ONLY_TAYLOR_FINAL_METHODOLOGY_REQUIRED",
+  "authority": "CALIBRATION_EVIDENCE_ONLY_TAYLOR_METHOD_APPROVED_SEPARATELY_2026_10_01",
   "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
-  "status": "GOVERNED_CALC_PENDING_METHODOLOGY_CALIBRATION",
+  "status": "CALIBRATION_COMPLETE_METHOD_APPROVED_INPUT_HISTORY_PENDING",
+  "methodologyArtifact": "payroll_contraction_breadth_methodology.json",
   "formula": "100 * count(i in V_t where E_i,t < E_i,t-1) / count(V_t)",
   "inputContract": {
     "publisher": "U.S. Bureau of Labor Statistics",
@@ -11,7 +12,7 @@
     "geography": "US",
     "frequency": "monthly",
     "comparison": "previous compatible month",
-    "missingData": "exclude missing members from V_t and suppress when approved coverage threshold is not met",
+    "missingData": "suppress calculation if any of the ten governed inputs for t or t-1 is missing, invalid, incompatible, or unavailable",
     "revisionPropagation": "recalculate affected months from newly accepted CES revisions; retain the calculation methodology version and append revision evidence",
     "taxonomyVersioning": "universe membership and NAICS-basis changes require a new U_v version"
   },
@@ -82,6 +83,15 @@
     "universe": "OPTION_A",
     "minimumPublishableCoveragePercent": 95,
     "reason": "Option A is easier to audit, avoids parent/child overlap, had complete coverage in the tested decade, and is less sensitive to granular NAICS breaks. A 95% threshold tolerates one temporarily missing member without permitting materially incomplete publication.",
-    "authorization": "RECOMMENDATION_ONLY_NOT_TAYLOR_APPROVED"
+    "authorization": "REJECTED_SUPERSEDED_BY_TAYLOR_DECISION_2026_10_01"
+  },
+  "decision": {
+    "authority": "Taylor",
+    "approvedOn": "2026-10-01",
+    "approvedUniverse": "OPTION_A",
+    "requiredCoveragePercent": 100,
+    "requiredMemberCount": 10,
+    "former95PercentRecommendation": "REJECTED_NO_USEFUL_INTERMEDIATE_COVERAGE_WITH_TEN_MEMBERS",
+    "calibrationHistoryAcceptedForProduction": false
   }
 }

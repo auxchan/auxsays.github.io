@@ -70,7 +70,7 @@ The historical `77 source profiles` label was imprecise: it described a pre-clea
 | `factor:canonical:producer-input-costs` — Producer Input Costs | D_TAXONOMY_OR_SOURCE_PROBLEM | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:producer-input-prices` — Producer Input Prices | A_DIRECT_OBS | 2 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:productivity-automation` — Productivity / Automation | D_TAXONOMY_OR_SOURCE_PROBLEM | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
-| `factor:canonical:real-output-growth` — Real Output Growth | A_DIRECT_OBS | 6 | SOURCE_ENABLED_PENDING_ACCEPTANCE | EXACT | bea-nipa (PRIMARY_OBSERVATION_SOURCE) |
+| `factor:canonical:real-gdp-growth` — Real GDP Growth | A_DIRECT_OBS | 6 | SOURCE_ENABLED_PENDING_ACCEPTANCE | EXACT | bea-nipa (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:real-personal-consumption-expenditures-growth` — Real Personal Consumption Expenditures Growth | A_DIRECT_OBS | 3 | SOURCE_ENABLED_PENDING_ACCEPTANCE | EXACT | bea-nipa (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:regional-employment-growth` — Regional Employment Growth | B_CALC | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:retail-sales` — Retail Sales | A_DIRECT_OBS | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
@@ -149,7 +149,7 @@ The historical `77 source profiles` label was imprecise: it described a pre-clea
 | `factor:canonical:producer-input-costs` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:producer-input-prices` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:productivity-automation` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
-| `factor:canonical:real-output-growth` | LEVEL4_CANONICAL | SOURCE_ENABLED_PENDING_ACCEPTANCE | bea-nipa:BEA:NIPA:T10101:1:Q | PRIMARY_OBSERVATION_SOURCE |
+| `factor:canonical:real-gdp-growth` | LEVEL4_CANONICAL | SOURCE_ENABLED_PENDING_ACCEPTANCE | bea-nipa:BEA:NIPA:T10101:1:Q | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:real-personal-consumption-expenditures-growth` | LEVEL4_CANONICAL | SOURCE_ENABLED_PENDING_ACCEPTANCE | bea-nipa:BEA:NIPA:T10101:2:Q | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:regional-employment-growth` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:retail-sales` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |

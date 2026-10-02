@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import taxonomyRegistry from "../../data/config/layoffs/taxonomy.json";
 import claimClassRegistry from "../../data/config/layoffs/level4_claim_classes.json";
 import { LAYOFFS_CLASSIFIED_LEVEL4_FACTOR_COUNT, layoffsFactorSourceState, layoffsFactorSourceStates } from "../src/data/layoffsBranchReadModel";
-import { layoffsBranchTaxonomy, layoffsResolveCanonicalFactorId } from "../src/data/layoffsBranchTaxonomy";
+import { layoffsBranchTaxonomy, layoffsCanonicalLabel, layoffsResolveCanonicalFactorId } from "../src/data/layoffsBranchTaxonomy";
 import { createPersistentWorld, persistentWorldPlacementLabel, persistentWorldResolvePlacementId } from "../src/data/persistentWorldModel";
 
 describe("Layoffs & Job Destruction canonical hierarchy", () => {
@@ -59,9 +59,9 @@ describe("Layoffs & Job Destruction canonical hierarchy", () => {
     const level3 = model.childrenByPlacement[branch.id].flatMap((level2Id) => model.childrenByPlacement[level2Id].map((level3Id) => model.placements[level3Id]));
     const placementsNamed = (label: string) => level3.filter((placement) => persistentWorldPlacementLabel(model, placement) === label);
 
-    const realOutput = placementsNamed("Real Output Growth");
-    expect(realOutput).toHaveLength(6);
-    expect(new Set(realOutput.map((placement) => placement.canonicalFactorId))).toEqual(new Set(["factor:canonical:real-output-growth"]));
+    const realGdp = placementsNamed("Real GDP Growth");
+    expect(realGdp).toHaveLength(6);
+    expect(new Set(realGdp.map((placement) => placement.canonicalFactorId))).toEqual(new Set(["factor:canonical:real-gdp-growth"]));
 
     const lendingStandards = placementsNamed("C&I Lending Standards");
     expect(lendingStandards).toHaveLength(5);
@@ -116,11 +116,12 @@ describe("Layoffs & Job Destruction canonical hierarchy", () => {
     );
   });
 
-  it("resolves all five governed canonical renames without changing frozen placement IDs", () => {
+  it("resolves all six governed canonical renames without changing frozen placement IDs", () => {
     const migrations = {
       "factor:canonical:industry-payroll-contraction": "factor:canonical:payroll-contraction-breadth",
       "factor:canonical:establishment-deaths": "factor:canonical:jobs-lost-at-establishment-deaths",
       "factor:canonical:business-bankruptcy-stress": "factor:canonical:business-bankruptcy-filings-12-month-total",
+      "factor:canonical:real-output-growth": "factor:canonical:real-gdp-growth",
       "factor:canonical:consumer-demand": "factor:canonical:real-personal-consumption-expenditures-growth",
       "factor:canonical:disaster-operational-shock": "factor:canonical:fema-disaster-declaration",
     } as const;
@@ -128,11 +129,13 @@ describe("Layoffs & Job Destruction canonical hierarchy", () => {
       expect(layoffsResolveCanonicalFactorId(legacyId)).toBe(canonicalId);
       expect(layoffsFactorSourceState(legacyId)).toBe(layoffsFactorSourceState(canonicalId));
     });
+    expect(layoffsCanonicalLabel("Real Output Growth")).toBe("Real GDP Growth");
 
     const model = createPersistentWorld();
     expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:industry-payroll-contraction"].canonicalFactorId).toBe("factor:canonical:payroll-contraction-breadth");
     expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:establishment-deaths"].canonicalFactorId).toBe("factor:canonical:jobs-lost-at-establishment-deaths");
     expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:business-bankruptcy-stress"].canonicalFactorId).toBe("factor:canonical:business-bankruptcy-filings-12-month-total");
+    expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:real-output-growth"].canonicalFactorId).toBe("factor:canonical:real-gdp-growth");
     expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:consumer-demand"].canonicalFactorId).toBe("factor:canonical:real-personal-consumption-expenditures-growth");
     expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:disaster-operational-shock"].canonicalFactorId).toBe("factor:canonical:fema-disaster-declaration");
     expect(model.topologyFingerprint).toBe("fnv1a32:88684cdb");
