@@ -18,8 +18,8 @@ update_version: Motion adds custom styles, audio, text animations and Lottie exp
 update_logo_text: FIG
 update_published_at: '2026-09-30T00:00:00.000Z'
 update_last_checked: '2026-10-01T00:30:15Z'
-source_last_checked: '2026-10-02T01:12:45Z'
-official_body_last_checked: '2026-10-02T01:12:45Z'
+source_last_checked: '2026-10-02T08:21:14Z'
+official_body_last_checked: '2026-10-02T08:21:14Z'
 record_last_updated: '2026-10-01T00:30:15Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -87,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-02T01:12:45Z'
+  url: https://www.figma.com/release-notes/?title=motion-adds-styles-audio-animations-lottie
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-02T08:21:14Z'
   url: https://www.figma.com/release-notes/?title=motion-adds-styles-audio-animations-lottie
   status: captured-from-rss-feed
   body_captured: true

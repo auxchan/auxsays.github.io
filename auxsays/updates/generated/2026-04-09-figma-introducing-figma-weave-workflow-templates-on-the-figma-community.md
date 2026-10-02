@@ -17,8 +17,8 @@ update_version: Introducing Figma Weave workflow templates on the Figma Communit
 update_logo_text: FIG
 update_published_at: '2026-04-09T00:00:00.000Z'
 update_last_checked: '2026-07-21T19:54:42Z'
-source_last_checked: '2026-09-01T00:42:13Z'
-official_body_last_checked: '2026-09-01T00:42:13Z'
+source_last_checked: '2026-10-02T08:21:14Z'
+official_body_last_checked: '2026-10-02T08:21:14Z'
 record_last_updated: '2026-07-21T19:54:42Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-01T00:42:13Z'
+  url: https://www.figma.com/release-notes/?title=figma-weave-workflow-templates
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-02T08:21:14Z'
   url: https://www.figma.com/release-notes/?title=figma-weave-workflow-templates
   status: captured-from-rss-feed
   body_captured: true
