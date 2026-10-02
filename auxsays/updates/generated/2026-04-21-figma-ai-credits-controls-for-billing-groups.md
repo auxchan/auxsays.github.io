@@ -17,8 +17,8 @@ update_version: AI Credits Controls for Billing Groups
 update_logo_text: FIG
 update_published_at: '2026-04-21T00:00:00.000Z'
 update_last_checked: '2026-07-21T14:44:16Z'
-source_last_checked: '2026-09-01T00:42:13Z'
-official_body_last_checked: '2026-09-01T00:42:13Z'
+source_last_checked: '2026-10-02T01:12:45Z'
+official_body_last_checked: '2026-10-02T01:12:45Z'
 record_last_updated: '2026-07-21T14:44:16Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-01T00:42:13Z'
+  url: https://www.figma.com/release-notes/?title=ai-credits-controls-for-billing-groups
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-02T01:12:45Z'
   url: https://www.figma.com/release-notes/?title=ai-credits-controls-for-billing-groups
   status: captured-from-rss-feed
   body_captured: true
