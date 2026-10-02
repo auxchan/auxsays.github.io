@@ -44876,3 +44876,163 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021207-how-can-i-test-my-microphone-and-speak
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6021207/how-can-i-test-my-microphone-and-speakers-in-teams
+  parent_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_text_excerpt: How can I test my microphone and speakers in Teams for the web before joining a meeting? I'm using Microsoft Teams in a web browser and cannot find an option to test my microphone and speakers before joining a meeting. I'd like to verify that I can hear audio and that my...
+  captured_at: '2026-10-02T13:41:57Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021207-how-can-i-test-my-microphone-and-speak
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6021207/how-can-i-test-my-microphone-and-speakers-in-teams
+  parent_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_text_excerpt: How can I test my microphone and speakers in Teams for the web before joining a meeting? I'm using Microsoft Teams in a web browser and cannot find an option to test my microphone and speakers before joining a meeting. I'd like to verify that I can hear audio and that my...
+  captured_at: '2026-10-02T13:41:57Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021207-how-can-i-test-my-microphone-and-speak
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6021207/how-can-i-test-my-microphone-and-speakers-in-teams
+  parent_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_text_excerpt: How can I test my microphone and speakers in Teams for the web before joining a meeting? I'm using Microsoft Teams in a web browser and cannot find an option to test my microphone and speakers before joining a meeting. I'd like to verify that I can hear audio and that my...
+  captured_at: '2026-10-02T13:41:57Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021207-how-can-i-test-my-microphone-and-speak
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6021207/how-can-i-test-my-microphone-and-speakers-in-teams
+  parent_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_text_excerpt: How can I test my microphone and speakers in Teams for the web before joining a meeting? I'm using Microsoft Teams in a web browser and cannot find an option to test my microphone and speakers before joining a meeting. I'd like to verify that I can hear audio and that my...
+  captured_at: '2026-10-02T13:41:57Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6022472-2026-09-security-update-kb5129195-2620
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6022472/2026-09-security-update-kb5129195-26200-9457-faile
+  parent_title: 2026-09 Security Update (KB5129195) (26200.9457) Failed, update files missing or problems - Microsoft Q&A
+  report_title: 2026-09 Security Update (KB5129195) (26200.9457) Failed, update files missing or problems - Microsoft Q&A
+  report_text_excerpt: 2026-09 Security Update (KB5129195) (26200.9457) Failed, update files missing or problems - Microsoft Q&A This update is stuck in a death loop of downloading, installing and failing on my computer. Is there a way I can make it stop and not try again. Thx.
+  captured_at: '2026-10-02T13:50:39Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6022330-windows-core-audio-pkey-audioendpoint
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6022330/windows-core-audio-pkey-audioendpoint-stableid-sta
+  parent_title: 'Windows Core Audio (PKEY_AudioEndpoint_StableId): StableId changed after update of custom USB audio driver, what determines its stability? - Microsoft Q&A'
+  report_title: 'Windows Core Audio (PKEY_AudioEndpoint_StableId): StableId changed after update of custom USB audio driver, what determines its stability? - Microsoft Q&A'
+  report_text_excerpt: 'Windows Core Audio (PKEY_AudioEndpoint_StableId): StableId changed after update of custom USB audio driver, what determines its stability? - Microsoft Q&A Hi, we use PKEY_AudioEndpoint_StableId (Windows 11 24H2+) to re-identify audio endpoints across driver/OS updates....'
+  captured_at: '2026-10-02T13:51:49Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8894'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio regression
+  workflow_area: audio
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
