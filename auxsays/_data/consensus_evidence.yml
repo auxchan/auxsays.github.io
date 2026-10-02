@@ -44851,3 +44851,28 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wu737t-resolve-21-keeps-crashing-after-about-a-m
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wu737t/resolve_21_keeps_crashing_after_about_a_minute/
+  parent_title: Resolve 21 keeps crashing after about a minute
+  report_title: Resolve 21 keeps crashing after about a minute
+  report_text_excerpt: Resolve 21 keeps crashing after about a minute So I just got a new laptop, Asus zephyrus g16 i7 12th gen rtx4050 6gb and 32gb ram and davinci constantly crashes whenever I try to color grade; works fine for exactly a minute and then just instant crash. Anyone encountered this...
+  captured_at: '2026-10-01T23:44:50Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
