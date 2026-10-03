@@ -17,8 +17,8 @@ update_version: Create FigJam diagrams with Microsoft 365 Copilot
 update_logo_text: FIG
 update_published_at: '2026-04-01T00:00:00.000Z'
 update_last_checked: '2026-07-22T08:46:37Z'
-source_last_checked: '2026-09-01T17:36:56Z'
-official_body_last_checked: '2026-09-01T17:36:56Z'
+source_last_checked: '2026-10-03T07:46:46Z'
+official_body_last_checked: '2026-10-03T07:46:46Z'
 record_last_updated: '2026-07-22T08:46:37Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-01T17:36:56Z'
+  url: https://www.figma.com/release-notes/?title=create-figjam-diagrams-with-microsoft-365-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-03T07:46:46Z'
   url: https://www.figma.com/release-notes/?title=create-figjam-diagrams-with-microsoft-365-copilot
   status: captured-from-rss-feed
   body_captured: true
