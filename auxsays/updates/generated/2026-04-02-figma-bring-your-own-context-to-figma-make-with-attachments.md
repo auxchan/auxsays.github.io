@@ -17,8 +17,8 @@ update_version: Bring your own context to Figma Make with Attachments
 update_logo_text: FIG
 update_published_at: '2026-04-02T00:00:00.000Z'
 update_last_checked: '2026-07-22T04:19:18Z'
-source_last_checked: '2026-09-01T13:45:49Z'
-official_body_last_checked: '2026-09-01T13:45:49Z'
+source_last_checked: '2026-10-03T00:52:07Z'
+official_body_last_checked: '2026-10-03T00:52:07Z'
 record_last_updated: '2026-07-22T04:19:18Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-01T13:45:49Z'
+  url: https://www.figma.com/release-notes/?title=bring-your-own-context-to-figma-make-with-attachments
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-03T00:52:07Z'
   url: https://www.figma.com/release-notes/?title=bring-your-own-context-to-figma-make-with-attachments
   status: captured-from-rss-feed
   body_captured: true

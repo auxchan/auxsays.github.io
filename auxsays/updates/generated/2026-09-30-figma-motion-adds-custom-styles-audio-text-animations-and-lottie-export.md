@@ -18,8 +18,8 @@ update_version: Motion adds custom styles, audio, text animations and Lottie exp
 update_logo_text: FIG
 update_published_at: '2026-09-30T00:00:00.000Z'
 update_last_checked: '2026-10-01T00:30:15Z'
-source_last_checked: '2026-10-02T15:02:43Z'
-official_body_last_checked: '2026-10-02T15:02:43Z'
+source_last_checked: '2026-10-03T00:52:07Z'
+official_body_last_checked: '2026-10-03T00:52:07Z'
 record_last_updated: '2026-10-01T00:30:15Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,11 +71,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-01T06:58:03Z'
-  url: https://www.figma.com/release-notes/?title=motion-adds-styles-audio-animations-lottie
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-01T15:57:07Z'
   url: https://www.figma.com/release-notes/?title=motion-adds-styles-audio-animations-lottie
   status: captured-from-rss-feed
@@ -92,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-02T15:02:43Z'
+  url: https://www.figma.com/release-notes/?title=motion-adds-styles-audio-animations-lottie
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-03T00:52:07Z'
   url: https://www.figma.com/release-notes/?title=motion-adds-styles-audio-animations-lottie
   status: captured-from-rss-feed
   body_captured: true
