@@ -47493,3 +47493,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wrgnyk-how-to-properly-use-retime-without-resolv
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wrgnyk/how_to_properly_use_retime_without_resolve/
+  parent_title: How to properly use retime without Resolve locking up?
+  report_title: How to properly use retime without Resolve locking up?
+  report_text_excerpt: How to properly use retime without Resolve locking up? Update 1 Thanks to those who have replied, I have a few things to explore which given my current workload might take a few days. But it has given me some pointers. As per the suggestions below, I've run mediaInfo on the...
+  captured_at: '2026-10-03T22:10:53Z'
+  source_date: '2026-09-27'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1

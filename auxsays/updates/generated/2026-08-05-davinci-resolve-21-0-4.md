@@ -19,7 +19,7 @@ update_published_at: '2026-08-05T00:00:00Z'
 update_last_checked: '2026-08-05T07:31:23Z'
 source_last_checked: '2026-10-02T01:12:47Z'
 official_body_last_checked: '2026-10-02T01:12:47Z'
-record_last_updated: '2026-09-25T23:02:00.445953Z'
+record_last_updated: '2026-10-03T23:08:14.742719Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,23 +27,24 @@ update_status: current
 update_feed_title: DaVinci Resolve 21.0.4
 update_detail_title: DaVinci Resolve 21.0.4
 update_consensus_label: Negative
-update_report_count: 14
+update_report_count: 15
 update_consensus_confidence: Low-Medium
-quick_verdict: 'WAIT: DaVinci Resolve 21.0.4 has 14 user reports found.'
-official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.4 Update in its official support downloads feed.
-release_summary: This software update adds support for relinking proxy clips with different formats, support for additional
-  X-OCN formats, the ability to use API scripting to review selected clips on the timeline and improved realtime playback
-  on timelines with a large cache. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license
-  or software activation code.
-consensus_report: '14 user reports found for DaVinci Resolve 21.0.4. Current reports mention startup or application crashes,
-  render/export failures, and performance slowdowns. Current reports are Reddit-heavy, so production users should test before
-  updating. Sources represented: r/davinciresolve.'
+quick_verdict: 'WAIT: DaVinci Resolve 21.0.4 has 15 user reports found.'
+official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.4 Update in its official support downloads
+  feed.
+release_summary: This software update adds support for relinking proxy clips with different formats, support for
+  additional X-OCN formats, the ability to use API scripting to review selected clips on the timeline and improved
+  realtime playback on timelines with a large cache. This version requires a DaVinci Resolve Studio license dongle,
+  Blackmagic Cloud license or software activation code.
+consensus_report: '15 user reports found for DaVinci Resolve 21.0.4. Current reports mention startup or application
+  crashes, render/export failures, and performance slowdowns. Current reports are Reddit-heavy, so production users
+  should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 14
-evidence_last_checked: '2026-09-25T22:19:36Z'
+confirmed_patch_specific_report_count: 15
+evidence_last_checked: '2026-10-03T22:10:53Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -71,6 +72,9 @@ status_events:
 - at: '2026-09-25T23:02:00.445953Z'
   label: User reports found
   note: User report count updated to 14.
+- at: '2026-10-03T23:08:14.742719Z'
+  label: User reports found
+  note: User report count updated to 15.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -80,8 +84,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
-  It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
+  source. It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -128,10 +132,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update adds support for relinking proxy clips with different formats, support for additional X-OCN formats,
-  the ability to use API scripting to review selected clips on the timeline and improved realtime playback on timelines with
-  a large cache. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation
-  code.
+  This software update adds support for relinking proxy clips with different formats, support for additional X-OCN
+  formats, the ability to use API scripting to review selected clips on the timeline and improved realtime playback
+  on timelines with a large cache. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud
+  license or software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -142,10 +146,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 21.0.4 has 14 user reports found. User reports show a repeat pattern. Current
-  reports mention startup or application crashes, render/export failures, and performance slowdowns. Production editors with
-  active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production users
-  should test before updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 21.0.4 has 15 user reports found. User reports show a repeat pattern.
+  Current reports mention startup or application crashes, render/export failures, and performance slowdowns. Production
+  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
+  so production users should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1w9tt1v/davinci_keeps_crashing_in_one_project/
@@ -315,12 +319,21 @@ accepted_report_sources:
   patch_version_matched: true
   issue: startup or application crashes in application stability
   workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wrgnyk/how_to_properly_use_retime_without_resolve/
+  source_title: How to properly use retime without Resolve locking up?
+  source_date: '2026-09-27'
+  version_matched: 21.0.4
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention startup or application crashes, render/export failures, and performance slowdowns.
-  Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention startup or application crashes, render/export failures, and performance
+  slowdowns. Production editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
