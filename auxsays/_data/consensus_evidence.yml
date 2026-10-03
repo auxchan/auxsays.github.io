@@ -44655,7 +44655,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021183-teams-reset
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -44704,7 +44703,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021183-teams-reset
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -44753,7 +44751,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021183-teams-reset
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -44802,7 +44799,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021183-teams-reset
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -44851,7 +44847,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wu737t-resolve-21-keeps-crashing-after-about-a-m
   product_id: blackmagic-davinci
   update_version: '21'
@@ -44876,7 +44871,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021207-how-can-i-test-my-microphone-and-speak
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -44901,7 +44895,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021207-how-can-i-test-my-microphone-and-speak
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -44926,7 +44919,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021207-how-can-i-test-my-microphone-and-speak
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -44951,7 +44943,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021207-how-can-i-test-my-microphone-and-speak
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -44976,7 +44967,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6022472-2026-09-security-update-kb5129195-2620
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -45006,7 +44996,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6022330-windows-core-audio-pkey-audioendpoint
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -45036,7 +45025,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8894'
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6002907-teams-crashes-after-logging-in-on-pixe
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -47269,7 +47257,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-file-history-timestamp-sync-bug-still-br
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -47299,7 +47286,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9550'
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984300-when-using-a-logitech-headset-on-a-tea
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -47323,4 +47309,187 @@ evidence:
   platform: Windows
   severity: ''
   sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5967063-my-initials-show-up-in-teams-meeting
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5967063/my-initials-show-up-in-teams-meeting
+  parent_title: My initials show up in teams meeting. - Microsoft Q&A
+  report_title: My initials show up in teams meeting. - Microsoft Q&A
+  report_text_excerpt: My initials show up in teams meeting. I would like to have my initials show up when I am in a meeting in teams. Right now when I am in a meeting and I am using audio only I have a black screen.
+  captured_at: '2026-10-03T17:33:31Z'
+  source_date: '2026-08-05'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5967063-my-initials-show-up-in-teams-meeting-a
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5967063/my-initials-show-up-in-teams-meeting#answer-12900149
+  parent_title: My initials show up in teams meeting. - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi Mike, When your camera is turned off in a Microsoft Teams meeting, Teams should normally display either your profile picture or your initials. If you are currently seeing a black screen instead, this may indicate a profile image or synchronization issue. To have your...
+  captured_at: '2026-10-03T17:33:31Z'
+  source_date: '2026-08-05T14:06:54.13+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021183-teams-reset
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6021183/teams-reset
+  parent_title: Teams reset - Microsoft Q&A
+  report_title: Teams reset - Microsoft Q&A
+  report_text_excerpt: Teams reset trying to reconnect my teams and every account i log in says i am not an admin and cannot purchase license. can you help me with this
+  captured_at: '2026-10-03T17:33:31Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021183-teams-reset-answer-12981645
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6021183/teams-reset#answer-12981645
+  parent_title: Teams reset - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi Amanda , Regarding your concern, since you're using a work/school account, you need to have your organization’s Microsoft 365 administrator verify that a license containing Microsoft Teams is assigned to your account. Assigning a license requires at least the License...
+  captured_at: '2026-10-03T17:33:31Z'
+  source_date: '2026-09-30T15:56:27.3833333+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5969493-cant-delete-chats-that-users-deactivat
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5969493/cant-delete-chats-that-users-deactivated-accounts
+  parent_title: Cant delete chats that users Deactivated accounts - Microsoft Q&A
+  report_title: Cant delete chats that users Deactivated accounts - Microsoft Q&A
+  report_text_excerpt: Cant delete chats that users Deactivated accounts Trying to clear out Deactivated accounts in chat but it wont let me. Every time it says We couldn't delete your chat. Try again later. How do I remove them?
+  captured_at: '2026-10-03T17:33:31Z'
+  source_date: '2026-08-07'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-31-1-2-github-issue-13989
+  product_id: obs-studio
+  update_version: 31.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13989
+  parent_title: Video Capture Device fails with DirectShow Run failed (0x80004005) starting with OBS 30.2.0-beta1
+  report_title: Video Capture Device fails with DirectShow Run failed (0x80004005) starting with OBS 30.2.0-beta1
+  report_text_excerpt: ') works, ATEM does not. * OBS 30.2.0-beta1: neither device works. * OBS 30.2.0 / 30.2.3 / 31.1.2 / 32.1.2 / 32.2.2: neither device works. * OBS 32 works correctly with capture devices on another PC. * Clean portable installations were used for version testing. * Safe Mode, a new'
+  captured_at: '2026-10-03T17:55:06Z'
+  patch_version_matched: true
+  matched_version: 31.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13989
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13989
+  parent_title: Video Capture Device fails with DirectShow Run failed (0x80004005) starting with OBS 30.2.0-beta1
+  report_title: Video Capture Device fails with DirectShow Run failed (0x80004005) starting with OBS 30.2.0-beta1
+  report_text_excerpt: 'ATEM does not. * OBS 30.2.0-beta1: neither device works. * OBS 30.2.0 / 30.2.3 / 31.1.2 / 32.1.2 / 32.2.2: neither device works. * OBS 32 works correctly with capture devices on another PC. * Clean portable installations were used for version testing. * Safe Mode, a new scene col'
+  captured_at: '2026-10-03T18:00:13Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13989
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13989
+  parent_title: Video Capture Device fails with DirectShow Run failed (0x80004005) starting with OBS 30.2.0-beta1
+  report_title: Video Capture Device fails with DirectShow Run failed (0x80004005) starting with OBS 30.2.0-beta1
+  report_text_excerpt: 'esponse_ ### OBS Studio Version Other ### OBS Studio Version (Other) 30.2.0-beta1 through 32.2.2 (30.1.2 works with AV.io HD) ### OBS Studio Log URL https://obsproject.com/logs/UsYKkYsYmH5o8NcH ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Video Capture Device'
+  captured_at: '2026-10-03T18:02:22Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
   source_weight: 1
