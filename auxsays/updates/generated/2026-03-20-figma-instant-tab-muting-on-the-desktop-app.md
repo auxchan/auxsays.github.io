@@ -17,8 +17,8 @@ update_version: Instant tab muting on the desktop app
 update_logo_text: FIG
 update_published_at: '2026-03-20T00:00:00.000Z'
 update_last_checked: '2026-07-23T04:51:08Z'
-source_last_checked: '2026-09-02T06:32:11Z'
-official_body_last_checked: '2026-09-02T06:32:11Z'
+source_last_checked: '2026-10-03T19:00:40Z'
+official_body_last_checked: '2026-10-03T19:00:40Z'
 record_last_updated: '2026-07-23T04:51:08Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-02T06:32:11Z'
+  url: https://www.figma.com/release-notes/?title=instant-tab-muting-on-the-desktop-app
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-03T19:00:40Z'
   url: https://www.figma.com/release-notes/?title=instant-tab-muting-on-the-desktop-app
   status: captured-from-rss-feed
   body_captured: true
