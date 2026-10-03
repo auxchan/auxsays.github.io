@@ -47299,3 +47299,28 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9550'
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984300-when-using-a-logitech-headset-on-a-tea
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5984300/when-using-a-logitech-headset-on-a-teams-meeting-i
+  parent_title: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out - Microsoft Q&A
+  report_title: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out - Microsoft Q&A
+  report_text_excerpt: When using a LogiTech headset on a Teams meeting, I will occasionally go into "chipmunk" mode then cut out I have had several, seemingly random occurrences where I am on a Teams meeting, using my Logitech headset for both incoming and outgoing audio (as my speakers and...
+  captured_at: '2026-10-03T12:56:04Z'
+  source_date: '2026-08-24'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
