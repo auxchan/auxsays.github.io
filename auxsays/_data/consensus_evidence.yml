@@ -47873,3 +47873,278 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9550'
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986818
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: To correct the answer given to you by the other contributor, meeting recording IS available for personal account with paid subscriptions like Msft 365 personal, family or premium. However, transcripts for the meeting recording is only for business accounts with paid licenses.
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-10-04T21:54:19.2033333+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-add-outlook-as-an-app-in-teams-4561
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/add-outlook-as-an-app-in-teams/4561084
+  parent_title: Add Outlook as an App in Teams?
+  report_title: Add Outlook as an App in Teams?
+  report_text_excerpt: Add Outlook as an App in Teams? Any news on this ?I&apos;d ask at Add Outlook as an App in Teams? | Microsoft Community Hub but &quot;Replies have been turned off&quot;.Thanks
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986818
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: To correct the answer given to you by the other contributor, meeting recording IS available for personal account with paid subscriptions like Msft 365 personal, family or premium. However, transcripts for the meeting recording is only for business accounts with paid licenses.
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-10-04T21:54:19.2033333+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-add-outlook-as-an-app-in-teams-4561
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/add-outlook-as-an-app-in-teams/4561084
+  parent_title: Add Outlook as an App in Teams?
+  report_title: Add Outlook as an App in Teams?
+  report_text_excerpt: Add Outlook as an App in Teams? Any news on this ?I&apos;d ask at Add Outlook as an App in Teams? | Microsoft Community Hub but &quot;Replies have been turned off&quot;.Thanks
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986818
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: To correct the answer given to you by the other contributor, meeting recording IS available for personal account with paid subscriptions like Msft 365 personal, family or premium. However, transcripts for the meeting recording is only for business accounts with paid licenses.
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-10-04T21:54:19.2033333+00:00'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-add-outlook-as-an-app-in-teams-4561
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/add-outlook-as-an-app-in-teams/4561084
+  parent_title: Add Outlook as an App in Teams?
+  report_title: Add Outlook as an App in Teams?
+  report_text_excerpt: Add Outlook as an App in Teams? Any news on this ?I&apos;d ask at Add Outlook as an App in Teams? | Microsoft Community Hub but &quot;Replies have been turned off&quot;.Thanks
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986818
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: To correct the answer given to you by the other contributor, meeting recording IS available for personal account with paid subscriptions like Msft 365 personal, family or premium. However, transcripts for the meeting recording is only for business accounts with paid licenses.
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-10-04T21:54:19.2033333+00:00'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-add-outlook-as-an-app-in-teams-4561
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/add-outlook-as-an-app-in-teams/4561084
+  parent_title: Add Outlook as an App in Teams?
+  report_title: Add Outlook as an App in Teams?
+  report_text_excerpt: Add Outlook as an App in Teams? Any news on this ?I&apos;d ask at Add Outlook as an App in Teams? | Microsoft Community Hub but &quot;Replies have been turned off&quot;.Thanks
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986818
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: To correct the answer given to you by the other contributor, meeting recording IS available for personal account with paid subscriptions like Msft 365 personal, family or premium. However, transcripts for the meeting recording is only for business accounts with paid licenses.
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-10-04T21:54:19.2033333+00:00'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-add-outlook-as-an-app-in-teams-4561
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/add-outlook-as-an-app-in-teams/4561084
+  parent_title: Add Outlook as an App in Teams?
+  report_title: Add Outlook as an App in Teams?
+  report_text_excerpt: Add Outlook as an App in Teams? Any news on this ?I&apos;d ask at Add Outlook as an App in Teams? | Microsoft Community Hub but &quot;Replies have been turned off&quot;.Thanks
+  captured_at: '2026-10-04T22:36:20Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-the-kb5124010-file-history-backup-issue
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/the-kb5124010-file-history-backup-issue-persists-unresolved-issue-from-kb5101684/4560218
+  parent_title: The KB5124010 File History backup issue persists Unresolved issue from KB5101684
+  report_title: The KB5124010 File History backup issue persists Unresolved issue from KB5101684
+  report_text_excerpt: 'The KB5124010 File History backup issue persists Unresolved issue from KB5101684 Current version:Laptop: Windows 11 25H2 OS Build 26200.8973Desktop: Windows 10 22H2 OS Build 19045.7725After installing KB5124010, the previous KB5124008 issue was resolved, and the scheduled...'
+  captured_at: '2026-10-04T22:45:18Z'
+  source_date: '2026-09-27'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5124010
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5124010
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
