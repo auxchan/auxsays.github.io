@@ -47518,3 +47518,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wvqy29-is-their-closed-captions-possible-for-me
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wvqy29/is_their_closed_captions_possible_for_me_the/
+  parent_title: Is Their Closed Captions Possible For Me the Editor for Accessibility?
+  report_title: Is Their Closed Captions Possible For Me the Editor for Accessibility?
+  report_text_excerpt: Is Their Closed Captions Possible For Me the Editor for Accessibility? Hi!! I have autism but I work as an editor with the free version of Davinci Resolve 21, and of course listening to audio is a major aspect to being an editor, but on the initial skimming of the footage and...
+  captured_at: '2026-10-04T07:06:48Z'
+  source_date: '2026-10-02'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
