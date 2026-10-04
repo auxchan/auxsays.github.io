@@ -47543,3 +47543,333 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: Teams meeting transcript? - Microsoft Q&A
+  report_text_excerpt: Teams meeting transcript? I have Teams for personal use. Can I get a written transcript following a Teams meeting? If so, how?
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129862
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986217
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Fran Phillips Not directly, I'm afraid. Meeting recording and transcription are only included with the business Microsoft 365 plans. Teams for personal use gives you live captions during the meeting (More > Language and speech > Turn on live captions), but nothing is saved...
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-04T05:02:09.47+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021207-how-can-i-test-my-microphone-and-speak
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6021207/how-can-i-test-my-microphone-and-speakers-in-teams
+  parent_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_title: How can I test my microphone and speakers in Teams for the web before joining a meeting? - Microsoft Q&A
+  report_text_excerpt: How can I test my microphone and speakers in Teams for the web before joining a meeting? I'm using Microsoft Teams in a web browser and cannot find an option to test my microphone and speakers before joining a meeting. I'd like to verify that I can hear audio and that my...
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: Teams meeting transcript? - Microsoft Q&A
+  report_text_excerpt: Teams meeting transcript? I have Teams for personal use. Can I get a written transcript following a Teams meeting? If so, how?
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129862
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986217
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Fran Phillips Not directly, I'm afraid. Meeting recording and transcription are only included with the business Microsoft 365 plans. Teams for personal use gives you live captions during the meeting (More > Language and speech > Turn on live captions), but nothing is saved...
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-04T05:02:09.47+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: Teams meeting transcript? - Microsoft Q&A
+  report_text_excerpt: Teams meeting transcript? I have Teams for personal use. Can I get a written transcript following a Teams meeting? If so, how?
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129862
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986217
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Fran Phillips Not directly, I'm afraid. Meeting recording and transcription are only included with the business Microsoft 365 plans. Teams for personal use gives you live captions during the meeting (More > Language and speech > Turn on live captions), but nothing is saved...
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-04T05:02:09.47+00:00'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: Teams meeting transcript? - Microsoft Q&A
+  report_text_excerpt: Teams meeting transcript? I have Teams for personal use. Can I get a written transcript following a Teams meeting? If so, how?
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129862
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986217
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Fran Phillips Not directly, I'm afraid. Meeting recording and transcription are only included with the business Microsoft 365 plans. Teams for personal use gives you live captions during the meeting (More > Language and speech > Turn on live captions), but nothing is saved...
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-04T05:02:09.47+00:00'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: Teams meeting transcript? - Microsoft Q&A
+  report_text_excerpt: Teams meeting transcript? I have Teams for personal use. Can I get a written transcript following a Teams meeting? If so, how?
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129862
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986217
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Fran Phillips Not directly, I'm afraid. Meeting recording and transcription are only included with the business Microsoft 365 plans. Teams for personal use gives you live captions during the meeting (More > Language and speech > Turn on live captions), but nothing is saved...
+  captured_at: '2026-10-04T13:38:16Z'
+  source_date: '2026-10-04T05:02:09.47+00:00'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024379-windows-activation
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024379/windows-activation
+  parent_title: Windows Activation - Microsoft Q&A
+  report_title: Windows Activation - Microsoft Q&A
+  report_text_excerpt: Windows Activation - Microsoft Q&A Hi Team, Im having some pretty significant activation errors with Windows 11. Its a retail license from an older version of windows that qualified for the upgrade to Windows 11 Ive tried activating through the portal, through windows itself...
+  captured_at: '2026-10-04T13:47:19Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9457'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9457'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024331-kb5124010-build-26200-9550-goodix-fing
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024331/kb5124010-build-26200-9550-goodix-fingerprint-not
+  parent_title: 'KB5124010 (build 26200.9550): Goodix fingerprint not ready for ~85 s after cold boot, error 0x80098057 - fine on 26200.9457 - Microsoft Q&A'
+  report_title: 'KB5124010 (build 26200.9550): Goodix fingerprint not ready for ~85 s after cold boot, error 0x80098057 - fine on 26200.9457 - Microsoft Q&A'
+  report_text_excerpt: 'KB5124010 (build 26200.9550): Goodix fingerprint not ready for ~85 s after cold boot, error 0x80098057 - fine on 26200.9457 - Microsoft Q&A Since installing KB5124010 (Windows 11 25H2, build 26200.9550), my Goodix fingerprint sensor needs 85–92 seconds after a cold boot before...'
+  captured_at: '2026-10-04T13:47:28Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9550'
+  match_basis: exact_os_build
+  matched_kb: KB5124010
+  matched_os_build: '26200.9550'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
