@@ -47493,7 +47493,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wrgnyk-how-to-properly-use-retime-without-resolv
   product_id: blackmagic-davinci
   update_version: 21.0.4
@@ -47518,7 +47517,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wvqy29-is-their-closed-captions-possible-for-me
   product_id: blackmagic-davinci
   update_version: '21'
@@ -47543,7 +47541,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -47616,7 +47613,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -47665,7 +47661,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -47714,7 +47709,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -47763,7 +47757,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -47812,7 +47805,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024379-windows-activation
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -47842,7 +47834,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9457'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024331-kb5124010-build-26200-9550-goodix-fing
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -47873,7 +47864,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9550'
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -47922,7 +47912,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -47971,7 +47960,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -48020,7 +48008,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -48069,7 +48056,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -48118,7 +48104,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-the-kb5124010-file-history-backup-issue
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -48148,3 +48133,306 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9550'
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-mtr-devices-unable-to-connect-w
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-mtr-devices-unable-to-connect-workplace/4514790
+  parent_title: New MTR devices unable to connect workplace
+  report_title: New MTR devices unable to connect workplace
+  report_text_excerpt: 'New MTR devices unable to connect workplace Hello collective im facing an issue with new Poly devices&amp;nbsp;Poly X52 + Poly TC10 + Poly Trio 60Poly X52 + Poly TC10Both devices can not connect to M365.Error message: &quot;Couldn&apos;t connect to Workplace Join. try again,...'
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-04-26'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-transfer-an-external-sip-cal
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-transfer-an-external-sip-call-directly-to-a-teams-users-voicemail/4561360
+  parent_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_text_excerpt: How to transfer an external SIP call directly to a Teams user&apos;s voicemail? Hi,I am working on an external SIP-based reception platform that connects to Microsoft Teams through Direct Routing.My requirement is to transfer an external call directly to a Teams user&apos;s...
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-mtr-devices-unable-to-connect-w
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-mtr-devices-unable-to-connect-workplace/4514790
+  parent_title: New MTR devices unable to connect workplace
+  report_title: New MTR devices unable to connect workplace
+  report_text_excerpt: 'New MTR devices unable to connect workplace Hello collective im facing an issue with new Poly devices&amp;nbsp;Poly X52 + Poly TC10 + Poly Trio 60Poly X52 + Poly TC10Both devices can not connect to M365.Error message: &quot;Couldn&apos;t connect to Workplace Join. try again,...'
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-04-26'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-transfer-an-external-sip-cal
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-transfer-an-external-sip-call-directly-to-a-teams-users-voicemail/4561360
+  parent_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_text_excerpt: How to transfer an external SIP call directly to a Teams user&apos;s voicemail? Hi,I am working on an external SIP-based reception platform that connects to Microsoft Teams through Direct Routing.My requirement is to transfer an external call directly to a Teams user&apos;s...
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-mtr-devices-unable-to-connect-w
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-mtr-devices-unable-to-connect-workplace/4514790
+  parent_title: New MTR devices unable to connect workplace
+  report_title: New MTR devices unable to connect workplace
+  report_text_excerpt: 'New MTR devices unable to connect workplace Hello collective im facing an issue with new Poly devices&amp;nbsp;Poly X52 + Poly TC10 + Poly Trio 60Poly X52 + Poly TC10Both devices can not connect to M365.Error message: &quot;Couldn&apos;t connect to Workplace Join. try again,...'
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-04-26'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-transfer-an-external-sip-cal
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-transfer-an-external-sip-call-directly-to-a-teams-users-voicemail/4561360
+  parent_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_text_excerpt: How to transfer an external SIP call directly to a Teams user&apos;s voicemail? Hi,I am working on an external SIP-based reception platform that connects to Microsoft Teams through Direct Routing.My requirement is to transfer an external call directly to a Teams user&apos;s...
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-mtr-devices-unable-to-connect-w
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-mtr-devices-unable-to-connect-workplace/4514790
+  parent_title: New MTR devices unable to connect workplace
+  report_title: New MTR devices unable to connect workplace
+  report_text_excerpt: 'New MTR devices unable to connect workplace Hello collective im facing an issue with new Poly devices&amp;nbsp;Poly X52 + Poly TC10 + Poly Trio 60Poly X52 + Poly TC10Both devices can not connect to M365.Error message: &quot;Couldn&apos;t connect to Workplace Join. try again,...'
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-04-26'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-transfer-an-external-sip-cal
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-transfer-an-external-sip-call-directly-to-a-teams-users-voicemail/4561360
+  parent_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_text_excerpt: How to transfer an external SIP call directly to a Teams user&apos;s voicemail? Hi,I am working on an external SIP-based reception platform that connects to Microsoft Teams through Direct Routing.My requirement is to transfer an external call directly to a Teams user&apos;s...
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-mtr-devices-unable-to-connect-w
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-mtr-devices-unable-to-connect-workplace/4514790
+  parent_title: New MTR devices unable to connect workplace
+  report_title: New MTR devices unable to connect workplace
+  report_text_excerpt: 'New MTR devices unable to connect workplace Hello collective im facing an issue with new Poly devices&amp;nbsp;Poly X52 + Poly TC10 + Poly Trio 60Poly X52 + Poly TC10Both devices can not connect to M365.Error message: &quot;Couldn&apos;t connect to Workplace Join. try again,...'
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-04-26'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-transfer-an-external-sip-cal
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-transfer-an-external-sip-call-directly-to-a-teams-users-voicemail/4561360
+  parent_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_text_excerpt: How to transfer an external SIP call directly to a Teams user&apos;s voicemail? Hi,I am working on an external SIP-based reception platform that connects to Microsoft Teams through Direct Routing.My requirement is to transfer an external call directly to a Teams user&apos;s...
+  captured_at: '2026-10-05T15:50:09Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-31-1-2-github-issue-13995
+  product_id: obs-studio
+  update_version: 31.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13995
+  parent_title: 'Virtual camera fails on macOS 26.7: "code signature invalid" - amfid finds no provisioning profile for the camera extension'
+  report_title: 'Virtual camera fails on macOS 26.7: "code signature invalid" - amfid finds no provisioning profile for the camera extension'
+  report_text_excerpt: '. Not a new OBS packaging regression: the signing and packaging logic is unchanged across 31.1.2, 32.1.2 and 32.2.2 (verified by diffing `cmake/macos/helpers.cmake`, `cmake/macos/xcode.cmake` and `plugins/mac-virtualcam/src/camera-extension/CMakeLists.txt` across the three tags;'
+  captured_at: '2026-10-05T16:13:13Z'
+  patch_version_matched: true
+  matched_version: 31.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13995
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13995
+  parent_title: 'Virtual camera fails on macOS 26.7: "code signature invalid" - amfid finds no provisioning profile for the camera extension'
+  report_title: 'Virtual camera fails on macOS 26.7: "code signature invalid" - amfid finds no provisioning profile for the camera extension'
+  report_text_excerpt: 'new OBS packaging regression: the signing and packaging logic is unchanged across 31.1.2, 32.1.2 and 32.2.2 (verified by diffing `cmake/macos/helpers.cmake`, `cmake/macos/xcode.cmake` and `plugins/mac-virtualcam/src/camera-extension/CMakeLists.txt` across the three tags; the only'
+  captured_at: '2026-10-05T16:18:23Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13995
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13995
+  parent_title: 'Virtual camera fails on macOS 26.7: "code signature invalid" - amfid finds no provisioning profile for the camera extension'
+  report_title: 'Virtual camera fails on macOS 26.7: "code signature invalid" - amfid finds no provisioning profile for the camera extension'
+  report_text_excerpt: '**Problem: OBS 32.2.2''s camera extension ships without a provisioning profile covering its own bundle ID, and macOS 26.7 now refuses to activate it (`OSSystemExtensionErrorCode 8`, "code signature invalid"'
+  captured_at: '2026-10-05T16:20:31Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
