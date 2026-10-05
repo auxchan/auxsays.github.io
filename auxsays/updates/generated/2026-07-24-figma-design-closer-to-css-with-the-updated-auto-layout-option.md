@@ -17,8 +17,8 @@ update_version: Design closer to CSS with the updated auto layout option
 update_logo_text: FIG
 update_published_at: '2026-07-24T00:00:00.000Z'
 update_last_checked: '2026-07-28T20:25:17Z'
-source_last_checked: '2026-09-03T18:13:37Z'
-official_body_last_checked: '2026-09-03T18:13:37Z'
+source_last_checked: '2026-10-05T00:00:42Z'
+official_body_last_checked: '2026-10-05T00:00:42Z'
 record_last_updated: '2026-07-28T20:25:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-02T20:14:20Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-03T06:53:15Z'
   url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-03T18:13:37Z'
+  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-05T00:00:42Z'
   url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
   status: captured-from-rss-feed
   body_captured: true
