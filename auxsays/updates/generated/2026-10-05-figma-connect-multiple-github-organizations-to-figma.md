@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: Figma AI hosting controls (Governance+) official update breakdown
-description: Official Figma update record captured from Figma.
-permalink: /updates/figma/figma/ai-hosting-controls-governance/
+title: Figma Connect multiple GitHub organizations to Figma official update breakdown
+description: Official Figma update record captured from Figma for Connect multiple GitHub organizations to Figma.
+permalink: /updates/figma/figma/connect-multiple-github-organizations-to-figma/
 update_entry: true
 company_id: figma
 product_id: figma
@@ -11,28 +11,28 @@ update_product: Figma
 update_category: Design Workflow
 update_type: official-source
 update_source_name: Figma
-update_source_url: https://www.figma.com/release-notes/?title=ai-hosting-controls-governance
+update_source_url: https://www.figma.com/release-notes/?title=connect-multiple-github-organizations-to-figma
 update_download_url: ''
-update_version: AI hosting controls (Governance+)
+update_version: Connect multiple GitHub organizations to Figma
 update_logo_text: FIG
-update_published_at: '2026-02-23T00:00:00.000Z'
-update_last_checked: '2026-07-28T09:07:45Z'
+update_published_at: '2026-10-05T00:00:00.000Z'
+update_last_checked: '2026-10-06T02:49:49Z'
 source_last_checked: '2026-10-06T02:49:49Z'
 official_body_last_checked: '2026-10-06T02:49:49Z'
-record_last_updated: '2026-07-28T09:07:45Z'
+record_last_updated: '2026-10-06T02:49:49Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
 update_status: current
-update_feed_title: Figma AI hosting controls (Governance+)
-update_detail_title: Figma AI hosting controls (Governance+)
+update_feed_title: Figma Connect multiple GitHub organizations to Figma
+update_detail_title: Figma Connect multiple GitHub organizations to Figma
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma AI hosting controls (Governance+) has an official AUXSAYS record. Confirmed patch-specific consensus
-  is deferred until the consensus refresh pipeline is active.
-official_summary: Figma published Figma AI hosting controls (Governance+).
-release_summary: Governance+ org admins can now turn on AI hosting controls so AI requests stay within Figma’s AWS environment.
+quick_verdict: Figma Connect multiple GitHub organizations to Figma has an official AUXSAYS record. Confirmed patch-specific
+  consensus is deferred until the consensus refresh pipeline is active.
+official_summary: Figma published Figma Connect multiple GitHub organizations to Figma.
+release_summary: You can now connect multiple GitHub organizations to a single Figma plan.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -50,10 +50,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-02-23T00:00:00.000Z'
+- at: '2026-10-05T00:00:00.000Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-07-28T09:07:52Z'
+- at: '2026-10-06T02:50:00Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: rss-feed
@@ -61,7 +61,7 @@ primary_official_source: https://www.figma.com/release-notes/
 fallback_official_sources:
 - https://forum.figma.com/product-updates-3
 official_patch_notes_capture_status: captured-from-rss-feed
-official_patch_notes_source_url: https://www.figma.com/release-notes/?title=ai-hosting-controls-governance
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=connect-multiple-github-organizations-to-figma
 official_note_status: official_source_captured
 official_note_label: Official source summary
 official_source_type: rss-feed
@@ -69,23 +69,12 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-07-28T09:07:45Z'
-  url: https://www.figma.com/release-notes/?title=ai-hosting-controls-governance
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-09-03T21:57:22Z'
-  url: https://www.figma.com/release-notes/?title=ai-hosting-controls-governance
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-06T02:49:49Z'
-  url: https://www.figma.com/release-notes/?title=ai-hosting-controls-governance
+  url: https://www.figma.com/release-notes/?title=connect-multiple-github-organizations-to-figma
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: Governance+ org admins can now turn on AI hosting controls so AI requests stay within Figma’s AWS
-  environment.
+official_patch_notes_body: You can now connect multiple GitHub organizations to a single Figma plan.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---

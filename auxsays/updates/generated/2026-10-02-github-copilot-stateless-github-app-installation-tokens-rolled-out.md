@@ -18,8 +18,8 @@ update_version: Stateless GitHub App installation tokens rolled out
 update_logo_text: GIT
 update_published_at: '2026-10-02T22:18:23Z'
 update_last_checked: '2026-10-03T00:52:11Z'
-source_last_checked: '2026-10-05T17:20:47Z'
-official_body_last_checked: '2026-10-05T17:20:47Z'
+source_last_checked: '2026-10-06T02:50:14Z'
+official_body_last_checked: '2026-10-06T02:50:14Z'
 record_last_updated: '2026-10-03T00:52:11Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,11 +86,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-04T08:41:48Z'
-  url: https://github.blog/changelog/2026-10-02-stateless-github-app-installation-tokens-rolled-out
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-04T15:05:33Z'
   url: https://github.blog/changelog/2026-10-02-stateless-github-app-installation-tokens-rolled-out
   status: captured-from-rss-feed
@@ -107,6 +102,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-05T17:20:47Z'
+  url: https://github.blog/changelog/2026-10-02-stateless-github-app-installation-tokens-rolled-out
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-06T02:50:14Z'
   url: https://github.blog/changelog/2026-10-02-stateless-github-app-installation-tokens-rolled-out
   status: captured-from-rss-feed
   body_captured: true
