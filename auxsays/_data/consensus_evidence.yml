@@ -48436,3 +48436,87 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-26-002-21901-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-launch-crashing-on-m1-ventura-13-0-1645137
+  product_id: adobe-acrobat-pro
+  update_version: 26.002.21901
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-launch-crashing-on-m1-ventura-13-0-1645137
+  parent_title: Acrobat launch crashing on m1 Ventura 13.0
+  report_title: Acrobat launch crashing on m1 Ventura 13.0
+  report_text_excerpt: 'Acrobat launch crashing on m1 Ventura 13.0 Last week, Acrobat stopped opening. I have tried: different documents different methods to open the app multiple uninstalls/reinstalls cleaner tool deleting hidden files a rabbit hole of other suggestions from google Note: when...'
+  captured_at: '2026-10-06T00:01:14Z'
+  source_date: '2026-10-05'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.002.21901
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-002-21901-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-launch-crashing-on-m1-ventura-13-0-1645137
+  product_id: adobe-acrobat-reader
+  update_version: 26.002.21901
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-launch-crashing-on-m1-ventura-13-0-1645137
+  parent_title: Acrobat launch crashing on m1 Ventura 13.0
+  report_title: Acrobat launch crashing on m1 Ventura 13.0
+  report_text_excerpt: 'Acrobat launch crashing on m1 Ventura 13.0 Last week, Acrobat stopped opening. I have tried: different documents different methods to open the app multiple uninstalls/reinstalls cleaner tool deleting hidden files a rabbit hole of other suggestions from google Note: when...'
+  captured_at: '2026-10-06T00:22:32Z'
+  source_date: '2026-10-05'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.002.21901
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-microsoft-support-kb5124010-kb5124008-kn
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/microsoft-support-kb5124010-kb5124008-known-issues-in-this-update-highlights-sem/4561880
+  parent_title: 'Microsoft support KB5124010, KB5124008: Known issues in this update, Highlights: semantic ambiguity'
+  report_title: 'Microsoft support KB5124010, KB5124008: Known issues in this update, Highlights: semantic ambiguity'
+  report_text_excerpt: 'Microsoft support KB5124010, KB5124008: Known issues in this update, Highlights: semantic ambiguity Hello, I have a question regarding Microsoft is announcement.Hi everyone,I was reviewing the Microsoft support pages for the September 2026 Windows updates and got quite...'
+  captured_at: '2026-10-06T01:31:25Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5124010
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5124010
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
