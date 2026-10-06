@@ -17,8 +17,8 @@ update_version: Model picker in Make
 update_logo_text: FIG
 update_published_at: '2026-02-17T00:00:00.000Z'
 update_last_checked: '2026-07-28T20:25:17Z'
-source_last_checked: '2026-09-04T13:19:37Z'
-official_body_last_checked: '2026-09-04T13:19:37Z'
+source_last_checked: '2026-10-06T16:01:49Z'
+official_body_last_checked: '2026-10-06T16:01:49Z'
 record_last_updated: '2026-07-28T20:25:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-04T13:19:37Z'
+  url: https://www.figma.com/release-notes/?title=model-picker-in-make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-06T16:01:49Z'
   url: https://www.figma.com/release-notes/?title=model-picker-in-make
   status: captured-from-rss-feed
   body_captured: true
