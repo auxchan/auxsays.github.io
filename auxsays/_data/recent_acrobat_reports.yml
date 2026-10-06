@@ -4,7 +4,7 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-10-06T00:01:14Z'
+  captured_at: '2026-10-06T06:16:52Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -24,7 +24,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-06T00:01:14Z'
+  captured_at: '2026-10-06T06:16:52Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -45,7 +45,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-06T00:01:14Z'
+  captured_at: '2026-10-06T06:16:52Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -65,7 +65,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-06T00:01:14Z'
+  captured_at: '2026-10-06T06:16:52Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -85,7 +85,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-06T00:01:14Z'
+  captured_at: '2026-10-06T06:16:52Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -465,7 +465,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-06T00:22:32Z'
+  captured_at: '2026-10-06T06:38:20Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -485,7 +485,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-06T00:22:32Z'
+  captured_at: '2026-10-06T06:38:20Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -505,7 +505,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-06T00:22:32Z'
+  captured_at: '2026-10-06T06:38:20Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
