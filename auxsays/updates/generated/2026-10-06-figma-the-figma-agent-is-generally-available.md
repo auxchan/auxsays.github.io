@@ -17,8 +17,8 @@ update_version: The Figma agent is generally available
 update_logo_text: FIG
 update_published_at: '2026-10-06T00:00:00.000Z'
 update_last_checked: '2026-10-06T16:01:49Z'
-source_last_checked: '2026-10-07T08:47:43Z'
-official_body_last_checked: '2026-10-07T08:47:43Z'
+source_last_checked: '2026-10-07T13:09:45Z'
+official_body_last_checked: '2026-10-07T13:09:45Z'
 record_last_updated: '2026-10-06T16:01:49Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-07T08:47:43Z'
+  url: https://www.figma.com/release-notes/?title=the-figma-agent-is-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-07T13:09:45Z'
   url: https://www.figma.com/release-notes/?title=the-figma-agent-is-generally-available
   status: captured-from-rss-feed
   body_captured: true

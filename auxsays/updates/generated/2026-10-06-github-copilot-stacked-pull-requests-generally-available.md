@@ -17,8 +17,8 @@ update_version: Stacked pull requests generally available
 update_logo_text: GIT
 update_published_at: '2026-10-06T20:16:41Z'
 update_last_checked: '2026-10-07T01:07:55Z'
-source_last_checked: '2026-10-07T08:47:47Z'
-official_body_last_checked: '2026-10-07T08:47:47Z'
+source_last_checked: '2026-10-07T13:09:48Z'
+official_body_last_checked: '2026-10-07T13:09:48Z'
 record_last_updated: '2026-10-07T01:07:55Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -105,6 +105,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-07T08:47:47Z'
+  url: https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-07T13:09:48Z'
   url: https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available
   status: captured-from-rss-feed
   body_captured: true
