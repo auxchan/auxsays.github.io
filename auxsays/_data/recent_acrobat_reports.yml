@@ -4,7 +4,7 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-10-06T13:22:18Z'
+  captured_at: '2026-10-06T22:38:28Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -24,7 +24,27 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-06T13:22:18Z'
+  captured_at: '2026-10-06T22:38:28Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.002.21901|26.002.21901
+  report_date: '2026-09-12'
+  report_excerpt: Adobe Acrobat installed app doesn't open My Adobe Acrobat installed app suddenly stopped
+    working. I am using a MacBook M1 (Ventura 13.1) and have the latest version of the app. Everything
+    was working fine for all the months I've been using it. One day, I was working normally...
+  report_id: adobe-acrobat-pro:4b250017f9fab0e1
+  report_title: Adobe Acrobat installed app doesn't open
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-installed-app-doesn-t-open-1641557
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21901
+  window_end: '2026-09-17'
+  window_start: '2026-09-08'
+  window_version: 26.002.21901
+- attribution_state: not_established
+  captured_at: '2026-10-06T22:38:28Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -45,7 +65,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-06T13:22:18Z'
+  captured_at: '2026-10-06T22:38:28Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -65,7 +85,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-06T13:22:18Z'
+  captured_at: '2026-10-06T22:38:28Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -85,7 +105,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-06T13:22:18Z'
+  captured_at: '2026-10-06T22:38:28Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -105,7 +125,7 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
-  captured_at: '2026-10-05T14:32:16Z'
+  captured_at: '2026-10-06T22:38:28Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -125,7 +145,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-10-03T05:15:17Z'
+  captured_at: '2026-10-06T22:38:28Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -465,7 +485,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-06T13:42:41Z'
+  captured_at: '2026-10-06T22:59:32Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -485,7 +505,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-06T13:42:41Z'
+  captured_at: '2026-10-06T22:59:32Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -505,7 +525,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-06T13:42:41Z'
+  captured_at: '2026-10-06T22:59:32Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -545,7 +565,7 @@ reports:
   window_start: '2026-06-25'
   window_version: 26.001.21691
 - attribution_state: not_established
-  captured_at: '2026-10-04T21:42:19Z'
+  captured_at: '2026-10-06T22:59:32Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -565,7 +585,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-10-03T05:36:48Z'
+  captured_at: '2026-10-06T22:59:32Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
