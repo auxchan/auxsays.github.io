@@ -315,40 +315,57 @@ def run() -> int:
           all("block" not in str(r.get("exclusion_reason") or "")
               and "rate" not in str(r.get("exclusion_reason") or "") for r in dead))
 
-    # I. The rows that survived are the two whose Adobe threads still resolve, and they are what the
-    # record now publishes -- nothing was re-attributed and no URL was invented from a title.
+    # I. WHAT SURVIVED, AS A PROPERTY RATHER THAN A SNAPSHOT. This block used to assert "exactly the
+    # two live 26.2 bug reports survive" and "26.2.2 is empty". Both were true the day the
+    # withdrawals landed and both became false the moment production legitimately acquired evidence
+    # -- the Algolia chain persisted 22 rows on its first write-enabled run. A test that pins a
+    # count pins a moment; what matters is that the withdrawn rows stay withdrawn and that whatever
+    # IS counted is a specific, live Premiere report. Counts are an observation, not a target.
     counted = [r for r in rows if r.get("counted") is True]
-    check("P6-I exactly the two live 26.2 bug reports survive",
-          len(counted) == 2 and all(str(r.get("update_version")) == "26.2" for r in counted),
-          str([(r.get("update_version"), str(r.get("source_url"))[-40:]) for r in counted]))
+    check("P6-I the withdrawn rows are not among the counted ones",
+          not [r for r in counted if r.get("id") in {str(w.get("id")) for w in withdrawn}],
+          str([r.get("id") for r in counted if r.get("id") in {str(w.get("id")) for w in withdrawn}]))
+    check("P6-I every counted row names a tracked Premiere patch",
+          counted and all(str(r.get("update_version")) in {"26.2", "26.2.2"} for r in counted),
+          str(sorted({str(r.get("update_version")) for r in counted})))
     import patch_collectors.adobe_premiere as _ap  # noqa: PLC0415
     published = [str(s.get("source_url") or "") for s in (data.get("accepted_report_sources") or [])
                  if isinstance(s, dict)]
     check("P6-K every published source url is a SPECIFIC Adobe report, by the collector's own rule",
           published and all(_ap.adobe_report_url_is_specific(_ap.canonical_adobe_url(u))
                             for u in published), str(published))
-    check("P6-K the published list is exactly the surviving counted rows",
-          sorted(published) == sorted(str(r.get("source_url")) for r in counted),
-          f"published={sorted(published)} counted={sorted(str(r.get('source_url')) for r in counted)}")
+    check("P6-K the published list is drawn from this record's own counted rows",
+          set(published) <= {str(r.get("source_url")) for r in counted
+                             if str(r.get("update_version")) == str(data.get("update_version"))},
+          f"published-only={sorted(set(published) - {str(r.get('source_url')) for r in counted})}")
 
-    # M/N. What promotion rebuilt, and what retraction emptied -- read from the two real records.
+    # M/N. The relationship between a record and its population, whatever that population is.
     other = front(_REPO / "auxsays" / "updates" / "generated" / "2026-05-01-premiere-pro-26-2-2.md")
-    check("P6-M the surviving record's community fields were rebuilt from the counted population",
-          int(data.get("update_report_count") or 0) == len(counted)
-          and len(data.get("evidence_samples") or []) == len(counted)
-          and bool(str(data.get("update_consensus_summary") or "").strip()),
-          f"count={data.get('update_report_count')} samples={len(data.get('evidence_samples') or [])}")
-    check("P6-N the emptied record retracted its projections rather than keeping them",
-          int(other.get("update_report_count") or 0) == 0
-          and not (other.get("accepted_report_sources") or [])
-          and not (other.get("evidence_samples") or [])
-          and not str(other.get("update_consensus_summary") or "").strip(),
-          f"count={other.get('update_report_count')} "
-          f"sources={len(other.get('accepted_report_sources') or [])}")
-    check("P6-N and it fell back to the official-only shape, not a half-empty one",
-          str(other.get("evidence_state")) == "official_only"
-          and str(other.get("update_consensus_label")) == "Insufficient data",
-          f"{other.get('evidence_state')!r} {other.get('update_consensus_label')!r}")
+    for label, record in (("26.2", data), ("26.2.2", other)):
+        version = str(record.get("update_version") or "")
+        population = [r for r in counted if str(r.get("update_version")) == version]
+        count = int(record.get("update_report_count") or 0)
+        check(f"P6-M {label}'s count is its counted population, neither more nor less",
+              count == len(population), f"record={count} store={len(population)}")
+        if population:
+            check(f"P6-M {label} publishes a summary and samples for a non-zero count",
+                  bool(str(record.get("update_consensus_summary") or "").strip())
+                  and bool(record.get("evidence_samples")),
+                  f"summary={bool(record.get('update_consensus_summary'))} "
+                  f"samples={len(record.get('evidence_samples') or [])}")
+            check(f"P6-M {label}'s visible samples stay within the presentation cap",
+                  len(record.get("evidence_samples") or []) <= 5,
+                  str(len(record.get("evidence_samples") or [])))
+        else:
+            check(f"P6-N {label} retracted its projections rather than keeping them",
+                  not (record.get("accepted_report_sources") or [])
+                  and not (record.get("evidence_samples") or [])
+                  and not str(record.get("update_consensus_summary") or "").strip(),
+                  f"sources={len(record.get('accepted_report_sources') or [])}")
+            check(f"P6-N {label} fell back to the official-only shape, not a half-empty one",
+                  str(record.get("evidence_state")) == "official_only"
+                  and str(record.get("update_consensus_label")) == "Insufficient data",
+                  f"{record.get('evidence_state')!r} {record.get('update_consensus_label')!r}")
     check("P6 no record claims a theme frequency the counted population cannot support",
           not (data.get("complaint_themes") or []) or len(data.get("complaint_themes") or [])
           <= int(data.get("update_report_count") or 0),
