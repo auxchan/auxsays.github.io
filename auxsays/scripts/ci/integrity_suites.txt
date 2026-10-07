@@ -49,6 +49,16 @@ auxsays/scripts/tests/test_automation_writeback.py = 134
 auxsays/scripts/tests/test_evidence_loss_guard.py = 80
 auxsays/scripts/tests/test_ci_integrity_runner.py = 39
 
+# The merge authority. AUX-013 was not a missing rule, it was a rule with nothing behind it: PR #163
+# merged nineteen seconds after its own ci-integrity run concluded `failure`, because the status read
+# and the merge were one gesture. Server-side enforcement was measured and refused (three probes in
+# the ledger), so the gate is repo-owned and therefore has to be tested like production code. This
+# suite replays the real #163 head and run, enumerates every refusal, and pins the structure -- the
+# single `client.merge(` call site, the absent override flag, the SHA lease. All 24 mutants of the
+# gate are killed by it, including the one that made a missing required run read as green and the
+# one that let a hand-dispatched run of the same workflow stand in for the pull request's own.
+auxsays/scripts/tests/test_guarded_merge.py = 82
+
 # --- PowerPoint collection expansion: same-author context + OfficeDev issues -----
 auxsays/scripts/tests/test_powerpoint_same_author_context.py = 18
 auxsays/scripts/tests/test_powerpoint_github_officedev.py = 22
