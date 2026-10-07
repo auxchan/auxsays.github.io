@@ -513,6 +513,32 @@ bundle exec jekyll build --trace
 
 If a validation failure is unrelated to the task, report it honestly and do not pretend it passed.
 
+## Merging
+
+A pull request may not be merged while its CI is red. This was broken on 2026-10-07: PR #163's
+`ci-integrity` run concluded `failure`, and the pull request merged nineteen seconds later, because
+reading the status and issuing the merge were a single uninterrupted command.
+
+GitHub cannot enforce this here. It was measured, not assumed: this repository belongs to a personal
+account, and a ruleset that requires a pull request or a passing status check refuses
+`github-actions[bot]` pushes too, which would break all four writeback lanes. No bypass actor covers
+that identity (see AUX-013 in [`docs/ENGINEERING_LEDGER.md`](docs/ENGINEERING_LEDGER.md) for the
+three probe results).
+
+So the gate is repo-owned. **Do not merge with `gh pr merge`.** Use:
+
+```bash
+python auxsays/scripts/ci/guarded_merge.py <PR>           # report the verdict
+python auxsays/scripts/ci/guarded_merge.py <PR> --merge   # merge only if it allows
+```
+
+It resolves the required run for the pull request's exact current head SHA, refuses a missing,
+unfinished, failing or stale result, re-reads the head immediately before merging, and passes that
+SHA to GitHub as a lease. It exits 1 when it refuses.
+
+There is no override flag, by design. A refusal means fix the commit. Never read CI status and merge
+in the same command, and never merge on a run that belongs to an earlier SHA.
+
 ## Delivery expectations
 
 When completing a task, report:
