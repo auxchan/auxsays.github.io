@@ -36,8 +36,8 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-020 | Deferred | Evidence acceptance | Medium | PowerPoint's release-date gate reads the feed's last-activity stamp |
 | AUX-021 | Resolved | Presentation | High | Same-day releases on one servicing line were ordered by array position |
 | AUX-022 | Resolved | Evidence authority | High | Premiere evidence was maintained by hand, and two of its five rows could not stand |
-| AUX-023 | Deferred | Evidence acquisition | High | Premiere has no working discovery method, and an Adobe board id is not a product |
-| AUX-024 | Implemented | Evidence acquisition | High | Premiere acquisition over the keyless Adobe Community chain — production proof pending |
+| AUX-023 | Resolved | Evidence acquisition | High | Premiere has no working discovery method, and an Adobe board id is not a product — closed by AUX-024 |
+| AUX-024 | Resolved | Evidence acquisition | High | Premiere acquisition restored over the keyless Adobe Community chain |
 
 ---
 
@@ -732,9 +732,11 @@ counted Premiere row survives whose thread no longer resolves.
 
 ### AUX-023 — Premiere has no working discovery method, and an Adobe board id is not a product
 
-- **Status** Deferred · **Area** Evidence acquisition · **Severity** High
+- **Status** Resolved · **Area** Evidence acquisition · **Severity** High · **Closed by** AUX-024
 
-**Update 2026-10-07** The implementation that should close this is AUX-024. It is NOT closed here:
+**Update 2026-10-07** CLOSED. The implementation is AUX-024, and it is closed on production
+evidence rather than on a dry run: run 37609394691 persisted 22 rows the chain discovered
+autonomously. The earlier wording, kept for the record:
 a dry-run calibration proves the chain answers, not that the merged code acquires evidence
 autonomously in the write-enabled lane. This stays open until a normal scheduled-shape
 production run proves discovery -> acceptance -> persistence -> promotion -> writeback.
@@ -769,13 +771,36 @@ holds. Nothing is misattributed; the pages disclose the blockage.
 
 ### AUX-024 — Premiere acquisition over the keyless Adobe Community chain
 
-- **Status** Implemented, production proof pending · **Area** Evidence acquisition · **Severity** High
-- **First seen** 2026-09-30 (as AUX-023) · **Implemented** 2026-10-07
+- **Status** Resolved · **Area** Evidence acquisition · **Severity** High
+- **First seen** 2026-09-30 (as AUX-023) · **Resolved** 2026-10-07
 
-**What is proven here, and what is not.** Code and tests are complete and a bounded calibration
-shows the chain answers. That is not acquisition: until a write-enabled production run persists a
-row the chain discovered, this is a mechanism, not a result. AUX-023 therefore stays OPEN, and both
-entries close together in the production-proof update.
+**Production proof (2026-10-07)** Run 37609394691 on `9a83d3da`, write-enabled, scheduled shape.
+The Premiere collector ran 622.1s, `ok: true`, and `adobe_community_algolia_search` reported
+**success** on both patches while all eight legacy methods reported `blocked` and added nothing.
+26.2: 40 candidates, 4 accepted, 36 rejected. 26.2.2: 36 candidates, 18 accepted, 18 rejected.
+**22 rows persisted** -- 4 and 18 -- which is the first autonomous Premiere acquisition since the
+corpus was built. Telemetry per patch: 3 logical queries, 60 hits, 40/36 unique topic ids, **0
+truncated**, 6 HTTP requests. Reconciliation then took 26.2 to 6 and 26.2.2 to 18, the scoped
+promotion wrote both records, QA passed 0/0 over 1,258 records twice (before and after promotion),
+the audit reported 0 integrity errors, writeback `9ec5becf` pushed first attempt, and Pages
+37620580198 deployed it. Official identity is byte-identical to the merge on both records.
+
+**What the gates refused in production, on real reports** 36 `missing_exact_patch_version_match`,
+11 `not_a_real_issue_report`, 4 `version_role_working`, 1 `version_owned_by_another_product`,
+1 `vendor_release_announcement`, 1 `foreign_adobe_product_subject`. Every gate this sprint added
+fired on live data.
+
+**Counted-population invariants, re-fetched and checked** 24 counted rows: 24/24 distinct per patch
+identity (one thread names both tracked patches and counts once per patch), 24/24 specific report
+URLs on board 728, and for the 22 rows this chain produced, 22/22 dated on or after their patch's
+release with the stored date equal to the page's own `firstPost.creationDate`.
+
+**Known residual** The two surviving legacy rows -- `adobe-premiere-pro-26-2-interface-slowdown-
+build-65` and `-26-2-crashes-build-65`, both `captured_at: 2026-05-01` -- carry `source_date: null`,
+so the release-date gate never applied to them. They are genuine live reports (fetched and confirmed
+during the previous sprint) and the chain now reads both pages as created 2026-04-17, after the
+2026-04-16 release. They were not replaced because URL dedupe keeps the stored row. Not introduced
+here, and not worth a forced rewrite; it is recorded so it is not rediscovered as a mystery.
 
 **Symptom** All eight registered Premiere discovery methods were blocked or broken, measured on two
 consecutive production runs: Adobe search HTTP 403, bug-tab rate-limited, known-URL recheck
