@@ -1258,7 +1258,7 @@ METHODS: list[dict[str, Any]] = [
         "discovery_model": ["query_search", "enumeration"],
         "transport": ["rest_json"],
         "health_statuses": ["blocked", "broken", "no_results", "partial", "success"],
-        "proven_on": ["adobe-acrobat-reader", "adobe-acrobat-pro"],
+        "proven_on": ["adobe-acrobat-reader", "adobe-acrobat-pro", "adobe-premiere-pro"],
         "strengths": [
         "The only Adobe acquisition path in this repo that has ever produced counted evidence",
         "Authoritative content: getTopics returns the canonical URL and the FIRST POST, so URL identity and post date are structural rather than...",

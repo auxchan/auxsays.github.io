@@ -37,6 +37,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-021 | Resolved | Presentation | High | Same-day releases on one servicing line were ordered by array position |
 | AUX-022 | Resolved | Evidence authority | High | Premiere evidence was maintained by hand, and two of its five rows could not stand |
 | AUX-023 | Deferred | Evidence acquisition | High | Premiere has no working discovery method, and an Adobe board id is not a product |
+| AUX-024 | Implemented | Evidence acquisition | High | Premiere acquisition over the keyless Adobe Community chain — production proof pending |
 
 ---
 
@@ -733,6 +734,11 @@ counted Premiere row survives whose thread no longer resolves.
 
 - **Status** Deferred · **Area** Evidence acquisition · **Severity** High
 
+**Update 2026-10-07** The implementation that should close this is AUX-024. It is NOT closed here:
+a dry-run calibration proves the chain answers, not that the merged code acquires evidence
+autonomously in the write-enabled lane. This stays open until a normal scheduled-shape
+production run proves discovery -> acceptance -> persistence -> promotion -> writeback.
+
 **Symptom** All eight registered Premiere methods are blocked or broken, measured on the 2026-09-30
 production run: `adobe_community_search` HTTP 403, `adobe_community_bug_tab_index` rate-limited,
 `adobe_community_known_url_recheck` rate-limited, `brave_search_api` **HTTP 402** (lapsed
@@ -758,6 +764,87 @@ holds. Nothing is misattributed; the pages disclose the blockage.
 **Revisit trigger** PR #51 merging, or any Premiere method returning candidates again.
 
 **Must not block** Roadmap work, or evidence acquisition for any other product.
+
+---
+
+### AUX-024 — Premiere acquisition over the keyless Adobe Community chain
+
+- **Status** Implemented, production proof pending · **Area** Evidence acquisition · **Severity** High
+- **First seen** 2026-09-30 (as AUX-023) · **Implemented** 2026-10-07
+
+**What is proven here, and what is not.** Code and tests are complete and a bounded calibration
+shows the chain answers. That is not acquisition: until a write-enabled production run persists a
+row the chain discovered, this is a mechanism, not a result. AUX-023 therefore stays OPEN, and both
+entries close together in the production-proof update.
+
+**Symptom** All eight registered Premiere discovery methods were blocked or broken, measured on two
+consecutive production runs: Adobe search HTTP 403, bug-tab rate-limited, known-URL recheck
+rate-limited, Brave **HTTP 402** (lapsed subscription) twice, Creative COW browser challenge, Reddit
+feed parse failure, Wayback rate-limited/503. Zero candidates for both patches. Separately,
+`SPECIFIC_ADOBE_BUG_URL_RE` accepted `/bug-reports-<any digits>/`, so another Adobe product's bug
+board satisfied Premiere's URL gate.
+
+**Resolution** `adobe_community_algolia_search`: searchToken → Algolia → getTopics, on Premiere's own
+runtime-bounded transport. Measured against the live chain rather than inherited from the prototype:
+`availableIndexes` is exactly `['adobedme-en-unified']` (pinned by NAME — Acrobat still takes
+`[0]` positionally); category **726** "Adobe Premiere" with **731** a separate "Premiere (Beta)";
+forum **728** "Bug Reports" with Announcements a sibling; `firstPost.creationDate` a true
+opening-post timestamp. Scoping is structural on Adobe's own taxonomy and **re-asserted after
+hydration**, because a filter is a request and the hydrated record is the answer. The URL gate is
+pinned to `bug-reports-728`, closing the cross-Adobe hole at no recall cost.
+
+**Discovery is not evidence.** The snippet, the title and the Algolia rank are discarded; the row is
+built from the hydrated opening post and judged by the same authority every other method uses. V1
+counts opening posts only, dated by `firstPost.creationDate` — never `date_last_update`, never
+Algolia's `date_added`.
+
+**Four defects the live data exposed, three of them from the adversarial review**
+
+- A report titled *"…hangs indefinitely with attached proxies **(26.2.2 works correctly)**"* was
+  counted against 26.2.2. `lib.target_outcome` scores a failure noun sitting before the version as
+  `affected`, so the working claim after it never registered. Premiere now checks the text
+  *following* the version, bounded by the sentence so *"works fine until I export, then it crashes"*
+  stays countable.
+- *"Known issue: …"* was counted as a user report. Its body opens *"We are aware of an issue"* —
+  Adobe speaking. The platform says so outright: that author's `userTitle` is "Principal Product
+  Manager" while reporters are "Participant". The veto reads the rank, and lists **vendor** roles
+  rather than community ones so a new community rank can never become a refusal. The rank is a VETO
+  SIGNAL ONLY: an absent, unknown or ordinary rank grants nothing, and the authored text, product,
+  version role, URL, date and issue gates still decide.
+- **macOS 26.x shares Premiere's version space exactly.** 17 live board-728 threads declare a macOS
+  26.2; one whose only "26.2" was *"macOS Tahoe 26.2 Premiere 26.3.0"* counted as a Premiere 26.2
+  failure. Board provenance now establishes the PRODUCT only — at least one occurrence of the
+  version must be Premiere's own, or owned by nobody. Every occurrence is inspected, not the first.
+- The board abbreviates habitually (6 of 18 accepted titles begin "Pr "), so the owner lists carry
+  AE / AME / Ps / Encoder, gated on a version-declaration shape because `au`, `ai` and `id` are
+  ordinary English.
+
+**Measured, per patch, per run** 6 HTTP requests (1 searchToken, 3 Algolia, 2 chunked getTopics),
+under 2.5s. 26.2: 40 candidates, 4 accepted, health `partial` (1 topic id truncated — recorded, not
+absorbed). 26.2.2: 36 candidates, 18 accepted, health `success`.
+
+**The other eight methods, classified on measured behaviour** — recorded here, not acted on in this
+change, because removing them moves method-health display and healthy-source counts and deserves its
+own blast radius. `adobe_community_known_url_recheck` → **FALLBACK**: cheap, and the only path that
+revalidates already-stored URLs; it returned `no_results` (i.e. it worked) for 26.2.2.
+`adobe_community_search`, `adobe_community_bug_tab_index`, `creativecow_forum_index`,
+`reddit_search` → **DISABLED** candidates: refused on every run for months. `brave_search_api` and
+`creativecow_brave_search` → **DISABLED**: HTTP 402, the subscription has lapsed, so no code change
+can revive them. `wayback_snapshot_recheck` → **PROBE_ONLY**: it existed to read Adobe pages the
+collector could not fetch, and Algolia now reaches them directly.
+
+**Verification** 94 suites. New `test_premiere_algolia_discovery.py` at 98 checks, offline — proven
+by running it with every socket refused — and registered in `[blocking]`, because
+`test_adobe_premiere_collector.py` sits in `[network]` and does not gate a pull request. 10 mutants
+killed across the index pin, both scope checks, the URL pin, the four role vetoes and truncation.
+
+**PR** #162 · supersedes PR #51, which is closed unmerged: its base predated #58, #65, #69, #87,
+#93, #98, #116, #122, #158 and #161, its Premiere-local cue set vetoed 9 of 16 rollback/fix/
+known-good phrasings where `lib.target_outcome` vetoes 15, and its title-version exclusivity rule
+would have deleted legitimate multi-version reports.
+
+**Reopen only if** a Premiere counted row names a version the author attributed to another product
+or an operating system, or the keyless chain stops answering from CI.
 
 ---
 
