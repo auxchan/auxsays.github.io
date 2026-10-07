@@ -17,8 +17,8 @@ update_version: '@ mentions in Make connectors'
 update_logo_text: FIG
 update_published_at: '2026-02-10T00:00:00.000Z'
 update_last_checked: '2026-07-29T09:12:45Z'
-source_last_checked: '2026-09-04T20:50:09Z'
-official_body_last_checked: '2026-09-04T20:50:09Z'
+source_last_checked: '2026-10-07T08:47:43Z'
+official_body_last_checked: '2026-10-07T08:47:43Z'
 record_last_updated: '2026-07-29T09:12:45Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-04T20:50:09Z'
+  url: https://www.figma.com/release-notes/?title=mentions-in-make-connectors
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-07T08:47:43Z'
   url: https://www.figma.com/release-notes/?title=mentions-in-make-connectors
   status: captured-from-rss-feed
   body_captured: true
