@@ -49275,3 +49275,30 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9457'
+
+- id: microsoft-powerpoint-2609-github-officedev-issue-https-github-com-officedev-office-js-issues-6993
+  product_id: microsoft-powerpoint
+  update_version: '2609'
+  source_type: github_officedev_issue
+  source_name: OfficeDev office-js
+  source_url: https://github.com/OfficeDev/office-js/issues/6993
+  parent_title: 'PowerPoint: Office.addin.getContentSnapshotAsBase64() returns placeholder icon instead of add-in content since Version 2608/2609'
+  report_title: 'PowerPoint: Office.addin.getContentSnapshotAsBase64() returns placeholder icon instead of add-in content since Version 2608/2609'
+  report_text_excerpt: 'Office desktop version: Microsoft 365 Apps, Current Channel, Version 2609 (Build 20430.20146). Host: powerpoint Office desktop version: Microsoft 365 Apps, Current Channel, Version 2609 (Build 16.0.20430.20146) PowerPoint: Office.addin.getContentSnapshotAsBase64() returns...'
+  captured_at: '2026-10-07T12:23:20Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2609'
+  match_basis: exact_version_channel_build
+  applicability: microsoft-powerpoint
+  counted: true
+  exclusion_reason: null
+  issue_theme: add-in incompatibility
+  workflow_area: add-ins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '20430.20146'
