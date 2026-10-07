@@ -17,8 +17,8 @@ update_version: Automatic guest removal
 update_logo_text: FIG
 update_published_at: '2026-02-03T00:00:00.000Z'
 update_last_checked: '2026-07-29T14:33:59Z'
-source_last_checked: '2026-09-05T12:52:23Z'
-official_body_last_checked: '2026-09-05T12:52:23Z'
+source_last_checked: '2026-10-07T15:18:51Z'
+official_body_last_checked: '2026-10-07T15:18:51Z'
 record_last_updated: '2026-07-29T14:33:59Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-05T12:52:23Z'
+  url: https://www.figma.com/release-notes/?title=automatic-guest-removal
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-07T15:18:51Z'
   url: https://www.figma.com/release-notes/?title=automatic-guest-removal
   status: captured-from-rss-feed
   body_captured: true

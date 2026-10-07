@@ -18,8 +18,8 @@ update_version: Update your IDE to restore agent activity in Copilot usage metri
 update_logo_text: GIT
 update_published_at: '2026-10-06T23:43:00Z'
 update_last_checked: '2026-10-07T01:07:55Z'
-source_last_checked: '2026-10-07T13:09:48Z'
-official_body_last_checked: '2026-10-07T13:09:48Z'
+source_last_checked: '2026-10-07T15:18:55Z'
+official_body_last_checked: '2026-10-07T15:18:55Z'
 record_last_updated: '2026-10-07T01:07:55Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -120,6 +120,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-07T13:09:48Z'
+  url: https://github.blog/changelog/2026-10-06-update-your-ide-to-restore-agent-activity-in-copilot-usage-metrics
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-07T15:18:55Z'
   url: https://github.blog/changelog/2026-10-06-update-your-ide-to-restore-agent-activity-in-copilot-usage-metrics
   status: captured-from-rss-feed
   body_captured: true
