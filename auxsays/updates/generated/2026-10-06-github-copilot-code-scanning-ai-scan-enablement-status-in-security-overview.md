@@ -18,8 +18,8 @@ update_version: Code scanning AI Scan enablement status in security overview
 update_logo_text: GIT
 update_published_at: '2026-10-06T10:23:38Z'
 update_last_checked: '2026-10-06T16:02:05Z'
-source_last_checked: '2026-10-06T16:02:05Z'
-official_body_last_checked: '2026-10-06T16:02:05Z'
+source_last_checked: '2026-10-07T01:07:55Z'
+official_body_last_checked: '2026-10-07T01:07:55Z'
 record_last_updated: '2026-10-06T16:02:05Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -78,6 +78,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-10-06T16:02:05Z'
+  url: https://github.blog/changelog/2026-10-06-code-scanning-ai-scan-enablement-status-in-security-overview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-07T01:07:55Z'
   url: https://github.blog/changelog/2026-10-06-code-scanning-ai-scan-enablement-status-in-security-overview
   status: captured-from-rss-feed
   body_captured: true
