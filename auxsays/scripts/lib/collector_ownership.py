@@ -44,6 +44,10 @@ ALLOWED_METHODS: dict[str, set[str]] = {
         "vendor_forum_search", "web_search",
     },
     "adobe-premiere-pro": {
+        # adobe_community_algolia_search is the keyless searchToken -> Algolia -> getTopics chain.
+        # It reuses the adobe_community_bug_report source_type on purpose: it discovers the SAME
+        # Premiere bug-report threads a different way, and one report must not become two identities.
+        "adobe_community_algolia_search",
         "reddit_search", "adobe_community_search", "adobe_community_bug_tab_index",
         "adobe_community_known_url_recheck", "brave_search_api", "wayback_snapshot_recheck",
         "creativecow_forum_index", "creativecow_brave_search", "known_watchlist",
