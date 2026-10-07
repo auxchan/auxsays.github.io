@@ -48641,3 +48641,637 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-from-version-26-2-i-can-t-tweak-the-properties-panel-p
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/from-version-26-2-i-can-t-tweak-the-properties-panel-premiere-keeps-crashing-1635805
+  parent_title: From version 26.2 I can't tweak the Properties Panel, Premiere keeps crashing
+  report_title: From version 26.2 I can't tweak the Properties Panel, Premiere keeps crashing
+  report_text_excerpt: It’s been 4 updates already (since 26.2 till the latest 26.3.2) that everytime I use the Properties Panel, either Position or Scale mainly, Premiere crashes, freezes for like 10 seconds and seems normal, then I want to use the panel and crashes again. Also happens if I want to...
+  captured_at: '2026-10-07T11:24:51Z'
+  source_date: '2026-08-07'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: application crash or hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-26-2-2-severe-ui-lag-and-freezing-on
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-2-26-2-2-severe-ui-lag-and-freezing-on-every-click-resolved-only-by-rolling-back-to-26-0-2-1627273
+  parent_title: Premiere Pro 26.2 / 26.2.2 — Severe UI lag and freezing on every click (resolved only by rolling back to 26.0.2)
+  report_title: Premiere Pro 26.2 / 26.2.2 — Severe UI lag and freezing on every click (resolved only by rolling back to 26.0.2)
+  report_text_excerpt: 'App Version: Premiere Pro 26.2.0 and 26.2.2 (issue present in both, including the current Beta build) Issue Category: Performance / UI Responsiveness OS: [Windows 11 Pro 24H2 / macOS version] CPU: [your CPU] GPU: [your GPU + driver version] RAM: [your RAM] Problem Description:...'
+  captured_at: '2026-10-07T11:24:51Z'
+  source_date: '2026-06-10'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-native-camera-shake-effect-causes-pr
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-2-native-camera-shake-effect-causes-program-monitor-offset-in-multicam-view-while-export-renders-correctly-1634549
+  parent_title: Premiere Pro 26.2 - Native Camera Shake effect causes Program Monitor offset in Multicam view while export renders correctly
+  report_title: Premiere Pro 26.2 - Native Camera Shake effect causes Program Monitor offset in Multicam view while export renders correctly
+  report_text_excerpt: MacBook Pro M1 Pro macOS 15.7.7 Premiere Pro 26.2 Mercury Metal Camera Shake native Multicam preview only Export unaffected [Moved to Adobe Premiere by a moderator］
+  captured_at: '2026-10-07T11:24:51Z'
+  source_date: '2026-07-30'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-shift-drag-to-resize-all-track-heights-at-the-same-tim
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/shift-drag-to-resize-all-track-heights-at-the-same-time-is-broken-in-premiere-26-2-and-26-5-beta-1625399
+  parent_title: Shift+Drag to resize all track heights at the same time is broken in Premiere 26.2 and 26.5 Beta
+  report_title: Shift+Drag to resize all track heights at the same time is broken in Premiere 26.2 and 26.5 Beta
+  report_text_excerpt: 'Issue: Holding the Shift key while dragging track dividers in the timeline header fails to adjust all track heights simultaneously. Instead, Premiere completely ignores the Shift modifier key and only resizes the single hovered track. Steps to Reproduce: Open any sequence...'
+  captured_at: '2026-10-07T11:24:51Z'
+  source_date: '2026-05-27'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: project open/load failure
+  workflow_area: project opening
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-in-26-2-2-the-app-would-freeze-whenever-i-needed-to-op
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/in-26-2-2-the-app-would-freeze-whenever-i-needed-to-open-a-drop-down-in-the-menu-1624383
+  parent_title: In 26.2.2, the app would freeze whenever I needed to open a drop-down in the menu.
+  report_title: In 26.2.2, the app would freeze whenever I needed to open a drop-down in the menu.
+  report_text_excerpt: I was using the latest version, 26.2.2. Everything was mostly fine, but whenever I need to click into a drop-down menu, it freezes up. Sometimes it will do the action I attempt to make, but sometimes it won't. This also happened when attempting to crop a video in the...
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-05-20'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-26-2-2-severe-ui-lag-and-freezing-on
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-2-26-2-2-severe-ui-lag-and-freezing-on-every-click-resolved-only-by-rolling-back-to-26-0-2-1627273
+  parent_title: Premiere Pro 26.2 / 26.2.2 — Severe UI lag and freezing on every click (resolved only by rolling back to 26.0.2)
+  report_title: Premiere Pro 26.2 / 26.2.2 — Severe UI lag and freezing on every click (resolved only by rolling back to 26.0.2)
+  report_text_excerpt: 'App Version: Premiere Pro 26.2.0 and 26.2.2 (issue present in both, including the current Beta build) Issue Category: Performance / UI Responsiveness OS: [Windows 11 Pro 24H2 / macOS version] CPU: [your CPU] GPU: [your GPU + driver version] RAM: [your RAM] Problem Description:...'
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-06-10'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-text-style-second-and-subsequent-strokes-are-lost-when
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/text-style-second-and-subsequent-strokes-are-lost-when-saving-to-my-styles-26-2-2-26-3-0-1634260
+  parent_title: 'Text Style: second and subsequent strokes are lost when saving to My Styles (26.2.2 / 26.3.0)'
+  report_title: 'Text Style: second and subsequent strokes are lost when saving to My Styles (26.2.2 / 26.3.0)'
+  report_text_excerpt: 【Summary】 When a text layer has two or more strokes and is saved via Properties > My Styles > "+", the second and subsequent strokes are not stored in the saved style. Applying that style shows only the first stroke; the second one is replaced with default values (gray, 1.0,...
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-07-28'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-in-version-26-2-2-auto-save-is-causing-premier-to-cras
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/in-version-26-2-2-auto-save-is-causing-premier-to-crash-1628096
+  parent_title: In version 26.2.2, auto-save is causing Premier to crash
+  report_title: In version 26.2.2, auto-save is causing Premier to crash
+  report_text_excerpt: In recent versions, the program freezes for a few seconds when the auto-save feature is enabled. The video plays, but the program’s functions don’t work. I have to force-close the program. This issue occurs in all projects, regardless of the number of files or effects. I...
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-06-16'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-pr-26-2-2-timeremapped-nest-bug-1632360
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/pr-26-2-2-timeremapped-nest-bug-1632360
+  parent_title: Pr 26.2.2 timeremapped nest bug
+  report_title: Pr 26.2.2 timeremapped nest bug
+  report_text_excerpt: Pr 26.2.2, 10 images put into a nest, inside the nest all the images are duplicated multiple times. The task is to make a gradually speeding-up sequence of images. 32 minutes of images, 5 seconds each So I switched on the time-remapping graph and made this curve and it turns...
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-07-16'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: project open/load failure
+  workflow_area: project opening
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-26-2-2-memory-leak-1629171
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-26-2-2-memory-leak-1629171
+  parent_title: Premiere 26.2.2 memory leak
+  report_title: Premiere 26.2.2 memory leak
+  report_text_excerpt: 'Hi. I’ve seen this reported multiple times in 26.0 and 26.0.2 but now I’m having this memory leak issue in 26.2.2 myself. Memory leak with a half of RAM free Important : I have 64 Gb of ram. Every time this issue happens I check the ram usage and it’s never above 36-38 Gb in...'
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-06-23'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: interface lag or freezing
+  workflow_area: editing interface
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-ducking-broken-in-pr-26-2-2-is-unsuable-unless-senseti
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/ducking-broken-in-pr-26-2-2-is-unsuable-unless-sensetivity-is-lowest-1627927
+  parent_title: Ducking broken in Pr 26.2.2? Is unsuable unless sensetivity is lowest
+  report_title: Ducking broken in Pr 26.2.2? Is unsuable unless sensetivity is lowest
+  report_text_excerpt: I’m working of a project of a documentary which contains a lot of music in the background. The music itself is to gradually get lower once the voiceover is in and rise when it finishes. I made a lot of such projects in thew past and never had any problems with ducking but now...
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-06-15'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: project open/load failure
+  workflow_area: project opening
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-pr-26-2-2-media-wrong-order-when-placed-on-timeline-16
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/pr-26-2-2-media-wrong-order-when-placed-on-timeline-1627006
+  parent_title: Pr 26.2.2 media wrong order when placed on timeline
+  report_title: Pr 26.2.2 media wrong order when placed on timeline
+  report_text_excerpt: 'Premiere 26.2.2 keeps putting the first 5 clips in a folder in the list view at the end of the timeline when the whole folder is dragged onto it: Here you can see the clip count starts from C0425. The first clips are at the end and even so their order is messed up: In order to...'
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-06-08'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: timeline crash or hang
+  workflow_area: timeline editing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-2-hangs-indefinitely-on-startup-init
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-2-2-hangs-indefinitely-on-startup-initializing-application-1626596
+  parent_title: Premiere Pro 26.2.2 hangs indefinitely on startup ("Initializing application")
+  report_title: Premiere Pro 26.2.2 hangs indefinitely on startup ("Initializing application")
+  report_text_excerpt: 'Title: Premiere Pro 26.2.2 hangs indefinitely on startup ("Initializing application") — infinite loop in CoolType / ATEWrapper FontServer while scanning a specific font (Windows 11 25H2) Severity: High — Premiere Pro cannot launch at all until the offending font is located and...'
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-pr-26-2-2-keyframe-handles-bug-1627000
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/pr-26-2-2-keyframe-handles-bug-1627000
+  parent_title: Pr 26.2.2 keyframe handles bug
+  report_title: Pr 26.2.2 keyframe handles bug
+  report_text_excerpt: Pr 26.2.2, Win 11 26h1, 14700K, 4080, a couple of colleagues have confirmed the issue. Start a new project, make a sequence, place some video on the timeline Create 2 keyframes for the position property, smooth them out and in Try to move the left keyframe handle to the edge...
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-06-08'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-2-on-macos-tahoe-26-4-m4-max-complet
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-2-2-on-macos-tahoe-26-4-m4-max-complete-video-playback-failure-when-any-still-image-layer-is-added-to-timeline-full-diagnostic-report-attached-1627227
+  parent_title: Premiere Pro 26.2.2 on macOS Tahoe 26.4 / M4 Max — complete video playback failure when any still image layer is added to timeline. Full diagnostic report attached.
+  report_title: Premiere Pro 26.2.2 on macOS Tahoe 26.4 / M4 Max — complete video playback failure when any still image layer is added to timeline. Full diagnostic report attached.
+  report_text_excerpt: Premiere Pro 26.2.2 on macOS Tahoe 26.4 / M4 Max — complete video playback failure when any still image layer is added to timeline. Full diagnostic report attached.
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-06-10'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-p-properties-panel-freezes-on-any-interaction-text-cap
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/p-properties-panel-freezes-on-any-interaction-text-captions-masks-shapes-fill-shadow-border-1625671
+  parent_title: 'P: Properties panel freezes on any interaction — text, captions, masks, shapes, fill, shadow, border.'
+  report_title: 'P: Properties panel freezes on any interaction — text, captions, masks, shapes, fill, shadow, border.'
+  report_text_excerpt: Properties panel causes severe freezing on any interaction — 40+ second hangs, complete unresponsiveness Premiere Pro 26.2.2 (latest stable release as of May 2026) freezes severely whenever the Properties panel is used. The issue was also reproduced on the latest Premiere Pro...
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-05-29'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-export-workspace-turns-black-and-freezes
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-export-workspace-turns-black-and-freezes-with-gpu-accelerated-ui-rendering-enabled-1639456
+  parent_title: Premiere Pro Export workspace turns black and freezes with GPU Accelerated UI Rendering enabled
+  report_title: Premiere Pro Export workspace turns black and freezes with GPU Accelerated UI Rendering enabled
+  report_text_excerpt: 'Issue: The Export workspace in Adobe Premiere Pro turns black and the application becomes unusable when GPU Accelerated UI Rendering is enabled. Steps to reproduce: Open Premiere Pro. Go to Preferences > General and enable GPU Accelerated UI Rendering. Restart Premiere Pro....'
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-08-29'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-memory-leak-issue-in-premiere-pro-with-specific-trigge
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/memory-leak-issue-in-premiere-pro-with-specific-triggers-1633132
+  parent_title: Memory leak issue in premiere pro with specific triggers.
+  report_title: Memory leak issue in premiere pro with specific triggers.
+  report_text_excerpt: When opening and synchronizing a large project from a full day shoot with time code and then later transcribing that time-coded sequence, it seems that something in that process triggers a memory leak within my version of Premiere Pro. 26.2.2 Regularly, my instance of Premiere...
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-07-21'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: project open/load failure
+  workflow_area: project opening
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-26-2-2-still-freezes-1560320
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-26-2-2-still-freezes-1560320
+  parent_title: Premiere 26.2.2 still freezes.
+  report_title: Premiere 26.2.2 still freezes.
+  report_text_excerpt: 26.2 had freezes. I upgraded to 26.2.2 as the promise was that the freezing problem was solved. (official mention on Updates). Instead, I can’t even hit the report button, without Premiere freezing. Since we have to maintain a proper language in messages, I will just say that...
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-05-05'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: application crash or hang
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-26-2-2-unstable-1624607
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-26-2-2-unstable-1624607
+  parent_title: Premiere 26.2.2 unstable
+  report_title: Premiere 26.2.2 unstable
+  report_text_excerpt: Premiere Pro 26.2.2 still very unstable, windows and menus freeze or take forever to pop up, rendering seems much slower and still most of the same issues as 26.2. C’mon Adobe, you have to do better than this. Lenovo i7 14700HX Nvidia 4070 8GB 64GB Ram 2 TB SSD
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-05-22'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-bug-premiere-pro-26-2-2-program-monitor-frozen-during
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/bug-premiere-pro-26-2-2-program-monitor-frozen-during-playback-audio-plays-video-static-mac-studio-m1-max-1560818
+  parent_title: '[BUG] Premiere Pro 26.2.2: Program Monitor frozen during playback (Audio plays, Video static) - Mac Studio M1 Max'
+  report_title: '[BUG] Premiere Pro 26.2.2: Program Monitor frozen during playback (Audio plays, Video static) - Mac Studio M1 Max'
+  report_text_excerpt: 'System Specifications: Machine: Mac Studio Processor: Apple M1 Max OS: macOS Tahohe 26.3.1(a) Premiere Pro Version: 26.2.2 (Issue occurs here) / 26.0 (Stable) The Issue: After updating to version 26.2.2 , the Program Monitor fails to refresh the image during playback. When I...'
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-05-08'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-2-b3-does-not-transfer-audio-from-co
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-2-2-b3-does-not-transfer-audio-from-corresponding-video-clip-when-adding-to-an-existing-sequence-either-when-dragged-from-the-project-panel-bin-or-from-the-source-monitor-1561428
+  parent_title: Premiere Pro (26.2.2. B3) does not transfer audio from corresponding video clip when adding to an existing sequence (either when dragged from the Project panel / bin OR from the Source Monitor).
+  report_title: Premiere Pro (26.2.2. B3) does not transfer audio from corresponding video clip when adding to an existing sequence (either when dragged from the Project panel / bin OR from the Source Monitor).
+  report_text_excerpt: Dell XPS 17 9730 Win11 Ent (26200.8328) Intel Core i9-13900H 64 GB RAM 1TB SSD (Internal), 4TB SanDisk SSD (External), 500 GB mSata (External - Cache & Render) Nvidia GeForce RTX 4080 Laptop GPU (12 GB, Studio Driver 596.36)
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-05-13'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: export/render failure
+  workflow_area: export/render
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wadm4j-export-seemingly-is-a-much-larger-file-th
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wadm4j/export_seemingly_is_a_much_larger_file_that/
+  parent_title: Export seemingly is a much larger file that contains nothing?
+  report_title: Export seemingly is a much larger file that contains nothing?
+  report_text_excerpt: Export seemingly is a much larger file that contains nothing? I have been working on a project for a while that tries to make an anime look like it was on VHS. To do that, I changed the aspect ratio, pan and scanned, added and formatted retro subtitles, and then used an...
+  captured_at: '2026-10-07T11:46:51Z'
+  source_date: '2026-09-08'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve 20
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-19-1-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1s0zyt3-way-to-retime-without-adding-frames
+  product_id: blackmagic-davinci
+  update_version: 19.1.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1s0zyt3/way_to_retime_without_adding_frames/
+  parent_title: Way to retime without adding frames?
+  report_title: Way to retime without adding frames?
+  report_text_excerpt: Way to retime without adding frames? I'm working with (vintage film) footage shot at 16FPS, of course my export options are 24FPS (or 30 or 23.976), so I need to slow it down on the timeline. It doesn't seem to matter if I import my media as 16FPS and leave the timeline at...
+  captured_at: '2026-10-07T11:51:33Z'
+  source_date: '2026-03-22'
+  target_release_date: '2025-01-20'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.1.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6026132-record-automatically-missing-from-team
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6026132/record-automatically-missing-from-teams
+  parent_title: Record Automatically missing from Teams - Microsoft Q&A
+  report_title: Record Automatically missing from Teams - Microsoft Q&A
+  report_text_excerpt: Record Automatically missing from Teams As you can see from the attached image, it looks like the "Record automatically" toggle is missing completely form Teams. Now it does look like between the two screenshots that there is a version difference. Is there a new place for this...
+  captured_at: '2026-10-07T11:55:15Z'
+  source_date: '2026-10-05'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027605-windows-11-pro-digital-license-cannot
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6027605/windows-11-pro-digital-license-cannot-be-reactivat
+  parent_title: Windows 11 Pro digital license cannot be reactivated after hardware change - Microsoft Q&A
+  report_title: Windows 11 Pro digital license cannot be reactivated after hardware change - Microsoft Q&A
+  report_text_excerpt: Windows 11 Pro digital license cannot be reactivated after hardware change - Microsoft Q&A Windows 11 Pro digital license cannot be reactivated after hardware change I am unable to reactivate Windows 11 Pro after replacing my computer hardware. My old laptop is still activated...
+  captured_at: '2026-10-07T12:03:27Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9457'
