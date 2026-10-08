@@ -351,8 +351,12 @@ def run() -> int:  # noqa: PLR0915
 
     # ---- J. non-PowerPoint products unchanged ---------------------------------------------
     plan = mr.plan_methods("obs-studio")
+    # The default plan grew `probe_only` and `disabled` when Premiere declared a routing plan of
+    # its own. The invariant here is unchanged and is about obs-studio, not about the dict's
+    # width: a product that declares nothing is routed nowhere.
     check("J non-PowerPoint products get the empty default plan (no orchestrated fallback)",
-          plan == {"primary": [], "fallback": [], "fallback_when": []}, str(plan))
+          plan == {"primary": [], "fallback": [], "fallback_when": [],
+                   "probe_only": [], "disabled": []}, str(plan))
     runner_src = (_REPO / "auxsays" / "scripts" / "run_patch_evidence_collection.py").read_text(encoding="utf-8")
     # The invariant is a DEPENDENCY one: the production runner must not depend on the orchestration
     # layer, so removing that layer can never break the proven lane. Asserted on real imports rather
@@ -363,17 +367,26 @@ def run() -> int:  # noqa: PLR0915
                  if isinstance(n, _ast.ImportFrom)} | {
         a.name for n in _ast.walk(_ast.parse(runner_src)) if isinstance(n, _ast.Import)
         for a in n.names}
-    check("J production runner does NOT import the orchestration layer",
-          not any(m.split(".")[0] in {"orchestration", "method_routing", "orchestrate_evidence_run"}
-                  or m in {"lib.orchestration", "lib.method_routing"} for m in _imported),
+    # THIS CHECK HAD TWO JOBS, and only one of them still holds.
+    #   (1) the runner must not depend on the orchestration GRAPH, so deleting the graph can
+    #       never break the proven lane. Unchanged, and still asserted.
+    #   (2) the runner must not depend on lib/method_routing either. That one is now
+    #       deliberately false: the Premiere collector routes its own nine methods through the
+    #       SHARED declaration rather than a private copy, so one product cannot drift from
+    #       the vocabulary the other lane validates against. method_routing is a pure-data
+    #       module -- two pure functions over literals, no imports of its own -- so depending
+    #       on it does not reintroduce the graph, which is what job (1) actually protects.
+    check("J production runner does NOT import the orchestration graph",
+          not any(m.split(".")[0] in {"orchestration", "orchestrate_evidence_run"}
+                  or m == "lib.orchestration" for m in _imported),
           str(sorted(_imported)))
     probe = subprocess.run(
         [sys.executable, "-c",
          "import sys; sys.path.insert(0, sys.argv[1]); import run_patch_evidence_collection; "
-         "print([m for m in sys.modules if 'orchestrat' in m or m.endswith('method_routing')])",
+         "print([m for m in sys.modules if 'orchestrat' in m])",
          str(_REPO / "auxsays" / "scripts")],
         capture_output=True, text=True, cwd=str(_REPO))
-    check("J importing the production runner does not pull in the orchestrator",
+    check("J importing the production runner does not pull in the orchestrator graph",
           probe.returncode == 0 and probe.stdout.strip() == "[]",
           f"rc={probe.returncode} loaded={probe.stdout.strip()} {probe.stderr.strip()[-200:]}")
     check("J collect_for_record keeps its production signature (composition refactor only)",

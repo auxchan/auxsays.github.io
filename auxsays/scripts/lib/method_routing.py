@@ -56,9 +56,45 @@ METHOD_PLANS: dict[str, dict[str, Any]] = {
         "fallback": ["reddit_search"],
         "fallback_when": ["no_accepted_reports", "blocked", "broken", "stale", "low_confidence"],
     },
+    "adobe-premiere-pro": {
+        # ONE primary. Measured on current main over both live Premiere records, scheduled shape
+        # (--since-days 45 --max-pages 5): the nine-method flat loop took 546.8s, of which
+        # wayback_snapshot_recheck was 408.5s and reddit_search 92.3s -- 91.6% of the run spent
+        # in two methods that returned 0 candidates and reported blocked/broken. Algolia took
+        # 6.2s for 12 requests and produced every accepted row (4 for 26.2, 18 for 26.2.2).
+        "primary": ["adobe_community_algolia_search"],
+        # The recheck re-reads the specific report URLs already stored for this patch, so it is
+        # the one method that can speak about evidence the collector already holds. It is a
+        # fallback rather than a primary because it DISCOVERS nothing new -- a URL it returns is
+        # already in the store and dies at URL dedupe -- and because it is itself currently
+        # blocked on the same Adobe HTML surface (26.2 blocked, 26.2.2 no_results, 25 requests,
+        # 0 candidates). Running it behind a healthy Algolia buys nothing and costs 20.3s.
+        "fallback": ["adobe_community_known_url_recheck"],
+        # Exactly the three conditions Algolia can actually produce. `stale` and
+        # `low_confidence` are deliberately absent: adobe_community_method_status never returns
+        # them, so declaring them would be configuration that can never fire.
+        "fallback_when": ["no_accepted_reports", "blocked", "broken"],
+        # Implemented and kept, never run by routine collection. Wayback is the single largest
+        # cost in the whole collector (408.5s, 26 requests, ~15.7s per request against
+        # web.archive.org) and it reached nothing: 0 candidates on both records, blocked on 26.2
+        # and broken on 26.2.2. It also calls Brave itself, so it inherits the lapsed
+        # subscription's HTTP 402. No automatic recovery trigger is declared because the
+        # measurement gives none: the cycle where the primary fails is exactly the cycle that
+        # must not also spend seven minutes on an archive that answered nothing.
+        "probe_only": ["wayback_snapshot_recheck"],
+        # Measured refused, every run, for months. Left implemented with their registry history
+        # intact; they simply stop doing routine network work. Each still reports an honest
+        # `disabled` row every cycle, because a method that stops emitting leaves its last
+        # `blocked` row frozen in the telemetry and looking current (upsert_method_health keys on
+        # (product, version, build, method) and retains what it is not given).
+        "disabled": ["adobe_community_search", "adobe_community_bug_tab_index",
+                     "reddit_search", "brave_search_api",
+                     "creativecow_forum_index", "creativecow_brave_search"],
+    },
 }
 
-DEFAULT_PLAN: dict[str, Any] = {"primary": [], "fallback": [], "fallback_when": []}
+DEFAULT_PLAN: dict[str, Any] = {"primary": [], "fallback": [], "fallback_when": [],
+                               "probe_only": [], "disabled": []}
 
 
 def plan_methods(product_id: str) -> dict[str, Any]:
@@ -66,9 +102,22 @@ def plan_methods(product_id: str) -> dict[str, Any]:
     unknown = set(plan.get("fallback_when", [])) - FALLBACK_CONDITIONS
     if unknown:
         raise ValueError(f"unknown fallback conditions for {product_id}: {sorted(unknown)}")
-    return {"primary": list(plan.get("primary", [])),
-            "fallback": list(plan.get("fallback", [])),
-            "fallback_when": list(plan.get("fallback_when", []))}
+    resolved = {"primary": list(plan.get("primary", [])),
+                "fallback": list(plan.get("fallback", [])),
+                "fallback_when": list(plan.get("fallback_when", [])),
+                "probe_only": list(plan.get("probe_only", [])),
+                "disabled": list(plan.get("disabled", []))}
+    # One method, one role. A method listed twice is not a harmless duplicate: it would be
+    # both executed and reported as intentionally not executed, and the health row written
+    # second would overwrite the true one.
+    seen: dict[str, str] = {}
+    for role in ("primary", "fallback", "probe_only", "disabled"):
+        for method_id in resolved[role]:
+            if method_id in seen:
+                raise ValueError(
+                    f"{product_id}: {method_id} is declared both {seen[method_id]} and {role}")
+            seen[method_id] = role
+    return resolved
 
 
 def fallback_justified(primary_health: list[dict[str, Any]], accepted_count: int,
