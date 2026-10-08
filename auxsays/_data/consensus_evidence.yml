@@ -48641,7 +48641,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-from-version-26-2-i-can-t-tweak-the-properties-panel-p
   product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -48738,7 +48737,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-in-26-2-2-the-app-would-freeze-whenever-i-needed-to-op
   product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -49171,7 +49169,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wadm4j-export-seemingly-is-a-much-larger-file-th
   product_id: blackmagic-davinci
   update_version: '20'
@@ -49196,7 +49193,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-19-1-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1s0zyt3-way-to-retime-without-adding-frames
   product_id: blackmagic-davinci
   update_version: 19.1.3
@@ -49221,7 +49217,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6026132-record-automatically-missing-from-team
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -49246,7 +49241,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027605-windows-11-pro-digital-license-cannot
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -49275,7 +49269,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9457'
-
 - id: microsoft-powerpoint-2609-github-officedev-issue-https-github-com-officedev-office-js-issues-6993
   product_id: microsoft-powerpoint
   update_version: '2609'
@@ -49302,3 +49295,504 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '20430.20146'
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-powershell-no-longer-works-on
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-powershell-no-longer-works-on-macos---windows-only-dependency-after-7-9-0/4561845
+  parent_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_text_excerpt: 'Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0 Since MicrosoftTeams 7.9.0, Connect-MicrosoftTeams with the default interactive sign-in fails on macOS before any sign-in prompt appears. It throws System.DllNotFoundException: Unable to load...'
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-10-02'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-access-teams-from-a-pc-on
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-access-teams-from-a-pc-only-mobile-access/4561047
+  parent_title: Unable to access Teams from a PC (only mobile access)
+  report_title: Unable to access Teams from a PC (only mobile access)
+  report_text_excerpt: Unable to access Teams from a PC (only mobile access) We have a user who can&apos;t access Teams on PC, but it works as usual on mobile (however, no connections to Outlook for Teams or the ability to create Teams meetings). Have tested several different PC’s as well as app and...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-see-who-is-removing-users-in
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-see-who-is-removing-users-in-a-meeting/1269490
+  parent_title: Can i see who is removing users in a meeting?
+  report_title: Can i see who is removing users in a meeting?
+  report_text_excerpt: Can i see who is removing users in a meeting? I need to know if I can see which participant of the meeting is expelling others, since this happens very often in my classes and I don&apos;t know how to detect who is specific.&amp;nbsp;Thanks.
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2020-03-31'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-automatically-record-all-tea
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-automatically-record-all-teams-meetings/3901450
+  parent_title: How to automatically record all Teams meetings?
+  report_title: How to automatically record all Teams meetings?
+  report_text_excerpt: How to automatically record all Teams meetings? I have subscribed to a Teams Premium trial and added the license to a user&apos;s account. As global admin, I&apos;m trying to enable automatic recording on ALL Teams meetings for that user. I don&apos;t want the user to need to...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2023-08-16'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-powershell-no-longer-works-on
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-powershell-no-longer-works-on-macos---windows-only-dependency-after-7-9-0/4561845
+  parent_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_text_excerpt: 'Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0 Since MicrosoftTeams 7.9.0, Connect-MicrosoftTeams with the default interactive sign-in fails on macOS before any sign-in prompt appears. It throws System.DllNotFoundException: Unable to load...'
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-10-02'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-access-teams-from-a-pc-on
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-access-teams-from-a-pc-only-mobile-access/4561047
+  parent_title: Unable to access Teams from a PC (only mobile access)
+  report_title: Unable to access Teams from a PC (only mobile access)
+  report_text_excerpt: Unable to access Teams from a PC (only mobile access) We have a user who can&apos;t access Teams on PC, but it works as usual on mobile (however, no connections to Outlook for Teams or the ability to create Teams meetings). Have tested several different PC’s as well as app and...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-see-who-is-removing-users-in
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-see-who-is-removing-users-in-a-meeting/1269490
+  parent_title: Can i see who is removing users in a meeting?
+  report_title: Can i see who is removing users in a meeting?
+  report_text_excerpt: Can i see who is removing users in a meeting? I need to know if I can see which participant of the meeting is expelling others, since this happens very often in my classes and I don&apos;t know how to detect who is specific.&amp;nbsp;Thanks.
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2020-03-31'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-automatically-record-all-tea
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-automatically-record-all-teams-meetings/3901450
+  parent_title: How to automatically record all Teams meetings?
+  report_title: How to automatically record all Teams meetings?
+  report_text_excerpt: How to automatically record all Teams meetings? I have subscribed to a Teams Premium trial and added the license to a user&apos;s account. As global admin, I&apos;m trying to enable automatic recording on ALL Teams meetings for that user. I don&apos;t want the user to need to...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2023-08-16'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-powershell-no-longer-works-on
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-powershell-no-longer-works-on-macos---windows-only-dependency-after-7-9-0/4561845
+  parent_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_text_excerpt: 'Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0 Since MicrosoftTeams 7.9.0, Connect-MicrosoftTeams with the default interactive sign-in fails on macOS before any sign-in prompt appears. It throws System.DllNotFoundException: Unable to load...'
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-10-02'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-access-teams-from-a-pc-on
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-access-teams-from-a-pc-only-mobile-access/4561047
+  parent_title: Unable to access Teams from a PC (only mobile access)
+  report_title: Unable to access Teams from a PC (only mobile access)
+  report_text_excerpt: Unable to access Teams from a PC (only mobile access) We have a user who can&apos;t access Teams on PC, but it works as usual on mobile (however, no connections to Outlook for Teams or the ability to create Teams meetings). Have tested several different PC’s as well as app and...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-see-who-is-removing-users-in
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-see-who-is-removing-users-in-a-meeting/1269490
+  parent_title: Can i see who is removing users in a meeting?
+  report_title: Can i see who is removing users in a meeting?
+  report_text_excerpt: Can i see who is removing users in a meeting? I need to know if I can see which participant of the meeting is expelling others, since this happens very often in my classes and I don&apos;t know how to detect who is specific.&amp;nbsp;Thanks.
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2020-03-31'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-automatically-record-all-tea
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-automatically-record-all-teams-meetings/3901450
+  parent_title: How to automatically record all Teams meetings?
+  report_title: How to automatically record all Teams meetings?
+  report_text_excerpt: How to automatically record all Teams meetings? I have subscribed to a Teams Premium trial and added the license to a user&apos;s account. As global admin, I&apos;m trying to enable automatic recording on ALL Teams meetings for that user. I don&apos;t want the user to need to...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2023-08-16'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-powershell-no-longer-works-on
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-powershell-no-longer-works-on-macos---windows-only-dependency-after-7-9-0/4561845
+  parent_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_text_excerpt: 'Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0 Since MicrosoftTeams 7.9.0, Connect-MicrosoftTeams with the default interactive sign-in fails on macOS before any sign-in prompt appears. It throws System.DllNotFoundException: Unable to load...'
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-10-02'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-access-teams-from-a-pc-on
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-access-teams-from-a-pc-only-mobile-access/4561047
+  parent_title: Unable to access Teams from a PC (only mobile access)
+  report_title: Unable to access Teams from a PC (only mobile access)
+  report_text_excerpt: Unable to access Teams from a PC (only mobile access) We have a user who can&apos;t access Teams on PC, but it works as usual on mobile (however, no connections to Outlook for Teams or the ability to create Teams meetings). Have tested several different PC’s as well as app and...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-see-who-is-removing-users-in
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-see-who-is-removing-users-in-a-meeting/1269490
+  parent_title: Can i see who is removing users in a meeting?
+  report_title: Can i see who is removing users in a meeting?
+  report_text_excerpt: Can i see who is removing users in a meeting? I need to know if I can see which participant of the meeting is expelling others, since this happens very often in my classes and I don&apos;t know how to detect who is specific.&amp;nbsp;Thanks.
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2020-03-31'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-automatically-record-all-tea
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-automatically-record-all-teams-meetings/3901450
+  parent_title: How to automatically record all Teams meetings?
+  report_title: How to automatically record all Teams meetings?
+  report_text_excerpt: How to automatically record all Teams meetings? I have subscribed to a Teams Premium trial and added the license to a user&apos;s account. As global admin, I&apos;m trying to enable automatic recording on ALL Teams meetings for that user. I don&apos;t want the user to need to...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2023-08-16'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-powershell-no-longer-works-on
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-powershell-no-longer-works-on-macos---windows-only-dependency-after-7-9-0/4561845
+  parent_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_text_excerpt: 'Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0 Since MicrosoftTeams 7.9.0, Connect-MicrosoftTeams with the default interactive sign-in fails on macOS before any sign-in prompt appears. It throws System.DllNotFoundException: Unable to load...'
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-10-02'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-access-teams-from-a-pc-on
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-access-teams-from-a-pc-only-mobile-access/4561047
+  parent_title: Unable to access Teams from a PC (only mobile access)
+  report_title: Unable to access Teams from a PC (only mobile access)
+  report_text_excerpt: Unable to access Teams from a PC (only mobile access) We have a user who can&apos;t access Teams on PC, but it works as usual on mobile (however, no connections to Outlook for Teams or the ability to create Teams meetings). Have tested several different PC’s as well as app and...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-see-who-is-removing-users-in
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-see-who-is-removing-users-in-a-meeting/1269490
+  parent_title: Can i see who is removing users in a meeting?
+  report_title: Can i see who is removing users in a meeting?
+  report_text_excerpt: Can i see who is removing users in a meeting? I need to know if I can see which participant of the meeting is expelling others, since this happens very often in my classes and I don&apos;t know how to detect who is specific.&amp;nbsp;Thanks.
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2020-03-31'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-automatically-record-all-tea
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-automatically-record-all-teams-meetings/3901450
+  parent_title: How to automatically record all Teams meetings?
+  report_title: How to automatically record all Teams meetings?
+  report_text_excerpt: How to automatically record all Teams meetings? I have subscribed to a Teams Premium trial and added the license to a user&apos;s account. As global admin, I&apos;m trying to enable automatic recording on ALL Teams meetings for that user. I don&apos;t want the user to need to...
+  captured_at: '2026-10-08T00:29:31Z'
+  source_date: '2023-08-16'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14006
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14006
+  parent_title: 'Crash (SIGSEGV in free) when a dock is closed during drag on Wayland: OBSDock close warning runs exec() inside QDrag loop'
+  report_title: 'Crash (SIGSEGV in free) when a dock is closed during drag on Wayland: OBSDock close warning runs exec() inside QDrag loop'
+  report_text_excerpt: ', Hyprland 0.56.2 (Wayland session, `QT_QPA_PLATFORM=wayland;xcb`) ### OBS Studio Version 32.2.2 (Arch package `obs-studio 32.2.2-1`; Qt 6.11.2 runtime / 6.11.1 compiled; qt6-wayland 6.11.2; Mesa 26.2.2, Intel ADL GT2) ### OBS Studio Log URL _Not attached; can provide on request.'
+  captured_at: '2026-10-08T00:59:08Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
