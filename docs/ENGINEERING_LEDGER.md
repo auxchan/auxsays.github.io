@@ -1100,6 +1100,34 @@ locally: `brave_search_api` short-circuits to zero requests, while in production
 and the three Brave callers each spend their four queries failing. The local figure therefore
 UNDERSTATES the production saving.
 
+**Production proof (2026-10-08).** Run **37721610263** on `871a9d9b`, write-enabled, scheduled shape,
+`--product-id adobe-premiere-pro`. Measured on the SAME telemetry field as the 622.1s baseline
+(`collector_end.duration_s`, write mode, both records):
+
+> **622.1s → 74.3s, `ok: true`. An 88.1% reduction, well under the 120s gate.**
+
+`premiere_routing` fired once per record with `fallback_justified: false` on both, so the fallback was
+correctly not needed. Algolia ran for both patches (26.2: 3 queries, 39 selected topic ids; 26.2.2: 3
+queries, 36 selected, 0 truncated). All **18 method-health rows** were rewritten with this run's
+timestamp: **2 `success`, 16 `disabled`, and zero `blocked` or `broken`** — the stale-failure
+telemetry this change existed to prevent does not exist for Premiere any more.
+
+Evidence is untouched by the speedup: 27 stored Premiere rows (7 + 20), **24 counted and the 3
+audited withdrawals still withdrawn**, counts still 6 and 18 with
+`update_report_count == confirmed_patch_specific_report_count` on both, `pilot_sample` and `WAIT`
+unchanged. QA **success** over 1,261 records, consensus audit **success**,
+`validate_evidence_method_health` exit 0, `evidence_losses: []`, writeback
+`push_success_first_attempt` with no conflicting paths, Pages dispatched and deployed
+(`37722434766`, success).
+
+**The predicted public change happened, and both records still say something.** The limitation "Some
+community sources were unavailable during the last check" is gone from both Premiere records, because
+after routing nothing was unavailable -- nothing was attempted. 26.2 still carries "Small sample
+size; production users should test before updating" and 26.2.2 still carries "This is a surfaced
+user-report sample, not a live telemetry feed", so neither record lost its coverage caveat entirely.
+With no `blocked`/`broken` row left for either identity, the patch detail page's separate
+"Collection blocked." sentence no longer has an input.
+
 **Resolution: declare the roles in the SHARED router, do not build a Premiere one.**
 `lib/method_routing.py` gains an `adobe-premiere-pro` plan, and its plan vocabulary gains two role
 lists every product can use:
