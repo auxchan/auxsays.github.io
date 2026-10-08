@@ -153,24 +153,37 @@ def run() -> int:
     orig_adobe = ac.adobe_community_search_candidates
     orig_reddit = ac.reddit_search_candidates
     try:
-        ac.adobe_community_algolia_search_candidates = lambda *a, **k: []
-        ac.adobe_community_search_candidates = lambda *a, **k: []
-        ac.reddit_search_candidates = lambda *a, **k: []
+        # Record WHICH transports are actually entered. The method-id list used to stand in
+        # for that, but since AUX-026 a retired method also reports a row -- status
+        # `disabled` -- so the row list no longer tells you what ran. Counting calls does.
+        _ran: list[str] = []
+        ac.adobe_community_algolia_search_candidates = (
+            lambda *a, **k: (_ran.append("adobe_community_algolia_search"), [])[1])
+        ac.adobe_community_search_candidates = (
+            lambda *a, **k: (_ran.append("adobe_community_search"), [])[1])
+        ac.reddit_search_candidates = (
+            lambda *a, **k: (_ran.append("reddit_search"), [])[1])
         accepted, rejected, health = coll.collect_for_record(REC_R, _NoNet(), CAPTURED)
-        method_ids = sorted(h["method_id"] for h in health)
         # Only the productive method runs by default. Measured over the whole recorded history,
         # 143 runs each: algolia 0 blocked / 128 accepted reports; adobe_community_search 143
         # blocked (100%) / 0 accepted; reddit_search 142 blocked / 0 accepted. Keeping the two dead
         # transports was not free -- this collector stops mid-corpus on a wall-clock budget, so the
         # time they spent failing was a RECENT record never reached at all.
         check("collect_for_record runs only the method that produces evidence",
-              method_ids == ["adobe_community_algolia_search"], str(method_ids))
+              _ran == ["adobe_community_algolia_search"], str(_ran))
         check("the retired transports are recoverable for a deliberate reachability probe",
               ac._retired_methods_enabled() is False
               and "AUXSAYS_ACROBAT_RETIRED_METHODS" in
               (_REPO / "auxsays" / "scripts" / "patch_collectors"
                / "adobe_acrobat_community.py").read_text(encoding="utf-8"))
-        check("zero candidates -> zero accepted, honest no_results health", accepted == [] and all(h["status"] == "no_results" for h in health))
+        # Scoped to the method that RAN. The retired methods report `disabled` in the same
+        # list, which is the point of AUX-026: a method nobody ran must not report a result.
+        _executed = [h for h in health if h["method_id"] in _ran]
+        check("zero candidates -> zero accepted, honest no_results health",
+              accepted == [] and _executed
+              and all(h["status"] == "no_results" for h in _executed)
+              and all(h["status"] == "disabled" for h in health if h["method_id"] not in _ran),
+              str({h["method_id"]: h["status"] for h in health}))
         check("health rows carry the collector product_id", all(h["product_id"] == R for h in health))
     finally:
         ac.adobe_community_algolia_search_candidates = orig_algolia

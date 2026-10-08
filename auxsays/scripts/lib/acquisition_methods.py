@@ -914,12 +914,12 @@ METHODS: list[dict[str, Any]] = [
         "purpose": ["context_resolution", "candidate_discovery"],
         "discovery_model": ["query_search", "enumeration"],
         "transport": ["html"],
-        "health_statuses": ["blocked", "broken", "no_results", "partial", "success"],
+        "health_statuses": ["blocked", "broken", "disabled", "no_results", "partial", "success"],
         "proven_on": ["adobe-acrobat-reader", "adobe-acrobat-pro", "adobe-premiere-pro"],
         "strengths": [
         "Requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint...",
         "Failure is diagnosable: the blocked_reason string carries the exact signature and a repeat count (\"reason xN\")",
-        "Keeping it retired-not-deleted means its health rows stay honest and the block is re-testable with one env var",
+        "Keeping it retired-not-deleted keeps the block re-testable with one env var (AUX-026 had to make the honesty half true: retiring it ALONE froze 286 Acrobat rows at `blocked` for months, because the health store retains what a run does not emit -- a retired method now reports `disabled` every run)",
     ],
         "blind_spots": [
         "Cannot see the inSided platform's newer content at all where it is not exposed as /t5 HTML",
@@ -934,7 +934,7 @@ METHODS: list[dict[str, Any]] = [
     ],
         "execution": "No key, no auth. Blocked from CI datacenter egress by CloudFront. Acrobat's copy is DISABLED BY DEFAULT and only re-enters the method tuple when AUXSAYS_ACROBAT_RETIRED_METHODS is set to 1/true/yes/on -- described as a deliberate one-off reachability probe, because \"a transport that is blocked from...",
         "evidence_rules": "Discovery only; identical downstream gates. Premiere's method_notes spell it out for every method: \"discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates\" (adobe_premiere.py:493). URL specificity is enforced per-site and is STRICTER than...",
-        "measured_notes": "adobe_acrobat_community.py:1277-1285, measured over 143 runs each: adobe_community_search 143 blocked (100%), 0 accepted. Live _data/evidence_method_health.yml: adobe-acrobat-reader 69 blocked rows, adobe-acrobat-pro 74 blocked rows, 0 accepted and 0 candidates on both; adobe-premiere-pro 2 blocked rows, 0 accepted, blocked_reason adobe_community_search_fetch_failed:http_403_blocked (yml:22-33). Caps: Acrobat MAX_SEARCH_QUERIES=3 / MAX_SEARCH_PAGES=1; Premiere MAX_SEARCH_QUERIES_PER_RUN=2 /...",
+        "measured_notes": "Live _data/evidence_method_health.yml BEFORE AUX-026: adobe-acrobat-reader 69 blocked rows, adobe-acrobat-pro 74 blocked rows -- all FROZEN, not 143 attempts. They were the method's last real result before retirement and the store retains what a run does not emit, so they sat at `blocked` from 2026-08-07/09-01 while the active method refreshed daily. Since AUX-026 a retired Acrobat method reports `disabled` with a fresh last_run on every record the walk reaches, so a `blocked` row here now means a real current refusal.",
         "break_history": "Retired from the Acrobat collector after 143 recorded runs with a 100% block rate and zero accepted reports, on the explicit reasoning that the time it spent failing was a RECENT record at the end of the wall-clock-bounded walk that was never reached at all -- \"they were costing the reach they were supposed to widen\".",
         "revisit_trigger": "Run the Acrobat collector once with AUXSAYS_ACROBAT_RETIRED_METHODS=1 and check whether _blocked_signature still returns \"blocked\" on the /t5 searchpage from CI egress.",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/patch_collectors/adobe_acrobat_community.py:203-206, :230-231, :673-718, :151-159 (_retired_methods_enabled), :1277-1290 (retirement + measurement), :390-395, :461-468, :597-611;...",

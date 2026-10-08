@@ -39,6 +39,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-023 | Resolved | Evidence acquisition | High | Premiere has no working discovery method, and an Adobe board id is not a product — closed by AUX-024 |
 | AUX-024 | Resolved | Evidence acquisition | High | Premiere acquisition restored over the keyless Adobe Community chain |
 | AUX-025 | Resolved | Collector runtime | Medium | Premiere spent 622s to collect 12s of evidence — routed to one primary, 97.8% faster |
+| AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 
 ---
 
@@ -1276,6 +1277,174 @@ reports `blocked`/`broken` for a method routing did not call.
 
 **Cross-reference** AUX-023 / AUX-024 for the acquisition history. Nothing in their evidence
 semantics, identity, version-ownership, role or vendor logic is changed here.
+
+---
+
+### AUX-026 — Acrobat published a blocked collector for methods nobody runs
+
+- **Status** Resolved · **Area** Collector telemetry · **Severity** Medium
+- **First seen** 2026-10-07 (found as a residual while fixing AUX-025) · **Resolved** 2026-10-08
+
+**Symptom** 84 Acrobat patch pages published **"Collection blocked."** and *"Some collection methods
+are **currently** blocked or returning errors"*, and the public methodology page published 286 raw
+fetch diagnostics as current state. Nothing was blocked. The only Acrobat method that executes
+reports **success (122) or no_results (90) across every row in the store, and never blocked or
+broken.**
+
+**Verified cause.** `adobe_community_search` and `reddit_search` were retired from the Acrobat
+collector, and the comment that retired them claimed *"their health rows stay honest, they just stop
+costing time."* They did not. `upsert_method_health` keys rows on
+`(product_id, update_version, target_build, method_id)` and **retains whatever a run does not emit**,
+so their last rows froze in place:
+
+| product | method | rows | newest `last_run` | status |
+|---|---|---|---|---|
+| acrobat-pro | `adobe_community_search` | 74 | 2026-09-01 | blocked 74 |
+| acrobat-pro | `reddit_search` | 74 | 2026-09-01 | blocked 73, broken 1 |
+| acrobat-reader | `adobe_community_search` | 69 | 2026-09-01 | blocked 69 |
+| acrobat-reader | `reddit_search` | 69 | 2026-09-01 | blocked 69 |
+| **total frozen** | | **286** | | |
+| acrobat-pro/reader | `adobe_community_algolia_search` | 212 | **2026-10-08** | success 122, no_results 90 |
+
+`AUXSAYS_ACROBAT_RETIRED_METHODS`, the only thing that re-enables them, is set in **zero** workflows,
+so those 286 rows could never be refreshed by anything.
+
+**Complete calculation, `adobe-acrobat-pro / 26.001.21563`.** Three rows: algolia `success`
+(last_run 2026-10-07, 1 day old) and the two retired methods `blocked` (last_run 2026-08-07, 62 days
+old). Rendered through the shipped `_includes/monitoring-status.html` with the real Liquid gem:
+
+- `mon_total` 3, `mon_disabled` 0, `mon_fresh_usable` 1, `mon_healthy` **1** — counted per source
+  FAMILY, and the retired Adobe method shares `adobe_community_bug_report` with the active one, so
+  it was never a second family even when it ran.
+- `mon_has_blocked_broken` **true** and `mon_has_degraded_status` **true** — both assigned from
+  status alone, with **no age condition anywhere**, so a 62-day-old row is indistinguishable from
+  today's.
+- Ladder: rung 6 needs `mon_healthy == 0` (it is 1), so rung **7** fires → **MONITORING DEGRADED**.
+- The per-method list printed *"adobe community search — Source request was blocked — last checked
+  Aug 7, 2026"* beside the fresh Oct 7 run.
+
+**Six consumers read these rows. Two published a falsehood, and one more published the diagnostics.**
+
+| consumer | freshness-aware? | before | after |
+|---|---|---|---|
+| `_layouts/aux-update.html` (its own gate, independent of the ladder) | **no** | "Collection blocked." on **84 pages** | gone |
+| `updates/methodology/index.md` (global, unscoped) | **no** | 286 raw `blocked_reason` strings published as current; tiles blocked **695** / broken **15** / disabled **183** | 0 strings; **410 / 14 / 469** |
+| `_includes/monitoring-status.html` per-method list | partly | "Source request was blocked · last checked Aug 7, 2026" | "Method disabled · last checked Oct 8, 2026" |
+| `_includes/monitoring-status.html` ladder label | no (for blocked) | MONITORING DEGRADED | MONITORING DEGRADED (unchanged) |
+| `apply_consensus_to_records.py` | **no** | the "unavailable during the last check" sentence on 84 records | gone |
+| `validate_evidence_method_health.py` | n/a | passes | passes |
+
+Only `adobe_community_search` drove the 84 headlines: that gate also requires the method's
+`source_type` to appear among the page's own accepted sources, and no Acrobat page holds an accepted
+`reddit_community_report`. So `reddit_search`'s 143 frozen rows changed no rendered output at all —
+they were pure false telemetry.
+
+**One correction to how this was first described.** `evidence_source_limitations` has **no renderer
+anywhere on the site**; `qa_patch_records.py` warns if it ever reaches a layout. The "unavailable
+during the last check" sentence was therefore wrong *stored data*, not something a reader saw. The
+reader-facing falsehoods were "Collection blocked.", the per-method line, and the methodology
+diagnostics.
+
+**Resolution.** When the retired methods are not enabled, the collector now emits one health row per
+retired method per record, status **`disabled`**, fresh `last_run`, zeroed counters, no
+`blocked_reason`. The retired tuple is emptied when the env flag turns the methods on, so a run can
+never emit both a real row and a disabled row for the same method — `upsert_method_health` is
+last-wins and the disabled loop runs last, which would otherwise bury the truth.
+
+`disabled` was chosen because it is canonical, already means exactly this in the schema, and was
+already live on 183 rows across four products. It is counted as neither healthy nor
+attempted-and-failed, it does not trigger either blocked surface, and `_distribute_capped` caps a
+row's share of stored evidence at its own `accepted_candidates` — zero — so a disabled row sharing
+the active method's family can never be credited with that family's reports.
+
+#### Two consequences stated rather than buried
+
+**1. 69 identities gain a degraded label they do not have today.** Those records postdate the
+retirement, so they hold no frozen row and today publish **INSUFFICIENT COVERAGE**. Once they gain a
+`disabled` row they publish **MONITORING DEGRADED**, because `mon_partial_disabled`
+(`mon_disabled > 0 and mon_disabled < mon_total`) is itself a degraded signal at ladder rung 7,
+ahead of the coverage rung. Verified by rendering `adobe-acrobat-reader / 26.002.21869` both ways
+through the real Liquid gem. **The figure a reader acts on is identical either way** — "Healthy
+sources 1 fresh (success / no reports) · need 2" — and the page gains two honest "Method disabled"
+lines.
+
+Accepted rather than scoped away: emitting a disabled row only where a frozen row already exists
+would encode "this file already contains a bad row" as a business rule and let every newly ingested
+record drift back into the same silence. Premiere has published MONITORING DEGRADED for exactly this
+reason since AUX-025, so the two products with retired methods now read the same way.
+
+**2. The schedule does not converge this. Measured, and the first run alone is net-negative.**
+Acrobat records are walked **newest-first** under a wall-clock budget, so a scheduled run reaches
+**about the first 20 of 196 records per edition** — 17 identities refreshed on 2026-10-08, 17 on
+2026-10-07. Of the 143 frozen identities, only **4** sit inside that prefix; **139** sit outside it,
+72 last walked 2026-09-09 and a tail reaching back to 2026-08-10, several of the affected records
+dating from 2015–2016.
+
+So on the next cron alone: **30 identities gain the degraded label and 4 are repaired.** The 84
+"Collection blocked." pages are not among the 4. An earlier draft of this change asserted in its own
+governed manifest that "the stored rows are rewritten by the next production run" — that was false,
+and the adversarial review caught it. The manifest, the suite's `warn()` docstring and both warning
+strings now say what is true: each record's rows clear when that record is next walked, which is a
+standing backlog that scoped dispatches clear.
+
+**That is why this change was merged together with scoped per-edition dispatches** rather than left
+to the cron. See the production proof below for what converged and what remains.
+
+**Verification** `test_acrobat_retired_method_health.py`, **50 checks**, offline — proven by running
+it with every socket refused — registered `[blocking]`. It covers both editions: that every method
+reports a row, that the retired two report `disabled` with this run's timestamp and no diagnostic,
+that the executing method keeps its real health, that re-enabling replaces the disabled row under
+the identical key and never emits both in one run, that `disabled` trips none of the three failure
+predicates, and that a disabled row sharing the active family is credited with none of its evidence.
+**10 of 10 mutants killed, every one by a named assertion.**
+
+Two existing suites had assertions that my change made wrong rather than broken, and both were
+restated to what they actually mean. `test_adobe_acrobat_community_collector.py` asserted "runs only
+the method that produces evidence" by comparing the health-row id list — a proxy that stops working
+once a retired method also reports — so it now **counts calls into the discovery functions**, which
+is the property it was always about; and its `no_results` assertion is scoped to the method that
+ran. `test_acquisition_method_registry.py` needed `disabled` added to the method's declared status
+vocabulary.
+
+**What the adversarial review changed.** Six lenses. The subject came back sound on identity,
+semantics and blast radius, but three findings were real and all three were fixed:
+
+- **The convergence claim was false**, and the first run is net-negative (above). The registered
+  justification said the corpus self-heals; it does not.
+- **`C.7` was not load-bearing.** It claimed to pin the one hazard the shared source family creates
+  — that a disabled row cannot be credited with the active method's stored evidence — but built its
+  rows from the silenced collector, where the active row's `accepted_candidates` was also 0. The cap
+  it named could be deleted and the check still passed. It now builds a family with a real accepted
+  count, asserts both halves, and runs in **both row orders**; removing `_distribute_capped`'s cap
+  now fails it.
+- **The registry still carried the disproven claim.** `lib/acquisition_methods.py` is the designated
+  read-before-you-build authority and still asserted that retiring the method kept "its health rows
+  honest", and reported its 143 frozen rows as 143 measured attempts. Both corrected; `disabled`
+  added to its declared statuses.
+
+Also fixed from the review: a dead local left beside the new oracle, and the public `notes` string
+reordered so the reader-facing sentence leads and the collector attribution trails it — those 286
+notes are printed as the primary cell on the methodology page whenever `blocked_reason` is empty,
+which for these rows is always.
+
+**Known residuals**
+
+- **"last checked <today>" on a method that issued no request.** The per-method display line reads
+  `last_run` with no `m_is_disabled` guard, so a disabled row renders "Method disabled · last checked
+  Oct 8". The ladder excludes disabled rows from every freshness counter, so nothing *computed* reads
+  fresher; it is the label's wording. Pre-existing for all 183 disabled rows across four products,
+  and a cross-product wording change is not this sprint.
+- **139 frozen identities remain** until each record is walked. Quantified above.
+- **Nothing was deleted.** All 212 Acrobat identities keep their rows; the repair changes what a row
+  says, never whether it exists.
+
+**Reopen only if** an Acrobat method-health row reports `blocked` or `broken` for a method the
+collector did not run, or an Acrobat patch page publishes "Collection blocked." while
+`adobe_community_algolia_search` reports success or no_results for that exact identity.
+
+**Cross-reference** AUX-025 fixed the identical defect for Premiere and is where the mechanism is
+described. Nothing in Acrobat's evidence rows, counts, Reader/Pro identity, Standard exclusion,
+Liquid Mode, verdicts, consensus or official ingestion is changed here.
 
 ---
 

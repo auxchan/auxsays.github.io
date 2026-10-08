@@ -1274,7 +1274,15 @@ class AdobeAcrobatCollector(ProductCollector):
             # Primary, CI-reachable: keyless inSided/Algolia JSON discovery + getTopics content.
             ("adobe_community_algolia_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_algolia_search_candidates),
         )
-        # RETIRED, not deleted -- their health rows stay honest, they just stop costing time.
+        # RETIRED, not deleted. They stop costing time, and -- since AUX-026 -- they still report
+        # their own state every run. The comment here used to claim "their health rows stay
+        # honest"; measured against the live store they did not. A method that stops emitting
+        # leaves its last row frozen, because upsert_method_health keys on
+        # (product, version, build, method) and retains what a run does not give it. 286 rows
+        # sat at status `blocked`, last_run 2026-08-07/2026-09-01, next to algolia rows that
+        # refreshed daily -- and three public surfaces read status with no freshness check, so
+        # 84 records published "Collection blocked", "methods are CURRENTLY blocked" and
+        # "sources were unavailable during the last check" about checks that never happened.
         # Measured over the whole recorded history, 143 runs each:
         #   adobe_community_algolia_search  0 blocked, 83 success, 128 accepted reports
         #   adobe_community_search        143 blocked (100%),        0 accepted   <- CloudFront
@@ -1283,11 +1291,13 @@ class AdobeAcrobatCollector(ProductCollector):
         # bounded by a wall-clock budget and stops mid-corpus when it expires, so every second the
         # two dead methods spend failing is a record at the END of the list -- the RECENT one -- that
         # is never reached at all. They were costing the reach they were supposed to widen.
+        retired = (
+            ("adobe_community_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_search_candidates),
+            ("reddit_search", REDDIT_SOURCE_TYPE, reddit_search_candidates),
+        )
         if _retired_methods_enabled():
-            methods = methods + (
-                ("adobe_community_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_search_candidates),
-                ("reddit_search", REDDIT_SOURCE_TYPE, reddit_search_candidates),
-            )
+            methods = methods + retired
+            retired = ()
         all_accepted: list[dict[str, Any]] = []
         all_rejected: list[dict[str, Any]] = []
         method_health: list[dict[str, Any]] = []
@@ -1318,6 +1328,34 @@ class AdobeAcrobatCollector(ProductCollector):
                 blocked_reason=_blocked_reason(errors) or None,
                 last_run=captured_at,
                 notes=f"acrobat community collector; edition={self.product_id}",
+            ))
+        # Each retired method still reports, with the one status that says what is true:
+        # implemented, deliberately not executed. This is what stops its last real row from
+        # freezing at `blocked` and reading as a current failure forever. `disabled` is
+        # canonical and is counted as neither healthy nor attempted-and-failed, so it cannot
+        # inflate coverage either. If the env flag re-enables a method, its real row replaces
+        # this one under the same identity key -- and `retired` is emptied above, so a run can
+        # never emit both for the same method.
+        for method_id, source_type, _fn in retired:
+            method_health.append(method_health_row(
+                product_id=self.product_id,
+                update_version=record.update_version,
+                method_id=method_id,
+                source_type=source_type,
+                status="disabled",
+                candidates_found=0,
+                accepted_reports=0,
+                rejected_reports=0,
+                blocked_reason=None,
+                last_run=captured_at,
+                # PUBLIC COPY. updates/methodology/index.md prints `notes` as the primary cell
+                # whenever blocked_reason is empty, which for these rows is always, so the
+                # reader-facing sentence leads and the collector attribution trails it.
+                notes=("Not run. This source refused every request it was given over a "
+                       "sustained period, so AUXSAYS deliberately stopped calling it rather "
+                       "than spending each cycle timing out against it. The method is "
+                       "retained and can be restored if the source starts answering again. "
+                       f"(acrobat community collector; edition={self.product_id})"),
             ))
         return all_accepted, all_rejected, method_health
 
