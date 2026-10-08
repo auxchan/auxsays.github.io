@@ -38,6 +38,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-022 | Resolved | Evidence authority | High | Premiere evidence was maintained by hand, and two of its five rows could not stand |
 | AUX-023 | Resolved | Evidence acquisition | High | Premiere has no working discovery method, and an Adobe board id is not a product — closed by AUX-024 |
 | AUX-024 | Resolved | Evidence acquisition | High | Premiere acquisition restored over the keyless Adobe Community chain |
+| AUX-025 | Resolved | Collector runtime | Medium | Premiere spent 622s to collect 12s of evidence — routed to one primary, 97.8% faster |
 
 ---
 
@@ -1061,6 +1062,182 @@ would have deleted legitimate multi-version reports.
 
 **Reopen only if** a Premiere counted row names a version the author attributed to another product
 or an operating system, or the keyless chain stops answering from CI.
+
+---
+
+### AUX-025 — Premiere spent 622 seconds to collect 12 seconds of evidence
+
+- **Status** Resolved · **Area** Collector runtime · **Severity** Medium
+- **First seen** 2026-10-07 (measured in AUX-024's production proof) · **Resolved** 2026-10-07
+
+**Symptom** The Premiere collector ran **622.1s** in production run 37609394691 while the chain that
+produced every accepted row needed about 2.5s per patch. It attempted all nine discovery methods for
+every record, including six that had refused every request for months.
+
+**Measured baseline, before any change.** One bounded run on `e174bf89`, both live Premiere records,
+scheduled shape (`--since-days 45 --max-pages 5`), per-method timing and `urlopen` counting:
+
+| method | seconds | requests | status | candidates |
+|---|---|---|---|---|
+| `wayback_snapshot_recheck` | **408.5** | 26 | blocked / broken | 0 |
+| `reddit_search` | **92.3** | 150 (82 errors) | blocked | 0 |
+| `adobe_community_known_url_recheck` | 20.3 | 25 | blocked / no_results | 0 |
+| `adobe_community_algolia_search` | **6.2** | 12 | **success** | **76** |
+| `adobe_community_bug_tab_index` | 1.5 | 2 | blocked | 0 |
+| `creativecow_forum_index` | 0.4 | 2 | blocked | 0 |
+| `adobe_community_search` | 0.2 | 2 | blocked | 0 |
+| `brave_search_api` | 0.0 | 0 | disabled (no local key) | 0 |
+| `creativecow_brave_search` | 0.0 | 0 | disabled (no local key) | 0 |
+| **total** | **546.8** | **219** | | |
+
+**Attribution: two methods are 91.6% of the runtime.** Wayback (74.7%) and Reddit (16.9%) between
+them took 500.8s and returned nothing. Wayback averaged ~15.7s per request against web.archive.org,
+which is timeout cost, not work; it also calls Brave itself, so it inherits the lapsed
+subscription. Algolia was **1.1%** of the run and produced every accepted row.
+
+The local total is 546.8s against production's 622.1s because `BRAVE_SEARCH_API_KEY` is absent
+locally: `brave_search_api` short-circuits to zero requests, while in production the key is present
+and the three Brave callers each spend their four queries failing. The local figure therefore
+UNDERSTATES the production saving.
+
+**Resolution: declare the roles in the SHARED router, do not build a Premiere one.**
+`lib/method_routing.py` gains an `adobe-premiere-pro` plan, and its plan vocabulary gains two role
+lists every product can use:
+
+| role | methods | behaviour |
+|---|---|---|
+| `primary` | `adobe_community_algolia_search` | runs every cycle |
+| `fallback` | `adobe_community_known_url_recheck` | runs only on `no_accepted_reports`, `blocked`, `broken` |
+| `probe_only` | `wayback_snapshot_recheck` | never run routinely; kept for manual diagnosis |
+| `disabled` | the six measured-refused methods | never run; implementation and registry history kept |
+
+`fallback_when` names exactly the three conditions `adobe_community_method_status` can actually
+return. `stale` and `low_confidence` are deliberately absent: declaring them would be configuration
+that can never fire. `plan_methods` now also refuses a method declared in two roles, which would
+otherwise be both executed and reported as intentionally not executed.
+
+**After, same measurement, same records:** **12.1s** and **12 requests**, down from 546.8s and 219 —
+**97.8% less time, 94.5% fewer requests** — with the evidence population unchanged: 26.2 still
+40 candidates / 4 accepted, 26.2.2 still 36 / 18. No bounded attribution was needed; the result is
+an order of magnitude below the 120s gate.
+
+**What the known-URL recheck actually provides: C, plus a thin slice of B. Not A.** This was the
+question that decided whether making it conditional suppresses an evidence-integrity function, so it
+was traced rather than assumed. `known_candidate_urls` reads its URL list **out of the evidence store
+itself**, filtered to this product and this exact version, so every candidate it yields is already
+stored by construction — it has no discovery surface at all. The only writer the Premiere lane can
+reach, `append_evidence_rows`, is append-only, and `rejected` rows are never handed to it, so nothing
+on this path can withdraw, recount or correct a stored row. A rediscovered URL dies at
+`merge_rows_by_url` or at the append's URL key and becomes a `duplicate_existing_evidence` number.
+Its sole downstream effect is its own health row. **Making it conditional suppresses no required
+operation**, and AUX-024's description of it as "the only method that revalidates already-stored
+URLs" is true only in the sense that it re-fetches them; nothing acts on the result.
+
+**Why wayback gets no automatic recovery trigger.** A trigger such as "primary blocked AND known-URL
+access unavailable" is expressible, and was rejected on the measurement: wayback is itself blocked on
+one record and broken on the other, returned zero candidates, and costs 408.5s. The cycle where the
+primary has failed is exactly the cycle that must not also spend seven minutes on an archive that
+answered nothing. It stays `probe_only` and reachable by hand.
+
+#### Health semantics: a method that stops running must not leave a frozen failure behind
+
+`upsert_method_health` keys rows on `(product_id, update_version, target_build, method_id)` and
+**retains whatever the current run did not emit.** Nothing ages, prunes or expires a row. So simply
+routing six methods off would have left six `blocked` rows in the telemetry forever, with a frozen
+`last_run`, still driving public output — `apply_consensus_to_records` reads those statuses with no
+freshness check at all.
+
+This is not hypothetical. **Acrobat already retired `adobe_community_search` and `reddit_search`, and
+286 of their `blocked`/`broken` rows are still in the file**, newest `last_run` 2026-09-01, beside
+algolia rows that refresh daily. Those frozen rows are what still prints "Some community sources were
+unavailable during the last check" on Acrobat records today. The retiring comment there claims their
+"health rows stay honest"; measured against the live file, they do not.
+
+So every method routing declines to call still writes a row each cycle, with status **`disabled`** and
+a fresh `last_run`. `disabled` is canonical, already means exactly this in the schema ("implemented,
+deliberately switched off"), and is already emitted in production by three collectors across 167 rows,
+so nothing new was invented. The not-run rows are built by their own function rather than by the
+collector's status mapper, because that mapper returns `no_results` for a method with no candidates
+and no errors — and the monitoring ladder counts `no_results` as **healthy**. Routing a method off
+through the mapper would have published a method that never ran as a working source.
+
+**Public monitoring, rendered rather than reasoned about.** Both Premiere patches publish
+**MONITORING DEGRADED** today and still publish MONITORING DEGRADED after routing: partial
+disablement is itself a degraded signal, and healthy sources are counted per source FAMILY, so the
+six Adobe access mechanisms were never more than one family. Premiere therefore reads "1 fresh ·
+need 2" before and after. Two public statements do change, and both become more accurate:
+
+- the patch detail page's separate collection gate prints the literal sentence **"Collection
+  blocked."** on both Premiere pages today, on the strength of rows for methods nobody intends to
+  run. With no `blocked`/`broken` row left, it stops.
+- the record limitation "Some community sources were unavailable during the last check" stops too.
+  Nothing was unavailable; nothing was attempted.
+
+**A correction to this ledger.** AUX-024 states the live Premiere pages say "COLLECTION BLOCKED",
+"0 fresh … need 2". Rendered through the shipped Liquid include against the live telemetry, they say
+**MONITORING DEGRADED** and **"1 fresh … need 2"**. The "Collection blocked." sentence does exist on
+the page, but it comes from a different gate one screen away, not from the monitoring card.
+
+#### One defect this change introduced, and one assertion it had to re-scope
+
+**The orchestrator's GATE 2 used "has a plan" as a proxy for "has an adapter."** That proxy held only
+while PowerPoint was the sole product in `METHOD_PLANS`. The moment Premiere declared a plan for its
+OWN collector, `orchestrate_evidence_run.py --product-id adobe-premiere-pro` would have passed the
+gate and then run `default_powerpoint_methods()` against Premiere records, because `self.methods`
+defaults to PowerPoint's adapters. Not reachable from production, which hardcodes PowerPoint, but
+reachable by hand. The gate now checks the adapters directly, which is what its own comment always
+said it meant. It checks for ANY declared primary it can execute, not all of them: every R1 fixture
+deliberately binds two adapters against a six-method plan, and requiring the full subset declared
+PowerPoint unsupported in all of them — caught by the governed suite, not by the targeted one.
+
+**`test_orchestration_r1.py`'s dependency assertion had two jobs.** It forbade the production runner
+from importing the orchestration graph AND from importing `lib/method_routing`. The first is unchanged
+and still asserted. The second is now deliberately false: Premiere routes through the shared
+declaration rather than a private copy, so one product cannot drift from the vocabulary the other
+lane validates against. `method_routing` is two pure functions over literals with no imports of its
+own, so depending on it does not reintroduce the graph — which is what the invariant actually
+protects. Both jobs are now named in the test.
+
+**Verification** `test_premiere_method_routing.py`, **48 checks**, offline — proven by running it with
+every socket refused — registered `[blocking]`. It covers the declared plan and roles, that a healthy
+primary runs nothing else, each fallback condition, that routing touches no acceptance field, that a
+not-run method makes no request and still reports `disabled` with this run's timestamp, that PowerPoint
+is unmoved, and that the orchestrator still refuses Premiere. **15 of 15 mutants killed**, scoped to
+routing and health transitions only.
+
+Two of those mutants mattered. One proved an earlier version of the orchestrator assertion was
+**vacuous**: it re-derived the gate's predicate in the test instead of calling it, so it passed with
+the gate deleted. The predicate is now a named method the test calls directly. The other showed the
+last mutant surviving in this suite is killed by `test_orchestration_r1.py` instead, which owns the
+gate's call site — recorded here so the coverage is known to be split on purpose rather than assumed.
+
+**Known residuals**
+
+- **Acrobat has the same frozen-telemetry defect**, 286 rows, and a retiring comment that claims
+  otherwise. Not touched here: it is a different product's lane and its own measurement.
+- **A `disabled`-aware public caveat was measured and deliberately not added.** Routing removes the
+  "sources were unavailable" sentence, and nothing replaces it with "coverage is narrower than the
+  method list suggests". Adding a caveat on `disabled` alone would newly change **15 obs-studio patch
+  identities**, which is a cross-product presentation change this sprint should not make. Premiere's
+  coverage limit stays visible as MONITORING DEGRADED / "1 fresh · need 2".
+- **The fallback's acceptance path is already LOOSER than the primary's, and routing did not cause
+  it.** `row_from_candidate` branches on `premiere_board_verified` and `vendor_authored`, which only
+  Algolia's `topic_candidate` sets, and a candidate with no date bypasses the opening-post date gate
+  entirely because `source_date_pass` is `None` rather than `False`. Algolia is structurally incapable
+  of producing a dateless candidate; the HTML methods are not. Routing REDUCES exposure to that path,
+  since the fallback now runs only when the primary failed, but the asymmetry is real and predates
+  this change. Premiere identity logic is frozen this sprint, so it is recorded, not touched.
+- **Eight of the nine methods never called `start_method()`**, so the 180s per-method deadline, the
+  60-request cap and the backoff cap applied only to `reddit_search`. The effective ceiling was the
+  1170s per-COLLECTOR budget shared across both records. Routing removes the need rather than fixing
+  the gap.
+
+**Reopen only if** the Premiere collector exceeds roughly 120s on a scheduled run, or a method
+declared `disabled`/`probe_only` performs a routine network request, or a Premiere method-health row
+reports `blocked`/`broken` for a method routing did not call.
+
+**Cross-reference** AUX-023 / AUX-024 for the acquisition history. Nothing in their evidence
+semantics, identity, version-ownership, role or vendor logic is changed here.
 
 ---
 

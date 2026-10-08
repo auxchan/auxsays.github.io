@@ -122,6 +122,15 @@ auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
 auxsays/scripts/tests/test_premiere_editorial_protection.py = 36
 auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
+
+# Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
+# loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit
+# 92.3s, both returning zero candidates, while Algolia produced every accepted row in 6.2s.
+# Routed: 12.1s, 12 requests, same 4 and 18 accepted. The assertions here are what stops that
+# speed being bought with weaker acceptance (H) or a telemetry file that merely LOOKS better --
+# a method that stops emitting leaves its last `blocked` row frozen and reading as current, which
+# is why every not-run method still writes a fresh `disabled` row (O, P, J).
+auxsays/scripts/tests/test_premiere_method_routing.py = 48
 auxsays/scripts/tests/test_qa_patch_records.py = 30
 auxsays/scripts/tests/test_reader_evidence_identity.py = 17
 auxsays/scripts/tests/test_report_count_reconciliation.py = 17

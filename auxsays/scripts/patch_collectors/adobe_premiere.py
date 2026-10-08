@@ -40,6 +40,7 @@ from .base import (
     utc_now,
 )
 
+from lib.method_routing import fallback_justified, plan_methods
 from lib.target_outcome import target_is_contradicted
 from . import reddit_source
 
@@ -166,36 +167,107 @@ class AdobePremiereCollector(ProductCollector):
         return results
 
 
-def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
-    captured_at = utc_now()
-    method_results: list[dict[str, Any]] = []
 
-    for method_id, collector in (
-        # First: the only chain that answers today, and the only one scoped by Adobe's own taxonomy.
-        ("adobe_community_algolia_search", adobe_community_algolia_search_candidates),
-        ("reddit_search", reddit_search_candidates),
-        ("adobe_community_search", adobe_community_search_candidates),
-        ("adobe_community_bug_tab_index", adobe_community_bug_tab_candidates),
-        ("adobe_community_known_url_recheck", adobe_community_known_url_candidates),
-        ("brave_search_api", brave_search_api_candidates),
-        ("wayback_snapshot_recheck", wayback_snapshot_recheck_candidates),
-        ("creativecow_forum_index", creativecow_forum_index_candidates),
-        ("creativecow_brave_search", creativecow_brave_search_candidates),
-    ):
-        errors: list[dict[str, Any]] = []
-        candidates = collector(record, context, errors)
-        accepted, rejected = evaluate_candidates(record, candidates, captured_at)
-        method_results.append({
-            "method_id": method_id,
-            "candidates": candidates,
-            "accepted": accepted,
-            "rejected": rejected,
-            "errors": errors,
-        })
+# Why a method was not executed, for its health row's notes. These are the only three reasons:
+# routing never silently skips anything.
+#
+# This text is PUBLIC. The methodology page renders a health row's `notes` field verbatim, so
+# these read as site copy and must not name repository paths or internal module names.
+NOT_RUN_REASONS = {
+    "disabled": ("Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again."),
+    "probe_only": ("Not run. Kept for occasional manual diagnosis only: it was by far the slowest method in this collector and returned no usable reports when it was last measured."),
+    "fallback_not_required": ("Not run. The primary source answered with accepted reports, so this backup check was not needed. That is a routing decision, not a failed attempt."),
+}
+
+
+def run_one(record: PatchRecord, context: CollectorContext, method_id: str,
+            captured_at: str) -> dict[str, Any]:
+    """Execute one discovery method and evaluate it under the shared acceptance authority."""
+    errors: list[dict[str, Any]] = []
+    candidates = PREMIERE_METHODS[method_id](record, context, errors)
+    accepted, rejected = evaluate_candidates(record, candidates, captured_at)
+    return {"method_id": method_id, "candidates": candidates, "accepted": accepted,
+            "rejected": rejected, "errors": errors}
+
+
+def not_run_health_row(record: PatchRecord, captured_at: str, method_id: str,
+                       reason_key: str) -> dict[str, Any]:
+    """An honest telemetry row for a method routing did not call.
+
+    `disabled` is the canonical status for this and already means exactly this in the schema
+    ("implemented, deliberately switched off"), so nothing new is invented. It matters that a row
+    is written AT ALL: the store is an upsert keyed (product, version, build, method) that RETAINS
+    what it is not given, so a method that simply stopped emitting would leave its last `blocked`
+    row behind with a frozen last_run, reading as a current failure forever. Writing `disabled`
+    with a fresh last_run replaces that with the truth, and the monitoring include counts a
+    disabled row as not-usable rather than as a failed attempt.
+    """
+    return method_health_row(
+        product_id=PRODUCT_ID,
+        update_version=record.update_version,
+        method_id=method_id,
+        source_type=method_source_type(method_id),
+        status="disabled",
+        candidates_found=0,
+        accepted_reports=0,
+        rejected_reports=0,
+        blocked_reason="",
+        last_run=captured_at,
+        notes=f"{method_label(method_id)} not run. {NOT_RUN_REASONS[reason_key]}",
+    )
+
+
+def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    """Route, then collect. Routing chooses WHICH method runs; it never decides what counts.
+
+    Every method that executes passes through the same `evaluate_candidates` authority it always
+    did, and the merge/dedupe below is unchanged, so a row accepted from the fallback is accepted
+    on exactly the terms it would have been from the primary.
+    """
+    captured_at = utc_now()
+    plan = plan_methods(PRODUCT_ID)
+    primary_ids = [m for m in plan["primary"] if m in PREMIERE_METHODS]
+    fallback_ids = [m for m in plan["fallback"] if m in PREMIERE_METHODS]
+    not_run: list[tuple[str, str]] = []
+
+    # No declared primary means no product-scoped routing. Run the whole catalogue rather than
+    # silently collecting nothing: a missing declaration must not look like a product with no
+    # sources, which is the one failure mode that would be invisible in the output.
+    if not primary_ids:
+        primary_ids = list(PREMIERE_METHODS)
+        fallback_ids = []
+
+    method_results = [run_one(record, context, mid, captured_at) for mid in primary_ids]
+    primary_health = [health_for_method(record, captured_at, result) for result in method_results]
+    primary_accepted = merge_rows_by_url([row for r in method_results for row in r["accepted"]])
+
+    justified, reason = fallback_justified(primary_health, len(primary_accepted),
+                                          plan["fallback_when"])
+    health = list(primary_health)
+    for method_id in fallback_ids:
+        if justified:
+            result = run_one(record, context, method_id, captured_at)
+            method_results.append(result)
+            health.append(health_for_method(record, captured_at, result))
+        else:
+            not_run.append((method_id, "fallback_not_required"))
+
+    for method_id in plan["probe_only"]:
+        if method_id in PREMIERE_METHODS:
+            not_run.append((method_id, "probe_only"))
+    for method_id in plan["disabled"]:
+        if method_id in PREMIERE_METHODS:
+            not_run.append((method_id, "disabled"))
+    health.extend(not_run_health_row(record, captured_at, mid, why) for mid, why in not_run)
+
+    rb.emit("premiere_routing", product_id=PRODUCT_ID,
+            version=str(record.update_version or ""),
+            executed=[r["method_id"] for r in method_results],
+            not_run=[mid for mid, _ in not_run],
+            fallback_justified=bool(justified), fallback_reason=reason or "")
 
     accepted = merge_rows_by_url([row for result in method_results for row in result["accepted"]])
     rejected = merge_rows_by_url([row for result in method_results for row in result["rejected"] if not row_is_accepted_url(row, accepted)])
-    health = [health_for_method(record, captured_at, result) for result in method_results]
     return accepted, rejected, health
 
 
@@ -772,6 +844,23 @@ def method_source_type(method_id: str) -> str:
     return SOURCE_TYPE
 
 
+METHOD_LABELS = {
+    "adobe_community_algolia_search": "Adobe Community keyless JSON chain (searchToken to Algolia to getTopics)",
+    "reddit_search": "Reddit community search (r/premierepro, r/editors, r/Adobe)",
+    "adobe_community_search": "Adobe Community search",
+    "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
+    "adobe_community_known_url_recheck": "Known Adobe Community bug-report URL recheck",
+    "brave_search_api": "Brave Search API fallback",
+    "wayback_snapshot_recheck": "Wayback snapshot recheck",
+    "creativecow_forum_index": "Creative COW Premiere Pro forum index",
+    "creativecow_brave_search": "Creative COW Brave Search fallback",
+}
+
+
+def method_label(method_id: str) -> str:
+    return METHOD_LABELS.get(method_id, method_id)
+
+
 def method_notes(
     method_id: str,
     candidates: list[dict[str, Any]],
@@ -779,18 +868,7 @@ def method_notes(
     rejected: list[dict[str, Any]],
     errors: list[dict[str, Any]],
 ) -> str:
-    labels = {
-        "adobe_community_algolia_search": "Adobe Community keyless JSON chain (searchToken to Algolia to getTopics)",
-        "reddit_search": "Reddit community search (r/premierepro, r/editors, r/Adobe)",
-        "adobe_community_search": "Adobe Community search",
-        "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
-        "adobe_community_known_url_recheck": "Known Adobe Community bug-report URL recheck",
-        "brave_search_api": "Brave Search API fallback",
-        "wayback_snapshot_recheck": "Wayback snapshot recheck",
-        "creativecow_forum_index": "Creative COW Premiere Pro forum index",
-        "creativecow_brave_search": "Creative COW Brave Search fallback",
-    }
-    notes = f"{labels.get(method_id, method_id)} discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates."
+    notes = f"{method_label(method_id)} discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates."
     if method_id == "adobe_community_search":
         notes = f"{notes} Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly."
     if method_id == "brave_search_api":
@@ -1673,3 +1751,19 @@ def apply_consensus_writeback(update_version: str) -> bool:
     # record_updated for a no-op -- and in the OBS caller it would suppress the count fallback that
     # runs only `if not record_updated`.
     return bool(apply_collector_record_fields(record_path, fields)["write_plan"]["fields"])
+
+# Defined at the END of the module on purpose: every function it names is defined below the
+# routing code that uses it, and a module-level dict is evaluated at import time.
+# The catalogue: every implemented Premiere discovery method, by id. This dict decides nothing --
+# lib/method_routing.py decides which of these actually runs, product-scoped.
+PREMIERE_METHODS: dict[str, Any] = {
+    "adobe_community_algolia_search": adobe_community_algolia_search_candidates,
+    "adobe_community_known_url_recheck": adobe_community_known_url_candidates,
+    "wayback_snapshot_recheck": wayback_snapshot_recheck_candidates,
+    "adobe_community_search": adobe_community_search_candidates,
+    "adobe_community_bug_tab_index": adobe_community_bug_tab_candidates,
+    "reddit_search": reddit_search_candidates,
+    "brave_search_api": brave_search_api_candidates,
+    "creativecow_forum_index": creativecow_forum_index_candidates,
+    "creativecow_brave_search": creativecow_brave_search_candidates,
+}

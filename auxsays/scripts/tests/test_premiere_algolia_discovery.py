@@ -345,8 +345,18 @@ def run() -> int:
           premiere.SOURCE_TYPE in allowed_source_types("adobe-premiere-pro")
           and premiere.method_source_type("adobe_community_algolia_search") == premiere.SOURCE_TYPE,
           premiere.method_source_type("adobe_community_algolia_search"))
-    check("H6 it is first in the method tuple, ahead of the chains that no longer answer",
-          "adobe_community_algolia_search" in str(premiere.collect_for_record.__code__.co_consts))
+    # Was: "first in the method tuple", asserted by reading collect_for_record.__code__.co_consts.
+    # The flat tuple is gone -- the nine methods are now routed from the shared plan -- and the
+    # guarantee is strictly stronger than position: Algolia is the sole PRIMARY and the chains
+    # that no longer answer are not merely later, they do not run.
+    from lib.method_routing import plan_methods
+    _plan = plan_methods("adobe-premiere-pro")
+    check("H6 it is the sole primary, and the chains that no longer answer are not run at all",
+          _plan["primary"] == ["adobe_community_algolia_search"]
+          and {"adobe_community_search", "adobe_community_bug_tab_index", "reddit_search",
+               "brave_search_api", "creativecow_forum_index", "creativecow_brave_search"}
+          <= set(_plan["disabled"]),
+          f"primary={_plan['primary']} disabled={_plan['disabled']}")
 
     from lib.acquisition_methods import METHODS
     entry = next((m for m in METHODS if m.get("method_id") == "adobe_community_algolia_search"), None)

@@ -328,6 +328,25 @@ class Pipeline:
 
     # ---- nodes -------------------------------------------------------------
 
+    def unsupported_products(self) -> list[str]:
+        """Products this runner cannot actually execute.
+
+        Either the product declares no primary method, or this runner holds an adapter for NONE
+        of the ones it declares. Separate from GATE 2 so it can be asserted directly: a test
+        that re-derives the predicate passes with the gate removed.
+
+        ANY rather than ALL, deliberately. A caller may legitimately bind a narrower adapter
+        set than the plan declares -- every R1 fixture does, injecting two adapters against a
+        six-method plan -- and requiring the full subset declared PowerPoint unsupported in
+        all of them. What the gate must catch is a product this runner cannot touch at all,
+        which is what a product whose primaries are all missing from self.methods is."""
+        unsupported: list[str] = []
+        for product_id in self.product_ids:
+            primary = plan_methods(product_id).get("primary") or []
+            if not primary or not (set(primary) & set(self.methods)):
+                unsupported.append(product_id)
+        return unsupported
+
     def verify_repo_state(self, state: OrchestrationState) -> OrchestrationState:
         self._restore_url_state(state)   # resume: rehydrate dedup/ownership before any discovery
         head = subprocess.run(["git", "-C", str(self.repo_root), "rev-parse", "HEAD"],
@@ -378,10 +397,19 @@ class Pipeline:
                         state.fail("VERIFY_REPO_STATE", "resume_dirty_outside_allow",
                                    ",".join(outside[:5]))
 
-        # GATE 2 -- R1 only has a real method adapter for products with a declared plan. Running
-        # an empty plan and reporting DONE would claim a product was orchestrated when nothing
-        # ran. Fail closed instead; this does not touch production collectors.
-        unsupported = [p for p in self.product_ids if not plan_methods(p).get("primary")]
+        # GATE 2 -- this runner must actually HAVE an adapter for every primary method the
+        # product declares. Running a plan it cannot execute and reporting DONE would claim a
+        # product was orchestrated when nothing ran. Fail closed instead; this does not touch
+        # production collectors.
+        #
+        # This used to test only that the plan had a non-empty `primary`, using "has a plan" as
+        # a proxy for "has an adapter". The proxy held only while PowerPoint was the sole
+        # product in METHOD_PLANS. It stopped holding the moment another product declared a
+        # plan for its OWN collector: adobe-premiere-pro would have passed this gate and then
+        # run `default_powerpoint_methods()` against Premiere records, because self.methods
+        # defaults to PowerPoint's adapters. Checking the adapters directly is what the
+        # comment above always meant.
+        unsupported = self.unsupported_products()
         if unsupported:
             state.method_plan["unsupported_products"] = unsupported
             state.fail("VERIFY_REPO_STATE", "unsupported_product", ",".join(unsupported))
