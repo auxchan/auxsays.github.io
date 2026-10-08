@@ -17,8 +17,8 @@ update_version: New Glass effect updates
 update_logo_text: FIG
 update_published_at: '2026-01-27T00:00:00.000Z'
 update_last_checked: '2026-07-31T09:35:12Z'
-source_last_checked: '2026-09-06T13:21:23Z'
-official_body_last_checked: '2026-09-06T13:21:23Z'
+source_last_checked: '2026-10-08T15:55:32Z'
+official_body_last_checked: '2026-10-08T15:55:32Z'
 record_last_updated: '2026-07-31T09:35:12Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-06T13:21:23Z'
+  url: https://www.figma.com/release-notes/?title=new-glass-effect-updates
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-08T15:55:32Z'
   url: https://www.figma.com/release-notes/?title=new-glass-effect-updates
   status: captured-from-rss-feed
   body_captured: true

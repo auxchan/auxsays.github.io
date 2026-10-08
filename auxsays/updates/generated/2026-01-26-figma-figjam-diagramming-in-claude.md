@@ -17,8 +17,8 @@ update_version: FigJam diagramming in Claude
 update_logo_text: FIG
 update_published_at: '2026-01-26T00:00:00.000Z'
 update_last_checked: '2026-07-31T09:35:12Z'
-source_last_checked: '2026-09-06T17:49:45Z'
-official_body_last_checked: '2026-09-06T17:49:45Z'
+source_last_checked: '2026-10-08T15:55:32Z'
+official_body_last_checked: '2026-10-08T15:55:32Z'
 record_last_updated: '2026-07-31T09:35:12Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-06T17:49:45Z'
+  url: https://www.figma.com/release-notes/?title=figjam-diagramming-in-claude
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-08T15:55:32Z'
   url: https://www.figma.com/release-notes/?title=figjam-diagramming-in-claude
   status: captured-from-rss-feed
   body_captured: true
