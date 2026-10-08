@@ -21,7 +21,7 @@ methods:
   target_build: ''
   method_id: adobe_community_search
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -29,15 +29,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: adobe_community_search_fetch_failed:http_403_blocked
-  last_run: '2026-10-08T00:00:26Z'
-  notes: 'Adobe Community search discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly. Fetch failures: 1.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:13:02Z'
+  notes: Adobe Community search not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
   method_id: adobe_community_bug_tab_index
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -45,15 +45,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: adobe_community_bug_tab_fetch_failed:rate_limited
-  last_run: '2026-10-08T00:00:26Z'
-  notes: 'Adobe Community Premiere bug-tab listing discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 1.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:13:02Z'
+  notes: Adobe Community Premiere bug-tab listing not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
   method_id: adobe_community_known_url_recheck
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -61,15 +61,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: adobe_community_known_url_recheck_report_fetch_failed:rate_limited x18
-  last_run: '2026-10-08T00:00:26Z'
-  notes: 'Known Adobe Community bug-report URL recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 18.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:13:02Z'
+  notes: Known Adobe Community bug-report URL recheck not run. Not run. The primary source answered with accepted reports, so this backup check was not needed. That is a routing decision, not a failed attempt.
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
   method_id: brave_search_api
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -77,15 +77,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: brave_search_api_report_fetch_failed:rate_limited x10; brave_search_api_report_fetch_failed:http_404_none
-  last_run: '2026-10-08T00:00:26Z'
-  notes: 'Brave Search API fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method reads BRAVE_SEARCH_API_KEY from the workflow environment, uses it only as an API header, and never logs the token. Fetch failures: 11.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:13:02Z'
+  notes: Brave Search API fallback not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
   method_id: wayback_snapshot_recheck
   source_type: adobe_community_bug_report
-  status: broken
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -93,15 +93,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: wayback_no_snapshot x6; wayback_cdx_fetch_failed:TimeoutError x2; wayback_cdx_fetch_failed:url_error_timed out x15
-  last_run: '2026-10-08T00:00:26Z'
-  notes: 'Wayback snapshot recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available. Fetch failures: 23.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:13:02Z'
+  notes: 'Wayback snapshot recheck not run. Not run. Kept for occasional manual diagnosis only: it was by far the slowest method in this collector and returned no usable reports when it was last measured.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
   method_id: creativecow_forum_index
   source_type: creativecow_forum_report
-  status: broken
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -109,15 +109,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: creativecow_forum_index_fetch_failed:RequestDeadlineExceeded; creativecow_forum_index_fetch_failed:TimeoutError x2
-  last_run: '2026-10-08T00:00:26Z'
-  notes: 'Creative COW Premiere Pro forum index discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 3.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:13:02Z'
+  notes: Creative COW Premiere Pro forum index not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
   method_id: creativecow_brave_search
   source_type: creativecow_forum_report
-  status: broken
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -125,15 +125,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: 'creativecow_brave_search_fetch_failed:url_error__ssl.c:993: The handshake operation timed out x3'
-  last_run: '2026-10-08T00:00:26Z'
-  notes: 'Creative COW Brave Search fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 3.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:13:02Z'
+  notes: Creative COW Brave Search fallback not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: adobe_community_search
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -141,15 +141,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: adobe_community_search_fetch_failed:http_403_blocked
-  last_run: '2026-10-07T23:48:39Z'
-  notes: 'Adobe Community search discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly. Fetch failures: 1.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:12:43Z'
+  notes: Adobe Community search not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: adobe_community_bug_tab_index
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -157,15 +157,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: adobe_community_bug_tab_fetch_failed:rate_limited
-  last_run: '2026-10-07T23:48:39Z'
-  notes: 'Adobe Community Premiere bug-tab listing discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 1.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:12:43Z'
+  notes: Adobe Community Premiere bug-tab listing not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: adobe_community_known_url_recheck
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -173,15 +173,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: adobe_community_known_url_recheck_report_fetch_failed:rate_limited x6; adobe_community_known_url_recheck_report_fetch_failed:http_404_none
-  last_run: '2026-10-07T23:48:39Z'
-  notes: 'Known Adobe Community bug-report URL recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 7.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:12:43Z'
+  notes: Known Adobe Community bug-report URL recheck not run. Not run. The primary source answered with accepted reports, so this backup check was not needed. That is a routing decision, not a failed attempt.
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: brave_search_api
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -189,15 +189,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: brave_search_api_report_fetch_failed:http_404_none; brave_search_api_report_fetch_failed:rate_limited x16
-  last_run: '2026-10-07T23:48:39Z'
-  notes: 'Brave Search API fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method reads BRAVE_SEARCH_API_KEY from the workflow environment, uses it only as an API header, and never logs the token. Fetch failures: 17.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:12:43Z'
+  notes: Brave Search API fallback not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: wayback_snapshot_recheck
   source_type: adobe_community_bug_report
-  status: broken
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -205,15 +205,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: 'wayback_cdx_fetch_failed:TimeoutError; wayback_cdx_fetch_failed:url_error_timed out x17; wayback_cdx_fetch_failed:url_error__ssl.c:993: The handshake operation timed out x2; wayback_no_snapshot x2'
-  last_run: '2026-10-07T23:48:39Z'
-  notes: 'Wayback snapshot recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available. Fetch failures: 22.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:12:43Z'
+  notes: 'Wayback snapshot recheck not run. Not run. Kept for occasional manual diagnosis only: it was by far the slowest method in this collector and returned no usable reports when it was last measured.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: creativecow_forum_index
   source_type: creativecow_forum_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -221,15 +221,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: creativecow_forum_index_fetch_failed:browser_challenge
-  last_run: '2026-10-07T23:48:39Z'
-  notes: 'Creative COW Premiere Pro forum index discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 1.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:12:43Z'
+  notes: Creative COW Premiere Pro forum index not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: creativecow_brave_search
   source_type: creativecow_forum_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -237,9 +237,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: creativecow_brave_search_thread_fetch_failed:browser_challenge x2
-  last_run: '2026-10-07T23:48:39Z'
-  notes: 'Creative COW Brave Search fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 2.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:12:43Z'
+  notes: Creative COW Brave Search fallback not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: blackmagic-davinci
   update_version: 20.3.1
   target_build: ''
@@ -917,7 +917,7 @@ methods:
   target_build: ''
   method_id: reddit_search
   source_type: reddit_community_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -925,15 +925,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x18; reddit_feed_fetch_failed:http_429 x17; reddit_budget:max_requests
-  last_run: '2026-10-07T23:48:39Z'
-  notes: 'Reddit community search (r/premierepro, r/editors, r/Adobe) discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 36.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:12:43Z'
+  notes: Reddit community search (r/premierepro, r/editors, r/Adobe) not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
   method_id: reddit_search
   source_type: reddit_community_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -941,9 +941,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x21; reddit_feed_fetch_failed:http_429 x17; reddit_feed_fetch_failed:network_network x3
-  last_run: '2026-10-08T00:00:26Z'
-  notes: 'Reddit community search (r/premierepro, r/editors, r/Adobe) discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 41.'
+  blocked_reason: ''
+  last_run: '2026-10-08T03:13:02Z'
+  notes: Reddit community search (r/premierepro, r/editors, r/Adobe) not run. Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again.
 - product_id: obs-studio
   update_version: 32.1.1
   target_build: ''
@@ -25222,15 +25222,15 @@ methods:
   method_id: adobe_community_algolia_search
   source_type: adobe_community_bug_report
   status: success
-  candidates_found: 40
+  candidates_found: 39
   accepted_candidates: 4
   duplicate_existing_evidence: 4
   evidence_rows_added: 0
   public_counted_reports: 4
   accepted_reports: 4
-  rejected_reports: 36
+  rejected_reports: 35
   blocked_reason: ''
-  last_run: '2026-10-07T23:48:39Z'
+  last_run: '2026-10-08T03:12:43Z'
   notes: Adobe Community keyless JSON chain (searchToken to Algolia to getTopics) discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates.
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -25246,5 +25246,5 @@ methods:
   accepted_reports: 18
   rejected_reports: 18
   blocked_reason: ''
-  last_run: '2026-10-08T00:00:26Z'
+  last_run: '2026-10-08T03:13:02Z'
   notes: Adobe Community keyless JSON chain (searchToken to Algolia to getTopics) discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates.
