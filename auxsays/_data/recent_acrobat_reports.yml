@@ -4,7 +4,26 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-10-07T23:03:18Z'
+  captured_at: '2026-10-08T05:59:37Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.002.21901|26.002.21901
+  report_date: '2026-09-15'
+  report_excerpt: Compare files tool For some reason the tool Compare files causes Acrobat to freeze and
+    I then have to terminate the program. I use it a lot but now it doesn't work. Anyone who knows why?
+  report_id: adobe-acrobat-pro:f111e4dbb9533c67
+  report_title: Compare files tool
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/compare-files-tool-1641985
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21901
+  window_end: '2026-09-17'
+  window_start: '2026-09-08'
+  window_version: 26.002.21901
+- attribution_state: not_established
+  captured_at: '2026-10-08T05:59:37Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -24,7 +43,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-07T23:03:18Z'
+  captured_at: '2026-10-08T05:59:37Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -44,7 +63,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-07T23:03:18Z'
+  captured_at: '2026-10-08T05:59:37Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -65,7 +84,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-07T23:03:18Z'
+  captured_at: '2026-10-08T05:59:37Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -85,7 +104,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-07T23:03:18Z'
+  captured_at: '2026-10-08T05:59:37Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -105,7 +124,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-07T23:03:18Z'
+  captured_at: '2026-10-08T05:59:37Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -485,7 +504,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-07T23:25:12Z'
+  captured_at: '2026-10-08T06:21:28Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -505,7 +524,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-07T23:25:12Z'
+  captured_at: '2026-10-08T06:21:28Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -525,7 +544,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-07T23:25:12Z'
+  captured_at: '2026-10-08T06:21:28Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true

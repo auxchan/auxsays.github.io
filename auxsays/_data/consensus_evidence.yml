@@ -49796,3 +49796,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wxe8oo-compound-clips-reduces-volume-bug-workaro
+  product_id: blackmagic-davinci
+  update_version: '21.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wxe8oo/compound_clips_reduces_volume_bug_workaround/
+  parent_title: Compound Clips reduces volume - bug (workaround?)
+  report_title: Compound Clips reduces volume - bug (workaround?)
+  report_text_excerpt: Compound Clips reduces volume - bug (workaround?) Have you noticed that if you make a Compound Clip on Edit Page it will reduce the Audio Volume of your clip? This happens only if your Audio Track is Mono. (Does not matter if the clip itself is mono or stereo). You can hear...
+  captured_at: '2026-10-08T06:46:40Z'
+  source_date: '2026-10-04'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
