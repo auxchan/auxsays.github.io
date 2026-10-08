@@ -1211,6 +1211,16 @@ the gate deleted. The predicate is now a named method the test calls directly. T
 last mutant surviving in this suite is killed by `test_orchestration_r1.py` instead, which owns the
 gate's call site — recorded here so the coverage is known to be split on purpose rather than assumed.
 
+**One thing the PR run exposed, unrelated to routing.** CI run 37718129073 reported **96/96 suites
+PASSED** and was cancelled two seconds later: the `integrity` job's `timeout-minutes: 20` ran out
+while it was writing its summary. The comment defending that number described "~5.5 min for 66
+suites", which stopped being true at 96. Measured over the ten most recent runs — 10, 13, 13, 14, 16,
+17, 18, 19, 19, 20 minutes — `e174bf89` on `main` had already taken 19m with one minute of headroom,
+for content that had passed. This change's one extra suite consumed the last minute. Raised to 45,
+a little over twice the slowest observed run; the per-suite 900s cap is unchanged, so a genuinely
+hung suite is still bounded. **A green suite reported as a red build is the worst failure shape a CI
+gate can have**, and it is exactly what AUX-013's merge gate then correctly refused to merge.
+
 **Known residuals**
 
 - **Acrobat has the same frozen-telemetry defect**, 286 rows, and a retiring comment that claims

@@ -52,9 +52,19 @@ jobs:
   integrity:
     name: integrity
     runs-on: ubuntu-latest
-    # Measured ~5.5 min locally for 66 suites. 20 min leaves generous room for runner variance
-    # without letting a hung suite burn an hour; the runner also caps each suite at 900s itself.
-    timeout-minutes: 20
+    # The "~5.5 min for 66 suites, 20 min is generous" budget this carried stopped being true as
+    # the suite count grew to 96. Measured on the ten most recent runs: 10, 13, 13, 14, 16, 17,
+    # 18, 19, 19 and 20 minutes -- and e174bf89 on main took 19m against the 20m ceiling, one
+    # minute of headroom, for content that had already passed. The run that forced this change
+    # (37718129073) reported 96/96 PASSED and was cancelled two seconds later with no time left
+    # to write its summary, which is the worst possible failure shape: a green suite reported as
+    # a red build.
+    #
+    # 45 min is a little over twice the slowest observed run, so ordinary runner variance cannot
+    # reach it, while a genuinely hung job is still bounded. The real per-suite ceiling is
+    # unchanged: the runner caps each suite at 900s itself, so one stuck suite cannot consume
+    # this budget quietly.
+    timeout-minutes: 45
 
     steps:
       - name: Check out the pull request
