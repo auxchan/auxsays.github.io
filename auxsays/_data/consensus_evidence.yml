@@ -49821,3 +49821,230 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024388-unable-to-select-additional-channels-w
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024388/unable-to-select-additional-channels-when-posting
+  parent_title: Unable to select additional channels when posting to multiple channels - Microsoft Q&A
+  report_title: Unable to select additional channels when posting to multiple channels - Microsoft Q&A
+  report_text_excerpt: Unable to select additional channels when posting to multiple channels Hello, I am experiencing an issue with publishing a single post to multiple channels simultaneously in Microsoft Teams. This functionality previously worked correctly, but it has recently stopped...
+  captured_at: '2026-10-08T14:29:33Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027725-microsoft-teams-repeatedly-asks-you-to
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6027725/microsoft-teams-repeatedly-asks-you-to-sign-in
+  parent_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams repeatedly asks you to sign in. Dear All, The following is happening to us; After I successfully authenticate on Teams, it asks me to log in again. Everything works correctly for a few moments and then it asks me to log in again. Is there anything I can check...
+  captured_at: '2026-10-08T14:29:33Z'
+  source_date: '2026-10-06'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027529-teams-duplication
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6027529/teams-duplication
+  parent_title: teams duplication - Microsoft Q&A
+  report_title: teams duplication - Microsoft Q&A
+  report_text_excerpt: teams duplication Microsoft teams not working for all calls- I may have two versions 365 and regular. Should i uninstall one?
+  captured_at: '2026-10-08T14:29:33Z'
+  source_date: '2026-10-06'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027529-teams-duplication-answer-12989337
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6027529/teams-duplication#answer-12989337
+  parent_title: teams duplication - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hello I am afraid your description of the issue is quite unclear. Can you share a screenshot of how the two versions/duplicates are presented in your system? As two apps, or as one app but two accounts? Also, what system are you using it on? Windows 11? MacOS, phone? What are...
+  captured_at: '2026-10-08T14:29:33Z'
+  source_date: '2026-10-06T14:22:21.73+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027725-microsoft-teams-repeatedly-asks-you-to
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6027725/microsoft-teams-repeatedly-asks-you-to-sign-in
+  parent_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams repeatedly asks you to sign in. Dear All, The following is happening to us; After I successfully authenticate on Teams, it asks me to log in again. Everything works correctly for a few moments and then it asks me to log in again. Is there anything I can check...
+  captured_at: '2026-10-08T14:29:33Z'
+  source_date: '2026-10-06'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027725-microsoft-teams-repeatedly-asks-you-to
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6027725/microsoft-teams-repeatedly-asks-you-to-sign-in
+  parent_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams repeatedly asks you to sign in. Dear All, The following is happening to us; After I successfully authenticate on Teams, it asks me to log in again. Everything works correctly for a few moments and then it asks me to log in again. Is there anything I can check...
+  captured_at: '2026-10-08T14:29:33Z'
+  source_date: '2026-10-06'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027725-microsoft-teams-repeatedly-asks-you-to
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6027725/microsoft-teams-repeatedly-asks-you-to-sign-in
+  parent_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams repeatedly asks you to sign in. Dear All, The following is happening to us; After I successfully authenticate on Teams, it asks me to log in again. Everything works correctly for a few moments and then it asks me to log in again. Is there anything I can check...
+  captured_at: '2026-10-08T14:29:33Z'
+  source_date: '2026-10-06'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027725-microsoft-teams-repeatedly-asks-you-to
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6027725/microsoft-teams-repeatedly-asks-you-to-sign-in
+  parent_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams repeatedly asks you to sign in. Dear All, The following is happening to us; After I successfully authenticate on Teams, it asks me to log in again. Everything works correctly for a few moments and then it asks me to log in again. Is there anything I can check...
+  captured_at: '2026-10-08T14:29:33Z'
+  source_date: '2026-10-06'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6029471-windows-update-install-error-0x800736b
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6029471/windows-update-install-error-0x800736b3-kb5129195
+  parent_title: Windows Update install error 0X800736b3 - KB5129195 - Microsoft Q&A
+  report_title: Windows Update install error 0X800736b3 - KB5129195 - Microsoft Q&A
+  report_text_excerpt: 'Windows Update install error 0X800736b3 - KB5129195 - Microsoft Q&A When I try to install Windows update KB5129195 (26200.9457), I still have the same install error code : 0X800736b3. The same thing happen when I tried to install the preversion of Windows Update KB5124010...'
+  captured_at: '2026-10-08T14:33:40Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9550'
+  match_basis: exact_os_build
+  matched_kb: KB5124010
+  matched_os_build: '26200.9550'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
