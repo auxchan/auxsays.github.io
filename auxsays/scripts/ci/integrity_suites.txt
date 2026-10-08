@@ -65,6 +65,21 @@ auxsays/scripts/tests/test_powerpoint_github_officedev.py = 22
 auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
 auxsays/scripts/tests/test_powerpoint_qna_tag_enumeration.py = 65
 auxsays/scripts/tests/test_acrobat_tiering.py = 136
+
+# A retired Acrobat method must report that it is retired. adobe_community_search and
+# reddit_search stopped executing, and the comment that retired them claimed their health rows
+# stayed honest; 286 rows instead froze at `blocked` with last_run 2026-08-07/2026-09-01 beside
+# algolia rows refreshing daily. Three consumers read status with no freshness check, so 84
+# patch pages published "Collection blocked" and the methodology page published 286 raw
+# blocked_reason diagnostics as current. This pins the repair -- a fresh `disabled` row every
+# run -- and the properties that make `disabled` correct rather than cosmetic: not healthy, not
+# attempted-and-failed, not creditable with another method's evidence, and replaced in place if
+# the method is ever re-enabled. The two corpus observations WARN rather than fail: this is a
+# producer fix, and each record's rows are rewritten only when THAT record is next walked.
+# Acrobat is walked newest-first under a wall-clock budget -- about the first 20 of 196
+# records per edition per run -- so 139 of the 143 frozen identities are a standing backlog
+# that scoped dispatches clear, not a one-run lag.
+auxsays/scripts/tests/test_acrobat_retired_method_health.py = 50
 auxsays/scripts/tests/test_update_linked_tier2.py = 243
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
