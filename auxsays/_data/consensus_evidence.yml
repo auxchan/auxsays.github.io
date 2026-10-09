@@ -50073,3 +50073,135 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-15-009-20071-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-pro-will-not-update-beyond-15-9-20069-15942-131
+  product_id: adobe-acrobat-reader
+  update_version: 15.009.20071
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-pro-will-not-update-beyond-15-9-20069-15942-1314912
+  parent_title: Acrobat DC Pro will not update beyond 15.9.20069.15942
+  report_title: Acrobat DC Pro will not update beyond 15.9.20069.15942
+  report_text_excerpt: 'Acrobat DC Pro will not update beyond 15.9.20069.15942 Acrobat DC Pro says it updates to but it doesn''t. Always stays at 15.009.20071. I try to update manually and it states: The upgrade patch cannot be installed by the windows installer service because the program to be...'
+  captured_at: '2026-10-09T01:44:16Z'
+  source_date: '2018-03-02'
+  target_release_date: '2015-10-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.009.20071
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-009-20069-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-issues-1231412
+  product_id: adobe-acrobat-reader
+  update_version: 15.009.20069
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-issues-1231412
+  parent_title: Acrobat issues
+  report_title: Acrobat issues
+  report_text_excerpt: Acrobat issues Good afternoon, Recently we have had issues with Adobe DC version 15.009.20069 and Adobe X Pro 10.1.16 being installed on the same computer, when trying to open hyperlinks embedded in an excel document or off the Web we get the following errors document does not...
+  captured_at: '2026-10-09T01:44:16Z'
+  source_date: '2018-09-24'
+  target_release_date: '2015-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.009.20069
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-009-20069-adobe-community-bug-report-https-community-adobe-com-questions-9-cant-install-acrobat-dc-in-cc-again-1243509
+  product_id: adobe-acrobat-reader
+  update_version: 15.009.20069
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/cant-install-acrobat-dc-in-cc-again-1243509
+  parent_title: Cant Install Acrobat DC in CC... again
+  report_title: Cant Install Acrobat DC in CC... again
+  report_text_excerpt: 'Cant Install Acrobat DC in CC... again Ok this is getting real old.... Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW071 ... -------------------------------------- Summary -------------------------------------- - 0 fatal...'
+  captured_at: '2026-10-09T01:44:16Z'
+  source_date: '2015-12-14'
+  target_release_date: '2015-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.009.20069
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-009-20069-adobe-community-bug-report-https-community-adobe-com-questions-624-acrobat-dc-fails-to-install-as-part-of-cc-design-tools-2
+  product_id: adobe-acrobat-reader
+  update_version: 15.009.20069
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/acrobat-dc-fails-to-install-as-part-of-cc-design-tools-2015-silent-install-673667
+  parent_title: Acrobat DC fails to install as part of CC Design Tools 2015 silent install
+  report_title: Acrobat DC fails to install as part of CC Design Tools 2015 silent install
+  report_text_excerpt: 'Acrobat DC fails to install as part of CC Design Tools 2015 silent install Hello, On some machines the Acrobat DC doesn''t install. Is there anyway to enable logging for the msi? The log Adobe Acrobat DC 15.009.20069 10-05-2016 Shows it begins, then never finishes.: 10/05/16...'
+  captured_at: '2026-10-09T01:44:16Z'
+  source_date: '2016-10-14'
+  target_release_date: '2015-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.009.20069
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-009-20069-adobe-community-bug-report-https-community-adobe-com-questions-617-i-can-t-install-the-program-acrobat-dc-in-creative-cloud
+  product_id: adobe-acrobat-reader
+  update_version: 15.009.20069
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-617/i-can-t-install-the-program-acrobat-dc-in-creative-cloud-on-win10-ne-mogu-ustanovit-programmu-acrobat-dc-v-creative-cloud-na-win10-472925
+  parent_title: I can't install the program Acrobat DC in Creative Cloud on Win10/ Не могу установить программу Acrobat DC в Creative Cloud на Win10
+  report_title: I can't install the program Acrobat DC in Creative Cloud on Win10/ Не могу установить программу Acrobat DC в Creative Cloud на Win10
+  report_text_excerpt: 'I can''t install the program Acrobat DC in Creative Cloud on Win10/ Не могу установить программу Acrobat DC в Creative Cloud на Win10 Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW071 ... --------------------------------------...'
+  captured_at: '2026-10-09T01:44:16Z'
+  source_date: '2015-12-29'
+  target_release_date: '2015-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.009.20069
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1

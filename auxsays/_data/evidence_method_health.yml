@@ -12152,20 +12152,20 @@ methods:
   status: success
   candidates_found: 12
   accepted_candidates: 3
-  duplicate_existing_evidence: 1
-  evidence_rows_added: 2
+  duplicate_existing_evidence: 3
+  evidence_rows_added: 0
   public_counted_reports: 3
   accepted_reports: 3
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-09-09T02:25:01Z'
+  last_run: '2026-10-09T01:44:16Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.008.20082
   target_build: ''
   method_id: adobe_community_search
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -12173,15 +12173,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-09-01T11:56:45Z'
-  notes: acrobat community collector; edition=adobe-acrobat-reader
+  blocked_reason: ''
+  last_run: '2026-10-09T01:44:16Z'
+  notes: Not run. This source refused every request it was given over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again. (acrobat community collector; edition=adobe-acrobat-reader)
 - product_id: adobe-acrobat-reader
   update_version: 15.008.20082
   target_build: ''
   method_id: reddit_search
   source_type: reddit_community_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -12189,31 +12189,31 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x4; reddit_feed_fetch_failed:network_network x4
-  last_run: '2026-09-01T11:56:45Z'
-  notes: acrobat community collector; edition=adobe-acrobat-reader
+  blocked_reason: ''
+  last_run: '2026-10-09T01:44:16Z'
+  notes: Not run. This source refused every request it was given over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again. (acrobat community collector; edition=adobe-acrobat-reader)
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20069
   target_build: ''
   method_id: adobe_community_algolia_search
   source_type: adobe_community_bug_report
-  status: no_results
+  status: success
   candidates_found: 9
-  accepted_candidates: 0
+  accepted_candidates: 4
   duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 9
+  evidence_rows_added: 4
+  public_counted_reports: 4
+  accepted_reports: 4
+  rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-09-01T11:56:45Z'
+  last_run: '2026-10-09T01:44:16Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20069
   target_build: ''
   method_id: adobe_community_search
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -12221,15 +12221,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-09-01T11:56:45Z'
-  notes: acrobat community collector; edition=adobe-acrobat-reader
+  blocked_reason: ''
+  last_run: '2026-10-09T01:44:16Z'
+  notes: Not run. This source refused every request it was given over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again. (acrobat community collector; edition=adobe-acrobat-reader)
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20069
   target_build: ''
   method_id: reddit_search
   source_type: reddit_community_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -12237,31 +12237,31 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x8
-  last_run: '2026-09-01T11:56:45Z'
-  notes: acrobat community collector; edition=adobe-acrobat-reader
+  blocked_reason: ''
+  last_run: '2026-10-09T01:44:16Z'
+  notes: Not run. This source refused every request it was given over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again. (acrobat community collector; edition=adobe-acrobat-reader)
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20071
   target_build: ''
   method_id: adobe_community_algolia_search
   source_type: adobe_community_bug_report
-  status: no_results
+  status: success
   candidates_found: 2
-  accepted_candidates: 0
+  accepted_candidates: 1
   duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 2
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-09-01T11:56:45Z'
+  last_run: '2026-10-09T01:44:16Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20071
   target_build: ''
   method_id: adobe_community_search
   source_type: adobe_community_bug_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -12269,15 +12269,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-09-01T11:56:45Z'
-  notes: acrobat community collector; edition=adobe-acrobat-reader
+  blocked_reason: ''
+  last_run: '2026-10-09T01:44:16Z'
+  notes: Not run. This source refused every request it was given over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again. (acrobat community collector; edition=adobe-acrobat-reader)
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20071
   target_build: ''
   method_id: reddit_search
   source_type: reddit_community_report
-  status: blocked
+  status: disabled
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -12285,9 +12285,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x9; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9
-  last_run: '2026-09-01T11:56:45Z'
-  notes: acrobat community collector; edition=adobe-acrobat-reader
+  blocked_reason: ''
+  last_run: '2026-10-09T01:44:16Z'
+  notes: Not run. This source refused every request it was given over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again. (acrobat community collector; edition=adobe-acrobat-reader)
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20077
   target_build: ''
