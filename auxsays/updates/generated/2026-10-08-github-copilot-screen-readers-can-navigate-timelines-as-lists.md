@@ -17,8 +17,8 @@ update_version: Screen readers can navigate timelines as lists
 update_logo_text: GIT
 update_published_at: '2026-10-08T16:00:56Z'
 update_last_checked: '2026-10-09T01:40:01Z'
-source_last_checked: '2026-10-09T01:40:01Z'
-official_body_last_checked: '2026-10-09T01:40:01Z'
+source_last_checked: '2026-10-09T08:49:06Z'
+official_body_last_checked: '2026-10-09T08:49:06Z'
 record_last_updated: '2026-10-09T01:40:01Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-10-09T01:40:01Z'
+  url: https://github.blog/changelog/2026-10-08-screen-readers-can-navigate-timelines-as-lists
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-09T08:49:06Z'
   url: https://github.blog/changelog/2026-10-08-screen-readers-can-navigate-timelines-as-lists
   status: captured-from-rss-feed
   body_captured: true
