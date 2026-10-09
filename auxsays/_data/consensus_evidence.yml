@@ -50092,8 +50092,8 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat (shared DC build)
   applicability: adobe-acrobat-reader,adobe-acrobat-pro
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: wrong_product
   issue_theme: install/update failure
   workflow_area: deployment
   platform: windows

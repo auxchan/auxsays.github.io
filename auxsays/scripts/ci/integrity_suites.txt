@@ -80,6 +80,19 @@ auxsays/scripts/tests/test_acrobat_tiering.py = 136
 # records per edition per run -- so 139 of the 143 frozen identities are a standing backlog
 # that scoped dispatches clear, not a one-run lag.
 auxsays/scripts/tests/test_acrobat_retired_method_health.py = 50
+
+# The two repairs AUX-027 made after a targeted collector dispatch was used to clear the AUX-026
+# health backlog. That was the wrong mechanism -- a full collector dispatch DISCOVERS EVIDENCE --
+# and run 37871206618 added five counted Reader rows besides the health it was meant to fix. One
+# made Reader 15.009.20071 publish a single report sourced from "Acrobat DC Pro will not update
+# beyond ...", while Pro 15.009.20071 published none: PRO_RE's `dc pro` alternative required the
+# literal word "Adobe", so the bare form fell through to the shared-DC-build fallback. Section A
+# pins every real Pro spelling on BOTH collection paths, B pins that nothing else was broadened
+# (generic "Acrobat DC", licensing wording, Reader aliases, the genuinely-shared case), and D/E
+# pin the zero-network health migration that replaces the dispatch: idempotent, scoped to two
+# products x two methods, and structurally unable to write evidence -- E.2 checks that over the
+# AST, because the module docstring legitimately names the things it must not do.
+auxsays/scripts/tests/test_acrobat_edition_and_health_migration.py = 53
 auxsays/scripts/tests/test_update_linked_tier2.py = 243
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23

@@ -40,6 +40,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-024 | Resolved | Evidence acquisition | High | Premiere acquisition restored over the keyless Adobe Community chain |
 | AUX-025 | Resolved | Collector runtime | Medium | Premiere spent 622s to collect 12s of evidence — routed to one primary, 97.8% faster |
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
+| AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 
 ---
 
@@ -1445,6 +1446,142 @@ collector did not run, or an Acrobat patch page publishes "Collection blocked." 
 **Cross-reference** AUX-025 fixed the identical defect for Premiere and is where the mechanism is
 described. Nothing in Acrobat's evidence rows, counts, Reader/Pro identity, Standard exclusion,
 Liquid Mode, verdicts, consensus or official ingestion is changed here.
+
+---
+
+### AUX-027 — Clearing telemetry with a collector moved evidence, and "Acrobat DC Pro" was not Pro
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-10-09 · **Resolved** 2026-10-09
+
+**I caused this one.** AUX-026 fixed the producer so a retired Acrobat method reports `disabled`,
+but it could not fix the 286 rows already frozen in the store, and the newest-first walk reaches
+only ~20 of 196 records per edition per run. To clear the backlog I dispatched a targeted Acrobat
+collector run. **That is the wrong mechanism: a full collector dispatch discovers evidence.**
+
+Workflow run **37871206618** wrote commit **de8ccb21**, which besides method health also changed
+`consensus_evidence.yml`, `acrobat_update_linked_evidence.yml` and three generated Reader records,
+persisting **five new counted Reader evidence rows**. One of them made
+
+> **adobe-acrobat-reader 15.009.20071 — confirmed reports = 1**
+
+whose only accepted source was the thread *"Acrobat DC Pro will not update beyond
+15.9.20069.15942"*, while **adobe-acrobat-pro 15.009.20071 counted 0**. An explicitly Pro report was
+the entire evidentiary basis of a Reader page.
+
+**Root cause, reproduced.** `PRO_RE` had two Pro spellings: `acrobat pro (dc)?` with an OPTIONAL
+`adobe` prefix, and `adobe acrobat dc pro` with a MANDATORY one. So:
+
+| text | PRO_RE | READER_RE | result |
+|---|---|---|---|
+| `Acrobat Pro`, `Acrobat Pro DC`, `Adobe Acrobat DC Pro` | hit | — | Pro |
+| **`Acrobat DC Pro`** | **miss** | miss | bare Acrobat → `generic_acrobat_without_edition` → **shared DC build → Reader + Pro** |
+
+The stored row proves the path it took: `matched_product_alias: acrobat (shared DC build)`.
+
+**First repair — edition identity.** The `adobe` prefix is optional on both alternatives now. One
+regex change, nothing else broadened. Measured over the corpus: **7 stored rows contain "Acrobat DC
+Pro"**; the 5 on Pro pages stay counted and are now *explicit* rather than shared-build guesses, and
+the 2 on Reader pages become `wrong_product`. Generic "Acrobat DC" still belongs to the shared-build
+policy, licensing-tier wording still attributes nothing, Reader aliases are untouched, and a report
+naming both editions is still shared. **"Acrobat DC Reader" was checked and occurs 0 times in the
+corpus, so no alias was invented for it.**
+
+**Second repair — the row already persisted.** Fixing the producer removes nothing: the evidence
+store is append/dedupe oriented and nothing re-evaluates a stored row. So the row was corrected
+explicitly, as an audited withdrawal — `counted: false`, `exclusion_reason: wrong_product`, **the row
+kept**. The verdict is DERIVED: `withdraw_acrobat_wrong_edition_rows.py` re-evaluates every stored
+Acrobat row with the repaired authority and reports what it refuses, withdrawing only URLs named on
+the command line so the blast radius is visible in the invocation.
+
+Reconciled and promoted normally afterwards; the count is derived, never asserted:
+
+| record | before | after |
+|---|---|---|
+| **Reader 15.009.20071** | 1 report, `pilot_sample` | **0 reports, `official_only`** |
+| **Pro 15.009.20071** | 0 reports | **0 reports, unchanged** |
+
+**It was deliberately NOT moved to Pro.** `lib.target_outcome.target_is_contradicted` returns no
+verdict on this text, and the post says the install *"always stays at 15.009.20071"* while a LATER
+update fails — so 15.009.20071 reads as the version it remains on, not the blamed one. The honest
+answer is that the existing role authority does not resolve this shape, and inventing a rule for one
+thread is not a fix. Exactly one row exists for that URL; it is on Reader, withdrawn, and was never
+duplicated to Pro.
+
+**Bounded adjudication of all five rows de8ccb21 added.** One per row, re-derived from stored content
+with the repo's own authorities:
+
+| row | version | verdict | basis |
+|---|---|---|---|
+| R1 "Acrobat DC Pro will not update beyond …" | 15.009.20071 | **WITHDRAW** `wrong_product` | explicitly the other edition |
+| R2 "Acrobat issues" | 15.009.20069 | KEEP | generic "Adobe DC" + record applicability includes Reader; hyperlink/document-open failure |
+| R3 "Cant Install Acrobat DC in CC… again" | 15.009.20069 | KEEP | generic Acrobat DC; `can't install` is a strong-issue hit |
+| R4 "Acrobat DC fails to install as part of CC Design Tools" | 15.009.20069 | KEEP | generic; two independent strong-issue hits |
+| R5 "I can't install the program Acrobat DC…" | 15.009.20069 | KEEP | generic; strong-issue hit |
+
+No role veto fires on any of them, every URL is a specific thread, and each date is the opening
+post's own `firstPost.creationDate` rather than a listing stamp.
+
+**An audit limitation worth recording, because it bounds how much that table can claim.** All five
+rows store only a **~275-character `report_text_excerpt`** and no `report_text`. Their
+`patch_version_matched: true` / `match_basis: exact_version_text` were recorded by the collector
+against the full body at collection time, and **cannot be independently re-derived from what the
+store keeps** — R3's version does not appear in its excerpt at all, and R2's concrete-issue gate
+flips on words that were truncated away. So the four KEEP verdicts rest on the re-derivable gates
+(edition, role, URL, date) plus the collector's own recorded match, not on a full re-run. This is
+the same `report_text` vs `report_text_excerpt` gap that caused the PowerPoint integrity defects.
+
+#### The migration that should have cleared the backlog in the first place
+
+`auxsays/scripts/migrate_acrobat_retired_method_health.py`. Zero network, deterministic, idempotent,
+and scoped to **two products × two retired methods**. It writes exactly one file, and the test
+asserts that over the **AST** rather than the text, because the module docstring legitimately names
+the things it must not do.
+
+| | before | after |
+|---|---|---|
+| retired Acrobat rows | 271 `blocked`, 1 `broken`, 74 `disabled` | **346 `disabled`** |
+| carrying a fetch diagnostic | 272 | **0** |
+| `adobe_community_algolia_search` | 124 success / 88 no_results | **unchanged** |
+| non-Acrobat rows | 1,080 | **unchanged** |
+| total rows | 1,638 | **1,638 — nothing deleted** |
+
+**Scope proven, not asserted.** `consensus_evidence.yml`, `acrobat_update_linked_evidence.yml`,
+`recent_acrobat_reports.yml` and all 392 Acrobat generated records were hashed before and after:
+**0 of 395 changed.** That is the whole point — the dispatch it replaces could not make that promise
+and did not keep it. 272 rows change on the first pass and **0 on the second**; a row already correct
+keeps its own timestamp rather than being restamped.
+
+PR #168's per-record `disabled` emitter remains the ongoing producer. This migration is the one-time
+backlog repair, and no historical identity needed a full collector traversal.
+
+**Verification** `test_acrobat_edition_and_health_migration.py`, **53 checks**, offline — proven with
+every socket refused — registered `[blocking]`. Section A pins all five real Pro spellings on BOTH
+collection paths, B pins that nothing else moved, C replays the exact stored text, D/E pin the
+migration's scope, shape and idempotence. **7 of 7 edition mutants killed.** The symmetric one — the
+Pro path no longer refusing a Reader-only report — **survived until I added the assertion that was
+missing**: the defect was one-directional but the contract is not.
+
+**Known residuals, measured**
+
+- **Three more stored rows the repaired authority refuses, all pre-existing and all outside this
+  sprint's scope**: `adobe-acrobat-pro 17.012.20093` and `adobe-acrobat-pro 18.009.20044` (Reader
+  reports on Pro pages — already refusable before this change) and `adobe-acrobat-reader
+  17.012.20093` (an "Acrobat DC Pro" report, newly refusable). The withdrawal tool lists them as
+  `report-only` on every run, so they cannot be forgotten.
+- **"Adobe X Pro" / "Acrobat X Pro" is not recognised by `PRO_RE`** — the same shape of hole as the
+  one fixed here. Not widened: on the one row where it appears the referent is Acrobat X 10.1.16,
+  a different product generation, so recognising it would withdraw a row on the strength of a
+  mention of something else. Widening WHO widens WHAT.
+- **A theme misattribution, not a counting defect**: R2's symptom is hyperlink/document-open
+  failure, but `acrobat_classify` latched on "being installed on the same computer" and the Reader
+  15.009.20069 page says "Current reports mention install/update failure".
+
+**Reopen only if** an Acrobat page counts a report whose text names only the other edition, or a
+method-health repair touches any file other than `evidence_method_health.yml`.
+
+**Cross-reference** AUX-026 is the producer fix this backlog belongs to. The lesson that generalises:
+**a telemetry repair must not be able to move evidence.** A collector dispatch is not a migration.
 
 ---
 
