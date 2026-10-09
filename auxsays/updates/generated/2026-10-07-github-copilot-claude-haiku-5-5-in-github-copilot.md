@@ -17,8 +17,8 @@ update_version: Claude Haiku 5.5 in GitHub Copilot
 update_logo_text: GIT
 update_published_at: '2026-10-07T20:12:18Z'
 update_last_checked: '2026-10-08T01:59:39Z'
-source_last_checked: '2026-10-08T15:55:36Z'
-official_body_last_checked: '2026-10-08T15:55:36Z'
+source_last_checked: '2026-10-09T01:40:01Z'
+official_body_last_checked: '2026-10-09T01:40:01Z'
 record_last_updated: '2026-10-08T01:59:39Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -92,6 +92,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-08T15:55:36Z'
+  url: https://github.blog/changelog/2026-10-07-claude-haiku-5-5-in-github-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-09T01:40:01Z'
   url: https://github.blog/changelog/2026-10-07-claude-haiku-5-5-in-github-copilot
   status: captured-from-rss-feed
   body_captured: true

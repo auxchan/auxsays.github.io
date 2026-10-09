@@ -18,8 +18,8 @@ update_version: Draft pull requests count toward pull request limits
 update_logo_text: GIT
 update_published_at: '2026-10-08T14:25:53Z'
 update_last_checked: '2026-10-08T15:55:36Z'
-source_last_checked: '2026-10-08T15:55:36Z'
-official_body_last_checked: '2026-10-08T15:55:36Z'
+source_last_checked: '2026-10-09T01:40:01Z'
+official_body_last_checked: '2026-10-09T01:40:01Z'
 record_last_updated: '2026-10-08T15:55:36Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -77,6 +77,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-10-08T15:55:36Z'
+  url: https://github.blog/changelog/2026-10-08-draft-pull-requests-count-toward-pull-request-limits
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-09T01:40:01Z'
   url: https://github.blog/changelog/2026-10-08-draft-pull-requests-count-toward-pull-request-limits
   status: captured-from-rss-feed
   body_captured: true

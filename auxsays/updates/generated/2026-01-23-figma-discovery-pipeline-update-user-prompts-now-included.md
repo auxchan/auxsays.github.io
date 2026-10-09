@@ -17,8 +17,8 @@ update_version: 'Discovery pipeline update: User prompts now included'
 update_logo_text: FIG
 update_published_at: '2026-01-23T00:00:00.000Z'
 update_last_checked: '2026-07-31T14:39:30Z'
-source_last_checked: '2026-09-06T17:49:45Z'
-official_body_last_checked: '2026-09-06T17:49:45Z'
+source_last_checked: '2026-10-09T01:39:58Z'
+official_body_last_checked: '2026-10-09T01:39:58Z'
 record_last_updated: '2026-07-31T14:39:30Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-06T17:49:45Z'
+  url: https://www.figma.com/release-notes/?title=discovery-pipeline-update
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-09T01:39:58Z'
   url: https://www.figma.com/release-notes/?title=discovery-pipeline-update
   status: captured-from-rss-feed
   body_captured: true
