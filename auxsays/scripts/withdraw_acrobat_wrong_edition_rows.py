@@ -54,23 +54,57 @@ def refused_rows(rows: list[dict]) -> list[tuple[dict, str]]:
     return out
 
 
-def withdraw(text: str, url: str, reason: str) -> tuple[str, bool]:
-    """Flip counted/exclusion_reason inside ONE row block. Returns (text, changed)."""
-    anchor = text.index(url)
-    start = text.rindex(NEW_ROW, 0, anchor) + 1
-    nxt = text.find(NEW_ROW, anchor)
-    end = nxt + 1 if nxt != -1 else len(text)
-    block = text[start:end]
+def _blocks(text: str) -> list[tuple[int, int]]:
+    """(start, end) of every row block in the store, in file order."""
+    spans = []
+    i = text.find(NEW_ROW)
+    while i != -1:
+        nxt = text.find(NEW_ROW, i + 1)
+        spans.append((i + 1, (nxt + 1) if nxt != -1 else len(text)))
+        i = nxt
+    return spans
+
+
+def withdraw(text: str, row: dict, reason: str) -> tuple[str, bool]:
+    """Flip counted/exclusion_reason inside the ONE block matching this row's full identity.
+
+    Selection is by (source_url, product_id, update_version), not by URL alone. One Adobe thread
+    legitimately produces a row on BOTH editions -- the shared DC build -- and in those pairs only
+    one row is refused. Locating by URL took whichever block came first in the file, which for
+    escript-api-is-crashing-on-i9-form is the PRO row while the refused one is the READER row: it
+    would have withdrawn a correctly accepted report and left the wrong one counted.
+    """
+    url = str(row.get("source_url") or "")
+    pid = str(row.get("product_id") or "")
+    ver = str(row.get("update_version") or "")
+    want_pid = EOL + "  product_id: " + pid + EOL
+    want_url = EOL + "  source_url: " + url + EOL
+    matches = []
+    for lo, hi in _blocks(text):
+        block = text[lo:hi]
+        if want_url in block and want_pid in block and _version_of(block) == ver:
+            matches.append((lo, hi))
+    if len(matches) != 1:
+        raise SystemExit(
+            "refusing: " + str(len(matches)) + " blocks match " + pid + " " + ver + " " + url)
+    lo, hi = matches[0]
+    block = text[lo:hi]
     if COUNTED_FALSE in block and (EOL + "  exclusion_reason: " + reason + EOL) in block:
         return text, False
     if COUNTED_TRUE not in block:
-        raise SystemExit("refusing: unexpected counted shape for " + url)
+        raise SystemExit("refusing: unexpected counted shape for " + pid + " " + url)
     if REASON_NULL not in block:
-        raise SystemExit("refusing: unexpected exclusion_reason shape for " + url)
+        raise SystemExit("refusing: unexpected exclusion_reason shape for " + pid + " " + url)
     block = block.replace(COUNTED_TRUE, COUNTED_FALSE, 1)
     block = block.replace(REASON_NULL, EOL + "  exclusion_reason: " + reason + EOL, 1)
-    return text[:start] + block + text[end:], True
+    return text[:lo] + block + text[hi:], True
 
+
+def _version_of(block: str) -> str:
+    for line in block.split(EOL):
+        if line.startswith("  update_version: "):
+            return line[len("  update_version: "):].strip().strip("'").strip(chr(34))
+    return ""
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
@@ -99,7 +133,7 @@ def main(argv: list[str] | None = None) -> int:
         url = str(row.get("source_url") or "")
         if not any(u in url for u in args.only_url):
             continue
-        text, did = withdraw(text, url, reason)
+        text, did = withdraw(text, row, reason)
         changed += 1 if did else 0
     print("rows withdrawn               : " + str(changed))
 

@@ -10631,8 +10631,8 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat reader + acrobat pro
   applicability: adobe-acrobat-reader,adobe-acrobat-pro
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: wrong_product
   issue_theme: crash or launch failure
   workflow_area: application stability
   platform: unknown
@@ -10735,8 +10735,8 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat reader + acrobat pro
   applicability: adobe-acrobat-reader,adobe-acrobat-pro
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: wrong_product
   issue_theme: crash or launch failure
   workflow_area: application stability
   platform: unknown
@@ -29265,8 +29265,8 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat (shared DC build)
   applicability: adobe-acrobat-reader,adobe-acrobat-pro
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: wrong_product
   issue_theme: form behavior regression
   workflow_area: forms
   platform: unknown

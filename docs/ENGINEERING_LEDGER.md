@@ -1436,6 +1436,9 @@ which for these rows is always.
   fresher; it is the label's wording. Pre-existing for all 183 disabled rows across four products,
   and a cross-product wording change is not this sprint.
 - **139 frozen identities remain** until each record is walked. Quantified above.
+  **Superseded 2026-10-09 (AUX-027):** they were eliminated by a zero-network health migration,
+  not by the walk. All 346 retired Acrobat rows now report `disabled`. The reasoning above stands
+  as the measurement that showed why the walk could never do it.
 - **Nothing was deleted.** All 212 Acrobat identities keep their rows; the repair changes what a row
   says, never whether it exists.
 
@@ -1562,13 +1565,50 @@ migration's scope, shape and idempotence. **7 of 7 edition mutants killed.** The
 Pro path no longer refusing a Reader-only report — **survived until I added the assertion that was
 missing**: the defect was one-directional but the contract is not.
 
+**Residual CLEARED 2026-10-09 — and the first description of it was wrong.** This entry originally
+listed those three rows as "residuals" the withdrawal tool would print as `report-only` so they
+"cannot be forgotten". That understated them. `refused_rows()` **skips rows where `counted is
+False`**, so everything it reports is by construction **still counted**: all three were live
+wrong-edition counted rows, and their existence satisfied this entry's own reopen trigger while the
+entry read Resolved. Calling them report-only residuals was my mistake, not a scoping decision.
+
+All three are now withdrawn — `counted: false`, `exclusion_reason: wrong_product`, rows kept:
+
+| row | URL | before | after |
+|---|---|---|---|
+| `adobe-acrobat-pro 17.012.20093` | `…/adobe-acrobat-reader-dc-crashing-when-opening-july-2017-i-9-form-1510679` | counted | **withdrawn** |
+| `adobe-acrobat-pro 18.009.20044` | `…/blank-white-page-when-pdf-opened-1512271` | counted | **withdrawn** |
+| `adobe-acrobat-reader 17.012.20093` | `…/escript-api-is-crashing-on-i9-form-1309446` | counted | **withdrawn** |
+
+Reconciled and promoted per exact identity (`--product-id` + `--update-version`, `--write`, never
+`--write-all`), so exactly three generated records changed and no other record was touched:
+
+| record | reports before | after | evidence_state |
+|---|---|---|---|
+| Pro 17.012.20093 | 3 | **2** | `pilot_sample` (unchanged) |
+| Reader 17.012.20093 | 4 | **3** | `pilot_sample` (unchanged) |
+| Pro 18.009.20044 | 1 | **0** | `pilot_sample` → **`official_only`** |
+
+**The withdrawal tool had a selection bug, found while doing this and fixed first.** Two of the three
+URLs carry **two** stored rows — one per edition, which is what the shared DC build legitimately
+produces — and in each pair only ONE row is refused. `withdraw()` located its block by URL substring
+alone and took the first match in the file. For `escript-api-is-crashing-on-i9-form` that first block
+is the **Pro** row while the refused row is the **Reader** row, so the tool would have withdrawn a
+correctly accepted report and left the wrong one counted. It now selects on
+`(source_url, product_id, update_version)` and refuses unless exactly one block matches. Section F of
+the focused suite pins both directions; reinstating the URL-only selector fails three of its checks.
+
+**Verified after:** the authority reports **0 Acrobat rows refused as wrong_product**. Evidence total
+unchanged at **1,978 → 1,978** with every base row accounted for; **exactly 3 rows changed counting
+state and 0 rows changed in any other way**, compared on full identity rather than on `id` (the store
+holds 1,978 rows under 1,964 identities, so an id-keyed diff silently collapses rows and reported
+only 2 of the 3). `evidence_method_health.yml`, `acrobat_update_linked_evidence.yml` and
+`recent_acrobat_reports.yml` are byte-identical to the previous main. No row moved between editions,
+nothing was deleted, and no collector ran — this was stored-evidence correction, not acquisition.
+QA 1,266 records 0 errors 0 warnings; consensus audit clean; `evidence_losses` empty.
+
 **Known residuals, measured**
 
-- **Three more stored rows the repaired authority refuses, all pre-existing and all outside this
-  sprint's scope**: `adobe-acrobat-pro 17.012.20093` and `adobe-acrobat-pro 18.009.20044` (Reader
-  reports on Pro pages — already refusable before this change) and `adobe-acrobat-reader
-  17.012.20093` (an "Acrobat DC Pro" report, newly refusable). The withdrawal tool lists them as
-  `report-only` on every run, so they cannot be forgotten.
 - **"Adobe X Pro" / "Acrobat X Pro" is not recognised by `PRO_RE`** — the same shape of hole as the
   one fixed here. Not widened: on the one row where it appears the referent is Acrobat X 10.1.16,
   a different product generation, so recognising it would withdraw a row on the strength of a

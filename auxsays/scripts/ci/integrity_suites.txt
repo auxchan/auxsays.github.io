@@ -92,7 +92,7 @@ auxsays/scripts/tests/test_acrobat_retired_method_health.py = 50
 # pin the zero-network health migration that replaces the dispatch: idempotent, scoped to two
 # products x two methods, and structurally unable to write evidence -- E.2 checks that over the
 # AST, because the module docstring legitimately names the things it must not do.
-auxsays/scripts/tests/test_acrobat_edition_and_health_migration.py = 53
+auxsays/scripts/tests/test_acrobat_edition_and_health_migration.py = 59
 auxsays/scripts/tests/test_update_linked_tier2.py = 243
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
