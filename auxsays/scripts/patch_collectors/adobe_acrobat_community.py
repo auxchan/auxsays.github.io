@@ -237,7 +237,14 @@ MAX_SEARCH_PAGES = 1
 # rule; a Pro crash report often carries com.adobe.Acrobat.Pro but never the literal phrase
 # "Acrobat Pro". Bare "com.adobe.Acrobat" (no .Pro/.Reader) stays ambiguous and is not added.
 READER_RE = re.compile(r"\b(?:adobe\s+)?acrobat\s+reader(?:\s+dc)?\b|\badobe\s+reader\b|\breader\s+dc\b|\bcom\.adobe\.reader\b", re.I)
-PRO_RE = re.compile(r"\b(?:adobe\s+)?acrobat\s+pro(?:\s+dc)?\b|\badobe\s+acrobat\s+dc\s+pro\b|\bcom\.adobe\.acrobat\.pro\b", re.I)
+# The `dc pro` alternative used to REQUIRE the word "Adobe" in front of it, while the `pro dc`
+# alternative above has always treated that prefix as optional. So "Adobe Acrobat DC Pro" was Pro
+# and bare "Acrobat DC Pro" -- which is how people actually write it -- was not: it missed
+# PRO_RE, missed READER_RE, hit ACROBAT_BARE_RE, fell through to generic_acrobat_without_edition,
+# and the shared-DC-build fallback then published an explicitly Pro report on the READER page.
+# Reader 15.009.20071 counted exactly one report and it was "Acrobat DC Pro will not update
+# beyond ..." (AUX-027).
+PRO_RE = re.compile(r"\b(?:adobe\s+)?acrobat\s+pro(?:\s+dc)?\b|\b(?:adobe\s+)?acrobat\s+dc\s+pro\b|\bcom\.adobe\.acrobat\.pro\b", re.I)
 ACROBAT_BARE_RE = re.compile(r"\b(?:adobe\s+)?acrobat\b", re.I)
 # A licensing/entitlement TIER context: an edition name here denotes the license the user
 # holds, not the patched product. E.g. "signs in with an Acrobat Pro or Standard license",
