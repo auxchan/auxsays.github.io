@@ -17,8 +17,8 @@ update_version: Figma for Jira update
 update_logo_text: FIG
 update_published_at: '2026-01-08T00:00:00.000Z'
 update_last_checked: '2026-08-01T14:12:00Z'
-source_last_checked: '2026-09-07T14:53:15Z'
-official_body_last_checked: '2026-09-07T14:53:15Z'
+source_last_checked: '2026-10-09T15:39:26Z'
+official_body_last_checked: '2026-10-09T15:39:26Z'
 record_last_updated: '2026-08-01T14:12:00Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-07T14:53:15Z'
+  url: https://www.figma.com/release-notes/?title=figma-for-jira-update
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-09T15:39:26Z'
   url: https://www.figma.com/release-notes/?title=figma-for-jira-update
   status: captured-from-rss-feed
   body_captured: true

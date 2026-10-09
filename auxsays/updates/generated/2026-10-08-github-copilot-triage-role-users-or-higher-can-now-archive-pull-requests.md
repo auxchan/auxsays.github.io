@@ -18,8 +18,8 @@ update_version: Triage role users or higher can now archive pull requests
 update_logo_text: GIT
 update_published_at: '2026-10-08T19:01:42Z'
 update_last_checked: '2026-10-09T01:40:01Z'
-source_last_checked: '2026-10-09T08:49:06Z'
-official_body_last_checked: '2026-10-09T08:49:06Z'
+source_last_checked: '2026-10-09T15:39:29Z'
+official_body_last_checked: '2026-10-09T15:39:29Z'
 record_last_updated: '2026-10-09T01:40:01Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -90,6 +90,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-09T08:49:06Z'
+  url: https://github.blog/changelog/2026-10-08-triage-role-users-or-higher-can-now-archive-pull-requests
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-09T15:39:29Z'
   url: https://github.blog/changelog/2026-10-08-triage-role-users-or-higher-can-now-archive-pull-requests
   status: captured-from-rss-feed
   body_captured: true
