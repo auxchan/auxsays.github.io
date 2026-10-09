@@ -50330,3 +50330,91 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6030149-windows-update-not-working
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6030149/windows-update-not-working
+  parent_title: Windows Update Not Working - Microsoft Q&A
+  report_title: Windows Update Not Working - Microsoft Q&A
+  report_text_excerpt: 'Windows Update Not Working - Microsoft Q&A My Windows Update is not working, it just shows the loading symbol (throbber) repeatedly. I''m running: Edition Windows 11 Pro Version 25H2 Installed on ‎2025/‎01/‎27 OS build 26200.9457 Experience Windows Feature Experience Pack...'
+  captured_at: '2026-10-09T14:25:03Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6030773-windows-hello-for-business-container-l
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6030773/windows-hello-for-business-container-load-failure
+  parent_title: Windows Hello for Business Container Load Failure - Microsoft Q&A
+  report_title: Windows Hello for Business Container Load Failure - Microsoft Q&A
+  report_text_excerpt: 'Windows Hello for Business Container Load Failure - Microsoft Q&A OS: Windows 11 Enterprise 25H2, build 26200.9457 Hardware: HP EliteBook 6 G1i 14 inch Notebook AI PC Primary error: 0xD000A002 This computer model intermittently fails to load its Windows Hello for Business...'
+  captured_at: '2026-10-09T14:25:03Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6029917-hlk-studio-26100-8328-no-longer-queues
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6029917/hlk-studio-26100-8328-no-longer-queues-tests
+  parent_title: HLK Studio 26100.8328 no longer queues tests - Microsoft Q&A
+  report_title: HLK Studio 26100.8328 no longer queues tests - Microsoft Q&A
+  report_text_excerpt: HLK Studio 26100.8328 no longer queues tests - Microsoft Q&A Hello, Since upgrading HLK Studio to 10.0.26100.8328 it no longer queues tests for our drivers in the same setup that worked perfectly fine in 26100.7705. We apply the usual playlist and then all tests stay in Queued...
+  captured_at: '2026-10-09T14:27:53Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-04-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8328'
+  match_basis: exact_os_build
+  matched_os_build: '26100.8328'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8328'
