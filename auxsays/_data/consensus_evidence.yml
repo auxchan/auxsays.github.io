@@ -50048,3 +50048,28 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9550'
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x0khcv-exporting-aaf-for-pro-tools-through-resol
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x0khcv/exporting_aaf_for_pro_tools_through_resolve/
+  parent_title: Exporting AAF for Pro Tools through Resolve duration mismatch
+  report_title: Exporting AAF for Pro Tools through Resolve duration mismatch
+  report_text_excerpt: Exporting AAF for Pro Tools through Resolve duration mismatch Am trying to export an AAF for audio post using Davinci Resolve. For some reason the Duration in the top right hand corner seems to be incorrect? I'm using a Macbook Air M2, and on Davinci Resolve 21 (Free). This...
+  captured_at: '2026-10-09T00:06:15Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
