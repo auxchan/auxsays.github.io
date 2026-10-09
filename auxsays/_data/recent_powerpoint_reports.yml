@@ -4,7 +4,7 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -25,7 +25,7 @@ reports:
   window_start: '2026-09-22'
   window_version: '2609'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -46,7 +46,7 @@ reports:
   window_start: '2026-09-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -106,7 +106,7 @@ reports:
   window_start: '2026-09-01'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -127,7 +127,7 @@ reports:
   window_start: '2026-08-26'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -148,7 +148,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -274,7 +274,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -505,7 +505,7 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -548,7 +548,7 @@ reports:
   window_start: '2025-01-30'
   window_version: '2501'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -569,7 +569,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -633,7 +633,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -654,7 +654,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-10-09T01:36:42Z'
+  captured_at: '2026-10-09T02:42:10Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
