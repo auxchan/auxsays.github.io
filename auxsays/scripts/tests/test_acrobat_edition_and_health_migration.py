@@ -52,6 +52,34 @@ def check(label: str, condition: bool, detail: str = "") -> None:
         print(f"  FAIL  {label}" + (f"  [{detail}]" if detail else ""))
 
 
+def load_withdrawal():
+    path = SCRIPTS / "withdraw_acrobat_wrong_edition_rows.py"
+    spec = importlib.util.spec_from_file_location("aux_withdrawal", path)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["aux_withdrawal"] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+# Two rows, ONE url, different editions -- the shape the shared DC build legitimately produces, and
+# the shape that broke the first selector. The PRO block is deliberately first in the file.
+TWO_ROW_STORE = (
+    "schema_version: 1" + chr(10) + "evidence:" + chr(10)
+    + "- id: pro-row" + chr(10)
+    + "  product_id: adobe-acrobat-pro" + chr(10)
+    + "  update_version: 17.012.20093" + chr(10)
+    + "  source_url: https://community.adobe.com/questions-9/escript-1309446" + chr(10)
+    + "  counted: true" + chr(10)
+    + "  exclusion_reason: null" + chr(10)
+    + "- id: reader-row" + chr(10)
+    + "  product_id: adobe-acrobat-reader" + chr(10)
+    + "  update_version: 17.012.20093" + chr(10)
+    + "  source_url: https://community.adobe.com/questions-9/escript-1309446" + chr(10)
+    + "  counted: true" + chr(10)
+    + "  exclusion_reason: null" + chr(10)
+)
+
+
 def load_migration():
     path = SCRIPTS / "migrate_acrobat_retired_method_health.py"
     spec = importlib.util.spec_from_file_location("aux_health_migration", path)
@@ -252,6 +280,45 @@ def run_suite() -> int:
     check("E.5 it refuses to write without an explicit flag", "--write" in src and "dry run" in src)
     check("E.6 the timestamp is required rather than defaulted to now()",
           'required=True' in src and "datetime.now" not in src and "utcnow" not in src)
+
+    print()
+    print("=" * 92)
+    print("F  the withdrawal tool selects a row by identity, not by URL")
+    print("=" * 92)
+    wd = load_withdrawal()
+    reader_row = {"product_id": "adobe-acrobat-reader", "update_version": "17.012.20093",
+                  "source_url": "https://community.adobe.com/questions-9/escript-1309446"}
+    pro_row = dict(reader_row, product_id="adobe-acrobat-pro")
+    out, changed = wd.withdraw(TWO_ROW_STORE, reader_row, "wrong_product")
+    reader_block = out[out.index("- id: reader-row"):]
+    pro_block = out[out.index("- id: pro-row"):out.index("- id: reader-row")]
+    check("F.1 withdrawing the Reader row of a shared URL edits the READER block",
+          changed and "counted: false" in reader_block
+          and "exclusion_reason: wrong_product" in reader_block, reader_block[:120])
+    # This is the defect: locating by URL alone took the FIRST block in the file, which here is
+    # Pro -- so a correctly accepted report was withdrawn and the wrong row stayed counted.
+    check("F.2 and leaves the PRO row of the same URL counted",
+          "counted: true" in pro_block and "exclusion_reason: null" in pro_block,
+          pro_block[:120])
+    out2, changed2 = wd.withdraw(TWO_ROW_STORE, pro_row, "wrong_product")
+    pro_block2 = out2[out2.index("- id: pro-row"):out2.index("- id: reader-row")]
+    reader_block2 = out2[out2.index("- id: reader-row"):]
+    check("F.3 and the mirror case picks the PRO block",
+          changed2 and "counted: false" in pro_block2
+          and "counted: true" in reader_block2, pro_block2[:120])
+    again, changed3 = wd.withdraw(out, reader_row, "wrong_product")
+    check("F.4 a row already withdrawn with this reason is left alone",
+          changed3 is False and again == out)
+    # An ambiguous or absent match must stop, not guess.
+    try:
+        wd.withdraw(TWO_ROW_STORE, dict(reader_row, update_version="99.9"), "wrong_product")
+        refused = False
+    except SystemExit:
+        refused = True
+    check("F.5 a row whose identity matches no block is refused, not guessed at", refused)
+    check("F.6 the authority only ever withdraws an EXPLICIT opposite-edition refusal",
+          'reason == "wrong_product"' in
+          (SCRIPTS / "withdraw_acrobat_wrong_edition_rows.py").read_text(encoding="utf-8"))
 
     print()
     print("=" * 92)
