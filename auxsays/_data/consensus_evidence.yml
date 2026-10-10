@@ -50543,3 +50543,28 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
+
+- id: blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wudeds-davinci-lagging-like-hell-on-macbook-m4-p
+  product_id: blackmagic-davinci
+  update_version: '21.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wudeds/davinci_lagging_like_hell_on_macbook_m4_pro_48gb/
+  parent_title: DaVinci lagging like hell on MacBook M4 pro (48GB) 😭
+  report_title: DaVinci lagging like hell on MacBook M4 pro (48GB) 😭
+  report_text_excerpt: DaVinci lagging like hell on MacBook M4 pro (48GB) 😭 I recently switched to a MacBook Pro M4 Pro 48GB/1TB (14C CPU/20C GPU) and got my first long form project. I’m editing 2 VSLs ( 8 min and 5 min) They require fusion work, most of it is just cuts, brolls, typography and...
+  captured_at: '2026-10-10T06:35:33Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
