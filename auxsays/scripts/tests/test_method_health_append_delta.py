@@ -318,8 +318,14 @@ def run() -> int:  # noqa: PLR0915
           orch.index("finalize_method_health_delta(") < orch.index("upsert_method_health(health"),
           "health is written before the delta is known")
     obs = (_REPO / "auxsays" / "scripts" / "patch_collectors" / "obs.py").read_text(encoding="utf-8")
-    check("10 OBS passes the delta its legacy runner reports",
-          "evidence_rows_added=rows_added" in obs,
+    # OBS now has TWO source families, so the single forwarded delta became a per-family
+    # split attributed from write_evidence's own appends (added_rows_by_source_type). The
+    # property this guards is unchanged -- the number must be measured, never defaulted to
+    # the accepted count -- and it is pinned behaviourally in
+    # test_obs_forum_evidence_family.py T19, which runs the collector and reads the rows.
+    check("10 OBS forwards a measured delta for each of its source families",
+          "evidence_rows_added=github_added" in obs
+          and "evidence_rows_added=forum_added" in obs,
           "OBS appends inside the legacy script; it must forward the reported delta")
 
     # ---------------- the shipped corpus ----------------
