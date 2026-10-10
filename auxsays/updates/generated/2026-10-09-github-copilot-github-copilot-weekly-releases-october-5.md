@@ -17,8 +17,8 @@ update_version: GitHub Copilot weekly releases — October 5
 update_logo_text: GIT
 update_published_at: '2026-10-09T22:58:23Z'
 update_last_checked: '2026-10-10T00:58:40Z'
-source_last_checked: '2026-10-10T08:25:46Z'
-official_body_last_checked: '2026-10-10T08:25:46Z'
+source_last_checked: '2026-10-10T14:54:24Z'
+official_body_last_checked: '2026-10-10T14:54:24Z'
 record_last_updated: '2026-10-10T00:58:40Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -88,6 +88,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-10T08:25:46Z'
+  url: https://github.blog/changelog/2026-10-09-github-copilot-weekly-releases-october-5
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-10T14:54:24Z'
   url: https://github.blog/changelog/2026-10-09-github-copilot-weekly-releases-october-5
   status: captured-from-rss-feed
   body_captured: true
