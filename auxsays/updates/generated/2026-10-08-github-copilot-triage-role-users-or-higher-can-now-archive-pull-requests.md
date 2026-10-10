@@ -18,9 +18,9 @@ update_version: Triage role users or higher can now archive pull requests
 update_logo_text: GIT
 update_published_at: '2026-10-08T19:01:42Z'
 update_last_checked: '2026-10-09T01:40:01Z'
-source_last_checked: '2026-10-09T15:39:29Z'
-official_body_last_checked: '2026-10-09T15:39:29Z'
-record_last_updated: '2026-10-09T01:40:01Z'
+source_last_checked: '2026-10-10T00:58:40Z'
+official_body_last_checked: '2026-10-10T00:58:40Z'
+record_last_updated: '2026-10-10T00:58:40Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
@@ -99,6 +99,11 @@ official_source_attempts:
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
+- at: '2026-10-10T00:58:40Z'
+  url: https://github.blog/changelog/2026-10-08-triage-role-users-or-higher-can-now-archive-pull-requests
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: "Users with the triage role or higher in a repository can now archive and unarchive pull requests.\
   \ Previously, archiving was limited to repository administrators, requiring trusted triagers to hand routine moderation\
   \ work to someone with higher permissions.\n\n\n Maintainers increasingly rely on triagers to keep pull request queues healthy\
@@ -110,10 +115,11 @@ official_patch_notes_body: "Users with the triage role or higher in a repository
   \ a conversation’s locked state, which requires write access.\n\n\n With these changes:\n\n\n\n Users with the triage, write,\
   \ maintain, or admin role can archive and unarchive pull requests.\n Archiving automatically closes the pull request and\
   \ makes its conversation read-only.\n New comments, reactions, and automated comments are blocked while a pull request is\
-  \ archived.\n Archived pull requests are hidden from public view and remain visible to repository administrators.\n Unarchiving\
-  \ restores the ability to comment and react, but does not reopen the pull request.\n\n If you have any questions or feedback,\
-  \ drop a comment in our Community discussion .\n\n\n\n The post Triage role users or higher can now archive pull requests\
-  \ appeared first on The GitHub Blog ."
+  \ archived.\n Archived pull requests are hidden from public view and remain visible to users with the triage, write, maintain,\
+  \ or admin role.\n Unarchiving restores the ability to comment and react, but does not reopen the pull request.\n\n Editor’s\
+  \ note (October 9th, 2026): Clarified who will still be able to see archived pull requests.\n\n\n If you have any questions\
+  \ or feedback, drop a comment in our Community discussion .\n\n\n\n The post Triage role users or higher can now archive\
+  \ pull requests appeared first on The GitHub Blog ."
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---
