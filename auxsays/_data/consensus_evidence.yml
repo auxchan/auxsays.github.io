@@ -49796,7 +49796,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wxe8oo-compound-clips-reduces-volume-bug-workaro
   product_id: blackmagic-davinci
   update_version: '21.1'
@@ -49821,7 +49820,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024388-unable-to-select-additional-channels-w
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -49870,7 +49868,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027529-teams-duplication
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -49943,7 +49940,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027725-microsoft-teams-repeatedly-asks-you-to
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -49968,7 +49964,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027725-microsoft-teams-repeatedly-asks-you-to
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -49993,7 +49988,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027725-microsoft-teams-repeatedly-asks-you-to
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -50018,7 +50012,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6029471-windows-update-install-error-0x800736b
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -50048,7 +50041,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9550'
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x0khcv-exporting-aaf-for-pro-tools-through-resol
   product_id: blackmagic-davinci
   update_version: '21'
@@ -50073,7 +50065,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-009-20071-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-pro-will-not-update-beyond-15-9-20069-15942-131
   product_id: adobe-acrobat-reader
   update_version: 15.009.20071
@@ -50100,7 +50091,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-009-20069-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-issues-1231412
   product_id: adobe-acrobat-reader
   update_version: 15.009.20069
@@ -50205,7 +50195,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-seperate-retention-times-for-meetin
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -50230,7 +50219,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-seperate-retention-times-for-meetin
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -50255,7 +50243,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-seperate-retention-times-for-meetin
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -50280,7 +50267,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-seperate-retention-times-for-meetin
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -50305,7 +50291,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-seperate-retention-times-for-meetin
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -50330,7 +50315,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6030149-windows-update-not-working
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -50389,7 +50373,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9457'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6029917-hlk-studio-26100-8328-no-longer-queues
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -50418,7 +50401,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8328'
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -50443,7 +50425,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -50468,7 +50449,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -50493,7 +50473,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -50518,7 +50497,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -50543,7 +50521,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wudeds-davinci-lagging-like-hell-on-macbook-m4-p
   product_id: blackmagic-davinci
   update_version: '21.1'
@@ -50568,7 +50545,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -50617,7 +50593,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6031563-link-teams-in-outlook
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -50714,7 +50689,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -50763,7 +50737,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -50812,7 +50785,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -50861,7 +50833,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6032280-voice-focus-voice-clarity-disappeared
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -50891,7 +50862,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9550'
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6031361-powershell-5-1-filestream-creation-fai
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -50921,3 +50891,45 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9457'
+- id: obs-studio-32-2-0-github-issue-14017
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14017
+  parent_title: 'Windows: since 32.2.0, plugins whose dependencies are found via PATH no longer load'
+  report_title: 'Windows: since 32.2.0, plugins whose dependencies are found via PATH no longer load'
+  report_text_excerpt: 's through `PATH`, as in 32.1.x and in other host applications. ### Current Behavior Since 32.2.0, a plugin DLL fails to load if it imports a DLL that is only found through a `PATH` directory. The same plugins load fine in other hosts on the same machine. **Cause** 32.2.0 added th'
+  captured_at: '2026-10-10T23:13:34Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14017
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14017
+  parent_title: 'Windows: since 32.2.0, plugins whose dependencies are found via PATH no longer load'
+  report_title: 'Windows: since 32.2.0, plugins whose dependencies are found via PATH no longer load'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/oCsDou2aOUeH0m7F ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Third'
+  captured_at: '2026-10-10T23:15:08Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
