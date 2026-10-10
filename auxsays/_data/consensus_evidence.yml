@@ -50418,3 +50418,128 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8328'
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/shared-channels-channel-mentions-fail-to-trigger-activity-notifications-for-team/4562911
+  parent_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_text_excerpt: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members Hello everyone,&amp;nbsp;I am facing a persistent issue regarding notification behavior in Microsoft Teams Shared Channels that I hope someone can clarify or help...'
+  captured_at: '2026-10-09T23:38:49Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/shared-channels-channel-mentions-fail-to-trigger-activity-notifications-for-team/4562911
+  parent_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_text_excerpt: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members Hello everyone,&amp;nbsp;I am facing a persistent issue regarding notification behavior in Microsoft Teams Shared Channels that I hope someone can clarify or help...'
+  captured_at: '2026-10-09T23:38:49Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/shared-channels-channel-mentions-fail-to-trigger-activity-notifications-for-team/4562911
+  parent_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_text_excerpt: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members Hello everyone,&amp;nbsp;I am facing a persistent issue regarding notification behavior in Microsoft Teams Shared Channels that I hope someone can clarify or help...'
+  captured_at: '2026-10-09T23:38:49Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/shared-channels-channel-mentions-fail-to-trigger-activity-notifications-for-team/4562911
+  parent_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_text_excerpt: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members Hello everyone,&amp;nbsp;I am facing a persistent issue regarding notification behavior in Microsoft Teams Shared Channels that I hope someone can clarify or help...'
+  captured_at: '2026-10-09T23:38:49Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/shared-channels-channel-mentions-fail-to-trigger-activity-notifications-for-team/4562911
+  parent_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_text_excerpt: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members Hello everyone,&amp;nbsp;I am facing a persistent issue regarding notification behavior in Microsoft Teams Shared Channels that I hope someone can clarify or help...'
+  captured_at: '2026-10-09T23:38:49Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
