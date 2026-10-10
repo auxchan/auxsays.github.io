@@ -6,7 +6,7 @@ import { createPersistentWorld, employmentDriverCandidates, persistentWorldFinge
 import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
-import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
+import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, premiumNodeLabelPoint, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
 import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasPixelRatio, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldFullWorldScale, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldOverviewScale, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTapWithinTolerance, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, persistentWorldTargetCamera, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldInitialImmersive, persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
@@ -179,6 +179,22 @@ describe("premium persistent-world visual language", () => {
     expect(orbitLabels.map((item) => item.id)).toEqual(["orbit-left", "orbit-right"]);
     expect(Math.min(...orbitLabels.map((item) => item.left))).toBeGreaterThanOrEqual(8);
     expect(Math.max(...orbitLabels.map((item) => item.left + item.width))).toBeLessThanOrEqual(392);
+
+    const attached = resolvePremiumLabels([
+      { id: "attached-a", text: "A", x: 160, y: 100, priority: 50, width: 80, height: 22, accent: "#fff", anchorX: 140, anchorY: 100, required: true },
+      { id: "attached-b", text: "B", x: 160, y: 100, priority: 50, width: 80, height: 22, accent: "#fff", anchorX: 140, anchorY: 100, required: true }
+    ], 400, 240);
+    expect(attached.map((item) => item.id)).toEqual(["attached-a", "attached-b"]);
+    expect(attached[0].y).not.toBe(attached[1].y);
+    expect(Math.abs(attached[0].x - attached[1].x)).toBeLessThanOrEqual(1);
+  });
+
+  it("moves a node title in lockstep with its animated bubble", () => {
+    const before = premiumNodeLabelPoint({ x: 100, y: 80 }, { x: 100, y: 180 }, 14, 2);
+    const after = premiumNodeLabelPoint({ x: 113, y: 87 }, { x: 113, y: 187 }, 14, 2);
+    expect(after.x - before.x).toBeCloseTo(13);
+    expect(after.y - before.y).toBeCloseTo(7);
+    expect(Math.hypot(before.x - 100, before.y - 80)).toBeCloseTo(Math.hypot(after.x - 113, after.y - 87));
   });
 
   it("normalizes every sector into the same focus-camera orientation", () => {

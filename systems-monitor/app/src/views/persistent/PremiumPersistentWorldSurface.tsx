@@ -5,7 +5,7 @@ import { persistentWorldCandidateSourceProfile } from "../../data/persistentWorl
 import {
   PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, drawPremiumGlyph,
   createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
-  persistentFocusRotation, persistentPlacementAccent, premiumRadius, resolvePersistentLod, resolvePremiumLabels, traceCubic,
+  persistentFocusRotation, persistentPlacementAccent, premiumNodeLabelPoint, premiumRadius, resolvePersistentLod, resolvePremiumLabels, traceCubic,
   samplePersistentCameraTransition, type LabelCandidate, type PersistentCameraPose, type PersistentCameraTransition, type PersistentCameraVelocity, type Point
 } from "./persistentWorldVisuals";
 import { createPersistentProjector, createPersistentWorldSpatialLayout, type PersistentProjectedPlacement } from "./persistentWorldSpatialLayout";
@@ -175,6 +175,11 @@ export const PERSISTENT_RIGHT_CONTROL_LABEL_INSET = 190;
 export function persistentWorldLabelRequired(viewportWidth: number, placementId: string, selectedPlacementId: string | null, selectedPath: ReadonlySet<string>, structurallyRequired: boolean) {
   if (viewportWidth > 620) return structurallyRequired;
   return placementId === selectedPlacementId || selectedPath.has(placementId);
+}
+
+/** Phone canvases show only the selected route; the exact-ten list remains available below the map. */
+export function persistentWorldLabelVisible(viewportWidth: number, placementId: string, selectedPlacementId: string | null, selectedPath: ReadonlySet<string>) {
+  return viewportWidth > 620 || placementId === selectedPlacementId || selectedPath.has(placementId);
 }
 
 /** Fits the complete Level-1 orbit inside the shorter mobile viewport dimension. */
@@ -427,10 +432,8 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       const projected = new Map<string, PersistentProjectedPlacement>();
       const tendrilSwayActive = !fullWorld && focusedForMotion?.depth === 1 && !reducedMotion;
       const tendrilChildren = tendrilSwayActive && focusedForMotion ? new Set(model.childrenByPlacement[focusedForMotion.id] ?? []) : new Set<string>();
-      const stableProjected = new Map<string, PersistentProjectedPlacement>();
       for (const placement of renderedPlacements) {
         const point = projectFrame(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[placement.id] ?? 0 : 0);
-        stableProjected.set(placement.id, point);
         if (tendrilChildren.has(placement.id)) {
           const sway = persistentWorldTendrilSway(placement.id, placement.order, now, viewMode);
           projected.set(placement.id, { ...point, x: point.x + sway.x, y: point.y + sway.y });
@@ -479,7 +482,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       for (const placement of renderedPlacements) (projectedAt(placement.id).band === "far" ? farPlacements : projectedAt(placement.id).band === "near" ? nearPlacements : midPlacements).push(placement);
       const orderedPlacements = [...farPlacements, ...midPlacements, ...nearPlacements];
       for (const placement of orderedPlacements) {
-        const point = projectedAt(placement.id); const stableLabelPoint = stableProjected.get(placement.id) ?? point; if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
+        const point = projectedAt(placement.id); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
         const factorLabel = persistentWorldGraphNodeLabel(model, placement); const factualBinding = factualBindings[placement.id];
         const semanticAlpha = Math.min(1, (semanticSet.has(placement.id) ? transitionSample.progress * 1.8 : 0) + (previousSemanticSet.has(placement.id) ? Math.max(0, 1 - transitionSample.progress * 2.5) : 0));
         if (!fullWorld && focusPlacement?.depth === 2 && !semanticSet.has(placement.id) && semanticAlpha <= .015) continue;
@@ -499,38 +502,21 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
         }
         if (emphasized && lod >= 1) {
           const label = factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(226, context.measureText(label).width + 18);
-          let labelX = stableLabelPoint.x; let labelY = stableLabelPoint.y + radius + 17; let anchorX: number | undefined; let anchorY: number | undefined; let labelSide: "left" | "right" | "top" | "bottom" | undefined;
           const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
-          if (parent && placement.depth >= 2) {
-            const parentPoint = stableProjected.get(parent.id) ?? projectedAt(parent.id); const dx = stableLabelPoint.x - parentPoint.x; const dy = stableLabelPoint.y - parentPoint.y; const distance = Math.max(1, Math.hypot(dx, dy)); const tangent = placement.order % 2 ? -6 : 6;
-            labelX = stableLabelPoint.x + (dx / distance) * (radius + 15) + (-dy / distance) * tangent;
-            labelY = stableLabelPoint.y + (dy / distance) * (radius + 15) + (dx / distance) * tangent;
-            const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
-            const focusedExactTenChild = Boolean(focused && focused.depth < 3 && placement.parentPlacementId === focused.id && placement.depth === focused.depth + 1);
-            if (focusedExactTenChild && viewMode === "TOP_DOWN") {
-              const radialX = dx / distance; const radialY = dy / distance; const horizontal = Math.abs(radialX) >= .18;
-              labelSide = horizontal ? radialX < 0 ? "left" : "right" : radialY < 0 ? "top" : "bottom";
-              if (labelSide === "left" || labelSide === "right") {
-                const direction = labelSide === "left" ? -1 : 1;
-                labelX = persistentWorldSideLabelX(labelSide, width, textWidth); labelY = stableLabelPoint.y;
-                anchorX = point.x + direction * (radius + 3); anchorY = point.y;
-              } else {
-                const direction = labelSide === "top" ? -1 : 1;
-                labelX = stableLabelPoint.x; labelY = labelSide === "top" ? 25 : height - 25;
-                anchorX = point.x; anchorY = point.y + direction * (radius + 3);
-              }
-            }
-          }
+          const parentPoint = parent ? projectedAt(parent.id) : undefined;
+          const labelPoint = premiumNodeLabelPoint(point, placement.depth >= 2 ? parentPoint : undefined, radius, placement.order);
           const focusedExactTenChild = Boolean(focusPlacement && focusPlacement.depth < 3 && placement.parentPlacementId === focusPlacement.id && placement.depth === focusPlacement.depth + 1);
           const requiredOverviewDriver = placement.depth === 1 && (!selectedPlacementId || fullWorld);
           const structurallyRequired = requiredOverviewDriver || (focusedExactTenChild && viewMode === "TOP_DOWN");
-          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: persistentWorldLabelRequired(width, placement.id, selectedPlacementId, selectedPath, structurallyRequired), side: labelSide, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
+          const required = persistentWorldLabelRequired(width, placement.id, selectedPlacementId, selectedPath, structurallyRequired);
+          if (persistentWorldLabelVisible(width, placement.id, selectedPlacementId, selectedPath)) labelCandidates.push({ id: placement.id, text: label, x: labelPoint.x, y: labelPoint.y, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX: point.x, anchorY: point.y, required, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
         }
         context.globalAlpha = 1;
       }
-      const labels = resolvePremiumLabels(labelCandidates, width, height).map((label) => ({ ...label, anchorX: undefined, anchorY: undefined }));
-      host.dataset.labelLeaderCount = labels.filter((label) => label.anchorX !== undefined && label.anchorY !== undefined).length.toString();
-      for (const label of labels) { context.save(); context.globalAlpha = label.opacity ?? 1; if (label.anchorX !== undefined && label.anchorY !== undefined) { const targetX = label.side === "left" ? label.left + label.width : label.side === "right" ? label.left : label.x; const targetY = label.side === "top" ? label.top + label.height : label.side === "bottom" ? label.top : label.y; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(targetX, targetY); context.stroke(); } context.fillStyle = "rgba(2,16,22,.9)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); context.restore(); }
+      const labels = resolvePremiumLabels(labelCandidates, width, height);
+      host.dataset.labelLayout = width <= 620 ? "SELECTED_ROUTE_ONLY" : "NODE_ATTACHED_RADIAL";
+      host.dataset.labelLeaderCount = labels.filter((label) => label.side && label.anchorX !== undefined && label.anchorY !== undefined).length.toString();
+      for (const label of labels) { context.save(); context.globalAlpha = label.opacity ?? 1; if (label.side && label.anchorX !== undefined && label.anchorY !== undefined) { const targetX = label.side === "left" ? label.left + label.width : label.side === "right" ? label.left : label.x; const targetY = label.side === "top" ? label.top + label.height : label.side === "bottom" ? label.top : label.y; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(targetX, targetY); context.stroke(); } context.fillStyle = "rgba(2,16,22,.9)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); context.restore(); }
 
       const elapsed = performance.now() - started;
       if (frameCount === 0) host.dataset.firstDrawMs = (performance.now() - mountedAtRef.current).toFixed(3);

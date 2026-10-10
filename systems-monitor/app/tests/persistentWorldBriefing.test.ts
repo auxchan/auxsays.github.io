@@ -3,7 +3,7 @@ import { persistentBindingPresentationLabel, persistentChangePresentationLabel, 
 import { persistentWorldFactualBindingForFactor, type PersistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
 import { createPersistentWorld, persistentWorldPlacementLabel } from "../src/data/persistentWorldModel";
 import { persistentChangeNotices, type PersistentChangeNotice } from "../src/data/persistentWorldTemporalReadModel";
-import { persistentWorldLabelRequired } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { persistentWorldLabelRequired, persistentWorldLabelVisible } from "../src/views/persistent/PremiumPersistentWorldSurface";
 
 const model = createPersistentWorld();
 const layoffsBranchId = "placement:layoffs-job-destruction";
@@ -89,5 +89,9 @@ describe("persistent-world five-second briefing", () => {
     expect(persistentWorldLabelRequired(375, "placement:consumer-demand", layoffsBranchId, path, true)).toBe(false);
     expect(persistentWorldLabelRequired(375, layoffsBranchId, layoffsBranchId, path, true)).toBe(true);
     expect(persistentWorldLabelRequired(1200, "placement:consumer-demand", layoffsBranchId, path, true)).toBe(true);
+    expect(persistentWorldLabelVisible(375, "placement:consumer-demand", layoffsBranchId, path)).toBe(false);
+    expect(persistentWorldLabelVisible(375, layoffsBranchId, layoffsBranchId, path)).toBe(true);
+    expect(persistentWorldLabelVisible(375, model.outcomePlacementId, layoffsBranchId, path)).toBe(true);
+    expect(persistentWorldLabelVisible(1200, "placement:consumer-demand", layoffsBranchId, path)).toBe(true);
   });
 });
