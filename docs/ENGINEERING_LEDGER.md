@@ -1774,6 +1774,20 @@ this reason; mine did not. The repair is pinned two ways -- the quantifier is ex
 AND 2 intervening words, so no single-word case can stand in for the range again, and the whole
 cue table (19 patterns across all five groups) is scanned for the `(n, m)` artifact.
 
+**The calibration caught a false veto that neither corpus measurement could see.** One of my own
+cues put `appear` in its verb list, so *"doesn't appear on 32.2.1"* read as the problem being
+ABSENT. It is the opposite: a thing that does not appear IS the problem. The cue vetoed
+obsproject.com thread 196135, *"Downstream- key doesn't appear on 32.2.1 or 32.2.2 after
+installation"*, whose title states that 32.2.1 is affected -- a real report, deleted by a veto I
+added. Both measurements had said 0 acceptances lost, and both were right about the corpora they
+covered: neither the 1,111 GitHub issues nor the 1,320 stored rows contains that phrasing. **A
+veto is only as safe as the corpus it was measured against, and a new source family is a new
+corpus** -- which is exactly why the bounded calibration spot-checks are a gate and not a
+formality. The verb list now holds only verbs whose bare negation can only mean the problem is
+absent: `occur`, `happen`, `manifest`, `reproduce`. Three "missing thing" shapes are pinned as
+NOT-working, and the three unambiguous phrasings are pinned as still-working, so the removal
+cannot silently reopen the leaks it was added for.
+
 **Review answers, for the record.** Version inheritance across authors: opening posts only,
 bounded to their own article, quotes stripped by balanced scan. Working version counted as
 affected: three cues added, one residual above. Duplicate across methods: one `write_evidence`
@@ -1784,8 +1798,8 @@ the release-date gate refuses `missing_source_date` when the release date is kno
 Developer-only counted: the forum carries no labels, and detection is prose-based, so
 `cmake`/CI reports are still refused and an end-user failure is still kept.
 
-**Tests** `test_obs_forum_evidence_family.py`, 150 governed checks, offline from HTML fixtures.
-**30 mutants, 30 killed** across the identity, date-scoping, quote, sticky, dedupe,
+**Tests** `test_obs_forum_evidence_family.py`, 156 governed checks, offline from HTML fixtures.
+**31 mutants, 31 killed** across the identity, date-scoping, quote, sticky, dedupe,
 delta-attribution and health gates. Two mutants survived their first run and both were the same
 failure of the FIXTURE, not of the code: one made GitHub's accepted and added counts equal (two
 fields that are always equal are one field), and one put all quoted text before the inner quote
@@ -1794,6 +1808,29 @@ second exposed a real defect -- the iterated regex strip, replaced by the balanc
 A third survivor proved a test can verify a helper without proving the caller uses it: pacing was
 asserted by calling `_pace()` directly, so deleting the `_pace()` call from `_fetch` left the
 suite green until a test drove `_fetch` itself.
+
+**Bounded dry calibration**, GitHub Actions run 38025646937 on the PR head, `collect` job 223s.
+Pool: 9 listing requests, 180 threads, **0 failed, 0 unparsed, 0 body-less** -- the forum is
+fully CI-reachable. Across the 16 tracked patches the forum judged **44 candidates and accepted
+18**; GitHub judged 58 and accepted 40.
+
+The independence is real rather than nominal. On **32.1.0, 32.1.1 and 32.2.0** GitHub accepted
+nothing while the forum accepted a report, and 32.1.1 is the sharpest case: GitHub produced two
+candidates and accepted neither. Those rows also read `github_issues: no_results` beside
+`obs_forum: success`, which is the per-family separation doing its job rather than one verdict
+blurring both.
+
+Rejection reasons over the same run: `generic_or_no_concrete_issue` 23, `version_reported_working`
+2, `version_is_rollback_target` 1. **The concrete-issue vocabulary is the dominant limit on this
+family -- 88% of its refusals** -- and two spot-checked refusals are genuine reports it cannot
+read: a French-language thread describing an audio-monitoring fault (`CONCRETE_ISSUE_TERMS` is
+English-only, which costs nothing on GitHub's English issue template and costs recall on a forum)
+and the 196135 thread above, whose "doesn't appear" is a real defect the vocabulary does not
+name. Both are refusals of real reports, not acceptances of false ones, so they cost recall and
+not integrity. **Widening that vocabulary is deliberately NOT part of this sprint**: it is an
+acceptance widening, it affects GitHub too, and the sticky-guide finding above shows the
+vocabulary already matches text that describes nobody's install. It needs its own precision
+measurement.
 
 **Measured limitation, with a reopen trigger.** The forum family reaches the most recently active
 ~60 threads per subforum. Listing order is last-activity, so a revived old thread resurfaces, but

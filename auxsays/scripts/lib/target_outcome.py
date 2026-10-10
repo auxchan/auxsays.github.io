@@ -86,6 +86,12 @@ _WORKING_CUES: list[tuple[str, str]] = [
     (rf"{_T}{_STOP}{{0,40}}?\b(?:do(?:es)?\s*n[o']?t\s+(?:have|exhibit|show|reproduce)\s+"
      rf"th(?:is|e)\s+(?:problem|issue|bug|behaviou?r)|has\s+no\s+(?:such\s+)?(?:problem|issue))",
      "target_lacks_problem"),
+    # The verb list holds only verbs whose BARE negation can only mean "the problem is absent":
+    # occur, happen, manifest, reproduce. `appear` was in it and had to come out -- "doesn't
+    # appear" usually names the PROBLEM, something missing. It vetoed obsproject.com thread
+    # 196135, "Downstream- key doesn't appear on 32.2.1", whose title says 32.2.1 IS affected.
+    # The corpus measurements could not catch that: the GitHub corpus and the stored rows have
+    # no such phrasing, and a veto is only ever as safe as the corpus it was measured against.
     # "this issue does not occur in 32.2.2" -- the negation sits BEFORE the verb and the target
     # comes AFTER it, a direction target_lacks_problem (target first) cannot see. Real: obs
     # #13982, newly exposed by the exact_version_re sentence-end fix; without this cue a version
@@ -96,7 +102,7 @@ _WORKING_CUES: list[tuple[str, str]] = [
     (rf"\b(?:do(?:es|id)?\s*n[o']?t|never)\s+"
      rf"(?:(?:see|seen|saw|notice|noticed|had|have|get|got|experience[d]?)\s+"
      rf"(?:\w+\s+){{0,2}}?)?"
-     rf"(?:occur|happen|appear|manifest|reproduce)\w*"
+     rf"(?:occur|happen|manifest|reproduce)\w*"
      rf"{_STOP}{{0,30}}?\b(?:in|on|with|under|for)\b{_STOP}{{0,15}}?{_T}",
      "target_lacks_occurrence"),
     # "32.2.2 was fine for me", "32.2.2 is stable". The results-table cue below needs a bracket,

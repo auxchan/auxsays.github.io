@@ -782,6 +782,24 @@ def run() -> int:
                                  VER, RELEASE)[1]
         check(f"T22 the occurrence cue vetoes with {label}",
               got == "version_reported_working", f"got {got}")
+    # A MISSING thing is the problem, not an absence of the problem. "doesn't appear" was in the
+    # occurrence verb list and vetoed obsproject.com thread 196135 -- "Downstream- key doesn't
+    # appear on 32.2.1" -- whose title says 32.2.1 IS affected. Neither corpus measurement could
+    # see it: the GitHub corpus and the stored rows carry no such phrasing. A veto is only as
+    # safe as the corpus it was measured against, and this one needed the new family to surface.
+    for text, label in ((f"The dock doesn't appear on {VER} after installation.", "dock missing"),
+                        (f"The menu does not appear in {VER}.", "menu missing"),
+                        (f"My source doesn't appear on {VER}.", "source missing")):
+        outcome = classify_target_outcome(text, VER)
+        check(f"T22 a {label} report is NOT read as the version working",
+              outcome.outcome != "working", f"{outcome.outcome} via {outcome.basis}")
+    # ...while the unambiguous phrasings still veto, so removing `appear` did not reopen them.
+    for text, label in ((f"This issue does not occur in version {VER}.", "does not occur"),
+                        (f"This does not happen on {VER}.", "does not happen"),
+                        (f"I never saw this happen in {VER}.", "never saw this happen")):
+        outcome = classify_target_outcome(text, VER)
+        check(f"T22 \"{label}\" still reads as the version working",
+              outcome.outcome == "working", f"{outcome.outcome} via {outcome.basis}")
     print("T23 a thread identity is resolved, never invented")
     check("T23.1 the slugged URL shape resolves",
           forum.thread_id("/forum/threads/a-slug.196568/") == "196568")
