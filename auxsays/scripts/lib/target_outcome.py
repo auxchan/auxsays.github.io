@@ -86,6 +86,32 @@ _WORKING_CUES: list[tuple[str, str]] = [
     (rf"{_T}{_STOP}{{0,40}}?\b(?:do(?:es)?\s*n[o']?t\s+(?:have|exhibit|show|reproduce)\s+"
      rf"th(?:is|e)\s+(?:problem|issue|bug|behaviou?r)|has\s+no\s+(?:such\s+)?(?:problem|issue))",
      "target_lacks_problem"),
+    # "this issue does not occur in 32.2.2" -- the negation sits BEFORE the verb and the target
+    # comes AFTER it, a direction target_lacks_problem (target first) cannot see. Real: obs
+    # #13982, newly exposed by the exact_version_re sentence-end fix; without this cue a version
+    # the report names as HEALTHY would reach the acceptance predicates. Deliberately NOT
+    # polarity-sensitive: the cue carries its own negation, same as target_lacks_problem.
+    # Measured alone over 1,111 OBS issues it changes nothing -- it is a counterweight, not a
+    # widening of what gets vetoed in practice.
+    (rf"\b(?:do(?:es|id)?\s*n[o']?t|never)\s+"
+     rf"(?:(?:see|seen|saw|notice|noticed|had|have|get|got|experience[d]?)\s+"
+     rf"(?:\w+\s+){{0,2}}?)?"
+     rf"(?:occur|happen|appear|manifest|reproduce)\w*"
+     rf"{_STOP}{{0,30}}?\b(?:in|on|with|under|for)\b{_STOP}{{0,15}}?{_T}",
+     "target_lacks_occurrence"),
+    # "32.2.2 was fine for me", "32.2.2 is stable". The results-table cue below needs a bracket,
+    # dash or colon delimiter, and target_works needs the word "work", so a plain adjective said
+    # in prose reached acceptance -- found by adversarial probe, not by a corpus observation.
+    # "was fine UNTIL ..." is excluded: that sentence reports a regression, not a healthy build.
+    (rf"{_T}{_STOP}{{0,25}}?\b(?:was|were|is|are|seems?|seemed|ran|runs)\s+"
+     rf"(?:perfectly\s+|totally\s+|completely\s+|absolutely\s+)?"
+     rf"(?:fine|ok|okay|stable|solid|flawless|problem-free)(?:ly)?\b(?!\s+until\b)",
+     "target_said_fine"),
+    # "No problems on 32.2.2", "no crashes with 32.2.2". The negation is a NOUN phrase rather
+    # than a negated verb, so target_lacks_occurrence does not reach it.
+    (rf"\bno\s+(?:problems?|issues?|errors?|crashes?|bugs?)\b{_STOP}{{0,25}}?"
+     rf"\b(?:in|on|with|under|for)\b{_STOP}{{0,15}}?{_T}",
+     "no_problem_on_target"),
     # "works in X" / "worked as intended on X"
     (rf"\bwork(?:s|ed|ing)?\b{_STOP}{{0,30}}?\b(?:in|on|with|under)\b{_STOP}{{0,15}}?{_T}",
      "works_on_target"),

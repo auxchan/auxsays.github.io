@@ -149,7 +149,22 @@ def fetch_issue(item: dict[str, Any]) -> dict[str, Any]:
 
 
 def exact_version_re(version: str) -> re.Pattern[str]:
-    return re.compile(rf"(?<![0-9.]){re.escape(version)}(?![0-9.])")
+    """Match the version as its own identity, not as a prefix of a longer one.
+
+    The right-hand guard was `(?![0-9.])`, which also refused a version at the END OF A
+    SENTENCE: "I recently updated to 32.2.2." matched nothing. That costs little on GitHub,
+    where the issue template carries the version on a line of its own, and costs everything on
+    a forum, where prose is the only carrier.
+
+    What the guard must exclude is a LONGER VERSION, so it refuses a following digit, or a dot
+    THEN a digit. 32.2.21 and 32.2.2.1 still fail; "32.2.2." and "32.2.2," now read as the
+    identity they name. Measured over 1,111 OBS issues this moves two outcomes and loses no
+    acceptance: one real report is recovered, and obs #13982 stops being refused by accident
+    and starts being refused as version_reported_working (see the cue added for it).
+
+    Deliberately NOT applied to _DECLARED_VERSION_TOKEN -- see the note there.
+    """
+    return re.compile(rf"(?<![0-9.]){re.escape(version)}(?![0-9])(?!\.[0-9])")
 
 
 def match_basis(issue: dict[str, Any], version: str) -> str | None:
@@ -169,6 +184,12 @@ def match_basis(issue: dict[str, Any], version: str) -> str | None:
 # demanding defect prose beside the identity would discard most of the legitimate corpus.
 DECLARED_VERSION_FIELDS = re.compile(
     r"###\s*OBS Studio Version(?:\s*\(Other\))?\s*\n(.*?)(?=\n###|\Z)", re.I | re.S)
+# This KEEPS the stricter `(?![0-9.])` that exact_version_re drops, and the difference is
+# deliberate. The consequences are asymmetric: R1 in lib/target_outcome makes a DECLARED
+# version immune to every veto, so over-recognising one here grants immunity, while under-
+# recognising prose there only drops a report. Measured: relaxing this field would read
+# "32.0.0.r2.ga75fdd2-1" (an AUR git build, obs #12669) as a bare 32.0.0 declaration, and the
+# nixpkgs build reports #13971/#13972 as declarations of 32.1.2. Do not unify the two.
 _DECLARED_VERSION_TOKEN = re.compile(r"(?<![0-9.])\d+(?:\.\d+){1,3}(?![0-9.])")
 
 
@@ -354,18 +375,29 @@ def excerpt(text: str, version: str, width: int = 280) -> str:
     return textwrap.shorten(snippet, width=width, placeholder="...")
 
 
-def evidence_row(issue: dict[str, Any], version: str, basis: str, captured_at: str) -> dict[str, Any]:
+def evidence_row(issue: dict[str, Any], version: str, basis: str, captured_at: str,
+                 identity: dict[str, str] | None = None) -> dict[str, Any]:
+    """One accepted report as an evidence row.
+
+    `identity` lets a second source family supply its own row id, source type/name and URL
+    while every other field -- and every acceptance decision upstream -- stays identical. The
+    point is that there is ONE set of OBS evidence semantics: a forum report and a GitHub
+    issue differ in where they were found, not in what counting them means. Omitting
+    `identity` reproduces the GitHub row byte for byte.
+    """
     number = issue.get("number")
     title = str(issue.get("title") or f"GitHub issue {number}").strip()
     body = str(issue.get("body") or "")
     theme, workflow_area, platform, severity, sentiment = classify(issue)
+    ident = identity or {}
     return {
-        "id": f"obs-studio-{slug(version)}-github-issue-{number}",
+        "id": ident.get("row_id") or f"obs-studio-{slug(version)}-github-issue-{number}",
         "product_id": PRODUCT_ID,
         "update_version": version,
-        "source_type": "github_issue",
-        "source_name": SOURCE_NAME,
-        "source_url": issue.get("html_url") or f"https://github.com/{REPO}/issues/{number}",
+        "source_type": ident.get("source_type") or "github_issue",
+        "source_name": ident.get("source_name") or SOURCE_NAME,
+        "source_url": (ident.get("source_url") or issue.get("html_url")
+                       or f"https://github.com/{REPO}/issues/{number}"),
         "parent_title": title,
         "report_title": title,
         "report_text_excerpt": excerpt(body or title, version),
@@ -446,7 +478,20 @@ def evidence_key(row: dict[str, Any], field: str) -> tuple[str, str, str]:
     )
 
 
-def write_evidence(rows: list[dict[str, Any]]) -> tuple[int, int, list[dict[str, Any]]]:
+def write_evidence(rows: list[dict[str, Any]],
+                   added_out: list[dict[str, Any]] | None = None) -> tuple[int, int, list[dict[str, Any]]]:
+    """Append rows that are not already stored, and report the real delta.
+
+    This is the ONE dedupe authority for OBS evidence, and it is what makes a second discovery
+    method safe: suppression is keyed on (product, version, id) and (product, version, url), and
+    the seen-sets are updated AS the batch is walked, so two methods that hand the same physical
+    report to the same call cannot both land it. A cross-method rediscovery therefore becomes
+    duplicate telemetry -- accepted minus added -- rather than a second counted row.
+
+    `added_out`, when given, receives exactly the rows that were appended, so a caller can
+    attribute the delta per source family without re-deriving the suppression rule itself.
+    Re-deriving it is how two predicates drift apart.
+    """
     existing = parse_existing_rows(EVIDENCE_PATH)
     seen_ids = {evidence_key(row, "id") for row in existing if row.get("id")}
     seen_urls = {evidence_key(row, "source_url") for row in existing if row.get("source_url")}
@@ -460,6 +505,8 @@ def write_evidence(rows: list[dict[str, Any]]) -> tuple[int, int, list[dict[str,
         seen_ids.add(id_key)
         seen_urls.add(url_key)
         added += 1
+        if added_out is not None:
+            added_out.append(row)
     if added:
         write_evidence_file(EVIDENCE_PATH, existing)
     return added, len(existing), existing
@@ -631,24 +678,63 @@ def collect_one(
     since: str | None,
     max_pages: int,
     write: bool,
+    extra_accepted: list[dict[str, Any]] | None = None,
+    extra_rejected: list[dict[str, Any]] | None = None,
 ) -> tuple[int, dict[str, Any]]:
+    """Collect one version from GitHub, merge in any already-evaluated rows from another method,
+    and persist the union through the single dedupe authority.
+
+    `extra_accepted` rows must already have passed `evaluate_issue` -- this merges, it does not
+    judge. Two properties matter here. The union is written in ONE `write_evidence` call, so
+    cross-method duplicate suppression is structural rather than a rule each method remembers.
+    And a GitHub outage no longer discards the other family's work: that is the entire reason for
+    having a second family, so it reports per-family status instead of one verdict for both.
+    """
     release_date = release_date_for_record(record_path)
+    extra_accepted = list(extra_accepted or [])
+    extra_rejected = list(extra_rejected or [])
+    github_error: str | None = None
     try:
         accepted, rejected = collect(version, since, max_pages, release_date)
     except Exception as exc:
+        accepted, rejected, github_error = [], [], str(exc) or type(exc).__name__
+
+    if github_error is not None and not extra_accepted and not extra_rejected:
         return 1, {
             "version": version,
             "mode": "write" if write else "dry-run",
             "status": "fetch_failed",
-            "error": str(exc),
+            "error": github_error,
             "candidates_reviewed": 0,
             "accepted_count": 0,
             "rejected_count": 0,
+            "github_status": "failed",
+            "github_error": github_error,
+            "github_accepted_count": 0,
+            "github_rejected_count": 0,
         }
 
+    github_accepted_count = len(accepted)
+    github_rejected_count = len(rejected)
+    accepted = accepted + extra_accepted
+    rejected = rejected + extra_rejected
+
     result = summarize(version, "write" if write else "dry-run", accepted, rejected)
+    # Per-family status, because one overall status would report a GitHub outage as green the
+    # moment the forum returned anything -- a source that failed must never read as healthy.
+    result["github_status"] = "failed" if github_error else "ok"
+    result["github_accepted_count"] = github_accepted_count
+    result["github_rejected_count"] = github_rejected_count
+    if github_error:
+        result["github_error"] = github_error
     if write:
-        added, total, rows = write_evidence(accepted)
+        added_rows: list[dict[str, Any]] = []
+        added, total, rows = write_evidence(accepted, added_out=added_rows)
+        result["added_rows_by_source_type"] = {
+            source_type: sum(1 for row in added_rows
+                             if str(row.get("source_type") or "") == source_type)
+            for source_type in sorted({str(row.get("source_type") or "") for row in added_rows})
+        }
         structured_count = counted_evidence_count(rows, version)
         record_updated = False
         if record_path:
