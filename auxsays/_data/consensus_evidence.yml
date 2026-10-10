@@ -50568,3 +50568,356 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-setup-in-teams-channel-is-not-allowing-me-to-update-the-agenda-and-send-/4563340
+  parent_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_text_excerpt: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates I am interested to understand why when I have setup a meeting from A channel I am not able to change the invitation to all the team members. When I go into teams Calendar ,. I update the...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-management-of-unsupported-wfh-teams
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/management-of-unsupported-wfh-teams-certified-desk-phones/4563336
+  parent_title: Management of unsupported WFH Teams-certified desk phones
+  report_title: Management of unsupported WFH Teams-certified desk phones
+  report_text_excerpt: Management of unsupported WFH Teams-certified desk phones Hello, I&apos;m looking for best practice or suggestions on management of unsupported WFH Teams-certified desk phones for company with Microsoft enterprise E3 and E5 licensed users. We&apos;re a Microsoft shop with...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6031563-link-teams-in-outlook
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6031563/link-teams-in-outlook
+  parent_title: Link Teams in Outlook - Microsoft Q&A
+  report_title: Link Teams in Outlook - Microsoft Q&A
+  report_text_excerpt: Link Teams in Outlook Unable to link Teams in Outlook so that I can create a Teams meeting in Outlook. Teams tab is in the Outlook Calendar ribbon but only "sign-in" is not grey'd out, and shows logged into Teams when I click on it. The other icons to add a Teams meeting...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6031563-link-teams-in-outlook-answer-12994015
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6031563/link-teams-in-outlook#answer-12994015
+  parent_title: Link Teams in Outlook - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: That button is grayed out because it’s a feature for those on business tier subscriptions. With a personal account, this feature will not work. However, if you use New Outlook and if you use native Microsoft domain email like outlook.com, when you create a calendar item you...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09T12:20:55.24+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-setup-in-teams-channel-is-not-allowing-me-to-update-the-agenda-and-send-/4563340
+  parent_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_text_excerpt: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates I am interested to understand why when I have setup a meeting from A channel I am not able to change the invitation to all the team members. When I go into teams Calendar ,. I update the...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-management-of-unsupported-wfh-teams
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/management-of-unsupported-wfh-teams-certified-desk-phones/4563336
+  parent_title: Management of unsupported WFH Teams-certified desk phones
+  report_title: Management of unsupported WFH Teams-certified desk phones
+  report_text_excerpt: Management of unsupported WFH Teams-certified desk phones Hello, I&apos;m looking for best practice or suggestions on management of unsupported WFH Teams-certified desk phones for company with Microsoft enterprise E3 and E5 licensed users. We&apos;re a Microsoft shop with...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-setup-in-teams-channel-is-not-allowing-me-to-update-the-agenda-and-send-/4563340
+  parent_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_text_excerpt: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates I am interested to understand why when I have setup a meeting from A channel I am not able to change the invitation to all the team members. When I go into teams Calendar ,. I update the...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-management-of-unsupported-wfh-teams
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/management-of-unsupported-wfh-teams-certified-desk-phones/4563336
+  parent_title: Management of unsupported WFH Teams-certified desk phones
+  report_title: Management of unsupported WFH Teams-certified desk phones
+  report_text_excerpt: Management of unsupported WFH Teams-certified desk phones Hello, I&apos;m looking for best practice or suggestions on management of unsupported WFH Teams-certified desk phones for company with Microsoft enterprise E3 and E5 licensed users. We&apos;re a Microsoft shop with...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-setup-in-teams-channel-is-not-allowing-me-to-update-the-agenda-and-send-/4563340
+  parent_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_text_excerpt: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates I am interested to understand why when I have setup a meeting from A channel I am not able to change the invitation to all the team members. When I go into teams Calendar ,. I update the...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-management-of-unsupported-wfh-teams
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/management-of-unsupported-wfh-teams-certified-desk-phones/4563336
+  parent_title: Management of unsupported WFH Teams-certified desk phones
+  report_title: Management of unsupported WFH Teams-certified desk phones
+  report_text_excerpt: Management of unsupported WFH Teams-certified desk phones Hello, I&apos;m looking for best practice or suggestions on management of unsupported WFH Teams-certified desk phones for company with Microsoft enterprise E3 and E5 licensed users. We&apos;re a Microsoft shop with...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-setup-in-teams-channel-is-not-allowing-me-to-update-the-agenda-and-send-/4563340
+  parent_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_text_excerpt: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates I am interested to understand why when I have setup a meeting from A channel I am not able to change the invitation to all the team members. When I go into teams Calendar ,. I update the...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-management-of-unsupported-wfh-teams
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/management-of-unsupported-wfh-teams-certified-desk-phones/4563336
+  parent_title: Management of unsupported WFH Teams-certified desk phones
+  report_title: Management of unsupported WFH Teams-certified desk phones
+  report_text_excerpt: Management of unsupported WFH Teams-certified desk phones Hello, I&apos;m looking for best practice or suggestions on management of unsupported WFH Teams-certified desk phones for company with Microsoft enterprise E3 and E5 licensed users. We&apos;re a Microsoft shop with...
+  captured_at: '2026-10-10T13:31:27Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6032280-voice-focus-voice-clarity-disappeared
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6032280/voice-focus-voice-clarity-disappeared-after-previe
+  parent_title: Voice Focus/Voice Clarity disappeared after Preview Update (KB 5124010) (26300.9550) - Microsoft Q&A
+  report_title: Voice Focus/Voice Clarity disappeared after Preview Update (KB 5124010) (26300.9550) - Microsoft Q&A
+  report_text_excerpt: Voice Focus/Voice Clarity disappeared after Preview Update (KB 5124010) (26300.9550) - Microsoft Q&A After updating my computer to the Preview Update (KB 5124010) (26300.9550), the option to use audio enhancements for my microphone disappeared! The only way I managed to get it...
+  captured_at: '2026-10-10T13:40:12Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9550'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9550'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9550'
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6031361-powershell-5-1-filestream-creation-fai
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6031361/powershell-5-1-filestream-creation-fails-with-0x80
+  parent_title: PowerShell 5.1 FileStream creation fails with 0x80070005 on an NTFS VHDX using a volume GUID path, while directory creation succeeds - Microsoft Q&A
+  report_title: PowerShell 5.1 FileStream creation fails with 0x80070005 on an NTFS VHDX using a volume GUID path, while directory creation succeeds - Microsoft Q&A
+  report_text_excerpt: PowerShell 5.1 FileStream creation fails with 0x80070005 on an NTFS VHDX using a volume GUID path, while directory creation succeeds - Microsoft Q&A I am investigating a persistent file-creation failure on a locally created NTFS VHDX mounted as R:. I would appreciate help...
+  captured_at: '2026-10-10T13:40:16Z'
+  source_date: '2026-10-10'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9457'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9457'
