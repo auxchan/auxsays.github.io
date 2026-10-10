@@ -39,7 +39,13 @@
     "acceptedExternalObservationRefs": 1
   },
   "initialUiClaims": {
-    "status": "READY_FOR_HUMAN_LEVEL4_INITIAL_UI_CLAIMS_QA",
+    "status": "PRODUCTION_COMPLETE_GOVERNED_LEVEL4_EXACT_TEN",
+    "humanQa": "PASS",
+    "firstProductionCompleteGovernedLevel4ExactTen": true,
+    "acceptedImplementationCheckpoint": "f1181a60753ec39257b2803290e9836235e7f1b1",
+    "verifiedFrameworkDefectCheckpoint": "88ea7f3605422435202489f6cd6ad08037d2dc76",
+    "approvedBy": "Taylor",
+    "approvedOn": "2026-10-09",
     "placements": 10,
     "acceptedObservationPlacements": 5,
     "acceptedCalculationPlacements": 0,
@@ -101,7 +107,7 @@
     "explorationBackForward": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
     "searchAndJump": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
     "progressiveInspector": "IMPLEMENTED_HUMAN_QA_PASSED_FRAMEWORK_FROZEN",
-    "temporalHistoryPresentation": "INITIAL_UI_CLAIMS_EXACT_TEN_HUMAN_QA_SURFACE_PENDING",
+    "temporalHistoryPresentation": "INITIAL_UI_CLAIMS_EXACT_TEN_HUMAN_QA_SURFACE_PASSED",
     "forecastVintageStatusPresentation": "ZERO_ELIGIBLE_ROWS_FORECASTING_LOCKED"
   },
   "humanQa": {
@@ -117,7 +123,11 @@
     "level3FrameworkApprovedBy": "Taylor",
     "level3FrameworkApprovedOn": "2026-09-27",
     "LEVEL3_FRAMEWORK_STATE": "FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS",
-    "HUMAN_LEVEL4_INITIAL_UI_CLAIMS_QA": "PENDING",
+    "HUMAN_LEVEL4_INITIAL_UI_CLAIMS_QA": "PASS",
+    "initialUiClaimsApprovedBy": "Taylor",
+    "initialUiClaimsApprovedOn": "2026-10-09",
+    "initialUiClaimsAcceptedImplementationCheckpoint": "f1181a60753ec39257b2803290e9836235e7f1b1",
+    "verifiedFrameworkDefectCheckpoint": "88ea7f3605422435202489f6cd6ad08037d2dc76",
     "HUMAN_PHASE4B_STRUCTURAL_PATH_QA": "NOT_OPENED_NO_STRUCTURAL_PROOF"
   },
   "blockers": [

@@ -24,7 +24,7 @@ describe("Initial UI Claims Level-4 Human QA surface", () => {
     expect(container.querySelectorAll(".sm-l4qa-series")).toHaveLength(11);
     exactTen.forEach((label) => expect(screen.getByRole("heading", { name: label })).toBeTruthy());
     expect(container.querySelectorAll('[data-disposition="ACCEPTED_OBSERVATION"]')).toHaveLength(5);
-    expect(container.querySelector(".sm-l4qa")?.getAttribute("data-human-qa")).toBe("PENDING");
+    expect(container.querySelector(".sm-l4qa")?.getAttribute("data-human-qa")).toBe("PASS");
     expect(container.querySelector(".sm-l4qa")?.getAttribute("data-unexplained-renderer-fixtures")).toBe("0");
   });
 

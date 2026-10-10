@@ -27,7 +27,25 @@ class InitialUiClaimsProductionTests(unittest.TestCase):
         self.assertEqual("OPEN", production["gateB"])
         self.assertEqual("LOCKED_UNAVAILABLE", production["forecasting"])
         self.assertEqual("UNAUTHORIZED", production["materiality"])
-        self.assertEqual("PENDING", production["humanQa"])
+        self.assertEqual("PASS", production["humanQa"])
+        self.assertEqual("TAYLOR_INITIAL_UI_CLAIMS_FINAL_CORRECTIONS_2026_10_01", production["authority"])
+        self.assertEqual("TAYLOR_INITIAL_UI_CLAIMS_HUMAN_QA_2026_10_09", production["humanQaAuthority"])
+        self.assertEqual("PRODUCTION_COMPLETE_GOVERNED_LEVEL4_EXACT_TEN", production["governanceState"])
+        self.assertEqual("FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS", production["frameworkState"])
+        self.assertEqual(0, production["forecastVintageObservations"])
+        self.assertEqual("UNAVAILABLE", production["destinationImpact"])
+        self.assertEqual("LOCKED", production["phase5"])
+
+        review_status = load("level4_p0_review_status.json")
+        self.assertEqual("PRODUCTION_COMPLETE_GOVERNED_LEVEL4_EXACT_TEN", review_status["initialUiClaims"]["status"])
+        self.assertEqual("PASS", review_status["initialUiClaims"]["humanQa"])
+        self.assertTrue(review_status["initialUiClaims"]["firstProductionCompleteGovernedLevel4ExactTen"])
+        self.assertEqual("PASS", review_status["humanQa"]["HUMAN_LEVEL4_INITIAL_UI_CLAIMS_QA"])
+        self.assertEqual("FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS", review_status["humanQa"]["LEVEL3_FRAMEWORK_STATE"])
+        self.assertEqual(0, review_status["initialUiClaims"]["acceptedStructuralRelationships"])
+        self.assertEqual("OPEN", review_status["initialUiClaims"]["gateB"])
+        self.assertEqual("LOCKED_UNAVAILABLE", review_status["initialUiClaims"]["forecasting"])
+        self.assertEqual(0, review_status["history"]["forecastVintageEligibleRows"])
 
     def test_exact_ten_dispositions_and_classes_are_explicit(self):
         rows = load("initial_ui_claims_production.json")["placements"]
