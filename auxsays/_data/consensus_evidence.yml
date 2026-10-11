@@ -50933,3 +50933,48 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6031042-i-have-issues-in-my-ms-teams-and-i-wan
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6031042/i-have-issues-in-my-ms-teams-and-i-want-to-uninsta
+  parent_title: I have issues in my MS Teams and i want to Uninstall and Install Teams again - Microsoft Q&A
+  report_title: I have issues in my MS Teams and i want to Uninstall and Install Teams again - Microsoft Q&A
+  report_text_excerpt: I have issues in my MS Teams and i want to Uninstall and Install Teams again I have issues in my MS Teams and i want to Uninstall and Install Teams again
+  captured_at: '2026-10-11T06:45:50Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14018
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14018
+  parent_title: 'VAAPI H.264 crash at recording start: empty packet reaches obs_avc_keyframe (analysis + patch)'
+  report_title: 'VAAPI H.264 crash at recording start: empty packet reaches obs_avc_keyframe (analysis + patch)'
+  report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/BwcBipTHtc7Ag0T3 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Recor'
+  captured_at: '2026-10-11T07:16:02Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
