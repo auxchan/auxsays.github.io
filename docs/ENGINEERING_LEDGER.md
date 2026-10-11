@@ -1798,8 +1798,8 @@ the release-date gate refuses `missing_source_date` when the release date is kno
 Developer-only counted: the forum carries no labels, and detection is prose-based, so
 `cmake`/CI reports are still refused and an end-user failure is still kept.
 
-**Tests** `test_obs_forum_evidence_family.py`, 156 governed checks, offline from HTML fixtures.
-**31 mutants, 31 killed** across the identity, date-scoping, quote, sticky, dedupe,
+**Tests** `test_obs_forum_evidence_family.py`, 164 governed checks, offline from HTML fixtures.
+**34 mutants, 34 killed** across the identity, date-scoping, quote, sticky, dedupe,
 delta-attribution and health gates. Two mutants survived their first run and both were the same
 failure of the FIXTURE, not of the code: one made GitHub's accepted and added counts equal (two
 fields that are always equal are one field), and one put all quoted text before the inner quote
@@ -1831,6 +1831,27 @@ not integrity. **Widening that vocabulary is deliberately NOT part of this sprin
 acceptance widening, it affects GitHub too, and the sticky-guide finding above shows the
 vocabulary already matches text that describes nobody's install. It needs its own precision
 measurement.
+
+**The first write-enabled production run FAILED, and a dry run could never have predicted it.**
+Run 38124620114 on merged main refused with
+`ownership_violation:evidence_unauthorized_source` and wrote nothing. `lib/collector_ownership`
+holds POSITIVE per-product allow-lists -- `ALLOWED_METHODS` and `ALLOWED_SOURCE_TYPES` -- and
+they are consulted only when an append actually happens, so the whole bounded calibration ran
+clean while the registration was missing. The gate behaved correctly: it fail-closed, wrote
+nothing, and named the exact reason. `obs_forum` and `obs_forum_thread` are now registered, and
+the registration is pinned in BOTH directions -- the gate must accept a forum append AND still
+refuse a source type nobody registered, because an allow-list test that only checks its own entry
+is present proves nothing about the gate consulting it.
+
+A second consumer needed the same treatment. `revalidate_consensus_evidence` classifies rows by
+source type, and anything off its lists falls through to `unsupported_source_type` -- which reads
+as "OBS evidence carries a source nobody knows". `obs_forum_thread` joins
+`PENDING_SOURCE_ADAPTER_TYPES`, the honest classification: recognised source, no revalidation
+adapter written yet, exactly like `blackmagic_forum` and `reddit_community_report`.
+
+The generalisable lesson, and it is the same one AUXSAYS keeps relearning: **a new source family
+is not finished when the collector accepts it. Every positive allow-list that names a source or
+a method is a separate registration, and the write-mode ones are invisible to every dry run.**
 
 **Measured limitation, with a reopen trigger.** The forum family reaches the most recently active
 ~60 threads per subforum. Listing order is last-activity, so a revived old thread resurfaces, but
