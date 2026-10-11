@@ -50978,3 +50978,188 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6028318/cannot-able-to-share-screen-inside-the-azure-virtu
+  parent_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_text_excerpt: Cannot able to share screen inside the Azure Virtual Desktop in Teams application Cannot able to share screen inside the Azure Virtual Desktop in Teams application even after having the latest version of windows app and teams client. In Slimcore optimization I am r having the...
+  captured_at: '2026-10-11T13:47:59Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6028318/cannot-able-to-share-screen-inside-the-azure-virtu
+  parent_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_text_excerpt: Cannot able to share screen inside the Azure Virtual Desktop in Teams application Cannot able to share screen inside the Azure Virtual Desktop in Teams application even after having the latest version of windows app and teams client. In Slimcore optimization I am r having the...
+  captured_at: '2026-10-11T13:47:59Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6028318/cannot-able-to-share-screen-inside-the-azure-virtu
+  parent_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_text_excerpt: Cannot able to share screen inside the Azure Virtual Desktop in Teams application Cannot able to share screen inside the Azure Virtual Desktop in Teams application even after having the latest version of windows app and teams client. In Slimcore optimization I am r having the...
+  captured_at: '2026-10-11T13:47:59Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6028318/cannot-able-to-share-screen-inside-the-azure-virtu
+  parent_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_text_excerpt: Cannot able to share screen inside the Azure Virtual Desktop in Teams application Cannot able to share screen inside the Azure Virtual Desktop in Teams application even after having the latest version of windows app and teams client. In Slimcore optimization I am r having the...
+  captured_at: '2026-10-11T13:47:59Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6028318/cannot-able-to-share-screen-inside-the-azure-virtu
+  parent_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_title: Cannot able to share screen inside the Azure Virtual Desktop in Teams application - Microsoft Q&A
+  report_text_excerpt: Cannot able to share screen inside the Azure Virtual Desktop in Teams application Cannot able to share screen inside the Azure Virtual Desktop in Teams application even after having the latest version of windows app and teams client. In Slimcore optimization I am r having the...
+  captured_at: '2026-10-11T13:47:59Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6032546-windows-hello-facial-recognition-unava
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6032546/windows-hello-facial-recognition-unavailable-on-su
+  parent_title: Windows Hello facial recognition unavailable on Surface Pro 9 — sensor adapter error 0x80004005 - Microsoft Q&A
+  report_title: Windows Hello facial recognition unavailable on Surface Pro 9 — sensor adapter error 0x80004005 - Microsoft Q&A
+  report_text_excerpt: Windows Hello facial recognition unavailable on Surface Pro 9 — sensor adapter error 0x80004005 - Microsoft Q&A Hello, I’m having a problem setting up facial recognition on my Surface Pro 9 with Intel. In Settings → Accounts → Sign-in options , Windows Hello Face says it’s...
+  captured_at: '2026-10-11T13:56:37Z'
+  source_date: '2026-10-10'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9550'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9550'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9550'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6032391-windows-failed-pin-and-windows-hello
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6032391/windows-failed-pin-and-windows-hello
+  parent_title: Windows failed Pin and windows hello - Microsoft Q&A
+  report_title: Windows failed Pin and windows hello - Microsoft Q&A
+  report_text_excerpt: Windows failed Pin and windows hello - Microsoft Q&A SUMMARY After a shutdown and cold boot, Windows Hello Face and PIN stop working on the lock screen. Re-enrolling fixes it, but it comes back within a couple of days. I'm looking for the cause and a permanent fix, not another...
+  captured_at: '2026-10-11T13:57:18Z'
+  source_date: '2026-10-10'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
