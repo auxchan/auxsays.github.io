@@ -41,6 +41,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-025 | Resolved | Collector runtime | Medium | Premiere spent 622s to collect 12s of evidence — routed to one primary, 97.8% faster |
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
+| AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
 
 ---
 
@@ -1599,9 +1600,9 @@ correctly accepted report and left the wrong one counted. It now selects on
 the focused suite pins both directions; reinstating the URL-only selector fails three of its checks.
 
 **Verified after:** the authority reports **0 Acrobat rows refused as wrong_product**. Evidence total
-unchanged at **1,978 → 1,978** with every base row accounted for; **exactly 3 rows changed counting
+unchanged at **1,983 → 1,983** with every base row accounted for; **exactly 3 rows changed counting
 state and 0 rows changed in any other way**, compared on full identity rather than on `id` (the store
-holds 1,978 rows under 1,964 identities, so an id-keyed diff silently collapses rows and reported
+holds 1,983 rows under 1,964 identities, so an id-keyed diff silently collapses rows and reported
 only 2 of the 3). `evidence_method_health.yml`, `acrobat_update_linked_evidence.yml` and
 `recent_acrobat_reports.yml` are byte-identical to the previous main. No row moved between editions,
 nothing was deleted, and no collector ran — this was stored-evidence correction, not acquisition.
@@ -1624,6 +1625,223 @@ method-health repair touches any file other than `evidence_method_health.yml`.
 **a telemetry repair must not be able to move evidence.** A collector dispatch is not a migration.
 
 ---
+
+### AUX-028 — OBS had one evidence family and a reserved slot that discovered nothing
+
+- **Status** Resolved · **Area** Evidence coverage · **Severity** Medium
+- **First seen** 2026-10-09 · **Resolved** 2026-10-09
+
+**Symptom** OBS Studio evidence came from exactly one source family, `obsproject/obs-studio`
+GitHub Issues. The second method registered against the product, `known_watchlist`, emitted
+`disabled` with `no_obs_watchlist_configured`, and its own note conceded it *"does not discover
+candidates in Phase A."* Two method rows, one corpus. A GitHub outage took OBS evidence to zero
+with nothing behind it.
+
+**What a second family had to be.** Independence is by FAMILY, not by method count: a second
+GitHub Issues query against the same repository is the same authors, the same platform and the
+same moderation, renamed. Three candidates were measured in one bounded pass.
+
+| candidate | verdict | measured reason |
+|---|---|---|
+| Reddit | **rejected** | `robots.txt` is `User-agent: *` / `Disallow: /`. Policy, not transport. |
+| GitHub Discussions | **rejected** | Enabled, but 312 discussions across Announcements / Development Questions / General / Polls / RFPs. No user bug-report territory, and "Development Questions" is content the authority already refuses. Same platform as Issues. |
+| **obsproject.com forum** | **ACTIVE** | 200, no auth. Three support subforums: Windows (32), Mac (33), Linux (34). |
+
+**Robots decides the shape.** `/forum/list/` and `/forum/threads/` are allowed; `/forum/search/`,
+`/forum/whats-new/`, `/forum/find-new/` and `/forum/posts/` are not. So the forum is
+**enumerated, never queried** -- the same conclusion the PowerPoint source-coverage sprint
+reached. And because a reply's canonical URL is `/forum/posts/<id>/`, which is disallowed, only
+**opening posts** are read. That is the safe reading anyway: a reply must never inherit the
+thread author's version, and reading only the first post makes that structural instead of a rule
+someone has to remember.
+
+**One authority, two families.** Both methods call `collect_obs_reports.evaluate_issue` and
+`collect_obs_reports.evidence_row`. `evidence_row` grew one optional `identity` argument
+supplying row id, source type/name and URL; omitted, it reproduces the GitHub row byte for byte.
+Nothing else differs, and `source_weight` is 1 on both. The forum pool is narrowed per version
+with the authority's own `match_basis`, not a second containment test, because a second version
+predicate is a second authority waiting to drift.
+
+**One writer, so dedupe is structural.** Both families' accepted rows go through a single
+`write_evidence` call, which suppresses on `(product, version, id)` and `(product, version, url)`
+and updates its seen-sets as it walks the batch. A report discovered twice becomes duplicate
+telemetry -- accepted minus added -- not a second counted row. `write_evidence` gained an
+`added_out` out-parameter so each family's delta is attributed from the appends that actually
+happened rather than re-derived; re-deriving the suppression rule is how two predicates drift
+apart.
+
+**Three defects found while building it, each measured before it was changed.**
+
+1. **`exact_version_re` refused a version at the end of a sentence.** The right-hand guard was
+   `(?![0-9.])`, so *"I recently updated to 32.2.2."* matched nothing. Costless on GitHub, where
+   the issue template puts the version on its own line; fatal on a forum, where prose is the only
+   carrier. The guard must exclude a LONGER version, so it now refuses a following digit, or a
+   dot then a digit. Measured over **1,111 live OBS issues: 2 outcomes move, 0 acceptances
+   lost.** One real report is recovered (#12506, *"This started for me with 31.1.0"*).
+2. **The counterweight that fix required.** The second moved outcome, #13982, says *"This issue
+   does not occur in version 32.2.2"* -- a version named as HEALTHY, which the old matcher
+   refused only by accident. The WORKING cue set covered "X doesn't have this problem" (target
+   first) but not the negation-first direction. `target_lacks_occurrence` closes it. **Measured
+   alone across the same 1,111 issues it changes nothing** -- it is a counterweight, not a
+   widening. R1 (a declared version is never vetoed) and R3 (an explicit affected cue wins) still
+   sit above it, which is what lets obsproject.com thread 196545 -- *"I then downgraded to OBS
+   32.1.2 ... the exact same issue happens"* -- still count for the version it rolled back to.
+3. **The same regex shape is CORRECT in the declared-version tokenizer, and was left alone.** The
+   consequences are asymmetric: R1 makes a declared version immune to every veto, so
+   over-recognising there grants immunity, while under-recognising prose only drops a report.
+   Relaxing it would read `32.0.0.r2.ga75fdd2-1` (an AUR git build, #12669) as a bare 32.0.0
+   declaration, and the nixpkgs build reports #13971/#13972 as declarations of 32.1.2. A comment
+   and a test now hold the asymmetry in place.
+
+**Stickies are excluded at discovery, and that exclusion is load-bearing.** The five pinned
+threads in Windows Support are *"Dropped frames/disconnecting/lag? Read this first!"*, *"High CPU
+usage ... Read this first!"*, *"Laptop black screen when capturing"*, *"My stream lags/buffers
+constantly"* and *"Please post a log with your issue"*. Every one is written in the vocabulary of
+the problems it is about -- the first title alone carries three concrete-issue terms -- and
+describes nobody's install. They also sit on page 1 of every subforum forever, so enumeration
+meets them first on every run. XenForo groups them in their own container, so this is a
+structural fact about the listing rather than a guess from the title. Methods may discover
+differently; they may not judge differently, so nothing about acceptance changed for the threads
+that do get through. A test asserts that the authority *would* have accepted the guide, which is
+what records the exclusion as load-bearing.
+
+**Page dates are last-activity; the opening post's own date is not.** Thread 8870 renders
+`2013-11-16`, `2013-11-16`, `2025-11-24`. The date is read from the first `<time>` inside the
+opening post's own `<article>`, and the post's extent is bounded to the next post's article tag
+-- searching the rest of the page would silently read a REPLY's date whenever the opening post's
+`<time>` moved. A thread whose opening post has no date is dropped rather than dated by its
+reply, and one whose body markup moves parses with an EMPTY body rather than borrowing a reply's.
+
+**Quoted text is stripped with a balanced scan, not a regex.** A non-greedy
+`<blockquote>.*?</blockquote>` matches the OUTER open tag through the INNER close on a nested
+quote, consuming the outer's opening tag and leaving the outer's own trailing text behind --
+another member's version claim, now attributed to the quoting author. Iterating the regex does
+not fix that, because the outer open tag is already gone. An unbalanced quote drops everything
+from its opening tag, which loses some of the author's own words: the right direction to fail.
+
+**known_watchlist is retired honestly, not deleted.** It emits `disabled` with
+`retired_superseded_by_obs_forum` on every run. Deleting it would have frozen its last row
+forever -- the AUX-026 defect -- because `upsert_method_health` retains what a run does not emit.
+
+**Health is per family.** `collect_one` returns `github_status` / `github_error` separately from
+the merged result, and `github_health` derives the GitHub row from the GitHub outcome alone.
+Before the second family existed those were the same thing; afterwards, a run where GitHub 502s
+and the forum returns three reports still exits 0, and one verdict for both would publish that
+outage as success. A GitHub failure no longer discards the forum's work either -- that is the
+entire point of having a second family. The forum reports `blocked` (unreachable), `broken`
+(pages fetched, nothing mapped), `partial` (any page lost, unparsed or body-less), `success` or
+`no_results`. The body-less counter exists because a bbWrapper class rename would otherwise
+degrade the family to titles only while health kept reporting success.
+
+**The adversarial review found three real defects, and one it could not safely fix.**
+
+- **Three phrasings naming the version as HEALTHY were counted as affected.** *"32.2.2 was fine
+  for me"*, *"No problems on 32.2.2"* and *"I never saw this happen in 32.2.2"*. The
+  results-table cue needs a bracket, dash or colon delimiter and `target_works` needs the word
+  "work", so a plain adjective said in prose reached acceptance. Closed by `target_said_fine`,
+  `no_problem_on_target`, and widening `target_lacks_occurrence` to allow an intervening object.
+  `target_said_fine` carries a `(?!\s+until\b)` guard, because *"32.2.2 was fine UNTIL I added a
+  browser source"* is a regression report and deleting it is the failure this cue could cause.
+  **Measured: of 1,111 live OBS issues exactly one changes, and only its REJECTION REASON
+  (#13982 moves from the accidental `generic_or_no_concrete_issue` to the correct
+  `version_reported_working`); 0 acceptances are lost. Across all 1,320 counted stored rows,
+  every product, 0 rows are newly vetoed.** Counterweights, not a widening.
+- **One thread could be stored twice under two URL shapes.** `row_identity` took the text after
+  the last dot, so `/forum/threads/196568/` (no slug) yielded the whole path as the "id" --
+  a row id containing slashes, and a URL key that did not match the slugged form, so both
+  landed. Latent rather than live, because the listing regex only emits the dotted shape, but an
+  identity gate should not depend on that. `thread_id()` now resolves both shapes to the same
+  numeric id and returns **None** rather than guessing; a candidate with no resolvable id is
+  refused as `unresolvable_thread_identity`, because a row whose identity was invented is worse
+  than a report that was not counted.
+- **Residual, deliberately not fixed: *"No crashes with 32.2.2 at all"* is still read as
+  affected.** The cause is not a missing veto -- it is the AFFECTED cue `failure_then_target`
+  matching "crashes with 32.2.2" and winning at R3 before any veto runs. The obvious repair,
+  adding the failure cues to `_POLARITY_SENSITIVE`, is **unsafe and was tested as an idea rather
+  than shipped**: `_POLARITY_INVERTER` matches bare `not`, and `does not work` is itself one of
+  the AFFECTED failure phrases, so those cues would self-invert and stop detecting a large part
+  of the real corpus. Fixing it properly means re-measuring every product's corpus, which is a
+  different piece of work. **Reopen if** a counted row is ever found whose only version mention
+  sits inside a negated-healthy noun phrase.
+
+**A quantifier in the cue table was silently a tuple.** The cue patterns are f-strings, so
+`{0,2}` is a replacement field: Python evaluated it as `(0, 2)` and rendered that as literal text,
+leaving `(?:\w+\s+)(0, 2)?` -- a group demanding EXACTLY one intervening word. It is not a syntax
+error and it broke no test, because the case under test had exactly one word. It shipped that way
+through a full green suite and 29 killed mutants, and only became visible when the over-long line
+was wrapped and the rendered pattern printed. The table's existing cues double the braces for
+this reason; mine did not. The repair is pinned two ways -- the quantifier is exercised at 0, 1
+AND 2 intervening words, so no single-word case can stand in for the range again, and the whole
+cue table (19 patterns across all five groups) is scanned for the `(n, m)` artifact.
+
+**The calibration caught a false veto that neither corpus measurement could see.** One of my own
+cues put `appear` in its verb list, so *"doesn't appear on 32.2.1"* read as the problem being
+ABSENT. It is the opposite: a thing that does not appear IS the problem. The cue vetoed
+obsproject.com thread 196135, *"Downstream- key doesn't appear on 32.2.1 or 32.2.2 after
+installation"*, whose title states that 32.2.1 is affected -- a real report, deleted by a veto I
+added. Both measurements had said 0 acceptances lost, and both were right about the corpora they
+covered: neither the 1,111 GitHub issues nor the 1,320 stored rows contains that phrasing. **A
+veto is only as safe as the corpus it was measured against, and a new source family is a new
+corpus** -- which is exactly why the bounded calibration spot-checks are a gate and not a
+formality. The verb list now holds only verbs whose bare negation can only mean the problem is
+absent: `occur`, `happen`, `manifest`, `reproduce`. Three "missing thing" shapes are pinned as
+NOT-working, and the three unambiguous phrasings are pinned as still-working, so the removal
+cannot silently reopen the leaks it was added for.
+
+**Review answers, for the record.** Version inheritance across authors: opening posts only,
+bounded to their own article, quotes stripped by balanced scan. Working version counted as
+affected: three cues added, one residual above. Duplicate across methods: one `write_evidence`
+call keyed on id AND url, now with a resolvable id. Fake independent-family depth: **0 of 36
+pooled threads mention GitHub at all and 0 of 5 accepted reports cite it** -- the family is not
+derivative. Missing source date failing open: a thread with no opening-post date is dropped, and
+the release-date gate refuses `missing_source_date` when the release date is known.
+Developer-only counted: the forum carries no labels, and detection is prose-based, so
+`cmake`/CI reports are still refused and an end-user failure is still kept.
+
+**Tests** `test_obs_forum_evidence_family.py`, 156 governed checks, offline from HTML fixtures.
+**31 mutants, 31 killed** across the identity, date-scoping, quote, sticky, dedupe,
+delta-attribution and health gates. Two mutants survived their first run and both were the same
+failure of the FIXTURE, not of the code: one made GitHub's accepted and added counts equal (two
+fields that are always equal are one field), and one put all quoted text before the inner quote
+so a single regex pass happened to clear it. Both fixtures were made discriminating, and the
+second exposed a real defect -- the iterated regex strip, replaced by the balanced scan above.
+A third survivor proved a test can verify a helper without proving the caller uses it: pacing was
+asserted by calling `_pace()` directly, so deleting the `_pace()` call from `_fetch` left the
+suite green until a test drove `_fetch` itself.
+
+**Bounded dry calibration**, GitHub Actions run 38025646937 on the PR head, `collect` job 223s.
+Pool: 9 listing requests, 180 threads, **0 failed, 0 unparsed, 0 body-less** -- the forum is
+fully CI-reachable. Across the 16 tracked patches the forum judged **44 candidates and accepted
+18**; GitHub judged 58 and accepted 40.
+
+The independence is real rather than nominal. On **32.1.0, 32.1.1 and 32.2.0** GitHub accepted
+nothing while the forum accepted a report, and 32.1.1 is the sharpest case: GitHub produced two
+candidates and accepted neither. Those rows also read `github_issues: no_results` beside
+`obs_forum: success`, which is the per-family separation doing its job rather than one verdict
+blurring both.
+
+Rejection reasons over the same run: `generic_or_no_concrete_issue` 23, `version_reported_working`
+2, `version_is_rollback_target` 1. **The concrete-issue vocabulary is the dominant limit on this
+family -- 88% of its refusals** -- and two spot-checked refusals are genuine reports it cannot
+read: a French-language thread describing an audio-monitoring fault (`CONCRETE_ISSUE_TERMS` is
+English-only, which costs nothing on GitHub's English issue template and costs recall on a forum)
+and the 196135 thread above, whose "doesn't appear" is a real defect the vocabulary does not
+name. Both are refusals of real reports, not acceptances of false ones, so they cost recall and
+not integrity. **Widening that vocabulary is deliberately NOT part of this sprint**: it is an
+acceptance widening, it affects GitHub too, and the sticky-guide finding above shows the
+vocabulary already matches text that describes nobody's install. It needs its own precision
+measurement.
+
+**Measured limitation, with a reopen trigger.** The forum family reaches the most recently active
+~60 threads per subforum. Listing order is last-activity, so a revived old thread resurfaces, but
+a patch whose reports have gone quiet is out of reach -- deliberately, because widening this is
+the newest-first-walk tail problem, not a cap to raise. **Reopen if** accepted forum reports per
+scheduled run stay at zero across a full week while `threads_in_pool` stays healthy, which would
+mean the limit has moved from reach to acceptance.
+
+**Cross-reference** AUX-026 is why the retired slot still emits. The lesson that generalises: a
+matcher fix and the veto covering what it newly exposes are **one change** -- ship them together,
+and measure the veto alone to prove it is a counterweight and not a deletion.
 
 ## Adding an entry
 

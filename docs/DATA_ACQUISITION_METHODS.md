@@ -43,7 +43,7 @@ widening how we look never widens what counts. The validator refuses any entry t
 
 ## The families
 
-21 families, 57 concrete implementations. Counts are generated from the registry.
+21 families, 58 concrete implementations. Counts are generated from the registry.
 
 | family | methods | purposes | transports |
 |---|---|---|---|
@@ -63,7 +63,7 @@ widening how we look never widens what counts. The validator refuses any entry t
 | `manual_watch` | 1 | candidate_discovery | html |
 | `open_web_federation` | 1 | candidate_discovery, recheck | html, rest_json |
 | `open_web_search_api` | 2 | candidate_discovery, recheck | html, rest_json |
-| `paginated_listing_enumeration` | 1 | candidate_discovery, recheck | html, rest_json, rss_xml |
+| `paginated_listing_enumeration` | 2 | candidate_discovery, recheck | html, rest_json, rss_xml |
 | `rss_feed_poll` | 3 | candidate_discovery, official_ingestion | rest_json, rss_xml |
 | `rss_search` | 2 | candidate_discovery, community_discovery, recheck | html, rest_json, rss_xml |
 | `sitemap_walk` | 2 | candidate_discovery, recheck | html, rss_xml |

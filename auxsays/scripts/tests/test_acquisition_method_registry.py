@@ -195,6 +195,23 @@ def run() -> int:
           documented == set(am.families()),
           f"only in doc: {sorted(documented - set(am.families()))}; "
           f"only in registry: {sorted(set(am.families()) - documented)}")
+    # The per-family counts in that same table had drifted and nothing noticed: R20 compares
+    # family NAMES only, so adding a method to an existing family left its row saying 1 when the
+    # registry held 2. A table that reads as authoritative and is wrong is worse than no table,
+    # which is the stated reason R20 exists -- so the numbers beside the names are checked too.
+    import collections as _collections
+    registry_counts = _collections.Counter(m["method_family"] for m in methods)
+    doc_counts = {name: int(count) for name, count in
+                  re.findall(r"^\| `([a-z_]+)` \| (\d+) \|", doc, re.M)}
+    drifted = {name: (count, registry_counts.get(name))
+               for name, count in doc_counts.items() if registry_counts.get(name) != count}
+    # Non-vacuity first: an empty parse would make the comparison below trivially true.
+    check("R21b the family table rows parse at all (this check is not vacuous)",
+          len(doc_counts) == len(am.families()),
+          f"parsed {len(doc_counts)} rows for {len(am.families())} families")
+    check("R21c the family table states each family's real method count",
+          not drifted, str(drifted))
+
     check("R21 the document states the counts the registry actually has",
           f"{len(methods)} concrete implementations" in doc
           and f"{len(am.families())} families" in doc,
