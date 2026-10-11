@@ -51163,3 +51163,28 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
+
+- id: blackmagic-davinci-21-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x0mw4u-resolve-keeps-crashing-on-macbook-pro
+  product_id: blackmagic-davinci
+  update_version: 21.1.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x0mw4u/resolve_keeps_crashing_on_macbook_pro/
+  parent_title: Resolve keeps crashing on MacBook Pro
+  report_title: Resolve keeps crashing on MacBook Pro
+  report_text_excerpt: 'Resolve keeps crashing on MacBook Pro Hey Guys. Davinci Resolve Studio 21.1.1 Build 10 keeps crashing on MacBook Pro M4 with OS Tahoe 26.7.1. The Problem is reproducable: I have a 4K Timeline and some of the Clips have a different Speed and also reverse Setting. Whenever I...'
+  captured_at: '2026-10-11T22:37:32Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-10-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.1.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
