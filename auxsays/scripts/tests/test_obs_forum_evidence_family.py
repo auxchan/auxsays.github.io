@@ -823,6 +823,67 @@ def run() -> int:
     check("T23.5 and the candidate is REFUSED rather than stored under an invented identity",
           acc23 == [] and rej23 and rej23[0]["reason"] == "unresolvable_thread_identity",
           str((acc23, rej23)))
+    print("T24 the write-mode ownership gate authorizes the new family")
+    # A DRY RUN CANNOT REACH THIS GATE. The bounded calibration was clean and the first
+    # write-enabled production run failed at `ownership_violation:evidence_unauthorized_source`,
+    # because the per-product allow-lists are positive and only consulted on an actual append.
+    # Asserted against the real gate, and in BOTH directions -- an allow-list test that only
+    # checks its own entry is present proves nothing about the gate consulting it.
+    from lib import collector_ownership as ownership
+    check("T24.1 obs_forum is an authorized METHOD for obs-studio",
+          "obs_forum" in ownership.ALLOWED_METHODS["obs-studio"],
+          str(sorted(ownership.ALLOWED_METHODS["obs-studio"])))
+    check("T24.2 obs_forum_thread is an authorized SOURCE TYPE for obs-studio",
+          "obs_forum_thread" in ownership.ALLOWED_SOURCE_TYPES["obs-studio"],
+          str(sorted(ownership.ALLOWED_SOURCE_TYPES["obs-studio"])))
+    check("T24.3 the retired watchlist keeps its registration, so its health can still be emitted",
+          "known_watchlist" in ownership.ALLOWED_METHODS["obs-studio"])
+
+    import yaml as _yaml
+    live_rows = _yaml.safe_load(live_evidence_before.decode("utf-8"))["evidence"]
+
+    def _dump(rows):
+        return _yaml.safe_dump({"schema_version": 1, "evidence": rows}, sort_keys=False,
+                               allow_unicode=True, width=1000)
+
+    gate_post = forum_post(body=f"{VER} crashes on record", thread_id="196568")
+    gate_row = obs.normalize_row(forum_row(gate_post))
+    try:
+        ownership.validate_evidence("obs-studio", live_evidence_before.decode("utf-8"),
+                                    _dump(live_rows + [gate_row]))
+        accepted_by_gate, gate_reason = True, ""
+    except Exception as exc:
+        accepted_by_gate = False
+        gate_reason = str(getattr(exc, "reason", "") or exc)
+    check("T24.4 the gate ACCEPTS a forum evidence append", accepted_by_gate, gate_reason)
+
+    stranger = dict(gate_row, source_type="reddit_community_report",
+                    id="obs-studio-32-2-2-stranger-1",
+                    source_url="https://example.invalid/r/obs/1/")
+    try:
+        ownership.validate_evidence("obs-studio", live_evidence_before.decode("utf-8"),
+                                    _dump(live_rows + [stranger]))
+        refused_stranger = False
+    except Exception:
+        refused_stranger = True
+    check("T24.5 and still REFUSES a source type nobody registered", refused_stranger,
+          "the gate admitted an unregistered source")
+
+    print("T25 the revalidation harness classifies the new source honestly")
+    import revalidate_consensus_evidence as reval
+    rv = {"product_id": "obs-studio", "update_version": VER, "counted": True,
+          "patch_version_matched": True, "source_type": forum.SOURCE_TYPE,
+          "source_url": "https://obsproject.com/forum/threads/some-thread.196568/"}
+    # `pending_source_adapter` says the source is recognised but has no adapter yet.
+    # `unsupported_source_type` would say OBS evidence carries a source nobody knows -- a
+    # misreport rather than a gap, and the default for any type left off the list.
+    check("T25.1 a forum row is pending_source_adapter, not unsupported_source_type",
+          reval.classify_row(rv)[0] == "pending_source_adapter", str(reval.classify_row(rv)))
+    check("T25.2 a GitHub row still has its real adapter contract",
+          reval.classify_row(dict(rv, source_type="github_issue"))[0] == "candidate_for_revalidation",
+          str(reval.classify_row(dict(rv, source_type="github_issue"))))
+    check("T25.3 a genuinely unknown source type is still unsupported",
+          reval.classify_row(dict(rv, source_type="zz_not_a_source"))[0] == "unsupported_source_type")
     print("T17 implementing this did not rewrite stored OBS evidence")
     live_now = obs.EVIDENCE_PATH.read_bytes() if obs.EVIDENCE_PATH.exists() else b""
     check("T17.1 the live evidence store is byte-identical after the suite",

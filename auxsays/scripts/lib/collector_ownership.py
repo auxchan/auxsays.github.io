@@ -60,7 +60,11 @@ ALLOWED_METHODS: dict[str, set[str]] = {
         "adobe_community_algolia_search", "adobe_community_search", "reddit_search",
         "adobe_community_bug_tab_index", "adobe_community_known_url_recheck",
     },
-    "obs-studio": {"github_issues", "known_watchlist"},
+    # obs_forum is the SECOND source family for OBS -- the project's own support forum, a
+    # different platform and different authors, not a second route into GitHub Issues.
+    # known_watchlist is retired and emits only `disabled`; it stays listed because a method
+    # that stops emitting keeps its last health row forever (AUX-026).
+    "obs-studio": {"github_issues", "obs_forum", "known_watchlist"},
     # techcommunity_windows_sitemap is the SECOND source family for Windows -- a different
     # community, not a second route into Learn Q&A. See microsoft_windows.TECHCOMMUNITY_METHOD_ID
     # for the bake-off that chose it.
@@ -89,7 +93,9 @@ ALLOWED_SOURCE_TYPES: dict[str, set[str]] = {
     },
     "adobe-acrobat-reader": {"adobe_community_bug_report", "reddit_community_report"},
     "adobe-acrobat-pro": {"adobe_community_bug_report", "reddit_community_report"},
-    "obs-studio": {"github_issue", "curated_watchlist"},
+    # obs_forum_thread is a distinct source_type because obsproject.com is a distinct
+    # community, which is what makes it count toward the two-family coverage floor.
+    "obs-studio": {"github_issue", "obs_forum_thread", "curated_watchlist"},
     # microsoft_tech_community is a genuinely separate community from microsoft_learn_qna, which is
     # what makes it count toward the two-family coverage floor -- unlike learn_qna_powerpoint_tags
     # below, which deliberately shares its family because it reads the same community.
