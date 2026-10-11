@@ -6,7 +6,7 @@ import {
   PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, drawPremiumGlyph,
   createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
   persistentFocusRotation, persistentPlacementAccent, premiumNodeLabelPoint, premiumRadius, resolvePersistentLod, resolvePremiumLabels, traceCubic,
-  samplePersistentCameraTransition, type LabelCandidate, type PersistentCameraPose, type PersistentCameraTransition, type PersistentCameraVelocity, type Point
+  samplePersistentCameraTransition, type LabelCandidate, type ResolvedLabel, type PersistentCameraPose, type PersistentCameraTransition, type PersistentCameraVelocity, type Point
 } from "./persistentWorldVisuals";
 import { createPersistentProjector, createPersistentWorldSpatialLayout, type PersistentProjectedPlacement } from "./persistentWorldSpatialLayout";
 
@@ -15,6 +15,7 @@ export type PersistentWorldViewMode = "TOP_DOWN" | "CINEMATIC_2_5D";
 interface Viewport { zoom: number; panX: number; panY: number }
 interface OrbitDrag { pointerId: number; startX: number; startY: number; lastX: number; lastAt: number; startAngle: number; moved: boolean }
 interface TapGesture { pointerId: number; pointerType: string; startX: number; startY: number; hitId: string | null; moved: boolean }
+interface PremiumLabelSprite { canvas: HTMLCanvasElement; width: number; height: number; padding: number }
 interface Props {
   model: PersistentWorldReadModel;
   factualBindings: Readonly<Record<string, PersistentWorldFactualBinding>>;
@@ -322,6 +323,32 @@ function drawDimensionalNode(context: CanvasRenderingContext2D, point: Persisten
   context.restore();
 }
 
+/** Rasterizes a complete title bubble once so its border and glyphs travel as one composited image. */
+function createPremiumLabelSprite(label: ResolvedLabel, selected: boolean, pixelRatio: number): PremiumLabelSprite | null {
+  const padding = 3;
+  const width = label.width + padding * 2;
+  const height = label.height + padding * 2;
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.ceil(width * pixelRatio));
+  canvas.height = Math.max(1, Math.ceil(height * pixelRatio));
+  const context = canvas.getContext("2d");
+  if (!context) return null;
+  context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  context.fillStyle = "rgba(2,16,22,.9)";
+  context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3);
+  context.lineWidth = 1;
+  context.beginPath();
+  context.roundRect(padding, padding, label.width, label.height, 6);
+  context.fill();
+  context.stroke();
+  context.fillStyle = selected ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1);
+  context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText(label.text, padding + label.width / 2, padding + label.height / 2, label.width - 12);
+  return { canvas, width, height, padding };
+}
+
 export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, viewMode, traceMode, reducedMotion, resetVersion, routePulseVersion, publicBeta = false, onSelect, onNavigateParent, onReset }: Props) {
   const spatialLayout = useMemo(() => createPersistentWorldSpatialLayout(model), [model]);
   const hostRef = useRef<HTMLDivElement>(null); const canvasRef = useRef<HTMLCanvasElement>(null); const canvasBitmapResetCountRef = useRef(0);
@@ -332,6 +359,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const tapRef = useRef<TapGesture | null>(null);
   const orbitDragRef = useRef<OrbitDrag | null>(null); const orbitAngleRef = useRef(0); const orbitVelocityRef = useRef(0); const ambientOrbitAngleRef = useRef(0);
   const suppressClickRef = useRef(false); const hoveredRef = useRef<string | null>(null); const hoverVisualsRef = useRef(new Map<string, number>());
+  const labelShiftRef = useRef(new Map<string, number>()); const labelSpriteCacheRef = useRef(new Map<string, PremiumLabelSprite>());
   const pointerRef = useRef<Point>({ x: 0, y: 0 }); const invalidateRef = useRef<() => void>(() => undefined);
   const semanticHistoryRef = useRef<readonly string[]>([]); const cameraMomentumRef = useRef<Point>({ x: 0, y: 0 });
   const routePulseRef = useRef({ version: routePulseVersion, startedAt: performance.now() });
@@ -354,6 +382,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     invalidateRef.current();
   }, [routePulseVersion]);
   useEffect(() => { if (hostRef.current) hostRef.current.dataset.viewMode = viewMode; }, [viewMode]);
+  useEffect(() => { labelShiftRef.current.clear(); }, [fullWorld, resetVersion, selectedPlacementId, viewMode]);
   useEffect(() => {
     viewportRef.current = { zoom: 1, panX: 0, panY: 0 }; const host = hostRef.current;
     if (host) { host.dataset.viewportZoom = "1.000"; host.dataset.viewportPanX = "0"; host.dataset.viewportPanY = "0"; } invalidateRef.current();
@@ -366,7 +395,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   useEffect(() => {
     const host = hostRef.current; const canvas = canvasRef.current; const context = canvas?.getContext("2d", { alpha: false });
     if (!host || !canvas || !context) return;
-    let frame = 0; let last = performance.now(); let frameCount = 0; let accumulated = 0; const frameSamples: number[] = [];
+    let frame = 0; let last = performance.now(); let frameCount = 0; let accumulated = 0; let canvasRatio = 1; const frameSamples: number[] = [];
     const initialBounds = host.getBoundingClientRect();
     let destination = persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, initialBounds.width, initialBounds.height, spatialLayout); const cameraStarted = performance.now(); let cameraSettled = false;
     let cameraTransition = polishPersistentCameraTransition(createPersistentCameraTransition(cameraRef.current, destination, cameraStarted, `${viewMode}:${selectedPlacementId ?? (fullWorld ? "full-world" : "overview")}`, cameraVelocityRef.current));
@@ -374,7 +403,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     const previousSemanticSet = new Set(previousSemantic); const transitionSemanticSet = new Set([...previousSemantic, ...semantic]);
     delete host.dataset.cameraSettleMs; if (reducedMotion) { cameraRef.current = destination; cameraVelocityRef.current = { x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 }; cameraMomentumRef.current = { x: 0, y: 0 }; }
     const resize = () => {
-      const bounds = host.getBoundingClientRect(); const ratio = persistentWorldCanvasPixelRatio(window.devicePixelRatio || 1, bounds.width); destination = persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
+      const bounds = host.getBoundingClientRect(); const ratio = persistentWorldCanvasPixelRatio(window.devicePixelRatio || 1, bounds.width); canvasRatio = ratio; destination = persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
       const nextWidth = Math.max(1, Math.round(bounds.width * ratio)); const nextHeight = Math.max(1, Math.round(bounds.height * ratio));
       const bitmapChanged = persistentWorldCanvasResizeRequired(canvas.width, canvas.height, nextWidth, nextHeight);
       if (bitmapChanged) {
@@ -509,14 +538,25 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
           const requiredOverviewDriver = placement.depth === 1 && (!selectedPlacementId || fullWorld);
           const structurallyRequired = requiredOverviewDriver || (focusedExactTenChild && viewMode === "TOP_DOWN");
           const required = persistentWorldLabelRequired(width, placement.id, selectedPlacementId, selectedPath, structurallyRequired);
-          if (persistentWorldLabelVisible(width, placement.id, selectedPlacementId, selectedPath)) labelCandidates.push({ id: placement.id, text: label, x: labelPoint.x, y: labelPoint.y, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX: point.x, anchorY: point.y, required, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
+          if (persistentWorldLabelVisible(width, placement.id, selectedPlacementId, selectedPath)) labelCandidates.push({ id: placement.id, text: label, x: labelPoint.x, y: labelPoint.y, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX: point.x, anchorY: point.y, required, preferredShift: labelShiftRef.current.get(placement.id), opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
         }
         context.globalAlpha = 1;
       }
       const labels = resolvePremiumLabels(labelCandidates, width, height);
+      labelShiftRef.current = new Map(labels.flatMap((label) => label.shift === undefined ? [] : [[label.id, label.shift] as const]));
       host.dataset.labelLayout = width <= 620 ? "SELECTED_ROUTE_ONLY" : "NODE_ATTACHED_RADIAL";
+      host.dataset.labelMotion = "STICKY_COMPOSITED";
       host.dataset.labelLeaderCount = labels.filter((label) => label.side && label.anchorX !== undefined && label.anchorY !== undefined).length.toString();
-      for (const label of labels) { context.save(); context.globalAlpha = label.opacity ?? 1; if (label.side && label.anchorX !== undefined && label.anchorY !== undefined) { const targetX = label.side === "left" ? label.left + label.width : label.side === "right" ? label.left : label.x; const targetY = label.side === "top" ? label.top + label.height : label.side === "bottom" ? label.top : label.y; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(targetX, targetY); context.stroke(); } context.fillStyle = "rgba(2,16,22,.9)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); context.restore(); }
+      for (const label of labels) {
+        context.save(); context.globalAlpha = label.opacity ?? 1;
+        if (label.side && label.anchorX !== undefined && label.anchorY !== undefined) { const targetX = label.side === "left" ? label.left + label.width : label.side === "right" ? label.left : label.x; const targetY = label.side === "top" ? label.top + label.height : label.side === "bottom" ? label.top : label.y; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(targetX, targetY); context.stroke(); }
+        const selected = label.id === selectedPlacementId;
+        const spriteKey = `${canvasRatio.toFixed(3)}|${label.width.toFixed(2)}|${label.height}|${label.priority}|${selected}|${label.accent}|${label.text}`;
+        let sprite = labelSpriteCacheRef.current.get(spriteKey);
+        if (!sprite) { const created = createPremiumLabelSprite(label, selected, canvasRatio); if (created) { sprite = created; labelSpriteCacheRef.current.set(spriteKey, created); } }
+        if (sprite) { context.imageSmoothingEnabled = true; context.imageSmoothingQuality = "high"; context.drawImage(sprite.canvas, label.left - sprite.padding, label.top - sprite.padding, sprite.width, sprite.height); }
+        context.restore();
+      }
 
       const elapsed = performance.now() - started;
       if (frameCount === 0) host.dataset.firstDrawMs = (performance.now() - mountedAtRef.current).toFixed(3);

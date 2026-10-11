@@ -6,8 +6,8 @@ export interface PersistentCameraPose { x: number; y: number; z: number; scale: 
 export interface PersistentCameraVelocity { x: number; y: number; z: number; logScale: number; rotation: number; pitch: number; yaw: number }
 export interface PersistentCameraTransition { from: PersistentCameraPose; to: PersistentCameraPose; startedAt: number; durationMs: number; arc: number; orbit: number; velocity: PersistentCameraVelocity }
 export type PremiumLabelSide = "left" | "right" | "top" | "bottom";
-export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number; required?: boolean; side?: PremiumLabelSide; opacity?: number }
-export interface ResolvedLabel extends LabelCandidate { left: number; top: number }
+export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number; required?: boolean; side?: PremiumLabelSide; opacity?: number; preferredShift?: number }
+export interface ResolvedLabel extends LabelCandidate { left: number; top: number; shift?: number }
 
 export const PERSISTENT_GLINT_PERIOD_MS = 2500;
 export const PERSISTENT_GLINT_TRAIL = 0.085;
@@ -224,7 +224,7 @@ export function premiumNodeLabelPoint(node: Point, parent: Point | undefined, ra
 export function resolvePremiumLabels(candidates: readonly LabelCandidate[], width: number, height: number) {
   const accepted: ResolvedLabel[] = [];
   const ordered = [...candidates].sort((left, right) => right.priority - left.priority || left.id.localeCompare(right.id));
-  const collides = (resolved: ResolvedLabel) => accepted.some((item) => resolved.left < item.left + item.width + 8 && resolved.left + resolved.width + 8 > item.left && resolved.top < item.top + item.height + 6 && resolved.top + resolved.height + 6 > item.top);
+  const collides = (resolved: ResolvedLabel, horizontalGap = 8, verticalGap = 6) => accepted.some((item) => resolved.left < item.left + item.width + horizontalGap && resolved.left + resolved.width + horizontalGap > item.left && resolved.top < item.top + item.height + verticalGap && resolved.top + resolved.height + verticalGap > item.top);
   const clampX = (candidate: LabelCandidate, x: number) => Math.max(8 + candidate.width / 2, Math.min(width - 8 - candidate.width / 2, x));
   const clampY = (candidate: LabelCandidate, y: number) => Math.max(8 + candidate.height / 2, Math.min(height - 8 - candidate.height / 2, y));
   const resolvedAt = (candidate: LabelCandidate, x: number, y: number): ResolvedLabel => ({ ...candidate, x, y, left: x - candidate.width / 2, top: y - candidate.height / 2 });
@@ -272,9 +272,11 @@ export function resolvePremiumLabels(candidates: readonly LabelCandidate[], widt
     const tangentY = distance === 1 && radialX === 0 && radialY === 0 ? 0 : radialX / distance;
     const step = candidate.height + 8;
     const shifts = [0, -1, 1, -2, 2, -3, 3, -4, 4];
-    const resolved = shifts
-      .map((shift) => resolvedAt(candidate, clampX(candidate, baseX + tangentX * step * shift), clampY(candidate, baseY + tangentY * step * shift)))
-      .find((item) => !collides(item));
+    const preferredShift = shifts.includes(candidate.preferredShift ?? Number.NaN) ? candidate.preferredShift : undefined;
+    const orderedShifts = preferredShift === undefined ? shifts : [preferredShift, ...shifts.filter((shift) => shift !== preferredShift)];
+    const resolved = orderedShifts
+      .map((shift) => ({ ...resolvedAt(candidate, clampX(candidate, baseX + tangentX * step * shift), clampY(candidate, baseY + tangentY * step * shift)), shift }))
+      .find((item) => !collides(item, item.shift === preferredShift ? 2 : 8, item.shift === preferredShift ? 2 : 6));
     if (resolved) accepted.push(resolved);
   }
 

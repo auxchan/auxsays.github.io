@@ -187,6 +187,19 @@ describe("premium persistent-world visual language", () => {
     expect(attached.map((item) => item.id)).toEqual(["attached-a", "attached-b"]);
     expect(attached[0].y).not.toBe(attached[1].y);
     expect(Math.abs(attached[0].x - attached[1].x)).toBeLessThanOrEqual(1);
+
+    const crowdedFrame = resolvePremiumLabels([
+      { id: "fixed", text: "Fixed", x: 100, y: 100, priority: 100, width: 80, height: 22, accent: "#fff", required: true },
+      { id: "moving", text: "Moving", x: 187.5, y: 100, priority: 50, width: 80, height: 22, accent: "#fff", anchorX: 167.5, anchorY: 100, required: true }
+    ], 400, 240);
+    const movingShift = crowdedFrame.find((item) => item.id === "moving")!.shift;
+    expect(movingShift).toBe(-1);
+    const nextFrame = resolvePremiumLabels([
+      { id: "fixed", text: "Fixed", x: 100, y: 100, priority: 100, width: 80, height: 22, accent: "#fff", required: true },
+      { id: "moving", text: "Moving", x: 188.5, y: 100, priority: 50, width: 80, height: 22, accent: "#fff", anchorX: 168.5, anchorY: 100, required: true, preferredShift: movingShift }
+    ], 400, 240);
+    expect(nextFrame.find((item) => item.id === "moving")!.shift).toBe(movingShift);
+    expect(nextFrame.find((item) => item.id === "moving")!.y).toBe(crowdedFrame.find((item) => item.id === "moving")!.y);
   });
 
   it("moves a node title in lockstep with its animated bubble", () => {
