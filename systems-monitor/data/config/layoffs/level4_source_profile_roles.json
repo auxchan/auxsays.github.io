@@ -1324,9 +1324,9 @@
     "sourceOnlyRecordsWithDisposition": 6,
     "sourceRoles": {
       "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE": 2,
-      "CALC_INPUT": 12,
+      "CALC_INPUT": 10,
       "FALLBACK_ACQUISITION_METHOD": 1,
-      "PRIMARY_OBSERVATION_SOURCE": 29,
+      "PRIMARY_OBSERVATION_SOURCE": 31,
       "STRUCTURAL_SOURCE": 2
     },
     "supersededSourceOnlyAliases": 1
@@ -1576,20 +1576,20 @@
         {
           "exactSelector": true,
           "origin": "sources_bls_dol.json",
-          "role": "CALC_INPUT",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
           "selector": "DOL-UI-SA-CONTINUED",
           "sourceId": "dol-ui-claims",
           "status": "EXACT_SELECTOR",
-          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
         },
         {
           "exactSelector": true,
           "origin": "sources_bls_dol.json",
-          "role": "CALC_INPUT",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
           "selector": "DOL-UI-SA-IUR",
           "sourceId": "dol-ui-claims",
           "status": "EXACT_SELECTOR",
-          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
         }
       ]
     },

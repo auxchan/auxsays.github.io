@@ -101,7 +101,7 @@ The historical `77 source profiles` label was imprecise: it described a pre-clea
 | `factor:canonical:candi-loan-demand` | LEVEL4_CANONICAL | BLOCKED | fed-sloos:selector-pending | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:capacity-utilization` | LEVEL4_CANONICAL | BLOCKED | fed-g17:selector-pending | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:consumer-spending` | LEVEL4_CANONICAL | BLOCKED | bea-nipa:selector-pending | PRIMARY_OBSERVATION_SOURCE |
-| `factor:canonical:continued-claims-insured-unemployment` | LEVEL3_PARENT | SOURCE_ENABLED_PENDING_ACCEPTANCE | dol-ui-claims:DOL-UI-SA-CONTINUED; dol-ui-claims:DOL-UI-SA-IUR | CALC_INPUT; CALC_INPUT |
+| `factor:canonical:continued-claims-insured-unemployment` | LEVEL3_PARENT | SOURCE_ENABLED_PENDING_ACCEPTANCE | dol-ui-claims:DOL-UI-SA-CONTINUED; dol-ui-claims:DOL-UI-SA-IUR | PRIMARY_OBSERVATION_SOURCE; PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:corporate-profitability` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:corporate-profits` | LEVEL4_CANONICAL | BLOCKED | bea-nipa:selector-pending | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:disaster-external-shock` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |

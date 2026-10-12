@@ -27,7 +27,7 @@ export function SnapshotProvider({ children }: { children: React.ReactNode }) {
   }, []);
   const workstream1aReview = routeHash === "#workstream1a";
   const explicitLegacyView = new URLSearchParams(window.location.search).has("view") || routeHash === "#workstream1a";
-  const persistentWorldReview = routeHash.startsWith("#persistent-world") || routeHash === "#layoffs-level4-qa" || (import.meta.env.PROD && !explicitLegacyView);
+  const persistentWorldReview = routeHash.startsWith("#persistent-world") || routeHash === "#layoffs-level4-qa" || routeHash === "#continued-claims-level4-qa" || (import.meta.env.PROD && !explicitLegacyView);
   const snapshot = useMemo(() => {
     const storedCandidate = import.meta.env.DEV && !workstream1aReview && !persistentWorldReview ? window.localStorage.getItem("auxsays.localFactualCandidate") : null;
     const localCandidate = workstream1aReview || persistentWorldReview ? undefined : window.__AUXSAYS_LOCAL_FACTUAL_SNAPSHOT__ ?? (storedCandidate ? JSON.parse(storedCandidate) : undefined);

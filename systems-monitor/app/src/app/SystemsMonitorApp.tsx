@@ -14,6 +14,9 @@ const PersistentWorldShell = lazy(() => import("../views/persistent/PersistentWo
 const LayoffsLevel4QaView = import.meta.env.DEV
   ? lazy(() => import("../views/layoffs-qa/LayoffsLevel4QaView").then((module) => ({ default: module.LayoffsLevel4QaView })))
   : null;
+const ContinuedClaimsLevel4QaView = import.meta.env.DEV
+  ? lazy(() => import("../views/layoffs-qa/ContinuedClaimsLevel4QaView").then((module) => ({ default: module.ContinuedClaimsLevel4QaView })))
+  : null;
 
 class AppErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
   state = { error: null } as { error: Error | null };
@@ -26,10 +29,14 @@ function ValidatedApp() {
   const { route, navigate } = useRouteState(snapshot);
   if (variant === "loading") return <LoadingState />;
   if (variant === "snapshot-unavailable") return <ErrorState />;
-  const layoffsQa = import.meta.env.DEV && window.location.hash === "#layoffs-level4-qa";
+  const initialClaimsQa = import.meta.env.DEV && window.location.hash === "#layoffs-level4-qa";
+  const continuedClaimsQa = import.meta.env.DEV && window.location.hash === "#continued-claims-level4-qa";
+  const layoffsQa = initialClaimsQa || continuedClaimsQa;
   const explicitLegacyView = new URLSearchParams(window.location.search).has("view") || window.location.hash === "#workstream1a";
   const persistentWorld = !layoffsQa && (window.location.hash.startsWith("#persistent-world") || (import.meta.env.PROD && !explicitLegacyView));
-  const view = layoffsQa && LayoffsLevel4QaView
+  const view = continuedClaimsQa && ContinuedClaimsLevel4QaView
+    ? <ContinuedClaimsLevel4QaView />
+    : initialClaimsQa && LayoffsLevel4QaView
     ? <LayoffsLevel4QaView />
     : persistentWorld
     ? <PersistentWorldShell />

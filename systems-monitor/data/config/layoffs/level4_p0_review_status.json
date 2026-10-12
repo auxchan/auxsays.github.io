@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "level4-p0-review-status-0.4.1",
+  "schemaVersion": "level4-p0-review-status-0.5.0",
   "scope": "Layoffs & Job Destruction",
   "asOfStartingCommit": "c5e09181a0cf0d37da00fa3baa2ba0fcaf17a062",
   "authority": "TAYLOR_INITIAL_UI_CLAIMS_FINAL_CORRECTIONS_2026_10_01",
@@ -58,6 +58,26 @@
     "eventOrStructuralFactors": 1,
     "unexplainedRendererFixtures": 0,
     "canonicalMigrations": 6,
+    "acceptedStructuralRelationships": 0,
+    "gateB": "OPEN",
+    "forecasting": "LOCKED_UNAVAILABLE"
+  },
+  "continuedClaims": {
+    "status": "PRODUCTION_COMPLETE_GOVERNED_LEVEL4_EXACT_TEN",
+    "reviewState": "READY_FOR_HUMAN_LEVEL4_CONTINUED_CLAIMS_QA",
+    "humanQa": "PENDING",
+    "startingCheckpoint": "931ad59d243a3e2d460865b0f254c7f22d07637d",
+    "parentIdentityResolution": "TWO_SEPARATELY_LABELED_DIRECT_OBSERVATIONS",
+    "parentDirectObservations": 2,
+    "parentAcceptedHistoryRecords": 0,
+    "placements": 10,
+    "acceptedObservationPlacements": 5,
+    "acceptedHistoryReuseRecords": 114,
+    "governedCalculationsPendingTaylorApproval": 1,
+    "taxonomyOrSourceScopeRequired": 1,
+    "taxonomyOrMethodRequired": 1,
+    "blockedCredential": 2,
+    "unexplainedRendererFixtures": 0,
     "acceptedStructuralRelationships": 0,
     "gateB": "OPEN",
     "forecasting": "LOCKED_UNAVAILABLE"
@@ -127,6 +147,7 @@
     "initialUiClaimsApprovedBy": "Taylor",
     "initialUiClaimsApprovedOn": "2026-10-09",
     "initialUiClaimsAcceptedImplementationCheckpoint": "f1181a60753ec39257b2803290e9836235e7f1b1",
+    "HUMAN_LEVEL4_CONTINUED_CLAIMS_QA": "PENDING",
     "verifiedFrameworkDefectCheckpoint": "88ea7f3605422435202489f6cd6ad08037d2dc76",
     "HUMAN_PHASE4B_STRUCTURAL_PATH_QA": "NOT_OPENED_NO_STRUCTURAL_PROOF"
   },

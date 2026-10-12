@@ -268,6 +268,8 @@ def _role_for(
     source_only: bool,
     alternate: bool = False,
 ) -> str:
+    if factor_id == "factor:canonical:continued-claims-insured-unemployment" and source_id == "dol-ui-claims":
+        return "PRIMARY_OBSERVATION_SOURCE"
     if source_only:
         if factor_id in {"factor:canonical:business-formations"}:
             return "LEGACY_DUPLICATE_SHOULD_REMOVE"

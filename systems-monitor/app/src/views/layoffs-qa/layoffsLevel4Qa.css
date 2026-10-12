@@ -4,6 +4,7 @@
 [data-aux-product="systems-monitor"] .sm-l4qa-hero span { color: #6ed9c6; font: 700 .72rem/1.2 ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; }
 [data-aux-product="systems-monitor"] .sm-l4qa-hero h1 { margin: .55rem 0 .8rem; font-size: clamp(2.15rem, 5vw, 4.5rem); line-height: .98; letter-spacing: -.055em; }
 [data-aux-product="systems-monitor"] .sm-l4qa-hero p { max-width: 48rem; margin: 0; color: #b8ceca; line-height: 1.65; }
+[data-aux-product="systems-monitor"] .sm-l4qa-node-link { display: inline-flex; margin-top: 1rem; padding: .65rem .85rem; border: 1px solid #356259; color: #8de2cf; text-decoration: none; font-weight: 700; }
 [data-aux-product="systems-monitor"] .sm-l4qa-hero dl { display: grid; grid-template-columns: 1fr 1fr; margin: 0; border: 1px solid #2a5057; align-self: stretch; }
 [data-aux-product="systems-monitor"] .sm-l4qa-hero dl div { display: grid; place-content: center; min-height: 6rem; padding: 1rem; border: 1px solid #19383f; }
 [data-aux-product="systems-monitor"] .sm-l4qa-hero dt { color: #8ba9a5; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
@@ -12,6 +13,23 @@
 [data-aux-product="systems-monitor"] .sm-l4qa-boundary strong { color: #6ed9c6; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; }
 [data-aux-product="systems-monitor"] .sm-l4qa-boundary small { color: #78918e; }
 [data-aux-product="systems-monitor"] .sm-l4qa-grid { display: grid; gap: 1.25rem; margin-top: 1.75rem; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent { margin-top: 1.75rem; border: 1px solid #345878; background: #0a171d; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent > header { display: flex; justify-content: space-between; gap: 1.5rem; padding: 1.25rem; border-bottom: 1px solid #345878; background: #102334; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent > header span { color: #98c5f7; font: 700 .7rem/1 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent > header h2 { margin: .45rem 0; font-size: 1.45rem; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent > header p { max-width: 50rem; margin: 0; color: #b9cddd; line-height: 1.5; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent > header b { align-self: start; color: #98c5f7; font-size: .72rem; white-space: nowrap; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid { display: grid; grid-template-columns: 1fr 1fr; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid > article { display: grid; gap: .55rem; padding: 1.25rem; border-right: 1px solid #24434a; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid > article:last-child { border-right: 0; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid article > span { color: #78918e; font: 700 .68rem/1 ui-monospace, monospace; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid h3 { margin: 0; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid article > strong { color: #98c5f7; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid code { color: #8fa8a4; overflow-wrap: anywhere; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid dl { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin: .5rem 0 0; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid dl div { padding: .6rem; background: #0e2127; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid dt { color: #78918e; font-size: .65rem; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-l4qa-parent-grid dd { margin: .25rem 0 0; font-weight: 700; }
 [data-aux-product="systems-monitor"] .sm-l4qa-factor { border: 1px solid #24434a; background: #0a171d; }
 [data-aux-product="systems-monitor"] .sm-l4qa-factor > header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; padding: 1.15rem 1.25rem; border-bottom: 1px solid #24434a; background: #10262d; }
 [data-aux-product="systems-monitor"] .sm-l4qa-factor-icon { display: grid; width: 2.5rem; height: 2.5rem; place-items: center; border: 1px solid #356259; color: #6ed9c6; }
@@ -36,6 +54,7 @@
 [data-aux-product="systems-monitor"] .sm-l4qa-disposition[data-source-state="event"] { border-left: 4px solid #6b99cf; background: #101923; }
 [data-aux-product="systems-monitor"] .sm-l4qa-disposition[data-source-state="event"] > header strong { border-color: #476c96; color: #98c5f7; }
 [data-aux-product="systems-monitor"] .sm-l4qa-event-boundary { margin: 0 0 1rem; padding: .85rem 1rem; border: 1px solid #345878; background: #102334; color: #c8ddf1; line-height: 1.5; }
+[data-aux-product="systems-monitor"] .sm-l4qa-recommendation { margin: 1rem 0 0; padding: .85rem 1rem; border: 1px solid #8f6b35; background: #251d13; color: #f0d5a7; line-height: 1.5; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series[data-source-state="stale"] { border-left: 4px solid #ef9f66; background: #1b1816; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series[data-source-state="fallback"] { border-left: 4px solid #58c7b1; background: #0d1e22; }
 [data-aux-product="systems-monitor"] .sm-l4qa-series[data-source-state="stale"] > header strong { border-color: #a96038; color: #ffc29d; }
@@ -64,6 +83,8 @@
   [data-aux-product="systems-monitor"] .sm-l4qa-boundary { grid-template-columns: 1fr; }
   [data-aux-product="systems-monitor"] .sm-l4qa-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   [data-aux-product="systems-monitor"] .sm-l4qa-history ol { grid-template-columns: 1fr 1fr; }
+  [data-aux-product="systems-monitor"] .sm-l4qa-parent-grid { grid-template-columns: 1fr; }
+  [data-aux-product="systems-monitor"] .sm-l4qa-parent-grid > article { border-right: 0; border-bottom: 1px solid #24434a; }
 }
 
 @media (max-width: 520px) {
@@ -72,5 +93,7 @@
   [data-aux-product="systems-monitor"] .sm-l4qa-factor > header { grid-template-columns: auto 1fr; }
   [data-aux-product="systems-monitor"] .sm-l4qa-factor > header b { grid-column: 2; }
   [data-aux-product="systems-monitor"] .sm-l4qa-series > header { display: grid; }
+  [data-aux-product="systems-monitor"] .sm-l4qa-parent > header { display: grid; }
+  [data-aux-product="systems-monitor"] .sm-l4qa-parent-grid dl { grid-template-columns: 1fr; }
   [data-aux-product="systems-monitor"] .sm-l4qa-facts, [data-aux-product="systems-monitor"] .sm-l4qa-history ol, [data-aux-product="systems-monitor"] .sm-l4qa-deep dl { grid-template-columns: 1fr; }
 }
