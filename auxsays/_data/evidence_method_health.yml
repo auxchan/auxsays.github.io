@@ -638,8 +638,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-10-11T07:13:41Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:39:32Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.1.2
   target_build: ''
@@ -654,8 +654,8 @@ methods:
   accepted_reports: 8
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-10-11T07:14:25Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:40:20Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.1.2
   target_build: ''
@@ -669,9 +669,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-17T14:12:54Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:40:20Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: blackmagic-davinci
   update_version: '21.0'
   target_build: ''
@@ -957,9 +957,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:13:41Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:39:32Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: adobe-acrobat-reader
   update_version: 26.001.21529
   target_build: ''
@@ -1518,8 +1518,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:12:21Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:38:05Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.0.4
   target_build: ''
@@ -1533,9 +1533,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:12:21Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:38:05Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: obs-studio
   update_version: 32.1.0
   target_build: ''
@@ -1550,8 +1550,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:13:00Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:38:49Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.1.0
   target_build: ''
@@ -1565,9 +1565,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:13:00Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:38:49Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: adobe-acrobat-pro
   update_version: 24.002.20759
   target_build: ''
@@ -1934,8 +1934,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:11:01Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:36:42Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.0.3
   target_build: ''
@@ -1950,8 +1950,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:11:41Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:37:24Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.0.3
   target_build: ''
@@ -1965,9 +1965,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:11:41Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:37:24Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: adobe-acrobat-pro
   update_version: 23.003.20244
   target_build: ''
@@ -2334,8 +2334,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:09:42Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:35:20Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.0.0
   target_build: ''
@@ -2349,9 +2349,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:09:42Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:35:20Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: obs-studio
   update_version: 32.0.1
   target_build: ''
@@ -2366,8 +2366,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:10:22Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:36:01Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.0.1
   target_build: ''
@@ -2381,9 +2381,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:10:22Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:36:01Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: adobe-acrobat-pro
   update_version: 21.005.20058
   target_build: ''
@@ -2750,8 +2750,8 @@ methods:
   accepted_reports: 2
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:09:03Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:34:36Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 31.1.2
   target_build: ''
@@ -2765,9 +2765,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-03T13:16:38Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:34:36Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: obs-studio
   update_version: 32.2.0
   target_build: ''
@@ -2782,8 +2782,8 @@ methods:
   accepted_reports: 1
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:15:06Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:41:05Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.2.0
   target_build: ''
@@ -2797,9 +2797,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-10T13:54:52Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:41:05Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: adobe-acrobat-pro
   update_version: 21.005.20048
   target_build: ''
@@ -3166,8 +3166,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:07:42Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:33:12Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 31.1.0
   target_build: ''
@@ -3181,9 +3181,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:07:42Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:33:12Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: obs-studio
   update_version: 31.1.1
   target_build: ''
@@ -3198,8 +3198,8 @@ methods:
   accepted_reports: 1
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:08:22Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:33:53Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 31.1.1
   target_build: ''
@@ -3213,9 +3213,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-09-10T22:15:44Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:33:53Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: adobe-acrobat-pro
   update_version: 20.013.20074
   target_build: ''
@@ -3582,8 +3582,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:06:23Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:31:53Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 31.0.3
   target_build: ''
@@ -3597,9 +3597,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:06:23Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:31:53Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: obs-studio
   update_version: 31.0.4
   target_build: ''
@@ -3614,8 +3614,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-10-11T07:07:03Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:32:32Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: adobe-acrobat-pro
   update_version: 20.009.20067
   target_build: ''
@@ -12110,9 +12110,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:07:03Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:32:32Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: obs-studio
   update_version: 32.0.2
   target_build: ''
@@ -12126,9 +12126,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-10-11T07:11:01Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:36:42Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: obs-studio
   update_version: 32.2.1
   target_build: ''
@@ -12143,8 +12143,8 @@ methods:
   accepted_reports: 1
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-10-11T07:15:46Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:41:50Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: adobe-acrobat-reader
   update_version: 15.008.20082
   target_build: ''
@@ -17033,14 +17033,14 @@ methods:
   status: success
   candidates_found: 41
   accepted_candidates: 28
-  duplicate_existing_evidence: 27
-  evidence_rows_added: 1
+  duplicate_existing_evidence: 28
+  evidence_rows_added: 0
   public_counted_reports: 28
   accepted_reports: 28
   rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-10-11T07:16:44Z'
-  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
+  last_run: '2026-10-12T00:42:48Z'
+  notes: obsproject/obs-studio GitHub Issues, exact version matching.
 - product_id: obs-studio
   update_version: 32.2.2
   target_build: ''
@@ -17054,9 +17054,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-18T20:03:07Z'
-  notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:42:48Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
 - product_id: blackmagic-davinci
   update_version: 10.1.5
   target_build: ''
@@ -26209,3 +26209,275 @@ methods:
   blocked_reason: ''
   last_run: '2026-10-08T23:40:37Z'
   notes: Not run. This source refused every request it was given over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again. (acrobat community collector; edition=adobe-acrobat-reader)
+- product_id: obs-studio
+  update_version: 31.0.3
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: no_results
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:31:53Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 31.0.4
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: no_results
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:32:32Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 31.1.0
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: no_results
+  candidates_found: 1
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 1
+  blocked_reason: ''
+  last_run: '2026-10-12T00:33:12Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 31.1.1
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: no_results
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:33:53Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 31.1.2
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: success
+  candidates_found: 3
+  accepted_candidates: 2
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 2
+  public_counted_reports: 2
+  accepted_reports: 2
+  rejected_reports: 1
+  blocked_reason: ''
+  last_run: '2026-10-12T00:34:36Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.0.0
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: success
+  candidates_found: 1
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:35:20Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.0.1
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: no_results
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:36:01Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.0.2
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: no_results
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:36:42Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.0.3
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: no_results
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:37:24Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.0.4
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: no_results
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:38:05Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.1.0
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: success
+  candidates_found: 1
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:38:49Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.1.1
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: no_results
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:39:32Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.1.2
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: success
+  candidates_found: 11
+  accepted_candidates: 4
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 4
+  public_counted_reports: 4
+  accepted_reports: 4
+  rejected_reports: 7
+  blocked_reason: ''
+  last_run: '2026-10-12T00:40:20Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.2.0
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: success
+  candidates_found: 1
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-10-12T00:41:05Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.2.1
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: success
+  candidates_found: 7
+  accepted_candidates: 3
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 3
+  public_counted_reports: 3
+  accepted_reports: 3
+  rejected_reports: 4
+  blocked_reason: ''
+  last_run: '2026-10-12T00:41:50Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.
+- product_id: obs-studio
+  update_version: 32.2.1
+  target_build: ''
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: retired_superseded_by_obs_forum
+  last_run: '2026-10-12T00:41:50Z'
+  notes: Retired. Reserved slot that never discovered a candidate; superseded by obs_forum.
+- product_id: obs-studio
+  update_version: 32.2.2
+  target_build: ''
+  method_id: obs_forum
+  source_type: obs_forum_thread
+  status: success
+  candidates_found: 19
+  accepted_candidates: 6
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 6
+  public_counted_reports: 6
+  accepted_reports: 6
+  rejected_reports: 13
+  blocked_reason: ''
+  last_run: '2026-10-12T00:42:48Z'
+  notes: obsproject.com Windows/Mac/Linux support subforums, opening posts only; pool of 180 threads.

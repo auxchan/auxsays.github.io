@@ -50978,7 +50978,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -51003,7 +51002,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -51028,7 +51026,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -51053,7 +51050,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -51078,7 +51074,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6028318-cannot-able-to-share-screen-inside-the
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -51103,7 +51098,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6032546-windows-hello-facial-recognition-unava
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -51132,7 +51126,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9550'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6032391-windows-failed-pin-and-windows-hello
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -51163,7 +51156,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9445'
-
 - id: blackmagic-davinci-21-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x0mw4u-resolve-keeps-crashing-on-macbook-pro
   product_id: blackmagic-davinci
   update_version: 21.1.1
@@ -51185,6 +51177,384 @@ evidence:
   issue_theme: startup or application crash
   workflow_area: application stability
   platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-31-1-2-obs-forum-thread-190590
+  product_id: obs-studio
+  update_version: 31.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-version-32-0-0-removed-disable-shutdown-check.190590/
+  parent_title: OBS Version 32.0.0 removed --disable-shutdown-check
+  report_title: OBS Version 32.0.0 removed --disable-shutdown-check
+  report_text_excerpt: run OBS in the background like this? As of now my current solution is to just use version 31.1.2 and turn off "Automatically check for updates on startup".
+  captured_at: '2026-10-12T00:33:53Z'
+  patch_version_matched: true
+  matched_version: 31.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-31-1-2-obs-forum-thread-196230
+  product_id: obs-studio
+  update_version: 31.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/image-source-causes-rendering-lag-and-dropped-frames-when-opening-properties-or-changing-images-on-macos.196230/
+  parent_title: Image Source causes rendering lag and dropped frames when opening Properties or changing images on macOS
+  report_title: Image Source causes rendering lag and dropped frames when opening Properties or changing images on macOS
+  report_text_excerpt: 'Apple Silicon. Hardware: - MacBook Pro M3 Max - 36 GB RAM OBS versions tested: - 32.2.1 - 31.1.2 The issue occurs with both versions. When streaming at 1920×1080, 59.94 FPS, simply opening the Properties window of an Image Source causes a small rendering stutter. Changing the ima'
+  captured_at: '2026-10-12T00:33:53Z'
+  patch_version_matched: true
+  matched_version: 31.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-0-0-obs-forum-thread-190590
+  product_id: obs-studio
+  update_version: 32.0.0
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-version-32-0-0-removed-disable-shutdown-check.190590/
+  parent_title: OBS Version 32.0.0 removed --disable-shutdown-check
+  report_title: OBS Version 32.0.0 removed --disable-shutdown-check
+  report_text_excerpt: breaks the automation and forces me to manually click it every reboot. After updating to 32.0.0, I found that --disable-shutdown-check has been removed. This essentially ruins the ability to have OBS auto-run in the background for anyone using it as a virtual mic with VB Cable o
+  captured_at: '2026-10-12T00:34:36Z'
+  patch_version_matched: true
+  matched_version: 32.0.0
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-0-obs-forum-thread-195386
+  product_id: obs-studio
+  update_version: 32.1.0
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/disable-check-panel.195386/
+  parent_title: Disable check panel
+  report_title: Disable check panel
+  report_text_excerpt: al mode and safe mode. I always want to start in normal mode. I'm currently using version 32.1.0. Thanks.
+  captured_at: '2026-10-12T00:38:05Z'
+  patch_version_matched: true
+  matched_version: 32.1.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-196545
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/
+  parent_title: Video Capture Device green flickering
+  report_title: Video Capture Device green flickering
+  report_text_excerpt: ', but only on the video capture device, not on any other source. I then downgraded to OBS 32.1.2, and tried it again, but the exact same issue happens. I''m not sure why the green flicker happens and how to fix it. I am currently using a MacBook Pro 2020, macOS 15.7.9 Sequoia. Log'
+  captured_at: '2026-10-12T00:39:32Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-195552
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs32-1-2-cannot-install-on-ubuntu-26-04-wayland.195552/
+  parent_title: OBS32.1.2 Cannot install on Ubuntu 26.04(wayland)
+  report_title: OBS32.1.2 Cannot install on Ubuntu 26.04(wayland)
+  report_text_excerpt: 'ENV: Ubuntu budgie 26.04(wayland) + OBS 32.1.2 OBS32.1.2 Cannot install on Ubuntu 26.04(wayland)'
+  captured_at: '2026-10-12T00:39:32Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-195498
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-gives-error-when-trying-video-capture.195498/
+  parent_title: OBS gives error when trying video capture
+  report_title: OBS gives error when trying video capture
+  report_text_excerpt: I am trying to capture video in OBS 32.1.2 however it is producing this error in my dmesg when trying to utilize the video. [ 1563.673358] hws_vidioc_try_fmt_vid_cap.. format2 not support -1X-1 I am now just seeing a blue scre
+  captured_at: '2026-10-12T00:39:32Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-195299
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/window-capture-no-longer-working.195299/
+  parent_title: Window Capture no longer working
+  report_title: Window Capture no longer working
+  report_text_excerpt: 'and reinstalling OBS, but the problem persists. Here is my system information: OBS Studio 32.1.2 Code: System: Kernel: 6.8.0-117-generic arch: x86_64 bits: 64 compiler: gcc v: 13.3.0 clocksource: tsc Desktop: Cinnamon v: 6.6.7 tk: GTK v: 3.24.41 wm: Muffin v: 6.6.3 vt: 7 dm: Ligh'
+  captured_at: '2026-10-12T00:39:32Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-0-obs-forum-thread-196501
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/system-audio-crackling-when-obs-is-launched-no-recording-streaming-required.196501/
+  parent_title: System audio crackling when OBS is launched (no recording/streaming required)
+  report_title: System audio crackling when OBS is launched (no recording/streaming required)
+  report_text_excerpt: e obs-studio-tytan652 package from the aur but I also tried to use the obs-studio-browser 32.2.0-4 package, both have this issue. I also tried to switch to an older Hyprland version which didn't fix it. The only thing that "fixes" the issue is to launch it in xwayland mode using
+  captured_at: '2026-10-12T00:40:20Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-obs-forum-thread-196230
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/image-source-causes-rendering-lag-and-dropped-frames-when-opening-properties-or-changing-images-on-macos.196230/
+  parent_title: Image Source causes rendering lag and dropped frames when opening Properties or changing images on macOS
+  report_title: Image Source causes rendering lag and dropped frames when opening Properties or changing images on macOS
+  report_text_excerpt: 'cOS with Apple Silicon. Hardware: - MacBook Pro M3 Max - 36 GB RAM OBS versions tested: - 32.2.1 - 31.1.2 The issue occurs with both versions. When streaming at 1920×1080, 59.94 FPS, simply opening the Properties window of an Image Source causes a small rendering stutter. Changin'
+  captured_at: '2026-10-12T00:41:05Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-obs-forum-thread-196249
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/websocket-server-all-the-time-give-me-4009-error-even-if-ip-port-and-password-is-100-corect-nobara-linux-kde.196249/
+  parent_title: WebSocket server all the time give me 4009 error even if IP port and password is 100% corect... Nobara linux kde.
+  report_title: WebSocket server all the time give me 4009 error even if IP port and password is 100% corect... Nobara linux kde.
+  report_text_excerpt: et to make it possible but i rly dont know what i do wrong. And yes i use flatpak version 32.2.1 x64 now. Any suggestion why this not work?? Thanks! Cheers from Poland.
+  captured_at: '2026-10-12T00:41:05Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-obs-forum-thread-195984
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/flatpak-dumps-core-if-ran-in-nixos-from-desktop-file-but-works-in-command-line-exec.195984/
+  parent_title: Flatpak dumps core if ran in NixOS from desktop file, but works in command line exec
+  report_title: Flatpak dumps core if ran in NixOS from desktop file, but works in command line exec
+  report_text_excerpt: 'OS: NixOS OBS Studio Version 32.2.1 https://obsproject.com/logs/ioKIxndNQ8FnaxZe Dumps core: ``` PID: 62280 (obs) TID: 62280 (obs) UID: 1000 (muntasir) GID: 100 (users) Signal: 6 (ABRT) si_code: SI_TKILL Timestamp: Fri'
+  captured_at: '2026-10-12T00:41:05Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196556
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/periodic-1-3-s-fps-dips-repeated-frames-in-recordings-and-preview-game-frame-pacing-is-even-per-capframex.196556/
+  parent_title: Periodic 1-3 s "fps dips" (repeated frames) in recordings and preview, game frame pacing is even per CapFrameX
+  report_title: Periodic 1-3 s "fps dips" (repeated frames) in recordings and preview, game frame pacing is even per CapFrameX
+  report_text_excerpt: Setup Ryzen 7 7700, RTX 4060 8 GB (driver 32.0.16.1714), 32 GB RAM, Windows 11 25H2, OBS 32.2.2. OBS output 1920x1080 at 59.948 fps (also tested 60 and 120), NVENC H.264. Main monitor 165 Hz with G-Sync, second monitor 60 Hz. Game FPS capped to the same fractional value via NVID
+  captured_at: '2026-10-12T00:41:50Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196560
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/invisible-text-in-youtube-live-control-panel.196560/
+  parent_title: Invisible text in Youtube Live Control Panel
+  report_title: Invisible text in Youtube Live Control Panel
+  report_text_excerpt: . I was wondering if anybody had a permanent fix or a simpler workaround. I'm running OBS 32.2.2 64-bit on Windows.
+  captured_at: '2026-10-12T00:41:50Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196545
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/
+  parent_title: Video Capture Device green flickering
+  report_title: Video Capture Device green flickering
+  report_text_excerpt: video lesson whilst writing etc on the pdf. It was working well at first. I was using OBS 32.2.2 (64 bit) and it was running well. Then it started to slow down such that the scroll time lagged, and so did my movements on the camera device. Then a green screen started flickering o
+  captured_at: '2026-10-12T00:41:50Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196331
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/macos-screen-capture-audio-stops-after-10-minutes-of-recording.196331/
+  parent_title: macOS Screen Capture audio stops after ~10 minutes of recording
+  report_title: macOS Screen Capture audio stops after ~10 minutes of recording
+  report_text_excerpt: I'm using OBS Studio 32.2.2 on macOS Tahoe 26.5.1 on a 2019 Intel MacBook Pro. I'm recording a Zoom presentation using a macOS Screen Capture source. The screen capture audio initially works normally, and I can
+  captured_at: '2026-10-12T00:41:50Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196489
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-32-2-2-flatpak-version-today-stoppt-working-on-debain-13-6-6-18-48-latest-updates.196489/
+  parent_title: OBS 32.2.2 flatpak version today stoppt working on Debain 13.6, 6.18.48 latest updates
+  report_title: OBS 32.2.2 flatpak version today stoppt working on Debain 13.6, 6.18.48 latest updates
+  report_text_excerpt: 'Yesterday OBS worked great as you can see here: https://www.youtube.com/watch?v=3-iH3oEyl9A&t=3152s Today I wanted to stream but all of a sudden it does not start anymore!?!? There is a huuuugggeegee bug going on. Please fix asap'
+  captured_at: '2026-10-12T00:41:50Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196184
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/zoominator-wayland-mouse-follow-broken-requesting-xdg-desktop-portal-support.196184/
+  parent_title: 'Zoominator & Wayland: Mouse-follow broken, requesting xdg-desktop-portal support'
+  report_title: 'Zoominator & Wayland: Mouse-follow broken, requesting xdg-desktop-portal support'
+  report_text_excerpt: 'n the Ideas board: [your ideas link here] System: CachyOS, KDE Plasma 6.7.4, Wayland, OBS 32.2.2'
+  captured_at: '2026-10-12T00:41:50Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: linux
   severity: high
   sentiment: negative
   source_weight: 1
