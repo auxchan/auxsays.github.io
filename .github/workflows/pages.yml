@@ -66,8 +66,16 @@ jobs:
       - name: Validate logo assets
         run: python auxsays/scripts/validate_logo_assets.py
 
-      - name: Run generated record QA
-        run: python auxsays/scripts/qa_patch_records.py
+      - name: Run generated record QA (publication-strict)
+        # PUBLICATION mode, which is the whole point of the flag. A record that names two
+        # actions is a warning for the writeback lane -- one stale record must not discard a
+        # whole evidence run -- and an ERROR here, because this step is what puts the page in
+        # front of a reader. Without the flag this invocation detected the contradiction and
+        # deployed it anyway (AUX-009).
+        #
+        # Position is load-bearing: this runs BEFORE `bundle exec jekyll build`, so a
+        # non-zero exit stops the build rather than failing after the site is already made.
+        run: python auxsays/scripts/qa_patch_records.py --publish-strict
 
       - name: Install Systems Monitor dependencies
         run: npm ci --prefix systems-monitor/app

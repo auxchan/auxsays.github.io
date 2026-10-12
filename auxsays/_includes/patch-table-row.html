@@ -32,16 +32,34 @@
 {% if item.evidence_state == 'official_only' or item.evidence_state_label == 'Official source only' %}{% assign is_official_only = true %}{% endif %}
 {% if is_official_only and report_count_num == 0 %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endif %}
 {%- comment -%} Verdict risk order (leading category); unknown -> 99 so it sorts last but stays visible. {%- endcomment -%}
-{% assign vkey = decision_label | upcase %}
-{% assign verdict_rank = 99 %}
-{% if vkey contains 'AVOID' %}{% assign verdict_rank = 0 %}
-{% elsif vkey contains 'WAIT' %}{% assign verdict_rank = 1 %}
-{% elsif vkey contains 'TEST FIRST' %}{% assign verdict_rank = 2 %}
-{% elsif vkey contains 'SECURITY UPDATE' %}{% assign verdict_rank = 3 %}
-{% elsif vkey contains 'SAFE ENOUGH' %}{% assign verdict_rank = 4 %}
-{% elsif vkey contains 'OFFICIAL ONLY' %}{% assign verdict_rank = 5 %}
-{% elsif vkey contains 'INSUFFICIENT DATA' %}{% assign verdict_rank = 6 %}
-{% elsif vkey contains 'MANUAL WATCH' %}{% assign verdict_rank = 7 %}
+{%- comment -%}
+  Vocabulary and risk order come from _data/patch_verdicts.yml, which mirrors
+  lib/patch_decision.py (RISK_ORDER / LEGACY_ALIASES) and is pinned to it by
+  test_patch_decision_authority. This include used to carry its own eight-way elsif ladder: a
+  second copy of the policy, free to disagree with Python about both membership and order.
+
+  A legacy phrasing resolves to the action it names, so an old record ranks beside a new one.
+  Anything in NEITHER list is unknown: it keeps unknown_rank so it sorts last, and the verdict
+  shown falls back to INSUFFICIENT DATA rather than publishing unvetted prose as a decision.
+{%- endcomment -%}
+{% assign verdict_vocab = site.data.patch_verdicts %}
+{% assign verdict_alias = verdict_vocab.legacy_aliases[decision_label] %}
+{% if verdict_alias %}{% assign verdict_action = verdict_alias %}{% else %}{% assign verdict_action = decision_label %}{% endif %}
+{% assign verdict_rank = verdict_vocab.unknown_rank %}
+{% for known in verdict_vocab.risk_order %}
+{% if known == verdict_action %}{% assign verdict_rank = forloop.index0 %}{% break %}{% endif %}
+{% endfor %}
+{%- comment -%}
+  FAIL SAFE. A label the vocabulary does not recognise is not published as a verdict. Latent on
+  today's corpus -- 38 records derive a release-note title through the ':' split below, and the
+  official-source-only rule above already replaces every one of them, so 0 rendered verdicts move
+  -- but the split itself admits any pre-colon text, and the next record that is not official-only
+  would publish it.
+{%- endcomment -%}
+{% if verdict_rank == verdict_vocab.unknown_rank %}{% assign decision_label = 'INSUFFICIENT DATA' %}
+{% for known in verdict_vocab.risk_order %}
+{% if known == decision_label %}{% assign verdict_rank = forloop.index0 %}{% break %}{% endif %}
+{% endfor %}
 {% endif %}
 {%- comment -%}
   Community evidence strength: derived from the row's confirmed report count using the same

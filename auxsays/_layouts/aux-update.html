@@ -283,6 +283,34 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% elsif decision_label == '' %}
   {% assign decision_label = 'INSUFFICIENT DATA' %}
 {% endif %}
+{%- comment -%}
+  FAIL SAFE, the same refusal the listing row carries (AUX-029). The chain above ends in a
+  `split: ':' | first`, which promotes ANY pre-colon text to the published verdict -- and this box
+  is the verdict: line ~577 renders it verbatim under the "AUXSAYS verdict" eyebrow.
+
+  Phase 1 first added this refusal to _includes/patch-table-row.html only, which left the two
+  surfaces disagreeing about the same record: fed a summary opening
+  "GitHub / Copilot Copilot code review:" the row said INSUFFICIENT DATA while THIS page published
+  the vendor's title as the verdict, and a stored label of "SHIP IT" published as-is. Rendered and
+  confirmed with the liquid gem before the fix.
+
+  Vocabulary and order come from _data/patch_verdicts.yml, which mirrors lib/patch_decision.py and
+  is pinned to it by test_patch_decision_authority. A legacy phrasing resolves to the action it
+  names; anything in neither list is not published as a decision.
+
+  LATENT when added: 0 of 1,270 records publish a non-vocabulary verdict here today, because the
+  official-source-only rule below rescues all 38 that derive a title-shaped label. That rescue is
+  one condition, and it is NOT the same condition the row uses -- the row reads the front-matter
+  evidence_state, this page rebuilds its own -- so the two could stop agreeing.
+{%- endcomment -%}
+{% assign verdict_vocab = site.data.patch_verdicts %}
+{% assign verdict_alias = verdict_vocab.legacy_aliases[decision_label] %}
+{% if verdict_alias %}{% assign verdict_action = verdict_alias %}{% else %}{% assign verdict_action = decision_label %}{% endif %}
+{% assign verdict_known = false %}
+{% for known in verdict_vocab.risk_order %}
+{% if known == verdict_action %}{% assign verdict_known = true %}{% break %}{% endif %}
+{% endfor %}
+{% unless verdict_known %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endunless %}
 {% assign decision_label_key = decision_label | downcase %}
 {% assign show_test_first_context = false %}
 {% if report_bearing_count > 0 and decision_label_key contains 'test first' %}{% assign show_test_first_context = true %}{% endif %}

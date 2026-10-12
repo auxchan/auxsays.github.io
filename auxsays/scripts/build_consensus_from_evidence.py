@@ -304,7 +304,11 @@ def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]]
     version = patch_display_label(version, target_build, product_id)
     if total <= 0:
         return (
-            f"INSUFFICIENT DATA: {label_name} {version} has no user reports found yet. "
+            # Authority constant, not a literal -- same reason as the twin in
+            # apply_consensus_to_records._public_summary: at zero reports this prefix IS the
+            # verdict the renderer shows.
+            f"{patch_decision.INSUFFICIENT_DATA}: {label_name} {version} has no user reports "
+            "found yet. "
             "Use the official source only until reports are available."
         )
     label = consensus_label(counts).lower()

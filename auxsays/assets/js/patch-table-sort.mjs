@@ -20,20 +20,17 @@ export function compareVersion(a, b) {
   return c !== 0 ? c : (a < b ? -1 : a > b ? 1 : 0);
 }
 
-// Canonical AUXSAYS verdict risk order (most cautionary first). MIRRORS the Liquid in
-// _includes/patch-table-row.html that emits data-verdict-rank; unknown/malformed -> 99 so it
-// sorts last while staying visible.
-export const VERDICT_ORDER = [
-  'AVOID', 'WAIT', 'TEST FIRST', 'SECURITY UPDATE',
-  'SAFE ENOUGH', 'OFFICIAL ONLY', 'INSUFFICIENT DATA', 'MANUAL WATCH',
-];
-export function verdictRank(label) {
-  const s = String(label == null ? '' : label).toUpperCase();
-  for (let i = 0; i < VERDICT_ORDER.length; i += 1) {
-    if (s.indexOf(VERDICT_ORDER[i]) !== -1) return i;
-  }
-  return 99;
-}
+// NO VERDICT VOCABULARY HERE, deliberately (AUX-008). This module used to carry VERDICT_ORDER and
+// verdictRank(): a third copy of the risk order, in a browser module, classifying verdict TEXT by
+// substring. It was unreachable at runtime -- the Verdict column is declared
+// `data-sort-key="verdict-rank" data-sort-type="num"` and the comparator reads the server-emitted
+// data-verdict-rank -- so the only caller was its own unit test, while the copy was free to
+// disagree with the authority. It already did: it listed bare 'SAFE ENOUGH', which the Python
+// vocabulary did not contain at all.
+//
+// The order now lives in lib/patch_decision.py (RISK_ORDER), mirrored for Liquid in
+// _data/patch_verdicts.yml and pinned by test_patch_decision_authority. The rank arrives here as a
+// number, already decided.
 
 // Evidence-strength tier index from the confirmed report count (same thresholds as
 // apply_consensus_to_records._confidence, locked by test_evidence_strength_thresholds.py).

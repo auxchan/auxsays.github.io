@@ -2,7 +2,7 @@
 // Run: node --test auxsays/assets/js/patch-table-sort.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { compareVersion, verdictRank, evidenceRank, rowComparator, VERDICT_ORDER } from './patch-table-sort.mjs';
+import { compareVersion, evidenceRank, rowComparator } from './patch-table-sort.mjs';
 
 const sortStr = (arr, cmp) => [...arr].sort(cmp);
 const lt = (a, b) => assert.ok(compareVersion(a, b) < 0, `${a} should sort before ${b}`);
@@ -53,30 +53,6 @@ test('version: total order over a mixed real product set', () => {
   }
 });
 
-test('verdict: every allowed category maps to its risk index', () => {
-  VERDICT_ORDER.forEach((label, i) => assert.equal(verdictRank(label), i, `${label} -> ${i}`));
-  assert.deepEqual(VERDICT_ORDER.length, 8);
-});
-
-test('verdict: real suffix-bearing / cased forms normalise to the leading category', () => {
-  assert.equal(verdictRank('AVOID for production'), 0);
-  assert.equal(verdictRank('WAIT for production systems'), 1);
-  assert.equal(verdictRank('TEST FIRST'), 2);
-  assert.equal(verdictRank('SAFE ENOUGH to test'), 4);
-  assert.equal(verdictRank('Insufficient data'), 6);     // case-insensitive
-  assert.equal(verdictRank('SECURITY UPDATE'), 3);
-  assert.equal(verdictRank('OFFICIAL ONLY'), 5);
-  assert.equal(verdictRank('MANUAL WATCH'), 7);
-  // A compound label normalises to its highest-priority (lowest-rank) category, deterministically.
-  assert.equal(verdictRank('SECURITY UPDATE, TEST FIRST'), 2);
-});
-
-test('verdict: unknown / empty values sort last (99) but remain classified', () => {
-  assert.equal(verdictRank('something weird'), 99);
-  assert.equal(verdictRank(''), 99);
-  assert.equal(verdictRank(null), 99);
-});
-
 test('evidence: report-count tiering matches the locked thresholds', () => {
   const cases = [[0, 0], [1, 1], [7, 1], [8, 2], [24, 2], [25, 3], [32, 3], [33, 4], [79, 4], [1000, 4]];
   cases.forEach(([n, rank]) => assert.equal(evidenceRank(n), rank, `${n} -> ${rank}`));
@@ -109,3 +85,27 @@ test('rowComparator: date key sorts ISO strings chronologically', () => {
     .sort(rowComparator('date', 'date', 'desc'));
   assert.deepEqual(sorted.map((r) => r.dataset.date.slice(0, 10)), ['2026-07-01', '2026-01-30', '2025-11-20']);
 });
+
+test('verdict: this module owns NO verdict vocabulary (AUX-008)', async () => {
+  // The risk order lives in lib/patch_decision.py, mirrored for Liquid in
+  // _data/patch_verdicts.yml. A copy here would be a third one, free to drift -- the retired copy
+  // already listed a label the Python vocabulary did not have.
+  const mod = await import('./patch-table-sort.mjs');
+  assert.equal(mod.verdictRank, undefined, 'verdictRank must stay retired');
+  assert.equal(mod.VERDICT_ORDER, undefined, 'VERDICT_ORDER must stay retired');
+  const src = await (await import('node:fs/promises')).readFile(
+    new URL('./patch-table-sort.mjs', import.meta.url), 'utf8');
+  ['AVOID', 'TEST FIRST', 'MANUAL WATCH', 'OFFICIAL ONLY'].forEach((label) => {
+    assert.equal(src.includes(`'${label}'`), false, `${label} must not be a literal in this module`);
+  });
+});
+
+test('verdict: the column sorts the server-emitted numeric rank, not text', () => {
+  // Proves the retirement is safe: ordering comes from data-verdict-rank as a number.
+  const row = (rank) => ({ dataset: { verdictRank: String(rank), date: '2026-01-01', version: '1.0' } });
+  const cmp = rowComparator('verdict-rank', 'num', 'asc');
+  assert.ok(cmp(row(0), row(1)) < 0, 'AVOID rank sorts before WAIT rank');
+  assert.ok(cmp(row(7), row(99)) < 0, 'known ranks sort before unknown');
+  assert.equal(cmp(row(2), row(2)), 0, 'equal ranks tie, then fall to the date/version tiebreak');
+});
+

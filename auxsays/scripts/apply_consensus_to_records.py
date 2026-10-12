@@ -754,7 +754,12 @@ def _public_summary(
     version_label = ver
     if count <= 0:
         return (
-            f"INSUFFICIENT DATA: {product_label} {version_label} has no user reports found yet. "
+            # The authority's constant, not a literal. At count 0 `_record_coherence_fields`
+            # returns {} and no `update_decision_label` is written, so the renderer derives the
+            # DISPLAYED verdict by splitting this sentence on ":". That makes this prefix the
+            # published decision, which means it has to come from the one place decisions do.
+            f"{patch_decision.INSUFFICIENT_DATA}: {product_label} {version_label} has no user "
+            "reports found yet. "
             "Use the official source only until reports are available."
         )
     # HANDED the decision, never choosing one. This function used to call a local
@@ -1016,26 +1021,45 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         return fields
 
     if pid == "obs-studio":
-        # `archived` still selects the PROSE. It no longer selects a decision: the archived->WAIT,
-        # maintained->TEST FIRST rule now lives in patch_decision, where the summary reads it too.
+        # THE PROSE FOLLOWS THE DECISION, and `archived` only qualifies it (AUX-029).
+        #
+        # This branch used to pick the body from `update_status` alone. Once AUX-007 made the OBS
+        # decision evidence-driven, that produced a record whose verdict says WAIT and whose body
+        # says "Test on a backup profile before using this OBS build" -- an invitation to install
+        # under a decision that withholds one, which is the second-recommendation defect
+        # `permits_testing` exists to prevent. It was live: all eight OBS records that move to WAIT
+        # are maintained builds, so every one of them took the testing body.
+        #
+        # `update_status` stays DESCRIPTIVE: it appends a qualification, never selects the
+        # instruction.
         archived = str(record.get("update_status") or "").strip().lower() == "archived"
-        if archived:
-            body = (
-                f"{product_label} {ver} is archived. Use a newer maintained OBS build unless you need this version for rollback testing or reproduction."
-            )
-        else:
+        if patch_decision.permits_testing(decision):
             body = (
                 "Test on a backup profile before using this OBS build for live streams or important recordings, especially if your setup depends on plugins, capture devices, audio routing, or large scene collections."
+            )
+            steps = [
+                "Test with a backup scene collection and profile before production use.",
+                "Check plugin, capture-device, and audio-routing behavior before a live stream or paid recording.",
+                "Keep a rollback installer available if your setup is already stable.",
+            ]
+        else:
+            body = (
+                "Hold this OBS build off live streams and important recordings while these reports settle, especially if your setup depends on plugins, capture devices, audio routing, or large scene collections."
+            )
+            steps = [
+                "Stay on your current working OBS build until the reported problems are resolved.",
+                "If you have already updated, keep a rollback installer available and avoid paid or unrepeatable recordings.",
+                "Check whether the reported problems involve the plugins, capture devices, or audio routing your setup depends on.",
+            ]
+        if archived:
+            body += (
+                f" {product_label} {ver} is also an older archived build: prefer a newer maintained OBS release unless you need this version for rollback testing or reproduction."
             )
         return {
             "quick_verdict": f"{decision}: {product_label} {ver} has {count} user reports found.",
             "update_decision_label": decision,
             "update_decision_body": body,
-            "practical_recommendations": [
-                "Test with a backup scene collection and profile before production use.",
-                "Check plugin, capture-device, and audio-routing behavior before a live stream or paid recording.",
-                "Keep a rollback installer available if your setup is already stable.",
-            ],
+            "practical_recommendations": steps,
             "source_freshness_note": "",
         }
 

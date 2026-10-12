@@ -33,6 +33,8 @@ import shutil
 import subprocess
 import tempfile
 import traceback
+
+import yaml
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
@@ -362,10 +364,17 @@ def run() -> int:
     # the pages carrying the most evidence, because the zero-report rescue only covers count == 0.
     # On Acrobat the intended verdict sat unused in update_consensus_summary the whole time.
     def rendered(page_extra: dict, template: str | None = None) -> str | None:
+        # `site.data.patch_verdicts` is supplied because Jekyll supplies it: since AUX-029 the
+        # layout validates the derived label against that shared vocabulary and refuses one it
+        # cannot find. Rendering with an empty `site` downgrades every verdict to INSUFFICIENT
+        # DATA -- the intended fail-safe, pinned as such in D.5a -- which would make these
+        # assertions measure the harness instead of the template.
         base = page_vars(2, "Negative")
         base.update(page_extra)
         return liquid_render(template if template is not None else consensus_block(),
-                             {"page": base, "site": {}})
+                             {"page": base,
+                              "site": {"data": {"patch_verdicts": yaml.safe_load(
+                                  (_AUX / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8"))}}})
 
     no_label = rendered({"update_decision_label": "",
                          "update_consensus_summary": "WAIT: hold off until the signing fix lands"})
@@ -395,10 +404,29 @@ def run() -> int:
         # the way an include passes it -- handing it `item` directly leaves every lookup nil and
         # the row falls through to INSUFFICIENT DATA for the wrong reason.
         row_head = ROW.split("{% include")[0]
-        row_out = liquid_render(row_head + "LABEL=[{{ decision_label }}]", {"include": {"item": {
+        # `site.data.patch_verdicts` has to be supplied, because Jekyll supplies it: since AUX-029
+        # the row looks the risk rank up in that shared vocabulary instead of carrying its own
+        # ladder. Handing it an empty `site` makes every verdict degrade to INSUFFICIENT DATA --
+        # which is the intended fail-safe, and is pinned as such two checks below.
+        _vocab = yaml.safe_load(
+            (_AUX / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8"))
+        _row_item = {
             "update_decision_label": "", "update_consensus_summary": "WAIT: hold off",
             "update_report_count": 2, "update_version": "26.001.21529",
-            "product_id": "adobe-acrobat-pro"}}, "site": {}})
+            "product_id": "adobe-acrobat-pro"}
+        row_out = liquid_render(row_head + "LABEL=[{{ decision_label }}]",
+                                {"include": {"item": _row_item},
+                                 "site": {"data": {"patch_verdicts": _vocab}}})
+        # A MISSING vocabulary degrades loudly, on purpose. If _data/patch_verdicts.yml ever went
+        # away, every verdict would read INSUFFICIENT DATA -- obviously wrong and immediately
+        # visible -- rather than the row quietly publishing labels nothing validated. The file is
+        # tracked and pinned to lib/patch_decision.py by test_patch_decision_authority, so CI fails
+        # before a reader ever sees this.
+        bare = liquid_render(row_head + "LABEL=[{{ decision_label }}]",
+                             {"include": {"item": _row_item}, "site": {}})
+        check("D.5a a missing shared vocabulary fails LOUD, not silently permissive",
+              bare is None or "LABEL=[INSUFFICIENT DATA]" in bare,
+              (bare or "")[-120:])
         check("D.5 the listing row derives a label the same way",
               row_out is not None and "LABEL=[WAIT]" in row_out,
               (row_out or "render failed")[-90:])

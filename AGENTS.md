@@ -120,19 +120,55 @@ Relevant product/workflow areas include:
 
 ## Verdict labels
 
-Use these decision labels where applicable:
+Exactly **eight** canonical verdicts, and the order is the risk order, most cautionary first:
 
-- `AVOID`
-- `WAIT`
-- `SAFE ENOUGH`
-- `OFFICIAL ONLY`
-- `INSUFFICIENT DATA`
-- `SECURITY UPDATE, TEST FIRST`
-- `MANUAL WATCH`
+1. `AVOID`
+2. `WAIT`
+3. `TEST FIRST`
+4. `SECURITY UPDATE`
+5. `SAFE ENOUGH`
+6. `OFFICIAL ONLY`
+7. `INSUFFICIENT DATA`
+8. `MANUAL WATCH`
 
-Do not overstate certainty.
+**One patch publishes one verdict.** `lib/patch_decision.py` is the only thing that chooses it:
+collectors, templates, the sort JS and summary prose all consume what it returns. A record's
+`update_decision_label`, `quick_verdict` and `update_consensus_summary` must all resolve to the
+same action; `qa_patch_records.py --publish-strict` fails the Pages build if they do not.
 
-For security-sensitive updates, do not casually tell users to avoid them. Prefer wording like:
+The normative definitions live in `lib/patch_decision.py` (`RISK_ORDER`, `LEGACY_ALIASES`),
+mirrored for Liquid in `auxsays/_data/patch_verdicts.yml` and pinned to it by
+`test_patch_decision_authority.py`. Do not add a verdict anywhere else.
+
+### Legacy phrasings
+
+These appear in older records. They are **recognised**, never produced, and are **not** separate
+verdicts — each resolves to one canonical action:
+
+| legacy phrasing | canonical action |
+|---|---|
+| `AVOID for production` | `AVOID` |
+| `WAIT for production systems` | `WAIT` |
+| `SAFE ENOUGH to test` | `SAFE ENOUGH` |
+| `SECURITY UPDATE, TEST FIRST` | `TEST FIRST` |
+
+An unrecognised label is **not** silently classified: it ranks last and the renderer publishes
+`INSUFFICIENT DATA` rather than unvetted prose.
+
+### Supporting prose is not a second verdict
+
+Do not overstate certainty. Prose may **qualify** the verdict; it may not name another one.
+
+Allowed — a qualification:
+
+> Verdict `WAIT`. "Production editors should avoid installing this during an active deadline."
+
+Not allowed — two published decisions:
+
+> Verdict `WAIT`, summary opening `AVOID: ...`
+
+For security-sensitive updates, do not casually tell users to avoid them. This is **supporting
+prose**, not a verdict; the verdict is still one of the eight above:
 
 > Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.
 

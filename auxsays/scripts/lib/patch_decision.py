@@ -64,35 +64,62 @@ from __future__ import annotations
 import re
 from typing import Any
 
-# The full decision vocabulary. Anything that names an action must come from this set, so a new
-# phrase cannot enter the corpus without passing through here.
-#
-# It is also the RECOGNISER, which is why it lists phrases `decision_label` never returns. "AVOID"
-# and "AVOID for production" stay because prose has to be checked for them -- a supporting sentence
-# that opens "AVOID for production:" is a second verdict whoever wrote it -- and because
-# `_includes/patch-table-row.html` still ranks an AVOID label red at the top of the verdict sort.
-# A word this authority cannot produce is not a word the site can stop recognising.
 INSUFFICIENT_DATA = "INSUFFICIENT DATA"
-DECISIONS = frozenset({
+
+# ---------------------------------------------------------------------------------------------
+# THE CANONICAL VOCABULARY. Exactly eight production verdicts, MOST CAUTIONARY FIRST.
+#
+# The order IS the policy: the index is the risk rank the row emitter publishes as
+# `data-verdict-rank`, and the sort JS orders that number rather than re-reading the words. Moving
+# an entry changes what the product recommends, so it is moved here or nowhere.
+# ---------------------------------------------------------------------------------------------
+RISK_ORDER: tuple[str, ...] = (
     "AVOID",
-    "AVOID for production",
     "WAIT",
-    "WAIT for production systems",
-    "SAFE ENOUGH to test",
+    "TEST FIRST",
+    "SECURITY UPDATE",
+    "SAFE ENOUGH",
     "OFFICIAL ONLY",
     INSUFFICIENT_DATA,
-    "SECURITY UPDATE",
-    "TEST FIRST",
     "MANUAL WATCH",
-})
+)
+CANONICAL_DECISIONS = frozenset(RISK_ORDER)
 
-# Which decisions invite the reader to put the build on a machine. A POSITIVE list, so a decision
+# An unrecognised label sorts LAST and stays visible. Not 0: a phrase nobody has classified must
+# never inherit the rank of the most cautionary verdict, and must never be hidden either.
+UNKNOWN_RANK = 99
+
+# LEGACY PHRASINGS. Recognised, never produced. They exist in records written before the
+# vocabulary was fixed, and they must keep resolving to an action so conflict detection, audits
+# and the template fallback all read an old record the same way a new one.
+#
+# "SECURITY UPDATE, TEST FIRST" names two of them; its ACTION is TEST FIRST, the more cautionary
+# of the pair and the one that tells the reader what to do. That also matches the rank the site
+# has always given it -- the Liquid `contains` chain reaches TEST FIRST first -- so recognising it
+# here changes no published ordering.
+LEGACY_ALIASES: dict[str, str] = {
+    "AVOID for production": "AVOID",
+    "WAIT for production systems": "WAIT",
+    "SAFE ENOUGH to test": "SAFE ENOUGH",
+    "SECURITY UPDATE, TEST FIRST": "TEST FIRST",
+}
+
+# The RECOGNISER: everything a field may legitimately open with. Wider than what this module
+# produces, on purpose -- a word the authority cannot produce is still a word the site has to be
+# able to read.
+DECISIONS = frozenset(CANONICAL_DECISIONS | set(LEGACY_ALIASES))
+
+# Which ACTIONS invite the reader to put the build on a machine. A POSITIVE list, so a decision
 # phrase nobody has thought about yet defaults to cautious rather than to "go ahead".
+#
+# Keyed on the canonical action, not on phrasings, so the legacy "SAFE ENOUGH to test" is admitted
+# through `action_of` instead of needing its own entry here. Listing phrasings is how a set like
+# this falls behind the vocabulary.
 #
 # Supporting prose asks this before offering an installation. "Most users can test the update"
 # under a WAIT verdict is a second, quieter recommendation -- the same defect as a second verdict,
 # in a sentence that carries no colon.
-INVITES_TESTING = frozenset({"SAFE ENOUGH to test", "TEST FIRST"})
+INVITES_TESTING = frozenset({"SAFE ENOUGH", "TEST FIRST"})
 
 _BETA_RE = re.compile(r"\b(?:public\s+)?beta\b|b\d+\b", re.I)
 
@@ -117,28 +144,51 @@ def version_is_beta(version: str) -> bool:
 
 
 def permits_testing(decision: str) -> bool:
-    """May supporting prose invite the reader to install or test this build?"""
-    return str(decision or "").strip() in INVITES_TESTING
+    """May supporting prose invite the reader to install or test this build?
 
+    Asked of the ACTION, so a record still carrying the legacy "SAFE ENOUGH to test" answers the
+    same as one carrying canonical "SAFE ENOUGH".
+    """
+    return action_of(decision) in INVITES_TESTING
 
-# Phrasings that give the SAME instruction. Two fields saying "WAIT" and "WAIT for production
-# systems" are one decision in two registers; "WAIT" against "TEST FIRST", or "AVOID" against
-# "WAIT", are two instructions to the same reader. Anything that audits a record for coherence has
-# to know the difference, or it reports the DaVinci beta and hand-authored Premiere 26.2 alike.
-_ACTION_OF = {
-    "AVOID": "AVOID",
-    "AVOID for production": "AVOID",
-    "WAIT": "WAIT",
-    "WAIT for production systems": "WAIT",
-}
 
 _LONGEST_FIRST = tuple(sorted(DECISIONS, key=len, reverse=True))
 
 
 def action_of(decision: str) -> str:
-    """The instruction a decision phrase gives, with phrasing collapsed."""
+    """The instruction a decision phrase gives, with phrasing collapsed to the canonical action.
+
+    Two fields saying "WAIT" and "WAIT for production systems" are one decision in two registers;
+    "WAIT" against "TEST FIRST", or "AVOID" against "WAIT", are two instructions to the same
+    reader. Anything auditing a record for coherence has to know the difference.
+
+    AN UNRECOGNISED PHRASE IS RETURNED UNCHANGED, and that is the fail-safe direction. Collapsing
+    it to "" would make it invisible to the conflict check in qa_patch_records, so a record whose
+    summary opened with an unvetted decision word would read as coherent. Returned as itself it
+    stays a DISTINCT action, so pairing it with a canonical one is still reported as a conflict.
+    What it never does is acquire a canonical action it was not given.
+    """
     text = str(decision or "").strip()
-    return _ACTION_OF.get(text, text)
+    return LEGACY_ALIASES.get(text, text)
+
+
+def is_canonical(decision: str) -> bool:
+    """Is this exactly one of the eight canonical production verdicts?"""
+    return str(decision or "").strip() in CANONICAL_DECISIONS
+
+
+def risk_rank(decision: str) -> int:
+    """Position in RISK_ORDER, most cautionary first; UNKNOWN_RANK for anything unrecognised.
+
+    Legacy phrasings rank as the action they name, so an old record sorts beside a new one. This
+    is the normative definition that `_includes/patch-table-row.html` mirrors when it emits
+    `data-verdict-rank`; test_patch_decision_authority pins the two against each other.
+    """
+    action = action_of(decision)
+    try:
+        return RISK_ORDER.index(action)
+    except ValueError:
+        return UNKNOWN_RANK
 
 
 def leading_decision(text: str) -> str:
@@ -183,12 +233,30 @@ def decision_label(product_id: str, version: str, consensus_label: str, count: i
     label = str(consensus_label or "").strip().lower()
 
     if pid == DAVINCI:
-        # A beta is not a harsher sentiment, it is a different install decision: wait for production
-        # systems, and keep it off active projects (the qualification lives in the prose).
-        return "WAIT for production systems" if version_is_beta(version) else "WAIT"
+        # A beta is not a harsher sentiment, it is a different install decision: wait before
+        # installing, and keep it off active projects. Both halves used to live in the LABEL
+        # ("WAIT for production systems"); the action is WAIT either way, and the production-systems
+        # half is a qualification, which belongs in the prose where `_affected_workflow_sentence`
+        # already states it verbatim. The label is now canonical; `version_is_beta` stays because
+        # the prose still asks it.
+        return "WAIT"
     if pid == OBS:
-        archived = str((record or {}).get("update_status") or "").strip().lower() == "archived"
-        return "WAIT" if archived else "TEST FIRST"
+        # EVIDENCE-DRIVEN (AUX-007). This branch used to read `update_status`: an "archived" record
+        # got WAIT and everything else got TEST FIRST. That made a positional metadata field the
+        # install recommendation, and the field is no longer meaningfully maintained -- 15 of 16 OBS
+        # records say "current". The effect was that eight records whose community consensus is
+        # NEGATIVE published TEST FIRST, including 32.1.2 with 107 negative reports. The one
+        # "archived" record happened to agree with the evidence, so the field looked like it was
+        # working.
+        #
+        # `update_status` remains descriptive metadata and may still shape prose ("an older
+        # archived build"). It MUST NOT reach this decision, which is why `record` is no longer
+        # consulted here.
+        if label == "negative":
+            return "WAIT"
+        if label == "positive":
+            return "SAFE ENOUGH"
+        return "TEST FIRST"
     if pid == WINDOWS:
         return "WAIT"
     if pid == PREMIERE:
@@ -197,5 +265,5 @@ def decision_label(product_id: str, version: str, consensus_label: str, count: i
     if label == "negative":
         return "WAIT"
     if label == "positive":
-        return "SAFE ENOUGH to test"
+        return "SAFE ENOUGH"
     return "TEST FIRST"
