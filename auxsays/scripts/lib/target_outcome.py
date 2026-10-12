@@ -79,6 +79,21 @@ _ROLLBACK_CUES: list[tuple[str, str]] = [
     # "the previous/older/last known good version X"
     (rf"\b(?:previous|older|earlier|last\s+(?:known\s+)?(?:good|working))\s+"
      rf"(?:version|build|install\w*)\b{_STOP}{{0,25}}?{_T}", "previous_version_is_target"),
+    # "my current solution is to just use version 31.1.2", "the workaround is to stay on X".
+    # A version named as the author's SOLUTION is the version that WORKS, not the one that
+    # failed. The motion-verb cue above misses it because nobody moved anywhere -- the sentence
+    # describes what they run now. Real: obsproject.com thread 190590, where 32.0.0 removed a
+    # flag and the author closes with "my current solution is to just use version 31.1.2"; the
+    # first production run of the forum family counted that as evidence AGAINST 31.1.2.
+    # "work" is deliberately absent from the verb list as defence in depth, NOT as a
+    # load-bearing guard: measured over 1,111 OBS issues and 1,346 counted stored rows,
+    # adding it changes 0 outcomes, because "does not work" is itself an AFFECTED cue and R3
+    # wins before any veto runs. The exclusion costs nothing and keeps the cue honest about
+    # what it means if R3 ever stops covering that phrasing.
+    (rf"\b(?:solution|work-?around)\b{_STOP}{{0,40}}?"
+     rf"\b(?:use|using|install\w*|run|running|stay\w*|remain\w*|keep\w*|stick\w*)\b"
+     rf"{_STOP}{{0,30}}?{_T}",
+     "target_is_the_workaround"),
 ]
 
 _WORKING_CUES: list[tuple[str, str]] = [

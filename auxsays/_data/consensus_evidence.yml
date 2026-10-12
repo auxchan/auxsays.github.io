@@ -51193,8 +51193,8 @@ evidence:
   patch_version_matched: true
   matched_version: 31.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: version_is_rollback_target
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: unknown

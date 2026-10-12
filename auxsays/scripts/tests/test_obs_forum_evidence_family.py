@@ -884,6 +884,61 @@ def run() -> int:
           str(reval.classify_row(dict(rv, source_type="github_issue"))))
     check("T25.3 a genuinely unknown source type is still unsupported",
           reval.classify_row(dict(rv, source_type="zz_not_a_source"))[0] == "unsupported_source_type")
+    print("T26 a version named as the author's WORKAROUND is not evidence against it")
+    # Found by the bounded production audit, not by a test. obsproject.com thread 190590 is about
+    # 32.0.0 removing a flag and closes with "my current solution is to just use version 31.1.2".
+    # The first production run of the forum family counted that as evidence AGAINST 31.1.2. The
+    # motion-verb rollback cue misses it because nobody moved anywhere -- the sentence says what
+    # the author runs now.
+    real = ("After updating to 32.0.0, I found that --disable-shutdown-check has been removed. "
+            "This breaks my automation. As of now my current solution is to just use version "
+            "31.1.2 and turn off automatic update checks.")
+    got_wa = classify_target_outcome(real, "31.1.2")
+    check("T26.1 the workaround version is a rollback target, not an affected version",
+          got_wa.outcome == "rollback_target", f"{got_wa.outcome} via {got_wa.basis}")
+    check("T26.2 and its basis names the workaround cue",
+          got_wa.basis == "target_is_the_workaround", got_wa.basis)
+    check("T26.3 the version that actually regressed is still affected/acceptable",
+          classify_target_outcome(real, "32.0.0").outcome != "rollback_target",
+          classify_target_outcome(real, "32.0.0").outcome)
+    for text, label in ((f"The workaround is to stay on {VER}.", "workaround is to stay on"),
+                        (f"My solution was to keep using {VER}.", "solution was to keep using"),
+                        (f"Workaround: install {VER} instead.", "workaround: install")):
+        o = classify_target_outcome(text, VER)
+        check(f"T26 \"{label}\" vetoes the named version",
+              o.outcome == "rollback_target", f"{o.outcome} via {o.basis}")
+    # The counterweight. A sentence saying the workaround FAILS on a version must not veto that
+    # version. Measured note: this holds via R3, because "does not work" is itself an AFFECTED
+    # cue -- so this pins the OUTCOME, not the verb list. Adding `work` to that list changes 0
+    # outcomes across both corpora, i.e. it is an equivalent variant rather than a defect.
+    fails = f"I tried the workaround but it does not work on {VER}, OBS still crashes."
+    o_fails = classify_target_outcome(fails, VER)
+    check("T26.7 \"the workaround does not work on X\" does NOT veto X",
+          o_fails.outcome != "rollback_target", f"{o_fails.outcome} via {o_fails.basis}")
+
+    print("T27 the audited-withdrawal tool derives its verdict and keeps the row")
+    import withdraw_obs_role_misattributed_rows as wd
+    kept = {"id": "obs-studio-31-1-2-obs-forum-thread-190590", "product_id": "obs-studio",
+            "update_version": "31.1.2", "counted": True, "exclusion_reason": None,
+            "source_url": "https://obsproject.com/forum/threads/x.190590/",
+            "report_text_excerpt": "my current solution is to just use version 31.1.2"}
+    clean = {"id": "obs-studio-32-2-2-obs-forum-thread-1", "product_id": "obs-studio",
+             "update_version": VER, "counted": True, "exclusion_reason": None,
+             "source_url": "https://obsproject.com/forum/threads/y.1/",
+             "report_text_excerpt": f"Since {VER} my recording crashes every time."}
+    other = dict(clean, product_id="microsoft-windows-11", id="win-1")
+    refused = wd.refused_rows([kept, clean, other])
+    check("T27.1 the workaround row is reported as refused",
+          [r["id"] for r, _ in refused] == [kept["id"]], str([r["id"] for r, _ in refused]))
+    check("T27.2 with the reason the authority gives, not a hard-coded string",
+          refused[0][1] == "version_is_rollback_target", refused[0][1])
+    check("T27.3 a legitimate forum row is NOT refused",
+          clean["id"] not in [r["id"] for r, _ in refused])
+    check("T27.4 another product is out of scope entirely",
+          "win-1" not in [r["id"] for r, _ in refused])
+    already = dict(kept, counted=False, exclusion_reason="version_is_rollback_target")
+    check("T27.5 an already-withdrawn row is skipped, so the tool is idempotent",
+          wd.refused_rows([already]) == [], str(wd.refused_rows([already])))
     print("T17 implementing this did not rewrite stored OBS evidence")
     live_now = obs.EVIDENCE_PATH.read_bytes() if obs.EVIDENCE_PATH.exists() else b""
     check("T17.1 the live evidence store is byte-identical after the suite",
