@@ -20,11 +20,11 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 68 user reports found. User reports show a repeat pattern.
+update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 69 user reports found. User reports show a repeat pattern.
   Current reports mention render/export failures, startup or application crashes, and performance slowdowns. Production
   editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
   so production users should test before updating.'
-update_report_count: 68
+update_report_count: 69
 update_consensus_confidence: High
 status_change_type: new
 notification_message: ''
@@ -37,14 +37,14 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
-quick_verdict: 'WAIT: DaVinci Resolve 21 has 68 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 21 has 69 user reports found.'
 update_decision_label: WAIT
 update_decision_body: Current reports mention render/export failures, startup or application crashes, and performance
   slowdowns. Production editors with active delivery deadlines should wait or test on copied projects.
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '68 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
+consensus_report: '69 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
   startup or application crashes, and performance slowdowns. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 status_events:
@@ -195,6 +195,9 @@ status_events:
 - at: '2026-10-09T00:48:01.472581Z'
   label: User reports found
   note: User report count updated to 68.
+- at: '2026-10-12T17:07:10.751426Z'
+  label: User reports found
+  note: User report count updated to 69.
 legacy_consensus_score: 0
 legacy_consensus_score_percent: 50
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -230,7 +233,7 @@ consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 official_source_captured: true
-confirmed_patch_specific_report_count: 68
+confirmed_patch_specific_report_count: 69
 known_issues_present: null
 official_checksums_body: ''
 source_last_checked: '2026-07-01T15:14:39Z'
@@ -263,8 +266,8 @@ official_source_attempts:
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-evidence_last_checked: '2026-10-09T00:06:15Z'
-record_last_updated: '2026-10-09T00:48:01.472581Z'
+evidence_last_checked: '2026-10-12T16:19:30Z'
+record_last_updated: '2026-10-12T17:07:10.751426Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
@@ -935,6 +938,16 @@ accepted_report_sources:
   patch_version_matched: true
   issue: render/export failures
   workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x28eez/after_updated_to_davinci_resolve_21_its_keeps/
+  source_title: After updated to DaVinci Resolve 21, its keeps crashing all the time, does anyone know how to fix
+    it? (Mac M1
+  source_date: '2026-10-10'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.

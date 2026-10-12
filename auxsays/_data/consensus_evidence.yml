@@ -51579,3 +51579,273 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x28eez-after-updated-to-davinci-resolve-21-its-k
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x28eez/after_updated_to_davinci_resolve_21_its_keeps/
+  parent_title: After updated to DaVinci Resolve 21, its keeps crashing all the time, does anyone know how to fix it? (Mac M1
+  report_title: After updated to DaVinci Resolve 21, its keeps crashing all the time, does anyone know how to fix it? (Mac M1
+  report_text_excerpt: After updated to DaVinci Resolve 21, its keeps crashing all the time, does anyone know how to fix it? (Mac M1 Ever since I updated to DaVinci Resolve 21, it keeps crashing every time I add glitch effects to subtitles. I’m using a Mac M1. Please help!! Is there any way to fix...
+  captured_at: '2026-10-12T16:19:30Z'
+  source_date: '2026-10-10'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-integration-with-exchange-on-prem/1549578
+  parent_title: Teams integration with exchange on prem
+  report_title: Teams integration with exchange on prem
+  report_text_excerpt: Teams integration with exchange on prem Hello,I would like the possibility to schedule meetings in microsoft teams.Currently I have already created the domain on o365 and synchronized AD users.In fact, I am able to use domain credentials on Microsoft teams.Now I would like to...
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2020-07-28'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-places-bug-room-images-ar
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-places-bug-room-images-are-too-big-hiding-info-need-a-compactresize-op/4562556
+  parent_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_text_excerpt: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option Hi everyone,We are currently deploying Microsoft Places and configuring our Resource Mailboxes. We are facing a major UI/UX issue regarding the Room Cards (Space Profiles).No matter what...'
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-integration-with-exchange-on-prem/1549578
+  parent_title: Teams integration with exchange on prem
+  report_title: Teams integration with exchange on prem
+  report_text_excerpt: Teams integration with exchange on prem Hello,I would like the possibility to schedule meetings in microsoft teams.Currently I have already created the domain on o365 and synchronized AD users.In fact, I am able to use domain credentials on Microsoft teams.Now I would like to...
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2020-07-28'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-places-bug-room-images-ar
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-places-bug-room-images-are-too-big-hiding-info-need-a-compactresize-op/4562556
+  parent_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_text_excerpt: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option Hi everyone,We are currently deploying Microsoft Places and configuring our Resource Mailboxes. We are facing a major UI/UX issue regarding the Room Cards (Space Profiles).No matter what...'
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-integration-with-exchange-on-prem/1549578
+  parent_title: Teams integration with exchange on prem
+  report_title: Teams integration with exchange on prem
+  report_text_excerpt: Teams integration with exchange on prem Hello,I would like the possibility to schedule meetings in microsoft teams.Currently I have already created the domain on o365 and synchronized AD users.In fact, I am able to use domain credentials on Microsoft teams.Now I would like to...
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2020-07-28'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-places-bug-room-images-ar
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-places-bug-room-images-are-too-big-hiding-info-need-a-compactresize-op/4562556
+  parent_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_text_excerpt: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option Hi everyone,We are currently deploying Microsoft Places and configuring our Resource Mailboxes. We are facing a major UI/UX issue regarding the Room Cards (Space Profiles).No matter what...'
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-integration-with-exchange-on-prem/1549578
+  parent_title: Teams integration with exchange on prem
+  report_title: Teams integration with exchange on prem
+  report_text_excerpt: Teams integration with exchange on prem Hello,I would like the possibility to schedule meetings in microsoft teams.Currently I have already created the domain on o365 and synchronized AD users.In fact, I am able to use domain credentials on Microsoft teams.Now I would like to...
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2020-07-28'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-places-bug-room-images-ar
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-places-bug-room-images-are-too-big-hiding-info-need-a-compactresize-op/4562556
+  parent_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_text_excerpt: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option Hi everyone,We are currently deploying Microsoft Places and configuring our Resource Mailboxes. We are facing a major UI/UX issue regarding the Room Cards (Space Profiles).No matter what...'
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-integration-with-exchange-on-prem/1549578
+  parent_title: Teams integration with exchange on prem
+  report_title: Teams integration with exchange on prem
+  report_text_excerpt: Teams integration with exchange on prem Hello,I would like the possibility to schedule meetings in microsoft teams.Currently I have already created the domain on o365 and synchronized AD users.In fact, I am able to use domain credentials on Microsoft teams.Now I would like to...
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2020-07-28'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-places-bug-room-images-ar
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-places-bug-room-images-are-too-big-hiding-info-need-a-compactresize-op/4562556
+  parent_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_text_excerpt: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option Hi everyone,We are currently deploying Microsoft Places and configuring our Resource Mailboxes. We are facing a major UI/UX issue regarding the Room Cards (Space Profiles).No matter what...'
+  captured_at: '2026-10-12T16:22:24Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
