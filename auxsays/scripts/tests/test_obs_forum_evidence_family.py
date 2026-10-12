@@ -916,6 +916,47 @@ def run() -> int:
     check("T26.7 \"the workaround does not work on X\" does NOT veto X",
           o_fails.outcome != "rollback_target", f"{o_fails.outcome} via {o_fails.basis}")
 
+    # T26b: the inverse phrasing. The cue above was corpus-safe -- 0 changed outcomes over 1,111
+    # issues and every counted stored row -- and still semantically wrong: "The solution is NOT
+    # to use version 31.1.2" vetoed 31.1.2 as the healthy fallback while the author was saying to
+    # avoid it. Corpus safety is not semantic completeness; nothing in either corpus happened to
+    # phrase it that way. Driven through the real classifier, not by re-deriving the regex.
+    avoidance = [
+        (f"The solution is not to use version {OTHER}.", "not to use"),
+        (f"My workaround is to avoid using {OTHER}.", "avoid using"),
+        (f"The workaround is to run without {OTHER}.", "run without"),
+        (f"Use any version except {OTHER} as the workaround.", "except TARGET"),
+        (f"The solution is to stay away from {OTHER}.", "stay away from"),
+        (f"The workaround was to stop using {OTHER}.", "stop using"),
+    ]
+    for text, label in avoidance:
+        o = classify_target_outcome(text, OTHER)
+        check(f"T26b \"{label}\" does NOT make the target a rollback/workaround version",
+              o.outcome != "rollback_target", f"{o.outcome} via {o.basis}")
+    # Affirmative selection must still veto, or the repair has simply disabled the cue.
+    selection = [
+        (f"My current solution is to just use version {OTHER}.", "solution is to just use"),
+        (f"Workaround: install {OTHER} instead.", "workaround: install"),
+        (f"The solution was to keep using {OTHER}.", "keep using"),
+        (f"I am staying on {OTHER} as a workaround.", "staying on"),
+        # `no` must NOT read as avoidance: this sentence affirmatively selects the target, and the
+        # generic polarity lookback would have refused it on the bare "no".
+        (f"There is no other workaround; use {OTHER}.", "no other workaround; use"),
+        # `except` guards the verb->target gap only. In the marker->verb gap it blocked this
+        # sentence, which affirmatively selects the target as the only remaining option.
+        (f"There is no workaround except to use {OTHER}.", "no workaround except to use"),
+    ]
+    for text, label in selection:
+        o = classify_target_outcome(text, OTHER)
+        check(f"T26b \"{label}\" still vetoes the named version",
+              o.outcome == "rollback_target", f"{o.outcome} via {o.basis}")
+    # The real thread, unchanged by the tightening.
+    o190 = classify_target_outcome(real, "31.1.2")
+    check("T26b.12 thread 190590 still vetoes 31.1.2 after the tightening",
+          o190.outcome == "rollback_target" and o190.basis == "target_is_the_workaround",
+          f"{o190.outcome} via {o190.basis}")
+    check("T26b.13 and 32.0.0 from that thread is still not vetoed",
+          classify_target_outcome(real, "32.0.0").outcome != "rollback_target")
     print("T27 the audited-withdrawal tool derives its verdict and keeps the row")
     import withdraw_obs_role_misattributed_rows as wd
     kept = {"id": "obs-studio-31-1-2-obs-forum-thread-190590", "product_id": "obs-studio",
