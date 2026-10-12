@@ -1798,8 +1798,8 @@ the release-date gate refuses `missing_source_date` when the release date is kno
 Developer-only counted: the forum carries no labels, and detection is prose-based, so
 `cmake`/CI reports are still refused and an end-user failure is still kept.
 
-**Tests** `test_obs_forum_evidence_family.py`, 164 governed checks, offline from HTML fixtures.
-**34 mutants, 34 killed** across the identity, date-scoping, quote, sticky, dedupe,
+**Tests** `test_obs_forum_evidence_family.py`, 190 governed checks, offline from HTML fixtures.
+**43 mutants attempted, 40 killed and 3 proven equivalent**, across the identity, date-scoping, quote, sticky, dedupe,
 delta-attribution and health gates. Two mutants survived their first run and both were the same
 failure of the FIXTURE, not of the code: one made GitHub's accepted and added counts equal (two
 fields that are always equal are one field), and one put all quoted text before the inner quote
@@ -1852,6 +1852,64 @@ adapter written yet, exactly like `blackmagic_forum` and `reddit_community_repor
 The generalisable lesson, and it is the same one AUXSAYS keeps relearning: **a new source family
 is not finished when the collector accepts it. Every positive allow-list that names a source or
 a method is a separate registration, and the write-mode ones are invisible to every dry run.**
+
+**The bounded production audit found a false positive among the first 18 persisted rows, and it
+is the defect this family was most likely to produce.** obsproject.com thread 190590 is about
+32.0.0 removing `--disable-shutdown-check`, and it closes: *"As of now my current solution is to
+just use version 31.1.2 and turn off automatic update checks."* 31.1.2 is the author's
+WORKAROUND -- the version that works -- and the run counted it as evidence AGAINST 31.1.2. The
+motion-verb rollback cue (`downgraded to`, `rolled back to`, `staying on`) misses it because
+nobody moved anywhere: the sentence says what the author runs now. `target_is_the_workaround`
+closes it, and 32.0.0 -- the version that actually regressed -- still counts from the same thread.
+
+Measured before shipping: **0 outcomes change across 1,111 live OBS issues, and across all 1,347
+counted stored rows spanning every product exactly ONE row is newly vetoed -- the bad row.**
+
+The stored row was then removed from the counted population by **audited withdrawal**, not
+deletion: `counted: false` plus `exclusion_reason: version_is_rollback_target`, row kept
+(`lib/evidence_loss.py` reports 0 unexplained losses). Fixing the producer never moves a stored
+row -- the writer only appends, and `obs_forum_thread` has no revalidation adapter -- so without
+the withdrawal the false row would have stayed counted forever.
+
+`withdraw_obs_role_misattributed_rows.py` DERIVES its verdict from the shared authority rather
+than hard-coding one, and withdraws only URLs named on the command line, so the blast radius is
+the invocation. It IMPORTS the block-scoped edit from the Acrobat withdrawal tool instead of
+copying it: that selector is the one that had to learn that locating a row by URL alone takes
+whichever block comes first in the file, and thread 190590 is exactly that shape -- one URL,
+two versions, one refused. Two copies of a selector are two predicates waiting to drift.
+
+Reconciliation then moved the projection with the store: 31.1.2 went 5 -> 4 on
+`update_report_count`, `confirmed_patch_specific_report_count`, `quick_verdict`,
+`consensus_report` and `update_consensus_summary` together, and the withdrawn thread left
+`accepted_report_sources`. One record changed; the other ten were already current.
+
+A pre-merge adversarial review then found the INVERSE phrase. The cue read
+`solution|workaround ... verb ... target` as sufficient, so *"The solution is **not** to use
+version 31.1.2"* vetoed 31.1.2 as the healthy fallback while the author was saying to avoid it --
+5 of 6 avoidance shapes leaked. **Corpus safety is not semantic completeness**: both corpora had
+already called the loose cue safe, because nothing stored and no GitHub issue happened to phrase
+it that way. The cue now requires AFFIRMATIVE SELECTION, via tempered gaps -- an avoidance word
+between the marker and the verb, or an exclusion word between the verb and the target, blocks the
+match. `stay/remain/stick` left the verb list because `rollback_to_target` already owns "staying
+on X". Re-measured against the PR head it had been built on: **0 outcomes change across 1,111
+issues and all 1,346 counted stored rows**, and thread 190590 still vetoes 31.1.2.
+
+`except` guards the verb->target gap ONLY. Guarding the first gap too blocked *"There is no
+workaround except to use 31.1.2"*, which affirmatively selects the target -- the review predicted
+that exact sentence and the first repair failed it.
+
+The basis is deliberately NOT `_POLARITY_SENSITIVE`, and that is measured rather than assumed:
+`_POLARITY_INVERTER` matches `no longer`, not bare `no`, so the generic lookback would never have
+refused *"There is no other workaround; use 31.1.2"*. The tempered gaps express avoidance OF the
+target, which a generic lead-word scan cannot.
+
+One mutant of this change is **equivalent, not surviving**: adding `work` to the workaround verb
+list changes 0 outcomes across both corpora, because `does not work` is itself an AFFECTED cue
+and R3 wins before any veto. Two more are equivalent for stated reasons: adding `no` to the
+avoidance list (that `no` sits BEFORE the marker and never enters a gap) and adding the basis to
+`_POLARITY_SENSITIVE` (the inverter does not match bare `no`). All three are excluded as intent
+rather than as guards, and the comments now say that instead of claiming protection they do not
+provide. None was converted into a manufactured kill.
 
 **Measured limitation, with a reopen trigger.** The forum family reaches the most recently active
 ~60 threads per subforum. Listing order is last-activity, so a revived old thread resurfaces, but

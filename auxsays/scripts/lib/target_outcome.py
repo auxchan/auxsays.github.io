@@ -79,6 +79,50 @@ _ROLLBACK_CUES: list[tuple[str, str]] = [
     # "the previous/older/last known good version X"
     (rf"\b(?:previous|older|earlier|last\s+(?:known\s+)?(?:good|working))\s+"
      rf"(?:version|build|install\w*)\b{_STOP}{{0,25}}?{_T}", "previous_version_is_target"),
+    # "my current solution is to just use version 31.1.2", "the workaround is to stay on X".
+    # A version named as the author's SOLUTION is the version that WORKS, not the one that
+    # failed. The motion-verb cue above misses it because nobody moved anywhere -- the sentence
+    # describes what they run now. Real: obsproject.com thread 190590, where 32.0.0 removed a
+    # flag and the author closes with "my current solution is to just use version 31.1.2"; the
+    # first production run of the forum family counted that as evidence AGAINST 31.1.2.
+    # "work" is deliberately absent from the verb list as defence in depth, NOT as a
+    # load-bearing guard: measured over 1,111 OBS issues and 1,346 counted stored rows,
+    # adding it changes 0 outcomes, because "does not work" is itself an AFFECTED cue and R3
+    # wins before any veto runs. The exclusion costs nothing and keeps the cue honest about
+    # what it means if R3 ever stops covering that phrasing.
+    # AFFIRMATIVE SELECTION of the target, not merely "solution/workaround ... verb ... target".
+    # Without that distinction "The solution is not to use version 31.1.2" vetoed 31.1.2 as the
+    # healthy fallback while the author was saying to AVOID it -- found by adversarial probe before
+    # merge, after both corpora had already called the cue safe. Corpus safety is not semantic
+    # completeness: no stored row and no GitHub issue happened to use that phrasing.
+    #
+    # The gaps are TEMPERED: an avoidance word between the marker and the verb, or an exclusion
+    # word between the verb and the target, blocks the match. `no` is deliberately NOT in either
+    # list, because "There is no other workaround; use 31.1.2" affirmatively selects 31.1.2.
+    # Measured honestly: adding `no` changes nothing on today's corpora, since the `no` in that
+    # sentence sits BEFORE the marker and never falls inside a gap -- so the exclusion is intent,
+    # not a load-bearing guard.
+    #
+    # This basis is NOT _POLARITY_SENSITIVE, and the reason is measured rather than assumed:
+    # _POLARITY_INVERTER matches `no longer`, not bare `no`, so the generic lookback would NOT
+    # have refused that sentence. Adding the basis to _POLARITY_SENSITIVE changes no tested
+    # outcome either. It stays out because the tempered gaps express the distinction this cue
+    # actually needs -- avoidance OF the target -- which a generic lead-word scan cannot.
+    #
+    # `except` and `away` are guards for the SECOND gap only. In the first gap `except` would
+    # block "There is no workaround except to use 31.1.2", which affirmatively selects 31.1.2 --
+    # the handoff predicted that exact sentence, and it did fail until `except` came out.
+    # The first gap admits `;`, which _STOP does not, because that sentence puts the marker and the
+    # selection in separate clauses. The avoidance guard still applies across it.
+    #
+    # stay/remain/stick are absent on purpose: "staying on X" is already rollback_to_target and
+    # duplicating that territory would give one sentence two bases. "keep using X" is reached
+    # through `using`, without making a bare "keep X" authoritative.
+    (rf"\b(?:solution|work-?around)\b"
+     rf"(?:(?!\b(?:not|never|avoid\w*|stop\w*|quit\w*|refrain|don'?t|doesn'?t|didn'?t|without)\b)[^.!?\n]){{0,40}}?"
+     rf"\b(?:use|using|install\w*|run|running|switch\w*\s+to|went\s+with)\b"
+     rf"(?:(?!\b(?:without|except|unless)\b)[^.;!?\n]){{0,30}}?{_T}",
+     "target_is_the_workaround"),
 ]
 
 _WORKING_CUES: list[tuple[str, str]] = [
