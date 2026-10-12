@@ -22,6 +22,8 @@ import sys
 import traceback
 from pathlib import Path
 
+import yaml
+
 _REPO = Path(__file__).resolve().parents[3]
 _AUX = _REPO / "auxsays"
 
@@ -120,14 +122,27 @@ def run() -> int:
           "'INSUFFICIENT DATA'" in ROW and "is_official_only and report_count_num == 0" in ROW)
     check("verdict column never substitutes the community-consensus label",
           "update_consensus_label" not in ROW)
-    # explicit risk order AVOID(0) .. MANUAL WATCH(7), unknown(99, still visible)
+    # Explicit risk order AVOID(0) .. MANUAL WATCH(7), unknown(99, still visible).
+    #
+    # This used to string-match the include's own eight-way elsif ladder. AUX-029 removed that
+    # ladder: the order now lives in _data/patch_verdicts.yml (mirroring lib/patch_decision.py)
+    # and the include looks the rank up there. The ORDER is still pinned here, value by value --
+    # only its owner moved.
     order = [("AVOID", 0), ("WAIT", 1), ("TEST FIRST", 2), ("SECURITY UPDATE", 3),
              ("SAFE ENOUGH", 4), ("OFFICIAL ONLY", 5), ("INSUFFICIENT DATA", 6), ("MANUAL WATCH", 7)]
+    vocab = yaml.safe_load((_AUX / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8"))
+    risk_order = list(vocab.get("risk_order") or [])
+    check("the shared verdict vocabulary is readable (this section is not vacuous)",
+          len(risk_order) == 8, repr(risk_order))
     for cat, rank in order:
         check(f"verdict rank: '{cat}' -> {rank}",
-              (f"vkey contains '{cat}' %}}{{% assign verdict_rank = {rank} %}}" in ROW))
+              len(risk_order) > rank and risk_order[rank] == cat,
+              repr(risk_order[rank] if len(risk_order) > rank else None))
+    check("the include takes its rank from the shared vocabulary, not its own ladder",
+          "site.data.patch_verdicts" in ROW and "vkey contains" not in ROW)
     check("unknown/malformed verdict sorts last (rank 99) but stays visible",
-          "{% assign verdict_rank = 99 %}" in ROW and "{{ decision_label }}" in ROW)
+          vocab.get("unknown_rank") == 99
+          and "verdict_vocab.unknown_rank" in ROW and "{{ decision_label }}" in ROW)
 
     # --- Sort keys emitted server-side; JS only orders them -------------------
     for attr in ["data-date=", "data-version=", "data-verdict-rank=", "data-reports=", "data-evidence-rank="]:

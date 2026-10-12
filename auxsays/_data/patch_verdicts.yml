@@ -1,0 +1,29 @@
+# THE CANONICAL PATCH VERDICT VOCABULARY, for Liquid.
+#
+# Normative definition: auxsays/scripts/lib/patch_decision.py (RISK_ORDER, LEGACY_ALIASES).
+# This file exists because Liquid cannot import Python, and the templates need a membership
+# test and a risk rank. It is a MIRROR, pinned by test_patch_decision_authority.py -- editing
+# one without the other fails that test rather than drifting silently.
+#
+# `risk_order` is ordered, most cautionary first; the index IS data-verdict-rank.
+# Anything not listed here, and not a legacy alias below, is unknown: it ranks last and the
+# renderer refuses to publish it as a verdict.
+risk_order:
+  - AVOID
+  - WAIT
+  - TEST FIRST
+  - SECURITY UPDATE
+  - SAFE ENOUGH
+  - OFFICIAL ONLY
+  - INSUFFICIENT DATA
+  - MANUAL WATCH
+
+# Recognised historical phrasings -> the canonical action they name. Never produced, still read.
+legacy_aliases:
+  "AVOID for production": AVOID
+  "WAIT for production systems": WAIT
+  "SAFE ENOUGH to test": SAFE ENOUGH
+  "SECURITY UPDATE, TEST FIRST": TEST FIRST
+
+# An unrecognised label sorts last and stays visible.
+unknown_rank: 99

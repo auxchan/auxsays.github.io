@@ -108,7 +108,7 @@ auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
 auxsays/scripts/tests/test_method_health_append_delta.py = 58
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
-auxsays/scripts/tests/test_consensus_sample_honesty.py = 87
+auxsays/scripts/tests/test_consensus_sample_honesty.py = 88
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
@@ -125,7 +125,7 @@ auxsays/scripts/tests/test_davinci_projection_coherence.py = 29
 # feed. Proves the single authority by SUBSTITUTING it and watching every decision-bearing field
 # move, which a grep for the module name cannot do, and pins the decisions themselves so that
 # "make them agree" cannot drift into "make them lenient".
-auxsays/scripts/tests/test_patch_decision_authority.py = 47
+auxsays/scripts/tests/test_patch_decision_authority.py = 180
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
@@ -237,7 +237,7 @@ auxsays/scripts/tests/test_patch_heading_contrast.py = 111
 auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
 auxsays/scripts/tests/test_patch_ingest_record_limit.py = 78
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
-auxsays/scripts/tests/test_product_page_layout.py = 52
+auxsays/scripts/tests/test_product_page_layout.py = 54
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
 auxsays/scripts/tests/test_public_method_health_presentation.py = 72
 auxsays/scripts/tests/test_reddit_source.py = 8

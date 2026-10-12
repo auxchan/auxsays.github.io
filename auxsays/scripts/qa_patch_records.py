@@ -2,6 +2,7 @@
 """Warning-first QA for generated AUXSAYS update records and priority source coverage."""
 from __future__ import annotations
 
+import argparse
 import json
 import re
 from datetime import datetime, timezone
@@ -371,6 +372,18 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
             patch_decision.action_of(
                 patch_decision.leading_decision(data.get("update_consensus_summary"))),
         }
+        # A STORED label must be a verdict the authority recognises. Without this the vocabulary
+        # is only enforced at render time, by the two template fail-safes -- so a record could sit
+        # in the corpus naming a decision nothing classified, and the site would quietly publish
+        # INSUFFICIENT DATA for it instead of saying the record is wrong. `is_canonical` existed
+        # after AUX-029's first pass with no production caller at all; this is that caller.
+        stored = str(data.get("update_decision_label") or "").strip()
+        if stored and patch_decision.action_of(stored) not in patch_decision.CANONICAL_DECISIONS:
+            add(warnings, path, "record_names_unknown_verdict",
+                f"update_decision_label {stored!r} is not a canonical verdict and is not a "
+                "recognised legacy phrasing. One patch publishes one decision, from the eight in "
+                "lib/patch_decision.RISK_ORDER; an unvetted label is not a decision.")
+
         actions.discard("")
         if len(actions) > 1:
             add(warnings, path, "record_names_conflicting_actions",
@@ -815,7 +828,48 @@ def scan_route_integrity(
     return errors, warnings
 
 
-def main() -> int:
+# Codes that are a WARNING for the evidence/writeback lane and an ERROR for publication.
+#
+# The split is deliberate rather than an oversight. The writeback lane must not throw away a whole
+# collection run because one stale record names two actions -- the evidence is good, the record is
+# old, and discarding real evidence to punish old prose is the worse failure. But Pages publishes
+# that record to readers, and a page naming two decisions has no verdict at all.
+#
+# Same check, two consequences, selected by an EXPLICIT flag. Not by sniffing CI environment
+# variables: an implicit rule is one nobody can exercise from a command line, which is how a
+# publication gate quietly stops gating.
+PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
+                                        "record_names_unknown_verdict"})
+
+
+def promote_for_publication(
+    errors: list[dict[str, str]], warnings: list[dict[str, str]]
+) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """Move publication-blocking warnings into the error list.
+
+    Only codes named in PUBLICATION_BLOCKING_CODES move. Every other warning keeps its severity,
+    so turning on publication mode cannot silently promote an unrelated advisory into a deploy
+    blocker.
+    """
+    kept: list[dict[str, str]] = []
+    promoted: list[dict[str, str]] = []
+    for item in warnings:
+        if str(item.get("code") or "") in PUBLICATION_BLOCKING_CODES:
+            promoted.append(item)
+        else:
+            kept.append(item)
+    return errors + promoted, kept
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--publish-strict", action="store_true",
+        help="Publication mode: treat a record that names more than one action as an ERROR and "
+             "exit non-zero, so the site cannot deploy a patch page with two decisions. The "
+             "writeback lane runs WITHOUT this flag, where the same finding stays a warning.")
+    args = parser.parse_args(argv)
+
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     files = sorted(GENERATED_DIR.glob("*.md"))
     errors: list[dict[str, str]] = []
@@ -841,9 +895,12 @@ def main() -> int:
     errors.extend(e)
     warnings.extend(w)
 
+    if args.publish_strict:
+        errors, warnings = promote_for_publication(errors, warnings)
+
     status = {
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "mode": "blocking",
+        "mode": "publish-strict" if args.publish_strict else "blocking",
         "records_scanned": len(files),
         "priority_products_checked": len(PRIORITY_PRODUCTS),
         "error_count": len(errors),
