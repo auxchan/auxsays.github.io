@@ -18,8 +18,8 @@ update_version: Push attribution for commits in limited public preview
 update_logo_text: GIT
 update_published_at: '2026-10-12T16:30:11Z'
 update_last_checked: '2026-10-12T17:58:56Z'
-source_last_checked: '2026-10-13T02:59:17Z'
-official_body_last_checked: '2026-10-13T02:59:17Z'
+source_last_checked: '2026-10-13T16:38:43Z'
+official_body_last_checked: '2026-10-13T16:38:43Z'
 record_last_updated: '2026-10-12T17:58:56Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -91,6 +91,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-13T02:59:17Z'
+  url: https://github.blog/changelog/2026-10-12-push-attribution-public-preview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-13T16:38:43Z'
   url: https://github.blog/changelog/2026-10-12-push-attribution-public-preview
   status: captured-from-rss-feed
   body_captured: true
