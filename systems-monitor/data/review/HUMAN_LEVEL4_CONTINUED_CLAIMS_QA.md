@@ -11,9 +11,9 @@ Taylor should verify:
 - the parent presents Continued Claims (count) and Insured Unemployment Rate (percent) as two separate direct observations;
 - the exact ten child identities match the frozen taxonomy;
 - Initial Claims, Hires Rate, Job Openings Rate, Temporary Help Employment, and Average Weekly Hours reuse the existing 114 accepted records;
-- Payroll Growth remains methodology-pending and does not publish a number;
-- Regional Employment Growth remains taxonomy/method-pending and does not assume a geography;
-- Business Formations does not silently equate its broad label with projected formations within four quarters;
+- Total Nonfarm Payroll Change uses `PAYROLL_CHANGE_V1` over accepted `CES0000000001` t/t-1 inputs, remains input-history-pending, and does not publish a number;
+- State-Level Payroll Growth Breadth uses the fixed `CES_STATE_TOTAL_NONFARM_V1` 50-state-plus-DC universe, remains input-history-pending, and does not publish a number;
+- Business Formations Within 4 Quarters uses `BF_BF4Q` as the direct actual formation series and does not substitute projected `BF_PBF4Q` or spliced `BF_SBF4Q`;
 - Real GDP Growth and Real PCE Growth remain explicitly credential-blocked;
 - accepted, pending, and blocked states are visually distinct;
 - no renderer fixture, causal, materiality, destination-impact, or forecast claim appears.

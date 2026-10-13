@@ -55,8 +55,11 @@ const configuredAliases: Readonly<Record<string, string>> = Object.freeze({
   "bds-firm-deaths": "firm-deaths",
   "bds-firm-death-establishments": "firm-age-size-vulnerability",
   "bds-firm-death-employment": "firm-death-shutdown-stress",
-  "business-formations-four-quarters": "business-formation",
-  "business-formations": "business-formation",
+  "payroll-growth": "total-nonfarm-payroll-change",
+  "business-formation": "business-formations-within-4-quarters",
+  "business-formations-four-quarters": "business-formations-within-4-quarters",
+  "business-formations": "business-formations-within-4-quarters",
+  "regional-employment-growth": "state-level-payroll-growth-breadth",
   "industry-payroll-contraction": "payroll-contraction-breadth",
   "establishment-deaths": "jobs-lost-at-establishment-deaths",
   "establishment-death-job-losses": "jobs-lost-at-establishment-deaths",
@@ -117,7 +120,10 @@ for (const source of censusRegistry.sources) {
     for (const id of canonicalTargets) {
       const state = mutable.get(id) ?? { activationState: "SOURCE_IDENTIFIED" as const, series: [] };
       state.series.push({ sourceId: source.source_id, seriesId: row.source_series_id, label: row.label, unit: row.unit, cadence: source.cadence, adjustment: row.seasonal_adjustment, evidenceUrl: source.evidence_url, methodologyUrl: source.methodology_url });
-      state.activationState = promoteState(state.activationState, "BLOCKED");
+      state.activationState = promoteState(
+        state.activationState,
+        id === "factor:canonical:business-formations-within-4-quarters" ? "SOURCE_IDENTIFIED" : "BLOCKED"
+      );
       if (state.activationState === "BLOCKED") state.blockedReason = `Scheduled retrieval requires ${censusRegistry.credential_environment_variable}; values remain unavailable until retrieval, rights, and acceptance pass.`;
       mutable.set(id, state);
     }

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "state-payroll-growth-breadth-calibration-1.0.0",
+  "authority": "CALIBRATION_EVIDENCE_ONLY_TAYLOR_METHOD_APPROVED_SEPARATELY_2026_10_13",
+  "canonicalFactorId": "factor:canonical:state-level-payroll-growth-breadth",
+  "status": "CALIBRATION_COMPLETE_METHOD_APPROVED_INPUT_HISTORY_PENDING",
+  "methodologyVersion": "STATE_PAYROLL_GROWTH_BREADTH_V1",
+  "universeVersion": "CES_STATE_TOTAL_NONFARM_V1",
+  "methodologyArtifact": "state_payroll_growth_breadth_methodology.json",
+  "endpoint": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+  "retrievedAt": "2026-10-13T21:00:02Z",
+  "query": {
+    "startYear": 2016,
+    "endYear": 2025,
+    "batches": [25, 25, 1],
+    "credential": "NONE",
+    "publisherStatus": ["REQUEST_SUCCEEDED", "REQUEST_SUCCEEDED", "REQUEST_SUCCEEDED"]
+  },
+  "selectorContract": {
+    "prefix": "SMS",
+    "area": "statewide seven-digit area code",
+    "industry": "00000000 Total Nonfarm",
+    "dataType": "01 All Employees",
+    "seasonalAdjustment": "S Seasonally Adjusted",
+    "metropolitanSeriesAllowed": false,
+    "memberCount": 51
+  },
+  "selectors": [
+    "SMS01000000000000001", "SMS02000000000000001", "SMS04000000000000001", "SMS05000000000000001", "SMS06000000000000001", "SMS08000000000000001", "SMS09000000000000001", "SMS10000000000000001", "SMS11000000000000001", "SMS12000000000000001", "SMS13000000000000001", "SMS15000000000000001", "SMS16000000000000001", "SMS17000000000000001", "SMS18000000000000001", "SMS19000000000000001", "SMS20000000000000001", "SMS21000000000000001", "SMS22000000000000001", "SMS23000000000000001", "SMS24000000000000001", "SMS25000000000000001", "SMS26000000000000001", "SMS27000000000000001", "SMS28000000000000001", "SMS29000000000000001", "SMS30000000000000001", "SMS31000000000000001", "SMS32000000000000001", "SMS33000000000000001", "SMS34000000000000001", "SMS35000000000000001", "SMS36000000000000001", "SMS37000000000000001", "SMS38000000000000001", "SMS39000000000000001", "SMS40000000000000001", "SMS41000000000000001", "SMS42000000000000001", "SMS44000000000000001", "SMS45000000000000001", "SMS46000000000000001", "SMS47000000000000001", "SMS48000000000000001", "SMS49000000000000001", "SMS50000000000000001", "SMS51000000000000001", "SMS53000000000000001", "SMS54000000000000001", "SMS55000000000000001", "SMS56000000000000001"
+  ],
+  "coverage": {
+    "historyDepth": "2016-01 through 2025-12",
+    "monthlyPeriods": 120,
+    "seriesReturned": 51,
+    "complete51Of51Periods": 120,
+    "firstCompletePeriod": "2016-01",
+    "lastCompletePeriod": "2025-12",
+    "missingSeriesPatterns": "None; every selector returned a numeric value in every one of the 120 calibrated monthly periods.",
+    "missingObservationsBySelector": 0
+  },
+  "revisionBehavior": "State CES series are current revised history subject to routine monthly revisions, annual benchmark revisions, seasonal-factor revisions, and possible state/area or industry coding changes. Any accepted revision to t or t-1 requires a new immutable calculation candidate for the affected breadth period.",
+  "publicationStatus": "CALIBRATION_ONLY_NOT_ACCEPTED_NOT_PUBLISHABLE",
+  "calibrationHistoryAcceptedForProduction": false,
+  "productionStateAfterCalibration": "GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING"
+}

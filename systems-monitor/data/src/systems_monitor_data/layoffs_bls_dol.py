@@ -90,8 +90,8 @@ def load_layoffs_bls_dol_registry(path: Path) -> tuple[dict[str, Any], tuple[Lay
 
 
 def _validate_registry(document: dict[str, Any], specs: tuple[LayoffsSeriesSpec, ...]) -> None:
-    if document.get("schema_version") != "1.0.0" or len(specs) != 19:
-        raise ValueError("layoffs BLS/DOL registry must contain the reviewed nineteen series")
+    if document.get("schema_version") != "1.0.0" or len(specs) != 20:
+        raise ValueError("layoffs BLS/DOL registry must contain the reviewed twenty series")
     ids = [spec.series_id for spec in specs]
     if len(ids) != len(set(ids)):
         raise ValueError("source series IDs must be unique")

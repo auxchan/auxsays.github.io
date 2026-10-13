@@ -7,8 +7,8 @@ Status: **REVIEW EVIDENCE — NO OBSERVATION OR RELATIONSHIP PROMOTION**
 - 100 reviewed Layoffs Level-4 placements.
 - 64 canonical Level-4 factors.
 - 74 UI-side factor/source state records.
-- 46 expanded acquisition bindings across 42 records.
-- 32 source-identified placeholders without a configured binding.
+- 47 expanded acquisition bindings across 43 records.
+- 31 source-identified placeholders without a configured binding.
 - 6 configured source identities outside the current taxonomy.
 
 The historical `77 source profiles` label was imprecise: it described a pre-cleanup UI-side state count, not canonical factors or adapters. The current governed registry contains 74 active records after narrowing Courts F-2 to the national all-business selector and separating noninterchangeable Census BDS identities.
@@ -22,8 +22,8 @@ The historical `77 source profiles` label was imprecise: it described a pre-clea
 | `factor:canonical:business-bankruptcy-filings` — Business Bankruptcy Filings | A_DIRECT_OBS | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:business-bankruptcy-filings-12-month-total` — Business Bankruptcy Filings, 12-Month Total | A_DIRECT_OBS | 3 | SOURCE_ENABLED_PENDING_ACCEPTANCE | EXACT | uscourts-f2 (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:business-failure-stress` — Business Failure Stress | D_TAXONOMY_OR_SOURCE_PROBLEM | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
-| `factor:canonical:business-formation` — Business Formations | A_DIRECT_OBS | 2 | BLOCKED | EXACT | census-bfs (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:business-formation-dynamism` — Business Formation / Dynamism | B_CALC | 1 | BLOCKED | EXACT | census-bfs (CALC_INPUT) |
+| `factor:canonical:business-formations-within-4-quarters` — Business Formations Within 4 Quarters | A_DIRECT_OBS | 2 | SOURCE_IDENTIFIED | EXACT | census-bfs (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:candi-credit-conditions` — C&I Credit Conditions | D_TAXONOMY_OR_SOURCE_PROBLEM | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:candi-lending-standards` — C&I Lending Standards | A_DIRECT_OBS | 5 | BLOCKED | PENDING_OR_UNMAPPED | fed-sloos (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:candi-loan-demand` — C&I Loan Demand | A_DIRECT_OBS | 1 | BLOCKED | PENDING_OR_UNMAPPED | fed-sloos (PRIMARY_OBSERVATION_SOURCE) |
@@ -65,19 +65,19 @@ The historical `77 source profiles` label was imprecise: it described a pre-clea
 | `factor:canonical:manufacturing-output` — Manufacturing Output | A_DIRECT_OBS | 1 | BLOCKED | PENDING_OR_UNMAPPED | fed-g17 (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:new-orders` — New Orders | A_DIRECT_OBS | 2 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:payroll-contraction-breadth` — Industry Payroll Contraction | B_CALC | 3 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
-| `factor:canonical:payroll-growth` — Payroll Growth | B_CALC | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:permanent-job-losers` — Permanent Job Losers | A_DIRECT_OBS | 1 | ACCEPTED | EXACT | bls-cps (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:producer-input-costs` — Producer Input Costs | D_TAXONOMY_OR_SOURCE_PROBLEM | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:producer-input-prices` — Producer Input Prices | A_DIRECT_OBS | 2 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:productivity-automation` — Productivity / Automation | D_TAXONOMY_OR_SOURCE_PROBLEM | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:real-gdp-growth` — Real GDP Growth | A_DIRECT_OBS | 6 | SOURCE_ENABLED_PENDING_ACCEPTANCE | EXACT | bea-nipa (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:real-personal-consumption-expenditures-growth` — Real Personal Consumption Expenditures Growth | A_DIRECT_OBS | 3 | SOURCE_ENABLED_PENDING_ACCEPTANCE | EXACT | bea-nipa (PRIMARY_OBSERVATION_SOURCE) |
-| `factor:canonical:regional-employment-growth` — Regional Employment Growth | B_CALC | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:retail-sales` — Retail Sales | A_DIRECT_OBS | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:sales-revenue` — Sales / Revenue | D_TAXONOMY_OR_SOURCE_PROBLEM | 2 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:sales-revenue-growth` — Sales / Revenue Growth | B_CALC | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
+| `factor:canonical:state-level-payroll-growth-breadth` — State-Level Payroll Growth Breadth | B_CALC | 1 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
 | `factor:canonical:temporary-help-employment` — Temporary Help Employment | A_DIRECT_OBS | 1 | ACCEPTED | EXACT | bls-ces (PRIMARY_OBSERVATION_SOURCE) |
 | `factor:canonical:temporary-layoffs` — Temporary Layoffs | A_DIRECT_OBS | 1 | ACCEPTED | EXACT | bls-cps (PRIMARY_OBSERVATION_SOURCE) |
+| `factor:canonical:total-nonfarm-payroll-change` — Total Nonfarm Payroll Change | B_CALC | 1 | SOURCE_ENABLED_PENDING_ACCEPTANCE | EXACT | bls-ces (CALC_INPUT) |
 | `factor:canonical:trade-external-shock` — Trade / External Shock | C_EVENT_OR_STRUCTURAL | 1 | BLOCKED | EXACT | census-ftd (STRUCTURAL_SOURCE) |
 | `factor:canonical:trade-import-pressure` — Import / Trade Pressure | B_CALC | 2 | BLOCKED | EXACT | census-ftd (CALC_INPUT) |
 | `factor:canonical:unit-labor-costs` — Unit Labor Costs | A_DIRECT_OBS | 3 | SOURCE_IDENTIFIED | PENDING_OR_UNMAPPED | No configured binding |
@@ -94,8 +94,8 @@ The historical `77 source profiles` label was imprecise: it described a pre-clea
 | `factor:canonical:business-bankruptcy-filings-12-month-total` | LEVEL4_CANONICAL | SOURCE_ENABLED_PENDING_ACCEPTANCE | uscourts-f2:F2:US:BUSINESS:ALL | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:business-failure-bankruptcy-stress` | LEVEL3_PARENT | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:business-failure-stress` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
-| `factor:canonical:business-formation` | LEVEL4_CANONICAL | BLOCKED | census-bfs:BFS:T:BF_BF4Q:SA | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:business-formation-dynamism` | LEVEL4_CANONICAL | BLOCKED | census-bfs:BFS:T:BF_BF4Q:SA | CALC_INPUT |
+| `factor:canonical:business-formations-within-4-quarters` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | census-bfs:BFS:T:BF_BF4Q:SA | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:candi-credit-conditions` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:candi-lending-standards` | LEVEL4_CANONICAL | BLOCKED | fed-sloos:selector-pending | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:candi-loan-demand` | LEVEL4_CANONICAL | BLOCKED | fed-sloos:selector-pending | PRIMARY_OBSERVATION_SOURCE |
@@ -144,19 +144,19 @@ The historical `77 source profiles` label was imprecise: it described a pre-clea
 | `factor:canonical:manufacturing-output` | LEVEL4_CANONICAL | BLOCKED | fed-g17:selector-pending | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:new-orders` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:payroll-contraction-breadth` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
-| `factor:canonical:payroll-growth` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:permanent-job-losers` | LEVEL4_CANONICAL | ACCEPTED | bls-cps:LNS13026638 | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:producer-input-costs` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:producer-input-prices` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:productivity-automation` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:real-gdp-growth` | LEVEL4_CANONICAL | SOURCE_ENABLED_PENDING_ACCEPTANCE | bea-nipa:BEA:NIPA:T10101:1:Q | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:real-personal-consumption-expenditures-growth` | LEVEL4_CANONICAL | SOURCE_ENABLED_PENDING_ACCEPTANCE | bea-nipa:BEA:NIPA:T10101:2:Q | PRIMARY_OBSERVATION_SOURCE |
-| `factor:canonical:regional-employment-growth` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:retail-sales` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:sales-revenue` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:sales-revenue-growth` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
+| `factor:canonical:state-level-payroll-growth-breadth` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
 | `factor:canonical:temporary-help-employment` | LEVEL4_CANONICAL | ACCEPTED | bls-ces:CES6056132001 | PRIMARY_OBSERVATION_SOURCE |
 | `factor:canonical:temporary-layoffs` | LEVEL4_CANONICAL | ACCEPTED | bls-cps:LNS13023653 | PRIMARY_OBSERVATION_SOURCE |
+| `factor:canonical:total-nonfarm-payroll-change` | LEVEL4_CANONICAL | SOURCE_ENABLED_PENDING_ACCEPTANCE | bls-ces:CES0000000001 | CALC_INPUT |
 | `factor:canonical:trade-external-shock` | LEVEL4_CANONICAL | BLOCKED | census-ftd:FTD:IMP:BOPGS:SA | STRUCTURAL_SOURCE |
 | `factor:canonical:trade-import-pressure` | LEVEL4_CANONICAL | BLOCKED | census-ftd:FTD:IMP:BOPGS:SA | CALC_INPUT |
 | `factor:canonical:unit-labor-costs` | LEVEL4_CANONICAL | SOURCE_IDENTIFIED | — | UNMAPPED_SOURCE_IDENTIFIED_PLACEHOLDER |
@@ -167,13 +167,13 @@ The following source-only records do not resolve to a current taxonomy identity 
 
 - `factor:canonical:bds-establishment-exits` — **SECONDARY_CONTEXT_ONLY**; target `factor:canonical:jobs-lost-at-establishment-deaths`; no activation effect.
 - `factor:canonical:bds-job-destruction` — **SECONDARY_CONTEXT_ONLY**; target `factor:canonical:gross-job-losses`; no activation effect.
-- `factor:canonical:business-formations` — **ALIAS_SUPERSEDED**; target `factor:canonical:business-formation`; no activation effect.
+- `factor:canonical:business-formations` — **ALIAS_SUPERSEDED**; target `factor:canonical:business-formations-within-4-quarters`; no activation effect.
 - `factor:canonical:establishment-birth-job-gains` — **CALC_INPUT_ONLY**; target `factor:canonical:establishment-openings`; no activation effect.
 - `factor:canonical:establishment-expansions` — **CALC_INPUT_ONLY**; target `factor:canonical:gross-job-gains`; no activation effect.
 - `factor:canonical:establishment-openings` — **CALC_INPUT_ONLY**; target `factor:canonical:gross-job-gains`; no activation effect.
 - `factor:canonical:gross-job-gains` — **SECONDARY_CONTEXT_ONLY**; target `factor:canonical:gross-job-losses`; no activation effect.
 
-`business-formations` is canonicalized to the singular factor while its legacy identity remains recorded. Three BED component records are calculation-input-only. BED gross gains and the two noninterchangeable Census BDS identities remain context-only. Courts F-2 is narrowed to one exact national all-business selector. None of these cleanup records becomes a new placement or accepted observation.
+`business-formations` is canonicalized to Business Formations Within 4 Quarters while its legacy identity remains recorded. Three BED component records are calculation-input-only. BED gross gains and the two noninterchangeable Census BDS identities remain context-only. Courts F-2 is narrowed to one exact national all-business selector. None of these cleanup records becomes a new placement or accepted observation.
 
 ## Promotion boundary
 

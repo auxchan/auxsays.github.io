@@ -109,9 +109,9 @@
       "promotionBlocker": "Narrow or replace the concept before source selection."
     },
     {
-      "canonicalFactorId": "factor:canonical:business-formation",
+      "canonicalFactorId": "factor:canonical:business-formations-within-4-quarters",
       "claimClass": "A_DIRECT_OBS",
-      "rationale": "Census Business Formation Statistics publishes explicitly defined formation statistics directly.",
+      "rationale": "Census Business Formation Statistics directly publishes Business Formations Within 4 Quarters as BF_BF4Q; it is not the projected BF_PBF4Q series or the spliced BF_SBF4Q series.",
       "sourceRefs": ["census-bfs:BFS:T:BF_BF4Q:SA"],
       "exactSourceDefensible": true,
       "promotionBlocker": "Credential, rights, retrieval, and observation acceptance are pending."
@@ -405,12 +405,12 @@
       "promotionBlocker": "Exact series/table, credential, rights, and vintage are pending."
     },
     {
-      "canonicalFactorId": "factor:canonical:payroll-growth",
+      "canonicalFactorId": "factor:canonical:total-nonfarm-payroll-change",
       "claimClass": "B_CALC",
-      "rationale": "Growth is deterministically calculated from accepted CES payroll-employment levels.",
-      "sourceRefs": ["bls-ces"],
-      "exactSourceDefensible": false,
-      "promotionBlocker": "Exact employment series, interval, and revision-aware formula are pending."
+      "rationale": "Monthly change is deterministically calculated as E_t minus E_t-1 from accepted seasonally adjusted CES total-nonfarm payroll-employment levels.",
+      "sourceRefs": ["bls-ces:CES0000000001", "PAYROLL_CHANGE_V1"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "PAYROLL_CHANGE_V1 is approved, but accepted compatible CES0000000001 input history for t and t-1 is pending."
     },
     {
       "canonicalFactorId": "factor:canonical:producer-input-costs",
@@ -445,12 +445,12 @@
       "promotionBlocker": "Live API acquisition is blocked until AUXSAYS_BEA_USER_ID is configured and accepted history is built."
     },
     {
-      "canonicalFactorId": "factor:canonical:regional-employment-growth",
+      "canonicalFactorId": "factor:canonical:state-level-payroll-growth-breadth",
       "claimClass": "B_CALC",
-      "rationale": "Growth is calculated from accepted regional employment levels and must preserve geography and vintages.",
-      "sourceRefs": ["bls-ces"],
-      "exactSourceDefensible": false,
-      "promotionBlocker": "Regional series, geography, interval, and revision-aware formula are pending."
+      "rationale": "Breadth is the percentage of the fixed 50-state-plus-DC statewide CES total-nonfarm universe whose accepted seasonally adjusted payroll level exceeds its previous compatible month.",
+      "sourceRefs": ["bls-ces-state-and-metro:CES_STATE_TOTAL_NONFARM_V1", "STATE_PAYROLL_GROWTH_BREADTH_V1"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "The method and exact 51-series universe are approved and calibrated, but accepted 51-of-51 production input history is pending."
     },
     {
       "canonicalFactorId": "factor:canonical:retail-sales",

@@ -26,9 +26,9 @@ class LayoffsLevel4AuditTests(unittest.TestCase):
         self.assertEqual(64, counts["canonicalLevel4Factors"])
         self.assertEqual(100, counts["level4Placements"])
         self.assertEqual(74, counts["factorSourceStateRecords"])
-        self.assertEqual(46, counts["expandedSourceBindings"])
-        self.assertEqual(42, counts["recordsWithSourceBindings"])
-        self.assertEqual(32, counts["sourceIdentifiedPlaceholders"])
+        self.assertEqual(47, counts["expandedSourceBindings"])
+        self.assertEqual(43, counts["recordsWithSourceBindings"])
+        self.assertEqual(31, counts["sourceIdentifiedPlaceholders"])
         self.assertEqual(6, counts["sourceOnlyRecords"])
         self.assertEqual(6, counts["sourceOnlyRecordsWithDisposition"])
         self.assertEqual(7, counts["sourceOnlyIdentitiesReviewed"])
@@ -49,7 +49,7 @@ class LayoffsLevel4AuditTests(unittest.TestCase):
             "LEGACY_DUPLICATE_SHOULD_REMOVE",
         }
         bindings = [binding for row in audit["factorSourceStateRecords"] for binding in row["sourceBindings"]]
-        self.assertEqual(46, len(bindings))
+        self.assertEqual(47, len(bindings))
         self.assertTrue(all(binding["role"] in allowed_roles for binding in bindings))
         self.assertTrue(all(binding["whyNeeded"] for binding in bindings))
         self.assertTrue(all(row["claimClass"] for row in audit["canonicalFactors"]))

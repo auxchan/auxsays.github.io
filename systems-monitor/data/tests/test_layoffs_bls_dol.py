@@ -26,12 +26,13 @@ class LayoffsBlsDolTests(unittest.TestCase):
         cls.acquisition, cls.specs = load_layoffs_bls_dol_registry(REGISTRY)
 
     def test_registry_has_reviewed_exact_series_and_no_credentials(self):
-        self.assertEqual(19, len(self.specs))
+        self.assertEqual(20, len(self.specs))
         ids = {spec.series_id for spec in self.specs}
         self.assertIn("JTS000000000000000LDL", ids)
         self.assertIn("LNS13026638", ids)
         self.assertIn("LNS13023653", ids)
         self.assertIn("CES0500000002", ids)
+        self.assertIn("CES0000000001", ids)
         self.assertIn("BDS0000000000000000110004LQ5", ids)
         self.assertIn("BDS0000000000000000110005LQ5", ids)
         self.assertIn("BDS0000000000000000110006LQ5", ids)
@@ -42,6 +43,13 @@ class LayoffsBlsDolTests(unittest.TestCase):
         serialized = REGISTRY.read_text(encoding="utf-8").lower()
         self.assertNotIn("api_key", serialized)
         self.assertNotIn("registrationkey", serialized)
+
+        payroll = next(spec for spec in self.specs if spec.series_id == "CES0000000001")
+        self.assertEqual("Total nonfarm payroll employment", payroll.label)
+        self.assertEqual("thousands of persons", payroll.unit)
+        self.assertEqual("monthly", payroll.frequency)
+        self.assertEqual("seasonally adjusted", payroll.seasonal_adjustment)
+        self.assertEqual("SOURCE_ENABLED_PENDING_ACCEPTANCE", payroll.activation_state)
 
     def test_bls_parser_preserves_period_unit_adjustment_and_preliminary_marker(self):
         wanted = {
@@ -242,7 +250,7 @@ class LayoffsBlsDolTests(unittest.TestCase):
         self.assertEqual(first.observation_id, retry.observation_id)
         self.assertNotEqual(first.observation_id, revised.observation_id)
 
-    def test_collector_builds_one_bounded_bls_request_for_all_sixteen_series(self):
+    def test_collector_builds_one_bounded_bls_request_for_all_seventeen_series(self):
         calls = []
 
         class FakeRetriever:
@@ -254,7 +262,7 @@ class LayoffsBlsDolTests(unittest.TestCase):
         bls_specs = [spec for spec in self.specs if spec.source_id != "dol-ui-claims"]
         self.assertEqual("artifact", collector.retrieve_bls(bls_specs, 2025, 2026))
         body = json.loads(calls[0][1]["body"])
-        self.assertEqual(16, len(body["seriesid"]))
+        self.assertEqual(17, len(body["seriesid"]))
         self.assertEqual("2025", body["startyear"])
         self.assertEqual("2026", body["endyear"])
 

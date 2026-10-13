@@ -106,31 +106,6 @@
       "sourceStatus": "SOURCE_IDENTIFIED"
     },
     {
-      "canonicalFactorId": "factor:canonical:business-formation",
-      "claimClass": "A_DIRECT_OBS",
-      "definition": "Census Business Formation Statistics publishes explicitly defined formation statistics directly.",
-      "exactSelectorStatus": "EXACT",
-      "label": "Business Formations",
-      "placementCount": 2,
-      "placementPaths": [
-        "Continued Claims / Insured Unemployment > Business Formations",
-        "Business Failure / Bankruptcy Stress > Business Formation"
-      ],
-      "promotionBlocker": "Credential, rights, retrieval, and observation acceptance are pending.",
-      "sourceBindings": [
-        {
-          "exactSelector": true,
-          "origin": "sources_census.json",
-          "role": "PRIMARY_OBSERVATION_SOURCE",
-          "selector": "BFS:T:BF_BF4Q:SA",
-          "sourceId": "census-bfs",
-          "status": "EXACT_SELECTOR",
-          "whyNeeded": "Direct official measurement candidate for this canonical factor."
-        }
-      ],
-      "sourceStatus": "BLOCKED"
-    },
-    {
       "canonicalFactorId": "factor:canonical:business-formation-dynamism",
       "claimClass": "B_CALC",
       "definition": "Dynamism combines official entry, exit, or formation components and must disclose its formula and scope.",
@@ -153,6 +128,31 @@
         }
       ],
       "sourceStatus": "BLOCKED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-formations-within-4-quarters",
+      "claimClass": "A_DIRECT_OBS",
+      "definition": "Census Business Formation Statistics directly publishes Business Formations Within 4 Quarters as BF_BF4Q; it is not the projected BF_PBF4Q series or the spliced BF_SBF4Q series.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Business Formations Within 4 Quarters",
+      "placementCount": 2,
+      "placementPaths": [
+        "Continued Claims / Insured Unemployment > Business Formations Within 4 Quarters",
+        "Business Failure / Bankruptcy Stress > Business Formation"
+      ],
+      "promotionBlocker": "Credential, rights, retrieval, and observation acceptance are pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BFS:T:BF_BF4Q:SA",
+          "sourceId": "census-bfs",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ],
+      "sourceStatus": "SOURCE_IDENTIFIED"
     },
     {
       "canonicalFactorId": "factor:canonical:candi-credit-conditions",
@@ -995,20 +995,6 @@
       "sourceStatus": "SOURCE_IDENTIFIED"
     },
     {
-      "canonicalFactorId": "factor:canonical:payroll-growth",
-      "claimClass": "B_CALC",
-      "definition": "Growth is deterministically calculated from accepted CES payroll-employment levels.",
-      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
-      "label": "Payroll Growth",
-      "placementCount": 1,
-      "placementPaths": [
-        "Continued Claims / Insured Unemployment > Payroll Growth"
-      ],
-      "promotionBlocker": "Exact employment series, interval, and revision-aware formula are pending.",
-      "sourceBindings": [],
-      "sourceStatus": "SOURCE_IDENTIFIED"
-    },
-    {
       "canonicalFactorId": "factor:canonical:permanent-job-losers",
       "claimClass": "A_DIRECT_OBS",
       "definition": "BLS CPS publishes the permanent-job-losers estimate directly.",
@@ -1131,20 +1117,6 @@
       "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
     },
     {
-      "canonicalFactorId": "factor:canonical:regional-employment-growth",
-      "claimClass": "B_CALC",
-      "definition": "Growth is calculated from accepted regional employment levels and must preserve geography and vintages.",
-      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
-      "label": "Regional Employment Growth",
-      "placementCount": 1,
-      "placementPaths": [
-        "Continued Claims / Insured Unemployment > Regional Employment Growth"
-      ],
-      "promotionBlocker": "Regional series, geography, interval, and revision-aware formula are pending.",
-      "sourceBindings": [],
-      "sourceStatus": "SOURCE_IDENTIFIED"
-    },
-    {
       "canonicalFactorId": "factor:canonical:retail-sales",
       "claimClass": "A_DIRECT_OBS",
       "definition": "Census MARTS publishes retail and food-services sales estimates directly.",
@@ -1184,6 +1156,20 @@
         "Establishment Death / Closure Losses > Sales / Revenue Growth"
       ],
       "promotionBlocker": "Underlying series, scope, interval, and formula are not accepted.",
+      "sourceBindings": [],
+      "sourceStatus": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:state-level-payroll-growth-breadth",
+      "claimClass": "B_CALC",
+      "definition": "Breadth is the percentage of the fixed 50-state-plus-DC statewide CES total-nonfarm universe whose accepted seasonally adjusted payroll level exceeds its previous compatible month.",
+      "exactSelectorStatus": "PENDING_OR_UNMAPPED",
+      "label": "State-Level Payroll Growth Breadth",
+      "placementCount": 1,
+      "placementPaths": [
+        "Continued Claims / Insured Unemployment > State-Level Payroll Growth Breadth"
+      ],
+      "promotionBlocker": "The method and exact 51-series universe are approved and calibrated, but accepted 51-of-51 production input history is pending.",
       "sourceBindings": [],
       "sourceStatus": "SOURCE_IDENTIFIED"
     },
@@ -1234,6 +1220,30 @@
         }
       ],
       "sourceStatus": "ACCEPTED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:total-nonfarm-payroll-change",
+      "claimClass": "B_CALC",
+      "definition": "Monthly change is deterministically calculated as E_t minus E_t-1 from accepted seasonally adjusted CES total-nonfarm payroll-employment levels.",
+      "exactSelectorStatus": "EXACT",
+      "label": "Total Nonfarm Payroll Change",
+      "placementCount": 1,
+      "placementPaths": [
+        "Continued Claims / Insured Unemployment > Total Nonfarm Payroll Change"
+      ],
+      "promotionBlocker": "PAYROLL_CHANGE_V1 is approved, but accepted compatible CES0000000001 input history for t and t-1 is pending.",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "CALC_INPUT",
+          "selector": "CES0000000001",
+          "sourceId": "bls-ces",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ],
+      "sourceStatus": "SOURCE_ENABLED_PENDING_ACCEPTANCE"
     },
     {
       "canonicalFactorId": "factor:canonical:trade-external-shock",
@@ -1304,17 +1314,17 @@
   "counts": {
     "activationStates": {
       "ACCEPTED": 12,
-      "BLOCKED": 21,
-      "SOURCE_ENABLED_PENDING_ACCEPTANCE": 8,
+      "BLOCKED": 20,
+      "SOURCE_ENABLED_PENDING_ACCEPTANCE": 9,
       "SOURCE_IDENTIFIED": 33
     },
     "canonicalLevel4Factors": 64,
-    "expandedSourceBindings": 46,
+    "expandedSourceBindings": 47,
     "factorSourceStateRecords": 74,
     "level3Parents": 10,
     "level4Placements": 100,
-    "recordsWithSourceBindings": 42,
-    "sourceIdentifiedPlaceholders": 32,
+    "recordsWithSourceBindings": 43,
+    "sourceIdentifiedPlaceholders": 31,
     "sourceOnlyDispositionTypes": {
       "CALC_INPUT_ONLY": 3,
       "SECONDARY_CONTEXT_ONLY": 3
@@ -1324,7 +1334,7 @@
     "sourceOnlyRecordsWithDisposition": 6,
     "sourceRoles": {
       "ALTERNATE_GEOGRAPHIC_INDUSTRY_SCOPE": 2,
-      "CALC_INPUT": 10,
+      "CALC_INPUT": 11,
       "FALLBACK_ACQUISITION_METHOD": 1,
       "PRIMARY_OBSERVATION_SOURCE": 31,
       "STRUCTURAL_SOURCE": 2
@@ -1460,23 +1470,6 @@
     },
     {
       "activationState": "BLOCKED",
-      "canonicalFactorId": "factor:canonical:business-formation",
-      "label": "Business Formations",
-      "recordKind": "LEVEL4_CANONICAL",
-      "sourceBindings": [
-        {
-          "exactSelector": true,
-          "origin": "sources_census.json",
-          "role": "PRIMARY_OBSERVATION_SOURCE",
-          "selector": "BFS:T:BF_BF4Q:SA",
-          "sourceId": "census-bfs",
-          "status": "EXACT_SELECTOR",
-          "whyNeeded": "Direct official measurement candidate for this canonical factor."
-        }
-      ]
-    },
-    {
-      "activationState": "BLOCKED",
       "canonicalFactorId": "factor:canonical:business-formation-dynamism",
       "label": "Business Formation / Dynamism",
       "recordKind": "LEVEL4_CANONICAL",
@@ -1489,6 +1482,23 @@
           "sourceId": "census-bfs",
           "status": "EXACT_SELECTOR",
           "whyNeeded": "Official input retained for a future governed deterministic calculation."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:business-formations-within-4-quarters",
+      "label": "Business Formations Within 4 Quarters",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_census.json",
+          "role": "PRIMARY_OBSERVATION_SOURCE",
+          "selector": "BFS:T:BF_BF4Q:SA",
+          "sourceId": "census-bfs",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Direct official measurement candidate for this canonical factor."
         }
       ]
     },
@@ -2185,13 +2195,6 @@
       "sourceBindings": []
     },
     {
-      "activationState": "SOURCE_IDENTIFIED",
-      "canonicalFactorId": "factor:canonical:payroll-growth",
-      "label": "Payroll Growth",
-      "recordKind": "LEVEL4_CANONICAL",
-      "sourceBindings": []
-    },
-    {
       "activationState": "ACCEPTED",
       "canonicalFactorId": "factor:canonical:permanent-job-losers",
       "label": "Permanent Job Losers",
@@ -2265,13 +2268,6 @@
     },
     {
       "activationState": "SOURCE_IDENTIFIED",
-      "canonicalFactorId": "factor:canonical:regional-employment-growth",
-      "label": "Regional Employment Growth",
-      "recordKind": "LEVEL4_CANONICAL",
-      "sourceBindings": []
-    },
-    {
-      "activationState": "SOURCE_IDENTIFIED",
       "canonicalFactorId": "factor:canonical:retail-sales",
       "label": "Retail Sales",
       "recordKind": "LEVEL4_CANONICAL",
@@ -2288,6 +2284,13 @@
       "activationState": "SOURCE_IDENTIFIED",
       "canonicalFactorId": "factor:canonical:sales-revenue-growth",
       "label": "Sales / Revenue Growth",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": []
+    },
+    {
+      "activationState": "SOURCE_IDENTIFIED",
+      "canonicalFactorId": "factor:canonical:state-level-payroll-growth-breadth",
+      "label": "State-Level Payroll Growth Breadth",
       "recordKind": "LEVEL4_CANONICAL",
       "sourceBindings": []
     },
@@ -2322,6 +2325,23 @@
           "sourceId": "bls-cps",
           "status": "EXACT_SELECTOR",
           "whyNeeded": "Direct official measurement candidate for this canonical factor."
+        }
+      ]
+    },
+    {
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "canonicalFactorId": "factor:canonical:total-nonfarm-payroll-change",
+      "label": "Total Nonfarm Payroll Change",
+      "recordKind": "LEVEL4_CANONICAL",
+      "sourceBindings": [
+        {
+          "exactSelector": true,
+          "origin": "sources_bls_dol.json",
+          "role": "CALC_INPUT",
+          "selector": "CES0000000001",
+          "sourceId": "bls-ces",
+          "status": "EXACT_SELECTOR",
+          "whyNeeded": "Official input retained for a future governed deterministic calculation."
         }
       ]
     },
@@ -2371,7 +2391,7 @@
   "promotionAuthority": "NONE",
   "reconciliation": {
     "actualCanonicalLevel4FactorCount": 64,
-    "actualExpandedAcquisitionBindingCount": 46,
+    "actualExpandedAcquisitionBindingCount": 47,
     "allReviewedDispositions": [
       {
         "acceptanceEligible": false,
@@ -2395,10 +2415,10 @@
       },
       {
         "acceptanceEligible": false,
-        "canonicalTarget": "factor:canonical:business-formation",
+        "canonicalTarget": "factor:canonical:business-formations-within-4-quarters",
         "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
         "disposition": "ALIAS_SUPERSEDED",
-        "reason": "The plural source-side identity is a legacy duplicate of the visible singular taxonomy factor; canonicalization must occur before any source binding or acceptance decision.",
+        "reason": "The plural source-side identity is a legacy duplicate of the governed Business Formations Within 4 Quarters factor; canonicalization must occur before any source binding or acceptance decision.",
         "sourceOnlyId": "factor:canonical:business-formations",
         "sourceRole": "PRIMARY_OBSERVATION_SOURCE_CANDIDATE_FOR_CANONICAL_TARGET",
         "uiPlacementEligible": false
@@ -2445,7 +2465,7 @@
       }
     ],
     "explanation": "The historical 77 count described UI-side factor/source state records, not 77 unique Level-4 factors or acquisition adapters. Narrowing Courts F-2 to one exact all-business binding and retaining the two noninterchangeable Census BDS identities as context-only leaves 74 governed records.",
-    "requiredCleanup": "All seven reviewed source-only identities have an explicit non-activating alias, calculation-input, or context-only disposition. The plural business-formations binding canonicalizes to the visible singular factor while preserving the legacy identity in this disposition registry.",
+    "requiredCleanup": "All seven reviewed source-only identities have an explicit non-activating alias, calculation-input, or context-only disposition. The legacy business-formations identity canonicalizes to Business Formations Within 4 Quarters while preserving the legacy identity in this disposition registry.",
     "sourceIdentifiedRecordsWithoutBinding": [
       "factor:canonical:business-bankruptcy-filings",
       "factor:canonical:business-failure-bankruptcy-stress",
@@ -2470,14 +2490,13 @@
       "factor:canonical:inventory-sales-ratio",
       "factor:canonical:new-orders",
       "factor:canonical:payroll-contraction-breadth",
-      "factor:canonical:payroll-growth",
       "factor:canonical:producer-input-costs",
       "factor:canonical:producer-input-prices",
       "factor:canonical:productivity-automation",
-      "factor:canonical:regional-employment-growth",
       "factor:canonical:retail-sales",
       "factor:canonical:sales-revenue",
       "factor:canonical:sales-revenue-growth",
+      "factor:canonical:state-level-payroll-growth-breadth",
       "factor:canonical:unit-labor-costs"
     ],
     "sourceOnlyDispositions": [
@@ -2553,10 +2572,10 @@
     "supersededAliasDispositions": [
       {
         "acceptanceEligible": false,
-        "canonicalTarget": "factor:canonical:business-formation",
+        "canonicalTarget": "factor:canonical:business-formations-within-4-quarters",
         "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
         "disposition": "ALIAS_SUPERSEDED",
-        "reason": "The plural source-side identity is a legacy duplicate of the visible singular taxonomy factor; canonicalization must occur before any source binding or acceptance decision.",
+        "reason": "The plural source-side identity is a legacy duplicate of the governed Business Formations Within 4 Quarters factor; canonicalization must occur before any source binding or acceptance decision.",
         "sourceOnlyId": "factor:canonical:business-formations",
         "sourceRole": "PRIMARY_OBSERVATION_SOURCE_CANDIDATE_FOR_CANONICAL_TARGET",
         "uiPlacementEligible": false

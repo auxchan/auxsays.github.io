@@ -25,13 +25,13 @@ const factorSymbols: Readonly<Record<string, StructuralNodeSymbol>> = Object.fre
   "factor:canonical:initial-claims": "claims",
   "factor:canonical:hires-rate": "hire",
   "factor:canonical:job-openings-rate": "openings",
-  "factor:canonical:payroll-growth": "briefcase",
+  "factor:canonical:total-nonfarm-payroll-change": "briefcase",
   "factor:canonical:temporary-help-employment": "people",
   "factor:canonical:average-weekly-hours": "clock",
-  "factor:canonical:business-formation": "factory",
+  "factor:canonical:business-formations-within-4-quarters": "factory",
   "factor:canonical:real-gdp-growth": "ratio",
   "factor:canonical:real-personal-consumption-expenditures-growth": "people",
-  "factor:canonical:regional-employment-growth": "labor-market",
+  "factor:canonical:state-level-payroll-growth-breadth": "labor-market",
 });
 
 function recordCount(series: LayoffsAcceptedSeriesSummary) {

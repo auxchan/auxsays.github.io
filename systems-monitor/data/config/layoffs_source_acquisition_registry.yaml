@@ -336,10 +336,10 @@ factorSourceMap:
   firm-deaths: [census_bds]
   firm-death-shutdown-stress: [census_bds, uscourts_bankruptcy]
   industry-payroll-contraction: [bls_ces]
-  payroll-growth: [bls_ces]
+  payroll-growth: [bls_ces] # stable placement slug; canonical factor is Total Nonfarm Payroll Change / PAYROLL_CHANGE_V1
   temporary-help-employment: [bls_ces]
-  regional-employment-growth: [bls_ces]
-  business-formations: [census_bfs]
+  regional-employment-growth: [bls_ces] # stable placement slug; canonical factor is State-Level Payroll Growth Breadth
+  business-formations: [census_bfs] # stable placement slug; canonical factor is Business Formations Within 4 Quarters
   business-formation-dynamism: [census_bfs, census_bds]
   disaster-operational-shock: [fema_openfema, noaa_storm_events]
   disaster-weather-shock: [noaa_storm_events, fema_openfema]
@@ -408,13 +408,13 @@ hierarchy:
       - [initial-ui-claims, Initial Claims]
       - [hires-rate, Hires Rate]
       - [job-openings-rate, Job Openings Rate]
-      - [payroll-growth, Payroll Growth]
+      - [payroll-growth, Total Nonfarm Payroll Change]
       - [temporary-help-employment, Temporary Help Employment]
       - [average-weekly-hours, Average Weekly Hours]
-      - [business-formations, Business Formations]
+      - [business-formations, Business Formations Within 4 Quarters]
       - [real-output-growth, Real GDP Growth]
       - [consumer-demand, Consumer Demand]
-      - [regional-employment-growth, Regional Employment Growth]
+      - [regional-employment-growth, State-Level Payroll Growth Breadth]
   - id: permanent-job-losers
     label: Permanent Job Losers
     primarySourceCandidates: [bls_cps]

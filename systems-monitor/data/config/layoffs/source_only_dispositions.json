@@ -7,12 +7,12 @@
     {
       "sourceOnlyId": "factor:canonical:business-formations",
       "disposition": "ALIAS_SUPERSEDED",
-      "canonicalTarget": "factor:canonical:business-formation",
+      "canonicalTarget": "factor:canonical:business-formations-within-4-quarters",
       "sourceRole": "PRIMARY_OBSERVATION_SOURCE_CANDIDATE_FOR_CANONICAL_TARGET",
       "uiPlacementEligible": false,
       "acceptanceEligible": false,
       "decisionStatus": "IMPLEMENTED_NON_ACTIVATING",
-      "reason": "The plural source-side identity is a legacy duplicate of the visible singular taxonomy factor; canonicalization must occur before any source binding or acceptance decision."
+      "reason": "The plural source-side identity is a legacy duplicate of the governed Business Formations Within 4 Quarters factor; canonicalization must occur before any source binding or acceptance decision."
     },
     {
       "sourceOnlyId": "factor:canonical:bds-job-destruction",

@@ -22,7 +22,10 @@ const slug = (value: string) => value.toLowerCase().replace(/&/g, "and").replace
 export const layoffsCanonicalAliases: Readonly<Record<string, string>> = Object.freeze({
   "Initial UI Claims": "Initial Claims",
   "Closing Establishment Losses": "Establishment Closures",
-  "Business Formations": "Business Formation",
+  "Payroll Growth": "Total Nonfarm Payroll Change",
+  "Business Formations": "Business Formations Within 4 Quarters",
+  "Business Formation": "Business Formations Within 4 Quarters",
+  "Regional Employment Growth": "State-Level Payroll Growth Breadth",
   "Import / Trade Pressure": "Trade / Import Pressure",
   "Industry Payroll Contraction": "Payroll Contraction Breadth",
   "Establishment Deaths": "Jobs Lost at Establishment Deaths",
@@ -33,6 +36,10 @@ export const layoffsCanonicalAliases: Readonly<Record<string, string>> = Object.
 });
 
 export const layoffsCanonicalFactorMigration: Readonly<Record<string, string>> = Object.freeze({
+  "factor:canonical:payroll-growth": "factor:canonical:total-nonfarm-payroll-change",
+  "factor:canonical:business-formation": "factor:canonical:business-formations-within-4-quarters",
+  "factor:canonical:business-formations": "factor:canonical:business-formations-within-4-quarters",
+  "factor:canonical:regional-employment-growth": "factor:canonical:state-level-payroll-growth-breadth",
   "factor:canonical:industry-payroll-contraction": "factor:canonical:payroll-contraction-breadth",
   "factor:canonical:establishment-deaths": "factor:canonical:jobs-lost-at-establishment-deaths",
   "factor:canonical:business-bankruptcy-stress": "factor:canonical:business-bankruptcy-filings-12-month-total",
@@ -42,6 +49,10 @@ export const layoffsCanonicalFactorMigration: Readonly<Record<string, string>> =
 });
 
 const stablePlacementSlugs: Readonly<Record<string, string>> = Object.freeze({
+  "Total Nonfarm Payroll Change": "payroll-growth",
+  "Business Formations Within 4 Quarters": "business-formations",
+  "Business Formation": "business-formation",
+  "State-Level Payroll Growth Breadth": "regional-employment-growth",
   "Payroll Contraction Breadth": "industry-payroll-contraction",
   "Jobs Lost at Establishment Deaths": "establishment-deaths",
   "Business Bankruptcy Filings, 12-Month Total": "business-bankruptcy-stress",
@@ -96,7 +107,7 @@ export const layoffsBranchTaxonomy: readonly LayoffsBranchGroup[] = Object.freez
     "Continued Claims / Insured Unemployment",
     "The persistence of insured unemployment and the capacity of the labor market to return claimants to work.",
     "U.S. Department of Labor ETA; BLS JOLTS/CES; Census; BEA",
-    ["Initial Claims", "Hires Rate", "Job Openings Rate", "Payroll Growth", "Temporary Help Employment", "Average Weekly Hours", "Business Formations", "Real GDP Growth", "Real Personal Consumption Expenditures Growth", "Regional Employment Growth"]
+    ["Initial Claims", "Hires Rate", "Job Openings Rate", "Total Nonfarm Payroll Change", "Temporary Help Employment", "Average Weekly Hours", "Business Formations Within 4 Quarters", "Real GDP Growth", "Real Personal Consumption Expenditures Growth", "State-Level Payroll Growth Breadth"]
   ),
   group(
     "permanent-job-losers",

@@ -6,10 +6,10 @@ import { layoffsBranchTaxonomy } from "./layoffsBranchTaxonomy";
 export type ContinuedClaimsClass = "A_DIRECT_OBS" | "B_GOVERNED_CALC" | "D_TAXONOMY_OR_SOURCE_PROBLEM";
 export type ContinuedClaimsDisposition =
   | "ACCEPTED_OBSERVATION"
-  | "GOVERNED_CALC_PENDING_TAYLOR_APPROVAL"
-  | "TAXONOMY_OR_SOURCE_SCOPE_REQUIRED"
+  | "GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING"
+  | "SOURCE_IDENTIFIED_PENDING_ACCEPTANCE"
   | "BLOCKED_CREDENTIAL"
-  | "TAXONOMY_OR_METHOD_REQUIRED";
+  ;
 
 export interface ContinuedClaimsParentObservation {
   order: number;

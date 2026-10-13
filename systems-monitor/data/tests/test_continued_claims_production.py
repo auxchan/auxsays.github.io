@@ -94,18 +94,37 @@ class ContinuedClaimsProductionTests(unittest.TestCase):
 
     def test_pending_children_are_truthfully_bounded(self):
         rows = {row["canonicalFactorId"]: row for row in load("continued_claims_production.json")["placements"]}
-        self.assertEqual("GOVERNED_CALC_PENDING_TAYLOR_APPROVAL", rows["factor:canonical:payroll-growth"]["productionDisposition"])
-        self.assertEqual([], rows["factor:canonical:payroll-growth"]["selectors"])
-        self.assertIn("total nonfarm", rows["factor:canonical:payroll-growth"]["recommendation"])
-        self.assertEqual("TAXONOMY_OR_SOURCE_SCOPE_REQUIRED", rows["factor:canonical:business-formation"]["productionDisposition"])
-        self.assertEqual(["BFS:T:BF_BF4Q:SA"], rows["factor:canonical:business-formation"]["selectors"])
-        self.assertIn("Projected Business Formations Within Four Quarters", rows["factor:canonical:business-formation"]["recommendation"])
-        self.assertEqual("TAXONOMY_OR_METHOD_REQUIRED", rows["factor:canonical:regional-employment-growth"]["productionDisposition"])
-        self.assertEqual([], rows["factor:canonical:regional-employment-growth"]["sourceIds"])
-        self.assertEqual([], rows["factor:canonical:regional-employment-growth"]["selectors"])
+        payroll = rows["factor:canonical:total-nonfarm-payroll-change"]
+        self.assertEqual("GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING", payroll["productionDisposition"])
+        self.assertEqual(["CES0000000001", "PAYROLL_CHANGE_V1"], payroll["selectors"])
+        self.assertIsNone(payroll["recommendation"])
+        business = rows["factor:canonical:business-formations-within-4-quarters"]
+        self.assertEqual("A_DIRECT_OBS", business["claimClass"])
+        self.assertEqual("SOURCE_IDENTIFIED_PENDING_ACCEPTANCE", business["productionDisposition"])
+        self.assertEqual(["BFS:T:BF_BF4Q:SA"], business["selectors"])
+        self.assertNotIn("projected", business["blocker"].lower())
+        breadth = rows["factor:canonical:state-level-payroll-growth-breadth"]
+        self.assertEqual("GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING", breadth["productionDisposition"])
+        self.assertEqual(["bls-ces-state-and-metro"], breadth["sourceIds"])
+        self.assertEqual(["CES_STATE_TOTAL_NONFARM_V1", "STATE_PAYROLL_GROWTH_BREADTH_V1"], breadth["selectors"])
         self.assertEqual("BLOCKED_CREDENTIAL", rows["factor:canonical:real-gdp-growth"]["productionDisposition"])
         self.assertEqual("BLOCKED_CREDENTIAL", rows["factor:canonical:real-personal-consumption-expenditures-growth"]["productionDisposition"])
         self.assertTrue(all(row["blocker"] for row in rows.values() if row["productionDisposition"] != "ACCEPTED_OBSERVATION"))
+
+    def test_exact_ten_corrections_do_not_promote_values_or_change_boundaries(self):
+        production = load("continued_claims_production.json")
+        self.assertEqual(
+            [
+                "Initial Claims", "Hires Rate", "Job Openings Rate", "Total Nonfarm Payroll Change",
+                "Temporary Help Employment", "Average Weekly Hours", "Business Formations Within 4 Quarters",
+                "Real GDP Growth", "Real Personal Consumption Expenditures Growth", "State-Level Payroll Growth Breadth",
+            ],
+            [row["label"] for row in production["placements"]],
+        )
+        self.assertEqual(0, production["forecastVintageObservations"])
+        self.assertEqual(0, production["acceptedStructuralRelationships"])
+        self.assertEqual(0, production["unexplainedRendererFixtures"])
+        self.assertEqual("PENDING", production["humanQa"])
 
 
 if __name__ == "__main__":

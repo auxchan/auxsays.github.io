@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "total-nonfarm-payroll-change-methodology-1.0.0",
+  "authority": "TAYLOR_CONTINUED_CLAIMS_SEMANTIC_CORRECTIONS_2026_10_13",
+  "status": "METHOD_APPROVED_INPUT_HISTORY_PENDING",
+  "canonicalFactorId": "factor:canonical:total-nonfarm-payroll-change",
+  "claimClass": "B_GOVERNED_CALC",
+  "methodologyVersion": "PAYROLL_CHANGE_V1",
+  "interpretation": "Monthly change in seasonally adjusted total nonfarm payroll employment, expressed in thousands of jobs.",
+  "formula": "delta_t = E_t - E_t-1",
+  "unit": "thousands of jobs",
+  "inputContract": {
+    "publisher": "U.S. Bureau of Labor Statistics",
+    "program": "Current Employment Statistics",
+    "seriesId": "CES0000000001",
+    "seriesTitle": "All employees, thousands, total nonfarm, seasonally adjusted",
+    "canonicalSeriesId": "US_LABOR_TOTAL_NONFARM_PAYROLLS",
+    "geography": "US_NATIONAL",
+    "measure": "ALL_EMPLOYEES_THOUSANDS",
+    "sourceUnit": "thousands of persons",
+    "seasonalAdjustment": "SEASONALLY_ADJUSTED",
+    "frequency": "MONTHLY",
+    "comparison": "PREVIOUS_COMPATIBLE_MONTH",
+    "requiredAcceptedInputs": 2
+  },
+  "calculationRules": {
+    "percentChangeAllowed": false,
+    "annualizationAllowed": false,
+    "smoothingAllowed": false,
+    "interpolationAllowed": false,
+    "carryForwardAllowed": false,
+    "incompatibleOrMissingInput": "SUPPRESS_CALCULATION_EXPLICIT_UNAVAILABLE_STATE"
+  },
+  "productionState": {
+    "acceptedInputSeries": 0,
+    "acceptedInputHistoryDepth": 0,
+    "calculatedHistoryDepth": 0,
+    "latestAcceptedValue": null,
+    "latestAcceptedPeriod": null,
+    "blocker": "No accepted compatible CES0000000001 t and t-1 input pair exists in the Continued Claims Level-4 production history."
+  },
+  "calculationOutputContract": {
+    "historyClass": "CURRENT_REVISED_HISTORY",
+    "forecastVintageEligible": false,
+    "requiredProvenance": ["methodologyVersion", "CES0000000001", "current input observation identity", "prior input observation identity", "input periods", "input revision states", "input values"],
+    "revisionPolicy": "Recalculate an affected period when either accepted input is revised and append a new immutable calculation candidate; never overwrite an earlier calculation identity."
+  },
+  "publicLanguage": {
+    "template": "Total nonfarm payroll employment changed by X thousand jobs from the previous month.",
+    "prohibitedInterpretations": ["percent growth", "annualized change", "smoothed change", "forecast", "causal effect", "material impact"]
+  }
+}

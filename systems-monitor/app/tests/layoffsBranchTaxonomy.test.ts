@@ -108,16 +108,21 @@ describe("Layoffs & Job Destruction canonical hierarchy", () => {
     });
   });
 
-  it("canonicalizes the legacy plural business-formations source identity without adding a source-only node", () => {
+  it("canonicalizes legacy business-formation identities onto the exact BF_BF4Q factor", () => {
     expect(Object.keys(layoffsFactorSourceStates)).toHaveLength(74);
-    expect(layoffsFactorSourceState("factor:canonical:business-formations")).toBeUndefined();
-    expect(layoffsFactorSourceState("factor:canonical:business-formation")?.series).toEqual(
+    expect(layoffsFactorSourceState("factor:canonical:business-formations")).toBe(layoffsFactorSourceState("factor:canonical:business-formations-within-4-quarters"));
+    expect(layoffsFactorSourceState("factor:canonical:business-formation")).toBe(layoffsFactorSourceState("factor:canonical:business-formations-within-4-quarters"));
+    expect(layoffsFactorSourceState("factor:canonical:business-formations-within-4-quarters")?.series).toEqual(
       expect.arrayContaining([expect.objectContaining({ sourceId: "census-bfs", seriesId: "BFS:T:BF_BF4Q:SA" })])
     );
   });
 
-  it("resolves all six governed canonical renames without changing frozen placement IDs", () => {
+  it("resolves all governed canonical renames without changing frozen placement IDs", () => {
     const migrations = {
+      "factor:canonical:payroll-growth": "factor:canonical:total-nonfarm-payroll-change",
+      "factor:canonical:business-formation": "factor:canonical:business-formations-within-4-quarters",
+      "factor:canonical:business-formations": "factor:canonical:business-formations-within-4-quarters",
+      "factor:canonical:regional-employment-growth": "factor:canonical:state-level-payroll-growth-breadth",
       "factor:canonical:industry-payroll-contraction": "factor:canonical:payroll-contraction-breadth",
       "factor:canonical:establishment-deaths": "factor:canonical:jobs-lost-at-establishment-deaths",
       "factor:canonical:business-bankruptcy-stress": "factor:canonical:business-bankruptcy-filings-12-month-total",
@@ -138,6 +143,9 @@ describe("Layoffs & Job Destruction canonical hierarchy", () => {
     expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:real-output-growth"].canonicalFactorId).toBe("factor:canonical:real-gdp-growth");
     expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:consumer-demand"].canonicalFactorId).toBe("factor:canonical:real-personal-consumption-expenditures-growth");
     expect(model.placements["placement:layoffs-job-destruction:initial-ui-claims:disaster-operational-shock"].canonicalFactorId).toBe("factor:canonical:fema-disaster-declaration");
+    expect(model.placements["placement:layoffs-job-destruction:continued-claims-insured-unemployment:payroll-growth"].canonicalFactorId).toBe("factor:canonical:total-nonfarm-payroll-change");
+    expect(model.placements["placement:layoffs-job-destruction:continued-claims-insured-unemployment:business-formations"].canonicalFactorId).toBe("factor:canonical:business-formations-within-4-quarters");
+    expect(model.placements["placement:layoffs-job-destruction:continued-claims-insured-unemployment:regional-employment-growth"].canonicalFactorId).toBe("factor:canonical:state-level-payroll-growth-breadth");
     expect(model.topologyFingerprint).toBe("fnv1a32:88684cdb");
   });
 });

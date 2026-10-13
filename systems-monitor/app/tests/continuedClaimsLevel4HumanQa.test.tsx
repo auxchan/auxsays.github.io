@@ -8,13 +8,13 @@ const exactTen = [
   "Initial Claims",
   "Hires Rate",
   "Job Openings Rate",
-  "Payroll Growth",
+  "Total Nonfarm Payroll Change",
   "Temporary Help Employment",
   "Average Weekly Hours",
-  "Business Formations",
+  "Business Formations Within 4 Quarters",
   "Real GDP Growth",
   "Real Personal Consumption Expenditures Growth",
-  "Regional Employment Growth",
+  "State-Level Payroll Growth Breadth",
 ] as const;
 
 describe("Continued Claims Level-4 Human QA surface", () => {
@@ -34,6 +34,9 @@ describe("Continued Claims Level-4 Human QA surface", () => {
     const { container } = render(<ContinuedClaimsLevel4QaView />);
     expect(container.querySelectorAll(".sm-l4qa-factor")).toHaveLength(10);
     exactTen.forEach((label) => expect(screen.getByRole("heading", { name: label })).toBeTruthy());
+    expect(screen.queryByRole("heading", { name: "Payroll Growth" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Regional Employment Growth" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Business Formations" })).toBeNull();
     expect(container.querySelectorAll('[data-disposition="ACCEPTED_OBSERVATION"]')).toHaveLength(5);
     expect(container.querySelector(".sm-l4qa")?.getAttribute("data-human-qa")).toBe("PENDING");
     expect(container.querySelector(".sm-l4qa")?.getAttribute("data-unexplained-renderer-fixtures")).toBe("0");
@@ -47,17 +50,17 @@ describe("Continued Claims Level-4 Human QA surface", () => {
 
   it("makes every unresolved child state and decision explicit", () => {
     render(<ContinuedClaimsLevel4QaView />);
-    const payroll = screen.getByRole("heading", { name: "Payroll Growth" }).closest("section")!;
-    expect(within(payroll).getAllByText(/GOVERNED CALC PENDING TAYLOR APPROVAL/).length).toBeGreaterThan(0);
-    expect(within(payroll).getByText(/Taylor should choose total nonfarm payroll employment/)).toBeTruthy();
+    const payroll = screen.getByRole("heading", { name: "Total Nonfarm Payroll Change" }).closest("section")!;
+    expect(within(payroll).getAllByText(/GOVERNED CALC METHOD APPROVED INPUT HISTORY PENDING/).length).toBeGreaterThan(0);
+    expect(within(payroll).getByText(/no accepted compatible CES0000000001 input pair/i)).toBeTruthy();
 
-    const business = screen.getByRole("heading", { name: "Business Formations" }).closest("section")!;
-    expect(within(business).getAllByText(/TAXONOMY OR SOURCE SCOPE REQUIRED/).length).toBeGreaterThan(0);
-    expect(within(business).getByText(/Projected Business Formations Within Four Quarters/)).toBeTruthy();
+    const business = screen.getByRole("heading", { name: "Business Formations Within 4 Quarters" }).closest("section")!;
+    expect(within(business).getAllByText(/SOURCE IDENTIFIED PENDING ACCEPTANCE/).length).toBeGreaterThan(0);
+    expect(within(business).getByText(/BF_BF4Q is resolved as the direct/i)).toBeTruthy();
 
-    const regional = screen.getByRole("heading", { name: "Regional Employment Growth" }).closest("section")!;
-    expect(within(regional).getAllByText(/TAXONOMY OR METHOD REQUIRED/).length).toBeGreaterThan(0);
-    expect(within(regional).getByText(/choose the geography/)).toBeTruthy();
+    const regional = screen.getByRole("heading", { name: "State-Level Payroll Growth Breadth" }).closest("section")!;
+    expect(within(regional).getAllByText(/GOVERNED CALC METHOD APPROVED INPUT HISTORY PENDING/).length).toBeGreaterThan(0);
+    expect(within(regional).getByText(/fixed 50-state-plus-DC method/i)).toBeTruthy();
 
     const gdp = screen.getByRole("heading", { name: "Real GDP Growth" }).closest("section")!;
     expect(within(gdp).getAllByText(/BLOCKED CREDENTIAL/).length).toBeGreaterThan(0);

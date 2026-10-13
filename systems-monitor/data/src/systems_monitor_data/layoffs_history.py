@@ -69,7 +69,11 @@ CANONICAL_ALIASES = {
     "bds-firm-deaths": "firm-deaths",
     "bds-firm-death-establishments": "firm-age-size-vulnerability",
     "bds-firm-death-employment": "firm-death-shutdown-stress",
-    "business-formations-four-quarters": "business-formation",
+    "payroll-growth": "total-nonfarm-payroll-change",
+    "business-formation": "business-formations-within-4-quarters",
+    "business-formations-four-quarters": "business-formations-within-4-quarters",
+    "business-formations": "business-formations-within-4-quarters",
+    "regional-employment-growth": "state-level-payroll-growth-breadth",
 }
 
 

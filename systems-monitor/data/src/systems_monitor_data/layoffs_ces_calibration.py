@@ -28,6 +28,24 @@ def load_payroll_breadth_calibration(path: Path) -> dict[str, Any]:
     return document
 
 
+def load_state_payroll_growth_breadth_calibration(path: Path) -> dict[str, Any]:
+    document = json.loads(path.read_text(encoding="utf-8"))
+    if document.get("schemaVersion") != "state-payroll-growth-breadth-calibration-1.0.0":
+        raise ValueError("unsupported state payroll breadth calibration schema")
+    if document.get("status") != "CALIBRATION_COMPLETE_METHOD_APPROVED_INPUT_HISTORY_PENDING":
+        raise ValueError("state payroll breadth calibration must remain separate from production history")
+    if document.get("methodologyVersion") != "STATE_PAYROLL_GROWTH_BREADTH_V1" or document.get("universeVersion") != "CES_STATE_TOTAL_NONFARM_V1":
+        raise ValueError("state payroll breadth calibration versions are incorrect")
+    selectors = document.get("selectors", [])
+    if len(selectors) != 51 or len(set(selectors)) != 51:
+        raise ValueError("state payroll breadth calibration requires 51 exact selectors")
+    if document.get("coverage", {}).get("complete51Of51Periods") != 120:
+        raise ValueError("state payroll breadth calibration does not prove the recorded 51-of-51 window")
+    if document.get("calibrationHistoryAcceptedForProduction") is not False or document.get("publicationStatus") != "CALIBRATION_ONLY_NOT_ACCEPTED_NOT_PUBLISHABLE":
+        raise ValueError("state payroll calibration rows cannot be production history")
+    return document
+
+
 def simulate_coverage(documents: Iterable[dict[str, Any]], selectors: Iterable[str]) -> dict[str, Any]:
     expected = tuple(selectors)
     by_series: dict[str, set[str]] = {}

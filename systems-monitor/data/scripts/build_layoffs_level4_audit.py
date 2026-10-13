@@ -22,8 +22,11 @@ ALIASES = {
     "bds-firm-deaths": "firm-deaths",
     "bds-firm-death-establishments": "firm-age-size-vulnerability",
     "bds-firm-death-employment": "firm-death-shutdown-stress",
-    "business-formations-four-quarters": "business-formation",
-    "business-formations": "business-formation",
+    "payroll-growth": "total-nonfarm-payroll-change",
+    "business-formation": "business-formations-within-4-quarters",
+    "business-formations-four-quarters": "business-formations-within-4-quarters",
+    "business-formations": "business-formations-within-4-quarters",
+    "regional-employment-growth": "state-level-payroll-growth-breadth",
     "industry-payroll-contraction": "payroll-contraction-breadth",
     "establishment-deaths": "jobs-lost-at-establishment-deaths",
     "establishment-death-job-losses": "jobs-lost-at-establishment-deaths",
@@ -120,7 +123,12 @@ def build_audit(config_root: Path) -> dict[str, Any]:
                     source_id=source["source_id"], selector=row["source_series_id"], role=role,
                     status="EXACT_SELECTOR", exact=True, origin="sources_census.json",
                 ))
-                _promote(record, "BLOCKED")
+                _promote(
+                    record,
+                    "SOURCE_IDENTIFIED"
+                    if factor_id == "factor:canonical:business-formations-within-4-quarters"
+                    else "BLOCKED",
+                )
 
     for source in context["sources"]:
         for row in source.get("series", []):
@@ -226,7 +234,7 @@ def build_audit(config_root: Path) -> dict[str, Any]:
             "sourceOnlyDispositions": [disposition_by_id[factor_id] for factor_id in orphan_ids],
             "supersededAliasDispositions": [disposition_by_id[factor_id] for factor_id in sorted(superseded_alias_ids)],
             "allReviewedDispositions": [disposition_by_id[factor_id] for factor_id in sorted(disposition_by_id)],
-            "requiredCleanup": "All seven reviewed source-only identities have an explicit non-activating alias, calculation-input, or context-only disposition. The plural business-formations binding canonicalizes to the visible singular factor while preserving the legacy identity in this disposition registry."
+            "requiredCleanup": "All seven reviewed source-only identities have an explicit non-activating alias, calculation-input, or context-only disposition. The legacy business-formations identity canonicalizes to Business Formations Within 4 Quarters while preserving the legacy identity in this disposition registry."
         },
         "canonicalFactors": canonical_rows,
         "factorSourceStateRecords": records,
@@ -352,7 +360,7 @@ def render_markdown(audit: dict[str, Any]) -> str:
     )
     lines += [
         "",
-        "`business-formations` is canonicalized to the singular factor while its legacy identity remains recorded. Three BED component records are calculation-input-only. BED gross gains and the two noninterchangeable Census BDS identities remain context-only. Courts F-2 is narrowed to one exact national all-business selector. None of these cleanup records becomes a new placement or accepted observation.",
+        "`business-formations` is canonicalized to Business Formations Within 4 Quarters while its legacy identity remains recorded. Three BED component records are calculation-input-only. BED gross gains and the two noninterchangeable Census BDS identities remain context-only. Courts F-2 is narrowed to one exact national all-business selector. None of these cleanup records becomes a new placement or accepted observation.",
         "",
         "## Promotion boundary",
         "",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "continued-claims-production-1.0.0",
   "authority": "TAYLOR_CONTINUED_CLAIMS_EXACT_TEN_2026_10_12",
-  "startingCheckpoint": "931ad59d243a3e2d460865b0f254c7f22d07637d",
+  "startingCheckpoint": "2e4176c5be6153af8cde0cb749d53d9b677bd0ec",
   "parentPlacementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment",
   "parentLabel": "Continued Claims / Insured Unemployment",
   "parentIdentityResolution": "TWO_SEPARATELY_LABELED_DIRECT_OBSERVATIONS",
@@ -99,16 +99,16 @@
     {
       "order": 4,
       "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:payroll-growth",
-      "label": "Payroll Growth",
-      "canonicalFactorId": "factor:canonical:payroll-growth",
+      "label": "Total Nonfarm Payroll Change",
+      "canonicalFactorId": "factor:canonical:total-nonfarm-payroll-change",
       "claimClass": "B_GOVERNED_CALC",
-      "productionDisposition": "GOVERNED_CALC_PENDING_TAYLOR_APPROVAL",
+      "productionDisposition": "GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING",
       "sourceIds": ["bls-ces"],
-      "selectors": [],
-      "acceptedHistoryState": "NONE_METHOD_PENDING",
+      "selectors": ["CES0000000001", "PAYROLL_CHANGE_V1"],
+      "acceptedHistoryState": "METHOD_APPROVED_INPUT_HISTORY_PENDING",
       "expectedAcceptedHistoryRecords": 0,
-      "blocker": "The taxonomy does not govern whether Payroll Growth means an official change series or a deterministic transformation, which payroll universe applies, or which interval and unit must be published.",
-      "recommendation": "Taylor should choose total nonfarm payroll employment and authorize either an exact official BLS change series or month-over-month percent change over accepted seasonally adjusted CES levels, including revision propagation and missing-data rules."
+      "blocker": "PAYROLL_CHANGE_V1 is approved, but no accepted compatible CES0000000001 input pair for t and t-1 exists in this Level-4 production history. No value is published.",
+      "recommendation": null
     },
     {
       "order": 5,
@@ -141,16 +141,16 @@
     {
       "order": 7,
       "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:business-formations",
-      "label": "Business Formations",
-      "canonicalFactorId": "factor:canonical:business-formation",
-      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
-      "productionDisposition": "TAXONOMY_OR_SOURCE_SCOPE_REQUIRED",
+      "label": "Business Formations Within 4 Quarters",
+      "canonicalFactorId": "factor:canonical:business-formations-within-4-quarters",
+      "claimClass": "A_DIRECT_OBS",
+      "productionDisposition": "SOURCE_IDENTIFIED_PENDING_ACCEPTANCE",
       "sourceIds": ["census-bfs"],
       "selectors": ["BFS:T:BF_BF4Q:SA"],
       "acceptedHistoryState": "NONE",
       "expectedAcceptedHistoryRecords": 0,
-      "blocker": "The broad taxonomy label does not specify which Census BFS concept is intended, and source rights/history acceptance remains pending.",
-      "recommendation": "If the existing exact selector is intended, narrow the governed label to Projected Business Formations Within Four Quarters before accepting history; otherwise choose the intended BFS measure explicitly."
+      "blocker": "BF_BF4Q is resolved as the direct Business Formations Within 4 Quarters series; normal Census rights, acquisition, and history acceptance remain pending.",
+      "recommendation": null
     },
     {
       "order": 8,
@@ -183,16 +183,16 @@
     {
       "order": 10,
       "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:regional-employment-growth",
-      "label": "Regional Employment Growth",
-      "canonicalFactorId": "factor:canonical:regional-employment-growth",
-      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
-      "productionDisposition": "TAXONOMY_OR_METHOD_REQUIRED",
-      "sourceIds": [],
-      "selectors": [],
-      "acceptedHistoryState": "NONE",
+      "label": "State-Level Payroll Growth Breadth",
+      "canonicalFactorId": "factor:canonical:state-level-payroll-growth-breadth",
+      "claimClass": "B_GOVERNED_CALC",
+      "productionDisposition": "GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING",
+      "sourceIds": ["bls-ces-state-and-metro"],
+      "selectors": ["CES_STATE_TOTAL_NONFARM_V1", "STATE_PAYROLL_GROWTH_BREADTH_V1"],
+      "acceptedHistoryState": "METHOD_APPROVED_INPUT_HISTORY_PENDING",
       "expectedAcceptedHistoryRecords": 0,
-      "blocker": "No governed geography, employment measure, seasonal-adjustment policy, calculation interval, or aggregation method exists.",
-      "recommendation": "Taylor must choose the geography (for example states, metropolitan areas, Census divisions, or Census regions), the official BLS employment series, the interval, and any aggregation or weighting rule."
+      "blocker": "The fixed 50-state-plus-DC method and exact series universe are approved and calibrated, but accepted 51-of-51 production input history for compatible t and t-1 periods is pending. No value is published.",
+      "recommendation": null
     }
   ]
 }
