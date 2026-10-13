@@ -51579,7 +51579,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x28eez-after-updated-to-davinci-resolve-21-its-k
   product_id: blackmagic-davinci
   update_version: '21'
@@ -51604,7 +51603,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -51653,7 +51651,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -51702,7 +51699,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -51751,7 +51747,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -51800,7 +51795,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -51848,4 +51842,25 @@ evidence:
   platform: Windows
   severity: ''
   sentiment: ''
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14026
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14026
+  parent_title: 'Bug Report: Crash when clicking Menu Bar / System Tray icon on macOS 27.0.1 (Apple Silicon)'
+  report_title: 'Bug Report: Crash when clicking Menu Bar / System Tray icon on macOS 27.0.1 (Apple Silicon)'
+  report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/uOB2n0YG6ucor5BE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/1wTiK'
+  captured_at: '2026-10-13T02:03:22Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
   source_weight: 1
