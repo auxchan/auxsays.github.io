@@ -2212,6 +2212,67 @@ reason. Related: a Liquid `comment` block still PARSES tags, so a literal tag wr
 prose is a SyntaxError that takes the whole template down -- S2 exists because this repair's own
 first draft did exactly that to the homepage.
 
+### AUX-031 — the deploy gate and pull-request CI could disagree
+
+- **Status** Resolved · **Area** CI governance · **Severity** High
+- **First seen** 2026-10-13 · **Resolved** 2026-10-13
+
+AUX-030 passed governed CI on its exact head, merged clean, and then **failed the Pages build**.
+The site did not deploy, `main` sat red at the deploy gate, and the verified repair was not in
+front of a single reader.
+
+The failing check was `file_size_pill_value_guard_missing`, from
+`qa_patch_records.py --publish-strict`. That script runs in `pages.yml` BEFORE `jekyll build`, and
+it is deliberately absent from `ci-integrity.yml`: it writes the gitignored
+`_data/qa_status.json`, and that workflow is read-only by construction. The reasoning for the
+omission was sound and is unchanged. What was wrong was the sentence attached to it -- "its
+invariants are covered by `test_qa_patch_records.py`" -- which held for the record-level predicates
+and **not** for the ones that read the shipped layout.
+
+So the two gates could disagree, and a template edit was exactly the shape of change that made them
+disagree. Pull-request CI exercises Liquid through the gem; the deploy additionally greps the
+layout and then runs a full Jekyll build. Nothing at pull-request time could see the second.
+
+#### The check was enforcing the defect it described
+
+Its message reads "The top file-size pill must render only when a stripped real value exists". Its
+implementation demanded the literal string `{% if file_size_pill_value != blank %}` -- a comparison
+that, as AUX-030 established, never gates in this stack. The guard it required was the guard that
+let the pill render its label over an empty value on 1,274 records. Repairing the layout to a real
+comparison is what tripped it.
+
+It now requires the comparison against `''` and **rejects** the inert spelling under a second code,
+`file_size_pill_value_guard_inert`, so the old form cannot come back quietly.
+
+#### Closing the class, not the instance
+
+`scan_update_layout_public_copy()` is the only function in the publication gate that reads a
+template (`UPDATE_LAYOUT_PATH` is its only layout path), and it is pure: it reads and returns, and
+writes nothing. `test_qa_patch_records.py` now calls it directly against the real shipped layout.
+That keeps `ci-integrity.yml` read-only, runs the *real* deploy predicate rather than a copy of it
+at pull-request time, and makes the comment's claim true. Measured both ways: with the pill guard
+reverted the governed suite fails 31/32 **and** `--publish-strict` exits 1, so the two gates now
+agree by construction.
+
+The non-vacuity mutation deletes the guarded token rather than respelling it. A respelling mutation
+silently becomes a no-op when the layout already carries the broken spelling, and then the check
+fails for the wrong reason on top of the real failure -- noise a maintainer has to decode before
+finding the actual problem.
+
+**Reopen only if** a check is added to `qa_patch_records.py` that reads a template other than
+`aux-update.html`, or reads it other than through `scan_update_layout_public_copy()`, without a
+matching assertion in `test_qa_patch_records.py`.
+
+**Deliberately not done.** A full non-deploying `jekyll build` in pull-request CI would also have
+caught this, and would additionally catch plugin and Liquid-integration errors that neither gate
+sees today. It is a larger change -- it needs the Ruby toolchain, the bundle, and a build budget in
+a workflow that currently runs in 45 minutes with no Ruby install beyond a single gem -- and it is
+recorded as program backlog rather than smuggled into a hotfix.
+
+**Cross-reference** AUX-013 is why merging is a script rather than a branch rule. The lesson that
+generalises: a comment asserting that something else covers a gap is a claim, and an unverified
+claim in a governance file is the most expensive kind -- it stops the next engineer from looking.
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.
