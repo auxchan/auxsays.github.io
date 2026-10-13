@@ -37,8 +37,8 @@ layout: aux-base
           <a href="{{ item.url | relative_url }}">
             <span class="patch-version-landing__build-id">Build {{ item.target_build }}</span>
             <span class="patch-version-landing__build-meta">
-              {% if item.update_published_at != blank %}{{ item.update_published_at | date: "%Y-%m-%d" }}{% endif %}
-              {% if item.target_channel != blank %} &middot; {{ item.target_channel }}{% endif %}
+              {% assign ipub = item.update_published_at | default: '' | strip %}{% if ipub != '' %}{{ item.update_published_at | date: "%Y-%m-%d" }}{% endif %}
+              {% assign ichan = item.target_channel | default: '' | strip %}{% if ichan != '' %} &middot; {{ item.target_channel }}{% endif %}
             </span>
           </a>
         </li>

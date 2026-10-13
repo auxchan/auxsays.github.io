@@ -235,6 +235,18 @@ auxsays/scripts/tests/test_orchestration_r1.py = 55
 # still reports all 64 checks, failing R1 and everything that depends on the render.
 auxsays/scripts/tests/test_patch_heading_contrast.py = 111
 auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
+# Presence guards. 91 `x != blank` / `x == blank` tests across eight layouts and includes were
+# ALL inert: `blank` needs ActiveSupport's `blank?` and Jekyll does not load it, so every such
+# guard passed unconditionally and every `== blank` branch was dead. That shipped 1,218 empty
+# <dd> values, 1,095 empty-href download links, checksum instructions over zero hashes on 1,258
+# records, and a homepage whose article thumbnails could never resolve under ANY front-matter
+# shape. K1-K3 pin the mechanism itself, so the S1 ban stays grounded in measurement rather
+# than folklore. Needs ruby + liquid like the hierarchy suite; without them L1 fails and the
+# render checks fail with it instead of skipping. The V checks cover the second way content
+# went missing: `.reveal-up` defaulted to opacity 0 with an observer threshold of 0.08, which
+# an element taller than ~12 viewports can never satisfy, so the Adobe company page's 410-row
+# history stayed invisible on desktop permanently.
+auxsays/scripts/tests/test_template_presence_guards.py = 45
 auxsays/scripts/tests/test_patch_ingest_record_limit.py = 78
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54

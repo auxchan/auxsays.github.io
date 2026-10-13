@@ -81,8 +81,26 @@ def run() -> int:
           "m_run_s <= mon_now_s" in INCLUDE)
     check("usable row with missing/future timestamp flags invalid telemetry (fail closed)",
           "mon_has_invalid_ts_usable = true" in INCLUDE)
+    # This asserted its subject by grepping for one exact right-hand side, which proves only that
+    # a substring exists SOMEWHERE -- it would pass with the assignment hoisted out of the branch,
+    # and it broke when AUX-030 renamed the value to a `| default: '' | strip` copy without moving
+    # anything. Re-aimed at the placement the label actually claims: exactly one non-initialising
+    # assignment, sitting after the `m_ts_ok` gate, on a line that also carries the newest-wins
+    # comparison. Either spelling of the source value is accepted, so a rename cannot fail this
+    # while a semantic change still does.
+    _latest_assigns = [i for i in range(len(INCLUDE))
+                       if INCLUDE.startswith("assign mon_latest_raw = ", i)]
+    _init = [i for i in _latest_assigns if INCLUDE.startswith("assign mon_latest_raw = '' ", i)
+             or INCLUDE[i:i + 30].rstrip().endswith("= ''")]
+    _real = [i for i in _latest_assigns if i not in _init]
+    _gate = INCLUDE.find("{%- if m_ts_ok -%}")
+    _line_of = lambda i: INCLUDE[INCLUDE.rfind(chr(10), 0, i) + 1:INCLUDE.find(chr(10), i)]
     check("latest evidence run tracked only inside the valid-timestamp branch",
-          "mon_latest_raw = m.last_run" in INCLUDE and "mon_latest_s = m_run_s" in INCLUDE)
+          len(_real) == 1 and _gate != -1 and _real[0] > _gate
+          and "m_run_s > mon_latest_s" in _line_of(_real[0])
+          and "mon_latest_s = m_run_s" in _line_of(_real[0]),
+          f"{len(_real)} real assignment(s); gate at {_gate}, assignment at "
+          f"{_real[0] if _real else None}")
 
     # --- degraded_present covers every degraded signal ---------------------------
     for tok in ["partial", "blocked", "broken", "stale", "low_confidence", "manual_review_needed"]:

@@ -140,6 +140,9 @@ def pre_fix_template() -> str:
     Non-vacuity is proven against a synthetic pre-fix template rather than `git show main:...`,
     because the moment this merges main IS the fixed template and such a proof silently inverts.
 
+    The anchor below is only a stable insertion POINT. AUX-030 respelled it from `!= blank` to
+    `!= ''`; if it moves again, this raises rather than letting every C6 control pass vacuously.
+
     The two inserted regions are removed SEPARATELY: the verdict-box one wraps a nested
     {% if %}, so a single non-greedy pattern would stop at the INNER {% endif %} and leave the
     outer one dangling. Liquid then refuses to parse, the render returns None, and every C6
@@ -160,7 +163,7 @@ def pre_fix_template() -> str:
         raise AssertionError("pre-fix reconstruction failed: the fix is still present, so every "
                              "C6 control would pass vacuously")
     # restore the hard cut-off that produced the cliff
-    anchor = "{% if record_note_text != blank %}"
+    anchor = "{% if record_note_text != '' %}"
     if anchor not in text:
         raise AssertionError("pre-fix reconstruction lost its anchor; C6 would go vacuous")
     text = text.replace(
@@ -296,21 +299,32 @@ def run() -> int:
           re.search(r"consensus_established\s*=\s*false", LAYOUT) is not None
           and "{% if evidence_state_class == 'live' %}{% assign consensus_established = true %}"
               in LAYOUT)
-    # `blank` is a NO-OP in this stack: `!= blank` is ALWAYS true. The layout carries pre-existing
-    # guards written that way; they are deliberately NOT repaired here, because doing so changes the
-    # rendered markup of ~936 records and has nothing to do with the low-sample boundary. What IS
-    # locked is that the additions made here never introduce another one.
+    # `blank` is a NO-OP in this stack: `!= blank` is ALWAYS true. This sprint deliberately left
+    # the layout's pre-existing guards alone, because repairing them changes the rendered markup of
+    # ~936 records and has nothing to do with the low-sample boundary. AUX-030 has since repaired
+    # all 91 of them and `test_template_presence_guards.py` S1 now bans the pattern site-wide, so
+    # the deferral these two checks pinned is closed. They keep their original job: the consensus
+    # additions must not introduce a presence guard of their own, and must not have disturbed a
+    # pre-existing one. C5.3b therefore counts the REPAIRED spelling, and does not go vacuous now
+    # that the no-op spelling is extinct. Measured scope, because the old label claimed more than
+    # the check does: the count delta catches a guard placed ANYWHERE in the inserted regions,
+    # including lines C5.3's per-line scan does not match (verified -- a guard added inside the
+    # sample-note paragraph fails it 60 vs 61). It cannot detect an edit to an unrelated
+    # pre-existing guard, because both sides derive from the same LAYOUT; the anchor assertion in
+    # pre_fix_template() is what covers that, loudly.
     added = [line for line in LAYOUT.splitlines()
              if ("consensus_established" in line or "consensus-sample-note" in line
                  or "evidence_strength =" in line)]
-    check("C5.3 the additions introduce no new `!= blank` no-op guard",
-          added and all("!= blank" not in line for line in added), str(len(added)))
+    check("C5.3 the additions introduce no no-op `blank` presence guard",
+          bool(added) and all("blank" not in line for line in added), str(len(added)))
     # Compared against the reconstruction rather than a hardcoded number or `git show main:`: the
     # reconstruction removes ONLY the additions, so an equal count proves no pre-existing guard was
     # touched, and it stays true after this merges.
-    check("C5.3b pre-existing blank guards are left exactly as they were",
-          pre_fix_template().count("!= blank") == LAYOUT.count("!= blank"),
-          f"{pre_fix_template().count('!= blank')} vs {LAYOUT.count('!= blank')}")
+    check("C5.3b the inserted regions add no presence guard anywhere, not just on named lines",
+          pre_fix_template().count("!= ''") == LAYOUT.count("!= ''")
+          and LAYOUT.count("!= ''") > 20,
+          f"{pre_fix_template().count(chr(33) + chr(61) + chr(32) + chr(39) * 2)} vs "
+          f"{LAYOUT.count(chr(33) + chr(61) + chr(32) + chr(39) * 2)}")
     check("C5.4b the qualifier reuses a class that is already styled, not a bare unstyled <p>",
           'class="consensus-chart-meta consensus-sample-note"' in LAYOUT,
           "an unstyled paragraph would ship at default UA size inside a grid container")

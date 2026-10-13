@@ -48,7 +48,7 @@
 {%- assign mon_max_age_s = mon_max_age_days | times: 86400 -%}
 {%- assign mon_now_s = site.time | date: '%s' | plus: 0 -%}
 {%- assign mon_pub_s = 0 -%}
-{%- if include.published_at != blank -%}{%- assign mon_pub_s = include.published_at | date: '%s' | plus: 0 -%}{%- endif -%}
+{%- assign mon_pub_raw = include.published_at | default: '' | strip -%}{%- if mon_pub_raw != '' -%}{%- assign mon_pub_s = mon_pub_raw | date: '%s' | plus: 0 -%}{%- endif -%}
 {%- assign mon_total = 0 -%}
 {%- assign mon_disabled = 0 -%}
 {%- assign mon_healthy = 0 -%}
@@ -78,14 +78,14 @@
 {%- if m_status == 'partial' or m_status == 'blocked' or m_status == 'broken' or m_status == 'stale' or m_status == 'low_confidence' or m_status == 'manual_review_needed' -%}{%- assign mon_has_degraded_status = true -%}{%- endif -%}
 {%- assign m_ts_ok = false -%}
 {%- assign m_run_s = 0 -%}
-{%- if m.last_run != blank -%}
-{%- assign m_run_s = m.last_run | date: '%s' | plus: 0 -%}
+{%- assign m_run_raw = m.last_run | default: '' | strip -%}{%- if m_run_raw != '' -%}
+{%- assign m_run_s = m_run_raw | date: '%s' | plus: 0 -%}
 {%- if m_run_s <= mon_now_s -%}{%- assign m_ts_ok = true -%}{%- endif -%}
 {%- endif -%}
 {%- unless m_is_disabled -%}
 {%- if m_ts_ok -%}
 {%- assign mon_has_valid_usable_ts = true -%}
-{%- if m_run_s > mon_latest_s -%}{%- assign mon_latest_s = m_run_s -%}{%- assign mon_latest_raw = m.last_run -%}{%- endif -%}
+{%- if m_run_s > mon_latest_s -%}{%- assign mon_latest_s = m_run_s -%}{%- assign mon_latest_raw = m_run_raw -%}{%- endif -%}
 {%- if m_run_s >= mon_pub_s -%}
 {%- assign mon_has_post_release_valid = true -%}
 {%- assign m_age_s = mon_now_s | minus: m_run_s -%}
@@ -132,7 +132,7 @@
 {%- endif -%}
 {%- assign mon_status_class = mon_status | downcase | replace: ' ', '-' -%}
 {%- assign mon_latest_label = '' -%}
-{%- if mon_latest_raw != blank -%}{%- assign mon_latest_label = mon_latest_raw | date: "%b %-d, %Y" -%}{%- endif -%}
+{%- if mon_latest_raw != '' -%}{%- assign mon_latest_label = mon_latest_raw | date: "%b %-d, %Y" -%}{%- endif -%}
 {%- if mon_mode == 'cell' -%}
 <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}" title="Community-evidence monitoring status (separate from the verdict)">{{ mon_status }}</span>
 {%- elsif mon_mode == 'feed' -%}
@@ -145,7 +145,7 @@
   </div>
   <dl class="update-monitoring-facts">
     <div class="update-monitoring-fact"><dt>Accepted reports</dt><dd>{{ mon_reports }}</dd></div>
-    <div class="update-monitoring-fact"><dt>Latest evidence run</dt><dd>{% if mon_latest_label != blank %}{{ mon_latest_label }}{% else %}Not recorded{% endif %}</dd></div>
+    <div class="update-monitoring-fact"><dt>Latest evidence run</dt><dd>{% if mon_latest_label != '' %}{{ mon_latest_label }}{% else %}Not recorded{% endif %}</dd></div>
     <div class="update-monitoring-fact"><dt>Healthy sources</dt><dd>{{ mon_healthy }} fresh (success / no reports) &middot; need {{ mon_min_healthy }}</dd></div>
   </dl>
   {%- if mon_rows != '' and mon_rows.size > 0 -%}
@@ -170,7 +170,7 @@
   {%- elsif m_status2 == 'disabled' -%}{%- assign m_expl = 'Method disabled' -%}
   {%- endif -%}
   {%- assign m_checked = '' -%}
-  {%- if m.last_run != blank -%}{%- assign m_run_s2 = m.last_run | date: '%s' | plus: 0 -%}{%- if m_run_s2 <= mon_now_s -%}{%- assign m_checked = m.last_run | date: "%b %-d, %Y" -%}{%- endif -%}{%- endif -%}
+  {%- assign m_run_raw2 = m.last_run | default: '' | strip -%}{%- if m_run_raw2 != '' -%}{%- assign m_run_s2 = m_run_raw2 | date: '%s' | plus: 0 -%}{%- if m_run_s2 <= mon_now_s -%}{%- assign m_checked = m_run_raw2 | date: "%b %-d, %Y" -%}{%- endif -%}{%- endif -%}
     {%- comment -%}
       PUBLIC SOURCE FAMILY, not the internal method id. Several methods deliberately read the
       SAME community by different routes -- Microsoft Q&A is searched, enumerated by community
@@ -187,7 +187,7 @@
     {%- elsif m.method_id == 'github_officedev_issues' -%}{%- assign m_family = 'OfficeDev GitHub issues' -%}
     {%- elsif m.method_id == 'reddit_search' -%}{%- assign m_family = 'Reddit' -%}
     {%- endif -%}
-  <li class="update-monitoring-method update-monitoring-method--{{ m_status2 | replace: '_', '-' }}"><span class="update-monitoring-method__id">{{ m_family | escape }}</span> <span class="update-monitoring-method__state">{{ m_expl }}</span>{% if m_checked != blank %} <span class="update-monitoring-method__checked">last checked {{ m_checked }}</span>{% endif %}</li>
+  <li class="update-monitoring-method update-monitoring-method--{{ m_status2 | replace: '_', '-' }}"><span class="update-monitoring-method__id">{{ m_family | escape }}</span> <span class="update-monitoring-method__state">{{ m_expl }}</span>{% if m_checked != '' %} <span class="update-monitoring-method__checked">last checked {{ m_checked }}</span>{% endif %}</li>
   {%- endif -%}
   {%- endfor -%}
   </ul>
