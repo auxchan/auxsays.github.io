@@ -18,8 +18,8 @@ update_version: New controls and chat improvements in Copilot for JetBrains
 update_logo_text: GIT
 update_published_at: '2026-10-10T18:53:39Z'
 update_last_checked: '2026-10-11T00:19:00Z'
-source_last_checked: '2026-10-12T17:58:56Z'
-official_body_last_checked: '2026-10-12T17:58:56Z'
+source_last_checked: '2026-10-13T02:59:17Z'
+official_body_last_checked: '2026-10-13T02:59:17Z'
 record_last_updated: '2026-10-11T00:19:00Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -95,11 +95,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-11T08:19:07Z'
-  url: https://github.blog/changelog/2026-10-10-new-controls-and-chat-improvements-in-copilot-for-jetbrains
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-11T15:15:25Z'
   url: https://github.blog/changelog/2026-10-10-new-controls-and-chat-improvements-in-copilot-for-jetbrains
   status: captured-from-rss-feed
@@ -116,6 +111,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-12T17:58:56Z'
+  url: https://github.blog/changelog/2026-10-10-new-controls-and-chat-improvements-in-copilot-for-jetbrains
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-13T02:59:17Z'
   url: https://github.blog/changelog/2026-10-10-new-controls-and-chat-improvements-in-copilot-for-jetbrains
   status: captured-from-rss-feed
   body_captured: true

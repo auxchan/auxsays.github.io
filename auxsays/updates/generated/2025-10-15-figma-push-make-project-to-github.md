@@ -17,8 +17,8 @@ update_version: Push Make project to GitHub
 update_logo_text: FIG
 update_published_at: '2025-10-15T00:00:00.000Z'
 update_last_checked: '2026-08-04T13:06:18Z'
-source_last_checked: '2026-09-10T04:10:56Z'
-official_body_last_checked: '2026-09-10T04:10:56Z'
+source_last_checked: '2026-10-13T02:59:14Z'
+official_body_last_checked: '2026-10-13T02:59:14Z'
 record_last_updated: '2026-08-04T13:06:18Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-10T04:10:56Z'
+  url: https://www.figma.com/release-notes/?title=Push%20Make%20project%20to%20GitHub
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-13T02:59:14Z'
   url: https://www.figma.com/release-notes/?title=Push%20Make%20project%20to%20GitHub
   status: captured-from-rss-feed
   body_captured: true
