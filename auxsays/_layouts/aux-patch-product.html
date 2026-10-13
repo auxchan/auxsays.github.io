@@ -39,7 +39,7 @@ layout: aux-base
           <span>{{ product.category_label }}</span>
           <span>{{ cadence_label }}</span>
         </div>
-        {% if page.product_id != blank %}
+        {% assign pid_clean = page.product_id | default: '' | strip %}{% if pid_clean != '' %}
         <button type="button" class="patch-watch-toggle" data-watch-product="{{ page.product_id }}"
                 data-watch-label="{{ product.product_name | default: page.product_id }}"
                 data-watch-text-off="Watch product" data-watch-text-on="Watching"
@@ -63,7 +63,7 @@ layout: aux-base
       </div>
     </div>
     <div class="patch-card-links patch-intel-links">
-      {% if product.source_url != blank %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
+      {% assign psrc = product.source_url | default: '' | strip %}{% if psrc != '' %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
       <a href="{{ '/updates/' | relative_url }}">Global Patch Feed →</a>
     </div>
   </section>
@@ -99,7 +99,7 @@ layout: aux-base
       </div>
       <div class="patch-dossier-card">
         <h3>Official source</h3>
-        {% if product.source_url != blank %}
+        {% assign psrc = product.source_url | default: '' | strip %}{% if psrc != '' %}
         <p><a href="{{ product.source_url }}">{{ product.source_label | default: 'Official source' }} ↗</a></p>
         {% else %}
         <p>Official source pending.</p>

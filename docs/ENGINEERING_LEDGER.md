@@ -2099,6 +2099,119 @@ this extends it to the vocabulary, the rank and the publication gate. The lesson
 a policy copy that is unreachable at runtime is still a policy copy -- the retired JS ranker had
 already drifted from Python on `SAFE ENOUGH`, and nothing noticed because nothing called it.
 
+### AUX-030 — the site discarded content it already had
+
+- **Status** Resolved · **Area** Rendering · **Severity** High
+- **First seen** 2026-10-13 · **Resolved** 2026-10-13
+
+Two unrelated mechanisms were throwing away content AUXSAYS had already collected, parsed and
+shipped. Neither was a data problem. Both were in the presentation layer, and both were invisible
+to every existing suite because the templates were only ever grepped, never rendered against the
+corpus.
+
+#### `blank` has never worked in this stack
+
+91 presence tests across eight layouts and includes were written as `x != blank` / `x == blank`,
+on 80 lines (92 occurrences in all, one of which sits in explanatory comment prose).
+None of them gated anything. Liquid 4 resolves the `blank` literal through a `MethodLiteral` that
+sends `:blank?` to the value; `blank?` is an ActiveSupport method, Jekyll does not load
+ActiveSupport, and `"".respond_to?(:blank?)` is therefore `false`. The send never happens and the
+comparison degrades to one against nil, so **`x != blank` was always true and `x == blank` always
+false**. Every guard written that way passed unconditionally; every `== blank` branch was dead.
+
+This was already known locally and already fixed once, for `decision_label`, where it had blanked
+the verdict on 86 records. That repair normalised the value with `| default: '' | strip` and
+compared against `''`. What was missing was the generalisation: the same idiom applied to the
+other 90 sites, and a check that stops them coming back.
+
+Measured over all 1,274 shipped patch records, rendered through the real `aux-update.html` with
+ruby + liquid 4.0.4, plus the live site:
+
+| | before | after |
+| --- | --- | --- |
+| empty `<dd></dd>` values | 1,218 | 0 |
+| empty-href links (live, `/updates/`) | 1,095 | 0 |
+| checksum block + "use these hashes" over zero hashes | 1,258 | 0 (16 real kept) |
+| "in these notes:" with no attribution | 1,262 | 0 (12 real kept) |
+| citations reading `name. ().` (live, OBS 32.1.2) | 107 of 109 | 0 |
+
+The empty-href case is the one that cost a reader something concrete: an empty `href` resolves to
+the current document, so 1,095 "Download page" links on the patch feed silently reloaded the feed.
+
+The homepage was worse than a cosmetic defect. Its article-thumbnail cascade could not resolve
+**any** front-matter shape, including a perfectly valid `image:`. The first guard assigned
+`post.image` even when absent, which killed the thumbnail/cover/hero fallbacks; then three unwrap
+guards ran unconditionally, and a String has no `.path`, so the value was reduced to nil. nil is
+not `''`, so the render guard still passed and the card emitted an `img` with an empty `src`.
+Production auxsays.com shipped two broken images where the designed gradient placeholder should
+have been. Replayed against `origin/main`, all five probe shapes returned empty; against the fix,
+all twelve resolve correctly.
+
+#### content that waits for a script it cannot get an answer from
+
+`.reveal-up` defaulted to `opacity:0` and depended on an IntersectionObserver callback to become
+visible, with `threshold: 0.08`. `intersectionRatio` for an element taller than the viewport is
+`viewportHeight / elementHeight`, so 0.08 is unsatisfiable above roughly 12 viewports. The live
+`/updates/adobe/` page is 559,860 bytes with 410 table rows inside 4 `reveal-up` containers and
+no `<noscript>`: that content was at opacity 0 permanently on desktop. Two width-gated
+`opacity:1 !important` patches for narrow screens were already in the stylesheet, which is the
+tell that this had been hit before and diagnosed as a mobile bug.
+
+The animation is now **opt-in**. The CSS default is visible; only `html.js-reveal` arms the hidden
+start state, and the script adds that class for itself only after confirming an observer exists
+and the reader has not asked for reduced motion. `threshold` is 0, and a timed sweep reveals
+anything the observer missed. No script, no observer, or reduced motion now all mean the page
+simply renders.
+
+#### How the repair was proven, and what it was not allowed to change
+
+All 1,274 records were rendered before and after with 0 errors on both sides. Every record's HTML
+changed, so the diff was characterised rather than eyeballed: seven content-preservation
+properties were asserted over non-vacuous populations -- 179 records with a real download URL, 57
+with a real file size, 16 with real checksums, 12 with a real attribution label, 1,262 with a real
+official body. All seven hold. **The published verdict is byte-identical on all 1,274 records**:
+this change touches presentation only, and patch-decision authority stays with
+`lib/patch_decision.py` (AUX-029).
+
+20 mutants, 20 killed, each by a named check rather than by a crash. One finding from that sweep is
+worth keeping: reverting the citation's URL guard was initially caught by the structural ban alone
+and by **no behaviour at all**, because every citation fixture had a URL. C6 adds the missing-URL
+case. A negative assertion is only as good as the fixture that can violate it.
+
+#### The ban is grounded, not folklore
+
+K1-K3 assert the mechanism itself: that `x != blank` passes on nil here, that `x == blank` is false
+on `''` here, and that `String` does not respond to `blank?`. If a future dependency change makes
+`blank` work, those three fail loudly and S1's ban can be revisited on evidence instead of being
+carried as received wisdom.
+
+One judgment call is recorded rather than silently taken. `patch-latest-signals.html` had a dead
+`cstate == blank` branch whose authored intent was to label an empty coverage state "No patch
+records yet". Reaching that branch at all proves a configured ingestion source exists and is
+switched off, so reviving it would have replaced the accurate "Source disabled -- not yet
+monitoring" with something vaguer. The branch was removed and its stale comment corrected, leaving
+behaviour unchanged; restoring a guard is not automatically an improvement when the guard was
+written against a weaker understanding than the code now has.
+
+Two things in this entry were over-claimed in working notes before being measured, and the
+corrections matter for anyone repeating the work. The `and`/`or` precedence hazard is narrower than
+it looks: Liquid associates right-to-left, so appending an `and`-term at the END of an `or` chain
+parses the way you want, and only a leading `and`-term reparses. And `| default: '' | strip` is not
+merely a safer spelling of `x and x != ''` -- it is the only one of the two that treats
+whitespace-only as absent, which is what `blank` was reaching for.
+
+**Reopen only if** `test_template_presence_guards.py` S1 reports a new `blank` comparison in
+emitting markup, or K1-K3 start failing (which would mean `blank` now resolves in this stack and
+the ban needs rewriting rather than enforcing), or a live page is observed serving an empty `href`
+or an `img` with an empty `src` from a presence guard.
+
+**Cross-reference** the `decision_label` repair in `aux-update.html` is the precedent this
+generalises. The lesson that generalises further: a template suite that greps source cannot see a
+guard that never fires, and `test_template_presence_guards.py` renders the shipped markup for that
+reason. Related: a Liquid `comment` block still PARSES tags, so a literal tag written into comment
+prose is a SyntaxError that takes the whole template down -- S2 exists because this repair's own
+first draft did exactly that to the homepage.
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.

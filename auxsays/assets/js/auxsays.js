@@ -29,9 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // reveals
+  // REVEALS -- opt-in, and only when this script can actually finish the job.
+  //
+  // The CSS default is now VISIBLE. `js-reveal` is what arms the hidden start state, so it is only
+  // added once we know an observer exists and the reader has not asked for reduced motion. If
+  // anything here is unavailable the page stays visible instead of disappearing.
+  //
+  // threshold 0 replaces 0.08: intersectionRatio for an element taller than the viewport is
+  // (viewportHeight / elementHeight), so 0.08 was unsatisfiable above ~12 viewports and the
+  // 410-row Adobe history never revealed. 0 fires as soon as any part of the element enters.
   const reveals = document.querySelectorAll('.reveal-up');
-  if (!prefersReducedMotion && reveals.length) {
+  const canObserve = typeof IntersectionObserver === 'function';
+  if (!prefersReducedMotion && canObserve && reveals.length) {
+    document.documentElement.classList.add('js-reveal');
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -39,10 +49,16 @@ document.addEventListener('DOMContentLoaded', () => {
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px -4% 0px' });
     reveals.forEach((el) => io.observe(el));
-  } else {
-    reveals.forEach((el) => el.classList.add('is-visible'));
+    // Belt and braces: anything still unrevealed shortly after load is shown regardless, so a
+    // missed callback can never leave content hidden.
+    window.setTimeout(() => {
+      document.querySelectorAll('.reveal-up:not(.is-visible)').forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('is-visible');
+      });
+    }, 1200);
   }
 
   // homepage coverage cards

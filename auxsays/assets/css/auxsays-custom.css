@@ -377,8 +377,25 @@ body.aux-page { --heading-color: var(--text-0); }
   box-shadow: 0 18px 42px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.04);
 }
 
-.reveal-up { opacity:0; transform:translate3d(0,22px,0); transition: opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1); }
-.reveal-up.is-visible { opacity:1; transform:none; }
+/* REVEAL ANIMATION -- VISIBLE BY DEFAULT.
+ *
+ * This used to be `.reveal-up { opacity:0 }` with JS adding `.is-visible`. Content that is
+ * invisible until a script says otherwise is content that does not exist for a crawler, for a
+ * reader with JS off, or whenever the observer simply never fires -- and it did not fire: the
+ * observer used threshold 0.08, which an element taller than ~12 viewports can never satisfy, so
+ * the live /updates/adobe/ page -- 410 table rows across 4 reveal-up containers -- sat at
+ * opacity 0 permanently on desktop. Two
+ * width-gated `opacity:1 !important` patches had already been added for narrow screens, which is
+ * the tell that this had been hit before and treated as a mobile bug.
+ *
+ * Now the animation is OPT-IN: the default is visible, and only `html.js-reveal` -- a class the
+ * script adds for itself, after confirming it can observe and that the reader has not asked for
+ * reduced motion -- re-arms the hidden start state. No script, no observer, or reduced motion all
+ * mean the page simply renders.
+ */
+.reveal-up { opacity:1; transform:none; }
+html.js-reveal .reveal-up { opacity:0; transform:translate3d(0,22px,0); transition: opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1); }
+html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
 .reveal-delay-1 { transition-delay:.08s; }
 .reveal-delay-2 { transition-delay:.16s; }
 

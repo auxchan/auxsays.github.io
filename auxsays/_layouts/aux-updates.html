@@ -237,6 +237,11 @@ layout: aux-base
 
   <section class="patch-feed patch-feed--current reveal-up" id="patch-feed">
     {% for item in current_pages %}
+      {% assign it_feed_title = item.update_feed_title | default: '' | strip %}
+      {% assign it_product = item.update_product | default: '' | strip %}
+      {% assign it_version = item.update_version | default: '' | strip %}
+      {% assign it_source_url = item.update_source_url | default: '' | strip %}
+      {% assign it_download_url = item.update_download_url | default: '' | strip %}
       {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: "Insufficient" %}
       {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
       {% assign brand_meta = site.data.update_brands[item.update_brand_id] %}
@@ -298,12 +303,12 @@ layout: aux-base
             {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version target_build=item.target_build published_at=item.update_published_at report_count=item.update_report_count %}
           </span>
         </div>
-        {% if item.update_feed_title != blank %}
-        {% assign card_title = item.update_feed_title %}
-        {% elsif item.update_product != blank and item.update_version != blank %}
-        {% assign card_title = item.update_product | append: ' ' | append: item.update_version %}
-        {% elsif item.update_product != blank %}
-        {% assign card_title = item.update_product %}
+        {% if it_feed_title != '' %}
+        {% assign card_title = it_feed_title %}
+        {% elsif it_product != '' and it_version != '' %}
+        {% assign card_title = it_product | append: ' ' | append: it_version %}
+        {% elsif it_product != '' %}
+        {% assign card_title = it_product %}
         {% else %}
         {% assign card_title = item.title %}
         {% endif %}
@@ -312,7 +317,7 @@ layout: aux-base
         {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
         {% if consensus_summary %}
         {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | strip %}
-        {% if evidence_summary != blank %}
+        {% if evidence_summary != '' %}
         <div class="patch-consensus-block">
           <span class="patch-consensus-label">Evidence summary</span>
           <p class="patch-consensus-line">{{ evidence_summary }}</p>
@@ -322,8 +327,8 @@ layout: aux-base
         {% endif %}
         <div class="patch-card-links">
           <a href="{{ item.url | relative_url }}">Read breakdown →</a>
-          {% if item.update_source_url != blank %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
-          {% if item.update_download_url != blank %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
+          {% if it_source_url != '' %}<a href="{{ it_source_url }}">Official source ↗</a>{% endif %}
+          {% if it_download_url != '' %}<a href="{{ it_download_url }}">Download page ↗</a>{% endif %}
         </div>
       </article>
     {% endfor %}
@@ -337,6 +342,11 @@ layout: aux-base
     </div>
     <div class="patch-feed patch-feed--archive" id="patch-archive-feed">
       {% for item in archived_pages %}
+        {% assign it_feed_title = item.update_feed_title | default: '' | strip %}
+        {% assign it_product = item.update_product | default: '' | strip %}
+        {% assign it_version = item.update_version | default: '' | strip %}
+        {% assign it_source_url = item.update_source_url | default: '' | strip %}
+        {% assign it_download_url = item.update_download_url | default: '' | strip %}
         {% unless item.feed_hidden %}
         {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: "Insufficient" %}
         {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
@@ -399,12 +409,12 @@ layout: aux-base
               {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version target_build=item.target_build published_at=item.update_published_at report_count=item.update_report_count %}
             </span>
           </div>
-          {% if item.update_feed_title != blank %}
-          {% assign card_title = item.update_feed_title %}
-          {% elsif item.update_product != blank and item.update_version != blank %}
-          {% assign card_title = item.update_product | append: ' ' | append: item.update_version %}
-          {% elsif item.update_product != blank %}
-          {% assign card_title = item.update_product %}
+          {% if it_feed_title != '' %}
+          {% assign card_title = it_feed_title %}
+          {% elsif it_product != '' and it_version != '' %}
+          {% assign card_title = it_product | append: ' ' | append: it_version %}
+          {% elsif it_product != '' %}
+          {% assign card_title = it_product %}
           {% else %}
           {% assign card_title = item.title %}
           {% endif %}
@@ -413,7 +423,7 @@ layout: aux-base
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
           {% if consensus_summary %}
           {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | strip %}
-          {% if evidence_summary != blank %}
+          {% if evidence_summary != '' %}
           <div class="patch-consensus-block">
             <span class="patch-consensus-label">Evidence summary</span>
             <p class="patch-consensus-line">{{ evidence_summary }}</p>
@@ -423,8 +433,8 @@ layout: aux-base
           {% endif %}
           <div class="patch-card-links">
             <a href="{{ item.url | relative_url }}">Read breakdown →</a>
-            {% if item.update_source_url != blank %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
-            {% if item.update_download_url != blank %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
+            {% if it_source_url != '' %}<a href="{{ it_source_url }}">Official source ↗</a>{% endif %}
+            {% if it_download_url != '' %}<a href="{{ it_download_url }}">Download page ↗</a>{% endif %}
           </div>
         </article>
         {% endunless %}

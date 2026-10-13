@@ -31,9 +31,29 @@ layout: aux-base
 {% endif %}
 {% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
 {% assign product = site.data.patch_products | where: "id", page.product_id | first %}
-{% if page.update_detail_title != blank %}
+{%- comment -%}
+  NORMALIZED PRESENCE. Every `page.*` field tested for presence below is normalised to a plain
+  string here, exactly as `decision_label` already is further down. The reason is that `blank`
+  does not work in this stack: Liquid 4 resolves `blank` through a MethodLiteral that calls
+  `blank?` on the value, `blank?` comes from ActiveSupport, and Jekyll does not load
+  ActiveSupport -- so `x != blank` was ALWAYS true and `x == blank` ALWAYS false. Every guard
+  written that way passed unconditionally, which is why citations rendered an empty `()` and
+  technical rows rendered empty values. Comparing a `| default: '' | strip` string against ''
+  restores the intended meaning, and treats whitespace-only as absent the way `blank` would.
+{%- endcomment -%}
+{% assign detail_title_clean = page.update_detail_title | default: '' | strip %}
+{% assign feed_title_clean = page.update_feed_title | default: '' | strip %}
+{% assign pub_at_clean = page.update_published_at | default: '' | strip %}
+{% assign src_name_clean = page.update_source_name | default: '' | strip %}
+{% assign src_url_clean = page.update_source_url | default: '' | strip %}
+{% assign dl_url_clean = page.update_download_url | default: '' | strip %}
+{% assign official_src_url_clean = page.official_patch_notes_source_url | default: '' | strip %}
+{% assign attr_label_clean = page.official_app_attribution_label | default: '' | strip %}
+{% assign file_size_note_clean = page.patch_file_size_note | default: '' | strip %}
+{% assign product_id_clean = page.product_id | default: '' | strip %}
+{% if detail_title_clean != '' %}
   {% assign display_title = page.update_detail_title %}
-{% elsif page.update_feed_title != blank %}
+{% elsif feed_title_clean != '' %}
   {% assign display_title = page.update_feed_title %}
 {% else %}
   {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
@@ -44,14 +64,14 @@ layout: aux-base
 {% assign source_checked_at = page.source_last_checked | default: '' %}
 {% assign source_checked_label = 'Not recorded' %}
 {% if source_checked_at != '' %}{% assign source_checked_label = source_checked_at | date: "%b %-d, %Y" %}{% endif %}
-{% assign official_body_checked_at = page.official_body_last_checked %}
+{% assign official_body_checked_at = page.official_body_last_checked | default: '' | strip %}
 {% assign official_body_checked_label = 'Not recorded' %}
-{% if official_body_checked_at != blank %}{% assign official_body_checked_label = official_body_checked_at | date: "%b %-d, %Y" %}{% endif %}
+{% if official_body_checked_at != '' %}{% assign official_body_checked_label = official_body_checked_at | date: "%b %-d, %Y" %}{% endif %}
 {% assign source_url_present = false %}
-{% if page.update_source_url != blank or page.official_patch_notes_source_url != blank %}{% assign source_url_present = true %}{% endif %}
+{% if src_url_clean != '' or official_src_url_clean != '' %}{% assign source_url_present = true %}{% endif %}
 {% assign official_body_clean = page.official_patch_notes_body | default: '' | strip %}
 {% assign official_body_present = false %}
-{% if official_body_clean != blank %}{% assign official_body_present = true %}{% endif %}
+{% if official_body_clean != '' %}{% assign official_body_present = true %}{% endif %}
 {% assign official_body_key = official_body_clean | downcase %}
 {% assign official_body_polluted = false %}
 {% if official_body_key contains 'showvotefeedback' or official_body_key contains 'function(' or official_body_key contains 'document.' or official_body_key contains 'window.' or official_body_key contains 'queryselector' or official_body_key contains 'content-rating-buttons' %}
@@ -111,7 +131,7 @@ layout: aux-base
 {% if has_user_report_sources %}
   {% for source in accepted_report_sources %}
     {% assign source_type_key = source.source_type | default: source.source_name | default: '' | downcase | replace: '_', ' ' | replace: '-', ' ' | strip %}
-    {% if source_type_key != blank %}
+    {% if source_type_key != '' %}
       {% capture evidence_source_type_tokens %}{{ evidence_source_type_tokens }}{{ source_type_key }}|{% endcapture %}
       {% if source_type_key contains 'listing card' %}{% assign has_listing_card_evidence = true %}{% endif %}
     {% endif %}
@@ -322,7 +342,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
     {% assign decision_body = 'Too few reports for a verdict yet.' %}
   {% endif %}
 {% endif %}
-{% assign summary_text = page.release_summary | default: page.official_summary | default: page.description %}
+{% assign summary_text = page.release_summary | default: page.official_summary | default: page.description | default: '' | strip %}
 {% assign record_note_text = page.record_note | default: '' | strip %}
 {% assign issue_cluster_text = '' %}
 {% assign issue_cluster_seen = '|' %}
@@ -334,10 +354,10 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
     {% if issue_label_first == ',' or issue_label_first == ';' %}
       {% assign issue_label = issue_label | slice: 1, 240 | strip %}
     {% endif %}
-    {% if issue_label != blank %}
+    {% if issue_label != '' %}
       {% assign issue_cluster_token = '|' | append: issue_label | append: '|' %}
       {% unless issue_cluster_seen contains issue_cluster_token %}
-        {% if issue_cluster_text == blank %}
+        {% if issue_cluster_text == '' %}
           {% assign issue_cluster_text = issue_label %}
         {% else %}
           {% capture issue_cluster_text %}{{ issue_cluster_text }}, {{ issue_label }}{% endcapture %}
@@ -349,15 +369,15 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
     {% if issue_cluster_count >= 3 %}{% break %}{% endif %}
   {% endfor %}
 {% endif %}
-{% if issue_cluster_text == blank and page.complaint_themes and page.complaint_themes.size > 0 %}
+{% if issue_cluster_text == '' and page.complaint_themes and page.complaint_themes.size > 0 %}
   {% for item in page.complaint_themes %}
     {% assign issue_label = item.theme | default: '' | strip %}
     {% assign issue_label_first = issue_label | slice: 0 %}
     {% if issue_label_first == ',' or issue_label_first == ';' %}
       {% assign issue_label = issue_label | slice: 1, 240 | strip %}
     {% endif %}
-    {% if issue_label != blank %}
-      {% if issue_cluster_text == blank %}
+    {% if issue_label != '' %}
+      {% if issue_cluster_text == '' %}
         {% assign issue_cluster_text = issue_label %}
       {% else %}
         {% capture issue_cluster_text %}{{ issue_cluster_text }}, {{ issue_label }}{% endcapture %}
@@ -451,14 +471,14 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% endif %}
 {% assign checksum_body_clean = page.official_checksums_body | default: '' | strip %}
 {% assign checksum_present = false %}
-{% if checksum_body_clean != blank %}{% assign checksum_present = true %}{% endif %}
+{% if checksum_body_clean != '' %}{% assign checksum_present = true %}{% endif %}
 {% assign official_source_type = page.official_patch_notes_source_type | default: page.official_source_type | default: 'official-source' %}
 {% assign file_size_present = false %}
 {% assign patch_file_size_clean = page.patch_file_size | default: '' | strip %}
 {% assign patch_file_size_key = patch_file_size_clean | downcase %}
 {% assign blocked_file_size_values = '|not captured|unknown|null|not provided by source|creative cloud-managed / not provided by source|' %}
 {% assign patch_file_size_token = '|' | append: patch_file_size_key | append: '|' %}
-{% if patch_file_size_clean != blank %}
+{% if patch_file_size_clean != '' %}
   {% unless blocked_file_size_values contains patch_file_size_token %}{% assign file_size_present = true %}{% endunless %}
 {% endif %}
 {% assign file_size_label = patch_file_size_clean %}
@@ -468,25 +488,25 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
     {% assign file_size_label = 'Not provided by source' %}
   {% elsif file_size_state == 'creative_cloud_managed' %}
     {% assign file_size_label = 'Creative Cloud-managed / not provided by source' %}
-  {% elsif page.patch_file_size_note != blank %}
+  {% elsif file_size_note_clean != '' %}
     {% assign file_size_label = 'Not provided by source' %}
   {% endif %}
 {% endif %}
 {% assign file_size_renderable = false %}
-{% if file_size_present or file_size_label != blank %}{% assign file_size_renderable = true %}{% endif %}
+{% if file_size_present or file_size_label != '' %}{% assign file_size_renderable = true %}{% endif %}
 {% assign file_size_pill_value = '' %}
 {% if file_size_present %}{% assign file_size_pill_value = patch_file_size_clean | strip %}{% endif %}
 {% assign technical_details_renderable = false %}
-{% if checksum_present or file_size_renderable or source_checked_at != blank or official_body_checked_at != blank or page.update_published_at != blank %}{% assign technical_details_renderable = true %}{% endif %}
+{% if checksum_present or file_size_renderable or source_checked_at != '' or official_body_checked_at != '' or pub_at_clean != '' %}{% assign technical_details_renderable = true %}{% endif %}
 {% assign visible_evidence_limit = page.evidence_sample_visible_limit | default: 5 | plus: 0 %}
 {% assign sources_collapsed_by_default = false %}
 {% if user_report_source_count > 5 %}{% assign sources_collapsed_by_default = true %}{% endif %}
 {% assign has_official_links = false %}
-{% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}{% assign has_official_links = true %}{% endif %}
+{% if page.official_sources or src_url_clean != '' or dl_url_clean != '' %}{% assign has_official_links = true %}{% endif %}
 {% assign rendered_history_events = page.public_status_events | default: page.public_history_events | default: page.update_history %}
 {% assign has_public_history = false %}
 {% if rendered_history_events and rendered_history_events.size > 0 %}{% assign has_public_history = true %}{% endif %}
-{% assign resolved_update_logo_path = product.logo_path | default: company.logo_path %}
+{% assign resolved_update_logo_path = product.logo_path | default: company.logo_path | default: '' | strip %}
 {% assign product_name_clean = product.product_name | default: '' | strip %}
 {% assign product_url_clean = product.product_url | default: '' | strip %}
 {% assign update_version_clean = page.update_version | default: '' | strip %}
@@ -494,11 +514,11 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% assign release_channel_clean = page.release_channel_label | default: '' | strip %}
 {% assign release_type_clean = page.release_type_label | default: '' | strip %}
 {% assign release_channel_pill_clean = '' %}
-{% if update_channel_clean != blank %}
+{% if update_channel_clean != '' %}
   {% assign release_channel_pill_clean = update_channel_clean %}
-{% elsif release_channel_clean != blank %}
+{% elsif release_channel_clean != '' %}
   {% assign release_channel_pill_clean = release_channel_clean %}
-{% elsif release_type_clean != blank %}
+{% elsif release_type_clean != '' %}
   {% assign release_channel_pill_clean = release_type_clean %}
 {% endif %}
 
@@ -509,11 +529,11 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 
       <div class="update-brand-row">
         <span class="update-brand-badge patch-logo-badge patch-logo-badge--has-image">
-          {% if resolved_update_logo_path != blank %}<img src="{% if resolved_update_logo_path contains "://" %}{{ resolved_update_logo_path }}{% else %}{{ resolved_update_logo_path | relative_url }}{% endif %}" alt="{{ product.product_name | default: page.update_product }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
+          {% if resolved_update_logo_path != '' %}<img src="{% if resolved_update_logo_path contains "://" %}{{ resolved_update_logo_path }}{% else %}{{ resolved_update_logo_path | relative_url }}{% endif %}" alt="{{ product.product_name | default: page.update_product }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
         </span>
         <span class="update-brand-meta">
           <strong>{{ page.update_product }}</strong>
-          {% if page.update_source_name != blank %}<span>{{ page.update_source_name }}</span>{% endif %}
+          {% if src_name_clean != '' %}<span>{{ page.update_source_name }}</span>{% endif %}
         </span>
       </div>
 
@@ -524,7 +544,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         Watching follows the PRODUCT, not this one historical patch: a visitor who cares about OBS
         cares about the next OBS release, not about 31.0.4 forever.
       {% endcomment %}
-      {% if page.product_id != blank %}
+      {% if product_id_clean != '' %}
       <button type="button" class="patch-watch-toggle patch-watch-toggle--inline" data-watch-product="{{ page.product_id }}"
               data-watch-label="{{ product_name_clean | default: page.update_product | default: page.product_id }}"
               data-watch-text-off="Watch {{ product_name_clean | default: page.update_product | default: 'product' }}" data-watch-text-on="Watching"
@@ -546,17 +566,17 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {% endif %}
 
       <div class="update-meta-strip">
-        {% if product_name_clean != blank %}
-          {% if product_url_clean != blank %}
+        {% if product_name_clean != '' %}
+          {% if product_url_clean != '' %}
           <a class="update-meta-pill" href="{{ product_url_clean | relative_url }}"><span class="update-meta-pill__label">Product</span><span class="update-meta-pill__value">{{ product_name_clean }}</span></a>
           {% else %}
           <span class="update-meta-pill"><span class="update-meta-pill__label">Product</span><span class="update-meta-pill__value">{{ product_name_clean }}</span></span>
           {% endif %}
         {% endif %}
-        {% if update_version_clean != blank %}<span class="update-meta-pill"><span class="update-meta-pill__label">Version</span><span class="update-meta-pill__value">{{ update_version_clean }}</span></span>{% endif %}
-        {% if release_channel_pill_clean != blank %}<span class="update-meta-pill update-meta-pill--channel"><span class="update-meta-pill__value">{{ release_channel_pill_clean }}</span></span>{% endif %}
-        {% if page.update_published_at != blank %}<span class="update-meta-pill"><span class="update-meta-pill__label">Release date</span><span class="update-meta-pill__value">{{ page.update_published_at | date: "%b %-d, %Y" }}</span></span>{% endif %}
-        {% if file_size_pill_value != blank %}<span class="update-meta-pill"><span class="update-meta-pill__label">File size</span><span class="update-meta-pill__value">{{ file_size_pill_value }}</span></span>{% endif %}
+        {% if update_version_clean != '' %}<span class="update-meta-pill"><span class="update-meta-pill__label">Version</span><span class="update-meta-pill__value">{{ update_version_clean }}</span></span>{% endif %}
+        {% if release_channel_pill_clean != '' %}<span class="update-meta-pill update-meta-pill--channel"><span class="update-meta-pill__value">{{ release_channel_pill_clean }}</span></span>{% endif %}
+        {% if pub_at_clean != '' %}<span class="update-meta-pill"><span class="update-meta-pill__label">Release date</span><span class="update-meta-pill__value">{{ page.update_published_at | date: "%b %-d, %Y" }}</span></span>{% endif %}
+        {% if file_size_pill_value != '' %}<span class="update-meta-pill"><span class="update-meta-pill__label">File size</span><span class="update-meta-pill__value">{{ file_size_pill_value }}</span></span>{% endif %}
       </div>
 
       <div class="update-verdict-card update-verdict-card--clean update-evidence-card" aria-label="User report evidence summary">
@@ -618,7 +638,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           {%- endif %}
         </div>
         <div class="update-decision-reasoning">
-          {% if report_count > 0 and issue_cluster_text != blank %}
+          {% if report_count > 0 and issue_cluster_text != '' %}
           <p>Current reports mention {{ issue_cluster_text }}.</p>
           {% elsif report_count > 0 %}
           <p>User reports are present; review the source list before updating critical work.</p>
@@ -635,7 +655,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             count, so nothing changes discontinuously at exactly n=3.
           {%- endcomment -%}
           {% if consensus_established == false and evidence_strength == 'Low' %}<p>Too few reports for a firm verdict yet &mdash; treat this as early evidence.</p>{% endif %}
-          {% if record_note_text != blank %}<p>{{ record_note_text }}</p>{% endif %}
+          {% if record_note_text != '' %}<p>{{ record_note_text }}</p>{% endif %}
         </div>
       </div>
 
@@ -662,11 +682,11 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   <section class="update-content-grid">
     <details id="official-patch-notes" class="panel update-info-card update-official-details update-order-official-details">
       <summary>Official Patch Notes — {% if official_body_renderable %}vendor release notes captured from the official source{% else %}not captured{% endif %}</summary>
-      {% if summary_text != blank %}<p>{{ summary_text }}</p>{% endif %}
+      {% if summary_text != '' %}<p>{{ summary_text }}</p>{% endif %}
       {%- comment -%} What the vendor documented for THIS app on THIS build. A build with no
       app-specific note is still a real shipped build; saying so is not the same as saying the app
       was unchanged, and this line is the only place that distinction is visible. {%- endcomment -%}
-      {% if page.official_app_attribution_label != blank %}<p class="update-official-attribution"><strong>{{ page.update_product }} in these notes:</strong> {{ page.official_app_attribution_label }}.</p>{% endif %}
+      {% if attr_label_clean != '' %}<p class="update-official-attribution"><strong>{{ page.update_product }} in these notes:</strong> {{ page.official_app_attribution_label }}.</p>{% endif %}
       {% if page.official_additions or page.official_fixes %}
       <div class="update-change-grid">
         {% if page.official_additions and page.official_additions.size > 0 %}
@@ -703,10 +723,10 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       <summary>Technical Details</summary>
       <div class="update-technical-details__body">
         <dl class="update-technical-list">
-          {% if page.update_published_at != blank %}<div><dt>Released</dt><dd>{{ page.update_published_at | date: "%b %-d, %Y" }}</dd></div>{% endif %}
+          {% if pub_at_clean != '' %}<div><dt>Released</dt><dd>{{ page.update_published_at | date: "%b %-d, %Y" }}</dd></div>{% endif %}
           {% if file_size_renderable %}<div><dt>File size</dt><dd>{{ file_size_label }}</dd></div>{% endif %}
-          {% if source_checked_at != blank %}<div><dt>Official source checked</dt><dd>{{ source_checked_label }}</dd></div>{% endif %}
-          {% if official_body_checked_at != blank %}<div><dt>Official notes checked</dt><dd>{{ official_body_checked_label }}</dd></div>{% endif %}
+          {% if source_checked_at != '' %}<div><dt>Official source checked</dt><dd>{{ source_checked_label }}</dd></div>{% endif %}
+          {% if official_body_checked_at != '' %}<div><dt>Official notes checked</dt><dd>{{ official_body_checked_label }}</dd></div>{% endif %}
         </dl>
         {% if checksum_present %}
         <details id="checksum" class="update-checksum-details update-checksum-details--nested">
@@ -731,13 +751,16 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         {% for source in accepted_report_sources %}
         {% assign source_title = source.source_title | default: source.title | default: 'User report' %}
         {% assign source_type_label = source.source_type | default: source.source_name | default: 'user report' %}
-        {% assign source_issue = source.issue | default: source.issue_theme %}
-        {% assign source_workflow = source.workflow_area %}
+        {% assign source_issue = source.issue | default: source.issue_theme | default: '' | strip %}
+        {% assign source_name_clean = source.source_name | default: '' | strip %}
+        {% assign source_date_clean = source.source_date | default: '' | strip %}
+        {% assign source_url_clean = source.source_url | default: '' | strip %}
+        {% assign source_workflow = source.workflow_area | default: '' | strip %}
         <li>
-          <cite>{% if source.source_name != blank %}{{ source.source_name }}. {% endif %}{% if source.source_date != blank %}({{ source.source_date | date: "%Y, %B %-d" }}). {% endif %}{% if source.source_url != blank %}<a href="{{ source.source_url }}">{{ source_title }}</a>{% else %}{{ source_title }}{% endif %}.</cite>
+          <cite>{% if source_name_clean != '' %}{{ source_name_clean }}. {% endif %}{% if source_date_clean != '' %}({{ source_date_clean | date: "%Y, %B %-d" }}). {% endif %}{% if source_url_clean != '' %}<a href="{{ source_url_clean }}">{{ source_title }}</a>{% else %}{{ source_title }}{% endif %}.</cite>
           <span>{{ source_type_label | replace: '_', ' ' }}</span>
-          {% if source_issue != blank %}<small>Issue: {{ source_issue }}</small>{% endif %}
-          {% if source_workflow != blank %}<small>Workflow: {{ source_workflow }}</small>{% endif %}
+          {% if source_issue != '' %}<small>Issue: {{ source_issue }}</small>{% endif %}
+          {% if source_workflow != '' %}<small>Workflow: {{ source_workflow }}</small>{% endif %}
         </li>
         {% endfor %}
       </ul>
@@ -750,12 +773,12 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       <ul class="update-source-list update-source-list--official">
         {% if page.official_sources and page.official_sources.size > 0 %}
           {% for source in page.official_sources %}
-          <li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}{% if page.update_published_at != blank %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a>.</cite><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
+          <li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}{% if pub_at_clean != '' %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a>.</cite><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
           {% endfor %}
-        {% elsif page.update_source_url != blank %}
-          <li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}{% if page.update_published_at != blank %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ page.update_source_url }}">{{ page.update_feed_title | default: display_title }}</a>.</cite><span>{{ official_source_type | replace: '_', ' ' }}</span></li>
+        {% elsif src_url_clean != '' %}
+          <li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}{% if pub_at_clean != '' %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ page.update_source_url }}">{{ page.update_feed_title | default: display_title }}</a>.</cite><span>{{ official_source_type | replace: '_', ' ' }}</span></li>
         {% endif %}
-        {% if page.update_download_url != blank %}<li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}<a href="{{ page.update_download_url }}">Download page</a>.</cite><span>download</span></li>{% endif %}
+        {% if dl_url_clean != '' %}<li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}<a href="{{ page.update_download_url }}">Download page</a>.</cite><span>download</span></li>{% endif %}
       </ul>
       {% endif %}
       </div>
@@ -766,7 +789,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       <summary>History / Updates</summary>
       <div class="status-timeline status-timeline--compact">
         {% for event in rendered_history_events %}
-        <div class="status-event"><time>{{ event.at | date: "%b %-d, %Y" }}</time><strong>{{ event.label }}</strong>{% if event.note != blank %}<p>{{ event.note }}</p>{% endif %}</div>
+        <div class="status-event"><time>{{ event.at | date: "%b %-d, %Y" }}</time><strong>{{ event.label }}</strong>{% assign event_note_clean = event.note | default: '' | strip %}{% if event_note_clean != '' %}<p>{{ event_note_clean }}</p>{% endif %}</div>
         {% endfor %}
       </div>
     </details>
