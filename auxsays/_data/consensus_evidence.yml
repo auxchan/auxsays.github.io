@@ -51864,3 +51864,62 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6034117-net-framework-3-5-standalone-installer
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6034117/net-framework-3-5-standalone-installer-for-windows
+  parent_title: .NET Framework 3.5 standalone installer for Windows 11 26H1+ requires build 28000, but Windows 11 26H2 uses build 26300 - Microsoft Q&A
+  report_title: .NET Framework 3.5 standalone installer for Windows 11 26H1+ requires build 28000, but Windows 11 26H2 uses build 26300 - Microsoft Q&A
+  report_text_excerpt: .NET Framework 3.5 standalone installer for Windows 11 26H1+ requires build 28000, but Windows 11 26H2 uses build 26300 - Microsoft Q&A Hello, I am trying to install .NET Framework 3.5 on a device running Windows 11 26H2 (Build 26300.9457). According to Microsoft's Windows...
+  captured_at: '2026-10-13T15:20:47Z'
+  source_date: '2026-10-12'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9457'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9457'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6034766-windows-11-version-26h2-install-error
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6034766/windows-11-version-26h2-install-error-0x800f0993
+  parent_title: Windows 11, version 26H2 Install error - 0x800f0993 - Microsoft Q&A
+  report_title: Windows 11, version 26H2 Install error - 0x800f0993 - Microsoft Q&A
+  report_text_excerpt: Windows 11, version 26H2 Install error - 0x800f0993 - Microsoft Q&A I have a GMKtec NucBox K12 with AMD Ryzen 7 255H and Windows 11 Pro OS Build 26200.7462. Almost every month I have great difficulty with updates on this machine and none of my other multiple Windows devices. I...
+  captured_at: '2026-10-13T15:26:35Z'
+  source_date: '2026-10-12'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7462'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7462'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7462'
