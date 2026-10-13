@@ -218,6 +218,51 @@ def run() -> int:
     check("H2. the same string in quick_verdict still fails",
           len(findings_for({"quick_verdict": REAL})) == 1, str(findings_for({"quick_verdict": REAL})))
 
+    # ---- the deploy gate's TEMPLATE invariants, run at PR time ----------------------
+    #
+    # `qa_patch_records.py --publish-strict` runs in pages.yml BEFORE `jekyll build`, and is
+    # deliberately absent from ci-integrity.yml: it writes the gitignored _data/qa_status.json,
+    # and that workflow is read-only by construction. The comment there says its invariants are
+    # "covered by test_qa_patch_records.py" -- and for the record-level predicates they were, but
+    # NOT for the ones that read the shipped layout. So a template edit could pass every PR check
+    # and then fail the deploy. That is not hypothetical: AUX-030 repaired the file-size pill guard
+    # from the inert `!= blank` spelling to a real comparison, PR CI went green, and the Pages
+    # build failed on `file_size_pill_value_guard_missing` with main already merged.
+    #
+    # `scan_update_layout_public_copy()` is the ONLY function in that gate which reads a template
+    # (UPDATE_LAYOUT_PATH is its only layout path), and it is pure -- it reads and returns, it
+    # writes nothing. Calling it here runs the real deploy predicate against the real shipped
+    # layout, so the read-only guarantee stays intact and the claim in ci-integrity.yml becomes
+    # true. This is the suite's existing idiom: assert THROUGH the shipped predicates, never a copy.
+    layout_errors, layout_warnings = qa.scan_update_layout_public_copy()
+    check("the shipped aux-update.html passes the deploy gate's layout scan",
+          not layout_errors,
+          "these exact codes will fail `qa_patch_records.py --publish-strict` in pages.yml, "
+          "AFTER the pull request has merged: "
+          + "; ".join(sorted({str(e.get("code", e)) for e in layout_errors})))
+
+    # Non-vacuity. A scan that cannot fail proves nothing, so damage a copy of the real layout and
+    # require the predicate to notice. The guard spelling is mutated to the inert `!= blank` form,
+    # which is the exact regression this check exists to catch.
+    _real_layout = qa.UPDATE_LAYOUT_PATH
+    _src = _real_layout.read_text(encoding="utf-8")
+    # Remove the guarded pill outright rather than respelling it. A respelling mutation silently
+    # becomes a no-op when the layout ALREADY carries the broken spelling -- and then this check
+    # fails for the wrong reason, on top of the real failure above, which is noise a maintainer has
+    # to decode. Deleting the token always applies, so this check only ever reports its own subject.
+    _mutant = _src.replace("file_size_pill_value", "file_size_pill_value_REMOVED")
+    _tmp = Path(tempfile.mkdtemp(prefix="auxsays-qa-layout-")) / "aux-update.html"
+    _tmp.write_text(_mutant, encoding="utf-8")
+    try:
+        qa.UPDATE_LAYOUT_PATH = _tmp
+        mutant_errors, _ = qa.scan_update_layout_public_copy()
+    finally:
+        qa.UPDATE_LAYOUT_PATH = _real_layout
+    _codes = {str(e.get("code", "")) for e in mutant_errors}
+    check("that layout scan actually fails when the guarded pill is removed",
+          _src != _mutant and "file_size_pill_value_guard_missing" in _codes,
+          f"mutation applied={_src != _mutant}; codes={sorted(_codes)}")
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

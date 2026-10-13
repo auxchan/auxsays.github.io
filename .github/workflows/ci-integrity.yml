@@ -135,6 +135,14 @@ jobs:
       # auxsays/_data/qa_status.json and has no read-only mode, and running a writer under a
       # git-diff guard that cannot see a gitignored file would be a false assurance. Its invariants
       # are covered by test_qa_patch_records.py in the blocking category.
+      #
+      # That last sentence was true of the RECORD-level predicates and false of the ones that read
+      # the shipped layout, and the gap was not theoretical: AUX-030 changed aux-update.html, every
+      # check here passed, the pull request merged, and the Pages build then failed its
+      # publication-strict gate on a layout grep nothing at pull-request time could see. The suite
+      # now calls scan_update_layout_public_copy() -- the gate's only template-reading function,
+      # and a pure one -- against the real layout, so this workflow stays read-only AND the claim
+      # above holds. Anything added to that gate which reads a template must be added there too.
       - name: Audit consensus evidence
         run: python auxsays/scripts/audit_consensus_evidence.py
 

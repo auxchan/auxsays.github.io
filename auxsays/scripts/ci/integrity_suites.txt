@@ -160,7 +160,14 @@ auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
 # a method that stops emitting leaves its last `blocked` row frozen and reading as current, which
 # is why every not-run method still writes a fresh `disabled` row (O, P, J).
 auxsays/scripts/tests/test_premiere_method_routing.py = 48
-auxsays/scripts/tests/test_qa_patch_records.py = 30
+# Also runs the deploy gate's TEMPLATE invariants at PR time. `qa_patch_records.py
+# --publish-strict` executes in pages.yml before `jekyll build` and cannot run in ci-integrity
+# (it writes the gitignored _data/qa_status.json, and that workflow is read-only), so a template
+# edit used to pass every PR check and fail the DEPLOY -- which is exactly how AUX-030 merged
+# green and then broke Pages. scan_update_layout_public_copy() is the only part of that gate
+# which reads a template, and it is pure, so the suite calls it directly against the shipped
+# layout.
+auxsays/scripts/tests/test_qa_patch_records.py = 32
 auxsays/scripts/tests/test_reader_evidence_identity.py = 17
 auxsays/scripts/tests/test_report_count_reconciliation.py = 17
 auxsays/scripts/tests/test_acquisition_method_registry.py = 30
