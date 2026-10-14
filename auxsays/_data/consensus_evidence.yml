@@ -51864,7 +51864,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6034117-net-framework-3-5-standalone-installer
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -51894,7 +51893,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9457'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6034766-windows-11-version-26h2-install-error
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -51923,7 +51921,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7462'
-
 - id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x4we9j-is-there-no-good-way-of-speedramping-a-cl
   product_id: blackmagic-davinci
   update_version: 21.0.2
@@ -51947,4 +51944,222 @@ evidence:
   platform: unknown
   severity: medium
   sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x5a7a0-davinci-resolve-wont-launch-anymore
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x5a7a0/davinci_resolve_wont_launch_anymore/
+  parent_title: Davinci Resolve wont launch anymore
+  report_title: Davinci Resolve wont launch anymore
+  report_text_excerpt: Davinci Resolve wont launch anymore Before anyone asks~ I've checked/updated my Drivers/PC Updated to version 21 Uninstalled / Restarted PC / Reinstalled Davinci & all Blackmagic programs I can't think of anything else I could do to fix it that doesn't involve super specific...
+  captured_at: '2026-10-14T12:38:43Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: version 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x581vl-text-deleting-itself-bug
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x581vl/text_deleting_itself_bug/
+  parent_title: Text deleting itself (Bug?)
+  report_title: Text deleting itself (Bug?)
+  report_text_excerpt: Text deleting itself (Bug?) Hello, i am using davinci to edit a video for the first time in a while and im encountering something that i assume is a bug? Sometimes when i type in the text box or edit text it starts auto deleting. usually when that happens i close the software...
+  captured_at: '2026-10-14T12:38:43Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6035116-teams-meeting-wont-schedule-a-meeting
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6035116/teams-meeting-wont-schedule-a-meeting
+  parent_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_text_excerpt: teams meeting won't schedule a meeting Attempting to book a meeting however teams meeting won't schedule a meeting and states try again later.
+  captured_at: '2026-10-14T12:52:23Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6035116-teams-meeting-wont-schedule-a-meeting
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6035116/teams-meeting-wont-schedule-a-meeting
+  parent_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_text_excerpt: teams meeting won't schedule a meeting Attempting to book a meeting however teams meeting won't schedule a meeting and states try again later.
+  captured_at: '2026-10-14T12:52:23Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6035116-teams-meeting-wont-schedule-a-meeting
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6035116/teams-meeting-wont-schedule-a-meeting
+  parent_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_text_excerpt: teams meeting won't schedule a meeting Attempting to book a meeting however teams meeting won't schedule a meeting and states try again later.
+  captured_at: '2026-10-14T12:52:23Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6035116-teams-meeting-wont-schedule-a-meeting
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6035116/teams-meeting-wont-schedule-a-meeting
+  parent_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_text_excerpt: teams meeting won't schedule a meeting Attempting to book a meeting however teams meeting won't schedule a meeting and states try again later.
+  captured_at: '2026-10-14T12:52:23Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6035116-teams-meeting-wont-schedule-a-meeting
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6035116/teams-meeting-wont-schedule-a-meeting
+  parent_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_text_excerpt: teams meeting won't schedule a meeting Attempting to book a meeting however teams meeting won't schedule a meeting and states try again later.
+  captured_at: '2026-10-14T12:52:23Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6036208-defender-offline-scan-boots-into-recov
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6036208/defender-offline-scan-boots-into-recovery-mode
+  parent_title: Defender Offline Scan boots into Recovery Mode - Microsoft Q&A
+  report_title: Defender Offline Scan boots into Recovery Mode - Microsoft Q&A
+  report_text_excerpt: Defender Offline Scan boots into Recovery Mode - Microsoft Q&A 26H2 26300.9711 Never seen this before, has anyone seen this? After todays update I ran a Defender Offline scan. When the scan started I noticed that it had started in the Preparing for Recovery window. I have...
+  captured_at: '2026-10-14T13:01:31Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: obs-studio-32-2-2-obs-forum-thread-196602
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/elgato-4k-pro-xrgb-fails-to-connect-connectpins-0x80040207-yuy2-nv12-work-fine.196602/
+  parent_title: 'Elgato 4K Pro: XRGB fails to connect (ConnectPins 0x80040207), YUY2/NV12 work fine'
+  report_title: 'Elgato 4K Pro: XRGB fails to connect (ConnectPins 0x80040207), YUY2/NV12 work fine'
+  report_text_excerpt: 'with the exact same setup. Log: https://obsproject.com/logs/hQkqqp4BGJ7wamNB System - OBS 32.2.2 (64-bit), Windows 11 Home build 26300 - HP Pavilion Gaming Desktop 790-00xx, Intel i5-9400F, NVIDIA RTX 2060 - Elgato 4K Pro (PCIe, links at Gen2 x4), driver 1.1.0.203.7, firmware 24.'
+  captured_at: '2026-10-14T13:26:39Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
   source_weight: 1
