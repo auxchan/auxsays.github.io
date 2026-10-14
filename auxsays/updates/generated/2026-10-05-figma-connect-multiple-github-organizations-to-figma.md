@@ -17,8 +17,8 @@ update_version: Connect multiple GitHub organizations to Figma
 update_logo_text: FIG
 update_published_at: '2026-10-05T00:00:00.000Z'
 update_last_checked: '2026-10-06T02:49:49Z'
-source_last_checked: '2026-10-13T16:38:40Z'
-official_body_last_checked: '2026-10-13T16:38:40Z'
+source_last_checked: '2026-10-14T01:25:13Z'
+official_body_last_checked: '2026-10-14T01:25:13Z'
 record_last_updated: '2026-10-06T02:49:49Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-12T00:25:25Z'
-  url: https://www.figma.com/release-notes/?title=connect-multiple-github-organizations-to-figma
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-12T08:11:53Z'
   url: https://www.figma.com/release-notes/?title=connect-multiple-github-organizations-to-figma
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-13T16:38:40Z'
+  url: https://www.figma.com/release-notes/?title=connect-multiple-github-organizations-to-figma
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-14T01:25:13Z'
   url: https://www.figma.com/release-notes/?title=connect-multiple-github-organizations-to-figma
   status: captured-from-rss-feed
   body_captured: true
