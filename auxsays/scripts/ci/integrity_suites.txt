@@ -253,7 +253,7 @@ auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
 # went missing: `.reveal-up` defaulted to opacity 0 with an observer threshold of 0.08, which
 # an element taller than ~12 viewports can never satisfy, so the Adobe company page's 410-row
 # history stayed invisible on desktop permanently.
-auxsays/scripts/tests/test_template_presence_guards.py = 45
+auxsays/scripts/tests/test_template_presence_guards.py = 49
 auxsays/scripts/tests/test_patch_ingest_record_limit.py = 78
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54
