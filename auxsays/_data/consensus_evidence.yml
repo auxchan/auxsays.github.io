@@ -51923,3 +51923,28 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7462'
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x4we9j-is-there-no-good-way-of-speedramping-a-cl
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x4we9j/is_there_no_good_way_of_speedramping_a_clip_from/
+  parent_title: Is there no good way of Speedramping a clip from 100% to Freeze Frame onto a specific frame?
+  report_title: Is there no good way of Speedramping a clip from 100% to Freeze Frame onto a specific frame?
+  report_text_excerpt: Is there no good way of Speedramping a clip from 100% to Freeze Frame onto a specific frame? I have a portrait which is the person laughing and then I want to slowly transition into a freeze frame with the help of Optical Flow but I can't get to it how I want. The Speed change...
+  captured_at: '2026-10-13T23:28:32Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
