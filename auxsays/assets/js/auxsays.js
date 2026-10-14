@@ -29,19 +29,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // REVEALS -- opt-in, and only when this script can actually finish the job.
+  // REVEALS -- opt-in, armed in the <head> before first paint, revealed here.
   //
-  // The CSS default is now VISIBLE. `js-reveal` is what arms the hidden start state, so it is only
-  // added once we know an observer exists and the reader has not asked for reduced motion. If
-  // anything here is unavailable the page stays visible instead of disappearing.
+  // The CSS default is VISIBLE and `html.js-reveal` arms the hidden start state. The arming moved
+  // to a synchronous script in aux-base.html's <head>, where it lands before the browser paints;
+  // doing it from this deferred script meant content painted visible and then faded OUT, measured
+  // at 1.5s to opacity 0 on the live /updates/adobe/ page. The capability and reduced-motion
+  // checks live there with the arming, because the decision and its consequence belong together.
   //
   // threshold 0 replaces 0.08: intersectionRatio for an element taller than the viewport is
   // (viewportHeight / elementHeight), so 0.08 was unsatisfiable above ~12 viewports and the
   // 410-row Adobe history never revealed. 0 fires as soon as any part of the element enters.
   const reveals = document.querySelectorAll('.reveal-up');
-  const canObserve = typeof IntersectionObserver === 'function';
-  if (!prefersReducedMotion && canObserve && reveals.length) {
-    document.documentElement.classList.add('js-reveal');
+  const root = document.documentElement;
+  // The inline head script already decided whether to arm, and did it BEFORE first paint -- doing
+  // it here instead cost a measured 1.5s fade-out-and-back on every page. This script's job is to
+  // honour that decision, not to retake it: it claims the reveals so the head script's failsafe
+  // stands down, then reveals them. If the head script chose not to arm (no observer, reduced
+  // motion) there is nothing to reveal, because the CSS default is already visible.
+  window.__auxRevealReady = true;
+  if (root.classList.contains('js-reveal') && reveals.length) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {

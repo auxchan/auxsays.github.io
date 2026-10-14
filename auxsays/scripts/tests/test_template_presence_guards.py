@@ -64,6 +64,7 @@ _LAYOUTS = _AUX / "_layouts"
 _INCLUDES = _AUX / "_includes"
 CSS_PATH = _AUX / "assets" / "css" / "auxsays-custom.css"
 JS_PATH = _AUX / "assets" / "js" / "auxsays.js"
+BASE_LAYOUT_PATH = _AUX / "_layouts" / "aux-base.html"
 
 COMMENT_RE = re.compile(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", re.S)
 FRONT_MATTER_RE = re.compile(r"\A---\n.*?\n---\n", re.S)
@@ -467,10 +468,37 @@ def run() -> int:
               "html.js-reveal .reveal-up {")[1].split("}")[0].replace(" ", ""),
           "the opt-in rule is what makes the animation possible at all")
 
-    check("V4 the script adds `js-reveal` only after confirming it can observe",
-          re.search(r"if \(!prefersReducedMotion && canObserve && reveals\.length\) \{\s*"
-                    r"document\.documentElement\.classList\.add\('js-reveal'\)", js) is not None,
-          "arming the hidden state before knowing the observer exists is how content vanishes")
+    base = BASE_LAYOUT_PATH.read_text(encoding="utf-8")
+    head = base.split("</head>")[0] if "</head>" in base else ""
+
+    # The arming must happen BEFORE first paint, which means a synchronous inline script in <head>.
+    # Measured on the live site when it was armed from the deferred script instead: content painted
+    # at 123ms, `js-reveal` arrived at 158ms, and because the armed rule carries a .72s opacity
+    # transition the page then faded to opacity 0 and did not return until 1679ms -- 200 frames
+    # below 0.95. The reader saw the whole body disappear for a second and a half.
+    arming = re.search(r"classList\.add\('js-reveal'\)", head)
+    check("V4 `js-reveal` is armed by a synchronous script inside <head>",
+          arming is not None,
+          "arming from the deferred script paints the content visible and then fades it out")
+    check("V4a that arming script is not deferred or async",
+          arming is not None
+          and not re.search(r"<script[^>]*\b(defer|async)\b[^>]*>(?:(?!</script>).)*"
+                            r"classList\.add\('js-reveal'\)", head, re.S),
+          "a deferred script runs after parsing, which is exactly the regression this replaced")
+    check("V4b the head script arms only when it can observe and motion is allowed",
+          arming is not None
+          and "typeof IntersectionObserver !== 'function'" in head
+          and "prefers-reduced-motion: reduce" in head,
+          "without both guards the hidden state is armed on browsers that can never un-arm it")
+    check("V4c the head script un-arms itself if the main script never claims the reveals",
+          "__auxRevealReady" in head and "classList.remove('js-reveal')" in head,
+          "if auxsays.js 404s or throws, nothing would ever add `.is-visible` and the armed page "
+          "would stay blank -- the failsafe is what makes arming early safe")
+    check("V4d the main script claims the reveals rather than re-deciding",
+          "window.__auxRevealReady = true;" in js
+          and "classList.contains('js-reveal')" in js
+          and "classList.add('js-reveal')" not in js,
+          "two places deciding whether to arm is two places to get it wrong")
 
     check("V5 the observer threshold is 0, not a ratio a tall element cannot reach",
           "threshold: 0," in js and "threshold: 0.08" not in js,

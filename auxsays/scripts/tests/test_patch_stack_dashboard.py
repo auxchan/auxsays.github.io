@@ -763,8 +763,16 @@ def run() -> int:
                 by_date: dict = {}
                 for r in group:
                     by_date.setdefault(str(r[2] or ""), []).append(r)
+                # Only a tie at the FRONTIER of its line is unorderable. Once a strictly newer
+                # release exists in the same line, the tie stops mattering: whichever of the two
+                # tied builds the reader is on, there is a later stable to move to, and naming it
+                # is the right answer. Pinning every historical tie made this assertion a hostage
+                # to ingestion -- origin/main 302a8c75 added
+                # 2026-10-13-windows-11-26h2-26300-9711.md, a wholly legitimate record, and that
+                # alone turned SD-A and SD-A2 red on main with no code change anywhere.
+                newest_date = max(by_date.keys()) if by_date else ""
                 for date, tied in by_date.items():
-                    if len(tied) < 2:
+                    if len(tied) < 2 or date != newest_date:
                         continue
                     recs_all = list(entry.get("recs") or [])
                     # Permute ONLY the tied members, leaving every other record where the real

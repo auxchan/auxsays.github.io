@@ -2273,6 +2273,116 @@ recorded as program backlog rather than smuggled into a hotfix.
 generalises: a comment asserting that something else covers a gap is a claim, and an unverified
 claim in a governance file is the most expensive kind -- it stops the next engineer from looking.
 
+### AUX-032 — the page showed itself, then hid for a second and a half
+
+- **Status** Resolved · **Area** Rendering · **Severity** Medium
+- **First seen** 2026-10-13 · **Resolved** 2026-10-14
+
+AUX-030 made `.reveal-up` visible by default and moved the hidden start state behind
+`html.js-reveal`, so that no script, no observer or reduced motion all mean the page simply
+renders. That is still right. What was wrong was WHERE the class was added: from `auxsays.js`,
+which is `defer`red, and therefore runs after the document has parsed -- on a large page, after
+the browser has already painted.
+
+Measured on the live `/updates/adobe/` page, 505 frames sampled across a cold load:
+
+| t | state |
+| --- | --- |
+| 123 ms | `js-reveal` absent, opacity 1 -- the content painted, visible |
+| 158 ms | `js-reveal` added, fade-out begins |
+| 158-1679 ms | 200 frames below 0.95, reaching **opacity 0** |
+| ~1680 ms | back to visible |
+
+The armed rule carries `transition: opacity .72s`, so ARMING the hidden state animates 1 -> 0 over
+0.72s, and the observer's reveal then animates 0 -> 1 over another 0.72s. The reader saw the whole
+page body fade out and come back, every load. Strictly better than AUX-030's permanent invisibility,
+and still a defect worth its own correction.
+
+#### The fix is where, not what
+
+The arming moved to a synchronous `<script>` in `aux-base.html`'s `<head>`, so the hidden state is
+the first thing ever painted and the only transition a reader sees is the intended fade in.
+Reproduced in a harness built from the real stylesheet and script at 1280x760: on `origin/main` the
+probe reports `paintedVisibleThenHidden: true` with the drop beginning at 34 ms; on this branch it
+reports `false`, with `js-reveal` already present at the first sample.
+
+Arming before paint is only safe if it can also un-arm itself, because the class now lands before
+anything has proven it can be removed. Three refusals, all of them exercised:
+
+- no `IntersectionObserver`, or `prefers-reduced-motion: reduce` -- it never arms;
+- the script throws -- the class is never added and the visible default stands;
+- `auxsays.js` never runs (404, parse error, blocked) -- nothing would ever add `.is-visible`, so a
+  2-second timeout removes the class.
+
+The third is the one that matters and it was measured, not reasoned: with the script 404ing, at
+~1s the page is armed with `__auxRevealReady` false and opacity 0; at ~5s the class is gone and
+opacity is 1. Content cannot be left permanently hidden, which is the whole point of AUX-030.
+
+`auxsays.js` no longer decides anything about arming. It sets `window.__auxRevealReady` to stand the
+failsafe down and reveals what the head script armed. Two places deciding whether to arm is two
+places to get it wrong, and the capability checks belong with the arming they gate.
+
+#### A corrupted regex nearly shipped a check that could never fail
+
+Writing the new assertions through a shell heredoc turned `\b` into a literal **backspace (0x08)**
+inside `test_template_presence_guards.py`. The suite still reported 49/49, and the mutant that marks
+the arming script `defer` -- the exact regression this entry exists to prevent -- SURVIVED. It was
+caught only because every new check was mutation-tested rather than trusted for being green. After
+repairing the escapes, all seven mutants die.
+
+This is the third time this trap has been hit in this repository. The rule stands and is worth
+restating: build anything containing a backslash with `chr(92)`, or write it with a tool that does
+not pass through shell escaping, and then scan the file for control characters before trusting it.
+
+**Reopen only if** `paintedVisibleThenHidden` becomes true again on a cold desktop load of a page
+with an above-the-fold `.reveal-up`, or if a page is observed still armed (`html.js-reveal` present)
+more than ~3 seconds after load with no `.is-visible` applied.
+
+**Cross-reference** AUX-030 established the visible-by-default contract; this fixes where it is
+armed without changing it. The lesson that generalises: a transition on the HIDING rule means
+arming is itself an animation -- if the armed state is not painted first, the reader watches the
+page undo itself.
+
+### AUX-033 — a legitimate record turned main red
+
+- **Status** Resolved · **Area** CI governance · **Severity** Medium
+- **First seen** 2026-10-14 · **Resolved** 2026-10-14
+
+`origin/main` at `302a8c75` was red on `test_patch_stack_dashboard.py` (84/86) with no code change
+anywhere. The commit that broke it is its own: `302a8c75 "Ingest official patch records"` added
+`2026-10-13-windows-11-26h2-26300-9711.md`, a perfectly ordinary Windows record from the scheduled
+lane.
+
+SD-A collected every same-line, same-day pair of records in the LIVE corpus and asserted each one
+reports `RELEASE ORDER NOT RECORDED`. 26H2 carries such a pair: `26300.9457` and `26300.9550`, both
+dated 2026-09-29. Nothing can order those two against each other, so while they were the newest in
+their line the assertion was right.
+
+`26300.9711` ended that. A reader on either tied build now has a strictly newer stable release in
+the same servicing line, so the dashboard answers `UPDATE AVAILABLE` and names `26300.9711` -- which
+is the correct and more useful answer. The product was right and the test was wrong.
+
+The live half now considers only ties at the FRONTIER of their line. A tie that is no longer newest
+is not unorderable in any way that matters, because the reader has somewhere definite to go.
+
+#### What this cost, and what it did not
+
+Narrowing it leaves the live half vacuous today: `live same-line same-day member-evaluations: 0`.
+That is tolerable here only because the suite already prints that count -- so the vacuity is visible
+rather than silent -- and because the semantics live in fixtures, not in the corpus scan. That claim
+was measured rather than inherited: three mutations of the tie logic in `auxsays.js` (suppressing
+the tie, counting tied siblings as newer, renaming the unresolved state) are each killed by
+`SD-B`/`SD-C`/`SD-D1`/`SD-D2`/`SD-D3`/`SD-G`/`UP9`/`UP9c`, none of which reads the corpus.
+
+**Reopen only if** a corpus scan is added to a PR-time suite that asserts over whatever records
+happen to exist, without a fixture carrying the same semantics.
+
+**Cross-reference** this is the hazard an adversarial review of the SEO work named independently --
+"it pins DATA, not behaviour, so a scheduled collector run turns a PR-time suite red for a
+legitimate new record" -- observed here in production before that work began. The lesson that
+generalises: a PR-time assertion over live corpus state has a second author, the collector, and it
+commits whenever it likes.
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.

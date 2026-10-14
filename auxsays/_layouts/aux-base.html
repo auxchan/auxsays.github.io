@@ -6,6 +6,38 @@
     {% seo %}
     <link rel="stylesheet" href="{{ '/assets/css/jekyll-theme-chirpy.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/auxsays-custom.css' | relative_url }}">
+    <script>
+      /* ARM THE REVEAL ANIMATION BEFORE FIRST PAINT.
+       *
+       * The CSS default for `.reveal-up` is VISIBLE, and `html.js-reveal` is what arms the hidden
+       * start state. That ordering is deliberate -- no script, no observer, or reduced motion all
+       * mean the page simply renders -- but it only works if the class lands before the browser
+       * paints. Arming it from the DEFERRED script did not: measured on the live /updates/adobe/
+       * page, content painted at 123ms, `js-reveal` arrived at 158ms, and because the armed rule
+       * carries `transition: opacity .72s` the content then FADED OUT to opacity 0 and did not
+       * return until 1679ms -- a 1.5 second disappearance of the whole page body, 200 frames below
+       * 0.95. Arming synchronously here means the hidden state is the first thing ever painted, so
+       * the only transition a reader sees is the intended fade IN.
+       *
+       * This script may never leave content hidden. Three ways it refuses to:
+       *   - no IntersectionObserver, or reduced motion -> it does not arm at all;
+       *   - it throws -> the class is never added and the visible default stands;
+       *   - auxsays.js never runs (404, parse error, blocked) -> nothing would ever add
+       *     `.is-visible`, so the timeout below un-arms and the page shows itself.
+       * The flag is set by auxsays.js once it has actually wired the observer, not merely loaded.
+       */
+      (function () {
+        try {
+          if (typeof IntersectionObserver !== 'function') return;
+          if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          var root = document.documentElement;
+          root.classList.add('js-reveal');
+          window.setTimeout(function () {
+            if (!window.__auxRevealReady) root.classList.remove('js-reveal');
+          }, 2000);
+        } catch (e) { /* never let arming failure hide the page */ }
+      })();
+    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4SVH0YHB76"></script>
     <script>
