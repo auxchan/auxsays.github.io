@@ -18,9 +18,9 @@ update_version: GitHub Actions workflow lockfiles in public preview
 update_logo_text: GIT
 update_published_at: '2026-10-14T13:49:15Z'
 update_last_checked: '2026-10-14T14:31:10Z'
-source_last_checked: '2026-10-14T14:31:10Z'
-official_body_last_checked: '2026-10-14T14:31:10Z'
-record_last_updated: '2026-10-14T14:31:10Z'
+source_last_checked: '2026-10-14T19:51:40Z'
+official_body_last_checked: '2026-10-14T19:51:40Z'
+record_last_updated: '2026-10-14T19:51:40Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
@@ -99,14 +99,20 @@ official_source_attempts:
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: "GitHub Actions workflow dependency lockfiles are now in public preview for GitHub Enterprise Cloud\
-  \ and GitHub Enterprise Cloud with data residency. Tags and branches can move after you review a workflow, so a later run\
-  \ might execute different code. Lockfiles let you keep those references in your workflow while running the exact commits\
-  \ you locked.\n\n\n If an action is compromised, a moved tag or branch can introduce malicious code into your workflow without\
-  \ a change to your repository. Lockfiles help protect against unexpected dependency changes by keeping workflow runs tied\
-  \ to the commits you locked. Locking does not determine whether the dependency itself is safe, so review dependencies before\
-  \ locking them.\n\n\n Install the gh actions-lock extension for the GitHub CLI to create and maintain your workflow lockfile.\
-  \ With the extension, you can:\n\n\n\n Pin your dependencies: Generate .github/workflows/actions.lock with reviewable commits\
+- at: '2026-10-14T19:51:40Z'
+  url: https://github.blog/changelog/2026-10-14-github-actions-workflow-lockfiles-in-public-preview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+official_patch_notes_body: "GitHub Actions workflow dependency lockfiles are now in public preview for GitHub Enterprise Cloud,\
+  \ GitHub Enterprise Cloud with data residency, Team, and Free plans. Tags and branches can move after you review a workflow,\
+  \ so a later run might execute different code. Lockfiles let you keep those references in your workflow while running the\
+  \ exact commits you locked.\n\n\n Editor’s note (October 14th, 2026): Updated which plans have access to this public preview.\n\
+  \n\n If an action is compromised, a moved tag or branch can introduce malicious code into your workflow without a change\
+  \ to your repository. Lockfiles help protect against unexpected dependency changes by keeping workflow runs tied to the\
+  \ commits you locked. Locking does not determine whether the dependency itself is safe, so review dependencies before locking\
+  \ them.\n\n\n Install the gh actions-lock extension for the GitHub CLI to create and maintain your workflow lockfile. With\
+  \ the extension, you can:\n\n\n\n Pin your dependencies: Generate .github/workflows/actions.lock with reviewable commits\
   \ for actions and their transitive dependencies, as well as reusable workflow dependencies.\n Adopt locking gradually: Onboard\
   \ workflows individually. Once onboarded, a workflow must have lockfile entries for its dependencies, and GitHub Actions\
   \ runs the recorded commits.\n Keep workflow runs consistent: GitHub Actions requires each dependency of an onboarded workflow\
