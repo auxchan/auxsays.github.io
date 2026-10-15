@@ -17,8 +17,8 @@ update_version: Snap to midpoint for variable width stroke
 update_logo_text: FIG
 update_published_at: '2025-09-15T00:00:00.000Z'
 update_last_checked: '2026-08-11T14:57:56Z'
-source_last_checked: '2026-09-11T23:04:48Z'
-official_body_last_checked: '2026-09-11T23:04:48Z'
+source_last_checked: '2026-10-15T19:52:44Z'
+official_body_last_checked: '2026-10-15T19:52:44Z'
 record_last_updated: '2026-08-11T14:57:56Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-11T23:04:48Z'
+  url: https://www.figma.com/release-notes/?title=snap-to-midpoint-in-variable-width-strokes
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-15T19:52:44Z'
   url: https://www.figma.com/release-notes/?title=snap-to-midpoint-in-variable-width-strokes
   status: captured-from-rss-feed
   body_captured: true

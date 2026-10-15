@@ -17,8 +17,8 @@ update_version: 'New alpha: Prompt to edit your designs'
 update_logo_text: FIG
 update_published_at: '2025-09-16T00:00:00.000Z'
 update_last_checked: '2026-08-11T08:51:47Z'
-source_last_checked: '2026-09-11T18:54:45Z'
-official_body_last_checked: '2026-09-11T18:54:45Z'
+source_last_checked: '2026-10-15T19:52:44Z'
+official_body_last_checked: '2026-10-15T19:52:44Z'
 record_last_updated: '2026-08-11T08:51:47Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-11T18:54:45Z'
+  url: https://www.figma.com/release-notes/?title=new-alpha-prompt-to-edit-your-designs
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-15T19:52:44Z'
   url: https://www.figma.com/release-notes/?title=new-alpha-prompt-to-edit-your-designs
   status: captured-from-rss-feed
   body_captured: true
