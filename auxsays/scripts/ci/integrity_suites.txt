@@ -241,6 +241,14 @@ auxsays/scripts/tests/test_orchestration_r1.py = 55
 # rather than grepping for a token. Needs ruby + liquid like the hierarchy suite; without them it
 # still reports all 64 checks, failing R1 and everything that depends on the render.
 auxsays/scripts/tests/test_patch_heading_contrast.py = 111
+# Wave A: the patch page answers the decision before it explains the evidence. The hero used to
+# emit identity -> community sentiment on a three-zone graph -> the AUXSAYS verdict -> a full
+# collection-telemetry card, which on a 390x844 phone put the verdict 170px BELOW the fold under
+# a sentiment word that is a DIFFERENT axis (opposite direction on 217 records). A1-A17 pin the
+# new order, the axis naming, the zero-report graph suppression WITH its honesty statement, the
+# single monitoring authority, and the issue-sentence de-duplication. The de-duplication is pinned
+# by fixtures, never by the 66/153 corpus split -- scheduled collectors own those numbers.
+auxsays/scripts/tests/test_patch_decision_hierarchy.py = 32
 auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
 # Presence guards. 91 `x != blank` / `x == blank` tests across eight layouts and includes were
 # ALL inert: `blank` needs ActiveSupport's `blank?` and Jekyll does not load it, so every such

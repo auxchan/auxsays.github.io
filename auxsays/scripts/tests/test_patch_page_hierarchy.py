@@ -273,8 +273,15 @@ def run() -> int:
 
     check("H1 patch identity comes first", identity < summary,
           f"identity@{identity} summary@{summary}")
-    check("H2 the evidence summary precedes the verdict", summary < verdict,
-          f"summary@{summary} verdict@{verdict}")
+    # INVERTED BY WAVE A, deliberately. This suite's own subject is that the page answers the
+    # decision before it explains the evidence, and H3/H4/H5 below already enforce that against the
+    # freshness caveat and the two uncounted-report tiers. The community-evidence card was the one
+    # block still allowed to precede the verdict, and measurement showed what that cost: on a
+    # 390x844 phone the verdict word sat 170px below the fold, and the only categorical word above
+    # it was the raw sample sentiment -- a different axis, pointing the opposite way on 217 records.
+    # The decision now leads the evidence too, so the ordering this check pins is reversed.
+    check("H2 the verdict precedes the community-evidence card", verdict < summary,
+          f"verdict@{verdict} summary@{summary}")
     # THE DEFECT. Each of these three was above the verdict.
     check("H3 the verdict precedes the evidence-freshness caveat", verdict < freshness,
           f"verdict@{verdict} freshness@{freshness}")
@@ -501,9 +508,13 @@ def run() -> int:
     o_note = at('class="consensus-chart-meta consensus-sample-note"')
     o_verdict = at('id="verdict"')
     o_aside = at('class="update-evidence-freshness-notice"')
-    check("C4b ...inside the evidence card, above the verdict",
-          -1 < o_note < o_verdict < o_aside,
-          f"note={o_note} verdict={o_verdict} aside={o_aside}")
+    # Wave A moved the verdict above the evidence card, so the sample note -- which lives INSIDE
+    # that card and must stay there -- now follows it. Both of this check's jobs are unchanged: the
+    # note sits in the evidence card rather than floating elsewhere, and the freshness aside still
+    # comes after the decision. Only the note/verdict order flipped, with the decision gaining.
+    check("C4b ...inside the evidence card, which now follows the verdict",
+          -1 < o_verdict < o_note < o_aside,
+          f"verdict={o_verdict} note={o_note} aside={o_aside}")
     check("C4c the card still prints the staleness date next to it",
           "Last evidence checked: {{ evidence_checked_label }}" in LAYOUT_EMITTED)
     check("C5 the freshness caveat renders exactly once",

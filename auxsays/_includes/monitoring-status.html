@@ -20,7 +20,9 @@
     include.target_build  -- exact vendor build for build-aware products ('' when not build-aware)
     include.published_at  -- record release timestamp (ISO); gates post-release runs
     include.report_count  -- accepted patch-specific community report count
-    include.mode          -- 'full' (detail card) | 'cell' (table cell) | 'feed' (feed line)
+    include.mode          -- 'full' (detail card) | 'compact' (one hero line) | 'cell' (table
+                             cell) | 'feed' (feed line). Every mode renders the SAME derived
+                             `mon_status`; none of them re-derives it.
 
   Fail-closed ladder (first match wins):
     1  no matching rows                                          -> OFFICIAL SOURCE ONLY
@@ -133,7 +135,22 @@
 {%- assign mon_status_class = mon_status | downcase | replace: ' ', '-' -%}
 {%- assign mon_latest_label = '' -%}
 {%- if mon_latest_raw != '' -%}{%- assign mon_latest_label = mon_latest_raw | date: "%b %-d, %Y" -%}{%- endif -%}
-{%- if mon_mode == 'cell' -%}
+{%- comment -%}
+  COMPACT. One line, for the hero. It renders the SAME `mon_status` the full card does -- derived
+  once, above, by the ladder that is this file's whole reason to exist -- so there is no second
+  calculation and no way for the hero and the audit card to disagree. The full detail is not
+  removed; it moves to a disclosure lower on the page, which is where an audit trail belongs once
+  the reader has the answer. A degraded state is still named in full here, in words, so a blocked
+  or stale source is as obvious at a glance as it was in the card.
+{%- endcomment -%}
+{%- if mon_mode == 'compact' -%}
+<div class="update-monitoring-compact update-monitoring-compact--{{ mon_status_class }}">
+  <span class="update-monitoring-compact__label">Monitoring</span>
+  <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}">{{ mon_status }}</span>
+  <span class="update-monitoring-compact__detail">{% if mon_latest_label != '' %}checked {{ mon_latest_label }}{% else %}no run recorded{% endif %}</span>
+  <a class="update-monitoring-compact__more" href="#monitoring">Collection detail</a>
+</div>
+{%- elsif mon_mode == 'cell' -%}
 <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}" title="Community-evidence monitoring status (separate from the verdict)">{{ mon_status }}</span>
 {%- elsif mon_mode == 'feed' -%}
 <span class="patch-card-monitoring"><span class="patch-card-monitoring__label">Monitoring</span> <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}">{{ mon_status }}</span></span>

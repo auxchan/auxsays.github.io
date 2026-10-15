@@ -2383,6 +2383,121 @@ legitimate new record" -- observed here in production before that work began. Th
 generalises: a PR-time assertion over live corpus state has a second author, the collector, and it
 commits whenever it likes.
 
+### AUX-034 — the money page explained the evidence before it answered the question
+
+- **Status** Resolved · **Area** Patch page UX · **Severity** High
+- **First seen** 2026-10-14 · **Resolved** 2026-10-14
+
+AUXSAYS exists to answer one question. The page that answers it emitted, in order: identity, a
+community-sentiment word on a three-zone graph, the AUXSAYS verdict, and a full collection-telemetry
+card. Measured on a 390x844 phone, the verdict sat **730px down** on an evidence-rich record, and
+the only categorical word above it was the raw sample sentiment -- a **different axis**, which on
+217 records points the opposite way to the verdict, labelled "Evidence summary" directly beneath a
+box labelled "AUXSAYS verdict".
+
+#### What moved, measured over seven representative records
+
+| | mobile 390x844 | desktop 1280x800 |
+| --- | --- | --- |
+| verdict top | **-230px mean** (-179 to -251) | **-193px mean** (-141 to -214) |
+| hero footprint | **-273px mean** | **-147px mean** |
+| horizontal overflow | none | none |
+
+The records are deliberately spread across the states that behave differently: n=107, n=4, n=1,
+TEST FIRST, n=0, an archived build, and a Windows record whose long build identity legitimately
+consumes more room. Patch identity, version and release date are untouched on every one -- the
+H1 and the metadata row measure identically before and after. Nothing was shrunk to buy space.
+
+#### Two axes, named
+
+The evidence card's lead-in is now **Community signal**, and the sample's strength carries its own
+label. Not one stored value changed: across all 1,292 records the decision label, the community
+word, the report count, the monitoring state, the last-checked date, the source-URL population, the
+accepted citations and the official-notes block are **byte-identical** before and after.
+
+#### The graph, and the line that must survive it
+
+The three-zone scale now renders only where counted reports exist: 1,292 records to **219**. On the
+other 1,073 it drew a bar, a marker and a caption restating the "0 confirmed patch-specific
+community reports" line directly above it. The first attempt removed the honesty STATEMENT along
+with the bar, and `C1.7` in the sample-honesty suite caught it: dropping the graph was about height,
+dropping the sentence would have been about honesty. A zero-report page still says community
+consensus is not established, in words, with no graph.
+
+#### Issue reasoning: measure which sentence actually adds something
+
+The reasoning block printed "Current reports mention X." beneath a body that, on four products,
+already opened with exactly those words. Measured over the rendered corpus: 77 records printed both;
+on 66 every subject was already in the body, on 11 the cluster named one the body omitted. The rule
+suppresses the first group and keeps the second -- verified against ground truth at **66 suppressed,
+153 kept, 0 misclassified** -- and the suite pins that by FIXTURE, never by those counts, because
+scheduled collectors own corpus composition.
+
+**A Liquid trap cost nine records their information before the fixtures existed.** A for-tag written
+as `for x in str | split` does not split: Liquid ignores the filter and iterates the whole string as
+ONE item, raising nothing. The loop compared the entire cluster against the body, found the leading
+subject, and suppressed -- on exactly the records whose cluster named something the body omitted,
+which is the information the rule exists to protect. Same family as `blank`: a construct that
+quietly does nothing. The split is now assigned first, and mutant M9 restores the broken form.
+
+#### Monitoring: one authority, two presentations
+
+The hero carries a one-line status; the full card moved to a `#monitoring` disclosure with a nav
+link. Both render the SAME derived `mon_status` -- `monitoring-status.html` remains the only place
+the state is decided, and A8 refuses any derivation outside it. A degraded or blocked collection is
+still named in words, so it does not depend on colour or on opening a disclosure.
+
+One regression was introduced and caught here: the compact line initially restated the accepted
+count, taking per-page report-count restatements from a mean of 2.34 to 3.34. The line is about
+collection freshness, so it now carries only the freshness fact.
+
+#### History stays hidden, and why that is the right answer
+
+`status_events` fits the History block's reader contract exactly -- `at|label|note` on all 3,305
+events -- which is precisely the trap. Its CONTENT is internal pipeline state: 1,290 "AUXSAYS
+official-ingestion record initialized", 720 "User report count updated to N", against 4 genuine
+release events. 61% is ingestion and collector churn. Wiring the block to it would have published
+the pipeline. **The three fields the block reads (`public_status_events`, `public_history_events`,
+`update_history`) exist on 0 of 1,292 records, so the reader contract is sound and unserved**; the
+gap is a producer one. A16 refuses the shortcut.
+
+**Deferred to backend:** a producer that writes a public-safe release-event stream. Until then
+History renders nothing, which is honest.
+
+#### A link whose target was conditional on an unrelated fact
+
+Review caught one structural defect after CI was already green. The Collection Health disclosure was
+placed inside `{% if technical_details_renderable %}`, because it was inserted immediately before
+`<details id="technical-details">` and that anchor happens to live inside the gate. The hero's
+compact line and the section nav both emit `href="#monitoring"` UNCONDITIONALLY, so a record with no
+technical metadata would have carried two links to an id that does not exist and no reachable audit
+trail.
+
+Measured: **0 of 1,292 records currently render without a technical-details section**, because
+`pub_at_clean` feeds that flag and effectively every record has a release date. The defect was
+therefore entirely latent -- which is the point worth keeping. A link whose target is conditional on
+an unrelated fact is wrong whether or not today's data happens to hit it, and no corpus measurement
+would ever have surfaced it.
+
+The original A9 asserted that `id="monitoring"`, `mode='full'` and `href="#monitoring"` all appear in
+the SOURCE. They did, in all three cases, in the broken build: the strings existed, they just never
+coexisted in the branch that mattered. A9b-A9h replace that with rendered fixtures -- one record with
+every input to the gate blanked, one with them present -- and A9h generalises it: in every rendered
+fixture, every `href="#..."` must resolve to an id in the same document. The placement mutant is
+killed by A9d, A9e and A9h.
+
+**Live coverage is fixture-proven only.** No current record exercises the branch, and none was
+manufactured to claim otherwise.
+
+**Reopen only if** a record acquires one of the three public history fields without a producer that
+guarantees the events are reader-facing, or if `status_events` is wired to the block directly.
+
+**Cross-reference** AUX-030 established that this layout's guards had to be measured rather than
+read; this entry is the same discipline applied to its information order. The lesson that
+generalises: a page can be entirely truthful and still answer the wrong question first, and only
+geometry on a real viewport shows it -- the defect here was invisible to every assertion in the
+suite, because every individual fact on the page was correct.
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.
