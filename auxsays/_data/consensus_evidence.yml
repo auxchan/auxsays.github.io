@@ -52231,3 +52231,118 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037441-can-a-private-organisation-catalogue-a
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037441/can-a-private-organisation-catalogue-app-register
+  parent_title: Can a private organisation-catalogue app register a named Teams video filter? (New Teams desktop — app installs, tile never appears) - Microsoft Q&A
+  report_title: Can a private organisation-catalogue app register a named Teams video filter? (New Teams desktop — app installs, tile never appears) - Microsoft Q&A
+  report_text_excerpt: Can a private organisation-catalogue app register a named Teams video filter? (New Teams desktop — app installs, tile never appears) Hello Microsoft Teams platform team, We are testing a private, organisation-only Teams app in our own tenant. We are not seeking Teams Store...
+  captured_at: '2026-10-15T12:25:51Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037892-windows-hello-face-stops-working-after
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037892/windows-hello-face-stops-working-after-kb5127648-i
+  parent_title: Windows Hello Face stops working after KB5127648 – IR stream never starts (ROG Strix G18 G815LR) - Microsoft Q&A
+  report_title: Windows Hello Face stops working after KB5127648 – IR stream never starts (ROG Strix G18 G815LR) - Microsoft Q&A
+  report_text_excerpt: Windows Hello Face stops working after KB5127648 – IR stream never starts (ROG Strix G18 G815LR) - Microsoft Q&A After the cumulative update KB5127648 (build 26300.9711), Windows Hello Face stopped working. The IR emitter doesn't light up, and face sign-in never finds a face....
+  captured_at: '2026-10-15T12:34:09Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26300.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6036828-kb5127648-breaks-wired-802-1x-peap-aut
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6036828/kb5127648-breaks-wired-802-1x-peap-authentication
+  parent_title: KB5127648 breaks wired 802.1X (PEAP) authentication on Windows 11 24H2 - Microsoft Q&A
+  report_title: KB5127648 breaks wired 802.1X (PEAP) authentication on Windows 11 24H2 - Microsoft Q&A
+  report_text_excerpt: KB5127648 breaks wired 802.1X (PEAP) authentication on Windows 11 24H2 - Microsoft Q&A Summary After installing cumulative update KB5127648 and rebooting, wired 802.1X authentication using PEAP fails on the client side. The client reports an internal authentication error and...
+  captured_at: '2026-10-15T12:34:19Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.9711'
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037456-windows-11-26h2-build-26300-9457-taskb
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037456/windows-11-26h2-build-26300-9457-taskbar-drag-hove
+  parent_title: 'Windows 11 26H2 build 26300.9457: taskbar drag-hover does not activate windows with EnableLUA=0 - Microsoft Q&A'
+  report_title: 'Windows 11 26H2 build 26300.9457: taskbar drag-hover does not activate windows with EnableLUA=0 - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11 26H2 build 26300.9457: taskbar drag-hover does not activate windows with EnableLUA=0 - Microsoft Q&A I am looking for a Windows-level fix for native taskbar drag-hover window activation, while keeping EnableLUA=0 and the native Windows 11 taskbar. Environment:...'
+  captured_at: '2026-10-15T12:34:30Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9457'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9457'
