@@ -2498,6 +2498,94 @@ generalises: a page can be entirely truthful and still answer the wrong question
 geometry on a real viewport shows it -- the defect here was invisible to every assertion in the
 suite, because every individual fact on the page was correct.
 
+### AUX-035 — a rendering instruction was being published as a release date
+
+- **Status** Resolved · **Area** Official ingestion · **Severity** High
+- **First seen** 2026-10-14 · **Resolved** 2026-10-15
+
+The Elgato adapter produced `published_at: "relative"` on every live article. Proven end to end
+against the real help centre before anything was changed: `fetch()` returned 3 of 3 records with
+that literal string. Two independent causes.
+
+**The regex matched the wrong attribute.** `TIME_RE` was
+`<time\b[^>]*datetime=["'](?P<date>[^"']+)["']`. The character class is greedy with nothing to stop
+it, so on Zendesk's real tag --
+`<time datetime="2026-10-13T16:58:24Z" title="..." data-datetime="relative">` -- it backtracked to
+the RIGHTMOST `datetime=`, which is the tail of `data-datetime`, and captured the rendering
+instruction. Requiring whitespace before the attribute name and matching lazily pins it to the real
+attribute: in `data-datetime` the preceding character is a hyphen.
+
+**`normalize_date` is the wrong function for a release date.** It returns unparseable text VERBATIM
+and answers `utc_now()` for empty input. Both behaviours are right for a feed timestamp and wrong
+for a publication date: the first let a presentational token through, and the second presented the
+moment the collector ran as the moment the vendor shipped.
+
+#### The honest state already existed
+
+`microsoft_office_updates._date_from_text` had already refused `normalize_date` for exactly this
+reason, in a comment: it returns `""` on no match "because normalize_date defaults to now() — which
+would let a non-date table cell win". `strict_date` is that rule made shareable rather than
+re-derived per adapter. It is ADDITIVE: `normalize_date` is untouched, so the five other callers
+keep their behaviour.
+
+`strict_date` returns an ISO instant or `""`. Nothing else. It accepts ISO with or without a zone,
+RFC 822, and "Month DD, YYYY"; it refuses `relative`, `today`, `yesterday`, `2 days ago`, `updated`,
+`recently`, empty, None, whitespace, garbage, HTML fragments, null-like strings, and impossible
+calendar dates. An adapter that cannot establish a date drops the candidate, reported as
+`date_misses`, exactly as it already drops an unrecoverable version.
+
+#### The writer was the second fabricator
+
+`output_path` and the front-matter builder both read `record.get("published_at") or utc_now()`.
+That reads like a default and behaves like a fabrication: downstream nothing can distinguish it
+from a vendor date, it renders as "Released <today>", and because the feed and homepage sort this
+field as a STRING it ranks the record as the newest patch on the site.
+
+The caller inventory justified closing it. Two of the three Microsoft Office paths already failed
+closed; the Click-to-Run path set `published = ""` and appended the record anyway, so its own
+`_date_from_text` refusal was discarded one line later. That path now fails closed like its
+siblings, and the writer raises `MissingPublicationDate` rather than substituting. With every
+adapter dropping undated candidates the raise is a backstop -- a loud one, because a silent
+substitution is how this survived.
+
+#### Chronology
+
+Liquid's `sort` is lexical, which is why the defect was not merely cosmetic: `"r"` (0x72) sorts
+above `"2"` (0x32), so the poisoned record ranked first on the homepage, first in the feed and
+newest in every product history, above genuinely newer patches. The property now asserted is that
+anything accepted is a leading-digit ISO instant and everything else is refused, so no accepted
+value can outrank a real one.
+
+#### Four errors in this work, caught before merge
+
+`strict_date` silently DROPPED timezone offsets -- `16:58+02:00` became `16:58Z`, a two-hour error,
+and it was described as correct in a working note before being measured. A hand-rolled field match
+cannot be used where an offset must be APPLIED.
+
+`E-D11` passed vacuously: `version_pattern` was put at the top level when the adapter reads
+`ingestion.version_pattern`, so BOTH fixtures were rejected on version before the date check ran,
+and the dateless-rejection test proved nothing. `E-D10` matched its own explanatory comment. The
+writer's "missing key" fixture used `dict(rec, **{})`, which keeps the key.
+
+Six mutants, six killed. One is reported as **equivalent**: removing the impossible-date guard
+changes no outcome, because those values still fall through to `""`. It is redundant defence, not a
+tested behaviour, and no kill was manufactured for it. One earlier mutant was MIS-TARGETED -- it hit
+`normalize_date`, which these tests do not cover -- and was re-aimed at both `strict_date` branches.
+
+The discovery fixtures carried no date at all, because they test starvation and the adapter used to
+invent one. They were given dates rather than weakening the rule: under the new contract a dateless
+article is not an ingestible candidate, so every "position i is reached" assertion would have been
+vacuously unreachable.
+
+**Reopen only if** an adapter is added that writes `published_at` from anything other than
+`strict_date`, or a record is observed whose `update_published_at` does not begin with a 4-digit
+year.
+
+**Cross-reference** the Office adapter's `_date_from_text` comment is the precedent this
+generalises. The lesson: a date field accepts two kinds of wrong value -- text that is not a date,
+and a real date that is not the vendor's -- and a permissive normaliser produces both while looking
+like a convenience.
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.

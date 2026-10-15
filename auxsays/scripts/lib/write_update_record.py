@@ -180,9 +180,33 @@ def record_slug(record: dict[str, Any]) -> str:
     version = record.get("version") or record.get("title") or record.get("record_id")
     return record_version_slug(version, record.get("target_build"), record.get("product_id"))
 
+class MissingPublicationDate(ValueError):
+    """Raised when a record reaches the writer with no establishable publication date.
+
+    The writer used to substitute `utc_now()` in two places -- the filename slug here and the
+    front-matter `update_published_at` below. That is not a default; it is a fabrication, and it
+    is indistinguishable downstream from a real vendor date: it renders as "Released <today>",
+    sorts as the newest patch on the homepage and the feed, and feeds every freshness comparison.
+
+    Every adapter that can fail to read a date now drops the candidate instead, so nothing should
+    ever reach this. It is a backstop, and it is loud on purpose: a silent substitution is how the
+    problem survived in the first place.
+    """
+
+
+def _require_published(record: dict[str, Any]) -> str:
+    published = str(record.get("published_at") or "").strip()
+    if not published:
+        raise MissingPublicationDate(
+            "record %r (%s) has no publication date; an adapter must drop an undated candidate "
+            "rather than let the writer invent one"
+            % (record.get("record_id") or record.get("version"), record.get("product_id")))
+    return published
+
+
 def output_path(output_dir: Path, record: dict[str, Any]) -> Path:
-    published = str(record.get("published_at") or utc_now())
-    date_slug = published[:10] if len(published) >= 10 else utc_now()[:10]
+    published = _require_published(record)
+    date_slug = published[:10]
     product_slug = slugify(record.get("software") or record.get("product_id"))
     return output_dir / f"{date_slug}-{product_slug}-{record_slug(record)}.md"
 
@@ -289,7 +313,7 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     version_slug = record_slug(record)
     software = record.get("software") or record.get("product_id")
     company = record.get("company") or record.get("company_id")
-    published = record.get("published_at") or utc_now()
+    published = _require_published(record)
     checked_at = record.get("source_last_checked") or record.get("_source_checked_at") or utc_now()
     source_url = record.get("source_url") or record.get("official_url")
     body = normalize_release_notes_body(record.get("body") or "No official release-note body was captured.")

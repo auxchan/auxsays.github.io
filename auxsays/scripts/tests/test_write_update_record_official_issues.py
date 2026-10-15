@@ -122,6 +122,42 @@ def run() -> int:
         wur.refresh_existing_record(path, base_record())
         check("refresh without official fields preserves last-known counts", read_fm(path).get("official_resolved_issue_count") == 2, str(read_fm(path).get("official_resolved_issue_count")))
 
+    # ---- THE WRITER NEVER INVENTS A RELEASE DATE --------------------------------------
+    #
+    # `output_path` and the front-matter builder both used `record.get("published_at") or
+    # utc_now()`. That reads like a default and behaves like a fabrication: downstream there is no
+    # way to tell an invented date from a vendor one. It renders as "Released <today>", and because
+    # the feed and homepage sort on this string it ranks the record as the newest patch on the
+    # site. Every adapter that can fail to read a date now drops the candidate, so this is a
+    # backstop -- but a loud one, because a silent substitution is how the defect survived.
+    from lib.write_update_record import MissingPublicationDate, output_path
+    from pathlib import Path as _Path
+
+    _rec = {"record_id": "t:1", "product_id": "elgato-stream-deck", "software": "Stream Deck",
+            "version": "7.6", "published_at": "2026-09-22T16:35:36Z"}
+    _ok = output_path(_Path("/tmp"), _rec)
+    check("W-D1 a dated record still produces a date-stamped filename",
+          "2026-09-22" in _ok.name, _ok.name)
+
+    def _without_date():
+        # `dict(_rec, **{})` keeps the key, so the "missing" case has to DROP it explicitly --
+        # otherwise this reads as a pass while testing a dated record.
+        r = dict(_rec)
+        r.pop("published_at", None)
+        return r
+
+    for label, bad in [("missing", None), ("empty string", {"published_at": ""}),
+                       ("whitespace", {"published_at": "   "}), ("None", {"published_at": None})]:
+        raised = False
+        try:
+            output_path(_Path("/tmp"), _without_date() if bad is None else dict(_rec, **bad))
+        except MissingPublicationDate:
+            raised = True
+        except Exception:
+            pass
+        check(f"W-D2 the writer refuses a {label} publication date",
+              raised, "it would otherwise be stamped with the collector's own clock")
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

@@ -87,6 +87,88 @@ def normalize_date(value: str | None) -> str:
         return m.group(1) + "T00:00:00Z"
     return text
 
+# PRESENTATIONAL DATE TOKENS. Zendesk and most CMS templates render a machine date alongside a
+# human one, and the human one is not a date at all -- it is a rendering instruction ("relative")
+# or a relative phrase ("2 days ago"). `normalize_date` returns unparseable input VERBATIM, so any
+# of these reaching it becomes a published date that looks real to every consumer downstream.
+_NON_DATE_TOKENS = (
+    "relative", "today", "yesterday", "tomorrow", "ago", "recently", "updated", "just now",
+    "last week", "last month", "n/a", "na", "none", "null", "nil", "unknown", "tbd", "tba",
+    "not available", "no date", "-", "--",
+)
+
+_MONTH_NAMES = {
+    "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6, "july": 7,
+    "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
+}
+_TEXT_DATE_RE = re.compile(
+    r"\b(" + "|".join(_MONTH_NAMES) + r")\s+(\d{1,2}),\s*(\d{4})\b", re.I)
+
+
+def strict_date(value: str | None) -> str:
+    """Normalise a publication date, or return "" -- never a substitute, never a passthrough.
+
+    `normalize_date` cannot be used for a publication date. It has two behaviours that are right
+    for a feed timestamp and wrong for a release date: it returns unparseable text VERBATIM, and
+    on empty input it returns `utc_now()` -- the COLLECTOR's runtime, presented as the moment the
+    vendor shipped. The Office adapter already refuses it for exactly this reason
+    (`_date_from_text` returns "" "not normalize_date('')... which would let a non-date table cell
+    win"), and this is that rule made shareable rather than re-derived per adapter.
+
+    Returns an ISO-8601 instant ending in Z, or "". Nothing else. A caller that cannot proceed
+    without a date must reject its candidate; it must not invent one.
+    """
+    if value is None:
+        return ""
+    text = str(value).strip()
+    if not text:
+        return ""
+    lowered = text.lower()
+    # A presentational token is not a near-miss date; it is a different kind of thing.
+    if lowered in _NON_DATE_TOKENS or any(
+            lowered == t or lowered.endswith(" " + t) or lowered.startswith(t + " ")
+            for t in ("ago", "today", "yesterday", "tomorrow", "relative")):
+        return ""
+    if any(tok in lowered for tok in (" ago", "ago ", "relative")):
+        return ""
+    # ISO 8601, with or without a zone. `fromisoformat` is used rather than a hand-rolled match
+    # because an offset has to be APPLIED, not discarded: a hand-rolled parse that reads the
+    # fields and ignores the trailing "+02:00" turns 16:58+02:00 into 16:58Z, which is a silent
+    # two-hour error on a published date. Everything is converted to UTC; a naive value is taken
+    # as already-UTC, which is what every source in this repo emits.
+    iso_candidate = text.replace("Z", "+00:00") if text.endswith("Z") else text
+    try:
+        parsed = dt.datetime.fromisoformat(iso_candidate)
+    except ValueError:
+        parsed = None
+    if parsed is not None:
+        if parsed.tzinfo is not None:
+            parsed = parsed.astimezone(dt.timezone.utc).replace(tzinfo=None)
+        return parsed.replace(microsecond=0).isoformat() + "Z"
+    # A date-shaped string fromisoformat refuses is an impossible calendar date, not a near miss.
+    if re.match(r"^\d{4}-\d{2}-\d{2}", text):
+        return ""
+    # RFC 822, as feeds emit it.
+    try:
+        from email.utils import parsedate_to_datetime
+        parsed = parsedate_to_datetime(text)
+        if parsed is not None:
+            if parsed.tzinfo:
+                parsed = parsed.astimezone(dt.timezone.utc).replace(tzinfo=None)
+            return parsed.replace(microsecond=0).isoformat() + "Z"
+    except Exception:
+        pass
+    # "Month DD, YYYY", which vendors print in article bodies.
+    m = _TEXT_DATE_RE.search(text)
+    if m:
+        try:
+            return dt.datetime(int(m.group(3)), _MONTH_NAMES[m.group(1).lower()],
+                               int(m.group(2))).isoformat() + "Z"
+        except ValueError:
+            return ""
+    return ""
+
+
 def format_asset_size(size_bytes: int | str | None) -> str:
     try:
         size = float(size_bytes or 0)

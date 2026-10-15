@@ -12,7 +12,7 @@ import sys
 from urllib.parse import urljoin, urlparse, urlunparse
 
 from lib.http import fetch_text
-from lib.normalize import strip_tags, normalize_date
+from lib.normalize import strip_tags, strict_date
 
 # Unlike parse-once adapters, this adapter fetches ONE HTTP page per discovered
 # article, so its network cost scales with how many links it inspects. Two mechanisms
@@ -50,7 +50,14 @@ TITLE_PATTERNS = (
     r"<h1\b[^>]*>(?P<title>.*?)</h1>",
     r"<title\b[^>]*>(?P<title>.*?)</title>",
 )
-TIME_RE = re.compile(r"<time\b[^>]*datetime=[\"'](?P<date>[^\"']+)[\"'][^>]*>", re.I | re.S)
+# The attribute boundary is load-bearing. Written as `[^>]*datetime=` the character class is
+# greedy with nothing to stop it, so on real Zendesk markup --
+#   <time datetime="2026-10-13T16:58:24Z" title="..." data-datetime="relative">
+# -- it backtracks to the RIGHTMOST `datetime=`, which is the tail of `data-datetime`, and
+# captures the literal string "relative". Requiring whitespace before the attribute name and
+# matching lazily pins it to the real `datetime` attribute: in `data-datetime` the preceding
+# character is a hyphen, so that attribute can no longer satisfy the pattern.
+TIME_RE = re.compile(r"<time\b[^>]*?\sdatetime=[\"'](?P<date>[^\"']+)[\"'][^>]*>", re.I | re.S)
 META_DATE_RE = re.compile(
     r"<meta\b[^>]*(?:property|name)=[\"'](?:article:published_time|date|pubdate|dc\.date)[\"'][^>]*content=[\"'](?P<date>[^\"']+)[\"'][^>]*>",
     re.I | re.S,
@@ -157,13 +164,26 @@ def _body_from_html(html: str) -> str:
 
 
 def _date_from_html(html: str) -> str:
+    """The article's publication date, or "" -- never a guess and never the collector's clock.
+
+    Every candidate goes through `strict_date`, which returns "" for anything that is not a real
+    calendar date. That matters twice over here. The machine attribute can carry a RENDERING
+    INSTRUCTION rather than a date (Zendesk writes data-datetime="relative"), and `normalize_date`
+    -- which this used to call -- returns unparseable text verbatim and answers `utc_now()` for
+    empty input, so a presentational token became a published date and an absent one became the
+    moment the collector happened to run. Neither is a release date.
+
+    Each source is tried in turn and a rejected value does not stop the search, so a template that
+    pollutes one attribute can still be read from another.
+    """
     for regex in (TIME_RE, META_DATE_RE):
-        match = regex.search(html or "")
-        if match:
-            return normalize_date(match.group("date"))
+        for match in regex.finditer(html or ""):
+            iso = strict_date(match.group("date"))
+            if iso:
+                return iso
     text = strip_tags(html or "")
     match = VISIBLE_DATE_RE.search(text)
-    return normalize_date(match.group(0) if match else "")
+    return strict_date(match.group(0)) if match else ""
 
 
 def _product_matches(source: dict, title: str, body: str) -> bool:
@@ -276,6 +296,7 @@ def fetch(source: dict, limit: int = 3, scan_state: dict | None = None) -> list[
     request_failures = 0
     parser_misses = 0
     nonmatches = 0
+    date_misses = 0
     newly_inspected: list[str] = []
     for article_url in selection:
         if articles_fetched >= article_budget:
@@ -296,7 +317,20 @@ def fetch(source: dict, limit: int = 3, scan_state: dict | None = None) -> list[
         if not version:
             parser_misses += 1
             continue
-        records.append(_record(source, article_url, title, version, _date_from_html(html), body))
+        # NO DATE, NO RECORD. A candidate whose publication date cannot be established is dropped
+        # the same way one with no recoverable version is. The alternative is worse than it looks:
+        # an empty published_at does not stay empty, because write_update_record substitutes
+        # utc_now() for it (:184 for the filename slug, :292 for the front matter), so the record
+        # would claim the vendor shipped at the moment the collector ran -- a precise-looking date
+        # that is simply false, on a page whose entire purpose is to be trusted about patches.
+        # Dropping the candidate is the honest outcome and the one this adapter already uses for
+        # an unrecoverable version; the count is reported so the loss is visible in diagnostics
+        # rather than silent.
+        published = _date_from_html(html)
+        if not published:
+            date_misses += 1
+            continue
+        records.append(_record(source, article_url, title, version, published, body))
 
     # STAGE the ledger advance under "pending_inspected"; the runner promotes it to
     # "inspected" only when the whole run succeeds (records written + state persisted).
@@ -330,6 +364,7 @@ def fetch(source: dict, limit: int = 3, scan_state: dict | None = None) -> list[
         no_matching_articles=(len(records) == 0),
         request_failures=request_failures,
         parser_misses=parser_misses,
+        date_misses=date_misses,
         nonmatches=nonmatches,
         inspected_ledger=len(scan_state.get("pending_inspected", [])) if isinstance(scan_state, dict) else 0,
     )

@@ -343,6 +343,15 @@ def _records_from_office_release_notes(
                 published = candidate
                 break
 
+        if not published:
+            # Fail closed, like the two sibling paths in this file. `_date_from_text` already
+            # refuses a non-date cell by returning "" rather than normalize_date(""), but that
+            # refusal was then discarded here: the record was appended with published_at empty,
+            # and write_update_record substitutes utc_now() for an empty value -- so a row whose
+            # date could not be read was published as if Microsoft shipped it the moment the
+            # collector ran. An undated row is not a dated row with a missing field.
+            continue
+
         seen_versions.add(version)
         records.append(_record(source, source_url, channel, version, build, published))
         if len(records) >= max(1, int(limit)):

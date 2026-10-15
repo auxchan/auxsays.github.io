@@ -225,7 +225,7 @@ auxsays/scripts/tests/test_blackmagic_support_downloads.py = 10
 auxsays/scripts/tests/test_css_design_tokens.py = 21
 auxsays/scripts/tests/test_davinci_creative_cow_source.py = 23
 auxsays/scripts/tests/test_davinci_reddit_source.py = 27
-auxsays/scripts/tests/test_elgato_help_center_adapter.py = 75
+auxsays/scripts/tests/test_elgato_help_center_adapter.py = 111
 auxsays/scripts/tests/test_failsoft_collection.py = 25
 auxsays/scripts/tests/test_http_credential_scope.py = 55
 auxsays/scripts/tests/test_microsoft_learn_qna_source.py = 28
@@ -273,7 +273,7 @@ auxsays/scripts/tests/test_route_integrity.py = 9
 auxsays/scripts/tests/test_run_patch_evidence_collection.py = 76
 auxsays/scripts/tests/test_runtime_budget.py = 37
 auxsays/scripts/tests/test_vendor_page_layout.py = 26
-auxsays/scripts/tests/test_write_update_record_official_issues.py = 17
+auxsays/scripts/tests/test_write_update_record_official_issues.py = 22
 
 [network]
 # Makes live external requests: 301 connection attempts to reddit.com / web.archive.org in one run,
