@@ -52346,3 +52346,753 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9457'
+
+- id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-pixel-aspect-ratio-getting-wrongly-interpreted-after-2
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/pixel-aspect-ratio-getting-wrongly-interpreted-after-26-2-and-still-on-26-3-1630083
+  parent_title: Pixel aspect ratio getting wrongly interpreted after 26.2 and still on 26.3
+  report_title: Pixel aspect ratio getting wrongly interpreted after 26.2 and still on 26.3
+  report_text_excerpt: Pixel aspect ratio gets wrongly interpreted on some footage after 26.2 version, i don’t know what triggers but it happens. Please test it with Pr 2025 and Pr 2026 (after 26.2 because 26.0 doesn’t have this bug.) Pixel aspect ratio gets wrongly interpreted as 1.778 and footage...
+  captured_at: '2026-10-15T17:43:06Z'
+  source_date: '2026-06-30'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-chat-messages-disappears/4564805
+  parent_title: Teams Chat messages disappears
+  report_title: Teams Chat messages disappears
+  report_text_excerpt: Teams Chat messages disappears Problem with Teams Windows client.When you hover the mouse over the chat column, all the contacts disappear.If you click on the Chat icon to the left or press CRTL+2 you get the error message &quot;We ran into a problem getting your chats and...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-transcription-langu
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-transcription-language-settings/4564414
+  parent_title: Microsoft Teams transcription language settings
+  report_title: Microsoft Teams transcription language settings
+  report_text_excerpt: Microsoft Teams transcription language settings Hi!&amp;nbsp;With a Microsoft 365 Business Premium license and a Copilot license, I can use transcription during a Teams meeting by setting the spoken language to Auto Detect. However, the transcription is sometimes inaccurate....
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-stopping-notifications-for-specific
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/stopping-notifications-for-specific-chats/4564806
+  parent_title: Stopping notifications for specific chats
+  report_title: Stopping notifications for specific chats
+  report_text_excerpt: Stopping notifications for specific chats When will you bring back the stop notifications for a specific post that was removed in the new Teams?This generate a lot of noise/notifications when there&apos;s a lot of replied in the post.
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-lists-json-3459899
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-lists-json/3459899
+  parent_title: Microsoft Teams/ Lists JSON
+  report_title: Microsoft Teams/ Lists JSON
+  report_text_excerpt: Microsoft Teams/ Lists JSON Hello,&amp;nbsp;&amp;nbsp;I&apos;m currently using Teams and Lists to track our universities certifications. I found a JSON&apos;s that allowed me to make the numbers of the dates red when expired, yellow within 30 days, and green if futher than 30...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2022-06-02'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-where-do-i-report-bug-for-ms-teams
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/where-do-i-report-bug-for-ms-teams-/2371087
+  parent_title: Where do I report bug for Ms TEams ?
+  report_title: Where do I report bug for Ms TEams ?
+  report_text_excerpt: Where do I report bug for Ms TEams ? I have encountered bug in MS TEams. Where to report ?&amp;nbsp;
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2021-05-20'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-organisations-monitoring-at
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-organisations-monitoring-attendance-and-participation-during-live-micros/4564487
+  parent_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_text_excerpt: How are organisations monitoring attendance and participation during live Microsoft Teams meetings? Hi everyone,I’m interested in how organisations are monitoring and verifying attendance and participation during live Microsoft Teams meetings, particularly where accurate...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-chat-messages-disappears/4564805
+  parent_title: Teams Chat messages disappears
+  report_title: Teams Chat messages disappears
+  report_text_excerpt: Teams Chat messages disappears Problem with Teams Windows client.When you hover the mouse over the chat column, all the contacts disappear.If you click on the Chat icon to the left or press CRTL+2 you get the error message &quot;We ran into a problem getting your chats and...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-transcription-langu
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-transcription-language-settings/4564414
+  parent_title: Microsoft Teams transcription language settings
+  report_title: Microsoft Teams transcription language settings
+  report_text_excerpt: Microsoft Teams transcription language settings Hi!&amp;nbsp;With a Microsoft 365 Business Premium license and a Copilot license, I can use transcription during a Teams meeting by setting the spoken language to Auto Detect. However, the transcription is sometimes inaccurate....
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-stopping-notifications-for-specific
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/stopping-notifications-for-specific-chats/4564806
+  parent_title: Stopping notifications for specific chats
+  report_title: Stopping notifications for specific chats
+  report_text_excerpt: Stopping notifications for specific chats When will you bring back the stop notifications for a specific post that was removed in the new Teams?This generate a lot of noise/notifications when there&apos;s a lot of replied in the post.
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-lists-json-3459899
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-lists-json/3459899
+  parent_title: Microsoft Teams/ Lists JSON
+  report_title: Microsoft Teams/ Lists JSON
+  report_text_excerpt: Microsoft Teams/ Lists JSON Hello,&amp;nbsp;&amp;nbsp;I&apos;m currently using Teams and Lists to track our universities certifications. I found a JSON&apos;s that allowed me to make the numbers of the dates red when expired, yellow within 30 days, and green if futher than 30...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2022-06-02'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-where-do-i-report-bug-for-ms-teams
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/where-do-i-report-bug-for-ms-teams-/2371087
+  parent_title: Where do I report bug for Ms TEams ?
+  report_title: Where do I report bug for Ms TEams ?
+  report_text_excerpt: Where do I report bug for Ms TEams ? I have encountered bug in MS TEams. Where to report ?&amp;nbsp;
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2021-05-20'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-organisations-monitoring-at
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-organisations-monitoring-attendance-and-participation-during-live-micros/4564487
+  parent_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_text_excerpt: How are organisations monitoring attendance and participation during live Microsoft Teams meetings? Hi everyone,I’m interested in how organisations are monitoring and verifying attendance and participation during live Microsoft Teams meetings, particularly where accurate...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-chat-messages-disappears/4564805
+  parent_title: Teams Chat messages disappears
+  report_title: Teams Chat messages disappears
+  report_text_excerpt: Teams Chat messages disappears Problem with Teams Windows client.When you hover the mouse over the chat column, all the contacts disappear.If you click on the Chat icon to the left or press CRTL+2 you get the error message &quot;We ran into a problem getting your chats and...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-transcription-langu
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-transcription-language-settings/4564414
+  parent_title: Microsoft Teams transcription language settings
+  report_title: Microsoft Teams transcription language settings
+  report_text_excerpt: Microsoft Teams transcription language settings Hi!&amp;nbsp;With a Microsoft 365 Business Premium license and a Copilot license, I can use transcription during a Teams meeting by setting the spoken language to Auto Detect. However, the transcription is sometimes inaccurate....
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-stopping-notifications-for-specific
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/stopping-notifications-for-specific-chats/4564806
+  parent_title: Stopping notifications for specific chats
+  report_title: Stopping notifications for specific chats
+  report_text_excerpt: Stopping notifications for specific chats When will you bring back the stop notifications for a specific post that was removed in the new Teams?This generate a lot of noise/notifications when there&apos;s a lot of replied in the post.
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-lists-json-3459899
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-lists-json/3459899
+  parent_title: Microsoft Teams/ Lists JSON
+  report_title: Microsoft Teams/ Lists JSON
+  report_text_excerpt: Microsoft Teams/ Lists JSON Hello,&amp;nbsp;&amp;nbsp;I&apos;m currently using Teams and Lists to track our universities certifications. I found a JSON&apos;s that allowed me to make the numbers of the dates red when expired, yellow within 30 days, and green if futher than 30...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2022-06-02'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-where-do-i-report-bug-for-ms-teams
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/where-do-i-report-bug-for-ms-teams-/2371087
+  parent_title: Where do I report bug for Ms TEams ?
+  report_title: Where do I report bug for Ms TEams ?
+  report_text_excerpt: Where do I report bug for Ms TEams ? I have encountered bug in MS TEams. Where to report ?&amp;nbsp;
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2021-05-20'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-organisations-monitoring-at
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-organisations-monitoring-attendance-and-participation-during-live-micros/4564487
+  parent_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_text_excerpt: How are organisations monitoring attendance and participation during live Microsoft Teams meetings? Hi everyone,I’m interested in how organisations are monitoring and verifying attendance and participation during live Microsoft Teams meetings, particularly where accurate...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-chat-messages-disappears/4564805
+  parent_title: Teams Chat messages disappears
+  report_title: Teams Chat messages disappears
+  report_text_excerpt: Teams Chat messages disappears Problem with Teams Windows client.When you hover the mouse over the chat column, all the contacts disappear.If you click on the Chat icon to the left or press CRTL+2 you get the error message &quot;We ran into a problem getting your chats and...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-transcription-langu
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-transcription-language-settings/4564414
+  parent_title: Microsoft Teams transcription language settings
+  report_title: Microsoft Teams transcription language settings
+  report_text_excerpt: Microsoft Teams transcription language settings Hi!&amp;nbsp;With a Microsoft 365 Business Premium license and a Copilot license, I can use transcription during a Teams meeting by setting the spoken language to Auto Detect. However, the transcription is sometimes inaccurate....
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-stopping-notifications-for-specific
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/stopping-notifications-for-specific-chats/4564806
+  parent_title: Stopping notifications for specific chats
+  report_title: Stopping notifications for specific chats
+  report_text_excerpt: Stopping notifications for specific chats When will you bring back the stop notifications for a specific post that was removed in the new Teams?This generate a lot of noise/notifications when there&apos;s a lot of replied in the post.
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-lists-json-3459899
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-lists-json/3459899
+  parent_title: Microsoft Teams/ Lists JSON
+  report_title: Microsoft Teams/ Lists JSON
+  report_text_excerpt: Microsoft Teams/ Lists JSON Hello,&amp;nbsp;&amp;nbsp;I&apos;m currently using Teams and Lists to track our universities certifications. I found a JSON&apos;s that allowed me to make the numbers of the dates red when expired, yellow within 30 days, and green if futher than 30...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2022-06-02'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-where-do-i-report-bug-for-ms-teams
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/where-do-i-report-bug-for-ms-teams-/2371087
+  parent_title: Where do I report bug for Ms TEams ?
+  report_title: Where do I report bug for Ms TEams ?
+  report_text_excerpt: Where do I report bug for Ms TEams ? I have encountered bug in MS TEams. Where to report ?&amp;nbsp;
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2021-05-20'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-organisations-monitoring-at
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-organisations-monitoring-attendance-and-participation-during-live-micros/4564487
+  parent_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_text_excerpt: How are organisations monitoring attendance and participation during live Microsoft Teams meetings? Hi everyone,I’m interested in how organisations are monitoring and verifying attendance and participation during live Microsoft Teams meetings, particularly where accurate...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-chat-messages-disappears/4564805
+  parent_title: Teams Chat messages disappears
+  report_title: Teams Chat messages disappears
+  report_text_excerpt: Teams Chat messages disappears Problem with Teams Windows client.When you hover the mouse over the chat column, all the contacts disappear.If you click on the Chat icon to the left or press CRTL+2 you get the error message &quot;We ran into a problem getting your chats and...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-transcription-langu
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-transcription-language-settings/4564414
+  parent_title: Microsoft Teams transcription language settings
+  report_title: Microsoft Teams transcription language settings
+  report_text_excerpt: Microsoft Teams transcription language settings Hi!&amp;nbsp;With a Microsoft 365 Business Premium license and a Copilot license, I can use transcription during a Teams meeting by setting the spoken language to Auto Detect. However, the transcription is sometimes inaccurate....
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-stopping-notifications-for-specific
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/stopping-notifications-for-specific-chats/4564806
+  parent_title: Stopping notifications for specific chats
+  report_title: Stopping notifications for specific chats
+  report_text_excerpt: Stopping notifications for specific chats When will you bring back the stop notifications for a specific post that was removed in the new Teams?This generate a lot of noise/notifications when there&apos;s a lot of replied in the post.
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-lists-json-3459899
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-lists-json/3459899
+  parent_title: Microsoft Teams/ Lists JSON
+  report_title: Microsoft Teams/ Lists JSON
+  report_text_excerpt: Microsoft Teams/ Lists JSON Hello,&amp;nbsp;&amp;nbsp;I&apos;m currently using Teams and Lists to track our universities certifications. I found a JSON&apos;s that allowed me to make the numbers of the dates red when expired, yellow within 30 days, and green if futher than 30...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2022-06-02'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-where-do-i-report-bug-for-ms-teams
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/where-do-i-report-bug-for-ms-teams-/2371087
+  parent_title: Where do I report bug for Ms TEams ?
+  report_title: Where do I report bug for Ms TEams ?
+  report_text_excerpt: Where do I report bug for Ms TEams ? I have encountered bug in MS TEams. Where to report ?&amp;nbsp;
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2021-05-20'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-organisations-monitoring-at
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-organisations-monitoring-attendance-and-participation-during-live-micros/4564487
+  parent_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_text_excerpt: How are organisations monitoring attendance and participation during live Microsoft Teams meetings? Hi everyone,I’m interested in how organisations are monitoring and verifying attendance and participation during live Microsoft Teams meetings, particularly where accurate...
+  captured_at: '2026-10-15T18:06:25Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
