@@ -4821,6 +4821,53 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 }
 .update-monitoring-card__header { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
 .update-monitoring-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .14em; color: var(--text-2); }
+/* DECISION-FIRST HERO (Wave A).
+ *
+ * The verdict box now precedes the community-evidence card, so the two have to stop competing for
+ * the same visual weight. Measured before this change on a 390x844 phone: the verdict word sat
+ * 170px BELOW the fold, and the only categorical word above it was the raw sample sentiment -- a
+ * different axis, pointing the opposite way on 217 records. The decision is now the dominant
+ * element and the evidence card is a lighter supporting block beneath it.
+ *
+ * Status meaning never depends on colour: `.patch-monitoring` carries the state as WORDS
+ * ("MONITORING DEGRADED", "COLLECTION BLOCKED"), so the compact line reads the same to a reader
+ * who cannot distinguish the hues, in high contrast, or with styles off.
+ */
+.update-decision-box__header strong { font-size: clamp(1.25rem, 2.4vw, 1.75rem); font-weight: 750; letter-spacing: -.01em; }
+.update-evidence-card {
+  /* lighter than the decision above it: supporting evidence, not a second recommendation */
+  background: rgba(255,255,255,.015);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: none;
+}
+.update-evidence-strength-line { white-space: nowrap; }
+
+/* COMPACT MONITORING -- one line in the hero; the full card lives in the #monitoring disclosure. */
+.update-monitoring-compact {
+  display: flex; align-items: center; gap: .55rem; flex-wrap: wrap;
+  margin: .85rem 0 0; padding: .5rem .75rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,.018);
+  border: 1px solid var(--border-subtle);
+  font-size: .82rem;
+}
+.update-monitoring-compact__label {
+  text-transform: uppercase; letter-spacing: .14em; font-size: .68rem;
+  font-weight: 700; color: var(--text-2);
+}
+.update-monitoring-compact__detail { color: var(--text-2); }
+.update-monitoring-compact__more { margin-left: auto; font-size: .78rem; white-space: nowrap; }
+/* A degraded collection state stays loud even in the compact line: the reader must not have to
+   open a disclosure to discover that the evidence behind the verdict is not being collected. */
+.update-monitoring-compact--monitoring-degraded,
+.update-monitoring-compact--collection-blocked,
+.update-monitoring-compact--collection-stale,
+.update-monitoring-compact--insufficient-coverage { border-color: rgba(240, 202, 103, .42); }
+.update-monitoring-details .update-monitoring-card { margin-top: 0; border: 0; background: none; padding: 0; }
+@media (max-width: 860px) {
+  .update-monitoring-compact { font-size: .78rem; }
+  .update-monitoring-compact__more { margin-left: 0; width: 100%; }
+}
 .update-monitoring-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .6rem 1.2rem; margin: .9rem 0 0; }
 .update-monitoring-fact dt { color: var(--text-2); font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; margin: 0; }
 .update-monitoring-fact dd { color: var(--text-0); margin: .15rem 0 0; font-size: .92rem; font-variant-numeric: tabular-nums; }

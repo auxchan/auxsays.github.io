@@ -590,8 +590,18 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "sentiment_marker_uses_legacy_score", "The top sentiment marker must follow the displayed evidence summary, not legacy score fields.")
     if "consensus-position-graph--{{ evidence_metric_class }}" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "sentiment_marker_class_missing", "The top sentiment graph should carry the evidence summary class for visual state handling.")
-    if "consensus-scale-labels--neutral" not in text:
-        add(errors, UPDATE_LAYOUT_PATH, "sentiment_neutral_state_missing", "Not-enough-report pages should use a neutral chart treatment.")
+    # The job here is that a page with no counted reports must not be given a sentiment chart. It
+    # used to be enforced by requiring a NEUTRAL variant of the chart; Wave A satisfies the same
+    # requirement more strongly by rendering no scale at all below one report, so requiring the
+    # neutral class would now forbid the better treatment. What is checked instead is the property:
+    # the three-zone scale must be gated on the report count, and the zero-report page must still
+    # make the not-established statement in words.
+    if "consensus-scale-labels" in text and "{% if report_count > 0 %}" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "sentiment_scale_not_gated_on_reports",
+            "The three-zone sentiment scale must render only where counted reports exist.")
+    if "Community consensus not established" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "sentiment_neutral_state_missing",
+            "A page without established consensus must say so in words, chart or no chart.")
     if "update_platform_clean" in text or "platform_label_clean" in text or "update_type_clean" in text:
         add(errors, UPDATE_LAYOUT_PATH, "top_metadata_placeholder_pill_regression", "Top metadata should render only data-bearing product, version, channel, release date, and file-size pills.")
     # This demanded the literal spelling `!= blank`, which in this stack does not gate at all:

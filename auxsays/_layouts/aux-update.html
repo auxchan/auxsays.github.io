@@ -400,6 +400,47 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   {% assign decision_body = page.practical_recommendations | first %}
 {% endif %}
 {%- comment -%}
+  ISSUE SENTENCE vs DECISION BODY. The reasoning block prints "Current reports mention X." under a
+  body that, on four products, ALREADY opens "Current reports mention X." -- two consecutive
+  sentences with the same lead-in and often the same subjects.
+
+  Measured over the rendered corpus: 77 records print both. On 66 of them every subject the issue
+  sentence names is already in the body, so the sentence is pure restatement. On the other 11 the
+  cluster names something the body omits -- "general workflow reports" on the DaVinci records --
+  and that is real information, so it stays. This is the distinction the de-duplication has to
+  make: not "do they overlap" but "does the second one ADD anything".
+
+  Deterministic and narrow. The cluster appends a theme to each subject ("render/export failures in
+  application stability"); the theme is internal taxonomy, so the subject is taken as the text
+  before " in " and compared against the normalised body. Every subject present => the sentence is
+  dropped. One subject missing => the whole sentence renders, because dropping it would lose that
+  subject. No paraphrase matching, no summarisation: the same normalise-and-contain rule the
+  recommendation list already uses.
+{%- endcomment -%}
+{% assign issue_adds_nothing = false %}
+{% if report_count > 0 and issue_cluster_text != '' and decision_body != '' %}
+  {% assign ic_body_probe = decision_body | downcase | replace: '’', "'" | replace: '.', '' | replace: '  ', ' ' | replace: '  ', ' ' %}
+  {% assign ic_missing = 0 %}
+  {% assign ic_checked = 0 %}
+  {%- comment -%}
+    The split is assigned FIRST, deliberately. A for-tag written as `for x in str | split`
+    does NOT split: Liquid ignores the filter and iterates the whole string as ONE item. It raises
+    nothing, so the loop looks right and silently compares the entire cluster against the body --
+    which suppressed the sentence on 9 records whose cluster named a subject the body omitted, the
+    exact information this rule exists to protect. Same failure family as `blank`: a construct that
+    quietly does nothing rather than erroring.
+  {%- endcomment -%}
+  {% assign ic_parts = issue_cluster_text | split: ',' %}
+  {% for ic_part in ic_parts %}
+    {% assign ic_sub = ic_part | split: ' in ' | first | strip | downcase | replace: '.', '' | replace: '  ', ' ' %}
+    {% if ic_sub != '' %}
+      {% assign ic_checked = ic_checked | plus: 1 %}
+      {% unless ic_body_probe contains ic_sub %}{% assign ic_missing = ic_missing | plus: 1 %}{% endunless %}
+    {% endif %}
+  {% endfor %}
+  {% if ic_checked > 0 and ic_missing == 0 %}{% assign issue_adds_nothing = true %}{% endif %}
+{% endif %}
+{%- comment -%}
   PRACTICAL RECOMMENDATIONS -- the list, not just item one.
 
   `practical_recommendations` is written by apply_consensus_to_records._record_coherence_fields for
@@ -579,46 +620,15 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         {% if file_size_pill_value != '' %}<span class="update-meta-pill"><span class="update-meta-pill__label">File size</span><span class="update-meta-pill__value">{{ file_size_pill_value }}</span></span>{% endif %}
       </div>
 
-      <div class="update-verdict-card update-verdict-card--clean update-evidence-card" aria-label="User report evidence summary">
-        <div class="consensus-compact">
-          <span class="update-evidence-summary-line"><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
-          <span class="update-evidence-report-count">{% if report_count > 0 %}{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found{% else %}0 confirmed patch-specific community reports{% endif %}</span>
-        </div>
-        <div class="consensus-position-graph consensus-position-graph--hero consensus-position-graph--{{ evidence_metric_class }}" style="--consensus-pos: {{ consensus_score_percent }}%;">
-          {% if evidence_metric_class == 'insufficient-data' %}
-          <div class="consensus-scale consensus-scale--neutral" aria-hidden="true">
-            <span class="consensus-scale-zone consensus-scale-zone--neutral"></span>
-            <span class="consensus-scale-marker"></span>
-          </div>
-          <div class="consensus-scale-labels consensus-scale-labels--neutral" aria-hidden="true">
-            <span>Community consensus not established</span>
-          </div>
-          {% else %}
-          <div class="consensus-scale" aria-hidden="true">
-            <span class="consensus-scale-zone consensus-scale-zone--negative"></span>
-            <span class="consensus-scale-zone consensus-scale-zone--moderate"></span>
-            <span class="consensus-scale-zone consensus-scale-zone--positive"></span>
-            <span class="consensus-scale-marker"></span>
-          </div>
-          <div class="consensus-scale-labels" aria-hidden="true">
-            <span>Negative</span><span>Moderate</span><span>Optimal</span>
-          </div>
-          {% endif %}
-          {%- comment -%}
-            The categorical word above is RAW SAMPLE SENTIMENT, not a maturity claim. Until the
-            record is actually marked live, say so in the same breath, and always carry the
-            sample size and its canonical strength so a 3-report read cannot look like a 33-report
-            one. This replaces a hard `report_count < 3` cut-off that removed the last qualifier at
-            exactly three reports -- the point where the sample is still weakest.
-          {%- endcomment -%}
-          {% if consensus_established == false and report_count > 0 %}
-          <p class="consensus-chart-meta consensus-sample-note">Community consensus not established &mdash; {{ report_count }} user report{% unless report_count == 1 %}s{% endunless %}, evidence strength {{ evidence_strength }}. This is a verified report sample, not live consensus telemetry.</p>
-          {% endif %}
-          {% if evidence_checked_at != '' %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
-        </div>
-      </div>
-
-
+      {%- comment -%}
+        DECISION FIRST. This block used to sit BELOW the community-evidence card, so the page a
+        reader met was: identity, then a sentiment word on a three-zone graph, and only then the
+        answer to the question the page exists for. Measured on a 390x844 phone, the verdict word
+        sat 170px BELOW the fold on an evidence-rich record and the only categorical word above it
+        was the raw sample sentiment -- a DIFFERENT axis, which on 217 records points the opposite
+        way to the verdict. AUXSAYS answers "should I install this update, wait, test it, or avoid
+        it?", so the decision leads and its evidence follows.
+      {%- endcomment -%}
       <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
         <div class="update-decision-box__header">
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>
@@ -638,7 +648,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           {%- endif %}
         </div>
         <div class="update-decision-reasoning">
-          {% if report_count > 0 and issue_cluster_text != '' %}
+          {% if report_count > 0 and issue_cluster_text != '' and issue_adds_nothing == false %}
           <p>Current reports mention {{ issue_cluster_text }}.</p>
           {% elsif report_count > 0 %}
           <p>User reports are present; review the source list before updating critical work.</p>
@@ -659,7 +669,66 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         </div>
       </div>
 
-      {% include monitoring-status.html mode='full' product_id=page.product_id version=page.update_version target_build=page.target_build published_at=page.update_published_at report_count=page.update_report_count %}
+
+      {%- comment -%}
+        TWO AXES, NAMED. The verdict above is AUXSAYS's recommendation; the word below is the RAW
+        SENTIMENT of the user-report sample. They are different questions, and labelling the second
+        one "Evidence summary" next to a verdict invited reading them as competing recommendations
+        -- on 217 records they point in opposite directions. Naming it "Community signal" and giving
+        the strength its own label makes the axis explicit without changing a single stored value.
+      {%- endcomment -%}
+      <div class="update-verdict-card update-verdict-card--clean update-evidence-card"
+           aria-label="Community evidence summary, reported separately from the AUXSAYS verdict">
+        <div class="consensus-compact">
+          <span class="update-evidence-summary-line"><strong>Community signal:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
+          {% if report_count > 0 %}<span class="update-evidence-strength-line"><strong>Evidence strength:</strong> {{ evidence_strength }}</span>{% endif %}
+          <span class="update-evidence-report-count">{% if report_count > 0 %}{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found{% else %}0 confirmed patch-specific community reports{% endif %}</span>
+        </div>
+        <div class="consensus-position-graph consensus-position-graph--hero consensus-position-graph--{{ evidence_metric_class }}" style="--consensus-pos: {{ consensus_score_percent }}%;">
+          {%- comment -%}
+            The scale renders only where there is a sample to place on it. On a zero-report record
+            the neutral variant drew a full-width bar, a marker and a caption that said the same
+            thing as the "0 confirmed patch-specific community reports" line directly above it --
+            1,071 of 1,290 records, 83% of the corpus, spending hero height to restate an absence.
+            Where reports DO exist the scale is kept: it carries the position of the sample, which
+            the categorical word alone does not.
+          {%- endcomment -%}
+          {% if report_count > 0 %}
+          <div class="consensus-scale" aria-hidden="true">
+            <span class="consensus-scale-zone consensus-scale-zone--negative"></span>
+            <span class="consensus-scale-zone consensus-scale-zone--moderate"></span>
+            <span class="consensus-scale-zone consensus-scale-zone--positive"></span>
+            <span class="consensus-scale-marker"></span>
+          </div>
+          <div class="consensus-scale-labels" aria-hidden="true">
+            <span>Negative</span><span>Moderate</span><span>Optimal</span>
+          </div>
+          {% endif %}
+          {%- comment -%}
+            The categorical word above is RAW SAMPLE SENTIMENT, not a maturity claim. Until the
+            record is actually marked live, say so in the same breath, and always carry the
+            sample size and its canonical strength so a 3-report read cannot look like a 33-report
+            one. This replaces a hard `report_count < 3` cut-off that removed the last qualifier at
+            exactly three reports -- the point where the sample is still weakest.
+          {%- endcomment -%}
+          {%- comment -%}
+            The zero-report page keeps the not-established STATEMENT even though it no longer draws
+            a scale. Dropping the neutral bar was about height; dropping the sentence would have
+            been about honesty, and those are not the same trade. One line, no count repeated --
+            the compact row directly above already says "0 confirmed patch-specific community
+            reports", so this adds the consensus claim and nothing else.
+          {%- endcomment -%}
+          {% if report_count == 0 %}
+          <p class="consensus-chart-meta consensus-sample-note">Community consensus not established.</p>
+          {% endif %}
+          {% if consensus_established == false and report_count > 0 %}
+          <p class="consensus-chart-meta consensus-sample-note">Community consensus not established &mdash; {{ report_count }} user report{% unless report_count == 1 %}s{% endunless %}, evidence strength {{ evidence_strength }}. This is a verified report sample, not live consensus telemetry.</p>
+          {% endif %}
+          {% if evidence_checked_at != '' %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
+        </div>
+      </div>
+
+      {% include monitoring-status.html mode='compact' product_id=page.product_id version=page.update_version target_build=page.target_build published_at=page.update_published_at report_count=page.update_report_count %}
 
       {% assign official_active = page.official_active_issue_count | default: 0 | plus: 0 %}
       {% assign official_resolved = page.official_resolved_issue_count | default: 0 | plus: 0 %}
@@ -675,6 +744,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
     <a href="#official-patch-notes">Official Patch Notes</a>
     {% if technical_details_renderable %}<a href="#technical-details">Technical Details</a>{% endif %}
     <a href="#user-reports-sources">User Reports / Sources</a>
+    <a href="#monitoring">Collection Health</a>
     <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a>
     {% if has_public_history %}<a href="#history">History / Updates</a>{% endif %}
   </nav>
@@ -716,6 +786,28 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {% else %}
       <p>Official patch-note body has not been captured.</p>
       {% endif %}
+    </details>
+
+    {%- comment -%}
+      PLACEMENT. Collection Health sits OUTSIDE the technical-details gate, deliberately. The hero's
+      compact monitoring line and the section nav both emit `href="#monitoring"` unconditionally, so
+      gating the target on `technical_details_renderable` gives a record with no technical metadata
+      two links to an id that does not exist and no reachable audit trail. The current corpus hides
+      it -- `pub_at_clean` feeds that flag and nearly every record has a release date -- but a link
+      whose target is conditional on an unrelated fact is wrong whether or not today's data hits it.
+      Monitoring health is not a technical-metadata field; it is the evidence behind the verdict.
+
+      It also used to sit in the hero, where it measured 581px
+      -- 20% of a 390x844 phone page -- directly under the decision, while its own closing sentence
+      says monitoring is "separate from the AUXSAYS verdict". It is an audit trail, so it now lives
+      with the other audit sections and the hero carries the one-line status instead. Same include,
+      same authority, different mode: nothing about how the status is derived moved.
+    {%- endcomment -%}
+    <details id="monitoring" class="panel update-info-card update-monitoring-details">
+      <summary><span class="update-info-card__title">Collection Health</span></summary>
+      <div class="update-info-card__body">
+      {% include monitoring-status.html mode='full' product_id=page.product_id version=page.update_version target_build=page.target_build published_at=page.update_published_at report_count=page.update_report_count %}
+      </div>
     </details>
 
     {% if technical_details_renderable %}

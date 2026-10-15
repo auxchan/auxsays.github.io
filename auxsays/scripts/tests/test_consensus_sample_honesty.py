@@ -154,6 +154,13 @@ def pre_fix_template() -> str:
         r"\{% if consensus_established == false and report_count > 0 %\}\s*"
         r"<p class=\"consensus-chart-meta consensus-sample-note\">.*?</p>\s*\{% endif %\}",
         "", text, flags=re.S)
+    # Wave A added a zero-report not-established line that reuses the same class. It is a
+    # different statement under a different guard, but the vacuity check below looks for the CLASS,
+    # so the reconstruction has to strip it too or it reports the fix as still present.
+    text = re.sub(
+        r"\{% if report_count == 0 %\}\s*"
+        r"<p class=\"consensus-chart-meta consensus-sample-note\">.*?</p>\s*\{% endif %\}",
+        "", text, flags=re.S)
     # the early-evidence line in the verdict box
     text = re.sub(
         r"\{% if consensus_established == false and evidence_strength == 'Low' %\}"
@@ -184,7 +191,7 @@ def run() -> int:
     check("C0.1 the block ends before the first include, so it renders standalone",
           "{% include" not in block and len(block) > 2000, str(len(block)))
     check("C0.2 the block carries the evidence card and the verdict box",
-          'id="verdict"' in block and "Evidence summary" in block)
+          'id="verdict"' in block and "update-evidence-card" in block)
     if not liquid_ok:
         check("C0.3 liquid gem available (render assertions SKIPPED without it)", False,
               "ruby/liquid missing - static locks below still ran")
@@ -227,15 +234,21 @@ def run() -> int:
     print("=" * 96)
     if liquid_ok:
         text = visible(3)
+        # The label, not the word, is what changed. Wave A renamed the evidence card's lead-in
+        # from "Evidence summary" to "Community signal" because it sits directly beneath the
+        # AUXSAYS verdict and the two are different axes -- on 217 records they point in opposite
+        # directions, and a reader meeting "Evidence summary: Negative" under "WAIT" had no cue
+        # that these were not two competing recommendations. Every value is untouched: these
+        # checks still pin that the raw sentiment word and the exact count survive unsuppressed.
         check("C2.1 the categorical sentiment word is still shown",
-              text is not None and "Evidence summary: Negative" in text, (text or "")[:110])
+              text is not None and "Community signal: Negative" in text, (text or "")[:110])
         check("C2.2 the exact accepted report count is still shown",
               text is not None and "3 user reports found" in text, (text or "")[:110])
         check("C2.3 the sample position scale is still shown (information is added, not removed)",
               text is not None and SCALE_LABELS in text)
         pos = visible(3, "Positive")
         check("C2.4 a positive sample still reads Optimal, not hedged into Negative",
-              pos is not None and "Evidence summary: Optimal" in pos, (pos or "")[:110])
+              pos is not None and "Community signal: Optimal" in pos, (pos or "")[:110])
         # The note counts the same field the line above it counts, and says so the same way, so the
         # page never shows two differently-worded counts of the same thing.
         one = visible(1) or ""
@@ -255,7 +268,7 @@ def run() -> int:
             check(f"C3.1 {status}: the not-established statement is GONE",
                   live is not None and NOT_ESTABLISHED not in live, (live or "")[:110])
             check(f"C3.2 {status}: the categorical label and scale still render",
-                  live is not None and "Evidence summary: Negative" in live and SCALE_LABELS in live)
+                  live is not None and "Community signal: Negative" in live and SCALE_LABELS in live)
             check(f"C3.3 {status}: no early-evidence hedge",
                   live is not None and EARLY_EVIDENCE not in live)
         # A LARGE sub-live sample must not be hedged as though it were tiny: over-hedging a real
