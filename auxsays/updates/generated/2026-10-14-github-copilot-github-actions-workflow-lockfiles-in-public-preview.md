@@ -18,8 +18,8 @@ update_version: GitHub Actions workflow lockfiles in public preview
 update_logo_text: GIT
 update_published_at: '2026-10-14T13:49:15Z'
 update_last_checked: '2026-10-14T14:31:10Z'
-source_last_checked: '2026-10-15T07:07:37Z'
-official_body_last_checked: '2026-10-15T07:07:37Z'
+source_last_checked: '2026-10-15T13:47:48Z'
+official_body_last_checked: '2026-10-15T13:47:48Z'
 record_last_updated: '2026-10-14T19:51:40Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -110,6 +110,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-15T07:07:37Z'
+  url: https://github.blog/changelog/2026-10-14-github-actions-workflow-lockfiles-in-public-preview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-15T13:47:48Z'
   url: https://github.blog/changelog/2026-10-14-github-actions-workflow-lockfiles-in-public-preview
   status: captured-from-rss-feed
   body_captured: true
