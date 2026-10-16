@@ -52231,7 +52231,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037441-can-a-private-organisation-catalogue-a
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -52256,7 +52255,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037892-windows-hello-face-stops-working-after
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -52286,7 +52284,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9711'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6036828-kb5127648-breaks-wired-802-1x-peap-aut
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -52316,7 +52313,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.9711'
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037456-windows-11-26h2-build-26300-9457-taskb
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -52346,7 +52342,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9457'
-
 - id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-pixel-aspect-ratio-getting-wrongly-interpreted-after-2
   product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -52371,7 +52366,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -52516,7 +52510,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -52661,7 +52654,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -52806,7 +52798,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -52951,7 +52942,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -53096,7 +53086,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -53145,7 +53134,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -53194,7 +53182,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -53243,7 +53230,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -53292,7 +53278,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -53341,7 +53326,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -53366,7 +53350,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -53391,7 +53374,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -53416,7 +53398,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -53441,7 +53422,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -53466,7 +53446,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6039278-regression-in-build-26300-9550-disk-sy
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -53495,7 +53474,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9550'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6039137-updates-failing
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -53525,7 +53503,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8655'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6039416-how-do-i-fix-error-0x80070306-when-ins
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -53555,3 +53532,24 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7623'
+- id: obs-studio-32-1-1-obs-forum-thread-194821
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/nvenc-video-encoder-has-disappeared.194821/
+  parent_title: NVENC Video Encoder has disappeared.
+  report_title: NVENC Video Encoder has disappeared.
+  report_text_excerpt: My OBS build was outdated, so figured maybe I should update that as well. Now I'm on OBS 32.1.1, and it's still not showing up. I figured, hey, I've updated my GPU drivers recently, but let's give em another update just in case. Now my GeForce Game Ready Driver is up-to-date wit
+  captured_at: '2026-10-16T18:16:45Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1

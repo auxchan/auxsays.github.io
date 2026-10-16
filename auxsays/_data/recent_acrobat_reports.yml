@@ -4,7 +4,7 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:19:13Z'
+  captured_at: '2026-10-16T16:35:31Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -23,7 +23,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:19:13Z'
+  captured_at: '2026-10-16T16:35:31Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -43,7 +43,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:19:13Z'
+  captured_at: '2026-10-16T16:35:31Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -63,7 +63,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:19:13Z'
+  captured_at: '2026-10-16T16:35:31Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -84,7 +84,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:19:13Z'
+  captured_at: '2026-10-16T16:35:31Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -104,7 +104,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:19:13Z'
+  captured_at: '2026-10-16T16:35:31Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -124,7 +124,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:19:13Z'
+  captured_at: '2026-10-16T16:35:31Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -483,6 +483,25 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
+  captured_at: '2026-10-16T16:56:56Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.002.22031|26.002.22031
+  report_date: '2026-10-15'
+  report_excerpt: Incorrect Swedish terminology when validating electronic signatures in Adobe Acrobat
+    Reader? Hello, We would like to ask a question regarding the wording currently used in the Swedish
+    version of Adobe Acrobat Reader when validating electronic signatures in PDF documents. We...
+  report_id: adobe-acrobat-reader:c5da6f94af2bfd28
+  report_title: Incorrect Swedish terminology when validating electronic signatures in Adobe Acrobat Reader?
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/incorrect-swedish-terminology-when-validating-electronic-signatures-in-adobe-acrobat-reader-1651437
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.22031
+  window_start: '2026-10-14'
+  window_version: 26.002.22031
+- attribution_state: not_established
   captured_at: '2026-09-23T05:02:30Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
@@ -504,7 +523,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:39:59Z'
+  captured_at: '2026-10-16T16:56:56Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -524,7 +543,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:39:59Z'
+  captured_at: '2026-10-16T16:56:56Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -544,7 +563,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-10-16T11:39:59Z'
+  captured_at: '2026-10-16T16:56:56Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
