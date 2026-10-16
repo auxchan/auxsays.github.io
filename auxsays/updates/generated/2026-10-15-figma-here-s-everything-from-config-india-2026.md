@@ -17,8 +17,8 @@ update_version: Here’s everything from Config India 2026
 update_logo_text: FIG
 update_published_at: '2026-10-15T00:00:00.000Z'
 update_last_checked: '2026-10-15T07:07:22Z'
-source_last_checked: '2026-10-16T19:25:32Z'
-official_body_last_checked: '2026-10-16T19:25:32Z'
+source_last_checked: '2026-10-16T23:50:45Z'
+official_body_last_checked: '2026-10-16T23:50:45Z'
 record_last_updated: '2026-10-15T07:07:22Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-15T19:52:44Z'
-  url: https://www.figma.com/release-notes/?title=config-india-2026
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-15T23:51:40Z'
   url: https://www.figma.com/release-notes/?title=config-india-2026
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-16T19:25:32Z'
+  url: https://www.figma.com/release-notes/?title=config-india-2026
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-16T23:50:45Z'
   url: https://www.figma.com/release-notes/?title=config-india-2026
   status: captured-from-rss-feed
   body_captured: true

@@ -17,8 +17,8 @@ update_version: More ways to edit images with AI
 update_logo_text: FIG
 update_published_at: '2025-08-14T00:00:00.000Z'
 update_last_checked: '2026-08-12T15:01:53Z'
-source_last_checked: '2026-09-12T17:57:27Z'
-official_body_last_checked: '2026-09-12T17:57:27Z'
+source_last_checked: '2026-10-16T23:50:45Z'
+official_body_last_checked: '2026-10-16T23:50:45Z'
 record_last_updated: '2026-08-12T15:01:53Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-12T17:57:27Z'
+  url: https://www.figma.com/release-notes/?title=edit-images-with-ai
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-16T23:50:45Z'
   url: https://www.figma.com/release-notes/?title=edit-images-with-ai
   status: captured-from-rss-feed
   body_captured: true
