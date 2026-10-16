@@ -53341,3 +53341,217 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037959/azure-ai-foundry-agent-works-in-studio-but-fails-w
+  parent_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_text_excerpt: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams I developed an agent in Microsoft Foundry that uses Logic Apps MCP tools to query and update data in a database. The agent works correctly in Foundry Studio, but after publishing to Microsoft...
+  captured_at: '2026-10-16T12:24:28Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037959/azure-ai-foundry-agent-works-in-studio-but-fails-w
+  parent_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_text_excerpt: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams I developed an agent in Microsoft Foundry that uses Logic Apps MCP tools to query and update data in a database. The agent works correctly in Foundry Studio, but after publishing to Microsoft...
+  captured_at: '2026-10-16T12:24:28Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037959/azure-ai-foundry-agent-works-in-studio-but-fails-w
+  parent_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_text_excerpt: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams I developed an agent in Microsoft Foundry that uses Logic Apps MCP tools to query and update data in a database. The agent works correctly in Foundry Studio, but after publishing to Microsoft...
+  captured_at: '2026-10-16T12:24:28Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037959/azure-ai-foundry-agent-works-in-studio-but-fails-w
+  parent_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_text_excerpt: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams I developed an agent in Microsoft Foundry that uses Logic Apps MCP tools to query and update data in a database. The agent works correctly in Foundry Studio, but after publishing to Microsoft...
+  captured_at: '2026-10-16T12:24:28Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037959/azure-ai-foundry-agent-works-in-studio-but-fails-w
+  parent_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_text_excerpt: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams I developed an agent in Microsoft Foundry that uses Logic Apps MCP tools to query and update data in a database. The agent works correctly in Foundry Studio, but after publishing to Microsoft...
+  captured_at: '2026-10-16T12:24:28Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6039278-regression-in-build-26300-9550-disk-sy
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6039278/regression-in-build-26300-9550-disk-sys-misclassif
+  parent_title: 'Regression in Build 26300.9550: disk.sys misclassifies USBSTOR as Internal Bus, blocking safe ejection - Microsoft Q&A'
+  report_title: 'Regression in Build 26300.9550: disk.sys misclassifies USBSTOR as Internal Bus, blocking safe ejection - Microsoft Q&A'
+  report_text_excerpt: 'Regression in Build 26300.9550: disk.sys misclassifies USBSTOR as Internal Bus, blocking safe ejection - Microsoft Q&A I am experiencing a persistent kernel-level storage lock on my external hard drives immediately upon a cold boot. The standard system tray "Safely Remove...'
+  captured_at: '2026-10-16T12:34:06Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9550'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9550'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9550'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6039137-updates-failing
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6039137/updates-failing
+  parent_title: updates failing - Microsoft Q&A
+  report_title: updates failing - Microsoft Q&A
+  report_text_excerpt: updates failing - Microsoft Q&A why is my new VYONIX laptop updates keep failingat security KB5094126(26200.8655)
+  captured_at: '2026-10-16T12:36:57Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8655'
+  match_basis: exact_os_build
+  matched_kb: KB5094126
+  matched_os_build: '26200.8655'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6039416-how-do-i-fix-error-0x80070306-when-ins
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6039416/how-do-i-fix-error-0x80070306-when-installing-upda
+  parent_title: How do I fix error 0x80070306 when installing Update KB5127648 - Microsoft Q&A
+  report_title: How do I fix error 0x80070306 when installing Update KB5127648 - Microsoft Q&A
+  report_text_excerpt: How do I fix error 0x80070306 when installing Update KB5127648 - Microsoft Q&A 2026-10 Security Update (KB5074109) (26200.7623) has Install Error 0x80070306 How do I fix problem
+  captured_at: '2026-10-16T12:40:38Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-01-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7623'
+  match_basis: exact_os_build
+  matched_kb: KB5074109
+  matched_os_build: '26200.7623'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7623'
