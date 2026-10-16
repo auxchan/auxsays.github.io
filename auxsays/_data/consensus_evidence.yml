@@ -53096,3 +53096,248 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/planner-task-comments-no-longer-send-email-notifications-%e2%80%93-critical-regression/4511601
+  parent_title: Planner task comments no longer send email notifications – critical regression
+  report_title: Planner task comments no longer send email notifications – critical regression
+  report_text_excerpt: Planner task comments no longer send email notifications – critical regression This change removed a previously existing core functionality without providing an adequate replacement.With the new Planner experience, task comments no longer trigger automatic email notifications...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-json-formatting-4564828
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/json-formatting/4564828
+  parent_title: JSON Formatting
+  report_title: JSON Formatting
+  report_text_excerpt: JSON Formatting I created a JSON that counts the days after a certain start date &quot;A&quot; and stops after a date &quot;B&quot; if there is no date in B it keeps counting. Further the days count&amp;lt;90 turn green, 90-120, turn yellow, &amp;gt;120 turn red. The problem I...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/planner-task-comments-no-longer-send-email-notifications-%e2%80%93-critical-regression/4511601
+  parent_title: Planner task comments no longer send email notifications – critical regression
+  report_title: Planner task comments no longer send email notifications – critical regression
+  report_text_excerpt: Planner task comments no longer send email notifications – critical regression This change removed a previously existing core functionality without providing an adequate replacement.With the new Planner experience, task comments no longer trigger automatic email notifications...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-json-formatting-4564828
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/json-formatting/4564828
+  parent_title: JSON Formatting
+  report_title: JSON Formatting
+  report_text_excerpt: JSON Formatting I created a JSON that counts the days after a certain start date &quot;A&quot; and stops after a date &quot;B&quot; if there is no date in B it keeps counting. Further the days count&amp;lt;90 turn green, 90-120, turn yellow, &amp;gt;120 turn red. The problem I...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/planner-task-comments-no-longer-send-email-notifications-%e2%80%93-critical-regression/4511601
+  parent_title: Planner task comments no longer send email notifications – critical regression
+  report_title: Planner task comments no longer send email notifications – critical regression
+  report_text_excerpt: Planner task comments no longer send email notifications – critical regression This change removed a previously existing core functionality without providing an adequate replacement.With the new Planner experience, task comments no longer trigger automatic email notifications...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-json-formatting-4564828
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/json-formatting/4564828
+  parent_title: JSON Formatting
+  report_title: JSON Formatting
+  report_text_excerpt: JSON Formatting I created a JSON that counts the days after a certain start date &quot;A&quot; and stops after a date &quot;B&quot; if there is no date in B it keeps counting. Further the days count&amp;lt;90 turn green, 90-120, turn yellow, &amp;gt;120 turn red. The problem I...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/planner-task-comments-no-longer-send-email-notifications-%e2%80%93-critical-regression/4511601
+  parent_title: Planner task comments no longer send email notifications – critical regression
+  report_title: Planner task comments no longer send email notifications – critical regression
+  report_text_excerpt: Planner task comments no longer send email notifications – critical regression This change removed a previously existing core functionality without providing an adequate replacement.With the new Planner experience, task comments no longer trigger automatic email notifications...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-json-formatting-4564828
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/json-formatting/4564828
+  parent_title: JSON Formatting
+  report_title: JSON Formatting
+  report_text_excerpt: JSON Formatting I created a JSON that counts the days after a certain start date &quot;A&quot; and stops after a date &quot;B&quot; if there is no date in B it keeps counting. Further the days count&amp;lt;90 turn green, 90-120, turn yellow, &amp;gt;120 turn red. The problem I...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/planner-task-comments-no-longer-send-email-notifications-%e2%80%93-critical-regression/4511601
+  parent_title: Planner task comments no longer send email notifications – critical regression
+  report_title: Planner task comments no longer send email notifications – critical regression
+  report_text_excerpt: Planner task comments no longer send email notifications – critical regression This change removed a previously existing core functionality without providing an adequate replacement.With the new Planner experience, task comments no longer trigger automatic email notifications...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-json-formatting-4564828
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/json-formatting/4564828
+  parent_title: JSON Formatting
+  report_title: JSON Formatting
+  report_text_excerpt: JSON Formatting I created a JSON that counts the days after a certain start date &quot;A&quot; and stops after a date &quot;B&quot; if there is no date in B it keeps counting. Further the days count&amp;lt;90 turn green, 90-120, turn yellow, &amp;gt;120 turn red. The problem I...
+  captured_at: '2026-10-16T05:33:15Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
