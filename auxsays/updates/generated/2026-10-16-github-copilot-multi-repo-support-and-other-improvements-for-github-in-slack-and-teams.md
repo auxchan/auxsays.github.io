@@ -18,8 +18,8 @@ update_version: Multi-repo support and other improvements for GitHub in Slack an
 update_logo_text: GIT
 update_published_at: '2026-10-16T02:16:35Z'
 update_last_checked: '2026-10-16T14:01:52Z'
-source_last_checked: '2026-10-16T14:01:52Z'
-official_body_last_checked: '2026-10-16T14:01:52Z'
+source_last_checked: '2026-10-16T19:25:36Z'
+official_body_last_checked: '2026-10-16T19:25:36Z'
 record_last_updated: '2026-10-16T14:01:52Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-10-16T14:01:52Z'
+  url: https://github.blog/changelog/2026-10-15-copilot-in-slack-and-teams-adds-model-and-repository-updates
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-16T19:25:36Z'
   url: https://github.blog/changelog/2026-10-15-copilot-in-slack-and-teams-adds-model-and-repository-updates
   status: captured-from-rss-feed
   body_captured: true
