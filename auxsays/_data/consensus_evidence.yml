@@ -53553,3 +53553,24 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-195407
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/srt-media-source-ffmpeg_source-cannot-recreate-listener-socket-on-reconnect-while-recording-or-streaming-is-active.195407/
+  parent_title: SRT Media Source (ffmpeg_source) cannot recreate listener socket on reconnect while recording or streaming is active
+  report_title: SRT Media Source (ffmpeg_source) cannot recreate listener socket on reconnect while recording or streaming is active
+  report_text_excerpt: 'SRT source to reconnect, then restart outputs. ### Environment - **OBS Studio version:** 32.1.2 (64-bit, Windows) - **Operating system:** Windows 11 24H2 (Build 26200) - **CPU:** Intel Core i9-9900K - **GPU:** NVIDIA GeForce RTX 4070 SUPER, driver 32.0.16.1047 - **Memory:** 32 G'
+  captured_at: '2026-10-16T22:42:59Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
