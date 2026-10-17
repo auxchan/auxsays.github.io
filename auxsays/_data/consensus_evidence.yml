@@ -55755,3 +55755,411 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6005951-my-enterprise-teams-cant-add-customer
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6005951/my-enterprise-teams-cant-add-customer-personal-tea
+  parent_title: My enterprise Teams can't add customer personal Teams id. - Microsoft Q&A
+  report_title: My enterprise Teams can't add customer personal Teams id. - Microsoft Q&A
+  report_text_excerpt: My enterprise Teams can't add customer personal Teams id. My enterprise Teams account can't add customer‘s personal Teams and my customer also can't add my Teams id, settings in Admin Teams are ok, how to resolve?
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2026-09-17'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-json-formatting-4564828
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/json-formatting/4564828
+  parent_title: JSON Formatting
+  report_title: JSON Formatting
+  report_text_excerpt: JSON Formatting I created a JSON that counts the days after a certain start date &quot;A&quot; and stops after a date &quot;B&quot; if there is no date in B it keeps counting. Further the days count&amp;lt;90 turn green, 90-120, turn yellow, &amp;gt;120 turn red. The problem I...
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/planner-task-comments-no-longer-send-email-notifications-%e2%80%93-critical-regression/4511601
+  parent_title: Planner task comments no longer send email notifications – critical regression
+  report_title: Planner task comments no longer send email notifications – critical regression
+  report_text_excerpt: Planner task comments no longer send email notifications – critical regression This change removed a previously existing core functionality without providing an adequate replacement.With the new Planner experience, task comments no longer trigger automatic email notifications...
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-chat-messages-disappears/4564805
+  parent_title: Teams Chat messages disappears
+  report_title: Teams Chat messages disappears
+  report_text_excerpt: Teams Chat messages disappears Problem with Teams Windows client.When you hover the mouse over the chat column, all the contacts disappear.If you click on the Chat icon to the left or press CRTL+2 you get the error message &quot;We ran into a problem getting your chats and...
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-transcription-langu
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-transcription-language-settings/4564414
+  parent_title: Microsoft Teams transcription language settings
+  report_title: Microsoft Teams transcription language settings
+  report_text_excerpt: Microsoft Teams transcription language settings Hi!&amp;nbsp;With a Microsoft 365 Business Premium license and a Copilot license, I can use transcription during a Teams meeting by setting the spoken language to Auto Detect. However, the transcription is sometimes inaccurate....
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-stopping-notifications-for-specific
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/stopping-notifications-for-specific-chats/4564806
+  parent_title: Stopping notifications for specific chats
+  report_title: Stopping notifications for specific chats
+  report_text_excerpt: Stopping notifications for specific chats When will you bring back the stop notifications for a specific post that was removed in the new Teams?This generate a lot of noise/notifications when there&apos;s a lot of replied in the post.
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-lists-json-3459899
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-lists-json/3459899
+  parent_title: Microsoft Teams/ Lists JSON
+  report_title: Microsoft Teams/ Lists JSON
+  report_text_excerpt: Microsoft Teams/ Lists JSON Hello,&amp;nbsp;&amp;nbsp;I&apos;m currently using Teams and Lists to track our universities certifications. I found a JSON&apos;s that allowed me to make the numbers of the dates red when expired, yellow within 30 days, and green if futher than 30...
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2022-06-02'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-where-do-i-report-bug-for-ms-teams
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/where-do-i-report-bug-for-ms-teams-/2371087
+  parent_title: Where do I report bug for Ms TEams ?
+  report_title: Where do I report bug for Ms TEams ?
+  report_text_excerpt: Where do I report bug for Ms TEams ? I have encountered bug in MS TEams. Where to report ?&amp;nbsp;
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2021-05-20'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-organisations-monitoring-at
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-organisations-monitoring-attendance-and-participation-during-live-micros/4564487
+  parent_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_text_excerpt: How are organisations monitoring attendance and participation during live Microsoft Teams meetings? Hi everyone,I’m interested in how organisations are monitoring and verifying attendance and participation during live Microsoft Teams meetings, particularly where accurate...
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-integration-with-exchange-on-prem/1549578
+  parent_title: Teams integration with exchange on prem
+  report_title: Teams integration with exchange on prem
+  report_text_excerpt: Teams integration with exchange on prem Hello,I would like the possibility to schedule meetings in microsoft teams.Currently I have already created the domain on o365 and synchronized AD users.In fact, I am able to use domain credentials on Microsoft teams.Now I would like to...
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2020-07-28'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-setup-in-teams-channel-is-not-allowing-me-to-update-the-agenda-and-send-/4563340
+  parent_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_text_excerpt: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates I am interested to understand why when I have setup a meeting from A channel I am not able to change the invitation to all the team members. When I go into teams Calendar ,. I update the...
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-management-of-unsupported-wfh-teams
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/management-of-unsupported-wfh-teams-certified-desk-phones/4563336
+  parent_title: Management of unsupported WFH Teams-certified desk phones
+  report_title: Management of unsupported WFH Teams-certified desk phones
+  report_text_excerpt: Management of unsupported WFH Teams-certified desk phones Hello, I&apos;m looking for best practice or suggestions on management of unsupported WFH Teams-certified desk phones for company with Microsoft enterprise E3 and E5 licensed users. We&apos;re a Microsoft shop with...
+  captured_at: '2026-10-17T11:43:47Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6040417-2026-10-net-framework-security-update
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6040417/2026-10-net-framework-security-update-kb5127694-fa
+  parent_title: 2026-10 .NET Framework Security Update (KB5127694) fails to install - Microsoft Q&A
+  report_title: 2026-10 .NET Framework Security Update (KB5127694) fails to install - Microsoft Q&A
+  report_text_excerpt: 2026-10 .NET Framework Security Update (KB5127694) fails to install - Microsoft Q&A I have a 1 year old HP laptop with Windows 11, version 26H2 installed September 30/26. For the first time every, the monthly updates failed to install. Specifically, 2026-10 .NET Framework...
+  captured_at: '2026-10-17T11:52:04Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6040570-update-to-26h2-from-25h2
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6040570/update-to-26h2-from-25h2
+  parent_title: update to 26H2 from 25H2 - Microsoft Q&A
+  report_title: update to 26H2 from 25H2 - Microsoft Q&A
+  report_text_excerpt: update to 26H2 from 25H2 - Microsoft Q&A I have windows 11 Pro versionn 25H2 (OS build 26200.8973) . Windows update warned there were updates to be installed. Failed. And there was a blue screen with bitlocker warning. I went to another PC and found the key and entered and...
+  captured_at: '2026-10-17T11:52:04Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6040356-windows-11-25h2-cumulative-updates-fai
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6040356/windows-11-25h2-cumulative-updates-fail-every-mont
+  parent_title: Windows 11 25H2 cumulative updates fail every month with error 0x800f0845 on Ryzen 7 9800X3D / Gigabyte B850 Gaming WiFi6, even after Cloud Reset and clean installation - Microsoft Q&A
+  report_title: Windows 11 25H2 cumulative updates fail every month with error 0x800f0845 on Ryzen 7 9800X3D / Gigabyte B850 Gaming WiFi6, even after Cloud Reset and clean installation - Microsoft Q&A
+  report_text_excerpt: Windows 11 25H2 cumulative updates fail every month with error 0x800f0845 on Ryzen 7 9800X3D / Gigabyte B850 Gaming WiFi6, even after Cloud Reset and clean installation - Microsoft Q&A Hello ! I've been unable to install any cumulative/security update since August 2026....
+  captured_at: '2026-10-17T11:52:14Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6040671-after-a-sept-2026-kb-update-i-cannet-g
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6040671/after-a-sept-2026-kb-update-i-cannet-get-by-back-e
+  parent_title: After a Sept 2026 KB update i cannet get by back external drive to connect with MS back up utility - Microsoft Q&A
+  report_title: After a Sept 2026 KB update i cannet get by back external drive to connect with MS back up utility - Microsoft Q&A
+  report_text_excerpt: After a Sept 2026 KB update i cannet get by back external drive to connect with MS back up utility - Microsoft Q&A How can i get my back up drive to connect back with MS HOME Windows and have my files recognizwd agian ? I see them through explorer, but i canniot get the drive...
+  captured_at: '2026-10-17T11:52:14Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9711'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
