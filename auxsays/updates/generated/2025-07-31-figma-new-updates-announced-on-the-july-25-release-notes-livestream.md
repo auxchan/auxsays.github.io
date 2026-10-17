@@ -17,8 +17,8 @@ update_version: New updates announced on the July '25 Release Notes livestream
 update_logo_text: FIG
 update_published_at: '2025-07-31T00:00:00.000Z'
 update_last_checked: '2026-08-13T04:04:29Z'
-source_last_checked: '2026-09-12T22:56:39Z'
-official_body_last_checked: '2026-09-12T22:56:39Z'
+source_last_checked: '2026-10-17T07:06:26Z'
+official_body_last_checked: '2026-10-17T07:06:26Z'
 record_last_updated: '2026-08-13T04:04:29Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-12T22:56:39Z'
+  url: https://www.figma.com/release-notes/?title=july-31-livestream
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-17T07:06:26Z'
   url: https://www.figma.com/release-notes/?title=july-31-livestream
   status: captured-from-rss-feed
   body_captured: true
