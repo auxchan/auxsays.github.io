@@ -17,8 +17,8 @@ update_version: Xcode 27 runner image generally available
 update_logo_text: GIT
 update_published_at: '2026-10-16T04:36:30Z'
 update_last_checked: '2026-10-16T19:25:36Z'
-source_last_checked: '2026-10-17T18:05:49Z'
-official_body_last_checked: '2026-10-17T18:05:49Z'
+source_last_checked: '2026-10-17T23:19:49Z'
+official_body_last_checked: '2026-10-17T23:19:49Z'
 record_last_updated: '2026-10-16T19:25:36Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,11 +76,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-16T19:25:36Z'
-  url: https://github.blog/changelog/2026-10-15-xcode-27-runner-image-generally-available
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-16T23:50:48Z'
   url: https://github.blog/changelog/2026-10-15-xcode-27-runner-image-generally-available
   status: captured-from-rss-feed
@@ -97,6 +92,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-17T18:05:49Z'
+  url: https://github.blog/changelog/2026-10-15-xcode-27-runner-image-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-17T23:19:49Z'
   url: https://github.blog/changelog/2026-10-15-xcode-27-runner-image-generally-available
   status: captured-from-rss-feed
   body_captured: true

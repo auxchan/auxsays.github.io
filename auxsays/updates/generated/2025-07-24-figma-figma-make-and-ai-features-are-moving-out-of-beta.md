@@ -17,8 +17,8 @@ update_version: Figma Make and AI features are moving out of beta
 update_logo_text: FIG
 update_published_at: '2025-07-24T00:00:00.000Z'
 update_last_checked: '2026-08-13T20:27:44Z'
-source_last_checked: '2026-09-13T18:31:53Z'
-official_body_last_checked: '2026-09-13T18:31:53Z'
+source_last_checked: '2026-10-17T23:19:46Z'
+official_body_last_checked: '2026-10-17T23:19:46Z'
 record_last_updated: '2026-08-13T20:27:44Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-13T18:31:53Z'
+  url: https://www.figma.com/release-notes/?title=make-ai-out-of-beta
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-17T23:19:46Z'
   url: https://www.figma.com/release-notes/?title=make-ai-out-of-beta
   status: captured-from-rss-feed
   body_captured: true
