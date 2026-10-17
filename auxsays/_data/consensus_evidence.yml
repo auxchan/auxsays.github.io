@@ -55755,7 +55755,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6005951-my-enterprise-teams-cant-add-customer
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -56044,7 +56043,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6040417-2026-10-net-framework-security-update
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -56104,7 +56102,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9711'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6040356-windows-11-25h2-cumulative-updates-fai
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -56163,3 +56160,72 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9711'
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021183-teams-reset
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6021183/teams-reset
+  parent_title: Teams reset - Microsoft Q&A
+  report_title: Teams reset - Microsoft Q&A
+  report_text_excerpt: Teams reset trying to reconnect my teams and every account i log in says i am not an admin and cannot purchase license. can you help me with this
+  captured_at: '2026-10-17T21:40:20Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6021183-teams-reset-answer-12981645
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6021183/teams-reset#answer-12981645
+  parent_title: Teams reset - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi Amanda , Regarding your concern, since you're using a work/school account, you need to have your organization’s Microsoft 365 administrator verify that a license containing Microsoft Teams is assigned to your account. Assigning a license requires at least the License...
+  captured_at: '2026-10-17T21:40:20Z'
+  source_date: '2026-09-30T15:56:27.3833333+00:00'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196628
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/cant-open-whats-new.196628/
+  parent_title: Can't open "What's New"
+  report_title: Can't open "What's New"
+  report_text_excerpt: \bin\64bit\obs64.exe", and everything works fine. A few days ago I downloaded "OBS-Studio-32.2.2-Windows-x64.zip" from " https://github.com/obsproject/obs-studio/releases/tag/32.2.2 ", unzipped it to D:, deleted old OBS folder, and opened obs64.exe, but no new window popped up af
+  captured_at: '2026-10-17T22:14:10Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
