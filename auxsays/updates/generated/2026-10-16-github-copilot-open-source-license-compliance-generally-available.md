@@ -17,8 +17,8 @@ update_version: Open source license compliance generally available
 update_logo_text: GIT
 update_published_at: '2026-10-16T14:00:32Z'
 update_last_checked: '2026-10-16T19:25:36Z'
-source_last_checked: '2026-10-17T13:14:43Z'
-official_body_last_checked: '2026-10-17T13:14:43Z'
+source_last_checked: '2026-10-17T18:05:49Z'
+official_body_last_checked: '2026-10-17T18:05:49Z'
 record_last_updated: '2026-10-16T19:25:36Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -105,6 +105,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-17T13:14:43Z'
+  url: https://github.blog/changelog/2026-10-16-open-source-license-compliance-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-17T18:05:49Z'
   url: https://github.blog/changelog/2026-10-16-open-source-license-compliance-generally-available
   status: captured-from-rss-feed
   body_captured: true
