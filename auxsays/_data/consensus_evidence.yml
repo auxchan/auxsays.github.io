@@ -56229,3 +56229,183 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6041156/teams-meeting-attendees-are-stuck-in-the-lobby-and
+  parent_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_text_excerpt: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit When the organizer / host of a Teams meeting must dial in by phone to host the meeting, and when one or more of the other attendees join using the Teams app, how can the...
+  captured_at: '2026-10-18T12:05:54Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6041156/teams-meeting-attendees-are-stuck-in-the-lobby-and
+  parent_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_text_excerpt: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit When the organizer / host of a Teams meeting must dial in by phone to host the meeting, and when one or more of the other attendees join using the Teams app, how can the...
+  captured_at: '2026-10-18T12:05:54Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6041156/teams-meeting-attendees-are-stuck-in-the-lobby-and
+  parent_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_text_excerpt: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit When the organizer / host of a Teams meeting must dial in by phone to host the meeting, and when one or more of the other attendees join using the Teams app, how can the...
+  captured_at: '2026-10-18T12:05:54Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6041156/teams-meeting-attendees-are-stuck-in-the-lobby-and
+  parent_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_text_excerpt: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit When the organizer / host of a Teams meeting must dial in by phone to host the meeting, and when one or more of the other attendees join using the Teams app, how can the...
+  captured_at: '2026-10-18T12:05:54Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6041156/teams-meeting-attendees-are-stuck-in-the-lobby-and
+  parent_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_text_excerpt: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit When the organizer / host of a Teams meeting must dial in by phone to host the meeting, and when one or more of the other attendees join using the Teams app, how can the...
+  captured_at: '2026-10-18T12:05:54Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6041156/teams-meeting-attendees-are-stuck-in-the-lobby-and
+  parent_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_title: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit - Microsoft Q&A
+  report_text_excerpt: Teams meeting attendees are stuck in the "lobby" and host has joined by phone and is not prompted to admit When the organizer / host of a Teams meeting must dial in by phone to host the meeting, and when one or more of the other attendees join using the Teams app, how can the...
+  captured_at: '2026-10-18T12:05:54Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041112-update-fails-to-install
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6041112/update-fails-to-install
+  parent_title: Update fails to install - Microsoft Q&A
+  report_title: Update fails to install - Microsoft Q&A
+  report_text_excerpt: Update fails to install - Microsoft Q&A why does this security update (2026-10 Security Update (KB5127648) (26200.9711) fail to install?
+  captured_at: '2026-10-18T12:14:06Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26200.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
