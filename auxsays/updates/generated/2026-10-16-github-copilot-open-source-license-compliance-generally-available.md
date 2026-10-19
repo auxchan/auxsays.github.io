@@ -17,8 +17,8 @@ update_version: Open source license compliance generally available
 update_logo_text: GIT
 update_published_at: '2026-10-16T14:00:32Z'
 update_last_checked: '2026-10-16T19:25:36Z'
-source_last_checked: '2026-10-18T23:22:03Z'
-official_body_last_checked: '2026-10-18T23:22:03Z'
+source_last_checked: '2026-10-19T07:20:35Z'
+official_body_last_checked: '2026-10-19T07:20:35Z'
 record_last_updated: '2026-10-16T19:25:36Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -89,11 +89,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-17T23:19:49Z'
-  url: https://github.blog/changelog/2026-10-16-open-source-license-compliance-generally-available
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-18T07:08:36Z'
   url: https://github.blog/changelog/2026-10-16-open-source-license-compliance-generally-available
   status: captured-from-rss-feed
@@ -110,6 +105,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-18T23:22:03Z'
+  url: https://github.blog/changelog/2026-10-16-open-source-license-compliance-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-19T07:20:35Z'
   url: https://github.blog/changelog/2026-10-16-open-source-license-compliance-generally-available
   status: captured-from-rss-feed
   body_captured: true
