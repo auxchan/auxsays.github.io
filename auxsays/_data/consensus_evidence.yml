@@ -56703,3 +56703,57 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
+
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x835fm-blackmagic-proxies-in-depth-questions
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x835fm/blackmagic_proxies_in_depth_questions/
+  parent_title: BLACKMAGIC PROXIES, in depth questions.
+  report_title: BLACKMAGIC PROXIES, in depth questions.
+  report_text_excerpt: BLACKMAGIC PROXIES, in depth questions. Hi there, Does anyone have definitive answers on Davinci's Proxy Generation? Namely, 1.Blackmagic Proxy Generator is somewhat slow, and CPU dependent. What is the best way to maximize its speed. 2. The generator can create 1080P proxies,...
+  captured_at: '2026-10-19T14:07:51Z'
+  source_date: '2026-10-17'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041724-windows-aik-enrollment-fails-with-http
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6041724/windows-aik-enrollment-fails-with-http-404-for-int
+  parent_title: Windows AIK enrollment fails with HTTP 404 for Intel PTT EK authority - Microsoft Q&A
+  report_title: Windows AIK enrollment fails with HTTP 404 for Intel PTT EK authority - Microsoft Q&A
+  report_text_excerpt: 'Windows AIK enrollment fails with HTTP 404 for Intel PTT EK authority - Microsoft Q&A Title: Windows AIK enrollment fails with HTTP 404 for Intel PTT EK authority Product: Windows 11 Pro, build 26300.9457 Motherboard: ASUS ROG Maximus Z790 Apex, dual BIOS CPU: Intel Core...'
+  captured_at: '2026-10-19T14:23:13Z'
+  source_date: '2026-10-18'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9457'
