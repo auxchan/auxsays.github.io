@@ -56409,3 +56409,297 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9711'
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-external-access-vs-b2b-direct-connect-vs-b2b-collab/4565309
+  parent_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_text_excerpt: Teams External Access vs. B2B Direct Connect vs. B2B Collab I&apos;ve received conflicting info regarding whether B2B Direct Connect and Teams External Access are the same thing.&amp;nbsp;Last time I looked into this, they both seemed to rely on the &apos;Default External...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-stuck-in-loading-latest-updat
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-stuck-in-loading-latest-updates--error/4118133
+  parent_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_text_excerpt: Teams stuck in &quot;Loading latest updates...&quot; error I have been having the same error with Teams for the past few months, across two different computers, and with me having uninstalled and reinstalled Teams several times.&amp;nbsp; Effectively, Teams works fine the...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2024-04-18'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-external-access-vs-b2b-direct-connect-vs-b2b-collab/4565309
+  parent_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_text_excerpt: Teams External Access vs. B2B Direct Connect vs. B2B Collab I&apos;ve received conflicting info regarding whether B2B Direct Connect and Teams External Access are the same thing.&amp;nbsp;Last time I looked into this, they both seemed to rely on the &apos;Default External...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-stuck-in-loading-latest-updat
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-stuck-in-loading-latest-updates--error/4118133
+  parent_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_text_excerpt: Teams stuck in &quot;Loading latest updates...&quot; error I have been having the same error with Teams for the past few months, across two different computers, and with me having uninstalled and reinstalled Teams several times.&amp;nbsp; Effectively, Teams works fine the...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2024-04-18'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-external-access-vs-b2b-direct-connect-vs-b2b-collab/4565309
+  parent_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_text_excerpt: Teams External Access vs. B2B Direct Connect vs. B2B Collab I&apos;ve received conflicting info regarding whether B2B Direct Connect and Teams External Access are the same thing.&amp;nbsp;Last time I looked into this, they both seemed to rely on the &apos;Default External...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-stuck-in-loading-latest-updat
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-stuck-in-loading-latest-updates--error/4118133
+  parent_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_text_excerpt: Teams stuck in &quot;Loading latest updates...&quot; error I have been having the same error with Teams for the past few months, across two different computers, and with me having uninstalled and reinstalled Teams several times.&amp;nbsp; Effectively, Teams works fine the...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2024-04-18'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-external-access-vs-b2b-direct-connect-vs-b2b-collab/4565309
+  parent_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_text_excerpt: Teams External Access vs. B2B Direct Connect vs. B2B Collab I&apos;ve received conflicting info regarding whether B2B Direct Connect and Teams External Access are the same thing.&amp;nbsp;Last time I looked into this, they both seemed to rely on the &apos;Default External...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-stuck-in-loading-latest-updat
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-stuck-in-loading-latest-updates--error/4118133
+  parent_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_text_excerpt: Teams stuck in &quot;Loading latest updates...&quot; error I have been having the same error with Teams for the past few months, across two different computers, and with me having uninstalled and reinstalled Teams several times.&amp;nbsp; Effectively, Teams works fine the...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2024-04-18'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-external-access-vs-b2b-direct-connect-vs-b2b-collab/4565309
+  parent_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_text_excerpt: Teams External Access vs. B2B Direct Connect vs. B2B Collab I&apos;ve received conflicting info regarding whether B2B Direct Connect and Teams External Access are the same thing.&amp;nbsp;Last time I looked into this, they both seemed to rely on the &apos;Default External...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-stuck-in-loading-latest-updat
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-stuck-in-loading-latest-updates--error/4118133
+  parent_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_text_excerpt: Teams stuck in &quot;Loading latest updates...&quot; error I have been having the same error with Teams for the past few months, across two different computers, and with me having uninstalled and reinstalled Teams several times.&amp;nbsp; Effectively, Teams works fine the...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2024-04-18'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-external-access-vs-b2b-direct-connect-vs-b2b-collab/4565309
+  parent_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_text_excerpt: Teams External Access vs. B2B Direct Connect vs. B2B Collab I&apos;ve received conflicting info regarding whether B2B Direct Connect and Teams External Access are the same thing.&amp;nbsp;Last time I looked into this, they both seemed to rely on the &apos;Default External...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-stuck-in-loading-latest-updat
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-stuck-in-loading-latest-updates--error/4118133
+  parent_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_text_excerpt: Teams stuck in &quot;Loading latest updates...&quot; error I have been having the same error with Teams for the past few months, across two different computers, and with me having uninstalled and reinstalled Teams several times.&amp;nbsp; Effectively, Teams works fine the...
+  captured_at: '2026-10-19T05:41:23Z'
+  source_date: '2024-04-18'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
