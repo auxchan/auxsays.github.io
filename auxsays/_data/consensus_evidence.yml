@@ -56763,3 +56763,52 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x6lczv-solved-davinci-resolve-21-unsupported-gpu
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x6lczv/solved_davinci_resolve_21_unsupported_gpu/
+  parent_title: 'SOLVED: DaVinci Resolve 21 “Unsupported GPU Processing Mode” on Windows 11 — Root cause was CUDA_VISIBLE_DEVICES=-1'
+  report_title: 'SOLVED: DaVinci Resolve 21 “Unsupported GPU Processing Mode” on Windows 11 — Root cause was CUDA_VISIBLE_DEVICES=-1'
+  report_text_excerpt: 'SOLVED: DaVinci Resolve 21 “Unsupported GPU Processing Mode” on Windows 11 — Root cause was CUDA_VISIBLE_DEVICES=-1 I spent quite a while troubleshooting the “Unsupported GPU Processing Mode” error in DaVinci Resolve 21. I initially suspected an NVIDIA driver issue, but the...'
+  captured_at: '2026-10-20T05:38:20Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x2ttin-a-second-preview-panel-has-hit-my-screen
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x2ttin/a_second_preview_panel_has_hit_my_screen_and_i/
+  parent_title: A second preview panel has hit my screen and I cant remove it
+  report_title: A second preview panel has hit my screen and I cant remove it
+  report_text_excerpt: A second preview panel has hit my screen and I cant remove it Windows, resolve 21 Hello, ive used davinci resolve for a few months now, and today while i was working on a video, a made a copy of the project. For more context if this helps, I edited a video, exported it, and...
+  captured_at: '2026-10-20T05:38:20Z'
+  source_date: '2026-10-11'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
