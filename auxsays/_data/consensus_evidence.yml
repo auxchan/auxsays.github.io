@@ -56229,7 +56229,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -56254,7 +56253,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -56279,7 +56277,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -56304,7 +56301,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -56329,7 +56325,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -56354,7 +56349,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041156-teams-meeting-attendees-are-stuck-in-t
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -56379,7 +56373,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041112-update-fails-to-install
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -56409,7 +56402,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9711'
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -56458,7 +56450,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -56507,7 +56498,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -56556,7 +56546,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -56605,7 +56594,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -56654,7 +56642,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -56703,7 +56690,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x835fm-blackmagic-proxies-in-depth-questions
   product_id: blackmagic-davinci
   update_version: '20.1'
@@ -56728,7 +56714,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6041724-windows-aik-enrollment-fails-with-http
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -56757,3 +56742,24 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9457'
+- id: obs-studio-32-2-2-github-issue-14054
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14054
+  parent_title: 'Linux: `obs-ffmpeg-mux` inherits V4L2 device file descriptors, so Virtual Camera can''t restart while recording'
+  report_title: 'Linux: `obs-ffmpeg-mux` inherits V4L2 device file descriptors, so Virtual Camera can''t restart while recording'
+  report_text_excerpt: '### Operating System Info Ubuntu 26.04 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/eYGldi62H2Ufdxx0 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Stopp'
+  captured_at: '2026-10-19T23:56:12Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
