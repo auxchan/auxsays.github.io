@@ -18,8 +18,8 @@ update_version: Some Git over HTTPS may temporarily require authentication
 update_logo_text: GIT
 update_published_at: '2026-10-19T10:37:30Z'
 update_last_checked: '2026-10-19T15:51:36Z'
-source_last_checked: '2026-10-19T15:51:36Z'
-official_body_last_checked: '2026-10-19T15:51:36Z'
+source_last_checked: '2026-10-20T01:00:42Z'
+official_body_last_checked: '2026-10-20T01:00:42Z'
 record_last_updated: '2026-10-19T15:51:36Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -83,6 +83,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-10-19T15:51:36Z'
+  url: https://github.blog/changelog/2026-10-19-some-git-over-https-may-temporarily-require-authentication
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-20T01:00:42Z'
   url: https://github.blog/changelog/2026-10-19-some-git-over-https-may-temporarily-require-authentication
   status: captured-from-rss-feed
   body_captured: true
