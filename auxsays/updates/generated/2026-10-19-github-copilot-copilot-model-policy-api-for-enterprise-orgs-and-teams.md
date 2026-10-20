@@ -18,9 +18,9 @@ update_version: Copilot model policy API for enterprise, orgs, and teams
 update_logo_text: GIT
 update_published_at: '2026-10-19T21:32:18Z'
 update_last_checked: '2026-10-20T01:00:42Z'
-source_last_checked: '2026-10-20T14:07:15Z'
-official_body_last_checked: '2026-10-20T14:07:15Z'
-record_last_updated: '2026-10-20T01:00:42Z'
+source_last_checked: '2026-10-20T19:34:17Z'
+official_body_last_checked: '2026-10-20T19:34:17Z'
+record_last_updated: '2026-10-20T19:34:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
@@ -92,15 +92,19 @@ official_source_attempts:
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
+- at: '2026-10-20T19:34:17Z'
+  url: https://github.blog/changelog/2026-10-19-copilot-model-policy-api-for-enterprise-orgs-and-teams
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: "You can now use the REST API to retrieve and update Copilot model policies for enterprises, enterprise\
-  \ teams, enterprise apps, and organizations.\n\n\n What’s new\n GET and PATCH endpoints are now generally available for\
-  \ model policies at four levels:\n\n\n\n Enterprise: /enterprises/{enterprise}/copilot/model-policies\n Enterprise teams:\
-  \ /enterprises/{enterprise}/teams/{team_slug}/copilot/model-policies\n Enterprise apps: /enterprises/{enterprise}/copilot/apps/model-policies\n\
-  \ Organization: /orgs/{org}/copilot/model-policies\n\n Together, these endpoints make it easier to manage Copilot model\
-  \ availability across your enterprise. Enterprise policies can delegate model control to organizations in organization mode,\
-  \ or to teams and apps in enterprise teams mode. Reference our documentation on managing availability of models in your\
-  \ enterprise and our REST API documentation to get started.\n\n\n\n The post Copilot model policy API for enterprise, orgs,\
-  \ and teams appeared first on The GitHub Blog ."
+  \ teams, agent apps, and organizations.\n\n\n What’s new\n GET and PATCH endpoints are now generally available for model\
+  \ policies at four levels:\n\n\n\n Enterprise: /enterprises/{enterprise}/copilot/model-policies\n Enterprise teams: /enterprises/{enterprise}/teams/{team_slug}/copilot/model-policies\n\
+  \ Agent apps: /enterprises/{enterprise}/copilot/apps/model-policies\n Organization: /orgs/{org}/copilot/model-policies\n\
+  \n Together, these endpoints make it easier to manage Copilot model availability across your enterprise. Enterprise policies\
+  \ can delegate model control to organizations in organization mode, or to teams and apps in enterprise teams mode. Reference\
+  \ our documentation on managing availability of models in your enterprise and our REST API documentation to get started.\n\
+  \n\n\n The post Copilot model policy API for enterprise, orgs, and teams appeared first on The GitHub Blog ."
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---
