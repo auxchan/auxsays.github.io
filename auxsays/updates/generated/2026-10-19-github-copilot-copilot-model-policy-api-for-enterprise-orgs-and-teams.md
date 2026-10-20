@@ -18,8 +18,8 @@ update_version: Copilot model policy API for enterprise, orgs, and teams
 update_logo_text: GIT
 update_published_at: '2026-10-19T21:32:18Z'
 update_last_checked: '2026-10-20T01:00:42Z'
-source_last_checked: '2026-10-20T07:33:53Z'
-official_body_last_checked: '2026-10-20T07:33:53Z'
+source_last_checked: '2026-10-20T14:07:15Z'
+official_body_last_checked: '2026-10-20T14:07:15Z'
 record_last_updated: '2026-10-20T01:00:42Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -83,6 +83,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-20T07:33:53Z'
+  url: https://github.blog/changelog/2026-10-19-copilot-model-policy-api-for-enterprise-orgs-and-teams
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-20T14:07:15Z'
   url: https://github.blog/changelog/2026-10-19-copilot-model-policy-api-for-enterprise-orgs-and-teams
   status: captured-from-rss-feed
   body_captured: true
