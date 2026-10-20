@@ -56812,3 +56812,64 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6042551-bugcheck-after-installing-kb5127648-oc
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6042551/bugcheck-after-installing-kb5127648-october-2026-c
+  parent_title: Bugcheck after installing KB5127648 (October 2026 cumulative update). Full dump faulting module is ntoskrnl.exe; the crashing thread stack contains only ntoskrnl and Ntfs.sys. - Microsoft Q&A
+  report_title: Bugcheck after installing KB5127648 (October 2026 cumulative update). Full dump faulting module is ntoskrnl.exe; the crashing thread stack contains only ntoskrnl and Ntfs.sys. - Microsoft Q&A
+  report_text_excerpt: Bugcheck after installing KB5127648 (October 2026 cumulative update). Full dump faulting module is ntoskrnl.exe; the crashing thread stack contains only ntoskrnl and Ntfs.sys. - Microsoft Q&A A kernel bugcheck started after installing the Windows 11 October 2026 security...
+  captured_at: '2026-10-20T12:45:14Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26300.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6042685-windows-11-mdm-win32appinventory-csp-g
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6042685/windows-11-mdm-win32appinventory-csp-get-returns-4
+  parent_title: 'Windows 11 MDM: Win32AppInventory CSP Get returns 404 after KB5127648 (inventory cache "Schema mismatch") - Microsoft Q&A'
+  report_title: 'Windows 11 MDM: Win32AppInventory CSP Get returns 404 after KB5127648 (inventory cache "Schema mismatch") - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11 MDM: Win32AppInventory CSP Get returns 404 after KB5127648 (inventory cache "Schema mismatch") - Microsoft Q&A Question: Is the Win32AppInventory 404 after KB5127648 a known issue, and is rebuilding the inventory cache (below) the supported way to fix affected...'
+  captured_at: '2026-10-20T12:45:25Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26200.9711'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
