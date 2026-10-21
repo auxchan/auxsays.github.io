@@ -63,6 +63,13 @@ jobs:
       - name: Generate source health snapshot
         run: python auxsays/scripts/source_health_snapshot.py
 
+      # Position is load-bearing: this runs BEFORE `bundle exec jekyll build`, so the product and
+      # company pages render the state collection actually reached rather than a static editorial
+      # label. Before it existed, 29 of 47 products publicly claimed "Monitoring active" with no
+      # enabled ingestion source, and four enabled-but-refused sources claimed nothing was wrong.
+      - name: Generate public monitoring projection
+        run: python auxsays/scripts/build_monitoring_projection.py
+
       - name: Validate logo assets
         run: python auxsays/scripts/validate_logo_assets.py
 

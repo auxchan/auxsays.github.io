@@ -43,6 +43,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
 
 ---
 
@@ -2585,6 +2586,80 @@ year.
 generalises. The lesson: a date field accepts two kinds of wrong value -- text that is not a date,
 and a real date that is not the vendor's -- and a permissive normaliser produces both while looking
 like a convenience.
+
+### AUX-039 — the site claimed to be monitoring 29 products it was not monitoring
+
+- **Status** Resolved · **Area** Published claims · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-21
+
+`coverage_status_label` is a static editorial string in `_data/patch_companies.yml` and
+`_data/patch_products.yml`. Three render sites published it as a monitoring claim: the product
+page pill, the product card on a company page, and the company-level pill. It tracks nothing.
+
+Measured across 47 products and 35 companies:
+
+- **29 products** publicly claimed "Monitoring active" with **no enabled ingestion source** —
+  nothing had ever collected for them.
+- **27 companies** claimed it with **zero healthy products**, `netlify` among them while its only
+  product's recorded state was `broken`.
+- Two products claimed "Source map staged" while enabled, healthy and producing records that same
+  day. So the field was not even conservative — it was decoupled, and wrong in both directions.
+- Four **enabled** products sat at 226, 226, 146 and 102 consecutive failures, last successes
+  between 2026-08-18 and 2026-09-21, and the page said nothing about it.
+
+#### Why fail-closed is the design, not a nicety
+
+Two earlier attempts at this repair each produced a DIFFERENT false claim, and both were caught
+only by adversarial review. One derived the state from `coverage_state`, an editorial enum. The
+other derived it from the source's `enabled` flag — which sounds authoritative and is not:
+`enabled` says a source is switched on, and five enabled sources have produced nothing. Five of
+the seventeen enabled sources were in fact failing or broken at the time.
+
+So `healthy` is now the ONLY affirmative state, it is evaluated LAST, and it must be earned —
+enabled, recorded healthy, and a success recent enough for the source's own cadence. Absent state,
+an unrecognised status, or a product that cannot be joined to a source all resolve to `unverified`,
+which reads as unknown rather than as working.
+
+#### Three failures that are not the same failure
+
+A source that refuses us, a source that never answers, and a source we reach but cannot parse are
+three different facts. They are `blocked`, `unreachable` and `broken`, and the suite pins that they
+do not collapse into one label — a reader weighing an absence of reports needs to know which one
+applies. The company aggregate follows the same rule: when nothing is healthy it says whether that
+is "not monitored" or "checks failing", and when some products are healthy it gives a count rather
+than an adjective.
+
+#### Recency follows the source's own cadence
+
+A success counts as recent within four of the source's declared polling intervals, floored at 48
+hours so the fastest lane is not called stale after one bad night, and capped at 14 days so nothing
+is "healthy" indefinitely. An unparseable per-source override falls back to the computed window
+rather than widening it, because a typo must not make a stale source look healthy.
+
+#### What the projection deliberately does not carry
+
+One row per product and per company: a state, reader-facing text, and dates. No error text, no
+adapter name, no method id, no failure counter, no health note. The richer `source_health.yml`
+already exists and its rows hold 24 fields including `last_error`, `adapter_type` and
+`consecutive_failures`; rendering that on a product page would have put all of it in template
+scope. So this is a separate, narrow file rather than a reuse of that one.
+
+**Verified on rendered output**, not on the template source: all 47 product pages were
+cross-checked against the derived state — 0 mismatches — and no page claims "Monitoring active"
+with a state other than `healthy`.
+
+**Reopen only if** a rendered monitoring pill carries a state outside the approved vocabulary, or
+a page claims an affirmative state for a product whose last success is older than its window, or
+any template begins reading `site.data.patch_ingest_state`.
+
+#### Phase 2 is required, not optional
+
+`patch_ingest_state.json` still sits in `_data/`, so Jekyll loads it into `site.data` for every
+template whether or not one reads it, and it carries raw error bodies and adapter names. Relocating
+it is a 27-file change touching **all four committing workflows**, on a repository whose writer
+queue is depth one, so it was deliberately not bundled with a copy fix. Until it lands, the guard
+in section [F] asserts that no layout, include or page reads it. That guard is containment, not a
+substitute for the move.
 
 ## Adding an entry
 

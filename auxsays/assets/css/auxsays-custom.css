@@ -1994,6 +1994,40 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   background: rgba(59,165,103,.12);
   color: #d9f7e5;
 }
+
+/* MONITORING STATE pills. Colour is SUPPLEMENTARY here: each state already carries distinct
+   text ("Monitoring active" vs "Source is refusing automated checks"), so the state is never
+   conveyed by styling alone. Only `healthy` is green; everything else is deliberately not,
+   because a reader glancing at the pill should not read an unestablished state as working. */
+.patch-coverage-pill--monitor-healthy {
+  border-color: rgba(59,165,103,.34);
+  background: rgba(59,165,103,.12);
+  color: #d9f7e5;
+}
+
+.patch-coverage-pill--monitor-failing,
+.patch-coverage-pill--monitor-blocked,
+.patch-coverage-pill--monitor-unreachable,
+.patch-coverage-pill--monitor-broken {
+  border-color: rgba(214,106,96,.38);
+  background: rgba(214,106,96,.12);
+  color: #f6d9d5;
+}
+
+.patch-coverage-pill--monitor-partial,
+.patch-coverage-pill--monitor-stale,
+.patch-coverage-pill--monitor-unverified {
+  border-color: rgba(214,176,96,.34);
+  background: rgba(214,176,96,.11);
+  color: #f6ecd5;
+}
+
+.patch-coverage-pill--monitor-disabled,
+.patch-coverage-pill--monitor-unconfigured {
+  border-color: var(--border-subtle);
+  background: rgba(255,255,255,.03);
+  color: var(--text-secondary, #c7ccd4);
+}
 .patch-coverage-pill--active_watch,
 .patch-coverage-pill--active-watch {
   border-color: rgba(95,212,229,.34);
