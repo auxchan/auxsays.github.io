@@ -17,8 +17,8 @@ update_version: Better agency and freelancer workflows in Figma
 update_logo_text: FIG
 update_published_at: '2025-04-09T00:00:00.000Z'
 update_last_checked: '2026-08-16T14:09:45Z'
-source_last_checked: '2026-09-16T09:55:42Z'
-official_body_last_checked: '2026-09-16T09:55:42Z'
+source_last_checked: '2026-10-21T00:20:49Z'
+official_body_last_checked: '2026-10-21T00:20:49Z'
 record_last_updated: '2026-08-16T14:09:45Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-16T09:55:42Z'
+  url: https://www.figma.com/release-notes/?title=connected-projects
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-21T00:20:49Z'
   url: https://www.figma.com/release-notes/?title=connected-projects
   status: captured-from-rss-feed
   body_captured: true

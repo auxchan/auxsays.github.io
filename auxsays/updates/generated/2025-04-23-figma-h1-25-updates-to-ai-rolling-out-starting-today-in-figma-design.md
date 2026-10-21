@@ -17,8 +17,8 @@ update_version: H1 ‘25 updates to AI rolling out starting today in Figma Desig
 update_logo_text: FIG
 update_published_at: '2025-04-23T00:00:00.000Z'
 update_last_checked: '2026-08-16T14:09:45Z'
-source_last_checked: '2026-09-16T05:11:34Z'
-official_body_last_checked: '2026-09-16T05:11:34Z'
+source_last_checked: '2026-10-21T00:20:49Z'
+official_body_last_checked: '2026-10-21T00:20:49Z'
 record_last_updated: '2026-08-16T14:09:45Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-16T05:11:34Z'
+  url: https://www.figma.com/release-notes/?title=updates-to-ai
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-21T00:20:49Z'
   url: https://www.figma.com/release-notes/?title=updates-to-ai
   status: captured-from-rss-feed
   body_captured: true
