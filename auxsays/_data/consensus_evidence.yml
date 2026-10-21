@@ -56898,3 +56898,180 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-26-002-22031-adobe-community-bug-report-https-community-adobe-com-questions-9-e3-83-91-e3-82-b9-e3-83-af-e3-83-bc-e3-83-89-e3-82-92-e8-a
+  product_id: adobe-acrobat-pro
+  update_version: 26.002.22031
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/%E3%83%91%E3%82%B9%E3%83%AF%E3%83%BC%E3%83%89%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B%E6%99%82%E3%81%AB%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5%E3%81%99%E3%82%8B-1652001
+  parent_title: パスワードを設定する時にクラッシュする
+  report_title: パスワードを設定する時にクラッシュする
+  report_text_excerpt: パスワードを設定する時にクラッシュする 以下、バグのようです。早めの修正をお願いいたします。 PDFファイルを開きます。 ツールバーの「鍵」ツールを選択し、表示されるドロップダウンメニューから「パスワードで暗号化」を選びます。ダイアログが開くので、「はい」をクリックします。 「文書を開く時にパスワードが必要」のチェックをオンにして、パスワードを設定します。 ここで奇妙な現象が発生します。 「OK」をクリックし、確認のためにパスワードを再入力します。 アプリケーションがクラッシュします。...
+  captured_at: '2026-10-21T21:40:09Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-10-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2026.002.22031
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
