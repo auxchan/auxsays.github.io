@@ -43,6 +43,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-040 | Resolved | Build reproducibility | High | The deployed gem set was whatever rubygems served that minute — now a tracked, frozen lock |
 
 ---
 
@@ -2585,6 +2586,64 @@ year.
 generalises. The lesson: a date field accepts two kinds of wrong value -- text that is not a date,
 and a real date that is not the vendor's -- and a permissive normaliser produces both while looking
 like a convenience.
+
+### AUX-040 — the deployed dependency set was whatever rubygems served that minute
+
+- **Status** Resolved · **Area** Build reproducibility · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-21
+
+Seven gems were declared in `auxsays/Gemfile` and two carried a version constraint. The five
+without one included `jekyll-theme-chirpy`, the theme every layout inherits from. No
+`Gemfile.lock` was tracked, and the deploy ran `bundle install` with no lock and no cache, so
+**every deploy re-resolved from scratch**.
+
+Measured rather than inferred: the live page emitted `jekyll-seo-tag 2.9.1` while a local build of
+the same commit emitted `2.9.0`. An upstream release could change the published markup of every
+page with no commit touching this repository.
+
+#### The obvious repair was worse than the defect
+
+Generating the lock from a developer machine would have pinned `chirpy 7.0.1`, `seo-tag 2.9.0` and
+`include-cache 0.2.2` — silently **downgrading the live theme by six minor versions** on the next
+deploy. A lock has to be resolved against what the deploy installs, never against what happens to
+be cached locally.
+
+So the inventory came from the authoritative source: the `bundle install` output of the CI run that
+built the live site. Forty production gems, direct and transitive, diffed against the lock line by
+line: **zero version mismatches**. Three gems sit in the lock beyond that set and each is
+accounted for — two are the Windows-only timezone gems, and `rexml` is a gem the runner already
+provides as a bundled gem, which is why it never appears in the install log.
+
+This is a FREEZE, not an upgrade. Production already ran 7.6.0; only the developer machine was
+behind. There was no theme upgrade to decide, only a theme version to record.
+
+#### Why only the theme is bounded
+
+The lock enforces exact versions, so constraining all five unconstrained gems would complicate
+legitimate maintenance without improving reproducibility. The theme is the exception because a
+major bump restructures markup everywhere, and that must never arrive as a side effect.
+
+#### What the deploy now proves
+
+`setup-ruby` installs in deployment mode with `BUNDLE_GEMFILE` named explicitly — the Gemfile is in
+`auxsays/`, not at the repository root, so without that the action resolves the wrong project. A
+following step refuses a missing lock outright rather than falling back to resolution, runs a frozen
+check, and fails if installation altered the lock byte-for-byte. That fallback WAS the defect, so
+removing it is the repair.
+
+Section [D] of the new suite EXTRACTS that step's shell from the workflow and EXECUTES it against a
+lockless checkout, requiring a non-zero exit. A suite that greps a workflow for a guard passes after
+the guard is deleted, which has happened here before.
+
+**Reopen only if** `Gemfile.lock` stops being tracked, or loses the `x86_64-linux` platform, or the
+deploy installs without deployment mode, or a build emits a gem version the lock does not name.
+
+#### Not covered
+
+The Linux install path is verified by the lock's platform entry and by PR-time CI, not locally;
+there is no Linux environment here to install into. Upgrade governance — monthly monitoring,
+quarterly review, immediate escalation for security advisories, owner approval for any production
+dependency change — is agreed but **not automated by this change**.
 
 ## Adding an entry
 
