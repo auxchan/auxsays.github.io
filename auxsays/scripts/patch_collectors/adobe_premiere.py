@@ -40,6 +40,7 @@ from .base import (
     utc_now,
 )
 
+from lib import evidence_classification as ec
 from lib.method_routing import fallback_justified, plan_methods
 from lib.target_outcome import target_is_contradicted
 from . import reddit_source
@@ -1173,7 +1174,11 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         str(candidate.get("report_text") or ""),
     ])
     matched, matched_version, basis = premiere_version_match(report_text, record.update_version)
-    theme, workflow_area, platform, severity, sentiment = classify(report_text)
+    # The concatenated blob stays the input to version matching -- acceptance authority is not
+    # touched by this change -- but classification gets the title and the body separately.
+    theme, workflow_area, platform, severity, sentiment = classify(
+        str(candidate.get("report_title") or candidate.get("parent_title") or ""),
+        str(candidate.get("report_text") or ""))
     source_date = date_part(candidate.get("source_date"))
     archive_url = str(candidate.get("archive_url") or "").strip()
     row = make_evidence_row(
@@ -1588,30 +1593,76 @@ def blocked_reason_from_errors(errors: list[dict[str, Any]]) -> str:
     return "; ".join(f"{reason} x{count}" if count > 1 else reason for reason, count in counts.items())
 
 
-def classify(text: str) -> tuple[str, str, str, str, str]:
-    lowered = (text or "").lower()
-    platform = "unknown"
-    for token, label in (("windows", "windows"), ("macos", "macos"), ("mac os", "macos"), ("mac", "macos")):
-        if token in lowered:
-            platform = label
-            break
-    if "export" in lowered or "render" in lowered:
-        return "export/render failure", "export/render", platform, "high", "negative"
-    if "project" in lowered and any(token in lowered for token in ("open", "load", "hang", "delay")):
-        return "project open/load failure", "project opening", platform, "high", "negative"
-    if "timeline" in lowered and any(token in lowered for token in ("crash", "freeze", "hang", "lag")):
-        return "timeline crash or hang", "timeline editing", platform, "high", "negative"
-    if "ui" in lowered or "interface" in lowered or "lag" in lowered or "slow" in lowered:
-        return "interface lag or freezing", "editing interface", platform, "high", "negative"
-    if "plugin" in lowered or "compatib" in lowered:
-        return "plugin or compatibility issue", "plugins / compatibility", platform, "medium", "negative"
-    if "media" in lowered or "decode" in lowered or "audio" in lowered or "video" in lowered:
-        return "media decode or audio/video issue", "media playback", platform, "medium", "negative"
-    if "install" in lowered:
-        return "install issue", "installation", platform, "medium", "negative"
-    if "crash" in lowered or "hang" in lowered or "freeze" in lowered:
-        return "application crash or hang", "application stability", platform, "high", "negative"
-    return "unspecified issue", "Premiere Pro workflow", platform, "medium", "moderate"
+# Premiere's published theme vocabulary. The WORDS are unchanged from the if-chain this replaces;
+# what changed is that they are matched on word boundaries, scored rather than first-match, and
+# weighted toward the reporter's own title.
+#
+# ORDER IS THE ONE DELIBERATE SEMANTIC CHANGE, and it generalises the repair Acrobat already made
+# for itself ("stability scored alongside everything else instead of last"). The old chain tested
+# export FIRST and crash LAST, so whenever a body hit several rules once each, the broadest rule
+# won on position alone. Live example, published: a report titled "Premiere 26.2.2 unstable" whose
+# body opens "windows and menus freeze, rendering seems much slower" scored export=1, ui=1,
+# crash=1 and was published as "export/render failure" -- a theme taken from a secondary clause.
+#
+# The order here is by SPECIFICITY. The two composite rules require two co-occurring tokens within
+# 120 characters, so they are strictly narrower than any single-token rule and go first; stability
+# comes next; the broad single-token rules last. The co-occurrence window is itself a tightening:
+# the old chain accepted "project" at the start of a 6,000-character body and "open" at the end of
+# it as one claim.
+_PREMIERE_THEME_RULES: tuple[ec.ThemeRule, ...] = (
+    # The two cues may appear in EITHER order within the window. One-directional lookahead was
+    # measured as a regression: "When opening and synchronizing a large project from a full day
+    # shoot" names the action before the noun, so a noun-then-cue pattern missed it, the row fell
+    # through to the fallback, and the fallback carries `moderate` SENTIMENT -- which is
+    # verdict-bearing. A counted bug report must not dilute a negative consensus because of the
+    # word order in its first sentence.
+    ec.ThemeRule("project open/load failure", "project opening", "high", "project",
+                 re.compile(r"(?:\bproject\w*\b(?=[\s\S]{0,120}?\b(?:open\w*|load\w*|hang\w*|delay\w*)\b)"
+                            r"|\b(?:open\w*|load\w*|hang\w*|delay\w*)\b(?=[\s\S]{0,120}?\bproject\w*\b))",
+                            re.I)),
+    ec.ThemeRule("timeline crash or hang", "timeline editing", "high", "timeline",
+                 re.compile(r"(?:\btimeline\w*\b(?=[\s\S]{0,120}?\b(?:crash\w*|freez\w*|hang\w*|lag\w*)\b)"
+                            r"|\b(?:crash\w*|freez\w*|hang\w*|lag\w*)\b(?=[\s\S]{0,120}?\btimeline\w*\b))",
+                            re.I)),
+    # `negatable`: a DENIED crash is not evidence of a crash. Scoped to this rule because it names
+    # a symptom; "can't export" and "won't launch" are how failures are reported, not denied.
+    ec.ThemeRule("application crash or hang", "application stability", "high", "crash",
+                 re.compile(r"\b(?:crash\w*|hang(?:s|ing|ed)?|freez\w*|not\s+responding)\b", re.I),
+                 negatable=True),
+    ec.ThemeRule("interface lag or freezing", "editing interface", "high", "ui",
+                 re.compile(r"\b(?:ui|interface|lag\w*|slow\w*|sluggish)\b", re.I)),
+    ec.ThemeRule("export/render failure", "export/render", "high", "export",
+                 re.compile(r"\b(?:export\w*|render\w*|encod\w*)\b", re.I)),
+    ec.ThemeRule("plugin or compatibility issue", "plugins / compatibility", "medium", "plugin",
+                 re.compile(r"\b(?:plugin\w*|plug-in\w*|compatib\w*)\b", re.I)),
+    ec.ThemeRule("media decode or audio/video issue", "media playback", "medium", "media",
+                 re.compile(r"\b(?:media|decod\w*|audio|video|codec\w*|playback)\b", re.I)),
+    ec.ThemeRule("install issue", "installation", "medium", "install",
+                 re.compile(r"\b(?:install\w*|uninstall\w*|reinstall\w*)\b", re.I)),
+)
+# An out-of-vocabulary severity does not fail loudly downstream: build_consensus_from_evidence sets
+# `exclusion_reason: invalid_severity` and SILENTLY UN-COUNTS the row. Refuse the table instead.
+ec.validate_rules(_PREMIERE_THEME_RULES)
+
+
+def classify(heading: str, body: str) -> tuple[str, str, str, str, str]:
+    """(theme, workflow_area, platform, severity, sentiment) for one Premiere report.
+
+    `heading` and `body` are SEPARATELY ATTRIBUTED on purpose. The caller used to concatenate
+    parent_title + report_title + report_text into one string and pass that, which made title
+    weighting impossible to express -- and, because Premiere sets parent_title and report_title to
+    the same extracted page title, put that title into the blob twice.
+
+    SENTIMENT IS UNCHANGED, deliberately and exactly: `negative` whenever a theme matched,
+    `moderate` on the fallback, which is what every branch of the old chain returned. Sentiment is
+    verdict-bearing, so the scorer cannot reach it -- the fallback is not a rule in the scored
+    table, so it cannot win a comparison; it is only what is left when nothing matched at all.
+    """
+    verdict = ec.score_themes(heading, body, _PREMIERE_THEME_RULES)
+    platform = ec.resolve_platform(" ".join(part for part in (heading, body) if part)).label
+    if verdict is None:
+        return "unspecified issue", "Premiere Pro workflow", platform, "medium", "moderate"
+    return verdict.theme, verdict.area, platform, verdict.severity, "negative"
 
 
 def premiere_strong_issue_match(text: str) -> bool:

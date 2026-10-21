@@ -33,6 +33,7 @@ from urllib.error import HTTPError, URLError
 
 from . import reddit_source
 from . import runtime_budget as rb
+from lib import evidence_classification as ec
 from lib.target_outcome import (
     AFFECTED as OUTCOME_AFFECTED,
     classify_target_outcome,
@@ -494,30 +495,54 @@ def _url_specific(url: str, source_type: str) -> bool:
 #
 # Three changes: word boundaries, the reporter's own TITLE weighted far above the body, and stability
 # scored alongside everything else instead of last.
-_THEME_RULES: tuple[tuple[str, str, str, str, "re.Pattern[str]"], ...] = (
-    ("crash or launch failure", "application stability", "high",
-     "crash", re.compile(r"\b(?:crash\w*|freez\w*|hang(?:s|ing|ed)?|not\s+responding|"
-                        r"appcrash|fails?\s+to\s+launch|won'?t\s+(?:launch|start|open))\b", re.I)),
-    ("printing regression", "printing", "high",
-     "print", re.compile(r"\b(?:print\w*|printer|print\s+queue|spooler)\b", re.I)),
-    ("signing/certificate failure", "e-signatures", "high",
-     "sign", re.compile(r"\b(?:e-?sign\w*|signature\w*|signing|certificat\w*|digital\s+id)\b", re.I)),
-    ("form behavior regression", "forms", "high",
-     "form", re.compile(r"\b(?:form\s+field\w*|fillable|form\w*)\b", re.I)),
-    ("install/update failure", "deployment", "high",
-     "install", re.compile(r"\b(?:install\w*|uninstall\w*|deploy\w*|msi|silent\s+update|"
-                          r"update\s+fail\w*|patch\s+fail\w*)\b", re.I)),
-    ("PDF rendering regression", "PDF rendering", "high",
-     "render", re.compile(r"\b(?:render\w*|blank\s+page|garbled|corrupt\w*|display\s+issue)\b", re.I)),
-    ("browser/plugin handoff failure", "browser integration", "medium",
-     "browser", re.compile(r"\b(?:browser|plugin|plug-in|add-?in|extension|edge|chrome|firefox)\b", re.I)),
-    ("performance regression", "performance", "medium",
-     "perf", re.compile(r"\b(?:high\s+cpu|memory\s+leak|slow\w*|sluggish|performance)\b", re.I)),
+#
+# The rules now carry the shared ThemeRule type and the shared scorer, so one implementation of
+# "score word-boundary rules, title weighted above body, best match wins" serves both Adobe
+# collectors. The WORDS, their ORDER and the weight are unchanged -- the five shipped checks below
+# Part F are the proof of that -- and the TABLE stays here, because Acrobat's taxonomy names
+# Acrobat workflows and feeds a different published sentence than Premiere's.
+_THEME_RULES: tuple[ec.ThemeRule, ...] = (
+    # `negatable`: an explicitly DENIED crash is not evidence of a crash. Only this rule opts in,
+    # and only plain denials suppress -- "won't launch" is matched BY this pattern and is a failure
+    # report, so an inability modal must never be read as a denial.
+    ec.ThemeRule("crash or launch failure", "application stability", "high",
+                 "crash", re.compile(r"\b(?:crash\w*|freez\w*|hang(?:s|ing|ed)?|not\s+responding|"
+                                     r"appcrash|fails?\s+to\s+launch|won'?t\s+(?:launch|start|open))\b", re.I),
+                 negatable=True),
+    ec.ThemeRule("printing regression", "printing", "high",
+                 "print", re.compile(r"\b(?:print\w*|printer|print\s+queue|spooler)\b", re.I)),
+    ec.ThemeRule("signing/certificate failure", "e-signatures", "high",
+                 "sign", re.compile(r"\b(?:e-?sign\w*|signature\w*|signing|certificat\w*|digital\s+id)\b", re.I)),
+    ec.ThemeRule("form behavior regression", "forms", "high",
+                 "form", re.compile(r"\b(?:form\s+field\w*|fillable|form\w*)\b", re.I)),
+    ec.ThemeRule("install/update failure", "deployment", "high",
+                 "install", re.compile(r"\b(?:install\w*|uninstall\w*|deploy\w*|msi|silent\s+update|"
+                                       r"update\s+fail\w*|patch\s+fail\w*)\b", re.I)),
+    ec.ThemeRule("PDF rendering regression", "PDF rendering", "high",
+                 "render", re.compile(r"\b(?:render\w*|blank\s+page|garbled|corrupt\w*|display\s+issue)\b", re.I)),
+    ec.ThemeRule("browser/plugin handoff failure", "browser integration", "medium",
+                 "browser", re.compile(r"\b(?:browser|plugin|plug-in|add-?in|extension|edge|chrome|firefox)\b", re.I)),
+    ec.ThemeRule("performance regression", "performance", "medium",
+                 "perf", re.compile(r"\b(?:high\s+cpu|memory\s+leak|slow\w*|sluggish|performance)\b", re.I)),
 )
+ec.validate_rules(_THEME_RULES)
 # Everything after one of these headings is what the reporter has ALREADY TRIED, not what failed.
+#
+# `steps to reproduce:` USED to be in this list and was removed, for two independent reasons.
+#
+# It is not the same kind of heading. Troubleshooting notes and workarounds describe things that did
+# NOT fail; reproduction steps are often the clearest affirmative description of the failure in the
+# whole report, so truncating them discards the best evidence rather than noise.
+#
+# And it never worked. The alternation sat inside a group closed by `\b`, and that boundary followed
+# the literal `:` -- so it could only match when a word character came immediately after the colon.
+# Measured: "Steps to reproduce: open the file" did NOT match the shipped pattern, while
+# "steps to reproduce:open" did. The cue was unreachable for every realistic phrasing, which is why
+# removing it changes no stored classification. Keeping it would have been a latent trap: anyone
+# fixing the boundary later would have silently switched on truncation nobody had evaluated.
 _TRIED_SPLIT_RE = re.compile(
     r"(?is)\b(?:troubleshooting|already\s+tried|things?\s+i(?:'ve)?\s+tried|what\s+i(?:'ve)?\s+tried|"
-    r"work\s?around|steps?\s+to\s+reproduce\s*:)\b")
+    r"work\s?around)\b")
 
 
 def acrobat_classify(text: str, title: str = "") -> tuple[str, str, str, str, str]:
@@ -532,24 +557,19 @@ def acrobat_classify(text: str, title: str = "") -> tuple[str, str, str, str, st
     heading = _TRIED_SPLIT_RE.split(heading, maxsplit=1)[0]
     scored_body = _TRIED_SPLIT_RE.split(body, maxsplit=1)[0]
 
-    lowered = body.lower()
-    platform = "unknown"
-    for token, label in (("windows", "windows"), ("macos", "macos"), ("mac os", "macos"),
-                         ("mac ", "macos")):
-        if token in lowered:
-            platform = label
-            break
+    # Platform was the same ordered membership scan Premiere used: the first token found anywhere
+    # won and stopped the loop, so `windows` beat a stated macOS whenever the word appeared --
+    # including as a UI noun, and including inside an unfilled "[Windows 11 / macOS version]"
+    # template. The shared resolver requires POSITIVE operating-system evidence and returns
+    # `unknown` when two platforms are named, because one evidence row is one person's one machine.
+    # It is given the same text as before: `body` here is already the deduped
+    # parent_title + report_title + report_text concatenation built by the caller.
+    platform = ec.resolve_platform(body).label
 
-    best = None
-    for theme, area, severity, _key, pattern in _THEME_RULES:
-        # The title is the reporter's own one-line summary of what went wrong, so a hit there is
-        # worth far more than a passing mention buried in a long body.
-        score = 5 * len(pattern.findall(heading)) + len(pattern.findall(scored_body))
-        if score and (best is None or score > best[0]):
-            best = (score, theme, area, severity)
-    if best is None:
+    verdict = ec.score_themes(heading, scored_body, _THEME_RULES)
+    if verdict is None:
         return "unspecified Acrobat issue", "Acrobat workflow", platform, "medium", "negative"
-    return best[1], best[2], platform, best[3], "negative"
+    return verdict.theme, verdict.area, platform, verdict.severity, "negative"
 
 
 # --- HTTP (Adobe Community) ---------------------------------------------------

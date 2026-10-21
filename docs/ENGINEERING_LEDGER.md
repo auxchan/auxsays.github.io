@@ -43,6 +43,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
 
 ---
 
@@ -2585,6 +2586,152 @@ year.
 generalises. The lesson: a date field accepts two kinds of wrong value -- text that is not a date,
 and a real date that is not the vendor's -- and a permissive normaliser produces both while looking
 like a convenience.
+
+### AUX-041 — a published theme contradicted the reporter, and a platform label was never earned
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-21
+
+`issue_theme` and `platform` are PUBLISHED PROSE. The patch page prints "Current reports mention
+<theme>", so a guess becomes a sentence a reader believes. Two Adobe collectors guessed, in two
+different ways, and both were reproduced against the shipped functions before anything changed:
+
+    "500 GB mSata (External - Cache & Render)"       -> export/render failure  (a disk label)
+    "Premiere 26.2.2 unstable", body opening
+      "windows and menus freeze, rendering seems
+       much slower"                                  -> export/render failure  (secondary clause)
+                                                     -> platform: windows     (a UI noun)
+    "OS: [Windows 11 Pro 24H2 / macOS version]"      -> platform: windows     (unfilled template)
+    "There is no crash at all after the update"      -> application crash or hang
+
+The last inverts its author. Premiere's classifier was a first-match substring chain with no word
+boundaries over `parent_title + report_title + report_text`, testing `export` FIRST and `crash`
+LAST, so on a body that hit several rules once each the broadest rule won on position alone.
+
+#### The repair Acrobat had already made for itself
+
+`adobe_acrobat_community` had fixed the THEME half and recorded the cost: 59 of 63 counted rows
+whose own TITLE said crash/freeze/hang published a different theme, because `sign` matched
+"de-SIGN" and "SIGN in" and was tested before `crash`. Its PLATFORM half was still the same ordered
+membership scan as Premiere's -- first token found anywhere wins, loop breaks -- so a stated macOS
+report was labelled `windows` whenever the word appeared, including as a UI noun.
+
+`lib/evidence_classification.py` generalises the mechanism, not the vocabulary. The theme TABLES
+stay with the collectors: Acrobat's taxonomy names Acrobat workflows and feeds a different
+published sentence than Premiere's. Three primitives, kept separable so each is pinned by its own
+named checks and can be reverted alone.
+
+**Sentiment is unreachable from here, by construction.** It is verdict-bearing --
+`build_consensus_from_evidence` counts sentiments and maps them through `consensus_label` and
+`lib.patch_decision` into the published install/wait/avoid decision -- so the library has no
+sentiment field to return. The fallback is deliberately NOT a rule in the scored table: a fallback
+that could be compared could win, and Premiere's fallback is the one branch returning `moderate`.
+Severity IS returned, so `validate_rules` refuses an out-of-vocabulary table at import time,
+because an invalid severity does not fail loudly downstream -- it sets
+`exclusion_reason: invalid_severity` and SILENTLY UN-COUNTS the row.
+
+#### Title weighting was inexpressible, and there were two call sites
+
+Premiere passed one concatenated blob, so "the reporter's own headline outweighs a passing body
+mention" could not be stated -- and because Premiere sets `parent_title` and `report_title` to the
+same extracted page title, that title was in the blob twice. `classify` now takes
+`(heading, body)`. The second caller is `promote_local_playwright_captures.py:566`, the promotion
+path; a grep of the collector alone does not find it. The concatenated blob still feeds
+`premiere_version_match`, so acceptance authority is untouched.
+
+#### Negation: a guard, not a language engine
+
+An explicitly denied symptom does not score, and nothing else changes -- a report that denies a
+crash while describing a freeze still themes as a freeze, because suppression removes one rule's
+hit inside one clause. It applies only to rules marked `negatable` (one per collector) and only to
+plain denials. Inability modals are excluded: "can't export", "won't launch" and "unable to open"
+are how failures are REPORTED. Acrobat's own crash pattern matches the literal phrase
+`won't launch`, so a naive guard would have suppressed the rule it was added to protect.
+
+#### Three errors in this work, all caught by the shadow run, none by a unit test
+
+A shadow pass -- old classifiers sliced out of `git show HEAD:` rather than hand-copied, both run
+over all 329 stored Adobe rows -- found three defects on COUNTED rows that every unit test passed.
+
+**Negation over-reached, twice.** In "Adobe Acrobat Pro Not Responding / Crashing" the "Not"
+belongs to the matched phrase `not responding`, and it suppressed the "Crashing" sixteen characters
+later. In "OSX 10.13.4 - Acrobat Pro NOT WORKING ... won't start up", "NOT WORKING" ASSERTS a
+failure and suppressed the launch failure five words later, flipping a counted crash report to
+"unspecified Acrobat issue". Two fixes: a negation inside the pattern's own match is not a negator,
+and suppression requires the denial within 2 intervening WORDS rather than 40 characters.
+
+**Composite rules were order-sensitive.** "When opening and synchronizing a large project" names
+the action before the noun, so a noun-then-cue lookahead missed it and the row fell to the
+fallback -- which carries `moderate` sentiment. That was the only sentiment move in the first
+shadow run. Cues now match in either order, and sentiment moves are 0.
+
+**`without` is not a denial.** The only `without` in range of a symptom across the corpus was
+"I can't even hit the report button, without Premiere freezing", which asserts the freeze because
+an inability modal earlier in the clause inverts the sense. It was removed rather than engineered
+around; the double-negative rule that would recover "runs without crashing" is deferred, not
+guessed at.
+
+#### The shipped truncation cue was inert
+
+Acrobat truncated everything after a "what I already tried" heading, and the list included
+`steps?\s+to\s+reproduce\s*:`. Two reasons it is gone. It is not the same kind of heading --
+troubleshooting notes describe what did NOT fail, while reproduction steps are often the clearest
+affirmative description of the failure. And it never fired: the alternation sat inside a group
+closed by `\b`, and that boundary followed the literal `:`, so "Steps to reproduce: open the file"
+did NOT match while "steps to reproduce:open" did. Removing it changes no stored classification --
+not because reporters do not write it, but because the pattern was unreachable. Keeping it was a
+latent trap: anyone fixing the boundary later would switch on truncation nobody had evaluated.
+
+#### Platform: an allowlist, and six drops that would have been regressions
+
+Positive OS evidence only. A denylist of UI phrasings is open-ended and every phrasing nobody
+thought of publishes a confident wrong label; an allowlist fails toward `unknown`. Two platforms
+named is `unknown`, because one evidence row is one person's one machine and "Windows, macOS" is
+the ADAPTER's answer to a different question about release targeting. `windows` is the one
+genuinely ambiguous token in English, so it requires an OS context.
+
+Auditing each changed row individually mattered more than the count. Of 9 initial
+`windows -> unknown` drops, **6 were regressions**: "Windows Installer service" (3 rows),
+"Windows 2016 server", and "(Windows)" as a parenthesised annotation (2 counted rows). Three
+narrow unconditional patterns were added. The remaining 5: 3 correct (the unfilled template twice
+and the UI noun, all counted) and 2 where the stored excerpt truncates mid-phrase -- both
+UNCOUNTED. The gate was deliberately not loosened to recover those two, because the only
+candidates are uncounted and loosening risks false positives on counted rows.
+
+#### Measured blast radius
+
+329 stored Adobe rows, 294 counted. Sentiment changes 0. Accepted counts, evidence identity and
+verdicts 0 -- `classify` produces none of those fields. Severity 3, all travelling with a theme.
+Theme 6, all Premiere, all counted: four unambiguous repairs, and two moving from "timeline crash
+or hang" to a less localized theme because the title outweighs the body, recorded as a specificity
+decrease rather than claimed as wins. Platform 27 (24 counted). Previously-unspecified rows gaining
+a theme: 0 -- this change removes unsupported assertions and does not expand recall.
+
+**Acrobat theme changes: 0 across all 301 rows.** That is the preservation proof, and it is
+stronger than its five shipped checks, which also still pass unchanged at 146/146.
+
+#### Verification
+
+`test_evidence_classification.py = 58`, registered `[blocking]`, frozen fixtures: the manifest
+compares the reported total to that count in both directions, so a walk of the live store would go
+red on the next scheduled run. 13 mutants, each reverting ONE behaviour, 13/13 caught by a NAMED
+check with the suite restored green after each. Two mutants initially SURVIVED and both were real
+gaps -- the bracket scrubber was unpinned because the live template names BOTH platforms, so the
+two-platforms rule was refusing it and the scrubber was doing nothing testable; and the first
+"steps to reproduce" mutant was a no-op because it restored the same inert pattern. Both are now
+pinned by behavioural fixtures.
+
+**Reopen only if** a stored Adobe row is observed whose `issue_theme` names a symptom its own text
+denies, or whose `platform` is not `unknown` without positive operating-system evidence in the
+retained text, or if `score_themes` is ever given a table whose fallback is a scored rule.
+
+**Cross-reference** AUX-027 established that a producer fix and a historical migration are
+separate changes; the migration for the stored rows this classifier would now label differently is
+deliberately not in this one. DaVinci (`davinci.py`) and OBS (`collect_obs_reports.py`) carry the
+same ordered platform scan and are each assessed separately rather than migrated automatically.
+The lesson: a classifier that cannot say "unknown" will always say something, and a theme scorer
+tested only on invented strings passes while inverting real reporters -- the shadow pass over the
+stored corpus found every defect that the 58 checks did not.
 
 ## Adding an entry
 
