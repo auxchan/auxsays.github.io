@@ -106,7 +106,7 @@ auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
 auxsays/scripts/tests/test_collector_traversal_order.py = 16
 auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
-auxsays/scripts/tests/test_method_health_append_delta.py = 58
+auxsays/scripts/tests/test_method_health_append_delta.py = 55
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
 auxsays/scripts/tests/test_consensus_sample_honesty.py = 88
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
@@ -206,7 +206,6 @@ auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 # guards. It now asserts against `run:` scalars with comments stripped. The sabotage that used to
 # pass now fails 10 checks.
 auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
-auxsays/scripts/tests/test_methodology_notes_rendering.py = 61
 # The reaper's shell, EXECUTED against a scripted fake `gh` rather than grepped -- extracted
 # from the workflow YAML so it cannot drift from what CI runs. The sabotage that the
 # structural suite originally missed fails 6 checks here. Needs `bash`, which ubuntu-latest
@@ -234,7 +233,7 @@ auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 78
 auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
 auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80
 auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
-auxsays/scripts/tests/test_monitoring_status.py = 44
+auxsays/scripts/tests/test_monitoring_status.py = 42
 auxsays/scripts/tests/test_orchestration_production_adoption.py = 75
 auxsays/scripts/tests/test_orchestration_r1.py = 55
 # Evaluates the cascade over the REAL rendered patch layout under both prefers-color-scheme values,
@@ -266,7 +265,13 @@ auxsays/scripts/tests/test_patch_ingest_record_limit.py = 78
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
-auxsays/scripts/tests/test_public_method_health_presentation.py = 72
+# The public projection of how evidence was gathered. The methodology page rendered the whole
+# method-health store (1,554,238 bytes; reddit_search 1,064 times) and the per-patch card
+# DEFAULTED its family label to the de-underscored method_id, so 16 unmapped ids of 23 printed
+# their internal token on hundreds of pages. Replaces test_methodology_notes_rendering.py and
+# test_public_method_health_presentation.py, carrying forward the guarantees that outlived the
+# table: the inert `blank` idiom, and a raw block reason never being emitted.
+auxsays/scripts/tests/test_public_evidence_projection.py = 36
 auxsays/scripts/tests/test_reddit_source.py = 8
 auxsays/scripts/tests/test_revalidate_consensus_evidence.py = 49
 auxsays/scripts/tests/test_route_integrity.py = 9

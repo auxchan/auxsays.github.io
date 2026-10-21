@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // The version string carries the only channel signal this repo actually has: three records in
   // 1,200 set a channel label, so a channel taxonomy would have to be invented, and inventing one
   // is explicitly not this feature's job. `beta` is therefore computed at build time from the same
-  // textual signal `lib/patch_decision.version_is_beta` uses, and is consumed here, not re-derived.
+  // textual signal the published verdict already uses, and is consumed here, not re-derived.
   // How many releases an upgrade path shows before it starts counting the rest.
   const PATH_LIMIT = 10;
 
