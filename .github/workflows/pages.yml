@@ -24,10 +24,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      # BUNDLE_GEMFILE is explicit because the Gemfile lives in auxsays/, not at the
+      # repository root: without it the action resolves the wrong project. bundler-cache
+      # installs from the TRACKED lock in deployment mode, which is what stops a silent
+      # re-resolution. Before the lock existed this job ran `bundle install` bare and
+      # re-resolved every gem on every deploy, so the published site was whatever rubygems
+      # served that minute -- measured: the live page emitted jekyll-seo-tag 2.9.1 while a
+      # local build of the same commit emitted 2.9.0, and the unconstrained THEME could have
+      # changed the markup of every page with no commit touching the repository.
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_GEMFILE: auxsays/Gemfile
         with:
           ruby-version: '3.3'
+          bundler-cache: true
 
       - name: Setup Node for logo generation and Systems Monitor
         uses: actions/setup-node@v6
@@ -47,11 +58,26 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libimage-exiftool-perl
 
-      - name: Install Bundler and gems
+      # The gems are already installed by setup-ruby above, from the lock. What remains is to
+      # prove the lock was HONOURED rather than quietly rewritten. An absent lock must fail the
+      # build here, not fall back to fresh resolution -- that fallback is the whole defect.
+      - name: Verify the dependency lock was used, not rewritten
         working-directory: ./auxsays
+        env:
+          BUNDLE_GEMFILE: Gemfile
         run: |
-          gem install bundler
-          bundle install
+          set -euo pipefail
+          test -f Gemfile.lock || { echo "::error::Gemfile.lock is missing. Refusing to resolve dependencies at deploy time."; exit 1; }
+          # Frozen mode refuses to change the lock; if the Gemfile and lock disagree this fails.
+          bundle config set --local frozen true
+          bundle check
+          # And prove it byte-for-byte: installation must not have altered the tracked lock.
+          if ! git diff --quiet -- Gemfile.lock; then
+            echo "::error::Gemfile.lock changed during installation. The deployed dependency set would not match the committed one."
+            git --no-pager diff -- Gemfile.lock
+            exit 1
+          fi
+          bundle list | sed -n '1,12p'
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
