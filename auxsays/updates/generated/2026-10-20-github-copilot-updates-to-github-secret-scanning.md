@@ -17,8 +17,8 @@ update_version: Updates to GitHub secret scanning
 update_logo_text: GIT
 update_published_at: '2026-10-20T18:03:55Z'
 update_last_checked: '2026-10-20T19:34:17Z'
-source_last_checked: '2026-10-21T07:26:28Z'
-official_body_last_checked: '2026-10-21T07:26:28Z'
+source_last_checked: '2026-10-21T14:29:24Z'
+official_body_last_checked: '2026-10-21T14:29:24Z'
 record_last_updated: '2026-10-20T19:34:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -100,6 +100,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-21T07:26:28Z'
+  url: https://github.blog/changelog/2026-10-20-updates-to-github-secret-scanning
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-21T14:29:24Z'
   url: https://github.blog/changelog/2026-10-20-updates-to-github-secret-scanning
   status: captured-from-rss-feed
   body_captured: true
