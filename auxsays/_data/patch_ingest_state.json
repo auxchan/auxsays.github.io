@@ -2,22 +2,22 @@
   "last_errors": [
     {
       "adapter": "elgato_help_center",
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-yf3BijPgttfjcPxwCJarvS&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-zk2kNsdEutt6Kx4tf5i95r&#39; &#39;unsafe-eval&#39; [source URL] script-s",
       "product_id": "elgato-stream-deck"
     },
     {
       "adapter": "elgato_help_center",
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-IJmzXGgL2i91ZoAmf1okPI&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-ookC6hUxfyo4sMIhVsKbfI&#39; &#39;unsafe-eval&#39; [source URL] script-s",
       "product_id": "elgato-wave-link"
     },
     {
       "adapter": "elgato_help_center",
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-WEIRHK0KhG4HE5yGdoGWWb&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-yQDnbASfNer9ajcUmm1HnN&#39; &#39;unsafe-eval&#39; [source URL] script-s",
       "product_id": "elgato-camera-hub"
     },
     {
       "adapter": "elgato_help_center",
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-0Uz9GtmkUKEsTdVh05XuZ9&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-xbwse0JSWbwjDmA3vaUcXG&#39; &#39;unsafe-eval&#39; [source URL] script-s",
       "product_id": "elgato-4k-capture-utility"
     }
   ],
@@ -25,18 +25,20 @@
     {
       "adapter": "rss_feed",
       "candidate_count": 200,
-      "created": 0,
+      "created": 1,
       "deferred": [
-        "rss:figma:1f17cc33-9061-4b0f-931e-e31797c2c125",
-        "rss:figma:503d79c7-e748-4953-89f0-bd9a054267f0",
-        "rss:figma:60f5ef70-d716-463d-a1ad-cdcff01787c2",
-        "rss:figma:5923b032-08a3-4fd9-81c8-4f537d66c315",
-        "rss:figma:159ff837-d973-462c-acca-72e596c5e178",
-        "rss:figma:62cae844-6289-4bec-875e-a2e364d29be7",
-        "rss:figma:5261574e-aa08-4673-a441-6798e2d54d1a"
+        "rss:figma:1c34375b-eb1f-4dff-8923-2b518d6c0a02",
+        "rss:figma:51e8af7e-ef46-4690-b499-04f61c1d03b0",
+        "rss:figma:e3af9235-33ed-44dd-8d91-17585c4a24e5",
+        "rss:figma:6a4d8e0e-176c-4da9-9aae-a48060b9d197",
+        "rss:figma:eb9fdd6c-4277-4a5c-9bd0-7cdf7f55aff0",
+        "rss:figma:96be2776-3ca6-49c4-97d3-81007a184b0a",
+        "rss:figma:5fc64c1e-8ca6-4a75-934e-ff542b2c2870",
+        "rss:figma:33686f91-5c87-46e6-af66-4a3481696bdf",
+        "rss:figma:1b5c1a55-640d-4945-89c0-d43ffbd661e6"
       ],
-      "deferred_count": 7,
-      "duration_ms": 1089,
+      "deferred_count": 9,
+      "duration_ms": 12817,
       "extraction_mismatch": false,
       "fetched": 200,
       "product_id": "figma",
@@ -54,13 +56,8 @@
         },
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2025-04-08-figma-design-system-quality-features.md",
-          "record_id": "rss:figma:3e4659bc-ef16-4708-9bd0-df4451bb8f19"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2025-04-01-figma-new-updates-announced-on-the-april-25-release-notes-livestream.md",
-          "record_id": "rss:figma:dc12b0f3-e36c-4985-af25-b00b6dc3d3c4"
+          "path": "auxsays/updates/generated/2025-02-24-figma-file-view-history.md",
+          "record_id": "rss:figma:48340d62-1048-498d-b49f-3a4c249f1184"
         }
       ],
       "scan_limit": 200,
@@ -755,47 +752,43 @@
         },
         {
           "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:3e4659bc-ef16-4708-9bd0-df4451bb8f19"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:dc12b0f3-e36c-4985-af25-b00b6dc3d3c4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:1f17cc33-9061-4b0f-931e-e31797c2c125"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:503d79c7-e748-4953-89f0-bd9a054267f0"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:60f5ef70-d716-463d-a1ad-cdcff01787c2"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5923b032-08a3-4fd9-81c8-4f537d66c315"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:159ff837-d973-462c-acca-72e596c5e178"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:62cae844-6289-4bec-875e-a2e364d29be7"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5261574e-aa08-4673-a441-6798e2d54d1a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
           "record_id": "rss:figma:1cbf8e16-980f-4948-b65b-19fef1cc98fb"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:48340d62-1048-498d-b49f-3a4c249f1184"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:1c34375b-eb1f-4dff-8923-2b518d6c0a02"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:51e8af7e-ef46-4690-b499-04f61c1d03b0"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:e3af9235-33ed-44dd-8d91-17585c4a24e5"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:6a4d8e0e-176c-4da9-9aae-a48060b9d197"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:eb9fdd6c-4277-4a5c-9bd0-7cdf7f55aff0"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:96be2776-3ca6-49c4-97d3-81007a184b0a"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:5fc64c1e-8ca6-4a75-934e-ff542b2c2870"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:33686f91-5c87-46e6-af66-4a3481696bdf"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:1b5c1a55-640d-4945-89c0-d43ffbd661e6"
         },
         {
           "reason": "state-seen-outside-refresh-window",
@@ -816,17 +809,15 @@
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "rss:figma:1d63df91-e540-477e-beed-0790bacb2103"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:figma:23e7e111-8870-4fdb-9707-9fb1b2d7e414"
         }
       ],
-      "skipped_existing": 189,
+      "skipped_existing": 187,
       "status": "success",
       "upstream_candidates": 0,
       "version_landings": [],
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-10-22-figma-new-controls-for-enterprise-admins.md"
+      ]
     },
     {
       "adapter": "adobe_release_notes",
@@ -834,7 +825,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 1108,
+      "duration_ms": 682,
       "extraction_mismatch": false,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
@@ -860,7 +851,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 491,
+      "duration_ms": 189,
       "extraction_mismatch": false,
       "fetched": 119,
       "product_id": "blackmagic-davinci",
@@ -1360,7 +1351,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 1247,
+      "duration_ms": 949,
       "extraction_mismatch": false,
       "fetched": 11,
       "product_id": "obs-studio",
@@ -1428,7 +1419,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 831,
+      "duration_ms": 586,
       "extraction_mismatch": false,
       "fetched": 30,
       "product_id": "comfyui",
@@ -1569,10 +1560,13 @@
     {
       "adapter": "rss_feed",
       "candidate_count": 10,
-      "created": 1,
-      "deferred": [],
-      "deferred_count": 0,
-      "duration_ms": 11837,
+      "created": 2,
+      "deferred": [
+        "rss:github:https://github.blog/changelog/2026-10-22-pull-requests-saved-whitespace-preferences-and-improved-split-view",
+        "rss:github:https://github.blog/changelog/2026-10-22-industry-comparisons-in-the-copilot-impact-dashboard"
+      ],
+      "deferred_count": 2,
+      "duration_ms": 23254,
       "extraction_mismatch": false,
       "fetched": 10,
       "product_id": "github",
@@ -1580,17 +1574,21 @@
       "refreshed": [
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-10-20-github-copilot-bulk-migrate-branch-protections-to-rulesets-for-a-repository.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-10-20-bulk-migrate-branch-protections-to-rulesets-for-a-repository"
+          "path": "auxsays/updates/generated/2026-10-21-github-copilot-github-cli-opt-in-to-expiring-auto-refreshing-oauth-tokens.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-10-21-github-cli-opt-in-to-expiring-auto-refreshing-oauth-tokens"
         },
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-10-20-github-copilot-updates-to-github-secret-scanning.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-10-20-updates-to-github-secret-scanning"
+          "path": "auxsays/updates/generated/2026-10-20-github-copilot-bulk-migrate-branch-protections-to-rulesets-for-a-repository.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-10-20-bulk-migrate-branch-protections-to-rulesets-for-a-repository"
         }
       ],
       "scan_limit": 200,
       "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-10-20-updates-to-github-secret-scanning"
+        },
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "rss:github:https://github.blog/changelog/2026-10-20-dependabot-alerts-rest-api-now-includes-dependency-versions"
@@ -1601,31 +1599,16 @@
         },
         {
           "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-10-19-copilot-model-policy-api-for-enterprise-orgs-and-teams"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-10-19-github-copilot-models-deprecated-on-october-19-2026"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-10-15-some-git-over-https-may-temporarily-require-authentication"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-10-19-codeql-changes-for-macos-27-xcode-27-and-swift-6-4"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-10-13-open-source-license-compliance-generally-available"
+          "record_id": "rss:github:https://github.blog/changelog/2026-10-19-dependabot-now-supports-npm-12-pnpm-11-and-12-and-bun-1-4"
         }
       ],
-      "skipped_existing": 7,
+      "skipped_existing": 4,
       "status": "success",
       "upstream_candidates": 0,
       "version_landings": [],
       "written": [
-        "auxsays/updates/generated/2026-10-20-github-copilot-dependabot-now-supports-npm-12-pnpm-11-and-12-and-bun-1-4.md"
+        "auxsays/updates/generated/2026-10-22-github-copilot-meta-api-endpoints-updated-for-actions-blob-storage.md",
+        "auxsays/updates/generated/2026-10-22-github-copilot-public-monitoring-now-available-with-data-residency.md"
       ]
     },
     {
@@ -1634,7 +1617,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 292,
+      "duration_ms": 172,
       "extraction_mismatch": true,
       "fetched": 0,
       "product_id": "netlify",
@@ -1654,7 +1637,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 296,
+      "duration_ms": 495,
       "extraction_mismatch": false,
       "fetched": 197,
       "product_id": "adobe-acrobat-reader",
@@ -2466,7 +2449,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 48,
+      "duration_ms": 52,
       "extraction_mismatch": false,
       "fetched": 197,
       "product_id": "adobe-acrobat-pro",
@@ -3278,7 +3261,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 2930,
+      "duration_ms": 2922,
       "extraction_mismatch": false,
       "fetched": 89,
       "product_id": "microsoft-windows-11",
@@ -3726,7 +3709,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 10915,
+      "duration_ms": 10671,
       "extraction_mismatch": false,
       "fetched": 5,
       "product_id": "microsoft-teams",
@@ -3766,29 +3749,33 @@
     },
     {
       "adapter": "microsoft_office_updates",
-      "candidate_count": 13,
+      "candidate_count": 14,
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 244,
+      "duration_ms": 205,
       "extraction_mismatch": false,
-      "fetched": 13,
+      "fetched": 14,
       "product_id": "microsoft-powerpoint",
       "record_limit": 2,
       "refreshed": [
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-10-13-microsoft-powerpoint-2609-20430-20182.md",
-          "record_id": "microsoft:microsoft-powerpoint:2609:781fa1475a0e27cf"
+          "path": "auxsays/updates/generated/2026-10-21-microsoft-powerpoint-2610-20527-20088.md",
+          "record_id": "microsoft:microsoft-powerpoint:2610:a89498a1fed03cbe"
         },
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-10-06-microsoft-powerpoint-2609-20430-20146.md",
-          "record_id": "microsoft:microsoft-powerpoint:2609:c81a1980c20fee9f"
+          "path": "auxsays/updates/generated/2026-10-13-microsoft-powerpoint-2609-20430-20182.md",
+          "record_id": "microsoft:microsoft-powerpoint:2609:781fa1475a0e27cf"
         }
       ],
       "scan_limit": 200,
       "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-powerpoint:2609:c81a1980c20fee9f"
+        },
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "microsoft:microsoft-powerpoint:2609:98f9a64bc1466bfa"
@@ -3834,7 +3821,7 @@
           "record_id": "microsoft:microsoft-powerpoint:2607:f3cea3049f3ce8c7"
         }
       ],
-      "skipped_existing": 11,
+      "skipped_existing": 12,
       "status": "success",
       "upstream_candidates": 0,
       "version_landings": [],
@@ -3846,7 +3833,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 10894,
+      "duration_ms": 178,
       "extraction_mismatch": false,
       "fetched": 1,
       "product_id": "microsoft-365-apps",
@@ -3854,8 +3841,8 @@
       "refreshed": [
         {
           "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-09-22-microsoft-365-apps-2609.md",
-          "record_id": "microsoft:microsoft-365-apps:2609:8a8113ef986fd9c1"
+          "path": "auxsays/updates/generated/2026-10-21-microsoft-365-apps-2610.md",
+          "record_id": "microsoft:microsoft-365-apps:2610:1b459fd496d1b278"
         }
       ],
       "scan_limit": 200,
@@ -3867,12 +3854,12 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-10-21T07:27:06Z",
+  "last_run_finished_at": "2026-10-22T19:45:52Z",
   "last_run_health": "degraded",
   "last_run_source_health": [
     {
       "adapter": "rss_feed",
-      "checked_at": "2026-10-21T07:26:24Z",
+      "checked_at": "2026-10-22T19:44:59Z",
       "company_id": "figma",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -3881,11 +3868,11 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:24Z",
-      "last_success_at": "2026-10-21T07:26:24Z",
+      "last_extraction_at": "2026-10-22T19:44:59Z",
+      "last_success_at": "2026-10-22T19:44:59Z",
       "product_id": "figma",
       "records_fetched": 200,
-      "records_written": 0,
+      "records_written": 1,
       "source_id": "figma",
       "source_type": "rss",
       "status": "healthy",
@@ -3893,7 +3880,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "checked_at": "2026-10-21T07:26:25Z",
+      "checked_at": "2026-10-22T19:45:12Z",
       "company_id": "adobe",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -3902,8 +3889,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:25Z",
-      "last_success_at": "2026-10-21T07:26:25Z",
+      "last_extraction_at": "2026-10-22T19:45:12Z",
+      "last_success_at": "2026-10-22T19:45:12Z",
       "product_id": "adobe-premiere-pro",
       "records_fetched": 1,
       "records_written": 0,
@@ -3914,7 +3901,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "checked_at": "2026-10-21T07:26:26Z",
+      "checked_at": "2026-10-22T19:45:12Z",
       "company_id": "blackmagic-design",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -3923,8 +3910,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:26Z",
-      "last_success_at": "2026-10-21T07:26:26Z",
+      "last_extraction_at": "2026-10-22T19:45:12Z",
+      "last_success_at": "2026-10-22T19:45:12Z",
       "product_id": "blackmagic-davinci",
       "records_fetched": 119,
       "records_written": 0,
@@ -3935,7 +3922,7 @@
     },
     {
       "adapter": "github_releases",
-      "checked_at": "2026-10-21T07:26:26Z",
+      "checked_at": "2026-10-22T19:45:13Z",
       "company_id": "obs-project",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -3944,8 +3931,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:26Z",
-      "last_success_at": "2026-10-21T07:26:26Z",
+      "last_extraction_at": "2026-10-22T19:45:13Z",
+      "last_success_at": "2026-10-22T19:45:13Z",
       "product_id": "obs-studio",
       "records_fetched": 11,
       "records_written": 0,
@@ -3956,7 +3943,7 @@
     },
     {
       "adapter": "github_releases",
-      "checked_at": "2026-10-21T07:26:27Z",
+      "checked_at": "2026-10-22T19:45:13Z",
       "company_id": "comfyui",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -3965,8 +3952,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:27Z",
-      "last_success_at": "2026-10-21T07:26:27Z",
+      "last_extraction_at": "2026-10-22T19:45:13Z",
+      "last_success_at": "2026-10-22T19:45:13Z",
       "product_id": "comfyui",
       "records_fetched": 30,
       "records_written": 0,
@@ -3977,7 +3964,7 @@
     },
     {
       "adapter": "rss_feed",
-      "checked_at": "2026-10-21T07:26:28Z",
+      "checked_at": "2026-10-22T19:45:14Z",
       "company_id": "github",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -3986,11 +3973,11 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:28Z",
-      "last_success_at": "2026-10-21T07:26:28Z",
+      "last_extraction_at": "2026-10-22T19:45:14Z",
+      "last_success_at": "2026-10-22T19:45:14Z",
       "product_id": "github",
       "records_fetched": 10,
-      "records_written": 1,
+      "records_written": 2,
       "source_id": "github",
       "source_type": "rss",
       "status": "healthy",
@@ -3998,9 +3985,9 @@
     },
     {
       "adapter": "html_changelog",
-      "checked_at": "2026-10-21T07:26:40Z",
+      "checked_at": "2026-10-22T19:45:37Z",
       "company_id": "netlify",
-      "consecutive_empty_extractions": 153,
+      "consecutive_empty_extractions": 159,
       "consecutive_failures": 0,
       "enabled": true,
       "error": "",
@@ -4008,7 +3995,7 @@
       "extraction_mismatch": true,
       "health_note": "Fetch succeeded and the source still lists 9 upstream entries, but the extractor matched none of them. That is a parser/extractor mismatch, not a quiet period: the page is reachable and its contents no longer fit this source's extraction rules.",
       "last_extraction_at": "",
-      "last_success_at": "2026-10-21T07:26:40Z",
+      "last_success_at": "2026-10-22T19:45:37Z",
       "product_id": "netlify",
       "records_fetched": 0,
       "records_written": 0,
@@ -4019,7 +4006,7 @@
     },
     {
       "adapter": "adobe_acrobat",
-      "checked_at": "2026-10-21T07:26:40Z",
+      "checked_at": "2026-10-22T19:45:38Z",
       "company_id": "adobe",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4028,8 +4015,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:40Z",
-      "last_success_at": "2026-10-21T07:26:40Z",
+      "last_extraction_at": "2026-10-22T19:45:38Z",
+      "last_success_at": "2026-10-22T19:45:38Z",
       "product_id": "adobe-acrobat-reader",
       "records_fetched": 197,
       "records_written": 0,
@@ -4040,7 +4027,7 @@
     },
     {
       "adapter": "adobe_acrobat",
-      "checked_at": "2026-10-21T07:26:41Z",
+      "checked_at": "2026-10-22T19:45:38Z",
       "company_id": "adobe",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4049,8 +4036,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:41Z",
-      "last_success_at": "2026-10-21T07:26:41Z",
+      "last_extraction_at": "2026-10-22T19:45:38Z",
+      "last_success_at": "2026-10-22T19:45:38Z",
       "product_id": "adobe-acrobat-pro",
       "records_fetched": 197,
       "records_written": 0,
@@ -4061,7 +4048,7 @@
     },
     {
       "adapter": "microsoft_release_health",
-      "checked_at": "2026-10-21T07:26:41Z",
+      "checked_at": "2026-10-22T19:45:38Z",
       "company_id": "microsoft",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4070,8 +4057,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:41Z",
-      "last_success_at": "2026-10-21T07:26:41Z",
+      "last_extraction_at": "2026-10-22T19:45:38Z",
+      "last_success_at": "2026-10-22T19:45:38Z",
       "product_id": "microsoft-windows-11",
       "records_fetched": 89,
       "records_written": 0,
@@ -4082,7 +4069,7 @@
     },
     {
       "adapter": "microsoft_office_updates",
-      "checked_at": "2026-10-21T07:26:44Z",
+      "checked_at": "2026-10-22T19:45:41Z",
       "company_id": "microsoft",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4091,8 +4078,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:44Z",
-      "last_success_at": "2026-10-21T07:26:44Z",
+      "last_extraction_at": "2026-10-22T19:45:41Z",
+      "last_success_at": "2026-10-22T19:45:41Z",
       "product_id": "microsoft-teams",
       "records_fetched": 5,
       "records_written": 0,
@@ -4103,7 +4090,7 @@
     },
     {
       "adapter": "microsoft_office_updates",
-      "checked_at": "2026-10-21T07:26:55Z",
+      "checked_at": "2026-10-22T19:45:52Z",
       "company_id": "microsoft",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4112,10 +4099,10 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:55Z",
-      "last_success_at": "2026-10-21T07:26:55Z",
+      "last_extraction_at": "2026-10-22T19:45:52Z",
+      "last_success_at": "2026-10-22T19:45:52Z",
       "product_id": "microsoft-powerpoint",
-      "records_fetched": 13,
+      "records_fetched": 14,
       "records_written": 0,
       "source_id": "microsoft-powerpoint",
       "source_type": "html_release_notes",
@@ -4124,7 +4111,7 @@
     },
     {
       "adapter": "microsoft_office_updates",
-      "checked_at": "2026-10-21T07:26:55Z",
+      "checked_at": "2026-10-22T19:45:52Z",
       "company_id": "microsoft",
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
@@ -4133,8 +4120,8 @@
       "error_type": "",
       "extraction_mismatch": false,
       "health_note": "Fetch succeeded.",
-      "last_extraction_at": "2026-10-21T07:26:55Z",
-      "last_success_at": "2026-10-21T07:26:55Z",
+      "last_extraction_at": "2026-10-22T19:45:52Z",
+      "last_success_at": "2026-10-22T19:45:52Z",
       "product_id": "microsoft-365-apps",
       "records_fetched": 1,
       "records_written": 0,
@@ -4145,13 +4132,13 @@
     },
     {
       "adapter": "elgato_help_center",
-      "checked_at": "2026-10-21T07:27:06Z",
+      "checked_at": "2026-10-22T19:45:52Z",
       "company_id": "elgato",
-      "consecutive_empty_extractions": 153,
-      "consecutive_failures": 146,
+      "consecutive_empty_extractions": 159,
+      "consecutive_failures": 152,
       "enabled": true,
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-yf3BijPgttfjcPxwCJarvS&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "error_type": "blocked",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-zk2kNsdEutt6Kx4tf5i95r&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "error_type": "challenged",
       "extraction_mismatch": false,
       "health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_extraction_at": "",
@@ -4166,13 +4153,13 @@
     },
     {
       "adapter": "elgato_help_center",
-      "checked_at": "2026-10-21T07:27:06Z",
+      "checked_at": "2026-10-22T19:45:52Z",
       "company_id": "elgato",
-      "consecutive_empty_extractions": 153,
-      "consecutive_failures": 226,
+      "consecutive_empty_extractions": 159,
+      "consecutive_failures": 232,
       "enabled": true,
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-IJmzXGgL2i91ZoAmf1okPI&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "error_type": "blocked",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-ookC6hUxfyo4sMIhVsKbfI&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "error_type": "challenged",
       "extraction_mismatch": false,
       "health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_extraction_at": "",
@@ -4187,13 +4174,13 @@
     },
     {
       "adapter": "elgato_help_center",
-      "checked_at": "2026-10-21T07:27:06Z",
+      "checked_at": "2026-10-22T19:45:52Z",
       "company_id": "elgato",
-      "consecutive_empty_extractions": 153,
-      "consecutive_failures": 102,
+      "consecutive_empty_extractions": 159,
+      "consecutive_failures": 108,
       "enabled": true,
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-WEIRHK0KhG4HE5yGdoGWWb&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "error_type": "blocked",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-yQDnbASfNer9ajcUmm1HnN&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "error_type": "challenged",
       "extraction_mismatch": false,
       "health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_extraction_at": "",
@@ -4208,13 +4195,13 @@
     },
     {
       "adapter": "elgato_help_center",
-      "checked_at": "2026-10-21T07:27:06Z",
+      "checked_at": "2026-10-22T19:45:52Z",
       "company_id": "elgato",
-      "consecutive_empty_extractions": 153,
-      "consecutive_failures": 226,
+      "consecutive_empty_extractions": 159,
+      "consecutive_failures": 232,
       "enabled": true,
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-0Uz9GtmkUKEsTdVh05XuZ9&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "error_type": "blocked",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-xbwse0JSWbwjDmA3vaUcXG&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "error_type": "challenged",
       "extraction_mismatch": false,
       "health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_extraction_at": "",
@@ -4228,25 +4215,25 @@
       "upstream_candidates": 0
     }
   ],
-  "last_run_started_at": "2026-10-21T07:26:23Z",
+  "last_run_started_at": "2026-10-22T19:44:59Z",
   "sources": {
     "adobe-acrobat-pro": {
       "consecutive_empty_extractions": 0,
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-10-21T07:26:41Z",
+      "last_checked_at": "2026-10-22T19:45:38Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:41Z",
+      "last_extraction_at": "2026-10-22T19:45:38Z",
       "last_extraction_records": 197,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 197,
       "last_records_skipped": 195,
       "last_records_written": 2,
-      "last_run_duration_ms": 48,
-      "last_success_at": "2026-10-21T07:26:41Z",
+      "last_run_duration_ms": 52,
+      "last_success_at": "2026-10-22T19:45:38Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -4455,18 +4442,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-10-21T07:26:40Z",
+      "last_checked_at": "2026-10-22T19:45:38Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:40Z",
+      "last_extraction_at": "2026-10-22T19:45:38Z",
       "last_extraction_records": 197,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 197,
       "last_records_skipped": 195,
       "last_records_written": 2,
-      "last_run_duration_ms": 296,
-      "last_success_at": "2026-10-21T07:26:40Z",
+      "last_run_duration_ms": 495,
+      "last_success_at": "2026-10-22T19:45:38Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -4735,18 +4722,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-10-21T07:26:25Z",
+      "last_checked_at": "2026-10-22T19:45:12Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:25Z",
+      "last_extraction_at": "2026-10-22T19:45:12Z",
       "last_extraction_records": 1,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 1108,
-      "last_success_at": "2026-10-21T07:26:25Z",
+      "last_run_duration_ms": 682,
+      "last_success_at": "2026-10-22T19:45:12Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -4760,18 +4747,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-10-21T07:26:26Z",
+      "last_checked_at": "2026-10-22T19:45:12Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:26Z",
+      "last_extraction_at": "2026-10-22T19:45:12Z",
       "last_extraction_records": 119,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 119,
       "last_records_skipped": 117,
       "last_records_written": 2,
-      "last_run_duration_ms": 491,
-      "last_success_at": "2026-10-21T07:26:26Z",
+      "last_run_duration_ms": 189,
+      "last_success_at": "2026-10-22T19:45:12Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -4903,18 +4890,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-10-21T07:26:27Z",
+      "last_checked_at": "2026-10-22T19:45:13Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:27Z",
+      "last_extraction_at": "2026-10-22T19:45:13Z",
       "last_extraction_records": 30,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 30,
       "last_records_skipped": 28,
       "last_records_written": 2,
-      "last_run_duration_ms": 831,
-      "last_success_at": "2026-10-21T07:26:27Z",
+      "last_run_duration_ms": 586,
+      "last_success_at": "2026-10-22T19:45:13Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -4968,14 +4955,14 @@
       "status": "healthy"
     },
     "elgato-4k-capture-utility": {
-      "consecutive_empty_extractions": 153,
-      "consecutive_failures": 226,
+      "consecutive_empty_extractions": 159,
+      "consecutive_failures": 232,
       "extraction_mismatch": false,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-10-21T07:27:06Z",
-      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-0Uz9GtmkUKEsTdVh05XuZ9&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "last_error_at": "2026-10-21T07:27:06Z",
-      "last_error_type": "blocked",
+      "last_checked_at": "2026-10-22T19:45:52Z",
+      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-xbwse0JSWbwjDmA3vaUcXG&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "last_error_at": "2026-10-22T19:45:52Z",
+      "last_error_type": "challenged",
       "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
@@ -5000,14 +4987,14 @@
       "status": "failing"
     },
     "elgato-camera-hub": {
-      "consecutive_empty_extractions": 153,
-      "consecutive_failures": 102,
+      "consecutive_empty_extractions": 159,
+      "consecutive_failures": 108,
       "extraction_mismatch": false,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-10-21T07:27:06Z",
-      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-WEIRHK0KhG4HE5yGdoGWWb&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "last_error_at": "2026-10-21T07:27:06Z",
-      "last_error_type": "blocked",
+      "last_checked_at": "2026-10-22T19:45:52Z",
+      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-yQDnbASfNer9ajcUmm1HnN&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "last_error_at": "2026-10-22T19:45:52Z",
+      "last_error_type": "challenged",
       "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
@@ -5048,14 +5035,14 @@
       "status": "failing"
     },
     "elgato-stream-deck": {
-      "consecutive_empty_extractions": 153,
-      "consecutive_failures": 146,
+      "consecutive_empty_extractions": 159,
+      "consecutive_failures": 152,
       "extraction_mismatch": false,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-10-21T07:27:06Z",
-      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-yf3BijPgttfjcPxwCJarvS&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "last_error_at": "2026-10-21T07:27:06Z",
-      "last_error_type": "blocked",
+      "last_checked_at": "2026-10-22T19:45:52Z",
+      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-zk2kNsdEutt6Kx4tf5i95r&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "last_error_at": "2026-10-22T19:45:52Z",
+      "last_error_type": "challenged",
       "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
@@ -5097,14 +5084,14 @@
       "status": "failing"
     },
     "elgato-wave-link": {
-      "consecutive_empty_extractions": 153,
-      "consecutive_failures": 226,
+      "consecutive_empty_extractions": 159,
+      "consecutive_failures": 232,
       "extraction_mismatch": false,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-10-21T07:27:06Z",
-      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-IJmzXGgL2i91ZoAmf1okPI&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "last_error_at": "2026-10-21T07:27:06Z",
-      "last_error_type": "blocked",
+      "last_checked_at": "2026-10-22T19:45:52Z",
+      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-ookC6hUxfyo4sMIhVsKbfI&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "last_error_at": "2026-10-22T19:45:52Z",
+      "last_error_type": "challenged",
       "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
@@ -5133,21 +5120,33 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-10-21T07:26:24Z",
+      "last_checked_at": "2026-10-22T19:44:59Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:24Z",
+      "last_extraction_at": "2026-10-22T19:44:59Z",
       "last_extraction_records": 200,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 200,
-      "last_records_skipped": 189,
+      "last_records_skipped": 187,
       "last_records_written": 4,
-      "last_run_duration_ms": 1089,
-      "last_success_at": "2026-10-21T07:26:24Z",
+      "last_run_duration_ms": 12817,
+      "last_success_at": "2026-10-22T19:44:59Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:figma:48340d62-1048-498d-b49f-3a4c249f1184",
+        "rss:figma:34fa285b-8f52-4734-85dc-65f769577827",
+        "rss:figma:1cbf8e16-980f-4948-b65b-19fef1cc98fb",
+        "rss:figma:5261574e-aa08-4673-a441-6798e2d54d1a",
+        "rss:figma:62cae844-6289-4bec-875e-a2e364d29be7",
+        "rss:figma:159ff837-d973-462c-acca-72e596c5e178",
+        "rss:figma:5923b032-08a3-4fd9-81c8-4f537d66c315",
+        "rss:figma:60f5ef70-d716-463d-a1ad-cdcff01787c2",
+        "rss:figma:503d79c7-e748-4953-89f0-bd9a054267f0",
+        "rss:figma:b7bd5d8a-6649-45d2-902c-4460f2bde86c",
+        "rss:figma:1f17cc33-9061-4b0f-931e-e31797c2c125",
+        "rss:figma:0ff17290-3da0-4b4d-b68d-c98e84f09a26",
         "rss:figma:dc12b0f3-e36c-4985-af25-b00b6dc3d3c4",
         "rss:figma:3e4659bc-ef16-4708-9bd0-df4451bb8f19",
         "rss:figma:98ac8edc-6a6a-42e1-b2dd-ebec55379bd8",
@@ -5335,19 +5334,7 @@
         "rss:figma:c3c5b6ad-1094-4627-b7f0-1caedc77a91a",
         "rss:figma:292a0700-1b38-4779-8deb-19c23a9326b6",
         "rss:figma:183b3da2-3400-4298-b356-a3fae18f0686",
-        "rss:figma:7b0461aa-c316-441a-8d26-139c5d74cc86",
-        "rss:figma:1b5c1a55-640d-4945-89c0-d43ffbd661e6",
-        "rss:figma:33686f91-5c87-46e6-af66-4a3481696bdf",
-        "rss:figma:5fc64c1e-8ca6-4a75-934e-ff542b2c2870",
-        "rss:figma:96be2776-3ca6-49c4-97d3-81007a184b0a",
-        "rss:figma:eb9fdd6c-4277-4a5c-9bd0-7cdf7f55aff0",
-        "rss:figma:6a4d8e0e-176c-4da9-9aae-a48060b9d197",
-        "rss:figma:e3af9235-33ed-44dd-8d91-17585c4a24e5",
-        "rss:figma:51e8af7e-ef46-4690-b499-04f61c1d03b0",
-        "rss:figma:1c34375b-eb1f-4dff-8923-2b518d6c0a02",
-        "rss:figma:48340d62-1048-498d-b49f-3a4c249f1184",
-        "rss:figma:b7bd5d8a-6649-45d2-902c-4460f2bde86c",
-        "rss:figma:1cbf8e16-980f-4948-b65b-19fef1cc98fb"
+        "rss:figma:7b0461aa-c316-441a-8d26-139c5d74cc86"
       ],
       "status": "healthy"
     },
@@ -5356,21 +5343,24 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-10-21T07:26:28Z",
+      "last_checked_at": "2026-10-22T19:45:14Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:28Z",
+      "last_extraction_at": "2026-10-22T19:45:14Z",
       "last_extraction_records": 10,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 10,
-      "last_records_skipped": 7,
-      "last_records_written": 3,
-      "last_run_duration_ms": 11837,
-      "last_success_at": "2026-10-21T07:26:28Z",
+      "last_records_skipped": 4,
+      "last_records_written": 4,
+      "last_run_duration_ms": 23254,
+      "last_success_at": "2026-10-22T19:45:14Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-10-22-public-monitoring-now-available-with-data-residency",
+        "rss:github:https://github.blog/changelog/2026-10-22-meta-api-endpoints-updated-for-actions-blob-storage",
+        "rss:github:https://github.blog/changelog/2026-10-21-github-cli-opt-in-to-expiring-auto-refreshing-oauth-tokens",
         "rss:github:https://github.blog/changelog/2026-10-19-dependabot-now-supports-npm-12-pnpm-11-and-12-and-bun-1-4",
         "rss:github:https://github.blog/changelog/2026-10-16-github-package-firewall-in-public-preview",
         "rss:github:https://github.blog/changelog/2026-10-20-dependabot-alerts-rest-api-now-includes-dependency-versions",
@@ -5567,10 +5557,7 @@
         "rss:github:https://github.blog/changelog/2026-08-07-enterprises-can-now-install-third-party-github-apps",
         "rss:github:https://github.blog/changelog/2026-08-07-github-copilot-weekly-releases-august-3",
         "rss:github:https://github.blog/changelog/2026-08-10-custom-thread-subscriptions-are-being-deprecated",
-        "rss:github:https://github.blog/changelog/2026-08-05-github-billing-in-india-now-supports-automatic-recurring-payments",
-        "rss:github:https://github.blog/changelog/2026-08-10-copilot-on-web-expands-conversation-controls",
-        "rss:github:https://github.blog/changelog/2026-08-04-retiring-the-copilot-billing-preview-app",
-        "rss:github:https://github.blog/changelog/2026-08-04-customize-code-scanning-default-setup-at-scale"
+        "rss:github:https://github.blog/changelog/2026-08-05-github-billing-in-india-now-supports-automatic-recurring-payments"
       ],
       "status": "healthy"
     },
@@ -5579,21 +5566,22 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-10-21T07:26:55Z",
+      "last_checked_at": "2026-10-22T19:45:52Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:55Z",
+      "last_extraction_at": "2026-10-22T19:45:52Z",
       "last_extraction_records": 1,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 10894,
-      "last_success_at": "2026-10-21T07:26:55Z",
+      "last_run_duration_ms": 178,
+      "last_success_at": "2026-10-22T19:45:52Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
+        "microsoft:microsoft-365-apps:2610:1b459fd496d1b278",
         "microsoft:microsoft-365-apps:2609:8a8113ef986fd9c1",
         "microsoft:microsoft-365-apps:2609:aca2fc97f1a81cd9",
         "microsoft:microsoft-365-apps:2609:30c085e60ce73ecb",
@@ -5618,21 +5606,22 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-10-21T07:26:55Z",
+      "last_checked_at": "2026-10-22T19:45:52Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:55Z",
-      "last_extraction_records": 13,
+      "last_extraction_at": "2026-10-22T19:45:52Z",
+      "last_extraction_records": 14,
       "last_health_note": "Fetch succeeded.",
-      "last_records_fetched": 13,
-      "last_records_skipped": 11,
+      "last_records_fetched": 14,
+      "last_records_skipped": 12,
       "last_records_written": 2,
-      "last_run_duration_ms": 244,
-      "last_success_at": "2026-10-21T07:26:55Z",
+      "last_run_duration_ms": 205,
+      "last_success_at": "2026-10-22T19:45:52Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
+        "microsoft:microsoft-powerpoint:2610:a89498a1fed03cbe",
         "microsoft:microsoft-powerpoint:2609:781fa1475a0e27cf",
         "microsoft:microsoft-powerpoint:2609:c81a1980c20fee9f",
         "microsoft:microsoft-powerpoint:2609:98f9a64bc1466bfa",
@@ -5673,18 +5662,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-10-21T07:26:44Z",
+      "last_checked_at": "2026-10-22T19:45:41Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:44Z",
+      "last_extraction_at": "2026-10-22T19:45:41Z",
       "last_extraction_records": 5,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 5,
       "last_records_skipped": 3,
       "last_records_written": 2,
-      "last_run_duration_ms": 10915,
-      "last_success_at": "2026-10-21T07:26:44Z",
+      "last_run_duration_ms": 10671,
+      "last_success_at": "2026-10-22T19:45:41Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -5702,18 +5691,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "microsoft_release_health",
-      "last_checked_at": "2026-10-21T07:26:41Z",
+      "last_checked_at": "2026-10-22T19:45:38Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:41Z",
+      "last_extraction_at": "2026-10-22T19:45:38Z",
       "last_extraction_records": 89,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 89,
       "last_records_skipped": 19,
       "last_records_written": 70,
-      "last_run_duration_ms": 2930,
-      "last_success_at": "2026-10-21T07:26:41Z",
+      "last_run_duration_ms": 2922,
+      "last_success_at": "2026-10-22T19:45:38Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [
@@ -5810,11 +5799,11 @@
       "status": "healthy"
     },
     "netlify": {
-      "consecutive_empty_extractions": 153,
+      "consecutive_empty_extractions": 159,
       "consecutive_failures": 0,
       "extraction_mismatch": true,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-10-21T07:26:40Z",
+      "last_checked_at": "2026-10-22T19:45:37Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -5822,8 +5811,8 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 292,
-      "last_success_at": "2026-10-21T07:26:40Z",
+      "last_run_duration_ms": 172,
+      "last_success_at": "2026-10-22T19:45:37Z",
       "last_upstream_candidates": 9,
       "previous_consecutive_failures": 0,
       "status": "broken"
@@ -5833,18 +5822,18 @@
       "consecutive_failures": 0,
       "extraction_mismatch": false,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-10-21T07:26:26Z",
+      "last_checked_at": "2026-10-22T19:45:13Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_extraction_at": "2026-10-21T07:26:26Z",
+      "last_extraction_at": "2026-10-22T19:45:13Z",
       "last_extraction_records": 11,
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 11,
       "last_records_skipped": 9,
       "last_records_written": 2,
-      "last_run_duration_ms": 1247,
-      "last_success_at": "2026-10-21T07:26:26Z",
+      "last_run_duration_ms": 949,
+      "last_success_at": "2026-10-22T19:45:13Z",
       "last_upstream_candidates": 0,
       "previous_consecutive_failures": 0,
       "seen": [

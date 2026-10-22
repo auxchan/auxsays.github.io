@@ -376,8 +376,14 @@ def run_writeback_script(work: Path, allow: list[str]) -> tuple[int, list[str], 
     """automation_writeback.py executed as a BARE SCRIPT, exactly as every writer workflow runs it.
     In-process tests import it as `lib.automation_writeback`, where `__package__` is set, so they
     can never see an import that only resolves in package mode."""
+    # A no-op Pages dispatch, because every production lane passes --pages-cmd: a github.token push
+    # does not trigger pages.yml, so the writer now refuses a site-affecting push that configures no
+    # dispatch (deploy_changed_no_pages_cmd) rather than exiting 0 and silently never deploying. The
+    # evidence store is site data, so without this the bare-script run models a lane production has
+    # never had. The interpreter itself is the no-op so it runs on every platform.
     cmd = [sys.executable, str(_REPO / "auxsays" / "scripts" / "lib" / "automation_writeback.py"),
-           "--repo", str(work), "--message", "Update automated patch evidence"]
+           "--repo", str(work), "--message", "Update automated patch evidence",
+           "--pages-cmd", f'"{sys.executable}" -c "pass"']
     for a in allow:
         cmd += ["--allow", a]
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", PYTHONIOENCODING="utf-8")

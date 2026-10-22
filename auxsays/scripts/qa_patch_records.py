@@ -14,8 +14,15 @@ import yaml
 
 from lib import patch_decision
 from lib.patch_identity import patch_key
+# The dedup identity the append path itself applies (base.evidence_key uses it), imported rather
+# than re-derived. A hand-rolled canonicaliser was measured against the corpus first and was WRONG:
+# stripping query strings collapsed six genuinely distinct Blackmagic forum threads
+# (viewtopic.php?t=...) onto one path and falsely reported duplicate evidence. "Distinct" here means
+# exactly what it meant when the row was accepted.
+from patch_collectors.base import normalize_url
 
-from lib.report_counts import counted_evidence_counts, windows_targets_from_front_matter
+from lib.report_counts import (counted_evidence_counts, counted_evidence_rows,
+                               windows_targets_from_front_matter)
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"
@@ -182,9 +189,18 @@ def is_blank(value: Any) -> bool:
     return value is None or str(value).strip() == ""
 
 
-def has_structured_evidence(data: dict[str, Any]) -> bool:
-    evidence = data.get("consensus_evidence") or data.get("structured_evidence") or data.get("evidence_objects")
-    return isinstance(evidence, list) and len(evidence) > 0 and all(isinstance(item, dict) for item in evidence)
+# `has_structured_evidence` was REMOVED, not reworked. It required front-matter
+# `consensus_evidence`, `structured_evidence` or `evidence_objects`, and the `consensus_live` gate
+# refused any record lacking one. Measured: 0 of 1316 generated records carried any of the three,
+# nothing writes them and no template reads them -- and all three are ABSENT from
+# `apply_consensus_to_records.WRITEABLE_FIELDS`, whose else-branch is
+# `raise RuntimeError("Refusing to write unapproved field")`. So the precondition was unsatisfiable
+# by data AND by the approved write path, which is why `consensus_live` has consumers and no
+# producer.
+#
+# Deleted rather than left unused: a helper that names three fields nothing produces is an
+# invitation to satisfy it by inventing a fourth representation, when the exhaustive one
+# (`accepted_report_sources`) already ships and already renders.
 
 
 def contains_public_static_sample(value: Any) -> bool:
@@ -256,6 +272,25 @@ def load_counted_evidence_counts(
         rows, windows_targets=windows_targets_from_front_matter(records or []))
 
 
+def load_counted_accepted_urls(
+        records: list[dict[str, Any]]) -> dict[tuple[str, str, str], set[str]]:
+    """The normalised source URLs of the authoritative accepted rows, per patch identity.
+
+    Same predicate, same single read as `load_counted_evidence_counts` -- `counted_evidence_counts`
+    is literally `len()` of these groups. A live claim must cite reports that are IN this
+    population; matching its SIZE is not the same thing, and a projection of the right cardinality
+    carrying one fabricated or superseded citation is invisible to a length comparison.
+    """
+    payload = load_yaml(EVIDENCE_PATH, [])
+    rows = payload.get("evidence") if isinstance(payload, dict) else payload
+    if not isinstance(rows, list):
+        return {}
+    groups = counted_evidence_rows(
+        rows, windows_targets=windows_targets_from_front_matter(records or []))
+    return {key: {normalize_url(str(row.get("source_url") or "")) for row in group}
+            for key, group in groups.items()}
+
+
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -309,8 +344,10 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
 
     if evidence_state == "official_only" and report_count > 0:
         add(errors, path, "official_only_with_reports", "Record has report_count > 0 but evidence_state is official_only.")
-    if evidence_state == "consensus_live" and not has_structured_evidence(data):
-        add(errors, path, "live_without_structured_evidence", "consensus_live requires structured evidence objects.")
+    # The `consensus_live` precondition is NOT checked here. It needs the authoritative counted
+    # evidence population, which is record-relative (the Windows gate depends on which cumulative
+    # update a record currently targets), so it cannot be decided from one record's front matter.
+    # It lives in `scan_live_consensus_claims`, which runs with that authority in hand.
     if evidence_state and evidence_state not in VALID_EVIDENCE_STATES:
         add(warnings, path, "unknown_evidence_state", f"Evidence state '{evidence_state}' is not in the normalized taxonomy.")
     if contains_public_static_sample(data):
@@ -651,12 +688,174 @@ def scan_required_record_paths() -> tuple[list[dict[str, str]], list[dict[str, s
     return errors, warnings
 
 
+#: The accepted-report volume a live consensus claim must have behind it. NOT a new threshold: it is
+#: the top rung ("High") of the community evidence strength ladder the patch table already publishes
+#: and `test_evidence_strength_thresholds` already locks --
+#: 0 Insufficient | 1-7 Low | 8-24 Low-Medium | 25-32 Medium | 33+ High.
+LIVE_MIN_ACCEPTED_REPORTS = 33
+
+LIVE_EVIDENCE_STATE = "consensus_live"
+#: `live_consensus` is the legacy word order, accepted on READ only because aux-update.html:89 tests
+#: both. Nothing should write it.
+LIVE_COLLECTION_STATUSES = ("consensus_live", "live_consensus")
+
+
+def scan_live_consensus_claims(
+        loaded: list[tuple[Path, dict[str, Any]]],
+        evidence_counts: dict[tuple[str, str, str], int],
+        accepted_urls: dict[tuple[str, str, str], set[str]] | None = None,
+) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """Every record claiming mature consensus, checked against the AUTHORITATIVE population.
+
+    This replaces a precondition that could never be met. The old gate demanded front-matter
+    `consensus_evidence` / `structured_evidence` / `evidence_objects`; 0 of 1316 records carry any
+    of them, no template reads them, and all three are absent from the consensus writer's
+    `WRITEABLE_FIELDS` allow-list -- so the one sanctioned way to satisfy it raised
+    `RuntimeError: Refusing to write unapproved field`.
+
+    WHY THE AUTHORITY AND NOT THE RECORD. `accepted_report_sources` carries
+    `patch_version_matched: True` as a HARDCODED LITERAL (`apply_consensus_to_records` writes the
+    constant for every entry), so believing that field would make the check unfalsifiable on any
+    record the consensus writer produced. Patch-matching is therefore established upstream, by
+    `lib.report_counts.counted_evidence_counts` applying the real per-row predicate
+    (`counted is not False` AND `patch_version_matched is True` AND, for Windows, the record-relative
+    current-patch gate) to the canonical evidence rows at this exact product/version/build identity.
+    Nothing below reads the projection's own matched flag.
+
+    FAIL CLOSED, and as ERRORS. The sibling length check in `scan_evidence_count_alignment` is
+    deliberately a WARNING because it fires in the legitimate window between reconciliation writing
+    a count and promotion rebuilding the projection. That tolerance is right for a pilot record
+    mid-cycle and wrong for a published claim of mature consensus: a live claim the evidence does
+    not support must not reach a reader, so here an unsupported claim blocks.
+
+    THE PAIR IS CHECKED TOGETHER because the surfaces disagree about which field decides.
+    `aux-update.html:86` keys the whole hero on `consensus_collection_status`; `evidence_state`
+    appears there only as a secondary `or` inside the pilot branch. So a record live in one field
+    and pilot in the other either publishes a mature claim this gate never validated, or renders
+    nothing at all while the data says otherwise. Both are defects, and neither is visible from one
+    field alone.
+    """
+    errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
+    for path, data in loaded:
+        state_live = str(data.get("evidence_state") or "").strip() == LIVE_EVIDENCE_STATE
+        status_live = (str(data.get("consensus_collection_status") or "").strip()
+                       in LIVE_COLLECTION_STATUSES)
+        if not (state_live or status_live):
+            continue
+
+        if state_live != status_live:
+            add(errors, path, "live_state_pair_inconsistent",
+                f"Record claims live consensus in one field but not the other "
+                f"(evidence_state={data.get('evidence_state')!r}, "
+                f"consensus_collection_status={data.get('consensus_collection_status')!r}); "
+                "the patch page keys on the collection status, so a half-claim either publishes "
+                "an unvalidated maturity claim or silently publishes nothing.")
+
+        product_id = str(data.get("product_id") or "").strip()
+        version = str(data.get("update_version") or "").strip()
+        if not product_id or not version:
+            add(errors, path, "live_without_canonical_identity",
+                "Record claims live consensus but carries no product_id/update_version, so no "
+                "accepted-evidence population can be attributed to it.")
+            continue
+
+        authoritative = int(evidence_counts.get(patch_key(product_id, version,
+                                                          data.get("target_build"))) or 0)
+        if authoritative < LIVE_MIN_ACCEPTED_REPORTS:
+            add(errors, path, "live_without_sufficient_accepted_evidence",
+                f"Record claims live consensus with {authoritative} accepted patch-specific "
+                f"reports in the authoritative population; {LIVE_MIN_ACCEPTED_REPORTS} is the "
+                "published High evidence-strength rung.")
+
+        claimed = int(data.get("update_report_count")
+                      or data.get("confirmed_patch_specific_report_count") or 0)
+        if claimed != authoritative:
+            add(errors, path, "live_count_disagrees_with_evidence",
+                f"Record claims live consensus and publishes {claimed} user reports, but the "
+                f"authoritative accepted-evidence population for this exact patch identity is "
+                f"{authoritative}.")
+
+        sources = data.get("accepted_report_sources")
+        if not isinstance(sources, list) or not sources:
+            add(errors, path, "live_without_accepted_report_sources",
+                "Record claims live consensus but publishes no accepted report sources, so a "
+                "reader cannot reach the evidence the claim rests on.")
+            continue
+        if not all(isinstance(item, dict) for item in sources):
+            add(errors, path, "live_sources_malformed",
+                "Record claims live consensus but accepted_report_sources contains a non-mapping "
+                "entry.")
+            continue
+
+        if len(sources) != authoritative:
+            add(errors, path, "live_sources_not_exhaustive",
+                f"Record claims live consensus and lists {len(sources)} accepted report sources "
+                f"against an authoritative population of {authoritative}; this list is the "
+                "exhaustive projection, not a sample, so the two must agree exactly.")
+
+        urls = [str(item.get("source_url") or item.get("url") or "").strip() for item in sources]
+        if any(not url.lower().startswith(("http://", "https://")) for url in urls):
+            add(errors, path, "live_source_without_valid_url",
+                "Record claims live consensus but at least one accepted report source carries no "
+                "usable http(s) URL, so that report cannot be verified by a reader.")
+        normalized = {normalize_url(url) for url in urls if url}
+        if len(normalized) != len(sources):
+            add(errors, path, "live_sources_not_distinct",
+                f"Record claims live consensus from {len(sources)} sources that resolve to "
+                f"{len(normalized)} distinct reports; repeated discoveries or cross-posts of one "
+                "report are not independent corroboration.")
+
+        # THE CONTENTS, not just the shape. Every check above compares the projection's SIZE to the
+        # authoritative population; none of them looks at WHICH reports it names. A projection of
+        # the right cardinality carrying one fabricated or superseded citation passes all of them:
+        # 34 accepted rows, a list of 33 real ones plus one invention, count 34 against authority
+        # 34, all distinct, all valid. That is the same failure as the precondition this gate
+        # replaced -- a check that appears to validate evidence while never comparing against the
+        # thing that decides.
+        if accepted_urls is not None:
+            population = accepted_urls.get(
+                patch_key(product_id, version, data.get("target_build")), set())
+            unsupported = sorted(normalized - population)
+            omitted = sorted(population - normalized)
+            if unsupported:
+                add(errors, path, "live_source_not_in_accepted_population",
+                    f"Record claims live consensus citing {len(unsupported)} report(s) that are "
+                    f"not in the authoritative accepted-evidence population for this patch "
+                    f"identity, e.g. {unsupported[0]}; a citation the evidence does not support "
+                    "cannot help establish consensus.")
+            # EXACT CORRESPONDENCE, not containment. With the length and distinctness checks above
+            # this is implied -- a set of N distinct citations drawn from an N-report population IS
+            # that population -- but a property that holds only as a consequence of three other
+            # checks is one refactor away from not holding, and nothing in the code would say so.
+            # Stated directly, it also names what a maintainer must fix: a substitution reports the
+            # invented citation AND the real report it displaced, where a length mismatch reports
+            # neither.
+            if omitted:
+                add(errors, path, "live_accepted_report_omitted",
+                    f"Record claims live consensus but omits {len(omitted)} accepted report(s) "
+                    f"from its published citations, e.g. {omitted[0]}; the published list is the "
+                    "exhaustive projection of the accepted population, so an omission means the "
+                    "page is citing a different set of reports than the one it counted.")
+
+    return errors, warnings
+
+
 def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
     # Read each record ONCE and reuse it for both the target map and the comparison below.
     loaded = [(path, front_matter(path)) for path in files]
     evidence_counts = load_counted_evidence_counts([data for _p, data in loaded])
+    # Live claims are validated against the SAME authority, from the same single read of the
+    # evidence store. Deliberately before the empty-map early return below: if the store is
+    # unreadable or empty, every live claim is unsupported and must say so rather than be waved
+    # through -- a missing evidence store is the one condition under which this gate matters most.
+    live_errors, live_warnings = scan_live_consensus_claims(
+        loaded, evidence_counts,
+        load_counted_accepted_urls([data for _p, data in loaded]))
+    errors.extend(live_errors)
+    warnings.extend(live_warnings)
     if not evidence_counts:
         return errors, warnings
 
@@ -887,9 +1086,19 @@ def main(argv: list[str] | None = None) -> int:
         help="Publication mode: treat a record that names more than one action as an ERROR and "
              "exit non-zero, so the site cannot deploy a patch page with two decisions. The "
              "writeback lane runs WITHOUT this flag, where the same finding stays a warning.")
+    parser.add_argument(
+        "--read-only", action="store_true",
+        help="Run every check and report normally, but write nothing. This exists so PR-time CI "
+             "can execute THIS implementation rather than a copy of it: the suite was excluded "
+             "from ci-integrity solely because the run wrote _data/qa_status.json, and a "
+             "re-implementation validated in CI while production ran different code is the "
+             "two-authorities defect these gates exist to prevent. The flag suppresses the two "
+             "write statements below and NOTHING else -- every scan, the publish-strict "
+             "promotion and the exit code are the production codepath, unchanged.")
     args = parser.parse_args(argv)
 
-    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    if not args.read_only:
+        OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     files = sorted(GENERATED_DIR.glob("*.md"))
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -927,7 +1136,8 @@ def main(argv: list[str] | None = None) -> int:
         "errors": errors,
         "warnings": warnings,
     }
-    OUT_PATH.write_text(json.dumps(status, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    if not args.read_only:
+        OUT_PATH.write_text(json.dumps(status, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"QA scanned {len(files)} generated records and {len(PRIORITY_PRODUCTS)} priority products: {len(errors)} errors, {len(warnings)} warnings")
     for item in warnings[:25]:
         print(f"::warning file={item['file']}::{item['code']}: {item['message']}")

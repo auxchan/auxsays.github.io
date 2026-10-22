@@ -42,7 +42,18 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-025 | Resolved | Collector runtime | Medium | Premiere spent 622s to collect 12s of evidence — routed to one primary, 97.8% faster |
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
+| AUX-040 | Resolved | Build reproducibility | High | The deployed gem set was whatever rubygems served that minute — now a tracked, frozen lock |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
+| AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
+| AUX-042 | Resolved | Evidence integrity | High | The gate guarding mature consensus demanded three fields nothing writes and the approved writer is forbidden to write |
+| AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
+| AUX-043 | Resolved | Evidence integrity | Medium | Every published source asserted a patch match it never checked; now derived from the row |
+| AUX-036 | Resolved | Official ingestion | High | A bot challenge read as an empty document, and the guard covered one of two response paths |
+| AUX-044 | Resolved | Public truthfulness | High | Promoting a page to live consensus would have hidden its collection warnings |
+| AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
+| AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
+| AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
 
 ---
@@ -2384,6 +2395,64 @@ legitimate new record" -- observed here in production before that work began. Th
 generalises: a PR-time assertion over live corpus state has a second author, the collector, and it
 commits whenever it likes.
 
+### AUX-040 — the deployed dependency set was whatever rubygems served that minute
+
+- **Status** Resolved · **Area** Build reproducibility · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-21
+
+Seven gems were declared in `auxsays/Gemfile` and two carried a version constraint. The five
+without one included `jekyll-theme-chirpy`, the theme every layout inherits from. No
+`Gemfile.lock` was tracked, and the deploy ran `bundle install` with no lock and no cache, so
+**every deploy re-resolved from scratch**.
+
+Measured rather than inferred: the live page emitted `jekyll-seo-tag 2.9.1` while a local build of
+the same commit emitted `2.9.0`. An upstream release could change the published markup of every
+page with no commit touching this repository.
+
+#### The obvious repair was worse than the defect
+
+Generating the lock from a developer machine would have pinned `chirpy 7.0.1`, `seo-tag 2.9.0` and
+`include-cache 0.2.2` — silently **downgrading the live theme by six minor versions** on the next
+deploy. A lock has to be resolved against what the deploy installs, never against what happens to
+be cached locally.
+
+So the inventory came from the authoritative source: the `bundle install` output of the CI run that
+built the live site. Forty production gems, direct and transitive, diffed against the lock line by
+line: **zero version mismatches**. Three gems sit in the lock beyond that set and each is
+accounted for — two are the Windows-only timezone gems, and `rexml` is a gem the runner already
+provides as a bundled gem, which is why it never appears in the install log.
+
+This is a FREEZE, not an upgrade. Production already ran 7.6.0; only the developer machine was
+behind. There was no theme upgrade to decide, only a theme version to record.
+
+#### Why only the theme is bounded
+
+The lock enforces exact versions, so constraining all five unconstrained gems would complicate
+legitimate maintenance without improving reproducibility. The theme is the exception because a
+major bump restructures markup everywhere, and that must never arrive as a side effect.
+
+#### What the deploy now proves
+
+`setup-ruby` installs in deployment mode with `BUNDLE_GEMFILE` named explicitly — the Gemfile is in
+`auxsays/`, not at the repository root, so without that the action resolves the wrong project. A
+following step refuses a missing lock outright rather than falling back to resolution, runs a frozen
+check, and fails if installation altered the lock byte-for-byte. That fallback WAS the defect, so
+removing it is the repair.
+
+Section [D] of the new suite EXTRACTS that step's shell from the workflow and EXECUTES it against a
+lockless checkout, requiring a non-zero exit. A suite that greps a workflow for a guard passes after
+the guard is deleted, which has happened here before.
+
+**Reopen only if** `Gemfile.lock` stops being tracked, or loses the `x86_64-linux` platform, or the
+deploy installs without deployment mode, or a build emits a gem version the lock does not name.
+
+#### Not covered
+
+The Linux install path is verified by the lock's platform entry and by PR-time CI, not locally;
+there is no Linux environment here to install into. Upgrade governance — monthly monitoring,
+quarterly review, immediate escalation for security advisories, owner approval for any production
+dependency change — is agreed but **not automated by this change**.
+
 ### AUX-034 — the money page explained the evidence before it answered the question
 
 - **Status** Resolved · **Area** Patch page UX · **Severity** High
@@ -2499,6 +2568,152 @@ generalises: a page can be entirely truthful and still answer the wrong question
 geometry on a real viewport shows it -- the defect here was invisible to every assertion in the
 suite, because every individual fact on the page was correct.
 
+### AUX-041 — a published theme contradicted the reporter, and a platform label was never earned
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-21
+
+`issue_theme` and `platform` are PUBLISHED PROSE. The patch page prints "Current reports mention
+<theme>", so a guess becomes a sentence a reader believes. Two Adobe collectors guessed, in two
+different ways, and both were reproduced against the shipped functions before anything changed:
+
+    "500 GB mSata (External - Cache & Render)"       -> export/render failure  (a disk label)
+    "Premiere 26.2.2 unstable", body opening
+      "windows and menus freeze, rendering seems
+       much slower"                                  -> export/render failure  (secondary clause)
+                                                     -> platform: windows     (a UI noun)
+    "OS: [Windows 11 Pro 24H2 / macOS version]"      -> platform: windows     (unfilled template)
+    "There is no crash at all after the update"      -> application crash or hang
+
+The last inverts its author. Premiere's classifier was a first-match substring chain with no word
+boundaries over `parent_title + report_title + report_text`, testing `export` FIRST and `crash`
+LAST, so on a body that hit several rules once each the broadest rule won on position alone.
+
+#### The repair Acrobat had already made for itself
+
+`adobe_acrobat_community` had fixed the THEME half and recorded the cost: 59 of 63 counted rows
+whose own TITLE said crash/freeze/hang published a different theme, because `sign` matched
+"de-SIGN" and "SIGN in" and was tested before `crash`. Its PLATFORM half was still the same ordered
+membership scan as Premiere's -- first token found anywhere wins, loop breaks -- so a stated macOS
+report was labelled `windows` whenever the word appeared, including as a UI noun.
+
+`lib/evidence_classification.py` generalises the mechanism, not the vocabulary. The theme TABLES
+stay with the collectors: Acrobat's taxonomy names Acrobat workflows and feeds a different
+published sentence than Premiere's. Three primitives, kept separable so each is pinned by its own
+named checks and can be reverted alone.
+
+**Sentiment is unreachable from here, by construction.** It is verdict-bearing --
+`build_consensus_from_evidence` counts sentiments and maps them through `consensus_label` and
+`lib.patch_decision` into the published install/wait/avoid decision -- so the library has no
+sentiment field to return. The fallback is deliberately NOT a rule in the scored table: a fallback
+that could be compared could win, and Premiere's fallback is the one branch returning `moderate`.
+Severity IS returned, so `validate_rules` refuses an out-of-vocabulary table at import time,
+because an invalid severity does not fail loudly downstream -- it sets
+`exclusion_reason: invalid_severity` and SILENTLY UN-COUNTS the row.
+
+#### Title weighting was inexpressible, and there were two call sites
+
+Premiere passed one concatenated blob, so "the reporter's own headline outweighs a passing body
+mention" could not be stated -- and because Premiere sets `parent_title` and `report_title` to the
+same extracted page title, that title was in the blob twice. `classify` now takes
+`(heading, body)`. The second caller is `promote_local_playwright_captures.py:566`, the promotion
+path; a grep of the collector alone does not find it. The concatenated blob still feeds
+`premiere_version_match`, so acceptance authority is untouched.
+
+#### Negation: a guard, not a language engine
+
+An explicitly denied symptom does not score, and nothing else changes -- a report that denies a
+crash while describing a freeze still themes as a freeze, because suppression removes one rule's
+hit inside one clause. It applies only to rules marked `negatable` (one per collector) and only to
+plain denials. Inability modals are excluded: "can't export", "won't launch" and "unable to open"
+are how failures are REPORTED. Acrobat's own crash pattern matches the literal phrase
+`won't launch`, so a naive guard would have suppressed the rule it was added to protect.
+
+#### Three errors in this work, all caught by the shadow run, none by a unit test
+
+A shadow pass -- old classifiers sliced out of `git show HEAD:` rather than hand-copied, both run
+over all 329 stored Adobe rows -- found three defects on COUNTED rows that every unit test passed.
+
+**Negation over-reached, twice.** In "Adobe Acrobat Pro Not Responding / Crashing" the "Not"
+belongs to the matched phrase `not responding`, and it suppressed the "Crashing" sixteen characters
+later. In "OSX 10.13.4 - Acrobat Pro NOT WORKING ... won't start up", "NOT WORKING" ASSERTS a
+failure and suppressed the launch failure five words later, flipping a counted crash report to
+"unspecified Acrobat issue". Two fixes: a negation inside the pattern's own match is not a negator,
+and suppression requires the denial within 2 intervening WORDS rather than 40 characters.
+
+**Composite rules were order-sensitive.** "When opening and synchronizing a large project" names
+the action before the noun, so a noun-then-cue lookahead missed it and the row fell to the
+fallback -- which carries `moderate` sentiment. That was the only sentiment move in the first
+shadow run. Cues now match in either order, and sentiment moves are 0.
+
+**`without` is not a denial.** The only `without` in range of a symptom across the corpus was
+"I can't even hit the report button, without Premiere freezing", which asserts the freeze because
+an inability modal earlier in the clause inverts the sense. It was removed rather than engineered
+around; the double-negative rule that would recover "runs without crashing" is deferred, not
+guessed at.
+
+#### The shipped truncation cue was inert
+
+Acrobat truncated everything after a "what I already tried" heading, and the list included
+`steps?\s+to\s+reproduce\s*:`. Two reasons it is gone. It is not the same kind of heading --
+troubleshooting notes describe what did NOT fail, while reproduction steps are often the clearest
+affirmative description of the failure. And it never fired: the alternation sat inside a group
+closed by `\b`, and that boundary followed the literal `:`, so "Steps to reproduce: open the file"
+did NOT match while "steps to reproduce:open" did. Removing it changes no stored classification --
+not because reporters do not write it, but because the pattern was unreachable. Keeping it was a
+latent trap: anyone fixing the boundary later would switch on truncation nobody had evaluated.
+
+#### Platform: an allowlist, and six drops that would have been regressions
+
+Positive OS evidence only. A denylist of UI phrasings is open-ended and every phrasing nobody
+thought of publishes a confident wrong label; an allowlist fails toward `unknown`. Two platforms
+named is `unknown`, because one evidence row is one person's one machine and "Windows, macOS" is
+the ADAPTER's answer to a different question about release targeting. `windows` is the one
+genuinely ambiguous token in English, so it requires an OS context.
+
+Auditing each changed row individually mattered more than the count. Of 9 initial
+`windows -> unknown` drops, **6 were regressions**: "Windows Installer service" (3 rows),
+"Windows 2016 server", and "(Windows)" as a parenthesised annotation (2 counted rows). Three
+narrow unconditional patterns were added. The remaining 5: 3 correct (the unfilled template twice
+and the UI noun, all counted) and 2 where the stored excerpt truncates mid-phrase -- both
+UNCOUNTED. The gate was deliberately not loosened to recover those two, because the only
+candidates are uncounted and loosening risks false positives on counted rows.
+
+#### Measured blast radius
+
+329 stored Adobe rows, 294 counted. Sentiment changes 0. Accepted counts, evidence identity and
+verdicts 0 -- `classify` produces none of those fields. Severity 3, all travelling with a theme.
+Theme 6, all Premiere, all counted: four unambiguous repairs, and two moving from "timeline crash
+or hang" to a less localized theme because the title outweighs the body, recorded as a specificity
+decrease rather than claimed as wins. Platform 27 (24 counted). Previously-unspecified rows gaining
+a theme: 0 -- this change removes unsupported assertions and does not expand recall.
+
+**Acrobat theme changes: 0 across all 301 rows.** That is the preservation proof, and it is
+stronger than its five shipped checks, which also still pass unchanged at 146/146.
+
+#### Verification
+
+`test_evidence_classification.py = 58`, registered `[blocking]`, frozen fixtures: the manifest
+compares the reported total to that count in both directions, so a walk of the live store would go
+red on the next scheduled run. 13 mutants, each reverting ONE behaviour, 13/13 caught by a NAMED
+check with the suite restored green after each. Two mutants initially SURVIVED and both were real
+gaps -- the bracket scrubber was unpinned because the live template names BOTH platforms, so the
+two-platforms rule was refusing it and the scrubber was doing nothing testable; and the first
+"steps to reproduce" mutant was a no-op because it restored the same inert pattern. Both are now
+pinned by behavioural fixtures.
+
+**Reopen only if** a stored Adobe row is observed whose `issue_theme` names a symptom its own text
+denies, or whose `platform` is not `unknown` without positive operating-system evidence in the
+retained text, or if `score_themes` is ever given a table whose fallback is a scored rule.
+
+**Cross-reference** AUX-027 established that a producer fix and a historical migration are
+separate changes; the migration for the stored rows this classifier would now label differently is
+deliberately not in this one. DaVinci (`davinci.py`) and OBS (`collect_obs_reports.py`) carry the
+same ordered platform scan and are each assessed separately rather than migrated automatically.
+The lesson: a classifier that cannot say "unknown" will always say something, and a theme scorer
+tested only on invented strings passes while inverting real reporters -- the shadow pass over the
+stored corpus found every defect that the 58 checks did not.
+
 ### AUX-035 — a rendering instruction was being published as a release date
 
 - **Status** Resolved · **Area** Official ingestion · **Severity** High
@@ -2586,6 +2801,538 @@ year.
 generalises. The lesson: a date field accepts two kinds of wrong value -- text that is not a date,
 and a real date that is not the vendor's -- and a permissive normaliser produces both while looking
 like a convenience.
+
+### AUX-042 — the gate guarding mature consensus could never be satisfied
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-21
+
+`consensus_live` is the only state that means established consensus. It had thirteen consumer
+references and **zero producers**, and 0 of 1,316 generated records carried it. That was read for a
+long time as an undecided threshold. It was not.
+
+`qa_patch_records.py` gated the state on front-matter `consensus_evidence`, `structured_evidence`
+or `evidence_objects`. **Measured: 0 of 1,316 records carry any of the three**, nothing writes them
+and no template reads them. The exhaustive projection that DOES ship and DOES render is
+`accepted_report_sources` (`aux-update.html:123` and `:350`).
+
+**And the sanctioned writer was forbidden to write them.**
+`apply_consensus_to_records.WRITEABLE_FIELDS` contains `evidence_state`,
+`consensus_collection_status`, `evidence_state_label` and `intelligence_stage` — and none of the
+three the gate demanded. Its else-branch is
+`raise RuntimeError(f"Refusing to write unapproved field: {key}")`. So the only approved way to
+satisfy the precondition crashed the promote step before QA ran. The gate was unsatisfiable by data
+**and** by design, which is the whole reason the state has consumers and no producer.
+
+#### Why this had to be repaired alone, before any producer exists
+
+`:312` added to `errors`, not `warnings`, and `main` is `return 1 if errors else 0`. Two
+consequences, both verified:
+
+- `obs-evidence-collection.yml:448` runs QA with `--validate-before-commit`, so the first scheduled
+  run that wrote `consensus_live` would fail validation and skip the writeback — **discarding that
+  cycle's evidence for every product**, repeating every 6 hours.
+- `pages.yml:78` runs `--publish-strict` **before** `jekyll build`, its own comment calling the
+  position load-bearing, so the deploy would stop too.
+- `ci-integrity.yml` excluded this script, so **nothing at pull-request time could see either**.
+
+A producer shipped alongside the repair would therefore have been unfalsifiable until the scheduled
+run it broke.
+
+#### What the replacement validates, and the one field it refuses to believe
+
+`scan_live_consensus_claims` checks every record claiming maturity against the **authoritative**
+counted-evidence population — `lib.report_counts.counted_evidence_counts` applying the real per-row
+predicate (`counted is not False` AND `patch_version_matched is True` AND, for Windows, the
+record-relative current-patch gate) at that exact product/version/build identity. It requires the
+published count to equal that population, `accepted_report_sources` to be a non-empty list of
+mappings whose length equals it, every entry to carry a usable http URL, and those URLs to be
+distinct.
+
+**It never reads `accepted_report_sources[*].patch_version_matched`.**
+`apply_consensus_to_records:914` writes that key as a hardcoded `True` for every entry, so a gate
+believing it would be unfalsifiable on any record the consensus writer produced. Patch-matching is
+established upstream, on the rows, where the flag is real. Part C pins this, including that the
+function body never mentions the key.
+
+#### The first version of this repair had the same shape as the defect
+
+Caught in review before merge. Every check listed above compares the projection's SIZE to the
+authority and none of them looks at WHICH reports it names. Worked through concretely: 34 accepted
+rows, a published list of 33 real citations plus one invention, count 34 against an authority of 34,
+all distinct, all valid — and it ships. A fabricated or superseded citation of the right cardinality
+was invisible.
+
+That is the failure this entry exists to fix, reproduced one level up: a check that appears to
+validate evidence while never comparing against the thing that decides.
+
+The gate now requires every cited URL to be IN the authoritative accepted population, which needed
+the rows and not merely their tally. `lib.report_counts.counted_evidence_rows` is that population
+and `counted_evidence_counts` is now `len()` of its groups, so the count and the rows cannot
+disagree — one predicate, not a second copy in the QA gate. `evidence_loss.is_accepted` was
+considered and rejected for this: it is row-level but deliberately omits the record-relative Windows
+current-patch gate, so a superseded-KB citation would have passed a subset check built on it.
+
+Measured across the eight identities at or above the rung: **0 unsupported citations.** The live
+corpus is clean; this closes a hole rather than repairing damage.
+
+Distinctness uses `base.normalize_url`, the identity the append path already applies, imported
+rather than re-derived. A hand-rolled canonicaliser was written first, measured against the corpus,
+and was **wrong**: stripping query strings collapsed six genuinely distinct Blackmagic forum threads
+(`viewtopic.php?f=42&t=…`) onto one path and falsely reported duplicate evidence on a legitimate
+identity. Introducing a second URL authority to guard against duplicates would have repeated the
+exact defect this entry fixes.
+
+#### The pair is checked together
+
+`aux-update.html:86` keys the entire hero on `consensus_collection_status`; `evidence_state` appears
+there only as a secondary `or` inside the pilot branch. So a record live in one field and pilot in
+the other either publishes a maturity claim nothing validated, or silently publishes nothing while
+the data says otherwise. Neither is visible from one field alone, so a mismatched pair is an error
+and the half-claim is still validated rather than skipped.
+
+The legacy `live_consensus` word order is accepted on READ, because `:89` tests both. Nothing writes
+it.
+
+#### `--read-only`, and why it is the enabling change
+
+`qa_patch_records.py` was excluded from pull-request CI for exactly one reason, stated in
+`ci-integrity.yml`: the run wrote `_data/qa_status.json`. `--read-only` suppresses that single write
+statement and the directory creation, and **nothing else** — every scan, the publish-strict
+promotion and the exit code are the production codepath. Verified by running both modes over the
+real tree and diffing: byte-identical findings, identical exit codes, and `qa_status.json`
+unchanged.
+
+That is not a convenience. A re-implementation validated in CI while production ran different code
+is the two-authorities defect these gates exist to prevent — and it is what let an unsatisfiable
+precondition sit unnoticed. `ci-integrity.yml` now runs
+`qa_patch_records.py --read-only --publish-strict`, the stricter of the two modes and the one the
+deploy uses.
+
+#### Nothing in this change can make a record live
+
+Pinned behaviourally, not by inspection: the shipped `evidence_state_for` and
+`collection_status_for` mappings are exercised across counts 0, 1, 5, 33 and 133 and never return a
+live value. `consensus_live` stays in `VALID_EVIDENCE_STATES` so consumers remain honest. The
+population is measured and ready — 8 of 221 identities carrying accepted evidence reach the
+published High rung (33+), none at or above it fails any integrity condition, and OBS 32.1.2 carries
+108 accepted reports while labelled identically to a 1-report patch — but the producer is a later,
+separate change, and the blockers it still needs are recorded in the project's maturity blocker
+inventory, not here.
+
+#### Verification
+
+`test_consensus_live_gate.py = 61`, registered `[blocking]`. The contents check is proven
+BEHAVIOURALLY, on a frozen synthetic fixture independent of the live corpus: 34 reports accepted,
+one withdrawn leaving 33 — still at the rung — and the record still citing the withdrawn one. Count,
+length, distinctness and volume all agree, so the refusal is attributable to the contradiction and
+to nothing else, and it is the only finding. A structural assertion that the gate body never reads
+the projection's matched flag is retained as supplementary, after a mutant proved the semantic check
+written for that property did not fire on its own.
+
+Part F does not use a synthetic record:
+it takes the live corpus's largest candidate, promotes its two maturity fields in memory, and proves
+the gate yields **no** error against the real evidence store — while inflating that same record's
+published count by one is refused. Errors are the only thing a lane blocks on, so that is the
+demonstration that a genuine promotion cannot wedge the writeback or the deploy.
+
+15 mutants, each reverting one behaviour, each caught by a named check, suite restored green after
+each.
+
+**Reopen only if** a record is observed carrying a live state in either field while the
+authoritative counted-evidence population for its exact identity is below the published High rung,
+or while its `accepted_report_sources` disagrees with that population in length, in distinctness, or
+in membership; or if `qa_patch_records.py` gains a second write site not covered by `--read-only`.
+
+**Cross-reference** this is P1 of the sequenced maturity work; the freshness-aside honesty fix
+(`aux-update.html:279` has no `live` branch, so promotion currently DELETES the blocked-method
+warning) is P2 and must land before any producer. The lesson: a precondition nobody can satisfy
+reads exactly like a policy nobody has decided, and the difference is only visible if you check
+whether the approved writer is even permitted to write what the gate demands.
+### AUX-038 — the site explained how it gathers evidence, in operational detail
+
+- **Status** Resolved · **Area** Public disclosure · **Severity** High
+- **First seen** 2026-10-18 · **Resolved** 2026-10-21
+
+Two surfaces published the acquisition implementation, and the smaller-looking one was the worse.
+
+**The methodology page rendered the entire method-health store.** Measured on the deployed page:
+1,554,238 bytes, in which the single most frequent internal method identifier appeared 1,064
+times, a transport failure code 558 times, a bot-challenge code 329 times, and every adapter name
+beside them. It is now 13,951 bytes of reader-facing evidence notes, with the
+title, heading, permalink and navigation label unchanged — containment came from deleting a
+telemetry dump, not from renaming anything, so inbound links, indexing and the publish-strict
+deploy gate are untouched.
+
+**The per-patch monitoring card leaked the same class more widely.** Its source-family label
+DEFAULTED to `method_id | replace: '_',' '` and let seven mappings override it, so every unmapped
+id printed its internal token. Measured: 16 of the 23 live ids were unmapped, and their
+de-underscored identifiers reached 216, 184, 137, 121, 89, 32, 16 and 2 pages respectively -- the
+route, API and discovery-strategy names among them. The default is now the generic family and the
+specific names are the overrides, so an unmapped id costs specificity, never truth. The rendered
+label is a closed ten-member set of real, publicly nameable source families.
+
+**The boundary this draws, because it is the reusable part.** `method_id` describes HOW a source was
+reached — a route, an API, a search strategy — and is proprietary. `source_type` describes WHAT was
+cited and is citation metadata the contract requires us to keep. So the first is contained and the
+second was deliberately left alone, including its lowercase presentation, because replacing a
+truthful specific statement with a vaguer one is the failure this work exists to avoid.
+
+#### What only a real build revealed
+
+Exposures survived three rounds of review and were found only by building the site and reading the
+artifact. All were reachable at HTTP 200: the operator browser-capture tooling, including a sample
+of captured data; three raw PASS/FAIL validation notes served at the DOMAIN ROOT; and a published
+test fixture.
+
+Then a fourth round found a LARGER class, because the first fix listed those three notes BY NAME
+instead of by class: **nine internal engineering documents were being served at the domain root**,
+their titles alone describing adapter strategy, ingestion reliability and consensus policy, one
+opening "This build applies the global Patch Feed consensus standard across all update records and
+display templates". A directory README and the build configuration went with them.
+
+The deploy gate had missed them too, for a reason worth keeping: `.md` had been left OUT of its
+deny-list on the reasoning that `.md` is a legitimate Jekyll source extension. That is true of the
+SOURCE tree and false of a BUILT artifact, where every legitimate page is `.html` and a surviving
+`.md` is a file Jekyll copied verbatim because it carried no front matter. `.md` is now denied by
+construction, and the exclusions are pattern-based so the next note written is caught without
+anyone remembering to list it.
+
+The published tree was 1,850 files including 190 `.py` and 14 `.md`; it is now 1,616, 0 and 0.
+
+The lesson is narrow and worth keeping: `exclude:` was verified by diffing two real builds of the
+SAME commit, because the first comparison crossed two bases and showed the page count RISING by 10
+— scheduled records, not an exclude effect.
+
+#### An inert control removed rather than left in place
+
+An `exclude:` line was written for the CSS source map, measured as having no effect, and deleted.
+The map is generated by Sass from the theme's `.scss` at build time, so it is a BUILD OUTPUT and no
+repo-path pattern can match it. `sass.sourcemap: never` is the mechanism that works. A control that
+reads as present while doing nothing is worse than no control — the same reasoning that retired the
+`should_curl` host clause in AUX-036.
+
+#### The deploy gate is a deny-list on purpose
+
+`verify_published_payload.py` runs between the build and the artifact upload, the last point at
+which the bytes that will be served can still be refused. It names the classes that are internal BY
+CONSTRUCTION and says nothing about the rest.
+
+The first design allow-listed extensions gathered from the working tree. Measured against two real
+builds, that list was missing `.map`, `.xml`, `.ico` and `.webmanifest`, which exist only in the
+built site — as a deploy gate it would have refused every correct build. An allow-list fails toward
+"block everything new"; a deny-list fails toward "let something new through". Wired into the deploy
+path, the second failure is recoverable and the first is an outage.
+
+Proven non-vacuous on real artifacts: 223 findings and exit 1 against a build without the
+exclusions, clean and exit 0 against a build with them.
+
+#### Retiring 133 checks without losing their second job
+
+`test_methodology_notes_rendering.py` (61) and `test_public_method_health_presentation.py` (72)
+existed to render the removed table. The guarantees that OUTLIVE it were moved into
+`test_public_evidence_projection.py` FIRST, in the same change that retired them: the inert Liquid
+`blank` idiom, and a raw block reason never being emitted. `test_method_health_append_delta.py`
+section [12] went with the table and the retirement is recorded in that file rather than deleted
+silently. Manifest 109 → 108 entries, 6,148 → 6,045 declared checks, and nothing parked in
+`[stale]`, which the runner's own tests pin EMPTY.
+
+#### A publicly reachable token form, found while scanning
+
+`/vault/` is a browser-based editor that describes itself as "Not public-facing" and asks for a
+GitHub token with contents write access to this repository. It stores nothing server-side, so no
+credential was exposed, but it was served at HTTP 200, listed in the sitemap, and covered by no
+robots rule -- `robots.txt` disallows only `/norobots/`. The page is functional and was NOT removed;
+`sitemap: false` and a `noindex` now keep it out of indexes (sitemap 1,451 -> 1,450, the page still
+served). Whether a repository-write-token form should be reachable on the public domain at all is an
+owner decision, recorded here rather than taken.
+
+#### The guarantee that genuinely needed rehoming
+
+Retiring the method-health presentation suite did drop one live guarantee, and the first reading of
+it was wrong. The surviving per-patch card joins on the CANONICAL TRIPLE -- `m_ver == mon_ver and
+m_build == mon_build` -- so "a sibling build's telemetry cannot appear on another build's card" is a
+property of a surface that still ships, not of the removed table. Nothing asserted it:
+`test_monitoring_status` never mentions the build, and the multibuild suite covers INGESTION
+siblings rather than this render. Group [G] now extracts the real join from the shipped file and
+proves, on rendered output, that a sibling build and a version-only row are both excluded.
+
+Build identity elsewhere was already covered and is cited rather than duplicated:
+`test_patch_page_hierarchy` pins the layout's build assignment,
+`test_powerpoint_build_identity` proves consumers keep same-version different-build records apart
+with a fail-closed check, and `test_patch_index_identity` builds its fixtures on it.
+
+#### Why the deploy gate does not read file contents
+
+It is a path-and-name gate on purpose, and that is a limitation rather than an oversight. Content
+scanning was tried and rejected on measured grounds: three separate content scans during this work
+produced false positives on legitimate material -- a `tools/` pattern matching `/dev-tools/` in the
+sitemap, a "web search" pattern matching a vendor's own release-note prose, and an allow-list check
+failing on a public name that happened to coincide with a de-underscored identifier. In a gate wired
+into the DEPLOY path, each of those is a halted deploy. So content assertions live in the offline
+suite, where a false positive costs a red test instead of an outage, and the gate's own docstring
+says plainly that it does not read contents.
+
+**Reopen only if** a rendered `update-monitoring-method__id` value falls outside the approved family
+set; or `verify_published_payload.py` reports a finding on a correct build, or reports none on a
+build with the exclusions removed; or the methodology page regains a `site.data` reference.
+
+#### What this does NOT fix
+
+The repository itself is public and unchanged; this constrains what the SITE publishes and nothing
+else. The gate is a regression safeguard, not complete protection. And one pre-existing truthfulness
+defect is deliberately out of scope: a product-page status line can claim monitoring is active for
+products whose collection is not running. Two attempted fixes were each measured to produce a
+DIFFERENT false claim — one derived from an editorial field, one from a configuration flag, and
+neither tracks whether collection works. That is AUX-039.
+### AUX-036 — a bot challenge was being read as an empty document
+
+- **Status** Resolved · **Area** Official ingestion · **Severity** High
+- **First seen** 2026-08-18 (last successful Elgato fetch) · **Resolved** 2026-10-18
+
+All four Elgato sources are `enabled: true` and have produced 0 records and 0 evidence rows since
+2026-08-18. The source sits behind Cloudflare, which answers with a "Just a moment..."
+interstitial. That is not a 404 and not an empty section, and Cloudflare serves it at 200 as well
+as at 403 -- so at 200 the ingestion path had no way to tell it from the document asked for. The
+adapter parsed the interstitial, matched no product in it, counted the article a NONMATCH, and the
+run booked itself `no_results`. A source actively refusing us therefore read, on the public page,
+as a source with nothing new to say.
+
+**Two response paths, one guard.** `lib/http.py` has two functions that return a `FetchResult`:
+`fetch_text` (urllib) and `_curl_fetch_text` (the narrow fallback). A content check added to the
+first only fails open on the second, and the curl path is the easier one to miss because curl
+reports exit 0 and the function hard-codes `status=200`. Measured before the fix against the real
+recorded 478-byte body: `_curl_fetch_text` returned it as a 200 while `looks_like_challenge` on
+that exact text already answered True. Both paths now refuse it, and both honour an explicit
+opt-out for the one caller whose job is to characterise a refusal.
+
+**A challenge is its own state, not a 403.** `classify_error` gains `challenged`, checked before
+the status-code branches, because the recovery differs: a 403 is a server refusing a request, while
+a challenge is bot protection that a different transport may not be subject to at all. The state
+also had to be consumed -- `source_health_snapshot.friendly_error` had no challenge case, so a
+challenged source still rendered "Blocked or forbidden by source". It now reads "Automated bot
+check blocked the last check", and an ordinary 403 is unchanged.
+**An inoperative control removed.** `should_curl` read
+`bool(curl_fallback) or ("adobe.com" in _domain(url) and bool(curl_fallback))`. `A or (host and A)`
+is `A`, so the host clause restricted nothing: any source enabling the fallback reached it for any
+host. Dead in practice -- the single config site that names the key sets it false -- but the
+docstring promises "For Adobe URLs only", and a control that reads as present while doing nothing
+is worse than no control.
+
+**Second authority avoided, deliberately.** `probe_photoshop_sources` carried its own challenge
+regex covering captcha, akamai, incapsula and similar. It now defers to
+`lib.http.looks_like_challenge` for the structural markers but keeps its broader net under an
+honest name, because the two have different jobs. The shared function is what raises in
+production, and widening it to match "akamai" would fire on `akamaihd.net` asset URLs on perfectly
+good pages. Photoshop's own blocker is an Akamai edge filter that emits none of Cloudflare's
+markers, so the probe needs the wider net and must never raise on it. Either signal now
+disqualifies an endpoint from the probe's usable list.
+
+**Non-vacuity.** Four mutants, each required to be caught by a named check: dropping the curl
+guard alone, dropping the urllib guard alone, restoring the inoperative host clause, and
+collapsing the public challenge label back into "blocked". The first two prove the halves are
+pinned independently -- removing either leaves the other check passing. One trap surfaced while
+building them: a synthetic module exec'd without registering it in `sys.modules` makes the
+dataclass in `lib/http.py` raise `AttributeError`, which would have been recorded as a mutant
+caught while testing nothing. A crash is not a catch.
+
+**Reopen only if** an `elgato-*` bucket in `patch_ingest_state.json` reports a `last_error_type`
+other than `challenged` while still failing, or `looks_like_challenge` returns True for a body
+carrying no interstitial marker, or a new function in `lib/http.py` returns a `FetchResult`
+without the guard.
+
+**What this does NOT fix.** The challenge still blocks the fetch, so Elgato remains at 0 records.
+This change makes the refusal visible and correctly named; it does not defeat it. Repo-wide,
+roughly twenty hand-rolled `urllib.request.urlopen` response paths in adapters and collectors do
+not route through `lib/http.py` and carry no challenge check at all. That boundary is recorded
+here rather than widened in this change.
+### AUX-043 — every published source asserted a patch match it never checked
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-10-22 · **Resolved** 2026-10-22
+
+`apply_consensus_to_records` projected accepted evidence into the public `accepted_report_sources`
+and `evidence_samples` lists and stamped `"patch_version_matched": True` on every entry, plus
+`"counted": True` on samples. Each source a reader saw therefore claimed a confirmed patch match
+whether or not one was established.
+
+It was latent rather than cosmetic: `_filter_rows` drops unmatched rows (gate 12) and uncounted rows
+(gate 13) only outside candidate mode, so in candidate mode a row the evidence itself marked
+unmatched could be published as matched. It also made any check trusting the projection
+unfalsifiable, which is why AUX-042's gate refuses to read the field.
+
+Both are now derived from the row. In normal mode the projected population is already filtered to
+matched, counted rows, so published pages are byte-identical.
+
+**Reopen only if** a public source entry is observed asserting `patch_version_matched: true` for a
+row whose stored `patch_version_matched` is not true.
+
+### AUX-037 — Elgato platform identity cannot write a record
+
+- **Status** Deferred · **Area** Canonical patch identity · **Severity** Medium
+- **First seen** 2026-10-18
+- **Branch** `wip/elgato-platform-identity` · **WIP commit** `96eb3766` (not merged, not a PR)
+
+**Symptom / gap** Wave Link ships separate Windows and macOS builds under one version number, so
+two real releases collapse onto one record. Work to make the product platform-aware was written
+and is preserved on the branch above. It cannot write a record.
+
+**Why deferred** `permalink_path` for `elgato-wave-link` emits a five-segment path such as
+`/updates/elgato/elgato-wave-link/3-4/windows/`. `permalink_build_segment` returns the fifth
+segment for any five-segment `/updates/...` path, and `elgato-wave-link` is not build-aware, so
+the platform segment is read as an unexpected build segment and `assert_build_identity` raises
+`InconsistentBuildIdentity`. `write_update_record._assert_record_consistent` calls it on both the
+create and the refresh path, so this is a hard crash on every write, not a gap.
+
+Beyond that, the platform registry lacks the fail-closed surface its build-aware counterpart has.
+Platform is absent from the identity triple, so grouping, dedup and consensus still collide across
+platforms -- only the filename and permalink differ. The display label stays bare, so two Wave
+Link pages would both claim "Wave Link 3.4 has N user reports". `require_platform` raises for
+non-aware products where its build-aware sibling is safe unconditionally. And `target_platform` is
+an existing published field in 400+ records with a title-case vocabulary that the new normaliser
+maps to the empty string.
+
+**Current impact** None in production. The source is challenged on every run (AUX-036), so no Wave
+Link record is written and the platform code never executes. There is no yield behind this item
+until the transport is solved, which is the strongest reason not to merge it to tidy a working
+tree.
+
+**What is already correct, and must not be rewritten** The extraction is title-only and refuses to
+invent a platform: verified by execution, a Stream Deck 7.6 article whose body mentions macOS
+yields no platform rather than a wrong one. An earlier iteration labelled that record macOS from
+the incidental mention. Registration is scoped to `elgato-wave-link` alone.
+
+**Revisit trigger** AUX-036's reopen conditions are met (the fetch succeeds), or a second product
+needs platform-split identity. The first task then is a platform-aware identity reason in
+`patch_identity` rather than reusing the build segment, plus a fixture captured from a real
+article -- the only Wave Link fixture in the suite is titled "Elgato Wave Link 2.0 Release Notes"
+and carries no platform token, so it contradicts the premise the registry rests on. Live scan data
+in `patch_ingest_state.json` does show real articles carrying the platform in their titles, so the
+premise is sound and the fixture is simply unrepresentative.
+
+**Work that this item must not block** Everything. No other lane reads platform identity, and the
+transport fix shipped separately.
+
+### AUX-044 — promoting a page to live consensus would have hidden its collection warnings
+
+- **Status** Resolved · **Area** Public truthfulness · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-22
+
+The patch page's collection-health aside — "Collection blocked", "Collection degraded", "Evidence
+freshness needs revalidation" — was gated on the pilot maturity level only. No record is live yet,
+so nothing was visibly wrong, but the moment any record was promoted the warning would have
+disappeared: a page claiming established consensus would have hidden a blocked or stale collector
+at exactly the point it claims the most. The published glossary defines live consensus as actively
+refreshed by a running pipeline, so that would have been a contradiction the site printed itself.
+
+The aside now admits pilot and live. When it fires on a live page it also carries the
+not-live-telemetry clause, because live pages correctly omit the card's not-established hedge. A
+fresh, healthy live page shows no warning — there is nothing to warn about — and instead carries a
+short scope note after the card stating the counts are publicly posted reports, not a measure of
+how many installations are affected. So a live page is never left with no statement of what its
+numbers are.
+
+This is a prerequisite for any maturity producer and changes nothing on today's pages, because no
+record is live.
+
+The card's own hedge block is untouched, deliberately: `test_consensus_sample_honesty` reconstructs
+a pre-fix template by excising exactly that block. The scope note uses its own CSS class for the
+same reason — that reconstruction raises if the card's class survives its stripping.
+
+**Reopen only if** a live page renders without its collection warning while its methods are
+blocked, degraded or its evidence is stale, or a live page renders with neither the
+not-live-telemetry clause nor the scope note.
+
+### AUX-047 — the published-payload gate refused a licence notice and halted every deploy
+
+- **Status** Resolved · **Area** Deployment · **Severity** High
+- **First seen** 2026-10-22 · **Resolved** 2026-10-22
+
+The first Pages run after AUX-038 merged failed at its own payload gate, so the containment it
+shipped never reached the live site. One finding: `systems-monitor/media/ATTRIBUTION.md`, the
+licence record the Systems Monitor build publishes beside its images. AUX-038 denies every `.md`
+in a built site, on the sound reasoning that a surviving `.md` is a file Jekyll copied verbatim.
+The rule was right about engineering notes and wrong about notices, which are published on purpose
+and must not be stripped from the assets they cover.
+
+Licence and credit basenames (`ATTRIBUTION`, `LICENSE`, `LICENCE`, `NOTICE`, `CREDITS`, `COPYING`,
+`.md`, case-insensitive, exact basename) are now permitted; every other `.md` is still refused.
+Pinned both ways: F4 fails when the exemption is reverted, and F5 fails if it widens to a near-miss
+name such as `ATTRIBUTION_DRAFT.md` or an arbitrary note.
+
+**Reusable lesson.** A deny-by-class rule added to a deploy gate is only proven against the build
+that existed when it was written. The Systems Monitor output is assembled by a separate build step,
+so the local verification of AUX-038 never saw it. Verify a new deploy-gate rule against the full
+production build, not the Jekyll output alone.
+
+### AUX-045 — a counted row could not show the evidence for its own version match
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-10-22 · **Resolved** 2026-10-22
+
+Every counted row records `match_basis: exact_version_text`, but only a truncated
+`report_text_excerpt` of the text that was matched. Reddit DaVinci rows are cut at 280 characters
+and 261 of 319 sit at the cap, so the claim could not be checked after the fact.
+
+That stopped being academic during the maturity audit. Fourteen DaVinci URLs are counted against two
+versions each, from an identical retained prefix — for example one post counted against both 20 and
+20.3.2, whose excerpt contains only "20". It looked like a false attribution and was first reported
+as one; that was withdrawn, because the second version can appear past the cut, in which case both
+attributions were correct when collected. The honest status was "unanswerable", and the cause was
+that the row did not keep its own evidence.
+
+`exact_version_match_span` now returns the offsets of the occurrence the matcher ACCEPTED, and
+`exact_version_match` is a view of it, so there is still one predicate. `match_provenance` turns that
+span into `matched_text`, `matched_field` and a `matched_context` window of 80 characters either
+side. Nothing searches the text a second time: a second search could land on a different occurrence
+— the first textual hit of a version string is often one the matcher REJECTED, such as a
+`dev20.3.2` branch name.
+
+DaVinci retains provenance from this change on. The three fields are optional and appended last to
+`EVIDENCE_FIELDS`, and the normaliser drops empty optional fields, so no stored row gains or reorders
+a key. A new row carrying them is accepted by the real `collector_ownership.validate_evidence` gate,
+verified directly rather than inferred from a dry run.
+
+Not done here, deliberately: other collectors adopting the provenance, and any correction of the
+stored DaVinci rows. The fourteen remain an audit population; this makes the next ones auditable.
+
+**Reopen only if** a counted row written after this change carries `match_basis: exact_version_text`
+without a `matched_text` that appears in its `matched_context`.
+
+### AUX-046 — four Elgato products had no records because the HTML pages challenge the runner
+
+- **Status** Resolved · **Area** Official ingestion · **Severity** High
+- **First seen** 2026-08-18 · **Resolved** 2026-10-22
+
+Official ingestion for Stream Deck, Wave Link, Camera Hub and 4K Capture Utility had failed on every
+run since 2026-08-18 (`consecutive_failures` 217/217/137/93 when last measured), and the site held
+**zero** Elgato records. A read-only probe from the Actions runner, sending production's own
+User-Agent and Accept header, settled why: the HTML section pages the old adapter scrapes return
+**403 with `cf-mitigated: challenge`** on all four products, while the Zendesk Help Center JSON API
+returns **200** with JSON on all four — 51, 61, 28 and 20 articles, a version in every title, a body
+on every article. The challenge sits on the pages, not the API. This PR's adapter reads the API.
+
+#### A version claimed by two articles is deferred
+
+Elgato publishes separate macOS and Windows notes for the same version — 10 Wave Link versions and
+1 Camera Hub version, measured live. The adapter as first written kept the newest article and dropped
+the other, so Wave Link 3.4 would have published as "Elgato Wave Link 3.4 (macOS) Release Notes": the
+macOS notes presented as the notes for 3.4, to Windows users included, as one of the first Elgato
+pages the site ever showed. A record holds one `official_patch_notes_body`, so it cannot present
+both platforms' notes each attributed to its own platform, and choosing either misstates the other.
+Such a version now produces no record and is counted (`versions_deferred`, `articles_deferred`). The
+same article listed twice is deduplicated by id first, so a paginator overlap does not masquerade as
+ambiguity.
+
+Measured against the live API: 138 versions publishable (Stream Deck 51, Wave Link 41, Camera Hub
+26, 4K Capture 20), 11 deferred. Single-platform versions keep their "(Windows)" or "(macOS)" marker
+because they are genuinely single-platform — Windows ran 3.2.x while macOS ran 2.0.x.
+
+**Not done here:** publishing the 11 deferred versions, which needs a record able to hold separately
+attributed platform notes.
+
+**Reopen only if** an Elgato record is published whose title names one platform while another
+platform's article exists for the same version, or the API begins returning a challenge to the runner.
 
 ### AUX-039 — the site claimed to be monitoring 29 products it was not monitoring
 

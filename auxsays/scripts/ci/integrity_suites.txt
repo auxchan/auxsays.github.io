@@ -39,7 +39,7 @@
 # --- the CI runner is policy, so it is tested like production code ---------------
 auxsays/scripts/tests/test_acrobat_vendor_authority.py = 49
 auxsays/scripts/tests/test_audit_consensus_evidence.py = 18
-auxsays/scripts/tests/test_automation_writeback.py = 134
+auxsays/scripts/tests/test_automation_writeback.py = 152
 # A stored evidence row may not disappear, and may stop being accepted only by an audited in-place
 # withdrawal. Every in-tree gate compares the records against the SAME store a purge rewrote, so a
 # coherent 98% DaVinci deletion passed QA, the audit and this whole manifest, and the real writeback
@@ -48,6 +48,15 @@ auxsays/scripts/tests/test_automation_writeback.py = 134
 # per event, and pins no count of the live store.
 auxsays/scripts/tests/test_evidence_loss_guard.py = 80
 auxsays/scripts/tests/test_ci_integrity_runner.py = 39
+
+# A published theme may not contradict the reporter. `issue_theme` is printed on the patch page as
+# "Current reports mention ...", and it was produced by a first-match substring scan: a disk label
+# "Cache & Render" published "export/render failure", and "There is no crash at all after the
+# update" published "application crash or hang". `platform` was an ordered membership test, so the
+# UI noun in "windows and menus freeze" published `platform: windows`, as did an UNFILLED template
+# reading "[Windows 11 Pro 24H2 / macOS version]". Frozen fixtures, because this manifest compares
+# the reported total to the count below in both directions and a walk of the live store would drift.
+auxsays/scripts/tests/test_evidence_classification.py = 58
 
 # The merge authority. AUX-013 was not a missing rule, it was a rule with nothing behind it: PR #163
 # merged nineteen seconds after its own ci-integrity run concluded `failure`, because the status read
@@ -104,11 +113,28 @@ auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
 # been searched once. Wiring is asserted from the AST, not by grepping the file, and a budget
 # simulation over the real corpus proves the pre-fix order missed the newest release.
 auxsays/scripts/tests/test_collector_traversal_order.py = 16
+# The deployed dependency set must come from a TRACKED lock, not a deploy-time resolve. Five of
+# seven gems were unconstrained, including the theme every layout inherits from, and no lock was
+# tracked -- so CI re-resolved on every deploy and the live page emitted jekyll-seo-tag 2.9.1
+# while a local build of the same commit emitted 2.9.0. Section [D] EXECUTES the workflow's
+# lock-integrity shell against a lockless checkout and requires a non-zero exit, because a suite
+# that greps a workflow for a guard passes after the guard is deleted.
+auxsays/scripts/tests/test_dependency_reproducibility.py = 21
 auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
-auxsays/scripts/tests/test_method_health_append_delta.py = 58
+auxsays/scripts/tests/test_method_health_append_delta.py = 55
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
 auxsays/scripts/tests/test_consensus_sample_honesty.py = 88
+
+# The live-consensus precondition, which had never been satisfiable. The gate demanded front-matter
+# `consensus_evidence` / `structured_evidence` / `evidence_objects`; 0 of 1316 records carried any of
+# them, no template read them, and all three are ABSENT from the consensus writer's WRITEABLE_FIELDS
+# allow-list, whose else-branch raises. So the one sanctioned way to satisfy it crashed the writer --
+# which is why `consensus_live` had many consumers and no producer. The replacement validates the
+# published projection against the authoritative counted-evidence population instead, and
+# deliberately never reads `accepted_report_sources[*].patch_version_matched`, which the writer
+# stamps as a hardcoded True on every entry and which would make the check unfalsifiable.
+auxsays/scripts/tests/test_consensus_live_gate.py = 61
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
@@ -129,7 +155,7 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 180
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
-auxsays/scripts/tests/test_patch_page_hierarchy.py = 128
+auxsays/scripts/tests/test_patch_page_hierarchy.py = 144
 # My Patch Watchlist: the visitor's own product list, local to their browser. Renders the shipped
 # patch layout to prove the control binds `page.product_id` (a patch page watches the PRODUCT, not
 # that one build), parses the other surfaces for their accessible state and their two distinct
@@ -151,6 +177,13 @@ auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
 auxsays/scripts/tests/test_premiere_editorial_protection.py = 36
 auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
+
+# Published evidence fields must be EARNED from their row. `patch_version_matched` and the samples'
+# `counted` were hardcoded True on every public source entry, so each one asserted a confirmed patch
+# match regardless -- and `_filter_rows` skips gates 12/13 in candidate mode, so a row the evidence
+# marked unmatched could be published as matched. In normal mode the projected population is already
+# filtered, so today's pages are byte-identical; Part B pins that.
+auxsays/scripts/tests/test_public_projection_earned_fields.py = 9
 
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit
@@ -187,6 +220,13 @@ auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
+# A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
+# DaVinci rows cut at 280 chars, 261 of 319 at the cap), so an exact_version_text claim could not be
+# audited: two rows from one post shared a truncated prefix and nothing showed which occurrence had
+# matched. The matcher now reports the span it ACCEPTED and the row keeps it -- never re-searched,
+# since a second search can land on a different occurrence. Forward-only; no stored row changes.
+auxsays/scripts/tests/test_matched_span_retention.py = 20
+
 # --- writer-lane governance and the methodology Notes render -----------------------
 # Both were added with the writer-queue repair, and both are proven non-vacuous by MEASUREMENT
 # rather than assertion. Against the pre-fix tree (HEAD workflows, no reaper, patch-ingest still
@@ -206,7 +246,6 @@ auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 # guards. It now asserts against `run:` scalars with comments stripped. The sabotage that used to
 # pass now fails 10 checks.
 auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
-auxsays/scripts/tests/test_methodology_notes_rendering.py = 61
 # The reaper's shell, EXECUTED against a scripted fake `gh` rather than grepped -- extracted
 # from the workflow YAML so it cannot drift from what CI runs. The sabotage that the
 # structural suite originally missed fails 6 checks here. Needs `bash`, which ubuntu-latest
@@ -227,6 +266,13 @@ auxsays/scripts/tests/test_davinci_creative_cow_source.py = 23
 auxsays/scripts/tests/test_davinci_reddit_source.py = 27
 auxsays/scripts/tests/test_elgato_help_center_adapter.py = 111
 auxsays/scripts/tests/test_failsoft_collection.py = 25
+# All four Elgato sources are enabled and have produced 0 records since 2026-08-18. Cloudflare
+# serves help.elgato.com a Just-a-moment interstitial, and it serves that at 200 as well as 403 --
+# so the adapter parsed it, matched no product, and the run booked itself no_results. A source
+# actively refusing us read as a source with nothing new to say. lib/http.py has TWO functions
+# returning a FetchResult and the guard landed on one, so this suite drives BOTH and the mutants
+# revert each half separately -- reverting both together once let one half's test cover for both.
+auxsays/scripts/tests/test_http_challenge_detection.py = 32
 auxsays/scripts/tests/test_http_credential_scope.py = 55
 auxsays/scripts/tests/test_microsoft_learn_qna_source.py = 28
 auxsays/scripts/tests/test_microsoft_teams_community.py = 85
@@ -242,7 +288,7 @@ auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
 # that tracks configuration rather than outcome, so section [A] pins fail-closed directly:
 # `healthy` is checked last and must be earned.
 auxsays/scripts/tests/test_monitoring_truthfulness.py = 51
-auxsays/scripts/tests/test_monitoring_status.py = 44
+auxsays/scripts/tests/test_monitoring_status.py = 42
 auxsays/scripts/tests/test_orchestration_production_adoption.py = 75
 auxsays/scripts/tests/test_orchestration_r1.py = 55
 # Evaluates the cascade over the REAL rendered patch layout under both prefers-color-scheme values,
@@ -258,6 +304,13 @@ auxsays/scripts/tests/test_patch_heading_contrast.py = 111
 # by fixtures, never by the 66/153 corpus split -- scheduled collectors own those numbers.
 auxsays/scripts/tests/test_patch_decision_hierarchy.py = 32
 auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
+
+# Elgato official ingestion over the Zendesk Help Center JSON API. The HTML section pages return 403
+# with cf-mitigated: challenge to the Actions runner on all four products; the API returns 200 JSON
+# with a version in every title. Offline: fetch_text is substituted. A version claimed by two distinct
+# articles (Elgato's separate macOS and Windows notes) is DEFERRED rather than resolved by keeping one,
+# because a record holds one notes body and choosing either half misstates the other platform.
+auxsays/scripts/tests/test_zendesk_help_center_adapter.py = 60
 # Presence guards. 91 `x != blank` / `x == blank` tests across eight layouts and includes were
 # ALL inert: `blank` needs ActiveSupport's `blank?` and Jekyll does not load it, so every such
 # guard passed unconditionally and every `== blank` branch was dead. That shipped 1,218 empty
@@ -270,11 +323,17 @@ auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
 # an element taller than ~12 viewports can never satisfy, so the Adobe company page's 410-row
 # history stayed invisible on desktop permanently.
 auxsays/scripts/tests/test_template_presence_guards.py = 49
-auxsays/scripts/tests/test_patch_ingest_record_limit.py = 78
+auxsays/scripts/tests/test_patch_ingest_record_limit.py = 79
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
-auxsays/scripts/tests/test_public_method_health_presentation.py = 72
+# The public projection of how evidence was gathered. The methodology page rendered the whole
+# method-health store (1,554,238 bytes; reddit_search 1,064 times) and the per-patch card
+# DEFAULTED its family label to the de-underscored method_id, so 16 unmapped ids of 23 printed
+# their internal token on hundreds of pages. Replaces test_methodology_notes_rendering.py and
+# test_public_method_health_presentation.py, carrying forward the guarantees that outlived the
+# table: the inert `blank` idiom, and a raw block reason never being emitted.
+auxsays/scripts/tests/test_public_evidence_projection.py = 39
 auxsays/scripts/tests/test_reddit_source.py = 8
 auxsays/scripts/tests/test_revalidate_consensus_evidence.py = 49
 auxsays/scripts/tests/test_route_integrity.py = 9

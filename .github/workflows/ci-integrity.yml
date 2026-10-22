@@ -131,10 +131,16 @@ jobs:
         run: python auxsays/scripts/ci/run_integrity_tests.py --suite all
 
       # Read-only data gates, proven not to write: a full-tree hash before/after all three is
-      # unchanged. `qa_patch_records.py` is deliberately NOT here -- it writes
-      # auxsays/_data/qa_status.json and has no read-only mode, and running a writer under a
-      # git-diff guard that cannot see a gitignored file would be a false assurance. Its invariants
-      # are covered by test_qa_patch_records.py in the blocking category.
+      # unchanged. `qa_patch_records.py` used to be excluded here for exactly one reason -- it wrote
+      # auxsays/_data/qa_status.json and had no read-only mode, and running a writer under a
+      # git-diff guard that cannot see a gitignored file would be a false assurance. It now has
+      # `--read-only`, which suppresses that single write statement and changes nothing else, so the
+      # gate itself runs below against this tree. That matters more than tidiness: the gate is what
+      # every writer lane and the Pages deploy block on, and a defect in it could previously only be
+      # discovered by the scheduled run that it broke.
+      #
+      # The record-level invariants remain covered by test_qa_patch_records.py in the blocking
+      # category, and the live-consensus precondition by test_consensus_live_gate.py.
       #
       # That last sentence was true of the RECORD-level predicates and false of the ones that read
       # the shipped layout, and the gap was not theoretical: AUX-030 changed aux-update.html, every
@@ -145,6 +151,12 @@ jobs:
       # above holds. Anything added to that gate which reads a template must be added there too.
       - name: Audit consensus evidence
         run: python auxsays/scripts/audit_consensus_evidence.py
+
+      # The gate the writer lanes and the Pages deploy both block on, executed against this tree
+      # rather than mirrored by a re-implementation. Publication mode is the stricter of the two and
+      # is what pages.yml runs, so that is what is checked here.
+      - name: Validate generated records (read-only)
+        run: python auxsays/scripts/qa_patch_records.py --read-only --publish-strict
 
       - name: Validate ingestion sources
         run: python auxsays/scripts/validate_ingestion_sources.py

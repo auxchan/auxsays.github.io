@@ -72,11 +72,22 @@ EVIDENCE_FIELDS = (
     # patch it was accepted for. Optional (and empty) for every product without a build
     # contract -- see lib.patch_identity.BUILD_AWARE_PRODUCTS.
     "target_build",
+    # The occurrence that satisfied the version match, which field it came from, and a bounded window
+    # around it. Retained because `report_text_excerpt` is truncated and could not substantiate its
+    # own row's match after the fact. Optional and appended LAST: rows written before this existed
+    # carry none of the three, and normalize_evidence_row drops empty optional fields, so no stored
+    # row gains, loses or reorders a key.
+    "matched_text",
+    "matched_field",
+    "matched_context",
 )
 
 OPTIONAL_EVIDENCE_FIELDS = {
     "archive_url",
     "target_build",
+    "matched_text",
+    "matched_field",
+    "matched_context",
     "source_date",
     "source_date_resolved",
     "target_release_date",
@@ -734,7 +745,22 @@ _VERSION_PREFIX_RE = re.compile(r"(?:^|[^A-Za-z0-9.])(?:v|ver|version|build)\.?$
 
 
 def exact_version_match(text: str, version: str, aliases: Iterable[str] = ()) -> tuple[bool, str, str]:
+    """(matched, matched_version, match_basis) -- `exact_version_match_span` without the offsets."""
+    matched, candidate, basis, _start, _end = exact_version_match_span(text, version, aliases)
+    return matched, candidate, basis
+
+
+def exact_version_match_span(
+        text: str, version: str, aliases: Iterable[str] = (),
+) -> tuple[bool, str, str, int, int]:
     """Does ``text`` name exactly this version (or one of its product-local spellings)?
+
+    Returns ``(matched, matched_version, match_basis, start, end)``, where ``start:end`` is the
+    occurrence the matcher ACCEPTED. The offsets exist so a collector can retain the evidence for
+    its own match. Stored excerpts are truncated (Reddit DaVinci rows are cut at 280 characters, 261
+    of 319 at the cap), so an `exact_version_text` claim could not be audited after the fact: two rows
+    from one post shared a truncated prefix, and nothing on disk showed which occurrence had matched.
+    This is the one predicate; `exact_version_match` is a view of it, so the two cannot disagree.
 
     BOUNDARIES. The trailing guard has to reject a longer version -- "26.001.21745.1" is a
     different build, and "26.001.217450" is a different number -- while accepting the sentence that
@@ -762,9 +788,43 @@ def exact_version_match(text: str, version: str, aliases: Iterable[str] = ()) ->
                 pass                                    # v / ver / version / build, written against
             elif before[-1].isdigit() or before[-1] == "." or before[-1].isalpha():
                 continue                                # inside a longer number, or another word
-            return True, candidate, ("exact_version_text" if candidate == version
-                                     else "exact_version_alias")
-    return False, "", ""
+            return (True, candidate,
+                    "exact_version_text" if candidate == version else "exact_version_alias",
+                    hit.start(), hit.end())
+    return False, "", "", -1, -1
+
+
+#: Characters of surrounding text kept either side of an accepted version match. An audit aid, not a
+#: copy of the post: enough to show the sentence the version appeared in, short enough that the
+#: evidence store does not grow into an archive of forum threads.
+MATCH_CONTEXT_CHARS = 80
+
+
+def match_provenance(parts: list[tuple[str, str]], start: int, end: int) -> dict[str, str]:
+    """Where an accepted match came from, for a text built as ``" ".join(value for _name, value)``.
+
+    ``parts`` is the ordered (field_name, value) list the caller joined; ``start:end`` is the span
+    `exact_version_match_span` accepted in that joined text. Nothing is searched again here -- a
+    second search could land on a DIFFERENT occurrence than the one that established the match.
+    """
+    if start < 0 or end <= start:
+        return {}
+    joined = " ".join(value for _name, value in parts)
+    field = ""
+    offset = 0
+    for name, value in parts:
+        if offset <= start < offset + len(value):
+            field = name
+            break
+        offset += len(value) + 1
+    lo = max(0, start - MATCH_CONTEXT_CHARS)
+    hi = min(len(joined), end + MATCH_CONTEXT_CHARS)
+    context = " ".join(joined[lo:hi].split())
+    return {
+        "matched_text": joined[start:end],
+        "matched_context": ("..." if lo > 0 else "") + context + ("..." if hi < len(joined) else ""),
+        "matched_field": field,
+    }
 
 
 def source_url_is_specific(url: str) -> bool:
@@ -845,6 +905,9 @@ def make_evidence_row(
     severity: str,
     sentiment: str,
     row_id: str | None = None,
+    matched_text: str = "",
+    matched_field: str = "",
+    matched_context: str = "",
 ) -> dict[str, Any]:
     return normalize_evidence_row({
         "id": row_id or f"{product_id}-{slug(update_version)}-{slug(source_type)}-{slug(source_url)}",
@@ -876,6 +939,9 @@ def make_evidence_row(
         "severity": severity,
         "sentiment": sentiment,
         "source_weight": 1,
+        "matched_text": matched_text,
+        "matched_field": matched_field,
+        "matched_context": matched_context,
     })
 
 

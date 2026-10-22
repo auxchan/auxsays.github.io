@@ -17,8 +17,8 @@ update_version: File View History
 update_logo_text: FIG
 update_published_at: '2025-02-24T00:00:00.000Z'
 update_last_checked: '2026-08-18T02:59:25Z'
-source_last_checked: '2026-09-17T19:17:26Z'
-official_body_last_checked: '2026-09-17T19:17:26Z'
+source_last_checked: '2026-10-22T19:44:59Z'
+official_body_last_checked: '2026-10-22T19:44:59Z'
 record_last_updated: '2026-08-18T02:59:25Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-17T19:17:26Z'
+  url: https://www.figma.com/release-notes/?title=File%20View%20History
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-22T19:44:59Z'
   url: https://www.figma.com/release-notes/?title=File%20View%20History
   status: captured-from-rss-feed
   body_captured: true

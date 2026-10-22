@@ -56763,7 +56763,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x6lczv-solved-davinci-resolve-21-unsupported-gpu
   product_id: blackmagic-davinci
   update_version: '21'
@@ -56812,7 +56811,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6042551-bugcheck-after-installing-kb5127648-oc
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -56842,7 +56840,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9711'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6042685-windows-11-mdm-win32appinventory-csp-g
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -56873,7 +56870,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9711'
-
 - id: blackmagic-davinci-19-1-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ws1ch3-please-help-recreate-a-look-i-have-made-b
   product_id: blackmagic-davinci
   update_version: 19.1.3
@@ -56897,4 +56893,337 @@ evidence:
   platform: windows
   severity: medium
   sentiment: negative
+  source_weight: 1
+- id: acrobat-26-002-22031-adobe-community-bug-report-https-community-adobe-com-questions-9-e3-83-91-e3-82-b9-e3-83-af-e3-83-bc-e3-83-89-e3-82-92-e8-a
+  product_id: adobe-acrobat-pro
+  update_version: 26.002.22031
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/%E3%83%91%E3%82%B9%E3%83%AF%E3%83%BC%E3%83%89%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B%E6%99%82%E3%81%AB%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5%E3%81%99%E3%82%8B-1652001
+  parent_title: パスワードを設定する時にクラッシュする
+  report_title: パスワードを設定する時にクラッシュする
+  report_text_excerpt: パスワードを設定する時にクラッシュする 以下、バグのようです。早めの修正をお願いいたします。 PDFファイルを開きます。 ツールバーの「鍵」ツールを選択し、表示されるドロップダウンメニューから「パスワードで暗号化」を選びます。ダイアログが開くので、「はい」をクリックします。 「文書を開く時にパスワードが必要」のチェックをオンにして、パスワードを設定します。 ここで奇妙な現象が発生します。 「OK」をクリックし、確認のためにパスワードを再入力します。 アプリケーションがクラッシュします。...
+  captured_at: '2026-10-21T21:40:09Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-10-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2026.002.22031
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044321/the-audio-portion-of-a-teams-meeting-from-the-atte
+  parent_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_title: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this - Microsoft Q&A
+  report_text_excerpt: the audio portion of a teams meeting from the attendees is cackling and unintelligable, how can I fix this I cannot understand any audio from callers on teams meeting as there is constant crackling.... I have deleted and re downloaded the app, I have checked the audio settings...
+  captured_at: '2026-10-21T22:46:05Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044815-powershell-5-1-authorizationmanager-ch
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044815/powershell-5-1-authorizationmanager-check-failed-b
+  parent_title: PowerShell 5.1 AuthorizationManager check failed before script execution inside a restricted Codex environment - Microsoft Q&A
+  report_title: PowerShell 5.1 AuthorizationManager check failed before script execution inside a restricted Codex environment - Microsoft Q&A
+  report_text_excerpt: PowerShell 5.1 AuthorizationManager check failed before script execution inside a restricted Codex environment - Microsoft Q&A Specific local PowerShell script invocations inside a restricted Codex environment fail before the script body starts. Basic PowerShell commands still...
+  captured_at: '2026-10-22T13:03:34Z'
+  source_date: '2026-10-21'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26300.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6045734-windows-aik-certificate-enrollment-fai
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6045734/windows-aik-certificate-enrollment-fails-with-http
+  parent_title: Windows AIK Certificate Enrollment Fails with HTTP 404 on ASUS ROG Strix G16 G614FR (Microsoft Pluton TPM) - Microsoft Q&A
+  report_title: Windows AIK Certificate Enrollment Fails with HTTP 404 on ASUS ROG Strix G16 G614FR (Microsoft Pluton TPM) - Microsoft Q&A
+  report_text_excerpt: Windows AIK Certificate Enrollment Fails with HTTP 404 on ASUS ROG Strix G16 G614FR (Microsoft Pluton TPM) - Microsoft Q&A Hello, I am experiencing an issue with Windows AIK certificate enrollment on my ASUS ROG Strix G16 G614FR laptop. The missing AIK certificate prevents...
+  captured_at: '2026-10-22T13:03:34Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6043315-windows-spotlight-ne-t-l-charge-plus-d
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6043315/windows-spotlight-ne-t-l-charge-plus-d-images-sur
+  parent_title: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A
+  report_title: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A
+  report_text_excerpt: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A Hello Microsoft Support Team, I would like to report a persistent issue with Windows Spotlight on my Windows 11 computer. 1. Problem Description Windows Spotlight (“Windows Spotlight” / “À la une de Windows”)...
+  captured_at: '2026-10-22T13:03:34Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044760-windows-11-24h2-audio-issue-after-wind
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044760/windows-11-24h2-audio-issue-after-windows-update
+  parent_title: Windows 11 24H2 audio issue after Windows update - Microsoft Q&A
+  report_title: Windows 11 24H2 audio issue after Windows update - Microsoft Q&A
+  report_text_excerpt: Windows 11 24H2 audio issue after Windows update - Microsoft Q&A I would like to ask for your assistance regarding a Windows 11 issue that is currently affecting approximately workstations in our organization. Environment HP EliteDesk 705 G5 AMD Radeon R7 430 graphics adapter...
+  captured_at: '2026-10-22T13:03:52Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.9711'
+- id: blackmagic-davinci-21-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x6vstv-v2111-path-modifier-control-display-bug
+  product_id: blackmagic-davinci
+  update_version: 21.1.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x6vstv/v2111_path_modifier_control_display_bug/
+  parent_title: V.21.1.1 Path Modifier Control Display Bug?
+  report_title: V.21.1.1 Path Modifier Control Display Bug?
+  report_text_excerpt: V.21.1.1 Path Modifier Control Display Bug? Amateur here. I was struggling trying to animate an object along a published polgon path. Even following step by step Youtube tutorials that worked for me in the past were not showing controls after I creating a path modifier for the...
+  captured_at: '2026-10-22T17:50:43Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.1.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  matched_text: 21.1.1
+  matched_field: parent_title
+  matched_context: V.21.1.1 Path Modifier Control Display Bug? V.21.1.1 Path Modifier Control Display Bug?...
+- id: obs-studio-32-2-2-github-issue-14067
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14067
+  parent_title: Duplicate source not working
+  report_title: Duplicate source not working
+  report_text_excerpt: '### Operating System Info Windows 11 ### OBS Studio Version 32.2.2 ### OBS Studio Log URL https://obsproject.com/logs/ISgOVJBu8MHUgw5b ### Expected Behavior The browser source not move ### Current Behavior The browser source are moving ### Steps to R'
+  captured_at: '2026-10-22T18:40:57Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
   source_weight: 1

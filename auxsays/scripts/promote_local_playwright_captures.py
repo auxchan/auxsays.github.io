@@ -563,7 +563,11 @@ def evaluate_candidate(candidate: dict[str, Any], record_by_version: dict[str, A
     version_match = resolve_version_match(report_text, candidate, record_by_version, release_windows)
     version = version_match.update_version
     matched = not version_match.rejection_reason and bool(version_match.update_version)
-    theme, workflow_area, platform, severity, sentiment = premiere.classify(report_text)
+    # Title and body separately: the concatenated blob remains the version-matching input above,
+    # but it cannot express "the reporter's own headline outweighs a passing body mention".
+    theme, workflow_area, platform, severity, sentiment = premiere.classify(
+        str(candidate.get("report_title") or candidate.get("parent_title") or ""),
+        str(candidate.get("report_text") or ""))
 
     row = make_evidence_row(
         product_id=DEFAULT_PRODUCT_ID,

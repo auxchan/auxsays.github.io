@@ -17,9 +17,9 @@ update_version: 21.1.1
 update_logo_text: DAV
 update_published_at: '2026-10-02T00:00:00Z'
 update_last_checked: '2026-10-02T01:12:47Z'
-source_last_checked: '2026-10-21T07:26:26Z'
-official_body_last_checked: '2026-10-21T07:26:26Z'
-record_last_updated: '2026-10-11T23:34:11.870382Z'
+source_last_checked: '2026-10-22T19:45:12Z'
+official_body_last_checked: '2026-10-22T19:45:12Z'
+record_last_updated: '2026-10-22T18:49:51.736853Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,22 +27,23 @@ update_status: current
 update_feed_title: DaVinci Resolve 21.1.1
 update_detail_title: DaVinci Resolve 21.1.1
 update_consensus_label: Negative
-update_report_count: 2
+update_report_count: 3
 update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 21.1.1 has 2 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 21.1.1 has 3 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.1.1 Update in its official support downloads feed.
 release_summary: This software update improves trim editor support for audio clips and multiple edit points, adds USAC support
   for Windows 11 computers and provides control over clips with multiple Fusion effects. This update also improves connection
   stability in multi-user projects and provides general performance and stability improvements. This version requires a DaVinci
   Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
-consensus_report: '2 user reports found for DaVinci Resolve 21.1.1. Current reports mention performance slowdowns and startup
-  or application crashes. Too few reports for a firm verdict yet. Sources represented: r/davinciresolve.'
+consensus_report: '3 user reports found for DaVinci Resolve 21.1.1. Current reports mention performance slowdowns and startup
+  or application crashes. Current reports are Reddit-heavy, so production users should test before updating. Sources represented:
+  r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 2
-evidence_last_checked: '2026-10-11T22:37:32Z'
+confirmed_patch_specific_report_count: 3
+evidence_last_checked: '2026-10-22T17:50:43Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -64,6 +65,9 @@ status_events:
 - at: '2026-10-11T23:34:11.870382Z'
   label: User reports found
   note: User report count updated to 2.
+- at: '2026-10-22T18:49:51.736853Z'
+  label: User reports found
+  note: User report count updated to 3.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -87,27 +91,27 @@ official_sources:
   trust_level: official
   extraction_status: version_metadata_captured
 official_source_attempts:
-- at: '2026-10-20T07:33:51Z'
+- at: '2026-10-21T19:42:17Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-- at: '2026-10-20T14:07:13Z'
+- at: '2026-10-22T00:27:35Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-- at: '2026-10-20T19:34:15Z'
+- at: '2026-10-22T07:30:12Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-- at: '2026-10-21T00:20:51Z'
+- at: '2026-10-22T14:43:17Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-- at: '2026-10-21T07:26:26Z'
+- at: '2026-10-22T19:45:12Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
@@ -135,9 +139,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 21.1.1 has 2 user reports found. Small sample size. Current reports mention
+update_consensus_summary: 'WAIT: DaVinci Resolve 21.1.1 has 3 user reports found. Small sample size. Current reports mention
   performance slowdowns and startup or application crashes. Production editors should test on copied projects before moving
-  active work to this version. Too few reports for a firm verdict yet.'
+  active work to this version. Current reports are Reddit-heavy, so production users should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1wygy6n/davinci_resolve_2111_timeline_bug/
@@ -155,6 +159,14 @@ evidence_samples:
   patch_version_matched: true
   issue: startup or application crashes in application stability
   outcome: high
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x6vstv/v2111_path_modifier_control_display_bug/
+  source_title: V.21.1.1 Path Modifier Control Display Bug?
+  counted: true
+  version_matched: 21.1.1
+  patch_version_matched: true
+  issue: general workflow reports
+  outcome: medium
 evidence_sample_visible_limit: 5
 accepted_report_sources:
 - source_name: r/davinciresolve
@@ -175,8 +187,17 @@ accepted_report_sources:
   patch_version_matched: true
   issue: startup or application crashes in application stability
   workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x6vstv/v2111_path_modifier_control_display_bug/
+  source_title: V.21.1.1 Path Modifier Control Display Bug?
+  source_date: '2026-10-15'
+  version_matched: 21.1.1
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
 evidence_source_limitations:
-- Too few reports for a firm verdict yet.
+- Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
 update_decision_body: Current reports mention performance slowdowns and startup or application crashes. Production editors
