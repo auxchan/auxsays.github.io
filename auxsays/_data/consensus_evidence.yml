@@ -56763,7 +56763,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x6lczv-solved-davinci-resolve-21-unsupported-gpu
   product_id: blackmagic-davinci
   update_version: '21'
@@ -56812,7 +56811,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6042551-bugcheck-after-installing-kb5127648-oc
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -56842,7 +56840,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9711'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6042685-windows-11-mdm-win32appinventory-csp-g
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -56873,7 +56870,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9711'
-
 - id: blackmagic-davinci-19-1-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ws1ch3-please-help-recreate-a-look-i-have-made-b
   product_id: blackmagic-davinci
   update_version: 19.1.3
@@ -56898,7 +56894,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-26-002-22031-adobe-community-bug-report-https-community-adobe-com-questions-9-e3-83-91-e3-82-b9-e3-83-af-e3-83-bc-e3-83-89-e3-82-92-e8-a
   product_id: adobe-acrobat-pro
   update_version: 26.002.22031
@@ -56925,7 +56920,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -56950,7 +56944,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -56975,7 +56968,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -57000,7 +56992,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -57025,7 +57016,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -57050,7 +57040,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044321-the-audio-portion-of-a-teams-meeting-f
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -57075,7 +57064,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044815-powershell-5-1-authorizationmanager-ch
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -57162,7 +57150,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9711'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044760-windows-11-24h2-audio-issue-after-wind
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -57192,3 +57179,51 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.9711'
+- id: blackmagic-davinci-21-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x6vstv-v2111-path-modifier-control-display-bug
+  product_id: blackmagic-davinci
+  update_version: 21.1.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x6vstv/v2111_path_modifier_control_display_bug/
+  parent_title: V.21.1.1 Path Modifier Control Display Bug?
+  report_title: V.21.1.1 Path Modifier Control Display Bug?
+  report_text_excerpt: V.21.1.1 Path Modifier Control Display Bug? Amateur here. I was struggling trying to animate an object along a published polgon path. Even following step by step Youtube tutorials that worked for me in the past were not showing controls after I creating a path modifier for the...
+  captured_at: '2026-10-22T17:50:43Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.1.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  matched_text: 21.1.1
+  matched_field: parent_title
+  matched_context: V.21.1.1 Path Modifier Control Display Bug? V.21.1.1 Path Modifier Control Display Bug?...
+- id: obs-studio-32-2-2-github-issue-14067
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14067
+  parent_title: Duplicate source not working
+  report_title: Duplicate source not working
+  report_text_excerpt: '### Operating System Info Windows 11 ### OBS Studio Version 32.2.2 ### OBS Studio Log URL https://obsproject.com/logs/ISgOVJBu8MHUgw5b ### Expected Behavior The browser source not move ### Current Behavior The browser source are moving ### Steps to R'
+  captured_at: '2026-10-22T18:40:57Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
