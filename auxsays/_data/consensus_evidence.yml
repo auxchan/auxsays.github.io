@@ -57075,3 +57075,120 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044815-powershell-5-1-authorizationmanager-ch
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044815/powershell-5-1-authorizationmanager-check-failed-b
+  parent_title: PowerShell 5.1 AuthorizationManager check failed before script execution inside a restricted Codex environment - Microsoft Q&A
+  report_title: PowerShell 5.1 AuthorizationManager check failed before script execution inside a restricted Codex environment - Microsoft Q&A
+  report_text_excerpt: PowerShell 5.1 AuthorizationManager check failed before script execution inside a restricted Codex environment - Microsoft Q&A Specific local PowerShell script invocations inside a restricted Codex environment fail before the script body starts. Basic PowerShell commands still...
+  captured_at: '2026-10-22T13:03:34Z'
+  source_date: '2026-10-21'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26300.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6045734-windows-aik-certificate-enrollment-fai
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6045734/windows-aik-certificate-enrollment-fails-with-http
+  parent_title: Windows AIK Certificate Enrollment Fails with HTTP 404 on ASUS ROG Strix G16 G614FR (Microsoft Pluton TPM) - Microsoft Q&A
+  report_title: Windows AIK Certificate Enrollment Fails with HTTP 404 on ASUS ROG Strix G16 G614FR (Microsoft Pluton TPM) - Microsoft Q&A
+  report_text_excerpt: Windows AIK Certificate Enrollment Fails with HTTP 404 on ASUS ROG Strix G16 G614FR (Microsoft Pluton TPM) - Microsoft Q&A Hello, I am experiencing an issue with Windows AIK certificate enrollment on my ASUS ROG Strix G16 G614FR laptop. The missing AIK certificate prevents...
+  captured_at: '2026-10-22T13:03:34Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6043315-windows-spotlight-ne-t-l-charge-plus-d
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6043315/windows-spotlight-ne-t-l-charge-plus-d-images-sur
+  parent_title: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A
+  report_title: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A
+  report_text_excerpt: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A Hello Microsoft Support Team, I would like to report a persistent issue with Windows Spotlight on my Windows 11 computer. 1. Problem Description Windows Spotlight (“Windows Spotlight” / “À la une de Windows”)...
+  captured_at: '2026-10-22T13:03:34Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044760-windows-11-24h2-audio-issue-after-wind
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044760/windows-11-24h2-audio-issue-after-windows-update
+  parent_title: Windows 11 24H2 audio issue after Windows update - Microsoft Q&A
+  report_title: Windows 11 24H2 audio issue after Windows update - Microsoft Q&A
+  report_text_excerpt: Windows 11 24H2 audio issue after Windows update - Microsoft Q&A I would like to ask for your assistance regarding a Windows 11 issue that is currently affecting approximately workstations in our organization. Environment HP EliteDesk 705 G5 AMD Radeon R7 430 graphics adapter...
+  captured_at: '2026-10-22T13:03:52Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.9711'
