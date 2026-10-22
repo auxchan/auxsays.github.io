@@ -3398,7 +3398,7 @@ with a state other than `healthy`.
 #### Corrections before merge
 
 Three defects found in review, all latent — the regenerated projections changed labels only, no
-product's state.
+product's state. (A later fix, below, does move four states: the bot-challenge mapping.)
 
 **A future-dated success read as healthy.** `now - last_success` is negative for a timestamp in the
 future, so it was always inside the window. It now fails closed to `unverified`, as the patch pages'

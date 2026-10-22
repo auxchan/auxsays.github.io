@@ -53,6 +53,19 @@ REPO_COMPANY_PROJECTION = _AUX / "_data" / "monitoring_company_state.yml"
 _GENERATED: dict = {}
 
 
+def repo_snapshot() -> dict:
+    """(mtime, size) of the repository's own projection paths, or None where absent.
+
+    mtime, not a content hash: a generator that rewrites the repo copy with identical bytes still
+    wrote into the repository, and a hash cannot see that.
+    """
+    out = {}
+    for p in (REPO_PRODUCT_PROJECTION, REPO_COMPANY_PROJECTION):
+        st = p.stat() if p.exists() else None
+        out[p] = (st.st_mtime_ns, st.st_size) if st else None
+    return out
+
+
 def generated() -> tuple:
     """Generate both projections ONCE into a private temp dir -> (product_path, company_path).
 
@@ -60,6 +73,9 @@ def generated() -> tuple:
     committed copy that was stale whenever a scheduled lane moved the ingest state.
     """
     if not _GENERATED:
+        # Taken before the FIRST generator run in this process, so G4 can see a write into the
+        # repository made by any run, including this one.
+        _GENERATED["repo_before"] = repo_snapshot()
         td = tempfile.mkdtemp(prefix="monitoring-projection-")
         with io.StringIO() as sink:
             saved, sys.stdout = sys.stdout, sink
@@ -211,8 +227,12 @@ def section_d_vocabulary_is_closed() -> None:
     print("\n[D] the published vocabulary is closed, and the live projection obeys it")
     import yaml
     product_path, company_path = generated()
-    rows = yaml.safe_load(product_path.read_text(encoding="utf-8")) or []
-    crows = yaml.safe_load(company_path.read_text(encoding="utf-8")) or []
+    try:
+        rows = yaml.safe_load(product_path.read_text(encoding="utf-8")) or []
+        crows = yaml.safe_load(company_path.read_text(encoding="utf-8")) or []
+    except Exception as exc:  # noqa: BLE001 -- a failed generation FAILS D1 by name, never crashes
+        rows, crows = [], []
+        print(f"        generation failed: rc={_GENERATED.get('rc')} {exc!r}"[:200])
     check("D1 the product projection is non-empty", len(rows) >= 40, f"{len(rows)} rows")
     outside = sorted({r["state"] for r in rows} - set(proj.PUBLIC_STATES))
     check("D2 every product state is an approved member", not outside, f"outside: {outside}")
@@ -386,34 +406,70 @@ def section_g_generated_never_committed() -> None:
     check("G3 pages.yml generates the projection after checkout and BEFORE jekyll build",
           order_ok, where)
 
-    # The CLI writes both files where it is told, exits 0, and leaves the repository alone.
-    before = {p: (p.stat().st_mtime_ns if p.exists() else None)
-              for p in (REPO_PRODUCT_PROJECTION, REPO_COMPANY_PROJECTION)}
-    product_path, company_path = generated()
-    after = {p: (p.stat().st_mtime_ns if p.exists() else None) for p in before}
+    # The CLI writes both files where it is told, exits 0, and leaves the repository alone. The
+    # baseline is the snapshot taken before the FIRST generator run in this process (section D's,
+    # via generated()); G4 then makes its own fresh run. A snapshot taken here, after D, would
+    # bracket nothing D did, and was measured to pass a generator that also wrote the repo copy.
+    generated()
+    before = _GENERATED["repo_before"]
+    with tempfile.TemporaryDirectory() as g4_dir, io.StringIO() as sink:
+        saved, sys.stdout = sys.stdout, sink
+        try:
+            g4_rc = proj.main(["--output-dir", g4_dir])
+        except Exception as exc:  # noqa: BLE001 -- fail G4 by name, never crash the suite
+            g4_rc = f"raised {exc!r}"
+        finally:
+            sys.stdout = saved
+        written = all((Path(g4_dir) / p.name).is_file() and (Path(g4_dir) / p.name).stat().st_size > 0
+                      for p in (REPO_PRODUCT_PROJECTION, REPO_COMPANY_PROJECTION))
+    after = repo_snapshot()
     check("G4 --output-dir writes both projections outside the repository and exits 0",
-          _GENERATED.get("rc") == 0 and product_path.stat().st_size > 0
-          and company_path.stat().st_size > 0 and before == after,
-          f"rc={_GENERATED.get('rc')} repo files touched={before != after}")
+          g4_rc == 0 and written and before == after,
+          f"rc={g4_rc} written={written} repo files touched={before != after}")
 
-    # Determinism AND that the injected clock is honoured: a generator reading the wall clock
-    # would pass the first half on its own. Far enough apart that every recent success has aged.
+    # Determinism on the real inputs, and that the injected clock is honoured -- the second half on
+    # a SYNTHETIC ingest state, so it depends on no real date and cannot age into a failure. One
+    # enabled, scheduled source recorded healthy an hour before the clock: healthy at that clock,
+    # stale 400 days later. A generator reading the wall clock fails the first.
     fixed = datetime(2026, 10, 1, 12, 0, tzinfo=timezone.utc)
     a_rows, b_rows = proj.build_rows(now=fixed), proj.build_rows(now=fixed)
-    later = proj.build_rows(now=fixed + timedelta(days=400))
+    deterministic = (proj.render(a_rows) == proj.render(b_rows)
+                     and proj.render_companies(proj.build_company_rows(a_rows))
+                     == proj.render_companies(proj.build_company_rows(b_rows)))
+    pid = next((s["product_id"] for s in proj.load_yaml(proj.SOURCES_PATH) or []
+                if isinstance(s, dict) and s.get("product_id") and s.get("enabled")
+                and proj.parse_cadence((s.get("ingestion") or {}).get("polling_frequency"))), None)
+    at_fixed = at_later = None
+    if pid:
+        with tempfile.TemporaryDirectory() as sd:
+            synthetic = Path(sd) / "patch_ingest_state.json"
+            synthetic.write_text(json.dumps({"sources": {pid: {
+                "status": "healthy",
+                "last_success_at": (fixed - timedelta(hours=1)).isoformat()}}}), encoding="utf-8")
+            real_state, proj.STATE_PATH = proj.STATE_PATH, synthetic
+            try:
+                at_fixed = {r["product_id"]: r["state"] for r in proj.build_rows(now=fixed)}.get(pid)
+                at_later = {r["product_id"]: r["state"]
+                            for r in proj.build_rows(now=fixed + timedelta(days=400))}.get(pid)
+            finally:
+                proj.STATE_PATH = real_state
     check("G5 at a fixed clock the projection is byte-identical, and the clock is honoured",
-          proj.render(a_rows) == proj.render(b_rows)
-          and proj.render_companies(proj.build_company_rows(a_rows))
-          == proj.render_companies(proj.build_company_rows(b_rows))
-          and proj.render(later) != proj.render(a_rows),
-          "two runs at one clock must match; a clock 400 days later must not")
+          deterministic and at_fixed == "healthy" and at_later == "stale",
+          f"deterministic={deterministic} {pid}: at clock={at_fixed} 400 days later={at_later}")
 
     # REAL RENDERS of both layouts, with the projection absent and present. Checking the assign
     # statements would pass a template that kept them and rendered the wrong value elsewhere.
     data = {name: yaml.safe_load((_AUX / "_data" / f"{name}.yml").read_text(encoding="utf-8"))
             for name in ("patch_companies", "patch_products")}
-    rows = yaml.safe_load(product_path.read_text(encoding="utf-8")) or []
-    crows = yaml.safe_load(company_path.read_text(encoding="utf-8")) or []
+    product_path, company_path = generated()
+    try:
+        rows = yaml.safe_load(product_path.read_text(encoding="utf-8")) or []
+        crows = yaml.safe_load(company_path.read_text(encoding="utf-8")) or []
+    except Exception as exc:  # noqa: BLE001 -- a failed generation FAILS G6-G9 by name
+        for n in ("G6", "G7", "G8", "G9"):
+            check(f"{n} the generated projection could not be read", False,
+                  f"rc={_GENERATED.get('rc')} {exc!r}"[:200])
+        return
     products = {p.get("id"): p for p in data["patch_products"] or []}
     # A product whose derived state is NOT the fallback, so "present" is distinguishable from
     # "absent". Prefer an affirmative one: that is the claim the fallback must never fabricate.
@@ -455,9 +511,11 @@ def section_g_generated_never_committed() -> None:
                                                    monitoring_company_state=crows),
                               {"company_id": company_id})
     got = pills(present_c)
+    # The company pill renders BEFORE every product card, so it is got[0]. Matching anywhere on
+    # the page would let a product card with the same state stand in for a broken company pill.
     check("G9 with the generated projection the company page shows its derived states",
-          crow is not None and (crow["state"], crow["label"]) in got
-          and (pick["state"], pick["label"]) in got,
+          crow is not None and bool(got) and got[0] == (crow["state"], crow["label"])
+          and (pick["state"], pick["label"]) in got[1:],
           f"want company {crow and (crow['state'], crow['label'])} + product, pills={got}")
 
 
