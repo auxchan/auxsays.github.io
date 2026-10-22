@@ -53,6 +53,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-044 | Resolved | Public truthfulness | High | Promoting a page to live consensus would have hidden its collection warnings |
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 | AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
+| AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 
 ---
 
@@ -3296,6 +3297,41 @@ stored DaVinci rows. The fourteen remain an audit population; this makes the nex
 
 **Reopen only if** a counted row written after this change carries `match_basis: exact_version_text`
 without a `matched_text` that appears in its `matched_context`.
+
+### AUX-046 — four Elgato products had no records because the HTML pages challenge the runner
+
+- **Status** Resolved · **Area** Official ingestion · **Severity** High
+- **First seen** 2026-08-18 · **Resolved** 2026-10-22
+
+Official ingestion for Stream Deck, Wave Link, Camera Hub and 4K Capture Utility had failed on every
+run since 2026-08-18 (`consecutive_failures` 217/217/137/93 when last measured), and the site held
+**zero** Elgato records. A read-only probe from the Actions runner, sending production's own
+User-Agent and Accept header, settled why: the HTML section pages the old adapter scrapes return
+**403 with `cf-mitigated: challenge`** on all four products, while the Zendesk Help Center JSON API
+returns **200** with JSON on all four — 51, 61, 28 and 20 articles, a version in every title, a body
+on every article. The challenge sits on the pages, not the API. This PR's adapter reads the API.
+
+#### A version claimed by two articles is deferred
+
+Elgato publishes separate macOS and Windows notes for the same version — 10 Wave Link versions and
+1 Camera Hub version, measured live. The adapter as first written kept the newest article and dropped
+the other, so Wave Link 3.4 would have published as "Elgato Wave Link 3.4 (macOS) Release Notes": the
+macOS notes presented as the notes for 3.4, to Windows users included, as one of the first Elgato
+pages the site ever showed. A record holds one `official_patch_notes_body`, so it cannot present
+both platforms' notes each attributed to its own platform, and choosing either misstates the other.
+Such a version now produces no record and is counted (`versions_deferred`, `articles_deferred`). The
+same article listed twice is deduplicated by id first, so a paginator overlap does not masquerade as
+ambiguity.
+
+Measured against the live API: 138 versions publishable (Stream Deck 51, Wave Link 41, Camera Hub
+26, 4K Capture 20), 11 deferred. Single-platform versions keep their "(Windows)" or "(macOS)" marker
+because they are genuinely single-platform — Windows ran 3.2.x while macOS ran 2.0.x.
+
+**Not done here:** publishing the 11 deferred versions, which needs a record able to hold separately
+attributed platform notes.
+
+**Reopen only if** an Elgato record is published whose title names one platform while another
+platform's article exists for the same version, or the API begins returning a challenge to the runner.
 
 ## Adding an entry
 
