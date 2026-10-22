@@ -1,9 +1,35 @@
 source "https://rubygems.org"
 
+# DEPENDENCY REPRODUCIBILITY.
+#
+# Gemfile.lock is tracked and authoritative for exact resolved versions. Before it existed,
+# pages.yml ran `bundle install` with no lock, so CI RE-RESOLVED every gem on every deploy and
+# the deployed site was whatever rubygems served that minute. That was not theoretical: the live
+# page emitted jekyll-seo-tag 2.9.1 while a local build emitted 2.9.0, and five of these seven
+# gems -- including the THEME that every layout inherits from -- carried no constraint at all.
+# An upstream release could change the published markup with no commit.
+#
+# The lock was frozen to the set a KNOWN-GOOD Linux CI build actually installed (pages.yml run
+# 39562461648), not to whatever happened to be cached on a developer machine. Resolving locally
+# would have pinned chirpy 7.0.1, seo-tag 2.9.0 and include-cache 0.2.2 -- a silent downgrade of
+# the live theme by six minor versions.
+#
+# Only the theme carries an explicit bound. The lock is what enforces exact versions; blanket
+# constraints on every gem would complicate legitimate maintenance without improving
+# reproducibility once frozen installation is enforced in CI.
+
 gem "jekyll", "~> 4.4"
-gem "jekyll-theme-chirpy"
+# Bounded to production's release family: this is the theme, so a major bump restructures markup
+# on every page. Upgrades inside or beyond this family are a reviewed change, never a side effect.
+gem "jekyll-theme-chirpy", "~> 7.6"
 gem "jekyll-include-cache"
 gem "jekyll-seo-tag"
 gem "jekyll-sitemap"
 gem "jekyll-archives"
 gem "webrick", "~> 1.8"
+
+# Windows only. Jekyll's timezone path requires tzinfo there and the Linux runner does not need
+# it, so this is platform-gated rather than universal -- it must not enter the Linux resolution.
+# `:windows` resolves to x64-mingw-ucrt on the Bundler in use (2.5.22).
+gem "tzinfo", platforms: :windows
+gem "tzinfo-data", platforms: :windows
