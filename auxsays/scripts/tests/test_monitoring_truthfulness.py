@@ -490,8 +490,12 @@ def section_g_generated_never_committed() -> None:
 
     absent = render_layout(product_layout, data, page)
     if absent is None:
+        # FAIL, not skip: these four renders are the only proof of what a reader actually sees,
+        # and CI installs ruby + liquid precisely so they run. A missing renderer is an
+        # environment defect to fix, never a pass.
         for n in ("G6", "G7", "G8", "G9"):
-            check(f"{n} SKIPPED - ruby/liquid unavailable", True)
+            check(f"{n} could not render: ruby/liquid unavailable", False,
+                  "install ruby and the liquid gem (CI pins liquid 4.0.4)")
         return
     got = pills(absent)
     check("G6 with NO projection the product page reads unknown, never monitored",
