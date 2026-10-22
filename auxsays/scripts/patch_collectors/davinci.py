@@ -34,6 +34,8 @@ from .base import (
     counted_rows,
     date_part,
     exact_version_match,
+    exact_version_match_span,
+    match_provenance,
     generated_records,
     newest_first,
     load_front_matter_and_body,
@@ -193,6 +195,12 @@ def bare_version_noise(text: str, version: str) -> str:
 
 
 def davinci_version_match(text: str, version: str) -> tuple[bool, str, str]:
+    """(matched, matched_version, match_basis) -- `davinci_version_match_span` without offsets."""
+    matched, matched_version, basis, _start, _end = davinci_version_match_span(text, version)
+    return matched, matched_version, basis
+
+
+def davinci_version_match_span(text: str, version: str) -> tuple[bool, str, str, int, int]:
     """`exact_version_match` for DaVinci, refusing a bare integer used as an ordinary number.
 
     A DOTTED version is self-identifying and routes through the shared matcher completely
@@ -205,17 +213,17 @@ def davinci_version_match(text: str, version: str) -> tuple[bool, str, str]:
     """
     aliases = version_aliases(version)
     if not _BARE_VERSION_RE.match(str(version or "").strip()):
-        return exact_version_match(text, version, aliases)
+        return exact_version_match_span(text, version, aliases)
     for alias in aliases:
         if _BARE_VERSION_RE.match(str(alias).strip()):
             continue
-        matched, matched_version, _basis = exact_version_match(text, alias, ())
+        matched, matched_version, _basis, start, end = exact_version_match_span(text, alias, ())
         if matched:
-            return True, matched_version, "exact_version_alias"
-    matched, matched_version, basis = exact_version_match(text, version, aliases)
+            return True, matched_version, "exact_version_alias", start, end
+    matched, matched_version, basis, start, end = exact_version_match_span(text, version, aliases)
     if matched and bare_version_noise(text, matched_version):
-        return False, "", ""
-    return matched, matched_version, basis
+        return False, "", "", -1, -1
+    return matched, matched_version, basis, start, end
 
 
 DAVINCI_STRONG_ISSUE_RE = re.compile(
@@ -1697,16 +1705,21 @@ def method_notes(method_id: str) -> str:
 
 
 def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_at: str) -> dict[str, Any]:
-    report_text = " ".join([
-        str(candidate.get("parent_title") or ""),
-        str(candidate.get("report_title") or ""),
-        str(candidate.get("report_text") or ""),
-    ])
+    parts = [
+        ("parent_title", str(candidate.get("parent_title") or "")),
+        ("report_title", str(candidate.get("report_title") or "")),
+        ("report_text", str(candidate.get("report_text") or "")),
+    ]
+    report_text = " ".join(value for _name, value in parts)
     # The bare-integer noise rule belongs HERE, in the version decision itself, not in a later
     # gate: patch_version_matched / matched_version / match_basis must all be false together, so a
     # refused row never asserts a version match it cannot demonstrate. `apply_consensus_to_records`
     # reads patch_version_matched as an acceptance input.
-    matched, matched_version, basis = davinci_version_match(report_text, record.update_version)
+    matched, matched_version, basis, m_start, m_end = davinci_version_match_span(
+        report_text, record.update_version)
+    # The exact occurrence the matcher accepted, retained so the row carries its own evidence: the
+    # stored excerpt is truncated and on its own cannot show which occurrence established the match.
+    provenance = match_provenance(parts, m_start, m_end) if matched else {}
     theme, workflow_area, platform, severity, sentiment = classify(report_text)
     row = make_evidence_row(
         product_id=PRODUCT_ID,
@@ -1731,6 +1744,9 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         severity=severity,
         sentiment=sentiment,
         row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(str(candidate.get('source_type') or 'source'))}-{slug(str(candidate.get('source_url') or ''))}",
+        matched_text=provenance.get("matched_text", ""),
+        matched_field=provenance.get("matched_field", ""),
+        matched_context=provenance.get("matched_context", ""),
     )
     gated = apply_acceptance_gates(row, report_text=report_text)
     if gated.get("counted") is True and is_stable_record(record.update_version) and beta_context_present(report_text):

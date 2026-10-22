@@ -43,6 +43,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
 
 ---
 
@@ -2585,6 +2586,40 @@ year.
 generalises. The lesson: a date field accepts two kinds of wrong value -- text that is not a date,
 and a real date that is not the vendor's -- and a permissive normaliser produces both while looking
 like a convenience.
+
+### AUX-045 — a counted row could not show the evidence for its own version match
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-10-22 · **Resolved** 2026-10-22
+
+Every counted row records `match_basis: exact_version_text`, but only a truncated
+`report_text_excerpt` of the text that was matched. Reddit DaVinci rows are cut at 280 characters
+and 261 of 319 sit at the cap, so the claim could not be checked after the fact.
+
+That stopped being academic during the maturity audit. Fourteen DaVinci URLs are counted against two
+versions each, from an identical retained prefix — for example one post counted against both 20 and
+20.3.2, whose excerpt contains only "20". It looked like a false attribution and was first reported
+as one; that was withdrawn, because the second version can appear past the cut, in which case both
+attributions were correct when collected. The honest status was "unanswerable", and the cause was
+that the row did not keep its own evidence.
+
+`exact_version_match_span` now returns the offsets of the occurrence the matcher ACCEPTED, and
+`exact_version_match` is a view of it, so there is still one predicate. `match_provenance` turns that
+span into `matched_text`, `matched_field` and a `matched_context` window of 80 characters either
+side. Nothing searches the text a second time: a second search could land on a different occurrence
+— the first textual hit of a version string is often one the matcher REJECTED, such as a
+`dev20.3.2` branch name.
+
+DaVinci retains provenance from this change on. The three fields are optional and appended last to
+`EVIDENCE_FIELDS`, and the normaliser drops empty optional fields, so no stored row gains or reorders
+a key. A new row carrying them is accepted by the real `collector_ownership.validate_evidence` gate,
+verified directly rather than inferred from a dry run.
+
+Not done here, deliberately: other collectors adopting the provenance, and any correction of the
+stored DaVinci rows. The fourteen remain an audit population; this makes the next ones auditable.
+
+**Reopen only if** a counted row written after this change carries `match_basis: exact_version_text`
+without a `matched_text` that appears in its `matched_context`.
 
 ## Adding an entry
 
