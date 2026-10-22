@@ -45,6 +45,8 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
 | AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
+| AUX-036 | Resolved | Official ingestion | High | A bot challenge read as an empty document, and the guard covered one of two response paths |
+| AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 
 ---
 
@@ -2724,6 +2726,112 @@ defect is deliberately out of scope: a product-page status line can claim monito
 products whose collection is not running. Two attempted fixes were each measured to produce a
 DIFFERENT false claim — one derived from an editorial field, one from a configuration flag, and
 neither tracks whether collection works. That is AUX-039.
+### AUX-036 — a bot challenge was being read as an empty document
+
+- **Status** Resolved · **Area** Official ingestion · **Severity** High
+- **First seen** 2026-08-18 (last successful Elgato fetch) · **Resolved** 2026-10-18
+
+All four Elgato sources are `enabled: true` and have produced 0 records and 0 evidence rows since
+2026-08-18. The source sits behind Cloudflare, which answers with a "Just a moment..."
+interstitial. That is not a 404 and not an empty section, and Cloudflare serves it at 200 as well
+as at 403 -- so at 200 the ingestion path had no way to tell it from the document asked for. The
+adapter parsed the interstitial, matched no product in it, counted the article a NONMATCH, and the
+run booked itself `no_results`. A source actively refusing us therefore read, on the public page,
+as a source with nothing new to say.
+
+**Two response paths, one guard.** `lib/http.py` has two functions that return a `FetchResult`:
+`fetch_text` (urllib) and `_curl_fetch_text` (the narrow fallback). A content check added to the
+first only fails open on the second, and the curl path is the easier one to miss because curl
+reports exit 0 and the function hard-codes `status=200`. Measured before the fix against the real
+recorded 478-byte body: `_curl_fetch_text` returned it as a 200 while `looks_like_challenge` on
+that exact text already answered True. Both paths now refuse it, and both honour an explicit
+opt-out for the one caller whose job is to characterise a refusal.
+
+**A challenge is its own state, not a 403.** `classify_error` gains `challenged`, checked before
+the status-code branches, because the recovery differs: a 403 is a server refusing a request, while
+a challenge is bot protection that a different transport may not be subject to at all. The state
+also had to be consumed -- `source_health_snapshot.friendly_error` had no challenge case, so a
+challenged source still rendered "Blocked or forbidden by source". It now reads "Automated bot
+check blocked the last check", and an ordinary 403 is unchanged.
+**An inoperative control removed.** `should_curl` read
+`bool(curl_fallback) or ("adobe.com" in _domain(url) and bool(curl_fallback))`. `A or (host and A)`
+is `A`, so the host clause restricted nothing: any source enabling the fallback reached it for any
+host. Dead in practice -- the single config site that names the key sets it false -- but the
+docstring promises "For Adobe URLs only", and a control that reads as present while doing nothing
+is worse than no control.
+
+**Second authority avoided, deliberately.** `probe_photoshop_sources` carried its own challenge
+regex covering captcha, akamai, incapsula and similar. It now defers to
+`lib.http.looks_like_challenge` for the structural markers but keeps its broader net under an
+honest name, because the two have different jobs. The shared function is what raises in
+production, and widening it to match "akamai" would fire on `akamaihd.net` asset URLs on perfectly
+good pages. Photoshop's own blocker is an Akamai edge filter that emits none of Cloudflare's
+markers, so the probe needs the wider net and must never raise on it. Either signal now
+disqualifies an endpoint from the probe's usable list.
+
+**Non-vacuity.** Four mutants, each required to be caught by a named check: dropping the curl
+guard alone, dropping the urllib guard alone, restoring the inoperative host clause, and
+collapsing the public challenge label back into "blocked". The first two prove the halves are
+pinned independently -- removing either leaves the other check passing. One trap surfaced while
+building them: a synthetic module exec'd without registering it in `sys.modules` makes the
+dataclass in `lib/http.py` raise `AttributeError`, which would have been recorded as a mutant
+caught while testing nothing. A crash is not a catch.
+
+**Reopen only if** an `elgato-*` bucket in `patch_ingest_state.json` reports a `last_error_type`
+other than `challenged` while still failing, or `looks_like_challenge` returns True for a body
+carrying no interstitial marker, or a new function in `lib/http.py` returns a `FetchResult`
+without the guard.
+
+**What this does NOT fix.** The challenge still blocks the fetch, so Elgato remains at 0 records.
+This change makes the refusal visible and correctly named; it does not defeat it. Repo-wide,
+roughly twenty hand-rolled `urllib.request.urlopen` response paths in adapters and collectors do
+not route through `lib/http.py` and carry no challenge check at all. That boundary is recorded
+here rather than widened in this change.
+### AUX-037 — Elgato platform identity cannot write a record
+
+- **Status** Deferred · **Area** Canonical patch identity · **Severity** Medium
+- **First seen** 2026-10-18
+- **Branch** `wip/elgato-platform-identity` · **WIP commit** `96eb3766` (not merged, not a PR)
+
+**Symptom / gap** Wave Link ships separate Windows and macOS builds under one version number, so
+two real releases collapse onto one record. Work to make the product platform-aware was written
+and is preserved on the branch above. It cannot write a record.
+
+**Why deferred** `permalink_path` for `elgato-wave-link` emits a five-segment path such as
+`/updates/elgato/elgato-wave-link/3-4/windows/`. `permalink_build_segment` returns the fifth
+segment for any five-segment `/updates/...` path, and `elgato-wave-link` is not build-aware, so
+the platform segment is read as an unexpected build segment and `assert_build_identity` raises
+`InconsistentBuildIdentity`. `write_update_record._assert_record_consistent` calls it on both the
+create and the refresh path, so this is a hard crash on every write, not a gap.
+
+Beyond that, the platform registry lacks the fail-closed surface its build-aware counterpart has.
+Platform is absent from the identity triple, so grouping, dedup and consensus still collide across
+platforms -- only the filename and permalink differ. The display label stays bare, so two Wave
+Link pages would both claim "Wave Link 3.4 has N user reports". `require_platform` raises for
+non-aware products where its build-aware sibling is safe unconditionally. And `target_platform` is
+an existing published field in 400+ records with a title-case vocabulary that the new normaliser
+maps to the empty string.
+
+**Current impact** None in production. The source is challenged on every run (AUX-036), so no Wave
+Link record is written and the platform code never executes. There is no yield behind this item
+until the transport is solved, which is the strongest reason not to merge it to tidy a working
+tree.
+
+**What is already correct, and must not be rewritten** The extraction is title-only and refuses to
+invent a platform: verified by execution, a Stream Deck 7.6 article whose body mentions macOS
+yields no platform rather than a wrong one. An earlier iteration labelled that record macOS from
+the incidental mention. Registration is scoped to `elgato-wave-link` alone.
+
+**Revisit trigger** AUX-036's reopen conditions are met (the fetch succeeds), or a second product
+needs platform-split identity. The first task then is a platform-aware identity reason in
+`patch_identity` rather than reusing the build segment, plus a fixture captured from a real
+article -- the only Wave Link fixture in the suite is titled "Elgato Wave Link 2.0 Release Notes"
+and carries no platform token, so it contradicts the premise the registry rests on. Live scan data
+in `patch_ingest_state.json` does show real articles carrying the platform in their titles, so the
+premise is sound and the fixture is simply unrepresentative.
+
+**Work that this item must not block** Everything. No other lane reads platform identity, and the
+transport fix shipped separately.
 
 ### AUX-047 — the published-payload gate refused a licence notice and halted every deploy
 
