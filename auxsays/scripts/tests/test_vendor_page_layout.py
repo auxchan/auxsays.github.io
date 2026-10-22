@@ -134,8 +134,9 @@ def run() -> int:
           "staged_lower" not in LATEST
           and "downcase" not in LATEST
           and "coverage_status_label | downcase" not in LATEST)
-    check("disabled source -> 'Source disabled'/'staged' wording, never 'Monitoring active'",
-          "Source disabled" in LATEST and "Monitoring active" in LATEST and "No configured ingestion source" in LATEST)
+    check("each source state has its own wording, and an enabled source claims only that it is enabled",
+          "Source disabled" in LATEST and "Official update source enabled" in LATEST
+          and "No configured ingestion source" in LATEST and "Monitoring active" not in LATEST)
     check("unknown state fails closed to restrained neutral wording",
           "No patch records yet" in LATEST)
 

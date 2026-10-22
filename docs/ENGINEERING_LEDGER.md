@@ -2648,6 +2648,31 @@ scope. So this is a separate, narrow file rather than a reuse of that one.
 cross-checked against the derived state — 0 mismatches — and no page claims "Monitoring active"
 with a state other than `healthy`.
 
+#### Corrections before merge
+
+Three defects found in review, all latent — the regenerated projections changed labels only, no
+product's state.
+
+**A future-dated success read as healthy.** `now - last_success` is negative for a timestamp in the
+future, so it was always inside the window. It now fails closed to `unverified`, as the patch pages'
+monitoring include already did by requiring `0 <= age`.
+
+**An override could widen the window.** The per-source override returned `timedelta(hours=float(v))`
+before any bound: negative or zero called every source stale, `1e9` let a failing source read healthy
+for 41 million days, and `inf` raised an uncaught `OverflowError`. Nothing sets the override, so these
+would have surfaced only when someone did. It may now tighten the window and never widen it, and
+non-finite, zero or negative values are ignored.
+
+**"Monitoring active" named no activity.** This projection reports official vendor update ingestion;
+the patch pages report community-report monitoring under a different, legitimately different
+freshness rule (14 days, versus a cadence-relative window here). A review first proposed collapsing
+the two into one threshold — wrong, since a 12-hourly official feed would then fail silently for two
+weeks. The real defect was the wording, so every label now names the official activity. That had to
+be fixed in three places, not one: the label table, `company_state`'s own aggregate wording (a first
+pass reworded the table while six companies kept publishing the old phrase), and
+`_includes/patch-latest-signals.html`, which said "Monitoring active — awaiting first record" for any
+merely *enabled* source — the exact enabled-alone claim this entry exists to stop.
+
 **Reopen only if** a rendered monitoring pill carries a state outside the approved vocabulary, or
 a page claims an affirmative state for a product whose last success is older than its window, or
 any template begins reading `site.data.patch_ingest_state`.

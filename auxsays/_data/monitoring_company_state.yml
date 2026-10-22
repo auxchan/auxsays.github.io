@@ -8,176 +8,176 @@
 # different facts, and a reader weighing an absence of reports needs to know which applies.
 - company_id: adobe
   state: partial
-  label: Monitoring 3 of 7
+  label: Official updates monitored for 3 of 7 products
   monitored: 3
   total: 7
 - company_id: amd
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: anthropic
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: blackmagic-design
   state: healthy
-  label: Monitoring active
+  label: Official updates monitored
   monitored: 1
   total: 1
 - company_id: blender-foundation
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: canva
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: cloudflare
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: comfyui
   state: healthy
-  label: Monitoring active
+  label: Official updates monitored
   monitored: 1
   total: 1
 - company_id: elgato
   state: failing
-  label: Source checks failing
+  label: Official source checks failing
   monitored: 0
   total: 4
 - company_id: epic-games
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: figma
   state: healthy
-  label: Monitoring active
+  label: Official updates monitored
   monitored: 1
   total: 1
 - company_id: github
   state: healthy
-  label: Monitoring active
+  label: Official updates monitored
   monitored: 1
   total: 1
 - company_id: google
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: hugging-face
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: intel
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: kick
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: lottiefiles
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: make
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: microsoft
   state: healthy
-  label: Monitoring active
+  label: Official updates monitored
   monitored: 4
   total: 4
 - company_id: midjourney
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: netlify
   state: failing
-  label: Source checks failing
+  label: Official source checks failing
   monitored: 0
   total: 1
 - company_id: notion
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: nvidia
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: obs-project
   state: healthy
-  label: Monitoring active
+  label: Official updates monitored
   monitored: 1
   total: 1
 - company_id: openai
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: perplexity
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: pika
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: rumble
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: runway
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: stability-ai
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: twitch
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: unity
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: valve
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: youtube
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1
 - company_id: zapier
   state: disabled
-  label: Not currently monitored
+  label: Official updates not currently monitored
   monitored: 0
   total: 1

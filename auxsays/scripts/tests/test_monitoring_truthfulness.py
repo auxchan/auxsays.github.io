@@ -143,6 +143,38 @@ def section_c_cadence_recency() -> None:
     check("C6 an UNPARSEABLE override falls back rather than widening the window",
           w(timedelta(hours=6), override_hours="soon") == timedelta(hours=48),
           "a typo must not silently make a stale source look healthy")
+    # An override may TIGHTEN, never widen. Each of these used to be honoured verbatim.
+    check("C7 an override LARGER than the window does not widen it",
+          w(timedelta(hours=6), override_hours=500) == timedelta(hours=48),
+          f"got {w(timedelta(hours=6), override_hours=500)}")
+    check("C8 an enormous override neither widens nor overflows",
+          w(timedelta(hours=6), override_hours=1e9) == timedelta(hours=48))
+    check("C9 an infinite override is ignored instead of raising",
+          w(timedelta(hours=6), override_hours=float("inf")) == timedelta(hours=48))
+    check("C10 a zero or negative override cannot call every source stale",
+          w(timedelta(hours=6), override_hours=0) == timedelta(hours=48)
+          and w(timedelta(hours=6), override_hours=-5) == timedelta(hours=48))
+    check("C11 nan is ignored", w(timedelta(hours=6), override_hours=float("nan")) == timedelta(hours=48))
+    check("C12 an override does not invent a schedule for a manual source",
+          w(None, override_hours=10) is None)
+
+    d = lambda s, st: proj.derive_state(s, st, now=NOW)
+    future = {"status": "healthy", "last_success_at": (NOW + timedelta(days=3)).isoformat()}
+    check("C13 a success dated in the FUTURE is not a recent success",
+          d(src(), future) == "unverified", d(src(), future))
+
+    labels = proj.STATE_LABELS
+    check("C14 every reader-facing label names the official activity it describes",
+          all("official" in v.lower() for v in labels.values()), str(labels))
+    check("C15 no label is the bare phrase that let readers confuse the two monitors",
+          "Monitoring active" not in labels.values())
+    # The label TABLE is not the only source: company_state builds its own aggregate wording, and a
+    # first version of this fix reworded the table while six companies kept publishing "Monitoring
+    # active". Assert against every state each builder can produce, not against the table.
+    company_labels = {proj.company_state(states)[1] for states in (
+        ["healthy"], ["healthy", "disabled"], ["blocked"], ["disabled"], ["stale"], [], ["weird"])}
+    check("C16 every COMPANY label also names the official activity",
+          all("official" in lab.lower() for lab in company_labels), str(sorted(company_labels)))
 
 
 def section_d_vocabulary_is_closed() -> None:
@@ -172,7 +204,7 @@ def section_e_company_aggregate() -> None:
     cs = proj.company_state
     check("E1 all products healthy -> active", cs(["healthy", "healthy"])[0] == "healthy")
     check("E2 some healthy -> a COUNT, not an adjective",
-          cs(["healthy", "disabled", "disabled"]) == ("partial", "Monitoring 1 of 3"),
+          cs(["healthy", "disabled", "disabled"]) == ("partial", "Official updates monitored for 1 of 3 products"),
           "27 companies claimed 'Monitoring active' with zero healthy products")
     check("E3 none healthy but something failing -> says checks are failing",
           cs(["blocked", "blocked"])[0] == "failing")

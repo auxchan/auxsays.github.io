@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -67,19 +68,24 @@ PUBLIC_STATES = (
 
 # Reader-facing copy. Deliberately plain: it states what happened, never what it implies about
 # the software itself. None of these is evidence about an update.
+# Every label names the ACTIVITY. This projection is official vendor update ingestion; the patch
+# pages separately report community-report monitoring, under a different and correctly different
+# freshness rule. A bare "Monitoring active" let a reader take one for the other: a product could
+# read "Monitoring active" here while its patch pages said community collection was stale, and both
+# statements were true about different things.
 STATE_LABELS = {
-    "healthy": "Monitoring active",
-    "stale": "No recent successful check",
-    "blocked": "Source is refusing automated checks",
-    "unreachable": "Source did not respond",
-    "broken": "Source responded but could not be read",
+    "healthy": "Official updates monitored",
+    "stale": "No recent official update check",
+    "blocked": "Official source is refusing automated checks",
+    "unreachable": "Official source did not respond",
+    "broken": "Official source responded but could not be read",
     # Both of these say the same true thing to a reader -- nothing is collecting for this
     # product right now -- and the distinction between "a source exists but is switched off"
     # and "no source exists" is an internal one. "Paused" was rejected: it implies monitoring
     # was once running, and for most of these it never has been.
-    "disabled": "Not currently monitored",
-    "unconfigured": "Not currently monitored",
-    "unverified": "Monitoring status unknown",
+    "disabled": "Official updates not currently monitored",
+    "unconfigured": "Official updates not currently monitored",
+    "unverified": "Official update monitoring status unknown",
 }
 
 # A success is "recent" relative to the source's OWN cadence, not a single global number. Four
@@ -107,18 +113,31 @@ def parse_cadence(value: Any) -> timedelta | None:
 
 
 def recency_window(cadence: timedelta | None, override_hours: Any = None) -> timedelta | None:
-    """How old a success may be and still count. None means recency does not apply."""
-    if override_hours not in (None, ""):
-        try:
-            return timedelta(hours=float(override_hours))
-        except (TypeError, ValueError):
-            pass  # an unparseable override must not silently widen the window
+    """How old a success may be and still count. None means recency does not apply.
+
+    A per-source override may TIGHTEN the window and may never widen it. The first version returned
+    `timedelta(hours=float(override))` before any bound was applied, so: a negative or zero value
+    called every source stale; a large one let a failing source read healthy indefinitely (1e9 hours
+    is 41 million days, far past the ceiling the comment said it respected); and `inf` raised
+    OverflowError, which `except (TypeError, ValueError)` did not catch. Nothing sets the override
+    today, which is exactly why its failure modes would have surfaced only when someone did.
+    """
     if cadence is None:
+        # No schedule, so there is nothing to have missed -- and an override does not invent one.
         return None
-    window = cadence * RECENCY_MULTIPLE
-    if window < RECENCY_FLOOR:
-        window = RECENCY_FLOOR
-    return min(window, RECENCY_CEILING)
+    window = min(max(cadence * RECENCY_MULTIPLE, RECENCY_FLOOR), RECENCY_CEILING)
+    if override_hours in (None, ""):
+        return window
+    try:
+        hours = float(override_hours)
+    except (TypeError, ValueError):
+        return window                   # unparseable: ignored, never widening
+    if not math.isfinite(hours) or hours <= 0:
+        return window                   # nan, inf, zero, negative: ignored
+    # Compare in hours BEFORE building a timedelta, so an enormous value cannot overflow.
+    if hours < window.total_seconds() / 3600:
+        return timedelta(hours=hours)
+    return window
 
 
 def parse_instant(value: Any) -> datetime | None:
@@ -166,6 +185,12 @@ def derive_state(source: dict | None, state: dict | None, *, now: datetime) -> s
     last_success = parse_instant(state.get("last_success_at"))
     if last_success is None:
         return "unverified"
+    if last_success > now:
+        # A success dated in the future proves nothing about the present: `now - last_success` would
+        # be negative, always inside the window, so a clock-skewed or malformed timestamp read as
+        # perfectly healthy. Fail closed, as the patch pages' monitoring include already does
+        # (it requires 0 <= age).
+        return "unverified"
     ingestion = source.get("ingestion") or {}
     window = recency_window(
         parse_cadence(ingestion.get("polling_frequency") or source.get("polling_frequency")),
@@ -191,17 +216,17 @@ def company_state(child_states: list[str]) -> tuple[str, str]:
         return "unconfigured", STATE_LABELS["unconfigured"]
     healthy = sum(1 for s in child_states if s == "healthy")
     if healthy == total:
-        return "healthy", "Monitoring active"
+        return "healthy", STATE_LABELS["healthy"]
     if healthy > 0:
-        return "partial", f"Monitoring {healthy} of {total}"
+        return "partial", f"Official updates monitored for {healthy} of {total} products"
     # Nothing healthy. Say WHY, because "not monitored" and "checks failing" are different facts
     # and a reader weighing an absence of reports needs to know which one applies.
     if any(s in ("blocked", "unreachable", "broken") for s in child_states):
-        return "failing", "Source checks failing"
+        return "failing", "Official source checks failing"
     if all(s in ("disabled", "unconfigured") for s in child_states):
         return "disabled", STATE_LABELS["disabled"]
     if any(s == "stale" for s in child_states):
-        return "stale", "No recent successful check"
+        return "stale", STATE_LABELS["stale"]
     return "unverified", STATE_LABELS["unverified"]
 
 
