@@ -36,6 +36,9 @@ from pathlib import Path
 DENIED_PREFIXES: tuple[str, ...] = (
     "scripts/",
     "tools/",
+    # A browser editor that asked visitors for a repository-write token and wrote through the
+    # GitHub contents API. Removed; it may not be published again under its old path.
+    "vault/",
 )
 
 # Extensions that are implementation or build residue wherever they appear. Deliberately NOT
@@ -65,6 +68,7 @@ DENIED_BASENAMES: tuple[str, ...] = (
     "integrity_suites.txt",     # the CI manifest, with per-suite check counts
     "requirements-ingest.txt",  # the ingestion dependency set
     "package.json",             # names the dependency set and the build scripts
+    "vault.js",                 # the removed token editor's GitHub contents-API client
 )
 
 # Licence and credit notices are published ON PURPOSE beside the assets they cover, and removing

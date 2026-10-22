@@ -1308,17 +1308,19 @@ def run() -> int:
         check(f"K1 a non-patch AUXSAYS layout gets the AUXSAYS token, not the theme's ({scheme})",
               ok, detail)
 
-    # ...and it stops at the AUXSAYS ground. `vault.html` is the one layout that does not render
-    # through aux-base: it emits `body.vault-page`, so nothing here may reach it.
-    vault_dom = parse_html('<html><body class="vault-page"><h1 id="v">x</h1></body></html>')
-    vbody = select(vault_dom, "body")[0]
+    # ...and it stops at the AUXSAYS ground. A body that does not carry `aux-page` -- any page not
+    # rendered through aux-base -- must keep the theme's token, so nothing here may reach it.
+    # Synthetic on purpose: the one such layout (the token editor) was removed, and the boundary
+    # must hold for the next one rather than depend on a particular file existing.
+    outside_dom = parse_html('<html><body class="theme-page"><h1 id="v">x</h1></body></html>')
+    vbody = select(outside_dom, "body")[0]
     for scheme in ("light", "dark"):
         st = Styler(sheets, {"scheme": scheme, "width": 1280})
         theme_only = Styler([theme_rules], {"scheme": scheme, "width": 1280})
         got = st.custom(vbody, "--heading-color")
         want = theme_only.custom(vbody, "--heading-color")
         check(f"K2 a body outside the AUXSAYS ground keeps the theme's token ({scheme})",
-              got is not None and got == want, f"vault-page: {got!r} vs theme {want!r}")
+              got is not None and got == want, f"theme-page: {got!r} vs theme {want!r}")
 
     # ---------- L: every representative AUXSAYS surface ----------
     print(f"\n[L] every heading on every AUXSAYS surface clears {THRESHOLD}:1 in both schemes")
