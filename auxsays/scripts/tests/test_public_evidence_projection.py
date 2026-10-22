@@ -335,6 +335,21 @@ def section_f_artifact_gate_is_non_vacuous() -> None:
         check("F3 a new legitimate asset type still passes", vpp.findings_for(site) == [],
               "an allow-list would have refused these; a deny-list must not")
 
+        # A licence notice ships beside the assets it covers; the first deploy after this gate
+        # landed was halted by systems-monitor/media/ATTRIBUTION.md. The exemption is by exact
+        # basename, so an arbitrary note -- the case the .md rule exists for -- is still refused.
+        (site / "systems-monitor" / "media").mkdir(parents=True)
+        (site / "systems-monitor" / "media" / "ATTRIBUTION.md").write_text("x", encoding="utf-8")
+        (site / "LICENSE.md").write_text("x", encoding="utf-8")
+        check("F4 a licence or attribution notice is published", vpp.findings_for(site) == [],
+              f"notice refused: {vpp.findings_for(site)}")
+        for rel in ("NOTES.md", "systems-monitor/media/ATTRIBUTION_DRAFT.md"):
+            (site / rel).write_text("x", encoding="utf-8")
+            flagged = [r for r, _ in vpp.findings_for(site)]
+            check(f"F5 {rel} is still refused", rel in flagged,
+                  f"{rel} not flagged; flagged={flagged}")
+            (site / rel).unlink()
+
 
 
 def join_block() -> str:

@@ -43,6 +43,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
 | AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
 | AUX-036 | Resolved | Official ingestion | High | A bot challenge read as an empty document, and the guard covered one of two response paths |
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
@@ -2831,6 +2832,28 @@ premise is sound and the fixture is simply unrepresentative.
 
 **Work that this item must not block** Everything. No other lane reads platform identity, and the
 transport fix shipped separately.
+
+### AUX-047 — the published-payload gate refused a licence notice and halted every deploy
+
+- **Status** Resolved · **Area** Deployment · **Severity** High
+- **First seen** 2026-10-22 · **Resolved** 2026-10-22
+
+The first Pages run after AUX-038 merged failed at its own payload gate, so the containment it
+shipped never reached the live site. One finding: `systems-monitor/media/ATTRIBUTION.md`, the
+licence record the Systems Monitor build publishes beside its images. AUX-038 denies every `.md`
+in a built site, on the sound reasoning that a surviving `.md` is a file Jekyll copied verbatim.
+The rule was right about engineering notes and wrong about notices, which are published on purpose
+and must not be stripped from the assets they cover.
+
+Licence and credit basenames (`ATTRIBUTION`, `LICENSE`, `LICENCE`, `NOTICE`, `CREDITS`, `COPYING`,
+`.md`, case-insensitive, exact basename) are now permitted; every other `.md` is still refused.
+Pinned both ways: F4 fails when the exemption is reverted, and F5 fails if it widens to a near-miss
+name such as `ATTRIBUTION_DRAFT.md` or an arbitrary note.
+
+**Reusable lesson.** A deny-by-class rule added to a deploy gate is only proven against the build
+that existed when it was written. The Systems Monitor output is assembled by a separate build step,
+so the local verification of AUX-038 never saw it. Verify a new deploy-gate rule against the full
+production build, not the Jekyll output alone.
 
 ## Adding an entry
 
