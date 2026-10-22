@@ -46,6 +46,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
 | AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
+| AUX-042 | Resolved | Evidence integrity | High | The gate guarding mature consensus demanded three fields nothing writes and the approved writer is forbidden to write |
 | AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
 | AUX-036 | Resolved | Official ingestion | High | A bot challenge read as an empty document, and the guard covered one of two response paths |
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
@@ -2796,6 +2797,153 @@ generalises. The lesson: a date field accepts two kinds of wrong value -- text t
 and a real date that is not the vendor's -- and a permissive normaliser produces both while looking
 like a convenience.
 
+### AUX-042 — the gate guarding mature consensus could never be satisfied
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-21
+
+`consensus_live` is the only state that means established consensus. It had thirteen consumer
+references and **zero producers**, and 0 of 1,316 generated records carried it. That was read for a
+long time as an undecided threshold. It was not.
+
+`qa_patch_records.py` gated the state on front-matter `consensus_evidence`, `structured_evidence`
+or `evidence_objects`. **Measured: 0 of 1,316 records carry any of the three**, nothing writes them
+and no template reads them. The exhaustive projection that DOES ship and DOES render is
+`accepted_report_sources` (`aux-update.html:123` and `:350`).
+
+**And the sanctioned writer was forbidden to write them.**
+`apply_consensus_to_records.WRITEABLE_FIELDS` contains `evidence_state`,
+`consensus_collection_status`, `evidence_state_label` and `intelligence_stage` — and none of the
+three the gate demanded. Its else-branch is
+`raise RuntimeError(f"Refusing to write unapproved field: {key}")`. So the only approved way to
+satisfy the precondition crashed the promote step before QA ran. The gate was unsatisfiable by data
+**and** by design, which is the whole reason the state has consumers and no producer.
+
+#### Why this had to be repaired alone, before any producer exists
+
+`:312` added to `errors`, not `warnings`, and `main` is `return 1 if errors else 0`. Two
+consequences, both verified:
+
+- `obs-evidence-collection.yml:448` runs QA with `--validate-before-commit`, so the first scheduled
+  run that wrote `consensus_live` would fail validation and skip the writeback — **discarding that
+  cycle's evidence for every product**, repeating every 6 hours.
+- `pages.yml:78` runs `--publish-strict` **before** `jekyll build`, its own comment calling the
+  position load-bearing, so the deploy would stop too.
+- `ci-integrity.yml` excluded this script, so **nothing at pull-request time could see either**.
+
+A producer shipped alongside the repair would therefore have been unfalsifiable until the scheduled
+run it broke.
+
+#### What the replacement validates, and the one field it refuses to believe
+
+`scan_live_consensus_claims` checks every record claiming maturity against the **authoritative**
+counted-evidence population — `lib.report_counts.counted_evidence_counts` applying the real per-row
+predicate (`counted is not False` AND `patch_version_matched is True` AND, for Windows, the
+record-relative current-patch gate) at that exact product/version/build identity. It requires the
+published count to equal that population, `accepted_report_sources` to be a non-empty list of
+mappings whose length equals it, every entry to carry a usable http URL, and those URLs to be
+distinct.
+
+**It never reads `accepted_report_sources[*].patch_version_matched`.**
+`apply_consensus_to_records:914` writes that key as a hardcoded `True` for every entry, so a gate
+believing it would be unfalsifiable on any record the consensus writer produced. Patch-matching is
+established upstream, on the rows, where the flag is real. Part C pins this, including that the
+function body never mentions the key.
+
+#### The first version of this repair had the same shape as the defect
+
+Caught in review before merge. Every check listed above compares the projection's SIZE to the
+authority and none of them looks at WHICH reports it names. Worked through concretely: 34 accepted
+rows, a published list of 33 real citations plus one invention, count 34 against an authority of 34,
+all distinct, all valid — and it ships. A fabricated or superseded citation of the right cardinality
+was invisible.
+
+That is the failure this entry exists to fix, reproduced one level up: a check that appears to
+validate evidence while never comparing against the thing that decides.
+
+The gate now requires every cited URL to be IN the authoritative accepted population, which needed
+the rows and not merely their tally. `lib.report_counts.counted_evidence_rows` is that population
+and `counted_evidence_counts` is now `len()` of its groups, so the count and the rows cannot
+disagree — one predicate, not a second copy in the QA gate. `evidence_loss.is_accepted` was
+considered and rejected for this: it is row-level but deliberately omits the record-relative Windows
+current-patch gate, so a superseded-KB citation would have passed a subset check built on it.
+
+Measured across the eight identities at or above the rung: **0 unsupported citations.** The live
+corpus is clean; this closes a hole rather than repairing damage.
+
+Distinctness uses `base.normalize_url`, the identity the append path already applies, imported
+rather than re-derived. A hand-rolled canonicaliser was written first, measured against the corpus,
+and was **wrong**: stripping query strings collapsed six genuinely distinct Blackmagic forum threads
+(`viewtopic.php?f=42&t=…`) onto one path and falsely reported duplicate evidence on a legitimate
+identity. Introducing a second URL authority to guard against duplicates would have repeated the
+exact defect this entry fixes.
+
+#### The pair is checked together
+
+`aux-update.html:86` keys the entire hero on `consensus_collection_status`; `evidence_state` appears
+there only as a secondary `or` inside the pilot branch. So a record live in one field and pilot in
+the other either publishes a maturity claim nothing validated, or silently publishes nothing while
+the data says otherwise. Neither is visible from one field alone, so a mismatched pair is an error
+and the half-claim is still validated rather than skipped.
+
+The legacy `live_consensus` word order is accepted on READ, because `:89` tests both. Nothing writes
+it.
+
+#### `--read-only`, and why it is the enabling change
+
+`qa_patch_records.py` was excluded from pull-request CI for exactly one reason, stated in
+`ci-integrity.yml`: the run wrote `_data/qa_status.json`. `--read-only` suppresses that single write
+statement and the directory creation, and **nothing else** — every scan, the publish-strict
+promotion and the exit code are the production codepath. Verified by running both modes over the
+real tree and diffing: byte-identical findings, identical exit codes, and `qa_status.json`
+unchanged.
+
+That is not a convenience. A re-implementation validated in CI while production ran different code
+is the two-authorities defect these gates exist to prevent — and it is what let an unsatisfiable
+precondition sit unnoticed. `ci-integrity.yml` now runs
+`qa_patch_records.py --read-only --publish-strict`, the stricter of the two modes and the one the
+deploy uses.
+
+#### Nothing in this change can make a record live
+
+Pinned behaviourally, not by inspection: the shipped `evidence_state_for` and
+`collection_status_for` mappings are exercised across counts 0, 1, 5, 33 and 133 and never return a
+live value. `consensus_live` stays in `VALID_EVIDENCE_STATES` so consumers remain honest. The
+population is measured and ready — 8 of 221 identities carrying accepted evidence reach the
+published High rung (33+), none at or above it fails any integrity condition, and OBS 32.1.2 carries
+108 accepted reports while labelled identically to a 1-report patch — but the producer is a later,
+separate change, and the blockers it still needs are recorded in the project's maturity blocker
+inventory, not here.
+
+#### Verification
+
+`test_consensus_live_gate.py = 61`, registered `[blocking]`. The contents check is proven
+BEHAVIOURALLY, on a frozen synthetic fixture independent of the live corpus: 34 reports accepted,
+one withdrawn leaving 33 — still at the rung — and the record still citing the withdrawn one. Count,
+length, distinctness and volume all agree, so the refusal is attributable to the contradiction and
+to nothing else, and it is the only finding. A structural assertion that the gate body never reads
+the projection's matched flag is retained as supplementary, after a mutant proved the semantic check
+written for that property did not fire on its own.
+
+Part F does not use a synthetic record:
+it takes the live corpus's largest candidate, promotes its two maturity fields in memory, and proves
+the gate yields **no** error against the real evidence store — while inflating that same record's
+published count by one is refused. Errors are the only thing a lane blocks on, so that is the
+demonstration that a genuine promotion cannot wedge the writeback or the deploy.
+
+15 mutants, each reverting one behaviour, each caught by a named check, suite restored green after
+each.
+
+**Reopen only if** a record is observed carrying a live state in either field while the
+authoritative counted-evidence population for its exact identity is below the published High rung,
+or while its `accepted_report_sources` disagrees with that population in length, in distinctness, or
+in membership; or if `qa_patch_records.py` gains a second write site not covered by `--read-only`.
+
+**Cross-reference** this is P1 of the sequenced maturity work; the freshness-aside honesty fix
+(`aux-update.html:279` has no `live` branch, so promotion currently DELETES the blocked-method
+warning) is P2 and must land before any producer. The lesson: a precondition nobody can satisfy
+reads exactly like a policy nobody has decided, and the difference is only visible if you check
+whether the approved writer is even permitted to write what the gate demands.
 ### AUX-038 — the site explained how it gathers evidence, in operational detail
 
 - **Status** Resolved · **Area** Public disclosure · **Severity** High

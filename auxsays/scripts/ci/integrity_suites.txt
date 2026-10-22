@@ -125,6 +125,16 @@ auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
 auxsays/scripts/tests/test_method_health_append_delta.py = 55
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
 auxsays/scripts/tests/test_consensus_sample_honesty.py = 88
+
+# The live-consensus precondition, which had never been satisfiable. The gate demanded front-matter
+# `consensus_evidence` / `structured_evidence` / `evidence_objects`; 0 of 1316 records carried any of
+# them, no template read them, and all three are ABSENT from the consensus writer's WRITEABLE_FIELDS
+# allow-list, whose else-branch raises. So the one sanctioned way to satisfy it crashed the writer --
+# which is why `consensus_live` had many consumers and no producer. The replacement validates the
+# published projection against the authoritative counted-evidence population instead, and
+# deliberately never reads `accepted_report_sources[*].patch_version_matched`, which the writer
+# stamps as a hardcoded True on every entry and which would make the check unfalsifiable.
+auxsays/scripts/tests/test_consensus_live_gate.py = 61
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27

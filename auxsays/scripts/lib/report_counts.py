@@ -50,12 +50,18 @@ def windows_targets_from_front_matter(
     return targets
 
 
-def counted_evidence_counts(
+def counted_evidence_rows(
         evidence_rows: Iterable[dict[str, Any]],
         *,
         windows_targets: dict[tuple[str, str, str], dict[str, Any]],
-) -> dict[tuple[str, str, str], int]:
-    """Authoritative count of final counted, patch-matched evidence rows per CANONICAL patch identity.
+) -> dict[tuple[str, str, str], list[dict[str, Any]]]:
+    """Authoritative final counted, patch-matched evidence ROWS per CANONICAL patch identity.
+
+    `counted_evidence_counts` is `len()` of these groups, so a caller needing the rows themselves --
+    the QA gate must check that a record's published citations are actually IN this population, not
+    merely the same length as it -- reads the same predicate rather than a second copy of it. One
+    predicate was the point of this module; returning only tallies forced the next caller to
+    re-derive acceptance, which is the divergence `apply_consensus_to_records` already documents.
 
     Predicate: ``counted is not False`` AND ``patch_version_matched is True`` AND, for
     ``microsoft-windows-11``, the row passes ``windows_identity_gate`` against that record's current
@@ -79,7 +85,7 @@ def counted_evidence_counts(
     itself takes -- so a genuinely record-less patch reads 0 while a caller bug cannot.
     Keys are patch_key(product_id, update_version, target_build); Reader and Pro are distinct
     product_ids and are never merged."""
-    counts: dict[tuple[str, str, str], int] = {}
+    groups: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
     for row in evidence_rows or []:
         if not isinstance(row, dict):
             continue
@@ -105,8 +111,20 @@ def counted_evidence_counts(
         require_build(product_id, version, row.get("target_build"),
                       f"counted evidence row {row.get('id') or row.get('source_url')!r}")
         key = patch_key(product_id, version, row.get("target_build"))
-        counts[key] = counts.get(key, 0) + 1
-    return counts
+        groups.setdefault(key, []).append(row)
+    return groups
+
+
+def counted_evidence_counts(
+        evidence_rows: Iterable[dict[str, Any]],
+        *,
+        windows_targets: dict[tuple[str, str, str], dict[str, Any]],
+) -> dict[tuple[str, str, str], int]:
+    """Authoritative COUNT per canonical patch identity -- the size of each `counted_evidence_rows`
+    group. Derived rather than tallied separately so the count and the population can never
+    disagree: this is the predicate `update_report_count` is reconciled against."""
+    return {key: len(rows) for key, rows in
+            counted_evidence_rows(evidence_rows, windows_targets=windows_targets).items()}
 
 
 # Count-derived presentation fields. These MIRROR apply_consensus_to_records exactly -- this module is
