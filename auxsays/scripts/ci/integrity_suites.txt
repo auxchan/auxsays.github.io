@@ -296,6 +296,13 @@ auxsays/scripts/tests/test_patch_heading_contrast.py = 111
 # by fixtures, never by the 66/153 corpus split -- scheduled collectors own those numbers.
 auxsays/scripts/tests/test_patch_decision_hierarchy.py = 32
 auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
+
+# Elgato official ingestion over the Zendesk Help Center JSON API. The HTML section pages return 403
+# with cf-mitigated: challenge to the Actions runner on all four products; the API returns 200 JSON
+# with a version in every title. Offline: fetch_text is substituted. A version claimed by two distinct
+# articles (Elgato's separate macOS and Windows notes) is DEFERRED rather than resolved by keeping one,
+# because a record holds one notes body and choosing either half misstates the other platform.
+auxsays/scripts/tests/test_zendesk_help_center_adapter.py = 60
 # Presence guards. 91 `x != blank` / `x == blank` tests across eight layouts and includes were
 # ALL inert: `blank` needs ActiveSupport's `blank?` and Jekyll does not load it, so every such
 # guard passed unconditionally and every `== blank` branch was dead. That shipped 1,218 empty
@@ -308,7 +315,7 @@ auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
 # an element taller than ~12 viewports can never satisfy, so the Adobe company page's 410-row
 # history stayed invisible on desktop permanently.
 auxsays/scripts/tests/test_template_presence_guards.py = 49
-auxsays/scripts/tests/test_patch_ingest_record_limit.py = 78
+auxsays/scripts/tests/test_patch_ingest_record_limit.py = 79
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
