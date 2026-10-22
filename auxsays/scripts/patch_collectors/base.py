@@ -13,6 +13,8 @@ import textwrap
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+
+from lib.patch_identity import key_from as patch_key_from, require_build
 from typing import Any, Iterable
 from urllib.parse import parse_qs, urlparse
 
@@ -64,10 +66,17 @@ EVIDENCE_FIELDS = (
     "listing_card_title",
     "listing_card_category",
     "listing_card_date_text",
+    # Exact vendor build. Part of the DURABLE schema, not a transient annotation: for a
+    # build-aware product the canonical patch identity is (product_id, update_version,
+    # target_build), so a row that loses its build here can no longer be attributed to the
+    # patch it was accepted for. Optional (and empty) for every product without a build
+    # contract -- see lib.patch_identity.BUILD_AWARE_PRODUCTS.
+    "target_build",
 )
 
 OPTIONAL_EVIDENCE_FIELDS = {
     "archive_url",
+    "target_build",
     "source_date",
     "source_date_resolved",
     "target_release_date",
@@ -91,6 +100,10 @@ OPTIONAL_EVIDENCE_FIELDS = {
 METHOD_HEALTH_FIELDS = (
     "product_id",
     "update_version",
+    # Method health is patch identity too: 2603/build-A learn_qna=success and
+    # 2603/build-B learn_qna=blocked are two different facts about two different patches.
+    # Empty for every product without a build contract, so their health identity is unchanged.
+    "target_build",
     "method_id",
     "source_type",
     "status",
@@ -171,6 +184,10 @@ class PatchRecord:
     update_published_at: str
     update_status: str
     update_product: str
+    # Exact vendor build from the record's front matter. Empty for every product without a build
+    # contract; for a build-aware product it is the second half of this record's patch identity,
+    # and collectors must attribute evidence and method health to it rather than to the YYMM.
+    target_build: str = ""
 
 
 @dataclass(frozen=True)
@@ -304,8 +321,41 @@ def generated_records(product_id: str, target_versions: set[str] | None = None, 
             update_published_at=str(data.get("update_published_at") or "").strip(),
             update_status=status,
             update_product=str(data.get("update_product") or product_id).strip(),
+            target_build=str(data.get("target_build") or "").strip(),
         ))
     return records
+
+
+def newest_first(records: list[PatchRecord]) -> list[PatchRecord]:
+    """Most recently released patch first.
+
+    `generated_records` above returns the corpus in FILENAME order, and every generated filename is
+    date-prefixed, so its natural order is oldest-first: 2014 before 2026. Every collector is bounded
+    by a per-collector wall-clock budget (`AUXSAYS_COLLECTOR_DEADLINE_SECONDS`, 1200 s) and simply
+    `break`s when it expires, so an oldest-first walk spends its entire budget re-scraping the
+    historical head of the corpus and never reaches the patches a reader is actually looking at.
+
+    This is not hypothetical and it is not a tail problem. Measured on DaVinci before this helper was
+    used there: scheduled run 34377762747 processed versions 10.1.5 through 15.0.1 -- records
+    published 2014-05-09 to 2018-09-03 -- rejected 77 of 77 candidates as
+    `missing_exact_patch_version_match`, and stopped. 87 of 120 records were never reached; the
+    newest release, 21.1, had never been searched once by any method; and the walk's high-water mark
+    was RECEDING, because each newly ingested record lengthens the corpus ahead of the recent tail.
+
+    Reversing the order does not create budget, it spends it where the value is. Old records keep
+    whatever remains, and they are the ones that already carry evidence. Deterministic: ties break on
+    version, so two runs walk the same order.
+
+    NOTE ON DUPLICATION. `adobe_acrobat_community.py:130` and `microsoft_windows.py:1038` each carry
+    their own private copy of this function, which is where the idea was proven (PRs #102-#105).
+    They are deliberately NOT refactored to call this one: both products are frozen, and "the
+    implementation could be cleaner" is not a licence to touch frozen code. This shared copy exists
+    so the next collector inherits the fix instead of rediscovering it.
+    """
+    return sorted(records,
+                  key=lambda r: (str(getattr(r, "update_published_at", "") or ""),
+                                 str(getattr(r, "update_version", "") or "")),
+                  reverse=True)
 
 
 def load_evidence(path: Path = EVIDENCE_PATH) -> list[dict[str, Any]]:
@@ -378,12 +428,91 @@ def write_method_health_file(rows: list[dict[str, Any]], path: Path = METHOD_HEA
     atomic_write_text(path, yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000))
 
 
-def method_health_key(row: dict[str, Any]) -> tuple[str, str, str]:
-    return (
-        str(row.get("product_id") or "").strip(),
-        str(row.get("update_version") or "").strip(),
-        str(row.get("method_id") or "").strip(),
-    )
+def _family_key(row: dict[str, Any]) -> tuple[str, str, str, str]:
+    product_id, version, build = patch_key_from(row)
+    return (product_id, version, build, str(row.get("source_type") or "").strip())
+
+
+def _distribute_capped(rows: list[dict[str, Any]], total: int) -> list[int]:
+    """Share `total` across `rows`, giving no row more than it accepted.
+
+    An evidence row records the COMMUNITY it came from, not the route that found it, so a family
+    delta cannot be split by method with certainty when several methods read one community
+    (PowerPoint has three on `microsoft_learn_qna`; Adobe has five on `adobe_community_bug_report`).
+    What IS certain is that a method cannot have stored more than it accepted, so the share is
+    walked in order and capped at each row's own accepted count.
+
+    The first version of this handed the whole family delta to the FIRST row with that key. On the
+    real Premiere method order -- `adobe_community_search` first and usually empty, `brave_search_api`
+    later and productive -- that published `accepted=0, stored=3` for a method that found nothing and
+    `stored=0, already held=3` for the method that had just stored them. Worse, `stored > accepted`
+    is refused by `validate_evidence_method_health`, which runs `--validate-before-commit` in both
+    write lanes, so the whole run's writeback would have been rejected -- every product, every file,
+    on every retry.
+    """
+    shares = [0] * len(rows)
+    remaining = total
+    for index, row in enumerate(rows):
+        if remaining <= 0:
+            break
+        room = int(row.get("accepted_candidates") or 0)
+        take = min(remaining, max(0, room))
+        shares[index] = take
+        remaining -= take
+    return shares
+
+
+def finalize_method_health_delta(health_rows: Iterable[dict[str, Any]],
+                                 added_rows: Iterable[dict[str, Any]],
+                                 already_held_rows: Iterable[dict[str, Any]] = ()) -> list[dict[str, Any]]:
+    """Stamp the MEASURED append outcome onto health rows, after the append has happened.
+
+    Both numbers come from the append itself -- `added_rows` from ``out_added`` and
+    `already_held_rows` from ``out_already_held`` -- because neither can be inferred. Deriving
+    duplicates as "accepted minus stored" was wrong three ways: a batch the build gate abandoned
+    reported every accepted row as "already held" when the store was empty; a URL two methods of one
+    collector both accepted in the SAME run was reported as archive depth; and the row credited with
+    the family's stored rows reported them as duplicates.
+
+    Attribution is by (canonical patch identity, source_type) because that is what both a health row
+    and an evidence row carry, then shared within the family capped by each row's accepted count --
+    see `_distribute_capped`. Within one community read by several methods the split between those
+    methods is therefore approximate; the family total, and the invariant that no row claims more
+    than it accepted, are exact.
+
+    Mutates and returns the rows, so a caller can finalize the list it is about to hand back.
+    """
+    finalized = list(health_rows or ())
+    added_by_family: dict[tuple[str, str, str, str], int] = {}
+    for row in added_rows or ():
+        key = _family_key(row)
+        added_by_family[key] = added_by_family.get(key, 0) + 1
+    held_by_family: dict[tuple[str, str, str, str], int] = {}
+    for row in already_held_rows or ():
+        key = _family_key(row)
+        held_by_family[key] = held_by_family.get(key, 0) + 1
+
+    families: dict[tuple[str, str, str, str], list[dict[str, Any]]] = {}
+    for row in finalized:
+        families.setdefault(_family_key(row), []).append(row)
+    for key, rows in families.items():
+        for row, stored in zip(rows, _distribute_capped(rows, added_by_family.get(key, 0))):
+            row["evidence_rows_added"] = stored
+        for row, held in zip(rows, _distribute_capped(rows, held_by_family.get(key, 0))):
+            # A row cannot have both stored and already-held more than it accepted in total.
+            room = max(0, int(row.get("accepted_candidates") or 0) - int(row.get("evidence_rows_added") or 0))
+            row["duplicate_existing_evidence"] = min(held, room)
+    return finalized
+
+
+def method_health_key(row: dict[str, Any]) -> tuple[str, str, str, str]:
+    """Method-health identity = canonical patch identity + method.
+
+    The build slot is '' for every product without a build contract, so their rows keep the exact
+    identity they had. For a build-aware product two builds under one YYMM are two health rows and
+    neither can overwrite the other."""
+    product_id, version, build = patch_key_from(row)
+    return (product_id, version, build, str(row.get("method_id") or "").strip())
 
 
 def upsert_method_health(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_PATH) -> tuple[int, int, list[dict[str, Any]]]:
@@ -393,7 +522,11 @@ def upsert_method_health(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_
     for row in rows:
         normalized = normalize_method_health_row(row)
         key = method_health_key(normalized)
-        if not all(key):
+        # The REQUIRED identity components are product, version and method. The build slot is
+        # legitimately empty for every product without a build contract, so `all(key)` would drop
+        # each of their rows -- guard the required components explicitly instead.
+        product_id, version, _build, method_id = key
+        if not (product_id and version and method_id):
             continue
         current_idx = index.get(key)
         if current_idx is None:
@@ -413,6 +546,7 @@ def method_health_row(
     product_id: str,
     update_version: str,
     method_id: str,
+    target_build: str = "",
     source_type: str,
     status: str,
     candidates_found: int,
@@ -429,13 +563,27 @@ def method_health_row(
     return normalize_method_health_row({
         "product_id": product_id,
         "update_version": update_version,
+        "target_build": target_build,
         "method_id": method_id,
         "source_type": source_type,
         "status": status,
         "candidates_found": candidates_found,
         "accepted_candidates": accepted_reports if accepted_candidates is None else accepted_candidates,
         "duplicate_existing_evidence": duplicate_existing_evidence,
-        "evidence_rows_added": accepted_reports if evidence_rows_added is None else evidence_rows_added,
+        # ROWS PERSISTED, NOT CANDIDATES ACCEPTED. This defaulted to `accepted_reports`, which made
+        # the field a second name for `accepted_candidates` -- and it was exactly that in all 1484
+        # committed rows, with `duplicate_existing_evidence` zero in every one of them. A collector
+        # re-finds the same threads every run and re-accepts them; `append_evidence_rows` then
+        # refuses each one as a duplicate, so a run could accept 80 rows, store 0, and publish
+        # "80 added" on the public methodology table. Measured over the git history of that table:
+        # 336 rows claimed against 48 actually stored.
+        #
+        # A health row is now built claiming NOTHING was stored, and the collector overwrites it via
+        # `finalize_method_health_delta` once `append_evidence_rows` has reported the real delta. A
+        # dry run stores nothing and 0 is therefore correct there; a write run that forgets to
+        # finalize understates instead of overstating, which is the safe direction for a number
+        # whose whole job is to say what actually reached the store.
+        "evidence_rows_added": 0 if evidence_rows_added is None else evidence_rows_added,
         "public_counted_reports": accepted_reports if public_counted_reports is None else public_counted_reports,
         "accepted_reports": accepted_reports,
         "rejected_reports": rejected_reports,
@@ -468,25 +616,59 @@ def normalize_evidence_row(row: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
-def evidence_key(row: dict[str, Any], key_field: str) -> tuple[str, str, str]:
-    return (
-        str(row.get("product_id") or "").strip(),
-        str(row.get("update_version") or "").strip(),
-        normalize_url(str(row.get(key_field) or "")),
-    )
+def evidence_key(row: dict[str, Any], key_field: str) -> tuple[str, str, str, str]:
+    """Append/dedup identity for a structured evidence row.
+
+    The first three components are the canonical patch identity (``lib.patch_identity.key_from``),
+    whose build slot is '' for every product without a build contract -- so this stays semantically
+    identical for OBS/DaVinci/Premiere/Acrobat/Windows. For a build-aware product the exact build
+    participates, so two reports sharing a source URL and YYMM but naming DIFFERENT builds are two
+    rows, while two discoveries of the same report for the SAME build still deduplicate."""
+    product_id, version, build = patch_key_from(row)
+    return (product_id, version, build, normalize_url(str(row.get(key_field) or "")))
 
 
-def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH) -> tuple[int, int, list[dict[str, Any]]]:
+def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
+                         *, out_added: list[dict[str, Any]] | None = None,
+                         out_already_held: list[dict[str, Any]] | None = None) -> tuple[int, int, list[dict[str, Any]]]:
+    """Append rows the store does not already hold. Returns (added, total, all rows).
+
+    ``out_added`` is an OPTIONAL sink for the rows actually persisted. It exists because the count
+    alone cannot be attributed: method-health telemetry has to say how many rows THIS METHOD stored
+    for THIS patch, and only the rows themselves carry the source_type and the patch identity. It is
+    a keyword-only out-parameter rather than a fourth return value because seven production call
+    sites unpack this function's three-tuple, and silently changing that arity is how a refactor
+    becomes an outage.
+
+    ``out_already_held`` is the other half, and it has to be MEASURED here rather than derived by
+    the caller: a refusal because the STORE already held the row is not the same event as a refusal
+    because an earlier row in this same batch had the identical URL, and neither is the same as a
+    batch abandoned mid-flight by the build gate. Only this loop can tell them apart, because only
+    it knows which keys were present before the batch started.
+    """
     existing = load_evidence(path)
+    # The keys the store held BEFORE this batch. `seen_ids` / `seen_urls` grow as the loop accepts,
+    # so they cannot answer "was this already held?" once the batch is underway.
     seen_ids = {evidence_key(row, "id") for row in existing if row.get("id")}
     seen_urls = {
         evidence_key(row, "source_url")
         for row in existing
         if row.get("source_url") and row.get("match_basis") != "embedded_listing_report_card"
     }
+    preexisting_ids = set(seen_ids)
+    preexisting_urls = set(seen_urls)
     added = 0
     for row in rows:
         normalized = normalize_evidence_row(row)
+        # Fail closed at the durable boundary: a COUNTED row for a build-aware product must carry
+        # the exact build it was accepted for. Persisting a counted row without one would create
+        # evidence that names a version but no patch -- unattributable to any build-specific
+        # record, and silently uncounted by every build-aware consumer downstream. Uncounted rows
+        # (rejected candidates, audit trail) are allowed to have no build.
+        if normalized.get("counted") is not False:
+            require_build(normalized.get("product_id"), normalized.get("update_version"),
+                          normalized.get("target_build"),
+                          f"counted evidence row {normalized.get('id') or normalized.get('source_url')!r}")
         id_key = evidence_key(normalized, "id")
         url_key = evidence_key(normalized, "source_url")
         url_duplicate = (
@@ -494,6 +676,14 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH)
             and url_key in seen_urls
         )
         if id_key in seen_ids or url_duplicate:
+            # Refused. Report it as "the store already held this" ONLY when the key was present
+            # before this batch began; a collision with an earlier row of this same batch is a
+            # different event and must not be published as archive depth.
+            if out_already_held is not None and (
+                    id_key in preexisting_ids
+                    or (normalized.get("match_basis") != "embedded_listing_report_card"
+                        and url_key in preexisting_urls)):
+                out_already_held.append(normalized)
             continue
         existing.append(normalized)
         seen_ids.add(id_key)
@@ -506,8 +696,16 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH)
         # `open("a")` torn-write hazard (an interruption can no longer leave a partial YAML document)
         # while keeping the historical bytes untouched (no full reformat). No additions -> no write.
         appended_rows = existing[-added:]
+        if out_added is not None:
+            out_added.extend(appended_rows)
         serialized = yaml.safe_dump(appended_rows, sort_keys=False, allow_unicode=True, width=1000)
-        if path.exists():
+        # The byte-append is only valid when the file already ENDS INSIDE the evidence list. A store
+        # written as `{schema_version: 1, evidence: []}` ends inside a mapping, so concatenating a
+        # bare top-level sequence onto it produces a document PyYAML then refuses to load
+        # ("expected <block end>, but found '-'") -- the store is destroyed by its first append.
+        # Not reachable from the live file, which has never been empty, but reachable from any fresh
+        # store, which is how the mandated telemetry fixtures found it.
+        if path.exists() and len(existing) > added:
             existing_text = path.read_text(encoding="utf-8")
             separator = "\n" if existing_text and existing_text.strip() else ""
             atomic_write_text(path, existing_text + separator + serialized)
@@ -529,14 +727,43 @@ def normalize_url(url: str) -> str:
     return url.strip().rstrip("/").lower()
 
 
+# A version prefix a reporter writes immediately before the number. Only these: an arbitrary
+# preceding letter must still block the match, or "dev25.001.21111" and "rev25.001.21111" would
+# read as 25.001.21111.
+_VERSION_PREFIX_RE = re.compile(r"(?:^|[^A-Za-z0-9.])(?:v|ver|version|build)\.?$", re.I)
+
+
 def exact_version_match(text: str, version: str, aliases: Iterable[str] = ()) -> tuple[bool, str, str]:
+    """Does ``text`` name exactly this version (or one of its product-local spellings)?
+
+    BOUNDARIES. The trailing guard has to reject a longer version -- "26.001.21745.1" is a
+    different build, and "26.001.217450" is a different number -- while accepting the sentence that
+    simply ENDS: "we are on version 26.001.21745." A period is only a version component when a
+    digit follows it, so that is the rule, rather than banning the character outright. Measured on
+    the live Acrobat corpus, the old guard refused six real reports on prose punctuation alone.
+
+    The leading guard stays strict about letters, with one exception: a recognised version prefix
+    written against the number ("v25.001.21111"). `dev`/`rev`/any other word still blocks.
+    """
+    body = text or ""
     for candidate in [version, *aliases]:
         candidate = str(candidate or "").strip()
         if not candidate:
             continue
-        pattern = re.compile(rf"(?<![A-Za-z0-9.]){re.escape(candidate)}(?![A-Za-z0-9.])", flags=re.I)
-        if pattern.search(text or ""):
-            return True, candidate, "exact_version_text" if candidate == version else "exact_version_alias"
+        # No leading lookbehind in the pattern: a version prefix is alphabetic, so a lookbehind
+        # would reject "v25.001.21111" before the loop could tell "v" from "dev". The leading
+        # boundary is decided below instead, on the text actually preceding the hit.
+        pattern = re.compile(rf"{re.escape(candidate)}(?![A-Za-z0-9])(?!\.\d)", flags=re.I)
+        for hit in pattern.finditer(body):
+            before = body[:hit.start()]
+            if not before:
+                pass                                    # start of text
+            elif _VERSION_PREFIX_RE.search(before):
+                pass                                    # v / ver / version / build, written against
+            elif before[-1].isdigit() or before[-1] == "." or before[-1].isalpha():
+                continue                                # inside a longer number, or another word
+            return True, candidate, ("exact_version_text" if candidate == version
+                                     else "exact_version_alias")
     return False, "", ""
 
 

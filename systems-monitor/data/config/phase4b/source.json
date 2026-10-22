@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "phase4b-bea-source-1.0.0",
+  "sourceId": "bea-input-output",
+  "authority": "U.S. Bureau of Economic Analysis",
+  "endpoint": "https://apps.bea.gov/api/data",
+  "dataset": "InputOutput",
+  "credentialEnvironmentVariable": "AUXSAYS_BEA_USER_ID",
+  "metadataMethod": "GetParameterValues",
+  "metadataParameters": ["TableID", "Year"],
+  "economicYear": "2024",
+  "aggregation": "SUMMARY_71",
+  "redefinitionBasis": "AFTER_REDEFINITIONS",
+  "priceBasis": "PRODUCERS_PRICES",
+  "unit": "Coefficient",
+  "topology": {
+    "productToken": "CxIDRAR",
+    "requiredTitleTerms": ["Direct Requirements", "After Redefinitions", "Summary"],
+    "tableId": null,
+    "tableIdResolution": "LIVE_GET_PARAMETER_VALUES_REQUIRED"
+  },
+  "benchmark": {
+    "productToken": "IxCTRAR",
+    "role": "NON_RECURSIVE_BENCHMARK_ONLY",
+    "requiredTitleTerms": ["Industry-by-Commodity", "Total Requirements", "After Redefinitions", "Summary"],
+    "tableId": null,
+    "tableIdResolution": "LIVE_GET_PARAMETER_VALUES_REQUIRED"
+  },
+  "requestLimits": {
+    "requestsPerMinute": 100,
+    "megabytesPerMinute": 100,
+    "errorsPerMinute": 30,
+    "honorRetryAfter": true
+  },
+  "scheduledRetrieval": "API_ONLY_RELEASE_AWARE_ANNUAL",
+  "attribution": "This product uses the Bureau of Economic Analysis (BEA) Data API but is not endorsed or certified by BEA."
+}

@@ -72,16 +72,26 @@ layout: aux-base
 
       <div class="featured-list">
         {% for post in site.posts limit:2 %}
-        {% assign article_image_src = '' %}
-        {% if post.image != blank %}{% assign article_image_src = post.image %}{% endif %}
-        {% if article_image_src == '' and post.thumbnail != blank %}{% assign article_image_src = post.thumbnail %}{% endif %}
-        {% if article_image_src == '' and post.thumb != blank %}{% assign article_image_src = post.thumb %}{% endif %}
-        {% if article_image_src == '' and post.cover != blank %}{% assign article_image_src = post.cover %}{% endif %}
-        {% if article_image_src == '' and post.hero_image != blank %}{% assign article_image_src = post.hero_image %}{% endif %}
-        {% if article_image_src == '' and post.featured_image != blank %}{% assign article_image_src = post.featured_image %}{% endif %}
-        {% if article_image_src.path != blank %}{% assign article_image_src = article_image_src.path %}{% endif %}
-        {% if article_image_src.url != blank %}{% assign article_image_src = article_image_src.url %}{% endif %}
-        {% if article_image_src.src != blank %}{% assign article_image_src = article_image_src.src %}{% endif %}
+        {%- comment -%}
+          Article thumbnail resolution. The `!= blank` form this block used is inert here (see the
+          NORMALIZED PRESENCE note in aux-update.html), which broke it twice over: the first guard
+          assigned `post.image` even when absent, so the thumbnail/cover/hero fallbacks could never
+          fire, and then the three unwrap guards ran unconditionally -- a String has no `.path`, so
+          `article_image_src` was reduced to nil on EVERY post. nil is not '', so the render guard
+          below still passed and both cards emitted `<img src="">` on the live homepage instead of
+          the `featured-visual` placeholder they were supposed to fall back to.
+
+          `default:` already implements the cascade (it skips nil AND ''), and testing the member
+          directly is the correct object test: on a String the member is nil and falsy, on a
+          front-matter hash it is the value. No `blank` needed.
+          NB: do not write a Liquid tag inside a comment block -- comment still PARSES tags,
+          so a literal if-tag in this prose is a SyntaxError that kills the whole template.
+        {%- endcomment -%}
+        {% assign image_candidate = post.image | default: post.thumbnail | default: post.thumb | default: post.cover | default: post.hero_image | default: post.featured_image %}
+        {% if image_candidate.path %}{% assign image_candidate = image_candidate.path %}
+        {% elsif image_candidate.url %}{% assign image_candidate = image_candidate.url %}
+        {% elsif image_candidate.src %}{% assign image_candidate = image_candidate.src %}{% endif %}
+        {% assign article_image_src = image_candidate | default: '' | strip %}
         <article class="featured-card featured-card--wide">
           <a class="featured-card-visual" href="{{ post.url | relative_url }}" aria-hidden="true">
             {% if article_image_src != '' %}
@@ -125,7 +135,12 @@ layout: aux-base
       {% assign home_patch_limit = 10 %}
       {% assign home_patch_count = 0 %}
       {% assign home_product_seen = '|' %}
-      <div class="home-patch-list home-patch-list--signals">
+      <p class="home-watchlist-note" data-home-watchlist-note hidden>
+        <span class="home-watchlist-note__mark" aria-hidden="true"></span>
+        Your watched products are shown first.
+        <a class="home-watchlist-note__link" href="{{ '/updates/my-stack/' | relative_url }}">My Patch Stack →</a>
+      </p>
+      <div class="home-patch-list home-patch-list--signals" data-home-signal-list>
         {% comment %}
           Homepage Patch Signals is intentionally stricter than the full Patch Feed.
           It promotes one actionable signal per product, not every official-only capture.
@@ -234,8 +249,9 @@ layout: aux-base
                 {% assign stage_label = item.intelligence_stage_label | default: item.intelligence_stage | default: '' | replace: '_', ' ' | capitalize %}
                 {% assign item_official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
                 {% assign item_official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
-                <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal>
+                <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal data-product-id="{{ item_product_identity }}">
                   <span class="home-patch-dot home-patch-dot--{{ consensus_key }}" aria-hidden="true"></span>
+                  <span class="home-watch-flag" data-home-watch-flag hidden>Watching</span>
                   <span class="home-patch-copy">
                     <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
                     <em>

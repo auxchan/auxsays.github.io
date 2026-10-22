@@ -19,7 +19,7 @@ update_published_at: '2026-05-14T00:00:00Z'
 update_last_checked: '2026-05-21T04:48:22Z'
 source_last_checked: '2026-06-23T10:05:47Z'
 official_body_last_checked: '2026-06-23T10:05:47Z'
-record_last_updated: '2026-08-07T03:45:14.845297Z'
+record_last_updated: '2026-09-16T02:08:35.525742Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,22 +27,22 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.3.3
 update_detail_title: DaVinci Resolve 20.3.3
 update_consensus_label: Negative
-update_report_count: 7
-update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 20.3.3 has 7 user reports found.'
+update_report_count: 8
+update_consensus_confidence: Low-Medium
+quick_verdict: 'WAIT: DaVinci Resolve 20.3.3 has 8 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.3.3 in its official support downloads feed.
 release_summary: This software update is for anyone using DaVinci Resolve Studio 20. It improves Fusion memory usage
   on Mac OS 26, addresses a metadata issue in Dolby Vision IMF renders and provides general performance and stability
   improvements. These improvements are already in DaVinci Resolve 21 Public Beta 3.
-consensus_report: '7 user reports found for DaVinci Resolve 20.3.3. Current reports mention render/export failures,
+consensus_report: '8 user reports found for DaVinci Resolve 20.3.3. Current reports mention render/export failures,
   installation problems, and startup or application crashes. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 7
-evidence_last_checked: '2026-08-07T03:43:21Z'
+confirmed_patch_specific_report_count: 8
+evidence_last_checked: '2026-09-10T05:38:34Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -79,6 +79,9 @@ status_events:
 - at: '2026-08-07T03:45:14.845297Z'
   label: User reports found
   note: User report count updated to 7.
+- at: '2026-09-16T02:08:35.525742Z'
+  label: User reports found
+  note: User report count updated to 8.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -149,10 +152,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.3 has 7 user reports found. Small sample size. Current reports
-  mention render/export failures, installation problems, and startup or application crashes. Production editors
-  with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so
-  production users should test before updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.3 has 8 user reports found. User reports show a repeat pattern.
+  Current reports mention render/export failures, installation problems, and startup or application crashes. Production
+  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
+  so production users should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1tjqajq/server_connection_interrupted_when_rendering/
@@ -255,6 +258,16 @@ accepted_report_sources:
   source_url: https://www.reddit.com/r/davinciresolve/comments/1vga3zc/render_error_of_short_film/
   source_title: render error of short film
   source_date: '2026-08-05'
+  version_matched: 20.3.3
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vjq4ae/screenshotsexports_of_the_color_page_viewer_wont/
+  source_title: Screenshots/exports of the Color page viewer won't upload to Claude.ai (Resolve 20.3.3, macOS) —
+    anyone else hit this?
+  source_date: '2026-08-09'
   version_matched: 20.3.3
   patch_version_matched: true
   issue: render/export failures

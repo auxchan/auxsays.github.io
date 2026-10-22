@@ -1,0 +1,329 @@
+# AUXSAYS CI test-governance manifest.
+#
+# CLOSED WORLD: every test file under auxsays/scripts/tests/ must appear in exactly one category
+# below. The runner fails if a test file exists that is classified nowhere (so a new test cannot
+# silently bypass CI), if a category names a file that does not exist (so coverage cannot silently
+# shrink), or if any file is listed twice. Listing is explicit rather than glob-discovered for
+# exactly that reason.
+#
+#   blocking              run by CI, must pass. Deterministic, offline, proven not to write.
+#   diagnostic            run by CI, must pass. Deterministic but broader/slower, or protecting
+#                         presentation rather than patch correctness.
+#   network               NOT run: makes live external requests. Transport availability is not PR
+#                         correctness; it belongs to the scheduled source-health lanes.
+#   mutating              NOT run: writes the live checkout. Would silently revert a contributor.
+#   environment_specific  NOT run: needs tooling absent from the runner, and reports green anyway.
+#   stale                 NOT run: currently failing for a test-side reason, with a named follow-up.
+#
+# Every entry outside `blocking`/`diagnostic` carries the reason it is excluded. Nothing is excluded
+# without one.
+#
+# Entries are REPO-RELATIVE PATHS, and discovery is repo-wide and recursive: a single non-recursive
+# glob of one directory let a new suite bypass CI five ways (a `*_test.py` suffix, a subdirectory,
+# another tests root, the repo root, a file beside the runner), and three real .mjs suites were
+# already living outside the closed world.
+#
+# Executed entries declare `= N`, the governed number of checks the suite must report. A
+# self-consistent summary proves nothing about how much work was done -- `0/0 passed, 0 failed` is
+# perfectly consistent and perfectly empty -- so this number is what makes silent coverage loss a
+# failed build. Change it deliberately, in the same commit as the test change.
+
+[blocking]
+# --- canonical patch identity -------------------------------------------------
+# --- build identity and the exact-build write path ----------------------------
+# --- collector field ownership and write authority ----------------------------
+# --- consensus count authority and workflow ordering --------------------------
+# --- evidence projection, acceptance and dedupe -------------------------------
+# --- version / authority attribution ------------------------------------------
+# --- generated-record QA and coherence gates ----------------------------------
+# --- the CI runner is policy, so it is tested like production code ---------------
+auxsays/scripts/tests/test_acrobat_vendor_authority.py = 49
+auxsays/scripts/tests/test_audit_consensus_evidence.py = 18
+auxsays/scripts/tests/test_automation_writeback.py = 152
+# A stored evidence row may not disappear, and may stop being accepted only by an audited in-place
+# withdrawal. Every in-tree gate compares the records against the SAME store a purge rewrote, so a
+# coherent 98% DaVinci deletion passed QA, the audit and this whole manifest, and the real writeback
+# pushed it. This suite drives the actual writeback against a throwaway bare origin, executes the
+# ci-integrity step against a stubbed git (it does not grep it), evaluates its concurrency group
+# per event, and pins no count of the live store.
+auxsays/scripts/tests/test_evidence_loss_guard.py = 80
+auxsays/scripts/tests/test_ci_integrity_runner.py = 39
+
+# The merge authority. AUX-013 was not a missing rule, it was a rule with nothing behind it: PR #163
+# merged nineteen seconds after its own ci-integrity run concluded `failure`, because the status read
+# and the merge were one gesture. Server-side enforcement was measured and refused (three probes in
+# the ledger), so the gate is repo-owned and therefore has to be tested like production code. This
+# suite replays the real #163 head and run, enumerates every refusal, and pins the structure -- the
+# single `client.merge(` call site, the absent override flag, the SHA lease. All 24 mutants of the
+# gate are killed by it, including the one that made a missing required run read as green and the
+# one that let a hand-dispatched run of the same workflow stand in for the pull request's own.
+auxsays/scripts/tests/test_guarded_merge.py = 82
+
+# --- PowerPoint collection expansion: same-author context + OfficeDev issues -----
+auxsays/scripts/tests/test_powerpoint_same_author_context.py = 18
+auxsays/scripts/tests/test_powerpoint_github_officedev.py = 22
+auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
+auxsays/scripts/tests/test_powerpoint_qna_tag_enumeration.py = 65
+auxsays/scripts/tests/test_acrobat_tiering.py = 136
+
+# A retired Acrobat method must report that it is retired. adobe_community_search and
+# reddit_search stopped executing, and the comment that retired them claimed their health rows
+# stayed honest; 286 rows instead froze at `blocked` with last_run 2026-08-07/2026-09-01 beside
+# algolia rows refreshing daily. Three consumers read status with no freshness check, so 84
+# patch pages published "Collection blocked" and the methodology page published 286 raw
+# blocked_reason diagnostics as current. This pins the repair -- a fresh `disabled` row every
+# run -- and the properties that make `disabled` correct rather than cosmetic: not healthy, not
+# attempted-and-failed, not creditable with another method's evidence, and replaced in place if
+# the method is ever re-enabled. The two corpus observations WARN rather than fail: this is a
+# producer fix, and each record's rows are rewritten only when THAT record is next walked.
+# Acrobat is walked newest-first under a wall-clock budget -- about the first 20 of 196
+# records per edition per run -- so 139 of the 143 frozen identities are a standing backlog
+# that scoped dispatches clear, not a one-run lag.
+auxsays/scripts/tests/test_acrobat_retired_method_health.py = 50
+
+# The two repairs AUX-027 made after a targeted collector dispatch was used to clear the AUX-026
+# health backlog. That was the wrong mechanism -- a full collector dispatch DISCOVERS EVIDENCE --
+# and run 37871206618 added five counted Reader rows besides the health it was meant to fix. One
+# made Reader 15.009.20071 publish a single report sourced from "Acrobat DC Pro will not update
+# beyond ...", while Pro 15.009.20071 published none: PRO_RE's `dc pro` alternative required the
+# literal word "Adobe", so the bare form fell through to the shared-DC-build fallback. Section A
+# pins every real Pro spelling on BOTH collection paths, B pins that nothing else was broadened
+# (generic "Acrobat DC", licensing wording, Reader aliases, the genuinely-shared case), and D/E
+# pin the zero-network health migration that replaces the dispatch: idempotent, scoped to two
+# products x two methods, and structurally unable to write evidence -- E.2 checks that over the
+# AST, because the module docstring legitimately names the things it must not do.
+auxsays/scripts/tests/test_acrobat_edition_and_health_migration.py = 59
+auxsays/scripts/tests/test_update_linked_tier2.py = 243
+auxsays/scripts/tests/test_collector_ownership.py = 52
+auxsays/scripts/tests/test_collector_transaction.py = 23
+auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
+auxsays/scripts/tests/test_collector_write_authority.py = 112
+auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
+# Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
+# scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
+# been searched once. Wiring is asserted from the AST, not by grepping the file, and a budget
+# simulation over the real corpus proves the pre-fix order missed the newest release.
+auxsays/scripts/tests/test_collector_traversal_order.py = 16
+auxsays/scripts/tests/test_davinci_verified_reports.py = 68
+auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
+auxsays/scripts/tests/test_method_health_append_delta.py = 58
+auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
+auxsays/scripts/tests/test_consensus_sample_honesty.py = 88
+auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
+auxsays/scripts/tests/test_normalize_davinci_version.py = 53
+auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
+auxsays/scripts/tests/test_obs_consensus_projection.py = 49
+auxsays/scripts/tests/test_obs_forum_evidence_family.py = 190
+# The same projection-coherence class for DaVinci, whose count is moved by the scheduled lane's
+# unscoped reconcile while its rebuild authority lived only in a dispatch-only workflow. Pins the
+# lane step (scoped, after reconciliation, before the first QA) and drives the real writer over a
+# temp tree, asserting through the SHIPPED qa_patch_records predicates rather than copies of them.
+auxsays/scripts/tests/test_davinci_projection_coherence.py = 29
+# ONE decision per patch. Three generators each chose an install/wait/avoid word from their own
+# policy, so one DaVinci beta record shipped "WAIT for production systems" as its verdict beside
+# "AVOID for production" as its summary -- and both reached readers, on the patch page and on the
+# feed. Proves the single authority by SUBSTITUTING it and watching every decision-bearing field
+# move, which a grep for the module name cannot do, and pins the decisions themselves so that
+# "make them agree" cannot drift into "make them lenient".
+auxsays/scripts/tests/test_patch_decision_authority.py = 180
+auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
+auxsays/scripts/tests/test_ownership_reason_codes.py = 48
+auxsays/scripts/tests/test_patch_index_identity.py = 93
+auxsays/scripts/tests/test_patch_page_hierarchy.py = 128
+# My Patch Watchlist: the visitor's own product list, local to their browser. Renders the shipped
+# patch layout to prove the control binds `page.product_id` (a patch page watches the PRODUCT, not
+# that one build), parses the other surfaces for their accessible state and their two distinct
+# empty states, and pins that the site's coverage TIER no longer calls itself "Watchlist" -- one
+# word cannot mean both the site's classification and the reader's selection. Storage behaviour
+# lives in the Node suite below, which this job cannot run.
+auxsays/scripts/tests/test_patch_watchlist.py = 35
+# My Patch Stack: the personal dashboard over that same watchlist. Renders the shipped page with
+# Liquid and checks the half Jekyll owns -- a bounded payload (no 1,200-record dump), the newest
+# dated non-archived record per product, and a verdict derived exactly as patch-table-row does.
+# The client rendering is verified live; the storage contract it reuses is the Node suite's.
+auxsays/scripts/tests/test_patch_stack_dashboard.py = 86
+auxsays/scripts/tests/test_powerpoint_attribution.py = 65
+auxsays/scripts/tests/test_powerpoint_build_identity.py = 54
+auxsays/scripts/tests/test_powerpoint_build_roles.py = 108
+auxsays/scripts/tests/test_powerpoint_context_resolution.py = 101
+auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
+auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
+auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
+auxsays/scripts/tests/test_premiere_editorial_protection.py = 36
+auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
+
+# Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
+# loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit
+# 92.3s, both returning zero candidates, while Algolia produced every accepted row in 6.2s.
+# Routed: 12.1s, 12 requests, same 4 and 18 accepted. The assertions here are what stops that
+# speed being bought with weaker acceptance (H) or a telemetry file that merely LOOKS better --
+# a method that stops emitting leaves its last `blocked` row frozen and reading as current, which
+# is why every not-run method still writes a fresh `disabled` row (O, P, J).
+auxsays/scripts/tests/test_premiere_method_routing.py = 48
+# Also runs the deploy gate's TEMPLATE invariants at PR time. `qa_patch_records.py
+# --publish-strict` executes in pages.yml before `jekyll build` and cannot run in ci-integrity
+# (it writes the gitignored _data/qa_status.json, and that workflow is read-only), so a template
+# edit used to pass every PR check and fail the DEPLOY -- which is exactly how AUX-030 merged
+# green and then broke Pages. scan_update_layout_public_copy() is the only part of that gate
+# which reads a template, and it is pure, so the suite calls it directly against the shipped
+# layout.
+auxsays/scripts/tests/test_qa_patch_records.py = 32
+auxsays/scripts/tests/test_reader_evidence_identity.py = 17
+auxsays/scripts/tests/test_report_count_reconciliation.py = 17
+auxsays/scripts/tests/test_acquisition_method_registry.py = 30
+auxsays/scripts/tests/test_teams_record_cleanup.py = 9
+auxsays/scripts/tests/test_transactional_writeback.py = 10
+auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
+auxsays/scripts/tests/test_validate_ingestion_sources.py = 40
+# A green patch-ingestion run must not hide an enabled source that failed. Covers the nine
+# required counterfactuals (healthy / quiet / 403 / transport failure / parser rot / mixed /
+# all-failed / disabled / aged-out), the failure-MODE-change case Elgato actually exhibited,
+# a simulation of the pre-fix semantics, and a mutation harness whose catches are asserted to
+# be semantic rather than crashes.
+auxsays/scripts/tests/test_ingestion_run_health.py = 128
+auxsays/scripts/tests/test_version_outcome_attribution.py = 64
+auxsays/scripts/tests/test_windows_count_authority.py = 104
+auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
+auxsays/scripts/tests/test_windows_patch_identity.py = 30
+auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
+
+# --- writer-lane governance and the methodology Notes render -----------------------
+# Both were added with the writer-queue repair, and both are proven non-vacuous by MEASUREMENT
+# rather than assertion. Against the pre-fix tree (HEAD workflows, no reaper, patch-ingest still
+# carrying its own cron) the concurrency suite reports 40/52 passed, 12 failed -- 52 and not 69
+# because section 8's reaper checks sit inside `if reaper:` and cannot run when the file is
+# absent. Against the current tree with ONLY patch-ingest's cron restored it reports 65/69, 4
+# failed. The Notes suite reports 39/61, 22 failed on the `!= blank` markup, including the exact
+# live figure of 636 phantom rows.
+#
+# An earlier version of this comment claimed "7 checks" for the concurrency suite without saying
+# which counterfactual it meant, and neither reading gave 7. The numbers above are what the two
+# named trees actually produce.
+#
+# The concurrency suite was also VACUOUS when first written: it grepped raw workflow text, so
+# deleting the reaper's in-flight guard, its zero-job eviction test and its one-per-tick `break`
+# left it fully green, because every token it looked for survived in the prose describing those
+# guards. It now asserts against `run:` scalars with comments stripped. The sabotage that used to
+# pass now fails 10 checks.
+auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
+auxsays/scripts/tests/test_methodology_notes_rendering.py = 61
+# The reaper's shell, EXECUTED against a scripted fake `gh` rather than grepped -- extracted
+# from the workflow YAML so it cannot drift from what CI runs. The sabotage that the
+# structural suite originally missed fails 6 checks here. Needs `bash`, which ubuntu-latest
+# and this repo's Windows dev setup both provide; it reports and fails if bash is absent
+# rather than passing vacuously.
+auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
+
+[diagnostic]
+# Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
+# "diagnostic" names the domain, not a weaker guarantee.
+auxsays/scripts/tests/test_adobe_acrobat_adapter.py = 48
+auxsays/scripts/tests/test_adobe_acrobat_community_collector.py = 146
+auxsays/scripts/tests/test_adobe_photoshop_adapter.py = 63
+auxsays/scripts/tests/test_adobe_release_notes_adapter.py = 8
+auxsays/scripts/tests/test_blackmagic_support_downloads.py = 10
+auxsays/scripts/tests/test_css_design_tokens.py = 21
+auxsays/scripts/tests/test_davinci_creative_cow_source.py = 23
+auxsays/scripts/tests/test_davinci_reddit_source.py = 27
+auxsays/scripts/tests/test_elgato_help_center_adapter.py = 111
+auxsays/scripts/tests/test_failsoft_collection.py = 25
+auxsays/scripts/tests/test_http_credential_scope.py = 55
+auxsays/scripts/tests/test_microsoft_learn_qna_source.py = 28
+auxsays/scripts/tests/test_microsoft_teams_community.py = 85
+auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 78
+auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
+auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80
+auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
+auxsays/scripts/tests/test_monitoring_status.py = 44
+auxsays/scripts/tests/test_orchestration_production_adoption.py = 75
+auxsays/scripts/tests/test_orchestration_r1.py = 55
+# Evaluates the cascade over the REAL rendered patch layout under both prefers-color-scheme values,
+# rather than grepping for a token. Needs ruby + liquid like the hierarchy suite; without them it
+# still reports all 64 checks, failing R1 and everything that depends on the render.
+auxsays/scripts/tests/test_patch_heading_contrast.py = 111
+# Wave A: the patch page answers the decision before it explains the evidence. The hero used to
+# emit identity -> community sentiment on a three-zone graph -> the AUXSAYS verdict -> a full
+# collection-telemetry card, which on a 390x844 phone put the verdict 170px BELOW the fold under
+# a sentiment word that is a DIFFERENT axis (opposite direction on 217 records). A1-A17 pin the
+# new order, the axis naming, the zero-report graph suppression WITH its honesty statement, the
+# single monitoring authority, and the issue-sentence de-duplication. The de-duplication is pinned
+# by fixtures, never by the 66/153 corpus split -- scheduled collectors own those numbers.
+auxsays/scripts/tests/test_patch_decision_hierarchy.py = 32
+auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
+# Presence guards. 91 `x != blank` / `x == blank` tests across eight layouts and includes were
+# ALL inert: `blank` needs ActiveSupport's `blank?` and Jekyll does not load it, so every such
+# guard passed unconditionally and every `== blank` branch was dead. That shipped 1,218 empty
+# <dd> values, 1,095 empty-href download links, checksum instructions over zero hashes on 1,258
+# records, and a homepage whose article thumbnails could never resolve under ANY front-matter
+# shape. K1-K3 pin the mechanism itself, so the S1 ban stays grounded in measurement rather
+# than folklore. Needs ruby + liquid like the hierarchy suite; without them L1 fails and the
+# render checks fail with it instead of skipping. The V checks cover the second way content
+# went missing: `.reveal-up` defaulted to opacity 0 with an observer threshold of 0.08, which
+# an element taller than ~12 viewports can never satisfy, so the Adobe company page's 410-row
+# history stayed invisible on desktop permanently.
+auxsays/scripts/tests/test_template_presence_guards.py = 49
+auxsays/scripts/tests/test_patch_ingest_record_limit.py = 78
+auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
+auxsays/scripts/tests/test_product_page_layout.py = 54
+auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
+auxsays/scripts/tests/test_public_method_health_presentation.py = 72
+auxsays/scripts/tests/test_reddit_source.py = 8
+auxsays/scripts/tests/test_revalidate_consensus_evidence.py = 49
+auxsays/scripts/tests/test_route_integrity.py = 9
+auxsays/scripts/tests/test_run_patch_evidence_collection.py = 76
+auxsays/scripts/tests/test_runtime_budget.py = 37
+auxsays/scripts/tests/test_vendor_page_layout.py = 26
+auxsays/scripts/tests/test_write_update_record_official_issues.py = 22
+
+[network]
+# Makes live external requests: 301 connection attempts to reddit.com / web.archive.org in one run,
+# measured. It degrades gracefully (72/72 offline) but costs ~530s online vs ~47s offline and its
+# runtime is rate-limit dependent, so it must not gate a pull request. Its own docstring says it
+# must not perform live requests -- that is a real bug in the test, tracked as follow-up.
+auxsays/scripts/tests/test_adobe_premiere_collector.py
+
+[mutating]
+# Runs `apply_consensus_to_records.py --write-all --confirm-write` against the LIVE checkout
+# (run_cli at :114 uses cwd=_REPO; called at :171, :188, :199). It currently reports zero writes only
+# because every DaVinci group is already converged -- that is incidental, not a safety property.
+# Demonstrated: with one managed field edited as a PR would, the test REWRITES the record and still
+# exits 0, so CI would be green while silently reverting the contributor's diff. Must be rewritten
+# against a temp copy before it can gate anything.
+auxsays/scripts/tests/test_davinci_promotion_scope.py
+
+[environment_specific]
+# test_monitoring_status_render needs `bundle exec jekyll build`, which this job does not install.
+# It prints NO `Results:` line at all, so the runner would treat it as NO RESULTS LINE and fail the
+# build loudly -- the consequence of including it is a permanently red check, not a silent pass.
+# (An earlier version of this note had that backwards.) Excluded until it can run or fail meaningfully.
+#
+# The three .mjs suites are Node, not Python: one is wired into auxsays/package.json
+# (`npm run test:local-browser-capture`), the others cover browser-capture tooling. They were
+# discovered by the repo-wide scan -- they had been outside the closed world entirely, which is
+# precisely the hole that scan was widened to close. Running them needs a Node toolchain this job
+# does not install; classifying them keeps them visible and makes adding a Node lane a deliberate
+# decision rather than something nobody notices is missing.
+auxsays/assets/js/patch-table-sort.test.mjs
+# Same reason: Node. Executes the shipped watchlist helpers sliced out of auxsays.js against a
+# stubbed window (13 checks) -- add/remove, dedupe, malformed storage, unavailable storage. It
+# already earned its keep: it caught `[1,2,3]` surviving the id filter, because String(1) is
+# slug-shaped.
+auxsays/assets/js/patch-watchlist.test.mjs
+# Same reason: Node. Executes the shipped installed-version helpers sliced out of auxsays.js (25
+# checks): set/change/clear, malformed and unavailable storage, and the four conservative
+# comparison states -- including the two that must never read as "update": a stable reader with a
+# newer BETA tracked, and a newer Windows servicing TRAIN rather than a newer build of the same one.
+auxsays/assets/js/installed-versions.test.mjs
+auxsays/scripts/tests/test_monitoring_status_render.py
+auxsays/tools/local-browser-capture/tests/capture-core.test.mjs
+auxsays/tools/local-playwright-capture/scripts/test-capture.mjs
+
+[stale]
+# EMPTY, deliberately. Both suites that were red on main were diagnosed as stale test assumptions
+# and REPAIRED in this change rather than parked here -- test_teams_record_cleanup identified a
+# product by filename substring (and so held a GitHub record to the Teams contract), and
+# test_davinci_verified_reports pinned literal prose to a field the product had stopped writing.
+# A permanently-red allowlist teaches contributors to ignore CI, so this category exists to be
+# visible when it is used, and to be empty the rest of the time.
+
+

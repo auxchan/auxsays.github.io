@@ -1,0 +1,23 @@
+{
+  "fixtureClass": "DISCOVERY_REVIEW_FIXTURE_NOT_LIVE_ACCEPTANCE",
+  "BEAAPI": {
+    "Results": {
+      "Data": [
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"211","RowDescr":"Oil and gas extraction","ColCode":"211","ColDescr":"Oil and gas extraction","DataValue":"0.0641171"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"211","RowDescr":"Oil and gas extraction","ColCode":"22","ColDescr":"Utilities","DataValue":"0.0283052"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"211","RowDescr":"Oil and gas extraction","ColCode":"324","ColDescr":"Petroleum and coal products","DataValue":"0.5633060"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"22","RowDescr":"Utilities","ColCode":"211","ColDescr":"Oil and gas extraction","DataValue":"0.0192690"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"22","RowDescr":"Utilities","ColCode":"22","ColDescr":"Utilities","DataValue":"0.0532397"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"22","RowDescr":"Utilities","ColCode":"324","ColDescr":"Petroleum and coal products","DataValue":"0.0039022"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"22","RowDescr":"Utilities","ColCode":"484","ColDescr":"Truck transportation","DataValue":"0.0129218"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"324","RowDescr":"Petroleum and coal products","ColCode":"22","ColDescr":"Utilities","DataValue":"0.0237260"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"324","RowDescr":"Petroleum and coal products","ColCode":"324","ColDescr":"Petroleum and coal products","DataValue":"0.0185351"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"324","RowDescr":"Petroleum and coal products","ColCode":"484","ColDescr":"Truck transportation","DataValue":"0.0466609"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"486","RowDescr":"Pipeline transportation","ColCode":"211","ColDescr":"Oil and gas extraction","DataValue":"0.0225524"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"486","RowDescr":"Pipeline transportation","ColCode":"324","ColDescr":"Petroleum and coal products","DataValue":"0.0205538"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"493","RowDescr":"Warehousing and storage","ColCode":"484","ColDescr":"Truck transportation","DataValue":"0.0128279"},
+        {"TableID":"999999","Year":"2024","Unit":"Coefficient","RowCode":"493","RowDescr":"Warehousing and storage","ColCode":"493","ColDescr":"Warehousing and storage","DataValue":"0.0359533"}
+      ]
+    }
+  }
+}

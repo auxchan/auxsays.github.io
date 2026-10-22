@@ -57,6 +57,10 @@ PENDING_SOURCE_ADAPTER_TYPES = {
     "adobe_community_listing_card",
     "blackmagic_forum",
     "curated_watchlist",
+    # obs_forum_thread is a RECOGNISED source with no revalidation adapter yet. Left out of
+    # this set it would classify as `unsupported_source_type`, which reads as "we do not know
+    # this source" rather than "the adapter is not written" -- a misreport, not a gap.
+    "obs_forum_thread",
     "reddit_community_report",
 }
 GITHUB_API_ROOT = "https://api.github.com"

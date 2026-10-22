@@ -12,6 +12,20 @@ on:
         required: false
         default: false
         type: boolean
+      update_version:
+        description: "Optional exact update_version(s), comma separated. Narrows the record walk to
+          those patches. The runner has always supported --update-version; this input forwards it,
+          so a specific record can be revisited without waiting for the time-bounded newest-first
+          traversal to come back round to it."
+        required: false
+        type: string
+      since:
+        description: "Optional YYYY-MM-DD lower bound for HISTORICAL REPLAY. Replaces the routine
+          --since-days 45 horizon for this run only. Dispatch-only by construction: the scheduled
+          path below passes no inputs, so routine monitoring stays recent and bounded. Refused
+          before 2025-01-01, which is older than any record AUXSAYS tracks."
+        required: false
+        type: string
   schedule:
     # Temporary bounded-recovery cadence: every 6 hours (was 4h). A run can take up to the 300-min
     # job timeout; a 6h (360-min) interval leaves 60 min after the job bound before the next slot is
@@ -43,6 +57,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # Resolve the ref when Checkout actually runs -- after this job has waited out the shared
+          # auxsays-main-writeback concurrency queue -- instead of the trigger-time SHA the default
+          # pins. Cron drift decides which lane queues, so this lane needs the same fresh base as
+          # patch-ingest: whichever job runs second must build on the winner's writeback. github.ref
+          # (not a literal branch) keeps workflow_dispatch against another branch or tag working.
+          ref: ${{ github.ref }}
 
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -66,33 +87,82 @@ jobs:
           # reachable from GitHub Actions (unlike the CloudFront-blocked /t5 search, Reddit,
           # and the dead Brave key), proven by dry-run on the PR branch. See PR #23.
           AUXSAYS_ENABLE_ACROBAT_CONSENSUS: "true"
-          # PowerPoint community-evidence PILOT: registered ONLY for a manual dry_run dispatch,
-          # never for a scheduled or --write run. This lets a maintainer observe the collector
-          # from GitHub Actions (read-only) without activating scheduled production consensus.
-          AUXSAYS_ENABLE_POWERPOINT_CONSENSUS: ${{ github.event.inputs.dry_run == 'true' && 'true' || 'false' }}
+          # PowerPoint community evidence: ACTIVE in the scheduled path. Canonical identity is the
+          # triple (product_id, update_version, target_build), and counted evidence REQUIRES the
+          # report to name the exact Current Channel build -- a version-only report is refused with
+          # missing_exact_build rather than attributed by inference. Promotion is scoped to this
+          # product and its generated records have their own writeback --allow, so evidence, method
+          # health and the record mutation commit together or not at all.
+          AUXSAYS_ENABLE_POWERPOINT_CONSENSUS: "true"
+          # Teams community evidence: ACTIVE. ONE tracked identity -- New Teams / Windows / Public
+          # cloud / stable -- and a report counts only when the COMPLETE tracked build appears in
+          # text its own author wrote. A Mac, Web, VDI, mobile, Government, Sovereign, Classic or
+          # Insider report is a different product state and is refused by identity, not by inference;
+          # a build named as the fix, the working reference or the rollback target is refused by
+          # role. Bounded live dry run on the PR branch: 741 candidates judged, 5 accepted across 3
+          # of 4 tracked patches, both source families reachable on every record.
+          AUXSAYS_ENABLE_TEAMS_CONSENSUS: "true"
+          # NO DOUBLE COLLECTION. PowerPoint is driven by the repo-owned orchestration graph in the
+          # dedicated job below, so it is REMOVED from this runner's collector registry. The
+          # exclusion is enforced inside build_collectors(), not by this step's arguments, so the
+          # legacy path cannot collect PowerPoint even under an explicit --product-id.
+          AUXSAYS_ORCHESTRATED_PRODUCTS: "microsoft-powerpoint"
         run: |
           args=(--since-days 45 --max-pages 5)
+
+          # HISTORICAL REPLAY, bounded and dispatch-only. `--since` already existed in the runner
+          # and already reaches every collector through CollectorContext.since, so there is no new
+          # replay framework here -- only a way to reach the one that was already built. The
+          # scheduled path passes no inputs, so this branch is unreachable from cron and routine
+          # monitoring keeps the 45-day horizon. Validated as a real date and floored, because an
+          # unbounded or malformed lower bound would turn every scheduled-shape run into a full
+          # corpus walk.
+          raw_since="${{ github.event.inputs.since }}"
+          since="$(printf '%s' "$raw_since" | tr -d '\r' | xargs)"
+          if [ -n "$since" ]; then
+            if ! printf '%s' "$since" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then
+              echo "::error::Invalid since '$since'. Use YYYY-MM-DD."
+              exit 2
+            fi
+            if [ "$since" \< "2025-01-01" ]; then
+              echo "::error::since '$since' is before the 2025-01-01 floor."
+              exit 2
+            fi
+            args+=(--since "$since")
+            echo "Historical replay: lower bound $since (overrides the routine 45-day horizon)."
+          fi
 
           raw_product_id="${{ github.event.inputs.product_id }}"
           product_id="$(printf '%s' "$raw_product_id" | tr -d '\r' | sed -E 's/^[[:space:]]*product_id:[[:space:]]*//' | xargs)"
 
           case "$product_id" in
-            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|adobe-acrobat-reader|adobe-acrobat-pro|microsoft-windows-11|microsoft-powerpoint) ;;
+            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|adobe-acrobat-reader|adobe-acrobat-pro|microsoft-windows-11|microsoft-powerpoint|microsoft-teams) ;;
             *)
-              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, or microsoft-powerpoint."
+              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, microsoft-powerpoint, or microsoft-teams."
               exit 2
               ;;
           esac
 
-          # PowerPoint is a dry_run-only pilot: refuse a --write run targeting it (belt-and-suspenders;
-          # the enable flag is already gated to dry_run, so it would not be registered anyway).
-          if [ "$product_id" = "microsoft-powerpoint" ] && [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
-            echo "::error::microsoft-powerpoint is a dry_run-only pilot; re-run with dry_run=true."
-            exit 2
-          fi
+          # PowerPoint is no longer dry_run-only: build-aware identity, scoped promotion and a
+          # material writeback --allow are all in place, and counted evidence requires the exact
+          # build, so a --write run targeting it is now a normal production run.
 
           if [ "$product_id" != "" ]; then
             args+=(--product-id "$product_id")
+          fi
+
+          # Optional targeted mode. The collector already filters its record walk by
+          # target_versions; this only forwards the flag, so a targeted run takes exactly the same
+          # authority path as an ordinary one -- discovery, normalization, edition authority,
+          # concreteness, role, dedupe, evidence writeback, reconciliation.
+          raw_versions="${{ github.event.inputs.update_version }}"
+          versions="$(printf '%s' "$raw_versions" | tr -d '\r' | xargs)"
+          if [ -n "$versions" ]; then
+            IFS=',' read -ra wanted <<< "$versions"
+            for v in "${wanted[@]}"; do
+              trimmed="$(printf '%s' "$v" | xargs)"
+              if [ -n "$trimmed" ]; then args+=(--update-version "$trimmed"); fi
+            done
           fi
 
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -108,6 +178,217 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/build_consensus_from_evidence.py
 
+      - name: Promote Acrobat consensus to its counted population
+        # Acrobat Pro and Reader had NO scoped promotion anywhere. Their projections were rebuilt
+        # only by the UNSCOPED --write-all in davinci-updates.yml -- the same call that overwrote
+        # Premiere's hand-authored prose -- so scoping that lane (PR #76) would have left 83
+        # positive-count Acrobat records with no rebuild path at all, re-opening for Acrobat exactly
+        # the STALE_EXHAUSTIVE_PROJECTION class #75 closed for OBS. Reproduced: add one counted
+        # Acrobat row and the scoped lane leaves `report_count_source_list_mismatch` standing that
+        # the unscoped lane cleared.
+        #
+        # Two invocations because --product-id takes ONE value and Pro/Reader are distinct
+        # product_ids that are never merged. BOTH are now in CONSENSUS_PROMOTION_PRODUCTS, i.e.
+        # retraction-eligible -- granted precisely BECAUSE these steps exist, since `--write-all`
+        # skips zero-count groups and without retraction no lane could produce the zero shape. The
+        # test invariant stays `retractable SUBSET OF promoted` rather than equality, so these two
+        # invocations are what makes that membership legal: delete either one and R7 fails.
+        #
+        # adobe-premiere-pro is deliberately absent and must stay absent: its record carries 6 hand
+        # commits and `_record_coherence_fields` has a premiere branch, so promoting it would replace
+        # human decision prose with generated text. That is the defect PR #76 exists to stop.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id adobe-acrobat-pro \
+            --write-all --confirm-write
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id adobe-acrobat-reader \
+            --write-all --confirm-write
+
+      - name: Promote OBS consensus to its counted population
+        # OBS records were the last consensus product whose PROJECTIONS nothing in this lane
+        # refreshed. Reconciliation writes the count and nothing else, so 2026-08-14-obs-studio-32-2-2
+        # published `update_report_count: 7` beside `accepted_report_sources` holding only the FIRST
+        # THREE of those seven issues (13803/13806/13807), `evidence_samples` stuck at 3 where the
+        # cap is 5, and -- worst -- `quick_verdict` reading "TEST FIRST: OBS Studio 32.2.2 has 3 user
+        # reports found." A reader saw 7 and 3 on one page. Historically OBS coherence was restored
+        # only by the UNSCOPED --write-all in davinci-updates.yml, which is workflow_dispatch-only,
+        # so any record accumulating rows after the last manual run drifted until someone noticed.
+        #
+        # Scoped to --product-id, and positioned with the other promotions between reconciliation and
+        # the first QA -- see the PowerPoint step for why that gap must contain no validation.
+        # obs-studio DOES have a branch in _record_coherence_fields, and that is required here rather
+        # than avoided: its `quick_verdict` states the report count, so it is count-derived and stale
+        # too. All 51 commits on that record are automated (zero human), unlike premiere 26.2 which
+        # carries 6 hand commits and is not in scope for any promotion step.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id obs-studio \
+            --write-all --confirm-write
+
+      - name: Promote PowerPoint consensus to build-aware records
+        # Scoped to microsoft-powerpoint via --product-id: no other product's promotion behaviour
+        # changes. The engine is the existing generic one; identity is the canonical triple
+        # (product_id, update_version, target_build), so evidence for one Current Channel build
+        # can only ever reconcile onto that build's own record. No-ops when PowerPoint has no
+        # evidence.
+        #
+        # POSITION IS LOAD-BEARING, and this step used to sit after QA/audit. Reconciliation moves
+        # the count and retracts projections for every retractable product; only that product's own
+        # promotion rebuilds them. With QA in between, the first run after a PowerPoint population
+        # emptied and refilled died on report_count_without_consensus_summary before this step ran,
+        # taking the whole writeback with it -- so a cycle of OBS, DaVinci, Acrobat and Premiere
+        # evidence was never committed either. Reproduced. Every retractable product's promotion now
+        # sit between reconciliation and the first QA, and a test asserts that for every product in
+        # lib.report_counts.CONSENSUS_PROMOTION_PRODUCTS rather than for one product by name.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-powerpoint \
+            --write-all --confirm-write
+
+      - name: Promote Windows consensus to its current patch identity
+        # Windows records are the one place the count and its prose could disagree: a Windows record
+        # tracks ONE cumulative update (KB / OS build) inside a feature train that rolls over
+        # monthly, and reconcile_record_counts fixes only the NUMBER. Before this step existed the
+        # 25H2 record published `update_report_count: 32` beside prose reading "9 user reports",
+        # because the number advanced with each rollover while nothing regenerated the sentence.
+        # Scoped to --product-id: no other product's records are touched, and every count-derived
+        # field here is regenerated from the same canonical population the count comes from --
+        # while that population is NON-EMPTY. This step skips a group at count <= 0, so the empty
+        # case (every KB rollover) is retracted by reconcile_record_counts instead; see
+        # lib.report_counts.retract_zero_count_projections.
+        #
+        # POSITION IS LOAD-BEARING: this runs immediately after reconciliation and BEFORE QA.
+        # Reconciliation moves the NUMBER and retracts projections; this step is the only thing that
+        # rebuilds them. With QA in between, the first run after a rollover -- count back above zero,
+        # projections not yet regenerated -- failed `report_count_without_consensus_summary` and
+        # `report_count_without_evidence_samples`, so the job died before reaching this step, the
+        # projections were never rebuilt, and every later run repeated it. Verified: a permanent
+        # wedge. QA must validate the state the writers finished, not one halfway through.
+        #
+        # Windows has no branch in _record_coherence_fields, so this cannot rewrite verdict prose --
+        # pinned by test, not just asserted here. All 361 commits across the two records are automated.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-windows-11 \
+            --write-all --confirm-write
+
+      - name: Promote DaVinci consensus to its counted population
+        # DaVinci's projections had no authority in any SCHEDULED lane, and this is the lane that
+        # moves its number. The consensus step above runs an unscoped reconcile_record_counts, which
+        # writes update_report_count for every product; the five promotions above rebuild the
+        # count-derived fields for their own products; DaVinci had none here. Its only scoped
+        # promotion lives in davinci-updates.yml, which is workflow_dispatch-only, last ran
+        # 2026-06-18 (failed), and whose DaVinci step -- added by #76 on 2026-08-27 -- has therefore
+        # never executed in production.
+        #
+        # WHY IT WENT UNNOTICED FOR THREE WEEKS. Until #69 (fd0cfa98, 2026-08-27) the DaVinci
+        # collector itself wrote the whole projection through _apply_record_fields. #69 narrowed
+        # every in-collector write to COLLECTOR_WRITABLE_FIELDS = {evidence_last_checked,
+        # record_last_updated} and delegated counts and projections to "a later authority" -- which
+        # for DaVinci was never wired up. The gap stayed invisible while DaVinci discovery was
+        # starved, and opened the moment #131 (11817dee) restored newest-first traversal: the first
+        # divergent commit (9815a89e, count 40 -> 44 with the source list frozen at 40) came from the
+        # lane run created 25 seconds after that merge.
+        #
+        # This is not only cosmetic drift. reconcile_record_counts raising a DaVinci record above
+        # zero with no step to build its summary is the #70 wedge: runs 34717343799, 34807610424 and
+        # 34998144189 all died at "QA patch records" on
+        # 2026-08-05-davinci-resolve-21-0-4.md (report_count_without_consensus_summary +
+        # report_count_without_evidence_samples), and because QA precedes the writeback, EVERY
+        # product's evidence for those three cycles was discarded.
+        #
+        # POSITION IS LOAD-BEARING, for the same reason it is for the four steps above: after the
+        # reconcile, before the first QA, so QA validates the state the writers finished. Scoped to
+        # one --product-id so no other product's records are touched; an empty value is falsy in
+        # run_dry_run's filter and would promote the whole corpus, which #76 made exit 2.
+        #
+        # blackmagic-davinci is deliberately NOT added to CONSENSUS_PROMOTION_PRODUCTS here, and the
+        # reason is a safety property rather than test cost. Retraction is the only content-DELETING
+        # operation in this lane, and deletion is what manufactures the wedge shape: with membership,
+        # a population that dips to zero and refills leaves the record at its old count with
+        # update_consensus_summary and evidence_samples DELETED -- exactly the two blocking QA errors
+        # that killed runs 34717343799 / 34807610424 / 34998144189. That is survivable only while the
+        # promotion precedes QA, an ordering this repo has already broken twice (#70 for Windows,
+        # then again for PowerPoint). Step-only cannot reach that shape, because nothing is deleted.
+        #
+        # Measured cost if it is ever granted, so the next person has the real number: exactly TWO
+        # assertions fail -- R6 and R8 in test_windows_count_authority.py, whose premise ("a product
+        # with no promotion step") this step itself invalidates -- plus a governed count bump there
+        # from 96 to 100, because the N5b loop adds four checks for the new member. Reconciling with
+        # membership granted changes 0 records and retracts 0 today.
+        #
+        # THE RESIDUAL, stated exactly: a DaVinci record driven to a canonical zero by an audited
+        # withdrawal or a row deletion keeps its source list and its "has N user reports found"
+        # headline beside a count of 0, raising warnings no lane can clear (`--write-all` skips
+        # zero-count groups; retraction is refused to non-members). It reaches 0 of the 96 zero-count
+        # DaVinci records today. An empty or unreadable evidence store is NOT such a route: the
+        # `bool(counts)` fence blocks retraction for members and non-members alike, and it self-heals.
+        #
+        # This step also gives the 6-hourly lane authority over DaVinci prose that is not a count
+        # projection (_record_coherence_fields' davinci branch, and its update_version "21"
+        # sub-branch). Every live value already equals what the writer produces, and
+        # test_davinci_projection_coherence.py [D2] fails the build if that stops being true, so a
+        # hand edit surfaces as a failing check rather than as a silent revert six hours later.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id blackmagic-davinci \
+            --write-all --confirm-write
+
+      - name: Promote Teams consensus to its counted population
+        # Teams community evidence is ACTIVE, so its records now need the same treatment every other
+        # counted product gets. The Teams collector's in-collector writeback can only set freshness
+        # fields -- apply_collector_record_fields filters everything through
+        # COLLECTOR_WRITABLE_FIELDS -- so nothing before this step can produce
+        # update_consensus_summary or evidence_samples. Without it the FIRST run that accepts a Teams
+        # report reaches QA with report_count > 0 and neither field present, which is a blocking
+        # error, and because QA precedes the writeback it discards OBS, DaVinci, Acrobat, Premiere,
+        # Windows and PowerPoint evidence along with it. That is the #70 wedge, and it is the reason
+        # this step ships in the same change that activates the collector rather than after it.
+        #
+        # POSITION IS LOAD-BEARING, exactly as for the five steps above: after reconciliation, before
+        # the first QA, so QA validates the state the writers finished. Scoped to one --product-id;
+        # an empty value promotes the whole corpus, which #76 made exit 2. microsoft-teams has no
+        # branch in _record_coherence_fields, so this cannot rewrite verdict prose, and it writes no
+        # official identity field -- target_platform, target_channel, teams_edition, update_version
+        # and the official release date and provenance stay the official lane's alone.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-teams \
+            --write-all --confirm-write
+
+      - name: Promote Premiere consensus to its counted population
+        # Premiere was deliberately absent from every promotion step because record 26.2 carries
+        # hand-authored verdict prose that promotion would overwrite. That protection is now the
+        # defect: three evidence rows were withdrawn with reasons -- one whose Adobe thread returns
+        # "Page not found", and both 26.2.2 rows, which carried the board LISTING url rather than
+        # any report's own -- and 26.2.2 therefore reaches zero counted rows while still publishing
+        # a source list, evidence samples and "has 2 user reports found". Only a product in
+        # CONSENSUS_PROMOTION_PRODUCTS may be retracted, and only its own scoped step rebuilds what
+        # reconciliation retracts, so the membership and this step land together.
+        #
+        # What it replaces on 26.2 is prose, not facts: `_record_coherence_fields` has a premiere
+        # branch that generates the verdict, decision body and recommendations deterministically
+        # from the decision and the themes. 26.2.2's stored values already ARE that branch's output
+        # word for word -- a dry run reports `fields_that_would_write: []` for it.
+        #
+        # POSITION IS LOAD-BEARING, as for the six steps above: after reconciliation, before the
+        # first QA, so QA validates the state the writers finished rather than one halfway through.
+        # Scoped to one --product-id; an empty value promotes the whole corpus, which #76 made
+        # exit 2. Official identity is untouched -- update_version, update_published_at, the
+        # official sources and the release-note body are not in WRITEABLE_FIELDS.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id adobe-premiere-pro \
+            --write-all --confirm-write
+
       - name: QA patch records
         id: qa
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -118,16 +399,27 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/audit_consensus_evidence.py
 
+      - name: Re-run QA after consensus promotion
+        # Promotion mutates report counts; re-validate before anything is staged so a
+        # half-promoted tree cannot reach the writeback.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/qa_patch_records.py
+
       - name: Remove transient validation output
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           rm -rf auxsays/_site node_modules .jekyll-cache
           find . -type d -name __pycache__ -prune -exec rm -rf {} +
           find . -type f -name '*.pyc' -delete
-          rm -f auxsays/_data/source_health.yml
           rm -f auxsays/_data/qa_status.json
           rm -f auxsays/_data/consensus_status.json
-          rm -f auxsays/_data/patch_ingest_state.json
+          # source_health.yml and patch_ingest_state.json are TRACKED and are in no --allow entry
+          # for this lane, so `rm -f` left an unstaged tracked DELETION: material the writeback
+          # validators could observe while the commit omitted it (audit_consensus_evidence.py
+          # reads patch_ingest_state.json for source-freshness state). Restore the committed
+          # content instead -- the tree the validators read is then exactly the tree that gets
+          # committed, which is what automation_writeback now enforces fail-closed.
+          git checkout -- auxsays/_data/source_health.yml auxsays/_data/patch_ingest_state.json
 
       - name: Commit material evidence changes (conflict-safe writeback)
         id: writeback
@@ -139,11 +431,17 @@ jobs:
             --message "Update automated patch evidence" \
             --allow auxsays/_data/consensus_evidence.yml \
             --allow auxsays/_data/evidence_method_health.yml \
+            --allow auxsays/_data/update_linked_evidence.yml \
+            --allow auxsays/_data/recent_powerpoint_reports.yml \
+            --allow auxsays/_data/acrobat_update_linked_evidence.yml \
+            --allow auxsays/_data/recent_acrobat_reports.yml \
             --allow 'auxsays/updates/generated/*obs-studio*.md' \
             --allow 'auxsays/updates/generated/*davinci*.md' \
             --allow 'auxsays/updates/generated/*premiere-pro*.md' \
             --allow 'auxsays/updates/generated/*windows-11*.md' \
             --allow 'auxsays/updates/generated/*acrobat*.md' \
+            --allow 'auxsays/updates/generated/*powerpoint*.md' \
+            --allow 'auxsays/updates/generated/*microsoft-teams*.md' \
             --validate 'python auxsays/scripts/qa_patch_records.py' \
             --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
             --validate 'python auxsays/scripts/validate_evidence_method_health.py' \
@@ -194,3 +492,131 @@ jobs:
             echo "- Pages dispatch: **${pages}**"
             echo "- writeback outcome token: \`${WB_OUTCOME:-n/a}\`"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  powerpoint-orchestrated:
+    # The PowerPoint lane, driven by the repo-owned deterministic orchestration graph. This is the
+    # ONLY path that collects PowerPoint: the legacy runner above refuses to register it (see
+    # AUXSAYS_ORCHESTRATED_PRODUCTS), so no product is ever collected twice in one run.
+    #
+    # `needs: collect` serialises the two lanes. The workflow-level concurrency group only
+    # serialises RUNS, not jobs within a run, and both lanes commit to main -- running them in
+    # parallel would race two writebacks against the same branch. Sequencing costs a few minutes
+    # and removes the race entirely.
+    #
+    # The graph invokes the SAME authorities the lane above uses -- the PowerPoint collector's own
+    # method functions, the evidence/health appenders, reconcile_record_counts,
+    # apply_consensus_to_records, qa_patch_records, audit_consensus_evidence and
+    # lib.automation_writeback. It re-implements none of them, and requires no AI.
+    needs: collect
+    if: ${{ always() && needs.collect.result != 'cancelled' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # Fresh base AFTER the collect lane's writeback landed, so this lane rebases onto it
+          # rather than racing it.
+          ref: ${{ github.ref }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Run the PowerPoint evidence graph
+        id: graph
+        env:
+          # Checkpoints live OUTSIDE the repo tree; the checkpointer refuses an in-repo directory
+          # that is not git-ignored, so a checkpoint can never be swept into a commit.
+          AUXSAYS_CHECKPOINT_DIR: ${{ runner.temp }}/auxsays-orchestration
+        run: |
+          mode=(--write)
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then mode=(); fi
+
+          python auxsays/scripts/orchestrate_evidence_run.py \
+            --product-id microsoft-powerpoint \
+            --checkpoint-dir "$AUXSAYS_CHECKPOINT_DIR" \
+            --message "Update automated patch evidence (PowerPoint)" \
+            --since-days 45 --max-pages 5 \
+            "${mode[@]}" | tee "$RUNNER_TEMP/graph-summary.json"
+
+      - name: Graph summary
+        if: ${{ always() }}
+        env:
+          GRAPH: ${{ steps.graph.outcome }}
+        run: |
+          summary="$RUNNER_TEMP/graph-summary.json"
+          {
+            echo "### 🕸️ PowerPoint orchestration graph"
+            echo ""
+            echo "- graph step: **${GRAPH}**"
+            if [ -s "$summary" ]; then
+              echo "- terminal: **$(python -c "import json,sys;print(json.load(open(sys.argv[1])).get('terminal','?'))" "$summary" 2>/dev/null || echo '?')**"
+              echo ""
+              echo '<details><summary>run summary</summary>'
+              echo ""
+              echo '```json'
+              cat "$summary"
+              echo '```'
+              echo ""
+              echo '</details>'
+            else
+              echo "- no run summary was produced"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  chain-ingest:
+    # ROUTINE PATCH INGESTION, ORDERED RATHER THAN RACING.
+    #
+    # patch-ingest.yml used to carry its own `cron: "17 */6 * * *"` -- the same expression this
+    # workflow declares. Both are writers, both share `auxsays-main-writeback`, and that group keeps
+    # at most ONE pending run: a new entrant cancels whatever was queued. Because a writer run takes
+    # 54-197 minutes against a 6-hour cadence, the second cron of each slot routinely landed in the
+    # pending slot and was destroyed by the next arrival. 14 scheduled runs were lost that way, 7 of
+    # them to another scheduled run.
+    #
+    # Dispatching ingestion from the END of this run removes the race: this run has finished its
+    # writeback, so ingestion enters a lane that is about to be free, and it enters ONCE per cycle
+    # rather than competing for the same slot. `needs:` both lanes and `always()` so ingestion still
+    # happens when collection fails or is skipped -- one writer failing must not starve the next.
+    #
+    # Gated to THE ROUTINE CYCLE, which is not the same thing as `github.event_name == 'schedule'`.
+    # `writer-queue-reaper.yml` recovers an evicted scheduled run by re-dispatching it, so the
+    # recovered run arrives as `workflow_dispatch` carrying no inputs. Gating on the event name
+    # alone would skip ingestion on exactly those recovered cycles -- reintroducing the silent loss
+    # one level up, in the workflow written to stop it.
+    #
+    # So the gate is "schedule, OR a dispatch with no inputs", which is the same definition of
+    # routine the rest of this workflow already uses (`github.event.inputs.dry_run != 'true'` at
+    # :170, :192, :217 and elsewhere; :108 states the contract -- the scheduled path passes no
+    # inputs). A TARGETED dispatch still does not drag a full ingestion run behind it;
+    # patch-ingest.yml keeps its own workflow_dispatch for that.
+    needs: [collect, powerpoint-orchestrated]
+    if: >-
+      ${{ always() && (github.event_name == 'schedule' ||
+          (github.event.inputs.product_id == '' &&
+           github.event.inputs.update_version == '' &&
+           github.event.inputs.since == '' &&
+           github.event.inputs.dry_run != 'true')) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch routine patch ingestion
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # No inputs: that is exactly the path the deleted cron took, and every production branch
+          # in patch-ingest.yml gates on the inputs being absent.
+          gh workflow run patch-ingest.yml --ref main \
+            --repo "${{ github.repository }}"
+          echo "- Dispatched \`patch-ingest.yml\` (routine cycle)" >> "$GITHUB_STEP_SUMMARY"

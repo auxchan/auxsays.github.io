@@ -1,0 +1,16 @@
+<r539cyNational rundate="8/27/2026">
+  <week>
+    <weekEnded>08/01/2026</weekEnded>
+    <InitialClaims><NSA>220,000</NSA><SF>110.0</SF><SA>200,000</SA><SA4WK>201,000</SA4WK></InitialClaims>
+    <ContinuedClaims><NSA>1,820,000</NSA><SF>102.0</SF><SA>1,781,000</SA><SA4WK>1,790,000</SA4WK></ContinuedClaims>
+    <IUR><NSA>1.3</NSA><SA>1.2</SA></IUR>
+    <CoveredEmployment>153,398,888</CoveredEmployment>
+  </week>
+  <week>
+    <weekEnded>08/08/2026</weekEnded>
+    <InitialClaims><NSA>&#160;</NSA><SF>&#160;</SF><SA>&#160;</SA><SA4WK>&#160;</SA4WK></InitialClaims>
+    <ContinuedClaims><NSA>&#160;</NSA><SF>&#160;</SF><SA>&#160;</SA><SA4WK>&#160;</SA4WK></ContinuedClaims>
+    <IUR><NSA>&#160;</NSA><SA>&#160;</SA></IUR>
+    <CoveredEmployment>&#160;</CoveredEmployment>
+  </week>
+</r539cyNational>

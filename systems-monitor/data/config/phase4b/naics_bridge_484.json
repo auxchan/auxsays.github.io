@@ -1,0 +1,17 @@
+{
+  "bridgeVersion": "bea-2017-to-bls-2022-naics-484-1.0.0",
+  "sourceVintage": "2017_NAICS",
+  "targetVintage": "2022_NAICS",
+  "sourceCode": "484",
+  "targetCode": "484",
+  "mappingType": "ONE_TO_ONE_UNCHANGED_AGGREGATE",
+  "reviewStatus": "VERIFIED",
+  "authorityUrls": [
+    "https://www.bea.gov/sites/default/files/2023-10/BEA-Industry-and-Commodity-Codes-and-NAICS-Concordance.xlsx",
+    "https://www.census.gov/naics/",
+    "https://data.bls.gov/timeseries/CES4348400001"
+  ],
+  "employmentSeriesId": "CES4348400001",
+  "employmentUnit": "thousands",
+  "seasonalAdjustment": "seasonally_adjusted"
+}

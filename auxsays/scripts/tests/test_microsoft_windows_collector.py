@@ -24,6 +24,7 @@ from patch_collectors.base import PatchRecord, windows_identity_gate
 import patch_collectors.microsoft_windows as win
 import lib.write_update_record as wur
 
+NEWLINE = chr(10)
 _PASS = 0
 _FAIL = 0
 _ERRORS: list[str] = []
@@ -60,7 +61,7 @@ TARGET_25H2 = {
 }
 TARGET_24H2_ROLLED = {**TARGET_24H2, "target_kb": "KB5099999", "target_os_build": "26100.9001", "target_release_date": "2026-07-14T00:00:00Z"}
 
-REC_24H2 = PatchRecord("microsoft-windows-11", "24H2", Path("2026-06-23-windows-11-24h2.md"), "2026-06-23T00:00:00Z", "current", "Windows 11")
+REC_24H2 = PatchRecord("microsoft-windows-11", "24H2", Path("2026-06-23-windows-11-24h2-26100-8737.md"), "2026-06-23T00:00:00Z", "current", "Windows 11", "26100.8737")
 REC_25H2 = PatchRecord("microsoft-windows-11", "25H2", Path("2026-06-23-windows-11-25h2.md"), "2026-06-23T00:00:00Z", "current", "Windows 11")
 CAPTURED = "2026-07-01T00:00:00Z"
 
@@ -144,16 +145,18 @@ def run() -> int:
 
     # --- collect_for_record end-to-end (source monkeypatched, no network) ---
     with tempfile.TemporaryDirectory() as d:
-        rec_path = Path(d) / "2026-06-23-windows-11-24h2.md"
+        # Canonical build-aware filename: one Windows record is one cumulative update.
+        rec_path = Path(d) / "2026-06-23-windows-11-24h2-26100-8737.md"
         rec_path.write_text(wur._dump_record(wur.build_front_matter({
             "company_id": "microsoft", "product_id": "microsoft-windows-11", "company": "Microsoft",
             "software": "Windows 11", "version": "24H2", "published_at": "2026-06-23T00:00:00Z",
             "source_url": "https://learn.microsoft.com/en-us/windows/release-health/",
             "body": "Windows 11 24H2 official record.", "official_summary": "Windows 11 24H2.",
             "target_feature_version": "24H2", "target_kb": "KB5095093",
-            "target_os_build": "26100.8737", "target_release_date": "2026-06-23T00:00:00Z",
+            "target_os_build": "26100.8737", "target_build": "26100.8737",
+            "target_release_date": "2026-06-23T00:00:00Z",
         })), encoding="utf-8")
-        record = PatchRecord("microsoft-windows-11", "24H2", rec_path, "2026-06-23T00:00:00Z", "current", "Windows 11")
+        record = PatchRecord("microsoft-windows-11", "24H2", rec_path, "2026-06-23T00:00:00Z", "current", "Windows 11", "26100.8737")
 
         original = win.learn_qna.collect_learn_qna_candidates
         try:
@@ -255,24 +258,39 @@ def run() -> int:
     )
 
     with tempfile.TemporaryDirectory() as d:
-        rec_path = Path(d) / "2026-06-23-windows-11-24h2.md"
+        # Canonical build-aware filename: one Windows record is one cumulative update.
+        rec_path = Path(d) / "2026-06-23-windows-11-24h2-26100-8737.md"
         rec_path.write_text(wur._dump_record(wur.build_front_matter({
             "company_id": "microsoft", "product_id": "microsoft-windows-11", "company": "Microsoft",
             "software": "Windows 11", "version": "24H2", "published_at": "2026-06-23T00:00:00Z",
             "source_url": "https://learn.microsoft.com/en-us/windows/release-health/",
             "body": "Windows 11 24H2.", "official_summary": "Windows 11 24H2.",
             "target_feature_version": "24H2", "target_kb": "KB5095093",
-            "target_os_build": "26100.8737", "target_release_date": "2026-06-23T00:00:00Z",
+            "target_os_build": "26100.8737", "target_build": "26100.8737",
+            "target_release_date": "2026-06-23T00:00:00Z",
         })), encoding="utf-8")
         synthetic = PatchRecord("microsoft-windows-11", "24H2", rec_path, "2026-06-23T00:00:00Z", "current", "Windows 11")
 
         orig_records = win.generated_records
         orig_source = win.learn_qna.collect_learn_qna_candidates
         orig_append = win.append_evidence_rows
+        orig_pool = win.build_techcommunity_pool
+        orig_fetch = win.techcommunity.fetch
         calls = {"append": 0}
+        pool_calls = {"pool": 0}
         try:
+            # Offline proof, not a promise: any real Tech Community fetch during this block fails
+            # the suite rather than quietly reaching the network from CI.
+            def _no_network(url):
+                raise AssertionError(f"offline suite attempted a live fetch: {url}")
+            win.techcommunity.fetch = _no_network
             win.generated_records = lambda pid, tv=None, **k: [synthetic]
             win.learn_qna.collect_learn_qna_candidates = lambda **k: []  # no network
+            # The second discovery method walks Tech Community sitemaps once per RUN, inside
+            # collect(). Stubbed for the same reason Learn Q&A is: this suite is offline.
+            win.build_techcommunity_pool = lambda context: (
+                pool_calls.__setitem__("pool", pool_calls["pool"] + 1),
+                win.TechCommunityPool(candidates=[], telemetry={}, errors=[]))[1]
             win.append_evidence_rows = lambda rows, *a, **k: (calls.__setitem__("append", calls["append"] + 1), (0, 0, []))[1]
 
             calls["append"] = 0
@@ -282,10 +300,223 @@ def run() -> int:
             calls["append"] = 0
             win.WindowsLearnQnaCollector().collect(SimpleNamespace(write=True, since=None, max_pages=1, target_versions=None))
             check("write path is implemented (write=True reaches append_evidence_rows)", calls["append"] == 1, f"append calls={calls['append']}")
+            check("the Tech Community pool is built ONCE per run, not once per record",
+                  pool_calls["pool"] == 2, f"pool builds={pool_calls['pool']} across 2 runs of 1 record")
         finally:
             win.generated_records = orig_records
             win.learn_qna.collect_learn_qna_candidates = orig_source
             win.append_evidence_rows = orig_append
+            win.build_techcommunity_pool = orig_pool
+            win.techcommunity.fetch = orig_fetch
+
+    # --- one report, one patch -----------------------------------------------
+    # REGRESSION. `append_evidence_rows` refuses a source_url already present under the same
+    # `evidence_key`, and that key's build slot was empty for Windows -- so the append guard was
+    # build-blind and a URL could physically exist only once for the product. Stamping the exact
+    # build onto rows (required for build-aware counting) silently WIDENED the key, and one thread
+    # naming two builds became two counted rows on two different patches. Production run
+    # 33944086829 wrote 14 such pairs, including one "ngcctnrsvc crashes" report counted for both
+    # 24H2 26100.9168 and 25H2 26200.9168 -- both ship KB5121003.
+    print(NEWLINE + "[exclusivity] one report is never counted on two patches")
+    shared_url = "https://learn.microsoft.com/en-us/answers/questions/5973125/ngcctnrsvc-crashes"
+    shared = {"source_url": shared_url,
+              "report_title": "KB5121003 crashes ucrtbase.dll after installing",
+              "report_text": "After installing KB5121003 ngcctnrsvc crashes three times in "
+                             "ucrtbase.dll with 0xc0000409. Same on Windows 11 24H2 (26100.9168) "
+                             "and 25H2 (26200.9168) here.",
+              "source_date": "2026-09-01"}
+    tgt_25 = {"target_feature_version": "25H2", "target_kb": "KB5121003",
+              "target_os_build": "26200.9168", "target_release_date": "2026-08-11T00:00:00Z",
+              "update_version": "25H2"}
+    tgt_24 = {"target_feature_version": "24H2", "target_kb": "KB5121003",
+              "target_os_build": "26100.9168", "target_release_date": "2026-08-11T00:00:00Z",
+              "update_version": "24H2"}
+    rec_25 = PatchRecord("microsoft-windows-11", "25H2", Path("x.md"),
+                         "2026-08-11T00:00:00Z", "current", "Windows 11", "26200.9168")
+    rec_24 = PatchRecord("microsoft-windows-11", "24H2", Path("y.md"),
+                         "2026-08-11T00:00:00Z", "current", "Windows 11", "26100.9168")
+    # Without a claims map both records accept it -- the defect, reproduced.
+    a25, _ = win.evaluate_candidates(rec_25, tgt_25, [dict(shared)], CAPTURED)
+    a24, _ = win.evaluate_candidates(rec_24, tgt_24, [dict(shared)], CAPTURED)
+    check("exclusivity: without the claims map BOTH patches accept it (the defect)",
+          len(a25) == 1 and len(a24) == 1, f"{len(a25)} {len(a24)}")
+    # With one shared claims map, the first record to walk keeps it and the second refuses.
+    claims: dict = {}
+    b25, r25 = win.evaluate_candidates(rec_25, tgt_25, [dict(shared)], CAPTURED, claims)
+    b24, r24 = win.evaluate_candidates(rec_24, tgt_24, [dict(shared)], CAPTURED, claims)
+    check("exclusivity: the first patch to walk keeps the report",
+          len(b25) == 1 and b25[0].get("target_build") == "26200.9168", str(len(b25)))
+    check("exclusivity: the second patch refuses it as a cross-patch duplicate",
+          len(b24) == 0 and len(r24) == 1
+          and r24[0].get("exclusion_reason") == "cross_patch_duplicate",
+          str([r.get("exclusion_reason") for r in r24]))
+    # The refused row KEEPS the build it was refused for. `counted: false` is what keeps it out of
+    # every count; the build is what lets the audit trail say WHICH patch refused this URL. Blanking
+    # it puts a stored row under (product, version, ''), a key no record has, and
+    # audit_consensus_evidence reports that as an integrity error -- measured: the first repair of
+    # these rows added exactly 2.
+    check("exclusivity: the refused row still records WHICH patch refused it",
+          r24 and str(r24[0].get("target_build") or "") == "26100.9168",
+          str(r24[0].get("target_build")))
+    check("exclusivity: ...and being uncounted is what keeps it out of the count",
+          r24 and r24[0].get("counted") is False, str(r24[0].get("counted")))
+    # ...and it holds ACROSS runs, because the map is seeded from stored evidence.
+    stored_claims = {shared_url.lower(): ("microsoft-windows-11", "25H2", "26200.9168")}
+    c24, cr24 = win.evaluate_candidates(rec_24, tgt_24, [dict(shared)], CAPTURED, stored_claims)
+    check("exclusivity: a URL already stored for another patch is refused on a later run",
+          len(c24) == 0 and cr24 and cr24[0].get("exclusion_reason") == "cross_patch_duplicate",
+          str([r.get("exclusion_reason") for r in cr24]))
+    # The same patch re-discovering its OWN report is not a cross-patch duplicate; the append
+    # guard deduplicates that, and turning it into a rejection would flip a real row to uncounted.
+    same_claims = {shared_url.lower(): ("microsoft-windows-11", "25H2", "26200.9168")}
+    d25, _dr = win.evaluate_candidates(rec_25, tgt_25, [dict(shared)], CAPTURED, same_claims)
+    check("exclusivity: a patch re-finding its OWN report still accepts it",
+          len(d25) == 1, str(len(d25)))
+
+    # --- the runner's ownership validator accepts what this collector emits --
+    # WHY THIS EXISTS. Ownership validation runs in run_patch_evidence_collection, NOT in this
+    # module's dry-run, so a collector can look completely healthy locally and still fail the whole
+    # production run closed. It did: run 33941301615 aborted with
+    # `ownership_violation:method_health_version_unresolved` because health rows still keyed on
+    # (product, "25H2", "") -- an identity no Windows record has had since one record came to mean
+    # one cumulative update. Drive the REAL validator against a REAL health row, against the live
+    # record set, so the gap between "the module is happy" and "the runner accepts it" is closed.
+    print(NEWLINE + "[ownership] the runner's validator accepts this collector's method health")
+    from lib import collector_ownership as own  # noqa: PLC0415
+    live = win.generated_records("microsoft-windows-11")
+    check("ownership: there are live Windows records to validate against", bool(live), "none found")
+    if live:
+        rec = live[0]
+        health = win.health_for_method(rec, win.record_target(rec), "2026-09-01T00:00:00Z",
+                                       [], [], [], [], [])
+        check("ownership: the health row states the record's exact build",
+              str(health.get("target_build") or "") == rec.target_build,
+              f"{health.get('target_build')!r} vs {rec.target_build!r}")
+        raised = None
+        try:
+            own.validate_method_health("microsoft-windows-11", [health])
+        except Exception as exc:  # noqa: BLE001 - the violation type is the assertion
+            raised = exc
+        check("ownership: validate_method_health ACCEPTS it", raised is None, str(raised))
+        # And the negative: a row that names no build must still be refused, or this check would
+        # pass for the wrong reason on a version-only fallback nobody intended to add.
+        stripped = {**health, "target_build": ""}
+        refused = None
+        try:
+            own.validate_method_health("microsoft-windows-11", [stripped])
+        except Exception as exc:  # noqa: BLE001
+            refused = exc
+        # The reason CODE, not the message text: the code is the contract the runner reports and
+        # the message is prose that may legitimately be reworded.
+        # The EVIDENCE surface, same reasoning. `_validate_ownership` runs only under --write
+        # (txn is None on a dry run), so neither this module's dry-run nor the runner's dry-run
+        # reaches it; a row shape that cannot resolve would surface for the first time as a
+        # production abort. Build a real accepted row and put it through the real validator.
+        import yaml as _yaml  # noqa: PLC0415
+        own_candidate = {"source_url": "https://learn.microsoft.com/en-us/answers/questions/1/x",
+                "report_title": f"{win.record_target(rec).get('target_kb')} "
+                                f"({rec.target_build}) will not install",
+                "report_text": f"After installing {win.record_target(rec).get('target_kb')} "
+                               f"({rec.target_build}) the update fails with error 0x800f0991.",
+                "source_date": "2026-09-01"}
+        ev_row = win.row_from_candidate(rec, win.record_target(rec), own_candidate,
+                                        "2026-09-01T00:00:00Z")
+        check("ownership: an accepted evidence row carries the record's exact build",
+              ev_row.get("counted") is True
+              and str(ev_row.get("target_build") or "") == rec.target_build,
+              f"counted={ev_row.get('counted')} reason={ev_row.get('exclusion_reason')!r} "
+              f"build={ev_row.get('target_build')!r}")
+        before = _yaml.safe_dump({"schema_version": 1, "evidence": []})
+        after = _yaml.safe_dump({"schema_version": 1, "evidence": [ev_row]})
+        ev_raised = None
+        try:
+            own.validate_evidence("microsoft-windows-11", before, after)
+        except Exception as exc:  # noqa: BLE001
+            ev_raised = exc
+        check("ownership: validate_evidence ACCEPTS the appended row", ev_raised is None,
+              str(ev_raised))
+        ev_stripped = {**ev_row, "target_build": ""}
+        ev_refused = None
+        try:
+            own.validate_evidence("microsoft-windows-11", before,
+                                  _yaml.safe_dump({"schema_version": 1, "evidence": [ev_stripped]}))
+        except Exception as exc:  # noqa: BLE001
+            ev_refused = exc
+        check("ownership: a build-less evidence row is still REFUSED",
+              ev_refused is not None
+              and getattr(ev_refused, "reason", getattr(ev_refused, "code", "")) == "evidence_version_unresolved",
+              f"{type(ev_refused).__name__}: {ev_refused}")
+        check("ownership: a build-less health row is still REFUSED",
+              refused is not None
+              and getattr(refused, "reason", getattr(refused, "code", "")) == "method_health_version_unresolved",
+              f"{type(refused).__name__}: {refused} "
+              f"reason={getattr(refused, 'reason', getattr(refused, 'code', None))!r}")
+
+    # --- the consensus writeback is batched, not per record -----------------
+    # WHY THIS IS PINNED. `apply_consensus_writeback` rebuilds the whole picture on every call:
+    # _index_generated_records reads all 1110 generated records (4.2s measured) and run_dry_run
+    # regroups the entire evidence corpus (5.4s). Calling it inside the record loop cost 4 x 9.6s
+    # while one Windows record meant one servicing TRAIN. There are 71 records now, so the same
+    # code costs 11 minutes a run -- spent out of the collector's wall-clock budget, i.e. paid in
+    # records never searched. Assert the CALL COUNT, because the runtime cost is invisible to every
+    # other check in this file: the records come out identical either way.
+    print(NEWLINE + "[batched writeback] the whole-corpus rebuild happens once, not once per record")
+    import apply_consensus_to_records as acr_mod  # noqa: PLC0415
+    with tempfile.TemporaryDirectory() as d:
+        recs = []
+        for build, kb in (("26100.8737", "KB5095093"), ("26100.8973", "KB5101684"),
+                          ("26100.9168", "KB5121003")):
+            rp = Path(d) / f"2026-06-23-windows-11-24h2-{build.replace('.', '-')}.md"
+            rp.write_text(wur._dump_record(wur.build_front_matter({
+                "company_id": "microsoft", "product_id": "microsoft-windows-11",
+                "company": "Microsoft", "software": "Windows 11", "version": "24H2",
+                "published_at": "2026-06-23T00:00:00Z",
+                "source_url": "https://learn.microsoft.com/en-us/windows/release-health/",
+                "body": "Windows 11 24H2.", "official_summary": "Windows 11 24H2.",
+                "target_feature_version": "24H2", "target_kb": kb,
+                "target_os_build": build, "target_build": build,
+                "target_release_date": "2026-06-23T00:00:00Z",
+            })), encoding="utf-8")
+            recs.append(PatchRecord("microsoft-windows-11", "24H2", rp,
+                                    "2026-06-23T00:00:00Z", "current", "Windows 11", build))
+
+        def _run(accept: bool) -> dict:
+            counts = {"index": 0, "dry_run": 0, "results": 0}
+            orig = (win.generated_records, win.collect_for_record, win.append_evidence_rows,
+                    acr_mod._index_generated_records, acr_mod.run_dry_run, win.build_techcommunity_pool)
+            try:
+                win.generated_records = lambda pid, tv=None, **k: list(recs)
+                win.build_techcommunity_pool = lambda context: win.TechCommunityPool(
+                    candidates=[], telemetry={}, errors=[])
+                # Every record "accepts" a row (or none), so every one is a writeback candidate.
+                # The pool arrives as a fourth argument; accepting it here keeps this stub honest
+                # about the signature the collector actually calls.
+                win.collect_for_record = lambda record, context, claims=None, pool=None: (
+                    ([{"source_url": "https://x/1"}] if accept else []), [], {})
+                win.append_evidence_rows = lambda rows, *a, **k: (1 if accept else 0, 1, [])
+                acr_mod._index_generated_records = lambda *a, **k: (
+                    counts.__setitem__("index", counts["index"] + 1), {})[1]
+                acr_mod.run_dry_run = lambda **k: (
+                    counts.__setitem__("dry_run", counts["dry_run"] + 1), [])[1]
+                out = win.WindowsLearnQnaCollector().collect(
+                    SimpleNamespace(write=True, since=None, max_pages=1, target_versions=None))
+                counts["results"] = len(out)
+            finally:
+                (win.generated_records, win.collect_for_record, win.append_evidence_rows,
+                 acr_mod._index_generated_records, acr_mod.run_dry_run,
+                 win.build_techcommunity_pool) = orig
+            return counts
+
+        accepted_run = _run(accept=True)
+        check("batched: all three records were walked", accepted_run["results"] == 3,
+              str(accepted_run))
+        check("batched: the record index is built ONCE for the whole run",
+              accepted_run["index"] == 1, f"index builds={accepted_run['index']} for 3 records")
+        check("batched: the evidence corpus is regrouped ONCE for the whole run",
+              accepted_run["dry_run"] == 1, f"dry runs={accepted_run['dry_run']} for 3 records")
+        empty_run = _run(accept=False)
+        check("batched: a run that accepted nothing rebuilds nothing",
+              empty_run["index"] == 0 and empty_run["dry_run"] == 0, str(empty_run))
 
     print()
     print("=" * 60)

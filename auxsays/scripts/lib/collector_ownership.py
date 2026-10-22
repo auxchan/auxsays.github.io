@@ -44,6 +44,10 @@ ALLOWED_METHODS: dict[str, set[str]] = {
         "vendor_forum_search", "web_search",
     },
     "adobe-premiere-pro": {
+        # adobe_community_algolia_search is the keyless searchToken -> Algolia -> getTopics chain.
+        # It reuses the adobe_community_bug_report source_type on purpose: it discovers the SAME
+        # Premiere bug-report threads a different way, and one report must not become two identities.
+        "adobe_community_algolia_search",
         "reddit_search", "adobe_community_search", "adobe_community_bug_tab_index",
         "adobe_community_known_url_recheck", "brave_search_api", "wayback_snapshot_recheck",
         "creativecow_forum_index", "creativecow_brave_search", "known_watchlist",
@@ -56,9 +60,22 @@ ALLOWED_METHODS: dict[str, set[str]] = {
         "adobe_community_algolia_search", "adobe_community_search", "reddit_search",
         "adobe_community_bug_tab_index", "adobe_community_known_url_recheck",
     },
-    "obs-studio": {"github_issues", "known_watchlist"},
-    "microsoft-windows-11": {"learn_qna_search_rss"},
-    "microsoft-powerpoint": {"learn_qna_search_rss", "reddit_search"},
+    # obs_forum is the SECOND source family for OBS -- the project's own support forum, a
+    # different platform and different authors, not a second route into GitHub Issues.
+    # known_watchlist is retired and emits only `disabled`; it stays listed because a method
+    # that stops emitting keeps its last health row forever (AUX-026).
+    "obs-studio": {"github_issues", "obs_forum", "known_watchlist"},
+    # techcommunity_windows_sitemap is the SECOND source family for Windows -- a different
+    # community, not a second route into Learn Q&A. See microsoft_windows.TECHCOMMUNITY_METHOD_ID
+    # for the bake-off that chose it.
+    "microsoft-windows-11": {"learn_qna_search_rss", "techcommunity_windows_sitemap"},
+    "microsoft-powerpoint": {"learn_qna_search_rss", "learn_qna_powerpoint_tags", "reddit_search",
+                             "stack_exchange_search", "github_officedev_issues",
+                             "tech_community_discussions", "open_web_discovery"},
+    # Two source families, reusing the shared method ids rather than minting Teams-specific ones:
+    # the acquisition-method registry catalogues each method once, and a per-product alias would
+    # make the same method look like two.
+    "microsoft-teams": {"learn_qna_search_rss", "tech_community_discussions"},
 }
 
 # Per-product allowed evidence source_type identities. Evidence rows carry ``source_type`` (not a
@@ -76,9 +93,20 @@ ALLOWED_SOURCE_TYPES: dict[str, set[str]] = {
     },
     "adobe-acrobat-reader": {"adobe_community_bug_report", "reddit_community_report"},
     "adobe-acrobat-pro": {"adobe_community_bug_report", "reddit_community_report"},
-    "obs-studio": {"github_issue", "curated_watchlist"},
-    "microsoft-windows-11": {"microsoft_learn_qna"},
-    "microsoft-powerpoint": {"microsoft_learn_qna", "reddit_community_report"},
+    # obs_forum_thread is a distinct source_type because obsproject.com is a distinct
+    # community, which is what makes it count toward the two-family coverage floor.
+    "obs-studio": {"github_issue", "obs_forum_thread", "curated_watchlist"},
+    # microsoft_tech_community is a genuinely separate community from microsoft_learn_qna, which is
+    # what makes it count toward the two-family coverage floor -- unlike learn_qna_powerpoint_tags
+    # below, which deliberately shares its family because it reads the same community.
+    "microsoft-windows-11": {"microsoft_learn_qna", "microsoft_tech_community"},
+    # learn_qna_powerpoint_tags deliberately shares the microsoft_learn_qna source_type: it is the
+    # same community, discovered a different way, and one report must not become two identities.
+    "microsoft-powerpoint": {"microsoft_learn_qna", "reddit_community_report", "stack_exchange_question",
+                             "github_officedev_issue", "microsoft_tech_community"},
+    # Teams counts two families for the coverage floor for the same reason Windows does:
+    # Tech Community is a different community, not a second route into Learn Q&A.
+    "microsoft-teams": {"microsoft_learn_qna", "microsoft_tech_community"},
 }
 
 # Per-product allowed permalink route slug(s). A record's public permalink is the canonical shape
@@ -97,28 +125,67 @@ def allowed_permalink_slugs(product_id: str) -> set[str]:
     return ALLOWED_PERMALINK_SLUGS.get(product_id, {product_id})
 
 
+def _permalink_segments(permalink: str) -> list[str] | None:
+    """Return the parsed segments of a canonical update permalink, or None when `permalink` is not
+    EXACTLY /updates/<company>/<product>/<version>/ or /updates/<company>/<product>/<version>/<build>/
+    -- a leading slash, then four (or, for a build-aware product, five) non-empty path segments, and
+    at most a single trailing slash. The shape is validated strictly, never repaired: a missing or
+    extra segment, an empty segment from a repeated slash (//), a non-'updates' root, a traversal
+    ('..'), or an encoded-slash / encoded-traversal / query / fragment artifact all fail.
+
+    The optional fifth segment is NOT a general relaxation: `validate_records` requires exactly five
+    segments for a build-aware product and exactly four for every other product, and additionally
+    requires the fifth to equal that record's own target_build. So the accepted shape per product is
+    still exactly one, and segment-position spoofing gains nothing."""
+    p = str(permalink or "")
+    if not p.startswith("/updates/"):
+        return None
+    body = p[1:]
+    if body.endswith("/"):
+        body = body[:-1]
+    segments = body.split("/")
+    if len(segments) not in (4, 5) or any(seg == "" for seg in segments) or segments[0] != "updates":
+        return None
+    # A query or fragment artifact used to be rejected implicitly, because '/updates/a/b/c/?x=1'
+    # split into FIVE segments and only four were allowed. Now that a fifth (build) segment is a
+    # legitimate shape for build-aware products, that implicit rejection is gone and these must be
+    # refused explicitly -- a canonical record permalink is a pure path, never a URL with a query
+    # string, fragment, or percent-encoding.
+    if ".." in segments or any(("%" in seg) or ("?" in seg) or ("#" in seg) for seg in segments):
+        return None
+    return segments
+
+
 def _permalink_product_slug(permalink: str) -> str | None:
     """Return the product-slug segment of a canonical update permalink, or None if `permalink` is not
-    EXACTLY the shape /updates/<company>/<product>/<version>/ -- a leading slash, then four non-empty
-    path segments, and at most a single trailing slash. The shape is validated strictly, never repaired:
+    a well-formed canonical path. The shape is validated strictly, never repaired:
     a missing or extra segment, an empty segment from a repeated slash (//), a non-'updates' root, a
     traversal ('..'), or an encoded-slash / encoded-traversal / query / fragment artifact all fail to
     yield a product slug. Combined with the exact-set membership check in validate_records, this makes
     segment-position spoofing and substring look-alikes (davinci-resolve-fake, blackmagic-davinci-extra)
     impossible to smuggle through -- the product slug is only ever the literal 3rd segment of a
     well-formed canonical path."""
-    p = str(permalink or "")
-    if not p.startswith("/updates/"):
-        return None
-    body = p[1:]                       # drop the leading slash -> 'updates/<co>/<prod>/<ver>[/]'
-    if body.endswith("/"):
-        body = body[:-1]               # tolerate exactly one trailing slash (the canonical form)
-    segments = body.split("/")
-    # Exactly updates/<company>/<product>/<version>; any empty segment (a repeated slash) or a wrong
-    # segment count is a malformed/ambiguous path and is rejected rather than collapsed or repaired.
-    if len(segments) != 4 or any(seg == "" for seg in segments) or segments[0] != "updates":
-        return None
-    return segments[2]
+    segments = _permalink_segments(permalink)
+    return segments[2] if segments else None
+
+
+def _permalink_build_segment(permalink: str) -> str:
+    """The exact-build segment of a build-aware permalink, or '' when the path carries none.
+
+    Delegates to the identity authority so the official-ingest write path and this validator read
+    the build out of a permalink the same way. The stricter shape/ownership parsing above still
+    runs first, so a hostile permalink is rejected before this is ever consulted."""
+    segments = _permalink_segments(permalink)
+    if not segments or len(segments) != 5:
+        return ""
+    return _identity_permalink_build_segment(permalink)
+
+
+from .patch_identity import (
+    REASON_BUILD_MISSING, REASON_PERMALINK_BUILD_MISMATCH, REASON_PERMALINK_BUILD_UNEXPECTED,
+    build_identity_reason, is_build_aware, normalize_build, patch_key,
+)
+from .patch_identity import permalink_build_segment as _identity_permalink_build_segment
 
 
 class OwnershipViolation(Exception):
@@ -182,10 +249,27 @@ def _evidence_by_id(rows: list[dict[str, Any]]) -> dict[tuple[str, str, str], di
     return {evidence_key(r, "id"): r for r in rows if r.get("id")}
 
 
-def _existing_versions(product_id: str) -> set[str]:
-    # str-normalize: YAML may parse a version as float (26.2) in one place and string ('26.2') in
-    # another; comparing normalized strings on BOTH sides avoids false-rejecting legitimate rows.
-    return {str(r.update_version).strip() for r in generated_records(product_id, include_archived=True)}
+def _existing_patch_keys(product_id: str) -> set[tuple[str, str, str]]:
+    """The exact canonical patch identities this product actually has records for.
+
+    For a version-only product this is just its versions with an empty build slot, so membership
+    is identical to the version-only check this replaced. For a build-aware product it is the
+    EXACT (version, build) pairs: a YYMM that exists is no longer sufficient, because a sibling
+    build under the same YYMM is a different patch that this row may not belong to."""
+    return {
+        patch_key(product_id, str(r.update_version).strip(), getattr(r, "target_build", ""))
+        for r in generated_records(product_id, include_archived=True)
+    }
+
+
+def _patch_resolves(product_id: str, version: str, target_build: str,
+                    existing_keys: set[tuple[str, str, str]]) -> bool:
+    """True when (product, version, build) names a patch that exists.
+
+    Build-aware products get NO version-only fallback: a missing build cannot resolve (it does not
+    name a patch at all) and a wrong build cannot resolve (it names a patch that does not exist).
+    Non-build-aware products are unaffected -- their build slot is always empty on both sides."""
+    return patch_key(product_id, version, target_build) in existing_keys
 
 
 # --- generated records ---------------------------------------------------------
@@ -193,7 +277,7 @@ def validate_records(product_id: str, generated_dir: Path, mutated: set[Path],
                      baseline_bytes) -> None:
     """`mutated` are paths under updates/generated/ this collector changed. baseline_bytes(path)
     returns the pre-collector bytes (None if the path did not exist)."""
-    existing_versions = _existing_versions(product_id)
+    existing_keys = _existing_patch_keys(product_id)
     for path in mutated:
         exists_now = path.exists()
         if not exists_now:
@@ -231,8 +315,31 @@ def validate_records(product_id: str, generated_dir: Path, mutated: set[Path],
         if slug is None or slug not in allowed_permalink_slugs(product_id):
             raise _violation("record_permalink_mismatch", f"collector '{product_id}' record permalink identity mismatch: {permalink!r} ({path.name})",
                              surface="record", product_id=product_id, version=version)
-        # A collector refreshes existing records; a version with no pre-existing record is suspect.
-        if version not in existing_versions:
+        # Exact-build identity. A build-aware product publishes at
+        # /updates/<co>/<product>/<version>/<build>/ and the build segment must be THIS record's own
+        # target_build -- so a record cannot claim another build's URL, and a missing build fails
+        # closed rather than silently falling back to the version-only URL that a sibling build may
+        # already own. Every other product must still be exactly four segments.
+        record_build = normalize_build(data.get("target_build"))
+        permalink_build = _permalink_build_segment(permalink)
+        # The rule itself lives in the identity authority; the official-ingest write path applies
+        # the SAME function before writing. Only the violation message is lane-specific.
+        build_reason = build_identity_reason(product_id, version, record_build, permalink)
+        if build_reason == REASON_BUILD_MISSING:
+            raise _violation("record_build_missing", f"collector '{product_id}' record has no exact target_build: {path.name}",
+                             surface="record", product_id=product_id, version=version)
+        if build_reason == REASON_PERMALINK_BUILD_MISMATCH:
+            raise _violation("record_permalink_build_mismatch", f"collector '{product_id}' record permalink build {permalink_build!r} does not match target_build {record_build!r} ({path.name})",
+                             surface="record", product_id=product_id, version=version)
+        if build_reason == REASON_PERMALINK_BUILD_UNEXPECTED:
+            raise _violation("record_permalink_build_unexpected", f"collector '{product_id}' is not build-aware but its permalink carries a build segment: {permalink!r} ({path.name})",
+                             surface="record", product_id=product_id, version=version)
+
+        # A collector refreshes existing records; a patch with no pre-existing record is suspect.
+        # For a build-aware product this resolves the EXACT (version, build), so refreshing a
+        # sibling build that has no record of its own is rejected rather than accepted because the
+        # YYMM happens to exist.
+        if not _patch_resolves(product_id, version, record_build, existing_keys):
             raise _violation("record_version_unresolved", f"collector '{product_id}' record version {version} does not resolve to an existing patch record",
                              surface="record", product_id=product_id, version=version)
 
@@ -257,7 +364,7 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
     if len(after) < len(before):
         raise _violation("evidence_rows_removed", f"collector '{product_id}' removed evidence rows", surface="evidence", product_id=product_id)
 
-    existing_versions = _existing_versions(product_id)
+    existing_keys = _existing_patch_keys(product_id)
     permitted_sources = allowed_source_types(product_id)
     # Dedup universe = existing ids/urls; each added row must be unique and owned. The duplicate-URL
     # identity is the SAME key the append/dedup authority uses (base.evidence_key): the triple
@@ -281,7 +388,7 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
             raise _violation("evidence_product_mismatch", f"collector '{product_id}' appended cross-product evidence for '{pid}'",
                              surface="evidence", product_id=product_id)
         version = str(row.get("update_version") or "").strip()
-        if version not in existing_versions:
+        if not _patch_resolves(product_id, version, row.get("target_build"), existing_keys):
             raise _violation("evidence_version_unresolved", f"collector '{product_id}' appended evidence for unresolved version {version}",
                              surface="evidence", product_id=product_id, version=version)
         source_type = str(row.get("source_type") or "").strip()
@@ -309,7 +416,7 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
 # --- method health -------------------------------------------------------------
 def validate_method_health(product_id: str, rows: list[dict[str, Any]]) -> None:
     permitted = allowed_methods(product_id)
-    existing_versions = _existing_versions(product_id)
+    existing_keys = _existing_patch_keys(product_id)
     for row in rows:
         if not isinstance(row, dict):
             raise _violation("method_health_non_dict", f"collector '{product_id}' returned a non-dict method-health row",
@@ -323,7 +430,7 @@ def validate_method_health(product_id: str, rows: list[dict[str, Any]]) -> None:
             raise _violation("method_not_allowed", f"collector '{product_id}' returned unauthorized method_id '{method}'",
                              surface="method_health", product_id=product_id)
         version = str(row.get("update_version") or "").strip()
-        if version not in existing_versions:
+        if not _patch_resolves(product_id, version, row.get("target_build"), existing_keys):
             raise _violation("method_health_version_unresolved", f"collector '{product_id}' returned method-health for unresolved version {version}",
                              surface="method_health", product_id=product_id, version=version)
         status = str(row.get("status") or "").strip()

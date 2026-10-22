@@ -21,29 +21,78 @@
   --border-subtle: rgba(255,255,255,0.08);
   --border-strong: rgba(199, 162, 85, 0.24);
   --shadow-soft: 0 24px 70px rgba(0,0,0,0.32);
-  --radius-xl: 28px@font-face {
-  font-family: 'AUX Triad Fusion';
-  src: url('/assets/fonts/AUX-TriadFusion-v13-Regular.otf') format('opentype');
-  font-display: swap;
-}
 
-:root {
-  --bg-0: #0a0d10;
-  --bg-1: #11161a;
-  --bg-2: #182026;
-  --bg-3: #202a31;
-  --text-0: #ece7dd;
-  --text-1: #cac3b6;
-  --text-2: #8f968f;
-  --accent-0: #d6ab4e;
-  --accent-1: #f0ca67;
-  --accent-dim: rgba(199, 162, 85, 0.18);
-  --cyan-0: #5fd4e5;
-  --cyan-1: #8feaf4;
-  --teal-ambient: rgba(71, 119, 126, 0.18);
-  --border-subtle: rgba(255,255,255,0.08);
-  --border-strong: rgba(199, 162, 85, 0.24);
-  --shadow-soft: 0 24px 70px rgba(0,0,0,0.32);
+  /* The --aux-* namespace, bound to the palette above.
+     These were introduced by the evidence-card styling and never defined anywhere, so every
+     `var(--aux-…, fallback)` silently resolved to its LIGHT-THEME fallback on a dark page:
+     .update-linked-card painted `background: var(--aux-surface-muted)` -- a near-white
+     card -- with `color: var(--aux-text-muted)` dark-grey text inside it. That is the
+     white Level-2 block. The three tokens written without a fallback (--aux-text, --aux-muted,
+     --aux-cyan) failed more quietly: the declaration was dropped, so those elements inherited
+     whatever colour surrounded them.
+
+     Their POSITION here was once load-bearing and no longer is. When these aliases were added,
+     the next declaration read `--radius-xl: 28px@font-face {` -- a missing semicolon that
+     swallowed the rest of the rule into that property's value -- so anything defined below it
+     parsed without error and had no effect whatsoever; the first attempt at this fix landed
+     there and was inert. That splice is gone (the dead region in #115, the two radius tokens
+     below on 2026-09-09), so every declaration in this rule is now live and ordering no longer
+     decides whether a token applies. Keeping them above the palette-derived radius block is
+     just tidiness now, not a constraint.
+
+     Aliasing at the source fixes all 37 `var(--aux-…)` usages at once, rather than rewriting
+     ~20 declarations across a dozen selectors and risking a missed one. */
+  --aux-text: var(--text-0);
+  --aux-muted: var(--text-2);
+  --aux-text-muted: var(--text-2);
+  --aux-border: var(--border-subtle);
+  --aux-cyan: var(--cyan-0);
+  --aux-gold: var(--accent-1);
+  /* Subordinate card surface. Reuses the value .update-monitoring-card already uses, so Level 2
+     reads as a secondary card rather than a new visual language; its subordination to the verdict
+     comes from having no gradient, no shadow, a smaller radius and a position below the decision. */
+  --aux-surface-muted: rgba(255,255,255,.022);
+  --aux-accent-muted: var(--border-strong);
+  /* PANEL GEOMETRY. --radius-xl and --radius-lg were restored 2026-09-09, closing the last
+     live effect of the `--radius-xl: 28px@font-face {` splice.
+
+     THE SPLICE. A missing semicolon after `28px` spliced a duplicated copy of the file header
+     plus ~900 lines of rules INTO this custom property's value, so the value ran on until the
+     next top-level `;`. Two things followed. The ~900 lines were inert text, not CSS -- #115
+     deleted them. And the terminating `;` belonged to the `--radius-lg: 22px` that came next,
+     so that declaration was eaten too: BOTH tokens were undefined in the live cascade for as
+     long as the splice existed, and #115 chose to leave them that way.
+
+     WHERE THESE VALUES COME FROM. Not from a guess, and not from reading the usages backwards.
+     The swallowed region contained an intact duplicate of this very :root, and that duplicate
+     still read `--radius-xl: 28px;` WITH its semicolon: the pasted copy was clean, and it was
+     the OUTER copy that lost the semicolon at the seam. Diffed line by line before restoring
+     (against the pre-#115 blob, since the region is deleted now):
+       * of the 912 swallowed lines, the 884 site-rule lines matched live rules further down
+         100% byte-identically -- 0 lines existed only in the swallowed copy, and every
+         difference was a live-ONLY addition, so the live copy was strictly the newer one;
+       * of the 19 declarations in the duplicated :root, 18 were byte-identical to their
+         counterparts elsewhere in the outer rule -- 16 above the splice, and --radius-lg and
+         --radius-md just below it. The 19th was `--radius-xl`, held as `28px` in the duplicate
+         and as the corrupted `28px@font-face {` in the outer copy.
+     So the duplicate was the only uncorrupted record of --radius-xl in CSS CODE; #115 preserved
+     the value too, but only as comment prose, which no cascade reads. --radius-lg
+     took a different route: `--radius-lg: 22px;` sat just BELOW the splice as ordinary text, but
+     was inert because the splice had consumed its `;` as the terminator of --radius-xl's value.
+     #115 then deleted that line along with the dead region, which is how a declaration that was
+     merely unreachable became genuinely absent. The duplicate corroborates the 22px.
+
+     THIS IS A DELIBERATE VISUAL CHANGE, measured in Chromium over a controlled A/B build whose
+     only difference was this file (1278 pages; 4 other files differed, all build timestamps):
+       --radius-xl  UNDEFINED -> 28px   .panel            7237 elements on 1260 of 1278 pages
+       --radius-lg  UNDEFINED -> 22px   .featured-card       2, .article-card 3,
+                                        .article-rail-card   3, .article-related-card 6
+     Nothing else moved. .update-side-card, .update-summary and .update-consensus also reference
+     --radius-lg but match 0 elements anywhere in the built site, so they are dead selectors.
+     --radius-md is defined but referenced by nothing.
+
+     Panels render round-cornered again, which is what the surrounding design intends. Changing
+     either value is a design decision: re-measure the components above when you do. */
   --radius-xl: 28px;
   --radius-lg: 22px;
   --radius-md: 16px;
@@ -55,6 +104,20 @@ a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; }
 
 .aux-page { min-height:100vh; position:relative; overflow-x:clip; }
+/* AUXSAYS HEADING COLOUR. The ground above is dark in every colour scheme, but Chirpy colours
+   h1-h5 with `var(--heading-color)`, which it flips on prefers-color-scheme: #cccccc for dark,
+   #2a2a2a for light. With an OS set to light, headings rendered #2a2a2a on #0a0d10 -- measured
+   1.36:1 and 1.30:1 in Chromium, on the patch page first and then on every other layout.
+
+   Wherever AUXSAYS owns the ground it owns the heading token too. `aux-base.html` emits
+   `<body class="aux-page {{ page.layout }}">` for every AUXSAYS layout, so `body.aux-page` IS that
+   ground: one value in both schemes, the same --text-0 every explicitly coloured heading here
+   already uses. Headings that set their own colour are untouched, because this only replaces the
+   theme's token, and `vault.html` renders `body.vault-page` so it keeps the theme's own behaviour.
+
+   This replaces the earlier `body.aux-update` rule rather than sitting beside it: same selector
+   weight, same value, and one owner is clearer than a general rule shadowed by a narrower copy. */
+body.aux-page { --heading-color: var(--text-0); }
 .aux-bg {
   position:fixed; inset:0; pointer-events:none;
   background:
@@ -314,896 +377,25 @@ button, input, select, textarea { font: inherit; }
   box-shadow: 0 18px 42px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.04);
 }
 
-.reveal-up { opacity:0; transform:translate3d(0,22px,0); transition: opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1); }
-.reveal-up.is-visible { opacity:1; transform:none; }
-.reveal-delay-1 { transition-delay:.08s; }
-.reveal-delay-2 { transition-delay:.16s; }
-
-@media (max-width: 1100px) {
-  .coverage-grid, .featured-grid, .article-grid { grid-template-columns:1fr 1fr; }
-  .about-flow-grid, .about-lanes { grid-template-columns:1fr; }
-}
-@media (max-width: 860px) {
-  .aux-topbar { padding-left:.8rem; padding-right:.8rem; }
-  .aux-topbar-inner, .aux-footer { width:calc(100vw - 24px); }
-  .aux-shell, .aux-article-page { width:calc(100vw - 24px); margin:1rem auto; }
-  .brand-copy em { display:none; }
-  .aux-nav { gap:.18rem; }
-  .aux-nav a { padding:.68rem .82rem; }
-  .hero-panel, .patch-hero, .patch-controls, .patch-card, .patch-notify, .article-card, .featured-card, .article-hero, .article-body, .update-hero, .update-body, .update-bottom { padding:1.12rem; }
-  .hero-title { font-size: clamp(2rem, 10vw, 3.3rem); max-width:100%; }
-  .hero-panel { min-height:460px; }
-  .hero-panel-content { width:calc(100% - 32px); padding:1.8rem 0 1.9rem 1.4rem; }
-  .coverage-grid, .featured-grid, .article-grid, .article-related-grid, .patch-feed { grid-template-columns:1fr; }
-  .coverage-card { min-height:unset; }
-  .about-stage-shell, .article-hero-grid, .update-hero-grid { grid-template-columns:1fr; }
-  .about-portrait-wrap { max-width:180px; }
-  .update-title, .article-title, .patch-title { max-width:100%; font-size:clamp(1.9rem, 9vw, 3rem); }
-  .tool-list { grid-template-columns:1fr; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal-up, .coverage-card, .coverage-icon::before, .coverage-icon::after, .btn, .chip, .patch-chip { animation:none !important; transition:none !important; }
-}
-
-
-/* Final integration fixes: Option B hero, About portrait, and Patch Feed report counts */
-.hero-panel { min-height: 560px; }
-.hero-panel-backdrop { background-position: center 52%; }
-.hero-panel-backdrop::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,.018), rgba(0,0,0,.08) 42%, rgba(0,0,0,.42));
-  pointer-events: none;
-}
-.coverage-card::before { content: none !important; }
-.coverage-card:hover::after, .coverage-card.is-open::after { opacity: 0 !important; }
-
-.about-stage-shell {
-  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
-  align-items: start;
-  gap: clamp(1.4rem, 3vw, 3rem);
-}
-.about-portrait-wrap {
-  position: relative;
-  z-index: 1;
-  max-width: 340px;
-}
-.about-portrait {
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  object-position: center 18%;
-}
-.about-stage-copy {
-  position: relative;
-  z-index: 2;
-  align-self: center;
-}
-.about-lanes { align-items: stretch; }
-
-.patch-status-stack {
-  display: inline-grid;
-  justify-items: end;
-  gap: .42rem;
-  flex: 0 0 auto;
-}
-.patch-report-count,
-.patch-consensus-meta,
-.update-report-count {
-  color: var(--text-2);
-  font-size: .74rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.patch-consensus-block {
-  display: grid;
-  gap: .36rem;
-  max-width: 62rem;
-  padding: .9rem 1rem;
-  border-left: 2px solid rgba(214,171,78,.56);
-  background: rgba(255,255,255,.018);
-  border-radius: 0 16px 16px 0;
-}
-.patch-consensus-label {
-  color: var(--accent-0);
-  font-size: .72rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  font-weight: 800;
-}
-.update-consensus-top {
-  display: flex;
-  gap: .8rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 860px) {
-  .about-stage-shell { grid-template-columns: 1fr; }
-  .about-portrait-wrap { max-width: min(280px, 72vw); }
-  .patch-card-headline { align-items: flex-start; }
-  .patch-status-stack { justify-items: start; }
-}
-
-/* Refinement pass: clearer homepage icons, visible hero terrain, softer About portrait */
-.coverage-icon { color: var(--accent-1); }
-.coverage-icon::before,
-.coverage-icon::after { content: none !important; }
-.coverage-icon svg {
-  width: 25px;
-  height: 25px;
-  display: block;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform .32s cubic-bezier(.22,1,.36,1), color .28s ease, filter .28s ease;
-}
-.coverage-card:hover .coverage-icon svg,
-.coverage-card.is-open .coverage-icon svg {
-  color: var(--cyan-1);
-  filter: drop-shadow(0 0 7px rgba(126,207,215,.24));
-}
-.coverage-icon--workflow svg .flow-node,
-.coverage-icon--lms svg .screen-fill { fill: rgba(240,202,103,.16); stroke: currentColor; }
-.coverage-card:hover .coverage-icon--workflow svg .flow-node,
-.coverage-card.is-open .coverage-icon--workflow svg .flow-node,
-.coverage-card:hover .coverage-icon--lms svg .screen-fill,
-.coverage-card.is-open .coverage-icon--lms svg .screen-fill { fill: rgba(126,207,215,.14); }
-.coverage-card:hover .coverage-icon--workflow svg .flow-end,
-.coverage-card.is-open .coverage-icon--workflow svg .flow-end,
-.coverage-card:hover .coverage-icon--lms svg .accent-line,
-.coverage-card.is-open .coverage-icon--lms svg .accent-line { stroke: var(--accent-1); }
-.coverage-card:hover .coverage-icon--workflow svg,
-.coverage-card.is-open .coverage-icon--workflow svg,
-.coverage-card:hover .coverage-icon--lms svg,
-.coverage-card.is-open .coverage-icon--lms svg,
-.coverage-card:hover .coverage-icon--automation svg,
-.coverage-card.is-open .coverage-icon--automation svg,
-.coverage-card:hover .coverage-icon--free-ai svg,
-.coverage-card.is-open .coverage-icon--free-ai svg { transform: translateY(-1px) scale(1.045); }
-.about-portrait-wrap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 42% 22%, rgba(255,255,255,.10), transparent 28%),
-    linear-gradient(135deg, rgba(126,207,215,.10), transparent 38%, rgba(214,171,78,.08));
-  mix-blend-mode: screen;
-  opacity: .24;
-  transition: opacity .32s ease;
-  pointer-events: none;
-}
-.about-portrait-wrap:hover::after { opacity: .04; }
-.about-portrait {
-  filter: grayscale(1) contrast(.95) brightness(1.03) saturate(.92);
-  transition: filter .32s ease, transform .32s ease;
-}
-.about-portrait-wrap:hover .about-portrait {
-  filter: grayscale(1) contrast(1.02) brightness(1.02) saturate(.98);
-  transform: scale(1.015);
-}
-
-
-/* Balanced performance pass: no particle DOM, no particle animation, keep premium static diffusion/glow. */
-.systems-particles,
-.systems-particle,
-[class*="systems-particle"] {
-  display: none !important;
-  animation: none !important;
-}
-
-/* Card rendering isolation without clipping glow/shadow effects. */
-.patch-card[hidden],
-.article-card[hidden] {
-  display: none !important;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .patch-card,
-  .featured-card,
-  .article-card {
-    transition: transform .24s cubic-bezier(.22,1,.36,1), border-color .24s ease, box-shadow .24s ease, background .24s ease;
-  }
-
-  .patch-card:hover,
-  .featured-card:hover,
-  .article-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(240,202,103,.28);
-    box-shadow: 0 14px 28px rgba(0,0,0,.24), 0 0 0 1px rgba(126,207,215,.055);
-  }
-}
-
-.aux-footer::before {
-  content:'';
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    linear-gradient(90deg, rgba(126,207,215,.16), transparent 18%, transparent 76%, rgba(199,162,85,.13)),
-    linear-gradient(180deg, rgba(255,255,255,.035), transparent 46%);
-  opacity:.82;
-}
-
-.aux-footer::after {
-  content:'';
-  position:absolute;
-  left:1.2rem;
-  right:1.2rem;
-  top:0;
-  height:1px;
-  background:linear-gradient(90deg, transparent, rgba(126,207,215,.36), rgba(240,202,103,.28), transparent);
-  pointer-events:none;
-}
-
-.aux-footer span {
-  position:relative;
-  z-index:1;
-  white-space:normal;
-}
-
-.aux-footer span:first-child {
-  color:#d7dde4;
-  font-weight:700;
-  letter-spacing:.02em;
-}
-
-.aux-footer span:last-child {
-  text-align:right;
-}
-
-@media (max-width: 900px) {
-  .systems-lottie { display:none; }
-  .systems-ring { opacity:.12; }
-  .coverage-card,
-  .patch-alert,
-  .patch-card,
-  .featured-card,
-  .article-card {
-    transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
-  }
-  .coverage-card:hover,
-  .patch-alert:hover,
-  .patch-card:hover,
-  .featured-card:hover,
-  .article-card:hover {
-    transform:none;
-  }
-}
-
-@media (max-width: 560px) {
-  .aux-footer {
-    width:calc(100vw - 24px);
-    padding:1rem;
-    justify-content:flex-start;
-  }
-  .aux-footer span:last-child {
-    text-align:left;
-  }
-}
-/* =========================================
-   AUXSAYS NODE GRAPH BULLETS
-   ========================================= */
-
-.article-body-inner ul,
-.update-body .prose ul {
-  position: relative;
-  list-style: none;
-  padding-left: 1.75rem;
-  margin: 1.15rem 0 1.45rem;
-}
-
-/* continuous node rail */
-.article-body-inner ul::before,
-.update-body .prose ul::before {
-  content: '';
-  position: absolute;
-  left: 0.42rem;
-  top: 0.9rem;
-  bottom: 0.9rem;
-  width: 1px;
-  background: linear-gradient(
-    180deg,
-    transparent,
-    rgba(52,217,248,0.34) 12%,
-    rgba(52,217,248,0.18) 50%,
-    rgba(52,217,248,0.34) 88%,
-    transparent
-  );
-  box-shadow: 0 0 8px rgba(52,217,248,0.12);
-}
-
-.article-body-inner ul li,
-.update-body .prose ul li {
-  position: relative;
-  margin-bottom: 0.58rem;
-  line-height: 1.72;
-}
-
-/* node outer shape */
-.article-body-inner ul li::before,
-.update-body .prose ul li::before {
-  content: '';
-  position: absolute;
-  left: -1.55rem;
-  top: 0.72em;
-  width: 11px;
-  height: 11px;
-  border: 1px solid rgba(52,217,248,0.86);
-  border-radius: 3px;
-  background: rgba(10,18,24,0.96);
-  box-shadow:
-    0 0 0 2px rgba(10,13,16,0.95),
-    0 0 10px rgba(52,217,248,0.24);
-  transform: rotate(45deg);
-}
-
-/* node core */
-.article-body-inner ul li::after,
-.update-body .prose ul li::after {
-  content: '';
-  position: absolute;
-  left: -1.33rem;
-  top: calc(0.72em + 3px);
-  width: 5px;
-  height: 5px;
-  border-radius: 2px;
-  background: var(--accent-1);
-  opacity: 0.82;
-  box-shadow: 0 0 8px rgba(240,202,103,0.28);
-}
-
-@media (hover: hover) {
-  .article-body-inner ul li:hover::before,
-  .update-body .prose ul li:hover::before {
-    border-color: var(--cyan-1);
-    box-shadow:
-      0 0 0 2px rgba(10,13,16,0.95),
-      0 0 14px rgba(52,217,248,0.38);
-  }
-
-  .article-body-inner ul li:hover::after,
-  .update-body .prose ul li:hover::after {
-    opacity: 1;
-    box-shadow: 0 0 12px rgba(240,202,103,0.42);
-  }
-}
-
-/* =========================================
-   PATCH FEED SOURCE RADAR OVERHAUL
-   ========================================= */
-
-.patch-source-radar {
-  padding: 1.35rem 1.45rem;
-  overflow: hidden;
-  position: relative;
-}
-
-.patch-source-radar::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 16% 0%, rgba(126,207,215,.10), transparent 28%),
-    radial-gradient(circle at 92% 8%, rgba(214,171,78,.10), transparent 24%),
-    linear-gradient(180deg, rgba(255,255,255,.025), transparent 42%);
-  opacity: .7;
-}
-
-.patch-source-radar-head {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, .44fr);
-  gap: 1.2rem;
-  align-items: start;
-  margin-bottom: 1.2rem;
-}
-
-.patch-source-title {
-  margin: 0 0 .55rem;
-  font-size: clamp(1.65rem, 2.6vw, 2.5rem);
-  line-height: 1;
-  letter-spacing: -.04em;
-}
-
-.patch-source-subtitle {
-  margin: 0;
-  max-width: 68rem;
-  color: var(--text-1);
-  line-height: 1.72;
-}
-
-.patch-radar-stat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: .65rem;
-}
-
-.patch-radar-stat-grid span {
-  display: grid;
-  gap: .22rem;
-  padding: .85rem .9rem;
-  border-radius: 18px;
-  border: 1px solid rgba(126,207,215,.12);
-  background: rgba(255,255,255,.024);
-}
-
-.patch-radar-stat-grid strong {
-  color: var(--cyan-1);
-  font-size: 1.08rem;
-  line-height: 1;
-}
-
-.patch-radar-stat-grid em {
-  color: var(--text-2);
-  font-size: .68rem;
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: .14em;
-  line-height: 1.35;
-}
-
-.patch-source-grid {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: .9rem;
-}
-
-.patch-source-card {
-  position: relative;
-  display: grid;
-  align-content: start;
-  gap: .82rem;
-  padding: 1rem;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,.075);
-  background:
-    linear-gradient(180deg, rgba(16,24,29,.74), rgba(9,14,18,.88)),
-    radial-gradient(circle at 94% 0%, rgba(126,207,215,.09), transparent 36%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
-  transition: transform .24s cubic-bezier(.22,1,.36,1), border-color .24s ease, box-shadow .24s ease, background .24s ease;
-}
-
-.patch-source-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(126,207,215,.18), transparent 22%, transparent 78%, rgba(214,171,78,.12)),
-    linear-gradient(180deg, rgba(255,255,255,.025), transparent 44%);
-  opacity: .45;
-}
-
-.patch-source-card[hidden],
-.patch-source-card.is-hidden {
-  display: none !important;
-}
-
-.patch-source-topline {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: .75rem;
-  align-items: center;
-}
-
-.patch-source-badge {
-  width: 2.9rem;
-  height: 2.9rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 14px;
-  border: 1px solid rgba(126,207,215,.18);
-  background: rgba(126,207,215,.055);
-  color: var(--cyan-1);
-  font-weight: 850;
-  font-size: .78rem;
-  letter-spacing: .08em;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.04);
-}
-
-.patch-source-meta {
-  display: grid;
-  gap: .13rem;
-  min-width: 0;
-}
-
-.patch-source-meta strong {
-  color: var(--text-0);
-  font-size: .98rem;
-  line-height: 1.12;
-}
-
-.patch-source-meta em {
-  color: var(--text-2);
-  font-size: .72rem;
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: .12em;
-}
-
-.patch-source-priority {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: .36rem .55rem;
-  border-radius: 999px;
-  font-size: .62rem;
-  font-weight: 850;
-  text-transform: uppercase;
-  letter-spacing: .13em;
-  border: 1px solid rgba(255,255,255,.08);
-  color: var(--text-1);
-  background: rgba(255,255,255,.026);
-}
-
-.patch-source-priority--core {
-  color: #071015;
-  background: linear-gradient(135deg, var(--accent-1), var(--accent-0));
-  border-color: rgba(240,202,103,.42);
-}
-
-.patch-source-priority--edge {
-  color: var(--cyan-1);
-  border-color: rgba(126,207,215,.32);
-  background: rgba(126,207,215,.065);
-}
-
-.patch-source-tags {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: .45rem;
-}
-
-.patch-source-tags span {
-  display: inline-flex;
-  padding: .34rem .52rem;
-  border-radius: 999px;
-  border: 1px solid rgba(126,207,215,.12);
-  color: var(--text-2);
-  background: rgba(255,255,255,.025);
-  font-size: .7rem;
-  text-transform: uppercase;
-  letter-spacing: .11em;
-}
-
-.patch-source-card p {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  color: var(--text-1);
-  line-height: 1.62;
-  font-size: .94rem;
-}
-
-.patch-source-card .patch-source-reason {
-  color: #d6dde7;
-}
-
-.patch-source-signal {
-  padding: .72rem .8rem;
-  border-left: 2px solid rgba(52,217,248,.46);
-  border-radius: 0 14px 14px 0;
-  background: rgba(126,207,215,.035);
-}
-
-.patch-source-signal strong {
-  color: var(--cyan-1);
-}
-
-.patch-source-link {
-  position: relative;
-  z-index: 1;
-  width: max-content;
-  color: var(--accent-1);
-  font-weight: 780;
-  font-size: .9rem;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .patch-source-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(126,207,215,.22);
-    box-shadow: 0 16px 34px rgba(0,0,0,.24), 0 0 0 1px rgba(52,217,248,.05);
-  }
-}
-
-@media (max-width: 1180px) {
-  .patch-source-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .patch-source-radar-head { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 760px) {
-  .patch-source-radar { padding: 1.12rem; }
-  .patch-radar-stat-grid { grid-template-columns: 1fr; }
-  .patch-source-grid { grid-template-columns: 1fr; }
-  .patch-source-card { content-visibility: visible; }
-}
-
-  --radius-lg: 22px;
-  --radius-md: 16px;
-}
-
-* { box-sizing: border-box; }
-html, body { margin:0; padding:0; background:var(--bg-0); color:var(--text-0); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-a { color: inherit; text-decoration: none; }
-button, input, select, textarea { font: inherit; }
-
-.aux-page { min-height:100vh; position:relative; overflow-x:clip; }
-.aux-bg {
-  position:fixed; inset:0; pointer-events:none;
-  background:
-    radial-gradient(circle at 14% 12%, rgba(126,207,215,.075), transparent 28%),
-    radial-gradient(circle at 82% 8%, rgba(199,162,85,.055), transparent 22%),
-    linear-gradient(180deg, rgba(255,255,255,.018), rgba(255,255,255,0));
-}
-.systems-field { position:fixed; inset:0; pointer-events:none; overflow:hidden; }
-.systems-grid {
-  position:absolute; inset:0; opacity:.12;
-  background-image:
-    linear-gradient(rgba(126,207,215,.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(126,207,215,.045) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: radial-gradient(circle at center, black 28%, transparent 84%);
-}
-.systems-lottie { position:absolute; inset:0; display:grid; place-items:center; opacity:.10; filter: drop-shadow(0 0 18px rgba(126,207,215,.055)); contain: layout paint style; }
-.systems-lottie > svg { width:min(54vw,680px); height:min(54vw,680px); }
-.systems-rings { position:absolute; inset:0; contain: layout paint style; }
-.systems-ring { position:absolute; border-radius:999px; border:1px solid rgba(126,207,215,.08); opacity:.22; }
-.systems-ring--1 { width:480px; height:480px; top:7%; right:-120px; }
-.systems-ring--2 { width:240px; height:240px; top:62%; left:-70px; border-color: rgba(199,162,85,.1); }
-.systems-ring--3 { width:180px; height:180px; top:14%; left:12%; }
-.aux-topbar {
-  position:sticky; top:0; z-index:30;
-  padding:.95rem 1.35rem;
-  border-bottom:1px solid rgba(255,255,255,.05);
-  backdrop-filter: blur(16px);
-  background: rgba(10,13,16,.72);
-}
-.aux-topbar-inner { width:min(1380px, calc(100vw - 48px)); margin:0 auto; display:flex; align-items:center; gap:1.6rem; }
-.brand { display:flex; align-items:center; flex:0 1 auto; }
-.brand-copy { display:flex; flex-direction:column; gap:.18rem; }
-.brand-copy strong { font-size:1.4rem; line-height:1; font-family:'AUX Triad Fusion', Inter, sans-serif; letter-spacing:.03em; }
-.brand-copy em { font-style:normal; text-transform:uppercase; color:var(--text-2); font-size:.78rem; letter-spacing:.18em; }
-.aux-nav { display:flex; gap:.25rem; align-items:center; margin-left:auto; }
-.aux-nav a {
-  padding:.72rem 1rem; border:1px solid transparent; border-radius:999px;
-  color:var(--text-1); transition: color .22s ease, border-color .22s ease, background .22s ease;
-}
-.aux-nav a.is-active, .aux-nav a:hover {
-  color:var(--text-0); border-color:var(--border-strong); background:rgba(199,162,85,.08);
-}
-
-.aux-shell { width:min(1380px, calc(100vw - 48px)); margin:2rem auto; display:grid; gap:2rem; position:relative; z-index:1; }
-.panel {
-  background: linear-gradient(180deg, rgba(17,22,26,.88), rgba(11,15,18,.96));
-  border:1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-soft);
-}
-.eyebrow {
-  display:inline-flex; align-items:center; gap:.55rem;
-  color:var(--accent-0); font-size:.76rem; text-transform:uppercase; letter-spacing:.22em; margin-bottom:1rem;
-}
-.eyebrow::before { content:''; width:36px; height:1px; background:linear-gradient(90deg, var(--accent-0), transparent); }
-.section-head { max-width:60rem; }
-.section-head h2, .articles-hero h1, .about-title, .patch-title, .post-title { margin:0 0 .55rem; font-size:clamp(2rem, 3.1vw, 3.3rem); line-height:.98; font-weight:800; letter-spacing:-.045em; text-transform:none; }
-.section-head p, .patch-subtitle { margin:0; color:var(--text-1); line-height:1.72; max-width:62rem; }
-
-.home-hero { display:grid; }
-.hero-panel { position:relative; padding:0; overflow:hidden; min-height:540px; }
-.hero-panel-backdrop { position:absolute; inset:0; background: linear-gradient(90deg, rgba(8,12,16,.82) 0%, rgba(8,12,16,.60) 29%, rgba(8,12,16,.24) 56%, rgba(8,12,16,.42) 100%), image-set(url('/assets/img/hero-signal-mountains.webp') type('image/webp'), url('/assets/img/hero-signal-mountains.png') type('image/png')) center 54%/cover no-repeat; transform: translateZ(0); backface-visibility: hidden; }
-.hero-panel-backdrop::after { content:''; position:absolute; inset:0; background: linear-gradient(90deg, rgba(5,8,11,.14), rgba(5,8,11,.02) 44%, rgba(5,8,11,.18)), radial-gradient(circle at 72% 26%, rgba(79,202,220,.06), transparent 24%), radial-gradient(circle at 88% 18%, rgba(71,206,233,.05), transparent 16%), linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.16)); }
-.hero-panel-content { position:relative; z-index:1; width:min(760px, calc(100% - 56px)); padding:2.8rem 0 2.8rem 2.6rem; }
-.hero-title { margin:0; display:grid; gap:.12rem; font-weight:850; font-size:clamp(2.35rem, 4.4vw, 5rem); line-height:.92; letter-spacing:-.06em; text-transform:none; max-width:15ch; }
-.hero-title .accent { color: var(--accent-1); }
-.hero-intro { margin:1.2rem 0 0; max-width:43rem; color:#d6dde7; font-size:1.08rem; line-height:1.8; }
-.cta-row { display:flex; flex-wrap:wrap; gap:.9rem; margin-top:1.85rem; }
-.btn {
-  display:inline-flex; align-items:center; justify-content:center; padding:.95rem 1.24rem;
-  border-radius:999px; border:1px solid var(--border-subtle); background:rgba(255,255,255,.02); color:var(--text-0);
-  transition: transform .28s cubic-bezier(.22,1,.36,1), background .28s cubic-bezier(.22,1,.36,1), border-color .28s ease, color .28s ease, box-shadow .28s ease;
-}
-.btn-home:hover, .btn-home:focus-visible, .btn:hover, .btn:focus-visible {
-  background: var(--accent-0); border-color: var(--accent-0); color:#0a0d10; box-shadow: 0 12px 26px rgba(199,162,85,.18); transform: translateY(-2px);
-}
-
-.featured-section, .coverage-section, .articles-hero { display:grid; gap:1.4rem; }
-.coverage-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
-.coverage-card {
-  position:relative; min-height:248px; border:1px solid var(--border-subtle); border-radius:24px;
-  background: linear-gradient(180deg, rgba(21,28,33,.92), rgba(13,18,22,.96));
-  overflow:hidden; transition: transform .32s cubic-bezier(.22,1,.36,1), border-color .32s ease, box-shadow .32s ease, background .32s ease;
-}
-.coverage-card::after { content:none; }
-.coverage-card:hover, .coverage-card.is-open {
-  transform: translateY(-7px) scale(1.018);
-  border-color: rgba(240,202,103,.82);
-  box-shadow: 0 18px 38px rgba(0,0,0,.30), 0 0 0 1px rgba(240,202,103,.26);
-}
-
-
-.coverage-hit { appearance:none; width:100%; background:transparent; border:0; color:inherit; display:grid; gap:.95rem; text-align:left; padding:1.2rem 1.2rem .2rem; cursor:pointer; }
-.coverage-topline { display:grid; grid-template-columns:58px 1fr 58px; align-items:center; gap:.9rem; }
-.coverage-index {
-  width:46px; height:46px; border-radius:14px; display:grid; place-items:center; font-size:.92rem; font-weight:800;
-  color:var(--text-1); background:rgba(255,255,255,.02); border:1px solid var(--border-subtle);
-  transition: color .28s ease, border-color .28s ease, background .28s ease, transform .28s ease;
-}
-.coverage-kicker { color:var(--text-2); font-size:.72rem; text-transform:uppercase; letter-spacing:.18em; line-height:1.45; }
-.coverage-icon {
-  position:relative; justify-self:end; width:44px; height:44px; border-radius:14px; border:1px solid var(--border-subtle); background:rgba(255,255,255,.018);
-  display:grid; place-items:center; transition: border-color .28s ease, background .28s ease, transform .28s ease;
-}
-.coverage-icon::before, .coverage-icon::after { content:''; position:absolute; transition: all .32s cubic-bezier(.22,1,.36,1); }
-.coverage-icon--spark::before {
-  width:16px; height:16px; background:linear-gradient(135deg, var(--text-0), var(--accent-0)); clip-path: polygon(50% 0%,63% 35%,100% 50%,63% 65%,50% 100%,37% 65%,0% 50%,37% 35%);
-}
-.coverage-icon--spark::after { width:30px; height:2px; background:linear-gradient(90deg, transparent, rgba(236,231,221,.65), transparent); transform: rotate(45deg) scaleX(.7); }
-.coverage-icon--grid::before {
-  width:18px; height:18px; border:2px solid rgba(236,231,221,.86);
-  box-shadow: 10px 0 0 -2px rgba(236,231,221,.86), 0 10px 0 -2px rgba(236,231,221,.86), 10px 10px 0 -2px var(--accent-0);
-}
-.coverage-icon--orbit::before { width:26px; height:26px; border-radius:50%; border:2px solid rgba(236,231,221,.86); }
-.coverage-icon--orbit::after { width:8px; height:8px; border-radius:50%; background: var(--accent-0); transform: translate(9px,-9px); box-shadow: -16px 15px 0 0 rgba(126,207,215,.65); }
-.coverage-icon--stack::before {
-  width:22px; height:14px; border-radius:4px; border:2px solid rgba(236,231,221,.86);
-  box-shadow: 0 -7px 0 -2px rgba(236,231,221,.4), 0 7px 0 -2px var(--accent-0);
-}
-.coverage-icon--stack::after { width:28px; height:28px; border-radius:10px; border:1px solid rgba(255,255,255,.14); }
-.coverage-card h3 { margin:0; font-size:1.18rem; line-height:1.08; letter-spacing:-.025em; font-weight:760; }
-.coverage-meta { min-height:1rem; display:flex; justify-content:space-between; align-items:center; }
-.coverage-action { color:var(--text-2); font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; }
-.coverage-body { padding:0 1.2rem 1.2rem; opacity:.78; transform:translateY(8px); transition: opacity .28s ease, transform .28s ease; }
-.coverage-body p { margin:0; color:var(--text-1); line-height:1.72; }
-.coverage-card:hover .coverage-body, .coverage-card.is-open .coverage-body { opacity:1; transform:none; }
-.coverage-card:hover .coverage-index, .coverage-card.is-open .coverage-index,
-.coverage-card:hover .coverage-icon, .coverage-card.is-open .coverage-icon {
-  color:var(--cyan-1); border-color: rgba(126,207,215,.32); background: rgba(126,207,215,.06); transform: translateZ(10px);
-}
-.coverage-card:hover .coverage-icon::before, .coverage-card.is-open .coverage-icon::before,
-.coverage-card:hover .coverage-icon::after, .coverage-card.is-open .coverage-icon::after { filter: drop-shadow(0 0 8px rgba(126,207,215,.18)); }
-.coverage-card:hover .coverage-icon--spark::before, .coverage-card.is-open .coverage-icon--spark::before { transform: scale(1.08) rotate(16deg); background:linear-gradient(135deg, var(--cyan-1), var(--accent-1)); }
-.coverage-card:hover .coverage-icon--spark::after, .coverage-card.is-open .coverage-icon--spark::after { opacity:.95; transform:rotate(45deg) scaleX(1); }
-.coverage-card:hover .coverage-icon--grid::before, .coverage-card.is-open .coverage-icon--grid::before { transform: translateY(-1px) scale(1.03); border-color:var(--cyan-1); box-shadow: 10px 0 0 -2px var(--cyan-1), 0 10px 0 -2px var(--cyan-1), 10px 10px 0 -2px var(--accent-1); }
-.coverage-card:hover .coverage-icon--orbit::before, .coverage-card.is-open .coverage-icon--orbit::before { transform: rotate(18deg) scale(1.04); border-color: var(--cyan-1); }
-.coverage-card:hover .coverage-icon--orbit::after, .coverage-card.is-open .coverage-icon--orbit::after { transform: translate(7px,-11px); background:var(--accent-1); box-shadow:-16px 15px 0 0 var(--cyan-1); }
-.coverage-card:hover .coverage-icon--stack::before, .coverage-card.is-open .coverage-icon--stack::before { transform: translateY(-2px); border-color:var(--cyan-1); box-shadow: 0 -7px 0 -2px rgba(236,231,221,.35), 0 7px 0 -2px var(--accent-1); }
-.coverage-card:hover .coverage-icon--stack::after, .coverage-card.is-open .coverage-icon--stack::after { transform: scale(1.05); border-color: rgba(126,207,215,.25); }
-
-.featured-grid, .article-grid { display:grid; gap:1rem; grid-template-columns: repeat(3, 1fr); }
-.featured-card, .article-card {
-  padding:1.25rem; border-radius: var(--radius-lg); border:1px solid var(--border-subtle);
-  background: linear-gradient(180deg, rgba(20,26,31,.92), rgba(13,18,22,.96)); display:grid; gap:.85rem;
-  transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease;
-}
-.featured-card:hover, .article-card:hover { transform: translateY(-3px); border-color: var(--border-strong); box-shadow:0 14px 28px rgba(0,0,0,.24); }
-.card-topline, .card-meta, .patch-meta-row, .update-topline { display:flex; flex-wrap:wrap; gap:.75rem; color:var(--text-2); font-size:.76rem; letter-spacing:.15em; text-transform:uppercase; }
-.featured-card h3, .article-card h2 { margin:0; font-size:1.14rem; line-height:1.14; letter-spacing:-.02em; font-weight:760; text-transform:none; }
-.featured-card p, .article-card p { margin:0; color:var(--text-1); line-height:1.7; }
-.text-link { color: var(--accent-1); font-weight:700; }
-
-.articles-hero { display:grid; gap:1.4rem; }
-.article-controls { display:grid; gap:1rem; }
-#article-search, .patch-search {
-  width:min(500px,100%); padding:1rem 1.05rem; border-radius:18px; border:1px solid var(--border-subtle);
-  background:rgba(255,255,255,.03); color:var(--text-0);
-}
-#article-search::placeholder, .patch-search::placeholder { color: var(--text-2); }
-.category-chips, .patch-chips { display:flex; flex-wrap:wrap; gap:.55rem; }
-.chip, .patch-chip {
-  padding:.72rem .98rem; border-radius:999px; border:1px solid var(--border-subtle); background:rgba(255,255,255,.03); color:var(--text-1); cursor:pointer;
-  transition: transform .22s ease, background .22s ease, border-color .22s ease, color .22s ease;
-}
-.chip:hover, .patch-chip:hover, .chip:focus-visible, .patch-chip:focus-visible { transform: translateY(-1px); border-color: var(--border-strong); color:var(--text-0); }
-.chip.is-active, .patch-chip.is-active { background: rgba(199,162,85,.12); border-color: var(--border-strong); color: var(--text-0); }
-
-.patch-shell { display:grid; gap:1.35rem; }
-.patch-hero, .patch-controls, .patch-card, .patch-notify { padding:1.35rem 1.45rem; }
-.patch-notify-list { display:grid; gap:.85rem; }
-.patch-alert {
-  display:flex; gap:.9rem; align-items:flex-start; padding:1rem 1.05rem; border-radius:18px; border:1px solid var(--border-subtle); background:rgba(255,255,255,.025);
-  transition: border-color .22s ease, transform .22s ease, background .22s ease;
-}
-.patch-alert:hover { transform: translateY(-1px); border-color: var(--border-strong); background: rgba(255,255,255,.04); }
-.patch-alert p { margin:.2rem 0 0; color:var(--text-1); line-height:1.7; }
-.patch-alert-pill, .patch-status, .consensus-badge {
-  display:inline-flex; align-items:center; padding:.42rem .74rem; border-radius:999px; font-size:.74rem; font-weight:800; text-transform:uppercase; letter-spacing:.15em; border:1px solid transparent;
-}
-.pill-improved, .patch-status--positive, .consensus-badge--positive { background: rgba(59,165,103,.16); color:#d9f7e5; }
-.pill-regressed, .patch-status--negative, .consensus-badge--negative { background: rgba(184,74,74,.16); color:#ffd7d7; }
-.patch-status--moderate, .consensus-badge--moderate { background: rgba(199,162,85,.16); color:#f7e5bd; }
-.patch-status--insufficient, .patch-status--insufficient-data, .consensus-badge--insufficient, .consensus-badge--insufficient-data { background: rgba(126,138,152,.16); color:#dee6ef; }
-.patch-toolbar-grid { display:grid; gap:1rem; }
-.patch-feed { display:grid; gap:1.2rem; }
-.patch-card { display:grid; gap:.95rem; }
-.patch-card-headline { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; }
-.patch-identity { display:inline-flex; align-items:center; gap:.85rem; width:max-content; }
-.patch-badge, .update-brand-badge {
-  min-width:3.1rem; height:3.1rem; display:inline-flex; align-items:center; justify-content:center; padding:0 .7rem; border-radius: 16px;
-  border:1px solid var(--border-subtle); background: rgba(255,255,255,.03); color:var(--text-0); font-weight:800; letter-spacing:.08em; text-transform:uppercase;
-}
-.patch-brand-copy, .update-brand-meta { display:grid; gap:.15rem; }
-.patch-brand-copy strong, .update-brand-meta strong { font-size:1rem; line-height:1.08; }
-.patch-brand-copy em, .update-brand-meta span { font-style:normal; color:var(--text-2); font-size:.78rem; text-transform:uppercase; letter-spacing:.13em; }
-.patch-card-title { margin:0; font-size:clamp(1.5rem, 2.15vw, 2.2rem); line-height:1.05; letter-spacing:-.03em; }
-.patch-card-summary, .patch-consensus-line { margin:0; color:var(--text-1); line-height:1.72; max-width:60rem; }
-.patch-card--archived { opacity:.86; }
-.patch-card-links { display:flex; flex-wrap:wrap; gap:1rem; }
-.patch-card-links a { color:var(--accent-1); font-weight:700; }
-.patch-card.is-hidden { display:none; }
-.section-head--archive h2 { font-size: clamp(1.5rem, 2.4vw, 2.2rem); }
-
-.about-stage, .about-flow { display:grid; }
-.about-stage-shell { display:grid; grid-template-columns:minmax(240px,300px) minmax(0,1fr); gap:2rem; align-items:start; padding:1.6rem; }
-.about-title { margin-bottom:.85rem; font-size: clamp(2.2rem, 3vw, 3.5rem); max-width:none; }
-.about-lead { margin:0; max-width:58ch; color:var(--text-1); font-size:1.08rem; line-height:1.78; }
-.about-stage-copy .mini-panel p { margin:0; }
-.about-lanes, .about-flow-grid { display:grid; gap:1rem; }
-.about-stage-copy { min-width:0; }
-.about-lanes { grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:1.35rem; }
-.about-flow-grid { grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr); }
-.flow-card, .mini-panel, .article-tags, .article-related, .article-nav-strip, .update-side-card { padding:1.2rem 1.2rem 1.25rem; }
-.flow-card--wide { grid-column:1 / 2; }
-.about-portrait-wrap { overflow:hidden; width:100%; max-width:300px; border-radius:24px; border:1px solid var(--border-subtle); background:rgba(255,255,255,.02); margin:0; }
-.about-portrait { display:block; width:100%; aspect-ratio:4/5; object-fit:cover; object-position:center 12%; filter:grayscale(1) contrast(1.08) brightness(.95); }
-.about-caption { display:grid; gap:.4rem; padding:.9rem 1rem 1rem; border-top:1px solid var(--border-subtle); background:rgba(255,255,255,.02); }
-.about-caption-kicker, .mini-panel h2, .article-section-label { color:var(--accent-0); font-size:.74rem; text-transform:uppercase; letter-spacing:.2em; }
-.about-caption-text, .flow-card-copy, .prose-tight p, .mini-panel p { color:var(--text-1); line-height:1.72; }
-.tool-list { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.5rem 1rem; }
-.tool-list li { position:relative; padding-left:1rem; color:var(--text-0); }
-.tool-list li::before { content:'—'; position:absolute; left:0; color:var(--accent-0); }
-
-.aux-article-page, .update-page-shell { display:grid; gap:1.25rem; }
-.aux-article-page { width:min(1180px, calc(100vw - 48px)); margin: 0 auto 2rem; }
-.article-hero, .article-body, .update-hero, .update-body, .update-bottom { padding:1.4rem 1.45rem; }
-.article-hero-grid, .update-hero-grid { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(250px,.78fr); gap:1.25rem; align-items:start; }
-.article-back-link, .update-back-link { display:inline-flex; align-items:center; gap:.45rem; margin-bottom:1rem; color:var(--text-2); font-size:.82rem; text-transform:uppercase; letter-spacing:.16em; }
-.article-back-link:hover, .update-back-link:hover { color:var(--text-0); }
-.article-eyebrow { display:inline-flex; gap:.55rem; margin-bottom:.9rem; color:var(--accent-0); font-size:.76rem; text-transform:uppercase; letter-spacing:.19em; }
-.article-title, .update-title { margin:0; max-width:14ch; font-size: clamp(2.2rem, 3.8vw, 4rem); line-height:.96; letter-spacing:-.055em; font-weight:820; text-transform:none; }
-.article-dek, .update-subtitle { margin:1rem 0 0; max-width:40rem; color:var(--text-1); font-size:1.08rem; line-height:1.72; }
-.article-rail-card, .update-side-card, .update-summary, .update-consensus { display:grid; gap:.75rem; padding:1rem 1rem 1.05rem; border-radius: var(--radius-lg); border:1px solid var(--border-subtle); background: rgba(255,255,255,.025); }
-.rail-row, .update-side-row { display:grid; gap:.15rem; }
-.rail-label, .update-side-label, .update-summary-label { color:var(--text-2); font-size:.72rem; text-transform:uppercase; letter-spacing:.18em; }
-.rail-value, .update-side-value, .update-summary p, .update-consensus p { color:var(--text-0); line-height:1.55; margin:0; }
-.article-body-inner, .update-body .prose { max-width:760px; }
-.article-body-inner > :first-child, .update-body .prose > :first-child { margin-top:0; }
-.article-body-inner h2, .article-body-inner h3, .update-body .prose h2, .update-body .prose h3 { color:var(--text-0); line-height:1.08; letter-spacing:-.03em; text-transform:none; }
-.article-body-inner p, .article-body-inner li, .update-body .prose p, .update-body .prose li { color:var(--text-1); font-size:1.05rem; line-height:1.86; }
-.article-body-inner ul, .article-body-inner ol, .update-body .prose ul, .update-body .prose ol { padding-left:1.35rem; }
-.article-body-inner a, .update-body .prose a { color:var(--accent-1); text-decoration:underline; text-decoration-color: rgba(199,162,85,.38); text-underline-offset:.16em; }
-.article-bottom-stack { display:grid; gap:1rem; }
-.tag-row { display:flex; flex-wrap:wrap; gap:.55rem; }
-.tag-chip { display:inline-flex; padding:.66rem .9rem; border-radius:999px; border:1px solid var(--border-subtle); background:rgba(255,255,255,.03); color:var(--text-1); font-size:.84rem; }
-.article-related-grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:1rem; }
-.article-related-card { display:grid; gap:.55rem; padding:1rem 1rem 1.05rem; border-radius: var(--radius-lg); border:1px solid var(--border-subtle); background:rgba(255,255,255,.025); }
-.article-related-card:hover { border-color:var(--border-strong); transform:translateY(-2px); }
-.mini-meta { color:var(--text-2); font-size:.74rem; text-transform:uppercase; letter-spacing:.16em; }
-
-.aux-footer {
-  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.85rem 1.2rem;
-  width:min(1400px, calc(100vw - 48px)); margin:0 auto 2rem; padding:1rem 1.2rem;
-  border:1px solid rgba(126,207,215,.11); border-radius:18px; color:var(--text-2); position:relative; z-index:1; overflow:hidden;
-  background: linear-gradient(90deg, rgba(14,22,28,.86), rgba(18,24,28,.72) 44%, rgba(12,18,22,.88)), radial-gradient(circle at 10% 0%, rgba(126,207,215,.10), transparent 26%), radial-gradient(circle at 86% 100%, rgba(199,162,85,.10), transparent 28%);
-  box-shadow: 0 18px 42px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.04);
-}
-
-.reveal-up { opacity:0; transform:translate3d(0,22px,0); transition: opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1); }
-.reveal-up.is-visible { opacity:1; transform:none; }
+/* REVEAL ANIMATION -- VISIBLE BY DEFAULT.
+ *
+ * This used to be `.reveal-up { opacity:0 }` with JS adding `.is-visible`. Content that is
+ * invisible until a script says otherwise is content that does not exist for a crawler, for a
+ * reader with JS off, or whenever the observer simply never fires -- and it did not fire: the
+ * observer used threshold 0.08, which an element taller than ~12 viewports can never satisfy, so
+ * the live /updates/adobe/ page -- 410 table rows across 4 reveal-up containers -- sat at
+ * opacity 0 permanently on desktop. Two
+ * width-gated `opacity:1 !important` patches had already been added for narrow screens, which is
+ * the tell that this had been hit before and treated as a mobile bug.
+ *
+ * Now the animation is OPT-IN: the default is visible, and only `html.js-reveal` -- a class the
+ * script adds for itself, after confirming it can observe and that the reader has not asked for
+ * reduced motion -- re-arms the hidden start state. No script, no observer, or reduced motion all
+ * mean the page simply renders.
+ */
+.reveal-up { opacity:1; transform:none; }
+html.js-reveal .reveal-up { opacity:0; transform:translate3d(0,22px,0); transition: opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1); }
+html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
 .reveal-delay-1 { transition-delay:.08s; }
 .reveal-delay-2 { transition-delay:.16s; }
 
@@ -3568,7 +2760,7 @@ button, input, select, textarea { font: inherit; }
 
 .patch-priority-label--company,
 .patch-priority-label--software,
-.patch-priority-label--watchlist {
+.patch-priority-label--emerging {
   text-transform: uppercase;
   letter-spacing: .16em;
 }
@@ -4414,6 +3606,12 @@ button, input, select, textarea { font: inherit; }
   grid-template-columns: .9fr .75fr 1.15fr 1.05fr .82fr 1fr .72fr .82fr .82fr 1.55fr;
   min-width: 1480px;
 }
+
+/* The Version/build track is one of the narrowest in this grid, and .source-health-row span sets
+   overflow-wrap:anywhere -- which the sub-label inherits. That would break a build INSIDE the
+   number ("20228.2012" / "6"), silently showing a different identity than the one stored. Break at
+   the space instead: "Build" / "20228.20110". An exact identity must never be split mid-digit. */
+.method-health-row .method-health-build { overflow-wrap: normal; }
 
 .method-health-status--success { color: #9af0be; border-color: rgba(70,209,137,.34); background: rgba(70,209,137,.10); }
 .method-health-status--partial,
@@ -5365,6 +4563,10 @@ button, input, select, textarea { font: inherit; }
 .update-order-technical { order: 20; }
 .update-order-sources { order: 30; }
 .update-order-history { order: 40; }
+/* Non-counting context (freshness caveat, Level 2 update-linked, Level 3 recent reports) sits
+   LAST in the grid, after the confirmed source list at order 30. Reports that do not count
+   toward consensus must never precede the ones that do. */
+.update-order-context { order: 50; }
 
 @media (max-width: 860px) {
   .update-technical-list {
@@ -5619,6 +4821,53 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 }
 .update-monitoring-card__header { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
 .update-monitoring-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .14em; color: var(--text-2); }
+/* DECISION-FIRST HERO (Wave A).
+ *
+ * The verdict box now precedes the community-evidence card, so the two have to stop competing for
+ * the same visual weight. Measured before this change on a 390x844 phone: the verdict word sat
+ * 170px BELOW the fold, and the only categorical word above it was the raw sample sentiment -- a
+ * different axis, pointing the opposite way on 217 records. The decision is now the dominant
+ * element and the evidence card is a lighter supporting block beneath it.
+ *
+ * Status meaning never depends on colour: `.patch-monitoring` carries the state as WORDS
+ * ("MONITORING DEGRADED", "COLLECTION BLOCKED"), so the compact line reads the same to a reader
+ * who cannot distinguish the hues, in high contrast, or with styles off.
+ */
+.update-decision-box__header strong { font-size: clamp(1.25rem, 2.4vw, 1.75rem); font-weight: 750; letter-spacing: -.01em; }
+.update-evidence-card {
+  /* lighter than the decision above it: supporting evidence, not a second recommendation */
+  background: rgba(255,255,255,.015);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: none;
+}
+.update-evidence-strength-line { white-space: nowrap; }
+
+/* COMPACT MONITORING -- one line in the hero; the full card lives in the #monitoring disclosure. */
+.update-monitoring-compact {
+  display: flex; align-items: center; gap: .55rem; flex-wrap: wrap;
+  margin: .85rem 0 0; padding: .5rem .75rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,.018);
+  border: 1px solid var(--border-subtle);
+  font-size: .82rem;
+}
+.update-monitoring-compact__label {
+  text-transform: uppercase; letter-spacing: .14em; font-size: .68rem;
+  font-weight: 700; color: var(--text-2);
+}
+.update-monitoring-compact__detail { color: var(--text-2); }
+.update-monitoring-compact__more { margin-left: auto; font-size: .78rem; white-space: nowrap; }
+/* A degraded collection state stays loud even in the compact line: the reader must not have to
+   open a disclosure to discover that the evidence behind the verdict is not being collected. */
+.update-monitoring-compact--monitoring-degraded,
+.update-monitoring-compact--collection-blocked,
+.update-monitoring-compact--collection-stale,
+.update-monitoring-compact--insufficient-coverage { border-color: rgba(240, 202, 103, .42); }
+.update-monitoring-details .update-monitoring-card { margin-top: 0; border: 0; background: none; padding: 0; }
+@media (max-width: 860px) {
+  .update-monitoring-compact { font-size: .78rem; }
+  .update-monitoring-compact__more { margin-left: 0; width: 100%; }
+}
 .update-monitoring-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .6rem 1.2rem; margin: .9rem 0 0; }
 .update-monitoring-fact dt { color: var(--text-2); font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; margin: 0; }
 .update-monitoring-fact dd { color: var(--text-0); margin: .15rem 0 0; font-size: .92rem; font-variant-numeric: tabular-nums; }
@@ -5634,3 +4883,502 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .update-monitoring-method--low-confidence .update-monitoring-method__state,
 .update-monitoring-method--manual-review-needed .update-monitoring-method__state { color: #f7e5bd; }
 .update-monitoring-note { color: var(--text-2); font-size: .8rem; margin: .9rem 0 0; }
+
+
+/* Update-linked (Tier 2) reports: real community reports whose exact build was never stated.
+   Styled as a distinct, quieter card than the consensus evidence card on purpose -- these are
+   shown for their information value and must never read as confirmed patch-specific evidence. */
+.update-linked-card {
+  margin: 1rem 0 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--aux-border);
+  border-left: 3px solid var(--aux-accent-muted);
+  border-radius: 6px;
+  background: var(--aux-surface-muted);
+}
+.update-linked-card__counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.update-linked-count dt {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--aux-text-muted);
+}
+.update-linked-count dd {
+  margin: 0.1rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.update-linked-card__note {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--aux-text-muted);
+}
+.update-linked-list { margin: 0; padding: 0; list-style: none; }
+.update-linked-item { padding: 0.6rem 0; border-top: 1px solid var(--aux-border); }
+/* The rule separates adjacent reports; on the first one it drew a line under the intro paragraph. */
+.update-linked-item:first-child { border-top: 0; padding-top: 0; }
+.update-linked-item__title { font-weight: 600; }
+.update-linked-item__meta {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--aux-text-muted);
+  margin-top: 0.15rem;
+}
+.update-linked-item__why,
+.update-linked-item__build {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+}
+.patch-cell-num__linked {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: var(--aux-text-muted);
+  white-space: nowrap;
+}
+
+
+/* Level 3 -- recent PowerPoint reports. Deliberately the quietest of the three evidence blocks:
+   this is situational context, and it must never read with the weight of confirmed evidence. */
+.recent-reports-card {
+  margin: 1rem 0 0;
+  padding: 0.9rem 1rem;
+  border: 1px dashed var(--aux-border);
+  border-radius: 6px;
+  background: transparent;
+}
+.recent-reports-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.recent-reports-card__title,
+.update-linked-card__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.recent-reports-card__count { font-size: 1.15rem; font-weight: 600; }
+.recent-reports-card__qualifier {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--aux-text-muted);
+}
+.recent-reports-card__note,
+.recent-reports-card__more {
+  margin: 0.4rem 0 0.6rem;
+  font-size: 0.85rem;
+  color: var(--aux-text-muted);
+}
+.recent-reports-list { margin: 0; padding: 0; list-style: none; }
+.recent-reports-item { padding: 0.55rem 0; border-top: 1px solid var(--aux-border); }
+.recent-reports-item:first-child { border-top: 0; padding-top: 0; }
+.recent-reports-item__title { font-weight: 600; }
+.recent-reports-item__meta,
+.recent-reports-item__window,
+.recent-reports-item__attribution {
+  display: block;
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--aux-text-muted);
+}
+.patch-cell-num__recent {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: var(--aux-text-muted);
+  white-space: nowrap;
+}
+
+/* Practical recommendations, inside the verdict box.
+   Appended at the end of the file on purpose: the dead-region cleanup that removed the swallowed
+   block is settled, and nothing here reopens it. Existing tokens only -- no new colour system, no
+   browser-default list styling, and the same gold rule the recommendation line above already uses,
+   so the block reads as part of the verdict rather than as a second panel. */
+.update-decision-actions {
+  margin: .85rem 0 0;
+  padding-left: .75rem;
+  border-left: 2px solid rgba(240, 202, 103, .28);
+}
+/* Scoped under the header because the block renders INSIDE it, and
+   `.update-decision-box__header p` (0,1,1) already sets color / font-weight / margin on every
+   paragraph in there -- it beats a bare `.update-decision-actions__label` (0,1,0) whatever the
+   source order. Measured in a browser before this scoping: the declared muted colour, the 700
+   weight and both margins were all inert, so the label rendered in body colour and weight, flush
+   against the first bullet. */
+.update-decision-box__header .update-decision-actions__label {
+  margin: 0 0 .35rem;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--aux-text-muted);
+}
+.update-decision-actions__list {
+  margin: 0;
+  padding: 0 0 0 1.05rem;
+  list-style: disc;
+  display: grid;
+  gap: .3rem;
+}
+.update-decision-actions__list li {
+  color: var(--text-1);
+  font-size: .92rem;
+  line-height: 1.5;
+}
+
+/* --- My Patch Watchlist -------------------------------------------------------------------
+   Tracking, not rating. No stars: a star reads as a score, and this is "I use this product".
+   Uses the existing chip/panel language -- same radii, same gold accent, same borders. */
+
+.patch-watch-toggle {
+  display: inline-flex; align-items: center; gap: .55rem;
+  margin-top: .9rem; padding: .55rem 1rem;
+  border: 1px solid var(--border-subtle); border-radius: 999px;
+  background: rgba(255,255,255,.025); color: var(--text-1);
+  font: inherit; font-size: .88rem; letter-spacing: .02em;
+  cursor: pointer; transition: border-color .18s ease, background .18s ease, color .18s ease;
+}
+.patch-watch-toggle--inline { margin-top: .75rem; }
+.patch-watch-toggle:hover { border-color: rgba(240,202,103,.42); color: var(--text-0); }
+.patch-watch-toggle:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 3px; }
+.patch-watch-toggle.is-watching {
+  border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.12); color: var(--text-0);
+}
+
+/* The mark is the state, so it must not rely on colour alone: empty ring -> filled check. */
+.patch-watch-toggle__mark {
+  width: .78rem; height: .78rem; border-radius: 50%;
+  border: 1.5px solid currentColor; flex: none; position: relative;
+}
+.patch-watch-toggle.is-watching .patch-watch-toggle__mark {
+  border-color: var(--accent-1); background: var(--accent-1);
+}
+.patch-watch-toggle.is-watching .patch-watch-toggle__mark::after {
+  content: ""; position: absolute; left: .21rem; top: .05rem;
+  width: .18rem; height: .38rem; border: solid #17140e;
+  border-width: 0 1.6px 1.6px 0; transform: rotate(45deg);
+}
+
+/* Discovery cards: the product names already listed on a company card ARE the watch control. */
+.patch-source-tags--watchable { display: flex; flex-wrap: wrap; gap: .4rem; }
+.patch-watch-tag {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .3rem .6rem; border-radius: 999px;
+  border: 1px solid var(--border-subtle); background: rgba(255,255,255,.03);
+  color: var(--text-1); font: inherit; font-size: .76rem; cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, color .18s ease;
+}
+.patch-watch-tag:hover { border-color: rgba(240,202,103,.42); color: var(--text-0); }
+.patch-watch-tag:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+.patch-watch-tag.is-watching { border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.12); color: var(--text-0); }
+/* `.patch-source-tags span:empty { display:none !important }` (above) exists to drop empty legacy
+   tag spans. The state mark is deliberately empty, so it has to opt back in or the watched state
+   on discovery cards would be carried by colour alone.
+
+   Specificity has to WIN, not merely exist: `.patch-source-tags span:empty` is (0,2,1) because
+   `:empty` counts as a class, so a (0,2,0) selector loses even with !important on both sides.
+   Three classes clears it. */
+.patch-source-tags .patch-watch-tag .patch-watch-tag__mark { display: block !important; }
+.patch-watch-tag__mark {
+  width: .6rem; height: .6rem; border-radius: 50%; border: 1.5px solid currentColor; flex: none;
+}
+.patch-watch-tag.is-watching .patch-watch-tag__mark { border-color: var(--accent-1); background: var(--accent-1); }
+.patch-watch-tag-more { font-size: .76rem; color: var(--text-1); align-self: center; }
+
+.patch-chip--watchlist { display: inline-flex; align-items: center; gap: .4rem; }
+.patch-chip-count {
+  min-width: 1.15rem; padding: 0 .3rem; border-radius: 999px;
+  background: rgba(255,255,255,.08); font-size: .72rem; line-height: 1.35;
+}
+.patch-chip--watchlist.is-active .patch-chip-count { background: rgba(240,202,103,.22); }
+.patch-chip--quiet { opacity: .72; font-size: .78rem; }
+.patch-chip--quiet:hover { opacity: 1; }
+
+/* An author `display` beats the UA sheet's `[hidden] { display:none }`, so any component that
+   ships hidden and declares its own display must say so explicitly -- otherwise the "Your
+   watchlist is empty" panel greets every visitor above a full feed. */
+.patch-watchlist-empty[hidden],
+.home-watchlist-note[hidden] { display: none !important; }
+
+.patch-watchlist-empty { padding: 1.6rem 1.5rem; display: grid; gap: .55rem; }
+.patch-watchlist-empty h2 { margin: 0; font-size: 1.05rem; color: var(--text-0); }
+.patch-watchlist-empty p { margin: 0; color: var(--text-1); font-size: .9rem; }
+.patch-watchlist-empty a { justify-self: start; margin-top: .3rem; }
+
+/* Homepage: watched signals are marked and hoisted. Nothing is hidden. */
+.home-watchlist-note {
+  display: flex; align-items: center; gap: .45rem;
+  margin: 0 0 .6rem; font-size: .78rem; color: var(--text-1);
+}
+.home-watchlist-note__mark {
+  width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent-1); flex: none;
+}
+.home-watch-flag {
+  align-self: center; padding: .1rem .42rem; border-radius: 999px;
+  border: 1px solid rgba(240,202,103,.4); background: rgba(240,202,103,.12);
+  color: var(--text-0); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase;
+}
+.home-patch-item.is-watched { border-color: rgba(240,202,103,.28); }
+
+@media (max-width: 640px) {
+  .patch-watch-toggle { width: 100%; justify-content: center; }
+  .patch-watchlist-empty { padding: 1.25rem 1.1rem; }
+}
+
+/* --- My Patch Stack ------------------------------------------------------------------------
+   A compact operations board over the visitor's watchlist. Same panels, radii and gold accent as
+   the rest of the site -- no separate dashboard chrome, no dense enterprise grid. */
+
+.patch-stack-shell { display: grid; gap: 1.35rem; }
+
+.patch-stack-strip {
+  display: flex; flex-wrap: wrap; gap: 1.1rem;
+  margin: 1rem 0 0; padding-top: .9rem;
+  border-top: 1px solid var(--border-subtle);
+  font-size: .86rem; color: var(--text-1);
+}
+.patch-stack-strip[hidden] { display: none !important; }
+.patch-stack-strip strong { color: var(--text-0); font-size: 1.05rem; margin-right: .3rem; }
+
+.patch-stack-empty { padding: 1.7rem 1.5rem; display: grid; gap: .7rem; }
+.patch-stack-empty[hidden] { display: none !important; }
+.patch-stack-empty h2 { margin: 0; font-size: 1.15rem; color: var(--text-0); }
+.patch-stack-empty p { margin: 0; color: var(--text-1); }
+.patch-stack-chooser { margin-top: .5rem; }
+.patch-stack-chooser h3 {
+  margin: 0 0 .6rem; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--text-1);
+}
+.patch-stack-chooser-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+
+.patch-stack-body { display: grid; gap: 1.35rem; }
+.patch-stack-body[hidden] { display: none !important; }
+.patch-stack-attention, .patch-stack-all { padding: 1.45rem 1.5rem; }
+.patch-stack-none { margin: 0; color: var(--text-1); font-size: .9rem; }
+.patch-stack-none[hidden] { display: none !important; }
+
+.patch-stack-grid {
+  display: grid; gap: 1rem; margin-top: 1.1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.patch-stack-grid:empty { display: none; }
+
+.patch-stack-card { padding: 1.15rem 1.2rem; display: grid; gap: .6rem; align-content: start; }
+.patch-stack-card__head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: .7rem;
+}
+.patch-stack-card__name { margin: 0; font-size: 1.02rem; color: var(--text-0); }
+.patch-stack-card__name a { color: inherit; }
+.patch-stack-card__patch { margin: 0; font-size: .9rem; color: var(--text-0); }
+.patch-stack-card__patch span { color: var(--text-1); }
+.patch-stack-card__patch--none { color: var(--text-1); }
+.patch-stack-card__meta {
+  margin: 0; padding: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: .25rem .7rem;
+  font-size: .8rem; color: var(--text-1);
+}
+.patch-stack-card__meta li { display: inline-flex; align-items: center; gap: .35rem; }
+.patch-stack-card__meta li + li::before {
+  content: "·"; color: var(--border-strong); margin-right: .35rem;
+}
+.patch-stack-card__reason {
+  margin: 0; font-size: .82rem; color: var(--text-0);
+  padding: .4rem .6rem; border-radius: 10px;
+  border: 1px solid rgba(240,202,103,.28); background: rgba(240,202,103,.08);
+}
+.patch-stack-card__links { display: flex; flex-wrap: wrap; gap: .5rem .9rem; align-items: center; }
+
+.patch-stack-unwatch {
+  margin-left: auto; padding: .34rem .75rem; border-radius: 999px;
+  border: 1px solid var(--border-subtle); background: rgba(255,255,255,.03);
+  color: var(--text-1); font: inherit; font-size: .78rem; cursor: pointer;
+  transition: border-color .18s ease, color .18s ease;
+}
+.patch-stack-unwatch:hover { border-color: rgba(240,202,103,.42); color: var(--text-0); }
+.patch-stack-unwatch:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+
+/* The route into the dashboard from the feed: a destination, styled as a link rather than a chip. */
+.patch-stack-link {
+  display: inline-flex; align-items: baseline; gap: .45rem; margin-top: .7rem;
+  color: var(--accent-1); font-size: .86rem; text-decoration: none;
+}
+.patch-stack-link:hover { text-decoration: underline; }
+.patch-stack-link:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 3px; }
+.patch-stack-link__count { color: var(--text-1); font-size: .78rem; }
+.home-watchlist-note__link { margin-left: .4rem; color: var(--accent-1); }
+
+@media (max-width: 640px) {
+  .patch-stack-grid { grid-template-columns: 1fr; }
+  .patch-stack-attention, .patch-stack-all, .patch-stack-empty { padding: 1.2rem 1.05rem; }
+  .patch-stack-card__head { flex-direction: column; gap: .4rem; }
+  .patch-stack-unwatch { margin-left: 0; }
+}
+
+/* Explicit, and kept explicit. `body.aux-page` now owns --heading-color for every AUXSAYS layout,
+   so these two would resolve to the same --text-0 without help; they stay because a component that
+   states its own heading colour does not silently change meaning if the shared token ever does. */
+.patch-stack-shell h1,
+.patch-stack-shell .section-head h2 { color: var(--text-0); }
+
+/* --- My Installed Versions ------------------------------------------------------------------
+   The reader's own build, compared against what AUXSAYS tracks. Same panels and accent as the
+   rest of the site; the comparison state is a relationship, never a verdict. */
+
+.patch-iv {
+  margin-top: .2rem; padding-top: .7rem;
+  border-top: 1px solid var(--border-subtle);
+  display: grid; gap: .5rem;
+}
+.patch-iv-prompt { margin: 0; font-size: .82rem; color: var(--text-1); }
+.patch-iv-prompt span { color: var(--text-0); }
+
+.patch-iv-compare { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .15rem .7rem; }
+.patch-iv-compare dt {
+  font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-1);
+  align-self: baseline;
+}
+.patch-iv-compare dd { margin: 0; font-size: .9rem; color: var(--text-0); }
+
+.patch-iv-build, .patch-iv-date, .patch-iv-beta { font-size: .74rem; color: var(--text-1); }
+.patch-iv-beta { color: var(--accent-1); }
+
+/* State words carry their own text, so the colour is reinforcement and never the message. */
+.patch-iv-state { margin: 0; font-size: .8rem; color: var(--text-1); }
+.patch-iv-state strong {
+  display: inline-block; margin-right: .35rem; padding: .12rem .45rem; border-radius: 999px;
+  font-size: .68rem; letter-spacing: .07em; text-transform: uppercase;
+  border: 1px solid var(--border-subtle); color: var(--text-0);
+}
+.patch-iv-state--current strong { border-color: rgba(95,212,229,.4); background: rgba(95,212,229,.12); }
+.patch-iv-state--update-available strong,
+.patch-iv-state--newer-tracked-version-exists strong { border-color: rgba(240,202,103,.45); background: rgba(240,202,103,.12); }
+.patch-iv-state--installed-version-no-longer-tracked strong { border-color: var(--border-subtle); background: rgba(255,255,255,.04); }
+/* Unresolved order is not a warning and not an all-clear, so it borrows neither palette. */
+.patch-iv-state--release-order-not-recorded strong { border-color: var(--border-subtle); background: rgba(255,255,255,.04); }
+
+.patch-iv-picker summary {
+  cursor: pointer; font-size: .8rem; color: var(--accent-1); list-style: none;
+  padding: .2rem 0;
+}
+.patch-iv-picker summary::-webkit-details-marker { display: none; }
+.patch-iv-picker summary::before { content: "＋ "; }
+.patch-iv-picker[open] summary::before { content: "− "; }
+.patch-iv-picker summary:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+
+.patch-iv-list {
+  margin: .4rem 0 0; padding: 0; list-style: none;
+  display: grid; gap: .2rem; max-height: 15rem; overflow-y: auto;
+}
+.patch-iv-option {
+  width: 100%; text-align: left; padding: .4rem .55rem; border-radius: 10px;
+  border: 1px solid transparent; background: rgba(255,255,255,.025);
+  color: var(--text-0); font: inherit; font-size: .82rem; cursor: pointer;
+}
+.patch-iv-option:hover { border-color: rgba(240,202,103,.35); }
+.patch-iv-option:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+.patch-iv-option.is-current { border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.1); }
+.patch-iv-more { margin: .5rem 0 0; font-size: .76rem; color: var(--text-1); }
+
+.patch-iv-clear {
+  justify-self: start; padding: .22rem .6rem; border-radius: 999px;
+  border: 1px solid var(--border-subtle); background: none; color: var(--text-1);
+  font: inherit; font-size: .74rem; cursor: pointer;
+}
+.patch-iv-clear:hover { color: var(--text-0); border-color: rgba(240,202,103,.4); }
+.patch-iv-clear:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+
+/* Patch page: claim this exact release. */
+.patch-iv-here {
+  display: inline-flex; align-items: center; gap: .5rem; margin: .75rem 0 0 .5rem;
+  padding: .55rem 1rem; border-radius: 999px;
+  border: 1px solid var(--border-subtle); background: rgba(255,255,255,.025);
+  color: var(--text-1); font: inherit; font-size: .88rem; cursor: pointer;
+  transition: border-color .18s ease, color .18s ease, background .18s ease;
+}
+.patch-iv-here:hover { border-color: rgba(240,202,103,.42); color: var(--text-0); }
+.patch-iv-here:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 3px; }
+.patch-iv-here.is-installed {
+  border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.12); color: var(--text-0);
+}
+
+/* Product history: the row the reader saved. */
+.patch-iv-yours {
+  display: inline-block; margin-left: .45rem; padding: .08rem .38rem; border-radius: 999px;
+  border: 1px solid rgba(240,202,103,.4); background: rgba(240,202,103,.1);
+  color: var(--text-0); font-size: .64rem; letter-spacing: .07em; text-transform: uppercase;
+  white-space: nowrap;
+}
+tr.patch-row.is-your-version { background: rgba(240,202,103,.045); }
+
+/* The upgrade path: the releases AUXSAYS tracks between the reader's version and the target.
+   Every role here is spelled out in text as well, so none of this colour carries the meaning. */
+.patch-iv-path summary {
+  cursor: pointer; font-size: .8rem; color: var(--accent-1); list-style: none; padding: .2rem 0;
+}
+.patch-iv-path summary::-webkit-details-marker { display: none; }
+.patch-iv-path summary::before { content: "＋ "; }
+.patch-iv-path[open] summary::before { content: "− "; }
+.patch-iv-path summary:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+.patch-iv-path__label { font-weight: 600; }
+
+.patch-iv-steps {
+  margin: .45rem 0 0; padding: 0 0 0 .9rem; list-style: none;
+  display: grid; gap: .45rem; border-left: 1px solid var(--border-subtle);
+}
+.patch-iv-steps--line { margin-top: .3rem; }
+.patch-iv-step { position: relative; }
+.patch-iv-step::before {
+  content: ""; position: absolute; left: -1.16rem; top: .42rem;
+  width: .42rem; height: .42rem; border-radius: 50%;
+  border: 1px solid var(--border-subtle); background: var(--bg-0, #0b0f14);
+}
+.patch-iv-step--mine::before,
+.patch-iv-step--target::before { border-color: rgba(240,202,103,.65); background: rgba(240,202,103,.35); }
+/* THE CONNECTOR IS A CLAIM. The rule down the left edge of the steps list reads as "this follows
+   that", so it is cut at a tied boundary -- and only there. The releases still list; the line
+   between them does not, because AUXSAYS records no order inside a shared date. */
+.patch-iv-step--tied::after {
+  /* Anchored to the list's own padding edge and over-hung by 3px each side, because the rule is a
+     sub-pixel hairline whose rendered position moves with zoom -- a 1px mask left a visible sliver
+     of it standing. It stops at the marker's top edge, so the marker itself is never painted over. */
+  content: ""; position: absolute; left: calc(-.9rem - 3px); top: -.55rem;
+  width: 5px; height: .97rem; background: var(--bg-0, #0b0f14);
+}
+.patch-iv-step__head { margin: 0; font-size: .84rem; color: var(--text-0); }
+.patch-iv-step__head a { color: inherit; }
+.patch-iv-step__verdict { margin: .18rem 0 0; }
+.patch-iv-role {
+  display: inline-block; margin-right: .4rem; padding: .06rem .36rem; border-radius: 999px;
+  border: 1px solid rgba(240,202,103,.4); background: rgba(240,202,103,.1);
+  color: var(--text-0); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.patch-iv-step__meta {
+  margin: .18rem 0 0; padding: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: .1rem .5rem; font-size: .72rem; color: var(--text-1);
+}
+.patch-iv-step__meta li + li::before { content: "· "; color: var(--border-subtle); }
+.patch-iv-tied, .patch-iv-note { margin: .3rem 0 0; font-size: .72rem; color: var(--text-1); }
+.patch-iv-tied { font-style: italic; }
+.patch-iv-line {
+  margin: .7rem 0 0; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-1);
+}
+
+@media (max-width: 640px) {
+  .patch-iv-here { width: 100%; justify-content: center; margin-left: 0; }
+  .patch-iv-compare { grid-template-columns: 1fr; gap: .1rem; }
+  .patch-iv-compare dt { margin-top: .3rem; }
+  .patch-iv-steps { padding-left: .75rem; }
+  .patch-iv-step::before { left: -1.02rem; }
+  .patch-iv-step--tied::after { left: calc(-.75rem - 3px); }
+  .patch-iv-step__meta { gap: .05rem .4rem; }
+}

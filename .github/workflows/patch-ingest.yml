@@ -12,8 +12,30 @@ on:
         required: false
         default: false
         type: boolean
-  schedule:
-    - cron: "17 */6 * * *"
+  # NO `schedule:` HERE, DELIBERATELY -- this lane is chained, not independently scheduled.
+  #
+  # This workflow used to declare `cron: "17 */6 * * *"`, byte-identical to the expression in
+  # obs-evidence-collection.yml. GitHub does not deliver two crons in the same minute (measured gaps
+  # were 277-688 s), so they never collided on arrival. They collided in the QUEUE: the writer
+  # concurrency group `auxsays-main-writeback` holds at most one run in progress and ONE run
+  # pending, and with `cancel-in-progress: false` it is the PENDING run that a new entrant destroys.
+  # Writer runs here take 54-197 minutes against a 6-hour cadence, so whichever cron was due while
+  # the other lane was still running went into that single pending slot and was cancelled by the
+  # following arrival.
+  #
+  # Measured over 236 writer runs before this change: 14 SCHEDULED runs were cancelled, and 7 of
+  # them were displaced by another SCHEDULED run -- production destroying production with no human
+  # involved. An evicted run is cancelled before a runner is allocated, so its `jobs` array is
+  # EMPTY: no checkout, no collector, no writeback, not even an `always()` handler. There is no
+  # failure log, which is why nobody noticed.
+  #
+  # Routine ingestion is now dispatched by the `chain-ingest` job at the end of the scheduled
+  # evidence run, so the two lanes are ordered instead of racing, and only ONE writer holds a cron.
+  # `workflow_dispatch` is kept for ad-hoc use; a no-input dispatch is behaviourally identical to
+  # the old scheduled path, because every production branch below gates on the inputs being absent.
+  #
+  # This alone is NOT the whole repair: two runs of the SAME workflow can still evict each other
+  # (runs 34311698674 and 34311764894 did). `writer-queue-reaper.yml` closes that half.
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -38,6 +60,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # Resolve the ref when Checkout actually runs -- after this job has waited out the shared
+          # auxsays-main-writeback concurrency queue -- instead of the trigger-time SHA the default
+          # pins. A queued job otherwise starts from a base the winning writeback has already moved
+          # past, so its refresh of the same generated records diverges and the shared-path rebase
+          # check correctly refuses (runs 31330673821, 31350261730). github.ref (not a literal
+          # branch) keeps workflow_dispatch against another branch or tag working.
+          ref: ${{ github.ref }}
 
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -50,6 +80,18 @@ jobs:
       - name: Validate ingestion source config
         run: python auxsays/scripts/validate_ingestion_sources.py
 
+      # RUN-LEVEL HEALTH IS NOW PART OF THE STEP'S OUTCOME.
+      #
+      # `patch_ingest.py` used to return 0 unless `--strict` was passed, and this workflow never
+      # passed it. Production run 34391487960 logged four `[ERROR] elgato-*: HTTP 403` lines and
+      # concluded SUCCESS. A green lane was not evidence that official patch discovery worked.
+      #
+      # `--strict` is still NOT passed, deliberately: it exits non-zero when ANY enabled source
+      # errors, which would pin this lane red for as long as one vendor blocks us. The script now
+      # classifies the RUN instead -- healthy / degraded / failed -- and returns non-zero only for
+      # `failed`, meaning nothing trustworthy was collected at all. A `degraded` run keeps the
+      # healthy vendors' records, exits 0, and announces itself through a `::warning` annotation
+      # and the step summary, so it can no longer pass as an undifferentiated green tick.
       - name: Run enabled patch ingestion
         if: ${{ github.event.inputs.source == '' || github.event.inputs.source == null }}
         run: |
@@ -74,6 +116,51 @@ jobs:
           fi
 
 
+      # THE LANE THAT ADVANCES A PATCH IDENTITY MUST REPAIR THE DRIFT IT CREATES.
+      #
+      # Ingestion moves a Windows record's target_kb / target_os_build to the new cumulative update.
+      # Every report accepted for the superseded KB instantly becomes `stale_due_to_patch_rollover`,
+      # so the record's canonical count drops -- usually to zero -- at the instant this lane commits.
+      # Nothing here used to recompute it, so the rollover was published and deployed with the old
+      # count still attached to the new identity, and stayed that way until the evidence lane's next
+      # cron. Both workflows carry the identical `17 */6 * * *` and share the writeback concurrency
+      # group, and GitHub has queued evidence collection FIRST in every observed slot, so the repair
+      # always landed a full cycle late. Measured on 2026-08-28: 25H2 published 14 reports whose
+      # canonical population was 0, and across 16 target advances in git history not one had ever
+      # changed update_report_count in the same commit.
+      #
+      # Scoped to the products this lane can actually invalidate. Windows is the only product whose
+      # EXISTING record's identity mutates in place; for every other product a new version is a new
+      # record, which strands no evidence. An unscoped reconcile here would let a lane that
+      # collected nothing rewrite every other product's counts.
+      # Only when this run could actually have advanced a Windows identity. `source` is an optional
+      # product_id or company_id; a dispatch scoped to some other product ingested no Windows record
+      # and must not reconcile or promote one -- that is the same "a lane must not rewrite what it
+      # never collected" rule these steps exist to honour, applied to the steps themselves.
+      - name: Converge records whose patch identity this run advanced
+        if: ${{ github.event.inputs.dry_run != 'true'
+          && (github.event.inputs.source == '' || github.event.inputs.source == null
+              || github.event.inputs.source == 'microsoft-windows-11'
+              || github.event.inputs.source == 'microsoft') }}
+        run: |
+          python auxsays/scripts/build_consensus_from_evidence.py \
+            --product-id microsoft-windows-11 \
+            --reconcile-only
+
+      # The repopulate half of the same lifecycle: if the new identity already has matching
+      # evidence, promotion rebuilds the source list and count-bearing prose that reconciliation's
+      # zero-state retraction would otherwise have to leave empty. Must sit BEFORE QA, the same
+      # ordering the evidence lane uses and `test_davinci_promotion_scope` pins.
+      - name: Promote Windows consensus to its current patch identity
+        if: ${{ github.event.inputs.dry_run != 'true'
+          && (github.event.inputs.source == '' || github.event.inputs.source == null
+              || github.event.inputs.source == 'microsoft-windows-11'
+              || github.event.inputs.source == 'microsoft') }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-windows-11 \
+            --write-all --confirm-write
+
       - name: Validate logo assets before commit
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/validate_logo_assets.py
@@ -91,7 +178,11 @@ jobs:
             --message "Ingest official patch records" \
             --allow auxsays/_data/patch_ingest_state.json \
             --allow auxsays/updates/generated \
+            --allow 'auxsays/updates/microsoft/microsoft-powerpoint/*/index.md' \
+            --allow 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \
             --site-path auxsays/updates/generated \
+            --site-path 'auxsays/updates/microsoft/microsoft-powerpoint/*/index.md' \
+            --site-path 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \
             --validate 'python auxsays/scripts/validate_ingestion_sources.py' \
             --validate 'python auxsays/scripts/validate_logo_assets.py' \
             --validate 'python auxsays/scripts/qa_patch_records.py' \
@@ -100,6 +191,8 @@ jobs:
             --pages-max-attempts 3 --pages-backoff 5,15 \
             --deploy-recovery \
             --recovery-site-path auxsays/updates/generated \
+            --recovery-site-path 'auxsays/updates/microsoft/microsoft-powerpoint/*/index.md' \
+            --recovery-site-path 'auxsays/updates/microsoft/microsoft-windows-11/*/index.md' \
             --recovery-commit-grep 'Ingest official patch records'
 
       - name: Mark dry run as unchanged

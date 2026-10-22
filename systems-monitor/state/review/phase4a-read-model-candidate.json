@@ -1,0 +1,1404 @@
+{
+  "acceptedRelationships": [
+    {
+      "acceptanceAuthority": "DEPENDENCY_RELATIONSHIP_CONTRACT 1.0.0 DR-021/DR-024; Taylor O-005 approval 2026-08-19",
+      "acceptanceRuleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "acceptedAt": "2026-08-19T00:00:00Z",
+      "calibration": "NONE_IDENTITY_ONLY",
+      "coverage": "NATIONAL_TOTAL_NONFARM",
+      "direction": "FORWARD",
+      "edgeId": "P4A-REL-001",
+      "effectiveFrom": "2026-08-19T00:00:00Z",
+      "evidenceClass": "DIRECT",
+      "evidenceRefs": [
+        "contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md#dr-024"
+      ],
+      "geography": "US",
+      "lifecycle": "ACCEPTED",
+      "mechanism": "The official CES payroll level is mapped without a coefficient to the employment-level state.",
+      "polarity": "UNKNOWN_NOT_APPLICABLE",
+      "quality": "OFFICIAL_SERIES_DEFINITION",
+      "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+      "sourceNode": "indicator:US_LABOR_TOTAL_NONFARM_PAYROLLS",
+      "sourceUnit": "thousands of persons",
+      "stateFamily": "employment_level",
+      "targetNode": "labor-state:employment-level",
+      "targetUnit": "thousands of persons",
+      "version": "1.0.0"
+    },
+    {
+      "acceptanceAuthority": "DEPENDENCY_RELATIONSHIP_CONTRACT 1.0.0 DR-021/DR-024; Taylor O-005 approval 2026-08-19",
+      "acceptanceRuleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "acceptedAt": "2026-08-19T00:00:00Z",
+      "calibration": "NONE_IDENTITY_ONLY",
+      "coverage": "NATIONAL_CIVILIAN_LABOR_FORCE",
+      "direction": "FORWARD",
+      "edgeId": "P4A-REL-002",
+      "effectiveFrom": "2026-08-19T00:00:00Z",
+      "evidenceClass": "DIRECT",
+      "evidenceRefs": [
+        "contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md#dr-024"
+      ],
+      "geography": "US",
+      "lifecycle": "ACCEPTED",
+      "mechanism": "The official CPS U-3 rate is mapped without a coefficient to the unemployment-rate state.",
+      "polarity": "UNKNOWN_NOT_APPLICABLE",
+      "quality": "OFFICIAL_SERIES_DEFINITION",
+      "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+      "sourceNode": "indicator:US_LABOR_U3_UNEMPLOYMENT_RATE",
+      "sourceUnit": "percent",
+      "stateFamily": "unemployment_rate",
+      "targetNode": "labor-state:unemployment-rate",
+      "targetUnit": "percent",
+      "version": "1.0.0"
+    },
+    {
+      "acceptanceAuthority": "DEPENDENCY_RELATIONSHIP_CONTRACT 1.0.0 DR-021/DR-024; Taylor O-005 approval 2026-08-19",
+      "acceptanceRuleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "acceptedAt": "2026-08-19T00:00:00Z",
+      "calibration": "NONE_IDENTITY_ONLY",
+      "coverage": "NATIONAL_CIVILIAN_NONINSTITUTIONAL_POPULATION",
+      "direction": "FORWARD",
+      "edgeId": "P4A-REL-003",
+      "effectiveFrom": "2026-08-19T00:00:00Z",
+      "evidenceClass": "DIRECT",
+      "evidenceRefs": [
+        "contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md#dr-024"
+      ],
+      "geography": "US",
+      "lifecycle": "ACCEPTED",
+      "mechanism": "The official CPS participation rate is mapped without a coefficient to the participation-rate state.",
+      "polarity": "UNKNOWN_NOT_APPLICABLE",
+      "quality": "OFFICIAL_SERIES_DEFINITION",
+      "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+      "sourceNode": "indicator:US_LABOR_FORCE_PARTICIPATION_RATE",
+      "sourceUnit": "percent",
+      "stateFamily": "participation_rate",
+      "targetNode": "labor-state:participation-rate",
+      "targetUnit": "percent",
+      "version": "1.0.0"
+    },
+    {
+      "acceptanceAuthority": "DEPENDENCY_RELATIONSHIP_CONTRACT 1.0.0 DR-021/DR-024; Taylor O-005 approval 2026-08-19",
+      "acceptanceRuleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "acceptedAt": "2026-08-19T00:00:00Z",
+      "calibration": "NONE_IDENTITY_ONLY",
+      "coverage": "NATIONAL_INITIAL_UI_CLAIMS",
+      "direction": "FORWARD",
+      "edgeId": "P4A-REL-004",
+      "effectiveFrom": "2026-08-19T00:00:00Z",
+      "evidenceClass": "DIRECT",
+      "evidenceRefs": [
+        "contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md#dr-024"
+      ],
+      "geography": "US",
+      "lifecycle": "ACCEPTED",
+      "mechanism": "The official initial-claims level is mapped without a coefficient to a claims/separation signal; no causal claim is made.",
+      "polarity": "UNKNOWN_NOT_APPLICABLE",
+      "quality": "OFFICIAL_SERIES_DEFINITION",
+      "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+      "sourceNode": "indicator:US_LABOR_INITIAL_UI_CLAIMS",
+      "sourceUnit": "claims",
+      "stateFamily": "claims",
+      "targetNode": "labor-state:claims-separation-signal",
+      "targetUnit": "claims",
+      "version": "1.0.0"
+    },
+    {
+      "acceptanceAuthority": "DEPENDENCY_RELATIONSHIP_CONTRACT 1.0.0 DR-021/DR-024; Taylor O-005 approval 2026-08-19",
+      "acceptanceRuleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "acceptedAt": "2026-08-19T00:00:00Z",
+      "calibration": "NONE_IDENTITY_ONLY",
+      "coverage": "NATIONAL_TOTAL_NONFARM",
+      "direction": "FORWARD",
+      "edgeId": "P4A-REL-005",
+      "effectiveFrom": "2026-08-19T00:00:00Z",
+      "evidenceClass": "DIRECT",
+      "evidenceRefs": [
+        "contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md#dr-024"
+      ],
+      "geography": "US",
+      "lifecycle": "ACCEPTED",
+      "mechanism": "The official JOLTS openings level is mapped without a coefficient to a labor-demand openings signal.",
+      "polarity": "UNKNOWN_NOT_APPLICABLE",
+      "quality": "OFFICIAL_SERIES_DEFINITION",
+      "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+      "sourceNode": "indicator:US_LABOR_JOB_OPENINGS",
+      "sourceUnit": "thousands",
+      "stateFamily": "job_openings",
+      "targetNode": "labor-state:labor-demand-openings-signal",
+      "targetUnit": "thousands",
+      "version": "1.0.0"
+    },
+    {
+      "acceptanceAuthority": "DEPENDENCY_RELATIONSHIP_CONTRACT 1.0.0 DR-021/DR-024; Taylor O-005 approval 2026-08-19",
+      "acceptanceRuleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "acceptedAt": "2026-08-19T00:00:00Z",
+      "calibration": "NONE_IDENTITY_ONLY",
+      "coverage": "NATIONAL_TOTAL_NONFARM",
+      "direction": "FORWARD",
+      "edgeId": "P4A-REL-006",
+      "effectiveFrom": "2026-08-19T00:00:00Z",
+      "evidenceClass": "DIRECT",
+      "evidenceRefs": [
+        "contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md#dr-024"
+      ],
+      "geography": "US",
+      "lifecycle": "ACCEPTED",
+      "mechanism": "The official JOLTS hires level is mapped without a coefficient to the realized-hiring-flow state.",
+      "polarity": "UNKNOWN_NOT_APPLICABLE",
+      "quality": "OFFICIAL_SERIES_DEFINITION",
+      "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+      "sourceNode": "indicator:US_LABOR_HIRES",
+      "sourceUnit": "thousands",
+      "stateFamily": "hires",
+      "targetNode": "labor-state:realized-hiring-flow",
+      "targetUnit": "thousands",
+      "version": "1.0.0"
+    }
+  ],
+  "activationStatus": "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED",
+  "artifactClass": "phase4a_engine_proof_candidate",
+  "calculatedStates": [
+    {
+      "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+      "derivationRef": "derivation:0c6f56516d80f270be759f862b84fc11baf49c4aab10160f865498d7a5ac4413",
+      "evidenceClassification": "DIRECT_SEMANTIC_MAPPING_NOT_CAUSAL",
+      "freshness": "current",
+      "label": "Employment Level",
+      "nodeId": "labor-state:employment-level",
+      "observationPeriod": "2026-07",
+      "stateFamily": "employment_level",
+      "stateId": "calc-state:60d016e49de5786fa275d3067597380d912acd880bace69e832fb5a8c4f5d33a",
+      "stateType": "CALC",
+      "unit": "thousands of persons",
+      "value": "158858"
+    },
+    {
+      "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+      "derivationRef": "derivation:744561fca2520ef7f2b3cc05e45caa7c1d03f289847997a01fae6d2270e03553",
+      "evidenceClassification": "DIRECT_SEMANTIC_MAPPING_NOT_CAUSAL",
+      "freshness": "current",
+      "label": "Unemployment Rate",
+      "nodeId": "labor-state:unemployment-rate",
+      "observationPeriod": "2026-07",
+      "stateFamily": "unemployment_rate",
+      "stateId": "calc-state:172117928c52476a26691716c4d1939f99dbc8256289c286cecafc734d0f2a85",
+      "stateType": "CALC",
+      "unit": "percent",
+      "value": "4.1"
+    },
+    {
+      "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+      "derivationRef": "derivation:135ecbf9e0b60b0cf50a6f0165cbd4542727267ffcaaa6bc07ef95152b1015ec",
+      "evidenceClassification": "DIRECT_SEMANTIC_MAPPING_NOT_CAUSAL",
+      "freshness": "current",
+      "label": "Participation Rate",
+      "nodeId": "labor-state:participation-rate",
+      "observationPeriod": "2026-07",
+      "stateFamily": "participation_rate",
+      "stateId": "calc-state:5085fc814c958ab9d42ab4265bb5b447837371ae4f58126ee1c19fa7c8d3ab9e",
+      "stateType": "CALC",
+      "unit": "percent",
+      "value": "61.4"
+    },
+    {
+      "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+      "derivationRef": "derivation:d832cfa7eff23161d8169b45c53a97b359f2b7558bbe10e9e701fa9302110569",
+      "evidenceClassification": "DIRECT_SEMANTIC_MAPPING_NOT_CAUSAL",
+      "freshness": "current",
+      "label": "Claims Separation Signal",
+      "nodeId": "labor-state:claims-separation-signal",
+      "observationPeriod": "2026-08-08",
+      "stateFamily": "claims",
+      "stateId": "calc-state:37b9f642d410a0c9e9872f9906efa00ec1e8243135e29e9bbab44473b2b8bfdb",
+      "stateType": "CALC",
+      "unit": "claims",
+      "value": "209000"
+    },
+    {
+      "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+      "derivationRef": "derivation:210d5c52a181565a936c550fc14ac599d7a57e810575df076ab3dba64a213931",
+      "evidenceClassification": "DIRECT_SEMANTIC_MAPPING_NOT_CAUSAL",
+      "freshness": "current",
+      "label": "Labor Demand Openings Signal",
+      "nodeId": "labor-state:labor-demand-openings-signal",
+      "observationPeriod": "2026-06",
+      "stateFamily": "job_openings",
+      "stateId": "calc-state:95999df6b04d00b7e9b44862bc09f61e6d97e0ad08ada324ac940c753dfac220",
+      "stateType": "CALC",
+      "unit": "thousands",
+      "value": "7359"
+    },
+    {
+      "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+      "derivationRef": "derivation:18e6aa9f1ec68bbe74b9b53a5c267270db237f3cc87be94ce4cdce9c9aa87505",
+      "evidenceClassification": "DIRECT_SEMANTIC_MAPPING_NOT_CAUSAL",
+      "freshness": "current",
+      "label": "Realized Hiring Flow",
+      "nodeId": "labor-state:realized-hiring-flow",
+      "observationPeriod": "2026-06",
+      "stateFamily": "hires",
+      "stateId": "calc-state:fec8324b46c6ee0aef753a4d605351eaae11b8ef667b204dda3e6050dd75cc70",
+      "stateType": "CALC",
+      "unit": "thousands",
+      "value": "5348"
+    }
+  ],
+  "candidateId": "phase4a-candidate:0b3836b23eed52985b746606c0c6bf75d536f885ecb653322af435758be6f5ea",
+  "derivations": [
+    {
+      "algorithmId": "DIRECT_IDENTITY_V1",
+      "baseline": {
+        "status": "NOT_APPLICABLE_DIRECT_STATE_MAPPING"
+      },
+      "calculationId": "P4A-REL-001-DIRECT-STATE",
+      "calculationVersion": "derivation-1.0.0",
+      "configurationVersion": "phase4a-proof-1.0.0",
+      "derivationId": "derivation:0c6f56516d80f270be759f862b84fc11baf49c4aab10160f865498d7a5ac4413",
+      "evidenceClassification": "CALC_FROM_DIRECT_OFFICIAL_OBSERVATION",
+      "inputRecordIds": [
+        "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509"
+      ],
+      "inputs": [
+        {
+          "stateId": "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509",
+          "unit": "thousands of persons",
+          "value": "158858"
+        }
+      ],
+      "intermediateContributions": [],
+      "knowledgeCutoff": "2026-08-19T00:00:00Z",
+      "output": {
+        "stateId": "calc-state:60d016e49de5786fa275d3067597380d912acd880bace69e832fb5a8c4f5d33a",
+        "unit": "thousands of persons",
+        "value": "158858"
+      },
+      "propagationProfile": "phase4a-proof-1.0.0",
+      "relationshipRefs": [
+        "P4A-REL-001@1.0.0"
+      ],
+      "replayMode": "OPERATIONALLY_KNOWN_AS_OF",
+      "schemaVersion": "phase4a-derivation-1.0.0",
+      "sourceSnapshotId": "sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6",
+      "stopReasons": [],
+      "transformations": [
+        "DIRECT_IDENTITY_V1"
+      ]
+    },
+    {
+      "algorithmId": "DIRECT_IDENTITY_V1",
+      "baseline": {
+        "status": "NOT_APPLICABLE_DIRECT_STATE_MAPPING"
+      },
+      "calculationId": "P4A-REL-002-DIRECT-STATE",
+      "calculationVersion": "derivation-1.0.0",
+      "configurationVersion": "phase4a-proof-1.0.0",
+      "derivationId": "derivation:744561fca2520ef7f2b3cc05e45caa7c1d03f289847997a01fae6d2270e03553",
+      "evidenceClassification": "CALC_FROM_DIRECT_OFFICIAL_OBSERVATION",
+      "inputRecordIds": [
+        "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb"
+      ],
+      "inputs": [
+        {
+          "stateId": "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb",
+          "unit": "percent",
+          "value": "4.1"
+        }
+      ],
+      "intermediateContributions": [],
+      "knowledgeCutoff": "2026-08-19T00:00:00Z",
+      "output": {
+        "stateId": "calc-state:172117928c52476a26691716c4d1939f99dbc8256289c286cecafc734d0f2a85",
+        "unit": "percent",
+        "value": "4.1"
+      },
+      "propagationProfile": "phase4a-proof-1.0.0",
+      "relationshipRefs": [
+        "P4A-REL-002@1.0.0"
+      ],
+      "replayMode": "OPERATIONALLY_KNOWN_AS_OF",
+      "schemaVersion": "phase4a-derivation-1.0.0",
+      "sourceSnapshotId": "sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6",
+      "stopReasons": [],
+      "transformations": [
+        "DIRECT_IDENTITY_V1"
+      ]
+    },
+    {
+      "algorithmId": "DIRECT_IDENTITY_V1",
+      "baseline": {
+        "status": "NOT_APPLICABLE_DIRECT_STATE_MAPPING"
+      },
+      "calculationId": "P4A-REL-003-DIRECT-STATE",
+      "calculationVersion": "derivation-1.0.0",
+      "configurationVersion": "phase4a-proof-1.0.0",
+      "derivationId": "derivation:135ecbf9e0b60b0cf50a6f0165cbd4542727267ffcaaa6bc07ef95152b1015ec",
+      "evidenceClassification": "CALC_FROM_DIRECT_OFFICIAL_OBSERVATION",
+      "inputRecordIds": [
+        "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484"
+      ],
+      "inputs": [
+        {
+          "stateId": "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484",
+          "unit": "percent",
+          "value": "61.4"
+        }
+      ],
+      "intermediateContributions": [],
+      "knowledgeCutoff": "2026-08-19T00:00:00Z",
+      "output": {
+        "stateId": "calc-state:5085fc814c958ab9d42ab4265bb5b447837371ae4f58126ee1c19fa7c8d3ab9e",
+        "unit": "percent",
+        "value": "61.4"
+      },
+      "propagationProfile": "phase4a-proof-1.0.0",
+      "relationshipRefs": [
+        "P4A-REL-003@1.0.0"
+      ],
+      "replayMode": "OPERATIONALLY_KNOWN_AS_OF",
+      "schemaVersion": "phase4a-derivation-1.0.0",
+      "sourceSnapshotId": "sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6",
+      "stopReasons": [],
+      "transformations": [
+        "DIRECT_IDENTITY_V1"
+      ]
+    },
+    {
+      "algorithmId": "DIRECT_IDENTITY_V1",
+      "baseline": {
+        "status": "NOT_APPLICABLE_DIRECT_STATE_MAPPING"
+      },
+      "calculationId": "P4A-REL-004-DIRECT-STATE",
+      "calculationVersion": "derivation-1.0.0",
+      "configurationVersion": "phase4a-proof-1.0.0",
+      "derivationId": "derivation:d832cfa7eff23161d8169b45c53a97b359f2b7558bbe10e9e701fa9302110569",
+      "evidenceClassification": "CALC_FROM_DIRECT_OFFICIAL_OBSERVATION",
+      "inputRecordIds": [
+        "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74"
+      ],
+      "inputs": [
+        {
+          "stateId": "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74",
+          "unit": "claims",
+          "value": "209000"
+        }
+      ],
+      "intermediateContributions": [],
+      "knowledgeCutoff": "2026-08-19T00:00:00Z",
+      "output": {
+        "stateId": "calc-state:37b9f642d410a0c9e9872f9906efa00ec1e8243135e29e9bbab44473b2b8bfdb",
+        "unit": "claims",
+        "value": "209000"
+      },
+      "propagationProfile": "phase4a-proof-1.0.0",
+      "relationshipRefs": [
+        "P4A-REL-004@1.0.0"
+      ],
+      "replayMode": "OPERATIONALLY_KNOWN_AS_OF",
+      "schemaVersion": "phase4a-derivation-1.0.0",
+      "sourceSnapshotId": "sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6",
+      "stopReasons": [],
+      "transformations": [
+        "DIRECT_IDENTITY_V1"
+      ]
+    },
+    {
+      "algorithmId": "DIRECT_IDENTITY_V1",
+      "baseline": {
+        "status": "NOT_APPLICABLE_DIRECT_STATE_MAPPING"
+      },
+      "calculationId": "P4A-REL-005-DIRECT-STATE",
+      "calculationVersion": "derivation-1.0.0",
+      "configurationVersion": "phase4a-proof-1.0.0",
+      "derivationId": "derivation:210d5c52a181565a936c550fc14ac599d7a57e810575df076ab3dba64a213931",
+      "evidenceClassification": "CALC_FROM_DIRECT_OFFICIAL_OBSERVATION",
+      "inputRecordIds": [
+        "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c"
+      ],
+      "inputs": [
+        {
+          "stateId": "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c",
+          "unit": "thousands",
+          "value": "7359"
+        }
+      ],
+      "intermediateContributions": [],
+      "knowledgeCutoff": "2026-08-19T00:00:00Z",
+      "output": {
+        "stateId": "calc-state:95999df6b04d00b7e9b44862bc09f61e6d97e0ad08ada324ac940c753dfac220",
+        "unit": "thousands",
+        "value": "7359"
+      },
+      "propagationProfile": "phase4a-proof-1.0.0",
+      "relationshipRefs": [
+        "P4A-REL-005@1.0.0"
+      ],
+      "replayMode": "OPERATIONALLY_KNOWN_AS_OF",
+      "schemaVersion": "phase4a-derivation-1.0.0",
+      "sourceSnapshotId": "sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6",
+      "stopReasons": [],
+      "transformations": [
+        "DIRECT_IDENTITY_V1"
+      ]
+    },
+    {
+      "algorithmId": "DIRECT_IDENTITY_V1",
+      "baseline": {
+        "status": "NOT_APPLICABLE_DIRECT_STATE_MAPPING"
+      },
+      "calculationId": "P4A-REL-006-DIRECT-STATE",
+      "calculationVersion": "derivation-1.0.0",
+      "configurationVersion": "phase4a-proof-1.0.0",
+      "derivationId": "derivation:18e6aa9f1ec68bbe74b9b53a5c267270db237f3cc87be94ce4cdce9c9aa87505",
+      "evidenceClassification": "CALC_FROM_DIRECT_OFFICIAL_OBSERVATION",
+      "inputRecordIds": [
+        "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795"
+      ],
+      "inputs": [
+        {
+          "stateId": "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795",
+          "unit": "thousands",
+          "value": "5348"
+        }
+      ],
+      "intermediateContributions": [],
+      "knowledgeCutoff": "2026-08-19T00:00:00Z",
+      "output": {
+        "stateId": "calc-state:fec8324b46c6ee0aef753a4d605351eaae11b8ef667b204dda3e6050dd75cc70",
+        "unit": "thousands",
+        "value": "5348"
+      },
+      "propagationProfile": "phase4a-proof-1.0.0",
+      "relationshipRefs": [
+        "P4A-REL-006@1.0.0"
+      ],
+      "replayMode": "OPERATIONALLY_KNOWN_AS_OF",
+      "schemaVersion": "phase4a-derivation-1.0.0",
+      "sourceSnapshotId": "sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6",
+      "stopReasons": [],
+      "transformations": [
+        "DIRECT_IDENTITY_V1"
+      ]
+    }
+  ],
+  "forecasts": [],
+  "gateBStatus": "OPEN_PHASE4B_REQUIRED",
+  "masterReadModel": {
+    "acceptedRelationshipCount": 6,
+    "activationStatus": "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED",
+    "artifactClass": "phase4a_master_read_model_candidate",
+    "candidateRelationshipCount": 0,
+    "claimClassesAbsent": [
+      "FCST",
+      "SCEN"
+    ],
+    "claimClassesPresent": [
+      "OBS",
+      "CALC"
+    ],
+    "coverageWarning": "This does not model the full economy and is not Gate-B evidence.",
+    "degradedState": "DEGRADED_SOURCE_PATH",
+    "derivationRefs": [
+      "derivation:0c6f56516d80f270be759f862b84fc11baf49c4aab10160f865498d7a5ac4413",
+      "derivation:135ecbf9e0b60b0cf50a6f0165cbd4542727267ffcaaa6bc07ef95152b1015ec",
+      "derivation:18e6aa9f1ec68bbe74b9b53a5c267270db237f3cc87be94ce4cdce9c9aa87505",
+      "derivation:210d5c52a181565a936c550fc14ac599d7a57e810575df076ab3dba64a213931",
+      "derivation:744561fca2520ef7f2b3cc05e45caa7c1d03f289847997a01fae6d2270e03553",
+      "derivation:d832cfa7eff23161d8169b45c53a97b359f2b7558bbe10e9e701fa9302110569"
+    ],
+    "domainId": "US_LABOR_ENGINE_PROOF",
+    "evaluatedAt": "2026-08-19T00:00:00Z",
+    "evidenceMix": {
+      "AUTHORITATIVE_STRUCTURAL": 0,
+      "DIRECT": 6,
+      "TEST_FIXTURE": 0
+    },
+    "knowledgeCutoff": "2026-08-19T00:00:00Z",
+    "propagationSummary": {
+      "runId": "propagation-run:adc2f8fa9aa82941e5faf9d876e611ab5b029de12791cb1472fe0da7a5a2c356",
+      "stopReasons": [
+        "no_eligible_relationship"
+      ],
+      "traversalCount": 6
+    },
+    "recurringInfrastructureCostUsd": 0,
+    "relationshipSummaries": [
+      {
+        "edgeId": "P4A-REL-001",
+        "evidenceClass": "DIRECT",
+        "lifecycle": "ACCEPTED",
+        "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+        "sourceNode": "indicator:US_LABOR_TOTAL_NONFARM_PAYROLLS",
+        "targetNode": "labor-state:employment-level",
+        "version": "1.0.0"
+      },
+      {
+        "edgeId": "P4A-REL-002",
+        "evidenceClass": "DIRECT",
+        "lifecycle": "ACCEPTED",
+        "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+        "sourceNode": "indicator:US_LABOR_U3_UNEMPLOYMENT_RATE",
+        "targetNode": "labor-state:unemployment-rate",
+        "version": "1.0.0"
+      },
+      {
+        "edgeId": "P4A-REL-003",
+        "evidenceClass": "DIRECT",
+        "lifecycle": "ACCEPTED",
+        "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+        "sourceNode": "indicator:US_LABOR_FORCE_PARTICIPATION_RATE",
+        "targetNode": "labor-state:participation-rate",
+        "version": "1.0.0"
+      },
+      {
+        "edgeId": "P4A-REL-004",
+        "evidenceClass": "DIRECT",
+        "lifecycle": "ACCEPTED",
+        "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+        "sourceNode": "indicator:US_LABOR_INITIAL_UI_CLAIMS",
+        "targetNode": "labor-state:claims-separation-signal",
+        "version": "1.0.0"
+      },
+      {
+        "edgeId": "P4A-REL-005",
+        "evidenceClass": "DIRECT",
+        "lifecycle": "ACCEPTED",
+        "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+        "sourceNode": "indicator:US_LABOR_JOB_OPENINGS",
+        "targetNode": "labor-state:labor-demand-openings-signal",
+        "version": "1.0.0"
+      },
+      {
+        "edgeId": "P4A-REL-006",
+        "evidenceClass": "DIRECT",
+        "lifecycle": "ACCEPTED",
+        "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+        "sourceNode": "indicator:US_LABOR_HIRES",
+        "targetNode": "labor-state:realized-hiring-flow",
+        "version": "1.0.0"
+      }
+    ],
+    "replayMode": "OPERATIONALLY_KNOWN_AS_OF",
+    "schemaVersion": "phase4a-master-read-model-1.0.0",
+    "sourceFreshness": [
+      {
+        "freshness": "current",
+        "retrievalPathHealth": "current",
+        "stateId": "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484"
+      },
+      {
+        "freshness": "current",
+        "retrievalPathHealth": "current",
+        "stateId": "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795"
+      },
+      {
+        "freshness": "current",
+        "retrievalPathHealth": "stale",
+        "stateId": "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74"
+      },
+      {
+        "freshness": "current",
+        "retrievalPathHealth": "current",
+        "stateId": "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c"
+      },
+      {
+        "freshness": "current",
+        "retrievalPathHealth": "current",
+        "stateId": "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509"
+      },
+      {
+        "freshness": "current",
+        "retrievalPathHealth": "current",
+        "stateId": "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb"
+      }
+    ],
+    "stateComponents": [
+      {
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "auxsaysCalculation": "NONE",
+        "derivationRef": null,
+        "evidenceUrl": "https://data.bls.gov/timeseries/LNS11300000",
+        "freshness": "current",
+        "label": "Labor-force participation rate",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/cps/calculation.htm",
+        "nodeId": "indicator:US_LABOR_FORCE_PARTICIPATION_RATE",
+        "observationPeriod": "2026-07",
+        "stateId": "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484",
+        "stateType": "OBS",
+        "unit": "percent",
+        "value": "61.4"
+      },
+      {
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "auxsaysCalculation": "NONE",
+        "derivationRef": null,
+        "evidenceUrl": "https://data.bls.gov/timeseries/JTS000000000000000HIL",
+        "freshness": "current",
+        "label": "Hires",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/jlt/presentation.htm",
+        "nodeId": "indicator:US_LABOR_HIRES",
+        "observationPeriod": "2026-06",
+        "stateId": "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795",
+        "stateType": "OBS",
+        "unit": "thousands",
+        "value": "5348"
+      },
+      {
+        "acquisitionProvenanceUrl": "https://www.dol.gov/ui/data.pdf",
+        "auxsaysCalculation": "NONE",
+        "derivationRef": null,
+        "evidenceUrl": "https://www.dol.gov/ui/data.pdf",
+        "freshness": "current",
+        "label": "Initial unemployment-insurance claims",
+        "methodologyUrl": "https://oui.doleta.gov/unemploy/claims.asp",
+        "nodeId": "indicator:US_LABOR_INITIAL_UI_CLAIMS",
+        "observationPeriod": "2026-08-08",
+        "stateId": "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74",
+        "stateType": "OBS",
+        "unit": "claims",
+        "value": "209000"
+      },
+      {
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "auxsaysCalculation": "NONE",
+        "derivationRef": null,
+        "evidenceUrl": "https://data.bls.gov/timeseries/JTS000000000000000JOL",
+        "freshness": "current",
+        "label": "Job openings",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/jlt/presentation.htm",
+        "nodeId": "indicator:US_LABOR_JOB_OPENINGS",
+        "observationPeriod": "2026-06",
+        "stateId": "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c",
+        "stateType": "OBS",
+        "unit": "thousands",
+        "value": "7359"
+      },
+      {
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "auxsaysCalculation": "NONE",
+        "derivationRef": null,
+        "evidenceUrl": "https://data.bls.gov/timeseries/CES0000000001",
+        "freshness": "current",
+        "label": "Total nonfarm payroll employment",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/ces/home.htm",
+        "nodeId": "indicator:US_LABOR_TOTAL_NONFARM_PAYROLLS",
+        "observationPeriod": "2026-07",
+        "stateId": "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509",
+        "stateType": "OBS",
+        "unit": "thousands of persons",
+        "value": "158858"
+      },
+      {
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "auxsaysCalculation": "NONE",
+        "derivationRef": null,
+        "evidenceUrl": "https://data.bls.gov/timeseries/LNS14000000",
+        "freshness": "current",
+        "label": "U-3 unemployment rate",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/cps/calculation.htm",
+        "nodeId": "indicator:US_LABOR_U3_UNEMPLOYMENT_RATE",
+        "observationPeriod": "2026-07",
+        "stateId": "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb",
+        "stateType": "OBS",
+        "unit": "percent",
+        "value": "4.1"
+      },
+      {
+        "acquisitionProvenanceUrl": null,
+        "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+        "derivationRef": "derivation:0c6f56516d80f270be759f862b84fc11baf49c4aab10160f865498d7a5ac4413",
+        "evidenceUrl": null,
+        "freshness": "current",
+        "label": "Employment Level",
+        "methodologyUrl": null,
+        "nodeId": "labor-state:employment-level",
+        "observationPeriod": "2026-07",
+        "stateId": "calc-state:60d016e49de5786fa275d3067597380d912acd880bace69e832fb5a8c4f5d33a",
+        "stateType": "CALC",
+        "unit": "thousands of persons",
+        "value": "158858"
+      },
+      {
+        "acquisitionProvenanceUrl": null,
+        "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+        "derivationRef": "derivation:744561fca2520ef7f2b3cc05e45caa7c1d03f289847997a01fae6d2270e03553",
+        "evidenceUrl": null,
+        "freshness": "current",
+        "label": "Unemployment Rate",
+        "methodologyUrl": null,
+        "nodeId": "labor-state:unemployment-rate",
+        "observationPeriod": "2026-07",
+        "stateId": "calc-state:172117928c52476a26691716c4d1939f99dbc8256289c286cecafc734d0f2a85",
+        "stateType": "CALC",
+        "unit": "percent",
+        "value": "4.1"
+      },
+      {
+        "acquisitionProvenanceUrl": null,
+        "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+        "derivationRef": "derivation:135ecbf9e0b60b0cf50a6f0165cbd4542727267ffcaaa6bc07ef95152b1015ec",
+        "evidenceUrl": null,
+        "freshness": "current",
+        "label": "Participation Rate",
+        "methodologyUrl": null,
+        "nodeId": "labor-state:participation-rate",
+        "observationPeriod": "2026-07",
+        "stateId": "calc-state:5085fc814c958ab9d42ab4265bb5b447837371ae4f58126ee1c19fa7c8d3ab9e",
+        "stateType": "CALC",
+        "unit": "percent",
+        "value": "61.4"
+      },
+      {
+        "acquisitionProvenanceUrl": null,
+        "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+        "derivationRef": "derivation:d832cfa7eff23161d8169b45c53a97b359f2b7558bbe10e9e701fa9302110569",
+        "evidenceUrl": null,
+        "freshness": "current",
+        "label": "Claims Separation Signal",
+        "methodologyUrl": null,
+        "nodeId": "labor-state:claims-separation-signal",
+        "observationPeriod": "2026-08-08",
+        "stateId": "calc-state:37b9f642d410a0c9e9872f9906efa00ec1e8243135e29e9bbab44473b2b8bfdb",
+        "stateType": "CALC",
+        "unit": "claims",
+        "value": "209000"
+      },
+      {
+        "acquisitionProvenanceUrl": null,
+        "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+        "derivationRef": "derivation:210d5c52a181565a936c550fc14ac599d7a57e810575df076ab3dba64a213931",
+        "evidenceUrl": null,
+        "freshness": "current",
+        "label": "Labor Demand Openings Signal",
+        "methodologyUrl": null,
+        "nodeId": "labor-state:labor-demand-openings-signal",
+        "observationPeriod": "2026-06",
+        "stateId": "calc-state:95999df6b04d00b7e9b44862bc09f61e6d97e0ad08ada324ac940c753dfac220",
+        "stateType": "CALC",
+        "unit": "thousands",
+        "value": "7359"
+      },
+      {
+        "acquisitionProvenanceUrl": null,
+        "auxsaysCalculation": "DIRECT_IDENTITY_V1",
+        "derivationRef": "derivation:18e6aa9f1ec68bbe74b9b53a5c267270db237f3cc87be94ce4cdce9c9aa87505",
+        "evidenceUrl": null,
+        "freshness": "current",
+        "label": "Realized Hiring Flow",
+        "methodologyUrl": null,
+        "nodeId": "labor-state:realized-hiring-flow",
+        "observationPeriod": "2026-06",
+        "stateId": "calc-state:fec8324b46c6ee0aef753a4d605351eaae11b8ef667b204dda3e6050dd75cc70",
+        "stateType": "CALC",
+        "unit": "thousands",
+        "value": "5348"
+      }
+    ],
+    "stateRunId": "state-run:4628b1f96d955855fa8844da3ad55f66b7a45ec429a92ca2a31d8de5865e8bbe",
+    "structuralCoverageState": "LIMITED_ENGINE_PROOF",
+    "supportedDomain": "six-indicator national labor engine proof only",
+    "unsupportedDomains": [
+      "industry-structure",
+      "occupation-demand",
+      "production",
+      "prices",
+      "housing",
+      "trade",
+      "energy",
+      "health",
+      "education",
+      "state-local"
+    ]
+  },
+  "profile": {
+    "budgets": {
+      "maxContributions": 256,
+      "maxNodes": 64,
+      "maxPaths": 128
+    },
+    "configurationVersion": "phase4a-proof-1.0.0",
+    "coverage": "LIMITED_ENGINE_PROOF",
+    "derivationVersion": "derivation-1.0.0",
+    "freshnessMaxAgeDays": {
+      "monthly": 75,
+      "weekly": 21
+    },
+    "materiality": {
+      "thresholds": {
+        "claims": "1",
+        "employment_level": "1",
+        "hires": "1",
+        "job_openings": "1",
+        "ordinal": "1",
+        "participation_rate": "0.1",
+        "unemployment_rate": "0.1"
+      },
+      "version": "phase4a-materiality-1.0.0"
+    },
+    "maxDepth": 3,
+    "maxRounds": 8,
+    "propagationAlgorithmVersion": "bounded-propagation-1.0.0",
+    "reconciliationVersion": "common-cause-reconciliation-1.0.0",
+    "recurringInfrastructureCostUsd": 0,
+    "relationshipDefinitionVersion": "labor-proof-relationships-1.0.0",
+    "schemaVersion": "phase4a-profile-1.0.0",
+    "stateEngineVersion": "state-engine-1.0.0"
+  },
+  "propagationRun": {
+    "algorithmVersion": "bounded-propagation-1.0.0",
+    "budgets": {
+      "maxContributions": 256,
+      "maxNodes": 64,
+      "maxPaths": 128
+    },
+    "configurationVersion": "phase4a-proof-1.0.0",
+    "contributionCount": 6,
+    "contributions": [
+      {
+        "commonCauseId": "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74",
+        "contributionId": "contribution:11c918c66892a4cd6d5ad18a79e6189aec62a2de311f30a80fbe1220cbda3a2b",
+        "depth": 1,
+        "disposition": "DIRECT_IDENTITY_MAPPING",
+        "evidenceClass": "DIRECT",
+        "originStateId": "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74",
+        "outcome": "TRANSMITTED",
+        "pathId": "path:d47231c6a1eb4d2c55953ecebb6237c773575224aee698212a6a0c6ba94d07cb",
+        "polarity": "UNKNOWN_NOT_APPLICABLE",
+        "relationshipIds": [
+          "P4A-REL-004@1.0.0"
+        ],
+        "round": 1,
+        "sourceNode": "indicator:US_LABOR_INITIAL_UI_CLAIMS",
+        "targetNode": "labor-state:claims-separation-signal",
+        "unit": "claims",
+        "value": "209000"
+      },
+      {
+        "commonCauseId": "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c",
+        "contributionId": "contribution:68c865bd6c472adf23c22057d843305c2db94af8a334dcd07f31de4deacd2857",
+        "depth": 1,
+        "disposition": "DIRECT_IDENTITY_MAPPING",
+        "evidenceClass": "DIRECT",
+        "originStateId": "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c",
+        "outcome": "TRANSMITTED",
+        "pathId": "path:dc64c3f25bbd1ba90f94967e1dc53de38faf1cf85f188e449fb192b43bd92a93",
+        "polarity": "UNKNOWN_NOT_APPLICABLE",
+        "relationshipIds": [
+          "P4A-REL-005@1.0.0"
+        ],
+        "round": 1,
+        "sourceNode": "indicator:US_LABOR_JOB_OPENINGS",
+        "targetNode": "labor-state:labor-demand-openings-signal",
+        "unit": "thousands",
+        "value": "7359"
+      },
+      {
+        "commonCauseId": "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb",
+        "contributionId": "contribution:9a6442b6787e6fea684d6156055f307e7bf9021d8762c801d1e42404eca1bbc7",
+        "depth": 1,
+        "disposition": "DIRECT_IDENTITY_MAPPING",
+        "evidenceClass": "DIRECT",
+        "originStateId": "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb",
+        "outcome": "TRANSMITTED",
+        "pathId": "path:5dc5f6ef047c4015ac2550e083aeebbb6cdc5fba0a25cea1026b04fcdb2b17ab",
+        "polarity": "UNKNOWN_NOT_APPLICABLE",
+        "relationshipIds": [
+          "P4A-REL-002@1.0.0"
+        ],
+        "round": 1,
+        "sourceNode": "indicator:US_LABOR_U3_UNEMPLOYMENT_RATE",
+        "targetNode": "labor-state:unemployment-rate",
+        "unit": "percent",
+        "value": "4.1"
+      },
+      {
+        "commonCauseId": "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509",
+        "contributionId": "contribution:2d4aa5f251b48069127bd88f9a5d33a264c96e790923c99fc8696c7b464496ca",
+        "depth": 1,
+        "disposition": "DIRECT_IDENTITY_MAPPING",
+        "evidenceClass": "DIRECT",
+        "originStateId": "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509",
+        "outcome": "TRANSMITTED",
+        "pathId": "path:bac1b4016924d7b705e9139194258f1b1a34038c7ea3157e64bc21064d24f088",
+        "polarity": "UNKNOWN_NOT_APPLICABLE",
+        "relationshipIds": [
+          "P4A-REL-001@1.0.0"
+        ],
+        "round": 1,
+        "sourceNode": "indicator:US_LABOR_TOTAL_NONFARM_PAYROLLS",
+        "targetNode": "labor-state:employment-level",
+        "unit": "thousands of persons",
+        "value": "158858"
+      },
+      {
+        "commonCauseId": "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795",
+        "contributionId": "contribution:9aa4efe06e41d6c00f206a89cc49639fb49ae1977ea777c9bf89bbd3910b825b",
+        "depth": 1,
+        "disposition": "DIRECT_IDENTITY_MAPPING",
+        "evidenceClass": "DIRECT",
+        "originStateId": "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795",
+        "outcome": "TRANSMITTED",
+        "pathId": "path:28b7a000150902429f41faeeddc077206b69519335de968549ac24a5eb533b03",
+        "polarity": "UNKNOWN_NOT_APPLICABLE",
+        "relationshipIds": [
+          "P4A-REL-006@1.0.0"
+        ],
+        "round": 1,
+        "sourceNode": "indicator:US_LABOR_HIRES",
+        "targetNode": "labor-state:realized-hiring-flow",
+        "unit": "thousands",
+        "value": "5348"
+      },
+      {
+        "commonCauseId": "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484",
+        "contributionId": "contribution:953f5dfd2fdba1ba6843fe459996fe2701dd4cb4552e19386b9e6a43ee714c5b",
+        "depth": 1,
+        "disposition": "DIRECT_IDENTITY_MAPPING",
+        "evidenceClass": "DIRECT",
+        "originStateId": "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484",
+        "outcome": "TRANSMITTED",
+        "pathId": "path:92678702b1192b86f1403521c6cfacc240130d8f40daec7f7ddb41bacd307c3e",
+        "polarity": "UNKNOWN_NOT_APPLICABLE",
+        "relationshipIds": [
+          "P4A-REL-003@1.0.0"
+        ],
+        "round": 1,
+        "sourceNode": "indicator:US_LABOR_FORCE_PARTICIPATION_RATE",
+        "targetNode": "labor-state:participation-rate",
+        "unit": "percent",
+        "value": "61.4"
+      }
+    ],
+    "knowledgeCutoff": "2026-08-19T00:00:00Z",
+    "maxDepth": 3,
+    "maxDepthReached": 1,
+    "maxRounds": 8,
+    "propagationRunId": "propagation-run:adc2f8fa9aa82941e5faf9d876e611ab5b029de12791cb1472fe0da7a5a2c356",
+    "reconciliation": {
+      "groups": [
+        {
+          "commonCauseId": "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74",
+          "negativeComponents": [],
+          "originStateId": "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74",
+          "overlapDisposition": "SINGLE_PATH",
+          "pathIds": [
+            "path:d47231c6a1eb4d2c55953ecebb6237c773575224aee698212a6a0c6ba94d07cb"
+          ],
+          "positiveComponents": [
+            "209000"
+          ],
+          "targetNode": "labor-state:claims-separation-signal"
+        },
+        {
+          "commonCauseId": "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c",
+          "negativeComponents": [],
+          "originStateId": "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c",
+          "overlapDisposition": "SINGLE_PATH",
+          "pathIds": [
+            "path:dc64c3f25bbd1ba90f94967e1dc53de38faf1cf85f188e449fb192b43bd92a93"
+          ],
+          "positiveComponents": [
+            "7359"
+          ],
+          "targetNode": "labor-state:labor-demand-openings-signal"
+        },
+        {
+          "commonCauseId": "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb",
+          "negativeComponents": [],
+          "originStateId": "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb",
+          "overlapDisposition": "SINGLE_PATH",
+          "pathIds": [
+            "path:5dc5f6ef047c4015ac2550e083aeebbb6cdc5fba0a25cea1026b04fcdb2b17ab"
+          ],
+          "positiveComponents": [
+            "4.1"
+          ],
+          "targetNode": "labor-state:unemployment-rate"
+        },
+        {
+          "commonCauseId": "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509",
+          "negativeComponents": [],
+          "originStateId": "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509",
+          "overlapDisposition": "SINGLE_PATH",
+          "pathIds": [
+            "path:bac1b4016924d7b705e9139194258f1b1a34038c7ea3157e64bc21064d24f088"
+          ],
+          "positiveComponents": [
+            "158858"
+          ],
+          "targetNode": "labor-state:employment-level"
+        },
+        {
+          "commonCauseId": "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795",
+          "negativeComponents": [],
+          "originStateId": "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795",
+          "overlapDisposition": "SINGLE_PATH",
+          "pathIds": [
+            "path:28b7a000150902429f41faeeddc077206b69519335de968549ac24a5eb533b03"
+          ],
+          "positiveComponents": [
+            "5348"
+          ],
+          "targetNode": "labor-state:realized-hiring-flow"
+        },
+        {
+          "commonCauseId": "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484",
+          "negativeComponents": [],
+          "originStateId": "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484",
+          "overlapDisposition": "SINGLE_PATH",
+          "pathIds": [
+            "path:92678702b1192b86f1403521c6cfacc240130d8f40daec7f7ddb41bacd307c3e"
+          ],
+          "positiveComponents": [
+            "61.4"
+          ],
+          "targetNode": "labor-state:participation-rate"
+        }
+      ],
+      "version": "common-cause-reconciliation-1.0.0"
+    },
+    "relationshipVersions": [
+      "P4A-REL-001@1.0.0",
+      "P4A-REL-002@1.0.0",
+      "P4A-REL-003@1.0.0",
+      "P4A-REL-004@1.0.0",
+      "P4A-REL-005@1.0.0",
+      "P4A-REL-006@1.0.0"
+    ],
+    "replayMode": "OPERATIONALLY_KNOWN_AS_OF",
+    "roundsUsed": 1,
+    "seedStateIds": [
+      "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74",
+      "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c",
+      "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb",
+      "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509",
+      "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795",
+      "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484"
+    ],
+    "sourceSnapshotId": "sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6",
+    "stopReasons": [
+      "no_eligible_relationship"
+    ],
+    "thresholdVersion": "phase4a-materiality-1.0.0",
+    "traversalCount": 6
+  },
+  "relationshipLifecycleEvents": [
+    {
+      "edgeId": "P4A-REL-001",
+      "from": "CANDIDATE",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "VALIDATED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-001",
+      "from": "VALIDATED",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "ACCEPTED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-002",
+      "from": "CANDIDATE",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "VALIDATED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-002",
+      "from": "VALIDATED",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "ACCEPTED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-003",
+      "from": "CANDIDATE",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "VALIDATED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-003",
+      "from": "VALIDATED",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "ACCEPTED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-004",
+      "from": "CANDIDATE",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "VALIDATED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-004",
+      "from": "VALIDATED",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "ACCEPTED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-005",
+      "from": "CANDIDATE",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "VALIDATED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-005",
+      "from": "VALIDATED",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "ACCEPTED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-006",
+      "from": "CANDIDATE",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "VALIDATED",
+      "version": "1.0.0"
+    },
+    {
+      "edgeId": "P4A-REL-006",
+      "from": "VALIDATED",
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "to": "ACCEPTED",
+      "version": "1.0.0"
+    }
+  ],
+  "scenarios": [],
+  "schemaVersion": "phase4a-review-candidate-1.0.0",
+  "sourceSnapshotId": "sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6",
+  "stateRun": {
+    "configurationVersion": "phase4a-proof-1.0.0",
+    "engineVersion": "state-engine-1.0.0",
+    "evaluatedAt": "2026-08-19T00:00:00Z",
+    "geography": "US",
+    "knowledgeCutoff": "2026-08-19T00:00:00Z",
+    "missingIndicators": [],
+    "observationIdentities": [
+      [
+        "US_LABOR_FORCE_PARTICIPATION_RATE",
+        "2026-07",
+        "bls-retrieval-2026-08-18T19:44:00.899016Z",
+        0
+      ],
+      [
+        "US_LABOR_HIRES",
+        "2026-06",
+        "bls-retrieval-2026-08-18T19:44:00.899016Z",
+        0
+      ],
+      [
+        "US_LABOR_INITIAL_UI_CLAIMS",
+        "2026-08-08",
+        "DOL-UI-2026-08-13-advance",
+        0
+      ],
+      [
+        "US_LABOR_JOB_OPENINGS",
+        "2026-06",
+        "bls-retrieval-2026-08-18T19:44:00.899016Z",
+        0
+      ],
+      [
+        "US_LABOR_TOTAL_NONFARM_PAYROLLS",
+        "2026-07",
+        "bls-retrieval-2026-08-18T19:44:00.899016Z",
+        0
+      ],
+      [
+        "US_LABOR_U3_UNEMPLOYMENT_RATE",
+        "2026-07",
+        "bls-retrieval-2026-08-18T19:44:00.899016Z",
+        0
+      ]
+    ],
+    "replayMode": "OPERATIONALLY_KNOWN_AS_OF",
+    "rightsDecisionSet": [
+      "ALLOW"
+    ],
+    "sourceSnapshotId": "sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6",
+    "stateRunId": "state-run:4628b1f96d955855fa8844da3ad55f66b7a45ec429a92ca2a31d8de5865e8bbe",
+    "states": [
+      {
+        "acceptedTime": "2026-08-18T19:46:00Z",
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "ageDays": 18,
+        "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
+        "auxsaysCalculation": "NONE",
+        "carriedForward": true,
+        "evidenceUrl": "https://data.bls.gov/timeseries/LNS11300000",
+        "frequency": "monthly",
+        "freshness": "current",
+        "geography": "US",
+        "label": "Labor-force participation rate",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/cps/calculation.htm",
+        "nodeId": "indicator:US_LABOR_FORCE_PARTICIPATION_RATE",
+        "observationPeriod": "2026-07",
+        "publicTime": "2026-08-07T12:30:00Z",
+        "retrievalPathHealth": "current",
+        "retrievedTime": "2026-08-18T19:44:00.899016Z",
+        "rightsState": "ALLOW",
+        "seasonalAdjustment": "seasonally adjusted",
+        "sourceId": "bls-cps",
+        "sourceLabel": "U.S. Bureau of Labor Statistics — Current Population Survey",
+        "sourceSeriesId": "LNS11300000",
+        "stateFamily": "participation_rate",
+        "stateId": "obs-state:f9ea4a18c6ca95dc0b2add5bf846b11f73edd412910182cb9484f30bdd1ac484",
+        "stateType": "OBS",
+        "unit": "percent",
+        "value": "61.4"
+      },
+      {
+        "acceptedTime": "2026-08-18T19:46:00Z",
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "ageDays": 49,
+        "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
+        "auxsaysCalculation": "NONE",
+        "carriedForward": true,
+        "evidenceUrl": "https://data.bls.gov/timeseries/JTS000000000000000HIL",
+        "frequency": "monthly",
+        "freshness": "current",
+        "geography": "US",
+        "label": "Hires",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/jlt/presentation.htm",
+        "nodeId": "indicator:US_LABOR_HIRES",
+        "observationPeriod": "2026-06",
+        "publicTime": "2026-08-04T14:00:00Z",
+        "retrievalPathHealth": "current",
+        "retrievedTime": "2026-08-18T19:44:00.899016Z",
+        "rightsState": "ALLOW",
+        "seasonalAdjustment": "seasonally adjusted",
+        "sourceId": "bls-jolts",
+        "sourceLabel": "U.S. Bureau of Labor Statistics — JOLTS",
+        "sourceSeriesId": "JTS000000000000000HIL",
+        "stateFamily": "hires",
+        "stateId": "obs-state:acec0472da11c6413d727a43fd892832b9308799485ce52f29800fc9e3f9f795",
+        "stateType": "OBS",
+        "unit": "thousands",
+        "value": "5348"
+      },
+      {
+        "acceptedTime": "2026-08-18T19:46:00Z",
+        "acquisitionProvenanceUrl": "https://www.dol.gov/ui/data.pdf",
+        "ageDays": 11,
+        "artifactSha256": "7f046fea52e4b60b13c45c2a868b199ff9fe448e7289add2ff9300abd9cb0fa3",
+        "auxsaysCalculation": "NONE",
+        "carriedForward": true,
+        "evidenceUrl": "https://www.dol.gov/ui/data.pdf",
+        "frequency": "weekly",
+        "freshness": "current",
+        "geography": "US",
+        "label": "Initial unemployment-insurance claims",
+        "methodologyUrl": "https://oui.doleta.gov/unemploy/claims.asp",
+        "nodeId": "indicator:US_LABOR_INITIAL_UI_CLAIMS",
+        "observationPeriod": "2026-08-08",
+        "publicTime": "2026-08-13T12:30:00Z",
+        "retrievalPathHealth": "stale",
+        "retrievedTime": "2026-08-18T19:44:22.485403Z",
+        "rightsState": "ALLOW",
+        "seasonalAdjustment": "seasonally adjusted",
+        "sourceId": "dol-ui-claims",
+        "sourceLabel": "U.S. Department of Labor — UI Weekly Claims",
+        "sourceSeriesId": "DOL-UI-SA-INITIAL",
+        "stateFamily": "claims",
+        "stateId": "obs-state:0075d8c418dc58d37031a6b624d06d0ff2081a7ad2131000f785f4d370474c74",
+        "stateType": "OBS",
+        "unit": "claims",
+        "value": "209000"
+      },
+      {
+        "acceptedTime": "2026-08-18T19:46:00Z",
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "ageDays": 49,
+        "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
+        "auxsaysCalculation": "NONE",
+        "carriedForward": true,
+        "evidenceUrl": "https://data.bls.gov/timeseries/JTS000000000000000JOL",
+        "frequency": "monthly",
+        "freshness": "current",
+        "geography": "US",
+        "label": "Job openings",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/jlt/presentation.htm",
+        "nodeId": "indicator:US_LABOR_JOB_OPENINGS",
+        "observationPeriod": "2026-06",
+        "publicTime": "2026-08-04T14:00:00Z",
+        "retrievalPathHealth": "current",
+        "retrievedTime": "2026-08-18T19:44:00.899016Z",
+        "rightsState": "ALLOW",
+        "seasonalAdjustment": "seasonally adjusted",
+        "sourceId": "bls-jolts",
+        "sourceLabel": "U.S. Bureau of Labor Statistics — JOLTS",
+        "sourceSeriesId": "JTS000000000000000JOL",
+        "stateFamily": "job_openings",
+        "stateId": "obs-state:2c759fcd37a50490f375fe13215e417810875d9e6c1a5af35cf6dcb749a8d78c",
+        "stateType": "OBS",
+        "unit": "thousands",
+        "value": "7359"
+      },
+      {
+        "acceptedTime": "2026-08-18T19:46:00Z",
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "ageDays": 18,
+        "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
+        "auxsaysCalculation": "NONE",
+        "carriedForward": true,
+        "evidenceUrl": "https://data.bls.gov/timeseries/CES0000000001",
+        "frequency": "monthly",
+        "freshness": "current",
+        "geography": "US",
+        "label": "Total nonfarm payroll employment",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/ces/home.htm",
+        "nodeId": "indicator:US_LABOR_TOTAL_NONFARM_PAYROLLS",
+        "observationPeriod": "2026-07",
+        "publicTime": "2026-08-07T12:30:00Z",
+        "retrievalPathHealth": "current",
+        "retrievedTime": "2026-08-18T19:44:00.899016Z",
+        "rightsState": "ALLOW",
+        "seasonalAdjustment": "seasonally adjusted",
+        "sourceId": "bls-ces",
+        "sourceLabel": "U.S. Bureau of Labor Statistics — Current Employment Statistics",
+        "sourceSeriesId": "CES0000000001",
+        "stateFamily": "employment_level",
+        "stateId": "obs-state:951dedbbd2fe19a8f1821b38fb482662601d35083318dc8316c0fa5019a6b509",
+        "stateType": "OBS",
+        "unit": "thousands of persons",
+        "value": "158858"
+      },
+      {
+        "acceptedTime": "2026-08-18T19:46:00Z",
+        "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "ageDays": 18,
+        "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
+        "auxsaysCalculation": "NONE",
+        "carriedForward": true,
+        "evidenceUrl": "https://data.bls.gov/timeseries/LNS14000000",
+        "frequency": "monthly",
+        "freshness": "current",
+        "geography": "US",
+        "label": "U-3 unemployment rate",
+        "methodologyUrl": "https://www.bls.gov/opub/hom/cps/calculation.htm",
+        "nodeId": "indicator:US_LABOR_U3_UNEMPLOYMENT_RATE",
+        "observationPeriod": "2026-07",
+        "publicTime": "2026-08-07T12:30:00Z",
+        "retrievalPathHealth": "current",
+        "retrievedTime": "2026-08-18T19:44:00.899016Z",
+        "rightsState": "ALLOW",
+        "seasonalAdjustment": "seasonally adjusted",
+        "sourceId": "bls-cps",
+        "sourceLabel": "U.S. Bureau of Labor Statistics — Current Population Survey",
+        "sourceSeriesId": "LNS14000000",
+        "stateFamily": "unemployment_rate",
+        "stateId": "obs-state:8631a8c32794f674f2a15cf0483c60720ce96c139897c934ec562fd17d8833fb",
+        "stateType": "OBS",
+        "unit": "percent",
+        "value": "4.1"
+      }
+    ]
+  },
+  "structuralCoverageState": "LIMITED_ENGINE_PROOF"
+}

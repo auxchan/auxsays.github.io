@@ -1,0 +1,22 @@
+{
+  "status": "REQUEST_SUCCEEDED",
+  "responseTime": 131,
+  "message": [],
+  "Results": {
+    "series": [
+      {"seriesID":"CES0000000001","data":[{"year":"2026","period":"M07","periodName":"July","value":"158858","footnotes":[{}]}]},
+      {"seriesID":"LNS14000000","data":[{"year":"2026","period":"M07","periodName":"July","value":"4.1","footnotes":[{}]}]},
+      {"seriesID":"LNS11300000","data":[{"year":"2026","period":"M07","periodName":"July","value":"61.4","footnotes":[{}]}]},
+      {"seriesID":"JTS000000000000000JOL","data":[{"year":"2026","period":"M06","periodName":"June","value":"7359","footnotes":[{}]}]},
+      {"seriesID":"JTS000000000000000HIL","data":[{"year":"2026","period":"M06","periodName":"June","value":"5348","footnotes":[{}]}]}
+    ]
+  },
+  "factual_fixture_provenance": {
+    "retrieved_at": "2026-08-18T19:44:00.899016Z",
+    "full_artifact_sha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
+    "full_artifact_bytes": 3736,
+    "endpoint": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+    "note": "Minimized authorized factual test fixture; full response is retained only in ignored local runtime evidence."
+  }
+}
+

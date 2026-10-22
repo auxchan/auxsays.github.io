@@ -1,0 +1,5 @@
+[
+  ["program_code", "data_type_code", "time_slot_id", "time_slot_date", "time_slot_name", "seasonally_adj", "category_code", "cell_value", "error_data", "time"],
+  ["FTD", "EXP", "920", "2026-06-01 00:00:00.", "Jun2026", "yes", "BOPGS", "289400", "no", "2026-06"],
+  ["FTD", "IMP", "920", "2026-06-01 00:00:00.", "Jun2026", "yes", "BOPGS", "371200", "no", "2026-06"]
+]

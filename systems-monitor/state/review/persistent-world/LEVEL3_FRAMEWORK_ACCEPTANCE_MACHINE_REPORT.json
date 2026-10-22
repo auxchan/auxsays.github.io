@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "level3-framework-acceptance-1.0.0",
+  "generatedAt": "2026-08-31",
+  "sourceHeadBeforeGate": "39f9ffee",
+  "machineGate": "PASS",
+  "humanGate": "PENDING",
+  "level3FrameworkReady": "PENDING_HUMAN_QA",
+  "inventory": {
+    "placements": 1111,
+    "level1Systems": 10,
+    "level3Parents": 100,
+    "level4Children": 1000,
+    "hierarchyTethers": 1110,
+    "syntheticInfluenceFixtures": 2000,
+    "acceptedStructuralRelationships": 0,
+    "factualStructuralRelationships": 0
+  },
+  "fingerprints": {
+    "topology": "fnv1a32:88684cdb",
+    "semanticGovernance": "fnv1a32:9647fd3f",
+    "historicalSupersededTopology": "fnv1a32:73cac7b9"
+  },
+  "coverage": {
+    "semanticParents": { "passed": 100, "total": 100 },
+    "exactTenHandoffs": { "passed": 100, "total": 100 },
+    "topDownLayouts": { "passed": 100, "total": 100 },
+    "cinematicLayouts": { "passed": 100, "total": 100 },
+    "inspectorProfiles": { "passed": 100, "total": 100 },
+    "fixtureLevel4Placements": 900,
+    "reviewedEconomicLevel4Placements": 100,
+    "connectedCanonicalFactors": 4,
+    "connectedHierarchyPlacements": 5,
+    "sourceIdentifiedWithoutDisplayedValue": 3
+  },
+  "performanceMsP95": {
+    "overview": 2.5,
+    "level1Focus": 2.0,
+    "level3TopDown": 1.2,
+    "level3Cinematic": 1.2,
+    "budget": 4.0
+  },
+  "browserSequence": {
+    "path": [
+      "Root",
+      "Consumer Demand",
+      "Real Wage Purchasing Power",
+      "Renderer fixture 01",
+      "Up",
+      "Back",
+      "Forward",
+      "Reset"
+    ],
+    "settledLevel3": { "semanticNodes": 12, "currentEdges": 12, "previousEdges": 0 },
+    "settledLevel4": { "semanticNodes": 11, "currentEdges": 3, "previousEdges": 0 },
+    "settledReset": { "semanticNodes": 11, "currentEdges": 10, "previousEdges": 0 }
+  },
+  "gates": {
+    "semanticStability": "PASS",
+    "exactTenHandoff": "PASS",
+    "navigation": "PASS",
+    "connectorBoundary": "PASS",
+    "layoutSweep": "PASS",
+    "interaction": "PASS",
+    "inspector": "PASS",
+    "performance": "PASS",
+    "accessibility": "PASS",
+    "reducedMotion": "PASS",
+    "fixtureBoundary": "PASS"
+  },
+  "authorityBoundary": {
+    "hierarchyCreatesEconomicTruth": false,
+    "fixtureCanDisplayAcceptedValue": false,
+    "fixtureCanBecomeAcceptedRelationship": false,
+    "forecastingAuthorized": false,
+    "additionalLevel4ContentAdded": false
+  }
+}

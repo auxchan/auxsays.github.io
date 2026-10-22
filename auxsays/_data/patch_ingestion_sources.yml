@@ -1208,11 +1208,23 @@
     Dedicated fail-closed adobe_photoshop adapter is implemented and unit-tested (explicit
     desktop-Photoshop attribution, exact stable-version extraction, deterministic release
     date, ambiguity/beta rejection, official-only records). Activation stays disabled because
-    the official HelpX desktop release-notes page is not reachable from datacenter / GitHub
-    Actions egress (connection times out, zero bytes), and no stable official release-history
-    fallback exists that avoids per-version manual curation. enabled flips to true only once an
-    official source is proven reachable in CI and the adapter dry-run is byte-clean. Community
-    consensus is intentionally NOT implemented for Photoshop.
+    the official Adobe routes carrying Photoshop desktop release identity are not reachable
+    from CI egress. Re-measured 2026-09-27 from GitHub Actions (runner 132.196.54.161) with 8s between
+    requests, reproduced over two runs: every helpx.adobe.com route answers HTTP 403 Access
+    Denied from an edge filter in 0.08-0.14s -- canonical desktop release notes, the /en/
+    locale path, the legacy release-note path, whats-new, the AEM .model.json, the Creative
+    Cloud release notes, and a known-issues control. The block is host-scoped, not a dead
+    endpoint: www.adobe.com answers 200 from the same job, and the canonical page loads
+    normally in a real browser carrying version 27.10 plus its history. The four candidate
+    paths on the reachable www.adobe.com host answer HTTP 404, so Adobe does not publish
+    equivalent desktop release history there. Locally the same host served 67,998 bytes to a
+    cold client and then answered 403 to identical request shapes minutes later, so the filter
+    is reputation/rate based rather than header based -- no User-Agent or Accept variation
+    fixes it, and impersonating a browser harder is not a supportable production dependency.
+    Re-measure with auxsays/scripts/probe_photoshop_sources.py (Photoshop Source Probe
+    workflow, manual dispatch). enabled flips to true only once an official Adobe route
+    carrying release identity answers 200 from CI and the adapter dry-run is byte-clean.
+    Community consensus is intentionally NOT implemented for Photoshop.
 - company_id: adobe
   product_id: adobe-media-encoder
   company: Adobe
@@ -3244,7 +3256,16 @@
     parser_profile: windows_release_health
     official_source_type: release_health
     source_capture_status: adapter_enabled
-    record_limit: 6
+    # The ingestion WINDOW. One record now means one cumulative update, and the official
+    # release-history tables reach back to 2021 -- but a 2021 cumulative update has no
+    # "should I install this?" left in it, and ~150 such pages would bury the ones that do.
+    # Measured: this window yields 71 records across the four live servicing trains.
+    history_since: '2025-12-01'
+    # Records WRITTEN per run (progressive backfill; the run still SCANS the wider
+    # BACKFILL_SCAN_LIMIT window). 6 was right when one record meant one servicing TRAIN and
+    # there were only four of them. Against 71 in-window updates a cap of 6 would take three
+    # months to reach the current patch. Still well below BACKFILL_SCAN_LIMIT.
+    record_limit: 70
     known_issues_capture: true
     status_url_template: https://learn.microsoft.com/en-us/windows/release-health/status-windows-11-{version_slug}
     include_prereleases: false
@@ -3259,8 +3280,8 @@
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: true, platform_specific_installers: false, archived_release_history: true}
     keywords: [release health, known issues, safeguard hold, rollout, cumulative update, security]
   generated_record:
-    canonical_url_pattern: /updates/microsoft/microsoft-windows-11/{version_slug}/
-    title_pattern: '{software} {version} official update breakdown'
+    canonical_url_pattern: /updates/microsoft/microsoft-windows-11/{version_slug}/{target_build}/
+    title_pattern: '{software} {version} (Build {target_build}) official update breakdown'
   community_future:
     possible_sources: [Microsoft Learn known issues, Windows forums, Reddit]
     difficulty: Medium-High
@@ -3270,8 +3291,8 @@
   company: Microsoft
   software: Microsoft Teams
   public_category: Workplace Critical
-  enabled: false
-  recommended_priority: P1 identity-scoped adapter staged; re-activation blocked on cleanup of prior mixed-identity records
+  enabled: true
+  recommended_priority: P1 active; identity-scoped to New Teams desktop / Windows / Public cloud, forward-only from record_floor_date
   ingestion:
     type: html_release_notes
     adapter: microsoft_office_updates
@@ -3281,7 +3302,16 @@
     api_url: null
     parser_profile: microsoft_teams_version_history
     official_source_type: release_notes
-    source_capture_status: adapter_staged_identity_scoped
+    source_capture_status: adapter_enabled
+    # FORWARD-ONLY ACTIVATION BOUNDARY. The Windows/Public table carries the whole history: 63
+    # builds back to 2023-10-12 when Teams was activated, every one a legitimate member of the
+    # target identity. The runner writes record_limit new records per run while scanning a
+    # 200-wide window, so without this floor activation walks three years of builds onto the
+    # site two at a time. This admits the four releases published since 2026-08-01 as a small
+    # truthful baseline, and every future Windows/Public release automatically. Same control the
+    # per-build PowerPoint lane uses; validation REQUIRES the key for this profile, so a typo
+    # cannot silently remove the guard.
+    record_floor_date: '2026-08-01'
     include_prereleases: false
     version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$
     requires_javascript: false
@@ -3301,23 +3331,29 @@
     difficulty: Medium
     defer_until_official_ingestion_stable: true
   source_health_note: >-
-    Official source (learn.microsoft.com/officeupdates/teams-app-versioning) is CI-reachable
-    (HTTP 200, server-rendered). The Teams parser is now IDENTITY-SCOPED: it emits records only
-    for the single New Teams desktop client on Windows in the Public cloud, rejecting every other
-    platform (Mac / Web / VDI / Mobile), cloud (Government GCC/GCCH/DoD, Sovereign Gallatin), and
-    edition (Classic Teams), plus preview/targeted/beta rings and undated/invalid-date rows.
-    enabled is set to false because the PRIOR (non-identity-scoped) parser mislabeled Mac builds
-    as generic "Microsoft Teams" -- the existing generated records and the seen ledger are the
-    Public/New/Mac stream, not Windows. Re-activation is gated on a controlled cleanup (remove the
-    mislabeled Mac records and reset the Teams seen ledger) so the Windows/Public stream ingests
-    from a clean baseline. Community consensus is intentionally NOT implemented for Teams.
+    ACTIVE. Official source (learn.microsoft.com/officeupdates/teams-app-versioning) is
+    CI-reachable (HTTP 200, server-rendered, 481 KB). The parser is IDENTITY-SCOPED and
+    table-anchored: of the 37 tables on that page it trusts exactly one -- Public cloud ->
+    New Teams app version -> Windows -- and identity is never inherited across a table
+    boundary, so Mac / Web / VDI / Mobile, Government GCC/GCCH/DoD, Sovereign Gallatin,
+    Classic Teams and preview/targeted/beta rings cannot leak, nor can undated or
+    impossible-date rows. Every emitted record carries target_platform Windows,
+    target_channel "Public cloud (Production)" and teams_edition "New Teams".
+    The earlier blocker is CLEARED: the prior non-identity-scoped parser mislabeled Mac builds
+    as generic "Microsoft Teams", and that corpus was removed in 7787548d -- 25 records
+    deleted, the microsoft-teams state entry reset, zero replacements left behind. The clean
+    baseline is re-asserted every run by test_teams_record_cleanup.py.
+    Activation is FORWARD-ONLY from ingestion.record_floor_date, because the target table
+    carries the full history (63 builds back to 2023-10-12) and would otherwise backfill years
+    of releases two per scheduled run. Community consensus is intentionally NOT implemented
+    for Teams.
 - company_id: microsoft
   product_id: microsoft-powerpoint
   company: Microsoft
   software: Microsoft PowerPoint
   public_category: Productivity
   enabled: true
-  recommended_priority: P1 app-attributed official ingestion (fail-closed)
+  recommended_priority: P1 per-build official ingestion (fail-closed on identity)
   ingestion:
     type: html_release_notes
     adapter: microsoft_office_updates
@@ -3330,6 +3366,14 @@
     feed_url: null
     api_url: null
     parser_profile: microsoft_365_powerpoint_release_notes
+    # FORWARD-ONLY INGESTION FLOOR. Record existence is keyed on Current Channel build identity
+    # rather than on app-specific prose, so every historical build on the release-notes page became
+    # a candidate at once. This lane creates records only for builds released on or after this
+    # date, so activating multi-build ingestion cannot start an unbounded historical backfill.
+    # 2026-07-23 is the release date of the oldest 2607 build already tracked, so the forward set is
+    # exactly the 2607 siblings and everything newer. Widening history is a separate, deliberate
+    # decision: move this date. Existing records are matched by identity and are never re-created.
+    record_floor_date: '2026-07-23'
     target_app: powerpoint
     channel: Current Channel
     official_source_type: release_notes
@@ -3341,12 +3385,12 @@
     reliability: Medium
     breakage_risk: Medium
     polling_frequency: 24h
-    update_detection_method: Per-app release-note attribution (explicit PowerPoint or explicit suite-wide only; generic channel/build rows stay on Microsoft 365 Apps)
+    update_detection_method: Per-BUILD Current Channel release-note sections. A build with a resolvable version, build and release date becomes a record; app attribution is recorded as official_app_attribution metadata (app_named_by_source / suite_wide_by_source / app_named_and_suite_wide_by_source / not_documented_by_source) and is NOT an admission gate -- the build ships the app either way. Generic suite servicing still also has its own microsoft-365-apps lane.
     file_size_status_when_missing: microsoft_managed
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: false, platform_specific_installers: false, archived_release_history: true}
     keywords: [PowerPoint, presentation, release, update]
   generated_record:
-    canonical_url_pattern: /updates/microsoft/microsoft-powerpoint/{version_slug}/
+    canonical_url_pattern: /updates/microsoft/microsoft-powerpoint/{version_slug}/{target_build}/
     title_pattern: '{software} {version} official update breakdown'
   community_future:
     possible_sources: [Microsoft Answers, Microsoft Tech Community, workplace reports]

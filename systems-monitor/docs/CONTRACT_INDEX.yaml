@@ -1,0 +1,251 @@
+schema_version: 1
+project: AUXSAYS U.S. Systems Monitor
+parent_master:
+  version: "V4.1"
+  path: MASTER_SPEC.md
+  source_sha256: "08895B471909DC600FC6AA5F373E2D6E16F457580A9BA141363ED210676397EA"
+approval_authority: Taylor
+phase_1_status: PASS
+phase_3_status: CLOSED
+phase_3_gate: PASS
+phase_3_human_data_qa: PASS
+current_authorized_work: Workstream 0 governance complete; Workstream 1 live factual Labor Market shell is the next eligible separately authorized task; source intake, Gate-B closure, Phase 5, public activation, push, merge, and deployment remain unauthorized
+workstream_0_governance_status: COMPLETE
+workstream_0_approved_decisions: [EMP-001, EMP-002, EMP-003, FAC-001, UXA-001]
+approved_foundation_decisions: [D-001, D-002, D-003, D-004, D-005, D-006, D-007, D-008, D-009, D-010]
+phase_3_contract_status: PASS
+phase_4_contract_status: BINDING_1_0_0
+phase_4_gate_b: OPEN_REQUIRES_PHASE_4B_AUTHORITATIVE_STRUCTURAL_PROOF
+phase_4a_profile_decision: O-006_ACCEPTED_INITIAL_PROFILE_ONLY
+approved_phase_3_decisions: [O-003]
+rejected_phase_3_decisions: [O-004]
+post_v4_1_requirements:
+  - id: D-009
+    summary: Four-hour maximum MVP system-evaluation heartbeat with source-specific, release-aware, material-change behavior
+    pending_master_consolidation: true
+  - id: D-010
+    summary: Compute-once/read-many and measured recurring infrastructure/API cost governance
+    pending_master_consolidation: true
+status_values:
+  - DRAFT
+  - PROVISIONAL
+  - BINDING
+  - SUPERSEDED
+  - DEPRECATED
+contracts:
+  - id: product
+    path: contracts/PRODUCT_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "ED64C95813C0EB43C9FCFD1745F19A7945638C39F287D547806BB018BB102D8B"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§0–5", "§38–39", "§55", "§64.1–64.12", "§68–71"]
+    depends_on: []
+    blocked_by: []
+    blocks: ["Phase 2 contract approval", "all substantive product implementation"]
+  - id: repository_integration
+    path: contracts/REPOSITORY_INTEGRATION_CONTRACT.md
+    version: "1.0.1"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "0AB85F8F5869430F80A0782EAF84F40E1D8E8C45E1CE974F09904C7EFD7FEA92"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§0.2–0.3", "§35.1–35.3", "§38.1–39", "§60", "§64.2–64.12", "§66–67", "§69"]
+    depends_on: [product]
+    blocked_by: []
+    blocks: ["Phase 2 repository/build/routing implementation"]
+  - id: architecture
+    path: contracts/ARCHITECTURE_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "C42836A1371491786149FA8A572778820331C7A52A91C5CC0D84CB85C2011A61"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§0.2–0.3", "§8", "§34–37.1", "§60", "§64.2–64.12", "§66–68"]
+    depends_on: [product, repository_integration]
+    blocked_by: []
+    blocks: ["Phase 2 module boundaries", "Phase 3+ service boundaries"]
+  - id: infrastructure
+    path: contracts/INFRASTRUCTURE_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "90B5E9A47971A346C0F12FD687B6E9DCB88629AD22073ECF2EC8797F3DBFBFE3"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§0.3", "§35.1–35.5", "§38.2", "§62", "§64.1–64.12", "§66–68"]
+    depends_on: [architecture]
+    blocked_by: []
+    blocks: ["provider-specific infrastructure", "production scheduling/storage/publication"]
+  - id: public_data_interface
+    path: contracts/PUBLIC_DATA_INTERFACE_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "097AAA4FBBF16294CFA1757EF873DB02364C46C072B3DD7FF243498861EA484E"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§2–3", "§11.1", "§16.1", "§31–32", "§35.3–35.5", "§37.1", "§64.9", "§67 Phase 1", "§68–69"]
+    depends_on: [product, architecture, infrastructure]
+    blocked_by: []
+    blocks: ["Phase 2 fixture schema/types", "Phase 3 public producer"]
+  - id: security_ingestion
+    path: contracts/SECURITY_INGESTION_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "BDD0056B8C4BA8D89CF66FECE2668198DA4DEACA16E24F2096D67176B03F1606"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§31.6", "§34.1–34.11", "§35.3–35.5", "§38.2", "§61", "§64.2–64.12", "§68"]
+    depends_on: [architecture, infrastructure]
+    blocked_by: []
+    blocks: ["production ingestion", "external document extraction", "public exports"]
+  - id: release_acceptance
+    path: contracts/RELEASE_ACCEPTANCE_CONTRACT.md
+    version: "1.0.1"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "2DB99655785D614FC3BFCD6E8CBA2B95654513C13BA81B66A6BA185452F0D08D"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§61–64.1", "§64.2–64.12", "§66–70"]
+    depends_on: [product, repository_integration, architecture, infrastructure, public_data_interface, security_ingestion]
+    blocked_by: []
+    blocks: ["Phase promotion", "public release", "public predictive claims"]
+  - id: ui_ux
+    path: contracts/UI_UX_CONTRACT.md
+    version: "1.0.1"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-25"
+    content_hash: "CB817AF9DE40070FB65128DAD611822EC6E290E6F4103A16EA627C75DDBCF180"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§2–3", "§38–59", "§61", "§63", "§67 Phase 2", "§69"]
+    depends_on: [product, repository_integration, architecture, public_data_interface, release_acceptance]
+    blocked_by: []
+    blocks: ["public UI shell acceptance"]
+  - id: motion_interaction
+    path: contracts/MOTION_INTERACTION_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "5B4EB9039259333E269B974B72107765A2E47F268A2E77A9BA490925E5E0548F"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§46–52", "§56–58", "§61", "§63", "§69"]
+    depends_on: [product, ui_ux, release_acceptance]
+    blocked_by: []
+    blocks: ["public UI shell interaction acceptance"]
+  - id: data
+    path: contracts/DATA_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "78903F61546F7B27035ED28F3FA676C34D98347CE854AF5C0FD23F3CC1908237"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§27–32", "§35–37.1", "§61", "§64.1–64.12", "§65", "§67 Phase 3", "§68"]
+    depends_on: [architecture, infrastructure, public_data_interface, security_ingestion]
+    blocked_by: []
+    blocks: ["factual public activation until Gate A", "Phase 4 data use until later authorization"]
+  - id: source
+    path: contracts/SOURCE_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "9B7C0A51D5B1A7BA892DD7582230BDB2920A533417C20AE17C16A56AE8034FB1"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§27–31", "§34.1–36", "§37", "§61", "§64.1–64.12", "§65", "§67 Phase 3", "§68"]
+    depends_on: [architecture, infrastructure, security_ingestion, data]
+    blocked_by: []
+    blocks: ["FRED/ALFRED use", "CPI/GDP first-slice ingestion", "factual activation until separate approval"]
+  - id: ontology_crosswalk
+    path: contracts/ONTOLOGY_CROSSWALK_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "3322E9890E3DBFDC2597A092034A6E3DC9D0C4D5603AD89517684FE1F46D874B"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§31.1–31.6", "§32", "§37", "§61", "§64.1–64.12", "§65", "§67 Phase 3", "§68"]
+    depends_on: [data, source]
+    blocked_by: []
+    blocks: ["broad taxonomy/crosswalk implementation", "Phase 4+ crosswalk expansion until scoped approval"]
+  - id: testing
+    path: contracts/TESTING_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "02BA2C0BB63FA2534C14BCCB33A3346D59B6BCFF6B366A8F23D882D311FB7835"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§29–32", "§34.1–35.5", "§38.2", "§61–64.1", "§64.2–64.12", "§65", "§67 Phase 3", "§68"]
+    depends_on: [data, source, ontology_crosswalk, security_ingestion, release_acceptance]
+    blocked_by: []
+    blocks: ["Phase-3 regression obligations", "factual public activation requires separate approval"]
+  - id: state_model
+    path: contracts/STATE_MODEL_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "325C0E317A217A9DD93EF921FD203D08CD4CD978F22703906D1CB5CDF298E78A"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§3", "§6–9", "§20–20.1", "§31.3–31.5", "§37.1", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [product, architecture, data, source, ontology_crosswalk, public_data_interface]
+    blocked_by: []
+    blocks: ["Gate B until Phase 4B authoritative structural proof"]
+  - id: dependency_relationship
+    path: contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "B217E77459179454675CB1C07C60B78A07964F582B2E2642219216C0A7B90DA0"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§6–6.1", "§8", "§10–12", "§20–20.1", "§31.3–31.5", "§34.1–34.4", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [architecture, data, source, ontology_crosswalk, security_ingestion, state_model]
+    blocked_by: []
+    blocks: ["Gate B until accepted authoritative structural relationships"]
+  - id: derivation_transparency
+    path: contracts/DERIVATION_TRANSPARENCY_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "642AA05144644CBB84F739D37F71EACB01D0108877A3672A22A1A5C68C8EF938"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§3", "§8", "§20–20.1", "§31.3–31.5", "§37.1", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [public_data_interface, data, source, ontology_crosswalk, state_model, dependency_relationship]
+    blocked_by: []
+    blocks: ["Gate B until complete Phase-4B structural derivation"]
+  - id: allocation_propagation
+    path: contracts/ALLOCATION_PROPAGATION_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "895AF860B5C83999A9A7E36C2175790D6FA3F164C3682EF62F330DD2F3B66C01"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§7–14", "§20–20.1", "§31.3–31.5", "§34.1–34.4", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [architecture, data, state_model, dependency_relationship, derivation_transparency]
+    blocked_by: []
+    blocks: ["Gate B until real structural behavioral evidence"]
+  - id: phase4_testing
+    path: contracts/PHASE4_TESTING_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "7618D7ACA4E4F9097F83F8E0940CA3135D16C5B4C51935E1947E6A19BEDB397B"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§9–14", "§20–20.1", "§31.3–31.5", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [testing, release_acceptance, state_model, dependency_relationship, allocation_propagation, derivation_transparency]
+    blocked_by: ["Phase 4B authoritative structural implementation and evidence", "Phase-4A and Phase-4B Human QA and Taylor Gate-B approval"]
+    blocks: ["Gate B PASS until Phase-4A mechanics and Phase-4B authoritative structural evidence, Human QA, and Taylor approval"]

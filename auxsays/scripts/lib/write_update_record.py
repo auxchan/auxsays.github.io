@@ -5,6 +5,11 @@ from pathlib import Path
 from typing import Any
 import yaml
 
+from .patch_identity import (
+    REASON_BUILD_MISSING, REASON_FILENAME_BUILD_MISMATCH, InconsistentBuildIdentity,
+    assert_build_identity, identity_build, is_build_aware, patch_display_label, permalink_path,
+    record_version_slug,
+)
 from .normalize import (
     slugify,
     utc_now,
@@ -15,6 +20,24 @@ from .normalize import (
 )
 
 DEFAULT_CONSENSUS = "Insufficient data"
+
+# What a patch with ZERO accepted patch-specific reports says in public. Named because it is also the
+# state a record must be RETURNED to when its accepted population empties -- see
+# lib.report_counts.reconcile_record_counts, which retracts count projections against this exact text
+# so a record can never keep claiming reports it no longer has.
+DEFERRED_CONSENSUS_REPORT = ("Confirmed patch-specific consensus collection is deferred. "
+                             "This page currently reflects official-source ingestion only.")
+
+
+def deferred_quick_verdict(software: str, version: str) -> str:
+    """The headline verdict for a patch with ZERO accepted reports.
+
+    Named for the same reason as DEFERRED_CONSENSUS_REPORT: it is also the state a record must
+    be RETURNED to when its accepted population empties. On products whose coherence branch
+    writes a count into this field -- obs-studio does, via "has N user reports found" -- leaving
+    the old sentence behind republishes a number the record no longer stands behind."""
+    return (f"{software} {version} has an official AUXSAYS record. Confirmed patch-specific "
+            "consensus is deferred until the consensus refresh pipeline is active.")
 
 # Official-source Release Health issue signals: deterministic counts produced by an
 # adapter from a vendor status page. Surfaced in the UI as OFFICIAL vendor status,
@@ -58,6 +81,17 @@ ACROBAT_IDENTITY_FIELDS = (
     "security_bulletin_id",
 )
 
+# The Teams lane tracks ONE identity out of the many on Microsoft's version-history page, and the
+# edition is a third of it: New Teams and Classic Teams ship different builds on the same day for
+# the same platform and cloud. The adapter has always emitted `teams_edition`, but this allow-list
+# is what reaches disk, and the field was in none of the tuples -- so every written Teams record
+# carried platform and channel and silently dropped the edition. `test_teams_record_cleanup.py`
+# asserts the full three-part contract on each record, which was green only because zero Teams
+# records existed; activation would have made it red and invited someone to delete real records.
+TEAMS_IDENTITY_FIELDS = (
+    "teams_edition",
+)
+
 # Explicit cross-product applicability: the list of product_ids one official item applies
 # to, plus a human label. Opt-in. Lets a single official item feed several app pages while
 # preserving a common source identity and an auditable applicability list (never blind
@@ -67,10 +101,68 @@ APPLICABILITY_FIELDS = (
     "applies_to_label",
 )
 
-# All opt-in structured identity/applicability fields the official adapters may supply.
-OPTIONAL_STRUCTURED_FIELDS = (
-    OFFICE_APP_IDENTITY_FIELDS + ACROBAT_IDENTITY_FIELDS + APPLICABILITY_FIELDS
+# What the VENDOR's own release notes said about this app for this exact build. This is official
+# capture metadata -- a statement about what the source was found to say -- not a claim about the
+# software. ``not_documented_by_source`` deliberately mirrors ``not_provided_by_source``: it says
+# Microsoft published nothing app-specific for this build, and it must NEVER be read or rendered as
+# "there were no changes for this app". Those are different claims.
+OFFICE_APP_ATTRIBUTION_FIELDS = (
+    "official_app_attribution",
+    "official_app_attribution_label",
 )
+
+ATTRIBUTION_NOT_DOCUMENTED = "not_documented_by_source"
+ATTRIBUTION_SUITE_WIDE = "suite_wide_by_source"
+ATTRIBUTION_APP_NAMED = "app_named_by_source"
+ATTRIBUTION_APP_NAMED_AND_SUITE_WIDE = "app_named_and_suite_wide_by_source"
+
+# Strength order. A refresh may only ever move UP this ladder.
+#
+# Precedent: ``official_patch_notes_capture_status`` is already a strengthening-only ratchet -- a
+# strong capture status is never overwritten by a failed observation, and the per-run truth lives in
+# the bounded ``official_source_attempts`` ledger instead. Attribution is the same kind of fact, and
+# the observation channel is just as lossy (a regex over a long multi-version HTML page, fetched
+# under a byte cap). "Not observed this run" must not erase "observed last run", because a build's
+# release notes are a historical fact about one immutable build, not a live pointer like the Windows
+# KB or an issue-lifecycle count -- the two field groups that legitimately DO accept downgrades.
+ATTRIBUTION_RANK = {
+    "": -1,
+    ATTRIBUTION_NOT_DOCUMENTED: 0,
+    ATTRIBUTION_SUITE_WIDE: 1,
+    ATTRIBUTION_APP_NAMED: 2,
+    ATTRIBUTION_APP_NAMED_AND_SUITE_WIDE: 3,
+}
+
+ATTRIBUTION_LABELS = {
+    ATTRIBUTION_NOT_DOCUMENTED: "Not documented in the official release notes for this build",
+    ATTRIBUTION_SUITE_WIDE: "Documented as an all-apps (suite-wide) change",
+    ATTRIBUTION_APP_NAMED: "Named in the official release notes",
+    ATTRIBUTION_APP_NAMED_AND_SUITE_WIDE: "Named in the official notes, plus an all-apps change",
+}
+
+# All opt-in structured identity/applicability fields the official adapters may supply.
+#
+# Attribution is deliberately NOT in this tuple: the loop that consumes it advances on any change,
+# which would silently downgrade a record the moment one parse failed to see the app block.
+OPTIONAL_STRUCTURED_FIELDS = (
+    OFFICE_APP_IDENTITY_FIELDS + ACROBAT_IDENTITY_FIELDS + TEAMS_IDENTITY_FIELDS
+    + APPLICABILITY_FIELDS
+)
+
+
+def _shrinks_applicability(existing: Any, incoming: Any) -> bool:
+    """True when the incoming applicability list drops product ids the record already claims."""
+    if not isinstance(existing, list) or not isinstance(incoming, list):
+        return False
+    return bool(set(existing) - set(incoming))
+
+
+def attribution_rank(value: Any) -> int:
+    return ATTRIBUTION_RANK.get(str(value or "").strip(), -1)
+
+
+def attribution_label(value: Any) -> str:
+    return ATTRIBUTION_LABELS.get(str(value or "").strip(), "")
 
 
 def _file_size_status(record: dict[str, Any]) -> str:
@@ -83,12 +175,38 @@ def _file_size_status(record: dict[str, Any]) -> str:
     return "pending_adapter_support"
 
 def record_slug(record: dict[str, Any]) -> str:
+    """Filename version component. Build-aware products append their exact build so two builds
+    under one YYMM cannot collide on one filename; every other product is unchanged."""
     version = record.get("version") or record.get("title") or record.get("record_id")
-    return slugify(version)
+    return record_version_slug(version, record.get("target_build"), record.get("product_id"))
+
+class MissingPublicationDate(ValueError):
+    """Raised when a record reaches the writer with no establishable publication date.
+
+    The writer used to substitute `utc_now()` in two places -- the filename slug here and the
+    front-matter `update_published_at` below. That is not a default; it is a fabrication, and it
+    is indistinguishable downstream from a real vendor date: it renders as "Released <today>",
+    sorts as the newest patch on the homepage and the feed, and feeds every freshness comparison.
+
+    Every adapter that can fail to read a date now drops the candidate instead, so nothing should
+    ever reach this. It is a backstop, and it is loud on purpose: a silent substitution is how the
+    problem survived in the first place.
+    """
+
+
+def _require_published(record: dict[str, Any]) -> str:
+    published = str(record.get("published_at") or "").strip()
+    if not published:
+        raise MissingPublicationDate(
+            "record %r (%s) has no publication date; an adapter must drop an undated candidate "
+            "rather than let the writer invent one"
+            % (record.get("record_id") or record.get("version"), record.get("product_id")))
+    return published
+
 
 def output_path(output_dir: Path, record: dict[str, Any]) -> Path:
-    published = str(record.get("published_at") or utc_now())
-    date_slug = published[:10] if len(published) >= 10 else utc_now()[:10]
+    published = _require_published(record)
+    date_slug = published[:10]
     product_slug = slugify(record.get("software") or record.get("product_id"))
     return output_dir / f"{date_slug}-{product_slug}-{record_slug(record)}.md"
 
@@ -107,6 +225,18 @@ def _dump_record(front: dict[str, Any], body: str = "") -> str:
 
 
 def _matching_existing_path(output_dir: Path, record: dict[str, Any]) -> Path | None:
+    """The existing record this incoming record refreshes, or None to create a new one.
+
+    The exact canonical filename is tried first. The scan below exists because that filename embeds
+    the publication DATE: when a vendor corrects a release date the expected name changes, and
+    without the scan the same patch would be written twice. It matches on identity, not on filename.
+
+    For a BUILD-AWARE product the identity includes the exact build. Matching on version alone here
+    meant an incoming sibling build resolved to a DIFFERENT build's record and refreshed it --
+    ``target_build`` advanced to the sibling while the filename and permalink stayed behind, leaving
+    a record whose declared build no longer matched the evidence keyed to it. Version-only products
+    are unaffected: their build slot is always '' on both sides, so the comparison is a no-op and
+    date-drift refresh behaves exactly as it always has."""
     expected = output_path(output_dir, record)
     if expected.exists():
         return expected
@@ -116,12 +246,17 @@ def _matching_existing_path(output_dir: Path, record: dict[str, Any]) -> Path | 
     if not product_id or not version:
         return None
 
+    build_aware = is_build_aware(product_id)
+    incoming_build = identity_build(record, product_id)
     for path in sorted(output_dir.glob("*.md")):
         front, _ = _front_matter(path)
         if str(front.get("product_id") or "").strip() != product_id:
             continue
-        if str(front.get("update_version") or "").strip() == version:
-            return path
+        if str(front.get("update_version") or "").strip() != version:
+            continue
+        if build_aware and identity_build(front, product_id) != incoming_build:
+            continue  # a sibling build is a DIFFERENT patch, never this record
+        return path
     return None
 
 
@@ -146,22 +281,39 @@ def _capture_status(record: dict[str, Any], *, body: str) -> str:
     return str(record.get("capture_status") or "captured-from-primary")
 
 
+def _public_version_label(record: dict[str, Any], version: Any) -> str:
+    """Public label for a patch: 'X' normally, 'X (Build Y)' for a build-aware product.
+
+    Several builds ship under one marketing version, so a version-only label made sibling pages
+    indistinguishable -- same title, same feed card, same meta description, four different verdicts.
+    """
+    build = identity_build(record, record.get("product_id"))
+    return f"{version} (Build {build})" if build else str(version)
+
+
 def _official_source_attempt(record: dict[str, Any], checked_at: str, *, body: str, checksums_body: str) -> dict[str, Any]:
     source_url = record.get("source_url") or record.get("official_patch_notes_source_url") or record.get("official_url") or ""
-    return {
+    attempt = {
         "at": checked_at,
         "url": source_url,
         "status": _capture_status(record, body=body),
         "body_captured": bool(body),
         "checksums_captured": bool(checksums_body),
     }
+    # What THIS observation saw for app attribution. The headline field only ratchets upward, so
+    # without this the run that saw a weaker state left no trace at all and the refusal to downgrade
+    # was unauditable -- an operator could not tell a lossy parse from a vendor rewording.
+    observed = str(record.get("official_app_attribution") or "").strip()
+    if observed:
+        attempt["app_attribution_observed"] = observed
+    return attempt
 
 def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     version = record.get("version") or record.get("title") or "Update"
     version_slug = record_slug(record)
     software = record.get("software") or record.get("product_id")
     company = record.get("company") or record.get("company_id")
-    published = record.get("published_at") or utc_now()
+    published = _require_published(record)
     checked_at = record.get("source_last_checked") or record.get("_source_checked_at") or utc_now()
     source_url = record.get("source_url") or record.get("official_url")
     body = normalize_release_notes_body(record.get("body") or "No official release-note body was captured.")
@@ -179,8 +331,12 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     official_source_type = record.get("official_source_type") or record.get("source_type") or "official-source"
     official_note_status = record.get("official_note_status") or ("release_notes_captured" if official_source_type in {"release_notes", "fixed_issues", "security_advisory", "changelog"} else "official_source_captured")
     official_note_label = record.get("official_note_label") or ("Official release notes" if official_source_type == "release_notes" else "Official source summary")
-    quick_verdict = record.get("quick_verdict") or f"{software} {version} has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active."
-    consensus_report = record.get("consensus_report") or "Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source ingestion only."
+    # Build-aware products name the exact patch even at zero reports: 64 Windows records would
+    # otherwise each publish "Windows 11 25H2 has an official AUXSAYS record", one sentence
+    # for 23 different cumulative updates.
+    quick_verdict = record.get("quick_verdict") or deferred_quick_verdict(
+        software, patch_display_label(version, record.get("target_build"), record.get("product_id")))
+    consensus_report = record.get("consensus_report") or DEFERRED_CONSENSUS_REPORT
     known_issues_present = record.get("known_issues_present")
     if known_issues_present is None and record.get("complaint_themes"):
         known_issues_present = True
@@ -190,9 +346,14 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     ]
     front = {
         "layout": "aux-update",
-        "title": f"{software} {version} official update breakdown",
-        "description": f"Official {software} update record captured from {company}.",
-        "permalink": f"/updates/{record['company_id']}/{record['product_id']}/{version_slug}/",
+        "title": f"{software} {_public_version_label(record, version)} official update breakdown",
+        "description": (f"Official {software} update record captured from {company} for "
+                        f"{_public_version_label(record, version)}."),
+        # Canonical public URL. Version-only products keep the established four-segment shape;
+        # a build-aware product gains one exact-build segment, so two builds under one YYMM are
+        # two distinct public pages instead of silently sharing one.
+        "permalink": permalink_path(record["company_id"], record["product_id"], version,
+                                    record.get("target_build")),
         "update_entry": True,
         "company_id": record["company_id"],
         "product_id": record["product_id"],
@@ -214,8 +375,8 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         "patch_file_size_note": record.get("file_size_note") or "",
         "patch_file_size_status": _file_size_status(record),
         "update_status": "current",
-        "update_feed_title": f"{software} {version}",
-        "update_detail_title": f"{software} {version}",
+        "update_feed_title": f"{software} {_public_version_label(record, version)}",
+        "update_detail_title": f"{software} {_public_version_label(record, version)}",
         "update_consensus_label": consensus_label,
         "update_report_count": report_count,
         "update_consensus_confidence": consensus_confidence,
@@ -267,7 +428,32 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     for field in OPTIONAL_STRUCTURED_FIELDS:
         if record.get(field) is not None:
             front[field] = record[field]
+    # Official app attribution. Emitted on CREATE here and ratcheted on REFRESH in
+    # refresh_existing_record -- both halves are required, or a field that only ever appears at
+    # creation would be frozen forever, and one that only ever appears on refresh would never
+    # appear at all.
+    # Vocabulary-checked on CREATE too. The refresh ratchet rejects anything outside the ladder,
+    # but create copied the incoming value verbatim -- so an adapter bug could have written a
+    # free-text claim (including the substantive-negative one this field exists to avoid) straight
+    # into front matter. The label is always derived, never trusted from the caller.
+    attribution = str(record.get("official_app_attribution") or "").strip()
+    if attribution_rank(attribution) >= 0:
+        front["official_app_attribution"] = attribution
+        front["official_app_attribution_label"] = attribution_label(attribution)
     return front
+
+
+def _assert_record_consistent(path: Path, front: dict[str, Any]) -> None:
+    """Refuse a record whose target_build, canonical permalink and canonical filename disagree.
+
+    Uses the identity authority's shared rule -- the same one the consensus lane's ownership
+    validator delegates to -- so official ingestion and consensus cannot hold two different notions
+    of a valid build-aware record."""
+    assert_build_identity(
+        front.get("product_id"), front.get("update_version"), front.get("target_build"),
+        front.get("permalink"), path.name,
+        detail=f"generated record {path.name}",
+    )
 
 
 def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, str]:
@@ -342,20 +528,69 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
     # build advance (KB-A/build-A -> KB-B/build-B) never leaves a stale target_* on the
     # record. Consensus counting gates Windows user reports against these fields, so a
     # stale value here would be exactly the rollover bug this sprint prevents.
+    #
+    # EXCEPT the build itself, once the product is build-aware. That in-place advance was the
+    # right repair while ONE record tracked a whole servicing train and had to roll every Patch
+    # Tuesday. Now one record IS one cumulative update: its build is its identity, fixed at
+    # creation and stamped into its permalink and its filename. Advancing `target_os_build` here
+    # would leave the page's own `target_build`, URL and filename saying build A while the fields
+    # the counting gate actually reads say build B -- so A's counted reports would silently stop
+    # counting and B's would land on A's page. A rollover is a NEW record now, not an edit to a
+    # published one. Same shape as the PowerPoint sibling-build write guard.
     for field in WINDOWS_IDENTITY_FIELDS:
-        if field in record and record[field] is not None and existing.get(field) != record[field]:
-            existing[field] = record[field]
-            material_changed = True
+        if field not in record or record[field] is None or existing.get(field) == record[field]:
+            continue
+        if (field == "target_os_build" and is_build_aware(existing.get("product_id"))
+                and str(existing.get("target_build") or "").strip()):
+            raise InconsistentBuildIdentity(
+                REASON_BUILD_MISSING if not str(record[field] or "").strip()
+                else REASON_FILENAME_BUILD_MISMATCH,
+                f"refresh would move {path.name} from build "
+                f"{existing.get('target_build')!r} to {record[field]!r}; a new cumulative "
+                "update needs its own record, not an edit to this one",
+            )
+        existing[field] = record[field]
+        material_changed = True
 
     # Office/Acrobat structured identity + applicability advance on change so a channel/
     # build/track/version rollover never leaves a stale identity on the record.
     for field in OPTIONAL_STRUCTURED_FIELDS:
         if field in record and record[field] is not None and existing.get(field) != record[field]:
+            if field in APPLICABILITY_FIELDS and _shrinks_applicability(
+                    existing.get("applicability"), record.get("applicability")):
+                # A re-parse that happened to match only the app block must not drop an
+                # already-established suite-wide applicability. Widening is fine; narrowing is a
+                # lost observation, not a vendor change. The LABEL is held back with the list --
+                # protecting one and letting the other advance just desyncs them.
+                continue
             existing[field] = record[field]
             material_changed = True
 
+    # Official app attribution: strengthening-only ratchet (see ATTRIBUTION_RANK). A weaker
+    # observation is recorded in the attempts ledger by the block above and never touches the
+    # headline field, so one failed parse cannot downgrade a record.
+    incoming_attr = str(record.get("official_app_attribution") or "").strip()
+    existing_attr = str(existing.get("official_app_attribution") or "").strip()
+    if incoming_attr and attribution_rank(incoming_attr) > attribution_rank(existing_attr):
+        existing["official_app_attribution"] = incoming_attr
+        existing["official_app_attribution_label"] = attribution_label(incoming_attr)
+        material_changed = True
+    elif existing_attr and not str(existing.get("official_app_attribution_label") or "").strip():
+        # Equal rank never rewrites the value, so a record whose label is missing would keep an
+        # unreadable state forever. Repair the derived label without touching the claim.
+        existing["official_app_attribution_label"] = attribution_label(existing_attr)
+        material_changed = True
+
     if material_changed:
         existing["record_last_updated"] = checked_at
+
+    # STRUCTURAL GATE. The merged record must describe ONE build. This catches both an already-
+    # corrupt record on disk and any future path that lets an incoming build advance in place --
+    # ``target_build`` is identity for a build-aware product, so it can never move while the
+    # filename and permalink stay behind. Checked BEFORE the write, and before the unchanged
+    # early-return: a record that is already inconsistent must be refused even when this refresh
+    # would have changed nothing, otherwise the corruption is silently accepted every run.
+    _assert_record_consistent(path, existing)
 
     if existing == original:
         return path, "unchanged"
@@ -370,5 +605,7 @@ def write_record(output_dir: Path, record: dict[str, Any], overwrite_existing: b
     if path.exists() and not overwrite_existing:
         return refresh_existing_record(path, record)
     front = build_front_matter(record)
+    # Same structural gate on the create path: nothing inconsistent is ever written.
+    _assert_record_consistent(path, front)
     atomic_write_text(path, _dump_record(front))
     return path, "created"

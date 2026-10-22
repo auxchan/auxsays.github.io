@@ -11,6 +11,7 @@ import argparse
 import json
 import re
 from collections import defaultdict
+from lib.patch_identity import patch_key, key_from as patch_key_from
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -122,8 +123,10 @@ def load_state(path: Path) -> dict[str, Any]:
     return payload if isinstance(payload, dict) else {}
 
 
-def record_key(data: dict[str, Any]) -> tuple[str, str]:
-    return (str(data.get("product_id") or "").strip(), str(data.get("update_version") or "").strip())
+def record_key(data: dict[str, Any]) -> tuple[str, str, str]:
+    """Canonical patch identity for a generated record. The build slot is '' for every product
+    without a build contract, so record<->evidence joins for those products are unchanged."""
+    return patch_key_from(data)
 
 
 def report_count(data: dict[str, Any]) -> int:
@@ -180,7 +183,7 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
     evidence = load_evidence(EVIDENCE_PATH)
     state = load_state(STATE_PATH)
     source_state_by_product = state.get("sources") if isinstance(state.get("sources"), dict) else {}
-    evidence_by_key: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    evidence_by_key: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
     integrity_errors: list[dict[str, Any]] = []
     evidence_freshness_errors: list[dict[str, Any]] = []
     record_freshness_warnings: list[dict[str, Any]] = []
@@ -215,10 +218,10 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
                 },
             )
         if product_id and version:
-            evidence_by_key[(product_id, version)].append(item)
+            evidence_by_key[patch_key(product_id, version, item.get("target_build"))].append(item)
 
     generated_records: list[dict[str, Any]] = []
-    generated_by_key: dict[tuple[str, str], dict[str, Any]] = {}
+    generated_by_key: dict[tuple[str, str, str], dict[str, Any]] = {}
     for path in sorted(GENERATED_DIR.glob("*.md")):
         data = load_front_matter(path)
         if not data.get("update_entry"):
@@ -234,6 +237,9 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
             "title": data.get("title"),
             "product_id": key[0],
             "update_version": key[1],
+            # Carried so the record<->evidence join below uses the SAME identity triple the
+            # evidence side was grouped by; '' for every product without a build contract.
+            "target_build": key[2],
             "update_status": data.get("update_status"),
             "generated_report_count": generated_count,
             "update_report_count": int(data.get("update_report_count") or 0),
@@ -262,7 +268,7 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
     stale_records: list[dict[str, Any]] = []
 
     for item in records_with_reports:
-        key = (item["product_id"], item["update_version"])
+        key = patch_key(item["product_id"], item["update_version"], item.get("target_build"))
         evidence_rows = evidence_by_key.get(key, [])
         counted_rows = [row for row in evidence_rows if row.get("counted") is not False]
         latest_evidence_checked = latest_time([row.get("captured_at") for row in evidence_rows])
@@ -290,7 +296,7 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
 
     evidence_backed_keys = set(evidence_by_key)
     for item in generated_records:
-        key = (item["product_id"], item["update_version"])
+        key = patch_key(item["product_id"], item["update_version"], item.get("target_build"))
         if item["generated_report_count"] <= 0 and key not in evidence_backed_keys:
             continue
         version_slug = slugify(item.get("update_version"))
@@ -366,10 +372,13 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
             {
                 "product_id": product_id,
                 "update_version": version,
+                # Empty for every product without a build contract; the exact build for a
+                # build-aware product, so two builds under one YYMM report as two groups.
+                "target_build": build,
                 "structured_evidence_count": len([row for row in rows if row.get("counted") is not False]),
                 "latest_structured_evidence_captured_at": latest_time([row.get("captured_at") for row in rows]),
             }
-            for (product_id, version), rows in sorted(evidence_by_key.items())
+            for (product_id, version, build), rows in sorted(evidence_by_key.items())
         ],
         "mismatches": mismatches,
         "evidence_without_matching_record": evidence_without_matching_record,

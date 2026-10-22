@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "phase4b-source-evidence-1.0.0",
+  "authority": "U.S. Energy Information Administration",
+  "report": "Weekly Petroleum Status Report",
+  "releaseDate": "2026-08-19",
+  "validWeekEnding": "2026-08-14",
+  "publicTime": "2026-08-19T14:30:00Z",
+  "retrievedTime": "2026-08-22T04:47:28Z",
+  "methodologyUrl": "https://www.eia.gov/petroleum/supply/weekly/",
+  "artifacts": [
+    {
+      "sourceArtifactId": "eia-wpsr:table2:2026-08-19",
+      "sourceUrl": "https://ir.eia.gov/wpsr/table2.csv",
+      "contentSha256": "304FCB173D22E9AF933295D716D3CFC07B7EB475995A8C8A5C1F7628B6A0AFB7",
+      "byteLength": 8367,
+      "enabledMetric": "U.S. percent operable refinery utilization",
+      "value": "97.2",
+      "unit": "percent"
+    },
+    {
+      "sourceArtifactId": "eia-wpsr:table4:2026-08-19",
+      "sourceUrl": "https://ir.eia.gov/wpsr/table4.csv",
+      "contentSha256": "9A6F6A3D12FB4A844271B7566E4C714E34BC9BFE7041DD287BFD5236CDF94341",
+      "byteLength": 2324,
+      "enabledMetric": "U.S. commercial crude stocks excluding SPR",
+      "value": "428.815",
+      "unit": "million_barrels"
+    }
+  ],
+  "rightsState": "ALLOW_WITH_ATTRIBUTION"
+}

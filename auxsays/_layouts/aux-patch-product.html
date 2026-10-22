@@ -39,14 +39,23 @@ layout: aux-base
           <span>{{ product.category_label }}</span>
           <span>{{ cadence_label }}</span>
         </div>
+        {% assign pid_clean = page.product_id | default: '' | strip %}{% if pid_clean != '' %}
+        <button type="button" class="patch-watch-toggle" data-watch-product="{{ page.product_id }}"
+                data-watch-label="{{ product.product_name | default: page.product_id }}"
+                data-watch-text-off="Watch product" data-watch-text-on="Watching"
+                aria-pressed="false" aria-label="Watch {{ product.product_name | default: page.product_id }}">
+          <span class="patch-watch-toggle__mark" aria-hidden="true"></span>
+          <span class="patch-watch-toggle__text" data-watch-text>Watch product</span>
+        </button>
+        {% endif %}
       </div>
       <div class="patch-intel-stat-card">
         {% if product_updates.size > 0 %}
         <span>{{ product_updates.size }}</span>
-        <em>documented patch records</em>
+        <em>tracked patch records</em>
         {% elsif product.ingestion_active %}
         <span>OFFICIAL SOURCE ACTIVE</span>
-        <em>awaiting first attributed record</em>
+        <em>awaiting first tracked patch</em>
         {% else %}
         <span>STAGED</span>
         <em>official source mapped</em>
@@ -54,7 +63,7 @@ layout: aux-base
       </div>
     </div>
     <div class="patch-card-links patch-intel-links">
-      {% if product.source_url != blank %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
+      {% assign psrc = product.source_url | default: '' | strip %}{% if psrc != '' %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
       <a href="{{ '/updates/' | relative_url }}">Global Patch Feed →</a>
     </div>
   </section>
@@ -90,7 +99,7 @@ layout: aux-base
       </div>
       <div class="patch-dossier-card">
         <h3>Official source</h3>
-        {% if product.source_url != blank %}
+        {% assign psrc = product.source_url | default: '' | strip %}{% if psrc != '' %}
         <p><a href="{{ product.source_url }}">{{ product.source_label | default: 'Official source' }} ↗</a></p>
         {% else %}
         <p>Official source pending.</p>

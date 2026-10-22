@@ -42,6 +42,44 @@ When working in this repo:
 - Do not downgrade credibility protections to make a task easier.
 - If instructions conflict, stop and report the conflict before making broad changes.
 
+### Progress-first triage
+
+The objective is credible production software: useful features, strong automation, professional UX,
+sufficient regression protection, and sustained forward progress. It is not maximal investigation.
+
+A discovered issue **blocks the current lane** only if it is one of:
+
+- a meaningful current user-facing defect;
+- patch evidence / verdict / attribution / integrity corruption;
+- broken production automation or deployment;
+- a security or data-loss risk;
+- an architectural defect that will predictably cause substantial rework if development continues
+  on top of it.
+
+Everything else gets a **bounded** investigation. If it is not proven blocking after that
+investigation: document it in [`docs/ENGINEERING_LEDGER.md`](docs/ENGINEERING_LEDGER.md), defer it,
+and continue. Plausible future problems do not become mandatory current sprints.
+
+**Do not run the audit cascade.** Fix A → notice hypothetical B → pause → audit B → discover
+historical C → audit C → block the roadmap on D is the failure mode. Do instead: fix A → test A →
+production-verify A → ledger B/C/D if materially plausible → continue.
+
+**A normal defect is closed** after: reproducible symptom; identified root cause; smallest complete
+implementation; focused non-vacuous regression test; relevant governed/CI suites pass; production
+or deployment verification where applicable. After those six gates, **stop**. Do not reopen because
+another hypothetical variation exists — open a deferred ledger item instead. Every resolved ledger
+entry carries a **Reopen only if** with objective conditions.
+
+**Adversarial review budget.** Normal implementation needs no fleet of review agents. Material
+data-integrity, writer or deployment repair gets one adversarial review. A second is justified only
+if the first found an executable, demonstrable defect. Do not launch repeated broad reviews to
+raise confidence once the objective gates are green.
+
+**Before proposing a new blocker, answer:** Is it broken in production now? Does it materially
+affect users, evidence credibility, deployment, security or imminent architecture? Is there an
+objective reproduction? Will continuing make it substantially harder to fix? If those are
+predominantly *no* — ledger it and proceed.
+
 ## Current priority product stack
 
 Focus depth before expansion.
@@ -82,19 +120,55 @@ Relevant product/workflow areas include:
 
 ## Verdict labels
 
-Use these decision labels where applicable:
+Exactly **eight** canonical verdicts, and the order is the risk order, most cautionary first:
 
-- `AVOID`
-- `WAIT`
-- `SAFE ENOUGH`
-- `OFFICIAL ONLY`
-- `INSUFFICIENT DATA`
-- `SECURITY UPDATE, TEST FIRST`
-- `MANUAL WATCH`
+1. `AVOID`
+2. `WAIT`
+3. `TEST FIRST`
+4. `SECURITY UPDATE`
+5. `SAFE ENOUGH`
+6. `OFFICIAL ONLY`
+7. `INSUFFICIENT DATA`
+8. `MANUAL WATCH`
 
-Do not overstate certainty.
+**One patch publishes one verdict.** `lib/patch_decision.py` is the only thing that chooses it:
+collectors, templates, the sort JS and summary prose all consume what it returns. A record's
+`update_decision_label`, `quick_verdict` and `update_consensus_summary` must all resolve to the
+same action; `qa_patch_records.py --publish-strict` fails the Pages build if they do not.
 
-For security-sensitive updates, do not casually tell users to avoid them. Prefer wording like:
+The normative definitions live in `lib/patch_decision.py` (`RISK_ORDER`, `LEGACY_ALIASES`),
+mirrored for Liquid in `auxsays/_data/patch_verdicts.yml` and pinned to it by
+`test_patch_decision_authority.py`. Do not add a verdict anywhere else.
+
+### Legacy phrasings
+
+These appear in older records. They are **recognised**, never produced, and are **not** separate
+verdicts — each resolves to one canonical action:
+
+| legacy phrasing | canonical action |
+|---|---|
+| `AVOID for production` | `AVOID` |
+| `WAIT for production systems` | `WAIT` |
+| `SAFE ENOUGH to test` | `SAFE ENOUGH` |
+| `SECURITY UPDATE, TEST FIRST` | `TEST FIRST` |
+
+An unrecognised label is **not** silently classified: it ranks last and the renderer publishes
+`INSUFFICIENT DATA` rather than unvetted prose.
+
+### Supporting prose is not a second verdict
+
+Do not overstate certainty. Prose may **qualify** the verdict; it may not name another one.
+
+Allowed — a qualification:
+
+> Verdict `WAIT`. "Production editors should avoid installing this during an active deadline."
+
+Not allowed — two published decisions:
+
+> Verdict `WAIT`, summary opening `AVOID: ...`
+
+For security-sensitive updates, do not casually tell users to avoid them. This is **supporting
+prose**, not a verdict; the verdict is still one of the eight above:
 
 > Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.
 
@@ -474,6 +548,43 @@ bundle exec jekyll build --trace
 ```
 
 If a validation failure is unrelated to the task, report it honestly and do not pretend it passed.
+
+## Merging
+
+A pull request may not be merged while its CI is red. This was broken on 2026-10-07: PR #163's
+`ci-integrity` run concluded `failure`, and the pull request merged nineteen seconds later, because
+reading the status and issuing the merge were a single uninterrupted command.
+
+GitHub cannot enforce this here. It was measured, not assumed: this repository belongs to a personal
+account, and a ruleset that requires a pull request or a passing status check refuses
+`github-actions[bot]` pushes too, which would break all four writeback lanes. No bypass actor covers
+that identity (see AUX-013 in [`docs/ENGINEERING_LEDGER.md`](docs/ENGINEERING_LEDGER.md) for the
+four probe results).
+
+So the gate is repo-owned. **Do not merge with `gh pr merge`.** Use:
+
+```bash
+python auxsays/scripts/ci/guarded_merge.py <PR>           # report the verdict
+python auxsays/scripts/ci/guarded_merge.py <PR> --merge   # merge only if it allows
+```
+
+It resolves the required run for the pull request's exact current head SHA, refuses a missing,
+unfinished, failing or stale result, re-reads the head immediately before merging, and passes that
+SHA to GitHub as a lease. It exits 1 when it refuses.
+
+There is no override flag, by design, and the CLI takes only a pull request number and `--merge`.
+It used to accept `--workflow`, `--base` and `--repo`; an adversarial review pointed out that
+`--workflow` WAS the override, because every other workflow in this repo is green on every commit
+by virtue of never having run on it.
+
+A refusal means fix the commit. Two specific things not to do:
+
+- **Do not chain the gate into a merge.** `guarded_merge.py 163 && gh pr merge 163` passes a casual
+  reading of this section and reproduces #163 exactly. Report mode exits 0 on an allow, so the
+  chain succeeds and throws the gate's whole purpose away.
+- **Do not merge on a run that belongs to an earlier SHA**, or to a hand-dispatched run of
+  `ci-integrity` standing in for the pull request's own. The gate refuses both; do not work around
+  the refusal by producing one.
 
 ## Delivery expectations
 

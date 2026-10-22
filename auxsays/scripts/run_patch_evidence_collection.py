@@ -40,8 +40,11 @@ COLLECTORS = {
 # --product-id, so it invokes every REGISTERED collector. To keep the dormant Windows Learn
 # Q&A collector from ever being invoked accidentally by that hourly writeback, it is NOT part
 # of the static COLLECTORS base; it is registered ONLY when an explicit enable flag is set.
-# The default (flag absent) is always "not registered" -> no Windows writeback. No workflow
-# sets this flag; enabling it is a deliberate, separate activation step.
+# The default (flag absent) is always "not registered" -> no Windows writeback. NOTE: this flag
+# IS set in production -- obs-evidence-collection.yml sets it to "true" in the env of the scheduled
+# `--write` "Collect patch evidence" step, so the Windows collector IS registered on every 6-hourly
+# run. (An earlier version of this comment claimed no workflow set it; that was stale, and it made
+# the Windows writeback look unreachable during a reachability audit.)
 WINDOWS_LEARN_QNA_PRODUCT_ID = "microsoft-windows-11"
 WINDOWS_LEARN_QNA_ENABLE_ENV = "AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK"
 
@@ -69,9 +72,10 @@ def windows_learn_qna_writeback_enabled(env: dict[str, str] | None = None) -> bo
 # always-on base would make the hourly scheduled ``--write`` writeback treat Acrobat
 # consensus as active while every source is blocked. So, exactly like the Windows Learn Q&A
 # collector above, it is registered ONLY when an explicit enable flag is set. The default
-# (flag absent) is always "not registered". No workflow sets this flag; turning it on --
-# together with proving a reachable source and re-adding the workflow routing -- is a
-# deliberate, separate activation step.
+# (flag absent) is always "not registered". NOTE: this flag IS set in production -- Acrobat
+# consensus was activated once the keyless inSided/Algolia discovery method proved reachable from
+# CI (PR #23), and obs-evidence-collection.yml sets it to "true" in the env of the scheduled
+# `--write` step. The paragraph above records why it was originally held off, not today's state.
 ACROBAT_CONSENSUS_PRODUCT_IDS = ("adobe-acrobat-reader", "adobe-acrobat-pro")
 ACROBAT_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_ACROBAT_CONSENSUS"
 
@@ -96,6 +100,8 @@ def acrobat_consensus_enabled(env: dict[str, str] | None = None) -> bool:
 # dry_run dispatch, so a scheduled ``--write`` never registers or writes PowerPoint evidence.
 POWERPOINT_CONSENSUS_PRODUCT_ID = "microsoft-powerpoint"
 POWERPOINT_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_POWERPOINT_CONSENSUS"
+TEAMS_CONSENSUS_PRODUCT_ID = "microsoft-teams"
+TEAMS_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_TEAMS_CONSENSUS"
 
 
 def powerpoint_consensus_enabled(env: dict[str, str] | None = None) -> bool:
@@ -110,6 +116,30 @@ def powerpoint_consensus_enabled(env: dict[str, str] | None = None) -> bool:
     return str(source.get(POWERPOINT_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
 
 
+ORCHESTRATED_PRODUCTS_ENV = "AUXSAYS_ORCHESTRATED_PRODUCTS"
+
+
+def teams_consensus_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for registering the Teams community collector.
+
+    Explicit true-only, the same shape as the other gated collectors: every other value --
+    absent, empty, "false", "0", "1", "yes", "on" -- returns False. This avoids the
+    bool(os.getenv(...)) pitfall where the string "false" is truthy."""
+    source = os.environ if env is None else env
+    return str(source.get(TEAMS_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
+
+
+def orchestrated_products(env: dict[str, str] | None = None) -> set[str]:
+    """Products whose collection is owned by the orchestration graph, not by this runner.
+
+    Comma-separated product ids. A product listed here is removed from the collector registry so
+    the legacy path physically cannot collect it -- the single-authoritative-path guarantee is
+    structural, not a convention."""
+    source = os.environ if env is None else env
+    raw = str(source.get(ORCHESTRATED_PRODUCTS_ENV, "") or "")
+    return {p.strip() for p in raw.split(",") if p.strip()}
+
+
 def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     """Return the runtime collector registry: the always-on base plus each default-off
     collector IFF its activation flag is explicitly enabled. This is the single place that
@@ -117,11 +147,19 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     its flag is off. Gated collector classes are imported lazily so they are only pulled in
     when actually enabled.
 
-    - Windows Learn Q&A: ``AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK``.
-    - Adobe Acrobat (Reader + Pro) consensus: ``AUXSAYS_ENABLE_ACROBAT_CONSENSUS`` -- held
-      off because both discovery methods are currently blocked from CI (see PR #23).
-    - Microsoft PowerPoint consensus PILOT: ``AUXSAYS_ENABLE_POWERPOINT_CONSENSUS`` -- default
-      off; the workflow only sets it for a manual dry_run, never a scheduled ``--write``."""
+    All three flags below are SET to "true" in production, in the env of the scheduled ``--write``
+    step of obs-evidence-collection.yml. "Default off" describes the default, not the deployment.
+
+    - Windows Learn Q&A: ``AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK`` -- registered on every
+      scheduled run.
+    - Adobe Acrobat (Reader + Pro) consensus: ``AUXSAYS_ENABLE_ACROBAT_CONSENSUS`` -- activated
+      once the keyless inSided/Algolia discovery proved reachable from CI (PR #23); registered on
+      every scheduled run.
+    - Microsoft PowerPoint consensus: ``AUXSAYS_ENABLE_POWERPOINT_CONSENSUS`` -- default off, but
+      SET to "true" on the scheduled ``--write`` step in production. PowerPoint is nonetheless not
+      collected here: ``AUXSAYS_ORCHESTRATED_PRODUCTS`` removes it from this registry because the
+      orchestration graph owns it (no double collection). The exclusion, not the flag, is what
+      keeps it out."""
     collectors: dict[str, Any] = dict(COLLECTORS)
     if windows_learn_qna_writeback_enabled(env):
         from patch_collectors.microsoft_windows import WindowsLearnQnaCollector
@@ -136,6 +174,15 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     if powerpoint_consensus_enabled(env):
         from patch_collectors.microsoft_powerpoint import PowerPointLearnQnaCollector
         collectors[POWERPOINT_CONSENSUS_PRODUCT_ID] = PowerPointLearnQnaCollector
+    if teams_consensus_enabled(env):
+        from patch_collectors.microsoft_teams import TeamsCommunityCollector
+        collectors[TEAMS_CONSENSUS_PRODUCT_ID] = TeamsCommunityCollector
+    # NO DOUBLE COLLECTION. A product driven by the orchestration graph is REMOVED from this
+    # registry, so the legacy path cannot also collect it in the same run. Enforcing it here rather
+    # than by workflow discipline means there is exactly one authoritative execution path per
+    # product no matter how the runner is invoked -- including an explicit --product-id.
+    for product_id in orchestrated_products(env):
+        collectors.pop(product_id, None)
     return collectors
 
 
@@ -264,13 +311,30 @@ def _write_github_summary(outcome: str, writeback_eligible: bool, per_collector:
         pass
 
 
+def _extra_write_surface(product_id: str) -> list[Path]:
+    """Additional files a specific collector is allowed to write, beyond evidence + records.
+
+    Kept here beside the transaction rather than inside the collector: the surface is what
+    the RUNNER promises to snapshot and restore, so it has to be declared where the
+    transaction is built.
+    """
+    if product_id in ("adobe-acrobat-reader", "adobe-acrobat-pro"):
+        from patch_collectors.adobe_acrobat_community import TIER2_PATH, TIER3_PATH
+        return [TIER2_PATH, TIER3_PATH]
+    return []
+
+
 def main(argv: list[str] | None = None) -> int:
     collectors = build_collectors()
     parser = argparse.ArgumentParser(description="Run AUXSAYS patch evidence collection.")
     parser.add_argument(
         "--product-id",
         action="append",
-        choices=sorted(collectors),
+        # Orchestrated products stay ACCEPTABLE on the CLI even though this runner will not collect
+        # them: the workflow forwards a dispatch input verbatim, and moving a product to the graph
+        # must not turn a previously valid invocation into an argument error. They are skipped with
+        # a notice below instead.
+        choices=sorted(set(collectors) | orchestrated_products()),
         help="Product to collect. May be passed more than once. Defaults to all registered collectors.",
     )
     parser.add_argument("--update-version", action="append", help="Exact update_version filter. May be passed more than once.")
@@ -283,6 +347,19 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     product_ids = args.product_id or sorted(collectors)
+    # An EXPLICIT --product-id for a product the orchestration graph owns is not an error and is
+    # certainly not a reason to collect it here anyway -- that would be the double collection the
+    # exclusion exists to prevent. Drop it with a visible notice; the graph's own job collects it.
+    orchestrated = orchestrated_products() & set(product_ids)
+    if orchestrated:
+        for product_id in sorted(orchestrated):
+            print(f"::notice title=Orchestrated lane::{product_id} is collected by the "
+                  f"orchestration graph, not this runner; skipping here.", flush=True)
+        product_ids = [p for p in product_ids if p not in orchestrated]
+    if not product_ids:
+        print("[auxsays] nothing to collect in this runner (all requested products are "
+              "orchestrated).", flush=True)
+        return 0
     budget = rb.RuntimeBudget()
     rb.set_run_budget(budget)  # cleared after the collector loop; lets DaVinci/OBS/Windows/Premiere total-bound their body reads via bounded_read
     context = CollectorContext(
@@ -324,7 +401,14 @@ def main(argv: list[str] | None = None) -> int:
         # this collector's baseline). Exception catching alone is insufficient; this is the isolation.
         # Production write mode REQUIRES git-based mutation detection (require_git=True): if git is
         # unavailable the transaction is unsafe and the run hard-aborts -- never a silent degrade.
-        txn = CollectorTransaction(REPO_ROOT, [EVIDENCE_PATH, GENERATED_DIR], require_git=True) if context.write else None
+        # The Acrobat collector also writes its own Level-2/Level-3 context files, so those are
+        # part of ITS declared surface -- otherwise the transaction correctly reads them as an
+        # undeclared mutation and rolls the whole collector back, which is exactly what the
+        # first production run did. Declared per product, not globally: no other collector may
+        # touch them, and rollback still has to restore them byte-for-byte.
+        surface = [EVIDENCE_PATH, GENERATED_DIR]
+        surface.extend(_extra_write_surface(product_id))
+        txn = CollectorTransaction(REPO_ROOT, surface, require_git=True) if context.write else None
         try:
             if txn is not None:
                 txn.begin()  # raises GitUnavailable (fail closed) if git is missing / not a work tree

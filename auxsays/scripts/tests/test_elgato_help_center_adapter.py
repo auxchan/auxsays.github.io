@@ -15,6 +15,8 @@ _REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
 
 from adapters import elgato_help_center as elgato
+from pathlib import Path as _P
+ELGATO_SOURCE_TEXT = (_P(elgato.__file__)).read_text(encoding="utf-8")
 import patch_ingest
 
 
@@ -43,8 +45,14 @@ def prog_url(i: int) -> str:
 
 
 def _match_html(i: int) -> str:
+    # These fixtures exercise DISCOVERY and starvation, not dates, and they carried no date at all
+    # because none was needed -- the adapter used to invent one. It no longer does: an article
+    # whose publication date cannot be established is not an ingestible candidate, so a dateless
+    # fixture would make every "position i is reached" assertion below vacuously unreachable.
+    # The date is varied by index so a sort assertion could not pass on a constant.
     return (f'<html><head><title>Elgato Stream Deck 7.{i}.0 Release Notes | Elgato</title></head>'
             f'<body><article><h1>Elgato Stream Deck 7.{i}.0 Release Notes</h1>'
+            f'<time datetime="2026-06-{(i % 27) + 1:02d}T00:00:00Z">June 2026</time>'
             f'<div class="article-body">Stream Deck 7.{i}.0 notes.</div></article></body></html>')
 
 
@@ -547,6 +555,166 @@ def run() -> int:
         check("Part G: diagnostics expose total_discovered and retained_count", f"total_discovered={cap + 50}" in d and f"retained_count={cap}" in d, d[:180])
         check("Part G: 250 links still cost only 1 section + <=ceiling detail requests", rb["section_reqs"] == 1 and len(rb["detail_reqs"]) <= elgato.ARTICLE_SCAN_CEILING, str((rb["section_reqs"], len(rb["detail_reqs"]))))
         check("Part G: no record is fabricated for the beyond-cap link (never fetched)", (cap + 10) not in prog_ingested(out), str(sorted(prog_ingested(out))))
+
+    # ---- PUBLICATION DATE CORRECTNESS -------------------------------------------------
+    #
+    # The adapter produced `published_at: "relative"` on every live article. Two causes, both
+    # proven against real markup before this was written:
+    #
+    #   1. TIME_RE was `<time\b[^>]*datetime=...`. The character class is greedy with nothing to
+    #      stop it, so on Zendesk's real tag --
+    #        <time datetime="2026-10-13T16:58:24Z" title="..." data-datetime="relative">
+    #      -- it backtracked to the RIGHTMOST `datetime=`, the tail of `data-datetime`, and
+    #      captured the rendering instruction instead of the date.
+    #
+    #   2. `normalize_date` returns unparseable text VERBATIM and answers `utc_now()` for empty
+    #      input. So the token survived as a date, and an absent date became the moment the
+    #      collector ran -- presented to a reader as when the vendor shipped.
+    #
+    # A publication date is now either a real calendar instant or the candidate is dropped. There
+    # is no third outcome, because the only other option downstream is a fabricated one:
+    # write_update_record substitutes utc_now() for an empty published_at.
+    from lib.normalize import strict_date
+
+    ZENDESK = ('<time datetime="2026-10-13T16:58:24Z" title="2026-10-13T16:58:24Z"'
+               ' data-datetime="relative">October 13, 2026</time>')
+    check("E-D1 the real datetime attribute wins over data-datetime on live Zendesk markup",
+          elgato._date_from_html(ZENDESK) == "2026-10-13T16:58:24Z",
+          repr(elgato._date_from_html(ZENDESK)))
+    check("E-D2 a tag carrying ONLY the presentational attribute yields no date",
+          elgato._date_from_html('<time data-datetime="relative">today</time>') == "",
+          "capturing it would publish a rendering instruction as a release date")
+    check("E-D3 markup with no date at all yields no date, not the collector clock",
+          elgato._date_from_html("<p>no date here</p>") == "")
+    check("E-D4 a body date is still read when no machine attribute exists",
+          elgato._date_from_html("<p>Released October 13, 2026</p>") == "2026-10-13T00:00:00Z")
+
+    # strict_date is the shared primitive; these pin its contract, which the adapter relies on.
+    for label, value, expected in [
+        ("ISO instant", "2026-10-13T16:58:24Z", "2026-10-13T16:58:24Z"),
+        ("ISO with offset", "2026-10-13T16:58:24+02:00", "2026-10-13T14:58:24Z"),
+        ("ISO date only", "2026-10-13", "2026-10-13T00:00:00Z"),
+        ("RFC 822", "Mon, 13 Oct 2026 16:58:24 +0000", "2026-10-13T16:58:24Z"),
+        ("Month DD, YYYY", "October 13, 2026", "2026-10-13T00:00:00Z"),
+    ]:
+        check(f"E-D5 strict_date accepts a {label}", strict_date(value) == expected,
+              f"{value!r} -> {strict_date(value)!r}, wanted {expected!r}")
+
+    for label, value in [
+        ("relative", "relative"), ("today", "today"), ("yesterday", "yesterday"),
+        ("2 days ago", "2 days ago"), ("updated", "updated"), ("recently", "recently"),
+        ("empty", ""), ("None", None), ("whitespace", "   "), ("garbage", "garbage text"),
+        ("HTML fragment", "<span>Oct 13</span>"), ("null-like", "null"),
+        ("impossible day", "2026-02-30"), ("impossible month", "2026-13-01"),
+        ("impossible text date", "March 40, 2026"),
+    ]:
+        check(f"E-D6 strict_date refuses {label}", strict_date(value) == "",
+              f"{value!r} -> {strict_date(value)!r}")
+
+    # The distinction that motivated a separate primitive rather than patching normalize_date.
+    from lib.normalize import normalize_date as _nd
+    check("E-D7 strict_date never answers with the collector's own clock",
+          strict_date("") == "" and _nd("") != "",
+          "normalize_date returns utc_now() for empty input; that is a feed timestamp, not a "
+          "release date, and it must not be reachable from this path")
+
+    # An undated candidate is DROPPED. Proven through the real record-building path.
+    _src = {"product_id": "elgato-stream-deck", "company_id": "elgato", "company": "Elgato",
+            "software": "Stream Deck", "public_category": "creator-software",
+            "version_pattern": r"(\d+\.\d+(?:\.\d+)?)", "ingestion": {}}
+    rec = elgato._record(_src, "https://e.test/a", "Stream Deck 7.6 Release Notes", "7.6",
+                         "2026-10-13T16:58:24Z", "body")
+    # M3 GAP. The checks above prove _date_from_html refuses, but refusing is only useful if the
+    # FETCH LOOP acts on it. Driving the real loop with an article that carries no date proves the
+    # candidate is dropped rather than written with a substituted one -- without this, deleting the
+    # rejection branch left every assertion green.
+    _dateless = ('<html><head><title>Elgato Stream Deck 9.9.9 Release Notes | Elgato</title></head>'
+                 '<body><article><h1>Elgato Stream Deck 9.9.9 Release Notes</h1>'
+                 '<div class="article-body">Stream Deck 9.9.9 notes.</div></article></body></html>')
+    _dated = _dateless.replace("</h1>", '</h1><time datetime="2026-05-04T10:00:00Z">May 4</time>')
+    _sec = ('<html><body><a href="/hc/en-us/articles/1-elgato-stream-deck-999">x</a></body></html>')
+
+    def _fetch_with(article_html):
+        src = {"product_id": "elgato-stream-deck", "company_id": "elgato", "company": "Elgato",
+               "software": "Stream Deck", "public_category": "creator-software",
+               "ingestion": {"official_url": "https://help.elgato.com/hc/en-us/sections/1",
+                             "version_pattern": r"(\d+\.\d+(?:\.\d+)?)"}}
+        recs, _http, _per, _err = run_fetch(
+            src, 3, _sec,
+            {"https://help.elgato.com/hc/en-us/articles/1-elgato-stream-deck-999": article_html})
+        return recs
+
+    try:
+        _no_date_recs = _fetch_with(_dateless)
+        _dated_recs = _fetch_with(_dated)
+        _loop_ok = True
+    except Exception as exc:  # noqa: BLE001
+        _no_date_recs = _dated_recs = None
+        _loop_ok = False
+        print(f"        (fetch-loop harness unavailable: {exc!r})")
+    check("E-D11 the fetch loop DROPS an article with no establishable date",
+          _loop_ok and _no_date_recs == [],
+          f"got {_no_date_recs!r}; an accepted undated candidate becomes utc_now() downstream")
+    check("E-D12 ...while the same article WITH a date is ingested",
+          _loop_ok and len(_dated_recs or []) == 1
+          and (_dated_recs or [{}])[0].get("published_at") == "2026-05-04T10:00:00Z",
+          f"got {_dated_recs!r}; the rejection must be about the date, not the article")
+
+    # ---- CHRONOLOGY: a malformed date must not outrank a real patch -------------------
+    #
+    # The consumers sort on `update_published_at` as a STRING (Liquid `sort` is lexical) or feed it
+    # to a date filter. That is why "relative" was not merely ugly: "r" (0x72) sorts above "2"
+    # (0x32), so the poisoned record ranked first on the homepage, first in the feed, and newest in
+    # every product history -- above every genuinely newer patch. These assert the property that
+    # makes that impossible: anything strict_date accepts is a leading-digit ISO instant, and
+    # everything else is refused outright, so no accepted value can sort above a real one.
+    _real = ["2026-10-13T16:58:24Z", "2024-01-02T00:00:00Z", "2026-01-01T00:00:00Z"]
+    _poison = ["relative", "today", "October 13, 2026", "updated", "recently", "2 days ago"]
+    _accepted = [strict_date(v) for v in _poison if strict_date(v)]
+    check("E-D15 no presentational token survives into a sortable value",
+          all(v in ("", "2026-10-13T00:00:00Z") for v in [strict_date(x) for x in _poison]),
+          f"{[(x, strict_date(x)) for x in _poison]}")
+    check("E-D16 every accepted date sorts below a later real date, never above",
+          all(sorted(_real + [a])[-1] in _real or a >= max(_real) for a in _accepted),
+          f"accepted={_accepted}")
+    check("E-D17 an accepted date always begins with a 4-digit year",
+          all(v[:4].isdigit() and len(v) == 20 and v.endswith("Z")
+              for v in [strict_date(x) for x in _real] if v),
+          "a non-numeric leading character is what let 'relative' outrank every patch")
+
+    # STATE ADVANCE. A date rejection must not behave like a transport failure: the article WAS
+    # fetched and examined, so it is marked inspected and not re-fetched forever. That is the same
+    # treatment an unrecoverable version gets, and the opposite of a request failure, which is
+    # deliberately NOT marked so it retries.
+    check("E-D18 a date-rejected article is still marked inspected, like a version miss",
+          "newly_inspected.append(article_url)" in ELGATO_SOURCE_TEXT
+          and ELGATO_SOURCE_TEXT.index("newly_inspected.append(article_url)")
+              < ELGATO_SOURCE_TEXT.index("date_misses += 1"),
+          "re-fetching an article whose markup carries no date would never terminate")
+
+    # M6 GAP. The RFC-822 branch has its own timezone conversion, and no case exercised it with a
+    # real offset, so discarding the conversion there changed no result.
+    check("E-D13 an RFC 822 date with a non-UTC offset is converted, not truncated",
+          strict_date("Mon, 13 Oct 2026 16:58:24 +0200") == "2026-10-13T14:58:24Z",
+          repr(strict_date("Mon, 13 Oct 2026 16:58:24 +0200")))
+    check("E-D14 ...in the other direction too",
+          strict_date("Mon, 13 Oct 2026 16:58:24 -0500") == "2026-10-13T21:58:24Z",
+          repr(strict_date("Mon, 13 Oct 2026 16:58:24 -0500")))
+
+    check("E-D8 a record carries the validated instant verbatim",
+          rec.get("published_at") == "2026-10-13T16:58:24Z", repr(rec.get("published_at")))
+    check("E-D9 the fetch loop reports a date rejection rather than hiding it",
+          "date_misses" in ELGATO_SOURCE_TEXT,
+          "a dropped candidate must be visible in diagnostics")
+    # Pinned on the IMPORT and the CALL, not on any mention: the comment above _date_from_html
+    # explains why normalize_date is unsuitable here, and a bare substring scan matches that
+    # explanation and fails forever on its own documentation.
+    _elg_code = re.sub(r"#[^\n]*", "", ELGATO_SOURCE_TEXT)
+    check("E-D10 the adapter neither imports nor calls the permissive normaliser",
+          "strict_date" in _elg_code
+          and not re.search(r"from lib\.normalize import[^\n]*normalize_date", _elg_code)
+          and "normalize_date(" not in _elg_code,
+          "normalize_date would reintroduce both verbatim passthrough and utc_now()")
 
     print()
     print("=" * 60)

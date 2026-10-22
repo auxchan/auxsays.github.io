@@ -10,6 +10,7 @@ Run with: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_adobe_acro
 """
 from __future__ import annotations
 
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -152,14 +153,37 @@ def run() -> int:
     orig_adobe = ac.adobe_community_search_candidates
     orig_reddit = ac.reddit_search_candidates
     try:
-        ac.adobe_community_algolia_search_candidates = lambda *a, **k: []
-        ac.adobe_community_search_candidates = lambda *a, **k: []
-        ac.reddit_search_candidates = lambda *a, **k: []
+        # Record WHICH transports are actually entered. The method-id list used to stand in
+        # for that, but since AUX-026 a retired method also reports a row -- status
+        # `disabled` -- so the row list no longer tells you what ran. Counting calls does.
+        _ran: list[str] = []
+        ac.adobe_community_algolia_search_candidates = (
+            lambda *a, **k: (_ran.append("adobe_community_algolia_search"), [])[1])
+        ac.adobe_community_search_candidates = (
+            lambda *a, **k: (_ran.append("adobe_community_search"), [])[1])
+        ac.reddit_search_candidates = (
+            lambda *a, **k: (_ran.append("reddit_search"), [])[1])
         accepted, rejected, health = coll.collect_for_record(REC_R, _NoNet(), CAPTURED)
-        method_ids = sorted(h["method_id"] for h in health)
-        check("collect_for_record emits health for ALL THREE methods",
-              method_ids == ["adobe_community_algolia_search", "adobe_community_search", "reddit_search"], str(method_ids))
-        check("zero candidates -> zero accepted, honest no_results health", accepted == [] and all(h["status"] == "no_results" for h in health))
+        # Only the productive method runs by default. Measured over the whole recorded history,
+        # 143 runs each: algolia 0 blocked / 128 accepted reports; adobe_community_search 143
+        # blocked (100%) / 0 accepted; reddit_search 142 blocked / 0 accepted. Keeping the two dead
+        # transports was not free -- this collector stops mid-corpus on a wall-clock budget, so the
+        # time they spent failing was a RECENT record never reached at all.
+        check("collect_for_record runs only the method that produces evidence",
+              _ran == ["adobe_community_algolia_search"], str(_ran))
+        check("the retired transports are recoverable for a deliberate reachability probe",
+              ac._retired_methods_enabled() is False
+              and "AUXSAYS_ACROBAT_RETIRED_METHODS" in
+              (_REPO / "auxsays" / "scripts" / "patch_collectors"
+               / "adobe_acrobat_community.py").read_text(encoding="utf-8"))
+        # Scoped to the method that RAN. The retired methods report `disabled` in the same
+        # list, which is the point of AUX-026: a method nobody ran must not report a result.
+        _executed = [h for h in health if h["method_id"] in _ran]
+        check("zero candidates -> zero accepted, honest no_results health",
+              accepted == [] and _executed
+              and all(h["status"] == "no_results" for h in _executed)
+              and all(h["status"] == "disabled" for h in health if h["method_id"] not in _ran),
+              str({h["method_id"]: h["status"] for h in health}))
         check("health rows carry the collector product_id", all(h["product_id"] == R for h in health))
     finally:
         ac.adobe_community_algolia_search_candidates = orig_algolia
@@ -393,6 +417,239 @@ def run() -> int:
     leak_row = ac.row_from_candidate(P, REC_P, {**pro2, "source_url": ac._canonical_url(pro2["source_url"])}, CAPTURED)
     check("Part D: no secured token leaks into evidence row values",
           not any("SECURED-TOKEN" in str(v) for v in leak_row.values()))
+
+    print()
+    print("=" * 60)
+    print("Part E: shared DC build, and the veto that has to come with it")
+    print("=" * 60)
+    # Adobe ships ONE DC build to Reader and to Pro. Requiring the words "Reader" or "Pro" refused
+    # 73 of 98 recent candidates -- reports that named the exact build and described a concrete
+    # post-install failure -- because Adobe's own forum and UI call the product "Acrobat".
+    # The relaxation is not an inference: every Acrobat record states its own `applicability`,
+    # derived by the adapter from the release note, and the collector reads THAT.
+    from patch_collectors.base import generated_records  # noqa: PLC0415
+    real = {(r.product_id, r.update_version): r
+            for pid in (R, P) for r in generated_records(pid)}
+    live = real.get((P, "26.001.21745"))
+    check("Part E: a real Acrobat record declares its shared applicability",
+          live is not None and ac.record_applicability(live) == (R, P),
+          str(ac.record_applicability(live)) if live else "record missing")
+
+    if live is not None:
+        def verdict(text, pid=P, rec=None):
+            row = ac.row_from_candidate(pid, rec or live, cand(
+                text, text, url="https://community.adobe.com/questions-9/x-1234567",
+                date="2026-08-01"), CAPTURED)
+            return row.get("counted"), row.get("exclusion_reason")
+
+        counted, reason = verdict("Acrobat 26.001.21745 crashes when opening a signed PDF")
+        check("Part E: bare 'Acrobat' + exact build now counts on a shared-build record",
+              counted is True, str(reason))
+        counted_dc, reason_dc = verdict("Acrobat DC (26.001.21745) crashing with eSignatures")
+        check("Part E: 'Acrobat DC' counts too, and 'crashing' is a failure word",
+              counted_dc is True, str(reason_dc))
+        # Precision the relaxation must NOT cost.
+        _, wrong = verdict("Adobe Acrobat Reader 26.001.21745 crashes")
+        check("Part E: naming the OTHER edition is still wrong_product",
+              wrong == "wrong_product", str(wrong))
+        _, nover = verdict("Acrobat crashes all the time")
+        check("Part E: bare Acrobat with no build still fails the identity gate",
+              nover == "missing_exact_patch_version_match", str(nover))
+        _, noappl = verdict("Acrobat 26.001.21563 crashes", pid=R, rec=REC_R)
+        check("Part E: a record that declares NO applicability gets no relaxation",
+              noappl == "generic_acrobat_without_edition", str(noappl))
+
+        # Naming the build is not blaming it. The shared-build relaxation widens what reaches this
+        # gate, so the veto ships WITH it -- this is the defect PR #79 fixed for OBS and DaVinci.
+        _, works = verdict("Acrobat 26.001.21745 works fine, it is 26.001.21789 that crashes")
+        check("Part E: a build named as WORKING is never counted as failing",
+              works == "version_named_but_working", str(works))
+        _, rolled = verdict("Acrobat crashes on 26.001.21789 so I rolled back to 26.001.21745")
+        check("Part E: a build named as the ROLLBACK target is not counted as failing",
+              rolled == "version_named_but_rollback_target", str(rolled))
+        affected, _ = verdict("Acrobat has crashed on every launch since 26.001.21745")
+        check("Part E: an affirmative failure statement still counts", affected is True)
+        # Every Adobe candidate carries the SAME string as parent_title and report_title, so the
+        # naive join repeated it -- and repetition is not harmless for any rule that reads word
+        # order. A second copy beginning "Acrobat crashes" lands beside the build the reporter
+        # rolled back TO, and the outcome classifier reads it as affected.
+        dup = ac.row_from_candidate(P, live, {
+            "source_type": ac.ADOBE_COMMUNITY_SOURCE_TYPE, "source_name": "Adobe Community",
+            "source_url": "https://community.adobe.com/questions-9/x-1234567",
+            "parent_title": "Acrobat crashes on 26.001.21789 so I rolled back to 26.001.21745",
+            "report_title": "Acrobat crashes on 26.001.21789 so I rolled back to 26.001.21745",
+            "report_text": "Acrobat crashes on 26.001.21789 so I rolled back to 26.001.21745",
+            "source_date": "2026-08-01"}, CAPTURED)
+        check("Part E: a repeated title cannot turn a rollback into a failure",
+              dup.get("exclusion_reason") == "version_named_but_rollback_target",
+              str(dup.get("exclusion_reason")))
+
+        # Adobe's own Help > About shows the year-prefixed spelling, which admins paste verbatim.
+        year, yreason = verdict("Help > About shows 2026.001.21745 and Acrobat will not print")
+        check("Part E: the year-prefixed build spelling is the same build",
+              year is True, str(yreason))
+        # Asserted as a PROPERTY rather than a pinned tuple: the set grew when four more real
+        # reporter spellings were measured, and a literal would have to be rewritten each time
+        # while proving less. Every alias must be a rewriting of THIS build's own digits.
+        from patch_collectors.base import exact_version_match as _evm  # noqa: PLC0415
+        aliases = ac.acrobat_version_aliases("26.001.21745")
+        check("Part E: every alias resolves to THIS build",
+              bool(aliases) and all(
+                  _evm(f"we are on {a} here", "26.001.21745", aliases)[0] for a in aliases),
+              str([a for a in aliases
+                   if not _evm(f"we are on {a} here", "26.001.21745", aliases)[0]]))
+        # The decisive negative: no alias of one build may resolve to its NEIGHBOUR. This is what
+        # makes the set a spelling table rather than a loosening.
+        neighbour = "26.001.21771"
+        check("Part E: and no alias of one build resolves to the adjacent build",
+              not any(_evm(f"we are on {a} here", neighbour,
+                           ac.acrobat_version_aliases(neighbour))[0] for a in aliases),
+              str(aliases))
+        check("Part E: a build with no alias form yields none",
+              ac.acrobat_version_aliases("garbage") == ())
+        check("Part E: the real reporter spellings are covered",
+              {"25.1.20982", "25.1.20982.0", "25.001 20982", "2500120982"}
+              <= set(ac.acrobat_version_aliases("25.001.20982")),
+              str(ac.acrobat_version_aliases("25.001.20982")))
+        _, other = verdict("Help > About shows 2026.001.21789 and Acrobat will not print")
+        check("Part E: a DIFFERENT build in year form is still refused",
+              other == "missing_exact_patch_version_match", str(other))
+
+    print()
+    print("=" * 60)
+    print("Part G: version normalization -- the real spellings, and what must still be refused")
+    print("=" * 60)
+    from patch_collectors.base import exact_version_match as evm  # noqa: PLC0415
+
+    # THE REAL CORPUS SPELLINGS. Each of these was written by a reporter about a build AUXSAYS
+    # tracks, and each was refused purely on how they typed it. Fixtures rather than live URLs so
+    # the control is deterministic; the text is verbatim from the measured threads.
+    calibration = [
+        ("25.001.20982", "Adobe Reader 25.1.20982.0 Crash", "installer, 4 components"),
+        ("25.001.20982", "we run Adobe Reader 25.1.20982 here", "installer, 3 components"),
+        ("26.001.21691", "Issue with Adobe acrobat 26.001 21691", "space for the second dot"),
+        ("25.001.21208", "RUM Exit Code 2 - AcrobatDC via AUSST path 2500121208",
+         "AUSST, no separators"),
+        ("25.001.20997", "Adobe Acrobat Pro Not Responding after 25.001.20997.",
+         "sentence-ending period"),
+        ("25.001.21111", "Adobe Acrobat Reader Vulnerabilities v25.001.21111", "v prefix"),
+        ("26.001.21789", "Help > About reports 2026.001.21789", "Help > About year prefix"),
+    ]
+    for build, text, why in calibration:
+        check(f"Part G: recognised -- {why}",
+              evm(text, build, ac.acrobat_version_aliases(build))[0], f"{build} <- {text[:52]}")
+
+    # A spelling table must not blur ADJACENT builds. Every calibration string is re-tested against
+    # the neighbouring build and must fail.
+    neighbours = {"25.001.20982": "25.001.20997", "26.001.21691": "26.001.21677",
+                  "25.001.21208": "25.001.21223", "25.001.20997": "25.001.20982",
+                  "25.001.21111": "25.001.21078", "26.001.21789": "26.001.21771"}
+    for build, text, why in calibration:
+        other = neighbours[build]
+        check(f"Part G: NOT the adjacent build -- {why}",
+              not evm(text, other, ac.acrobat_version_aliases(other))[0], f"{other} <- {text[:44]}")
+
+    # Boundaries the normalization must not cross.
+    for text, build, want, why in (
+            ("build 26.001.21745.1 shipped", "26.001.21745", False, "a longer build is different"),
+            ("saw 26.001.217450 in logs", "26.001.21745", False, "a longer number is different"),
+            ("ticket 126.001.21745", "26.001.21745", False, "a longer prefix is different"),
+            ("dev25.001.21111 nightly", "25.001.21111", False, "'dev' is not a version prefix"),
+            ("rev25.001.21111", "25.001.21111", False, "'rev' is not a version prefix"),
+            ("Error 30088-29 on 2026-05-01", "26.001.21745", False, "error codes and dates"),
+            ("CVE-2026-21745 advisory", "26.001.21745", False, "a CVE is not a build"),
+            ("on 26.001.21745, printing broke", "26.001.21745", True, "a comma still matches"),
+            ("(26.001.21745)", "26.001.21745", True, "parentheses still match")):
+        check(f"Part G: {why}",
+              evm(text, build, ac.acrobat_version_aliases(build))[0] is want, text[:46])
+
+    # ROLE AUTHORITY STILL WINS. Recognising a version string says nothing about blame; every one
+    # of these now MATCHES and must still be refused by the Phase-A role gates.
+    if live is not None:
+        rec_745 = real.get((P, "26.001.21745"))
+        for text, why in (
+                ("Acrobat 25.1.21745 works fine for us", "a build named as WORKING"),
+                ("we rolled back to Acrobat 26.001.21745 and it works", "a ROLLBACK target"),
+                ("fixed in 26.001.21745, no more crashes", "a build named as the FIX")):
+            row = ac.row_from_candidate(P, rec_745, cand(
+                text, text, url="https://community.adobe.com/questions-9/x-1234567",
+                date="2026-08-01"), CAPTURED)
+            check(f"Part G: normalization does not bypass role authority -- {why}",
+                  row.get("counted") is not True, str(row.get("exclusion_reason")))
+
+    print()
+    print("=" * 60)
+    print("Part F: what adversarial review found the shared build had let in")
+    print("=" * 60)
+    if live is not None:
+        def verdictF(text, pid=P, rec=None):
+            row = ac.row_from_candidate(pid, rec or live, cand(
+                text, text, url="https://community.adobe.com/questions-9/x-1234567",
+                date="2026-08-01"), CAPTURED)
+            return row.get("counted"), row.get("exclusion_reason")
+
+        # A person comparing versions names several builds: the one that broke, the one they want
+        # to revert to, the one a release note mentions. One live thread was published as a
+        # confirmed report against THREE builds, two of which its author explicitly did not blame.
+        # Where more than one TRACKED build is named, silence is not enough any more.
+        _, revert = verdictF("Acrobat 26.001.21789 breaks printing. Can I get the installer for "
+                             "26.001.21745 (Jul 23) to revert in the meantime?")
+        check("Part F: a build named only as the REVERT TARGET is not counted as failing",
+              revert == "multiple_builds_named_target_not_blamed", str(revert))
+        _, cited = verdictF("Acrobat 26.001.21789 breaks printing. The release notes show macOS 12 "
+                            "was dropped in 26.001.21745, but Ventura is not listed as dropped.")
+        check("Part F: a build named only as a release-note CITATION is not counted as failing",
+              cited == "multiple_builds_named_target_not_blamed", str(cited))
+        _, baseline = verdictF("Initial version: 26.001.21745 installs fine. Updated version: "
+                               "26.001.21789. After that Acrobat fails to launch.")
+        check("Part F: a build named as the WORKING BASELINE of an upgrade pair is not counted",
+              baseline == "multiple_builds_named_target_not_blamed", str(baseline))
+        blamed, _ = verdictF("I was on 26.001.21691 with no trouble. Since 26.001.21745 Acrobat "
+                             "crashes on every launch.")
+        check("Part F: naming another build does NOT block a report that blames this one",
+              blamed is True)
+        single, _ = verdictF("Acrobat crashes on every launch since 26.001.21745")
+        check("Part F: a single-build report is unaffected by the multi-build rule", single is True)
+
+        # Acrobat STANDARD is a named edition, not a generic mention. It reads as licensing
+        # language to the tier rule, so it fell through to generic and the shared-build fallback
+        # published it on BOTH tracked editions -- one such report was the entire evidentiary
+        # basis of a live Reader page.
+        _, std = verdictF("Since updating to Acrobat Standard 26.001.21745 I cannot print at all")
+        check("Part F: an Acrobat STANDARD report is not published as Reader or Pro",
+              std == "acrobat_standard_edition_not_tracked", str(std))
+        lic, _ = verdictF("Acrobat 26.001.21745 crashes; the user signs in with a Pro or Standard "
+                          "license")
+        check("Part F: a licensing mention of Standard is still not an edition claim", lic is True)
+
+    # The theme is printed on the patch page as "Current reports mention ...". The old rule was a
+    # bare substring scan with `crash` checked LAST, so "sign" matched "de-SIGN" and "SIGN in", and
+    # 59 of 63 counted rows whose own title said crash/freeze/hang published a different theme.
+    check("Part F: a crash report is themed as a crash",
+          ac.acrobat_classify("Acrobat keeps crashing immediately upon opening")[0]
+          == "crash or launch failure")
+    check("Part F: a freeze is too, even when a signature pad is mentioned",
+          ac.acrobat_classify("Document Freezing After Clicking Save. We use a Topaz Signature "
+                              "pad.")[0] == "crash or launch failure")
+    check("Part F: a printing failure is still themed as printing",
+          ac.acrobat_classify("Acrobat breaks printing on macOS - jobs never reach print queue")[0]
+          == "printing regression")
+    check("Part F: a workaround the reporter already tried does not set the theme",
+          ac.acrobat_classify("PDF Keeps Crashing. Workaround: open it through Edge and print "
+                              "using Microsoft Print to PDF")[0] == "crash or launch failure")
+    check("Part F: 'design' no longer reads as a signing failure",
+          ac.acrobat_classify("Acrobat crashes when I open a design document")[0]
+          == "crash or launch failure")
+
+    # The walk order is the reach fix: oldest-first plus a wall-clock budget meant 44 of the 48
+    # records released since 2025-12-01 had never been attempted by any method.
+    ordered = ac._newest_first(generated_records(R))
+    check("Part E: the record walk starts at the most recent patch",
+          bool(ordered) and ordered[0].update_published_at >= ordered[-1].update_published_at
+          and ordered[0].update_published_at[:4] >= "2026", str(ordered[0].update_published_at))
+    check("Part E: and it is deterministic",
+          [r.update_version for r in ac._newest_first(generated_records(R))]
+          == [r.update_version for r in ordered])
 
     print()
     print("=" * 60)

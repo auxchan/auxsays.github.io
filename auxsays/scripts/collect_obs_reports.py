@@ -27,6 +27,9 @@ from typing import Any
 import yaml
 
 from lib.normalize import split_front_matter, atomic_write_text
+from lib.patch_identity import patch_key
+from lib.report_counts import counted_evidence_counts
+from lib.target_outcome import target_is_contradicted
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
@@ -146,7 +149,22 @@ def fetch_issue(item: dict[str, Any]) -> dict[str, Any]:
 
 
 def exact_version_re(version: str) -> re.Pattern[str]:
-    return re.compile(rf"(?<![0-9.]){re.escape(version)}(?![0-9.])")
+    """Match the version as its own identity, not as a prefix of a longer one.
+
+    The right-hand guard was `(?![0-9.])`, which also refused a version at the END OF A
+    SENTENCE: "I recently updated to 32.2.2." matched nothing. That costs little on GitHub,
+    where the issue template carries the version on a line of its own, and costs everything on
+    a forum, where prose is the only carrier.
+
+    What the guard must exclude is a LONGER VERSION, so it refuses a following digit, or a dot
+    THEN a digit. 32.2.21 and 32.2.2.1 still fail; "32.2.2." and "32.2.2," now read as the
+    identity they name. Measured over 1,111 OBS issues this moves two outcomes and loses no
+    acceptance: one real report is recovered, and obs #13982 stops being refused by accident
+    and starts being refused as version_reported_working (see the cue added for it).
+
+    Deliberately NOT applied to _DECLARED_VERSION_TOKEN -- see the note there.
+    """
+    return re.compile(rf"(?<![0-9.]){re.escape(version)}(?![0-9])(?!\.[0-9])")
 
 
 def match_basis(issue: dict[str, Any], version: str) -> str | None:
@@ -158,6 +176,55 @@ def match_basis(issue: dict[str, Any], version: str) -> str | None:
     if pattern.search(body):
         return "body"
     return None
+
+
+# The issue template asks the reporter which version they are on. That answer is a structured
+# self-report of the AFFECTED version, and it is what keeps this fix from being destructive: 164 of
+# 188 counted OBS rows declare their version in this field (130 name it ONLY here), so a rule
+# demanding defect prose beside the identity would discard most of the legitimate corpus.
+DECLARED_VERSION_FIELDS = re.compile(
+    r"###\s*OBS Studio Version(?:\s*\(Other\))?\s*\n(.*?)(?=\n###|\Z)", re.I | re.S)
+# This KEEPS the stricter `(?![0-9.])` that exact_version_re drops, and the difference is
+# deliberate. The consequences are asymmetric: R1 in lib/target_outcome makes a DECLARED
+# version immune to every veto, so over-recognising one here grants immunity, while under-
+# recognising prose there only drops a report. Measured: relaxing this field would read
+# "32.0.0.r2.ga75fdd2-1" (an AUR git build, obs #12669) as a bare 32.0.0 declaration, and the
+# nixpkgs build reports #13971/#13972 as declarations of 32.1.2. Do not unify the two.
+_DECLARED_VERSION_TOKEN = re.compile(r"(?<![0-9.])\d+(?:\.\d+){1,3}(?![0-9.])")
+
+
+def declared_versions(issue: dict[str, Any]) -> set[str]:
+    """Versions the reporter declared running, from the issue template's own version fields."""
+    body = str(issue.get("body") or "")
+    found: set[str] = set()
+    for block in DECLARED_VERSION_FIELDS.finditer(body):
+        found |= set(_DECLARED_VERSION_TOKEN.findall(block.group(1)))
+    return found
+
+
+# One rejection reason per contradicted role, so a refusal stays diagnosable in method health
+# rather than collapsing into a single opaque bucket.
+CONTRADICTED_REASONS = {
+    "working": "version_reported_working",
+    "rollback_target": "version_is_rollback_target",
+    "fixed_in_target": "version_reported_fixed",
+    "reference_only": "version_reference_only",
+}
+
+
+def contradiction_reason(issue: dict[str, Any], version: str) -> str | None:
+    """Refuse a version the report itself says is NOT affected.
+
+    ``match_basis`` is pure containment, so "I downgraded to 32.1.2, which doesn't have this
+    problem" made 32.1.2 -- the author's fix -- count as a report AGAINST 32.1.2. This asks what
+    the report actually says about that version, and vetoes only on explicit contradictory
+    language. Silence keeps the existing decision.
+    """
+    text = f"{issue.get('title') or ''}\n{issue.get('body') or ''}"
+    outcome = target_is_contradicted(text, version, declared_versions(issue))
+    if outcome is None:
+        return None
+    return CONTRADICTED_REASONS.get(outcome.outcome, "version_not_affected_by_report")
 
 
 def issue_text(issue: dict[str, Any]) -> tuple[str, str, str, str]:
@@ -244,10 +311,18 @@ def release_date_gate(issue: dict[str, Any], release_date) -> str | None:
 def evaluate_issue(issue: dict[str, Any], version: str, release_date=None) -> tuple[str | None, str | None]:
     """Deterministic acceptance decision for one candidate issue.
     Returns (match_basis, None) when accepted, or (None, rejection_reason) when rejected.
-    Order: exact-version -> developer-only -> generic/no-concrete-issue -> release-date."""
+    Order: exact-version -> version-not-contradicted -> developer-only -> generic/no-concrete-issue
+    -> release-date.
+
+    The contradiction gate sits immediately after the version match because it answers the same
+    question -- is this report about THIS version -- and a version the report names as its fix must
+    not reach the later gates at all."""
     basis = match_basis(issue, version)
     if not basis:
         return None, "missing_exact_version"
+    contradicted = contradiction_reason(issue, version)
+    if contradicted:
+        return None, contradicted
     if likely_developer_only(issue):
         return None, "developer_or_build_only"
     if not describes_concrete_issue(issue):
@@ -300,18 +375,29 @@ def excerpt(text: str, version: str, width: int = 280) -> str:
     return textwrap.shorten(snippet, width=width, placeholder="...")
 
 
-def evidence_row(issue: dict[str, Any], version: str, basis: str, captured_at: str) -> dict[str, Any]:
+def evidence_row(issue: dict[str, Any], version: str, basis: str, captured_at: str,
+                 identity: dict[str, str] | None = None) -> dict[str, Any]:
+    """One accepted report as an evidence row.
+
+    `identity` lets a second source family supply its own row id, source type/name and URL
+    while every other field -- and every acceptance decision upstream -- stays identical. The
+    point is that there is ONE set of OBS evidence semantics: a forum report and a GitHub
+    issue differ in where they were found, not in what counting them means. Omitting
+    `identity` reproduces the GitHub row byte for byte.
+    """
     number = issue.get("number")
     title = str(issue.get("title") or f"GitHub issue {number}").strip()
     body = str(issue.get("body") or "")
     theme, workflow_area, platform, severity, sentiment = classify(issue)
+    ident = identity or {}
     return {
-        "id": f"obs-studio-{slug(version)}-github-issue-{number}",
+        "id": ident.get("row_id") or f"obs-studio-{slug(version)}-github-issue-{number}",
         "product_id": PRODUCT_ID,
         "update_version": version,
-        "source_type": "github_issue",
-        "source_name": SOURCE_NAME,
-        "source_url": issue.get("html_url") or f"https://github.com/{REPO}/issues/{number}",
+        "source_type": ident.get("source_type") or "github_issue",
+        "source_name": ident.get("source_name") or SOURCE_NAME,
+        "source_url": (ident.get("source_url") or issue.get("html_url")
+                       or f"https://github.com/{REPO}/issues/{number}"),
         "parent_title": title,
         "report_title": title,
         "report_text_excerpt": excerpt(body or title, version),
@@ -392,7 +478,20 @@ def evidence_key(row: dict[str, Any], field: str) -> tuple[str, str, str]:
     )
 
 
-def write_evidence(rows: list[dict[str, Any]]) -> tuple[int, int, list[dict[str, Any]]]:
+def write_evidence(rows: list[dict[str, Any]],
+                   added_out: list[dict[str, Any]] | None = None) -> tuple[int, int, list[dict[str, Any]]]:
+    """Append rows that are not already stored, and report the real delta.
+
+    This is the ONE dedupe authority for OBS evidence, and it is what makes a second discovery
+    method safe: suppression is keyed on (product, version, id) and (product, version, url), and
+    the seen-sets are updated AS the batch is walked, so two methods that hand the same physical
+    report to the same call cannot both land it. A cross-method rediscovery therefore becomes
+    duplicate telemetry -- accepted minus added -- rather than a second counted row.
+
+    `added_out`, when given, receives exactly the rows that were appended, so a caller can
+    attribute the delta per source family without re-deriving the suppression rule itself.
+    Re-deriving it is how two predicates drift apart.
+    """
     existing = parse_existing_rows(EVIDENCE_PATH)
     seen_ids = {evidence_key(row, "id") for row in existing if row.get("id")}
     seen_urls = {evidence_key(row, "source_url") for row in existing if row.get("source_url")}
@@ -406,19 +505,27 @@ def write_evidence(rows: list[dict[str, Any]]) -> tuple[int, int, list[dict[str,
         seen_ids.add(id_key)
         seen_urls.add(url_key)
         added += 1
+        if added_out is not None:
+            added_out.append(row)
     if added:
         write_evidence_file(EVIDENCE_PATH, existing)
     return added, len(existing), existing
 
 
 def counted_evidence_count(rows: list[dict[str, Any]], version: str) -> int:
-    return sum(
-        1
-        for row in rows
-        if str(row.get("product_id") or "").strip() == PRODUCT_ID
-        and str(row.get("update_version") or "").strip() == version
-        and row.get("counted") is not False
-    )
+    """This collector's count of accepted reports -- from the ONE canonical population.
+
+    It used to apply its own looser predicate (`counted is not False`, without
+    `patch_version_matched`) and then write the result straight into the record's
+    `update_report_count`: a private count authority for one product. It happens to agree with the
+    canonical predicate on the whole live corpus (all 9 OBS versions, zero delta -- measured, and
+    pinned by test), so delegating changes no published number today and stops the two drifting
+    tomorrow. Rows are narrowed to this collector's own product FIRST, so no other product's
+    evidence can influence -- or, via the build-identity guard, fail -- an OBS count."""
+    own = [row for row in rows
+           if str(row.get("product_id") or "").strip() == PRODUCT_ID]
+    return counted_evidence_counts(own, windows_targets={}).get(
+        patch_key(PRODUCT_ID, version, ""), 0)
 
 
 def front_matter_parts(path: Path) -> tuple[dict[str, Any], str]:
@@ -471,7 +578,7 @@ def update_obs_record(record_path: Path, count: int, captured_at: str) -> bool:
 
 
 def apply_consensus_writeback(version: str) -> bool:
-    from apply_consensus_to_records import _apply_record_fields, _index_generated_records, run_dry_run
+    from apply_consensus_to_records import _index_generated_records, apply_collector_record_fields, run_dry_run
 
     records_index = _index_generated_records()
     results = run_dry_run(
@@ -484,18 +591,27 @@ def apply_consensus_writeback(version: str) -> bool:
     matches = [item for item in results if item["update_version"] == version]
     if len(matches) != 1 or not matches[0].get("would_write"):
         return False
-    record_key = (PRODUCT_ID, version)
-    if record_key not in records_index:
-        return False
     result = matches[0]
-    record_path = records_index[record_key]["abs_path"]
+    # Reuse the record the dry-run already resolved by CANONICAL identity rather than re-deriving a
+    # key. The index has been keyed by the identity TRIPLE since #58 (4fe9e415); this 2-tuple
+    # predates it, so the membership test above never matched and this writeback has been silently
+    # inert. Reusing the resolved path is build-exact and cannot drift from the gated group.
+    record_rel = result.get("matched_generated_record_path")
+    if not record_rel:
+        return False
+    record_path = ROOT / record_rel
     fields = dict(result["proposed_fields_if_written"])
     data, _body = front_matter_parts(record_path)
     comparable = {k: v for k, v in fields.items() if k != "status_events_append"}
     if all(data.get(k) == v for k, v in comparable.items()):
         return False
-    _apply_record_fields(record_path, fields)
-    return True
+    # Report whether bytes actually changed, not merely that we reached the write.
+    # `comparable` above always differs (proposed_fields carries a fresh record_last_updated), so
+    # the early-exit never fires; the collector boundary then recomputes substantiveness EXCLUDING
+    # that timestamp and can legitimately write nothing. Returning True regardless would report
+    # record_updated for a no-op -- and in the OBS caller it would suppress the count fallback that
+    # runs only `if not record_updated`.
+    return bool(apply_collector_record_fields(record_path, fields)["write_plan"]["fields"])
 
 
 def valid_update_version(value: Any) -> bool:
@@ -562,30 +678,76 @@ def collect_one(
     since: str | None,
     max_pages: int,
     write: bool,
+    extra_accepted: list[dict[str, Any]] | None = None,
+    extra_rejected: list[dict[str, Any]] | None = None,
 ) -> tuple[int, dict[str, Any]]:
+    """Collect one version from GitHub, merge in any already-evaluated rows from another method,
+    and persist the union through the single dedupe authority.
+
+    `extra_accepted` rows must already have passed `evaluate_issue` -- this merges, it does not
+    judge. Two properties matter here. The union is written in ONE `write_evidence` call, so
+    cross-method duplicate suppression is structural rather than a rule each method remembers.
+    And a GitHub outage no longer discards the other family's work: that is the entire reason for
+    having a second family, so it reports per-family status instead of one verdict for both.
+    """
     release_date = release_date_for_record(record_path)
+    extra_accepted = list(extra_accepted or [])
+    extra_rejected = list(extra_rejected or [])
+    github_error: str | None = None
     try:
         accepted, rejected = collect(version, since, max_pages, release_date)
     except Exception as exc:
+        accepted, rejected, github_error = [], [], str(exc) or type(exc).__name__
+
+    if github_error is not None and not extra_accepted and not extra_rejected:
         return 1, {
             "version": version,
             "mode": "write" if write else "dry-run",
             "status": "fetch_failed",
-            "error": str(exc),
+            "error": github_error,
             "candidates_reviewed": 0,
             "accepted_count": 0,
             "rejected_count": 0,
+            "github_status": "failed",
+            "github_error": github_error,
+            "github_accepted_count": 0,
+            "github_rejected_count": 0,
         }
 
+    github_accepted_count = len(accepted)
+    github_rejected_count = len(rejected)
+    accepted = accepted + extra_accepted
+    rejected = rejected + extra_rejected
+
     result = summarize(version, "write" if write else "dry-run", accepted, rejected)
+    # Per-family status, because one overall status would report a GitHub outage as green the
+    # moment the forum returned anything -- a source that failed must never read as healthy.
+    result["github_status"] = "failed" if github_error else "ok"
+    result["github_accepted_count"] = github_accepted_count
+    result["github_rejected_count"] = github_rejected_count
+    if github_error:
+        result["github_error"] = github_error
     if write:
-        added, total, rows = write_evidence(accepted)
+        added_rows: list[dict[str, Any]] = []
+        added, total, rows = write_evidence(accepted, added_out=added_rows)
+        result["added_rows_by_source_type"] = {
+            source_type: sum(1 for row in added_rows
+                             if str(row.get("source_type") or "") == source_type)
+            for source_type in sorted({str(row.get("source_type") or "") for row in added_rows})
+        }
         structured_count = counted_evidence_count(rows, version)
         record_updated = False
         if record_path:
             record_updated = apply_consensus_writeback(version)
-            if not record_updated and record_needs_count_update(record_path, structured_count):
-                record_updated = update_obs_record(record_path, structured_count, utc_now())
+            # These two writes are ORTHOGONAL now, so they must not be mutually exclusive. The
+            # consensus writeback is bounded to collector-owned fields (freshness) and returns True
+            # whenever evidence_last_checked advances -- which is exactly when new evidence arrived,
+            # and therefore exactly when the count is most likely stale. Gating the count repair on
+            # `not record_updated` would suppress it precisely then. Gate it on the count instead,
+            # which is the condition it actually exists for.
+            if record_needs_count_update(record_path, structured_count):
+                record_updated = update_obs_record(record_path, structured_count,
+                                                   utc_now()) or record_updated
         result["evidence_rows_added"] = added
         result["evidence_rows_total"] = total
         result["structured_count_for_version"] = structured_count

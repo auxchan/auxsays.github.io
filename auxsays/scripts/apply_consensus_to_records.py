@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Consensus-to-generated-record updater with dry-run-first safety gates.
 
-Reads structured evidence rows, aggregates by (product_id, update_version),
+Reads structured evidence rows, aggregates by canonical patch identity,
 finds matching generated Markdown records, validates safety gates, and outputs
 an auditable plan.
 
@@ -15,6 +15,8 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict
+from lib import patch_decision
+from lib.patch_identity import key_from, patch_display_label, patch_key
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -66,6 +68,49 @@ CONSENSUS_COHERENCE_FIELDS = {
     "practical_recommendations",
     "source_freshness_note",
 }
+
+# POSITIVE collector write authority. An in-collector writeback runs BEFORE
+# lib.report_counts.reconcile_record_counts and before the final consensus/coherence application,
+# so at that moment it does not know the final counted-evidence population: `_filter_rows` and
+# `counted_evidence_counts` apply DIFFERENT predicates (live: Windows 25H2 is 9 vs 29, 26H1 is 1 vs
+# 2), and reconciliation later rewrites the NUMBERS without rewriting the prose derived from them.
+# A collector that writes count-derived narrative therefore publishes "9 user reports" beside a
+# reconciled count of 29 -- and qa_patch_records compares only the number, so nothing catches it.
+# It would also overwrite human-authored editorial prose: premiere-pro-26-2's quick_verdict,
+# update_decision_body and practical_recommendations came from a hand commit, not the engine.
+#
+# So a collector may write ONLY fields whose truth is already complete when that collector finishes.
+# Everything else -- counts, anything textually derived from a count, the accepted-row projections
+# (accepted_report_sources / evidence_samples, whose nested source_date the collector would blank),
+# and every editorial/coherence field -- belongs to a later authority.
+#
+# This is a POSITIVE allow-list, deliberately not "everything except PROTECTED|CONSENSUS_COHERENCE".
+# A field added to _proposed_record_fields later must NOT become collector-writable by default:
+# unknown field -> not collector-owned -> not written. Fail closed.
+COLLECTOR_WRITABLE_FIELDS = frozenset({
+    # "when did this collector last look at evidence for this patch". captured_at is stamped once
+    # per RUN, not per row, so max(captured_at) over the collector's own included rows equals the
+    # max over the full population -- verified across four live groups including the 9-vs-29 Windows
+    # one. That is what makes it a run fact rather than a population fact. It is the field that makes
+    # a collector write meaningful at all; record_last_updated alone is excluded from
+    # substantiveness, so without this the in-collector write would be permanently inert.
+    # (The later `promote` stage also writes it, so this is a freshness update BETWEEN collect and
+    # promote, not a field only the collector can set.)
+    "evidence_last_checked",
+    # bookkeeping only; RECORD_SUBSTANTIVE_COMPARE_IGNORED means it can never by itself cause a write
+    "record_last_updated",
+})
+
+
+def collector_owned_fields(fields: dict[str, Any]) -> dict[str, Any]:
+    """The subset of `fields` an in-collector writeback is authorized to apply."""
+    return {key: value for key, value in fields.items() if key in COLLECTOR_WRITABLE_FIELDS}
+
+
+def _is_blank_value(value: Any) -> bool:
+    """True for None, "" and whitespace -- the shapes a weaker proposal uses to erase a value."""
+    return value is None or (isinstance(value, str) and not value.strip())
+
 
 WRITEABLE_FIELDS = {
     "update_report_count",
@@ -154,8 +199,12 @@ def _latest_captured_at(rows: list[dict[str, Any]]) -> str:
     return max(parsed).isoformat().replace("+00:00", "Z")
 
 
-def _index_generated_records() -> dict[tuple[str, str], dict[str, Any]]:
-    index: dict[tuple[str, str], dict[str, Any]] = {}
+def _index_generated_records() -> dict[tuple[str, str, str], dict[str, Any]]:
+    """Index generated records by canonical patch identity.
+
+    Keyed by the identity triple rather than (product_id, version): for a build-aware product two
+    records under one YYMM are two distinct keys, so the second no longer overwrites the first."""
+    index: dict[tuple[str, str, str], dict[str, Any]] = {}
     for path in sorted(GENERATED_DIR.glob("*.md")):
         data = _load_front_matter(path)
         if not data.get("update_entry"):
@@ -163,7 +212,7 @@ def _index_generated_records() -> dict[tuple[str, str], dict[str, Any]]:
         product_id = str(data.get("product_id") or "").strip()
         version = str(data.get("update_version") or "").strip()
         if product_id and version:
-            index[(product_id, version)] = {
+            index[patch_key(product_id, version, data.get("target_build"))] = {
                 "path": str(path.relative_to(ROOT)),
                 "abs_path": path,
                 "product_id": product_id,
@@ -258,7 +307,7 @@ def _evaluate_gates(
         _gate("gate_03_product_id_matches_record", record["product_id"] == product_id, f"Evidence product_id={product_id!r}, record product_id={record['product_id']!r}.")
         _gate("gate_04_version_matches_record", record["update_version"] == version, f"Evidence version={version!r}, record version={record['update_version']!r}.")
     else:
-        _gate("gate_03_product_id_matches_record", False, "No generated record found for this (product_id, version) key.")
+        _gate("gate_03_product_id_matches_record", False, "No generated record found for this canonical patch identity.")
         _gate("gate_04_version_matches_record", False, "No generated record found — cannot verify version match.")
 
     version_mismatches = [r for r in included_rows if _row_version(r, is_candidate_mode=is_candidate_mode) != version]
@@ -362,17 +411,22 @@ def _filter_rows(rows: list[dict[str, Any]], *, product_id: str, version: str, i
     return included, excluded
 
 
-def _group_rows(rows: list[dict[str, Any]], *, is_candidate_mode: bool) -> dict[tuple[str, str], list[dict[str, Any]]]:
-    groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+def _group_rows(rows: list[dict[str, Any]], *, is_candidate_mode: bool) -> dict[tuple[str, str, str], list[dict[str, Any]]]:
+    """Group evidence rows by canonical patch identity.
+
+    For a build-aware product the exact build participates, so evidence naming build A and evidence
+    naming build B under one YYMM form two independent groups and can never aggregate into a single
+    promotion decision."""
+    groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         pid = str(row.get("product_id") or "").strip()
         ver = _row_version(row, is_candidate_mode=is_candidate_mode)
         if pid:
-            groups[(pid, ver)].append(row)
+            groups[patch_key(pid, ver, row.get("target_build"))].append(row)
     return groups
 
 
-def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str], dict[str, Any]], write_requested: bool = False) -> dict[str, Any]:
+def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, build: str = "") -> dict[str, Any]:
     if not ver:
         return {
             "product_id": pid,
@@ -397,7 +451,14 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
             "included_rows": [],
         }
 
-    record = records_index.get((pid, ver))
+    # Exact-identity lookup. For a build-aware product this selects ONLY the record whose
+    # target_build matches this evidence group; there is deliberately no fallback to a version-only
+    # key, so evidence with a missing or wrong build finds no record rather than promoting onto a
+    # sibling build's page.
+    record = records_index.get(patch_key(pid, ver, build))
+    # Diagnostic + writeback results are read back (and printed) per group; carrying the build
+    # keeps two same-YYMM PowerPoint groups distinguishable in the output, not just internally.
+    result_build = str(build or "")
     included, excluded = _filter_rows(rows, product_id=pid, version=ver, is_candidate_mode=is_candidate_mode, record=record)
     sentiments = Counter(str(r.get("sentiment") or "").lower() for r in included)
     themes = _issue_counter(pid, included)
@@ -408,13 +469,16 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
     proposed_fields: dict[str, Any] = {}
     effective_write_plan: dict[str, Any] = {}
     if gate_eval["would_write"]:
-        proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked)
+        proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked, build=build)
         if record:
             effective_write_plan = _public_write_plan(_load_front_matter(record["abs_path"]), proposed_fields)
 
     return {
         "product_id": pid,
         "update_version": ver,
+        # Exact build travels with the result so two same-YYMM PowerPoint groups stay
+        # distinguishable in diagnostics and in anything that reads a promotion result back.
+        "target_build": result_build,
         "matched_generated_record_path": record["path"] if record else None,
         "evidence_row_count": len(rows),
         "included_candidate_count": count,
@@ -573,20 +637,24 @@ def _top_theme_phrases(themes: Counter, *, limit: int = 3) -> list[str]:
     return phrases
 
 
-def _recommendation_prefix(pid: str, ver: str, consensus_label: str, count: int) -> str:
-    label = consensus_label.lower()
-    if count <= 0:
-        return "INSUFFICIENT DATA"
-    if _davinci_version_is_beta(ver) and label == "negative":
-        return "AVOID for production"
-    if label == "negative":
-        return "WAIT"
-    if label == "positive":
-        return "SAFE ENOUGH to test"
-    return "TEST FIRST"
+def _affected_workflow_sentence(pid: str, ver: str, consensus_label: str, themes: Counter,
+                                decision: str = "") -> str:
+    """The qualifying sentence. It may soften the decision; it may not reverse it.
 
+    The positive-sentiment sentence offers testing, and for the four products whose decision comes
+    from product policy rather than sentiment, a positive-sentiment record can carry a WAIT. That
+    combination would print "Most users can test the update" directly under a WAIT verdict -- a
+    second recommendation in prose, which is the same defect as a second verdict. It is not in the
+    corpus today (78 of the 80 policy-product records with evidence are Negative) but it was
+    representable, so the sentence now asks the decision first.
 
-def _affected_workflow_sentence(pid: str, ver: str, consensus_label: str, themes: Counter) -> str:
+    WHERE THE LINE IS. The moderate fallback below -- "should test first before upgrading
+    production systems" -- is NOT gated, and that is deliberate. It advises how to proceed if you
+    upgrade; it does not tell the reader they may. "Most users can test the update" does. A
+    qualification may describe the manner of an action the decision permits; it may not grant an
+    action the decision withholds. That is the whole distinction, and it is why only one of these
+    two sentences moved.
+    """
     label = consensus_label.lower()
     theme_words = " ".join(_top_theme_phrases(themes, limit=5)).lower()
     if pid == "blackmagic-davinci":
@@ -599,8 +667,10 @@ def _affected_workflow_sentence(pid: str, ver: str, consensus_label: str, themes
         return "Streamers and recording setups with stable scenes, plugins, or capture devices should wait or test on a backup profile."
     if label == "negative":
         return "Users with fragile production workflows should wait unless they need a specific fix."
-    if label == "positive":
+    if label == "positive" and patch_decision.permits_testing(decision):
         return "Most users can test the update, while critical workflows should still keep a rollback path."
+    if label == "positive":
+        return "Users with fragile production workflows should wait unless they need a specific fix."
     return "Users with fragile workflows should test first before upgrading production systems."
 
 
@@ -638,17 +708,26 @@ def _load_method_health_rows() -> list[dict[str, Any]]:
     return []
 
 
-def _public_source_limitations(pid: str, ver: str, rows: list[dict[str, Any]], confidence: str) -> list[str]:
+def _public_source_limitations(pid: str, ver: str, rows: list[dict[str, Any]], confidence: str, *, build: str) -> list[str]:
     limitations: list[str] = []
     limitation = _source_limitation_sentence(rows, confidence)
     if limitation:
         limitations.append(limitation)
 
-    method_rows = [
-        row for row in _load_method_health_rows()
-        if str(row.get("product_id") or "").strip() == pid
-        and str(row.get("update_version") or "").strip() == ver
-    ]
+    # Method-health rows are stored per EXACT patch: patch_collectors.base.method_health_key is the
+    # canonical identity triple plus method_id, so two builds under one YYMM are two independent
+    # rows. Joining on (product, version) alone projected that per-build table down to a version,
+    # which let a build with NO telemetry of its own publish a sibling build's limitation -- the
+    # same fail-open shape already fixed in _includes/monitoring-status.html. `build` is a REQUIRED
+    # keyword here: a caller that cannot state the build must fail loudly rather than silently
+    # widen the join back to the whole version.
+    #
+    # This is deliberately NOT gated on is_build_aware(). patch_key already collapses the build slot
+    # to '' for every product without a build contract, on BOTH sides of the comparison, so a
+    # version-only product keeps the exact identity it had -- proven no-op across all 304 live
+    # method-health identities. Branching on the product here would duplicate that one decision.
+    target = patch_key(pid, ver, build)
+    method_rows = [row for row in _load_method_health_rows() if key_from(row) == target]
     statuses = {str(row.get("status") or "").strip().lower() for row in method_rows}
     if statuses & {"blocked", "partial", "low_confidence", "broken"}:
         limitations.append("Some community sources were unavailable during the last check; unavailable sources were not counted as reports.")
@@ -669,22 +748,35 @@ def _public_summary(
     consensus_label: str,
     confidence: str,
     themes: Counter,
+    decision: str,
 ) -> str:
     count = len(rows)
     version_label = ver
     if count <= 0:
         return (
-            f"INSUFFICIENT DATA: {product_label} {version_label} has no user reports found yet. "
+            # The authority's constant, not a literal. At count 0 `_record_coherence_fields`
+            # returns {} and no `update_decision_label` is written, so the renderer derives the
+            # DISPLAYED verdict by splitting this sentence on ":". That makes this prefix the
+            # published decision, which means it has to come from the one place decisions do.
+            f"{patch_decision.INSUFFICIENT_DATA}: {product_label} {version_label} has no user "
+            "reports found yet. "
             "Use the official source only until reports are available."
         )
-    verdict = _recommendation_prefix(pid, ver, consensus_label, count)
+    # HANDED the decision, never choosing one. This function used to call a local
+    # `_recommendation_prefix` that re-derived an action from sentiment with its own copy of the
+    # beta rule, and on a negative DaVinci beta it answered "AVOID for production" while the verdict
+    # said "WAIT for production systems". Both reached readers -- the verdict on the patch page, this
+    # summary on the feed. The caller now computes the decision ONCE for the record and gives the
+    # same string to every field, so the two cannot disagree about anything, including which version
+    # string they judged.
+    verdict = decision
     report_word = "report" if count == 1 else "reports"
     sample_sentence = "Small sample size." if count < 8 else "User reports show a repeat pattern."
     return " ".join([
         f"{verdict}: {product_label} {version_label} has {count} user {report_word} found.",
         sample_sentence,
         _issue_cluster_sentence(themes),
-        f"{_affected_workflow_sentence(pid, ver, consensus_label, themes)} {_source_limitation_sentence(rows, confidence)}",
+        f"{_affected_workflow_sentence(pid, ver, consensus_label, themes, decision)} {_source_limitation_sentence(rows, confidence)}",
     ])
 
 
@@ -777,15 +869,22 @@ def _public_source_item(pid: str, ver: str, row: dict[str, Any]) -> dict[str, An
     }
 
 
-def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str) -> dict[str, Any]:
+def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str, *, build: str) -> dict[str, Any]:
     count = len(rows)
     sentiments = Counter(str(r.get("sentiment") or "").lower() for r in rows)
     themes = _issue_counter(pid, rows)
     consensus_label = _consensus_label(sentiments)
     confidence = _confidence(count)
     now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    version_label = ver
+    # Build-aware products name the exact patch here, not just the version -- otherwise four
+    # sibling Windows 25H2 pages each publish "25H2 has N user reports" with a different N.
+    # Collapses to the bare version for every product without a build contract.
+    version_label = patch_display_label(ver, build, pid)
     product_label = str((record or {}).get("update_product") or pid).strip()
+    # ONE decision for this record, computed once, from the RAW version the verdict path has always
+    # judged. Computing it separately in the two writers would let them judge different version
+    # strings -- `ver` against `version_label` -- and quietly reacquire the ability to disagree.
+    decision = patch_decision.decision_label(pid, ver, consensus_label, count, record=record)
     summary = _public_summary(
         pid=pid,
         ver=version_label,
@@ -794,6 +893,7 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         consensus_label=consensus_label,
         confidence=confidence,
         themes=themes,
+        decision=decision,
     )
     report = _public_consensus_report(
         pid=pid,
@@ -834,7 +934,7 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         "evidence_samples": samples,
         "evidence_sample_visible_limit": 5,
         "accepted_report_sources": accepted_report_sources,
-        "evidence_source_limitations": _public_source_limitations(pid, ver, rows, confidence),
+        "evidence_source_limitations": _public_source_limitations(pid, ver, rows, confidence, build=build),
         "status_events_append": {
             "at": now,
             "label": "User reports found" if count > 0 else "Insufficient data",
@@ -843,25 +943,38 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
             ),
         },
     }
-    fields.update(_record_coherence_fields(pid, ver, count, record, themes))
+    fields.update(_record_coherence_fields(pid, ver, count, record, themes, build=build,
+                                           decision=decision))
     return fields
 
 
-def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter) -> dict[str, Any]:
+def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "", decision: str | None = None) -> dict[str, Any]:
+    """The verdict fields. `decision` arrives from the caller; this function does not choose one.
+
+    Each branch used to name its own action ("WAIT for production systems" here, "TEST FIRST" for
+    OBS) while `_public_summary` named another. Both are now the SAME string, because the caller
+    computes it once and hands it to both.
+
+    Omitting `decision` asks the same authority for it rather than inventing a policy: every branch
+    that consumes it is product-branded, so the sentiment label those branches never read is the
+    only input missing. `_proposed_record_fields` always passes it explicitly.
+    """
     if count <= 0:
         return {}
     if not record:
         return {}
 
+    if decision is None:
+        decision = patch_decision.decision_label(pid, ver, "", count, record=record)
     product_label = str(record.get("update_product") or pid).strip()
 
     if pid == "blackmagic-davinci":
         if _davinci_version_is_beta(ver):
             return {
                 "quick_verdict": (
-                    f"WAIT for production systems: {product_label} {ver} is a beta build with {count} user reports found."
+                    f"{decision}: {product_label} {ver} is a beta build with {count} user reports found."
                 ),
-                "update_decision_label": "WAIT for production systems",
+                "update_decision_label": decision,
                 "update_decision_body": (
                     "Use this beta only for non-critical testing. Active client projects should stay on a known-good stable build unless a Resolve 21 beta feature is worth the risk."
                 ),
@@ -875,9 +988,9 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
 
         fields = {
             "quick_verdict": (
-                f"WAIT: {product_label} {ver} has {count} user reports found."
+                f"{decision}: {product_label} {ver} has {count} user reports found."
             ),
-            "update_decision_label": "WAIT",
+            "update_decision_label": decision,
             "update_decision_body": (
                 f"{_issue_cluster_sentence(themes)} Production editors with active delivery deadlines should wait or test on copied projects."
             ),
@@ -908,25 +1021,72 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         return fields
 
     if pid == "obs-studio":
+        # THE PROSE FOLLOWS THE DECISION, and `archived` only qualifies it (AUX-029).
+        #
+        # This branch used to pick the body from `update_status` alone. Once AUX-007 made the OBS
+        # decision evidence-driven, that produced a record whose verdict says WAIT and whose body
+        # says "Test on a backup profile before using this OBS build" -- an invitation to install
+        # under a decision that withholds one, which is the second-recommendation defect
+        # `permits_testing` exists to prevent. It was live: all eight OBS records that move to WAIT
+        # are maintained builds, so every one of them took the testing body.
+        #
+        # `update_status` stays DESCRIPTIVE: it appends a qualification, never selects the
+        # instruction.
         archived = str(record.get("update_status") or "").strip().lower() == "archived"
-        if archived:
-            decision_label = "WAIT"
-            body = (
-                f"{product_label} {ver} is archived. Use a newer maintained OBS build unless you need this version for rollback testing or reproduction."
-            )
-        else:
-            decision_label = "TEST FIRST"
+        if patch_decision.permits_testing(decision):
             body = (
                 "Test on a backup profile before using this OBS build for live streams or important recordings, especially if your setup depends on plugins, capture devices, audio routing, or large scene collections."
             )
-        return {
-            "quick_verdict": f"{decision_label}: {product_label} {ver} has {count} user reports found.",
-            "update_decision_label": decision_label,
-            "update_decision_body": body,
-            "practical_recommendations": [
+            steps = [
                 "Test with a backup scene collection and profile before production use.",
                 "Check plugin, capture-device, and audio-routing behavior before a live stream or paid recording.",
                 "Keep a rollback installer available if your setup is already stable.",
+            ]
+        else:
+            body = (
+                "Hold this OBS build off live streams and important recordings while these reports settle, especially if your setup depends on plugins, capture devices, audio routing, or large scene collections."
+            )
+            steps = [
+                "Stay on your current working OBS build until the reported problems are resolved.",
+                "If you have already updated, keep a rollback installer available and avoid paid or unrepeatable recordings.",
+                "Check whether the reported problems involve the plugins, capture devices, or audio routing your setup depends on.",
+            ]
+        if archived:
+            body += (
+                f" {product_label} {ver} is also an older archived build: prefer a newer maintained OBS release unless you need this version for rollback testing or reproduction."
+            )
+        return {
+            "quick_verdict": f"{decision}: {product_label} {ver} has {count} user reports found.",
+            "update_decision_label": decision,
+            "update_decision_body": body,
+            "practical_recommendations": steps,
+            "source_freshness_note": "",
+        }
+
+    if pid == WINDOWS_PRODUCT_ID:
+        # Without this branch the function fell through to `return {}`, so a Windows record kept
+        # the DEFERRED shape it was born with no matter how much evidence it accumulated: the live
+        # 25H2 page published `quick_verdict: "... Confirmed patch-specific consensus is deferred
+        # until the consensus refresh pipeline is active."` directly above `consensus_report: "14
+        # user reports found"`. Both sentences came from this writer, in the same run. The verdict
+        # is a count projection (PR #75); leaving it frozen at "deferred" while the count moves is
+        # the same incoherence the zero-count retraction fence prevents, running the other way.
+        report_word = "report" if count == 1 else "reports"
+        # Name the exact cumulative update, never the train: 28 records share "25H2".
+        patch_label = patch_display_label(ver, build, pid)
+        return {
+            "quick_verdict": f"{decision}: {product_label} {patch_label} has {count} user {report_word} found.",
+            "update_decision_label": decision,
+            "update_decision_body": (
+                f"{_issue_cluster_sentence(themes)} This page covers one cumulative update, not the "
+                f"whole {ver} servicing train; reports about a later update are counted on that "
+                "update's own page."
+            ),
+            "practical_recommendations": [
+                "Pause updates if this machine is doing deadline-sensitive or production work.",
+                "Check Microsoft's known-issue and safeguard-hold list for this KB before installing.",
+                "Keep the uninstall path in mind: a cumulative update can be removed from Settings "
+                "> Windows Update > Update history for a limited window after installation.",
             ],
             "source_freshness_note": "",
         }
@@ -934,8 +1094,8 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
     if pid == "adobe-premiere-pro":
         report_word = "report" if count == 1 else "reports"
         return {
-            "quick_verdict": f"WAIT: {product_label} {ver} has {count} user {report_word} found.",
-            "update_decision_label": "WAIT",
+            "quick_verdict": f"{decision}: {product_label} {ver} has {count} user {report_word} found.",
+            "update_decision_label": decision,
             "update_decision_body": (
                 f"{_issue_cluster_sentence(themes)} Editors with active deadlines should wait or test on copied projects before moving production work to this build."
             ),
@@ -951,18 +1111,21 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
 
 
 def _davinci_version_is_beta(version: str) -> bool:
-    return bool(re.search(r"\b(?:public\s+)?beta\b|b\d+\b", str(version or ""), flags=re.I))
+    # One beta definition for the repo (lib.patch_decision), shared with the summary path and with
+    # build_consensus_from_evidence. Kept as a name here because the prose helpers below read it.
+    return patch_decision.version_is_beta(version)
 
 
-def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str], dict[str, Any]], write_requested: bool = False) -> list[dict[str, Any]]:
+def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False) -> list[dict[str, Any]]:
     all_rows = _load_yaml_list(evidence_path)
     groups = _group_rows(all_rows, is_candidate_mode=is_candidate_mode)
     if product_id_filter:
         groups = {k: v for k, v in groups.items() if k[0] == product_id_filter}
-    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested) for (pid, ver), rows in sorted(groups.items())]
+    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, build=build)
+            for (pid, ver, build), rows in sorted(groups.items())]
 
 
-def _payload(results: list[dict[str, Any]], *, evidence_path: Path, is_candidate_mode: bool, product_id_filter: str | None, version_filter: str | None, records_index: dict[tuple[str, str], dict[str, Any]], write_mode_active: bool) -> dict[str, Any]:
+def _payload(results: list[dict[str, Any]], *, evidence_path: Path, is_candidate_mode: bool, product_id_filter: str | None, version_filter: str | None, records_index: dict[tuple[str, str, str], dict[str, Any]], write_mode_active: bool) -> dict[str, Any]:
     return {
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "mode": "write_back" if write_mode_active else ("dry_run_candidate_staging" if is_candidate_mode else "dry_run_production_evidence"),
@@ -1155,6 +1318,64 @@ def _fields_written_labels(fields: dict[str, Any]) -> list[str]:
     return labels
 
 
+def _is_earlier_iso(candidate: Any, existing: Any) -> bool:
+    """True when `candidate` is a strictly older timestamp than `existing`.
+
+    evidence_last_checked answers "how fresh is this patch's evidence", and audit_consensus_evidence
+    gates on it (stale_/missing_evidence_last_checked) as a --validate command. It is derived from
+    max(captured_at) over the collector's INCLUDED rows, so a gate change that newly excludes the
+    newest run -- a Windows KB rollover, say -- could hand back an older maximum. Freshness must only
+    ever advance; an unparseable value on either side is left to the normal write path."""
+    def _utc(value: Any) -> datetime | None:
+        text = str(value or "").strip()
+        if not text:
+            return None
+        if text.endswith("Z"):
+            text = text[:-1] + "+00:00"
+        try:
+            dt = datetime.fromisoformat(text)
+        except ValueError:
+            return None
+        return (dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None
+                else dt.astimezone(timezone.utc))
+
+    a, b = _utc(candidate), _utc(existing)
+    return a is not None and b is not None and a < b
+
+
+def apply_collector_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:
+    """The ONLY sanctioned record write for an in-collector writeback.
+
+    Filters `fields` through COLLECTOR_WRITABLE_FIELDS once, then applies the remainder through the
+    normal write plan, so a collector cannot publish a claim it does not yet have the authority to
+    make. Collectors must call this rather than _apply_record_fields directly -- that is what makes
+    the boundary a boundary. Returns the same shape as _apply_record_fields, so
+    ``bool(result["write_plan"]["fields"])`` still reports truthfully whether bytes changed.
+
+    PROVENANCE: an owned field whose proposed value is empty is dropped when the record already
+    holds a meaningful one. `_latest_captured_at([])` returns "" when a collector's gates exclude
+    every row, and premiere/davinci/obs do not gate their writeback on a non-empty accepted list --
+    so without this an unlucky run could blank the one field the collector is trusted with. Preserve
+    rather than destructively blank; a later stage with the full population can still set it.
+
+    ONE CARVE-OUT, deliberate: when nothing owned changed, `_record_write_plan` may still redact
+    banned internal terms out of the record's EXISTING `status_events` (see its non-substantive
+    branch). That is a doctrine-protective redaction of content already published, never an append
+    and never a new count -- `status_events_append` is filtered out here like any other unowned key.
+    """
+    owned = collector_owned_fields(fields)
+    current = _load_front_matter(record_path)
+    kept: dict[str, Any] = {}
+    for key, value in owned.items():
+        existing = current.get(key)
+        if _is_blank_value(value) and not _is_blank_value(existing):
+            continue                                  # never blank a meaningful value
+        if key == "evidence_last_checked" and _is_earlier_iso(value, existing):
+            continue                                  # freshness only ever advances
+        kept[key] = value
+    return _apply_record_fields(record_path, kept)
+
+
 def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:
     data, body = _load_front_matter_and_body(record_path)
     before = deepcopy(data)
@@ -1204,6 +1425,17 @@ def main(argv: list[str] | None = None) -> int:
         if args.candidate_file:
             print("ERROR: Write mode cannot use --candidate-file. Promote rows to production evidence first.", file=sys.stderr)
             return 2
+
+    # An explicitly supplied but EMPTY --product-id must never mean "every product". The filter is
+    # applied as `if product_id_filter:` (run_dry_run), so an empty string is falsy and silently
+    # widens the run to the whole corpus -- measured: `--product-id ""` with --write-all rewrites 8
+    # records across 4 products, byte-identical to passing no scope at all, while a MISSPELLED id
+    # correctly writes nothing. A caller that meant to scope and expanded a variable to nothing would
+    # get the unscoped blast radius and no error. Identity is uncertain here, so fail closed.
+    if args.product_id is not None and not str(args.product_id).strip():
+        print("ERROR: --product-id was supplied but is empty. Give a product id, or omit the flag "
+              "entirely to act on every product.", file=sys.stderr)
+        return 2
 
     if args.write:
         if not args.product_id:

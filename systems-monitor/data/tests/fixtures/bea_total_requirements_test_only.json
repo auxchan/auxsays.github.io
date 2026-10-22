@@ -1,0 +1,23 @@
+{
+  "fixtureClass": "TEST_ONLY_NOT_LIVE_BEA_DATA",
+  "BEAAPI": {
+    "Results": {
+      "Data": [
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"211","RowDescr":"Oil and gas extraction industry","ColCode":"211","ColDescr":"Oil and gas extraction commodity","DataValue":"1.2000000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"22","RowDescr":"Utilities industry","ColCode":"211","ColDescr":"Oil and gas extraction commodity","DataValue":"0.1000000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"324","RowDescr":"Petroleum and coal products industry","ColCode":"211","ColDescr":"Oil and gas extraction commodity","DataValue":"0.7000000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"211","RowDescr":"Oil and gas extraction industry","ColCode":"22","ColDescr":"Utilities commodity","DataValue":"0.0500000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"22","RowDescr":"Utilities industry","ColCode":"22","ColDescr":"Utilities commodity","DataValue":"1.1000000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"324","RowDescr":"Petroleum and coal products industry","ColCode":"22","ColDescr":"Utilities commodity","DataValue":"0.0200000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"484","RowDescr":"Truck transportation industry","ColCode":"22","ColDescr":"Utilities commodity","DataValue":"0.0400000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"22","RowDescr":"Utilities industry","ColCode":"324","ColDescr":"Petroleum and coal products commodity","DataValue":"0.0600000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"324","RowDescr":"Petroleum and coal products industry","ColCode":"324","ColDescr":"Petroleum and coal products commodity","DataValue":"1.1500000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"484","RowDescr":"Truck transportation industry","ColCode":"324","ColDescr":"Petroleum and coal products commodity","DataValue":"0.0800000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"211","RowDescr":"Oil and gas extraction industry","ColCode":"486","ColDescr":"Pipeline transportation commodity","DataValue":"0.0300000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"324","RowDescr":"Petroleum and coal products industry","ColCode":"486","ColDescr":"Pipeline transportation commodity","DataValue":"0.0400000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"484","RowDescr":"Truck transportation industry","ColCode":"493","ColDescr":"Warehousing and storage commodity","DataValue":"0.0200000"},
+        {"TableID":"999998","Year":"2024","Unit":"Coefficient","RowCode":"493","RowDescr":"Warehousing and storage industry","ColCode":"493","ColDescr":"Warehousing and storage commodity","DataValue":"1.0500000"}
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+G.17 INDUSTRIAL PRODUCTION AND CAPACITY UTILIZATION
+Release date: August 18, 2026
+
+Industrial Production
+This minimized fixture retains only the official product/schema markers.
+
+Capacity Utilization
+Observation extraction remains blocked until exact series identifiers are accepted.

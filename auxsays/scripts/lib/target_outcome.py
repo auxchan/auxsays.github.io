@@ -1,0 +1,363 @@
+#!/usr/bin/env python3
+"""What does a report say about ONE specific version/build identity?
+
+THE DEFECT THIS CLOSES. Version-only lanes accept a report for a version because the version
+STRING occurs in the text -- `exact_version_match` (``patch_collectors/base.py``) and
+``collect_obs_reports.exact_version_re`` are numeric-boundary containment and nothing more. So a
+report saying "I downgraded to 32.1.2, which doesn't have this problem" was counted as a NEGATIVE
+report about 32.1.2: the version the author named as their fix became evidence against it. Seven
+such associations were live in ``_data/consensus_evidence.yml`` when this module was written.
+
+WHAT THIS IS NOT. It is not a positive "prove the target is affected" gate. That was measured and
+rejected. Of the 351 accepted rows an audit could positively classify as affected, 176 carry no
+defect word within 100 characters of their own identity: they state the version only as a
+structured environment declaration. In the OBS lane 164 of 188 counted rows declare their version
+in the GitHub issue template's ``### OBS Studio Version`` field (130 name it ONLY there), with the
+defect prose in a different section. Requiring affected language near the identity would delete
+roughly half the legitimate corpus to remove seven bad rows. So this module only ever VETOES, and
+only on explicit contradictory language. Silence keeps today's behaviour.
+
+THE CONTRACT, and the real false positive that forced each rule:
+
+  R1  A target the reporter DECLARED running is never vetoed. Their own structured self-report
+      outranks ambient prose. Without R1, obs #13495 / #13518 / #13562 were wrongly dropped: each
+      declares 32.1.2 in the template and says "cannot reproduce" about the REPRODUCER, not the
+      version.
+  R2  A cue may not bind across another identity. In "fails ... in 32.2.0, works in 32.1.2",
+      `works` must not reach 32.2.0 nor `fails` reach 32.1.2. Applied symmetrically to affected and
+      excluding cues so it cannot bias the outcome. Without R2, obs #13708's 32.2.0 -- the version
+      the title indicts -- was wrongly dropped.
+  R3  An explicit affected statement about the target beats an excluding one (contested -> keep).
+      Reports routinely test several versions and declare only one: "the issue occurs in both
+      versions", "reproduced with both", "31.0.4: black screen". Without R3, obs #13568 / #13711 /
+      #13559 / #13436 / #13606 / #13659 / #13746 were all wrongly dropped -- seven legitimate
+      multi-version reports, i.e. the veto would have done more damage than the bug.
+
+Deterministic, offline, no network, no model. Cue lists are deliberately small: they were derived
+from measured corpus frequency, where one lemma covers most of each category (`works` 84% of
+working phrasings, `revert`/`from`/`previous` 84% of rollback).
+"""
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+from typing import Iterable
+
+# Outcomes. Only AFFECTED and NONE keep a row; the rest are vetoes.
+AFFECTED = "affected"
+WORKING = "working"
+ROLLBACK = "rollback_target"
+FIXED = "fixed_in_target"
+REFERENCE = "reference_only"
+NONE = "no_outcome_language"
+
+VETO_OUTCOMES = frozenset({WORKING, ROLLBACK, FIXED, REFERENCE})
+
+_T = "%T"
+
+# A clause boundary. A cue on the far side of a full stop, semicolon, newline or contrastive
+# conjunction is about something else.
+_STOP = r"[^.;!?\n]"
+
+_ROLLBACK_CUES: list[tuple[str, str]] = [
+    # "downgraded to X", "revert back to X", "went back to X", "staying on X".
+    # Every verb carries its third-person -s form. Without them the cue missed a live Windows
+    # title -- "Keeps Failing to Install and ROLLS BACK to 26200.9168" -- where the target is the
+    # working build the machine fell back to. The gap was systematic, not one word: `rolls back`,
+    # `reverts`, `downgrades`, `goes back` and `falls back` all read as no-outcome, because a
+    # title written about the machine ("it rolls back") rather than the author ("I rolled back")
+    # is the natural voice for install-failure reports.
+    # The -s is added only to the MOTION verbs, which mean the same thing whoever the subject is:
+    # something moved TO the target. It is deliberately NOT added to stay / remain / stick, where
+    # the subject decides the meaning -- "I stay on X" is a rollback, but "the bug stays on X" is
+    # an affected report, and adding `stays` classified that second sentence as a rollback target.
+    (rf"\b(?:down\s?grad(?:e|es|ed|ing)?|revert(?:s|ed|ing)?|roll(?:s|ed|ing)?\s*back"
+     rf"|went\s+back|go(?:es|ing)?\s+back|fall(?:s|ing)?\s+back|fell\s+back"
+     rf"|stay(?:ed|ing)?|remain(?:ed|ing)?|stick(?:ing)?)\b"
+     rf"{_STOP}{{0,40}}?\b(?:back\s+)?(?:to|on|with)\b{_STOP}{{0,25}}?{_T}",
+     "rollback_to_target"),
+    # "the previous/older/last known good version X"
+    (rf"\b(?:previous|older|earlier|last\s+(?:known\s+)?(?:good|working))\s+"
+     rf"(?:version|build|install\w*)\b{_STOP}{{0,25}}?{_T}", "previous_version_is_target"),
+    # "my current solution is to just use version 31.1.2", "the workaround is to stay on X".
+    # A version named as the author's SOLUTION is the version that WORKS, not the one that
+    # failed. The motion-verb cue above misses it because nobody moved anywhere -- the sentence
+    # describes what they run now. Real: obsproject.com thread 190590, where 32.0.0 removed a
+    # flag and the author closes with "my current solution is to just use version 31.1.2"; the
+    # first production run of the forum family counted that as evidence AGAINST 31.1.2.
+    # "work" is deliberately absent from the verb list as defence in depth, NOT as a
+    # load-bearing guard: measured over 1,111 OBS issues and 1,346 counted stored rows,
+    # adding it changes 0 outcomes, because "does not work" is itself an AFFECTED cue and R3
+    # wins before any veto runs. The exclusion costs nothing and keeps the cue honest about
+    # what it means if R3 ever stops covering that phrasing.
+    # AFFIRMATIVE SELECTION of the target, not merely "solution/workaround ... verb ... target".
+    # Without that distinction "The solution is not to use version 31.1.2" vetoed 31.1.2 as the
+    # healthy fallback while the author was saying to AVOID it -- found by adversarial probe before
+    # merge, after both corpora had already called the cue safe. Corpus safety is not semantic
+    # completeness: no stored row and no GitHub issue happened to use that phrasing.
+    #
+    # The gaps are TEMPERED: an avoidance word between the marker and the verb, or an exclusion
+    # word between the verb and the target, blocks the match. `no` is deliberately NOT in either
+    # list, because "There is no other workaround; use 31.1.2" affirmatively selects 31.1.2.
+    # Measured honestly: adding `no` changes nothing on today's corpora, since the `no` in that
+    # sentence sits BEFORE the marker and never falls inside a gap -- so the exclusion is intent,
+    # not a load-bearing guard.
+    #
+    # This basis is NOT _POLARITY_SENSITIVE, and the reason is measured rather than assumed:
+    # _POLARITY_INVERTER matches `no longer`, not bare `no`, so the generic lookback would NOT
+    # have refused that sentence. Adding the basis to _POLARITY_SENSITIVE changes no tested
+    # outcome either. It stays out because the tempered gaps express the distinction this cue
+    # actually needs -- avoidance OF the target -- which a generic lead-word scan cannot.
+    #
+    # `except` and `away` are guards for the SECOND gap only. In the first gap `except` would
+    # block "There is no workaround except to use 31.1.2", which affirmatively selects 31.1.2 --
+    # the handoff predicted that exact sentence, and it did fail until `except` came out.
+    # The first gap admits `;`, which _STOP does not, because that sentence puts the marker and the
+    # selection in separate clauses. The avoidance guard still applies across it.
+    #
+    # stay/remain/stick are absent on purpose: "staying on X" is already rollback_to_target and
+    # duplicating that territory would give one sentence two bases. "keep using X" is reached
+    # through `using`, without making a bare "keep X" authoritative.
+    (rf"\b(?:solution|work-?around)\b"
+     rf"(?:(?!\b(?:not|never|avoid\w*|stop\w*|quit\w*|refrain|don'?t|doesn'?t|didn'?t|without)\b)[^.!?\n]){{0,40}}?"
+     rf"\b(?:use|using|install\w*|run|running|switch\w*\s+to|went\s+with)\b"
+     rf"(?:(?!\b(?:without|except|unless)\b)[^.;!?\n]){{0,30}}?{_T}",
+     "target_is_the_workaround"),
+]
+
+_WORKING_CUES: list[tuple[str, str]] = [
+    # "X doesn't have this problem", "X does not exhibit this issue"
+    (rf"{_T}{_STOP}{{0,40}}?\b(?:do(?:es)?\s*n[o']?t\s+(?:have|exhibit|show|reproduce)\s+"
+     rf"th(?:is|e)\s+(?:problem|issue|bug|behaviou?r)|has\s+no\s+(?:such\s+)?(?:problem|issue))",
+     "target_lacks_problem"),
+    # The verb list holds only verbs whose BARE negation can only mean "the problem is absent":
+    # occur, happen, manifest, reproduce. `appear` was in it and had to come out -- "doesn't
+    # appear" usually names the PROBLEM, something missing. It vetoed obsproject.com thread
+    # 196135, "Downstream- key doesn't appear on 32.2.1", whose title says 32.2.1 IS affected.
+    # The corpus measurements could not catch that: the GitHub corpus and the stored rows have
+    # no such phrasing, and a veto is only ever as safe as the corpus it was measured against.
+    # "this issue does not occur in 32.2.2" -- the negation sits BEFORE the verb and the target
+    # comes AFTER it, a direction target_lacks_problem (target first) cannot see. Real: obs
+    # #13982, newly exposed by the exact_version_re sentence-end fix; without this cue a version
+    # the report names as HEALTHY would reach the acceptance predicates. Deliberately NOT
+    # polarity-sensitive: the cue carries its own negation, same as target_lacks_problem.
+    # Measured alone over 1,111 OBS issues it changes nothing -- it is a counterweight, not a
+    # widening of what gets vetoed in practice.
+    (rf"\b(?:do(?:es|id)?\s*n[o']?t|never)\s+"
+     rf"(?:(?:see|seen|saw|notice|noticed|had|have|get|got|experience[d]?)\s+"
+     rf"(?:\w+\s+){{0,2}}?)?"
+     rf"(?:occur|happen|manifest|reproduce)\w*"
+     rf"{_STOP}{{0,30}}?\b(?:in|on|with|under|for)\b{_STOP}{{0,15}}?{_T}",
+     "target_lacks_occurrence"),
+    # "32.2.2 was fine for me", "32.2.2 is stable". The results-table cue below needs a bracket,
+    # dash or colon delimiter, and target_works needs the word "work", so a plain adjective said
+    # in prose reached acceptance -- found by adversarial probe, not by a corpus observation.
+    # "was fine UNTIL ..." is excluded: that sentence reports a regression, not a healthy build.
+    (rf"{_T}{_STOP}{{0,25}}?\b(?:was|were|is|are|seems?|seemed|ran|runs)\s+"
+     rf"(?:perfectly\s+|totally\s+|completely\s+|absolutely\s+)?"
+     rf"(?:fine|ok|okay|stable|solid|flawless|problem-free)(?:ly)?\b(?!\s+until\b)",
+     "target_said_fine"),
+    # "No problems on 32.2.2", "no crashes with 32.2.2". The negation is a NOUN phrase rather
+    # than a negated verb, so target_lacks_occurrence does not reach it.
+    (rf"\bno\s+(?:problems?|issues?|errors?|crashes?|bugs?)\b{_STOP}{{0,25}}?"
+     rf"\b(?:in|on|with|under|for)\b{_STOP}{{0,15}}?{_T}",
+     "no_problem_on_target"),
+    # "works in X" / "worked as intended on X"
+    (rf"\bwork(?:s|ed|ing)?\b{_STOP}{{0,30}}?\b(?:in|on|with|under)\b{_STOP}{{0,15}}?{_T}",
+     "works_on_target"),
+    # "X works" -- but never "X workaround"/"X workflow", and never a path segment such as
+    # ".../obs-studio-32.1.0/work/..." (real: obs #13319, a compile-failure report).
+    (rf"{_T}(?![/\-]){_STOP}{{0,25}}?\bwork(?:s|ed|ing)?\b(?!\s*(?:around|flow))", "target_works"),
+    # a results table cell: "32.0.4 (working)" / "32.0.4 - ok"
+    (rf"{_T}\s*[\(\[\-–:]\s*(?:work|ok|fine|good|no\s+issue)", "target_marked_working"),
+    (rf"\bcan(?:no|')?t\s+reproduce|unable\s+to\s+reproduce\b{_STOP}{{0,30}}?{_T}",
+     "cannot_reproduce_on_target"),
+    (rf"{_T}{_STOP}{{0,25}}?\b(?:is\s+)?(?:not\s+affected|unaffected)\b", "target_not_affected"),
+    # "a 32.1.2 log ... showing successful loading" (obs #13692). Requiring the SHOWING verb keeps
+    # this off "Built OBS Studio 32.2.1 successfully from source" (obs #13770), which is a build
+    # report, not a claim that the version is healthy.
+    (rf"{_T}{_STOP}{{0,40}}?\bshow(?:s|ing|ed)?\s+successful\w*", "target_successful"),
+]
+
+_FIXED_CUES: list[tuple[str, str]] = [
+    (rf"\b(?:fix(?:ed|es)?|resolv(?:ed|es)|patch(?:ed)?)\b{_STOP}{{0,25}}?"
+     rf"\b(?:in|by|with|as\s+of)\b{_STOP}{{0,15}}?{_T}", "fixed_in_target"),
+]
+
+_REFERENCE_CUES: list[tuple[str, str]] = [
+    # "(e.g. 32.2.0)" -- illustrative, not the reporter's version (obs #13693).
+    (rf"(?<![A-Za-z])(?:e\.?\s?g\.?|for\s+example|such\s+as)\s*[,:]?\s*\)?\s*{_T}",
+     "example_reference"),
+]
+
+_AFFECTED_CUES: list[tuple[str, str]] = [
+    # a results table cell: "32.1.2 - broken"
+    (rf"{_T}\s*[\(\[\-–:]\s*(?:broken|crash|fail|not\s+working|bug|black\s+screen)",
+     "target_marked_broken"),
+    # "X crashes", "32.1.2 has this behavior", "31.0.4: black screen"
+    (rf"{_T}{_STOP}{{0,45}}?\b(?:crash(?:es|ed|ing)?|break(?:s)?|broke(?:n)?|fail(?:s|ed|ing)?"
+     rf"|hang(?:s|ing)?|freez(?:e|es|ing)|terminates?|do(?:es)?\s*n[o']?t\s+work|not\s+working"
+     rf"|is\s+broken|happens?|occurs?|same\s+(?:behaviou?r|issue|problem)|this\s+behaviou?r"
+     rf"|black\s+screen|flicker\w*|ghost\w*|blank\w*)\b", "target_then_failure"),
+    # "fails ... in X", "crashes on X" -- the mirror direction, which the build-role cue set lacks
+    (rf"\b(?:crash(?:es|ed|ing)?|break(?:s|ing)?|broke(?:n)?|fail(?:s|ed|ing)?|hang(?:s|ing)?"
+     rf"|freez(?:e|es|ing)|terminat\w*|regress\w*|reproduc\w*|do(?:es)?\s*n[o']?t\s+work"
+     rf"|not\s+working)\b{_STOP}{{0,45}}?\b(?:in|on|with|under|since|after|as\s+of|both)\b"
+     rf"{_STOP}{{0,20}}?{_T}", "failure_then_target"),
+    # "also tested X with the same behavior"
+    (rf"\b(?:also\s+)?tested\b{_STOP}{{0,25}}?{_T}{_STOP}{{0,45}}?"
+     rf"\b(?:same|too|as\s+well|also|both)\b", "tested_same_behaviour"),
+    (rf"\b(?:still|also)\s+(?:broken|crashes|fails|happens|occurs|present)\b"
+     rf"{_STOP}{{0,30}}?{_T}", "still_broken_on_target"),
+]
+
+# Any identity of the same shape as the target. Used only by R2, to detect a cue that reaches
+# across a DIFFERENT identity; it never selects targets itself.
+_NEIGHBOUR_IDENTITY = re.compile(r"(?<![0-9.])\d+(?:\.\d+){1,3}(?![0-9.])")
+
+# Cues whose meaning inverts under negation or cessation. "works in X" is a working claim;
+# "stopped working in X" and "no longer works on X" are DEFECT reports -- and
+# `collect_obs_reports.CONCRETE_ISSUE_TERMS` already lists those exact phrases as defect
+# indicators, so without this the same substring would mean opposite things in two gates of the
+# same funnel. Applied ONLY to these bases: `target_lacks_problem` legitimately contains "does
+# not have this problem" and must keep firing.
+_POLARITY_SENSITIVE = frozenset({"works_on_target", "target_works", "target_successful",
+                                 "fixed_in_target"})
+_POLARITY_INVERTER = re.compile(
+    r"\b(?:stopped|no\s+longer|never|not|n't|ceased|quit|fail(?:s|ed|ing)?\s+to)\b", re.I)
+
+
+@dataclass(frozen=True)
+class Outcome:
+    """What the report says about one identity, and the exact text that established it."""
+
+    outcome: str
+    basis: str
+    excerpt: str
+
+    @property
+    def vetoes(self) -> bool:
+        return self.outcome in VETO_OUTCOMES
+
+
+def _spans_another_identity(matched: str, target: str) -> bool:
+    """R2: does this match reach across a DIFFERENT identity to find its cue?
+
+    Only an identity of the SAME SHAPE as the target counts. Report bodies are full of dotted
+    numbers that are not product versions -- driver revisions ("driver 610.88"), frame rates,
+    resolutions -- and treating those as a neighbouring identity silently disables a cue. Matching
+    the target's component count keeps "610.88" from shielding "32.1.2" while still stopping
+    "32.2.0" from stealing "32.1.2"'s cue.
+    """
+    components = target.count(".")
+    blanked = matched
+    for hit in re.finditer(re.escape(target), matched):
+        blanked = blanked[:hit.start()] + (" " * (hit.end() - hit.start())) + blanked[hit.end():]
+    return any(found != target and found.count(".") == components
+               for found in _NEIGHBOUR_IDENTITY.findall(blanked))
+
+
+_SENTENCE_BREAK = re.compile(r"[.;!?\n]")
+# An auxiliary or wh-word opening the clause. Paired with a trailing "?", this is a question rather
+# than a claim.
+_INTERROGATIVE = re.compile(
+    r"^\s*(?:was|were|is|are|has|have|had|does|do|did|will|would|can|could|should|any(?:one|body)?"
+    r"|who|what|when|where|why|how)\b", re.I)
+
+
+def _is_question(text: str, start: int, end: int) -> bool:
+    """Is the clause carrying this match a question rather than an assertion?"""
+    left = max((m.end() for m in _SENTENCE_BREAK.finditer(text, 0, start)), default=0)
+    closer = _SENTENCE_BREAK.search(text, end)
+    right = closer.end() if closer else len(text)
+    clause = text[left:right].strip()
+    return clause.endswith("?") and bool(_INTERROGATIVE.match(clause))
+
+
+def _mask_foreign_numbers(text: str, target: str) -> str:
+    """Blank dotted numbers that cannot be a version of this product, preserving offsets.
+
+    Bodies are full of dotted numbers that are not product versions -- "driver 610.88", frame
+    rates, resolutions. Their dots are clause boundaries to ``_STOP``, so one of them sitting
+    between an identity and its verb silently hides the AFFECTED cue and lets a WORKING cue
+    elsewhere win -- i.e. noise deletes evidence. Only tokens with the target's own component
+    count survive, so a genuine sibling version still blocks a cue via R2.
+    """
+    components = target.count(".")
+    out = text
+    for hit in _NEIGHBOUR_IDENTITY.finditer(text):
+        found = hit.group(0)
+        if found == target or found.count(".") == components:
+            continue
+        out = out[:hit.start()] + ("#" * len(found)) + out[hit.end():]
+    return out
+
+
+# How far back to look for a word that inverts a cue's polarity. "stopped working", "no longer
+# works" and "still not fixed" all put the inverter BEFORE the cue verb, outside the match.
+_POLARITY_LOOKBACK = 28
+
+
+def _first_hit(text: str, target: str, cues: list[tuple[str, str]]) -> tuple[str, str] | None:
+    escaped = re.escape(target)
+    scanned = _mask_foreign_numbers(text, target)
+    for pattern, basis in cues:
+        for match in re.finditer(pattern.replace(_T, escaped), scanned, re.I):
+            if _spans_another_identity(match.group(0), target):
+                continue
+            if basis in _POLARITY_SENSITIVE and _is_question(scanned, match.start(), match.end()):
+                # "Was this fixed in KB5121003?" ASKS whether the target is healthy; it does not
+                # say so. Read as an assertion it vetoes a legitimately affected row, and R3 cannot
+                # rescue it because a question rarely carries a failure verb of its own. This
+                # phrasing is native to Microsoft Q&A, where the sentence appears verbatim.
+                continue
+            if basis in _POLARITY_SENSITIVE:
+                lead = scanned[max(0, match.start() - _POLARITY_LOOKBACK):match.start()]
+                # Only the SAME clause may invert a cue. Without this the lookback reached back
+                # over a full stop in obs #13692 -- "CoreAudio fails to load. OBS 32.1.2 log ...
+                # showing successful loading" -- and let a statement about 32.2 cancel a working
+                # claim about 32.1.2.
+                lead = re.split(r"[.;!?\n]", lead)[-1]
+                if _POLARITY_INVERTER.search(lead) or _POLARITY_INVERTER.search(match.group(0)):
+                    continue
+            # Report the ORIGINAL text, never the masked form, so the audit trail is verbatim.
+            return basis, " ".join(text[match.start():match.end()].split())[:160]
+    return None
+
+
+def classify_target_outcome(text: str, target: str, declared: Iterable[str] = ()) -> Outcome:
+    """What does ``text`` say about ``target``?
+
+    ``declared`` is the identity/identities the reporter structurally declared running -- for a
+    GitHub issue template, the answer to its own version question. R1: a declared target is never
+    vetoed, because that field IS the author saying "this is what I am on".
+    """
+    body = str(text or "")
+    identity = str(target or "").strip()
+    if not identity or identity not in body:
+        return Outcome(NONE, "target_not_in_text", "")
+
+    if identity in {str(d or "").strip() for d in declared}:
+        return Outcome(AFFECTED, "declared_by_reporter", identity)          # R1
+
+    affected = _first_hit(body, identity, _AFFECTED_CUES)
+    if affected is not None:                                                # R3
+        return Outcome(AFFECTED, affected[0], affected[1])
+
+    for cues, outcome in ((_ROLLBACK_CUES, ROLLBACK), (_WORKING_CUES, WORKING),
+                          (_FIXED_CUES, FIXED), (_REFERENCE_CUES, REFERENCE)):
+        hit = _first_hit(body, identity, cues)
+        if hit is not None:
+            return Outcome(outcome, hit[0], hit[1])
+
+    return Outcome(NONE, "no_outcome_language", "")
+
+
+def target_is_contradicted(text: str, target: str, declared: Iterable[str] = ()) -> Outcome | None:
+    """The Outcome when the report contradicts ``target`` being affected, else ``None``.
+
+    Callers use this as a veto on an already-established version match. Silence -- and any
+    affirmative statement -- returns ``None``, so existing acceptance is unchanged.
+    """
+    outcome = classify_target_outcome(text, target, declared)
+    return outcome if outcome.vetoes else None

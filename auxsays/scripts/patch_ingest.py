@@ -31,13 +31,18 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from lib.http import fetch_text
-from lib.normalize import strip_tags, utc_now
+from lib.normalize import split_front_matter, strip_tags, utc_now
 from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION
+from lib import ingest_health
 from lib.write_update_record import refresh_existing_record, write_record
+from lib.version_landing import ensure_for_record
 
 DEFAULT_CONFIG = Path("auxsays/_data/patch_ingestion_sources.yml")
 DEFAULT_STATE = Path("auxsays/_data/patch_ingest_state.json")
 DEFAULT_OUTPUT = Path("auxsays/updates/generated")
+# Root of the public /updates tree. Version landing pages for build-aware products live under
+# <updates_dir>/<company>/<product>/<version>/index.md -- one segment above the build records.
+DEFAULT_UPDATES_DIR = Path("auxsays/updates")
 
 URL_RE = re.compile(r"https?://[^\s\])}>\"']+")
 RETRY_CAPTURE_STATUSES = {
@@ -75,13 +80,19 @@ def adapter_module(adapter_name: str):
 
 
 def load_front_matter(path: Path) -> dict[str, Any]:
+    """Read a generated record's front matter via the shared delimiter-line-exact parser.
+
+    ``split_front_matter`` only treats a line whose ENTIRE content is ``---`` as a fence, so a
+    serialized scalar that folds onto a line ending in a hyphen run (e.g. an OBS
+    ``release_summary`` carrying ``Hotfix Changes ------------------``) can never be mistaken
+    for the closing fence -- the substring-split reader this replaces truncated such records
+    mid-scalar and crashed scheduled ingestion with a YAML ScannerError.
+    """
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
+    front, _body = split_front_matter(text)
+    if front is None:
         return {}
-    parts = text.split("---\n", 2)
-    if len(parts) < 3:
-        return {}
-    data = yaml.safe_load(parts[1]) or {}
+    data = yaml.safe_load(front) or {}
     return data if isinstance(data, dict) else {}
 
 
@@ -234,7 +245,7 @@ def resolve_scan_limit(source: dict[str, Any], args: argparse.Namespace) -> int:
     return value
 
 
-def _adapter_fetch(module: Any, source: dict[str, Any], limit: int, state: dict[str, Any], product_id: str, *, write: bool) -> list[dict[str, Any]]:
+def _adapter_fetch(module: Any, source: dict[str, Any], limit: int, state: dict[str, Any], product_id: str, *, write: bool, probe: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     """Call ``module.fetch``, giving adapters that sweep detail requests across runs a
     persisted per-source scan-progress dict.
 
@@ -249,16 +260,22 @@ def _adapter_fetch(module: Any, source: dict[str, Any], limit: int, state: dict[
     """
     fetch = module.fetch
     try:
-        accepts_scan_state = "scan_state" in inspect.signature(fetch).parameters
+        params = inspect.signature(fetch).parameters
     except (TypeError, ValueError):
-        accepts_scan_state = False
-    if not accepts_scan_state:
-        return fetch(source, limit=limit)
-    if write:
-        scan_state = source_state(state, product_id).setdefault("scan", {})
-    else:
-        scan_state = copy.deepcopy((source_state(state, product_id).get("scan") or {}))
-    return fetch(source, limit=limit, scan_state=scan_state)
+        params = {}
+    kwargs: dict[str, Any] = {"limit": limit}
+    if "scan_state" in params:
+        if write:
+            kwargs["scan_state"] = source_state(state, product_id).setdefault("scan", {})
+        else:
+            kwargs["scan_state"] = copy.deepcopy((source_state(state, product_id).get("scan") or {}))
+    # An adapter that can tell "the listing had entries I could not map" from "the listing had
+    # nothing" fills this dict. Passed only to adapters that declare the parameter, exactly like
+    # scan_state above, so every other adapter is called as before and reports no signal at all --
+    # and no signal means the tolerance path decides, never "broken".
+    if "probe" in params and probe is not None:
+        kwargs["probe"] = probe
+    return fetch(source, **kwargs)
 
 
 def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str, Any], *, write: bool = True) -> dict[str, Any]:
@@ -272,11 +289,17 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     module = adapter_module(adapter_name)
     per_run_limit = resolve_record_limit(source, args)
     scan_limit = resolve_scan_limit(source, args)
-    records = _adapter_fetch(module, source, scan_limit, state, product_id, write=write)
+    probe: dict[str, Any] = {}
+    records = _adapter_fetch(module, source, scan_limit, state, product_id, write=write, probe=probe)
     candidate_count = len(records)
+    upstream_candidates = int(probe.get("upstream_candidates") or 0)
+    # A mismatch claim only means anything when the extractor produced nothing. If records came
+    # back, extraction worked on this run whatever else the listing contained.
+    extraction_mismatch = bool(probe.get("extraction_mismatch")) and candidate_count == 0
     written = []
     skipped = []
     refreshed = []
+    landings: list[dict[str, str]] = []
     deferred = []
     deferred_source_urls: set[str] = set()  # URLs of accepted-but-deferred records (see promote below)
     would_create = []     # dry-run: unseen records this run WOULD create (no disk/state write)
@@ -331,6 +354,17 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         record.setdefault("fallback_official_sources", fallback_sources)
 
         path, action = write_record(args.output, record, overwrite_existing=args.overwrite_existing)
+        # A build-aware product's record lives one segment BELOW the version URL, so the version URL
+        # needs a landing page that lists the builds. Generated strictly AFTER a successful write --
+        # never from a candidate -- so a landing page can never exist for a version with no records.
+        # Idempotent: unchanged bytes are not rewritten, so a steady-state run touches nothing.
+        # Landing pages follow the RECORD output, not a fixed repo path: a caller writing records
+        # into a temporary directory must not have landing pages appear in the real tree. Only an
+        # explicit --updates-dir overrides that.
+        landing_root = getattr(args, "updates_dir", None) or Path(args.output).parent
+        landing_path, landing_action = ensure_for_record(landing_root, record)
+        if landing_action in {"created", "updated"}:
+            landings.append({"path": str(landing_path), "action": landing_action})
         mark_seen(state, product_id, record_id)
         if action == "created":
             written.append(str(path))
@@ -354,6 +388,10 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
             if deferred_source_urls:
                 promoted = [url for url in promoted if url not in deferred_source_urls]
             scan["inspected"] = promoted
+        # A source may declare how long its own silence stays plausible. Without an override the
+        # shared default applies; a source that genuinely publishes rarely can raise it rather than
+        # forcing a universal cadence threshold onto every vendor.
+        tolerance = source.get("ingestion", {}).get("empty_extraction_tolerance")
         update_source_success(
             state,
             product_id,
@@ -363,6 +401,9 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
             fetched=candidate_count,
             written=len(written) + len(refreshed),
             skipped=len(skipped),
+            extraction_mismatch=extraction_mismatch,
+            upstream_candidates=upstream_candidates,
+            **({"tolerance": int(tolerance)} if tolerance is not None else {}),
         )
 
     created_count = len(written) if write else len(would_create)
@@ -373,6 +414,8 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         "record_limit": per_run_limit,
         "scan_limit": scan_limit,
         "candidate_count": candidate_count,
+        "upstream_candidates": upstream_candidates,
+        "extraction_mismatch": extraction_mismatch,
         "created": created_count,
         "skipped_existing": len(skipped),
         "deferred_count": len(deferred),
@@ -382,6 +425,9 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         "refreshed": refreshed,
         "skipped": skipped,
         "deferred": deferred,
+        # Version landing routes created/repaired this run. Reported because the lane publishes
+        # them: an artifact the pipeline writes but never mentions is invisible to the operator.
+        "version_landings": landings,
         "status": "success",
         "duration_ms": duration_ms,
     }
@@ -395,6 +441,10 @@ def main() -> int:
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--state", type=Path, default=DEFAULT_STATE)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--updates-dir", type=Path, default=None,
+                        help="Root of the public /updates tree (version landing pages). "
+                             "Defaults to the parent of --output, so redirecting record output "
+                             "also redirects landing pages.")
     parser.add_argument("--source", action="append", help="Run a specific product_id or company_id. May be used multiple times.")
     parser.add_argument("--all", action="store_true", help="Run all non-manual sources, including P2/P3 experimental sources.")
     parser.add_argument("--limit", type=int, default=2, help="Max records per source.")
@@ -410,9 +460,11 @@ def main() -> int:
 
     results = []
     errors = []
+    attempted: list[dict[str, Any]] = []
     for source in sources:
         if not should_run(source, args):
             continue
+        attempted.append(source)
         try:
             # Dry-run and production share run_source (write=False vs True) so a dry-run
             # scans the SAME resolved candidate window and reports the exact create/refresh/
@@ -433,8 +485,10 @@ def main() -> int:
                     error=sanitize_error_message(exc),
                 )
             print(f"[ERROR] {error['product_id']}: {error['error']}", file=sys.stderr)
-            if args.strict:
-                break
+            # DELIBERATELY NO `break` HERE. `--strict` used to abandon the loop on the first error,
+            # so one blocked vendor discarded the valid discovery of every source that had not run
+            # yet. Strictness is about what the run REPORTS, not about how much work it throws away;
+            # the exit code is decided once, below, from the health of everything that ran.
 
     state["last_run_finished_at"] = utc_now()
     state["last_results"] = results
@@ -443,7 +497,37 @@ def main() -> int:
     if not args.dry_run:
         save_state(args.state, state)
 
-    print(json.dumps({"results": results, "errors": errors, "linked_body_refreshes": linked_body_refreshes}, indent=2))
+    # RUN-LEVEL HEALTH. Per-source state was already honest -- Elgato has carried
+    # `status: failing, consecutive_failures: 13` for days -- but nothing read it back at the end of
+    # the run, so the process exited 0 and the workflow reported success regardless. This is the
+    # step that makes the conclusion agree with the telemetry.
+    # On a write run the per-source buckets were already advanced during the loop; on a dry
+    # run nothing was persisted and the streaks must be projected forward here instead.
+    health_rows = ingest_health.source_rows(state, attempted, results, errors,
+                                            already_persisted=not args.dry_run)
+    verdict = ingest_health.classify_run(health_rows)
+    # A run that scored nothing must not overwrite a real verdict. A `--source` typo, or a probe of
+    # a staged `enabled: false` product, used to persist `healthy` over a stored `failed` -- into a
+    # file the writeback commits to main, while the per-source buckets in that same file still read
+    # `failing, consecutive_failures: 13`.
+    if verdict != ingest_health.RUN_NOT_EVALUATED:
+        state["last_run_health"] = verdict
+        state["last_run_source_health"] = health_rows
+        if not args.dry_run:
+            save_state(args.state, state)
+    ingest_health.annotate(health_rows, verdict)
+    ingest_health.write_step_summary(ingest_health.summarise(health_rows, verdict))
+
+    print(json.dumps({"results": results, "errors": errors,
+                      "linked_body_refreshes": linked_body_refreshes,
+                      "run_health": verdict, "source_health": health_rows}, indent=2))
+
+    # A DEGRADED run exits 0 on purpose: healthy vendors produced real records this run and
+    # discarding them would be a worse failure than the one being fixed. It is not silent -- the
+    # annotation and step summary above make it visible on the run page. Only a run with nothing
+    # trustworthy in it fails the lane.
+    if verdict == ingest_health.RUN_FAILED:
+        return 1
     if errors and args.strict:
         return 1
     return 0

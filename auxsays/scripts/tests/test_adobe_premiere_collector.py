@@ -189,6 +189,18 @@ def reddit_candidate(**overrides: str) -> dict[str, str]:
     return item
 
 
+def _no_algolia(premiere_mod):
+    """Offline stub for the Algolia chain's transport.
+
+    `collect_for_record` runs every method, so a suite that stubs only `request_text` would send
+    the Algolia chain to the live endpoint. Raising its own error type keeps the method on its
+    normal blocked path instead of crashing the run.
+    """
+    def _raise(*_args, **_kwargs):
+        raise premiere_mod.AlgoliaChainError("offline_test")
+    return _raise
+
+
 def run() -> int:
     print("=" * 60)
     print("Adobe Premiere Pro collector tests")
@@ -365,6 +377,7 @@ def run() -> int:
             return "<html><body>No results</body></html>"
 
         premiere.request_text = fake_request
+        premiere.algolia_request_json = _no_algolia(premiere)
         accepted_rows, rejected_rows, health = premiere.collect_for_record(record(), CollectorContext(write=False, since=None, max_pages=1))
     finally:
         premiere.request_text = original_request_text
@@ -453,6 +466,7 @@ def run() -> int:
             return BRAVE_RESPONSE
 
         premiere.request_text = fake_request
+        premiere.algolia_request_json = _no_algolia(premiere)
         premiere.request_json = fake_json
         premiere.load_evidence = lambda: []
         accepted_rows, rejected_rows, health = premiere.collect_for_record(record(), CollectorContext(write=False, since=None, max_pages=1))

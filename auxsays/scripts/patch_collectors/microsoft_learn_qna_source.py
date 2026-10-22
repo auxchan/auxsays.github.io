@@ -126,11 +126,43 @@ def canonical_learn_qna_url(url: str) -> str:
     return urllib.parse.urlunsplit(("https", host, parsed.path.rstrip("/"), "", ""))
 
 
+def is_feed_content_type(content_type: str) -> bool:
+    """True when the server says it returned a feed, not a web page."""
+    lowered = str(content_type or "").lower()
+    return ("xml" in lowered or "rss" in lowered) and "html" not in lowered
+
+
 def blocked_signature(text: str, *, status: int | None, content_type: str) -> str:
+    """Is this response a refusal, or is it results?
+
+    A REFUSAL IS A PROPERTY OF THE RESPONSE, NOT OF ITS CONTENT. The phrase rules below describe
+    what a challenge PAGE looks like, and they were being applied to feed bodies -- where every
+    phrase is somebody's question. Measured on the live corpus: the search for OS build
+    26100.8737 returns HTTP 200 `application/rss+xml` with five real Q&A results, one of them
+    titled "Xbox Live sign-in suspended error ... WAM/ADD broker issue" whose description mentions
+    "a brand new Microsoft account". Two words from a user's report made AUXSAYS discard the whole
+    feed as a login wall -- including "WINDOWS UPDATE not functioning" and a KB5095093 report --
+    and publish `partial` / `login_or_auth_challenge` health for a page that shows zero reports.
+
+    It also explains why the failure looked intermittent rather than deterministic: the caller
+    passes only the first 4000 characters, so whether the phrases appear depends on which results
+    the search happens to rank first that day.
+
+    So: status is always authoritative (401/403/429 are refusals whatever the body says), and an
+    HTML body is still read for challenge phrases. A body the server labels as a feed is DATA. If
+    a challenge is ever served under a feed content type it does not parse as RSS, and
+    `request_learn_qna_feed` already fails it closed as `feed_parse_failed`.
+    """
     lowered = (text or "").lower()
     if status in {401, 403}:
         return "blocked"
-    if status == 429 or "rate limit" in lowered or "too many requests" in lowered:
+    if status == 429:
+        return "rate_limited"
+    if not text:
+        return "empty_body"
+    if is_feed_content_type(content_type):
+        return "none"
+    if "rate limit" in lowered or "too many requests" in lowered:
         return "rate_limited"
     if "captcha" in lowered:
         return "captcha_challenge"
@@ -140,8 +172,6 @@ def blocked_signature(text: str, *, status: int | None, content_type: str) -> st
         return "browser_challenge"
     if "sign in" in lowered and "microsoft account" in lowered:
         return "login_or_auth_challenge"
-    if not text:
-        return "empty_body"
     if content_type and "html" in content_type.lower() and "xml" not in content_type.lower():
         return "html_response"
     return "none"
@@ -182,8 +212,19 @@ def _fetch_feed_text(url: str, *, timeout: int = 30, max_bytes: int = 1_500_000)
 
 def parse_learn_qna_rss(text: str, *, source_type: str = DEFAULT_SOURCE_TYPE, source_name: str = DEFAULT_SOURCE_NAME) -> list[dict[str, Any]]:
     """Pure RSS 2.0 parser: search-RSS text -> candidate dicts. Raises ET.ParseError on
-    malformed XML. Only specific Q&A question URLs survive."""
+    malformed XML or on a well-formed document that is not a feed. Only specific Q&A question
+    URLs survive.
+
+    THE ROOT IS CHECKED because `blocked_signature` now trusts the content type: a body the server
+    labels `application/rss+xml` is treated as results rather than scanned for challenge phrases.
+    Trusting that label without verifying the shape would leave one escape -- a challenge page that
+    is ALSO well-formed XML would parse to zero items and be published as `no_results`, i.e. "we
+    looked and there was nothing", when in fact nothing was read. Refusing a non-feed root closes
+    it: the caller turns ET.ParseError into `broken`, which fails closed."""
     root = ET.fromstring(text)
+    tag = str(root.tag or "").rsplit("}", 1)[-1].lower()
+    if tag not in {"rss", "feed", "rdf"}:
+        raise ET.ParseError(f"not a feed document: root element <{root.tag}>")
     channel = root.find("channel")
     items = channel.findall("item") if channel is not None else root.findall(".//item")
     candidates: list[dict[str, Any]] = []

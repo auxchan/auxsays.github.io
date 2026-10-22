@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "phase4b-source-evidence-1.0.0",
+  "sourceArtifactId": "bea-concordance:sha256:6e25267ff60ccedc0808c14153b0cdeb566a7f5e9097536c70c2b9694ef5ff47",
+  "authority": "U.S. Bureau of Economic Analysis",
+  "sourceUrl": "https://www.bea.gov/sites/default/files/2023-10/BEA-Industry-and-Commodity-Codes-and-NAICS-Concordance.xlsx",
+  "retrievedTime": "2026-08-22T04:39:22Z",
+  "acceptedTime": "2026-08-22T04:39:22Z",
+  "contentSha256": "6E25267FF60CCEDC0808C14153B0CDEB566A7F5E9097536C70C2B9694EF5FF47",
+  "byteLength": 61081,
+  "classificationLevel": "BEA_SUMMARY_71",
+  "naicsVintage": "2017_NAICS",
+  "securityInspection": {
+    "macros": false,
+    "formulas": false,
+    "externalLinks": false,
+    "executed": false
+  },
+  "rightsState": "ALLOW_WITH_ATTRIBUTION_AND_TERMS_FINGERPRINT"
+}

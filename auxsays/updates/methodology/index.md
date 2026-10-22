@@ -94,7 +94,7 @@ permalink: /updates/methodology/
   <section class="panel methodology-method-health">
     <div class="eyebrow">Collector audit</div>
     <h2>Collector / method health telemetry</h2>
-    <p>This describes collection attempts for community/report evidence. It is not accepted evidence by itself, and it does not change report counts, verdicts, or consensus state.</p>
+    <p>This describes collection attempts for community/report evidence. It is not accepted evidence by itself, and it does not change report counts, verdicts, or consensus state. Each row is one collection method against one exact patch, so a product with per-build updates has a separate row per build.</p>
     <p>Status values such as <strong>success</strong>, <strong>partial</strong>, <strong>blocked</strong>, <strong>broken</strong>, <strong>stale</strong>, <strong>disabled</strong>, and similar states describe collector or method execution. They do not mean users are reporting patch problems.</p>
 
     {% assign method_health_rows = site.data.evidence_method_health.methods %}
@@ -122,20 +122,58 @@ permalink: /updates/methodology/
 
     <div class="source-health-table method-health-table" role="table" aria-label="AUXSAYS collector method-health telemetry">
       <div class="source-health-row method-health-row source-health-row--head" role="row">
-        <span>Product</span><span>Version</span><span>Method</span><span>Source type</span><span>Status</span><span>Last run</span><span>Candidates</span><span>Accepted</span><span>Public counted</span><span>Notes / block reason</span>
+        <span>Product</span><span>Version / build</span><span>Method</span><span>Source type</span><span>Status</span><span>Last run</span><span>Candidates</span><span>Accepted</span><span>Public counted</span><span>Notes / block reason</span>
       </div>
       {% for item in method_health_rows %}
       <div class="source-health-row method-health-row method-health-row--{{ item.status | downcase | replace: '_', '-' }}" role="row">
         <span>{{ item.product_id }}</span>
-        <span>{{ item.update_version }}</span>
+        {%- assign mh_build = item.target_build | default: '' %}
+        <span>{{ item.update_version }}{% if mh_build != '' %}<small class="method-health-build">Build {{ mh_build }}</small>{% endif %}</span>
         <span>{{ item.method_id }}</span>
         <span>{{ item.source_type }}</span>
         <span><mark class="source-health-status method-health-status--{{ item.status | downcase | replace: '_', '-' }}">{{ item.status | replace: '_', ' ' }}</mark></span>
         <span>{% if item.last_run != blank %}{{ item.last_run }}{% else %}Not checked{% endif %}</span>
         <span>{{ item.candidates_found | default: 0 }}</span>
-        <span>{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} added</small></span>
+        {%- comment -%}
+          "N added" used to render `evidence_rows_added`, which defaulted to the accepted count and
+          was therefore the same number twice: a run could accept 80 candidates, store 0 because the
+          append refused every one as already known, and still publish "80 added". The field now
+          carries the real append delta and `duplicate_existing_evidence` carries the remainder, so
+          both halves of what a run did are stated instead of one of them being invented.
+        {%- endcomment -%}
+        <span>{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} newly stored{% if item.duplicate_existing_evidence and item.duplicate_existing_evidence > 0 %} &middot; {{ item.duplicate_existing_evidence }} already held{% endif %}</small></span>
         <span>{{ item.public_counted_reports | default: 0 }}</span>
-        <span>{% if item.blocked_reason != blank %}{{ item.blocked_reason }}{% else %}{{ item.notes }}{% endif %}<small>{% if item.blocked_reason != blank and item.notes != blank %}{{ item.notes }}{% endif %}</small></span>
+        {%- comment -%}
+          `!= blank` is a NO-OP in this Liquid. Measured, not inferred, against liquid 4.0.4 -- the
+          version `auxsays/Gemfile`'s `jekyll ~> 4.4` resolves to and `pages.yml` builds with.
+          `blank` is not a value: it parses to `Liquid::Expression::MethodLiteral(:blank?)`, and
+          because neither String nor NilClass responds to `blank?` without ActiveSupport, the
+          comparison never finds anything equal to it. So `== blank` is ALWAYS false and
+          `!= blank` ALWAYS true -- for `''`, for nil, for an absent key, for whitespace, for
+          `false`, for `0`, for text. (It is tempting to describe `blank` as nil; that is wrong and
+          the difference is observable -- if it were nil then `nil != blank` would be false and a
+          null-valued field would have taken the correct branch. It does not.) Rendering THIS line
+          verbatim through that gem confirmed all of it.
+
+          The consequence was live on 636 of 1496 rows: a row whose `blocked_reason` was empty still
+          took the first branch, so the primary text printed NOTHING while the row's real note was
+          demoted into `<small>`. The remaining 860 rows looked right only because both always-true
+          guards happened to select the intended branch -- correct by accident, not by logic.
+
+          Normalise first, then compare against a literal. That is the idiom already used for
+          `mh_build` a few lines above (PR #67/#68), and it is deterministic: `default: ''`
+          substitutes for nil AND for the empty string, `strip` catches whitespace-only values, so a
+          single comparison decides the branch. `<small>` now sits inside its own condition, so a
+          row with no secondary text emits no element rather than an empty `<small></small>`, and a
+          note identical to the reason is not printed twice.
+
+          Scoped deliberately to this cell. The other `blank` comparisons in this file (last_run,
+          last_checked, polling_frequency, last_error_display) are all LATENT -- no live row reaches
+          the wrong branch -- and a repo-wide blank rewrite is not in scope here.
+        {%- endcomment -%}
+        {%- assign mh_reason = item.blocked_reason | default: '' | strip -%}
+        {%- assign mh_note = item.notes | default: '' | strip -%}
+        <span>{% if mh_reason != '' %}{{ mh_reason }}{% else %}{{ mh_note }}{% endif %}{% if mh_reason != '' and mh_note != '' and mh_note != mh_reason %}<small>{{ mh_note }}</small>{% endif %}</span>
       </div>
       {% endfor %}
     </div>

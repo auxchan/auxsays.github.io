@@ -12,7 +12,9 @@ the problems that have already cost time:
 from __future__ import annotations
 
 import argparse
+import re
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -107,6 +109,16 @@ def _validate_entry(errors: list[str], warnings: list[str], source: dict[str, An
         if not isinstance(keywords, list) or not all(isinstance(item, str) for item in keywords):
             errors.append(f"{label}: ingestion.keywords must be null or a list of strings")
 
+    # How many consecutive no-record checks this source may post before its silence is treated as
+    # rot (`lib.state.classify_success`). It is an advertised escape hatch for a genuinely rare
+    # publisher, so it has to be validated: a string or a negative number here would either raise
+    # deep inside a production run or, worse, quietly disable the rot detection for that source.
+    tolerance = ingestion.get("empty_extraction_tolerance")
+    if tolerance is not None:
+        if isinstance(tolerance, bool) or not isinstance(tolerance, int) or tolerance < 0:
+            errors.append(f"{label}: ingestion.empty_extraction_tolerance must be null or a "
+                          f"non-negative integer, got {tolerance!r}")
+
     request = ingestion.get("request")
     if request is not None and not isinstance(request, dict):
         errors.append(f"{label}: ingestion.request must be an object when present")
@@ -124,6 +136,41 @@ def _validate_entry(errors: list[str], warnings: list[str], source: dict[str, An
             errors.append(f"{label}: ingestion.record_limit must be a positive integer when present (got {record_limit_raw!r})")
         else:
             record_limit_floor = record_limit_raw
+
+    # Forward-only ingestion floor (see microsoft_office_updates._record_floor_date). A malformed
+    # value would remove the guard rather than narrow it, so it is rejected here as well as at
+    # runtime -- a typo must fail the config check, not quietly re-enable historical backfill.
+    #
+    # A lane whose record existence is keyed on build identity rather than app prose MUST declare
+    # the floor. Validating only the value left a hole: a typo in the KEY name
+    # ('record_floor_data') removes the only backfill guard, passes validation, and silently starts
+    # ingesting the entire release-notes history.
+    profile = str(ingestion.get("parser_profile") or "").strip()
+    # Both lanes parse a page that carries the FULL release history of their identity, so both
+    # depend on the floor to stop activation from backfilling years of builds. Teams is the same
+    # shape as PowerPoint here: 63 Windows/Public builds back to 2023 sit in one table.
+    FLOOR_REQUIRED_PROFILES = {
+        "microsoft_365_powerpoint_release_notes": "per-build PowerPoint",
+        "microsoft_teams_version_history": "Teams Windows/Public",
+    }
+    if profile in FLOOR_REQUIRED_PROFILES and "record_floor_date" not in ingestion:
+        errors.append(f"{label}: ingestion.record_floor_date is REQUIRED for the "
+                      f"{FLOOR_REQUIRED_PROFILES[profile]} lane (forward-only ingestion guard); "
+                      f"check the key spelling")
+    if "record_floor_date" in ingestion:
+        floor_raw = ingestion.get("record_floor_date")
+        floor_ok = False
+        if isinstance(floor_raw, str):
+            match = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", floor_raw.strip())
+            if match:
+                try:
+                    date(int(match.group(1)), int(match.group(2)), int(match.group(3)))
+                    floor_ok = True
+                except ValueError:
+                    floor_ok = False   # shape-valid but not a real day (e.g. 2026-13-45)
+        if not floor_ok:
+            errors.append(f"{label}: ingestion.record_floor_date must be a real 'YYYY-MM-DD' date "
+                          f"when present (got {floor_raw!r})")
 
     scan_limit_raw = ingestion.get("scan_limit")
     if scan_limit_raw is not None:

@@ -23,6 +23,9 @@ except ModuleNotFoundError:
     )
     raise SystemExit(1)
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from lib.patch_identity import BUILD_AWARE_PRODUCTS  # noqa: E402
+
 DEFAULT_PATH = Path("auxsays/_data/evidence_method_health.yml")
 
 REQUIRED_FIELDS = (
@@ -162,7 +165,7 @@ def validate(path: Path = DEFAULT_PATH) -> int:
         methods = []
 
     status_counts: Counter[str] = Counter()
-    seen_keys: dict[tuple[str, str, str], int] = {}
+    seen_keys: dict[tuple[str, str, str, str], int] = {}
 
     for row_index, row in enumerate(methods, start=1):
         if not isinstance(row, dict):
@@ -173,6 +176,20 @@ def validate(path: Path = DEFAULT_PATH) -> int:
             value = row.get(field)
             if value in (None, ""):
                 _add_error(errors, row_index, field, "is required")
+
+        # A BUILD-AWARE PRODUCT'S TELEMETRY MUST NAME ITS BUILD, for the same reason its counted
+        # evidence must (`patch_collectors.base.append_evidence_rows` -> `require_build`): a row
+        # keyed (product, "25H2", "") belongs to no patch, because every record of a build-aware
+        # product carries a build. Four such rows survived the Windows build-aware migration --
+        # frozen at 2026-09-04T17:30Z, one of them reading `success` with 4 accepted reports for
+        # an identity that owns zero counted rows -- and the public methodology audit table
+        # renders every method row, so that number was live. Nothing can write the shape again;
+        # this rung is what keeps it that way.
+        if str(row.get("product_id") or "").strip() in BUILD_AWARE_PRODUCTS \
+                and not str(row.get("target_build") or "").strip():
+            _add_error(errors, row_index, "target_build",
+                       f"is required for build-aware product "
+                       f"{str(row.get('product_id') or '')!r}")
 
         status = str(row.get("status") or "").strip()
         if status:
@@ -189,12 +206,19 @@ def validate(path: Path = DEFAULT_PATH) -> int:
             _validate_counter(errors, row_index=row_index, row=row, field=field)
         _validate_counter_relationships(errors, row_index=row_index, row=row)
 
+        # Duplicate detection must use the CANONICAL health identity, which includes the exact
+        # build for a build-aware product. Keyed on (product, version, method) alone, two
+        # legitimate PowerPoint rows -- 2603/build-A and 2603/build-B -- would be rejected as a
+        # duplicate. The build slot is empty for every other product, so their duplicate
+        # detection is unchanged.
         key = (
             str(row.get("product_id") or "").strip(),
             str(row.get("update_version") or "").strip(),
+            str(row.get("target_build") or "").strip(),
             str(row.get("method_id") or "").strip(),
         )
-        if all(key):
+        # product / version / method are required; the build slot is legitimately empty.
+        if key[0] and key[1] and key[3]:
             first_row = seen_keys.get(key)
             if first_row is not None:
                 _add_error(

@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0.0",
+  "effective_from":"2026-08-18",
+  "geographies":{"US":{"label":"United States","source_native":{"bls":"All United States","dol":"United States total"}}},
+  "series_mappings":[
+    {"source_series_id":"CES0000000001","indicator_id":"US_LABOR_TOTAL_NONFARM_PAYROLLS","classification":"CES total nonfarm","version":"1.0.0"},
+    {"source_series_id":"LNS14000000","indicator_id":"US_LABOR_U3_UNEMPLOYMENT_RATE","classification":"CPS U-3 official unemployment rate","version":"1.0.0"},
+    {"source_series_id":"LNS11300000","indicator_id":"US_LABOR_FORCE_PARTICIPATION_RATE","classification":"CPS civilian labor-force participation rate","version":"1.0.0"},
+    {"source_series_id":"DOL-UI-SA-INITIAL","indicator_id":"US_LABOR_INITIAL_UI_CLAIMS","classification":"DOL seasonally adjusted initial claims","version":"1.0.0"},
+    {"source_series_id":"JTS000000000000000JOL","indicator_id":"US_LABOR_JOB_OPENINGS","classification":"JOLTS total nonfarm job openings level","version":"1.0.0"},
+    {"source_series_id":"JTS000000000000000HIL","indicator_id":"US_LABOR_HIRES","classification":"JOLTS total nonfarm hires level","version":"1.0.0"}
+  ]
+}

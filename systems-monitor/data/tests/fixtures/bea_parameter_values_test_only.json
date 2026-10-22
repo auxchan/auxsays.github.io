@@ -1,0 +1,11 @@
+{
+  "fixtureClass": "TEST_ONLY_NOT_LIVE_BEA_METADATA",
+  "BEAAPI": {
+    "Results": {
+      "ParamValue": [
+        {"Key": "999999", "Desc": "Direct Requirements, After Redefinitions (Summary)"},
+        {"Key": "999998", "Desc": "Industry-by-Commodity Total Requirements, After Redefinitions (Summary)"}
+      ]
+    }
+  }
+}

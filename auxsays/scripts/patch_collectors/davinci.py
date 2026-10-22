@@ -27,12 +27,15 @@ from .base import (
     CollectorContext,
     PatchRecord,
     ProductCollector,
+    ROOT,
     append_evidence_rows,
+    finalize_method_health_delta,
     apply_acceptance_gates,
     counted_rows,
     date_part,
     exact_version_match,
     generated_records,
+    newest_first,
     load_front_matter_and_body,
     make_evidence_row,
     method_health_row,
@@ -101,6 +104,120 @@ DAVINCI_VERSION_CONTEXT_RE = re.compile(
     r"\b(?:davinci\s+resolve(?:\s+studio)?|resolve(?:\s+studio)?|davinci|version)\s+v?(\d{1,2})(?:\.\d+){0,2}\b",
     flags=re.I,
 )
+# --- bare-integer version identity -------------------------------------------------------------
+# DaVinci is the only product whose update_version can be a bare 1-2 digit number ("11", "20",
+# "21"); every other product's version carries dots and is self-identifying. `exact_version_match`
+# is numeric-boundary containment, and both SPACE and COLON are legal neighbours of a genuine
+# version mention -- so "at 11:53", "15 Solve Coins" and "20 gb of ram" all satisfied it and were
+# published as exact-patch evidence. One Creative COW thread that states no version at all was
+# counted simultaneously as evidence for Resolve 11 (2014), 15 (2018) and 16 (2019).
+#
+# This CANNOT be repaired by changing the boundary: a colon follows a real version in
+# "Resolve 20: crash on launch", and spaces surround one in "on 20 the export fails". The missing
+# constraint is contextual, so it lives here, product-local -- the same shape as
+# `microsoft_powerpoint.version_in_context` and the OBS veto in `lib/target_outcome`, and the
+# reason `base.exact_version_match` is deliberately left as containment and nothing more.
+#
+# It is a NOISE rule, not a positive-context rule. Measured on the live corpus, demanding an
+# adjacent product word would drop 6-9 legitimate rows ("Crashing on Render After Updating to 21",
+# "Since the 21 Update", "21 on iPad loses sound") while STILL admitting "davinci resolve started
+# to use 20 gb of ram", whose gap to the product name is only 23 characters. Rejecting on
+# demonstrable non-version shapes keeps every legitimate mention while refusing the shapes
+# enumerated below.
+#
+# WHAT IT DOES NOT CLAIM. This refuses the enumerated shapes, not "every possible non-version
+# number". A blocklist cannot be exhaustive, and two limits are known and deliberate: a bare
+# integer beside an unlisted noun ("20 widgets") still passes, and a qualified alias occurring
+# ANYWHERE -- including forum nav chrome that names the product -- wins the pre-pass and exempts
+# the document. The rule is strictly narrowing (it never accepts anything the shared matcher
+# rejected), so each gap is a missed refusal, never a new false identity.
+_BARE_VERSION_RE = re.compile(r"^\d{1,2}$")
+_NON_VERSION_UNIT = (
+    r"gb|gib|mb|tb|kb|gigs?|megs?|ram|vram|fps|hz|bit|bits|clips?|tracks?|layers?|nodes?|"
+    r"coins?|points?|credits?|karma|min(?:ute)?s?|sec(?:ond)?s?|hours?|hrs?|days?|weeks?|months?|"
+    r"years?|dollars?|usd|eur|gbp|percent|files?|projects?|times?|pages?|frames?|replies|comments?"
+)
+_MONTH = (r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|"
+          r"sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?")
+# Other software whose version could be confused for a DaVinci major, including OS codenames --
+# a NLE forum names these constantly. Adjacency is required, so this is not a deny-list on the
+# number itself.
+_OTHER_PRODUCT = (
+    r"windows|win|macos|mac\s*os|osx|os\s*x|ios|ipados|android|ubuntu|fedora|debian|mint|nobara|"
+    r"pop!?_?os|sequoia|sonoma|ventura|monterey|big\s*sur|catalina|mojave|tahoe|"
+    r"nvidia|amd|intel|geforce|radeon|cuda|driver|studio\s+driver|game\s+ready|"
+    r"final\s+cut(?:\s+pro)?|fcpx?|premiere(?:\s+pro)?|after\s+effects|vegas|avid|"
+    r"media\s+composer|blender|xcode|python|qt|opencl|directx|unreal|unity"
+)
+_NON_VERSION_CONTEXT = (
+    # a clock time, from EITHER side: "at 11:53" (hour) and "at 10:20" (minute) and "11:53:16".
+    # Anchoring only on the hour was the original hole: every live DaVinci major (16/19/20/21) is
+    # also a plausible minute, and Creative COW prints exactly this format.
+    r"(?<![A-Za-z0-9.])%V\s*:\s*\d"
+    r"|\d\s*:\s*%V(?![A-Za-z0-9.])"
+    # a date: "2026-08-15", "15/08/2026", "August 19, 2026", "19 August"
+    r"|\d{{4}}\s*[-/]\s*\d{{1,2}}\s*[-/]\s*%V(?![A-Za-z0-9.])"
+    r"|(?<![A-Za-z0-9.])%V\s*[-/]\s*\d{{1,2}}\s*[-/]\s*\d{{2,4}}"
+    r"|(?<![A-Za-z0-9.])\d{{1,2}}\s*[-/]\s*%V\s*[-/]\s*\d{{2,4}}"
+    r"|(?:{month})\w*\.?\s+%V(?![A-Za-z0-9.])"
+    r"|(?<![A-Za-z0-9.])%V\s+(?:{month})\w*\b"
+    # a quantity: "20 gb of ram", "20 clips", "16 replies"
+    r"|(?<![A-Za-z0-9.])%V\s*(?:{unit})\b"
+    # a reputation/points counter, from either side: "15 Solve Coins", "Coins: 15"
+    r"|(?<![A-Za-z0-9.])%V\s+(?:[A-Za-z]+\s+){{0,2}}(?:coins?|points?|credits?|karma|upvotes?)\b"
+    r"|(?:coins?|points?|credits?|karma|upvotes?|replies|comments?)\s*:?\s*%V(?![A-Za-z0-9.])"
+    # money and percentage: "$20", "20$", "20%"
+    r"|[$£€]\s*%V(?![A-Za-z0-9.])"
+    r"|(?<![A-Za-z0-9.])%V\s*(?:%|\$|£|€)"
+    # an ordinal or index reference: "page 20", "step 20", "#20", "episode 20"
+    r"|(?<![A-Za-z0-9.])(?:page|p\.|chapter|step|item|line|port|build|episode|day|part|reply|"
+    r"post|no\.|number)\s+%V(?![A-Za-z0-9.])"
+    r"|#\s*%V(?![A-Za-z0-9.])"
+    # ANOTHER product's version: "Windows 11", "Final Cut Pro 11", "macOS Sequoia 15"
+    r"|(?<![A-Za-z0-9.])(?:{other})\s+%V(?![A-Za-z0-9.])"
+).format(unit=_NON_VERSION_UNIT, month=_MONTH, other=_OTHER_PRODUCT)
+
+
+def bare_version_noise(text: str, version: str) -> str:
+    """The non-version token a bare DaVinci version matched, or '' when the mention is usable.
+
+    Returns the offending substring so a refusal is auditable rather than silent. Dotted versions
+    are self-identifying and are never examined.
+    """
+    candidate = str(version or "").strip()
+    if not _BARE_VERSION_RE.match(candidate):
+        return ""
+    pattern = re.compile(_NON_VERSION_CONTEXT.replace("%V", re.escape(candidate)), re.I)
+    hit = pattern.search(str(text or ""))
+    return " ".join(hit.group(0).split()) if hit else ""
+
+
+def davinci_version_match(text: str, version: str) -> tuple[bool, str, str]:
+    """`exact_version_match` for DaVinci, refusing a bare integer used as an ordinary number.
+
+    A DOTTED version is self-identifying and routes through the shared matcher completely
+    unchanged, basis included -- 226 of 237 live rows carry `exact_version_text`, and this must not
+    silently relabel them.
+
+    For a bare integer, a qualified form ("DaVinci Resolve 20", "Resolve 20", "v20") is tried
+    first: it is unambiguous, so it wins outright and is never subject to the noise rule. Only when
+    the sole evidence is the bare token itself is that token checked for a non-version shape.
+    """
+    aliases = version_aliases(version)
+    if not _BARE_VERSION_RE.match(str(version or "").strip()):
+        return exact_version_match(text, version, aliases)
+    for alias in aliases:
+        if _BARE_VERSION_RE.match(str(alias).strip()):
+            continue
+        matched, matched_version, _basis = exact_version_match(text, alias, ())
+        if matched:
+            return True, matched_version, "exact_version_alias"
+    matched, matched_version, basis = exact_version_match(text, version, aliases)
+    if matched and bare_version_noise(text, matched_version):
+        return False, "", ""
+    return matched, matched_version, basis
+
+
 DAVINCI_STRONG_ISSUE_RE = re.compile(
     r"\b(?:crash(?:es|ed|ing)?|freez(?:e|es|ing|en)|hang(?:s|ing)?|fail(?:ed|s|ure|ing)?|error|bug|broke|broken|breaks|corrupt(?:ed|ion)?|regression|slow|lag(?:gy)?|won't\s+open|can't\s+open|cannot\s+open|does\s+not\s+open|decode|install(?:ation)?\s+issue|problem)\b",
     flags=re.I,
@@ -174,7 +291,15 @@ class DavinciCollector(ProductCollector):
     product_id = PRODUCT_ID
 
     def collect(self, context: CollectorContext) -> list[dict[str, Any]]:
-        records = generated_records(PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions))
+        # NEWEST-FIRST. `generated_records` returns filename order, i.e. oldest-first from 2014,
+        # and this collector `break`s when its 1200 s budget expires -- so every scheduled run spent
+        # its whole budget on 2014-2018 records and never reached the current ones. Measured on run
+        # 34377762747: versions 10.1.5 through 15.0.1, 77 of 77 candidates rejected as
+        # `missing_exact_patch_version_match`, 87 of 120 records never reached, and the newest
+        # release 21.1 never searched by any method. Acrobat (PR #102-#105) and Windows already walk
+        # newest-first; DaVinci was the collector that never got it.
+        records = newest_first(generated_records(
+            PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions)))
         results: list[dict[str, Any]] = []
         for record in records:
             _b = rb.get_run_budget()
@@ -195,7 +320,11 @@ class DavinciCollector(ProductCollector):
                 "method_health": method_health,
             }
             if context.write:
-                added, total, rows = append_evidence_rows(accepted)
+                persisted: list[dict[str, Any]] = []
+                already_held: list[dict[str, Any]] = []
+                added, total, rows = append_evidence_rows(
+                    accepted, out_added=persisted, out_already_held=already_held)
+                finalize_method_health_delta(method_health, persisted, already_held)
                 structured_count = len(counted_rows(rows, PRODUCT_ID, record.update_version))
                 record_updated = False
                 if accepted:
@@ -1573,7 +1702,11 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         str(candidate.get("report_title") or ""),
         str(candidate.get("report_text") or ""),
     ])
-    matched, matched_version, basis = exact_version_match(report_text, record.update_version, version_aliases(record.update_version))
+    # The bare-integer noise rule belongs HERE, in the version decision itself, not in a later
+    # gate: patch_version_matched / matched_version / match_basis must all be false together, so a
+    # refused row never asserts a version match it cannot demonstrate. `apply_consensus_to_records`
+    # reads patch_version_matched as an acceptance input.
+    matched, matched_version, basis = davinci_version_match(report_text, record.update_version)
     theme, workflow_area, platform, severity, sentiment = classify(report_text)
     row = make_evidence_row(
         product_id=PRODUCT_ID,
@@ -1728,7 +1861,7 @@ def record_needs_count_update(record: PatchRecord, count: int) -> bool:
 
 
 def apply_consensus_writeback(update_version: str) -> bool:
-    from apply_consensus_to_records import _apply_record_fields, _index_generated_records, run_dry_run
+    from apply_consensus_to_records import _index_generated_records, apply_collector_record_fields, run_dry_run
 
     records_index = _index_generated_records()
     results = run_dry_run(
@@ -1742,11 +1875,26 @@ def apply_consensus_writeback(update_version: str) -> bool:
     if len(matches) != 1 or not matches[0].get("would_write"):
         return False
     result = matches[0]
-    record_path = records_index[(PRODUCT_ID, update_version)]["abs_path"]
+    # The dry-run already resolved this group's record by CANONICAL identity
+    # (apply_consensus_to_records._result_for_group -> records_index.get(patch_key(pid, ver, build))),
+    # so reuse that resolution instead of re-deriving a key here. Re-deriving is what broke: the index
+    # has been keyed by the identity TRIPLE since #58 (4fe9e415), while this 2-tuple predates it and
+    # therefore misses every record. Reusing the resolved path also guarantees the write lands on the
+    # same record the gates were evaluated against, and is build-exact for free. Fail closed when the
+    # group resolved to no record -- never fall back to a version-level pick.
+    record_rel = result.get("matched_generated_record_path")
+    if not record_rel:
+        return False
+    record_path = ROOT / record_rel
     fields = dict(result["proposed_fields_if_written"])
     data, _body = load_front_matter_and_body(record_path)
     comparable = {k: v for k, v in fields.items() if k != "status_events_append"}
     if all(data.get(k) == v for k, v in comparable.items()):
         return False
-    _apply_record_fields(record_path, fields)
-    return True
+    # Report whether bytes actually changed, not merely that we reached the write.
+    # `comparable` above always differs (proposed_fields carries a fresh record_last_updated), so
+    # the early-exit never fires; the collector boundary then recomputes substantiveness EXCLUDING
+    # that timestamp and can legitimately write nothing. Returning True regardless would report
+    # record_updated for a no-op -- and in the OBS caller it would suppress the count fallback that
+    # runs only `if not record_updated`.
+    return bool(apply_collector_record_fields(record_path, fields)["write_plan"]["fields"])

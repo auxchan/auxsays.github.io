@@ -66,7 +66,7 @@ def code_of(fn):
 
 
 def run() -> int:
-    o._existing_versions = lambda pid: {V}
+    o._existing_patch_keys = lambda pid: {(pid, V, "")}
     print("=" * 74)
     print("Reader/Pro evidence-identity fix")
     print("=" * 74)

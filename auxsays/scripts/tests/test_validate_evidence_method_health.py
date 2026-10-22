@@ -144,6 +144,32 @@ def run() -> int:
         code, output = run_validator(telemetry_statuses_path)
         check("health-only statuses pass as telemetry states", code == 0, output)
 
+        # --- a build-aware product's telemetry must name its build ------------
+        # Four rows keyed (microsoft-windows-11, "<train>", "") survived the Windows build-aware
+        # migration, frozen at 2026-09-04T17:30Z. One read `success` with 4 accepted reports for an
+        # identity that owns zero counted rows and has no record -- and the public methodology audit
+        # table renders every method row, so that number was live on the site.
+        blank_build_path = tmp_path / "blank-build.yml"
+        write_fixture(blank_build_path, fixture(row_yaml(
+            product_id="microsoft-windows-11", update_version="25H2",
+            method_id="learn_qna_search_rss", source_type="microsoft_learn_qna")))
+        code, output = run_validator(blank_build_path)
+        check("a build-aware row with no target_build fails closed",
+              code != 0 and "target_build" in output and "build-aware" in output, output)
+
+        with_build_path = tmp_path / "with-build.yml"
+        write_fixture(with_build_path, fixture(row_yaml(
+            product_id="microsoft-windows-11", update_version="25H2",
+            method_id="learn_qna_search_rss", source_type="microsoft_learn_qna")
+            .replace("  update_version: 25H2", "  update_version: 25H2\n  target_build: '26200.9168'")))
+        code, output = run_validator(with_build_path)
+        check("the same row with its build passes", code == 0, output)
+
+        other_product_path = tmp_path / "other-product.yml"
+        write_fixture(other_product_path, fixture(row_yaml()))
+        code, output = run_validator(other_product_path)
+        check("a product without a build contract keeps its empty build slot", code == 0, output)
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

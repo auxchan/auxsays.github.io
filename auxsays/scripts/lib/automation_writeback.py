@@ -20,6 +20,9 @@ This module performs, against an ALREADY-checked-out repo whose working tree alr
 the freshly generated changes:
 
   * stage ONLY explicitly permitted pathspecs; reject any unexpected/forbidden staged path
+  * refuse the whole run when the working tree holds material the commit candidate does not
+    (unstaged tracked change/deletion, or a non-ignored untracked file), so the state a validator
+    reads is always the state that gets committed: VALIDATED TREE == COMMITTED TREE
   * empty staged diff -> no_changes; then, IFF deploy-recovery is enabled for this workflow,
     verify the current main SHA is deployed and re-dispatch Pages if not (never on every run)
   * create the bot commit; fetch origin/<branch> immediately before each push; rebase the
@@ -96,6 +99,18 @@ PAGES_BUILD_FAILED = "pages_build_failed"
 PAGES_BUILD_UNCONFIRMED = "pages_build_unconfirmed"
 # a site-affecting revision was pushed but the lane configured no Pages dispatch command
 DEPLOY_CHANGED_NO_PAGES_CMD = "deploy_changed_no_pages_cmd"
+UNSTAGED_CHANGED_PATH = "unstaged_changed_path"
+EVIDENCE_LOSS_REFUSED = "evidence_loss_refused"
+
+# The store the evidence-loss gate protects. Mirrors lib/evidence_loss.EVIDENCE_PATH; it is a literal
+# here rather than an import because this module is executed as a bare script by every writer
+# workflow and carries no import-time dependency beyond the standard library (see
+# _evidence_loss_module). test_evidence_loss_guard asserts the two constants are equal.
+EVIDENCE_PATH = "auxsays/_data/consensus_evidence.yml"
+
+# How many individual losses a refusal names. A purge can remove hundreds of rows; the summary
+# must stay one readable screen, and the count of what was elided is always stated.
+MAX_REPORTED_LOSSES = 25
 
 
 @dataclass
@@ -127,6 +142,9 @@ class WritebackConfig:
     recovery_site_paths: list[str] = field(default_factory=list)   # main HEAD must touch one of these
     recovery_commit_grep: str | None = None                        # ... and its message must contain this
     pages_status_cmd: str = DEFAULT_PAGES_STATUS_CMD
+    # The evidence store the loss gate protects. Repo-relative. Never disabled in production; tests
+    # point it at their own fixture store.
+    evidence_path: str = EVIDENCE_PATH
     # injectables (tests)
     sleep_fn: Callable[[float], None] = time.sleep
     test_hook_before_push: str | None = None
@@ -154,6 +172,7 @@ class WritebackResult:
     pages_backoff_applied: list[int] = field(default_factory=list)
     pages_dispatched: bool = False
     pages_build_outcome: str = ""   # "" (not checked) | confirmed | failed | unconfirmed
+    evidence_losses: list[str] = field(default_factory=list)
     ok: bool = False
 
     def as_dict(self) -> dict:
@@ -161,7 +180,8 @@ class WritebackResult:
             "outcome", "outcomes", "changed", "deploy_changed", "pushed", "deployment_pending",
             "checkout_sha", "origin_sha_initial", "origin_sha_latest", "local_commit_sha",
             "rebased_commit_sha", "pushed_sha", "retry_number", "conflicting_paths", "validation",
-            "pages_attempts", "pages_backoff_applied", "pages_dispatched", "pages_build_outcome", "ok",
+            "pages_attempts", "pages_backoff_applied", "pages_dispatched", "pages_build_outcome",
+            "evidence_losses", "ok",
         )}
 
 
@@ -212,12 +232,148 @@ def _emit(result: WritebackResult, token: str) -> None:
 
 
 def _staged_paths(repo: Path) -> list[str]:
-    out = _git(repo, "diff", "--cached", "--name-only").stdout
+    # --no-renames: every path the commit changes, BOTH sides of a rename. With git's default rename
+    # detection a rename prints only its destination, so deleting a file while adding a >=50%-similar
+    # one elsewhere hid the deletion from every gate that reads this list. Measured: delete the
+    # evidence store and write most of it to an allowed `generated/*.md`, and the evidence-loss gate
+    # never saw the store path and pushed a main with no store; the allow/forbidden gate had the same
+    # blind spot for any tracked file renamed INTO an allowed glob.
+    out = _git(repo, "diff", "--cached", "--name-only", "--no-renames").stdout
     return [ln.strip() for ln in out.splitlines() if ln.strip()]
 
 
+def _evidence_loss_module():
+    """lib/evidence_loss, imported only when the evidence store is actually staged.
+
+    Every writer workflow executes this file as a bare script (`python auxsays/scripts/lib/
+    automation_writeback.py`), where `lib` is not an importable package and sys.path[0] is this
+    directory. A top-level `from lib import evidence_loss` passes every test -- they import this
+    module AS `lib.automation_writeback` -- and raises ImportError in every production lane. So the
+    import is deferred to the one branch that needs it, and resolves in both modes."""
+    if __package__:
+        from . import evidence_loss  # imported as lib.automation_writeback (tests, orchestrator)
+    else:
+        import evidence_loss  # type: ignore[no-redef]  # executed as a script
+    return evidence_loss
+
+
+def _read_blob(repo: Path, spec: str, el) -> str | None:
+    """`spec` (`<sha>:<path>`, or `:<path>` for the index) as UTF-8 text; None when that path does not
+    exist there. Read as bytes and decoded strictly: `_git` decodes with the platform default, which
+    is cp1252 on Windows and mangles a store that carries non-ASCII report text."""
+    if subprocess.run(["git", "-C", str(repo), "cat-file", "-e", spec],
+                      capture_output=True).returncode != 0:
+        return None
+    proc = subprocess.run(["git", "-C", str(repo), "cat-file", "-p", spec], capture_output=True)
+    if proc.returncode != 0:
+        raise el.EvidenceStoreUnreadable("git could not read the evidence store")
+    try:
+        return proc.stdout.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise el.EvidenceStoreUnreadable("evidence store is not valid UTF-8") from exc
+
+
+def _refuse_evidence_loss(cfg: WritebackConfig, result: WritebackResult, staged: list[str]) -> bool:
+    """Fail-closed evidence-loss gate. True when the staged candidate fails to account for a row the
+    checked-out base held; the index is then reset and nothing is committed.
+
+    The base is the commit this run checked out -- the one reference a purge running in this job
+    cannot also rewrite. Every in-tree check downstream (QA, the consensus audit, the reconcile step)
+    compares the records against the SAME store the purge produced, so each confirms consistency by
+    construction; that is how a coherent 98% deletion used to pass all of them and get pushed.
+
+    Why pre-commit only, with no second check after a rebase: `_rebase` refuses any rebase whose
+    upstream commits touched a path this commit also touched, even a git-clean one. So if the store
+    is staged here, either upstream left the store alone -- and the rebased candidate's store is
+    byte-identical to the one judged here, against an unchanged base -- or the rebase is refused.
+    That argument needs `_rebase` to see both sides of a rename (--no-renames in _commit_paths and in
+    its upstream diff): with rename detection, an upstream that renamed the store listed only the
+    destination, no overlap was found, and merge-ort replayed this lane's rows into the renamed file
+    while the store left main."""
+    if not cfg.evidence_path or cfg.evidence_path not in staged:
+        return False
+    repo = cfg.repo
+    el = _evidence_loss_module()
+    try:
+        if not result.checkout_sha or not _ref_exists(repo, result.checkout_sha):
+            raise el.EvidenceStoreUnreadable("the checked-out base commit is not resolvable")
+        base = _read_blob(repo, f"{result.checkout_sha}:{cfg.evidence_path}", el)
+        # Absent from the index means the store itself was deleted: parse_store(None) is an empty
+        # candidate, so every base row reports as removed -- a deleted store is the largest purge.
+        candidate = _read_blob(repo, f":{cfg.evidence_path}", el)
+        losses = el.losses_between(base, candidate)
+    except el.EvidenceStoreUnreadable as exc:
+        # Fail closed. An unreadable store is never evidence that nothing was lost.
+        result.evidence_losses = [f"code={el.UNREADABLE} detail={str(exc)[:160]}"]
+    else:
+        if not losses:
+            return False
+        shown = [loss.public_reason() for loss in losses[:MAX_REPORTED_LOSSES]]
+        if len(losses) > MAX_REPORTED_LOSSES:
+            shown.append(f"... and {len(losses) - MAX_REPORTED_LOSSES} more identities "
+                         f"({sum(l.rows for l in losses)} rows in total)")
+        result.evidence_losses = shown
+    _git(repo, "reset", "-q")
+    for line in result.evidence_losses:
+        print(f"WRITEBACK_EVIDENCE_LOSS: {line}", flush=True)
+    _emit(result, EVIDENCE_LOSS_REFUSED)
+    result.outcome = EVIDENCE_LOSS_REFUSED
+    return True
+
+
+def _residual_paths(repo: Path) -> list[str]:
+    """Repository material the working tree holds that the commit candidate does NOT.
+
+    After ``git add -- <allow>`` the index IS the candidate commit, but ``_run_validation``
+    launches ordinary subprocesses that read the WORKING TREE. Anything present there and absent
+    from the candidate -- an unstaged modification or deletion of a tracked file, or a non-ignored
+    untracked file -- is material a validator can consume while ``git commit`` silently omits it.
+    That is exactly how a validator can pass on a state that never reaches ``main``:
+    evidence staged + an unallowed generated record modified in the working tree reads as a
+    coherent pair, while the commit publishes only the evidence half.
+
+    ``git status --porcelain`` already excludes .gitignore'd paths. That exclusion is deliberate
+    and measured: the genuinely transient artefacts these lanes produce (``_site``,
+    ``__pycache__``, ``*.pyc``, ``qa_status.json``, ``consensus_status.json``) are all ignored,
+    and any of them that somehow reached the index would still be refused by ``_is_forbidden``.
+    """
+    out = _git(repo, "status", "--porcelain").stdout
+    residual: list[str] = []
+    for line in out.splitlines():
+        if len(line) < 4:
+            continue
+        index_state, worktree_state, path = line[0], line[1], line[3:].strip()
+        if " -> " in path:          # rename/copy: the working-tree side is the destination
+            path = path.split(" -> ", 1)[1].strip()
+        path = path.strip('"')
+        if index_state == "?" and worktree_state == "?":
+            residual.append(path)   # untracked AND not ignored
+        elif worktree_state != " ":
+            residual.append(path)   # tracked, differs between working tree and index
+    return sorted(set(residual))
+
+
+def _refuse_residual(cfg: WritebackConfig, result: WritebackResult, reset_index: bool) -> bool:
+    """Fail-closed equivalence gate. True when residual material was found and the writeback must
+    stop: no validation, no commit, no push, no Pages dispatch. The working tree is deliberately
+    left untouched so the unexpected mutation stays visible for diagnosis -- it is never stashed,
+    reset or otherwise hidden, because a collector defect must not be silently absorbed."""
+    residual = _residual_paths(cfg.repo)
+    if not residual:
+        return False
+    if reset_index:
+        _git(cfg.repo, "reset", "-q")
+    result.conflicting_paths = residual
+    _emit(result, UNSTAGED_CHANGED_PATH)
+    result.outcome = UNSTAGED_CHANGED_PATH
+    return True
+
+
 def _commit_paths(repo: Path, commit: str) -> list[str]:
-    out = _git(repo, "show", "--name-only", "--pretty=format:", commit).stdout
+    # --no-renames, for the same reason as _staged_paths: a rename must list BOTH paths. This feeds
+    # the rebase shared-path refusal, the post-rebase allow/forbidden check and deploy recovery, and
+    # each of them had the same blind spot for the source side of a rename.
+    out = _git(repo, "show", "--name-only", "--no-renames", "--pretty=format:", commit).stdout
     return sorted({ln.strip() for ln in out.splitlines() if ln.strip()})
 
 
@@ -415,7 +571,8 @@ def _rebase(cfg: WritebackConfig, result: WritebackResult) -> bool:
     my_files = set(_commit_paths(repo, result.local_commit_sha))
     # compare only changes AFTER the original base SHA, not all history of those paths
     upstream_files = {
-        ln.strip() for ln in _git(repo, "diff", "--name-only", base, upstream).stdout.splitlines() if ln.strip()
+        ln.strip() for ln in _git(repo, "diff", "--name-only", "--no-renames", base, upstream).stdout.splitlines()
+        if ln.strip()
     }
 
     proc = _git(repo, "rebase", upstream, check=False)
@@ -498,6 +655,14 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
         result.outcome = UNEXPECTED_CHANGED_PATH
         return result
 
+    # Equivalence gate. Everything below -- validation, the commit, the push -- assumes the
+    # working tree the validators read is the tree that will be committed. Enforce that here,
+    # BEFORE the first validator runs, rather than assuming it. This also covers the no-change
+    # branch: "nothing to commit" while a generated record sits modified in the working tree is a
+    # silently discarded mutation, not a quiet run.
+    if _refuse_residual(cfg, result, reset_index=True):
+        return result
+
     if not staged:
         _emit(result, NO_CHANGES)
         result.outcome = NO_CHANGES
@@ -508,9 +673,21 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
     result.changed = True
     result.deploy_changed = any(_matches_any(p, cfg.site_paths) for p in staged) if cfg.site_paths else True
 
-    # Transactional gate: validate the STAGED state BEFORE creating any commit, so an invalid
-    # working tree (e.g. left dirty by a partial/failed upstream step) can never be committed. The
-    # git index is the staging area and `git commit` is the atomic replacement; on validation
+    # Evidence-loss gate. UNCONDITIONAL -- deliberately not one of the `--validate` commands, which
+    # only run before the commit when a lane passes --validate-before-commit, and two writer lanes
+    # (davinci-updates, promote-davinci-verified-reports) do not. Placed after the equivalence gate,
+    # so the index it reads is exactly what would be committed, and before the first commit, so a
+    # refusal leaves nothing behind.
+    if _refuse_evidence_loss(cfg, result, staged):
+        return result
+
+    # Transactional gate: validate BEFORE creating any commit, so an invalid tree (e.g. left
+    # dirty by a partial/failed upstream step) can never be committed. The validators still run as
+    # ordinary subprocesses against the working tree -- the guarantee that this equals the staged
+    # candidate comes from the equivalence gate above, which refused the run if the two could
+    # differ. Without that gate this comment overstated what the implementation delivered: a
+    # validator could pass on working-tree-only material that `git commit` would then omit.
+    # The git index is the staging area and `git commit` is the atomic replacement; on validation
     # failure the index is reset and NO commit is created, so tracked files stay byte-identical.
     if cfg.validate_before_commit and cfg.validate:
         if not _run_validation(repo, cfg.validate, result):
@@ -538,6 +715,12 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
                 return result
             rebased = True
             result.rebased_commit_sha = _sha(repo, "HEAD")
+            # Same invariant on the retry path. A tracked modification would already have made
+            # `git rebase` itself fail, but a non-ignored UNTRACKED file survives a clean rebase,
+            # stays readable by the revalidation below, and is still never committed -- so the
+            # post-rebase validation needs the identical gate, not a weaker one.
+            if _refuse_residual(cfg, result, reset_index=False):
+                return result
             if cfg.validate:
                 if not _run_validation(repo, cfg.validate, result):
                     _git(repo, "reset", "--hard", result.local_commit_sha, check=False)
@@ -553,6 +736,11 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
                 _emit(result, UNEXPECTED_CHANGED_PATH)
                 result.outcome = UNEXPECTED_CHANGED_PATH
                 return result
+
+        # Final equivalence assertion: a validator (or any step between validation and here)
+        # must not have introduced material that the pushed commit will not carry.
+        if _refuse_residual(cfg, result, reset_index=False):
+            return result
 
         if cfg.test_hook_before_push and fires < cfg.test_hook_fires:
             fires += 1

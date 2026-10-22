@@ -2,6 +2,7 @@
 """Warning-first QA for generated AUXSAYS update records and priority source coverage."""
 from __future__ import annotations
 
+import argparse
 import json
 import re
 from datetime import datetime, timezone
@@ -11,7 +12,10 @@ from urllib.parse import urlparse
 
 import yaml
 
-from lib.report_counts import counted_evidence_counts
+from lib import patch_decision
+from lib.patch_identity import patch_key
+
+from lib.report_counts import counted_evidence_counts, windows_targets_from_front_matter
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"
@@ -47,6 +51,59 @@ BANNED_PUBLIC_TERMS = {
     "collector",
     "candidate rows",
 }
+# Per-term, per-field exemptions for the internal-language gate.
+#
+# Most banned terms are unambiguous AUXSAYS implementation vocabulary and are rejected in every
+# public field. "collector" is different: it is also an ordinary English word that vendors use in
+# their own release notes. GitHub's changelog entry "Enterprise managed settings in GitHub Copilot
+# for JetBrains" describes configuring OpenTelemetry "including the collector endpoint, protocol,
+# service name, resource attributes and headers", and that vendor prose lands verbatim in
+# `release_summary` (rss_feed sets record["summary"], which write_update_record copies to
+# release_summary). Flattening every public field into one blob before matching therefore failed
+# the whole ingestion run on a legitimate upstream sentence.
+#
+# The exemption is deliberately as narrow as the evidence: ONE term, ONE field, and only because
+# `release_summary` is the single public field proven to carry source-authored vendor prose on that
+# path. `official_summary` is NOT exempt -- rss_feed leaves it unset and write_update_record
+# substitutes AUXSAYS-authored fallback text there. Every other banned term still applies inside
+# `release_summary`, and "collector" is still rejected in every AUXSAYS-authored field, so genuine
+# implementation leakage in decision/consensus language remains a blocking defect.
+BANNED_TERM_FIELD_EXEMPTIONS: dict[str, frozenset[str]] = {
+    "collector": frozenset({"release_summary"}),
+}
+# Claims AUXSAYS must never make on a vendor's behalf. A build with no app-specific release note is
+# not a build in which the app did not change -- and the official-notes body is scanned too, since
+# that is where a fabricated vendor claim would actually live.
+FORBIDDEN_ABSENCE_CLAIMS = (
+    "no powerpoint changes",
+    "no app-specific changes",
+    "no changes for",
+    "was unchanged",
+    "were unchanged",
+    "nothing changed",
+    "no changes were made",
+)
+# AUXSAYS-authored text: a forbidden claim here is our own fabrication -> ERROR.
+ABSENCE_CLAIM_SCANNED_FIELDS = (
+    "official_summary",
+    "release_summary",
+    "summary",
+    "description",
+    "quick_verdict",
+    "update_consensus_summary",
+    "official_app_attribution_label",
+)
+# Vendor-captured text: the vendor may legitimately write any of these phrases about their own
+# product. Flag it for review, but never fail the whole ingest run on somebody else's wording.
+ABSENCE_CLAIM_WARN_FIELDS = ("official_patch_notes_body",)
+# Vendor-attribution states an official record may declare (lib.write_update_record).
+VALID_APP_ATTRIBUTION_STATES = {
+    "app_named_by_source",
+    "suite_wide_by_source",
+    "app_named_and_suite_wide_by_source",
+    "not_documented_by_source",
+}
+
 PUBLIC_TEXT_FIELDS = {
     "description",
     "update_consensus_summary",
@@ -154,7 +211,35 @@ def public_record_text(data: dict[str, Any]) -> str:
     return " ".join(flatten_text(data.get(field)) for field in sorted(PUBLIC_TEXT_FIELDS))
 
 
-def load_counted_evidence_counts() -> dict[tuple[str, str], int]:
+def internal_term_findings(data: dict[str, Any], path: str) -> list[dict[str, Any]]:
+    """Banned internal terms in public fields, checked FIELD BY FIELD.
+
+    Field provenance matters twice over: it decides whether a per-term exemption applies (see
+    BANNED_TERM_FIELD_EXEMPTIONS), and it tells whoever reads the failure which field to look at.
+    The previous implementation flattened all PUBLIC_TEXT_FIELDS into one string before matching,
+    so it could do neither -- a vendor's ordinary use of "collector" failed the run, and the error
+    named no field.
+    """
+    findings: list[dict[str, Any]] = []
+    for field in sorted(PUBLIC_TEXT_FIELDS):
+        text = flatten_text(data.get(field)).lower()
+        if not text:
+            continue
+        for term in sorted(BANNED_PUBLIC_TERMS):
+            if term not in text:
+                continue
+            if field in BANNED_TERM_FIELD_EXEMPTIONS.get(term, frozenset()):
+                continue
+            findings.append({
+                "path": path,
+                "code": "public_internal_term",
+                "message": (f"Public-facing field '{field}' contains internal term '{term}'."),
+            })
+    return findings
+
+
+def load_counted_evidence_counts(
+        records: list[dict[str, Any]]) -> dict[tuple[str, str, str], int]:
     # Delegates to the single authoritative predicate (lib.report_counts.counted_evidence_counts) so
     # this QA gate and the post-collection reconciliation count evidence IDENTICALLY and can never
     # diverge -- that shared definition is what makes update_report_count == final counted evidence.
@@ -162,7 +247,13 @@ def load_counted_evidence_counts() -> dict[tuple[str, str], int]:
     rows = payload.get("evidence") if isinstance(payload, dict) else payload
     if not isinstance(rows, list):
         return {}
-    return counted_evidence_counts(rows)
+    # `records` supplies the Windows current-patch identities the canonical predicate gates on, and
+    # is REQUIRED for the same reason the predicate requires them: defaulting it would make a
+    # forgotten argument read 0 counted reports for every Windows patch, which this gate would then
+    # "confirm" against a record. A Windows patch present in `records` but carrying no target
+    # identity still fails closed -- excluded, not counted against an unknown identity.
+    return counted_evidence_counts(
+        rows, windows_targets=windows_targets_from_front_matter(records or []))
 
 
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -181,6 +272,30 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
     source_type = str(data.get("official_patch_notes_source_type") or data.get("official_source_type") or "").strip()
     official_body = str(data.get("official_patch_notes_body") or "")
     report_count = int(data.get("update_report_count") or data.get("confirmed_patch_specific_report_count") or 0)
+
+    # DOCTRINE GATE. "The vendor did not document a change for this app" and "the app did not
+    # change" are different claims, and only the first is ours to make. A build ships shared Office
+    # components, security fixes and installers whether or not the notes single an app out, so a
+    # substantive-negative claim would assert something the vendor never said. Enforced here rather
+    # than trusted, because prose is exactly what regresses quietly.
+    for field in ABSENCE_CLAIM_SCANNED_FIELDS:
+        text = str(data.get(field) or "").lower()
+        for phrase in FORBIDDEN_ABSENCE_CLAIMS:
+            if phrase in text:
+                add(errors, path, "substantive_absence_claim",
+                    f"{field} claims {phrase!r}. Absence of a documented note describes the notes, "
+                    "not the software -- say the vendor did not document a change instead.")
+    for field in ABSENCE_CLAIM_WARN_FIELDS:
+        text = str(data.get(field) or "").lower()
+        for phrase in FORBIDDEN_ABSENCE_CLAIMS:
+            if phrase in text:
+                add(warnings, path, "vendor_text_absence_claim",
+                    f"{field} (vendor-captured) contains {phrase!r}. Confirm it is the vendor's "
+                    "own wording and not AUXSAYS prose.")
+    attribution = str(data.get("official_app_attribution") or "").strip()
+    if attribution and attribution not in VALID_APP_ATTRIBUTION_STATES:
+        add(errors, path, "unknown_app_attribution_state",
+            f"official_app_attribution {attribution!r} is not one of {sorted(VALID_APP_ATTRIBUTION_STATES)}.")
 
     if not title:
         add(errors, path, "empty_title", "Generated record title is empty.")
@@ -203,12 +318,29 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
     public_text = public_record_text(data)
     if ("Pilot" + " sample") in public_text or ("pilot" + " sample") in public_text:
         add(errors, path, "public_pilot_sample_wording", "Public-facing generated record data still contains obsolete pilot-sample wording. Use 'Verified reports' for the evidence-state label.")
-    public_text_lower = public_text.lower()
-    for term in sorted(BANNED_PUBLIC_TERMS):
-        if term in public_text_lower:
-            add(errors, path, "public_internal_term", f"Public-facing generated fields contain internal term '{term}'.")
+    for finding in internal_term_findings(data, path):
+        # Same error code as before so dashboards and workflow parsers need no vocabulary
+        # migration; only the message gained the field name.
+        add(errors, path, finding["code"], finding["message"])
     if re.search(r"https?://\S+;\s*https?://", public_text):
         add(errors, path, "raw_source_urls_in_public_prose", "Public-facing generated prose appears to dump raw source URLs; use source objects/lists instead.")
+
+    # The HEADLINE is a count projection too, on any product whose coherence branch writes a
+    # number into it (obs-studio does: "has N user reports found"). Checked separately from the
+    # source list because the two fail apart: at a canonical zero the source list is RETRACTED,
+    # so the mismatch check below goes quiet by construction while the verdict can still be
+    # publishing a stale number. This check has no such blind spot, and it would have caught the
+    # original obs 32.2.2 defect at the most-read field rather than at the source list.
+    # Matched on content, so a hand-written verdict naming no number is never flagged.
+    verdict = str(data.get("quick_verdict") or "")
+    stated = re.search(r"(\d+)\s+user report", verdict)
+    if stated:
+        claimed_total = int(data.get("update_report_count")
+                            or data.get("confirmed_patch_specific_report_count") or 0)
+        if int(stated.group(1)) != claimed_total:
+            add(warnings, path, "quick_verdict_count_mismatch",
+                f"Headline verdict states {stated.group(1)} user reports but the record's "
+                f"count is {claimed_total}; both must state the same counted population.")
 
     if report_count > 0:
         if is_blank(data.get("update_consensus_summary")):
@@ -219,6 +351,47 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
             add(warnings, path, "report_count_without_accepted_report_sources", "Record has report_count > 0 but no collapsed full accepted source list.")
         if isinstance(data.get("evidence_samples"), list) and len(data.get("evidence_samples") or []) > 5:
             add(errors, path, "too_many_representative_samples", "evidence_samples should contain no more than five representative items; put the full list in accepted_report_sources.")
+
+        # ONE ACTION PER RECORD. The writer can no longer produce two, but until now nothing looked
+        # at what was already ON DISK -- which is why `2026-04-14-davinci-resolve-21-public-beta-1`
+        # published "WAIT for production systems" as its verdict beside "AVOID for production" as
+        # its summary, the first reader-visible on the patch page and the second on the feed, and
+        # no check anywhere failed. Ten records corpus-wide carried more than one phrase.
+        #
+        # Compares ACTIONS, not phrasings: "WAIT" and "WAIT for production systems" are one
+        # instruction in two registers, and reporting those would bury the real conflicts.
+        #
+        # A WARNING, deliberately. This scanner runs in the scheduled lane AFTER the promotions and
+        # BEFORE the writeback, and `main` exits non-zero only on errors. An error here would wedge
+        # the lane and discard every product's evidence for that cycle whenever a promotion was
+        # skipped -- the failure mode that killed three runs in August. A warning surfaces the drift
+        # without holding the evidence hostage.
+        actions = {
+            patch_decision.action_of(data.get("update_decision_label")),
+            patch_decision.action_of(patch_decision.leading_decision(data.get("quick_verdict"))),
+            patch_decision.action_of(
+                patch_decision.leading_decision(data.get("update_consensus_summary"))),
+        }
+        # A STORED label must be a verdict the authority recognises. Without this the vocabulary
+        # is only enforced at render time, by the two template fail-safes -- so a record could sit
+        # in the corpus naming a decision nothing classified, and the site would quietly publish
+        # INSUFFICIENT DATA for it instead of saying the record is wrong. `is_canonical` existed
+        # after AUX-029's first pass with no production caller at all; this is that caller.
+        stored = str(data.get("update_decision_label") or "").strip()
+        if stored and patch_decision.action_of(stored) not in patch_decision.CANONICAL_DECISIONS:
+            add(warnings, path, "record_names_unknown_verdict",
+                f"update_decision_label {stored!r} is not a canonical verdict and is not a "
+                "recognised legacy phrasing. One patch publishes one decision, from the eight in "
+                "lib/patch_decision.RISK_ORDER; an unvetted label is not a decision.")
+
+        actions.discard("")
+        if len(actions) > 1:
+            add(warnings, path, "record_names_conflicting_actions",
+                "Record names more than one action ("
+                + ", ".join(sorted(actions))
+                + f"): verdict {str(data.get('update_decision_label') or '(none)')!r}, summary "
+                f"opens {patch_decision.leading_decision(data.get('update_consensus_summary')) or '(none)'!r}. "
+                "One patch publishes one decision; supporting prose may qualify it, not replace it.")
 
     evidence_samples = data.get("evidence_samples")
     if evidence_samples is not None:
@@ -417,12 +590,31 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "sentiment_marker_uses_legacy_score", "The top sentiment marker must follow the displayed evidence summary, not legacy score fields.")
     if "consensus-position-graph--{{ evidence_metric_class }}" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "sentiment_marker_class_missing", "The top sentiment graph should carry the evidence summary class for visual state handling.")
-    if "consensus-scale-labels--neutral" not in text:
-        add(errors, UPDATE_LAYOUT_PATH, "sentiment_neutral_state_missing", "Not-enough-report pages should use a neutral chart treatment.")
+    # The job here is that a page with no counted reports must not be given a sentiment chart. It
+    # used to be enforced by requiring a NEUTRAL variant of the chart; Wave A satisfies the same
+    # requirement more strongly by rendering no scale at all below one report, so requiring the
+    # neutral class would now forbid the better treatment. What is checked instead is the property:
+    # the three-zone scale must be gated on the report count, and the zero-report page must still
+    # make the not-established statement in words.
+    if "consensus-scale-labels" in text and "{% if report_count > 0 %}" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "sentiment_scale_not_gated_on_reports",
+            "The three-zone sentiment scale must render only where counted reports exist.")
+    if "Community consensus not established" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "sentiment_neutral_state_missing",
+            "A page without established consensus must say so in words, chart or no chart.")
     if "update_platform_clean" in text or "platform_label_clean" in text or "update_type_clean" in text:
         add(errors, UPDATE_LAYOUT_PATH, "top_metadata_placeholder_pill_regression", "Top metadata should render only data-bearing product, version, channel, release date, and file-size pills.")
-    if "file_size_pill_value" not in text or "{% if file_size_pill_value != blank %}" not in text:
+    # This demanded the literal spelling `!= blank`, which in this stack does not gate at all:
+    # Liquid 4 resolves `blank` through a MethodLiteral that sends :blank? to the value, :blank?
+    # is ActiveSupport's, and Jekyll does not load ActiveSupport -- so the comparison was ALWAYS
+    # true and the pill rendered its label over an empty value on 1,274 records. The check was
+    # therefore enforcing the very defect its message describes. AUX-030 repaired the guard to
+    # compare the stripped value against '', which is what "a stripped real value exists" means.
+    # The old spelling is now rejected rather than required.
+    if "file_size_pill_value" not in text or "{% if file_size_pill_value != '' %}" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "file_size_pill_value_guard_missing", "The top file-size pill must render only when a stripped real value exists.")
+    if "file_size_pill_value != blank" in text:
+        add(errors, UPDATE_LAYOUT_PATH, "file_size_pill_value_guard_inert", "The file-size pill guard uses `!= blank`, which never gates in this stack; compare the stripped value against ''.")
     if "File size: {{ patch_file_size_clean" in text:
         add(errors, UPDATE_LAYOUT_PATH, "file_size_label_only_regression", "File-size metadata should use guarded label/value markup, not a label that can render without a value.")
     if "issue_cluster_first" not in text or "issue_label_first" not in text:
@@ -462,18 +654,63 @@ def scan_required_record_paths() -> tuple[list[dict[str, str]], list[dict[str, s
 def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
-    evidence_counts = load_counted_evidence_counts()
+    # Read each record ONCE and reuse it for both the target map and the comparison below.
+    loaded = [(path, front_matter(path)) for path in files]
+    evidence_counts = load_counted_evidence_counts([data for _p, data in loaded])
     if not evidence_counts:
         return errors, warnings
 
-    for path in files:
-        data = front_matter(path)
+    for path, data in loaded:
+        # The count and the public source list are BOTH projections of one accepted-evidence
+        # population -- `accepted_report_sources` is one entry per counted row, uncapped (the cap,
+        # `evidence_sample_visible_limit`, applies to `evidence_samples` instead). So a record whose
+        # list length differs from its own count is publishing two different populations, whatever
+        # its count says. This is the drift the count comparison below structurally CANNOT see: that
+        # one compares the record to the same predicate that wrote it, so it agrees by construction
+        # even when the predicate is wrong. Windows 25H2 published count 32 beside 9 sources and 9
+        # in its prose for three weeks with the count gate green. Checked only when a list exists,
+        # and it is a length comparison -- no prose is parsed.
+        sources = data.get("accepted_report_sources")
+        if isinstance(sources, list) and sources:
+            claimed = int(data.get("update_report_count")
+                          or data.get("confirmed_patch_specific_report_count") or 0)
+            if len(sources) != claimed:
+                # WARNING, not an error, and deliberately so: this fires during the normal lane,
+                # in the window between reconciliation writing the count and the scoped promotion
+                # rebuilding the projection. Blocking there would fail the run that is on its way to
+                # fixing the very thing being flagged. It also fires in `patch-ingest.yml`, which
+                # runs QA with no reconcile or promotion step at all and so can never clear it.
+                #
+                # It found obs-studio 32.2.2 (count 7, sources 3), which is now repaired by that
+                # product's own promotion step. Note the blind spot this check has and the headline
+                # check above does not: it is guarded on a NON-EMPTY source list, and at a canonical
+                # zero the list is retracted, so it goes quiet exactly when a stale verdict could
+                # still be publishing a number.
+                add(warnings, path, "report_count_source_list_mismatch",
+                    f"Record claims {claimed} user reports but lists {len(sources)} accepted "
+                    f"report sources; both must project the same counted-evidence population.")
         product_id = str(data.get("product_id") or "").strip()
         version = str(data.get("update_version") or "").strip()
         if not product_id or not version:
             continue
-        key = (product_id, version)
+        key = patch_key(product_id, version, data.get("target_build"))
+        # An absent key means the canonical population for this exact patch is EMPTY. That is real
+        # information: after a KB rollover a record can still claim reports for a patch with no
+        # accepted evidence at all, and the count comparison below structurally cannot see it.
+        #
+        # It is a WARNING, never an error, and that is the whole point. `patch-ingest.yml` runs this
+        # gate with NO reconcile step, and the rollover is exactly what that lane writes -- so
+        # erroring fails the run that PERFORMS the rollover, its writeback never commits the new
+        # target, and the rollover can never land. Verified: a permanent cross-lane wedge. Warning
+        # keeps the signal AND lets the rollover land; the obs lane's reconcile corrects the count
+        # within six hours. Measured zero false positives across all 905 live records.
         if key not in evidence_counts:
+            claimed = int(data.get("update_report_count")
+                          or data.get("confirmed_patch_specific_report_count") or 0)
+            if claimed > 0:
+                add(warnings, path, "report_count_for_empty_population",
+                    f"Record claims {claimed} user reports, but the canonical counted-evidence "
+                    f"population for this exact patch is empty.")
             continue
         expected = evidence_counts[key]
         actual = int(data.get("update_report_count") or data.get("confirmed_patch_specific_report_count") or 0)
@@ -610,7 +847,48 @@ def scan_route_integrity(
     return errors, warnings
 
 
-def main() -> int:
+# Codes that are a WARNING for the evidence/writeback lane and an ERROR for publication.
+#
+# The split is deliberate rather than an oversight. The writeback lane must not throw away a whole
+# collection run because one stale record names two actions -- the evidence is good, the record is
+# old, and discarding real evidence to punish old prose is the worse failure. But Pages publishes
+# that record to readers, and a page naming two decisions has no verdict at all.
+#
+# Same check, two consequences, selected by an EXPLICIT flag. Not by sniffing CI environment
+# variables: an implicit rule is one nobody can exercise from a command line, which is how a
+# publication gate quietly stops gating.
+PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
+                                        "record_names_unknown_verdict"})
+
+
+def promote_for_publication(
+    errors: list[dict[str, str]], warnings: list[dict[str, str]]
+) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """Move publication-blocking warnings into the error list.
+
+    Only codes named in PUBLICATION_BLOCKING_CODES move. Every other warning keeps its severity,
+    so turning on publication mode cannot silently promote an unrelated advisory into a deploy
+    blocker.
+    """
+    kept: list[dict[str, str]] = []
+    promoted: list[dict[str, str]] = []
+    for item in warnings:
+        if str(item.get("code") or "") in PUBLICATION_BLOCKING_CODES:
+            promoted.append(item)
+        else:
+            kept.append(item)
+    return errors + promoted, kept
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--publish-strict", action="store_true",
+        help="Publication mode: treat a record that names more than one action as an ERROR and "
+             "exit non-zero, so the site cannot deploy a patch page with two decisions. The "
+             "writeback lane runs WITHOUT this flag, where the same finding stays a warning.")
+    args = parser.parse_args(argv)
+
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     files = sorted(GENERATED_DIR.glob("*.md"))
     errors: list[dict[str, str]] = []
@@ -636,9 +914,12 @@ def main() -> int:
     errors.extend(e)
     warnings.extend(w)
 
+    if args.publish_strict:
+        errors, warnings = promote_for_publication(errors, warnings)
+
     status = {
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "mode": "blocking",
+        "mode": "publish-strict" if args.publish_strict else "blocking",
         "records_scanned": len(files),
         "priority_products_checked": len(PRIORITY_PRODUCTS),
         "error_count": len(errors),

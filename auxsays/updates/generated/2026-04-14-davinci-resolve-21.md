@@ -20,11 +20,11 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 40 user reports found. User reports show a repeat pattern.
-  Current reports mention render/export failures, installation problems, and performance slowdowns. Production editors
-  with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so
-  production users should test before updating.'
-update_report_count: 40
+update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 73 user reports found. User reports show a repeat pattern.
+  Current reports mention render/export failures, startup or application crashes, and performance slowdowns. Production
+  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
+  so production users should test before updating.'
+update_report_count: 73
 update_consensus_confidence: High
 status_change_type: new
 notification_message: ''
@@ -37,16 +37,16 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
-quick_verdict: 'WAIT: DaVinci Resolve 21 has 40 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 21 has 73 user reports found.'
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures, installation problems, and performance slowdowns.
-  Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures, startup or application crashes, and performance
+  slowdowns. Production editors with active delivery deadlines should wait or test on copied projects.
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '40 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
-  installation problems, and performance slowdowns. Current reports are Reddit-heavy, so production users should
-  test before updating. Sources represented: r/davinciresolve.'
+consensus_report: '73 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
+  startup or application crashes, and performance slowdowns. Current reports are Reddit-heavy, so production users
+  should test before updating. Sources represented: r/davinciresolve.'
 status_events:
 - at: '2026-04-14T00:00:00Z'
   label: Update released
@@ -165,6 +165,45 @@ status_events:
 - at: '2026-08-07T03:43:17.228134Z'
   label: User reports found
   note: User report count updated to 40.
+- at: '2026-09-16T02:08:37.301507Z'
+  label: User reports found
+  note: User report count updated to 57.
+- at: '2026-09-16T04:28:37.602703Z'
+  label: User reports found
+  note: User report count updated to 58.
+- at: '2026-09-17T01:06:56.431287Z'
+  label: User reports found
+  note: User report count updated to 59.
+- at: '2026-09-19T22:12:05.267929Z'
+  label: User reports found
+  note: User report count updated to 60.
+- at: '2026-09-24T18:42:34.164595Z'
+  label: User reports found
+  note: User report count updated to 61.
+- at: '2026-09-26T17:54:55.375255Z'
+  label: User reports found
+  note: User report count updated to 63.
+- at: '2026-09-27T06:48:57.951834Z'
+  label: User reports found
+  note: User report count updated to 65.
+- at: '2026-10-02T00:21:31.963170Z'
+  label: User reports found
+  note: User report count updated to 66.
+- at: '2026-10-04T07:50:39.005815Z'
+  label: User reports found
+  note: User report count updated to 67.
+- at: '2026-10-09T00:48:01.472581Z'
+  label: User reports found
+  note: User report count updated to 68.
+- at: '2026-10-12T17:07:10.751426Z'
+  label: User reports found
+  note: User report count updated to 69.
+- at: '2026-10-14T13:38:16.907400Z'
+  label: User reports found
+  note: User report count updated to 71.
+- at: '2026-10-20T06:36:59.461724Z'
+  label: User reports found
+  note: User report count updated to 73.
 legacy_consensus_score: 0
 legacy_consensus_score_percent: 50
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -200,7 +239,7 @@ consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 official_source_captured: true
-confirmed_patch_specific_report_count: 40
+confirmed_patch_specific_report_count: 73
 known_issues_present: null
 official_checksums_body: ''
 source_last_checked: '2026-07-01T15:14:39Z'
@@ -233,8 +272,8 @@ official_source_attempts:
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-evidence_last_checked: '2026-08-07T03:41:10Z'
-record_last_updated: '2026-08-07T03:43:17.228134Z'
+evidence_last_checked: '2026-10-20T05:38:20Z'
+record_last_updated: '2026-10-20T06:36:59.461724Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
@@ -254,13 +293,13 @@ evidence_samples:
   issue: general workflow reports
   outcome: medium
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1thh603/problem_with_keyframe_tab_in_fusion/
-  source_title: Problem with keyframe tab in fusion
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ucntqq/smoothness_on_a_slowed_down_clip/
+  source_title: Smoothness on a slowed down clip
   counted: true
   version_matched: '21'
   patch_version_matched: true
-  issue: installation problems
-  outcome: medium
+  issue: startup or application crashes in application stability
+  outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1tzqxgt/help_text_macro_animation_scales_to_the_full/
   source_title: '[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve
@@ -271,13 +310,13 @@ evidence_samples:
   issue: performance slowdowns in timeline / GPU performance
   outcome: medium
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1ucntqq/smoothness_on_a_slowed_down_clip/
-  source_title: Smoothness on a slowed down clip
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1thh603/problem_with_keyframe_tab_in_fusion/
+  source_title: Problem with keyframe tab in fusion
   counted: true
   version_matched: '21'
   patch_version_matched: true
-  issue: startup or application crashes in application stability
-  outcome: high
+  issue: installation problems
+  outcome: medium
 evidence_sample_visible_limit: 5
 accepted_report_sources:
 - source_name: r/davinciresolve
@@ -646,6 +685,308 @@ accepted_report_sources:
   source_title: Davinci resolve out of gpu memory
   source_date: '2026-07-31'
   version_matched: '21'
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vvfejj/why_is_davinci_resolve_21_studio_crashing_so_much/
+  source_title: Why is DaVinci Resolve 21 Studio crashing so much this week?
+  source_date: '2026-08-22'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w74qwg/import_fcpxml_timeline_unable_to_find_inherited/
+  source_title: Import fcpxml Timeline "Unable to find inherited value for key "library". Line 4."
+  source_date: '2026-09-04'
+  version_matched: DaVinci Resolve Studio 21
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vywcqr/vst_plugins_now_work_in_fairlight_on_linux_i/
+  source_title: VST plugins now work in Fairlight on Linux. I built the host that's missing, it's free and open
+    source.
+  source_date: '2026-08-26'
+  version_matched: Resolve Studio 21
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vf9vvg/grade_shows_correctly_on_clip_thumbnails_but_not/
+  source_title: Grade shows correctly on clip thumbnails but NOT in viewer or export — tried every known fix, still
+    stuck
+  source_date: '2026-08-04'
+  version_matched: DaVinci Resolve Studio 21
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wbshk6/is_resolve_211_finally_stable_enough_to_update/
+  source_title: Is Resolve 21.1 finally stable enough to update from 20?
+  source_date: '2026-09-09'
+  version_matched: '21'
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wazcmw/davinci_resolve_211_your_gpu_memory_is_full/
+  source_title: DaVinci Resolve 21.1 - Your GPU memory is full
+  source_date: '2026-09-08'
+  version_matched: '21'
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w927vk/why_isnt_my_gpu_being_recognized_resolve_21/
+  source_title: Why isn't my GPU being recognized? (Resolve 21, Debian 13 KDE)
+  source_date: '2026-09-06'
+  version_matched: Resolve 21
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w7nwz2/why_davinci_resolve_21_is_making_my_imagens_get/
+  source_title: Why davinci resolve 21 is making my imagens get bugged or something
+  source_date: '2026-09-05'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v434gz/m4_pro_macbook_pro_can_barely_play_resolves/
+  source_title: 'M4 Pro MacBook Pro can barely play Resolve’s Relight or AI Speed Warp: is this normal?'
+  source_date: '2026-07-23'
+  version_matched: DaVinci Resolve Studio 21
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vpu8os/unusable_level_of_lag_on_m4_pro_and_ive_tried/
+  source_title: Unusable level of lag on M4 Pro - and I’ve tried everything.
+  source_date: '2026-08-16'
+  version_matched: '21'
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vjls37/planar_tracker_crashing_instantly_when_using/
+  source_title: Planar Tracker crashing instantly when using occlusion mask
+  source_date: '2026-08-09'
+  version_matched: '21.0'
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w3otmy/is_the_resolve_site_broken/
+  source_title: Is the Resolve site broken?
+  source_date: '2026-08-31'
+  version_matched: Resolve 21
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vz4s9x/how_would_you_fix_this_exposure_shiftpumping_in/
+  source_title: How would you fix this exposure shift/pumping in DaVinci Resolve?
+  source_date: '2026-08-26'
+  version_matched: DaVinci Resolve Studio 21
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wd67zz/autosubs_380_not_launching_from_davinci_resolve/
+  source_title: AutoSubs 3.8.0 not launching from DaVinci Resolve 21 on Windows — solved with a custom Lua loader
+  source_date: '2026-09-11'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: startup or application crashes in installation
+  workflow_area: installation
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1we9yc4/variblur_creates_a_hard_vertical_edge_on/
+  source_title: VariBlur creates a hard vertical edge on transparent imagePost a reply
+  source_date: '2026-09-12'
+  version_matched: DaVinci Resolve Studio 21
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wblwm2/changing_clip_image_orientation_no_longer_changes/
+  source_title: Changing clip image orientation no longer changes aspect ratio since DaVinci Resolve 21.1
+  source_date: '2026-09-09'
+  version_matched: '21'
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wge6on/davinci_resolve_21_randomly_switching_cameras/
+  source_title: DaVinci Resolve 21 Randomly Switching Cameras During Render
+  source_date: '2026-09-14'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wh4w9b/how_to_perfectly_sync_path_displacement_with/
+  source_title: How to perfectly sync Path Displacement with Write-On/Mask Length? (Spatial vs Parametric mismatch)
+  source_date: '2026-09-15'
+  version_matched: DaVinci Resolve Studio 21
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wi57pb/resolve_21_free_crashing_constantly_on_rendering/
+  source_title: Resolve 21 free - crashing constantly on rendering
+  source_date: '2026-09-16'
+  version_matched: Resolve 21
+  patch_version_matched: true
+  issue: render/export failures in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wkun5o/fbxmesh3d_not_visible_in_3d_viewer_but_renders/
+  source_title: FBXMesh3D not visible in 3D viewer, but renders fine through Renderer3D
+  source_date: '2026-09-19'
+  version_matched: Resolve Studio 21
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1w5hgz9/waveforms_on_log_footage_looks_weird_it_appears/
+  source_title: Waveforms on Log Footage looks weird. It appears that it might be corrupted, but I am a beginner
+    and cannot tell.
+  source_date: '2026-09-02'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wmmi1t/retime_speed_keyframes_error/
+  source_title: Retime Speed Keyframes Error
+  source_date: '2026-09-21'
+  version_matched: DaVinci Resolve Studio 21
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wq5cuj/adjusting_overall_brightness_and_contrast_for/
+  source_title: Adjusting overall brightness and contrast for photo slideshow
+  source_date: '2026-09-25'
+  version_matched: version 21
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wr36zn/davinci_resolve_creates_artifacts_when_exporting/
+  source_title: DaVinci Resolve creates artifacts when exporting – AMD RX 9060 XT
+  source_date: '2026-09-26'
+  version_matched: '21'
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wmwgbt/audio_and_lip_sync_lag_with_blackmagic_camera_app/
+  source_title: Audio and Lip Sync Lag with Blackmagic Camera App, iPhone 12, and DJI Mic Mini Bluetooth in DaVinci
+    Resolve
+  source_date: '2026-09-22'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wu737t/resolve_21_keeps_crashing_after_about_a_minute/
+  source_title: Resolve 21 keeps crashing after about a minute
+  source_date: '2026-09-30'
+  version_matched: Resolve 21
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wvqy29/is_their_closed_captions_possible_for_me_the/
+  source_title: Is Their Closed Captions Possible For Me the Editor for Accessibility?
+  source_date: '2026-10-02'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x0khcv/exporting_aaf_for_pro_tools_through_resolve/
+  source_title: Exporting AAF for Pro Tools through Resolve duration mismatch
+  source_date: '2026-10-08'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x28eez/after_updated_to_davinci_resolve_21_its_keeps/
+  source_title: After updated to DaVinci Resolve 21, its keeps crashing all the time, does anyone know how to fix
+    it? (Mac M1
+  source_date: '2026-10-10'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x5a7a0/davinci_resolve_wont_launch_anymore/
+  source_title: Davinci Resolve wont launch anymore
+  source_date: '2026-10-13'
+  version_matched: version 21
+  patch_version_matched: true
+  issue: startup or application crashes in installation
+  workflow_area: installation
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x581vl/text_deleting_itself_bug/
+  source_title: Text deleting itself (Bug?)
+  source_date: '2026-10-13'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x6lczv/solved_davinci_resolve_21_unsupported_gpu/
+  source_title: 'SOLVED: DaVinci Resolve 21 “Unsupported GPU Processing Mode” on Windows 11 — Root cause was CUDA_VISIBLE_DEVICES=-1'
+  source_date: '2026-10-15'
+  version_matched: DaVinci Resolve 21
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x2ttin/a_second_preview_panel_has_hit_my_screen_and_i/
+  source_title: A second preview panel has hit my screen and I cant remove it
+  source_date: '2026-10-11'
+  version_matched: Resolve 21
   patch_version_matched: true
   issue: render/export failures
   workflow_area: render/export

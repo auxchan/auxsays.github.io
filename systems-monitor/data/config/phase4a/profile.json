@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "phase4a-profile-1.0.0",
+  "configurationVersion": "phase4a-proof-1.0.0",
+  "stateEngineVersion": "state-engine-1.0.0",
+  "relationshipDefinitionVersion": "labor-proof-relationships-1.0.0",
+  "propagationAlgorithmVersion": "bounded-propagation-1.0.0",
+  "derivationVersion": "derivation-1.0.0",
+  "reconciliationVersion": "common-cause-reconciliation-1.0.0",
+  "maxDepth": 3,
+  "maxRounds": 8,
+  "budgets": {
+    "maxNodes": 64,
+    "maxPaths": 128,
+    "maxContributions": 256
+  },
+  "freshnessMaxAgeDays": {
+    "weekly": 21,
+    "monthly": 75
+  },
+  "materiality": {
+    "version": "phase4a-materiality-1.0.0",
+    "thresholds": {
+      "employment_level": "1",
+      "unemployment_rate": "0.1",
+      "participation_rate": "0.1",
+      "claims": "1",
+      "job_openings": "1",
+      "hires": "1",
+      "ordinal": "1"
+    }
+  },
+  "coverage": "LIMITED_ENGINE_PROOF",
+  "recurringInfrastructureCostUsd": 0
+}

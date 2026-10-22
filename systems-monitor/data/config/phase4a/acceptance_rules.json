@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "phase4a-acceptance-rules-1.0.0",
+  "rules": [
+    {
+      "ruleId": "P4A-DIRECT-MAPPING-RULE-1.0.0",
+      "authority": "DEPENDENCY_RELATIONSHIP_CONTRACT 1.0.0 DR-021/DR-024; Taylor O-005 approval 2026-08-19",
+      "acceptedAt": "2026-08-19T00:00:00Z",
+      "relationshipType": "DIRECT_SEMANTIC_MAPPING",
+      "evidenceClass": "DIRECT",
+      "calibration": "NONE_IDENTITY_ONLY",
+      "geography": "US",
+      "allowedPairs": [
+        ["indicator:US_LABOR_TOTAL_NONFARM_PAYROLLS", "labor-state:employment-level"],
+        ["indicator:US_LABOR_U3_UNEMPLOYMENT_RATE", "labor-state:unemployment-rate"],
+        ["indicator:US_LABOR_FORCE_PARTICIPATION_RATE", "labor-state:participation-rate"],
+        ["indicator:US_LABOR_INITIAL_UI_CLAIMS", "labor-state:claims-separation-signal"],
+        ["indicator:US_LABOR_JOB_OPENINGS", "labor-state:labor-demand-openings-signal"],
+        ["indicator:US_LABOR_HIRES", "labor-state:realized-hiring-flow"]
+      ]
+    }
+  ]
+}

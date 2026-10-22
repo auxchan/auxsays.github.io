@@ -1,0 +1,11 @@
+{
+  "fixtureClass": "TEST_ONLY_NOT_LIVE_BEA_METADATA",
+  "BEAAPI": {
+    "Results": {
+      "ParamValue": [
+        {"Key": "2023", "Desc": "2023"},
+        {"Key": "2024", "Desc": "2024"}
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "phase4b-profile-1.0.0",
+  "configurationVersion": "phase4b-energy-2024-1.0.0",
+  "propagationAlgorithmVersion": "bounded-propagation-1.1.0",
+  "reconciliationVersion": "common-cause-reconciliation-1.0.0",
+  "maxDepth": 3,
+  "maxRounds": 8,
+  "budgets": {
+    "maxNodes": 20,
+    "maxPaths": 40,
+    "maxContributions": 128
+  },
+  "materiality": {
+    "version": "phase4b-energy-materiality-1.0.0",
+    "thresholds": {
+      "STRUCTURAL_PRESSURE": "0.0000001"
+    }
+  },
+  "coverage": "BOUNDED_STRUCTURAL_PROOF",
+  "recurringInfrastructureCostUsd": 0
+}

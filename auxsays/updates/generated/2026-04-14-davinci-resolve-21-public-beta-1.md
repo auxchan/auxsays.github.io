@@ -19,10 +19,10 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'AVOID for production: DaVinci Resolve 21 Public Beta 1 has 15 user reports found. User reports
-  show a repeat pattern. Current reports mention startup or application crashes, Magic Mask crashes, and performance slowdowns.
-  Production editors should avoid it on active projects; test only in disposable or non-critical projects. Current reports
-  are Reddit-heavy, so production users should test before updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 21 Public Beta 1 has 15 user reports found. User reports show a repeat pattern.
+  Current reports mention startup or application crashes, Magic Mask crashes, and performance slowdowns. Production editors
+  should avoid it on active projects; test only in disposable or non-critical projects. Current reports are Reddit-heavy,
+  so production users should test before updating.'
 update_report_count: 15
 update_consensus_confidence: Low-Medium
 status_change_type: new
@@ -36,8 +36,8 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
-quick_verdict: 'WAIT for production systems: DaVinci Resolve 21 Public Beta 1 is a beta build with 15 user reports found.'
-update_decision_label: WAIT for production systems
+quick_verdict: 'WAIT: DaVinci Resolve 21 Public Beta 1 is a beta build with 15 user reports found.'
+update_decision_label: WAIT
 update_decision_body: Use this beta only for non-critical testing. Active client projects should stay on a known-good stable
   build unless a Resolve 21 beta feature is worth the risk.
 source_freshness_note: ''
@@ -164,38 +164,38 @@ legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evi
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
-source_last_checked: '2026-08-06T13:15:58Z'
-official_body_last_checked: '2026-08-06T13:15:58Z'
+source_last_checked: '2026-10-22T00:28:09Z'
+official_body_last_checked: '2026-10-22T00:28:09Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-08-04T13:07:54Z'
+- at: '2026-10-21T00:21:22Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-- at: '2026-08-04T18:06:03Z'
+- at: '2026-10-21T07:27:12Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-- at: '2026-08-05T07:32:23Z'
+- at: '2026-10-21T14:29:56Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-- at: '2026-08-05T12:53:16Z'
+- at: '2026-10-21T19:43:01Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-- at: '2026-08-06T13:15:58Z'
+- at: '2026-10-22T00:28:09Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-06-14T06:05:56Z'
-record_last_updated: '2026-06-14T06:07:40.379547Z'
+record_last_updated: '2026-10-13T02:09:21.339342Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117

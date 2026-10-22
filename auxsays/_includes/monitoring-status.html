@@ -4,16 +4,25 @@
   evidence/collection status, NOT a verdict, and it is kept separate from the AUXSAYS verdict.
 
   Derived ONLY from structured per-exact-patch telemetry in _data/evidence_method_health.yml (EMH),
-  joined on (product_id, update_version). No manual allowlist -- "monitored" means EMH rows exist.
+  joined on the CANONICAL PATCH IDENTITY (product_id, update_version, target_build). The build
+  component matters: a build-aware product can ship several builds under one version, and every one
+  of their EMH rows carries the same update_version. Joining on the version alone let a build with
+  NO telemetry of its own inherit a sibling's -- the ladder's rule 1 would see rows and report a
+  monitoring state that build never earned, which is a fail-OPEN in the one place that must fail
+  closed. An empty build on both sides is a no-op, so version-only products are unaffected.
+  No manual allowlist -- "monitored" means EMH rows exist FOR THIS EXACT PATCH.
   It FAILS CLOSED: missing, stale, future, disabled, blocked, broken, partial, low-confidence, or
   manual-review telemetry can never produce a clean "no reports" read.
 
   Inputs:
     include.product_id    -- exact tracked product id
     include.version       -- exact patch version (numeric YAML versions are string-normalized)
+    include.target_build  -- exact vendor build for build-aware products ('' when not build-aware)
     include.published_at  -- record release timestamp (ISO); gates post-release runs
     include.report_count  -- accepted patch-specific community report count
-    include.mode          -- 'full' (detail card) | 'cell' (table cell) | 'feed' (feed line)
+    include.mode          -- 'full' (detail card) | 'compact' (one hero line) | 'cell' (table
+                             cell) | 'feed' (feed line). Every mode renders the SAME derived
+                             `mon_status`; none of them re-derives it.
 
   Fail-closed ladder (first match wins):
     1  no matching rows                                          -> OFFICIAL SOURCE ONLY
@@ -34,16 +43,18 @@
 {%- endcomment -%}
 {%- assign mon_mode = include.mode | default: 'cell' -%}
 {%- assign mon_ver = include.version | append: '' -%}
+{%- assign mon_build = include.target_build | default: '' | append: '' -%}
 {%- assign mon_reports = include.report_count | default: 0 | plus: 0 -%}
 {%- assign mon_min_healthy = site.monitoring_min_healthy_methods | default: 2 -%}
 {%- assign mon_max_age_days = site.monitoring_max_age_days | default: 14 -%}
 {%- assign mon_max_age_s = mon_max_age_days | times: 86400 -%}
 {%- assign mon_now_s = site.time | date: '%s' | plus: 0 -%}
 {%- assign mon_pub_s = 0 -%}
-{%- if include.published_at != blank -%}{%- assign mon_pub_s = include.published_at | date: '%s' | plus: 0 -%}{%- endif -%}
+{%- assign mon_pub_raw = include.published_at | default: '' | strip -%}{%- if mon_pub_raw != '' -%}{%- assign mon_pub_s = mon_pub_raw | date: '%s' | plus: 0 -%}{%- endif -%}
 {%- assign mon_total = 0 -%}
 {%- assign mon_disabled = 0 -%}
 {%- assign mon_healthy = 0 -%}
+{%- assign mon_healthy_seen = '' -%}
 {%- assign mon_fresh_usable = 0 -%}
 {%- assign mon_has_valid_usable_ts = false -%}
 {%- assign mon_has_post_release_valid = false -%}
@@ -59,7 +70,8 @@
 {%- if mon_rows != '' and mon_rows.size > 0 -%}
 {%- for m in mon_rows -%}
 {%- assign m_ver = m.update_version | append: '' -%}
-{%- if m_ver == mon_ver -%}
+{%- assign m_build = m.target_build | default: '' | append: '' -%}
+{%- if m_ver == mon_ver and m_build == mon_build -%}
 {%- assign mon_total = mon_total | plus: 1 -%}
 {%- assign m_status = m.status | default: '' | downcase | strip -%}
 {%- assign m_is_disabled = false -%}
@@ -68,20 +80,33 @@
 {%- if m_status == 'partial' or m_status == 'blocked' or m_status == 'broken' or m_status == 'stale' or m_status == 'low_confidence' or m_status == 'manual_review_needed' -%}{%- assign mon_has_degraded_status = true -%}{%- endif -%}
 {%- assign m_ts_ok = false -%}
 {%- assign m_run_s = 0 -%}
-{%- if m.last_run != blank -%}
-{%- assign m_run_s = m.last_run | date: '%s' | plus: 0 -%}
+{%- assign m_run_raw = m.last_run | default: '' | strip -%}{%- if m_run_raw != '' -%}
+{%- assign m_run_s = m_run_raw | date: '%s' | plus: 0 -%}
 {%- if m_run_s <= mon_now_s -%}{%- assign m_ts_ok = true -%}{%- endif -%}
 {%- endif -%}
 {%- unless m_is_disabled -%}
 {%- if m_ts_ok -%}
 {%- assign mon_has_valid_usable_ts = true -%}
-{%- if m_run_s > mon_latest_s -%}{%- assign mon_latest_s = m_run_s -%}{%- assign mon_latest_raw = m.last_run -%}{%- endif -%}
+{%- if m_run_s > mon_latest_s -%}{%- assign mon_latest_s = m_run_s -%}{%- assign mon_latest_raw = m_run_raw -%}{%- endif -%}
 {%- if m_run_s >= mon_pub_s -%}
 {%- assign mon_has_post_release_valid = true -%}
 {%- assign m_age_s = mon_now_s | minus: m_run_s -%}
 {%- if m_age_s <= mon_max_age_s -%}
 {%- assign mon_fresh_usable = mon_fresh_usable | plus: 1 -%}
-{%- if m_status == 'success' or m_status == 'no_results' -%}{%- assign mon_healthy = mon_healthy | plus: 1 -%}{%- endif -%}
+{%- comment -%}
+  Coverage is counted per SOURCE FAMILY, not per method row. Several methods deliberately read
+  the same community by different routes, so counting rows let two routes over one community
+  satisfy a floor that exists to require more than one community. The family is the evidence
+  source_type, which is exactly what the ownership manifest treats as a source identity.
+{%- endcomment -%}
+{%- if m_status == 'success' or m_status == 'no_results' -%}
+  {%- assign m_fam = m.source_type | default: m.method_id -%}
+  {%- capture m_fam_key -%}|{{ m_fam }}|{%- endcapture -%}
+  {%- unless mon_healthy_seen contains m_fam_key -%}
+    {%- assign mon_healthy = mon_healthy | plus: 1 -%}
+    {%- assign mon_healthy_seen = mon_healthy_seen | append: m_fam_key -%}
+  {%- endunless -%}
+{%- endif -%}
 {%- endif -%}
 {%- endif -%}
 {%- else -%}
@@ -109,8 +134,23 @@
 {%- endif -%}
 {%- assign mon_status_class = mon_status | downcase | replace: ' ', '-' -%}
 {%- assign mon_latest_label = '' -%}
-{%- if mon_latest_raw != blank -%}{%- assign mon_latest_label = mon_latest_raw | date: "%b %-d, %Y" -%}{%- endif -%}
-{%- if mon_mode == 'cell' -%}
+{%- if mon_latest_raw != '' -%}{%- assign mon_latest_label = mon_latest_raw | date: "%b %-d, %Y" -%}{%- endif -%}
+{%- comment -%}
+  COMPACT. One line, for the hero. It renders the SAME `mon_status` the full card does -- derived
+  once, above, by the ladder that is this file's whole reason to exist -- so there is no second
+  calculation and no way for the hero and the audit card to disagree. The full detail is not
+  removed; it moves to a disclosure lower on the page, which is where an audit trail belongs once
+  the reader has the answer. A degraded state is still named in full here, in words, so a blocked
+  or stale source is as obvious at a glance as it was in the card.
+{%- endcomment -%}
+{%- if mon_mode == 'compact' -%}
+<div class="update-monitoring-compact update-monitoring-compact--{{ mon_status_class }}">
+  <span class="update-monitoring-compact__label">Monitoring</span>
+  <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}">{{ mon_status }}</span>
+  <span class="update-monitoring-compact__detail">{% if mon_latest_label != '' %}checked {{ mon_latest_label }}{% else %}no run recorded{% endif %}</span>
+  <a class="update-monitoring-compact__more" href="#monitoring">Collection detail</a>
+</div>
+{%- elsif mon_mode == 'cell' -%}
 <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}" title="Community-evidence monitoring status (separate from the verdict)">{{ mon_status }}</span>
 {%- elsif mon_mode == 'feed' -%}
 <span class="patch-card-monitoring"><span class="patch-card-monitoring__label">Monitoring</span> <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}">{{ mon_status }}</span></span>
@@ -122,17 +162,18 @@
   </div>
   <dl class="update-monitoring-facts">
     <div class="update-monitoring-fact"><dt>Accepted reports</dt><dd>{{ mon_reports }}</dd></div>
-    <div class="update-monitoring-fact"><dt>Latest evidence run</dt><dd>{% if mon_latest_label != blank %}{{ mon_latest_label }}{% else %}Not recorded{% endif %}</dd></div>
-    <div class="update-monitoring-fact"><dt>Healthy methods</dt><dd>{{ mon_healthy }} fresh (success / no reports) &middot; need {{ mon_min_healthy }}</dd></div>
+    <div class="update-monitoring-fact"><dt>Latest evidence run</dt><dd>{% if mon_latest_label != '' %}{{ mon_latest_label }}{% else %}Not recorded{% endif %}</dd></div>
+    <div class="update-monitoring-fact"><dt>Healthy sources</dt><dd>{{ mon_healthy }} fresh (success / no reports) &middot; need {{ mon_min_healthy }}</dd></div>
   </dl>
   {%- if mon_rows != '' and mon_rows.size > 0 -%}
   {%- assign mon_has_method_rows = false -%}
-  {%- for m in mon_rows -%}{%- assign m_ver2 = m.update_version | append: '' -%}{%- if m_ver2 == mon_ver -%}{%- assign mon_has_method_rows = true -%}{%- endif -%}{%- endfor -%}
+  {%- for m in mon_rows -%}{%- assign m_ver2 = m.update_version | append: '' -%}{%- assign m_build2 = m.target_build | default: '' | append: '' -%}{%- if m_ver2 == mon_ver and m_build2 == mon_build -%}{%- assign mon_has_method_rows = true -%}{%- endif -%}{%- endfor -%}
   {%- if mon_has_method_rows -%}
   <ul class="update-monitoring-methods">
   {%- for m in mon_rows -%}
   {%- assign m_ver2 = m.update_version | append: '' -%}
-  {%- if m_ver2 == mon_ver -%}
+  {%- assign m_build2 = m.target_build | default: '' | append: '' -%}
+  {%- if m_ver2 == mon_ver and m_build2 == mon_build -%}
   {%- assign m_status2 = m.status | default: '' | downcase | strip -%}
   {%- assign m_expl = 'Status recorded' -%}
   {%- if m_status2 == 'success' -%}{%- assign m_expl = 'Completed' -%}
@@ -146,8 +187,24 @@
   {%- elsif m_status2 == 'disabled' -%}{%- assign m_expl = 'Method disabled' -%}
   {%- endif -%}
   {%- assign m_checked = '' -%}
-  {%- if m.last_run != blank -%}{%- assign m_run_s2 = m.last_run | date: '%s' | plus: 0 -%}{%- if m_run_s2 <= mon_now_s -%}{%- assign m_checked = m.last_run | date: "%b %-d, %Y" -%}{%- endif -%}{%- endif -%}
-  <li class="update-monitoring-method update-monitoring-method--{{ m_status2 | replace: '_', '-' }}"><span class="update-monitoring-method__id">{{ m.method_id | escape }}</span> <span class="update-monitoring-method__state">{{ m_expl }}</span>{% if m_checked != blank %} <span class="update-monitoring-method__checked">last checked {{ m_checked }}</span>{% endif %}</li>
+  {%- assign m_run_raw2 = m.last_run | default: '' | strip -%}{%- if m_run_raw2 != '' -%}{%- assign m_run_s2 = m_run_raw2 | date: '%s' | plus: 0 -%}{%- if m_run_s2 <= mon_now_s -%}{%- assign m_checked = m_run_raw2 | date: "%b %-d, %Y" -%}{%- endif -%}{%- endif -%}
+    {%- comment -%}
+      PUBLIC SOURCE FAMILY, not the internal method id. Several methods deliberately read the
+      SAME community by different routes -- Microsoft Q&A is searched, enumerated by community
+      tag, and re-read for thread context -- and printing three raw ids made one community look
+      like three independent sources. The family is named first so the real source universe is
+      legible, with the route in parentheses so the rows are still distinguishable.
+    {%- endcomment -%}
+    {%- assign m_family = m.method_id | replace: '_', ' ' -%}
+    {%- if m.method_id == 'learn_qna_search_rss' -%}{%- assign m_family = 'Microsoft Q&A (search)' -%}
+    {%- elsif m.method_id == 'learn_qna_powerpoint_tags' -%}{%- assign m_family = 'Microsoft Q&A (community enumeration)' -%}
+    {%- elsif m.method_id == 'learn_qna_segment_context' -%}{%- assign m_family = 'Microsoft Q&A (thread context)' -%}
+    {%- elsif m.method_id == 'tech_community_discussions' -%}{%- assign m_family = 'Microsoft Tech Community' -%}
+    {%- elsif m.method_id == 'stack_exchange_search' -%}{%- assign m_family = 'Super User / Stack Exchange' -%}
+    {%- elsif m.method_id == 'github_officedev_issues' -%}{%- assign m_family = 'OfficeDev GitHub issues' -%}
+    {%- elsif m.method_id == 'reddit_search' -%}{%- assign m_family = 'Reddit' -%}
+    {%- endif -%}
+  <li class="update-monitoring-method update-monitoring-method--{{ m_status2 | replace: '_', '-' }}"><span class="update-monitoring-method__id">{{ m_family | escape }}</span> <span class="update-monitoring-method__state">{{ m_expl }}</span>{% if m_checked != '' %} <span class="update-monitoring-method__checked">last checked {{ m_checked }}</span>{% endif %}</li>
   {%- endif -%}
   {%- endfor -%}
   </ul>

@@ -24,7 +24,9 @@ from .base import (
     CollectorContext,
     PatchRecord,
     ProductCollector,
+    ROOT,
     append_evidence_rows,
+    finalize_method_health_delta,
     apply_acceptance_gates,
     counted_rows,
     date_part,
@@ -38,6 +40,8 @@ from .base import (
     utc_now,
 )
 
+from lib.method_routing import fallback_justified, plan_methods
+from lib.target_outcome import target_is_contradicted
 from . import reddit_source
 
 PRODUCT_ID = "adobe-premiere-pro"
@@ -70,8 +74,16 @@ PRE_RELEASE_RE = re.compile(
     r"\b(?:public\s+beta|beta|pre[-\s]?release|prerelease)\s+(?:premiere\s+pro\s+)?26\.2(?:\.0)?\b|\b26\.2(?:\.0)?\s+(?:public\s+beta|beta|pre[-\s]?release|prerelease)\b",
     flags=re.I,
 )
+ALGOLIA_BUDGET_STOP = "premiere_algolia_budget_stop"
+ALGOLIA_TRUNCATED = "premiere_algolia_topic_ids_truncated"
 SPECIFIC_ADOBE_BUG_URL_RE = re.compile(
-    r"^/(?:bug-reports-\d+/[^/?#]+-\d+|t5/premiere-pro-bugs/[^/?#]+/(?:idi|td)-p/\d+)/?$",
+    # PINNED TO PREMIERE'S OWN BOARD. The old `bug-reports-\d+` accepted ANY Adobe product's bug
+    # board, so an After Effects, Media Encoder or Premiere Elements report satisfied Premiere's URL
+    # gate -- all three live in the same community and several have their own Bug Reports board.
+    # 728 is "Bug Reports" under category 726 "Adobe Premiere", measured against Adobe's own
+    # taxonomy. Costs no recall: every Adobe URL in the corpus is either this board or a
+    # `questions-\d+` path this pattern already rejected.
+    r"^/(?:bug-reports-728/[^/?#]+-\d+|t5/premiere-pro-bugs/[^/?#]+/(?:idi|td)-p/\d+)/?$",
     flags=re.I,
 )
 SPECIFIC_CREATIVE_COW_THREAD_RE = re.compile(r"^/forums/thread/[^/?#]+/?$", flags=re.I)
@@ -136,7 +148,11 @@ class AdobePremiereCollector(ProductCollector):
                 "method_health": method_health,
             }
             if context.write:
-                added, total, rows = append_evidence_rows(accepted)
+                persisted: list[dict[str, Any]] = []
+                already_held: list[dict[str, Any]] = []
+                added, total, rows = append_evidence_rows(
+                    accepted, out_added=persisted, out_already_held=already_held)
+                finalize_method_health_delta(method_health, persisted, already_held)
                 structured_count = len(counted_rows(rows, PRODUCT_ID, record.update_version))
                 record_updated = False
                 if accepted:
@@ -151,34 +167,107 @@ class AdobePremiereCollector(ProductCollector):
         return results
 
 
-def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
-    captured_at = utc_now()
-    method_results: list[dict[str, Any]] = []
 
-    for method_id, collector in (
-        ("reddit_search", reddit_search_candidates),
-        ("adobe_community_search", adobe_community_search_candidates),
-        ("adobe_community_bug_tab_index", adobe_community_bug_tab_candidates),
-        ("adobe_community_known_url_recheck", adobe_community_known_url_candidates),
-        ("brave_search_api", brave_search_api_candidates),
-        ("wayback_snapshot_recheck", wayback_snapshot_recheck_candidates),
-        ("creativecow_forum_index", creativecow_forum_index_candidates),
-        ("creativecow_brave_search", creativecow_brave_search_candidates),
-    ):
-        errors: list[dict[str, Any]] = []
-        candidates = collector(record, context, errors)
-        accepted, rejected = evaluate_candidates(record, candidates, captured_at)
-        method_results.append({
-            "method_id": method_id,
-            "candidates": candidates,
-            "accepted": accepted,
-            "rejected": rejected,
-            "errors": errors,
-        })
+# Why a method was not executed, for its health row's notes. These are the only three reasons:
+# routing never silently skips anything.
+#
+# This text is PUBLIC. The methodology page renders a health row's `notes` field verbatim, so
+# these read as site copy and must not name repository paths or internal module names.
+NOT_RUN_REASONS = {
+    "disabled": ("Not run. This source refused every request over a sustained period, so AUXSAYS deliberately stopped calling it rather than spending each cycle timing out against it. The method is retained and can be restored if the source starts answering again."),
+    "probe_only": ("Not run. Kept for occasional manual diagnosis only: it was by far the slowest method in this collector and returned no usable reports when it was last measured."),
+    "fallback_not_required": ("Not run. The primary source answered with accepted reports, so this backup check was not needed. That is a routing decision, not a failed attempt."),
+}
+
+
+def run_one(record: PatchRecord, context: CollectorContext, method_id: str,
+            captured_at: str) -> dict[str, Any]:
+    """Execute one discovery method and evaluate it under the shared acceptance authority."""
+    errors: list[dict[str, Any]] = []
+    candidates = PREMIERE_METHODS[method_id](record, context, errors)
+    accepted, rejected = evaluate_candidates(record, candidates, captured_at)
+    return {"method_id": method_id, "candidates": candidates, "accepted": accepted,
+            "rejected": rejected, "errors": errors}
+
+
+def not_run_health_row(record: PatchRecord, captured_at: str, method_id: str,
+                       reason_key: str) -> dict[str, Any]:
+    """An honest telemetry row for a method routing did not call.
+
+    `disabled` is the canonical status for this and already means exactly this in the schema
+    ("implemented, deliberately switched off"), so nothing new is invented. It matters that a row
+    is written AT ALL: the store is an upsert keyed (product, version, build, method) that RETAINS
+    what it is not given, so a method that simply stopped emitting would leave its last `blocked`
+    row behind with a frozen last_run, reading as a current failure forever. Writing `disabled`
+    with a fresh last_run replaces that with the truth, and the monitoring include counts a
+    disabled row as not-usable rather than as a failed attempt.
+    """
+    return method_health_row(
+        product_id=PRODUCT_ID,
+        update_version=record.update_version,
+        method_id=method_id,
+        source_type=method_source_type(method_id),
+        status="disabled",
+        candidates_found=0,
+        accepted_reports=0,
+        rejected_reports=0,
+        blocked_reason="",
+        last_run=captured_at,
+        notes=f"{method_label(method_id)} not run. {NOT_RUN_REASONS[reason_key]}",
+    )
+
+
+def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    """Route, then collect. Routing chooses WHICH method runs; it never decides what counts.
+
+    Every method that executes passes through the same `evaluate_candidates` authority it always
+    did, and the merge/dedupe below is unchanged, so a row accepted from the fallback is accepted
+    on exactly the terms it would have been from the primary.
+    """
+    captured_at = utc_now()
+    plan = plan_methods(PRODUCT_ID)
+    primary_ids = [m for m in plan["primary"] if m in PREMIERE_METHODS]
+    fallback_ids = [m for m in plan["fallback"] if m in PREMIERE_METHODS]
+    not_run: list[tuple[str, str]] = []
+
+    # No declared primary means no product-scoped routing. Run the whole catalogue rather than
+    # silently collecting nothing: a missing declaration must not look like a product with no
+    # sources, which is the one failure mode that would be invisible in the output.
+    if not primary_ids:
+        primary_ids = list(PREMIERE_METHODS)
+        fallback_ids = []
+
+    method_results = [run_one(record, context, mid, captured_at) for mid in primary_ids]
+    primary_health = [health_for_method(record, captured_at, result) for result in method_results]
+    primary_accepted = merge_rows_by_url([row for r in method_results for row in r["accepted"]])
+
+    justified, reason = fallback_justified(primary_health, len(primary_accepted),
+                                          plan["fallback_when"])
+    health = list(primary_health)
+    for method_id in fallback_ids:
+        if justified:
+            result = run_one(record, context, method_id, captured_at)
+            method_results.append(result)
+            health.append(health_for_method(record, captured_at, result))
+        else:
+            not_run.append((method_id, "fallback_not_required"))
+
+    for method_id in plan["probe_only"]:
+        if method_id in PREMIERE_METHODS:
+            not_run.append((method_id, "probe_only"))
+    for method_id in plan["disabled"]:
+        if method_id in PREMIERE_METHODS:
+            not_run.append((method_id, "disabled"))
+    health.extend(not_run_health_row(record, captured_at, mid, why) for mid, why in not_run)
+
+    rb.emit("premiere_routing", product_id=PRODUCT_ID,
+            version=str(record.update_version or ""),
+            executed=[r["method_id"] for r in method_results],
+            not_run=[mid for mid, _ in not_run],
+            fallback_justified=bool(justified), fallback_reason=reason or "")
 
     accepted = merge_rows_by_url([row for result in method_results for row in result["accepted"]])
     rejected = merge_rows_by_url([row for result in method_results for row in result["rejected"] if not row_is_accepted_url(row, accepted)])
-    health = [health_for_method(record, captured_at, result) for result in method_results]
     return accepted, rejected, health
 
 
@@ -436,6 +525,294 @@ def candidates_from_creativecow_links(
         candidates.append(candidate)
     return candidates
 
+# --- Adobe Community keyless JSON chain: searchToken -> Algolia -> getTopics ----------------------
+# DISCOVERY ONLY. This chain finds candidate topic ids; it never supplies evidence. A hit's snippet,
+# its title and its Algolia rank are all discarded -- the row is built from the HYDRATED opening post
+# and judged by the same acceptance authority every other Premiere method goes through.
+#
+# Measured 2026-10-07 against the live index, not inherited from a prototype:
+#   availableIndexes   ['adobedme-en-unified']            (one index; pinned by NAME, never position)
+#   category 726       "Adobe Premiere"                   (731 is "Premiere (Beta)" -- a DIFFERENT category)
+#   forum 728          "Bug Reports"   under 726          (729 Questions, Announcements a sibling)
+#   firstPost.creationDate  '2026-06-22T23:11:49+0200'    a real opening-post creation time
+# The same index also serves After Effects (526), Adobe Media Encoder (503), Premiere Elements (723)
+# and Premiere Rush (735) -- several with their own `Bug Reports` boards -- which is exactly why
+# scoping is STRUCTURAL on Adobe's own taxonomy rather than on a URL shape or a product regex.
+ADOBE_SEARCH_TOKEN_URL = "https://community.adobe.com/search/searchToken"
+ADOBE_GET_TOPICS_URL = "https://community.adobe.com/search/getTopics"
+ALGOLIA_QUERY_URL_TMPL = "https://{app_id}-dsn.algolia.net/1/indexes/{index}/query"
+ALGOLIA_INDEX = "adobedme-en-unified"
+PREMIERE_CATEGORY_ID = 726
+PREMIERE_BUG_FORUM_ID = 728
+ALGOLIA_FILTERS = f"category:{PREMIERE_CATEGORY_ID} AND forum:{PREMIERE_BUG_FORUM_ID}"
+MAX_ALGOLIA_QUERIES_PER_RECORD = 3
+MAX_ALGOLIA_HITS_PER_QUERY = 20
+MAX_TOPIC_IDS_PER_RECORD = 40
+GET_TOPICS_CHUNK = 20
+ALGOLIA_SOURCE_NAME = "Adobe Community Bug Report"
+JSON_HEADERS = {
+    "Accept": "application/json, text/plain;q=0.9, */*;q=0.5",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Connection": "close",
+    "User-Agent": HEADERS["User-Agent"],
+}
+
+
+class AlgoliaChainError(RuntimeError):
+    def __init__(self, reason: str) -> None:
+        super().__init__(reason)
+        self.reason = reason
+
+
+def algolia_request_json(url: str, *, data: bytes | None = None, timeout: int = 30,
+                         max_bytes: int = 1200000) -> Any:
+    """One JSON request on Premiere's own runtime-bounded transport.
+
+    Deliberately not Acrobat's `_request_json`: its budget plumbing belongs to the Acrobat collector,
+    and borrowing it here would silently run this method unbounded.
+    """
+    headers = dict(JSON_HEADERS)
+    if data is not None:
+        headers["Content-Type"] = "application/json"
+    request = urllib.request.Request(url, data=data, headers=headers,
+                                     method="POST" if data is not None else "GET")
+    try:
+        with urllib.request.urlopen(request, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
+            body = rb.bounded_read(response, budget=rb.get_run_budget(),
+                                   endpoint_family="premiere", max_bytes=max_bytes)
+    except urllib.error.HTTPError as exc:
+        raise AlgoliaChainError(f"http_{exc.code}_error") from exc
+    except Exception as exc:                                       # noqa: BLE001
+        raise AlgoliaChainError(error_reason(exc)) from exc
+    try:
+        return json.loads(body.decode("utf-8", errors="replace"))
+    except ValueError as exc:
+        raise AlgoliaChainError("json_decode_failed") from exc
+
+
+def algolia_credentials(errors: list[dict[str, Any]]) -> dict[str, str] | None:
+    """Anonymous app id + secured search key, with the index pinned BY NAME.
+
+    Acrobat takes `availableIndexes[0]`. Positional selection is how a silent reindex becomes a
+    silently wrong corpus, so membership of the exact expected name is required and anything else
+    fails closed as `broken` rather than searching whatever happened to be first.
+    """
+    try:
+        payload = algolia_request_json(ADOBE_SEARCH_TOKEN_URL)
+    except AlgoliaChainError as exc:
+        errors.append({"source_url": ADOBE_SEARCH_TOKEN_URL,
+                       "reason": f"adobe_search_token_fetch_failed:{exc.reason}"})
+        return None
+    data = payload if isinstance(payload, dict) else {}
+    app_id = str(data.get("client_id") or "").strip()
+    key = str(data.get("token") or "").strip()
+    indexes = data.get("availableIndexes")
+    names = [str(i).strip() for i in indexes] if isinstance(indexes, list) else []
+    if ALGOLIA_INDEX not in names:
+        errors.append({"source_url": ADOBE_SEARCH_TOKEN_URL,
+                       "reason": "searchtoken_index_unavailable"})
+        return None
+    if not (app_id and key):
+        errors.append({"source_url": ADOBE_SEARCH_TOKEN_URL, "reason": "adobe_search_token_incomplete"})
+        return None
+    return {"app_id": app_id, "key": key, "index": ALGOLIA_INDEX}
+
+
+def algolia_queries(record: PatchRecord) -> list[str]:
+    """Exact-version phrases. The board is already Premiere's, so the query carries the VERSION."""
+    version = str(record.update_version or "").strip()
+    queries = [f'"{version}"', f'"Premiere Pro {version}"', f'"Premiere {version}"']
+    return dedupe(queries)[:MAX_ALGOLIA_QUERIES_PER_RECORD]
+
+
+def algolia_search(creds: dict[str, str], query: str, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """One structurally-scoped query. `filters` is Adobe's own taxonomy, not a guess about URLs."""
+    url = ALGOLIA_QUERY_URL_TMPL.format(app_id=urllib.parse.quote(creds["app_id"]),
+                                        index=urllib.parse.quote(creds["index"]))
+    params = urllib.parse.urlencode({
+        "query": query,
+        "hitsPerPage": MAX_ALGOLIA_HITS_PER_QUERY,
+        "filters": ALGOLIA_FILTERS,
+    })
+    body = json.dumps({"params": params}).encode("utf-8")
+    original = JSON_HEADERS.copy()
+    try:
+        JSON_HEADERS["X-Algolia-Application-Id"] = creds["app_id"]
+        JSON_HEADERS["X-Algolia-API-Key"] = creds["key"]
+        payload = algolia_request_json(url, data=body)
+    except AlgoliaChainError as exc:
+        errors.append({"source_url": url, "reason": f"adobe_algolia_search_failed:{exc.reason}"})
+        return []
+    finally:
+        JSON_HEADERS.clear()
+        JSON_HEADERS.update(original)
+    hits = payload.get("hits") if isinstance(payload, dict) else None
+    if not isinstance(hits, list):
+        errors.append({"source_url": url, "reason": "adobe_algolia_schema_unexpected"})
+        return []
+    return [h for h in hits if isinstance(h, dict)]
+
+
+def get_topics(topic_ids: list[int], errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Hydrate topic ids into authoritative records. Chunked, because getTopics silently truncates
+    a long topicIds[] request -- silent loss is the one thing a bounded method must not do."""
+    topics: list[dict[str, Any]] = []
+    for start in range(0, len(topic_ids), GET_TOPICS_CHUNK):
+        chunk = topic_ids[start:start + GET_TOPICS_CHUNK]
+        url = f"{ADOBE_GET_TOPICS_URL}?" + urllib.parse.urlencode([("topicIds[]", str(t)) for t in chunk])
+        try:
+            payload = algolia_request_json(url)
+        except AlgoliaChainError as exc:
+            errors.append({"source_url": ADOBE_GET_TOPICS_URL,
+                           "reason": f"adobe_get_topics_failed:{exc.reason}"})
+            continue
+        if not isinstance(payload, list):
+            errors.append({"source_url": ADOBE_GET_TOPICS_URL, "reason": "adobe_get_topics_schema_unexpected"})
+            continue
+        topics.extend(t for t in payload if isinstance(t, dict))
+    return topics
+
+
+def topic_is_premiere_bug_report(topic: dict[str, Any]) -> bool:
+    """Re-assert Adobe's taxonomy AFTER hydration.
+
+    The search-side `filters` already scopes the query, but a filter is a request and the hydrated
+    record is the answer. Checking only at the search step would trust the thing being tested, and a
+    silently dropped filter would leak After Effects, Media Encoder or Premiere Elements -- all of
+    which live in this index, several with their own Bug Reports board.
+    """
+    forum = topic.get("forum") if isinstance(topic.get("forum"), dict) else {}
+    category = topic.get("category") if isinstance(topic.get("category"), dict) else {}
+    return (_as_int(forum.get("id")) == PREMIERE_BUG_FORUM_ID
+            and _as_int(category.get("categoryId")) == PREMIERE_CATEGORY_ID)
+
+
+def _as_int(value: Any) -> int | None:
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+# WHO WROTE IT, from the platform rather than from the prose. A live 26.2 "Known issue: Inaccuracies
+# in Pause and Filler Filtering..." post was counted as a user report; its body opens "We are aware
+# of an issue in Premiere version 26.2 and 26.3" -- Adobe speaking. Its opening-post author carries
+# userTitle "Principal Product Manager" while ordinary reporters carry "Participant", so the rank is
+# a fact the platform hands over and nothing has to be inferred from wording.
+#
+# A BLOCKLIST OF VENDOR ROLES, NOT AN ALLOW-LIST OF COMMUNITY ONES. Adobe's community ranks are open
+# ended -- Participant, Participating Frequently, Community Expert, Explorer, Enthusiast, Guide,
+# Legend -- and a "Community Expert" is a USER. Listing the vendor roles keeps a new community rank
+# from silently becoming a refusal.
+VENDOR_AUTHOR_RANK_RE = re.compile(
+    r"\b(?:adobe\s+(?:employee|staff|team)|employee|staff|moderator|community\s+manager|"
+    r"product\s+manager|program\s+manager|engineering\s+manager|engineer|developer\s+advocate|"
+    r"technical\s+support|support\s+engineer|administrator|admin)\b",
+    flags=re.I)
+
+
+def author_is_vendor(author: Any) -> bool:
+    """Does the platform itself say this opening post was written by Adobe?"""
+    if not isinstance(author, dict):
+        return False
+    rank = author.get("rank") if isinstance(author.get("rank"), dict) else {}
+    for value in (author.get("userTitle"), rank.get("name")):
+        if value and VENDOR_AUTHOR_RANK_RE.search(str(value)):
+            return True
+    return False
+
+
+def topic_candidate(topic: dict[str, Any]) -> dict[str, Any] | None:
+    """One hydrated topic -> one candidate built from the OPENING POST alone.
+
+    Replies are never folded in: a reply's version claim belongs to its author, and V1 counts the
+    person who opened the thread. The date is `firstPost.creationDate` -- when the report was
+    WRITTEN. Neither `date_last_update` nor Algolia's `date_added` is used: the release-date gate is
+    the only thing standing between a report and the wrong patch, and a last-activity stamp is
+    always later than the post.
+    """
+    if not topic_is_premiere_bug_report(topic):
+        return None
+    first = topic.get("firstPost") if isinstance(topic.get("firstPost"), dict) else {}
+    url = canonical_adobe_url(str(topic.get("url") or first.get("url") or ""))
+    if not url or not adobe_report_url_is_specific(url):
+        return None
+    body = clean_html(str(first.get("content") or ""))
+    if not body:
+        return None
+    created = date_part(str(first.get("creationDate") or ""))
+    if not created:
+        return None
+    title = str(topic.get("title") or "").strip()
+    return {
+        "source_type": SOURCE_TYPE,
+        "source_name": ALGOLIA_SOURCE_NAME,
+        "source_url": url,
+        "parent_title": title,
+        "report_title": title,
+        "report_text": body[:6000],
+        "source_date": created,
+        # Structural provenance, set ONLY after Adobe's own taxonomy has been re-checked on the
+        # hydrated record. It establishes the PRODUCT, never the version -- see row_from_candidate.
+        "premiere_board_verified": True,
+        # The platform's own statement about who wrote the opening post.
+        "vendor_authored": author_is_vendor(first.get("author")),
+    }
+
+
+def adobe_community_algolia_search_candidates(record: PatchRecord, context: CollectorContext,
+                                              errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """searchToken -> Algolia (structurally scoped) -> getTopics -> opening-post candidates.
+
+    Bounded end to end on the shared runtime budget, and TRUNCATION IS RECORDED rather than absorbed:
+    a capped topic population is reported so method health can downgrade to `partial` instead of
+    claiming it looked at everything.
+    """
+    creds = algolia_credentials(errors)
+    if not creds:
+        return []
+    budget = rb.get_run_budget()
+    topic_ids: list[int] = []
+    queries = algolia_queries(record)
+    discovered = 0
+    for query in queries:
+        if budget is not None and budget.collector_finalize_expired():
+            errors.append({"source_url": "", "reason": ALGOLIA_BUDGET_STOP})
+            break
+        for hit in algolia_search(creds, query, errors):
+            tid = _as_int(hit.get("id"))
+            # The hit's own facets are checked here too, so an unfiltered response is visible at the
+            # cheapest point rather than paid for in hydration requests.
+            if tid is None or _as_int(hit.get("category")) != PREMIERE_CATEGORY_ID \
+                    or _as_int(hit.get("forum")) != PREMIERE_BUG_FORUM_ID:
+                continue
+            discovered += 1
+            if tid not in topic_ids:
+                topic_ids.append(tid)
+    truncated = max(0, len(topic_ids) - MAX_TOPIC_IDS_PER_RECORD)
+    if truncated:
+        errors.append({"source_url": "", "reason": f"{ALGOLIA_TRUNCATED}:{truncated}"})
+    selected = topic_ids[:MAX_TOPIC_IDS_PER_RECORD]
+    rb.emit("premiere_algolia", product_id=PRODUCT_ID, version=str(record.update_version or ""),
+            queries=len(queries), discovered_topic_ids=discovered,
+            unique_topic_ids=len(topic_ids), selected_topic_ids=len(selected),
+            truncated_topic_ids=truncated)
+    if not selected:
+        return []
+    candidates: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for topic in get_topics(selected, errors):
+        candidate = topic_candidate(topic)
+        if not candidate:
+            continue
+        key = str(candidate["source_url"]).lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        candidates.append(candidate)
+    return candidates
+
+
 def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, Any]) -> dict[str, Any]:
     method_id = str(result["method_id"])
     candidates = list(result["candidates"])
@@ -467,6 +844,23 @@ def method_source_type(method_id: str) -> str:
     return SOURCE_TYPE
 
 
+METHOD_LABELS = {
+    "adobe_community_algolia_search": "Adobe Community keyless JSON chain (searchToken to Algolia to getTopics)",
+    "reddit_search": "Reddit community search (r/premierepro, r/editors, r/Adobe)",
+    "adobe_community_search": "Adobe Community search",
+    "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
+    "adobe_community_known_url_recheck": "Known Adobe Community bug-report URL recheck",
+    "brave_search_api": "Brave Search API fallback",
+    "wayback_snapshot_recheck": "Wayback snapshot recheck",
+    "creativecow_forum_index": "Creative COW Premiere Pro forum index",
+    "creativecow_brave_search": "Creative COW Brave Search fallback",
+}
+
+
+def method_label(method_id: str) -> str:
+    return METHOD_LABELS.get(method_id, method_id)
+
+
 def method_notes(
     method_id: str,
     candidates: list[dict[str, Any]],
@@ -474,17 +868,7 @@ def method_notes(
     rejected: list[dict[str, Any]],
     errors: list[dict[str, Any]],
 ) -> str:
-    labels = {
-        "reddit_search": "Reddit community search (r/premierepro, r/editors, r/Adobe)",
-        "adobe_community_search": "Adobe Community search",
-        "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
-        "adobe_community_known_url_recheck": "Known Adobe Community bug-report URL recheck",
-        "brave_search_api": "Brave Search API fallback",
-        "wayback_snapshot_recheck": "Wayback snapshot recheck",
-        "creativecow_forum_index": "Creative COW Premiere Pro forum index",
-        "creativecow_brave_search": "Creative COW Brave Search fallback",
-    }
-    notes = f"{labels.get(method_id, method_id)} discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates."
+    notes = f"{method_label(method_id)} discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates."
     if method_id == "adobe_community_search":
         notes = f"{notes} Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly."
     if method_id == "brave_search_api":
@@ -829,10 +1213,24 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
     if gated.get("counted") is True and str(gated.get("source_type") or "") == CREATIVE_COW_SOURCE_TYPE and not creativecow_thread_url_is_specific(str(gated.get("source_url") or "")):
         gated["counted"] = False
         gated["exclusion_reason"] = "source_url_not_specific_report"
-    if gated.get("counted") is True and not PREMIERE_PRODUCT_RE.search(report_text):
+    # PRODUCT CONTEXT, from the author's words OR from Adobe's own taxonomy. The phrase gate alone
+    # refused real reports on Premiere's own bug board, because Adobe writes "Adobe Premiere",
+    # "Premiere 26.2 build 65" and "premiere version 26.2.0" there -- never reliably "Premiere Pro".
+    # `premiere_board_verified` is set only by the Algolia method, and only after the HYDRATED topic
+    # was re-checked against category 726 / forum 728. It establishes the PRODUCT and nothing else:
+    # the version still has to come from the author's text below, so provenance can never manufacture
+    # a patch identity.
+    board_verified = bool(candidate.get("premiere_board_verified"))
+    if gated.get("counted") is True and not board_verified and not PREMIERE_PRODUCT_RE.search(report_text):
         gated["counted"] = False
         gated["exclusion_reason"] = "missing_premiere_product_context"
-    if gated.get("counted") is True and BUILD_65_RE.search(report_text) and not premiere_build_65_context(report_text, record.update_version):
+    # Provenance supplies the PRODUCT; it must not also supply the version. When the board is what
+    # established Premiere, at least one occurrence of the tracked version has to be Premiere's own
+    # -- otherwise a thread whose only 26.2 belongs to macOS Tahoe counts as a Premiere 26.2 report.
+    if gated.get("counted") is True and board_verified and not premiere_owns_version(report_text, record.update_version):
+        gated["counted"] = False
+        gated["exclusion_reason"] = "version_owned_by_another_product"
+    if gated.get("counted") is True and BUILD_65_RE.search(report_text) and not premiere_build_65_context(report_text, record.update_version, board_verified=board_verified):
         gated["counted"] = False
         gated["exclusion_reason"] = "build_65_without_premiere_version_context"
     if gated.get("counted") is True and PRE_RELEASE_RE.search(report_text):
@@ -841,7 +1239,137 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
     if gated.get("counted") is True and not premiere_strong_issue_match(report_text):
         gated["counted"] = False
         gated["exclusion_reason"] = "not_a_real_issue_report"
+    # THE TRACKED VERSION MUST BE THE AFFECTED ONE. "26.2 works, 26.1 crashes", "rolling back to
+    # 26.2 fixed it" and "upgrade to 26.2.2 to fix this" all NAME the version without blaming it.
+    # Judged by lib.target_outcome -- the shared authority Windows and Teams already use -- rather
+    # than a Premiere-local rule, so one corpus-wide definition of fix/working/rollback applies.
+    if gated.get("counted") is True and bool(candidate.get("vendor_authored")):
+        gated["counted"] = False
+        gated["exclusion_reason"] = "vendor_release_announcement"
+    if gated.get("counted") is True:
+        role = premiere_version_role_veto(report_text, record.update_version)
+        if role:
+            gated["counted"] = False
+            gated["exclusion_reason"] = role
     return gated
+
+
+# THE VERSION'S ROLE, on Premiere's own wording. lib.target_outcome is the shared authority and does
+# most of this, but it reads a failure noun ADJACENT to the target as "affected": measured, it scores
+# "The timeline crash is fixed in 26.2" and "Reverting to 26.2 stopped the crashing" as affected,
+# because the failure word sits beside the version either way. Rather than change an authority three
+# other products depend on, Premiere adds the two directional cues on its own side -- the same shape
+# the Teams collector uses.
+PREMIERE_FIX_TARGET_RE = re.compile(
+    r"(?<!not )(?<!n't )(?:fixed|resolved|addressed|patched|corrected|solved)\s+(?:in|with|by)\s+"
+    r"(?:(?:adobe\s+)?premiere(?:\s+pro)?\s+)?$",
+    flags=re.I)
+PREMIERE_ROLLBACK_TARGET_RE = re.compile(
+    r"(?:rolled?\s+back|rolling\s+back|revert(?:ed|ing)?|downgrad(?:ed|ing)?|went\s+back|"
+    r"stay(?:ed|ing)?|back)\s+(?:to|on)\s+(?:(?:adobe\s+)?premiere(?:\s+pro)?\s+)?$",
+    flags=re.I)
+# Another Adobe application named as the FAILING one. Scoped to the words immediately before the
+# tracked version, so a Premiere report that merely mentions Media Encoder in a neighbouring sentence
+# keeps counting while "Photoshop 26.2 crashes" does not. The product-context gate cannot catch this:
+# on a verified Premiere board the product is already established, and the question here is which
+# application the author is actually blaming.
+FOREIGN_ADOBE_SUBJECT_RE = re.compile(
+    r"\b(?:photoshop|after\s+effects|audition|media\s+encoder|illustrator|lightroom|indesign|"
+    r"animate|character\s+animator|premiere\s+elements|premiere\s+rush|frame\.?io|bridge)\b"
+    r"[^.;!?]{0,24}$",
+    flags=re.I)
+
+
+# A version named as the one that STILL WORKS. lib.target_outcome reads a failure noun sitting before
+# the version as "affected", so a live 26.2.2 report titled "Premiere Pro 26.3.0 Regression: ...
+# hangs indefinitely with attached proxies (26.2.2 works correctly)" scored affected and was counted
+# against 26.2.2 -- the version its author named as the working one. Measured on the live board, not
+# imagined. Checked on the text FOLLOWING the version, because that is where the claim sits.
+PREMIERE_WORKING_AFTER_RE = re.compile(
+    r"^\W{0,3}(?:still\s+)?(?:works?|working|is\s+fine|was\s+fine|runs\s+fine|is\s+ok|is\s+stable|"
+    r"was\s+stable|behaves\s+correctly|reconnects?\s+correctly)\b",
+    flags=re.I)
+
+# WHO OWNS THE VERSION NUMBER. Board provenance establishes the PRODUCT, but 26.x is not Premiere's
+# alone: macOS 26.x (Tahoe) shares the space exactly, and 17 live board-728 threads declare a macOS
+# 26.2. Measured: topic 1635431's only "26.2" is the line "macOS Tahoe 26.2 Premiere 26.3.0 (Build
+# 93)" -- the author declares Premiere 26.3.0 and was counted as a 26.2 Premiere failure. This board
+# also abbreviates habitually (6 of 18 accepted 26.2.2 titles begin "Pr "), so the owner lists carry
+# the short forms the register actually uses.
+#
+# EVERY occurrence is inspected, not the first. `find()` audits whichever claim happens to come
+# first, which on a board whose titles routinely open with a bare version is an arbitrary choice.
+PREMIERE_VERSION_OWNER_RE = re.compile(
+    r"(?:\b(?:adobe\s+)?premiere(?:\s+pro)?\b|\bppro\b|\bpr\b)[^0-9a-z]{0,18}$", flags=re.I)
+# Short forms are gated on a version-declaration shape, because `au`, `ai`, `id` and `ps` are
+# ordinary English otherwise. The long forms need no such guard.
+FOREIGN_VERSION_OWNER_RE = re.compile(
+    r"(?:\b(?:photoshop|after\s+effects|audition|media\s+encoder|illustrator|lightroom|indesign|"
+    r"animate|character\s+animator|premiere\s+elements|premiere\s+rush|bridge|frame\.?io|"
+    r"mac\s*os|macos|os\s*x|tahoe|sequoia|sonoma|ventura|monterey|windows|win\s*1[01]|"
+    r"ios|ipados|android|nvidia|radeon|geforce|studio\s+driver|game\s+ready|driver)\b"
+    r"|\b(?:ae|ame|ps|au|ai|id|lr|encoder|rush|elements)\b\s*(?:ver(?:sion)?|v|build|:|-)?\s*)"
+    r"[^0-9a-z]{0,8}$", flags=re.I)
+
+
+def premiere_owns_version(text: str, version: str) -> bool:
+    """Is at least one occurrence of the tracked version Premiere's, or owned by nobody?
+
+    A bare version in a title on Premiere's own bug board is Premiere's -- that is the board's normal
+    register. What this refuses is a report where EVERY occurrence is attributed to something else:
+    an operating system, a driver, or another Adobe application.
+    """
+    body = re.sub(r"\s+", " ", str(text or ""))
+    token = str(version or "").strip()
+    if not token:
+        return False
+    # Numeric boundaries on BOTH sides, including the dot: without `(?!\.[0-9])` the "26.2" inside
+    # "26.2.2" counts as an occurrence, and a report declaring "Premiere Version: 26.2.2" then
+    # "Operating System: Mac OS 26.2" would offer the 26.2.2 prefix as a Premiere-owned 26.2.
+    pattern = re.compile(r"(?<![0-9.])" + re.escape(token) + r"(?![0-9]|\.[0-9])")
+    occurrences = list(pattern.finditer(body))
+    if not occurrences:
+        return False
+    for match in occurrences:
+        window = body[max(0, match.start() - 40): match.start()]
+        if FOREIGN_VERSION_OWNER_RE.search(window) and not PREMIERE_VERSION_OWNER_RE.search(window):
+            continue
+        return True
+    return False
+
+def premiere_version_role_veto(text: str, version: str) -> str:
+    """Why the tracked version is NOT this author's failing version, or ''.
+
+    Three layers, cheapest first: the shared outcome authority, then the two directional cues it
+    reads as affected, then the foreign-application subject. All three are scoped to the words
+    LEADING UP TO the version, so a cue elsewhere in a long post cannot veto the report.
+    """
+    body = re.sub(r"\s+", " ", str(text or ""))
+    contradiction = target_is_contradicted(body, version)
+    if contradiction is not None:
+        return f"version_role_{contradiction.outcome}"
+    low = body.lower()
+    token = str(version or "").lower()
+    index = low.find(token)
+    if index < 0:
+        return ""
+    preceding = low[max(0, index - 90): index]
+    if PREMIERE_FIX_TARGET_RE.search(preceding):
+        return "version_role_fix_target"
+    if PREMIERE_ROLLBACK_TARGET_RE.search(preceding):
+        return "version_role_rollback_target"
+    if FOREIGN_ADOBE_SUBJECT_RE.search(preceding):
+        return "foreign_adobe_product_subject"
+    # The claim can also sit AFTER the version. Bounded by the sentence rather than the comma, so
+    # "26.2.2 works fine until I export, then it crashes" keeps its failure term in view and stays
+    # countable, while "(26.2.2 works correctly)" does not.
+    after = low[index + len(token):]
+    sentence = re.split(r"[.;!?]", after, maxsplit=1)[0][:160]
+    if (PREMIERE_WORKING_AFTER_RE.search(sentence)
+            and not re.search(r"(?:not|n't|never|stopped|fails?)", sentence)
+            and not STRONG_ISSUE_RE.search(sentence)):
+        return "version_role_working"
+    return ""
 
 
 def premiere_version_match(text: str, version: str) -> tuple[bool, str, str]:
@@ -853,11 +1381,24 @@ def premiere_version_match(text: str, version: str) -> tuple[bool, str, str]:
     return False, "", ""
 
 
-def premiere_build_65_context(text: str, version: str) -> bool:
+def premiere_build_65_context(text: str, version: str, *, board_verified: bool = False) -> bool:
+    """Is "build 65" tied to THIS Premiere version, rather than floating free?
+
+    Two ways to be sure, and both still require the VERSION in the author's own text. On a report
+    hydrated from Premiere's own bug board the product is already established by Adobe's taxonomy,
+    so "Premiere 26.2 build 65" is unambiguous there even though it never says "Premiere Pro" --
+    which is exactly the wording the phrase-only form refused. What `board_verified` must never do
+    is stand in for the version: a report naming only "build 65" and no version stays refused.
+    """
     if not BUILD_65_RE.search(text or ""):
         return False
     version_pattern = re.compile(rf"\b(?:adobe\s+)?premiere\s+pro\s+{re.escape(version)}(?:\.0)?\b", flags=re.I)
-    return bool(version_pattern.search(text or ""))
+    if version_pattern.search(text or ""):
+        return True
+    if not board_verified:
+        return False
+    matched, _matched_version, _basis = exact_version_match(text or "", version, version_aliases(version))
+    return bool(matched)
 
 
 def version_aliases(version: str) -> list[str]:
@@ -1173,7 +1714,7 @@ def format_rejection_counts(rows: list[dict[str, Any]]) -> str:
 
 
 def apply_consensus_writeback(update_version: str) -> bool:
-    from apply_consensus_to_records import _apply_record_fields, _index_generated_records, run_dry_run
+    from apply_consensus_to_records import _index_generated_records, apply_collector_record_fields, run_dry_run
 
     records_index = _index_generated_records()
     results = run_dry_run(
@@ -1187,11 +1728,42 @@ def apply_consensus_writeback(update_version: str) -> bool:
     if len(matches) != 1 or not matches[0].get("would_write"):
         return False
     result = matches[0]
-    record_path = records_index[(PRODUCT_ID, update_version)]["abs_path"]
+    # The dry-run already resolved this group's record by CANONICAL identity
+    # (apply_consensus_to_records._result_for_group -> records_index.get(patch_key(pid, ver, build))),
+    # so reuse that resolution instead of re-deriving a key here. Re-deriving is what broke: the index
+    # has been keyed by the identity TRIPLE since #58 (4fe9e415), while this 2-tuple predates it and
+    # therefore misses every record. Reusing the resolved path also guarantees the write lands on the
+    # same record the gates were evaluated against, and is build-exact for free. Fail closed when the
+    # group resolved to no record -- never fall back to a version-level pick.
+    record_rel = result.get("matched_generated_record_path")
+    if not record_rel:
+        return False
+    record_path = ROOT / record_rel
     fields = dict(result["proposed_fields_if_written"])
     data, _body = load_front_matter_and_body(record_path)
     comparable = {key: value for key, value in fields.items() if key != "status_events_append"}
     if all(data.get(key) == value for key, value in comparable.items()):
         return False
-    _apply_record_fields(record_path, fields)
-    return True
+    # Report whether bytes actually changed, not merely that we reached the write.
+    # `comparable` above always differs (proposed_fields carries a fresh record_last_updated), so
+    # the early-exit never fires; the collector boundary then recomputes substantiveness EXCLUDING
+    # that timestamp and can legitimately write nothing. Returning True regardless would report
+    # record_updated for a no-op -- and in the OBS caller it would suppress the count fallback that
+    # runs only `if not record_updated`.
+    return bool(apply_collector_record_fields(record_path, fields)["write_plan"]["fields"])
+
+# Defined at the END of the module on purpose: every function it names is defined below the
+# routing code that uses it, and a module-level dict is evaluated at import time.
+# The catalogue: every implemented Premiere discovery method, by id. This dict decides nothing --
+# lib/method_routing.py decides which of these actually runs, product-scoped.
+PREMIERE_METHODS: dict[str, Any] = {
+    "adobe_community_algolia_search": adobe_community_algolia_search_candidates,
+    "adobe_community_known_url_recheck": adobe_community_known_url_candidates,
+    "wayback_snapshot_recheck": wayback_snapshot_recheck_candidates,
+    "adobe_community_search": adobe_community_search_candidates,
+    "adobe_community_bug_tab_index": adobe_community_bug_tab_candidates,
+    "reddit_search": reddit_search_candidates,
+    "brave_search_api": brave_search_api_candidates,
+    "creativecow_forum_index": creativecow_forum_index_candidates,
+    "creativecow_brave_search": creativecow_brave_search_candidates,
+}

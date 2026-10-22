@@ -7,7 +7,9 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from collections import Counter, defaultdict
+from lib.patch_identity import patch_display_label, patch_key
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -15,7 +17,9 @@ from typing import Any
 import yaml
 
 from patch_collectors.base import WINDOWS_PRODUCT_ID, load_front_matter_and_body, windows_identity_gate
-from lib.report_counts import reconcile_record_counts
+from lib import patch_decision
+from lib.report_counts import (format_reconcile_detail, reconcile_record_counts,
+                               windows_targets_from_front_matter)
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
@@ -202,23 +206,49 @@ def top_theme_phrases(themes: Counter[str], *, limit: int = 3) -> list[str]:
 
 
 def version_is_beta(version: str) -> bool:
-    return bool(re.search(r"\b(?:public\s+)?beta\b|b\d+\b", str(version or ""), flags=re.I))
+    # One beta definition for the repo (lib.patch_decision). A second copy here is how a build
+    # could be a beta to the verdict and not to the summary.
+    return patch_decision.version_is_beta(version)
 
 
-def recommendation_prefix(product_id: str, version: str, label: str, total: int) -> str:
-    label = label.lower()
-    if total <= 0:
-        return "INSUFFICIENT DATA"
-    if product_id == "blackmagic-davinci" and version_is_beta(version) and label == "negative":
-        return "AVOID for production"
-    if label == "negative":
-        return "WAIT"
-    if label == "positive":
-        return "SAFE ENOUGH to test"
-    return "TEST FIRST"
+def record_status_index() -> dict[str, str]:
+    """patch_key -> update_status for every generated record.
+
+    Some decisions depend on record state: an archived OBS build is a WAIT, a maintained one a
+    TEST FIRST. This file never loaded records before, so asking the authority without one would
+    answer as if every build were maintained -- and `2026-04-02-obs-studio-32-1-1.md` (archived,
+    43 reports) would be a WAIT to the record writer and a TEST FIRST here. That is the same
+    divergence this module exists to end, so the state travels with the question.
+    """
+    if not GENERATED_DIR.exists():
+        return {}
+    index: dict[str, str] = {}
+    for path in sorted(GENERATED_DIR.glob("*.md")):
+        data = load_front_matter_and_body(path)[0]
+        product_id = str(data.get("product_id") or "").strip()
+        version = str(data.get("update_version") or "").strip()
+        if not product_id or not version:
+            continue
+        index[patch_key(product_id, version, data.get("target_build"))] = str(
+            data.get("update_status") or "").strip()
+    return index
 
 
-def affected_workflow_sentence(product_id: str, version: str, label: str, themes: Counter[str]) -> str:
+def recommendation_prefix(product_id: str, version: str, label: str, total: int,
+                          *, update_status: str = "") -> str:
+    # THE DECISION IS NOT CHOSEN HERE. This was the third independent implementation of one policy;
+    # the other two were `_recommendation_prefix` (now deleted) and `_record_coherence_fields` in
+    # apply_consensus_to_records. Three implementations of one decision are three chances to
+    # disagree, and they did: the DaVinci beta record shipped "WAIT for production systems" as its
+    # verdict beside "AVOID for production" as its summary.
+    return patch_decision.decision_label(product_id, version, label, total,
+                                         record={"update_status": update_status})
+
+
+def affected_workflow_sentence(product_id: str, version: str, label: str, themes: Counter[str],
+                               decision: str = "") -> str:
+    # Mirrors apply_consensus_to_records._affected_workflow_sentence: a qualification may soften the
+    # decision, never reverse it, so the positive-sentiment offer of testing asks the decision first.
     label = label.lower()
     theme_words = " ".join(top_theme_phrases(themes, limit=5)).lower()
     if product_id == "blackmagic-davinci":
@@ -231,8 +261,10 @@ def affected_workflow_sentence(product_id: str, version: str, label: str, themes
         return "Streamers and recording setups with stable scenes, plugins, or capture devices should wait or test on a backup profile."
     if label == "negative":
         return "Users with fragile production workflows should wait unless they need a specific fix."
-    if label == "positive":
+    if label == "positive" and patch_decision.permits_testing(decision):
         return "Most users can test the update, while critical workflows should still keep a rollback path."
+    if label == "positive":
+        return "Users with fragile production workflows should wait unless they need a specific fix."
     return "Users with fragile workflows should test first before upgrading production systems."
 
 
@@ -257,23 +289,39 @@ def issue_cluster_sentence(themes: Counter[str]) -> str:
     return "Current reports are too varied to group cleanly."
 
 
-def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str]) -> str:
+def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str], target_build: str = "", update_status: str = "") -> str:
     total = len(items)
     label_name = product_label(product_id)
+    # Build-aware products must name the exact patch: 28 Windows records share "25H2", so
+    # "25H2 has N user reports" is four different sentences that read as one contradiction.
+    # Collapses to the bare version for every product without a build contract.
+    #
+    # The RAW version is kept for the decision. The display label is for the reader; judging a patch
+    # by it would mean this file asks the authority about a different string than the record writer
+    # does -- the last surviving instance of the two-version-strings defect that let the verdict and
+    # the summary disagree. They are equal for every product today; equality is not the point.
+    raw_version = version
+    version = patch_display_label(version, target_build, product_id)
     if total <= 0:
         return (
-            f"INSUFFICIENT DATA: {label_name} {version} has no user reports found yet. "
+            # Authority constant, not a literal -- same reason as the twin in
+            # apply_consensus_to_records._public_summary: at zero reports this prefix IS the
+            # verdict the renderer shows.
+            f"{patch_decision.INSUFFICIENT_DATA}: {label_name} {version} has no user reports "
+            "found yet. "
             "Use the official source only until reports are available."
         )
     label = consensus_label(counts).lower()
     confidence_label = confidence(total)
     report_word = "report" if total == 1 else "reports"
     sample_sentence = "Small sample size." if total < 8 else "User reports show a repeat pattern."
+    decision = recommendation_prefix(product_id, raw_version, label, total,
+                                     update_status=update_status)
     return " ".join([
-        f"{recommendation_prefix(product_id, version, label, total)}: {label_name} {version} has {total} user {report_word} found.",
+        f"{decision}: {label_name} {version} has {total} user {report_word} found.",
         sample_sentence,
         issue_cluster_sentence(themes),
-        f"{affected_workflow_sentence(product_id, version, label, themes)} {source_limitation_sentence(items, confidence_label)}",
+        f"{affected_workflow_sentence(product_id, raw_version, label, themes, decision)} {source_limitation_sentence(items, confidence_label)}",
     ])
 
 
@@ -297,43 +345,73 @@ def latest_captured_at(items: list[dict[str, Any]]) -> str:
     return max(parsed).isoformat().replace("+00:00", "Z")
 
 
-def windows_target_index() -> dict[tuple[str, str], dict[str, str]]:
-    """Map (product_id, update_version) -> the record's current-patch identity for
-    Windows records, so the fail-closed identity gate can exclude stale/wrong-KB rows."""
-    index: dict[tuple[str, str], dict[str, str]] = {}
+def windows_target_index() -> dict[tuple[str, str, str], dict[str, Any]]:
+    """Map CANONICAL PATCH KEY -> that Windows record's current-patch identity, so the
+    fail-closed identity gate can exclude stale/wrong-KB rows.
+
+    Keyed by ``patch_key`` -- i.e. including the exact build -- and NOT by
+    ``(product_id, update_version)``. Windows became build-aware because one feature train
+    carries many cumulative updates; 25H2 alone has 28 records. A version-only key collapses
+    all 28 into whichever record sorts last, so every row belonging to any earlier build in
+    the train gets gated against a stranger's target and excluded as
+    ``stale_due_to_patch_rollover``. That is precisely the divergence ``lib.report_counts``
+    exists to end: the reconciler would count 38 rows across six patches while this lane
+    published four.
+
+    Delegates to ``windows_targets_from_front_matter`` so there is ONE definition of that
+    map. The gate reads only the ``target_*`` fields plus ``update_version``, all of which
+    the front matter already carries."""
     if not GENERATED_DIR.exists():
-        return index
-    for path in sorted(GENERATED_DIR.glob("*.md")):
-        data, _body = load_front_matter_and_body(path)
-        if data.get("update_entry") is not True or str(data.get("product_id") or "").strip() != WINDOWS_PRODUCT_ID:
-            continue
-        version = str(data.get("update_version") or "").strip()
-        if not version:
-            continue
-        index[(WINDOWS_PRODUCT_ID, version)] = {
-            "target_feature_version": str(data.get("target_feature_version") or "").strip(),
-            "target_kb": str(data.get("target_kb") or "").strip(),
-            "target_os_build": str(data.get("target_os_build") or "").strip(),
-            "target_release_date": str(data.get("target_release_date") or "").strip(),
-            "update_version": version,
-        }
-    return index
+        return {}
+    return windows_targets_from_front_matter(
+        load_front_matter_and_body(path)[0] for path in sorted(GENERATED_DIR.glob("*.md")))
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Build consensus aggregates from structured evidence, after reconciling every "
+                    "generated record's count to its exact-patch evidence population.")
+    parser.add_argument(
+        "--product-id", action="append", dest="product_ids", metavar="PRODUCT_ID",
+        help="Limit RECONCILIATION to this product (repeatable). Omit to reconcile every product, "
+             "which is what the scheduled evidence lane does. A lane that collected nothing for a "
+             "product must not silently rewrite that product's counts, so a lane which only "
+             "advanced one product's patch identity passes its own product here.")
+    parser.add_argument(
+        "--reconcile-only", action="store_true",
+        help="Reconcile record counts to the evidence population and stop, without rebuilding "
+             "consensus aggregates. For a lane that MUTATES patch identity but collects no "
+             "evidence -- patch ingestion advancing a Windows cumulative update -- so it can repair "
+             "the drift it just created without republishing consensus it did not gather.")
+    args = parser.parse_args(argv)
+    if args.product_ids is not None and not all(str(p).strip() for p in args.product_ids):
+        print("ERROR: --product-id was supplied but is empty. Give a product id, or omit the flag "
+              "entirely to reconcile every product.", file=sys.stderr)
+        return 2
+    scope = {str(p).strip() for p in args.product_ids} if args.product_ids else None
+
     evidence = load_evidence()
     # AUTHORITATIVE RECONCILIATION (runs after all collectors, before QA): make every generated
     # record's update_report_count equal the final counted evidence for its exact (product_id,
     # version), using the same predicate QA enforces. Idempotent -- an already-aligned tree writes
     # nothing. This closes the generated_report_count_mismatch (record showed 4 while structured
     # evidence had 14) at one place instead of trusting each collector's per-run count.
-    reconciled, reconciled_detail = reconcile_record_counts(evidence, GENERATED_DIR)
+    reconciled, reconciled_detail = reconcile_record_counts(evidence, GENERATED_DIR, product_ids=scope)
     if reconciled:
-        print(f"Reconciled report counts on {reconciled} record(s) to final counted evidence.")
+        scope_label = f" (scoped to {', '.join(sorted(scope))})" if scope else ""
+        print(f"Reconciled report counts on {reconciled} record(s) to final counted evidence{scope_label}.")
         for d in reconciled_detail:
-            print(f"  {d['record']}: {d['product_id']} {d['version']} {d['before']} -> {d['after']}")
+            print(f"  {format_reconcile_detail(d)}")
+    if args.reconcile_only:
+        if not reconciled:
+            print("Reconcile-only: every record already matches its exact-patch evidence population.")
+        return 0
     windows_targets = windows_target_index()
-    groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    # Grouped by canonical patch identity: a build-aware product's two builds under one YYMM are
+    # two independent groups, so one build's reports can never move the other's counts or summary.
+    groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
     excluded: list[dict[str, Any]] = []
 
     for item in evidence:
@@ -360,21 +438,27 @@ def main() -> int:
         # Windows-only fail-closed current-patch identity gate: exclude reports whose
         # matched KB/OS build is not the record's current patch (stale after rollover).
         if product_id == WINDOWS_PRODUCT_ID:
-            identity_ok, identity_reason = windows_identity_gate(item, windows_targets.get((product_id, version)))
+            identity_ok, identity_reason = windows_identity_gate(
+                item, windows_targets.get(patch_key(product_id, version, item.get("target_build"))))
             if not identity_ok:
                 item["exclusion_reason"] = item.get("exclusion_reason") or identity_reason
                 excluded.append(item)
                 continue
-        groups[(product_id, version)].append(item)
+        groups[patch_key(product_id, version, item.get("target_build"))].append(item)
 
     aggregate = []
-    for (product_id, version), items in sorted(groups.items()):
+    record_statuses = record_status_index()
+    for (product_id, version, _build), items in sorted(groups.items()):  # noqa: B007
         sentiments = Counter(str(item.get("sentiment")).lower() for item in items)
         severities = Counter(str(item.get("severity") or "low").lower() for item in items)
         themes = issue_counter(product_id, items)
         aggregate.append({
             "product_id": product_id,
             "update_version": version,
+            # The aggregate is a SERIALIZED artifact: without the build, two PowerPoint builds
+            # under one YYMM are indistinguishable to anything reading it back, which is exactly
+            # the collapse this identity exists to prevent. Empty for version-only products.
+            "target_build": _build,
             "report_count": len(items),
             "positive_count": sentiments["positive"],
             "moderate_count": sentiments["moderate"],
@@ -384,7 +468,9 @@ def main() -> int:
             "consensus_label": consensus_label(sentiments),
             "confidence": confidence(len(items)),
             "evidence_state": evidence_state(len(items)),
-            "consensus_summary": consensus_summary(product_id, version, items, sentiments, themes),
+            "consensus_summary": consensus_summary(
+                product_id, version, items, sentiments, themes, _build,
+                record_statuses.get(patch_key(product_id, version, _build), "")),
             "evidence_last_checked": latest_captured_at(items),
         })
 

@@ -19,12 +19,12 @@
   sort key). Deterministic from the record; never inferred. {%- endcomment -%}
 {% assign product_name = item.update_product | default: item.product_id %}
 {% assign verdict_text = item.quick_verdict %}
-{% assign decision_label = item.update_decision_label %}
-{% if decision_label == blank and item.update_consensus_summary contains ':' %}
+{% assign decision_label = item.update_decision_label | default: '' | strip %}
+{% if decision_label == '' and item.update_consensus_summary contains ':' %}
 {% assign decision_label = item.update_consensus_summary | split: ':' | first | strip %}
-{% elsif decision_label == blank and verdict_text contains ':' %}
+{% elsif decision_label == '' and verdict_text contains ':' %}
 {% assign decision_label = verdict_text | split: ':' | first | strip %}
-{% elsif decision_label == blank %}
+{% elsif decision_label == '' %}
 {% assign decision_label = 'INSUFFICIENT DATA' %}
 {% endif %}
 {% assign report_count_num = item.update_report_count | default: 0 | plus: 0 %}
@@ -32,16 +32,34 @@
 {% if item.evidence_state == 'official_only' or item.evidence_state_label == 'Official source only' %}{% assign is_official_only = true %}{% endif %}
 {% if is_official_only and report_count_num == 0 %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endif %}
 {%- comment -%} Verdict risk order (leading category); unknown -> 99 so it sorts last but stays visible. {%- endcomment -%}
-{% assign vkey = decision_label | upcase %}
-{% assign verdict_rank = 99 %}
-{% if vkey contains 'AVOID' %}{% assign verdict_rank = 0 %}
-{% elsif vkey contains 'WAIT' %}{% assign verdict_rank = 1 %}
-{% elsif vkey contains 'TEST FIRST' %}{% assign verdict_rank = 2 %}
-{% elsif vkey contains 'SECURITY UPDATE' %}{% assign verdict_rank = 3 %}
-{% elsif vkey contains 'SAFE ENOUGH' %}{% assign verdict_rank = 4 %}
-{% elsif vkey contains 'OFFICIAL ONLY' %}{% assign verdict_rank = 5 %}
-{% elsif vkey contains 'INSUFFICIENT DATA' %}{% assign verdict_rank = 6 %}
-{% elsif vkey contains 'MANUAL WATCH' %}{% assign verdict_rank = 7 %}
+{%- comment -%}
+  Vocabulary and risk order come from _data/patch_verdicts.yml, which mirrors
+  lib/patch_decision.py (RISK_ORDER / LEGACY_ALIASES) and is pinned to it by
+  test_patch_decision_authority. This include used to carry its own eight-way elsif ladder: a
+  second copy of the policy, free to disagree with Python about both membership and order.
+
+  A legacy phrasing resolves to the action it names, so an old record ranks beside a new one.
+  Anything in NEITHER list is unknown: it keeps unknown_rank so it sorts last, and the verdict
+  shown falls back to INSUFFICIENT DATA rather than publishing unvetted prose as a decision.
+{%- endcomment -%}
+{% assign verdict_vocab = site.data.patch_verdicts %}
+{% assign verdict_alias = verdict_vocab.legacy_aliases[decision_label] %}
+{% if verdict_alias %}{% assign verdict_action = verdict_alias %}{% else %}{% assign verdict_action = decision_label %}{% endif %}
+{% assign verdict_rank = verdict_vocab.unknown_rank %}
+{% for known in verdict_vocab.risk_order %}
+{% if known == verdict_action %}{% assign verdict_rank = forloop.index0 %}{% break %}{% endif %}
+{% endfor %}
+{%- comment -%}
+  FAIL SAFE. A label the vocabulary does not recognise is not published as a verdict. Latent on
+  today's corpus -- 38 records derive a release-note title through the ':' split below, and the
+  official-source-only rule above already replaces every one of them, so 0 rendered verdicts move
+  -- but the split itself admits any pre-colon text, and the next record that is not official-only
+  would publish it.
+{%- endcomment -%}
+{% if verdict_rank == verdict_vocab.unknown_rank %}{% assign decision_label = 'INSUFFICIENT DATA' %}
+{% for known in verdict_vocab.risk_order %}
+{% if known == decision_label %}{% assign verdict_rank = forloop.index0 %}{% break %}{% endif %}
+{% endfor %}
 {% endif %}
 {%- comment -%}
   Community evidence strength: derived from the row's confirmed report count using the same
@@ -62,13 +80,48 @@
 {% else %}{% assign evidence_strength = "Insufficient" %}{% assign evidence_rank = 0 %}{% endif %}
 {% endif %}
 {% assign verdict_class = decision_label | downcase | replace: ' ', '-' | replace: ':', '' %}
-<tr class="patch-row" data-date="{{ item.update_published_at }}" data-product="{{ product_name | escape }}" data-version="{{ item.update_version | escape }}" data-verdict-rank="{{ verdict_rank }}" data-reports="{{ report_count_num }}" data-evidence-rank="{{ evidence_rank }}">
+{% assign row_build = item.target_build | default: '' %}
+{%- comment -%} data-record-url is the row's own identity, so the client can mark the release a
+  reader has saved as installed without this include learning anything about that feature. {%- endcomment -%}
+<tr class="patch-row" data-record-url="{{ item.url }}" data-record-product="{{ item.product_id }}" data-date="{{ item.update_published_at }}" data-product="{{ product_name | escape }}" data-version="{{ item.update_version | escape }}{% if row_build != '' %}.{{ row_build | escape }}{% endif %}" data-verdict-rank="{{ verdict_rank }}" data-reports="{{ report_count_num }}" data-evidence-rank="{{ evidence_rank }}">
 <td data-label="Date"><time datetime="{{ item.update_published_at }}">{{ item.update_published_at | date: "%b %-d, %Y" }}</time></td>
 {% if include.show_product %}{% capture product_page_url %}/updates/{{ item.company_id }}/{{ item.product_id }}/{% endcapture %}<td data-label="Product" class="patch-cell-product"><a href="{{ product_page_url | relative_url }}">{{ product_name }}</a></td>{% endif %}
-<td data-label="Version" class="patch-cell-version">{{ item.update_version }}</td>
+<td data-label="Version" class="patch-cell-version">{{ item.update_version }}{% if row_build != '' %} <span class="patch-cell-version__build">Build {{ row_build }}</span>{% endif %}</td>
 <td data-label="Verdict"><span class="patch-verdict patch-verdict--rank{{ verdict_rank }}">{{ decision_label }}</span></td>
-<td data-label="Monitoring" class="patch-cell-monitoring">{% include monitoring-status.html mode='cell' product_id=item.product_id version=item.update_version published_at=item.update_published_at report_count=item.update_report_count %}</td>
-<td data-label="Reports" class="patch-cell-num">{{ report_count_num }}</td>
+<td data-label="Monitoring" class="patch-cell-monitoring">{% include monitoring-status.html mode='cell' product_id=item.product_id version=item.update_version target_build=item.target_build published_at=item.update_published_at report_count=item.update_report_count %}</td>
+{%- comment -%}
+  A row that says only "0" hides the fact that real update-linked reports exist for this patch.
+  The confirmed count stays first and unchanged -- the second number never replaces it.
+{%- endcomment -%}
+{%- comment -%}
+  Reuses the row_build local already assigned above rather than re-deriving it, and adds NO new
+  build guard: the include's two guarded build sites are an asserted invariant. Every update-linked
+  row is associated to exactly one release window, so matching on the build alone is sufficient and
+  a version fallback would only add an unguarded third site.
+{%- endcomment -%}
+{%- comment -%}
+  Per-PRODUCT tier files, and a per-product key. Acrobat has no second build token -- its canonical
+  identity IS the DC version -- so the joined key carries the version in the build slot. A new
+  variable rather than a third `assign row_build` site, which is an asserted invariant here.
+{%- endcomment -%}
+{%- assign row_tier_build = row_build -%}
+{%- assign row_tier_product = 'PowerPoint or Office' -%}
+{%- assign row_tier_name = 'PowerPoint' -%}
+{%- assign row_t2_all = site.data.update_linked_evidence.reports | default: empty -%}
+{%- assign row_l3_all = site.data.recent_powerpoint_reports.reports | default: empty -%}
+{%- if item.product_id contains 'acrobat' -%}
+  {%- assign row_tier_build = item.update_version -%}
+  {%- assign row_tier_product = 'Acrobat' -%}
+  {%- assign row_tier_name = 'Acrobat' -%}
+  {%- assign row_t2_all = site.data.acrobat_update_linked_evidence.reports | default: empty -%}
+  {%- assign row_l3_all = site.data.recent_acrobat_reports.reports | default: empty -%}
+{%- endif -%}
+{%- capture row_t2_key %}{{ item.product_id }}|{{ item.update_version }}|{{ row_tier_build }}{% endcapture -%}
+{%- assign row_t2 = row_t2_all | where: "associated_patch_key", row_t2_key -%}
+{%- assign row_t2_count = row_t2 | size -%}
+{%- assign row_l3 = row_l3_all | where: "release_window_key", row_t2_key -%}
+{%- assign row_l3_count = row_l3 | size -%}
+<td data-label="Reports" class="patch-cell-num">{{ report_count_num }}{% if row_t2_count > 0 %} <span class="patch-cell-num__linked" title="Update-linked reports: the reporter ties the problem to a {{ row_tier_product }} update but never states the exact build. Not counted toward consensus.">&middot; {{ row_t2_count }} update-linked</span>{% endif %}{% if row_l3_count > 0 %} <span class="patch-cell-num__recent" title="Recent {{ row_tier_name }} reports: concrete problems reported while this release was current. The reporters did not identify this update as the cause. Not counted toward consensus.">&middot; {{ row_l3_count }} recent</span>{% endif %}</td>
 <td data-label="Evidence"><span class="patch-evidence patch-evidence--rank{{ evidence_rank }}">{{ evidence_strength }}</span></td>
 <td data-label="Details" class="patch-col-details"><a class="patch-details-link" href="{{ item.url | relative_url }}">View patch <span aria-hidden="true">→</span></a></td>
 </tr>

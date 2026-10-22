@@ -108,10 +108,10 @@ def run() -> int:
         qa.EVIDENCE_PATH = evidence_path
         try:
             # Counted-row filtering: only counted+patch-matched rows count (3 of 5 raw rows).
-            counts = qa.load_counted_evidence_counts()
+            counts = qa.load_counted_evidence_counts([])
             check(
                 "only counted+patch-matched rows are counted (3 of 5 raw rows)",
-                counts.get(("obs-studio", "32.1.2")) == 3,
+                counts.get(("obs-studio", "32.1.2", "")) == 3,
                 f"counts={counts}",
             )
 
@@ -145,6 +145,123 @@ def run() -> int:
         finally:
             qa.ROOT = original_root
             qa.EVIDENCE_PATH = original_evidence_path
+
+
+    # =====================================================================================
+    # FIELD-AWARE PUBLIC INTERNAL-TERM GATE
+    #
+    # Production ingestion was blocked by a false positive: GitHub's own changelog entry
+    # "Enterprise managed settings in GitHub Copilot for JetBrains" describes configuring
+    # OpenTelemetry "including the collector endpoint, protocol, service name, ...". That
+    # vendor prose lands verbatim in `release_summary` (rss_feed -> record["summary"] ->
+    # write_update_record), and the gate flattened every public field into one blob before
+    # substring-matching the bare term "collector", so a generic English word in a vendor
+    # release note read as AUXSAYS implementation leakage and failed the whole run.
+    #
+    # The gate must stay: "collector" in AUXSAYS-AUTHORED public prose is still a defect.
+    # Only the proven vendor-derived field may carry it.
+    # =====================================================================================
+    def findings_for(data):
+        """All public_internal_term findings for a record-like dict."""
+        return qa.internal_term_findings(data, "rec.md")
+
+    VENDOR = "Improved garbage collector performance and reduced allocation churn."
+
+    # A. the real-world false positive: vendor prose in release_summary must PASS
+    check("A. vendor 'collector' prose in release_summary raises no internal-term error",
+          findings_for({"release_summary": VENDOR}) == [],
+          f"findings={findings_for({'release_summary': VENDOR})}")
+
+    # B. AUXSAYS-authored quick_verdict must still FAIL
+    check("B. 'collector' in AUXSAYS-authored quick_verdict is still an error",
+          len(findings_for({"quick_verdict": "Collector execution failed for this update."})) == 1,
+          str(findings_for({"quick_verdict": "Collector execution failed for this update."})))
+
+    # C. another AUXSAYS-authored field must still FAIL
+    for field in ("update_consensus_summary", "record_note", "update_decision_body",
+                  "consensus_report", "community_summary", "practical_recommendations",
+                  "evidence_source_limitations", "source_freshness_note", "description"):
+        check(f"C. 'collector' in AUXSAYS-authored {field} is still an error",
+              len(findings_for({field: "The collector produced these rows."})) == 1,
+              f"{field}: {findings_for({field: 'The collector produced these rows.'})}")
+
+    # D. a different banned term inside the exempt field must STILL fail -- the exemption is
+    #    per-term, never a blanket pass for the field.
+    check("D. 'writeback' inside release_summary is still an error",
+          len(findings_for({"release_summary": "Vendor notes mention writeback behaviour."})) == 1,
+          str(findings_for({"release_summary": "Vendor notes mention writeback behaviour."})))
+
+    # E. other unambiguous internal terms inside the exempt field still fail
+    for term in ("candidate rows", "source_weight", "consensus_evidence.yml",
+                 "promoted evidence rows", "deterministically accepted"):
+        check(f"E. '{term}' inside release_summary is still an error",
+              len(findings_for({"release_summary": f"Upstream text mentioning {term} here."})) == 1,
+              f"{term}: {findings_for({'release_summary': f'Upstream text mentioning {term} here.'})}")
+
+    # F. diagnostics name BOTH the offending field and the term
+    msg = " ".join(str(m) for m in findings_for({"quick_verdict": "collector failed"}))
+    check("F. the finding identifies the offending field and the term",
+          "quick_verdict" in msg and "collector" in msg, msg)
+
+    # G. the exemption is scoped to ONE field: collector in official_summary still fails,
+    #    because rss_feed does not populate it -- write_update_record substitutes
+    #    AUXSAYS-authored fallback prose there.
+    check("G. 'collector' in official_summary is still an error (AUXSAYS-authored fallback)",
+          len(findings_for({"official_summary": "Collector run for this build."})) == 1,
+          str(findings_for({"official_summary": "Collector run for this build."})))
+
+    # H. the real production string, end to end, must pass
+    REAL = ("Admins can now configure OpenTelemetry for Copilot in JetBrains IDEs, including "
+            "the collector endpoint, protocol, service name, resource attributes and headers.")
+    check("H. the exact production GitHub changelog string passes in release_summary",
+          findings_for({"release_summary": REAL}) == [], str(findings_for({"release_summary": REAL})))
+    check("H2. the same string in quick_verdict still fails",
+          len(findings_for({"quick_verdict": REAL})) == 1, str(findings_for({"quick_verdict": REAL})))
+
+    # ---- the deploy gate's TEMPLATE invariants, run at PR time ----------------------
+    #
+    # `qa_patch_records.py --publish-strict` runs in pages.yml BEFORE `jekyll build`, and is
+    # deliberately absent from ci-integrity.yml: it writes the gitignored _data/qa_status.json,
+    # and that workflow is read-only by construction. The comment there says its invariants are
+    # "covered by test_qa_patch_records.py" -- and for the record-level predicates they were, but
+    # NOT for the ones that read the shipped layout. So a template edit could pass every PR check
+    # and then fail the deploy. That is not hypothetical: AUX-030 repaired the file-size pill guard
+    # from the inert `!= blank` spelling to a real comparison, PR CI went green, and the Pages
+    # build failed on `file_size_pill_value_guard_missing` with main already merged.
+    #
+    # `scan_update_layout_public_copy()` is the ONLY function in that gate which reads a template
+    # (UPDATE_LAYOUT_PATH is its only layout path), and it is pure -- it reads and returns, it
+    # writes nothing. Calling it here runs the real deploy predicate against the real shipped
+    # layout, so the read-only guarantee stays intact and the claim in ci-integrity.yml becomes
+    # true. This is the suite's existing idiom: assert THROUGH the shipped predicates, never a copy.
+    layout_errors, layout_warnings = qa.scan_update_layout_public_copy()
+    check("the shipped aux-update.html passes the deploy gate's layout scan",
+          not layout_errors,
+          "these exact codes will fail `qa_patch_records.py --publish-strict` in pages.yml, "
+          "AFTER the pull request has merged: "
+          + "; ".join(sorted({str(e.get("code", e)) for e in layout_errors})))
+
+    # Non-vacuity. A scan that cannot fail proves nothing, so damage a copy of the real layout and
+    # require the predicate to notice. The guard spelling is mutated to the inert `!= blank` form,
+    # which is the exact regression this check exists to catch.
+    _real_layout = qa.UPDATE_LAYOUT_PATH
+    _src = _real_layout.read_text(encoding="utf-8")
+    # Remove the guarded pill outright rather than respelling it. A respelling mutation silently
+    # becomes a no-op when the layout ALREADY carries the broken spelling -- and then this check
+    # fails for the wrong reason, on top of the real failure above, which is noise a maintainer has
+    # to decode. Deleting the token always applies, so this check only ever reports its own subject.
+    _mutant = _src.replace("file_size_pill_value", "file_size_pill_value_REMOVED")
+    _tmp = Path(tempfile.mkdtemp(prefix="auxsays-qa-layout-")) / "aux-update.html"
+    _tmp.write_text(_mutant, encoding="utf-8")
+    try:
+        qa.UPDATE_LAYOUT_PATH = _tmp
+        mutant_errors, _ = qa.scan_update_layout_public_copy()
+    finally:
+        qa.UPDATE_LAYOUT_PATH = _real_layout
+    _codes = {str(e.get("code", "")) for e in mutant_errors}
+    check("that layout scan actually fails when the guarded pill is removed",
+          _src != _mutant and "file_size_pill_value_guard_missing" in _codes,
+          f"mutation applied={_src != _mutant}; codes={sorted(_codes)}")
 
     print()
     print("=" * 60)

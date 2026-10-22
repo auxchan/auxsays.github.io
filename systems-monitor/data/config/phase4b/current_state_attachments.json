@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "phase4b-current-state-attachments-1.0.0",
+  "authority": "TAYLOR_O008",
+  "attachments": [
+    {
+      "seriesId": "EIA_WPSR_TABLE4_US_COMMERCIAL_CRUDE_EXCLUDING_SPR",
+      "nodeIds": ["bea:commodity:211", "bea:commodity:324"],
+      "role": "BUFFER_CONTEXT_ONLY",
+      "propagationSeed": false
+    },
+    {
+      "seriesId": "EIA_WPSR_TABLE2_US_PERCENT_OPERABLE_UTILIZATION",
+      "nodeIds": ["bea:industry:324"],
+      "role": "CAPACITY_CONTEXT_ONLY",
+      "propagationSeed": false
+    },
+    {
+      "seriesId": "CES4348400001",
+      "nodeIds": ["bea:industry:484"],
+      "role": "CURRENT_EMPLOYMENT_OBS_ENDPOINT",
+      "propagationSeed": false
+    }
+  ]
+}

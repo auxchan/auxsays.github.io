@@ -1,0 +1,14 @@
+{
+  "status": "REQUEST_SUCCEEDED",
+  "responseTime": 12,
+  "message": [],
+  "Results": {
+    "series": [
+      {"seriesID":"JTS000000000000000LDL","data":[{"year":"2026","period":"M06","periodName":"June","latest":"true","value":"1766","footnotes":[{"code":"P","text":"preliminary"}]},{"year":"2026","period":"M05","periodName":"May","value":"1761","footnotes":[{}]}]},
+      {"seriesID":"LNS13026638","data":[{"year":"2026","period":"M07","periodName":"July","latest":"true","value":"1715","footnotes":[{}]}]},
+      {"seriesID":"CES0500000002","data":[{"year":"2026","period":"M07","periodName":"July","latest":"true","value":"34.3","footnotes":[{"code":"P","text":"preliminary"}]}]},
+      {"seriesID":"BDS0000000000000000110004LQ5","data":[{"year":"2025","period":"Q04","periodName":"4th Quarter","latest":"true","value":"7245","footnotes":[{}]}]},
+      {"seriesID":"BDS0000000000000000110008LQ5","data":[{"year":"2025","period":"Q04","periodName":"4th Quarter","latest":"true","value":"-","footnotes":[{}]},{"year":"2025","period":"Q01","periodName":"1st Quarter","value":"809","footnotes":[{}]}]}
+    ]
+  }
+}

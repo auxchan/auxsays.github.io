@@ -1,0 +1,213 @@
+name: Writer Queue Reaper
+
+# WHY THIS EXISTS
+#
+# Every workflow that mutates tracked repo state shares the `auxsays-main-writeback` concurrency
+# group so two writers can never own the working tree at once. That part works. The QUEUE in front
+# of it silently loses work.
+#
+# GitHub keeps, per concurrency group, at most ONE run in progress and ONE run pending. With
+# `cancel-in-progress: false` the RUNNING run is protected, so when a third run enters the group it
+# is the PENDING run that is cancelled. Writer runs here take 54-197 minutes against a 6-hour
+# cadence, so a cron routinely arrives while the previous run is still active, lands in that single
+# pending slot, and is destroyed by the next arrival.
+#
+# Measured over 236 writer runs before this workflow existed: 14 SCHEDULED runs were cancelled, 8 of
+# them `Patch Evidence Collection` -- 17% of its cron runs. Seven were displaced by another
+# SCHEDULED run: production destroying production, no human involved.
+#
+# THE HARM IS SILENT, AND THAT IS WHY THE REPAIR HAS TO LIVE OUT HERE. An evicted run is cancelled
+# BEFORE a runner is allocated, so its `jobs` array is empty -- no checkout, no collector, no
+# writeback, and critically no `if: always()` step of ours. Verified on every in-window eviction
+# (34273555118, 34278805171, 34279386465, 34311698674, 34311764894): `/jobs` returns
+# `total_count: 0`. A displaced run therefore CANNOT re-enqueue itself; there is no code of ours
+# inside it. Any design that tries would be untestable because it would never execute.
+#
+# Removing the duplicate cron from patch-ingest.yml stopped cron-versus-cron loss, but it is only
+# half the repair: two runs of the SAME workflow can still evict each other, which is exactly what
+# runs 34311698674 and 34311764894 did. A group with one member still has a pending slot of depth 1.
+# This workflow closes that half.
+#
+# IT IS NOT A WRITER. `contents: read`, and it never checks out or commits. It holds its OWN
+# concurrency group, so its own run can neither evict a pending writer nor be evicted by one.
+# The run it DISPATCHES is of course an entrant, which is why the guard below is group-wide rather
+# than per-workflow -- an adversarial review found that a per-workflow guard let this workflow add a
+# third entrant to a full group and destroy the very pending run it exists to protect.
+
+on:
+  schedule:
+    # Every two hours: frequent enough that a lost 6-hourly slot is recovered well inside its own
+    # cycle, cheap enough to be irrelevant (one API-only job, no runner work).
+    - cron: '43 */2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  # Deliberately NOT `auxsays-main-writeback`. Joining the writer group would make this workflow
+  # itself an entrant that could destroy the pending writer it exists to protect.
+  group: auxsays-writer-queue-reaper
+  cancel-in-progress: false
+
+jobs:
+  reap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      # Every member of the writer concurrency group. The queue is per GROUP, so the free-lane check
+      # has to consider all of them; a per-workflow check is what let an earlier version of this
+      # file evict a pending run of the other lane. `test_writer_queue_concurrency.py` asserts this
+      # list equals the set of workflows whose parsed `concurrency.group` is auxsays-main-writeback,
+      # so a new member cannot join the lane without joining this list.
+      GROUP_MEMBERS: >-
+        obs-evidence-collection.yml patch-ingest.yml
+        davinci-updates.yml promote-davinci-verified-reports.yml
+      # The lanes whose loss is repaired automatically. The two DaVinci lanes are deliberately
+      # absent: they are operator-driven (`workflow_dispatch` only, no cron), so a lost run there is
+      # a human's own action and visible to them, whereas these two carry the routine cycle.
+      REAPABLE: obs-evidence-collection.yml patch-ingest.yml
+    steps:
+      - name: Re-dispatch writer runs that were evicted while queued
+        id: reap
+        run: |
+          set -uo pipefail
+
+          # Only look back far enough to cover one missed cycle of the 6-hourly writers. The reaper
+          # ticks every 2h, so a lost slot gets ~7 recovery opportunities even at the 300-minute
+          # job cap.
+          SINCE="$(date -u -d '14 hours ago' +%Y-%m-%dT%H:%M:%SZ)"
+          echo "Scanning writer runs created since ${SINCE}"
+          dispatched=0
+          notes=""
+
+          # ---- GROUP-WIDE FREE-LANE CHECK -------------------------------------------------------
+          # The pending slot belongs to the GROUP, not to a workflow. If any member has a run
+          # queued or in progress, adding an entrant risks destroying a queued one -- so do nothing
+          # at all this tick and re-evaluate in two hours. This is also what makes the reaper
+          # terminating: it cannot pile re-dispatches on top of each other.
+          busy=0
+          for wf in ${GROUP_MEMBERS}; do
+            # `pending` IS THE ONE THAT MATTERS and it was missing from the first version of this
+            # list. A run held back by a concurrency group reports `status: "pending"`, not
+            # `queued` -- confirmed against the live API on run 34333264915, which this guard
+            # counted as absent while it sat in the very slot the guard exists to protect. The
+            # first production tick therefore reported "1 run(s) queued or in progress" when two
+            # runs were holding the lane. `queued`, `waiting` and `requested` are the other
+            # non-terminal states GitHub can report before a run completes.
+            n="$(gh api "repos/${REPO}/actions/workflows/${wf}/runs?per_page=20" --jq \
+              '[.workflow_runs[] | select(.status == "pending" or .status == "queued" or .status == "in_progress" or .status == "waiting" or .status == "requested")] | length' 2>/dev/null)" || n=""
+            if [ -z "${n}" ]; then
+              echo "::warning title=Reaper::could not read runs for ${wf}; treating the lane as busy"
+              busy=$((busy + 1))
+              continue
+            fi
+            [ "${n}" -gt 0 ] && echo "  ${wf}: ${n} run(s) queued or in progress"
+            busy=$((busy + n))
+          done
+          if [ "${busy}" -gt 0 ]; then
+            echo "writer lane is occupied (${busy}) -- not adding an entrant this tick"
+            {
+              echo "### Writer queue reaper"
+              echo ""
+              echo "- window: since \`${SINCE}\`"
+              echo "- lane occupied by ${busy} run(s); no re-dispatch attempted"
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          for wf in ${REAPABLE}; do
+            # A COVERING run is one that actually performed this workflow's routine cycle. Three
+            # conditions, each of which an adversarial review showed to be load-bearing:
+            #   conclusion == success   -- `failure`, `startup_failure`, `timed_out` and `skipped`
+            #                              did NOT do the work. A real case exists: patch-ingest run
+            #                              32226420647 was a genuine 0-job eviction that a later
+            #                              `failure` run would have written off.
+            #   not cancelled/null      -- implied by success, kept explicit for readability.
+            #   routine, not targeted   -- a `dry_run: true` dispatch concludes SUCCESS while
+            #                              writing nothing, and a `product_id`-scoped dispatch does
+            #                              one product. Inputs are invisible through the API, so
+            #                              routine is approximated by provenance: a cron run, or a
+            #                              run this repo's own automation dispatched (chain-ingest
+            #                              and this reaper both run as github-actions[bot]).
+            #                              An operator's dispatch never counts as covering.
+            covering="$(gh api "repos/${REPO}/actions/workflows/${wf}/runs?per_page=50" --jq \
+              "[.workflow_runs[] | select(.created_at >= \"${SINCE}\" and .conclusion == \"success\" and (.event == \"schedule\" or .triggering_actor.login == \"github-actions[bot]\"))] | sort_by(.created_at) | last | .created_at // \"\"" 2>/dev/null)" || covering=""
+
+            # An eviction has a precise signature: conclusion `cancelled` AND zero jobs ever
+            # allocated. The same provenance rule applies here: an operator who deliberately
+            # cancels a queued run -- to free the lane, or because they set `dry_run` by mistake --
+            # must not have it resurrected as a live writeback two hours later. Cron runs and this
+            # repo's own automated dispatches (the chain-ingest lane) are the ones that represent
+            # routine work nobody chose to abandon.
+            evicted="$(gh api "repos/${REPO}/actions/workflows/${wf}/runs?per_page=50" --jq \
+              "[.workflow_runs[] | select(.created_at >= \"${SINCE}\" and .conclusion == \"cancelled\" and (.event == \"schedule\" or .triggering_actor.login == \"github-actions[bot]\"))] | sort_by(.created_at) | .[] | \"\(.id) \(.created_at)\"" 2>/dev/null)" || {
+              echo "::warning title=Reaper::could not read runs for ${wf}; skipping this lane"
+              continue
+            }
+
+            if [ -z "${evicted}" ]; then
+              echo "  ${wf}: no routine cancelled runs in window"
+              continue
+            fi
+
+            repaired_one=0
+            while read -r id created; do
+              [ -n "${id}" ] || continue
+              jobs="$(gh api "repos/${REPO}/actions/runs/${id}/jobs" --jq '.total_count' 2>/dev/null)" || jobs=""
+              if [ -z "${jobs}" ]; then
+                echo "::warning title=Reaper::could not read jobs for run ${id}; leaving it alone"
+                continue
+              fi
+              if [ "${jobs}" -ne 0 ]; then
+                echo "  ${wf} run ${id}: cancelled WITH ${jobs} job(s) -- started work, not an eviction; left alone"
+                continue
+              fi
+              if [ -n "${covering}" ] && [ "${covering}" \> "${created}" ]; then
+                echo "  ${wf} run ${id}: evicted at ${created}, already covered by a later successful routine run (${covering})"
+                continue
+              fi
+              if [ "${repaired_one}" -ne 0 ]; then
+                # Distinguished from a genuine covering run, because it is not the same thing: this
+                # cycle's work is being folded into the repair of an earlier one. Both writers are
+                # cumulative (the collector walks a `--since-days 45` horizon), so one run does
+                # recover the window -- but saying so out loud is the difference between a
+                # deliberate decision and a silent write-off.
+                echo "  ${wf} run ${id}: evicted at ${created}, folded into this tick's earlier repair"
+                notes="${notes}\n- \`${wf}\` run ${id} folded into an earlier repair"
+                continue
+              fi
+              echo "  ${wf} run ${id}: evicted while queued at ${created} with 0 jobs -- re-dispatching"
+              if gh workflow run "${wf}" --ref main --repo "${REPO}"; then
+                dispatched=$((dispatched + 1))
+                repaired_one=1
+                notes="${notes}\n- re-dispatched \`${wf}\` for the cycle lost at ${created}"
+              else
+                echo "::warning title=Reaper::re-dispatch of ${wf} failed"
+              fi
+              # Only one entrant per tick, group-wide: the lane was free when this tick started and
+              # it is not free any more.
+              break
+            done <<< "${evicted}"
+            [ "${dispatched}" -gt 0 ] && break
+          done
+
+          {
+            echo "### Writer queue reaper"
+            echo ""
+            echo "- window: since \`${SINCE}\`"
+            echo "- re-dispatched: **${dispatched}**"
+            if [ "${dispatched}" -eq 0 ]; then
+              echo "- no legitimate routine writer run was found lost in this window"
+            fi
+            # An `[ -n ... ] && printf` here would make the whole block -- and therefore the step --
+            # exit non-zero on every quiet tick, now that `set -e` is deliberately not in force.
+            # A quiet tick is the normal case and must not report as a failure.
+            if [ -n "${notes}" ]; then
+              printf '%b\n' "${notes}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
