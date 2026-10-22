@@ -233,11 +233,20 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 
   SCOPE OF THAT CLAIM, stated precisely because the first draft overclaimed it. On every page the
   aside can render, exactly one box carries the qualifier. It does NOT say every page carries it:
-  the aside is gated on `evidence_state_class == 'pilot'`, so a NON-pilot record whose
+  the aside is gated on the pilot and live maturity levels, so an official-only record whose
   `report_bearing_count` exceeds its `report_count` has no aside to restore anything into and states
   the qualifier nowhere. The flag rescues the card's blind spot only inside the aside's own gate,
   which is the only box that exists to rescue it. 0 such records today; if one ever appears the fix
   belongs in the card's gate, not here.
+
+  WHY LIVE IS INSIDE THE GATE. It used to admit pilot only, so promoting a record to live DELETED its
+  collection-health warning: a page claiming established consensus would have hidden a blocked or
+  stale collection method at exactly the moment it claims the most. (This prose is scanned by the
+  deploy gate along with the markup, so it avoids the backend vocabulary that gate forbids.) The published glossary defines live consensus as
+  actively refreshed by a running pipeline, so a live page with a degraded pipeline must say so.
+  Live records do not show the card's not-established hedge -- consensus IS established -- so when
+  this aside fires on a live page it also carries the not-live-telemetry clause below, and a healthy
+  live page carries the scope note printed after the card instead.
 
   THE ASIDE BODY MUST NOT RE-NAME THE SAMPLE. `freshness_detail` is interpolated OUTSIDE the unless
   guard (see the rule below about writing tag delimiters here), so wording placed in it is NOT
@@ -276,7 +285,9 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% if report_evidence_stale and method_health_blocked_or_pending %}
   {% capture freshness_detail %}{{ freshness_detail }} This evidence has also not been revalidated recently.{% endcapture %}
 {% endif %}
-{% if report_bearing_count > 0 and evidence_state_class == 'pilot' %}
+{% assign aside_eligible_state = false %}
+{% if evidence_state_class == 'pilot' or evidence_state_class == 'live' %}{% assign aside_eligible_state = true %}{% endif %}
+{% if report_bearing_count > 0 and aside_eligible_state %}
   {% if report_evidence_stale or method_health_blocked_or_pending or source_freshness_note_warns %}
     {% assign show_report_freshness_notice = true %}
   {% endif %}
@@ -723,6 +734,9 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           {% endif %}
           {% if consensus_established == false and report_count > 0 %}
           <p class="consensus-chart-meta consensus-sample-note">Community consensus not established &mdash; {{ report_count }} user report{% unless report_count == 1 %}s{% endunless %}, evidence strength {{ evidence_strength }}. This is a verified report sample, not live consensus telemetry.</p>
+          {% endif %}
+          {% if consensus_established and report_count > 0 %}
+          <p class="consensus-chart-meta consensus-live-scope-note">Based on {{ report_count }} publicly posted user report{% unless report_count == 1 %}s{% endunless %}, evidence strength {{ evidence_strength }}. This is not a measure of how many installations are affected.</p>
           {% endif %}
           {% if evidence_checked_at != '' %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
         </div>

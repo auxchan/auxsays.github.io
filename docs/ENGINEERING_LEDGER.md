@@ -50,6 +50,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
 | AUX-043 | Resolved | Evidence integrity | Medium | Every published source asserted a patch match it never checked; now derived from the row |
 | AUX-036 | Resolved | Official ingestion | High | A bot challenge read as an empty document, and the guard covered one of two response paths |
+| AUX-044 | Resolved | Public truthfulness | High | Promoting a page to live consensus would have hidden its collection warnings |
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 
 ---
@@ -3208,6 +3209,36 @@ premise is sound and the fixture is simply unrepresentative.
 
 **Work that this item must not block** Everything. No other lane reads platform identity, and the
 transport fix shipped separately.
+
+### AUX-044 — promoting a page to live consensus would have hidden its collection warnings
+
+- **Status** Resolved · **Area** Public truthfulness · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-22
+
+The patch page's collection-health aside — "Collection blocked", "Collection degraded", "Evidence
+freshness needs revalidation" — was gated on the pilot maturity level only. No record is live yet,
+so nothing was visibly wrong, but the moment any record was promoted the warning would have
+disappeared: a page claiming established consensus would have hidden a blocked or stale collector
+at exactly the point it claims the most. The published glossary defines live consensus as actively
+refreshed by a running pipeline, so that would have been a contradiction the site printed itself.
+
+The aside now admits pilot and live. When it fires on a live page it also carries the
+not-live-telemetry clause, because live pages correctly omit the card's not-established hedge. A
+fresh, healthy live page shows no warning — there is nothing to warn about — and instead carries a
+short scope note after the card stating the counts are publicly posted reports, not a measure of
+how many installations are affected. So a live page is never left with no statement of what its
+numbers are.
+
+This is a prerequisite for any maturity producer and changes nothing on today's pages, because no
+record is live.
+
+The card's own hedge block is untouched, deliberately: `test_consensus_sample_honesty` reconstructs
+a pre-fix template by excising exactly that block. The scope note uses its own CSS class for the
+same reason — that reconstruction raises if the card's class survives its stripping.
+
+**Reopen only if** a live page renders without its collection warning while its methods are
+blocked, degraded or its evidence is stale, or a live page renders with neither the
+not-live-telemetry clause nor the scope note.
 
 ### AUX-047 — the published-payload gate refused a licence notice and halted every deploy
 
