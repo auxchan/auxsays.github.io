@@ -397,25 +397,42 @@ def section_g_build_identity() -> None:
 
 VAULT_FILES = (_AUX / "vault" / "index.html", _AUX / "_layouts" / "vault.html",
                _AUX / "assets" / "js" / "vault.js")
-# Skipped: directories Jekyll never publishes (config exclude, build output), and everything the
-# scheduled lanes WRITE -- the generated patch records under updates/generated/ and the evidence
-# corpora in _data/. Those quote third-party text and URLs that are not site navigation and change
-# every cycle, so scanning them would let a quoted report turn this suite red on a bot commit.
-# What remains is hand-authored: layouts, includes, pages, tabs and shipped scripts.
-_SCAN_EXCLUDED_DIRS = {"scripts", "tools", "_site", "vendor", "node_modules", ".bundle",
-                       ".jekyll-cache", "_posts", "_updates", "_data", "generated"}
-# A site-relative /vault path: preceded by a quote, space, ( or =, never by a host name, so a
-# cited "developer.hashicorp.com/vault/docs" in a record is not mistaken for a link.
-_VAULT_LINK = re.compile(r"""(?<![\w.-])/vault(?:/|\b)""")
+# The scan reads TRACKED files, so untracked local build output cannot make it behave differently
+# from CI. Skipped, by TOP-LEVEL directory only (Jekyll's own exclude is root-anchored, so a nested
+# assets/js/vendor/ or assets/scripts/ IS published and IS scanned):
+#   * scripts/ and tools/, which _config.yml excludes from the build;
+#   * what the scheduled lanes WRITE -- the evidence corpora in _data/ and the generated patch
+#     records under updates/generated/. Those quote third-party text and URLs that are not site
+#     navigation and change every cycle, so scanning them would let a quoted report turn this
+#     suite red on a bot commit.
+# Everything else is hand-authored and published: layouts, includes, pages, posts, tabs, config
+# and shipped scripts. Posts matter twice over: they are published articles, and _posts/ is the
+# directory the removed editor wrote to.
+_SCAN_EXCLUDED_ROOTS = {"scripts", "tools", "_data"}
+_PAGE_SUFFIXES = (".html", ".htm", ".xhtml", ".md", ".markdown", ".mkdown", ".mkdn", ".mkd")
+_SCRIPT_SUFFIXES = (".js", ".mjs")
+# A link to this site's /vault path: site-relative (preceded by a quote, space, ( or =, never by
+# another host, so a cited "developer.hashicorp.com/vault/docs" is not mistaken for one), or
+# absolute on this site's own host.
+_VAULT_LINK = re.compile(r"""(?:(?<![\w.-])|(?<=auxsays\.com))/vault(?:/|\b)""", re.I)
 
 
-def _published_sources(suffixes: tuple) -> list:
-    out = []
-    for path in _AUX.rglob("*"):
-        rel = path.relative_to(_AUX).parts
-        if path.is_file() and path.suffix in suffixes and not (set(rel[:-1]) & _SCAN_EXCLUDED_DIRS):
-            out.append(path)
-    return out
+def _published_sources(suffixes: tuple):
+    """Tracked, hand-authored, published files with one of `suffixes` -> list, or None if git fails."""
+    out = subprocess.run(["git", "ls-files", "-z", "--", "auxsays"], cwd=_REPO,
+                         capture_output=True)
+    if out.returncode != 0:
+        return None
+    found = []
+    for rel in out.stdout.decode("utf-8", "replace").split("\0"):
+        parts = Path(rel).parts[1:]   # drop the leading "auxsays"
+        if (not parts or parts[0] in _SCAN_EXCLUDED_ROOTS or parts[:2] == ("updates", "generated")
+                or Path(rel).suffix.lower() not in suffixes):
+            continue
+        path = _REPO / rel
+        if path.is_file():
+            found.append(path)
+    return found
 
 
 def section_h_token_editor_is_gone() -> None:
@@ -441,24 +458,27 @@ def section_h_token_editor_is_gone() -> None:
                   f"{rel} not flagged; flagged={flagged}")
             p.unlink()
 
-    linking = []
-    for path in _published_sources((".html", ".md", ".js", ".mjs", ".yml", ".yaml")):
-        if _VAULT_LINK.search(path.read_text(encoding="utf-8", errors="replace")):
-            linking.append(str(path.relative_to(_AUX)))
-    check("H3 no page, template, tab or script links to /vault/", not linking,
-          f"linking: {linking[:5]}")
+    linkable = _published_sources(_PAGE_SUFFIXES + _SCRIPT_SUFFIXES + (".yml", ".yaml"))
+    linking = [str(p.relative_to(_AUX)) for p in linkable or []
+               if _VAULT_LINK.search(p.read_text(encoding="utf-8", errors="replace"))]
+    check("H3 no page, post, template, tab or script links to /vault/",
+          linkable is not None and bool(linkable) and not linking,
+          "git ls-files failed or found nothing" if not linkable else f"linking: {linking[:5]}")
 
+    shipped = _published_sources(_PAGE_SUFFIXES + _SCRIPT_SUFFIXES)
     token_field, contents_write = [], []
-    for path in _published_sources((".html", ".md", ".js", ".mjs")):
+    for path in shipped or []:
         src = path.read_text(encoding="utf-8", errors="replace")
-        if 'id="github-token"' in src:
+        if re.search(r"""id\s*=\s*["']github-token["']""", src, re.I):
             token_field.append(str(path.relative_to(_AUX)))
-        if "api.github.com/repos/" in src and "/contents/" in src:
+        if "api.github.com/repos/" in src.lower() and "/contents/" in src.lower():
             contents_write.append(str(path.relative_to(_AUX)))
-    check("H4 no shipped template or script carries the token field", not token_field,
-          f"found in: {token_field}")
-    check("H4 no shipped template or script calls the GitHub contents API", not contents_write,
-          f"found in: {contents_write}")
+    scanned = shipped is not None and bool(shipped)
+    check("H4 no shipped page or script carries the token field", scanned and not token_field,
+          "git ls-files failed or found nothing" if not scanned else f"found in: {token_field}")
+    check("H4 no shipped page or script calls the GitHub contents API",
+          scanned and not contents_write,
+          "git ls-files failed or found nothing" if not scanned else f"found in: {contents_write}")
 
 
 def run() -> int:

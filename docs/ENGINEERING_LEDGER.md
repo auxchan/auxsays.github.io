@@ -3319,13 +3319,21 @@ not depend on any particular page existing.
 site. A source-level section asserts the three files are absent, that no page, template, tab or
 script links to `/vault/`, and that no shipped template or script carries the token field or calls
 the contents API. Each check was proven by its own mutant: restoring the files, dropping either gate
-rule, or adding a link fails a named check. The scan deliberately skips what the scheduled lanes
-write (generated records and the evidence corpora), so quoted third-party text cannot turn it red on
-a bot commit. It also deliberately does not ban every password field or GitHub API call, which would
-forbid legitimate future work.
+rule, or adding a link fails a named check. The scan reads tracked, hand-authored, published
+files -- layouts, includes, pages, posts, tabs, config and shipped scripts at any depth -- and
+skips only what the build excludes and what the scheduled lanes write (generated records and the
+evidence corpora), so quoted third-party text cannot turn it red on a bot commit. A first version
+matched excluded names at any depth and skipped posts, and review reproduced the editor's client
+returning unscanned under `assets/js/vendor/` with its form in a post; both are closed and pinned.
+It deliberately does not ban every password field or GitHub API call, which would forbid
+legitimate future work.
 
 Removing the page does not revoke anything. Any token ever pasted into it should be revoked by its
 owner.
+
+**Reopen only if** a built site contains `vault/` or `vault.js`, or a shipped page, post, template,
+tab or script links to this site's `/vault/`, carries the token field, or calls the GitHub contents
+API.
 
 ### AUX-046 — four Elgato products had no records because the HTML pages challenge the runner
 
