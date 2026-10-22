@@ -17,8 +17,8 @@ update_version: New updates announced on the Feb '25 Release Notes livestream
 update_logo_text: FIG
 update_published_at: '2025-02-26T00:00:00.000Z'
 update_last_checked: '2026-08-17T20:05:19Z'
-source_last_checked: '2026-09-17T07:07:22Z'
-official_body_last_checked: '2026-09-17T07:07:22Z'
+source_last_checked: '2026-10-22T14:43:16Z'
+official_body_last_checked: '2026-10-22T14:43:16Z'
 record_last_updated: '2026-08-17T20:05:19Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-17T07:07:22Z'
+  url: https://www.figma.com/release-notes/?title=feb-25-livestream
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-22T14:43:16Z'
   url: https://www.figma.com/release-notes/?title=feb-25-livestream
   status: captured-from-rss-feed
   body_captured: true
