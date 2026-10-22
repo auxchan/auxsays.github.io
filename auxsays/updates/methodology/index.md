@@ -1,229 +1,94 @@
 ---
 layout: aux-base
 title: AUXSAYS Patch Feed Methodology
-description: How AUXSAYS separates official-source patch ingestion from confirmed patch-specific community consensus.
+description: What AUXSAYS counts as evidence for a patch update, how official vendor information is kept separate from user reports, and when coverage is limited or out of date.
 permalink: /updates/methodology/
 ---
 <section class="patch-shell methodology-page">
   <section class="panel patch-hero reveal-up">
     <div class="eyebrow">Methodology</div>
     <h1 class="patch-title">Patch Feed evidence standards</h1>
-    <p class="patch-subtitle">AUXSAYS is being built as an official-first patch intelligence layer. This page explains what is live now, what is still scaffolding, and how patch-specific reports will be counted.</p>
+    <p class="patch-subtitle">AUXSAYS separates vendor release information from user-reported experiences. Patch pages identify the available evidence, link to relevant sources, and indicate when coverage is limited or outdated. An absence of user reports does not establish that an update is safe. Recommendations are based on the available information and may change as new reports emerge.</p>
   </section>
 
   <section class="panel methodology-grid reveal-up reveal-delay-1">
     <article class="methodology-card methodology-card--primary">
-      <h2>What AUXSAYS currently tracks</h2>
-      <p>AUXSAYS tracks creator-critical companies, their software/products, and specific patch or release records. Official vendor sources are treated as the factual baseline for what changed.</p>
+      <h2>Two kinds of evidence</h2>
+      <p>A patch page can carry two different things, and they are never merged into one number:</p>
       <ul>
-        <li>Company pages organize software under the vendor or project.</li>
-        <li>Software pages show release history and monitoring rules.</li>
-        <li>Patch pages show official notes, evidence state, and any confirmed patch-specific report sample.</li>
+        <li><strong>Vendor release information</strong> &mdash; what the publisher says changed. This is the factual baseline for what an update contains. It does not establish that the update is safe to install.</li>
+        <li><strong>User-reported experiences</strong> &mdash; individual public reports that name the exact release. Every counted report is linked, so you can read the original and judge it yourself.</li>
+      </ul>
+      <p>A page that carries vendor information and no user reports is labelled as such. That combination is not a safety finding.</p>
+    </article>
+
+    <article class="methodology-card">
+      <h2>What a patch page shows</h2>
+      <ul>
+        <li>The exact release identity, including the build where a product ships several builds under one version.</li>
+        <li>Links to the vendor source and to every counted report.</li>
+        <li>How many confirmed patch-specific reports were counted, including when that number is zero.</li>
+        <li>The evidence state, and the dates on which the vendor source and the user-report evidence were last checked.</li>
+        <li>Whether coverage for that exact release is limited, incomplete or out of date.</li>
       </ul>
     </article>
 
     <article class="methodology-card">
-      <h2>Official-source ingestion</h2>
-      <p>Official-source ingestion captures releases from vendor changelogs, RSS feeds, GitHub releases, or official release pages. This pipeline is active for selected sources and runs through GitHub Actions.</p>
-      <p>Official ingestion does not prove a patch is safe. It only records that an official update exists and preserves the available release note details.</p>
-      <p><strong>Official source checked</strong> means AUXSAYS contacted the vendor source or feed. It does not mean the page verdict, community evidence, or report count changed.</p>
+      <h2>How official sources are labelled</h2>
+      <p>Official vendor pages are not all the same kind of document, and they are not recorded as though they were. Release notes, a fixed-issue list, a security advisory and a changelog are release documentation. A feature summary, a &ldquo;what&rsquo;s new&rdquo; article, a download page, a release-status page and an official announcement are still official, but they are a different kind of document.</p>
+      <p>Each official citation on a patch page carries the kind of document it is, next to the link. <strong>That label, not the section heading, is what tells you what the source actually is:</strong> the Official Patch Notes heading is shown for any captured official body text, so a page whose official source is a download page or a release-status page still appears under that heading. Read the citation label.</p>
+      <p>An official source can also be linked with a missing-detail note. That means the page was reached but its body text could not be captured, and it is recorded rather than hidden.</p>
     </article>
 
     <article class="methodology-card">
-      <h2>Official source classification</h2>
-      <p>Official vendor pages are classified before display. A release-notes page, fixed-issue list, security advisory, changelog, vendor blog, “What’s New” article, download portal, and official community announcement are not treated as the same evidence type.</p>
-      <p>AUXSAYS should only label a section as <strong>Official Release Notes</strong> when the captured source is classified as release notes, fixed issues, a security advisory, or a changelog. Feature summaries and vendor announcements remain official, but they are labeled as summaries or announcements.</p>
-      <p><strong>Official notes checked</strong> means AUXSAYS attempted to capture official body text. A linked source can still show a missing-body note when extraction fails or the source is not a structured changelog.</p>
-    </article>
-
-    <article class="methodology-card">
-      <h2>Community consensus</h2>
-      <p>Community consensus is separate from official ingestion. It is not treated as live unless the page explicitly says <strong>Live consensus</strong>. Verified reports are manually confirmed patch-specific reports or previously captured structured reports; they should not be read as continuous community scraping.</p>
-      <p>When a live collector exists, every confirmed patch-specific report will count equally. Official forums, dedicated forums, Reddit, GitHub Issues, or other public sources may be labeled by source type for auditability, but source type does not multiply or discount the report.</p>
-    </article>
-
-    <article class="methodology-card">
-      <h2>Manual tracking</h2>
-      <p>Some priority products are watched manually while an adapter or collector is incomplete. Manual watch means AUXSAYS is tracking the source intentionally, but it does not mean automated official ingestion or live report scraping is active.</p>
-    </article>
-
-    <article class="methodology-card">
-      <h2>Consensus audit</h2>
-      <p>The consensus audit checks whether generated patch pages that show confirmed reports are backed by structured evidence rows. It can identify stale or manually encoded counts, but it does not collect new reports from public communities.</p>
-      <p><strong>Evidence checked</strong> is separate from official-source checks. It should only move when structured community/report evidence is reviewed or collected. Live consensus is not active unless a real evidence collector is running.</p>
-      <p>AUXSAYS may run narrow manual pilot collectors, such as a GitHub Issues pilot for a single OBS Studio patch. Those pilots are structured evidence collection, not live consensus.</p>
-    </article>
-
-    <article class="methodology-card">
-      <h2>Record freshness</h2>
-      <p><strong>Record updated</strong> means the generated patch page materially changed. Older records may show a legacy record date until the refreshed ingestion path writes the newer source and body-check fields.</p>
-      <p>Source checked, official notes checked, record updated, and evidence checked are separate timestamps. One timestamp should not be read as proof that the others changed.</p>
-    </article>
-
-    <article class="methodology-card">
-      <h2>What counts as a confirmed patch-specific report</h2>
+      <h2>What counts as a confirmed report</h2>
       <ul>
-        <li>The report/comment itself names the exact patch, version, or update.</li>
-        <li>Or the parent thread/page title names the exact patch, version, or update.</li>
-        <li>If the parent thread is patch-specific, replies inside that thread count unless the reply clearly shifts to another version or unrelated issue.</li>
+        <li>The report or comment names the exact patch, version or update.</li>
+        <li>Or the parent thread or page title names the exact patch, version or update.</li>
+        <li>Where the parent thread is specific to one release, replies inside that thread count, unless a reply clearly moves to another version or an unrelated issue.</li>
       </ul>
+      <p>Every confirmed report carries equal weight. Where a report was published does not multiply it and does not discount it.</p>
     </article>
 
     <article class="methodology-card methodology-card--warning">
       <h2>What does not count</h2>
       <ul>
-        <li>Generic complaints about the software.</li>
-        <li>Posts that only say “after the update” without a patch-specific parent thread.</li>
-        <li>Mentions that cannot be tied to the exact version being scored.</li>
-        <li>Reports that explicitly refer to another version, driver, operating system update, or unrelated plug-in issue.</li>
+        <li>General complaints about the software.</li>
+        <li>Posts that only say &ldquo;after the update&rdquo; with no release-specific parent thread.</li>
+        <li>Mentions that cannot be tied to the exact version on the page.</li>
+        <li>Reports that clearly refer to a different version, a driver, an operating-system update or an unrelated add-on.</li>
       </ul>
-      <p>Low-context reports are excluded entirely. They are not downweighted or used as weak signals.</p>
+      <p>Reports with too little context are excluded completely. They are not counted at reduced weight and they are not used as a weak signal.</p>
     </article>
 
     <article class="methodology-card">
       <h2>Evidence states</h2>
       <dl class="methodology-definition-list">
-        <div><dt>Live consensus</dt><dd>Confirmed patch-specific reports are actively refreshed by a consensus pipeline.</dd></div>
-        <div><dt>Official source only</dt><dd>An official source has been captured, but no confirmed patch-specific community reports are counted yet.</dd></div>
-        <div><dt>Verified reports</dt><dd>The page contains manually encoded or previously captured confirmed patch-specific report data. Check the evidence freshness line before treating it as current.</dd></div>
-        <div><dt>Insufficient data</dt><dd>AUXSAYS has not captured enough official or community evidence to support a verdict beyond a placeholder state.</dd></div>
+        <div><dt>Official source only</dt><dd>A vendor source has been captured. No confirmed patch-specific user reports are counted for this release. This is the most common state on the site, and it is not a safety finding.</dd></div>
+        <div><dt>Verified reports</dt><dd>The page carries confirmed patch-specific reports that were captured earlier. Check the evidence date on the page before treating them as current.</dd></div>
+        <div><dt>Live consensus</dt><dd>Reserved for a release whose confirmed patch-specific reports are being refreshed on an ongoing basis. No release currently carries it.</dd></div>
+        <div><dt>Insufficient data</dt><dd>There is not enough vendor or user evidence to support anything beyond a placeholder state.</dd></div>
       </dl>
+      <p>No state means an update is safe. &ldquo;Official source only&rdquo; and &ldquo;Insufficient data&rdquo; both mean the user-report picture for that release is empty or thin, not that it is clear.</p>
     </article>
-  </section>
 
-  <section class="panel methodology-method-health">
-    <div class="eyebrow">Collector audit</div>
-    <h2>Collector / method health telemetry</h2>
-    <p>This describes collection attempts for community/report evidence. It is not accepted evidence by itself, and it does not change report counts, verdicts, or consensus state. Each row is one collection method against one exact patch, so a product with per-build updates has a separate row per build.</p>
-    <p>Status values such as <strong>success</strong>, <strong>partial</strong>, <strong>blocked</strong>, <strong>broken</strong>, <strong>stale</strong>, <strong>disabled</strong>, and similar states describe collector or method execution. They do not mean users are reporting patch problems.</p>
+    <article class="methodology-card">
+      <h2>When coverage is limited or outdated</h2>
+      <p>Report collection is not exhaustive and it is not continuous. For any given release it may be incomplete, out of date, or not running at all. Each patch page states the collection position for that exact release. Where there is collection history for that exact release, the page also names each source family it checked and the result of each check; where there is none, the page is labelled Official source only and names no sources.</p>
+      <p>A check can complete, complete and find nothing, complete only partly, return a low-confidence result, be refused by the source, fail with an error, be out of date, need manual review, or not be running at all. Some sources are no longer called: where a source refused request after request over a sustained period, AUXSAYS stopped calling it rather than spending every cycle timing out against it, and the patch page says so for that source. Those sources are kept and can be restored if the source starts answering again.</p>
+      <p><strong>None of those outcomes is evidence about the update itself.</strong> A refused, stopped or failed check means AUXSAYS does not know. It does not mean users reported problems, and it does not mean they reported none.</p>
+      <p>Each page also states how many of its sources returned a usable, recent result, and says when that number is below the minimum AUXSAYS treats as adequate coverage. Where coverage for a release is thin or stale, the page says so rather than presenting the result as settled.</p>
+    </article>
 
-    {% assign method_health_rows = site.data.evidence_method_health.methods %}
-    {% if method_health_rows %}
-    {% assign success_methods = method_health_rows | where: "status", "success" %}
-    {% assign partial_methods = method_health_rows | where: "status", "partial" %}
-    {% assign no_result_methods = method_health_rows | where: "status", "no_results" %}
-    {% assign blocked_methods = method_health_rows | where: "status", "blocked" %}
-    {% assign stale_methods = method_health_rows | where: "status", "stale" %}
-    {% assign broken_methods = method_health_rows | where: "status", "broken" %}
-    {% assign low_confidence_methods = method_health_rows | where: "status", "low_confidence" %}
-    {% assign disabled_methods = method_health_rows | where: "status", "disabled" %}
-    {% assign manual_review_methods = method_health_rows | where: "status", "manual_review_needed" %}
-    <div class="source-health-summary method-health-summary" aria-label="Collector method health totals">
-      <div><strong>{{ success_methods.size }}</strong><span>Success</span></div>
-      <div><strong>{{ partial_methods.size }}</strong><span>Partial</span></div>
-      <div><strong>{{ no_result_methods.size }}</strong><span>No results</span></div>
-      <div><strong>{{ blocked_methods.size }}</strong><span>Blocked</span></div>
-      <div><strong>{{ broken_methods.size }}</strong><span>Broken</span></div>
-      <div><strong>{{ stale_methods.size }}</strong><span>Stale</span></div>
-      <div><strong>{{ low_confidence_methods.size }}</strong><span>Low confidence</span></div>
-      <div><strong>{{ disabled_methods.size }}</strong><span>Disabled</span></div>
-      <div><strong>{{ manual_review_methods.size }}</strong><span>Manual review</span></div>
-    </div>
+    <article class="methodology-card">
+      <h2>Dates mean different things</h2>
+      <p>A patch page can carry several dates: when the vendor source was last checked, when vendor detail was last captured, when the record itself last changed, and when user-report evidence was last checked. They move independently. One recent date is not proof that the others are recent, and a vendor check moving does not mean the recommendation, the report count or the evidence state changed.</p>
+    </article>
 
-    <div class="source-health-table method-health-table" role="table" aria-label="AUXSAYS collector method-health telemetry">
-      <div class="source-health-row method-health-row source-health-row--head" role="row">
-        <span>Product</span><span>Version / build</span><span>Method</span><span>Source type</span><span>Status</span><span>Last run</span><span>Candidates</span><span>Accepted</span><span>Public counted</span><span>Notes / block reason</span>
-      </div>
-      {% for item in method_health_rows %}
-      <div class="source-health-row method-health-row method-health-row--{{ item.status | downcase | replace: '_', '-' }}" role="row">
-        <span>{{ item.product_id }}</span>
-        {%- assign mh_build = item.target_build | default: '' %}
-        <span>{{ item.update_version }}{% if mh_build != '' %}<small class="method-health-build">Build {{ mh_build }}</small>{% endif %}</span>
-        <span>{{ item.method_id }}</span>
-        <span>{{ item.source_type }}</span>
-        <span><mark class="source-health-status method-health-status--{{ item.status | downcase | replace: '_', '-' }}">{{ item.status | replace: '_', ' ' }}</mark></span>
-        <span>{% if item.last_run != blank %}{{ item.last_run }}{% else %}Not checked{% endif %}</span>
-        <span>{{ item.candidates_found | default: 0 }}</span>
-        {%- comment -%}
-          "N added" used to render `evidence_rows_added`, which defaulted to the accepted count and
-          was therefore the same number twice: a run could accept 80 candidates, store 0 because the
-          append refused every one as already known, and still publish "80 added". The field now
-          carries the real append delta and `duplicate_existing_evidence` carries the remainder, so
-          both halves of what a run did are stated instead of one of them being invented.
-        {%- endcomment -%}
-        <span>{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} newly stored{% if item.duplicate_existing_evidence and item.duplicate_existing_evidence > 0 %} &middot; {{ item.duplicate_existing_evidence }} already held{% endif %}</small></span>
-        <span>{{ item.public_counted_reports | default: 0 }}</span>
-        {%- comment -%}
-          `!= blank` is a NO-OP in this Liquid. Measured, not inferred, against liquid 4.0.4 -- the
-          version `auxsays/Gemfile`'s `jekyll ~> 4.4` resolves to and `pages.yml` builds with.
-          `blank` is not a value: it parses to `Liquid::Expression::MethodLiteral(:blank?)`, and
-          because neither String nor NilClass responds to `blank?` without ActiveSupport, the
-          comparison never finds anything equal to it. So `== blank` is ALWAYS false and
-          `!= blank` ALWAYS true -- for `''`, for nil, for an absent key, for whitespace, for
-          `false`, for `0`, for text. (It is tempting to describe `blank` as nil; that is wrong and
-          the difference is observable -- if it were nil then `nil != blank` would be false and a
-          null-valued field would have taken the correct branch. It does not.) Rendering THIS line
-          verbatim through that gem confirmed all of it.
-
-          The consequence was live on 636 of 1496 rows: a row whose `blocked_reason` was empty still
-          took the first branch, so the primary text printed NOTHING while the row's real note was
-          demoted into `<small>`. The remaining 860 rows looked right only because both always-true
-          guards happened to select the intended branch -- correct by accident, not by logic.
-
-          Normalise first, then compare against a literal. That is the idiom already used for
-          `mh_build` a few lines above (PR #67/#68), and it is deterministic: `default: ''`
-          substitutes for nil AND for the empty string, `strip` catches whitespace-only values, so a
-          single comparison decides the branch. `<small>` now sits inside its own condition, so a
-          row with no secondary text emits no element rather than an empty `<small></small>`, and a
-          note identical to the reason is not printed twice.
-
-          Scoped deliberately to this cell. The other `blank` comparisons in this file (last_run,
-          last_checked, polling_frequency, last_error_display) are all LATENT -- no live row reaches
-          the wrong branch -- and a repo-wide blank rewrite is not in scope here.
-        {%- endcomment -%}
-        {%- assign mh_reason = item.blocked_reason | default: '' | strip -%}
-        {%- assign mh_note = item.notes | default: '' | strip -%}
-        <span>{% if mh_reason != '' %}{{ mh_reason }}{% else %}{{ mh_note }}{% endif %}{% if mh_reason != '' and mh_note != '' and mh_note != mh_reason %}<small>{{ mh_note }}</small>{% endif %}</span>
-      </div>
-      {% endfor %}
-    </div>
-    {% else %}
-    <p>No collector method-health snapshot is available yet.</p>
-    {% endif %}
-  </section>
-
-  <section class="panel methodology-source-health reveal-up reveal-delay-2">
-    <div class="eyebrow">Source audit</div>
-    <h2>Current official-ingestion source health</h2>
-    <p>This is a static audit snapshot produced from the ingestion config and the latest GitHub Actions state file. It is meant to show whether official-source monitoring is active, manual watch, needs an adapter, disabled, in error, or unknown. It is not a backend service and it does not represent live community consensus.</p>
-
-    {% assign active_sources = site.data.source_health | where: "status", "Active" %}
-    {% assign manual_watch_sources = site.data.source_health | where: "status", "Manual watch" %}
-    {% assign needs_adapter_sources = site.data.source_health | where: "status", "Needs adapter" %}
-    {% assign disabled_sources = site.data.source_health | where: "status", "Disabled" %}
-    {% assign error_sources = site.data.source_health | where: "status", "Error" %}
-    {% assign unknown_sources = site.data.source_health | where: "status", "Unknown" %}
-    <div class="source-health-summary" aria-label="Source health totals">
-      <div><strong>{{ active_sources.size }}</strong><span>Active</span></div>
-      <div><strong>{{ manual_watch_sources.size }}</strong><span>Manual watch</span></div>
-      <div><strong>{{ needs_adapter_sources.size }}</strong><span>Needs adapter</span></div>
-      <div><strong>{{ disabled_sources.size }}</strong><span>Disabled</span></div>
-      <div><strong>{{ error_sources.size }}</strong><span>Error</span></div>
-      <div><strong>{{ unknown_sources.size }}</strong><span>Unknown</span></div>
-    </div>
-
-    <div class="source-health-table" role="table" aria-label="AUXSAYS official ingestion source-health snapshot">
-      <div class="source-health-row source-health-row--head" role="row">
-        <span>Source</span><span>Software</span><span>Status</span><span>Last run</span><span>Records</span><span>Capabilities</span><span>Last error</span>
-      </div>
-      {% for item in site.data.source_health %}
-      <div class="source-health-row source-health-row--{{ item.status | downcase | replace: ' ', '-' }}" role="row">
-        <span class="source-health-id"><strong>{{ item.source_id }}</strong><em>{{ item.company }}</em></span>
-        <span>{{ item.software }}<small>{{ item.adapter_type }}</small></span>
-        <span><mark class="source-health-status source-health-status--{{ item.status | downcase | replace: ' ', '-' }}">{{ item.status }}</mark><small>{{ item.status_detail }}</small></span>
-        <span>{% if item.last_checked != blank %}{{ item.last_checked }}{% else %}Not checked{% endif %}<small>{% if item.polling_frequency != blank %}Target: {{ item.polling_frequency }}{% endif %}</small></span>
-        <span>{{ item.last_records_fetched }} fetched / {{ item.last_records_written }} written<small>{{ item.last_records_skipped }} skipped · {{ item.consecutive_failures }} failures</small></span>
-        <span class="source-health-capabilities">
-          {% if item.capabilities.release_notes %}<b>notes</b>{% endif %}
-          {% if item.capabilities.version %}<b>version</b>{% endif %}
-          {% if item.capabilities.download_url %}<b>download</b>{% endif %}
-          {% if item.capabilities.file_size %}<b>size</b>{% endif %}
-          {% if item.capabilities.checksum %}<b>checksum</b>{% endif %}
-          {% if item.capabilities.known_issues %}<b>known issues</b>{% endif %}
-        </span>
-        <span>{% if item.last_error_display != blank and item.last_error_display != 'None' %}{{ item.last_error_display }}{% else %}None{% endif %}</span>
-      </div>
-      {% endfor %}
-    </div>
+    <article class="methodology-card">
+      <h2>Limits of these notes</h2>
+      <p>These notes describe what AUXSAYS counts and what it shows. They are not a claim that every public report has been found, that a listed release has been tested, or that a recommendation will hold. Recommendations are based on the available information and may change as new reports emerge.</p>
+      <p>Where the evidence for a release is absent, limited or stale, prefer the page&rsquo;s own stated caveats over the recommendation on its own.</p>
+    </article>
   </section>
 </section>
