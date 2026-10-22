@@ -49,6 +49,15 @@ auxsays/scripts/tests/test_automation_writeback.py = 134
 auxsays/scripts/tests/test_evidence_loss_guard.py = 80
 auxsays/scripts/tests/test_ci_integrity_runner.py = 39
 
+# A published theme may not contradict the reporter. `issue_theme` is printed on the patch page as
+# "Current reports mention ...", and it was produced by a first-match substring scan: a disk label
+# "Cache & Render" published "export/render failure", and "There is no crash at all after the
+# update" published "application crash or hang". `platform` was an ordered membership test, so the
+# UI noun in "windows and menus freeze" published `platform: windows`, as did an UNFILLED template
+# reading "[Windows 11 Pro 24H2 / macOS version]". Frozen fixtures, because this manifest compares
+# the reported total to the count below in both directions and a walk of the live store would drift.
+auxsays/scripts/tests/test_evidence_classification.py = 58
+
 # The merge authority. AUX-013 was not a missing rule, it was a rule with nothing behind it: PR #163
 # merged nineteen seconds after its own ci-integrity run concluded `failure`, because the status read
 # and the merge were one gesture. Server-side enforcement was measured and refused (three probes in
