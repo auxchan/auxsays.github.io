@@ -28,20 +28,12 @@ export function compareVersion(a, b) {
 // disagree with the authority. It already did: it listed bare 'SAFE ENOUGH', which the Python
 // vocabulary did not contain at all.
 //
-// The order now lives in lib/patch_decision.py (RISK_ORDER), mirrored for Liquid in
-// _data/patch_verdicts.yml and pinned by test_patch_decision_authority. The rank arrives here as a
-// number, already decided.
+// The order now lives in one server-side authority, mirrored for the templates and pinned by
+// its own regression suite. The rank arrives here as a number, already decided.
 
-// Evidence-strength tier index from the confirmed report count (same thresholds as
-// apply_consensus_to_records._confidence, locked by test_evidence_strength_thresholds.py).
-export function evidenceRank(count) {
-  const n = Number(count);
-  if (!Number.isFinite(n) || n <= 0) return 0;
-  if (n >= 33) return 4;
-  if (n >= 25) return 3;
-  if (n >= 8) return 2;
-  return 1;
-}
+// evidenceRank() was removed here: it had no runtime caller (the Evidence column sorts on a
+// server-emitted numeric attribute) and it published the exact tier thresholds in a browser
+// module. The thresholds live server-side with their own regression suite.
 
 function numCompare(a, b) {
   const x = parseFloat(a);
