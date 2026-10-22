@@ -38,6 +38,15 @@ def friendly_error(error: str) -> str:
         return "None"
     if "timed out" in lower or "timeout" in lower:
         return "Timeout during last check"
+    # BEFORE the 403 branch, because Cloudflare serves the interstitial AT 403 and the
+    # substring test would otherwise claim it first. Without this, the `challenged` state
+    # that lib.state.classify_error now produces reaches the one reader-facing surface and
+    # renders as "Blocked or forbidden by source" -- which reads as the host refusing the
+    # request, when in fact a different transport may not be challenged at all. The whole
+    # point of a distinct state is that the recovery differs.
+    if ("browser challenge" in lower or "just a moment" in lower
+            or "cdn-cgi/challenge-platform" in lower):
+        return "Automated bot check blocked the last check"
     if "403" in lower or "forbidden" in lower:
         return "Blocked or forbidden by source"
     if "404" in lower or "not found" in lower:

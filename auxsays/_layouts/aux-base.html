@@ -12,12 +12,13 @@
        * The CSS default for `.reveal-up` is VISIBLE, and `html.js-reveal` is what arms the hidden
        * start state. That ordering is deliberate -- no script, no observer, or reduced motion all
        * mean the page simply renders -- but it only works if the class lands before the browser
-       * paints. Arming it from the DEFERRED script did not: measured on the live /updates/adobe/
-       * page, content painted at 123ms, `js-reveal` arrived at 158ms, and because the armed rule
-       * carries `transition: opacity .72s` the content then FADED OUT to opacity 0 and did not
-       * return until 1679ms -- a 1.5 second disappearance of the whole page body, 200 frames below
-       * 0.95. Arming synchronously here means the hidden state is the first thing ever painted, so
-       * the only transition a reader sees is the intended fade IN.
+       * paints. Arming it from the DEFERRED script did not: content painted BEFORE `js-reveal`
+       * arrived, and because the armed rule carries `transition: opacity .72s` the content then
+       * FADED OUT to opacity 0 and stayed gone for well over a second -- the whole page body
+       * disappearing after it had already been shown. Arming synchronously here means the hidden
+       * state is the first thing ever painted, so the only transition a reader sees is the
+       * intended fade IN. Do not move this to a deferred script; the measurements behind this
+       * are in the engineering ledger.
        *
        * This script may never leave content hidden. Three ways it refuses to:
        *   - no IntersectionObserver, or reduced motion -> it does not arm at all;

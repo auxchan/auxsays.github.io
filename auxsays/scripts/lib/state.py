@@ -276,6 +276,13 @@ def classify_error(error: str) -> str:
     text = (error or "").lower()
     if "timed out" in text or "timeout" in text:
         return "timeout"
+    # A browser challenge is its OWN state, checked before the status-code branches. It is served
+    # at 403 AND at 200, so folding it into "blocked" loses the distinction that matters: a 403 is
+    # a server refusing a request, while a challenge is bot protection that a different transport
+    # (the JSON API rather than the HTML page) may not be subject to at all. The recovery is
+    # different, so the classification has to be.
+    if "browser challenge" in text or "just a moment" in text or "cdn-cgi/challenge-platform" in text:
+        return "challenged"
     if "403" in text or "forbidden" in text:
         return "blocked"
     if "404" in text or "not found" in text:
