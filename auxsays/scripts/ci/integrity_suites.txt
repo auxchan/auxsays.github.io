@@ -220,6 +220,13 @@ auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
+# A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
+# DaVinci rows cut at 280 chars, 261 of 319 at the cap), so an exact_version_text claim could not be
+# audited: two rows from one post shared a truncated prefix and nothing showed which occurrence had
+# matched. The matcher now reports the span it ACCEPTED and the row keeps it -- never re-searched,
+# since a second search can land on a different occurrence. Forward-only; no stored row changes.
+auxsays/scripts/tests/test_matched_span_retention.py = 20
+
 # --- writer-lane governance and the methodology Notes render -----------------------
 # Both were added with the writer-queue repair, and both are proven non-vacuous by MEASUREMENT
 # rather than assertion. Against the pre-fix tree (HEAD workflows, no reaper, patch-ingest still

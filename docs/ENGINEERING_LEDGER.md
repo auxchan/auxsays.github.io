@@ -52,6 +52,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-036 | Resolved | Official ingestion | High | A bot challenge read as an empty document, and the guard covered one of two response paths |
 | AUX-044 | Resolved | Public truthfulness | High | Promoting a page to live consensus would have hidden its collection warnings |
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
+| AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
 
 ---
 
@@ -3261,6 +3262,40 @@ name such as `ATTRIBUTION_DRAFT.md` or an arbitrary note.
 that existed when it was written. The Systems Monitor output is assembled by a separate build step,
 so the local verification of AUX-038 never saw it. Verify a new deploy-gate rule against the full
 production build, not the Jekyll output alone.
+
+### AUX-045 — a counted row could not show the evidence for its own version match
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-10-22 · **Resolved** 2026-10-22
+
+Every counted row records `match_basis: exact_version_text`, but only a truncated
+`report_text_excerpt` of the text that was matched. Reddit DaVinci rows are cut at 280 characters
+and 261 of 319 sit at the cap, so the claim could not be checked after the fact.
+
+That stopped being academic during the maturity audit. Fourteen DaVinci URLs are counted against two
+versions each, from an identical retained prefix — for example one post counted against both 20 and
+20.3.2, whose excerpt contains only "20". It looked like a false attribution and was first reported
+as one; that was withdrawn, because the second version can appear past the cut, in which case both
+attributions were correct when collected. The honest status was "unanswerable", and the cause was
+that the row did not keep its own evidence.
+
+`exact_version_match_span` now returns the offsets of the occurrence the matcher ACCEPTED, and
+`exact_version_match` is a view of it, so there is still one predicate. `match_provenance` turns that
+span into `matched_text`, `matched_field` and a `matched_context` window of 80 characters either
+side. Nothing searches the text a second time: a second search could land on a different occurrence
+— the first textual hit of a version string is often one the matcher REJECTED, such as a
+`dev20.3.2` branch name.
+
+DaVinci retains provenance from this change on. The three fields are optional and appended last to
+`EVIDENCE_FIELDS`, and the normaliser drops empty optional fields, so no stored row gains or reorders
+a key. A new row carrying them is accepted by the real `collector_ownership.validate_evidence` gate,
+verified directly rather than inferred from a dry run.
+
+Not done here, deliberately: other collectors adopting the provenance, and any correction of the
+stored DaVinci rows. The fourteen remain an audit population; this makes the next ones auditable.
+
+**Reopen only if** a counted row written after this change carries `match_basis: exact_version_text`
+without a `matched_text` that appears in its `matched_context`.
 
 ## Adding an entry
 
