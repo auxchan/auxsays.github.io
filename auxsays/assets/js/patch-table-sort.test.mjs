@@ -2,7 +2,7 @@
 // Run: node --test auxsays/assets/js/patch-table-sort.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { compareVersion, evidenceRank, rowComparator } from './patch-table-sort.mjs';
+import { compareVersion, rowComparator } from './patch-table-sort.mjs';
 
 const sortStr = (arr, cmp) => [...arr].sort(cmp);
 const lt = (a, b) => assert.ok(compareVersion(a, b) < 0, `${a} should sort before ${b}`);
@@ -53,11 +53,9 @@ test('version: total order over a mixed real product set', () => {
   }
 });
 
-test('evidence: report-count tiering matches the locked thresholds', () => {
-  const cases = [[0, 0], [1, 1], [7, 1], [8, 2], [24, 2], [25, 3], [32, 3], [33, 4], [79, 4], [1000, 4]];
-  cases.forEach(([n, rank]) => assert.equal(evidenceRank(n), rank, `${n} -> ${rank}`));
-  assert.equal(evidenceRank('not-a-number'), 0);
-});
+// The report-count tiering test was removed with evidenceRank(): the thresholds are a
+// server-side concern with their own regression suite, and publishing them in a browser
+// module put an exact validation threshold on every page.
 
 test('rowComparator: numeric key with direction + deterministic date/version tiebreak', () => {
   const row = (date, version, reports) => ({ dataset: { date, version, reports } });

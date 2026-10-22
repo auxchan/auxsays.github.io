@@ -246,7 +246,23 @@ layout: aux-base
                 {% elsif evidence_state == 'insufficient_data' %}
                   {% assign evidence_label = 'Insufficient data' %}
                 {% endif %}
-                {% assign stage_label = item.intelligence_stage_label | default: item.intelligence_stage | default: '' | replace: '_', ' ' | capitalize %}
+                {%- comment -%}
+                  `intelligence_stage_label` does not exist anywhere in this repository -- a
+                  repo-wide grep finds it on this line only -- so the chain ALWAYS fell through
+                  to `intelligence_stage` and printed the internal stage vocabulary
+                  de-underscored on the home page: measured over 1,305 records, 1,052 rendered
+                  "Official live", 233 "Pilot" and 1 "Manual watch". Mapped to reader-facing
+                  words, defaulting to EMPTY rather than to a raw token, so an unmapped stage
+                  costs a label instead of publishing an identifier. Compared against '' and
+                  never `blank`, which is inert here.
+                {%- endcomment -%}
+                {% assign item_stage = item.intelligence_stage | default: '' %}
+                {% assign stage_label = '' %}
+                {% if item_stage == 'official_live' %}{% assign stage_label = 'Vendor information' %}
+                {% elsif item_stage == 'pilot' %}{% assign stage_label = 'Early reports' %}
+                {% elsif item_stage == 'consensus_live' %}{% assign stage_label = 'Established reports' %}
+                {% elsif item_stage == 'manual_watch' %}{% assign stage_label = 'Watching' %}
+                {% endif %}
                 {% assign item_official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
                 {% assign item_official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
                 <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal data-product-id="{{ item_product_identity }}">

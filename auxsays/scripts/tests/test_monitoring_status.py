@@ -148,13 +148,17 @@ def run() -> int:
     # emitted unescaped.
     check("the rendered method identity is HTML-escaped",
           "m_family | escape" in INCLUDE or "m.method_id | escape" in INCLUDE)
-    check("the family label is derived from the method id, not invented",
-          "assign m_family = m.method_id" in INCLUDE)
+    # RETIRED: this grepped for the literal `assign m_family = m.method_id`, which WAS the
+    # defect -- the label defaulted to the de-underscored internal id and let a few mappings
+    # override it, so 16 of 23 live ids printed their own token on hundreds of pages. The check
+    # could only pass while that default existed. Its intent (the label is derived, not
+    # invented) now lives in test_public_evidence_projection.py group [A], asserted on a real
+    # Liquid render over every live method id instead of on a source string.
     check("the raw method_id is never emitted unescaped",
           "{{ m.method_id }}" not in INCLUDE)
-    check("routes over one community are labelled as that community",
-          INCLUDE.count("Microsoft Q&A (") >= 2,
-          "three Q&A routes must not read as three independent sources")
+    # RETIRED: this counted a literal route-naming string in the source. The routes now share
+    # ONE label, which satisfies the invariant more strongly than three parenthetical variants
+    # did. Moved to test_public_evidence_projection.py check A6, on rendered output.
     # The coverage floor exists to require more than one COMMUNITY. Counting method rows let two
     # routes over the same community satisfy it, which is the same conflation one layer down from
     # the labels: measured live, two Q&A rows took 20228.20158 from healthy=1 to healthy=2 without
