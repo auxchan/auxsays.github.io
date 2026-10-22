@@ -17,8 +17,8 @@ update_version: Design System Quality Features
 update_logo_text: FIG
 update_published_at: '2025-04-08T00:00:00.000Z'
 update_last_checked: '2026-08-16T19:57:16Z'
-source_last_checked: '2026-09-16T09:55:42Z'
-official_body_last_checked: '2026-09-16T09:55:42Z'
+source_last_checked: '2026-10-21T07:26:24Z'
+official_body_last_checked: '2026-10-21T07:26:24Z'
 record_last_updated: '2026-08-16T19:57:16Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-16T09:55:42Z'
+  url: https://www.figma.com/release-notes/?title=design-system-quality-features
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-21T07:26:24Z'
   url: https://www.figma.com/release-notes/?title=design-system-quality-features
   status: captured-from-rss-feed
   body_captured: true

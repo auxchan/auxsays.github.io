@@ -17,8 +17,8 @@ update_version: 'New feature: Apex domains and custom subdomains in Figma Sites'
 update_logo_text: FIG
 update_published_at: '2025-07-09T00:00:00.000Z'
 update_last_checked: '2026-08-15T02:57:25Z'
-source_last_checked: '2026-09-14T23:59:59Z'
-official_body_last_checked: '2026-09-14T23:59:59Z'
+source_last_checked: '2026-10-18T23:21:48Z'
+official_body_last_checked: '2026-10-18T23:21:48Z'
 record_last_updated: '2026-08-15T02:57:25Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-14T23:59:59Z'
+  url: https://www.figma.com/release-notes/?title=apex-custom-domains
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-18T23:21:48Z'
   url: https://www.figma.com/release-notes/?title=apex-custom-domains
   status: captured-from-rss-feed
   body_captured: true
