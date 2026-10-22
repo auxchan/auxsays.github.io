@@ -39,7 +39,7 @@
 # --- the CI runner is policy, so it is tested like production code ---------------
 auxsays/scripts/tests/test_acrobat_vendor_authority.py = 49
 auxsays/scripts/tests/test_audit_consensus_evidence.py = 18
-auxsays/scripts/tests/test_automation_writeback.py = 134
+auxsays/scripts/tests/test_automation_writeback.py = 152
 # A stored evidence row may not disappear, and may stop being accepted only by an audited in-place
 # withdrawal. Every in-tree gate compares the records against the SAME store a purge rewrote, so a
 # coherent 98% DaVinci deletion passed QA, the audit and this whole manifest, and the real writeback
