@@ -395,6 +395,72 @@ def section_g_build_identity() -> None:
               f"rendered {out!r}; sibling telemetry would pool under one marketing version")
 
 
+VAULT_FILES = (_AUX / "vault" / "index.html", _AUX / "_layouts" / "vault.html",
+               _AUX / "assets" / "js" / "vault.js")
+# Skipped: directories Jekyll never publishes (config exclude, build output), and everything the
+# scheduled lanes WRITE -- the generated patch records under updates/generated/ and the evidence
+# corpora in _data/. Those quote third-party text and URLs that are not site navigation and change
+# every cycle, so scanning them would let a quoted report turn this suite red on a bot commit.
+# What remains is hand-authored: layouts, includes, pages, tabs and shipped scripts.
+_SCAN_EXCLUDED_DIRS = {"scripts", "tools", "_site", "vendor", "node_modules", ".bundle",
+                       ".jekyll-cache", "_posts", "_updates", "_data", "generated"}
+# A site-relative /vault path: preceded by a quote, space, ( or =, never by a host name, so a
+# cited "developer.hashicorp.com/vault/docs" in a record is not mistaken for a link.
+_VAULT_LINK = re.compile(r"""(?<![\w.-])/vault(?:/|\b)""")
+
+
+def _published_sources(suffixes: tuple) -> list:
+    out = []
+    for path in _AUX.rglob("*"):
+        rel = path.relative_to(_AUX).parts
+        if path.is_file() and path.suffix in suffixes and not (set(rel[:-1]) & _SCAN_EXCLUDED_DIRS):
+            out.append(path)
+    return out
+
+
+def section_h_token_editor_is_gone() -> None:
+    print(NEWLINE + "[H] the repository-write token editor is gone and cannot quietly return")
+    # /vault/ asked any visitor for a GitHub token with contents WRITE access and wrote through the
+    # contents API from the browser. Removed on the owner's decision. These checks pin the actual
+    # boundary -- that page, its client, and links to it -- rather than banning every password
+    # field or GitHub API call, which would also forbid legitimate future work.
+    present = [str(p.relative_to(_AUX)) for p in VAULT_FILES if p.exists()]
+    check("H1 the editor page, its layout and its API client are absent", not present,
+          f"present: {present}")
+
+    from ci import verify_published_payload as vpp
+    with tempfile.TemporaryDirectory() as td:
+        site = Path(td)
+        (site / "index.html").write_text("<html></html>", encoding="utf-8")
+        for rel in ("vault/index.html", "assets/js/vault.js"):
+            p = site / rel
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text("x", encoding="utf-8")
+            flagged = [r for r, _ in vpp.findings_for(site)]
+            check(f"H2 the deploy gate refuses a rebuilt {rel}", rel in flagged,
+                  f"{rel} not flagged; flagged={flagged}")
+            p.unlink()
+
+    linking = []
+    for path in _published_sources((".html", ".md", ".js", ".mjs", ".yml", ".yaml")):
+        if _VAULT_LINK.search(path.read_text(encoding="utf-8", errors="replace")):
+            linking.append(str(path.relative_to(_AUX)))
+    check("H3 no page, template, tab or script links to /vault/", not linking,
+          f"linking: {linking[:5]}")
+
+    token_field, contents_write = [], []
+    for path in _published_sources((".html", ".md", ".js", ".mjs")):
+        src = path.read_text(encoding="utf-8", errors="replace")
+        if 'id="github-token"' in src:
+            token_field.append(str(path.relative_to(_AUX)))
+        if "api.github.com/repos/" in src and "/contents/" in src:
+            contents_write.append(str(path.relative_to(_AUX)))
+    check("H4 no shipped template or script carries the token field", not token_field,
+          f"found in: {token_field}")
+    check("H4 no shipped template or script calls the GitHub contents API", not contents_write,
+          f"found in: {contents_write}")
+
+
 def run() -> int:
     section_a_family_is_closed()
     section_b_no_internal_tokens_rendered()
@@ -403,6 +469,7 @@ def run() -> int:
     section_e_shipped_js()
     section_f_artifact_gate_is_non_vacuous()
     section_g_build_identity()
+    section_h_token_editor_is_gone()
 
     print()
     print("=" * 78)

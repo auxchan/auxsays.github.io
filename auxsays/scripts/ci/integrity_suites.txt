@@ -325,7 +325,7 @@ auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
 # their internal token on hundreds of pages. Replaces test_methodology_notes_rendering.py and
 # test_public_method_health_presentation.py, carrying forward the guarantees that outlived the
 # table: the inert `blank` idiom, and a raw block reason never being emitted.
-auxsays/scripts/tests/test_public_evidence_projection.py = 39
+auxsays/scripts/tests/test_public_evidence_projection.py = 45
 auxsays/scripts/tests/test_reddit_source.py = 8
 auxsays/scripts/tests/test_revalidate_consensus_evidence.py = 49
 auxsays/scripts/tests/test_route_integrity.py = 9

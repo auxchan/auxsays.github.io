@@ -44,6 +44,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-040 | Resolved | Build reproducibility | High | The deployed gem set was whatever rubygems served that minute — now a tracked, frozen lock |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-048 | Resolved | Security | High | A page on the public domain asked visitors for a repository-write token |
 | AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
 | AUX-042 | Resolved | Evidence integrity | High | The gate guarding mature consensus demanded three fields nothing writes and the approved writer is forbidden to write |
@@ -3297,6 +3298,34 @@ stored DaVinci rows. The fourteen remain an audit population; this makes the nex
 
 **Reopen only if** a counted row written after this change carries `match_basis: exact_version_text`
 without a `matched_text` that appears in its `matched_context`.
+
+### AUX-048 — a page on the public domain asked visitors for a repository-write token
+
+- **Status** Resolved · **Area** Security · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-22
+
+`/vault/` was a browser-based editor that described itself as not public-facing and asked for a
+GitHub token with contents write access, then wrote to this repository through the GitHub contents
+API from the visitor's browser. AUX-038 recorded it and kept it out of the sitemap and search
+indexes, leaving removal as an owner decision. Not being indexed is not access control: the page was
+served at HTTP 200 to anyone with the URL. The owner decided to remove it.
+
+The page, its layout and its API client are deleted. Nothing linked to it. Two incidental references
+remain correct without it: a stylesheet comment, and a heading-contrast check that builds a
+synthetic body outside the AUXSAYS ground, now with a neutral class so the boundary it proves does
+not depend on any particular page existing.
+
+**What stops it returning.** The published-payload gate refuses `vault/` and `vault.js` in a built
+site. A source-level section asserts the three files are absent, that no page, template, tab or
+script links to `/vault/`, and that no shipped template or script carries the token field or calls
+the contents API. Each check was proven by its own mutant: restoring the files, dropping either gate
+rule, or adding a link fails a named check. The scan deliberately skips what the scheduled lanes
+write (generated records and the evidence corpora), so quoted third-party text cannot turn it red on
+a bot commit. It also deliberately does not ban every password field or GitHub API call, which would
+forbid legitimate future work.
+
+Removing the page does not revoke anything. Any token ever pasted into it should be revoked by its
+owner.
 
 ### AUX-046 — four Elgato products had no records because the HTML pages challenge the runner
 

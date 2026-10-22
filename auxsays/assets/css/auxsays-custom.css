@@ -113,7 +113,7 @@ button, input, select, textarea { font: inherit; }
    `<body class="aux-page {{ page.layout }}">` for every AUXSAYS layout, so `body.aux-page` IS that
    ground: one value in both schemes, the same --text-0 every explicitly coloured heading here
    already uses. Headings that set their own colour are untouched, because this only replaces the
-   theme's token, and `vault.html` renders `body.vault-page` so it keeps the theme's own behaviour.
+   theme's token, and a body outside the AUXSAYS ground keeps the theme's own behaviour.
 
    This replaces the earlier `body.aux-update` rule rather than sitting beside it: same selector
    weight, same value, and one owner is clearer than a general rule shadowed by a narrower copy. */
