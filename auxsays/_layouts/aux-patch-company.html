@@ -36,7 +36,7 @@ layout: aux-base
             says which reason applies. FAIL CLOSED: no row resolves to unknown, not to working.
           {%- endcomment -%}
           {% assign company_monitoring = site.data.monitoring_company_state | where: "company_id", company.id | first %}
-          <span class="patch-coverage-pill patch-coverage-pill--monitor-{{ company_monitoring.state | default: 'unverified' }}">{{ company_monitoring.label | default: 'Monitoring status unknown' }}</span>
+          <span class="patch-coverage-pill patch-coverage-pill--monitor-{{ company_monitoring.state | default: 'unverified' }}">{{ company_monitoring.label | default: 'Official update monitoring status unknown' }}</span>
           <span>{{ products.size }} tracked software{% if products.size != 1 %}s{% endif %}</span>
           <span>{{ documented_count }} tracked patch record{% if documented_count != 1 %}s{% endif %}</span>
         </div>
@@ -112,7 +112,7 @@ layout: aux-base
           {% if product_updates_for_card.size > 0 %}
           <span class="patch-coverage-pill patch-coverage-pill--documented">Patch records available</span>
           {% endif %}
-          <span class="patch-coverage-pill patch-coverage-pill--monitor-{{ card_monitoring.state | default: 'unverified' }}">{{ card_monitoring.label | default: 'Monitoring status unknown' }}</span>
+          <span class="patch-coverage-pill patch-coverage-pill--monitor-{{ card_monitoring.state | default: 'unverified' }}">{{ card_monitoring.label | default: 'Official update monitoring status unknown' }}</span>
           <span>{{ product_updates_for_card.size }} patch record{% if product_updates_for_card.size != 1 %}s{% endif %}</span>
         </div>
         <div class="patch-card-links">

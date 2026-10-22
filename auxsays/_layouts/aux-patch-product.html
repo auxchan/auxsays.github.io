@@ -18,7 +18,7 @@ layout: aux-base
 {%- endcomment -%}
 {% assign monitoring = site.data.monitoring_state | where: "product_id", page.product_id | first %}
 {% assign monitoring_state = monitoring.state | default: "unverified" %}
-{% assign monitoring_label = monitoring.label | default: "Monitoring status unknown" %}
+{% assign monitoring_label = monitoring.label | default: "Official update monitoring status unknown" %}
 {% assign monitoring_last_success = monitoring.last_success | default: "" %}
 {% assign cadence_label = product.cadence | default: '' %}
 {% if cadence_label == 'High' %}

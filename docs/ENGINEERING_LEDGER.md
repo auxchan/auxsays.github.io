@@ -3420,6 +3420,19 @@ pass reworded the table while six companies kept publishing the old phrase), and
 `_includes/patch-latest-signals.html`, which said "Monitoring active — awaiting first record" for any
 merely *enabled* source — the exact enabled-alone claim this entry exists to stop.
 
+**The projection is generated at deploy and never committed.** As first written, the two projection
+files were committed and a check compared them against a fresh regeneration. That check went red on
+every PR the moment a scheduled lane moved the ingest state, because the projection is a function of
+the current time and of that state: the committed copy was stale between a push and its own CI run.
+The deploy already regenerated it before `jekyll build`, so the committed copy was published by
+nothing and wedged CI for no benefit. Both files are now git-ignored, and the suite generates them
+into a temporary directory. Where they are absent, as in a fresh checkout or a local render, both
+layouts fall back to "Official update monitoring status unknown". That fallback is proven by real
+renders of both layouts, with and without the projection, not by inspecting the assign statements.
+The same pass found that a source refused by a bot challenge, which the ingest state records as its
+own error type since challenge pages stopped being read as documents, fell through to "unknown".
+It now reads as refusing automated checks, which is what a challenge is.
+
 **Reopen only if** a rendered monitoring pill carries a state outside the approved vocabulary, or
 a page claims an affirmative state for a product whose last success is older than its window, or
 any template begins reading `site.data.patch_ingest_state`.

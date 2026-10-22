@@ -11,6 +11,11 @@ node_modules/
 *.pyc
 auxsays/_data/qa_status.json
 auxsays/_data/consensus_status.json
+# Generated at deploy by build_monitoring_projection.py, never committed: the state is a function
+# of the current time and of ingest state that every scheduled lane moves, so any committed copy
+# went stale between push and CI. The layouts fail closed to 'unverified' when it is absent.
+auxsays/_data/monitoring_state.yml
+auxsays/_data/monitoring_company_state.yml
 auxsays/assets/img/patch-logos/_generation-report.json
 auxsays/tools/local-browser-capture/launcher/*.exe
 # Ruby/Bundler — local dev only, not part of the repo deliverable

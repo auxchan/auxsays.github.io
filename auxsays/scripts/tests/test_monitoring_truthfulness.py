@@ -45,8 +45,33 @@ if str(_SCRIPTS) not in sys.path:
 
 import build_monitoring_projection as proj  # noqa: E402
 
-PRODUCT_PROJECTION = _AUX / "_data" / "monitoring_state.yml"
-COMPANY_PROJECTION = _AUX / "_data" / "monitoring_company_state.yml"
+# Where the DEPLOY writes the projection. Never committed (see section G), so a clean checkout --
+# CI included -- does not have these files. Nothing here may depend on their presence.
+REPO_PRODUCT_PROJECTION = _AUX / "_data" / "monitoring_state.yml"
+REPO_COMPANY_PROJECTION = _AUX / "_data" / "monitoring_company_state.yml"
+
+_GENERATED: dict = {}
+
+
+def generated() -> tuple:
+    """Generate both projections ONCE into a private temp dir -> (product_path, company_path).
+
+    The suite validates freshly generated output, exactly what the deploy publishes, instead of a
+    committed copy that was stale whenever a scheduled lane moved the ingest state.
+    """
+    if not _GENERATED:
+        td = tempfile.mkdtemp(prefix="monitoring-projection-")
+        with io.StringIO() as sink:
+            saved, sys.stdout = sys.stdout, sink
+            try:
+                rc = proj.main(["--output-dir", td])
+            except Exception as exc:  # noqa: BLE001 -- G4 must FAIL by name, not crash the suite
+                rc = f"raised {exc!r}"
+            finally:
+                sys.stdout = saved
+        _GENERATED.update(rc=rc, dir=Path(td))
+    d = _GENERATED["dir"]
+    return d / REPO_PRODUCT_PROJECTION.name, d / REPO_COMPANY_PROJECTION.name
 TEMPLATES = (_AUX / "_layouts" / "aux-patch-product.html",
              _AUX / "_layouts" / "aux-patch-company.html")
 
@@ -121,6 +146,11 @@ def section_b_distinct_failures() -> None:
           "a source we reached but could not parse is a third, separate condition")
     check("B4 failing for an unrecognised reason -> unverified",
           d(src(), state("failing", 500, "something_else")) == "unverified")
+    # The ingest state records a bot challenge as its own error type. Left unmapped, four sources
+    # being refused by a challenge page read "status unknown" instead of saying so.
+    check("B6 a bot challenge is a refusal -> blocked",
+          d(src(), state("failing", 500, "challenged")) == "blocked",
+          "a challenge page is the source refusing automated checks")
     states = {d(src(), state("failing", 500, "blocked")),
               d(src(), state("failing", 500, "timeout")),
               d(src(), state("broken", 1))}
@@ -180,8 +210,9 @@ def section_c_cadence_recency() -> None:
 def section_d_vocabulary_is_closed() -> None:
     print("\n[D] the published vocabulary is closed, and the live projection obeys it")
     import yaml
-    rows = yaml.safe_load(PRODUCT_PROJECTION.read_text(encoding="utf-8")) or []
-    crows = yaml.safe_load(COMPANY_PROJECTION.read_text(encoding="utf-8")) or []
+    product_path, company_path = generated()
+    rows = yaml.safe_load(product_path.read_text(encoding="utf-8")) or []
+    crows = yaml.safe_load(company_path.read_text(encoding="utf-8")) or []
     check("D1 the product projection is non-empty", len(rows) >= 40, f"{len(rows)} rows")
     outside = sorted({r["state"] for r in rows} - set(proj.PUBLIC_STATES))
     check("D2 every product state is an approved member", not outside, f"outside: {outside}")
@@ -247,30 +278,187 @@ def section_f_raw_state_not_in_templates() -> None:
               not re.search(r"[!=]=\s*blank", stripped))
 
 
-def section_g_projection_is_current() -> None:
-    print("\n[G] the committed projection matches what the generator produces")
-    # The deploy regenerates this before building, so a stale committed copy is not published --
-    # but a stale copy in the repository makes every local render and every review misleading.
-    out = subprocess.run([sys.executable, str(_SCRIPTS / "build_monitoring_projection.py"),
-                          "--check"], capture_output=True, text=True, timeout=300)
-    check("G1 --check reports the committed projection current", out.returncode == 0,
-          (out.stdout + out.stderr).strip()[:200])
+_RENDER_RB = r"""
+require 'liquid'
+require 'json'
 
-    # And prove --check actually detects staleness, rather than always passing.
+# The two Jekyll filters these layouts use that plain Liquid 4 lacks. `where` keeps Jekyll's
+# semantics: a nil or non-enumerable input comes back unchanged, which is exactly the
+# "projection absent" case the fallback has to survive.
+module JekyllShims
+  def relative_url(i) = "/" + i.to_s.sub(%r{\A/}, "")
+  def where(input, property, value)
+    input = input.values if input.is_a?(Hash)
+    return input unless input.respond_to?(:select)
+    input.select { |item| item.is_a?(Hash) && item[property].to_s == value.to_s }
+  end
+end
+Liquid::Template.register_filter(JekyllShims)
+
+payload = JSON.parse(File.read(ARGV[0]))
+print Liquid::Template.parse(payload['layout']).render!('site' => payload['site'], 'page' => payload['page'])
+"""
+
+
+def _layout_body(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    if text.startswith("---"):
+        text = text.split("---", 2)[-1]
+    # Includes need a file system; none of them renders the monitoring pill.
+    return re.sub(r"\{%-?\s*include\s.*?-?%\}", "", text, flags=re.S)
+
+
+def render_layout(path: Path, site_data: dict, page: dict):
+    """Render a REAL layout through the liquid gem -> html, or None when ruby/liquid is absent."""
+    import shutil
+    ruby = shutil.which("ruby")
+    if not ruby:
+        return None
     with tempfile.TemporaryDirectory() as td:
-        backup = PRODUCT_PROJECTION.read_text(encoding="utf-8")
-        Path(td, "backup.yml").write_text(backup, encoding="utf-8")
-        try:
-            PRODUCT_PROJECTION.write_text(backup + "\n# tampered\n", encoding="utf-8")
-            out2 = subprocess.run([sys.executable,
-                                   str(_SCRIPTS / "build_monitoring_projection.py"), "--check"],
-                                  capture_output=True, text=True, timeout=300)
-            check("G2 --check FAILS on a tampered projection", out2.returncode != 0,
-                  "a check that always passes is not a check")
-        finally:
-            PRODUCT_PROJECTION.write_text(backup, encoding="utf-8")
-    check("G3 the projection was restored after the tamper test",
-          PRODUCT_PROJECTION.read_text(encoding="utf-8") == backup)
+        script = Path(td) / "render.rb"
+        script.write_text(_RENDER_RB, encoding="utf-8")
+        payload = Path(td) / "p.json"
+        payload.write_text(json.dumps({"layout": _layout_body(path), "page": page,
+                                       "site": {"data": site_data, "pages": []}}, default=str),
+                           encoding="utf-8")
+        out = subprocess.run([ruby, str(script), str(payload)], capture_output=True, text=True,
+                             encoding="utf-8", errors="replace", timeout=180)
+    if out.returncode != 0:
+        if "cannot load such file -- liquid" in (out.stderr or ""):
+            return None
+        raise RuntimeError(out.stderr[-400:])
+    return out.stdout
+
+
+def pills(html: str) -> list:
+    """-> [(state, label)] for every monitoring pill in rendered html."""
+    return re.findall(r'patch-coverage-pill--monitor-([a-z]+)">([^<]*)</span>', html)
+
+
+def _steps_by_job(workflow: dict):
+    for name, job in (workflow.get("jobs") or {}).items():
+        yield name, job.get("steps") or []
+
+
+def _run_lines(step: dict) -> list:
+    """The executable lines of a step's run: scalar, shell comments stripped."""
+    run = step.get("run") or ""
+    return [ln.strip() for ln in run.splitlines() if ln.strip() and not ln.strip().startswith("#")]
+
+
+def section_g_generated_never_committed() -> None:
+    print("\n[G] the projection is generated at deploy, never committed, and fails closed when absent")
+    import yaml
+    # WHY THIS REPLACED "the committed projection is current". The projection is a function of NOW
+    # and of patch_ingest_state.json, which every scheduled lane rewrites, so a committed copy went
+    # stale between a push and its own CI run and turned CI red with nothing wrong. The deploy
+    # regenerates it before building; the repository simply must not carry a copy.
+    tracked = subprocess.run(["git", "ls-files", "--", str(REPO_PRODUCT_PROJECTION),
+                              str(REPO_COMPANY_PROJECTION)], capture_output=True, text=True,
+                             cwd=_REPO)
+    check("G1 neither projection is tracked by git",
+          tracked.returncode == 0 and tracked.stdout.strip() == "",
+          f"rc={tracked.returncode} tracked={tracked.stdout.strip()!r} {tracked.stderr.strip()[:120]}")
+    ignored = [subprocess.run(["git", "check-ignore", "-q", "--no-index", str(p)], cwd=_REPO)
+               .returncode == 0 for p in (REPO_PRODUCT_PROJECTION, REPO_COMPANY_PROJECTION)]
+    check("G2 both projections are git-ignored, so a local run cannot re-commit them",
+          all(ignored), f"ignored={ignored}")
+
+    # Parsed, not grepped: a grep for the script name passes with the step commented out or moved
+    # after the build. The executable run lines decide.
+    wf = yaml.safe_load((_REPO / ".github" / "workflows" / "pages.yml").read_text(encoding="utf-8"))
+    order_ok, where = False, "no job carries all three steps"
+    for job, steps in _steps_by_job(wf):
+        idx = {"checkout": None, "generate": None, "build": None}
+        for i, st in enumerate(steps):
+            uses = str(st.get("uses") or "")
+            lines = _run_lines(st)
+            if idx["checkout"] is None and uses.startswith("actions/checkout"):
+                idx["checkout"] = i
+            if idx["generate"] is None and any("build_monitoring_projection.py" in ln for ln in lines):
+                idx["generate"] = i
+            if idx["build"] is None and any("jekyll build" in ln for ln in lines):
+                idx["build"] = i
+        if all(v is not None for v in idx.values()):
+            order_ok = idx["checkout"] < idx["generate"] < idx["build"]
+            where = f"job {job}: {idx}"
+            break
+    check("G3 pages.yml generates the projection after checkout and BEFORE jekyll build",
+          order_ok, where)
+
+    # The CLI writes both files where it is told, exits 0, and leaves the repository alone.
+    before = {p: (p.stat().st_mtime_ns if p.exists() else None)
+              for p in (REPO_PRODUCT_PROJECTION, REPO_COMPANY_PROJECTION)}
+    product_path, company_path = generated()
+    after = {p: (p.stat().st_mtime_ns if p.exists() else None) for p in before}
+    check("G4 --output-dir writes both projections outside the repository and exits 0",
+          _GENERATED.get("rc") == 0 and product_path.stat().st_size > 0
+          and company_path.stat().st_size > 0 and before == after,
+          f"rc={_GENERATED.get('rc')} repo files touched={before != after}")
+
+    # Determinism AND that the injected clock is honoured: a generator reading the wall clock
+    # would pass the first half on its own. Far enough apart that every recent success has aged.
+    fixed = datetime(2026, 10, 1, 12, 0, tzinfo=timezone.utc)
+    a_rows, b_rows = proj.build_rows(now=fixed), proj.build_rows(now=fixed)
+    later = proj.build_rows(now=fixed + timedelta(days=400))
+    check("G5 at a fixed clock the projection is byte-identical, and the clock is honoured",
+          proj.render(a_rows) == proj.render(b_rows)
+          and proj.render_companies(proj.build_company_rows(a_rows))
+          == proj.render_companies(proj.build_company_rows(b_rows))
+          and proj.render(later) != proj.render(a_rows),
+          "two runs at one clock must match; a clock 400 days later must not")
+
+    # REAL RENDERS of both layouts, with the projection absent and present. Checking the assign
+    # statements would pass a template that kept them and rendered the wrong value elsewhere.
+    data = {name: yaml.safe_load((_AUX / "_data" / f"{name}.yml").read_text(encoding="utf-8"))
+            for name in ("patch_companies", "patch_products")}
+    rows = yaml.safe_load(product_path.read_text(encoding="utf-8")) or []
+    crows = yaml.safe_load(company_path.read_text(encoding="utf-8")) or []
+    products = {p.get("id"): p for p in data["patch_products"] or []}
+    # A product whose derived state is NOT the fallback, so "present" is distinguishable from
+    # "absent". Prefer an affirmative one: that is the claim the fallback must never fabricate.
+    pick = next((r for r in rows if r["state"] == "healthy" and r["product_id"] in products), None) \
+        or next((r for r in rows if r["state"] != "unverified" and r["product_id"] in products), None)
+    unknown = proj.STATE_LABELS["unverified"]
+    affirmative = proj.STATE_LABELS["healthy"]
+    if pick is None:
+        for n in ("G6", "G7", "G8", "G9"):
+            check(f"{n} SKIPPED - no non-fallback product to render", False,
+                  "the generated projection has no product to distinguish present from absent")
+        return
+    company_id = products[pick["product_id"]].get("company_id")
+    crow = next((c for c in crows if c["company_id"] == company_id), None)
+    page = {"company_id": company_id, "product_id": pick["product_id"]}
+    product_layout = _AUX / "_layouts" / "aux-patch-product.html"
+    company_layout = _AUX / "_layouts" / "aux-patch-company.html"
+
+    absent = render_layout(product_layout, data, page)
+    if absent is None:
+        for n in ("G6", "G7", "G8", "G9"):
+            check(f"{n} SKIPPED - ruby/liquid unavailable", True)
+        return
+    got = pills(absent)
+    check("G6 with NO projection the product page reads unknown, never monitored",
+          bool(got) and all(s == "unverified" and lbl == unknown for s, lbl in got)
+          and affirmative not in absent, f"pills={got}")
+    present = render_layout(product_layout, dict(data, monitoring_state=rows), page)
+    got = pills(present)
+    check("G7 with the generated projection the product page shows its derived state",
+          (pick["state"], pick["label"]) in got, f"want {(pick['state'], pick['label'])}, pills={got}")
+
+    absent_c = render_layout(company_layout, data, {"company_id": company_id})
+    got = pills(absent_c)
+    check("G8 with NO projection the company pill and every product card read unknown",
+          bool(got) and all(s == "unverified" and lbl == unknown for s, lbl in got)
+          and affirmative not in absent_c, f"pills={got}")
+    present_c = render_layout(company_layout, dict(data, monitoring_state=rows,
+                                                   monitoring_company_state=crows),
+                              {"company_id": company_id})
+    got = pills(present_c)
+    check("G9 with the generated projection the company page shows its derived states",
+          crow is not None and (crow["state"], crow["label"]) in got
+          and (pick["state"], pick["label"]) in got,
+          f"want company {crow and (crow['state'], crow['label'])} + product, pills={got}")
 
 
 def run() -> int:
@@ -280,7 +468,7 @@ def run() -> int:
     section_d_vocabulary_is_closed()
     section_e_company_aggregate()
     section_f_raw_state_not_in_templates()
-    section_g_projection_is_current()
+    section_g_generated_never_committed()
     print()
     print("=" * 78)
     print(f"Results: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")

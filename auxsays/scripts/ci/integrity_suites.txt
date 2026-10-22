@@ -287,7 +287,7 @@ auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
 # Two earlier attempts each produced a DIFFERENT false claim by deriving the state from a field
 # that tracks configuration rather than outcome, so section [A] pins fail-closed directly:
 # `healthy` is checked last and must be earned.
-auxsays/scripts/tests/test_monitoring_truthfulness.py = 51
+auxsays/scripts/tests/test_monitoring_truthfulness.py = 58
 auxsays/scripts/tests/test_monitoring_status.py = 42
 auxsays/scripts/tests/test_orchestration_production_adoption.py = 75
 auxsays/scripts/tests/test_orchestration_r1.py = 55

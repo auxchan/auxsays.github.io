@@ -27,8 +27,14 @@ Everything else -- absent state, a status this file does not recognise, a produc
 joined to a source -- resolves to `unverified`. A state that cannot be established is never
 rendered as working.
 
+GENERATED AT DEPLOY, NEVER COMMITTED. The state is a function of the current time and of
+`patch_ingest_state.json`, which every scheduled lane rewrites, so a committed copy went stale
+between a push and its CI run and turned CI red with nothing wrong. `pages.yml` runs this before
+`jekyll build`; both outputs are git-ignored. Where the files are absent (a local render, a fresh
+checkout), the layouts fall back to `unverified` -- fail closed, never `healthy`.
+
 Run:  python auxsays/scripts/build_monitoring_projection.py
-      python auxsays/scripts/build_monitoring_projection.py --check   (no write; non-zero if stale)
+      python auxsays/scripts/build_monitoring_projection.py --output-dir DIR   (write elsewhere)
 """
 from __future__ import annotations
 
@@ -172,7 +178,10 @@ def derive_state(source: dict | None, state: dict | None, *, now: datetime) -> s
     if status == "broken":
         return "broken"
     if status in ("failing", "failed", "error"):
-        if error_type == "blocked":
+        # A bot challenge (`challenged`, recorded since challenge pages stopped being read as
+        # documents) IS the source refusing automated checks. Unmapped, it fell through to
+        # "status unknown" for four sources that were in fact being refused.
+        if error_type in ("blocked", "challenged"):
             return "blocked"
         if error_type == "timeout":
             return "unreachable"
@@ -342,41 +351,23 @@ def render_companies(rows: list[dict]) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--check", action="store_true",
-                    help="do not write; exit non-zero if the committed projection is stale")
+    ap.add_argument("--output-dir", type=Path, default=OUTPUT_PATH.parent,
+                    help="directory to write both projections into (default: auxsays/_data)")
     args = ap.parse_args(argv)
+    product_out = args.output_dir / OUTPUT_PATH.name
+    company_out = args.output_dir / COMPANY_OUTPUT_PATH.name
 
     rows = build_rows()
     text = render(rows)
     company_rows = build_company_rows(rows)
     company_text = render_companies(company_rows)
 
-    if args.check:
-        stale = []
-        for path, want in ((OUTPUT_PATH, text), (COMPANY_OUTPUT_PATH, company_text)):
-            have = ""
-            if path.exists():
-                with open(path, encoding="utf-8", newline="") as fh:
-                    have = fh.read().replace("\r\n", "\n")
-            if have != want:
-                stale.append(path.name)
-        if stale:
-            print("monitoring projection is stale; regenerate it: " + ", ".join(stale),
-                  file=sys.stderr)
-            return 1
-        print(f"monitoring projection current ({len(rows)} products, "
-              f"{len(company_rows)} companies)")
-        return 0
-
-    # Newlines are pinned so the output is byte-identical on every
-    # platform: write_text() would translate them to os.linesep, making the
-    # generator platform-dependent and the committed projection churn between
-    # a Windows developer machine and the Linux runner.
-    # making the generator platform-dependent and the committed projection churn between a
-    # Windows developer and the Linux runner.
-    with open(OUTPUT_PATH, "w", encoding="utf-8", newline="") as fh:
+    # Newlines are pinned so the output is byte-identical on every platform: write_text() would
+    # translate them to os.linesep, making the generator platform-dependent.
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    with open(product_out, "w", encoding="utf-8", newline="") as fh:
         fh.write(text)
-    with open(COMPANY_OUTPUT_PATH, "w", encoding="utf-8", newline="") as fh:
+    with open(company_out, "w", encoding="utf-8", newline="") as fh:
         fh.write(company_text)
     counts: dict[str, int] = {}
     for r in rows:
@@ -385,9 +376,9 @@ def main(argv: list[str] | None = None) -> int:
     cc: dict[str, int] = {}
     for r in company_rows:
         cc[r["state"]] = cc.get(r["state"], 0) + 1
-    print(f"Wrote {len(rows)} product rows to {OUTPUT_PATH.relative_to(ROOT)} ({summary})")
-    print(f"Wrote {len(company_rows)} company rows to "
-          f"{COMPANY_OUTPUT_PATH.relative_to(ROOT)} "
+    # Reported as given, not relative to ROOT: --output-dir may point outside the repository.
+    print(f"Wrote {len(rows)} product rows to {product_out} ({summary})")
+    print(f"Wrote {len(company_rows)} company rows to {company_out} "
           f"({', '.join(f'{k} {v}' for k, v in sorted(cc.items()))})")
     return 0
 
