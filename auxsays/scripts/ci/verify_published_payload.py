@@ -67,6 +67,15 @@ DENIED_BASENAMES: tuple[str, ...] = (
     "package.json",             # names the dependency set and the build scripts
 )
 
+# Licence and credit notices are published ON PURPOSE beside the assets they cover, and removing
+# one would strip a required attribution. The Systems Monitor build copies its media folder with
+# an ATTRIBUTION.md recording each image's licence; the blanket .md rule above refused it and
+# halted the first deploy after this gate shipped. Compared case-insensitively on the full
+# basename, so NOTES.md or ATTRIBUTION_DRAFT.md is still refused.
+PERMITTED_NOTICE_BASENAMES: frozenset[str] = frozenset({
+    "attribution.md", "license.md", "licence.md", "notice.md", "credits.md", "copying.md",
+})
+
 
 def findings_for(site: Path) -> list[tuple[str, str]]:
     """Return (relative_path, reason) for every published file that is internal by construction."""
@@ -79,7 +88,8 @@ def findings_for(site: Path) -> list[tuple[str, str]]:
         if any(rel.startswith(prefix) for prefix in DENIED_PREFIXES):
             found.append((rel, "internal directory"))
             continue
-        if any(base.endswith(suffix) for suffix in DENIED_SUFFIXES):
+        if (any(base.endswith(suffix) for suffix in DENIED_SUFFIXES)
+                and base.lower() not in PERMITTED_NOTICE_BASENAMES):
             found.append((rel, "implementation or build-residue file type"))
             continue
         if any(base.endswith(suffix) for suffix in DENIED_BASENAME_SUFFIXES):
