@@ -43,6 +43,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-043 | Resolved | Evidence integrity | Medium | Every published source asserted a patch match it never checked; now derived from the row |
 
 ---
 
@@ -2585,6 +2586,27 @@ year.
 generalises. The lesson: a date field accepts two kinds of wrong value -- text that is not a date,
 and a real date that is not the vendor's -- and a permissive normaliser produces both while looking
 like a convenience.
+
+### AUX-043 — every published source asserted a patch match it never checked
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-10-22 · **Resolved** 2026-10-22
+
+`apply_consensus_to_records` projected accepted evidence into the public `accepted_report_sources`
+and `evidence_samples` lists and stamped `"patch_version_matched": True` on every entry, plus
+`"counted": True` on samples. Each source a reader saw therefore claimed a confirmed patch match
+whether or not one was established.
+
+It was latent rather than cosmetic: `_filter_rows` drops unmatched rows (gate 12) and uncounted rows
+(gate 13) only outside candidate mode, so in candidate mode a row the evidence itself marked
+unmatched could be published as matched. It also made any check trusting the projection
+unfalsifiable, which is why AUX-042's gate refuses to read the field.
+
+Both are now derived from the row. In normal mode the projected population is already filtered to
+matched, counted rows, so published pages are byte-identical.
+
+**Reopen only if** a public source entry is observed asserting `patch_version_matched: true` for a
+row whose stored `patch_version_matched` is not true.
 
 ## Adding an entry
 
