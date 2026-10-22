@@ -863,7 +863,11 @@ def _public_source_item(pid: str, ver: str, row: dict[str, Any]) -> dict[str, An
         "source_title": row.get("source_title") or row.get("report_title") or row.get("parent_title") or "Community report",
         "source_date": source_date,
         "version_matched": row.get("matched_version") or row.get("update_version") or ver,
-        "patch_version_matched": True,
+        # EARNED from the row, never stamped. This was a hardcoded True, so every published source
+        # asserted a patch match whether or not one was established -- and `_filter_rows` only drops
+        # unmatched rows OUTSIDE candidate mode, so in candidate mode the constant could publish a
+        # match that the row itself denied.
+        "patch_version_matched": row.get("patch_version_matched") is True,
         "issue": _public_sample_issue(pid, row),
         "workflow_area": _clean_public_phrase(row.get("workflow_area")),
     }
@@ -910,9 +914,11 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
             "source_name": row.get("source_name") or row.get("source_type") or "Source",
             "source_url": row.get("source_url"),
             "source_title": row.get("source_title") or row.get("report_title") or row.get("parent_title"),
-            "counted": True,
+            # Both earned from the row for the reason given in `_public_source_item`: gates 12 and
+            # 13 in `_filter_rows` do not run in candidate mode, so a constant could contradict it.
+            "counted": row.get("counted") is not False,
             "version_matched": row.get("matched_version") or row.get("update_version") or ver,
-            "patch_version_matched": True,
+            "patch_version_matched": row.get("patch_version_matched") is True,
             "issue": _public_sample_issue(pid, row),
             "outcome": _clean_public_phrase(row.get("severity"), fallback="medium"),
         })

@@ -178,6 +178,13 @@ auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
 auxsays/scripts/tests/test_premiere_editorial_protection.py = 36
 auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
 
+# Published evidence fields must be EARNED from their row. `patch_version_matched` and the samples'
+# `counted` were hardcoded True on every public source entry, so each one asserted a confirmed patch
+# match regardless -- and `_filter_rows` skips gates 12/13 in candidate mode, so a row the evidence
+# marked unmatched could be published as matched. In normal mode the projected population is already
+# filtered, so today's pages are byte-identical; Part B pins that.
+auxsays/scripts/tests/test_public_projection_earned_fields.py = 9
+
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit
 # 92.3s, both returning zero candidates, while Algolia produced every accepted row in 6.2s.

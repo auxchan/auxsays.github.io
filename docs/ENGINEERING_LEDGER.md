@@ -48,6 +48,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
 | AUX-042 | Resolved | Evidence integrity | High | The gate guarding mature consensus demanded three fields nothing writes and the approved writer is forbidden to write |
 | AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
+| AUX-043 | Resolved | Evidence integrity | Medium | Every published source asserted a patch match it never checked; now derived from the row |
 | AUX-036 | Resolved | Official ingestion | High | A bot challenge read as an empty document, and the guard covered one of two response paths |
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 
@@ -3141,6 +3142,27 @@ This change makes the refusal visible and correctly named; it does not defeat it
 roughly twenty hand-rolled `urllib.request.urlopen` response paths in adapters and collectors do
 not route through `lib/http.py` and carry no challenge check at all. That boundary is recorded
 here rather than widened in this change.
+### AUX-043 — every published source asserted a patch match it never checked
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-10-22 · **Resolved** 2026-10-22
+
+`apply_consensus_to_records` projected accepted evidence into the public `accepted_report_sources`
+and `evidence_samples` lists and stamped `"patch_version_matched": True` on every entry, plus
+`"counted": True` on samples. Each source a reader saw therefore claimed a confirmed patch match
+whether or not one was established.
+
+It was latent rather than cosmetic: `_filter_rows` drops unmatched rows (gate 12) and uncounted rows
+(gate 13) only outside candidate mode, so in candidate mode a row the evidence itself marked
+unmatched could be published as matched. It also made any check trusting the projection
+unfalsifiable, which is why AUX-042's gate refuses to read the field.
+
+Both are now derived from the row. In normal mode the projected population is already filtered to
+matched, counted rows, so published pages are byte-identical.
+
+**Reopen only if** a public source entry is observed asserting `patch_version_matched: true` for a
+row whose stored `patch_version_matched` is not true.
+
 ### AUX-037 — Elgato platform identity cannot write a record
 
 - **Status** Deferred · **Area** Canonical patch identity · **Severity** Medium
