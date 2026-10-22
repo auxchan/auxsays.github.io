@@ -129,7 +129,7 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 180
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
-auxsays/scripts/tests/test_patch_page_hierarchy.py = 128
+auxsays/scripts/tests/test_patch_page_hierarchy.py = 144
 # My Patch Watchlist: the visitor's own product list, local to their browser. Renders the shipped
 # patch layout to prove the control binds `page.product_id` (a patch page watches the PRODUCT, not
 # that one build), parses the other surfaces for their accessible state and their two distinct

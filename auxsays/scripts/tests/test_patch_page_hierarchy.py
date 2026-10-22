@@ -114,6 +114,7 @@ def at(marker: str) -> int:
 # --------------------------------------------------------------- real Liquid render of both boxes
 
 CARD_SENTENCE = "This is a verified report sample, not live consensus telemetry."
+LIVE_SCOPE_NOTE = "This is not a measure of how many installations are affected."
 ASIDE_CLAUSE = "Report counts are preserved from structured evidence and are not live telemetry."
 
 # render! rather than render, so a Liquid error RAISES instead of being embedded in the output where
@@ -210,11 +211,26 @@ def render_gate_matrix():
         # report_count 0 with confirmed 4: the card's gate is false, so the aside must restore it.
         ("divergence",          _page(update_report_count=0,
                                       confirmed_patch_specific_report_count=4),  healthy,  1),
-        # mature consensus needs no sample qualifier, and the aside is not a pilot box
-        ("live consensus",      _page(update_report_count=5,
+        # LIVE CONSENSUS. The card's not-established hedge is correctly absent -- consensus IS
+        # established -- but the aside is no longer pilot-only. It used to be, so promoting a record
+        # DELETED its collection-health warning; a stale or blocked live page must still say so, and
+        # when it does it carries the not-live-telemetry clause because the card's hedge is off.
+        ("live stale",          _page(update_report_count=5,
                                       confirmed_patch_specific_report_count=5,
                                       consensus_collection_status="live_consensus",
-                                      evidence_state="live"),                    healthy,  0),
+                                      evidence_state="live"),                    healthy,  1),
+        ("live fresh+blocked",  _page(update_report_count=5,
+                                      confirmed_patch_specific_report_count=5,
+                                      consensus_collection_status="live_consensus",
+                                      evidence_state="live",
+                                      evidence_last_checked=FRESH),              health("blocked"), 1),
+        # fresh and healthy: no aside fires, so the qualifier is absent -- the scope note printed
+        # after the card carries the framing instead (asserted separately below).
+        ("live fresh+healthy",  _page(update_report_count=5,
+                                      confirmed_patch_specific_report_count=5,
+                                      consensus_collection_status="live_consensus",
+                                      evidence_state="live",
+                                      evidence_last_checked=FRESH),              healthy,  0),
         ("no reports at all",   _page(update_report_count=0,
                                       confirmed_patch_specific_report_count=0),  healthy,  0),
         # the 83% class: no aside (not pilot), so the card is the only owner and must carry it alone
@@ -465,6 +481,19 @@ def run() -> int:
         aside = aside_of(html)
         check(f"L5 {name}: the aside never re-names the sample",
               aside is None or "sample" not in aside.lower(), str(aside))
+        # A live page must never be left with NO statement of what its counts are. Either the aside
+        # carries the not-live-telemetry clause, or the scope note does -- never neither.
+        if name.startswith("live"):
+            check(f"L8 {name}: a live page always says what its counts are not",
+                  n >= 1 or LIVE_SCOPE_NOTE in html, html_excerpt(html))
+            check(f"L8 {name}: and never claims the not-established hedge",
+                  "Community consensus not established" not in html)
+    by_name = {name: page["_rendered"] for name, page, _e in cases}
+    check("L9 a blocked live page still says collection is blocked",
+          "Collection blocked." in by_name.get("live fresh+blocked", ""))
+    check("L9b a healthy live page carries the scope note instead of a warning",
+          LIVE_SCOPE_NOTE in by_name.get("live fresh+healthy", "")
+          and aside_of(by_name.get("live fresh+healthy", "")) is None)
 
     # THE RESTORE PATH IS REACHABLE. Without this the unless body would be unobservable dead code on
     # the whole corpus -- present in the source, provably emitted by nothing, which is exactly the
