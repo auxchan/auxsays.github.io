@@ -43,7 +43,11 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-026 | Resolved | Collector telemetry | Medium | Acrobat published a blocked collector for methods nobody runs — 286 frozen rows, 84 pages |
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
 | AUX-042 | Resolved | Evidence integrity | High | The gate guarding mature consensus demanded three fields nothing writes and the approved writer is forbidden to write |
+| AUX-038 | Resolved | Public disclosure | High | The site explained how it gathers evidence — a 1.5 MB telemetry page, and raw method ids on hundreds of patch pages |
+| AUX-036 | Resolved | Official ingestion | High | A bot challenge read as an empty document, and the guard covered one of two response paths |
+| AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 
 ---
 
@@ -2734,6 +2738,271 @@ in membership; or if `qa_patch_records.py` gains a second write site not covered
 warning) is P2 and must land before any producer. The lesson: a precondition nobody can satisfy
 reads exactly like a policy nobody has decided, and the difference is only visible if you check
 whether the approved writer is even permitted to write what the gate demands.
+### AUX-038 — the site explained how it gathers evidence, in operational detail
+
+- **Status** Resolved · **Area** Public disclosure · **Severity** High
+- **First seen** 2026-10-18 · **Resolved** 2026-10-21
+
+Two surfaces published the acquisition implementation, and the smaller-looking one was the worse.
+
+**The methodology page rendered the entire method-health store.** Measured on the deployed page:
+1,554,238 bytes, in which the single most frequent internal method identifier appeared 1,064
+times, a transport failure code 558 times, a bot-challenge code 329 times, and every adapter name
+beside them. It is now 13,951 bytes of reader-facing evidence notes, with the
+title, heading, permalink and navigation label unchanged — containment came from deleting a
+telemetry dump, not from renaming anything, so inbound links, indexing and the publish-strict
+deploy gate are untouched.
+
+**The per-patch monitoring card leaked the same class more widely.** Its source-family label
+DEFAULTED to `method_id | replace: '_',' '` and let seven mappings override it, so every unmapped
+id printed its internal token. Measured: 16 of the 23 live ids were unmapped, and their
+de-underscored identifiers reached 216, 184, 137, 121, 89, 32, 16 and 2 pages respectively -- the
+route, API and discovery-strategy names among them. The default is now the generic family and the
+specific names are the overrides, so an unmapped id costs specificity, never truth. The rendered
+label is a closed ten-member set of real, publicly nameable source families.
+
+**The boundary this draws, because it is the reusable part.** `method_id` describes HOW a source was
+reached — a route, an API, a search strategy — and is proprietary. `source_type` describes WHAT was
+cited and is citation metadata the contract requires us to keep. So the first is contained and the
+second was deliberately left alone, including its lowercase presentation, because replacing a
+truthful specific statement with a vaguer one is the failure this work exists to avoid.
+
+#### What only a real build revealed
+
+Exposures survived three rounds of review and were found only by building the site and reading the
+artifact. All were reachable at HTTP 200: the operator browser-capture tooling, including a sample
+of captured data; three raw PASS/FAIL validation notes served at the DOMAIN ROOT; and a published
+test fixture.
+
+Then a fourth round found a LARGER class, because the first fix listed those three notes BY NAME
+instead of by class: **nine internal engineering documents were being served at the domain root**,
+their titles alone describing adapter strategy, ingestion reliability and consensus policy, one
+opening "This build applies the global Patch Feed consensus standard across all update records and
+display templates". A directory README and the build configuration went with them.
+
+The deploy gate had missed them too, for a reason worth keeping: `.md` had been left OUT of its
+deny-list on the reasoning that `.md` is a legitimate Jekyll source extension. That is true of the
+SOURCE tree and false of a BUILT artifact, where every legitimate page is `.html` and a surviving
+`.md` is a file Jekyll copied verbatim because it carried no front matter. `.md` is now denied by
+construction, and the exclusions are pattern-based so the next note written is caught without
+anyone remembering to list it.
+
+The published tree was 1,850 files including 190 `.py` and 14 `.md`; it is now 1,616, 0 and 0.
+
+The lesson is narrow and worth keeping: `exclude:` was verified by diffing two real builds of the
+SAME commit, because the first comparison crossed two bases and showed the page count RISING by 10
+— scheduled records, not an exclude effect.
+
+#### An inert control removed rather than left in place
+
+An `exclude:` line was written for the CSS source map, measured as having no effect, and deleted.
+The map is generated by Sass from the theme's `.scss` at build time, so it is a BUILD OUTPUT and no
+repo-path pattern can match it. `sass.sourcemap: never` is the mechanism that works. A control that
+reads as present while doing nothing is worse than no control — the same reasoning that retired the
+`should_curl` host clause in AUX-036.
+
+#### The deploy gate is a deny-list on purpose
+
+`verify_published_payload.py` runs between the build and the artifact upload, the last point at
+which the bytes that will be served can still be refused. It names the classes that are internal BY
+CONSTRUCTION and says nothing about the rest.
+
+The first design allow-listed extensions gathered from the working tree. Measured against two real
+builds, that list was missing `.map`, `.xml`, `.ico` and `.webmanifest`, which exist only in the
+built site — as a deploy gate it would have refused every correct build. An allow-list fails toward
+"block everything new"; a deny-list fails toward "let something new through". Wired into the deploy
+path, the second failure is recoverable and the first is an outage.
+
+Proven non-vacuous on real artifacts: 223 findings and exit 1 against a build without the
+exclusions, clean and exit 0 against a build with them.
+
+#### Retiring 133 checks without losing their second job
+
+`test_methodology_notes_rendering.py` (61) and `test_public_method_health_presentation.py` (72)
+existed to render the removed table. The guarantees that OUTLIVE it were moved into
+`test_public_evidence_projection.py` FIRST, in the same change that retired them: the inert Liquid
+`blank` idiom, and a raw block reason never being emitted. `test_method_health_append_delta.py`
+section [12] went with the table and the retirement is recorded in that file rather than deleted
+silently. Manifest 109 → 108 entries, 6,148 → 6,045 declared checks, and nothing parked in
+`[stale]`, which the runner's own tests pin EMPTY.
+
+#### A publicly reachable token form, found while scanning
+
+`/vault/` is a browser-based editor that describes itself as "Not public-facing" and asks for a
+GitHub token with contents write access to this repository. It stores nothing server-side, so no
+credential was exposed, but it was served at HTTP 200, listed in the sitemap, and covered by no
+robots rule -- `robots.txt` disallows only `/norobots/`. The page is functional and was NOT removed;
+`sitemap: false` and a `noindex` now keep it out of indexes (sitemap 1,451 -> 1,450, the page still
+served). Whether a repository-write-token form should be reachable on the public domain at all is an
+owner decision, recorded here rather than taken.
+
+#### The guarantee that genuinely needed rehoming
+
+Retiring the method-health presentation suite did drop one live guarantee, and the first reading of
+it was wrong. The surviving per-patch card joins on the CANONICAL TRIPLE -- `m_ver == mon_ver and
+m_build == mon_build` -- so "a sibling build's telemetry cannot appear on another build's card" is a
+property of a surface that still ships, not of the removed table. Nothing asserted it:
+`test_monitoring_status` never mentions the build, and the multibuild suite covers INGESTION
+siblings rather than this render. Group [G] now extracts the real join from the shipped file and
+proves, on rendered output, that a sibling build and a version-only row are both excluded.
+
+Build identity elsewhere was already covered and is cited rather than duplicated:
+`test_patch_page_hierarchy` pins the layout's build assignment,
+`test_powerpoint_build_identity` proves consumers keep same-version different-build records apart
+with a fail-closed check, and `test_patch_index_identity` builds its fixtures on it.
+
+#### Why the deploy gate does not read file contents
+
+It is a path-and-name gate on purpose, and that is a limitation rather than an oversight. Content
+scanning was tried and rejected on measured grounds: three separate content scans during this work
+produced false positives on legitimate material -- a `tools/` pattern matching `/dev-tools/` in the
+sitemap, a "web search" pattern matching a vendor's own release-note prose, and an allow-list check
+failing on a public name that happened to coincide with a de-underscored identifier. In a gate wired
+into the DEPLOY path, each of those is a halted deploy. So content assertions live in the offline
+suite, where a false positive costs a red test instead of an outage, and the gate's own docstring
+says plainly that it does not read contents.
+
+**Reopen only if** a rendered `update-monitoring-method__id` value falls outside the approved family
+set; or `verify_published_payload.py` reports a finding on a correct build, or reports none on a
+build with the exclusions removed; or the methodology page regains a `site.data` reference.
+
+#### What this does NOT fix
+
+The repository itself is public and unchanged; this constrains what the SITE publishes and nothing
+else. The gate is a regression safeguard, not complete protection. And one pre-existing truthfulness
+defect is deliberately out of scope: a product-page status line can claim monitoring is active for
+products whose collection is not running. Two attempted fixes were each measured to produce a
+DIFFERENT false claim — one derived from an editorial field, one from a configuration flag, and
+neither tracks whether collection works. That is AUX-039.
+### AUX-036 — a bot challenge was being read as an empty document
+
+- **Status** Resolved · **Area** Official ingestion · **Severity** High
+- **First seen** 2026-08-18 (last successful Elgato fetch) · **Resolved** 2026-10-18
+
+All four Elgato sources are `enabled: true` and have produced 0 records and 0 evidence rows since
+2026-08-18. The source sits behind Cloudflare, which answers with a "Just a moment..."
+interstitial. That is not a 404 and not an empty section, and Cloudflare serves it at 200 as well
+as at 403 -- so at 200 the ingestion path had no way to tell it from the document asked for. The
+adapter parsed the interstitial, matched no product in it, counted the article a NONMATCH, and the
+run booked itself `no_results`. A source actively refusing us therefore read, on the public page,
+as a source with nothing new to say.
+
+**Two response paths, one guard.** `lib/http.py` has two functions that return a `FetchResult`:
+`fetch_text` (urllib) and `_curl_fetch_text` (the narrow fallback). A content check added to the
+first only fails open on the second, and the curl path is the easier one to miss because curl
+reports exit 0 and the function hard-codes `status=200`. Measured before the fix against the real
+recorded 478-byte body: `_curl_fetch_text` returned it as a 200 while `looks_like_challenge` on
+that exact text already answered True. Both paths now refuse it, and both honour an explicit
+opt-out for the one caller whose job is to characterise a refusal.
+
+**A challenge is its own state, not a 403.** `classify_error` gains `challenged`, checked before
+the status-code branches, because the recovery differs: a 403 is a server refusing a request, while
+a challenge is bot protection that a different transport may not be subject to at all. The state
+also had to be consumed -- `source_health_snapshot.friendly_error` had no challenge case, so a
+challenged source still rendered "Blocked or forbidden by source". It now reads "Automated bot
+check blocked the last check", and an ordinary 403 is unchanged.
+**An inoperative control removed.** `should_curl` read
+`bool(curl_fallback) or ("adobe.com" in _domain(url) and bool(curl_fallback))`. `A or (host and A)`
+is `A`, so the host clause restricted nothing: any source enabling the fallback reached it for any
+host. Dead in practice -- the single config site that names the key sets it false -- but the
+docstring promises "For Adobe URLs only", and a control that reads as present while doing nothing
+is worse than no control.
+
+**Second authority avoided, deliberately.** `probe_photoshop_sources` carried its own challenge
+regex covering captcha, akamai, incapsula and similar. It now defers to
+`lib.http.looks_like_challenge` for the structural markers but keeps its broader net under an
+honest name, because the two have different jobs. The shared function is what raises in
+production, and widening it to match "akamai" would fire on `akamaihd.net` asset URLs on perfectly
+good pages. Photoshop's own blocker is an Akamai edge filter that emits none of Cloudflare's
+markers, so the probe needs the wider net and must never raise on it. Either signal now
+disqualifies an endpoint from the probe's usable list.
+
+**Non-vacuity.** Four mutants, each required to be caught by a named check: dropping the curl
+guard alone, dropping the urllib guard alone, restoring the inoperative host clause, and
+collapsing the public challenge label back into "blocked". The first two prove the halves are
+pinned independently -- removing either leaves the other check passing. One trap surfaced while
+building them: a synthetic module exec'd without registering it in `sys.modules` makes the
+dataclass in `lib/http.py` raise `AttributeError`, which would have been recorded as a mutant
+caught while testing nothing. A crash is not a catch.
+
+**Reopen only if** an `elgato-*` bucket in `patch_ingest_state.json` reports a `last_error_type`
+other than `challenged` while still failing, or `looks_like_challenge` returns True for a body
+carrying no interstitial marker, or a new function in `lib/http.py` returns a `FetchResult`
+without the guard.
+
+**What this does NOT fix.** The challenge still blocks the fetch, so Elgato remains at 0 records.
+This change makes the refusal visible and correctly named; it does not defeat it. Repo-wide,
+roughly twenty hand-rolled `urllib.request.urlopen` response paths in adapters and collectors do
+not route through `lib/http.py` and carry no challenge check at all. That boundary is recorded
+here rather than widened in this change.
+### AUX-037 — Elgato platform identity cannot write a record
+
+- **Status** Deferred · **Area** Canonical patch identity · **Severity** Medium
+- **First seen** 2026-10-18
+- **Branch** `wip/elgato-platform-identity` · **WIP commit** `96eb3766` (not merged, not a PR)
+
+**Symptom / gap** Wave Link ships separate Windows and macOS builds under one version number, so
+two real releases collapse onto one record. Work to make the product platform-aware was written
+and is preserved on the branch above. It cannot write a record.
+
+**Why deferred** `permalink_path` for `elgato-wave-link` emits a five-segment path such as
+`/updates/elgato/elgato-wave-link/3-4/windows/`. `permalink_build_segment` returns the fifth
+segment for any five-segment `/updates/...` path, and `elgato-wave-link` is not build-aware, so
+the platform segment is read as an unexpected build segment and `assert_build_identity` raises
+`InconsistentBuildIdentity`. `write_update_record._assert_record_consistent` calls it on both the
+create and the refresh path, so this is a hard crash on every write, not a gap.
+
+Beyond that, the platform registry lacks the fail-closed surface its build-aware counterpart has.
+Platform is absent from the identity triple, so grouping, dedup and consensus still collide across
+platforms -- only the filename and permalink differ. The display label stays bare, so two Wave
+Link pages would both claim "Wave Link 3.4 has N user reports". `require_platform` raises for
+non-aware products where its build-aware sibling is safe unconditionally. And `target_platform` is
+an existing published field in 400+ records with a title-case vocabulary that the new normaliser
+maps to the empty string.
+
+**Current impact** None in production. The source is challenged on every run (AUX-036), so no Wave
+Link record is written and the platform code never executes. There is no yield behind this item
+until the transport is solved, which is the strongest reason not to merge it to tidy a working
+tree.
+
+**What is already correct, and must not be rewritten** The extraction is title-only and refuses to
+invent a platform: verified by execution, a Stream Deck 7.6 article whose body mentions macOS
+yields no platform rather than a wrong one. An earlier iteration labelled that record macOS from
+the incidental mention. Registration is scoped to `elgato-wave-link` alone.
+
+**Revisit trigger** AUX-036's reopen conditions are met (the fetch succeeds), or a second product
+needs platform-split identity. The first task then is a platform-aware identity reason in
+`patch_identity` rather than reusing the build segment, plus a fixture captured from a real
+article -- the only Wave Link fixture in the suite is titled "Elgato Wave Link 2.0 Release Notes"
+and carries no platform token, so it contradicts the premise the registry rests on. Live scan data
+in `patch_ingest_state.json` does show real articles carrying the platform in their titles, so the
+premise is sound and the fixture is simply unrepresentative.
+
+**Work that this item must not block** Everything. No other lane reads platform identity, and the
+transport fix shipped separately.
+
+### AUX-047 — the published-payload gate refused a licence notice and halted every deploy
+
+- **Status** Resolved · **Area** Deployment · **Severity** High
+- **First seen** 2026-10-22 · **Resolved** 2026-10-22
+
+The first Pages run after AUX-038 merged failed at its own payload gate, so the containment it
+shipped never reached the live site. One finding: `systems-monitor/media/ATTRIBUTION.md`, the
+licence record the Systems Monitor build publishes beside its images. AUX-038 denies every `.md`
+in a built site, on the sound reasoning that a surviving `.md` is a file Jekyll copied verbatim.
+The rule was right about engineering notes and wrong about notices, which are published on purpose
+and must not be stripped from the assets they cover.
+
+Licence and credit basenames (`ATTRIBUTION`, `LICENSE`, `LICENCE`, `NOTICE`, `CREDITS`, `COPYING`,
+`.md`, case-insensitive, exact basename) are now permitted; every other `.md` is still refused.
+Pinned both ways: F4 fails when the exemption is reverted, and F5 fails if it widens to a near-miss
+name such as `ATTRIBUTION_DRAFT.md` or an arbitrary note.
+
+**Reusable lesson.** A deny-by-class rule added to a deploy gate is only proven against the build
+that existed when it was written. The Systems Monitor output is assembled by a separate build step,
+so the local verification of AUX-038 never saw it. Verify a new deploy-gate rule against the full
+production build, not the Jekyll output alone.
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.

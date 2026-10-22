@@ -27,7 +27,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from lib.http import USER_AGENT, fetch_text  # noqa: E402
+from lib.http import USER_AGENT, fetch_text, looks_like_challenge  # noqa: E402
 
 # Official Adobe routes only. Each entry says what it is FOR, because a page that merely responds
 # is not the same as a page that carries release identity.
@@ -93,7 +93,18 @@ CANDIDATES = [
 # Content markers. A 200 that carries none of these is a challenge page, a redirect landing or a
 # shell that renders client-side -- none of which is a release-history document.
 VERSION_RE = re.compile(r"\b2[0-9]\.[0-9]+(\.[0-9]+)?\b")
-CHALLENGE_RE = re.compile(
+# TWO DIFFERENT JOBS, deliberately not merged.
+#
+# lib.http.looks_like_challenge is the TRANSPORT AUTHORITY: narrow, structural, and the
+# thing that raises in production. This regex is a PROBE HEURISTIC: broader, and it must
+# never raise. Folding this vocabulary into the shared authority was considered and
+# rejected -- "akamai" alone matches akamaihd.net asset URLs on perfectly good pages, so
+# widening the raising path would manufacture challenge failures on legitimate documents.
+#
+# The probe needs the broader net precisely because Photoshop's blocker is an Akamai edge
+# filter, which emits none of Cloudflare's structural markers. So the probe reports both
+# signals and treats either as disqualifying.
+EDGE_BLOCK_HEURISTIC_RE = re.compile(
     r"captcha|are you a human|access denied|request blocked|akamai|incapsula|"
     r"cf-browser-verification|challenge-platform|unusual traffic",
     re.I,
@@ -104,7 +115,10 @@ def probe(name: str, url: str, role: str, timeout: int = 30) -> dict:
     started = time.time()
     row = {"name": name, "url": url, "role": role}
     try:
-        res = fetch_text(url, timeout=timeout, max_bytes=750_000)
+        # raise_on_challenge=False: this probe exists to measure HOW a host refuses us.
+        # Letting the transport raise would collapse its one real finding into a generic
+        # RuntimeError and contradict "every failure mode is data" below.
+        res = fetch_text(url, timeout=timeout, max_bytes=750_000, raise_on_challenge=False)
         text = res.text or ""
         low = text.lower()
         row.update({
@@ -115,7 +129,8 @@ def probe(name: str, url: str, role: str, timeout: int = 30) -> dict:
             "elapsed_s": round(time.time() - started, 2),
             "mentions_photoshop": "photoshop" in low,
             "version_tokens": sorted(set(m.group(0) for m in VERSION_RE.finditer(text)))[:8],
-            "looks_like_challenge": bool(CHALLENGE_RE.search(text)),
+            "looks_like_challenge": bool(looks_like_challenge(text, res.headers)),
+            "edge_block_heuristic": bool(EDGE_BLOCK_HEURISTIC_RE.search(text)),
             # A release-history document has to carry BOTH the product and at least one version.
             "carries_release_identity": bool("photoshop" in low and VERSION_RE.search(text)),
         })
@@ -155,8 +170,12 @@ def main() -> int:
         rows.append(row)
         print(json.dumps(row), flush=True)
 
+    # EITHER signal disqualifies. Requiring only the narrow transport marker would count an
+    # Akamai-blocked page that happens to carry a version token as a usable endpoint.
     usable = [r for r in rows if r.get("carries_release_identity")
-              and r["role"] == "release-history" and not r.get("looks_like_challenge")]
+              and r["role"] == "release-history"
+              and not r.get("looks_like_challenge")
+              and not r.get("edge_block_heuristic")]
     print(f"\n# usable release-history endpoints from {where}: {len(usable)}", flush=True)
     for r in usable:
         print(f"#   {r['name']}  {r['bytes']} bytes  versions={r['version_tokens'][:4]}", flush=True)

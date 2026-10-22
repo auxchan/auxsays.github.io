@@ -146,6 +146,56 @@ def _headers(extra: dict[str, str] | None = None) -> dict[str, str]:
     return headers
 
 
+# BROWSER-CHALLENGE DETECTION.
+#
+# A bot-protection interstitial is not an error page. Cloudflare serves it at HTTP 403 -- which
+# classify_error already reads as `blocked` -- but it also serves it at HTTP 200, and at 200 the
+# ingestion path had no way to tell it from the real document. The adapter would parse the
+# challenge, fail to match a product in it, count the article as a NONMATCH, and the run would
+# book itself `no_results` with the note "Still within the tolerated quiet window". A source that
+# is actively refusing us then reads, on the public page, as a source with nothing new to say.
+#
+# The markers are deliberately narrow and structural: the interstitial's own title, Cloudflare's
+# own mitigation header and script path, and the challenge platform's element ids. They are
+# matched case-insensitively against the first few KB, so a release note that merely contains the
+# words "just a moment" in prose cannot trip it.
+CHALLENGE_TITLE_MARKERS = (
+    "<title>just a moment",
+    "<title>attention required",
+    "<title>access denied",
+    "checking your browser before accessing",
+)
+CHALLENGE_BODY_MARKERS = (
+    "/cdn-cgi/challenge-platform/",
+    "cf_chl_opt",
+    "cf-browser-verification",
+    "__cf_chl_",
+    "turnstile/v0/api.js",
+)
+# Bounded so a multi-megabyte release-notes page is not lowercased in full on every
+# fetch. Cloudflare and Turnstile both emit their markers in <head>, well inside this,
+# but a provider that buried one past the bound would be missed -- the failure direction
+# is a missed challenge, not a false one.
+_CHALLENGE_SCAN_BYTES = 8192
+
+
+def looks_like_challenge(text: str | None, headers: dict | None = None) -> bool:
+    """True when a response is a bot-protection interstitial rather than the document asked for.
+
+    Checked on CONTENT, not on status, because the whole failure mode is a challenge served at
+    200. A caller that only inspects the status code cannot distinguish it from success.
+    """
+    for key in ("cf-mitigated", "cf-chl-bypass"):
+        value = str((headers or {}).get(key) or "").strip().lower()
+        if value and value != "none":
+            return True
+    head = str(text or "")[:_CHALLENGE_SCAN_BYTES].lower()
+    if not head:
+        return False
+    return (any(m in head for m in CHALLENGE_TITLE_MARKERS)
+            or any(m in head for m in CHALLENGE_BODY_MARKERS))
+
+
 def _read_response(resp, max_bytes: int | None = None) -> bytes:
     if max_bytes and max_bytes > 0:
         return resp.read(max_bytes)
@@ -178,6 +228,7 @@ def _curl_fetch_text(
     headers: dict[str, str] | None,
     *,
     max_bytes: int | None = None,
+    raise_on_challenge: bool = True,
 ) -> FetchResult:
     # Generic curl stays credential-free: _headers() cannot mint one, and the argv builder
     # below additionally drops any Authorization a caller passed explicitly.
@@ -218,6 +269,16 @@ def _curl_fetch_text(
 
     raw = proc.stdout or b""
     text = raw.decode("utf-8", errors="replace")
+    # The SAME guard as the urllib path. A challenge check that covers one of two
+    # response-returning paths fails open on the other: curl reports exit 0 and this
+    # function hard-codes status=200, so without this an interstitial arrives at the
+    # parser indistinguishable from the document. Measured on the recorded Elgato body
+    # (478 bytes, title marker only): _curl_fetch_text returned it as a 200 while
+    # looks_like_challenge on that exact text was already True.
+    if raise_on_challenge and looks_like_challenge(text, None):
+        raise _format_fetch_error(
+            "Browser challenge", url,
+            "bot-protection interstitial served through the curl fallback")
     return FetchResult(url=url, status=200, headers={}, text=text, final_url=url)
 
 
@@ -231,6 +292,7 @@ def fetch_text(
     max_bytes: int | None = None,
     curl_fallback: bool | None = None,
     authenticate: bool = False,
+    raise_on_challenge: bool = True,
 ) -> FetchResult:
     """Fetch text with small, explicit reliability controls.
 
@@ -267,6 +329,15 @@ def fetch_text(
                 raw = _read_response(resp, max_bytes=max_bytes)
                 charset = resp.headers.get_content_charset() or "utf-8"
                 text = raw.decode(charset, errors="replace")
+                resp_headers = {k.lower(): v for k, v in resp.headers.items()}
+                if raise_on_challenge and looks_like_challenge(text, resp_headers):
+                    # Treated as a transport failure, not as a document. Raising here is what
+                    # stops a 200-served interstitial from reaching a parser that would read it
+                    # as "the section is empty today".
+                    raise _format_fetch_error(
+                        "Browser challenge", url,
+                        "bot-protection interstitial served at HTTP %s"
+                        % getattr(resp, "status", 200))
                 return FetchResult(
                     url=url,
                     status=getattr(resp, "status", 200),
@@ -288,10 +359,16 @@ def fetch_text(
         if attempt < attempts - 1:
             time.sleep(float(backoff_seconds) * (attempt + 1))
 
-    should_curl = bool(curl_fallback) or ("adobe.com" in _domain(url) and bool(curl_fallback))
+    # `A or (host and A)` is just A, so the adobe.com clause this line used to carry
+    # restricted nothing: any source setting curl_fallback reached the fallback for any
+    # host. Dead today -- the one config site that names the key sets it false -- but the
+    # docstring above promises "For Adobe URLs only", and an inoperative restriction is
+    # worse than none because it reads as a control that is already in place.
+    should_curl = bool(curl_fallback) and "adobe.com" in _domain(url)
     if should_curl:
         try:
-            return _curl_fetch_text(url, timeout=timeout, headers=headers, max_bytes=max_bytes)
+            return _curl_fetch_text(url, timeout=timeout, headers=headers, max_bytes=max_bytes,
+                                    raise_on_challenge=raise_on_challenge)
         except Exception as curl_exc:
             if last_exc:
                 raise RuntimeError(f"{last_exc}; fallback failed — {curl_exc}") from curl_exc

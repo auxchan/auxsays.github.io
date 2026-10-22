@@ -18,8 +18,8 @@ update_version: Bulk migrate branch protections to rulesets for a repository
 update_logo_text: GIT
 update_published_at: '2026-10-20T18:06:21Z'
 update_last_checked: '2026-10-20T19:34:17Z'
-source_last_checked: '2026-10-21T19:42:19Z'
-official_body_last_checked: '2026-10-21T19:42:19Z'
+source_last_checked: '2026-10-22T07:30:14Z'
+official_body_last_checked: '2026-10-22T07:30:14Z'
 record_last_updated: '2026-10-20T19:34:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -83,16 +83,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-20T19:34:17Z'
-  url: https://github.blog/changelog/2026-10-20-bulk-migrate-branch-protections-to-rulesets-for-a-repository
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-10-21T00:20:53Z'
-  url: https://github.blog/changelog/2026-10-20-bulk-migrate-branch-protections-to-rulesets-for-a-repository
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-21T07:26:28Z'
   url: https://github.blog/changelog/2026-10-20-bulk-migrate-branch-protections-to-rulesets-for-a-repository
   status: captured-from-rss-feed
@@ -104,6 +94,16 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-21T19:42:19Z'
+  url: https://github.blog/changelog/2026-10-20-bulk-migrate-branch-protections-to-rulesets-for-a-repository
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-22T00:27:37Z'
+  url: https://github.blog/changelog/2026-10-20-bulk-migrate-branch-protections-to-rulesets-for-a-repository
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-22T07:30:14Z'
   url: https://github.blog/changelog/2026-10-20-bulk-migrate-branch-protections-to-rulesets-for-a-repository
   status: captured-from-rss-feed
   body_captured: true
