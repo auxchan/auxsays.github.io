@@ -341,13 +341,13 @@ def run() -> int:  # noqa: PLR0915
                if int(m.get("evidence_rows_added") or 0) + int(m.get("duplicate_existing_evidence") or 0)
                > int(m.get("accepted_candidates") or 0)])
 
-    print(NEWLINE + "[12] the public table no longer says 'added' for a number that is not")
-    page = (_REPO / "auxsays" / "updates" / "methodology" / "index.md").read_text(encoding="utf-8")
-    emitted = re.sub(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", "", page, flags=re.S)
-    check("12 the label states what the number is", "newly stored" in emitted,
-          "the column still reads 'N added'")
-    check("12 duplicates are surfaced next to it", "already held" in emitted)
-    check("12 it still renders the real field", "item.evidence_rows_added" in emitted)
+    # [12] RETIRED with the public method-health table. Its three checks read
+    # updates/methodology/index.md and asserted on that table's column labels ("newly stored",
+    # "already held", item.evidence_rows_added); with the table gone there is no public surface
+    # left for them to describe. The guarantee that outlived it -- that a public number is
+    # never labelled "added" when it is not -- now has no public number to mislabel, and the
+    # field itself is internal. Recorded here rather than deleted silently, because a removed
+    # check in this repository has previously turned out to have had a second job.
 
     print()
     print("=" * 78)

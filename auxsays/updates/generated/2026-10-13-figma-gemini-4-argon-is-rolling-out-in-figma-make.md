@@ -17,8 +17,8 @@ update_version: Gemini 4 Argon is rolling out in Figma Make
 update_logo_text: FIG
 update_published_at: '2026-10-13T00:00:00.000Z'
 update_last_checked: '2026-10-14T01:25:13Z'
-source_last_checked: '2026-10-21T07:26:24Z'
-official_body_last_checked: '2026-10-21T07:26:24Z'
+source_last_checked: '2026-10-22T07:30:11Z'
+official_body_last_checked: '2026-10-22T07:30:11Z'
 record_last_updated: '2026-10-14T01:25:13Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,27 +69,27 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-20T07:33:50Z'
-  url: https://www.figma.com/release-notes/?title=gemini-4-argon-is-rolling-out-in-figma-make
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-10-20T14:07:11Z'
-  url: https://www.figma.com/release-notes/?title=gemini-4-argon-is-rolling-out-in-figma-make
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-10-20T19:34:13Z'
-  url: https://www.figma.com/release-notes/?title=gemini-4-argon-is-rolling-out-in-figma-make
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-10-21T00:20:49Z'
-  url: https://www.figma.com/release-notes/?title=gemini-4-argon-is-rolling-out-in-figma-make
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-21T07:26:24Z'
+  url: https://www.figma.com/release-notes/?title=gemini-4-argon-is-rolling-out-in-figma-make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-21T14:29:20Z'
+  url: https://www.figma.com/release-notes/?title=gemini-4-argon-is-rolling-out-in-figma-make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-21T19:42:15Z'
+  url: https://www.figma.com/release-notes/?title=gemini-4-argon-is-rolling-out-in-figma-make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-22T00:27:34Z'
+  url: https://www.figma.com/release-notes/?title=gemini-4-argon-is-rolling-out-in-figma-make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-22T07:30:11Z'
   url: https://www.figma.com/release-notes/?title=gemini-4-argon-is-rolling-out-in-figma-make
   status: captured-from-rss-feed
   body_captured: true

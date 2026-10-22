@@ -116,6 +116,17 @@ jobs:
       - name: Verify Systems Monitor static integration
         run: npm run verify:site --prefix systems-monitor/app
 
+      # Between the build and the upload ON PURPOSE: this is the last point at which the
+      # exact bytes that will be served can still be refused. Verified on real builds of
+      # this tree -- 223 internal files found on a build without the exclude block (exit 1),
+      # clean on a build with it (exit 0) -- so it is proven to catch the real exposure and
+      # proven not to fire on a correct build. It is a deny-list of classes that are internal
+      # by construction, never an extension allow-list: an allow-list derived from the working
+      # tree was measured to miss .map, .xml, .ico and .webmanifest, which exist only in the
+      # built site, and would therefore have refused every correct deploy.
+      - name: Verify published payload carries no internal implementation
+        run: python auxsays/scripts/ci/verify_published_payload.py --site auxsays/_site
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
