@@ -17,8 +17,8 @@ update_version: Aspect ratio, locked
 update_logo_text: FIG
 update_published_at: '2025-02-06T00:00:00.000Z'
 update_last_checked: '2026-08-19T20:04:39Z'
-source_last_checked: '2026-09-18T18:39:42Z'
-official_body_last_checked: '2026-09-18T18:39:42Z'
+source_last_checked: '2026-10-23T19:54:10Z'
+official_body_last_checked: '2026-10-23T19:54:10Z'
 record_last_updated: '2026-08-19T20:04:39Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-18T18:39:42Z'
+  url: https://www.figma.com/release-notes/?title=aspect-ratio-locked
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-23T19:54:10Z'
   url: https://www.figma.com/release-notes/?title=aspect-ratio-locked
   status: captured-from-rss-feed
   body_captured: true
