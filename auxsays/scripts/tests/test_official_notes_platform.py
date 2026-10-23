@@ -483,7 +483,16 @@ WL_209_NOTES = ("Release Date : 12 August 2026 Download Links macOS Elgato Wave 
 
 def section_j_joint_platform_evidence() -> None:
     print("\n[J] notes for BOTH platforms are established by installers, never assumed from a silent title")
-    p = zendesk.notes_platform_for
+    # Each product's own configured `product_terms` (patch_ingestion_sources.yml), composed into
+    # installer names exactly as the adapter does.
+    terms = {"Stream Deck": ["stream deck"], "Camera Hub": ["camera hub"],
+             "4K Capture Utility": ["4k capture utility", "4k capture"], "Wave Link": ["wave link"]}
+
+    def p(title: str, body: str, version: str) -> tuple:
+        product = next(name for name in terms if name in title)
+        names = zendesk._installer_names({"company": "Elgato", "ingestion": {"product_terms": terms[product]}})
+        return zendesk.notes_platform_for(title, body, version, names)
+
     check("J1 Stream Deck 7.6: same-version .pkg and .msi -> windows_macos, from installers",
           p("Elgato Stream Deck 7.6 Release Notes", SD_76_NOTES, "7.6") == ("windows_macos", "installer_downloads"))
     check("J2 Camera Hub 2.3: same-version .msi and .pkg -> windows_macos",
@@ -502,6 +511,19 @@ def section_j_joint_platform_evidence() -> None:
           and p("Elgato Stream Deck 7.6 Release Notes", SD_76_NOTES.replace("7.6.msi", "7.5.1.msi"), "7.6") == ("", ""))
     check("J8 an installer for one platform only -> unknown",
           p("Elgato Stream Deck 7.6 Release Notes", "Download Links macOS Elgato Stream Deck 7.6.pkg", "7.6") == ("", ""))
+    # Independent review's counterexample: other software's installers, same version, both platforms.
+    check("J14 installers not named for the tracked product -> unknown, in prose or in a download list",
+          p("Elgato Stream Deck 7.6 Release Notes", "Troubleshooting note: DemoPlugin 7.6.pkg and DemoTool "
+            "7.6.msi both fail to launch. No product downloads are listed.", "7.6") == ("", "")
+          and p("Elgato Stream Deck 7.6 Release Notes",
+                "Download Links macOS DemoPlugin 7.6.pkg Windows DemoTool 7.6.msi", "7.6") == ("", ""))
+    check("J15 the product's own files named in a sentence are prose, not a download list -> unknown",
+          p("Elgato Stream Deck 7.6 Release Notes", "Known issue: Elgato Stream Deck 7.6.pkg fails to open on "
+            "older Macs, and Elgato Stream Deck 7.6.msi needs a restart.", "7.6") == ("", ""))
+    check("J16 another product's installers do not contradict the tracked product's",
+          p("Elgato Stream Deck 7.6 Release Notes",
+            SD_76_NOTES + " Requires Elgato Camera Hub 2.3.pkg or later.", "7.6")
+          == ("windows_macos", "installer_downloads"))
 
     # The writer stores the value and its basis; joint notes add no title suffix or page line.
     joint = candidate("7.6", "windows_macos")
@@ -522,16 +544,27 @@ def section_j_joint_platform_evidence() -> None:
               after.get("official_notes_platform") == "windows_macos"
               and after.get("official_notes_platform_basis") == "installer_downloads"
               and all(after.get(k) == before.get(k) for k in TITLE_KEYS), action)
+        # An observation that lost the notes -- the adapter then sends the TITLE as the body, and no
+        # captured flag -- is not evidence the installers went away: the label stays.
+        lost = candidate("7.6")
+        lost["body"] = "Elgato Wave Link 7.6 Release Notes"
+        writer.write_record(out, lost)
+        survived, _ = writer._front_matter(path)
+        check("J17 a refresh whose article body was missing keeps an installer-based label",
+              survived.get("official_notes_platform") == "windows_macos"
+              and survived.get("official_notes_platform_basis") == "installer_downloads",
+              str(survived.get("official_notes_platform")))
         # The installers were the evidence: a later observation of the same notes that no longer
         # establishes both platforms takes the label away, instead of keeping it as "absent = keep".
         regressed = candidate("7.6")
         regressed["body"] = SD_76_NOTES.replace("7.6.pkg", "7.6.1.pkg")
+        regressed["official_notes_body_captured"] = True
         writer.write_record(out, regressed)
         gone, _ = writer._front_matter(path)
-        # A title-token label is NOT dropped by a body that says nothing about platforms.
+        # A title-token label is NOT dropped by a captured body that says nothing about platforms.
         path_w, _ = writer.write_record(out, dict(candidate("3.2.10", "windows"),
                                                   official_notes_platform_basis="title_token"))
-        writer.write_record(out, candidate("3.2.10"))
+        writer.write_record(out, dict(candidate("3.2.10"), official_notes_body_captured=True))
         kept, _ = writer._front_matter(path_w)
         check("J13 a label whose evidence was the installers leaves with them; a title label stays",
               "official_notes_platform" not in gone and "official_notes_platform_basis" not in gone
@@ -553,6 +586,20 @@ def section_j_joint_platform_evidence() -> None:
           by_version.get("3.3", {}).get("official_notes_platform") == "windows_macos"
           and "official_notes_platform" not in by_version.get("3.2.11", {"official_notes_platform": "x"})
           and diag(stderr, "platform_downloads_unverified") == 1, stderr[-200:])
+    # The captured flag is set only by a real body, and is the writer's input, never a record field.
+    records, _ = run_fetch([article(33, "Elgato Wave Link 3.4.1 Release Notes", "2026-09-10T10:00:00Z",
+                                    body="<p></p>"),
+                            article(34, "Elgato Wave Link 3.4.2 Release Notes", "2026-09-12T10:00:00Z")])
+    by_version = {r["version"]: r for r in records}
+    empty, real = by_version.get("3.4.1", {}), by_version.get("3.4.2", {})
+    with tempfile.TemporaryDirectory() as td:
+        written, _ = writer.write_record(Path(td), real)
+        stored, _ = writer._front_matter(written)
+    check("J18 only a captured body is flagged as an observation of the notes, and the flag is never stored",
+          "official_notes_body_captured" not in empty and empty.get("body") == empty.get("title")
+          and real.get("official_notes_body_captured") is True
+          and "official_notes_body_captured" not in stored,
+          f"empty={sorted(empty)} stored={'official_notes_body_captured' in stored}")
 
 
 def run() -> int:

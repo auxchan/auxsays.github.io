@@ -147,40 +147,67 @@ def notes_platform_from_title(title: str) -> str:
 # NOTES THAT COVER BOTH PLATFORMS, from installer evidence, never from prose. An article whose title
 # names no platform is NOT thereby cross-platform -- 4K Capture Utility 1.7.16's untitled notes offer a
 # Windows download only -- but Elgato's notes list their installers by file, and "Elgato Stream Deck
-# 7.6.pkg" beside "Elgato Stream Deck 7.6.msi" is positive, version-specific evidence for both. Only
-# installer files that name the record's EXACT version count; another version's installer in the same
-# notes is contradictory and labels nothing. Casual mentions of Windows or macOS in the text never
-# count.
-_INSTALLER_ARTIFACT = re.compile(r"(?<![\w.])(\d+(?:\.\d+)+)\.(pkg|dmg|msi|msix|exe)\b", re.I)
+# 7.6.pkg" beside "Elgato Stream Deck 7.6.msi" is positive, version-specific evidence for both. Three
+# conditions, each failing toward unknown:
+#   * an installer counts only when its file is named for the TRACKED PRODUCT ("DemoPlugin 7.6.pkg" in a
+#     troubleshooting note says nothing about Stream Deck 7.6);
+#   * the macOS and Windows files must sit in one download block -- product installers separated by
+#     nothing but platform labels, architecture qualifiers and download headings, the way Elgato lists
+#     them. A known-issue sentence that happens to name both files is prose, not a download list;
+#   * every product installer in the notes names the record's EXACT version; another version's file is
+#     contradictory and labels nothing.
+# Casual mentions of Windows or macOS in the text never count.
+_INSTALLER_EXTENSIONS = "pkg|dmg|msi|msix|exe"
 _MACOS_INSTALLERS = {"pkg", "dmg"}
 _WINDOWS_INSTALLERS = {"msi", "msix", "exe"}
+_DOWNLOAD_BLOCK_GAP = re.compile(
+    r"(?:\s|[,;:/|•·\-–—]|\([^()]{1,20}\)"
+    r"|\b(?:macos|mac\s?os|mac|windows|download|downloads|links?|x64|arm64|intel|apple\s+silicon)\b)*",
+    re.I)
 
 
-def joint_platform_downloads(body: str, version: str) -> tuple[str, bool]:
+def _product_installers(body: str, terms: tuple[str, ...]) -> list[re.Match[str]]:
+    """Installer files named for the product: one of its terms, then a version, then an extension."""
+    names = [r"[\s_\-]*".join(re.escape(word) for word in str(term).split())
+             for term in terms if str(term).strip()]
+    if not names:
+        return []
+    artifact = re.compile(r"(?<![\w.])(?:" + "|".join(names) + r")[\s_\-]+(\d+(?:\.\d+)+)\.("
+                          + _INSTALLER_EXTENSIONS + r")\b", re.I)
+    return list(artifact.finditer(body or ""))
+
+
+def joint_platform_downloads(body: str, version: str, terms: tuple[str, ...]) -> tuple[str, bool]:
     """-> ('windows_macos' or '', installers_seen).
 
-    'windows_macos' only when every versioned installer in the notes is for THIS version and they
-    include both a macOS and a Windows installer. `installers_seen` lets the caller count notes that
-    carried installers but did not establish joint coverage.
+    'windows_macos' only when every product installer in the notes is for THIS version and one download
+    block holds both a macOS and a Windows file. `installers_seen` lets the caller count notes that
+    carried the product's installers but did not establish joint coverage.
     """
-    found = [(m.group(1), m.group(2).lower()) for m in _INSTALLER_ARTIFACT.finditer(body or "")]
+    found = _product_installers(body, terms)
     if not found:
         return "", False
-    if any(found_version != version for found_version, _ in found):
+    if any(m.group(1) != version for m in found):
         return "", True
-    kinds = {ext for _, ext in found}
-    both = bool(kinds & _MACOS_INSTALLERS) and bool(kinds & _WINDOWS_INSTALLERS)
+    blocks: list[set[str]] = [{found[0].group(2).lower()}]
+    for previous, current in zip(found, found[1:]):
+        gap = (body or "")[previous.end():current.start()]
+        if _DOWNLOAD_BLOCK_GAP.fullmatch(gap):
+            blocks[-1].add(current.group(2).lower())
+        else:
+            blocks.append({current.group(2).lower()})
+    both = any(kinds & _MACOS_INSTALLERS and kinds & _WINDOWS_INSTALLERS for kinds in blocks)
     return ("windows_macos" if both else ""), True
 
 
-def notes_platform_for(title: str, body: str, version: str) -> tuple[str, str]:
+def notes_platform_for(title: str, body: str, version: str, terms: tuple[str, ...]) -> tuple[str, str]:
     """-> (platform, basis). The title token decides first; installers only where the title is silent."""
     platform = notes_platform_from_title(title)
     if platform:
         return platform, "title_token"
     if _platform_unrecognized(title):
         return "", ""
-    joint, _seen = joint_platform_downloads(body, version)
+    joint, _seen = joint_platform_downloads(body, version, terms)
     return (joint, "installer_downloads") if joint else ("", "")
 
 
@@ -194,6 +221,14 @@ def _product_terms(source: dict[str, Any]) -> tuple[str, ...]:
     if isinstance(configured, list) and configured:
         return tuple(str(term).lower() for term in configured if str(term).strip())
     return (str(source.get("software") or source.get("product_id") or "").lower(),)
+
+
+def _installer_names(source: dict[str, Any]) -> tuple[str, ...]:
+    """The product's terms, each also with the vendor in front: Elgato names its files "Elgato Stream
+    Deck 7.6.pkg", and a vendor word left between two files would split one download list in two."""
+    terms = _product_terms(source)
+    company = str(source.get("company") or "").strip().lower()
+    return terms + tuple(f"{company} {term}" for term in terms if company)
 
 
 def _body_text(article: dict[str, Any]) -> str:
@@ -210,9 +245,14 @@ def _record(source: dict[str, Any], article: dict[str, Any], version: str, body:
     # `title` stays verbatim: it feeds record_id above, and a changed digest would make a
     # published record look unseen. The platform travels as its own field, and only when known --
     # an empty value would read to the writer as "no platform" and could wipe a real label.
-    platform, basis = notes_platform_for(title, body, version)
+    platform, basis = notes_platform_for(title, body, version, _installer_names(source))
     extra = ({"official_notes_platform": platform, "official_notes_platform_basis": basis}
              if platform else {})
+    # Whether the article's notes were actually captured this time. "body" below falls back to the
+    # title, so the writer cannot tell a real observation from a missing one by the body alone; only a
+    # captured body may withdraw a label that rested on its installers. Never written to the record.
+    if body:
+        extra["official_notes_body_captured"] = True
     return {
         **extra,
         "record_id": f"zendesk:{source['product_id']}:{version}:{digest}",
@@ -351,7 +391,7 @@ def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
         if _platform_unrecognized(title):
             platform_titles_unrecognized += 1
         elif not notes_platform_from_title(title):
-            joint, installers_seen = joint_platform_downloads(body, version)
+            joint, installers_seen = joint_platform_downloads(body, version, _installer_names(source))
             if installers_seen and not joint:
                 # Installers were listed but did not establish both platforms for this exact
                 # version (one platform only, or another version's file): left unlabelled, counted.
