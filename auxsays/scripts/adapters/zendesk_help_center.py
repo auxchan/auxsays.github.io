@@ -126,6 +126,29 @@ def _version_from_title(source: dict[str, Any], title: str) -> str:
     return (match.group(1) or "").strip()
 
 
+# WHICH PLATFORM AN ARTICLE'S NOTES COVER, from its TITLE only. Elgato publishes some versions'
+# notes per platform, and an article titled "Elgato Wave Link 2.0.9 Release Notes (macOS)" covers
+# the macOS notes -- which says nothing about whether 2.0.9 exists elsewhere, so the record states
+# whose notes it holds and claims no more. Across every Elgato article observed the platform is
+# written exactly "(Windows)" or "(macOS)", so this is a closed vocabulary: no aliases, and never the
+# body, which routinely names both systems (a Windows-only article lists x64 and arm64; Stream Deck
+# notes mention macOS fixes). Exactly one match labels the record; none or both label nothing.
+_NOTES_PLATFORM_TOKENS = {"(windows)": "windows", "(macos)": "macos"}
+_PLATFORM_WORD = re.compile(r"\b(?:windows|mac ?os|os ?x|mac)\b", re.I)
+
+
+def notes_platform_from_title(title: str) -> str:
+    """'windows' or 'macos' when the title names exactly one platform in the known form, else ''."""
+    lowered = (title or "").lower()
+    found = {platform for token, platform in _NOTES_PLATFORM_TOKENS.items() if token in lowered}
+    return found.pop() if len(found) == 1 else ""
+
+
+def _platform_unrecognized(title: str) -> bool:
+    """A platform word the closed vocabulary did not resolve: counted, never guessed."""
+    return bool(_PLATFORM_WORD.search(title or "")) and not notes_platform_from_title(title)
+
+
 def _product_terms(source: dict[str, Any]) -> tuple[str, ...]:
     configured = (source.get("ingestion") or {}).get("product_terms")
     if isinstance(configured, list) and configured:
@@ -144,7 +167,13 @@ def _record(source: dict[str, Any], article: dict[str, Any], version: str, body:
     digest = hashlib.sha256((article_url + version + title).encode("utf-8")).hexdigest()[:16]
     company = source["company"]
     software = source["software"]
+    # `title` stays verbatim: it feeds record_id above, and a changed digest would make a
+    # published record look unseen. The platform travels as its own field, and only when known --
+    # an empty value would read to the writer as "no platform" and could wipe a real label.
+    platform = notes_platform_from_title(title)
+    extra = {"official_notes_platform": platform} if platform else {}
     return {
+        **extra,
         "record_id": f"zendesk:{source['product_id']}:{version}:{digest}",
         "company_id": source["company_id"],
         "product_id": source["product_id"],
@@ -272,9 +301,12 @@ def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
     for _article, version, _body in candidates:
         per_version[version] = per_version.get(version, 0) + 1
     versions_deferred = sorted(v for v, n in per_version.items() if n > 1)
+    platform_titles_unrecognized = 0
     for article, version, body in candidates:
         if per_version[version] > 1:
             continue
+        if _platform_unrecognized(str(article.get("title") or "")):
+            platform_titles_unrecognized += 1
         records.append(_record(source, article, version, body))
 
     accepted = records[: max(0, int(limit))]
@@ -293,6 +325,7 @@ def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
         duplicate_listings=duplicate_listings,
         versions_deferred=len(versions_deferred),
         articles_deferred=sum(per_version[v] for v in versions_deferred),
+        platform_titles_unrecognized=platform_titles_unrecognized,
         accepted_total=len(records),
         returned=len(accepted),
         no_matching_articles=(len(records) == 0),
