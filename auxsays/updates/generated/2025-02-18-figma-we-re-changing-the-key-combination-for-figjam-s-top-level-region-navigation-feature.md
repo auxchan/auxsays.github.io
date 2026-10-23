@@ -17,8 +17,8 @@ update_version: We're changing the key combination for Figjam's top-level region
 update_logo_text: FIG
 update_published_at: '2025-02-18T00:00:00.000Z'
 update_last_checked: '2026-08-18T14:16:49Z'
-source_last_checked: '2026-09-18T06:57:01Z'
-official_body_last_checked: '2026-09-18T06:57:01Z'
+source_last_checked: '2026-10-23T07:19:16Z'
+official_body_last_checked: '2026-10-23T07:19:16Z'
 record_last_updated: '2026-08-18T14:16:49Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-18T06:57:01Z'
+  url: https://www.figma.com/release-notes/?title=We're%20changing%20the%20key%20combination%20for%20Figjam's%20top-level%20region%20navigation%20feature.
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-23T07:19:16Z'
   url: https://www.figma.com/release-notes/?title=We're%20changing%20the%20key%20combination%20for%20Figjam's%20top-level%20region%20navigation%20feature.
   status: captured-from-rss-feed
   body_captured: true
