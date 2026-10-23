@@ -635,6 +635,16 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
     # title, and must not read as "this record covers no particular platform".
     incoming_platform = notes_platform(record.get("official_notes_platform"))
     existing_platform = notes_platform(existing.get("official_notes_platform"))
+    if (not incoming_platform and incoming_body
+            and str(existing.get("official_notes_platform_basis") or "") == "installer_downloads"):
+        # The installers in the notes WERE the evidence, and this observation re-read the notes without
+        # establishing joint coverage (the adapter then sends no platform): the label goes with its
+        # evidence. A title-token label is unaffected -- absent still means "keep" for it -- and the
+        # body-less minimal refresh never reaches here.
+        existing.pop("official_notes_platform", None)
+        existing.pop("official_notes_platform_basis", None)
+        existing_platform = ""
+        material_changed = True
     if incoming_platform and incoming_platform != existing_platform:
         existing["official_notes_platform"] = incoming_platform
         material_changed = True

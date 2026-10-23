@@ -522,6 +522,21 @@ def section_j_joint_platform_evidence() -> None:
               after.get("official_notes_platform") == "windows_macos"
               and after.get("official_notes_platform_basis") == "installer_downloads"
               and all(after.get(k) == before.get(k) for k in TITLE_KEYS), action)
+        # The installers were the evidence: a later observation of the same notes that no longer
+        # establishes both platforms takes the label away, instead of keeping it as "absent = keep".
+        regressed = candidate("7.6")
+        regressed["body"] = SD_76_NOTES.replace("7.6.pkg", "7.6.1.pkg")
+        writer.write_record(out, regressed)
+        gone, _ = writer._front_matter(path)
+        # A title-token label is NOT dropped by a body that says nothing about platforms.
+        path_w, _ = writer.write_record(out, dict(candidate("3.2.10", "windows"),
+                                                  official_notes_platform_basis="title_token"))
+        writer.write_record(out, candidate("3.2.10"))
+        kept, _ = writer._front_matter(path_w)
+        check("J13 a label whose evidence was the installers leaves with them; a title label stays",
+              "official_notes_platform" not in gone and "official_notes_platform_basis" not in gone
+              and kept.get("official_notes_platform") == "windows",
+              f"gone={gone.get('official_notes_platform')!r} kept={kept.get('official_notes_platform')!r}")
     bogus = candidate("7.6", "windows_macos")
     bogus["official_notes_platform_basis"] = "a guess"
     check("J11 a basis outside its vocabulary is never written",
