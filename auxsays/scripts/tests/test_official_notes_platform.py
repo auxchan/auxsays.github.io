@@ -421,6 +421,16 @@ def section_h_publish_guard() -> None:
         [(Path("r.md"), official)], {("elgato-stream-deck", "7.6", ""): 2})
     check("H3 counted evidence for ANY Elgato product is an error, labelled or not",
           [e["code"] for e in counted] == ["platform_scoped_evidence_counted"], str(counted))
+    # Each a claim on its own, with every other field official-only: the page keys "Verified
+    # reports" on the collection status and falls back to evidence_samples for its citations.
+    pilot = qa.scan_platform_scoped_consensus(
+        [(Path("r.md"), dict(official, consensus_collection_status="pilot_initial_sample"))], {})
+    check("H6 a zero-report Elgato record with a pilot collection status is an error",
+          [e["code"] for e in pilot] == ["platform_scoped_report_claimed"], str(pilot))
+    sampled = qa.scan_platform_scoped_consensus(
+        [(Path("r.md"), dict(official, evidence_samples=[{"source_url": "https://example.test/1"}]))], {})
+    check("H7 a zero-report Elgato record listing evidence samples is an error",
+          [e["code"] for e in sampled] == ["platform_scoped_report_claimed"], str(sampled))
     other = qa.scan_platform_scoped_consensus(
         [(Path("o.md"), {"company_id": "obs-project", "product_id": "obs-studio",
                          "update_report_count": 9, "evidence_state": "pilot_sample"})],

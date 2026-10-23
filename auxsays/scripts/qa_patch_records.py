@@ -873,10 +873,17 @@ def scan_platform_scoped_consensus(
         claimed = max(int(data.get("update_report_count") or 0),
                       int(data.get("confirmed_patch_specific_report_count") or 0))
         state = str(data.get("evidence_state") or "").strip()
-        if claimed > 0 or state not in ("", "official_only") or data.get("accepted_report_sources"):
+        # The patch page keys its report hero on the COLLECTION STATUS and falls back to
+        # evidence_samples for its citations, so each is a claim in its own right: a zero-count,
+        # official-only record could still show "Verified reports" or community sources.
+        status = str(data.get("consensus_collection_status") or "").strip()
+        if (claimed > 0 or state not in ("", "official_only")
+                or status not in ("", "deferred_official_only")
+                or data.get("accepted_report_sources") or data.get("evidence_samples")):
             add(errors, path, "platform_scoped_report_claimed",
                 f"Record claims community reports or consensus (reports={claimed}, "
-                f"evidence_state={state!r}), but {company} {reason}")
+                f"evidence_state={state!r}, consensus_collection_status={status!r}), "
+                f"but {company} {reason}")
     for (product_id, version, build), count in sorted(evidence_counts.items()):
         company = company_of.get(product_id) or product_id.split("-", 1)[0]
         if count > 0 and company in PLATFORM_UNGATED_COMPANIES:

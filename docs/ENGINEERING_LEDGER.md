@@ -3521,8 +3521,10 @@ both relabelled with unchanged permalinks.
 **Consensus is blocked for these vendors until it can respect the label.** No counting path compares
 a report's platform with the notes a record holds, so a report about one OS could count toward another
 OS's notes. Until a platform-aware acceptance rule exists, the publish QA refuses any Elgato record
-claiming reports or consensus, and any counted evidence row for an Elgato product, labelled or not,
-in the pass the deploy and every writeback lane run. A test fails if any collector or method route is
+that claims reports or consensus by ANY of the fields the page reads -- the counts, the evidence
+state, the collection status (which alone decides "Verified reports"), accepted sources or evidence
+samples (the page's fallback citations) -- and any counted evidence row for an Elgato product,
+labelled or not, in the pass the deploy and every writeback lane run. A test fails if any collector or method route is
 registered for Elgato under any enable flag.
 
 **Known limits, stated.** Version-only surfaces (product history tables, latest signals, the My Stack
