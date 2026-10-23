@@ -144,6 +144,46 @@ def notes_platform_from_title(title: str) -> str:
     return found.pop() if len(found) == 1 else ""
 
 
+# NOTES THAT COVER BOTH PLATFORMS, from installer evidence, never from prose. An article whose title
+# names no platform is NOT thereby cross-platform -- 4K Capture Utility 1.7.16's untitled notes offer a
+# Windows download only -- but Elgato's notes list their installers by file, and "Elgato Stream Deck
+# 7.6.pkg" beside "Elgato Stream Deck 7.6.msi" is positive, version-specific evidence for both. Only
+# installer files that name the record's EXACT version count; another version's installer in the same
+# notes is contradictory and labels nothing. Casual mentions of Windows or macOS in the text never
+# count.
+_INSTALLER_ARTIFACT = re.compile(r"(?<![\w.])(\d+(?:\.\d+)+)\.(pkg|dmg|msi|msix|exe)\b", re.I)
+_MACOS_INSTALLERS = {"pkg", "dmg"}
+_WINDOWS_INSTALLERS = {"msi", "msix", "exe"}
+
+
+def joint_platform_downloads(body: str, version: str) -> tuple[str, bool]:
+    """-> ('windows_macos' or '', installers_seen).
+
+    'windows_macos' only when every versioned installer in the notes is for THIS version and they
+    include both a macOS and a Windows installer. `installers_seen` lets the caller count notes that
+    carried installers but did not establish joint coverage.
+    """
+    found = [(m.group(1), m.group(2).lower()) for m in _INSTALLER_ARTIFACT.finditer(body or "")]
+    if not found:
+        return "", False
+    if any(found_version != version for found_version, _ in found):
+        return "", True
+    kinds = {ext for _, ext in found}
+    both = bool(kinds & _MACOS_INSTALLERS) and bool(kinds & _WINDOWS_INSTALLERS)
+    return ("windows_macos" if both else ""), True
+
+
+def notes_platform_for(title: str, body: str, version: str) -> tuple[str, str]:
+    """-> (platform, basis). The title token decides first; installers only where the title is silent."""
+    platform = notes_platform_from_title(title)
+    if platform:
+        return platform, "title_token"
+    if _platform_unrecognized(title):
+        return "", ""
+    joint, _seen = joint_platform_downloads(body, version)
+    return (joint, "installer_downloads") if joint else ("", "")
+
+
 def _platform_unrecognized(title: str) -> bool:
     """A platform word the closed vocabulary did not resolve: counted, never guessed."""
     return bool(_PLATFORM_WORD.search(title or "")) and not notes_platform_from_title(title)
@@ -170,8 +210,9 @@ def _record(source: dict[str, Any], article: dict[str, Any], version: str, body:
     # `title` stays verbatim: it feeds record_id above, and a changed digest would make a
     # published record look unseen. The platform travels as its own field, and only when known --
     # an empty value would read to the writer as "no platform" and could wipe a real label.
-    platform = notes_platform_from_title(title)
-    extra = {"official_notes_platform": platform} if platform else {}
+    platform, basis = notes_platform_for(title, body, version)
+    extra = ({"official_notes_platform": platform, "official_notes_platform_basis": basis}
+             if platform else {})
     return {
         **extra,
         "record_id": f"zendesk:{source['product_id']}:{version}:{digest}",
@@ -302,11 +343,19 @@ def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
         per_version[version] = per_version.get(version, 0) + 1
     versions_deferred = sorted(v for v, n in per_version.items() if n > 1)
     platform_titles_unrecognized = 0
+    platform_downloads_unverified = 0
     for article, version, body in candidates:
         if per_version[version] > 1:
             continue
-        if _platform_unrecognized(str(article.get("title") or "")):
+        title = str(article.get("title") or "")
+        if _platform_unrecognized(title):
             platform_titles_unrecognized += 1
+        elif not notes_platform_from_title(title):
+            joint, installers_seen = joint_platform_downloads(body, version)
+            if installers_seen and not joint:
+                # Installers were listed but did not establish both platforms for this exact
+                # version (one platform only, or another version's file): left unlabelled, counted.
+                platform_downloads_unverified += 1
         records.append(_record(source, article, version, body))
 
     accepted = records[: max(0, int(limit))]
@@ -326,6 +375,7 @@ def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
         versions_deferred=len(versions_deferred),
         articles_deferred=sum(per_version[v] for v in versions_deferred),
         platform_titles_unrecognized=platform_titles_unrecognized,
+        platform_downloads_unverified=platform_downloads_unverified,
         accepted_total=len(records),
         returned=len(accepted),
         no_matching_articles=(len(records) == 0),

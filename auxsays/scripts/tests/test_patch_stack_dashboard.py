@@ -943,7 +943,7 @@ def run() -> int:
     for rec_fm in labelled:
         if rec_fm.get("product_id") == "elgato-wave-link":
             v = str(rec_fm.get("update_version") or "")
-            rec_fm["official_notes_platform"] = "windows" if v == "3.2.10" else "macos" if v == "2.0.9" else ""
+            rec_fm["official_notes_platform"] = "macos" if v == "2.0.9" else "windows"
     _ok, html2 = render_page(labelled, products)
     m2 = re.search(r'<script type="application/json" id="patch-stack-data">(.*?)</script>', html2, re.S)
     entries2 = json.loads(m2.group(1)) if m2 else []
@@ -958,16 +958,82 @@ def run() -> int:
           f"wave={wave.get('split')!r} obs={obs_entry.get('split')!r} 4k={fourk.get('split')!r}")
     check("PS-17 every Wave Link record carries whose notes it holds in rec[11]",
           plats.get("3.2.10") == "windows" and plats.get("2.0.9") == "macos", str(plats))
-    check("PS-18 the stack card's latest record names its platform's notes",
-          wave.get("plat") in ("windows", "macos") and "release notes</span>" in JS.read_text(encoding="utf-8"),
-          repr(wave.get("plat")))
+    def render_card(entry, installed):
+        """The real cardHtml (with its installed-version panel) through node, or None without node."""
+        if not node:
+            return None
+        src = JS.read_text(encoding="utf-8")
+        installed_block = src[src.index("const INSTALLED_KEY"):src.index("const paintInstalledControls")]
+        stack_block = src[src.index("    const esc = (value)"):src.index("    const renderStack = () => {")]
+        probe = ("const store = " + json.dumps({"auxsays.installedVersions.v1": json.dumps(installed)}) + ";\n"
+                 "const window = { localStorage: { getItem: (k) => (k in store ? store[k] : null),"
+                 " setItem: (k, v) => { store[k] = v; } } };\n"
+                 "const document = { dispatchEvent() {} };\n"
+                 "class CustomEvent { constructor(t, o) { this.type = t; this.detail = o && o.detail; } }\n"
+                 "const PRODUCT_ID_RE = /^[a-z0-9][a-z0-9-]{0,63}$/;\n"
+                 + installed_block + "\n" + stack_block + "\n"
+                 + "console.log(JSON.stringify(cardHtml(" + json.dumps(entry) + ", '')));\n")
+        # A file, not `node -e`: the probe carries two slices of the shipped script, which is longer
+        # than a Windows command line allows.
+        with tempfile.TemporaryDirectory() as td:
+            probe_path = Path(td) / "card_probe.js"
+            probe_path.write_text(probe, encoding="utf-8")
+            res = subprocess.run([node, str(probe_path)], capture_output=True, text=True,
+                                 encoding="utf-8", cwd=str(_REPO), timeout=120)
+        if res.returncode != 0:
+            raise AssertionError("card probe failed: " + (res.stderr or "")[-400:])
+        return json.loads(res.stdout.strip().splitlines()[-1])
+
+    card_entry = dict(wave, recs=[prec("3.2.11", "2026-08-20", "windows"), prec("2.0.9", "2026-08-12", "macos"),
+                                  prec("3.2.10", "2026-08-05", "windows")],
+                      href="/updates/elgato/elgato-wave-link/3-2-11/", ver="3.2.11", plat="windows")
+    html_card = render_card(card_entry, {"elgato-wave-link": pent("3.2.10", "2026-08-05")})
+    check("PS-18 the rendered card names its latest record's notes platform",
+          html_card is not None and 'patch-stack-card__notes-scope">Windows release notes</span>' in html_card,
+          (html_card or "node unavailable")[:240])
+    check("PS-19 a platform-scoped target is labelled by its platform, not as the newest tracked",
+          html_card is not None and "<dt>Latest Windows release notes</dt>" in html_card
+          and "UPDATE AVAILABLE" in html_card, (html_card or "")[:400])
+    unknown_card = render_card(dict(card_entry, recs=[prec("2.0.9", "2026-08-12", "macos"),
+                                                      prec("3.2.10", "2026-08-05", "windows")]),
+                               {"elgato-wave-link": pent("3.2.10", "2026-08-05")})
+    check("PS-20 PLATFORM APPLICABILITY UNKNOWN renders its sentence and no target row",
+          unknown_card is not None and "PLATFORM APPLICABILITY UNKNOWN" in unknown_card
+          and "cannot confirm a newer applicable update" in unknown_card and "<dt>Latest" not in unknown_card,
+          (unknown_card or "")[:400])
+
+    if node:
+        both = states([
+            # 0 a later, greater release for BOTH platforms is an update for a Windows reader
+            {"product": split([prec("3.3", "2026-09-01", "windows_macos"), WIN_3210]),
+             "entry": pent("3.2.10", "2026-08-05")},
+            # 1 a both-platforms reader is not told a Windows-only release supersedes their notes
+            {"product": split([prec("7.7", "2026-10-01", "windows"), prec("7.6", "2026-09-22", "windows_macos")]),
+             "entry": pent("7.6", "2026-09-22")},
+            # 2 ...but a later, greater both-platforms release is their update
+            {"product": split([prec("7.7", "2026-10-01", "windows_macos"), prec("7.6", "2026-09-22", "windows_macos")]),
+             "entry": pent("7.6", "2026-09-22")},
+            # 3 an UNFLAGGED product whose records carry labels keeps the date-only answer
+            {"product": split([MAC_209, WIN_3210], flag=False), "entry": pent("3.2.10", "2026-08-05")},
+            # 4 a same-day sibling does not block a strictly later, greater update on the platform
+            {"product": split([WIN_3211, WIN_SAME_DAY, WIN_3210]), "entry": pent("3.2.10", "2026-08-05")},
+        ])
+        check("PS-21 notes for both platforms apply to a single-platform reader, not the reverse",
+              both[0]["state"] == "UPDATE AVAILABLE" and both[0]["latest"] == ["3.3", ""]
+              and both[1]["state"] == "PLATFORM APPLICABILITY UNKNOWN"
+              and both[2]["state"] == "UPDATE AVAILABLE" and both[2]["latest"] == ["7.7", ""], str(both[:3]))
+        check("PS-22 only the catalogue flag engages the platform rules: labels alone change nothing",
+              both[3]["state"] == "UPDATE AVAILABLE" and both[3]["latest"] == ["2.0.9", ""], str(both[3]))
+        check("PS-23 a same-day sibling does not block a strictly later same-platform update",
+              both[4]["state"] == "UPDATE AVAILABLE" and both[4]["latest"] == ["3.2.11", ""], str(both[4]))
 
     # SD-K, amended rather than worked around: version magnitude is consulted ONLY inside
     # platformScopedState, and only to withhold a claim (PS-4, PS-7, PS-11, PS-13 prove the direction).
     # installedState itself still never parses a version.
     scoped_body = js.split("const platformScopedState", 1)[1].split("const installedState", 1)[0]
+    installed_body = js.split("const installedState", 1)[1].split("const paintInstalledControls", 1)[0]
     check("PS-K version order lives only in the platform-split branch, never in installedState",
-          "versionOrder" in scoped_body and "versionOrder" not in iv_body, "")
+          "versionOrder" in scoped_body and "versionOrder" not in installed_body, "")
 
     print()
     print("=" * 78)

@@ -296,13 +296,24 @@ def _public_version_label(record: dict[str, Any], version: Any) -> str:
 # macOS-only, which the article does not establish. A closed vocabulary, checked on create AND
 # refresh rather than copied verbatim like OPTIONAL_STRUCTURED_FIELDS, so an adapter bug cannot
 # publish free text. Not `target_platform`: that is part of other products' structured identity.
+# `windows_macos` means the official notes document THIS version for both (installer evidence); it
+# adds no title suffix, because notes for both platforms are what an unsuffixed title already reads
+# as. Only the single-platform values are spelled out in titles.
 NOTES_PLATFORM_LABELS = {"windows": "Windows", "macos": "macOS"}
+NOTES_PLATFORMS = frozenset(NOTES_PLATFORM_LABELS) | {"windows_macos"}
+# How the platform was established, so every label can be audited back to its evidence.
+NOTES_PLATFORM_BASES = frozenset({"title_token", "installer_downloads"})
 
 
 def notes_platform(value: Any) -> str:
     """The checked platform value, or '' for anything outside the vocabulary."""
     candidate = str(value or "").strip().lower()
-    return candidate if candidate in NOTES_PLATFORM_LABELS else ""
+    return candidate if candidate in NOTES_PLATFORMS else ""
+
+
+def notes_platform_basis(value: Any) -> str:
+    candidate = str(value or "").strip().lower()
+    return candidate if candidate in NOTES_PLATFORM_BASES else ""
 
 
 def public_titles(software: Any, company: Any, label: str, platform: str) -> dict[str, str]:
@@ -312,7 +323,7 @@ def public_titles(software: Any, company: Any, label: str, platform: str) -> dic
     those. The platform is STORED in the titles rather than composed in a template because the SEO
     <title> and og:title come from front-matter `title` alone.
     """
-    notes = f"{NOTES_PLATFORM_LABELS[platform]} release notes" if platform else ""
+    notes = f"{NOTES_PLATFORM_LABELS[platform]} release notes" if platform in NOTES_PLATFORM_LABELS else ""
     headline = f"{software} {label}" + (f" — {notes}" if notes else "")
     return {
         "title": f"{software} {label} official update breakdown" + (f" ({notes})" if notes else ""),
@@ -475,6 +486,9 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         front["official_app_attribution_label"] = attribution_label(attribution)
     if platform:
         front["official_notes_platform"] = platform
+        basis = notes_platform_basis(record.get("official_notes_platform_basis"))
+        if basis:
+            front["official_notes_platform_basis"] = basis
     return front
 
 
@@ -623,6 +637,12 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
     existing_platform = notes_platform(existing.get("official_notes_platform"))
     if incoming_platform and incoming_platform != existing_platform:
         existing["official_notes_platform"] = incoming_platform
+        material_changed = True
+    incoming_basis = notes_platform_basis(record.get("official_notes_platform_basis"))
+    if (incoming_platform and incoming_basis
+            and existing.get("official_notes_platform") == incoming_platform
+            and existing.get("official_notes_platform_basis") != incoming_basis):
+        existing["official_notes_platform_basis"] = incoming_basis
         material_changed = True
     # The public titles then follow the field, ONLY on a record that carries a valid platform, and
     # field by field: a title is relabelled when it is missing or still in a generated form (the

@@ -457,15 +457,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // separate Windows and macOS articles, so date order across them is not an upgrade order: a reader
   // on Wave Link 3.2.10 (Windows notes) was told UPDATE AVAILABLE to 2.0.9 (macOS notes, an older
   // version published a week later), and a 2.0.9 reader CURRENT. rec[11] says whose notes a record
-  // holds ('windows' / 'macos'); ABSENT means the scope is unknown, never "every platform".
-  //   * Only a record carrying the reader's own platform is comparable at all.
+  // holds: 'windows' / 'macos' (the article title says so) or 'windows_macos' (its installers for this
+  // exact version cover both). ABSENT means the scope is unknown, never "every platform".
+  //   * A release APPLIES to the reader when it carries the reader's own value, or covers both
+  //     platforms for a single-platform reader. A both-platforms reader is compared only with other
+  //     both-platforms releases: a Windows-only release does not supersede notes for both.
   //   * UPDATE AVAILABLE needs a same-platform release that is strictly later (no same-day tie),
   //     strictly greater by version, and stable for a stable reader.
   //   * CURRENT needs nothing later on the platform AND nothing elsewhere (another or unknown
   //     platform) that is later-dated or a higher or unorderable version.
   //   * Everything else is PLATFORM APPLICABILITY UNKNOWN: no target, no path.
-  // Which products: a site-owned flag (`official_notes_by_platform`), so this engages before any
-  // record is labelled, or any labelled record in the window.
+  // Which products: ONLY the site-owned flag (`official_notes_by_platform`). It engages before any
+  // record is labelled, and a label appearing on an unflagged product changes nothing here.
   const platformScopedState = (entry, recs, index) => {
     const platformOf = (r) => String((r && r[11]) || '');
     const dateOf = (r) => String((r && r[2]) || '');
@@ -476,19 +479,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!myPlatform) return unknown;
     const myDate = String(entry.d || mine[2] || '');
     const others = recs.filter((r, i) => i !== index);
-    const samePlatform = others.filter((r) => platformOf(r) === myPlatform);
-    const elsewhereNews = others.filter((r) => platformOf(r) !== myPlatform
+    const applies = (r) => platformOf(r) === myPlatform
+      || (myPlatform !== 'windows_macos' && platformOf(r) === 'windows_macos');
+    const applicable = others.filter(applies);
+    const elsewhereNews = others.filter((r) => !applies(r)
       && (dateOf(r) > myDate || versionOrder(r[0], mine[0]) !== -1));
-    if (myDate && samePlatform.some((r) => dateOf(r) === myDate)) {
-      return { state: 'RELEASE ORDER NOT RECORDED', latest: null, mine, latestScope: '', pathKind: '' };
-    }
     // An EARLIER same-platform release that is not a LOWER version contradicts the order (or cannot
     // be checked against it), so neither CURRENT nor an update can be claimed.
-    if (samePlatform.some((r) => dateOf(r) < myDate && versionOrder(r[0], mine[0]) !== -1)) {
+    if (applicable.some((r) => dateOf(r) < myDate && versionOrder(r[0], mine[0]) !== -1)) {
       return unknown;
     }
-    const later = samePlatform.filter((r) => dateOf(r) > myDate);
+    const later = applicable.filter((r) => dateOf(r) > myDate);
     if (!later.length) {
+      // A same-day sibling on the reader's platform leaves the order unrecorded -- but only when
+      // nothing is strictly later, as on every other product: a real later update still wins.
+      if (myDate && applicable.some((r) => dateOf(r) === myDate)) {
+        return { state: 'RELEASE ORDER NOT RECORDED', latest: null, mine, latestScope: '', pathKind: '' };
+      }
       return elsewhereNews.length ? unknown
         : { state: 'CURRENT', latest: mine, mine, latestScope: 'platform', scopePlatform: myPlatform,
             pathKind: '' };
@@ -525,8 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!recs.length) return { state: '' };
     const sameIdentity = (r) => r[0] === entry.v && String(r[1] || '') === String(entry.b || '');
     const index = recs.findIndex(sameIdentity);
-    const platformSplit = !!(product && product.split)
-      || recs.some((r) => String((r && r[11]) || '') !== '');
+    const platformSplit = !!(product && product.split);
     if (platformSplit && index >= 0) return platformScopedState(entry, recs, index);
 
     if (index < 0) {
@@ -777,7 +783,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (entry.href) {
         // Whose notes the latest record holds, when the vendor publishes per platform: one
         // platform's article is not "the latest version" for everyone.
-        const scope = { windows: 'Windows', macos: 'macOS' }[String(entry.plat || '')];
+        const scope = { windows: 'Windows', macos: 'macOS', windows_macos: 'Windows and macOS' }[String(entry.plat || '')];
         parts.push(`<p class="patch-stack-card__patch"><a href="${esc(safeHref(entry.href))}">${esc(entry.ver)}</a>`
           + (scope ? ` <span class="patch-stack-card__notes-scope">${scope} release notes</span>` : '')
           + (entry.date ? ` <span>Released ${esc(entry.date)}</span>` : '') + '</p>');
@@ -973,7 +979,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // also exists. Calling that "Latest tracked" was accurate only by luck.
           // On a product that publishes notes per platform the target is the newest release with the
           // reader's platform's notes, which another platform's later article does not displace.
-          const platformName = { windows: 'Windows', macos: 'macOS' }[String(info.scopePlatform || '')];
+          const platformName = { windows: 'Windows', macos: 'macOS', windows_macos: 'Windows and macOS' }[String(info.scopePlatform || '')];
           const latestLabel = info.latestScope === 'line' ? 'Latest on your line'
             : (info.latestScope === 'platform' && platformName ? `Latest ${platformName} release notes`
               : 'Latest tracked');

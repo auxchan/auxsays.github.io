@@ -3548,33 +3548,50 @@ Reproduced with the shipped function on the live payload: a reader on Wave Link 
 notes, 5 August) was told UPDATE AVAILABLE to 2.0.9 (macOS notes, an older version published
 12 August), and a 2.0.9 reader was told CURRENT.
 
-**The containment.** For products flagged in the catalogue as publishing notes per platform
-(`official_notes_by_platform` -- Wave Link, Camera Hub and Stream Deck, whose official articles show
-it; not 4K Capture Utility, whose do not), the comparison only relates records whose notes carry the
-reader's own platform. An ABSENT platform means the scope is unknown, never "every platform". A
-confident UPDATE AVAILABLE needs a same-platform release that is strictly later, not tied, stable for
-a stable reader, and strictly greater by version; CURRENT also needs nothing elsewhere that is later
-or a higher or unorderable version. Everything else is a new state, PLATFORM APPLICABILITY UNKNOWN,
-which names no target and draws no path. The flag is site-owned, so the containment applied the
-moment it deployed, before any record was labelled. Every other product runs the unchanged path.
+**Whose notes, from evidence only.** `official_notes_platform` (AUX-049) now has three positive
+values: `windows` and `macos` from the article title's token, and `windows_macos` when the notes list
+installers for THIS exact version for both platforms ("Elgato Stream Deck 7.6.pkg" beside "Elgato
+Stream Deck 7.6.msi"). Its basis is stored beside it (`title_token` / `installer_downloads`). ABSENT
+means unknown. A title that names no platform is NOT taken as cross-platform: 4K Capture Utility
+1.7.16's untitled notes offer a Windows download only. Installers of another version, of one platform
+only, or prose mentions of both systems establish nothing, and installer lists that establish nothing
+are counted (`platform_downloads_unverified`). `windows_macos` adds no title suffix or page line.
+
+**The comparison.** Only for products flagged `official_notes_by_platform` in the catalogue -- Wave
+Link, Camera Hub and Stream Deck, whose official articles show per-platform notes; not 4K Capture
+Utility -- and only by that flag: a label on an unflagged product changes no comparison, and the
+publish QA warns about it instead (`platform_split_product_unconfigured`). A release applies to the
+reader when it carries the reader's value, or covers both platforms for a single-platform reader; a
+both-platforms reader is compared only with both-platforms releases. UPDATE AVAILABLE needs an
+applicable release that is strictly later, untied, stable for a stable reader and strictly greater by
+version; CURRENT also needs nothing inapplicable that is later or higher. Everything else is a new
+state, PLATFORM APPLICABILITY UNKNOWN, with no target and no path. Every other product runs the
+unchanged path.
 
 **A doctrine amended, not worked around.** SD-K forbids inferring chronology from version magnitude,
 because the same-day Windows fix (AUX-021) was nearly built on build arithmetic. Dates still decide
-order here. A dotted version may only VETO a claim the date rule would make, inside the platform
-branch, never create one; a check pins where the comparator may live, and the mutation proof shows
-it only ever turns a confident state into UNKNOWN.
+order. A dotted version may only VETO a claim the date rule would make, inside the platform branch,
+never create one; a check pins where the comparator may live.
+
+**What review caught.** A first version treated an absent value as unknown while the vocabulary could
+only say `windows` or `macos`, so a record from cross-platform notes could never be labelled, and
+every Stream Deck and Camera Hub reader would have been UNKNOWN permanently -- the ledger's own "until
+labelled" was false. Installer evidence is what fixes that without assuming anything. A simulated
+refresh of the real records gives Stream Deck 7.5.1 UPDATE AVAILABLE to 7.6 and 7.6 CURRENT again, the
+same for Camera Hub, while both Wave Link readers stay UNKNOWN.
 
 Two stale fixtures in `installed-versions.test.mjs` (not run in CI) were also repaired: they put a
 beta and a stable on the same date, which AUX-021 correctly made a tie. The beta is now a day later,
 with the assertions unchanged.
 
 **Known limits.** Version-only "latest" surfaces elsewhere (homepage signals, product history) still
-pick the newest-dated record; the My Stack card now names whose notes that record holds. A reader
-whose saved release is unlabelled on a flagged product sees UNKNOWN until its record is labelled.
+pick the newest-dated record; the My Stack card now names whose notes that record holds. A record that
+is never refreshed keeps no platform value, so its readers on a flagged product stay UNKNOWN.
 
-**Reopen only if** a flagged product's reader is offered another or an unknown platform's release as
-an update or told CURRENT while one is later or higher, or the version comparator ever produces a
-confident state on its own, or an unflagged product's comparison changes.
+**Reopen only if** a flagged product's reader is offered an inapplicable or unknown-platform release as
+an update or told CURRENT while one is later or higher, the version comparator ever produces a
+confident state on its own, `windows_macos` is set without same-version installers for both
+platforms, or an unflagged product's comparison changes.
 
 ## Adding an entry
 

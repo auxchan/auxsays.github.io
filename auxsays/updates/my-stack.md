@@ -113,10 +113,11 @@ permalink: /updates/my-stack/
       label, so the version string is it -- the same textual signal lib/patch_decision.version_is_beta
       uses. It exists so a stable reader is never told a newer BETA is an update.
 
-      Tuple shape, fixed at 11 and pinned exactly by the suite:
+      Tuple shape, fixed at 12 and pinned exactly by the suite:
         [0] version  [1] build  [2] date  [3] url  [4] beta
         [5] verdict  [6] rank   [7] reports  [8] evidence label
         [9] official active issue count      [10] official notes captured (0/1)
+        [11] whose release notes the record holds (see below)
       0-4 drive the version picker; 5-10 exist so an upgrade path can show what AUXSAYS already
       says about each release it lists, WITHOUT a second verdict computation on the client.
     {%- endcomment -%}
