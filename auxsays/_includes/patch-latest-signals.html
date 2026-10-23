@@ -32,16 +32,19 @@
     inferred from arbitrary human-readable label strings. Authority is the product's ingestion
     SOURCE `enabled` flag (_data/patch_ingestion_sources.yml, joined by product_id) plus the
     product `coverage_state` enum:
-      - source enabled            -> "Monitoring active" is honest (collection on, no record yet)
+      - source enabled            -> "Official update source enabled" (collection switched on, no
+                                     record yet). It used to claim monitoring was active, which is the
+                                     claim enabled-alone cannot support: nothing here has seen a
+                                     successful run. The monitoring projection is what may say active.
       - source disabled + staged  -> keep the config-supported staged label (e.g. "Source map staged")
-      - source disabled otherwise -> "Source disabled" (never "Monitoring active", even when a stale
+      - source disabled otherwise -> "Source disabled" (never a monitoring claim, even when a stale
                                      coverage_status_label says so -- e.g. Photoshop)
       - no configured source      -> "No configured ingestion source"
       - source disabled + empty/unrecognized coverage_state -> still "Source disabled". Reaching this
         branch at all PROVES a configured source exists and is off, so naming that is strictly more
         informative than the older "No patch records yet" wording, which hid the disabled source.
     Zero records is an absence of records, never "no user problems". Data files are NOT modified. {%- endcomment -%}
-  {% capture staged_html %}{% for product in ls_products %}{% capture pmark2 %}|{{ product.id }}|{% endcapture %}{% unless latest_seen contains pmark2 %}{% assign src = site.data.patch_ingestion_sources | where: "product_id", product.id | first %}{% assign src_enabled = false %}{% if src and src.enabled == true %}{% assign src_enabled = true %}{% endif %}{% assign cstate = product.coverage_state | default: '' %}{% if src == nil %}{% assign staged_state = 'No configured ingestion source' %}{% assign staged_pill = 'staged' %}{% elsif src_enabled %}{% assign staged_state = 'Monitoring active — awaiting first record' %}{% assign staged_pill = 'active_watch' %}{% elsif cstate == 'staged' %}{% assign staged_state = product.coverage_status_label | default: 'Source staged — not yet monitoring' %}{% assign staged_pill = 'staged' %}{% else %}{% assign staged_state = 'Source disabled — not yet monitoring' %}{% assign staged_pill = 'staged' %}{% endif %}<li class="patch-latest-staged"><span class="patch-latest-staged__name">{{ product.product_name }}</span> <span class="patch-coverage-pill patch-coverage-pill--{{ staged_pill }}">{{ staged_state }}</span> <a class="patch-latest-staged__link" href="{{ product.product_url | relative_url }}">Full history →</a></li>{% endunless %}{% endfor %}{% endcapture %}
+  {% capture staged_html %}{% for product in ls_products %}{% capture pmark2 %}|{{ product.id }}|{% endcapture %}{% unless latest_seen contains pmark2 %}{% assign src = site.data.patch_ingestion_sources | where: "product_id", product.id | first %}{% assign src_enabled = false %}{% if src and src.enabled == true %}{% assign src_enabled = true %}{% endif %}{% assign cstate = product.coverage_state | default: '' %}{% if src == nil %}{% assign staged_state = 'No configured ingestion source' %}{% assign staged_pill = 'staged' %}{% elsif src_enabled %}{% assign staged_state = 'Official update source enabled — awaiting first record' %}{% assign staged_pill = 'active_watch' %}{% elsif cstate == 'staged' %}{% assign staged_state = product.coverage_status_label | default: 'Source staged — not yet monitoring' %}{% assign staged_pill = 'staged' %}{% else %}{% assign staged_state = 'Source disabled — not yet monitoring' %}{% assign staged_pill = 'staged' %}{% endif %}<li class="patch-latest-staged"><span class="patch-latest-staged__name">{{ product.product_name }}</span> <span class="patch-coverage-pill patch-coverage-pill--{{ staged_pill }}">{{ staged_state }}</span> <a class="patch-latest-staged__link" href="{{ product.product_url | relative_url }}">Full history →</a></li>{% endunless %}{% endfor %}{% endcapture %}
   {% if staged_html contains "patch-latest-staged" %}
   <ul class="patch-latest-staged-list">
     {{ staged_html }}

@@ -6,6 +6,20 @@ layout: aux-base
 {% assign product_updates = site.pages | where: "update_entry", true | where: "product_id", page.product_id | sort: "update_published_at" | reverse %}
 {% assign documented_count = product_updates.size %}
 {% assign resolved_product_logo_path = product.logo_path | default: company.logo_path %}
+{%- comment -%}
+  MONITORING STATE comes from the generated projection, never from `coverage_status_label`.
+  That field is a static editorial string: measured across 47 products, 29 claimed "Monitoring
+  active" with no enabled ingestion source, one claimed it while its recorded state was `broken`,
+  and two claimed "Source map staged" while enabled, healthy and producing records the same day.
+  It tracks nothing, so it is no longer rendered as a monitoring claim.
+
+  FAIL CLOSED: a product with no row resolves to `unverified`, which reads as unknown rather than
+  as working. Compared against '' and never `blank`, which is inert in this Liquid.
+{%- endcomment -%}
+{% assign monitoring = site.data.monitoring_state | where: "product_id", page.product_id | first %}
+{% assign monitoring_state = monitoring.state | default: "unverified" %}
+{% assign monitoring_label = monitoring.label | default: "Official update monitoring status unknown" %}
+{% assign monitoring_last_success = monitoring.last_success | default: "" %}
 {% assign cadence_label = product.cadence | default: '' %}
 {% if cadence_label == 'High' %}
   {% assign cadence_label = 'Frequent updates' %}
@@ -31,11 +45,16 @@ layout: aux-base
         </div>
         <p class="patch-intel-subtitle">{{ product.watch_reason }}</p>
         <div class="patch-status-line">
+          {%- comment -%}
+            Records and monitoring answer DIFFERENT questions, so both are shown. "Patch records
+            available" used to REPLACE the monitoring state, so a product with records and broken
+            collection would have hidden the breakage. No product is in that position today, which
+            is exactly when to remove the trap.
+          {%- endcomment -%}
           {% if product_updates.size > 0 %}
           <span class="patch-coverage-pill patch-coverage-pill--documented">Patch records available</span>
-          {% else %}
-          <span class="patch-coverage-pill patch-coverage-pill--{{ product.coverage_state | default: 'active_watch' }}">{{ product.coverage_status_label | default: 'Active watch' }}</span>
           {% endif %}
+          <span class="patch-coverage-pill patch-coverage-pill--monitor-{{ monitoring_state }}">{{ monitoring_label }}</span>
           <span>{{ product.category_label }}</span>
           <span>{{ cadence_label }}</span>
         </div>
@@ -145,7 +164,7 @@ layout: aux-base
     <summary>Tracking Rules — tracking scope and evidence rules for this product.</summary>
     <div class="patch-monitor-card"><strong>Signal:</strong> {{ product.signal_notes }}</div>
     <div class="patch-monitor-card"><strong>Impact:</strong> {{ product.impact }}</div>
-    <div class="patch-monitor-card"><strong>Status:</strong> {% if product_updates.size > 0 %}{{ product_updates.size }} official patch record{% if product_updates.size != 1 %}s{% endif %} tracked{% else %}{{ product.ingestion_status | default: 'First patch record pending' }}{% endif %}</div>
+    <div class="patch-monitor-card"><strong>Status:</strong> {% if product_updates.size > 0 %}{{ product_updates.size }} official patch record{% if product_updates.size != 1 %}s{% endif %} tracked{% else %}No patch records yet{% endif %} &mdash; {{ monitoring_label }}{% if monitoring_state != 'healthy' %}{% if monitoring_last_success != '' %}, last successful check {{ monitoring_last_success }}{% else %}, no successful check recorded{% endif %}{% endif %}</div>
   </details>
 
   {%- comment -%} Progressive enhancement: sortable column headers + a compact mobile Sort control.

@@ -177,6 +177,9 @@ WATCHED_IGNORED = (
     "auxsays/_data/qa_status.json",
     "auxsays/_data/consensus_status.json",
     "auxsays/_data/patch_state.json",
+    # Generated at deploy and git-ignored; a suite that writes them would otherwise go unseen.
+    "auxsays/_data/monitoring_state.yml",
+    "auxsays/_data/monitoring_company_state.yml",
     "auxsays/_site",
 )
 

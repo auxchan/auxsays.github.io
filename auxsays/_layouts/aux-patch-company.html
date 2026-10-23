@@ -28,7 +28,15 @@ layout: aux-base
         </div>
         <p class="patch-intel-subtitle">{{ company.summary }}</p>
         <div class="patch-status-line">
-          <span class="patch-coverage-pill patch-coverage-pill--{{ company.coverage_state | default: 'active_watch' }}">{{ company.coverage_status_label | default: 'Active watch' }}</span>
+          {%- comment -%}
+            The COMPANY-level claim was the third render site of the same defect, and the one I
+            missed first: 27 companies asserted "Monitoring active" with ZERO healthy products,
+            netlify among them with its only product recorded `broken`. A company holds products
+            in different states, so the honest summary is a count, and when nothing is healthy it
+            says which reason applies. FAIL CLOSED: no row resolves to unknown, not to working.
+          {%- endcomment -%}
+          {% assign company_monitoring = site.data.monitoring_company_state | where: "company_id", company.id | first %}
+          <span class="patch-coverage-pill patch-coverage-pill--monitor-{{ company_monitoring.state | default: 'unverified' }}">{{ company_monitoring.label | default: 'Official update monitoring status unknown' }}</span>
           <span>{{ products.size }} tracked software{% if products.size != 1 %}s{% endif %}</span>
           <span>{{ documented_count }} tracked patch record{% if documented_count != 1 %}s{% endif %}</span>
         </div>
@@ -93,11 +101,18 @@ layout: aux-base
         <p>{{ product.impact }}</p>
         <p class="patch-source-signal"><strong>Signal:</strong> {{ product.signal_notes }}</p>
         <div class="patch-status-line patch-status-line--compact">
+          {%- comment -%}
+            Same correction as the product page: the monitoring state comes from the generated
+            projection, not from the static `coverage_status_label`, which claimed "Monitoring
+            active" for 29 products with no enabled ingestion source. A product with no row
+            resolves to `unverified` -- unknown, never working. Shown ALONGSIDE the records pill
+            rather than instead of it, so records cannot mask broken collection.
+          {%- endcomment -%}
+          {% assign card_monitoring = site.data.monitoring_state | where: "product_id", product.id | first %}
           {% if product_updates_for_card.size > 0 %}
           <span class="patch-coverage-pill patch-coverage-pill--documented">Patch records available</span>
-          {% else %}
-          <span class="patch-coverage-pill patch-coverage-pill--{{ product.coverage_state | default: 'active_watch' }}">{{ product.coverage_status_label | default: 'Monitoring active' }}</span>
           {% endif %}
+          <span class="patch-coverage-pill patch-coverage-pill--monitor-{{ card_monitoring.state | default: 'unverified' }}">{{ card_monitoring.label | default: 'Official update monitoring status unknown' }}</span>
           <span>{{ product_updates_for_card.size }} patch record{% if product_updates_for_card.size != 1 %}s{% endif %}</span>
         </div>
         <div class="patch-card-links">

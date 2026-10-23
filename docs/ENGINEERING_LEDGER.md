@@ -55,6 +55,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 | AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
+| AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
 
 ---
 
@@ -3369,6 +3370,118 @@ attributed platform notes.
 
 **Reopen only if** an Elgato record is published whose title names one platform while another
 platform's article exists for the same version, or the API begins returning a challenge to the runner.
+
+### AUX-039 — the site claimed to be monitoring 29 products it was not monitoring
+
+- **Status** Resolved · **Area** Published claims · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-21
+
+`coverage_status_label` is a static editorial string in `_data/patch_companies.yml` and
+`_data/patch_products.yml`. Three render sites published it as a monitoring claim: the product
+page pill, the product card on a company page, and the company-level pill. It tracks nothing.
+
+Measured across 47 products and 35 companies:
+
+- **29 products** publicly claimed "Monitoring active" with **no enabled ingestion source** —
+  nothing had ever collected for them.
+- **27 companies** claimed it with **zero healthy products**, `netlify` among them while its only
+  product's recorded state was `broken`.
+- Two products claimed "Source map staged" while enabled, healthy and producing records that same
+  day. So the field was not even conservative — it was decoupled, and wrong in both directions.
+- Four **enabled** products sat at 226, 226, 146 and 102 consecutive failures, last successes
+  between 2026-08-18 and 2026-09-21, and the page said nothing about it.
+
+#### Why fail-closed is the design, not a nicety
+
+Two earlier attempts at this repair each produced a DIFFERENT false claim, and both were caught
+only by adversarial review. One derived the state from `coverage_state`, an editorial enum. The
+other derived it from the source's `enabled` flag — which sounds authoritative and is not:
+`enabled` says a source is switched on, and five enabled sources have produced nothing. Five of
+the seventeen enabled sources were in fact failing or broken at the time.
+
+So `healthy` is now the ONLY affirmative state, it is evaluated LAST, and it must be earned —
+enabled, recorded healthy, and a success recent enough for the source's own cadence. Absent state,
+an unrecognised status, or a product that cannot be joined to a source all resolve to `unverified`,
+which reads as unknown rather than as working.
+
+#### Three failures that are not the same failure
+
+A source that refuses us, a source that never answers, and a source we reach but cannot parse are
+three different facts. They are `blocked`, `unreachable` and `broken`, and the suite pins that they
+do not collapse into one label — a reader weighing an absence of reports needs to know which one
+applies. The company aggregate follows the same rule: when nothing is healthy it says whether that
+is "not monitored" or "checks failing", and when some products are healthy it gives a count rather
+than an adjective.
+
+#### Recency follows the source's own cadence
+
+A success counts as recent within four of the source's declared polling intervals, floored at 48
+hours so the fastest lane is not called stale after one bad night, and capped at 14 days so nothing
+is "healthy" indefinitely. An unparseable per-source override falls back to the computed window
+rather than widening it, because a typo must not make a stale source look healthy.
+
+#### What the projection deliberately does not carry
+
+One row per product and per company: a state, reader-facing text, and dates. No error text, no
+adapter name, no method id, no failure counter, no health note. The richer `source_health.yml`
+already exists and its rows hold 24 fields including `last_error`, `adapter_type` and
+`consecutive_failures`; rendering that on a product page would have put all of it in template
+scope. So this is a separate, narrow file rather than a reuse of that one.
+
+**Verified on rendered output**, not on the template source: all 47 product pages were
+cross-checked against the derived state — 0 mismatches — and no page claims "Monitoring active"
+with a state other than `healthy`.
+
+#### Corrections before merge
+
+Three defects found in review, all latent — the regenerated projections changed labels only, no
+product's state. (A later fix, below, does move four states: the bot-challenge mapping.)
+
+**A future-dated success read as healthy.** `now - last_success` is negative for a timestamp in the
+future, so it was always inside the window. It now fails closed to `unverified`, as the patch pages'
+monitoring include already did by requiring `0 <= age`.
+
+**An override could widen the window.** The per-source override returned `timedelta(hours=float(v))`
+before any bound: negative or zero called every source stale, `1e9` let a failing source read healthy
+for 41 million days, and `inf` raised an uncaught `OverflowError`. Nothing sets the override, so these
+would have surfaced only when someone did. It may now tighten the window and never widen it, and
+non-finite, zero or negative values are ignored.
+
+**"Monitoring active" named no activity.** This projection reports official vendor update ingestion;
+the patch pages report community-report monitoring under a different, legitimately different
+freshness rule (14 days, versus a cadence-relative window here). A review first proposed collapsing
+the two into one threshold — wrong, since a 12-hourly official feed would then fail silently for two
+weeks. The real defect was the wording, so every label now names the official activity. That had to
+be fixed in three places, not one: the label table, `company_state`'s own aggregate wording (a first
+pass reworded the table while six companies kept publishing the old phrase), and
+`_includes/patch-latest-signals.html`, which said "Monitoring active — awaiting first record" for any
+merely *enabled* source — the exact enabled-alone claim this entry exists to stop.
+
+**The projection is generated at deploy and never committed.** As first written, the two projection
+files were committed and a check compared them against a fresh regeneration. That check went red on
+every PR the moment a scheduled lane moved the ingest state, because the projection is a function of
+the current time and of that state: the committed copy was stale between a push and its own CI run.
+The deploy already regenerated it before `jekyll build`, so the committed copy was published by
+nothing and wedged CI for no benefit. Both files are now git-ignored, and the suite generates them
+into a temporary directory. Where they are absent, as in a fresh checkout or a local render, both
+layouts fall back to "Official update monitoring status unknown". That fallback is proven by real
+renders of both layouts, with and without the projection, not by inspecting the assign statements.
+The same pass found that a source refused by a bot challenge, which the ingest state records as its
+own error type since challenge pages stopped being read as documents, fell through to "unknown".
+It now reads as refusing automated checks, which is what a challenge is.
+
+**Reopen only if** a rendered monitoring pill carries a state outside the approved vocabulary, or
+a page claims an affirmative state for a product whose last success is older than its window, or
+any template begins reading `site.data.patch_ingest_state`.
+
+#### Phase 2 is required, not optional
+
+`patch_ingest_state.json` still sits in `_data/`, so Jekyll loads it into `site.data` for every
+template whether or not one reads it, and it carries raw error bodies and adapter names. Relocating
+it is a 27-file change touching **all four committing workflows**, on a repository whose writer
+queue is depth one, so it was deliberately not bundled with a copy fix. Until it lands, the guard
+in section [F] asserts that no layout, include or page reads it. That guard is containment, not a
+substitute for the move.
 
 ## Adding an entry
 
