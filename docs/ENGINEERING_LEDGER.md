@@ -3551,8 +3551,9 @@ notes, 5 August) was told UPDATE AVAILABLE to 2.0.9 (macOS notes, an older versi
 **Whose notes, from evidence only.** `official_notes_platform` (AUX-049) now has three positive
 values: `windows` and `macos` from the article title's token, and `windows_macos` when one download
 list in the notes holds the PRODUCT'S OWN installers for THIS exact version for both platforms
-("Elgato Stream Deck 7.6.pkg" beside "Elgato Stream Deck 7.6.msi", separated only by platform labels,
-architecture qualifiers and download headings). Its basis is stored beside it (`title_token` /
+("Elgato Stream Deck 7.6.pkg" beside "Elgato Stream Deck 7.6.msi", with only platform labels,
+architecture qualifiers, download headings and list punctuation in front of and between them). Its
+basis is stored beside it (`title_token` /
 `installer_downloads`). ABSENT means unknown. A title that names no platform is NOT taken as
 cross-platform: 4K Capture Utility 1.7.16's untitled notes offer a Windows download only. Installers of
 other software, of another version, of one platform only, the product's files named inside a sentence,
@@ -3586,8 +3587,12 @@ refresh of the real records gives Stream Deck 7.5.1 UPDATE AVAILABLE to 7.6 and 
 same for Camera Hub, while both Wave Link readers stay UNKNOWN. A second review then showed the first
 installer matcher read ANY versioned installer anywhere in the text ("DemoPlugin 7.6.pkg and DemoTool
 7.6.msi both fail to launch" came out `windows_macos`) and that an empty API body could revoke a valid
-label; both are closed above, and the narrowed matcher still labels all eight captured Stream Deck and
-Camera Hub notes.
+label; both are closed above. An adversarial pass over the result found two more ways to satisfy the
+letter of the list rule: any short parenthetical counted as list vocabulary, so "(withdrawn)" or
+"(coming soon)" beside a file kept the list intact, and only the text BETWEEN files was checked, so
+"DemoPlugin for Stream Deck 7.6.pkg" listed first passed as the product's file. Qualifiers are now a
+closed set and every file must be introduced by list vocabulary. No captured note reached either, and
+the narrowed matcher still labels all eight captured Stream Deck and Camera Hub notes.
 
 Two stale fixtures in `installed-versions.test.mjs` (not run in CI) were also repaired: they put a
 beta and a stable on the same date, which AUX-021 correctly made a tie. The beta is now a day later,
@@ -3595,7 +3600,9 @@ with the assertions unchanged.
 
 **Known limits.** Version-only "latest" surfaces elsewhere (homepage signals, product history) still
 pick the newest-dated record; the My Stack card now names whose notes that record holds. A record that
-is never refreshed keeps no platform value, so its readers on a flagged product stay UNKNOWN.
+is never refreshed keeps no platform value, so its readers on a flagged product stay UNKNOWN. The
+classifier does not read availability statements made in prose ("the macOS download is temporarily
+unavailable"): a listed file is taken as published.
 
 **Reopen only if** a flagged product's reader is offered an inapplicable or unknown-platform release as
 an update or told CURRENT while one is later or higher, the version comparator ever produces a

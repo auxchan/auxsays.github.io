@@ -519,7 +519,25 @@ def section_j_joint_platform_evidence() -> None:
                 "Download Links macOS DemoPlugin 7.6.pkg Windows DemoTool 7.6.msi", "7.6") == ("", ""))
     check("J15 the product's own files named in a sentence are prose, not a download list -> unknown",
           p("Elgato Stream Deck 7.6 Release Notes", "Known issue: Elgato Stream Deck 7.6.pkg fails to open on "
-            "older Macs, and Elgato Stream Deck 7.6.msi needs a restart.", "7.6") == ("", ""))
+            "older Macs, and Elgato Stream Deck 7.6.msi needs a restart.", "7.6") == ("", "")
+          # each file is introduced by list vocabulary, but prose stands BETWEEN them
+          and p("Elgato Stream Deck 7.6 Release Notes", "Known issues: Elgato Stream Deck 7.6.pkg fails to open "
+                "on older Macs. Windows: Elgato Stream Deck 7.6.msi needs a restart.", "7.6") == ("", ""))
+    sd_list = "Download Links macOS Elgato Stream Deck 7.6.pkg {note} Windows Elgato Stream Deck 7.6.msi"
+    check("J19 only an architecture or platform qualifier may stand in a list; any other note breaks it",
+          all(p("Elgato Stream Deck 7.6 Release Notes", sd_list.format(note=note), "7.6") == ("", "")
+              for note in ("(withdrawn)", "(coming soon)", "(unavailable)", "(crashes on launch)"))
+          and all(p("Elgato Stream Deck 7.6 Release Notes", sd_list.format(note=note), "7.6")
+                  == ("windows_macos", "installer_downloads") for note in ("(Apple Silicon)", "(x64)", ""))
+          and p("Elgato Stream Deck 7.6 Release Notes", "Known issues: Elgato Stream Deck 7.6.pkg (crashes on "
+                "launch) Elgato Stream Deck 7.6.msi (needs a restart).", "7.6") == ("", ""))
+    check("J20 a file whose name only ENDS in the product's name is another product's, wherever it is listed",
+          p("Elgato Stream Deck 7.6 Release Notes", "Download Links macOS DemoPlugin for Stream Deck 7.6.pkg "
+            "Windows Elgato Stream Deck 7.6.msi", "7.6") == ("", "")
+          and p("Elgato Wave Link 3.4 Release Notes", "Download Links macOS Elgato Stream Deck + Wave Link "
+                "3.4.pkg Windows Elgato Wave Link 3.4.msix", "3.4") == ("", "")
+          and p("Elgato Stream Deck 7.6 Release Notes", "Elgato Stream Deck 7.6.pkg / Elgato Stream Deck 7.6.msi",
+                "7.6") == ("windows_macos", "installer_downloads"))
     check("J16 another product's installers do not contradict the tracked product's",
           p("Elgato Stream Deck 7.6 Release Notes",
             SD_76_NOTES + " Requires Elgato Camera Hub 2.3.pkg or later.", "7.6")

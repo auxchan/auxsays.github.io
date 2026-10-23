@@ -151,19 +151,24 @@ def notes_platform_from_title(title: str) -> str:
 # conditions, each failing toward unknown:
 #   * an installer counts only when its file is named for the TRACKED PRODUCT ("DemoPlugin 7.6.pkg" in a
 #     troubleshooting note says nothing about Stream Deck 7.6);
-#   * the macOS and Windows files must sit in one download block -- product installers separated by
-#     nothing but platform labels, architecture qualifiers and download headings, the way Elgato lists
-#     them. A known-issue sentence that happens to name both files is prose, not a download list;
+#   * the macOS and Windows files must sit in one download block -- product installers with nothing but
+#     LIST VOCABULARY in front of and between them: platform labels, architecture qualifiers, download
+#     headings and list punctuation, the way Elgato lists them. A known-issue sentence that happens to
+#     name both files is prose, not a download list; so is "(coming soon)" or "(withdrawn)" beside a
+#     file, and "DemoPlugin for Stream Deck 7.6.pkg" is another product's file, not this one's;
 #   * every product installer in the notes names the record's EXACT version; another version's file is
 #     contradictory and labels nothing.
-# Casual mentions of Windows or macOS in the text never count.
+# Casual mentions of Windows or macOS in the text never count. Not read: an availability statement made
+# in prose elsewhere ("the macOS download is temporarily unavailable") -- a listed file is taken as
+# published.
 _INSTALLER_EXTENSIONS = "pkg|dmg|msi|msix|exe"
 _MACOS_INSTALLERS = {"pkg", "dmg"}
 _WINDOWS_INSTALLERS = {"msi", "msix", "exe"}
-_DOWNLOAD_BLOCK_GAP = re.compile(
-    r"(?:\s|[,;:/|•·\-–—]|\([^()]{1,20}\)"
-    r"|\b(?:macos|mac\s?os|mac|windows|download|downloads|links?|x64|arm64|intel|apple\s+silicon)\b)*",
-    re.I)
+_LIST_WORD = r"\b(?:macos|mac\s?os|mac|windows|download|downloads|links?|x64|arm64|intel|apple\s+silicon)\b"
+_LIST_QUALIFIER = r"\((?:x64|x86|arm64|64-bit|32-bit|intel|apple\s+silicon|universal|macos|windows)\)"
+_LIST_PUNCT = r"[,;:/|•·\-–—]"
+_DOWNLOAD_BLOCK_GAP = re.compile(rf"(?:\s|{_LIST_PUNCT}|{_LIST_QUALIFIER}|{_LIST_WORD})*", re.I)
+_LISTING_LEAD = re.compile(rf"(?:{_LIST_PUNCT}|{_LIST_QUALIFIER}|{_LIST_WORD})\s*$", re.I)
 
 
 def _product_installers(body: str, terms: tuple[str, ...]) -> list[re.Match[str]]:
@@ -177,21 +182,31 @@ def _product_installers(body: str, terms: tuple[str, ...]) -> list[re.Match[str]
     return list(artifact.finditer(body or ""))
 
 
+def _listed(body: str, match: re.Match[str]) -> bool:
+    """A file is LISTED when only list vocabulary, or the start of the notes, stands in front of it."""
+    lead = body[:match.start()]
+    return not lead.strip() or bool(_LISTING_LEAD.search(lead))
+
+
 def joint_platform_downloads(body: str, version: str, terms: tuple[str, ...]) -> tuple[str, bool]:
     """-> ('windows_macos' or '', installers_seen).
 
     'windows_macos' only when every product installer in the notes is for THIS version and one download
-    block holds both a macOS and a Windows file. `installers_seen` lets the caller count notes that
-    carried the product's installers but did not establish joint coverage.
+    block of listed files holds both a macOS and a Windows file. `installers_seen` lets the caller count
+    notes that carried the product's installers but did not establish joint coverage.
     """
+    body = body or ""
     found = _product_installers(body, terms)
     if not found:
         return "", False
     if any(m.group(1) != version for m in found):
         return "", True
-    blocks: list[set[str]] = [{found[0].group(2).lower()}]
-    for previous, current in zip(found, found[1:]):
-        gap = (body or "")[previous.end():current.start()]
+    listed = [m for m in found if _listed(body, m)]
+    if not listed:
+        return "", True
+    blocks: list[set[str]] = [{listed[0].group(2).lower()}]
+    for previous, current in zip(listed, listed[1:]):
+        gap = body[previous.end():current.start()]
         if _DOWNLOAD_BLOCK_GAP.fullmatch(gap):
             blocks[-1].add(current.group(2).lower())
         else:
