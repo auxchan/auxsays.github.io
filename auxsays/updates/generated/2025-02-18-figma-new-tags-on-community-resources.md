@@ -17,8 +17,8 @@ update_version: New tags on Community resources
 update_logo_text: FIG
 update_published_at: '2025-02-18T00:00:00.000Z'
 update_last_checked: '2026-08-18T08:11:31Z'
-source_last_checked: '2026-09-17T23:40:27Z'
-official_body_last_checked: '2026-09-17T23:40:27Z'
+source_last_checked: '2026-10-23T00:12:49Z'
+official_body_last_checked: '2026-10-23T00:12:49Z'
 record_last_updated: '2026-08-18T08:11:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-17T23:40:27Z'
+  url: https://www.figma.com/release-notes/?title=new-tags
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-23T00:12:49Z'
   url: https://www.figma.com/release-notes/?title=new-tags
   status: captured-from-rss-feed
   body_captured: true
