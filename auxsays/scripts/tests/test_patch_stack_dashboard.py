@@ -237,7 +237,7 @@ def run() -> int:
           len(entries) == len(products), f"{len(entries)} entries vs {len(products)} products")
 
     allowed = {"id", "name", "hist", "href", "ver", "date", "verdict", "rank", "ev", "n",
-               "checked", "mon", "oa", "os", "recs", "more"}
+               "checked", "mon", "oa", "os", "recs", "more", "split", "plat"}
     extra = sorted({k for e in entries for k in e} - allowed)
     check("P5 the payload carries only dashboard fields, not whole records", not extra, str(extra))
 
@@ -327,7 +327,8 @@ def run() -> int:
     # Fixed width, asserted EXACTLY. When the tuple grew from 5 to 11 for the upgrade path, three
     # checks below were gated on `len(rec) == 5` and quietly began measuring an empty list -- IV2
     # passed over nothing at all. An exact width is what turned that into a visible failure.
-    REC_WIDTH = 11
+    # 11 -> 12: rec[11] says whose release notes a record holds, for platform-split products (AUX-050).
+    REC_WIDTH = 12
     bad_shape, unsorted, over_cap, bad_more = [], [], [], []
     build_aware, beta_flagged = [], []
     for entry in entries:
@@ -414,8 +415,12 @@ def run() -> int:
     # same-line same-day pair that none of the original four could describe without asserting an
     # order nobody published -- CURRENT claims the reader is newest, UPDATE AVAILABLE that the
     # sibling is newer, NEWER TRACKED VERSION EXISTS that newer releases are tracked.
+    # PLATFORM APPLICABILITY UNKNOWN (AUX-050) is the same kind of statement: for a product that
+    # publishes notes per platform, a release documented for another platform -- or one whose
+    # platform is unknown -- establishes no order against the reader's, so it names no target.
     CONSERVATIVE = {"CURRENT", "UPDATE AVAILABLE", "NEWER TRACKED VERSION EXISTS",
-                    "INSTALLED VERSION NO LONGER TRACKED", "RELEASE ORDER NOT RECORDED"}
+                    "INSTALLED VERSION NO LONGER TRACKED", "RELEASE ORDER NOT RECORDED",
+                    "PLATFORM APPLICABILITY UNKNOWN"}
     iv_logic = js.split("const installedState", 1)[1].split("// My Patch Stack", 1)[0]
     declared = set(re.findall(r"'(" + "|".join(sorted(CONSERVATIVE, key=len, reverse=True)) + r")'", js))
     leaked = [w for w in ("WAIT", "TEST FIRST", "AVOID", "SAFE ENOUGH", "SECURITY UPDATE",
@@ -648,7 +653,7 @@ def run() -> int:
         probe = (src[start:end]
                  + "\nconst CASES = " + json.dumps(cases) + ";\n"
                  + "console.log(JSON.stringify(CASES.map((c) => {\n"
-                 + "  const info = installedState(c.entry, { recs: c.recs });\n"
+                 + "  const info = installedState(c.entry, c.product || { recs: c.recs });\n"
                  + "  return { state: info.state, pathKind: info.pathKind || '',\n"
                  + "           latest: info.latest ? [info.latest[0], info.latest[1]] : null,\n"
                  + "           latestScope: info.latestScope || '',\n"
@@ -805,7 +810,9 @@ def run() -> int:
 
         # K. The repair reads DATES. It must not have quietly grown a build comparator: "26300.9550
         # is bigger than 26300.9457" is version arithmetic, and AUXSAYS does not infer chronology
-        # from build magnitude. Pinned on the function body, so a comparator anywhere else in the
+        # from build magnitude. (AUX-050 adds ONE bounded exception outside this body: in a
+        # platform-split product a dotted version may VETO a confident claim, never create one; PS-K pins
+        # where it may live.) Pinned on the function body, so a comparator anywhere else in the
         # file does not satisfy it and one added HERE cannot hide.
         iv_body = js.split("const installedState", 1)[1].split("const paintInstalledControls", 1)[0]
         arithmetic = [t for t in ("parseInt", "parseFloat", "localeCompare", "Number(r[1]",
@@ -829,6 +836,138 @@ def run() -> int:
               css_text.count(".patch-iv-step--tied::after") == 2
               and ".patch-iv-step--tied::after { left:" in css_text.split("@media (max-width: 640px)", 1)[1],
               "the narrow-screen offset is missing, so the mask would sit off the line")
+
+    # ---------- PS: products that publish release notes per platform (AUX-050) ----------
+    # Elgato documents some versions in separate Windows and macOS articles. Date order across them
+    # is not an upgrade order: a Wave Link 3.2.10 reader (Windows notes) was told UPDATE AVAILABLE
+    # to 2.0.9 (macOS notes, an older version published a week later). Run through the REAL
+    # installedState with the product flag the payload carries.
+    print("\n[PS] a release documented for another platform is never offered as an update")
+
+    def prec(version, date, platform="", beta=0):
+        return [version, "", date, f"/u/{version}", beta, "", 1, 0, "", 0, 1, platform]
+
+    def pent(version, date):
+        return {"v": version, "b": "", "d": date, "u": f"/u/{version}"}
+
+    def split(recs, flag=True):
+        return {"recs": recs, "split": flag}
+
+    WIN_3210 = prec("3.2.10", "2026-08-05", "windows")
+    MAC_209 = prec("2.0.9", "2026-08-12", "macos")
+    WIN_3211 = prec("3.2.11", "2026-08-20", "windows")
+    WIN_LOWER_LATER = prec("3.2.1", "2026-08-25", "windows")
+    WIN_ODD = prec("3.3 Preview", "2026-08-21", "windows")
+    WIN_BETA = prec("3.3.0", "2026-08-22", "windows", beta=1)
+    WIN_SAME_DAY = prec("3.2.10.1", "2026-08-05", "windows")
+    WIN_EARLIER_HIGHER = prec("3.4", "2026-07-01", "windows")
+    NEUTRAL_LATER = prec("3.3", "2026-08-21", "")
+    PLAIN_A = prec("3.2.10", "2026-08-05", "")
+    PLAIN_B = prec("2.0.9", "2026-08-12", "")
+    MAC_OLD = prec("2.0.8", "2026-07-01", "macos")
+    PLAIN_LATER_GREATER = prec("3.2.11", "2026-08-20", "")
+
+    if node:
+        r = states([
+            {"product": split([MAC_209, WIN_3210]), "entry": pent("3.2.10", "2026-08-05")},           # 0
+            {"product": split([MAC_209, WIN_3210]), "entry": pent("2.0.9", "2026-08-12")},            # 1
+            {"product": split([WIN_3211, MAC_209, WIN_3210]), "entry": pent("3.2.10", "2026-08-05")}, # 2
+            {"product": split([WIN_LOWER_LATER, WIN_3210]), "entry": pent("3.2.10", "2026-08-05")},   # 3
+            {"product": split([NEUTRAL_LATER, WIN_3210]), "entry": pent("3.2.10", "2026-08-05")},     # 4
+            {"product": split([WIN_3211, PLAIN_A]), "entry": pent("3.2.10", "2026-08-05")},           # 5
+            {"product": split([WIN_ODD, WIN_3210]), "entry": pent("3.2.10", "2026-08-05")},           # 6
+            {"product": split([WIN_SAME_DAY, WIN_3210]), "entry": pent("3.2.10", "2026-08-05")},      # 7
+            {"product": split([PLAIN_B, PLAIN_A]), "entry": pent("3.2.10", "2026-08-05")},            # 8
+            {"product": split([PLAIN_B, PLAIN_A], flag=False),
+             "entry": pent("3.2.10", "2026-08-05")},                                                    # 9
+            {"product": split([MAC_209, WIN_3210, MAC_OLD]), "entry": pent("2.0.9", "2026-08-12")},   # 10
+            {"product": split([MAC_209, MAC_OLD]), "entry": pent("2.0.9", "2026-08-12")},             # 11
+            {"product": split([WIN_BETA, WIN_3210]), "entry": pent("3.2.10", "2026-08-05")},          # 12
+            {"product": split([WIN_3210, WIN_EARLIER_HIGHER]),
+             "entry": pent("3.2.10", "2026-08-05")},                                                    # 13
+            {"product": split([MAC_209, WIN_3210]), "entry": pent("1.0", "2020-01-01")},              # 14
+            {"product": split([PLAIN_LATER_GREATER, PLAIN_A]), "entry": pent("3.2.10", "2026-08-05")}, # 15
+        ])
+        unknown = "PLATFORM APPLICABILITY UNKNOWN"
+
+        def is_unknown(res):
+            return res["state"] == unknown and res["latest"] is None and res["pathKind"] == ""
+
+        check("PS-1 Windows 3.2.10 vs a LATER-dated macOS 2.0.9: no update, no target", is_unknown(r[0]), str(r[0]))
+        check("PS-2 macOS 2.0.9 vs a HIGHER Windows 3.2.10: not CURRENT either", is_unknown(r[1]), str(r[1]))
+        check("PS-3 a later, greater, stable same-platform release is UPDATE AVAILABLE, for that platform",
+              r[2]["state"] == "UPDATE AVAILABLE" and r[2]["latest"] == ["3.2.11", ""]
+              and r[2]["latestScope"] == "platform", str(r[2]))
+        check("PS-4 a later same-platform release with a LOWER version is no update", is_unknown(r[3]), str(r[3]))
+        check("PS-5 a later release of UNKNOWN platform is not assumed to apply", is_unknown(r[4]), str(r[4]))
+        # Both halves: a labelled later release, and an UNLABELLED later, greater one -- the case only
+        # the "unlabelled reader" rule stops, since two unknown scopes are not one known platform.
+        check("PS-6 an UNLABELLED installed release compares with nothing",
+              is_unknown(r[5]) and is_unknown(r[15]), f"{r[5]} | {r[15]}")
+        check("PS-7 an unorderable version never becomes confident advice", is_unknown(r[6]), str(r[6]))
+        check("PS-8 a same-day same-platform release keeps the unrecorded-order state",
+              r[7]["state"] == "RELEASE ORDER NOT RECORDED" and r[7]["latest"] is None, str(r[7]))
+        check("PS-9 the product flag engages BEFORE any record is labelled",
+              is_unknown(r[8]) and r[9]["state"] == "UPDATE AVAILABLE",
+              f"flagged={r[8]['state']} unflagged={r[9]['state']}")
+        check("PS-10 the newest and highest on the reader's platform is CURRENT, scoped to that platform",
+              r[11]["state"] == "CURRENT" and r[11]["latest"] == ["2.0.9", ""]
+              and r[11]["latestScope"] == "platform", str(r[11]))
+        check("PS-11 ...but not while a higher version on another platform is tracked", is_unknown(r[10]), str(r[10]))
+        check("PS-12 a stable reader whose only later same-platform release is a beta: newer, no update",
+              r[12]["state"] == "NEWER TRACKED VERSION EXISTS" and r[12]["pathKind"] == "", str(r[12]))
+        check("PS-13 an EARLIER same-platform release with a HIGHER version contradicts the order",
+              is_unknown(r[13]), str(r[13]))
+        check("PS-14 a release older than the tracked window offers no other platform's record",
+              is_unknown(r[14]), str(r[14]))
+
+        # Unaffected products: the same shapes WITHOUT any platform data keep today's answers --
+        # OBS (date order), and DaVinci (a newer stable above a beta is still the update).
+        obs = states([
+            {"recs": [prec("32.2.2", "2026-08-14"), prec("32.1.2", "2026-04-21")],
+             "entry": pent("32.1.2", "2026-04-21")},
+            {"recs": [prec("32.2.2", "2026-08-14"), prec("32.1.2", "2026-04-21")],
+             "entry": pent("32.2.2", "2026-08-14")},
+            {"recs": [prec("21.1", "2026-05-01"), prec("21 Public Beta 1", "2026-04-15", beta=1),
+                      prec("20.2", "2026-01-10")], "entry": pent("20.2", "2026-01-10")},
+        ])
+        check("PS-15 unpartitioned products keep UPDATE AVAILABLE and CURRENT exactly as before",
+              obs[0]["state"] == "UPDATE AVAILABLE" and obs[0]["latest"] == ["32.2.2", ""]
+              and obs[1]["state"] == "CURRENT"
+              and obs[2]["state"] == "UPDATE AVAILABLE" and obs[2]["latest"] == ["21.1", ""], str(obs))
+
+    # The payload carries the flag and each record's platform. Rendered from the REAL page with
+    # labelled copies of the real Wave Link records, so it holds before and after the live relabel.
+    import copy
+    labelled = copy.deepcopy(records)
+    for rec_fm in labelled:
+        if rec_fm.get("product_id") == "elgato-wave-link":
+            v = str(rec_fm.get("update_version") or "")
+            rec_fm["official_notes_platform"] = "windows" if v == "3.2.10" else "macos" if v == "2.0.9" else ""
+    _ok, html2 = render_page(labelled, products)
+    m2 = re.search(r'<script type="application/json" id="patch-stack-data">(.*?)</script>', html2, re.S)
+    entries2 = json.loads(m2.group(1)) if m2 else []
+    wave = next((e for e in entries2 if e.get("id") == "elgato-wave-link"), {})
+    obs_entry = next((e for e in entries2 if e.get("id") == "obs-studio"), {})
+    fourk = next((e for e in entries2 if e.get("id") == "elgato-4k-capture-utility"), {})
+    plats = {rec[0]: rec[11] for rec in wave.get("recs", []) if isinstance(rec, list) and len(rec) == REC_WIDTH}
+    # Scoped to products with DOCUMENTED per-platform notes: Elgato 4K Capture Utility has none, so
+    # it is not swept in by its vendor.
+    check("PS-16 the payload flags documented per-platform products, and only them",
+          wave.get("split") is True and obs_entry.get("split") is False and fourk.get("split") is False,
+          f"wave={wave.get('split')!r} obs={obs_entry.get('split')!r} 4k={fourk.get('split')!r}")
+    check("PS-17 every Wave Link record carries whose notes it holds in rec[11]",
+          plats.get("3.2.10") == "windows" and plats.get("2.0.9") == "macos", str(plats))
+    check("PS-18 the stack card's latest record names its platform's notes",
+          wave.get("plat") in ("windows", "macos") and "release notes</span>" in JS.read_text(encoding="utf-8"),
+          repr(wave.get("plat")))
+
+    # SD-K, amended rather than worked around: version magnitude is consulted ONLY inside
+    # platformScopedState, and only to withhold a claim (PS-4, PS-7, PS-11, PS-13 prove the direction).
+    # installedState itself still never parses a version.
+    scoped_body = js.split("const platformScopedState", 1)[1].split("const installedState", 1)[0]
+    check("PS-K version order lives only in the platform-split branch, never in installedState",
+          "versionOrder" in scoped_body and "versionOrder" not in iv_body, "")
 
     print()
     print("=" * 78)

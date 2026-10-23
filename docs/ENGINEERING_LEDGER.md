@@ -57,6 +57,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
 | AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
+| AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
 
 ---
 
@@ -3535,6 +3536,45 @@ lands and older than the newest two already-seen articles are outside the per-ru
 **Reopen only if** a record built from one platform's article publishes without stating that platform,
 or a platform label appears that the article title does not support, or any Elgato record or evidence
 row counts community reports while no platform-aware acceptance rule exists.
+
+### AUX-050 — My Patch Stack recommended another platform's older release as an update
+
+- **Status** Resolved · **Area** Published claims · **Severity** High
+- **First seen** 2026-10-23 · **Resolved** 2026-10-23
+
+The installed-version comparison orders a product's releases by publication date. For a vendor that
+publishes some versions' notes per platform, date order across platforms is not an upgrade order.
+Reproduced with the shipped function on the live payload: a reader on Wave Link 3.2.10 (Windows
+notes, 5 August) was told UPDATE AVAILABLE to 2.0.9 (macOS notes, an older version published
+12 August), and a 2.0.9 reader was told CURRENT.
+
+**The containment.** For products flagged in the catalogue as publishing notes per platform
+(`official_notes_by_platform` -- Wave Link, Camera Hub and Stream Deck, whose official articles show
+it; not 4K Capture Utility, whose do not), the comparison only relates records whose notes carry the
+reader's own platform. An ABSENT platform means the scope is unknown, never "every platform". A
+confident UPDATE AVAILABLE needs a same-platform release that is strictly later, not tied, stable for
+a stable reader, and strictly greater by version; CURRENT also needs nothing elsewhere that is later
+or a higher or unorderable version. Everything else is a new state, PLATFORM APPLICABILITY UNKNOWN,
+which names no target and draws no path. The flag is site-owned, so the containment applied the
+moment it deployed, before any record was labelled. Every other product runs the unchanged path.
+
+**A doctrine amended, not worked around.** SD-K forbids inferring chronology from version magnitude,
+because the same-day Windows fix (AUX-021) was nearly built on build arithmetic. Dates still decide
+order here. A dotted version may only VETO a claim the date rule would make, inside the platform
+branch, never create one; a check pins where the comparator may live, and the mutation proof shows
+it only ever turns a confident state into UNKNOWN.
+
+Two stale fixtures in `installed-versions.test.mjs` (not run in CI) were also repaired: they put a
+beta and a stable on the same date, which AUX-021 correctly made a tie. The beta is now a day later,
+with the assertions unchanged.
+
+**Known limits.** Version-only "latest" surfaces elsewhere (homepage signals, product history) still
+pick the newest-dated record; the My Stack card now names whose notes that record holds. A reader
+whose saved release is unlabelled on a flagged product sees UNKNOWN until its record is labelled.
+
+**Reopen only if** a flagged product's reader is offered another or an unknown platform's release as
+an update or told CURRENT while one is later or higher, or the version comparator ever produces a
+confident state on its own, or an unflagged product's comparison changes.
 
 ## Adding an entry
 

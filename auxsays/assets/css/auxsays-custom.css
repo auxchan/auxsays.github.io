@@ -5297,6 +5297,8 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .patch-iv-state--installed-version-no-longer-tracked strong { border-color: var(--border-subtle); background: rgba(255,255,255,.04); }
 /* Unresolved order is not a warning and not an all-clear, so it borrows neither palette. */
 .patch-iv-state--release-order-not-recorded strong { border-color: var(--border-subtle); background: rgba(255,255,255,.04); }
+.patch-iv-state--platform-applicability-unknown strong { border-color: var(--border-subtle); background: rgba(255,255,255,.04); }
+.patch-stack-card__notes-scope { color: var(--text-1); font-size: .8rem; }
 
 .patch-iv-picker summary {
   cursor: pointer; font-size: .8rem; color: var(--accent-1); list-style: none;
