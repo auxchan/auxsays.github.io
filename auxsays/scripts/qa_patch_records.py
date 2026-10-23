@@ -892,6 +892,32 @@ def scan_platform_scoped_consensus(
     return errors
 
 
+def scan_unconfigured_platform_split(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """Surface a product whose records hold ONE platform's notes but which is not flagged as such.
+
+    My Patch Stack compares per platform only for products flagged `official_notes_by_platform` in the
+    catalogue -- a label appearing on an unflagged product deliberately changes no comparison. So the
+    label is reported here instead, as a WARNING: the product's update advice may cross platforms
+    until someone decides whether to flag it. `windows_macos` alone does not indicate per-platform
+    notes, so it is not reported.
+    """
+    flagged = {str(p.get("id") or p.get("product_id") or ""): bool(p.get("official_notes_by_platform"))
+               for p in (load_yaml(PRODUCTS_PATH, []) or []) if isinstance(p, dict)}
+    seen: dict[str, Path] = {}
+    for path in files:
+        data = front_matter(path)
+        product_id = str(data.get("product_id") or "").strip()
+        if str(data.get("official_notes_platform") or "") in ("windows", "macos") and not flagged.get(product_id):
+            seen.setdefault(product_id, path)
+    warnings: list[dict[str, str]] = []
+    for product_id, path in sorted(seen.items()):
+        add(warnings, path, "platform_split_product_unconfigured",
+            f"{product_id} has records holding one platform's release notes but is not flagged "
+            "official_notes_by_platform, so My Patch Stack may still compare across platforms for it "
+            "(AUX-050). Flag it in patch_products.yml if its vendor publishes notes per platform.")
+    return [], warnings
+
+
 def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -1163,6 +1189,9 @@ def main(argv: list[str] | None = None) -> int:
     errors.extend(e)
     warnings.extend(w)
     e, w = scan_evidence_count_alignment(files)
+    errors.extend(e)
+    warnings.extend(w)
+    e, w = scan_unconfigured_platform_split(files)
     errors.extend(e)
     warnings.extend(w)
     e, w = scan_update_layout_public_copy()

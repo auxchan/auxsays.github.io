@@ -466,6 +466,160 @@ def section_i_tripwire() -> None:
     check("I2 no method plan targets a per-platform vendor", not routed, str(routed))
 
 
+# --------------------------------------------------------------------------------------------
+# Verbatim download sections of the captured official notes (whitespace collapsed), so the
+# classifier is proven on what Elgato actually publishes, without reading bot-written records.
+SD_76_NOTES = ("22 September 2026 Download Links macOS Elgato Stream Deck 7.6.pkg Windows Elgato "
+               "Stream Deck 7.6.msi What's new in Stream Deck 7.6? Infobar Actions for Stream Deck Neo")
+CH_23_NOTES = ("Release Date: 14 July 2026 Windows Camera Hub 2.3.msi macOS Camera Hub 2.3.pkg "
+               "New Facecam 4K Firmware - Sharper, Cleaner, More Accurate")
+FOURK_1716_NOTES = ("Utility 1.7.16? Download Download 4K Capture Utility 1.7.16 from Elgato.com or the "
+                    "direct link below. Download for Windows Removed Bonjour Service")
+WL_3210_NOTES = ("Release Date : 5 August 2026 Download Links Windows Elgato Wave Link 3.2.10.msix (x64) "
+                 "Elgato Wave Link 3.2.10.msix (arm64) What's new in Wave Link 3.2.10 (Windows)?")
+WL_209_NOTES = ("Release Date : 12 August 2026 Download Links macOS Elgato Wave Link 2.0.9.pkg "
+                "What's new in Wave Link 2.0.9?")
+
+
+def section_j_joint_platform_evidence() -> None:
+    print("\n[J] notes for BOTH platforms are established by installers, never assumed from a silent title")
+    # Each product's own configured `product_terms` (patch_ingestion_sources.yml), composed into
+    # installer names exactly as the adapter does.
+    terms = {"Stream Deck": ["stream deck"], "Camera Hub": ["camera hub"],
+             "4K Capture Utility": ["4k capture utility", "4k capture"], "Wave Link": ["wave link"]}
+
+    def p(title: str, body: str, version: str) -> tuple:
+        product = next(name for name in terms if name in title)
+        names = zendesk._installer_names({"company": "Elgato", "ingestion": {"product_terms": terms[product]}})
+        return zendesk.notes_platform_for(title, body, version, names)
+
+    check("J1 Stream Deck 7.6: same-version .pkg and .msi -> windows_macos, from installers",
+          p("Elgato Stream Deck 7.6 Release Notes", SD_76_NOTES, "7.6") == ("windows_macos", "installer_downloads"))
+    check("J2 Camera Hub 2.3: same-version .msi and .pkg -> windows_macos",
+          p("Elgato Camera Hub 2.3 Release Notes", CH_23_NOTES, "2.3") == ("windows_macos", "installer_downloads"))
+    check("J3 4K Capture Utility 1.7.16: a silent title with a Windows download only -> unknown",
+          p("Elgato 4K Capture Utility 1.7.16 Release Notes", FOURK_1716_NOTES, "1.7.16") == ("", ""))
+    check("J4 Wave Link 3.2.10 stays Windows: the title token decides, from the title",
+          p(WINDOWS_TITLE, WL_3210_NOTES, "3.2.10") == ("windows", "title_token"))
+    check("J5 Wave Link 2.0.9 stays macOS",
+          p(MACOS_TITLE, WL_209_NOTES, "2.0.9") == ("macos", "title_token"))
+    check("J6 a silent title with no installers at all -> unknown, never neutral",
+          p("Elgato Stream Deck 7.7 Release Notes", "Fixes for Windows and macOS users.", "7.7") == ("", ""))
+    check("J7 installers for ANOTHER version, or a mix of versions -> unknown",
+          p("Elgato Stream Deck 7.6 Release Notes", SD_76_NOTES.replace("7.6.pkg", "7.5.1.pkg")
+            .replace("7.6.msi", "7.5.1.msi"), "7.6") == ("", "")
+          and p("Elgato Stream Deck 7.6 Release Notes", SD_76_NOTES.replace("7.6.msi", "7.5.1.msi"), "7.6") == ("", ""))
+    check("J8 an installer for one platform only -> unknown",
+          p("Elgato Stream Deck 7.6 Release Notes", "Download Links macOS Elgato Stream Deck 7.6.pkg", "7.6") == ("", ""))
+    # Independent review's counterexample: other software's installers, same version, both platforms.
+    check("J14 installers not named for the tracked product -> unknown, in prose or in a download list",
+          p("Elgato Stream Deck 7.6 Release Notes", "Troubleshooting note: DemoPlugin 7.6.pkg and DemoTool "
+            "7.6.msi both fail to launch. No product downloads are listed.", "7.6") == ("", "")
+          and p("Elgato Stream Deck 7.6 Release Notes",
+                "Download Links macOS DemoPlugin 7.6.pkg Windows DemoTool 7.6.msi", "7.6") == ("", ""))
+    check("J15 the product's own files named in a sentence are prose, not a download list -> unknown",
+          p("Elgato Stream Deck 7.6 Release Notes", "Known issue: Elgato Stream Deck 7.6.pkg fails to open on "
+            "older Macs, and Elgato Stream Deck 7.6.msi needs a restart.", "7.6") == ("", "")
+          # each file is introduced by list vocabulary, but prose stands BETWEEN them
+          and p("Elgato Stream Deck 7.6 Release Notes", "Known issues: Elgato Stream Deck 7.6.pkg fails to open "
+                "on older Macs. Windows: Elgato Stream Deck 7.6.msi needs a restart.", "7.6") == ("", ""))
+    sd_list = "Download Links macOS Elgato Stream Deck 7.6.pkg {note} Windows Elgato Stream Deck 7.6.msi"
+    check("J19 only an architecture or platform qualifier may stand in a list; any other note breaks it",
+          all(p("Elgato Stream Deck 7.6 Release Notes", sd_list.format(note=note), "7.6") == ("", "")
+              for note in ("(withdrawn)", "(coming soon)", "(unavailable)", "(crashes on launch)"))
+          and all(p("Elgato Stream Deck 7.6 Release Notes", sd_list.format(note=note), "7.6")
+                  == ("windows_macos", "installer_downloads") for note in ("(Apple Silicon)", "(x64)", ""))
+          and p("Elgato Stream Deck 7.6 Release Notes", "Known issues: Elgato Stream Deck 7.6.pkg (crashes on "
+                "launch) Elgato Stream Deck 7.6.msi (needs a restart).", "7.6") == ("", ""))
+    check("J20 a file whose name only ENDS in the product's name is another product's, wherever it is listed",
+          p("Elgato Stream Deck 7.6 Release Notes", "Download Links macOS DemoPlugin for Stream Deck 7.6.pkg "
+            "Windows Elgato Stream Deck 7.6.msi", "7.6") == ("", "")
+          and p("Elgato Wave Link 3.4 Release Notes", "Download Links macOS Elgato Stream Deck + Wave Link "
+                "3.4.pkg Windows Elgato Wave Link 3.4.msix", "3.4") == ("", "")
+          and p("Elgato Stream Deck 7.6 Release Notes", "Elgato Stream Deck 7.6.pkg / Elgato Stream Deck 7.6.msi",
+                "7.6") == ("windows_macos", "installer_downloads"))
+    check("J16 another product's installers do not contradict the tracked product's",
+          p("Elgato Stream Deck 7.6 Release Notes",
+            SD_76_NOTES + " Requires Elgato Camera Hub 2.3.pkg or later.", "7.6")
+          == ("windows_macos", "installer_downloads"))
+
+    # The writer stores the value and its basis; joint notes add no title suffix or page line.
+    joint = candidate("7.6", "windows_macos")
+    joint["official_notes_platform_basis"] = "installer_downloads"
+    front = writer.build_front_matter(joint)
+    plain = writer.build_front_matter(candidate("7.6"))
+    check("J9 create stores windows_macos with its basis, titles exactly the unsuffixed form",
+          front.get("official_notes_platform") == "windows_macos"
+          and front.get("official_notes_platform_basis") == "installer_downloads"
+          and all(front[k] == plain[k] for k in TITLE_KEYS), str({k: front.get(k) for k in TITLE_KEYS}))
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td)
+        path, _ = writer.write_record(out, candidate("7.6"))
+        before, _ = writer._front_matter(path)
+        _p, action = writer.write_record(out, joint)
+        after, _ = writer._front_matter(path)
+        check("J10 the next refresh of an unlabelled record adds windows_macos and its basis only",
+              after.get("official_notes_platform") == "windows_macos"
+              and after.get("official_notes_platform_basis") == "installer_downloads"
+              and all(after.get(k) == before.get(k) for k in TITLE_KEYS), action)
+        # An observation that lost the notes -- the adapter then sends the TITLE as the body, and no
+        # captured flag -- is not evidence the installers went away: the label stays.
+        lost = candidate("7.6")
+        lost["body"] = "Elgato Wave Link 7.6 Release Notes"
+        writer.write_record(out, lost)
+        survived, _ = writer._front_matter(path)
+        check("J17 a refresh whose article body was missing keeps an installer-based label",
+              survived.get("official_notes_platform") == "windows_macos"
+              and survived.get("official_notes_platform_basis") == "installer_downloads",
+              str(survived.get("official_notes_platform")))
+        # The installers were the evidence: a later observation of the same notes that no longer
+        # establishes both platforms takes the label away, instead of keeping it as "absent = keep".
+        regressed = candidate("7.6")
+        regressed["body"] = SD_76_NOTES.replace("7.6.pkg", "7.6.1.pkg")
+        regressed["official_notes_body_captured"] = True
+        writer.write_record(out, regressed)
+        gone, _ = writer._front_matter(path)
+        # A title-token label is NOT dropped by a captured body that says nothing about platforms.
+        path_w, _ = writer.write_record(out, dict(candidate("3.2.10", "windows"),
+                                                  official_notes_platform_basis="title_token"))
+        writer.write_record(out, dict(candidate("3.2.10"), official_notes_body_captured=True))
+        kept, _ = writer._front_matter(path_w)
+        check("J13 a label whose evidence was the installers leaves with them; a title label stays",
+              "official_notes_platform" not in gone and "official_notes_platform_basis" not in gone
+              and kept.get("official_notes_platform") == "windows",
+              f"gone={gone.get('official_notes_platform')!r} kept={kept.get('official_notes_platform')!r}")
+    bogus = candidate("7.6", "windows_macos")
+    bogus["official_notes_platform_basis"] = "a guess"
+    check("J11 a basis outside its vocabulary is never written",
+          "official_notes_platform_basis" not in writer.build_front_matter(bogus))
+
+    # End to end through fetch(): the diagnostics count installers that established nothing.
+    articles = [article(31, "Elgato Wave Link 3.3 Release Notes", "2026-09-01T10:00:00Z",
+                        body="<p>Download Links macOS Elgato Wave Link 3.3.pkg Windows Elgato Wave Link 3.3.msi</p>"),
+                article(32, "Elgato Wave Link 3.2.11 Release Notes", "2026-08-20T10:00:00Z",
+                        body="<p>Download Links Windows Elgato Wave Link 3.2.11.msix</p>")]
+    records, stderr = run_fetch(articles)
+    by_version = {r["version"]: r for r in records}
+    check("J12 through fetch(): joint installers label, one-platform installers are counted, not guessed",
+          by_version.get("3.3", {}).get("official_notes_platform") == "windows_macos"
+          and "official_notes_platform" not in by_version.get("3.2.11", {"official_notes_platform": "x"})
+          and diag(stderr, "platform_downloads_unverified") == 1, stderr[-200:])
+    # The captured flag is set only by a real body, and is the writer's input, never a record field.
+    records, _ = run_fetch([article(33, "Elgato Wave Link 3.4.1 Release Notes", "2026-09-10T10:00:00Z",
+                                    body="<p></p>"),
+                            article(34, "Elgato Wave Link 3.4.2 Release Notes", "2026-09-12T10:00:00Z")])
+    by_version = {r["version"]: r for r in records}
+    empty, real = by_version.get("3.4.1", {}), by_version.get("3.4.2", {})
+    with tempfile.TemporaryDirectory() as td:
+        written, _ = writer.write_record(Path(td), real)
+        stored, _ = writer._front_matter(written)
+    check("J18 only a captured body is flagged as an observation of the notes, and the flag is never stored",
+          "official_notes_body_captured" not in empty and empty.get("body") == empty.get("title")
+          and real.get("official_notes_body_captured") is True
+          and "official_notes_body_captured" not in stored,
+          f"empty={sorted(empty)} stored={'official_notes_body_captured' in stored}")
+
+
 def run() -> int:
     section_a_title_parser()
     section_b_identity()
@@ -476,6 +630,7 @@ def run() -> int:
     section_g_render()
     section_h_publish_guard()
     section_i_tripwire()
+    section_j_joint_platform_evidence()
     print()
     print("=" * 78)
     print(f"Results: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")

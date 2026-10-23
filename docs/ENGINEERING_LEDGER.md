@@ -57,6 +57,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
 | AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
+| AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
 
 ---
 
@@ -3535,6 +3536,78 @@ lands and older than the newest two already-seen articles are outside the per-ru
 **Reopen only if** a record built from one platform's article publishes without stating that platform,
 or a platform label appears that the article title does not support, or any Elgato record or evidence
 row counts community reports while no platform-aware acceptance rule exists.
+
+### AUX-050 — My Patch Stack recommended another platform's older release as an update
+
+- **Status** Resolved · **Area** Published claims · **Severity** High
+- **First seen** 2026-10-23 · **Resolved** 2026-10-23
+
+The installed-version comparison orders a product's releases by publication date. For a vendor that
+publishes some versions' notes per platform, date order across platforms is not an upgrade order.
+Reproduced with the shipped function on the live payload: a reader on Wave Link 3.2.10 (Windows
+notes, 5 August) was told UPDATE AVAILABLE to 2.0.9 (macOS notes, an older version published
+12 August), and a 2.0.9 reader was told CURRENT.
+
+**Whose notes, from evidence only.** `official_notes_platform` (AUX-049) now has three positive
+values: `windows` and `macos` from the article title's token, and `windows_macos` when one download
+list in the notes holds the PRODUCT'S OWN installers for THIS exact version for both platforms
+("Elgato Stream Deck 7.6.pkg" beside "Elgato Stream Deck 7.6.msi", with only platform labels,
+architecture qualifiers, download headings and list punctuation in front of and between them). Its
+basis is stored beside it (`title_token` /
+`installer_downloads`). ABSENT means unknown. A title that names no platform is NOT taken as
+cross-platform: 4K Capture Utility 1.7.16's untitled notes offer a Windows download only. Installers of
+other software, of another version, of one platform only, the product's files named inside a sentence,
+or prose mentions of both systems establish nothing, and installer lists that establish nothing are
+counted (`platform_downloads_unverified`). An installer-based label is withdrawn only by an
+observation whose notes were actually captured: the adapter sends the title when an article comes
+back without a body, and a lost body is not evidence that the installers went away.
+`windows_macos` adds no title suffix or page line.
+
+**The comparison.** Only for products flagged `official_notes_by_platform` in the catalogue -- Wave
+Link, Camera Hub and Stream Deck, whose official articles show per-platform notes; not 4K Capture
+Utility -- and only by that flag: a label on an unflagged product changes no comparison, and the
+publish QA warns about it instead (`platform_split_product_unconfigured`). A release applies to the
+reader when it carries the reader's value, or covers both platforms for a single-platform reader; a
+both-platforms reader is compared only with both-platforms releases. UPDATE AVAILABLE needs an
+applicable release that is strictly later, untied, stable for a stable reader and strictly greater by
+version; CURRENT also needs nothing inapplicable that is later or higher. Everything else is a new
+state, PLATFORM APPLICABILITY UNKNOWN, with no target and no path. Every other product runs the
+unchanged path.
+
+**A doctrine amended, not worked around.** SD-K forbids inferring chronology from version magnitude,
+because the same-day Windows fix (AUX-021) was nearly built on build arithmetic. Dates still decide
+order. A dotted version may only VETO a claim the date rule would make, inside the platform branch,
+never create one; a check pins where the comparator may live.
+
+**What review caught.** A first version treated an absent value as unknown while the vocabulary could
+only say `windows` or `macos`, so a record from cross-platform notes could never be labelled, and
+every Stream Deck and Camera Hub reader would have been UNKNOWN permanently -- the ledger's own "until
+labelled" was false. Installer evidence is what fixes that without assuming anything. A simulated
+refresh of the real records gives Stream Deck 7.5.1 UPDATE AVAILABLE to 7.6 and 7.6 CURRENT again, the
+same for Camera Hub, while both Wave Link readers stay UNKNOWN. A second review then showed the first
+installer matcher read ANY versioned installer anywhere in the text ("DemoPlugin 7.6.pkg and DemoTool
+7.6.msi both fail to launch" came out `windows_macos`) and that an empty API body could revoke a valid
+label; both are closed above. An adversarial pass over the result found two more ways to satisfy the
+letter of the list rule: any short parenthetical counted as list vocabulary, so "(withdrawn)" or
+"(coming soon)" beside a file kept the list intact, and only the text BETWEEN files was checked, so
+"DemoPlugin for Stream Deck 7.6.pkg" listed first passed as the product's file. Qualifiers are now a
+closed set and every file must be introduced by list vocabulary. No captured note reached either, and
+the narrowed matcher still labels all eight captured Stream Deck and Camera Hub notes.
+
+Two stale fixtures in `installed-versions.test.mjs` (not run in CI) were also repaired: they put a
+beta and a stable on the same date, which AUX-021 correctly made a tie. The beta is now a day later,
+with the assertions unchanged.
+
+**Known limits.** Version-only "latest" surfaces elsewhere (homepage signals, product history) still
+pick the newest-dated record; the My Stack card now names whose notes that record holds. A record that
+is never refreshed keeps no platform value, so its readers on a flagged product stay UNKNOWN. The
+classifier does not read availability statements made in prose ("the macOS download is temporarily
+unavailable"): a listed file is taken as published.
+
+**Reopen only if** a flagged product's reader is offered an inapplicable or unknown-platform release as
+an update or told CURRENT while one is later or higher, the version comparator ever produces a
+confident state on its own, `windows_macos` is set without same-version installers for both
+platforms, or an unflagged product's comparison changes.
 
 ## Adding an entry
 

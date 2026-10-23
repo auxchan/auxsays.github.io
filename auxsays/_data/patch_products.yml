@@ -1942,6 +1942,9 @@
   logo_path: /assets/img/patch-logos/elgato-stream-deck.png
   company_id: elgato
   product_id: elgato-stream-deck
+  # Elgato publishes some versions' release notes per platform, so a release dated later
+  # may be another platform's notes. The installed-version comparison fails closed for it.
+  official_notes_by_platform: true
   company_url: /updates/elgato/
   product_url: /updates/elgato/elgato-stream-deck/
   current_status_label: Source map staged
@@ -1981,6 +1984,9 @@
   logo_path: /assets/img/patch-logos/elgato.png
   company_id: elgato
   product_id: elgato-wave-link
+  # Elgato publishes some versions' release notes per platform, so a release dated later
+  # may be another platform's notes. The installed-version comparison fails closed for it.
+  official_notes_by_platform: true
   company_url: /updates/elgato/
   product_url: /updates/elgato/elgato-wave-link/
   current_status_label: Source map staged
@@ -2019,6 +2025,9 @@
   logo_path: /assets/img/patch-logos/elgato.png
   company_id: elgato
   product_id: elgato-camera-hub
+  # Elgato publishes some versions' release notes per platform, so a release dated later
+  # may be another platform's notes. The installed-version comparison fails closed for it.
+  official_notes_by_platform: true
   company_url: /updates/elgato/
   product_url: /updates/elgato/elgato-camera-hub/
   current_status_label: Source map staged

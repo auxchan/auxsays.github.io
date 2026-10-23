@@ -434,15 +434,106 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   };
 
+  // -1 / 0 / 1 for purely dotted-numeric versions ("3.2.10" > "2.0.9"), or null when either is not.
+  // Used ONLY by platformScopedState, and only ever to WITHHOLD a confident claim: chronology still
+  // comes from dates (see SD-K), and version magnitude can turn an UPDATE AVAILABLE or a CURRENT into
+  // PLATFORM APPLICABILITY UNKNOWN, never the reverse.
+  const versionOrder = (a, b) => {
+    const parse = (v) => {
+      const text = String(v || '').trim();
+      return /^\d+(\.\d+)*$/.test(text) ? text.split('.').map(Number) : null;
+    };
+    const x = parse(a);
+    const y = parse(b);
+    if (!x || !y) return null;
+    for (let i = 0; i < Math.max(x.length, y.length); i += 1) {
+      const d = (x[i] || 0) - (y[i] || 0);
+      if (d) return d > 0 ? 1 : -1;
+    }
+    return 0;
+  };
+
+  // PRODUCTS THAT PUBLISH RELEASE NOTES PER PLATFORM (AUX-050). Elgato documents some versions in
+  // separate Windows and macOS articles, so date order across them is not an upgrade order: a reader
+  // on Wave Link 3.2.10 (Windows notes) was told UPDATE AVAILABLE to 2.0.9 (macOS notes, an older
+  // version published a week later), and a 2.0.9 reader CURRENT. rec[11] says whose notes a record
+  // holds: 'windows' / 'macos' (the article title says so) or 'windows_macos' (its installers for this
+  // exact version cover both). ABSENT means the scope is unknown, never "every platform".
+  //   * A release APPLIES to the reader when it carries the reader's own value, or covers both
+  //     platforms for a single-platform reader. A both-platforms reader is compared only with other
+  //     both-platforms releases: a Windows-only release does not supersede notes for both.
+  //   * UPDATE AVAILABLE needs a same-platform release that is strictly later (no same-day tie),
+  //     strictly greater by version, and stable for a stable reader.
+  //   * CURRENT needs nothing later on the platform AND nothing elsewhere (another or unknown
+  //     platform) that is later-dated or a higher or unorderable version.
+  //   * Everything else is PLATFORM APPLICABILITY UNKNOWN: no target, no path.
+  // Which products: ONLY the site-owned flag (`official_notes_by_platform`). It engages before any
+  // record is labelled, and a label appearing on an unflagged product changes nothing here.
+  const platformScopedState = (entry, recs, index) => {
+    const platformOf = (r) => String((r && r[11]) || '');
+    const dateOf = (r) => String((r && r[2]) || '');
+    const mine = recs[index];
+    const unknown = { state: 'PLATFORM APPLICABILITY UNKNOWN', latest: null, mine, latestScope: '',
+                      pathKind: '' };
+    const myPlatform = platformOf(mine);
+    if (!myPlatform) return unknown;
+    const myDate = String(entry.d || mine[2] || '');
+    const others = recs.filter((r, i) => i !== index);
+    const applies = (r) => platformOf(r) === myPlatform
+      || (myPlatform !== 'windows_macos' && platformOf(r) === 'windows_macos');
+    const applicable = others.filter(applies);
+    const elsewhereNews = others.filter((r) => !applies(r)
+      && (dateOf(r) > myDate || versionOrder(r[0], mine[0]) !== -1));
+    // An EARLIER same-platform release that is not a LOWER version contradicts the order (or cannot
+    // be checked against it), so neither CURRENT nor an update can be claimed.
+    if (applicable.some((r) => dateOf(r) < myDate && versionOrder(r[0], mine[0]) !== -1)) {
+      return unknown;
+    }
+    const later = applicable.filter((r) => dateOf(r) > myDate);
+    if (!later.length) {
+      // A same-day sibling on the reader's platform leaves the order unrecorded -- but only when
+      // nothing is strictly later, as on every other product: a real later update still wins.
+      if (myDate && applicable.some((r) => dateOf(r) === myDate)) {
+        return { state: 'RELEASE ORDER NOT RECORDED', latest: null, mine, latestScope: '', pathKind: '' };
+      }
+      return elsewhereNews.length ? unknown
+        : { state: 'CURRENT', latest: mine, mine, latestScope: 'platform', scopePlatform: myPlatform,
+            pathKind: '' };
+    }
+    // A later same-platform release that is not a GREATER version contradicts the order.
+    if (later.some((r) => versionOrder(r[0], mine[0]) !== 1)) return unknown;
+    const stable = later.filter((r) => !r[4]);
+    if (mine[4] || !stable.length) {
+      return { state: 'NEWER TRACKED VERSION EXISTS', latest: later[0], mine, latestScope: 'platform',
+               scopePlatform: myPlatform, pathKind: '' };
+    }
+    return {
+      state: 'UPDATE AVAILABLE',
+      latest: stable[0],
+      mine,
+      latestScope: 'platform',
+      scopePlatform: myPlatform,
+      pathKind: 'upgrade',
+      parallel: false,
+      lines: [],
+      path: asSequence(stable.slice(0, PATH_LIMIT), entry.d),
+      hidden: Math.max(0, stable.length - PATH_LIMIT),
+      truncatedStart: false,
+      omittedBetas: later.length - stable.length,
+    };
+  };
+
   const installedState = (entry, product) => {
     const recs = Array.isArray(product && product.recs) ? product.recs : [];
     if (!entry) return { state: '' };
-    // rec shape: [version, build, date, url, beta]
+    // rec shape: [version, build, date, url, beta, ..., notes platform (11)]
     // Nothing tracked means nothing to compare against. Reporting "newer releases exist" here
     // would be an assertion about records that do not exist.
     if (!recs.length) return { state: '' };
     const sameIdentity = (r) => r[0] === entry.v && String(r[1] || '') === String(entry.b || '');
     const index = recs.findIndex(sameIdentity);
+    const platformSplit = !!(product && product.split);
+    if (platformSplit && index >= 0) return platformScopedState(entry, recs, index);
 
     if (index < 0) {
       // Absent from the tracked list. Only call that "no longer tracked" when it SHOULD have been
@@ -459,7 +550,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       // Older than everything published here. Every listed record is newer than the reader, but
       // releases between theirs and this window exist and are not listed, so the run is marked
-      // truncated rather than presented as complete.
+      // truncated rather than presented as complete. On a platform-split product the reader's own
+      // platform is not even known here, so no record can be offered as theirs.
+      if (platformSplit) {
+        return { state: 'PLATFORM APPLICABILITY UNKNOWN', latest: null, mine: null, latestScope: '',
+                 pathKind: '' };
+      }
       return Object.assign(
         { state: 'NEWER TRACKED VERSION EXISTS', latest: recs[0], mine: null },
         newerView(recs, recs, '', true)
@@ -685,7 +781,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       parts.push('</div>');
       if (entry.href) {
+        // Whose notes the latest record holds, when the vendor publishes per platform: one
+        // platform's article is not "the latest version" for everyone.
+        const scope = { windows: 'Windows', macos: 'macOS', windows_macos: 'Windows and macOS' }[String(entry.plat || '')];
         parts.push(`<p class="patch-stack-card__patch"><a href="${esc(safeHref(entry.href))}">${esc(entry.ver)}</a>`
+          + (scope ? ` <span class="patch-stack-card__notes-scope">${scope} release notes</span>` : '')
           + (entry.date ? ` <span>Released ${esc(entry.date)}</span>` : '') + '</p>');
         const meta = [];
         meta.push(`${Number(entry.n) || 0} confirmed report${Number(entry.n) === 1 ? '' : 's'}`);
@@ -719,6 +819,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // is on the newest, UPDATE AVAILABLE that the sibling is newer, and NEWER TRACKED VERSION
       // EXISTS that newer releases are tracked -- all three assert an order nobody recorded.
       'RELEASE ORDER NOT RECORDED': 'Another release on your line published the same day. AUXSAYS does not record which came first.',
+      // Release notes for different platforms, or whose platform is unknown, establish no order
+      // between the reader's release and the others: it names no target rather than guessing one.
+      'PLATFORM APPLICABILITY UNKNOWN': 'AUXSAYS tracks release notes for different platforms but cannot confirm a newer applicable update for your installation.',
     };
 
     const recLabel = (rec) => {
@@ -874,7 +977,13 @@ document.addEventListener('DOMContentLoaded', () => {
           // A train-scoped target is the newest release on the READER'S line, which on Windows is a
           // different record from the newest tracked one -- 25H2 26200.9550 while 26H1 28000.3086
           // also exists. Calling that "Latest tracked" was accurate only by luck.
-          out.push(`<dt>${info.latestScope === 'line' ? 'Latest on your line' : 'Latest tracked'}</dt>`
+          // On a product that publishes notes per platform the target is the newest release with the
+          // reader's platform's notes, which another platform's later article does not displace.
+          const platformName = { windows: 'Windows', macos: 'macOS', windows_macos: 'Windows and macOS' }[String(info.scopePlatform || '')];
+          const latestLabel = info.latestScope === 'line' ? 'Latest on your line'
+            : (info.latestScope === 'platform' && platformName ? `Latest ${platformName} release notes`
+              : 'Latest tracked');
+          out.push(`<dt>${latestLabel}</dt>`
             + `<dd>${esc(latest[0])}`
             + (String(latest[1] || '') ? ` <span class="patch-iv-build">Build ${esc(latest[1])}</span>` : '') + '</dd>');
         }

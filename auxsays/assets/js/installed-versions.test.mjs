@@ -76,7 +76,9 @@ const DAVINCI = {
 const BETA_TOP = {
   id: 'beta-top',
   recs: [
-    ['21 Public Beta 1', '', '2026-04-14', '/updates/dv/21-beta/', 1],
+    // The beta is STRICTLY later. On a shared date the two are a same-day pair whose order nobody
+    // recorded (AUX-021), which is a different question from "is a newer beta an update".
+    ['21 Public Beta 1', '', '2026-04-15', '/updates/dv/21-beta/', 1],
     ['21', '', '2026-04-14', '/updates/dv/21/', 0],
   ],
   more: 0,

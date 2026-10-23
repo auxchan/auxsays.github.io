@@ -49,6 +49,9 @@ permalink: /updates/my-stack/
     "id": {{ p_id | jsonify }},
     "name": {{ product.product_name | default: p_id | jsonify }},
     "hist": {{ product.product_url | default: '' | jsonify }}
+    {%- comment -%} The vendor publishes some release notes per platform, so the installed-version
+      comparison fails closed for this product (official_notes_by_platform). {%- endcomment -%}
+    ,"split": {% if product.official_notes_by_platform %}true{% else %}false{% endif %}
     {%- if chosen -%}
       {%- comment -%} Same fallback chain as patch-table-row.html, in the same order. {%- endcomment -%}
       {%- assign verdict_text = chosen.quick_verdict -%}
@@ -85,6 +88,7 @@ permalink: /updates/my-stack/
       {%- capture mon_discard -%}{%- include monitoring-status.html mode='cell' product_id=chosen.product_id version=chosen.update_version target_build=chosen.target_build published_at=chosen.update_published_at report_count=chosen.update_report_count -%}{%- endcapture -%}
       ,"href": {{ chosen.url | jsonify }}
       ,"ver": {{ chosen.update_version | default: '' | jsonify }}
+      ,"plat": {{ chosen.official_notes_platform | default: '' | jsonify }}
       ,"date": {{ chosen.update_published_at | date: "%b %d, %Y" | jsonify }}
       ,"verdict": {{ decision_label | jsonify }}
       ,"rank": {{ verdict_rank }}
@@ -109,10 +113,11 @@ permalink: /updates/my-stack/
       label, so the version string is it -- the same textual signal lib/patch_decision.version_is_beta
       uses. It exists so a stable reader is never told a newer BETA is an update.
 
-      Tuple shape, fixed at 11 and pinned exactly by the suite:
+      Tuple shape, fixed at 12 and pinned exactly by the suite:
         [0] version  [1] build  [2] date  [3] url  [4] beta
         [5] verdict  [6] rank   [7] reports  [8] evidence label
         [9] official active issue count      [10] official notes captured (0/1)
+        [11] whose release notes the record holds (see below)
       0-4 drive the version picker; 5-10 exist so an upgrade path can show what AUXSAYS already
       says about each release it lists, WITHOUT a second verdict computation on the client.
     {%- endcomment -%}
@@ -209,7 +214,10 @@ permalink: /updates/my-stack/
               {%- endif -%}
               {%- if rec_polluted == false -%}{%- assign rec_notes = 1 -%}{%- endif -%}
             {%- endif -%}
-            [{{ rec.update_version | default: '' | jsonify }},{{ rec.target_build | default: '' | jsonify }},{{ rec.update_published_at | date: "%Y-%m-%d" | jsonify }},{{ rec.url | jsonify }},{{ rec_is_beta }},{{ rec_verdict | jsonify }},{{ rec_rank }},{{ rec_n }},{{ rec_ev | jsonify }},{{ rec.official_active_issue_count | default: 0 | plus: 0 }},{{ rec_notes }}]
+            {%- comment -%} rec[11]: whose release notes the record holds ('windows' / 'macos'),
+              or '' for platform-neutral notes. The update comparison uses it so a release
+              documented for another platform is never offered as an update. {%- endcomment -%}
+            [{{ rec.update_version | default: '' | jsonify }},{{ rec.target_build | default: '' | jsonify }},{{ rec.update_published_at | date: "%Y-%m-%d" | jsonify }},{{ rec.url | jsonify }},{{ rec_is_beta }},{{ rec_verdict | jsonify }},{{ rec_rank }},{{ rec_n }},{{ rec_ev | jsonify }},{{ rec.official_active_issue_count | default: 0 | plus: 0 }},{{ rec_notes }},{{ rec.official_notes_platform | default: '' | jsonify }}]
           {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
