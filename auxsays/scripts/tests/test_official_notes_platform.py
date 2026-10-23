@@ -304,9 +304,14 @@ def section_e_refresh() -> None:
         p.write_text(writer._dump_record(f, b), encoding="utf-8")
         writer.write_record(out, other)
         g, _ = writer._front_matter(p)
+        # ALL FOUR titles, not just the hand-edited one: the curated rule protects that one
+        # whatever the platform logic does, so checking it alone passed a refresh that defaulted
+        # every unlabelled record to a platform.
         check("E8 with no platform anywhere, refresh leaves every title exactly as found",
-              g["title"] == "Wave Link 3.3 official update breakdown, hand-edited"
-              and "official_notes_platform" not in g)
+              all(g.get(k) == f.get(k) for k in TITLE_KEYS)
+              and g.get("record_last_updated") == f.get("record_last_updated")
+              and "official_notes_platform" not in g,
+              str({k: g.get(k) for k in TITLE_KEYS}))
 
 
 def section_f_second_article_later() -> None:
@@ -397,8 +402,9 @@ def section_g_render() -> None:
     plain = render_update(dict(writer.build_front_matter(candidate("3.3")),
                                official_patch_notes_body="<p>Fixes.</p>"))
     check("G3 an unlabelled record renders neither", plain is not None
+          and not plain.startswith("RENDER-ERROR") and "Official Patch Notes" in plain
           and "release notes for this version." not in plain
-          and "Official Patch Notes (" not in plain)
+          and "Official Patch Notes (" not in plain, (plain or "")[:200])
 
 
 def section_h_publish_guard() -> None:
