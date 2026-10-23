@@ -17,8 +17,8 @@ update_version: New controls for Enterprise admins
 update_logo_text: FIG
 update_published_at: '2026-10-22T00:00:00.000Z'
 update_last_checked: '2026-10-22T19:44:59Z'
-source_last_checked: '2026-10-23T07:19:16Z'
-official_body_last_checked: '2026-10-23T07:19:16Z'
+source_last_checked: '2026-10-23T14:11:23Z'
+official_body_last_checked: '2026-10-23T14:11:23Z'
 record_last_updated: '2026-10-22T19:44:59Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-23T07:19:16Z'
+  url: https://www.figma.com/release-notes/?title=new-controls-enterprise-admins
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-23T14:11:23Z'
   url: https://www.figma.com/release-notes/?title=new-controls-enterprise-admins
   status: captured-from-rss-feed
   body_captured: true
