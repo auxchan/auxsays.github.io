@@ -291,6 +291,38 @@ def _public_version_label(record: dict[str, Any], version: Any) -> str:
     return f"{version} (Build {build})" if build else str(version)
 
 
+# WHOSE NOTES A RECORD HOLDS. Some vendors publish one version's notes per platform, and a record
+# built from the macOS article must say it holds the macOS notes -- not that the version is
+# macOS-only, which the article does not establish. A closed vocabulary, checked on create AND
+# refresh rather than copied verbatim like OPTIONAL_STRUCTURED_FIELDS, so an adapter bug cannot
+# publish free text. Not `target_platform`: that is part of other products' structured identity.
+NOTES_PLATFORM_LABELS = {"windows": "Windows", "macos": "macOS"}
+
+
+def notes_platform(value: Any) -> str:
+    """The checked platform value, or '' for anything outside the vocabulary."""
+    candidate = str(value or "").strip().lower()
+    return candidate if candidate in NOTES_PLATFORM_LABELS else ""
+
+
+def public_titles(software: Any, company: Any, label: str, platform: str) -> dict[str, str]:
+    """The four public title fields, for create and refresh alike.
+
+    One builder, so a refresh can recognise titles in exactly the generated form and relabel only
+    those. The platform is STORED in the titles rather than composed in a template because the SEO
+    <title> and og:title come from front-matter `title` alone.
+    """
+    notes = f"{NOTES_PLATFORM_LABELS[platform]} release notes" if platform else ""
+    headline = f"{software} {label}" + (f" — {notes}" if notes else "")
+    return {
+        "title": f"{software} {label} official update breakdown" + (f" ({notes})" if notes else ""),
+        "description": (f"Official {software} update record captured from {company} for {label}"
+                        + (f" ({notes})" if notes else "") + "."),
+        "update_feed_title": headline,
+        "update_detail_title": headline,
+    }
+
+
 def _official_source_attempt(record: dict[str, Any], checked_at: str, *, body: str, checksums_body: str) -> dict[str, Any]:
     source_url = record.get("source_url") or record.get("official_patch_notes_source_url") or record.get("official_url") or ""
     attempt = {
@@ -344,11 +376,12 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         {"at": published, "label": "Published", "note": "Official source entry detected."},
         {"at": utc_now(), "label": consensus_label, "note": "AUXSAYS official-ingestion record initialized."},
     ]
+    platform = notes_platform(record.get("official_notes_platform"))
+    titles = public_titles(software, company, _public_version_label(record, version), platform)
     front = {
         "layout": "aux-update",
-        "title": f"{software} {_public_version_label(record, version)} official update breakdown",
-        "description": (f"Official {software} update record captured from {company} for "
-                        f"{_public_version_label(record, version)}."),
+        "title": titles["title"],
+        "description": titles["description"],
         # Canonical public URL. Version-only products keep the established four-segment shape;
         # a build-aware product gains one exact-build segment, so two builds under one YYMM are
         # two distinct public pages instead of silently sharing one.
@@ -375,8 +408,8 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         "patch_file_size_note": record.get("file_size_note") or "",
         "patch_file_size_status": _file_size_status(record),
         "update_status": "current",
-        "update_feed_title": f"{software} {_public_version_label(record, version)}",
-        "update_detail_title": f"{software} {_public_version_label(record, version)}",
+        "update_feed_title": titles["update_feed_title"],
+        "update_detail_title": titles["update_detail_title"],
         "update_consensus_label": consensus_label,
         "update_report_count": report_count,
         "update_consensus_confidence": consensus_confidence,
@@ -440,6 +473,8 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     if attribution_rank(attribution) >= 0:
         front["official_app_attribution"] = attribution
         front["official_app_attribution_label"] = attribution_label(attribution)
+    if platform:
+        front["official_notes_platform"] = platform
     return front
 
 
@@ -580,6 +615,34 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
         # unreadable state forever. Repair the derived label without touching the claim.
         existing["official_app_attribution_label"] = attribution_label(existing_attr)
         material_changed = True
+
+    # Whose notes the record holds. Set when the incoming observation is new or different, and
+    # KEPT when absent: refresh paths that rebuild a minimal record from front matter carry no
+    # title, and must not read as "this record covers no particular platform".
+    incoming_platform = notes_platform(record.get("official_notes_platform"))
+    existing_platform = notes_platform(existing.get("official_notes_platform"))
+    if incoming_platform and incoming_platform != existing_platform:
+        existing["official_notes_platform"] = incoming_platform
+        material_changed = True
+    # The public titles then follow the field, ONLY on a record that carries a valid platform, and
+    # field by field: a title is relabelled when it is missing or still in a generated form (the
+    # unlabelled one, or the one for the previous platform). That also repairs a record left
+    # partially labelled. A curated or legacy title matches no generated form and is never
+    # touched -- the field and the page's applicability line still land.
+    platform = incoming_platform or existing_platform
+    if platform:
+        software = existing.get("update_product")
+        company = existing.get("update_source_name")
+        label = _public_version_label(record, existing.get("update_version") or record.get("version"))
+        labelled = public_titles(software, company, label, platform)
+        replaceable = [public_titles(software, company, label, "")]
+        if existing_platform and existing_platform != platform:
+            replaceable.append(public_titles(software, company, label, existing_platform))
+        for key, value in labelled.items():
+            current = existing.get(key)
+            if current != value and (not current or any(current == form[key] for form in replaceable)):
+                existing[key] = value
+                material_changed = True
 
     if material_changed:
         existing["record_last_updated"] = checked_at

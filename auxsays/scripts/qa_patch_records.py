@@ -841,6 +841,50 @@ def scan_live_consensus_claims(
     return errors, warnings
 
 
+# Vendors that publish one version's notes PER PLATFORM. Their records say whose notes they hold
+# (`official_notes_platform`), but no community-counting path compares a report's platform with it
+# yet, so a report about one OS could be counted toward another OS's notes. Until a platform-aware
+# acceptance rule exists, these companies may not publish community reports or consensus at all.
+# Company-wide on purpose: an UNLABELLED version of the same product is no safer.
+PLATFORM_UNGATED_COMPANIES = frozenset({"elgato"})
+
+
+def scan_platform_scoped_consensus(
+        loaded: list[tuple[Path, dict[str, Any]]],
+        evidence_counts: dict[tuple[str, str, str], int],
+) -> list[dict[str, str]]:
+    """Block community reports and consensus for per-platform-notes vendors, record AND evidence.
+
+    Both halves, because either alone can be bypassed: the record's own fields could still read
+    official-only while counted rows accumulate in the evidence store (the authority), and the
+    store could be empty while a record was hand-promoted. Errors, so the publish path and every
+    writeback lane's validate-before-commit refuse rather than publish.
+    """
+    errors: list[dict[str, str]] = []
+    reason = ("publishes per-platform release notes and no platform-aware acceptance rule exists, so "
+              "a report about one OS could be counted toward another OS's notes. Add platform-aware "
+              "acceptance before enabling community counting for this company (AUX-049).")
+    company_of: dict[str, str] = {}
+    for path, data in loaded:
+        company = str(data.get("company_id") or "").strip()
+        company_of[str(data.get("product_id") or "").strip()] = company
+        if company not in PLATFORM_UNGATED_COMPANIES:
+            continue
+        claimed = max(int(data.get("update_report_count") or 0),
+                      int(data.get("confirmed_patch_specific_report_count") or 0))
+        state = str(data.get("evidence_state") or "").strip()
+        if claimed > 0 or state not in ("", "official_only") or data.get("accepted_report_sources"):
+            add(errors, path, "platform_scoped_report_claimed",
+                f"Record claims community reports or consensus (reports={claimed}, "
+                f"evidence_state={state!r}), but {company} {reason}")
+    for (product_id, version, build), count in sorted(evidence_counts.items()):
+        company = company_of.get(product_id) or product_id.split("-", 1)[0]
+        if count > 0 and company in PLATFORM_UNGATED_COMPANIES:
+            add(errors, f"{product_id} {version} {build}".strip(), "platform_scoped_evidence_counted",
+                f"{count} counted evidence row(s) exist for this patch, but {company} {reason}")
+    return errors
+
+
 def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -856,6 +900,7 @@ def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str
         load_counted_accepted_urls([data for _p, data in loaded]))
     errors.extend(live_errors)
     warnings.extend(live_warnings)
+    errors.extend(scan_platform_scoped_consensus(loaded, evidence_counts))
     if not evidence_counts:
         return errors, warnings
 

@@ -56,6 +56,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
+| AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
 
 ---
 
@@ -3368,8 +3369,11 @@ because they are genuinely single-platform — Windows ran 3.2.x while macOS ran
 **Not done here:** publishing the 11 deferred versions, which needs a record able to hold separately
 attributed platform notes.
 
-**Reopen only if** an Elgato record is published whose title names one platform while another
-platform's article exists for the same version, or the API begins returning a challenge to the runner.
+**Reopen only if** an Elgato record is published from one platform's article without stating
+whose notes it holds (AUX-049), or a version two platform articles claim is published from either
+one alone, or the API begins returning a challenge to the runner. A labelled record whose version
+later gains the other platform's article is correct as it stands: the version defers, and the
+page keeps saying whose notes it holds.
 
 ### AUX-039 — the site claimed to be monitoring 29 products it was not monitoring
 
@@ -3482,6 +3486,53 @@ it is a 27-file change touching **all four committing workflows**, on a reposito
 queue is depth one, so it was deliberately not bundled with a copy fix. Until it lands, the guard
 in section [F] asserts that no layout, include or page reads it. That guard is containment, not a
 substitute for the move.
+
+### AUX-049 — a record built from one platform's notes did not say so
+
+- **Status** Resolved · **Area** Published claims · **Severity** High
+- **First seen** 2026-10-23 · **Resolved** 2026-10-23
+
+The first Zendesk run (AUX-046) published eight Elgato records. Two came from single-platform
+articles: "Elgato Wave Link 3.2.10 (Windows) Release Notes" and "Elgato Wave Link 2.0.9 Release
+Notes (macOS)". They published as plain "Wave Link 3.2.10" and "Wave Link 2.0.9": a Windows reader
+of 2.0.9 got macOS-only notes with nothing marking them. AUX-046 defers a version only when two
+articles claim it, so a version with one platform's article went through unlabelled.
+
+**The label states whose notes a record holds, and nothing more.** "Wave Link 2.0.9 — macOS release
+notes", not "Wave Link 2.0.9 (macOS)": a macOS article proves which notes were captured, not that the
+version is macOS-only. The adapter reads the platform from the article TITLE only, from a closed
+vocabulary -- every Elgato article observed writes it exactly "(Windows)" or "(macOS)", on Camera Hub
+and Stream Deck too, while the bodies routinely name both systems. Exactly one token labels; none or
+both label nothing; a platform word in any other form labels nothing and is counted
+(`platform_titles_unrecognized`), never guessed. The article title stays verbatim because it feeds
+the record id, so a published record cannot look unseen.
+
+**Why it had to change the refresh path.** Both live records are refreshed on every run, but refresh
+never re-derived titles, and the writer's positive allow-list silently drops unknown keys (the trap
+that once lost `teams_edition`). So `official_notes_platform` is vocabulary-checked on create AND
+refresh, and one helper builds the four public title fields for both. The SEO `<title>` comes from
+front matter alone, so the label is stored in the titles, not composed in a template. Refresh
+relabels a title only when it is missing or still in a generated form, field by field: that repairs a
+partially labelled record, keeps a steady-state refresh from reporting a change, and leaves curated
+and legacy titles untouched. Identity, filename and permalink never move. The two live records are
+relabelled by the next scheduled run; a simulation of that run on the real state and records shows
+both relabelled with unchanged permalinks.
+
+**Consensus is blocked for these vendors until it can respect the label.** No counting path compares
+a report's platform with the notes a record holds, so a report about one OS could count toward another
+OS's notes. Until a platform-aware acceptance rule exists, the publish QA refuses any Elgato record
+claiming reports or consensus, and any counted evidence row for an Elgato product, labelled or not,
+in the pass the deploy and every writeback lane run. A test fails if any collector or method route is
+registered for Elgato under any enable flag.
+
+**Known limits, stated.** Version-only surfaces (product history tables, latest signals, the My Stack
+card) still show the version without the label. A vendor retitle that drops the platform token
+leaves the last label in place, by design: absent is not "no platform". Records created before this
+lands and older than the newest two already-seen articles are outside the per-run refresh window.
+
+**Reopen only if** a record built from one platform's article publishes without stating that platform,
+or a platform label appears that the article title does not support, or any Elgato record or evidence
+row counts community reports while no platform-aware acceptance rule exists.
 
 ## Adding an entry
 
