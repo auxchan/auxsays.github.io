@@ -18,8 +18,8 @@ update_version: GitHub Copilot in Visual Studio — September update
 update_logo_text: GIT
 update_published_at: '2026-10-23T00:17:51Z'
 update_last_checked: '2026-10-23T07:19:20Z'
-source_last_checked: '2026-10-23T19:54:21Z'
-official_body_last_checked: '2026-10-23T19:54:21Z'
+source_last_checked: '2026-10-24T00:07:24Z'
+official_body_last_checked: '2026-10-24T00:07:24Z'
 record_last_updated: '2026-10-23T07:19:20Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -100,6 +100,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-23T19:54:21Z'
+  url: https://github.blog/changelog/2026-10-22-github-copilot-in-visual-studio-september-update-2
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-24T00:07:24Z'
   url: https://github.blog/changelog/2026-10-22-github-copilot-in-visual-studio-september-update-2
   status: captured-from-rss-feed
   body_captured: true

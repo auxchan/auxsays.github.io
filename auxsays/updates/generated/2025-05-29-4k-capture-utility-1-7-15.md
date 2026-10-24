@@ -17,8 +17,8 @@ update_version: 1.7.15
 update_logo_text: '4K '
 update_published_at: '2025-05-29T20:39:13Z'
 update_last_checked: '2026-10-23T00:14:41Z'
-source_last_checked: '2026-10-23T19:55:32Z'
-official_body_last_checked: '2026-10-23T19:55:32Z'
+source_last_checked: '2026-10-24T00:08:30Z'
+official_body_last_checked: '2026-10-24T00:08:30Z'
 record_last_updated: '2026-10-23T00:14:41Z'
 patch_file_size: ''
 patch_file_size_note: Elgato installer metadata is not exposed on the public release-note article.
@@ -87,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-23T19:55:32Z'
+  url: https://help.elgato.com/hc/en-us/articles/35731668493841-Elgato-4K-Capture-Utility-1-7-15-Release-Notes
+  status: captured-from-zendesk-help-center-api
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-24T00:08:30Z'
   url: https://help.elgato.com/hc/en-us/articles/35731668493841-Elgato-4K-Capture-Utility-1-7-15-Release-Notes
   status: captured-from-zendesk-help-center-api
   body_captured: true
