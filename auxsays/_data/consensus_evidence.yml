@@ -60092,3 +60092,378 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-external-access-vs-b2b-direct-connect-vs-b2b-collab/4565309
+  parent_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_text_excerpt: Teams External Access vs. B2B Direct Connect vs. B2B Collab I&apos;ve received conflicting info regarding whether B2B Direct Connect and Teams External Access are the same thing.&amp;nbsp;Last time I looked into this, they both seemed to rely on the &apos;Default External...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-stuck-in-loading-latest-updat
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-stuck-in-loading-latest-updates--error/4118133
+  parent_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_text_excerpt: Teams stuck in &quot;Loading latest updates...&quot; error I have been having the same error with Teams for the past few months, across two different computers, and with me having uninstalled and reinstalled Teams several times.&amp;nbsp; Effectively, Teams works fine the...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2024-04-18'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-json-formatting-4564828
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/json-formatting/4564828
+  parent_title: JSON Formatting
+  report_title: JSON Formatting
+  report_text_excerpt: JSON Formatting I created a JSON that counts the days after a certain start date &quot;A&quot; and stops after a date &quot;B&quot; if there is no date in B it keeps counting. Further the days count&amp;lt;90 turn green, 90-120, turn yellow, &amp;gt;120 turn red. The problem I...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/planner-task-comments-no-longer-send-email-notifications-%e2%80%93-critical-regression/4511601
+  parent_title: Planner task comments no longer send email notifications – critical regression
+  report_title: Planner task comments no longer send email notifications – critical regression
+  report_text_excerpt: Planner task comments no longer send email notifications – critical regression This change removed a previously existing core functionality without providing an adequate replacement.With the new Planner experience, task comments no longer trigger automatic email notifications...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-organisations-monitoring-at
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-organisations-monitoring-attendance-and-participation-during-live-micros/4564487
+  parent_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_text_excerpt: How are organisations monitoring attendance and participation during live Microsoft Teams meetings? Hi everyone,I’m interested in how organisations are monitoring and verifying attendance and participation during live Microsoft Teams meetings, particularly where accurate...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-chat-messages-disappears/4564805
+  parent_title: Teams Chat messages disappears
+  report_title: Teams Chat messages disappears
+  report_text_excerpt: Teams Chat messages disappears Problem with Teams Windows client.When you hover the mouse over the chat column, all the contacts disappear.If you click on the Chat icon to the left or press CRTL+2 you get the error message &quot;We ran into a problem getting your chats and...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-transcription-langu
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-transcription-language-settings/4564414
+  parent_title: Microsoft Teams transcription language settings
+  report_title: Microsoft Teams transcription language settings
+  report_text_excerpt: Microsoft Teams transcription language settings Hi!&amp;nbsp;With a Microsoft 365 Business Premium license and a Copilot license, I can use transcription during a Teams meeting by setting the spoken language to Auto Detect. However, the transcription is sometimes inaccurate....
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-stopping-notifications-for-specific
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/stopping-notifications-for-specific-chats/4564806
+  parent_title: Stopping notifications for specific chats
+  report_title: Stopping notifications for specific chats
+  report_text_excerpt: Stopping notifications for specific chats When will you bring back the stop notifications for a specific post that was removed in the new Teams?This generate a lot of noise/notifications when there&apos;s a lot of replied in the post.
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-lists-json-3459899
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-lists-json/3459899
+  parent_title: Microsoft Teams/ Lists JSON
+  report_title: Microsoft Teams/ Lists JSON
+  report_text_excerpt: Microsoft Teams/ Lists JSON Hello,&amp;nbsp;&amp;nbsp;I&apos;m currently using Teams and Lists to track our universities certifications. I found a JSON&apos;s that allowed me to make the numbers of the dates red when expired, yellow within 30 days, and green if futher than 30...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2022-06-02'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-where-do-i-report-bug-for-ms-teams
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/where-do-i-report-bug-for-ms-teams-/2371087
+  parent_title: Where do I report bug for Ms TEams ?
+  report_title: Where do I report bug for Ms TEams ?
+  report_text_excerpt: Where do I report bug for Ms TEams ? I have encountered bug in MS TEams. Where to report ?&amp;nbsp;
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2021-05-20'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-integration-with-exchange-on-prem/1549578
+  parent_title: Teams integration with exchange on prem
+  report_title: Teams integration with exchange on prem
+  report_text_excerpt: Teams integration with exchange on prem Hello,I would like the possibility to schedule meetings in microsoft teams.Currently I have already created the domain on o365 and synchronized AD users.In fact, I am able to use domain credentials on Microsoft teams.Now I would like to...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2020-07-28'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-setup-in-teams-channel-is-not-allowing-me-to-update-the-agenda-and-send-/4563340
+  parent_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_text_excerpt: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates I am interested to understand why when I have setup a meeting from A channel I am not able to change the invitation to all the team members. When I go into teams Calendar ,. I update the...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-management-of-unsupported-wfh-teams
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/management-of-unsupported-wfh-teams-certified-desk-phones/4563336
+  parent_title: Management of unsupported WFH Teams-certified desk phones
+  report_title: Management of unsupported WFH Teams-certified desk phones
+  report_text_excerpt: Management of unsupported WFH Teams-certified desk phones Hello, I&apos;m looking for best practice or suggestions on management of unsupported WFH Teams-certified desk phones for company with Microsoft enterprise E3 and E5 licensed users. We&apos;re a Microsoft shop with...
+  captured_at: '2026-10-24T17:00:53Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196683
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/solved-brio-picture-blinks-in-obs-on-macos-%E2%80%94-uncompressed-stream-through-a-hub-hidden-mjpeg-format-fixes-it.196683/
+  parent_title: '[Solved] Brio picture blinks in OBS on macOS — uncompressed stream through a hub; hidden MJPEG format fixes it'
+  report_title: '[Solved] Brio picture blinks in OBS on macOS — uncompressed stream through a hub; hidden MJPEG format fixes it'
+  report_text_excerpt: 'nd set 60 FPS . That entry is actually MJPEG. Setup MacBook Pro M1 Pro, macOS 27.0.1, OBS 32.2.2. A single Thunderbolt cable goes to a Lenovo ThinkVision P40w-20 monitor, which has a built-in USB hub. Two cameras are plugged into the monitor: Logitech BRIO 4K Stream Edition (rear'
+  captured_at: '2026-10-24T17:35:14Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14077
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14077
+  parent_title: OBS only captures one audio source at a time despite having correct settings and seperate audio tracks.
+  report_title: OBS only captures one audio source at a time despite having correct settings and seperate audio tracks.
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 33.0.0-rc3 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/M5XOSG62nRDa9KEP ### OBS Studio Crash Log URL _No response_ ### Expected Behavior B'
+  captured_at: '2026-10-24T17:36:27Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-obs-forum-thread-196681
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/draw-plugin-is-not-working.196681/
+  parent_title: Draw Plugin is not working
+  report_title: Draw Plugin is not working
+  report_text_excerpt: After updation of OBS to 33.0.0 Draw plug in is not working and showing Error. Is there any solution Please.
+  captured_at: '2026-10-24T17:36:18Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
