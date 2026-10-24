@@ -60467,3 +60467,31 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1xd8b42-how-to-combine-multiple-text-zoom-effects
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1xd8b42/how_to_combine_multiple_text_zoom_effects_and/
+  parent_title: How to Combine Multiple Text+ Zoom Effects and Frame Freeze into One Reusable Effect in DaVinci Resolve 21?
+  report_title: How to Combine Multiple Text+ Zoom Effects and Frame Freeze into One Reusable Effect in DaVinci Resolve 21?
+  report_text_excerpt: How to Combine Multiple Text+ Zoom Effects and Frame Freeze into One Reusable Effect in DaVinci Resolve 21? Hello everyone, I want to combine two Text+ zoom effects and one Frame Freeze effect that I use on the Edit page in DaVinci Resolve 21 into a single reusable setup. My...
+  captured_at: '2026-10-24T21:49:57Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+  matched_text: DaVinci Resolve 21
+  matched_field: parent_title
+  matched_context: '...ombine Multiple Text+ Zoom Effects and Frame Freeze into One Reusable Effect in DaVinci Resolve 21? How to Combine Multiple Text+ Zoom Effects and Frame Freeze into One Reusable...'
