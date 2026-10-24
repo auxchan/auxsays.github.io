@@ -4,7 +4,26 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20088
+  report_date: '2026-10-24'
+  report_excerpt: power point not working power point not working power point is not working asking for
+    repairing and repair now i clicked but then close it
+  report_id: microsoft-powerpoint:37d7df962f9000ff
+  report_title: power point not working
+  source_family: Microsoft Q&A
+  source_report_id: '6048478'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6048478/power-point-not-working
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20088'
+  window_start: '2026-10-21'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -24,7 +43,7 @@ reports:
   window_start: '2026-10-13'
   window_version: '2609'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -44,7 +63,7 @@ reports:
   window_start: '2026-10-13'
   window_version: '2609'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -65,7 +84,7 @@ reports:
   window_start: '2026-09-22'
   window_version: '2609'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -86,7 +105,7 @@ reports:
   window_start: '2026-09-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -314,7 +333,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -545,7 +564,7 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -588,7 +607,7 @@ reports:
   window_start: '2025-01-30'
   window_version: '2501'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -609,7 +628,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -673,7 +692,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -694,7 +713,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-10-24T07:17:12Z'
+  captured_at: '2026-10-24T13:41:57Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
