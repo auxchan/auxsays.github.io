@@ -57727,7 +57727,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020040-unable-to-send-microsoft-team-invite-f
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -57752,7 +57751,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020040-unable-to-send-microsoft-team-invite-f
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -57777,7 +57775,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020040-unable-to-send-microsoft-team-invite-f
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -57802,7 +57799,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020040-unable-to-send-microsoft-team-invite-f
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -57827,7 +57823,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020040-unable-to-send-microsoft-team-invite-f
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -57852,7 +57847,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020040-unable-to-send-microsoft-team-invite-f
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -57877,7 +57871,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6002907-teams-crashes-after-logging-in-on-pixe
   product_id: microsoft-teams
   update_version: 26276.513.5241.9675
@@ -59437,4 +59430,665 @@ evidence:
   platform: Windows
   severity: ''
   sentiment: ''
+  source_weight: 1
+- id: acrobat-26-001-21691-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-support-request-regression-in-shared-review-webdav-r
+  product_id: adobe-acrobat-reader
+  update_version: 26.001.21691
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-support-request-regression-in-shared-review-webdav-registration-collab-registerreview-1636630
+  parent_title: 'Adobe Support Request: Regression in Shared Review WebDAV Registration (Collab.registerReview())'
+  report_title: 'Adobe Support Request: Regression in Shared Review WebDAV Registration (Collab.registerReview())'
+  report_text_excerpt: 'Adobe Support Request: Regression in Shared Review WebDAV Registration (Collab.registerReview()) Adobe Support Request: Regression in Shared Review WebDAV Registration ( Collab.registerReview() ) Summary We are a document management system vendor and have integrated Adobe...'
+  captured_at: '2026-10-24T11:16:16Z'
+  source_date: '2026-08-12'
+  target_release_date: '2026-06-25'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.1.21691
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047593-not-able-to-create-teams-profiles
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047593/not-able-to-create-teams-profiles
+  parent_title: not able to create teams profiles - Microsoft Q&A
+  report_title: not able to create teams profiles - Microsoft Q&A
+  report_text_excerpt: not able to create teams profiles I wanted to create a new account on my personal PC, as a login is required for the Teams app. I either misunderstood the "prove you're not a robot" verification (the "press and hold" step), or it didn't work correctly on my PC
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_text_excerpt: Teams Accounts and Orgs In teams under Accounts and Orgs there is a foreign ministry listed, how do I get rid of it?
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs-answer-1301499
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs#answer-13014993
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi P De Young, Good day. If the foreign ministry still appears under Teams > Accounts and orgs, even after trying to leave it, there are a few other things you can check. The key is to determine whether it's an organization linked to your Microsoft account or just an old...
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23T15:39:52.08+00:00'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020040-unable-to-send-microsoft-team-invite-f
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6020040/unable-to-send-microsoft-team-invite-for-a-schedul
+  parent_title: Unable to Send Microsoft Team Invite for a scheduled to several individuals. - Microsoft Q&A
+  report_title: Unable to Send Microsoft Team Invite for a scheduled to several individuals. - Microsoft Q&A
+  report_text_excerpt: Unable to Send Microsoft Team Invite for a scheduled to several individuals. I created a Team Meeting but was unable to send the invite to individuals. What is the problem?
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-09-29'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047593-not-able-to-create-teams-profiles
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047593/not-able-to-create-teams-profiles
+  parent_title: not able to create teams profiles - Microsoft Q&A
+  report_title: not able to create teams profiles - Microsoft Q&A
+  report_text_excerpt: not able to create teams profiles I wanted to create a new account on my personal PC, as a login is required for the Teams app. I either misunderstood the "prove you're not a robot" verification (the "press and hold" step), or it didn't work correctly on my PC
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_text_excerpt: Teams Accounts and Orgs In teams under Accounts and Orgs there is a foreign ministry listed, how do I get rid of it?
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs-answer-1301499
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs#answer-13014993
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi P De Young, Good day. If the foreign ministry still appears under Teams > Accounts and orgs, even after trying to leave it, there are a few other things you can check. The key is to determine whether it's an organization linked to your Microsoft account or just an old...
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23T15:39:52.08+00:00'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047593-not-able-to-create-teams-profiles
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047593/not-able-to-create-teams-profiles
+  parent_title: not able to create teams profiles - Microsoft Q&A
+  report_title: not able to create teams profiles - Microsoft Q&A
+  report_text_excerpt: not able to create teams profiles I wanted to create a new account on my personal PC, as a login is required for the Teams app. I either misunderstood the "prove you're not a robot" verification (the "press and hold" step), or it didn't work correctly on my PC
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_text_excerpt: Teams Accounts and Orgs In teams under Accounts and Orgs there is a foreign ministry listed, how do I get rid of it?
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs-answer-1301499
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs#answer-13014993
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi P De Young, Good day. If the foreign ministry still appears under Teams > Accounts and orgs, even after trying to leave it, there are a few other things you can check. The key is to determine whether it's an organization linked to your Microsoft account or just an old...
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23T15:39:52.08+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_text_excerpt: Teams Accounts and Orgs In teams under Accounts and Orgs there is a foreign ministry listed, how do I get rid of it?
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs-answer-1301499
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs#answer-13014993
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi P De Young, Good day. If the foreign ministry still appears under Teams > Accounts and orgs, even after trying to leave it, there are a few other things you can check. The key is to determine whether it's an organization linked to your Microsoft account or just an old...
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23T15:39:52.08+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047593-not-able-to-create-teams-profiles
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047593/not-able-to-create-teams-profiles
+  parent_title: not able to create teams profiles - Microsoft Q&A
+  report_title: not able to create teams profiles - Microsoft Q&A
+  report_text_excerpt: not able to create teams profiles I wanted to create a new account on my personal PC, as a login is required for the Teams app. I either misunderstood the "prove you're not a robot" verification (the "press and hold" step), or it didn't work correctly on my PC
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_text_excerpt: Teams Accounts and Orgs In teams under Accounts and Orgs there is a foreign ministry listed, how do I get rid of it?
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs-answer-1301499
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs#answer-13014993
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi P De Young, Good day. If the foreign ministry still appears under Teams > Accounts and orgs, even after trying to leave it, there are a few other things you can check. The key is to determine whether it's an organization linked to your Microsoft account or just an old...
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23T15:39:52.08+00:00'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047593-not-able-to-create-teams-profiles
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047593/not-able-to-create-teams-profiles
+  parent_title: not able to create teams profiles - Microsoft Q&A
+  report_title: not able to create teams profiles - Microsoft Q&A
+  report_text_excerpt: not able to create teams profiles I wanted to create a new account on my personal PC, as a login is required for the Teams app. I either misunderstood the "prove you're not a robot" verification (the "press and hold" step), or it didn't work correctly on my PC
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047593-not-able-to-create-teams-profiles
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047593/not-able-to-create-teams-profiles
+  parent_title: not able to create teams profiles - Microsoft Q&A
+  report_title: not able to create teams profiles - Microsoft Q&A
+  report_text_excerpt: not able to create teams profiles I wanted to create a new account on my personal PC, as a login is required for the Teams app. I either misunderstood the "prove you're not a robot" verification (the "press and hold" step), or it didn't work correctly on my PC
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_text_excerpt: Teams Accounts and Orgs In teams under Accounts and Orgs there is a foreign ministry listed, how do I get rid of it?
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs-answer-1301499
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs#answer-13014993
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi P De Young, Good day. If the foreign ministry still appears under Teams > Accounts and orgs, even after trying to leave it, there are a few other things you can check. The key is to determine whether it's an organization linked to your Microsoft account or just an old...
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23T15:39:52.08+00:00'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047593-not-able-to-create-teams-profiles
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047593/not-able-to-create-teams-profiles
+  parent_title: not able to create teams profiles - Microsoft Q&A
+  report_title: not able to create teams profiles - Microsoft Q&A
+  report_text_excerpt: not able to create teams profiles I wanted to create a new account on my personal PC, as a login is required for the Teams app. I either misunderstood the "prove you're not a robot" verification (the "press and hold" step), or it didn't work correctly on my PC
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_text_excerpt: Teams Accounts and Orgs In teams under Accounts and Orgs there is a foreign ministry listed, how do I get rid of it?
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs-answer-1301499
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs#answer-13014993
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi P De Young, Good day. If the foreign ministry still appears under Teams > Accounts and orgs, even after trying to leave it, there are a few other things you can check. The key is to determine whether it's an organization linked to your Microsoft account or just an old...
+  captured_at: '2026-10-24T12:01:31Z'
+  source_date: '2026-10-23T15:39:52.08+00:00'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047995-windows-11-iot-26h2-rdp-to-the-console
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047995/windows-11-iot-26h2-rdp-to-the-console-session-sta
+  parent_title: 'Windows 11 IoT 26H2: RDP to the console session stalls 180 s, then "session blocked by Local Session Manager" - Microsoft Q&A'
+  report_title: 'Windows 11 IoT 26H2: RDP to the console session stalls 180 s, then "session blocked by Local Session Manager" - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11 IoT 26H2: RDP to the console session stalls 180 s, then "session blocked by Local Session Manager" - Microsoft Q&A Environment: Windows 11 IoT Enterprise 26H2 (build 26300.9711), Intel NUC11TNBi3 (Core i3-1115G4, Intel UHD Graphics), unattended auto-login console...'
+  captured_at: '2026-10-24T12:09:16Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047219-issues-with-miracast-since-october-pat
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047219/issues-with-miracast-since-october-patch-wrong
+  parent_title: Issues with Miracast since October Patch (Wrong - Microsoft Q&A
+  report_title: Issues with Miracast since October Patch (Wrong - Microsoft Q&A
+  report_text_excerpt: Issues with Miracast since October Patch (Wrong - Microsoft Q&A Hi All, On a fleet of various devices (25H2 and 26H2). We are getting constant issues with the correct resolution casting to our miracast devices (teams rooms, screen beams etc). When duplicating the screen, we...
+  captured_at: '2026-10-24T12:09:16Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6048097-server-2022-sept-oct-2026-cus-replace
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6048097/server-2022-sept-oct-2026-cus-replace-ps5ui-dll-ps
+  parent_title: 'Server 2022: Sept/Oct 2026 CUs replace PS5UI.DLL/PSCRIPT5.DLL with 26100 builds, which breaks Type 3 print drivers (Event 808 0x7F, install error 0x8007078A) - Microsoft Q&A'
+  report_title: 'Server 2022: Sept/Oct 2026 CUs replace PS5UI.DLL/PSCRIPT5.DLL with 26100 builds, which breaks Type 3 print drivers (Event 808 0x7F, install error 0x8007078A) - Microsoft Q&A'
+  report_text_excerpt: 'Server 2022: Sept/Oct 2026 CUs replace PS5UI.DLL/PSCRIPT5.DLL with 26100 builds, which breaks Type 3 print drivers (Event 808 0x7F, install error 0x8007078A) - Microsoft Q&A Title: Server 2022: Sept/Oct 2026 CUs replace PS5UI.DLL/PSCRIPT5.DLL with 26100 builds, which breaks...'
+  captured_at: '2026-10-24T12:09:35Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26100.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.9711'
+- id: obs-studio-32-2-2-github-issue-14071
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14071
+  parent_title: OBS virtual camera DLLs loaded by Chromium
+  report_title: OBS virtual camera DLLs loaded by Chromium
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/iVnm6hRpLXN0oSbg ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The O'
+  captured_at: '2026-10-24T12:36:03Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
   source_weight: 1

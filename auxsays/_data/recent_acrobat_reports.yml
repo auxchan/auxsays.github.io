@@ -4,7 +4,7 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-10-24T04:32:30Z'
+  captured_at: '2026-10-24T10:54:42Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -23,7 +23,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-24T04:32:30Z'
+  captured_at: '2026-10-24T10:54:42Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -43,7 +43,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-24T04:32:30Z'
+  captured_at: '2026-10-24T10:54:42Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -144,6 +144,26 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
+  captured_at: '2026-10-24T10:54:42Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21789|26.001.21789
+  report_date: '2026-08-11'
+  report_excerpt: 2d measuring tools 'snap to point' options not working (Aug 2026) Acrobat 2d measuring
+    tools 'snap to point' options not working. This has recently stopped working (Aug 2026). It's not
+    just my version either, it's also stopped working for everyone else I have spoken to who...
+  report_id: adobe-acrobat-pro:c96e2934a76f36bd
+  report_title: 2d measuring tools 'snap to point' options not working (Aug 2026)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/2d-measuring-tools-snap-to-point-options-not-working-aug-2026-1636461
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21789
+  window_end: '2026-08-31'
+  window_start: '2026-08-11'
+  window_version: 26.001.21789
+- attribution_state: not_established
   captured_at: '2026-10-21T17:09:20Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
@@ -158,6 +178,26 @@ reports:
   source_family: adobe community bug report
   source_type: adobe_community_bug_report
   source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21662
+  window_end: '2026-06-17'
+  window_start: '2026-06-09'
+  window_version: 26.001.21662
+- attribution_state: not_established
+  captured_at: '2026-10-24T10:54:42Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21662|26.001.21662
+  report_date: '2026-06-09'
+  report_excerpt: Unable to save to mapped drive during certain times of the day. I have two users who
+    are using acrobat to open pdfs from outlook and save them to a mapped drive on a file server. During
+    around 6am-11am when they try to save to the drive adobe acrobat will hang indefinitely....
+  report_id: adobe-acrobat-pro:95cd2a7be99bb319
+  report_title: Unable to save to mapped drive during certain times of the day.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/unable-to-save-to-mapped-drive-during-certain-times-of-the-day-1627157
   strict_exclusion_reason: missing_exact_patch_version_match
   window_build: 26.001.21662
   window_end: '2026-06-17'
@@ -483,7 +523,7 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
-  captured_at: '2026-10-24T04:54:25Z'
+  captured_at: '2026-10-24T11:16:16Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -501,6 +541,26 @@ reports:
   window_build: 26.002.22031
   window_start: '2026-10-14'
   window_version: 26.002.22031
+- attribution_state: not_established
+  captured_at: '2026-10-24T11:16:16Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.002.21901|26.002.21901
+  report_date: '2026-09-12'
+  report_excerpt: Adobe Acrobat installed app doesn't open My Adobe Acrobat installed app suddenly stopped
+    working. I am using a MacBook M1 (Ventura 13.1) and have the latest version of the app. Everything
+    was working fine for all the months I've been using it. One day, I was working normally...
+  report_id: adobe-acrobat-reader:e5821d53f74f651e
+  report_title: Adobe Acrobat installed app doesn't open
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-installed-app-doesn-t-open-1641557
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21901
+  window_end: '2026-09-17'
+  window_start: '2026-09-08'
+  window_version: 26.002.21901
 - attribution_state: not_established
   captured_at: '2026-09-23T05:02:30Z'
   classification: recent_report
@@ -583,6 +643,26 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
+  captured_at: '2026-10-24T11:16:16Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21789|26.001.21789
+  report_date: '2026-08-11'
+  report_excerpt: 2d measuring tools 'snap to point' options not working (Aug 2026) Acrobat 2d measuring
+    tools 'snap to point' options not working. This has recently stopped working (Aug 2026). It's not
+    just my version either, it's also stopped working for everyone else I have spoken to who...
+  report_id: adobe-acrobat-reader:ba1822eab6a36511
+  report_title: 2d measuring tools 'snap to point' options not working (Aug 2026)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/2d-measuring-tools-snap-to-point-options-not-working-aug-2026-1636461
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21789
+  window_end: '2026-08-31'
+  window_start: '2026-08-11'
+  window_version: 26.001.21789
+- attribution_state: not_established
   captured_at: '2026-09-09T08:06:07Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
@@ -617,6 +697,26 @@ reports:
   source_family: adobe community bug report
   source_type: adobe_community_bug_report
   source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21662
+  window_end: '2026-06-17'
+  window_start: '2026-06-09'
+  window_version: 26.001.21662
+- attribution_state: not_established
+  captured_at: '2026-10-24T11:16:16Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21662|26.001.21662
+  report_date: '2026-06-09'
+  report_excerpt: Unable to save to mapped drive during certain times of the day. I have two users who
+    are using acrobat to open pdfs from outlook and save them to a mapped drive on a file server. During
+    around 6am-11am when they try to save to the drive adobe acrobat will hang indefinitely....
+  report_id: adobe-acrobat-reader:6bc031e59444ec52
+  report_title: Unable to save to mapped drive during certain times of the day.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/unable-to-save-to-mapped-drive-during-certain-times-of-the-day-1627157
   strict_exclusion_reason: missing_exact_patch_version_match
   window_build: 26.001.21662
   window_end: '2026-06-17'
