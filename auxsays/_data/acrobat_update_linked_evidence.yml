@@ -6,7 +6,7 @@ reports:
   associated_target_build: 26.002.21901
   associated_update_version: 26.002.21901
   association_basis: release_window_containment
-  captured_at: '2026-10-24T20:45:25Z'
+  captured_at: '2026-10-25T04:37:01Z'
   classification: update_linked
   confirmation_state: not_confirmed
   product_id: adobe-acrobat-pro
@@ -53,7 +53,7 @@ reports:
   associated_target_build: 26.002.21901
   associated_update_version: 26.002.21901
   association_basis: release_window_containment
-  captured_at: '2026-10-24T21:07:37Z'
+  captured_at: '2026-10-25T04:59:29Z'
   classification: update_linked
   confirmation_state: not_confirmed
   product_id: adobe-acrobat-reader

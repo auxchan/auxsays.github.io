@@ -60467,7 +60467,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1xd8b42-how-to-combine-multiple-text-zoom-effects
   product_id: blackmagic-davinci
   update_version: '21'
@@ -60495,3 +60494,768 @@ evidence:
   matched_text: DaVinci Resolve 21
   matched_field: parent_title
   matched_context: '...ombine Multiple Text+ Zoom Effects and Frame Freeze into One Reusable Effect in DaVinci Resolve 21? How to Combine Multiple Text+ Zoom Effects and Frame Freeze into One Reusable...'
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-people-keeping-manager-note
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-people-keeping-manager-notes-private-in-teams-without-creating-a-mess-of/4567222
+  parent_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_text_excerpt: How are people keeping manager notes private in Teams without creating a mess of separate files? We’re trying to get managers to keep better notes from 1:1s, performance conversations, development discussions, etc., but the privacy side gets messy pretty quickly.If everything...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-use-forms-inside-teams-to-aut
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-use-forms-inside-teams-to-automate-surveys-at-intervals/4567227
+  parent_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_text_excerpt: Can I use forms inside Teams to automate surveys at intervals? I’m trying to set up a few recurring surveys for things like monthly pulse checks and occasional employee feedback, ideally without someone from HR having to remember to send them out every time. I know Forms works...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-desperate-for-real-support-two-acoc
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/desperate-for-real-support-two-acocunts/1389836
+  parent_title: Desperate for real support.  Two acocunts,
+  report_title: Desperate for real support.  Two acocunts,
+  report_text_excerpt: 'Desperate for real support. Two acocunts, First, I get a message from Microsoft that&apos;s says:&amp;nbsp;&quot;It looks like this email is used with ore than one account from Microsoft.&amp;nbsp; Which one do you want to use?&amp;nbsp; Options: (1) Work or school account...'
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2020-05-14'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-redesigned-meeting-controls-4566208
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/redesigned-meeting-controls/4566208
+  parent_title: Redesigned meeting controls
+  report_title: Redesigned meeting controls
+  report_text_excerpt: Redesigned meeting controls I do not currently see the redesigned meeting controls in my Teams meetings. Are these scheduled for rollout on a certain date? Is there a beta for the rollout? Is an update required to see them?
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-people-keeping-manager-note
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-people-keeping-manager-notes-private-in-teams-without-creating-a-mess-of/4567222
+  parent_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_text_excerpt: How are people keeping manager notes private in Teams without creating a mess of separate files? We’re trying to get managers to keep better notes from 1:1s, performance conversations, development discussions, etc., but the privacy side gets messy pretty quickly.If everything...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-use-forms-inside-teams-to-aut
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-use-forms-inside-teams-to-automate-surveys-at-intervals/4567227
+  parent_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_text_excerpt: Can I use forms inside Teams to automate surveys at intervals? I’m trying to set up a few recurring surveys for things like monthly pulse checks and occasional employee feedback, ideally without someone from HR having to remember to send them out every time. I know Forms works...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-desperate-for-real-support-two-acoc
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/desperate-for-real-support-two-acocunts/1389836
+  parent_title: Desperate for real support.  Two acocunts,
+  report_title: Desperate for real support.  Two acocunts,
+  report_text_excerpt: 'Desperate for real support. Two acocunts, First, I get a message from Microsoft that&apos;s says:&amp;nbsp;&quot;It looks like this email is used with ore than one account from Microsoft.&amp;nbsp; Which one do you want to use?&amp;nbsp; Options: (1) Work or school account...'
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2020-05-14'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-redesigned-meeting-controls-4566208
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/redesigned-meeting-controls/4566208
+  parent_title: Redesigned meeting controls
+  report_title: Redesigned meeting controls
+  report_text_excerpt: Redesigned meeting controls I do not currently see the redesigned meeting controls in my Teams meetings. Are these scheduled for rollout on a certain date? Is there a beta for the rollout? Is an update required to see them?
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-people-keeping-manager-note
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-people-keeping-manager-notes-private-in-teams-without-creating-a-mess-of/4567222
+  parent_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_text_excerpt: How are people keeping manager notes private in Teams without creating a mess of separate files? We’re trying to get managers to keep better notes from 1:1s, performance conversations, development discussions, etc., but the privacy side gets messy pretty quickly.If everything...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-use-forms-inside-teams-to-aut
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-use-forms-inside-teams-to-automate-surveys-at-intervals/4567227
+  parent_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_text_excerpt: Can I use forms inside Teams to automate surveys at intervals? I’m trying to set up a few recurring surveys for things like monthly pulse checks and occasional employee feedback, ideally without someone from HR having to remember to send them out every time. I know Forms works...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-desperate-for-real-support-two-acoc
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/desperate-for-real-support-two-acocunts/1389836
+  parent_title: Desperate for real support.  Two acocunts,
+  report_title: Desperate for real support.  Two acocunts,
+  report_text_excerpt: 'Desperate for real support. Two acocunts, First, I get a message from Microsoft that&apos;s says:&amp;nbsp;&quot;It looks like this email is used with ore than one account from Microsoft.&amp;nbsp; Which one do you want to use?&amp;nbsp; Options: (1) Work or school account...'
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2020-05-14'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-redesigned-meeting-controls-4566208
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/redesigned-meeting-controls/4566208
+  parent_title: Redesigned meeting controls
+  report_title: Redesigned meeting controls
+  report_text_excerpt: Redesigned meeting controls I do not currently see the redesigned meeting controls in my Teams meetings. Are these scheduled for rollout on a certain date? Is there a beta for the rollout? Is an update required to see them?
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-people-keeping-manager-note
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-people-keeping-manager-notes-private-in-teams-without-creating-a-mess-of/4567222
+  parent_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_text_excerpt: How are people keeping manager notes private in Teams without creating a mess of separate files? We’re trying to get managers to keep better notes from 1:1s, performance conversations, development discussions, etc., but the privacy side gets messy pretty quickly.If everything...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-use-forms-inside-teams-to-aut
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-use-forms-inside-teams-to-automate-surveys-at-intervals/4567227
+  parent_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_text_excerpt: Can I use forms inside Teams to automate surveys at intervals? I’m trying to set up a few recurring surveys for things like monthly pulse checks and occasional employee feedback, ideally without someone from HR having to remember to send them out every time. I know Forms works...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-desperate-for-real-support-two-acoc
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/desperate-for-real-support-two-acocunts/1389836
+  parent_title: Desperate for real support.  Two acocunts,
+  report_title: Desperate for real support.  Two acocunts,
+  report_text_excerpt: 'Desperate for real support. Two acocunts, First, I get a message from Microsoft that&apos;s says:&amp;nbsp;&quot;It looks like this email is used with ore than one account from Microsoft.&amp;nbsp; Which one do you want to use?&amp;nbsp; Options: (1) Work or school account...'
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2020-05-14'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-redesigned-meeting-controls-4566208
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/redesigned-meeting-controls/4566208
+  parent_title: Redesigned meeting controls
+  report_title: Redesigned meeting controls
+  report_text_excerpt: Redesigned meeting controls I do not currently see the redesigned meeting controls in my Teams meetings. Are these scheduled for rollout on a certain date? Is there a beta for the rollout? Is an update required to see them?
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-people-keeping-manager-note
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-people-keeping-manager-notes-private-in-teams-without-creating-a-mess-of/4567222
+  parent_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_text_excerpt: How are people keeping manager notes private in Teams without creating a mess of separate files? We’re trying to get managers to keep better notes from 1:1s, performance conversations, development discussions, etc., but the privacy side gets messy pretty quickly.If everything...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-use-forms-inside-teams-to-aut
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-use-forms-inside-teams-to-automate-surveys-at-intervals/4567227
+  parent_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_text_excerpt: Can I use forms inside Teams to automate surveys at intervals? I’m trying to set up a few recurring surveys for things like monthly pulse checks and occasional employee feedback, ideally without someone from HR having to remember to send them out every time. I know Forms works...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-desperate-for-real-support-two-acoc
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/desperate-for-real-support-two-acocunts/1389836
+  parent_title: Desperate for real support.  Two acocunts,
+  report_title: Desperate for real support.  Two acocunts,
+  report_text_excerpt: 'Desperate for real support. Two acocunts, First, I get a message from Microsoft that&apos;s says:&amp;nbsp;&quot;It looks like this email is used with ore than one account from Microsoft.&amp;nbsp; Which one do you want to use?&amp;nbsp; Options: (1) Work or school account...'
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2020-05-14'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-redesigned-meeting-controls-4566208
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/redesigned-meeting-controls/4566208
+  parent_title: Redesigned meeting controls
+  report_title: Redesigned meeting controls
+  report_text_excerpt: Redesigned meeting controls I do not currently see the redesigned meeting controls in my Teams meetings. Are these scheduled for rollout on a certain date? Is there a beta for the rollout? Is an update required to see them?
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-people-keeping-manager-note
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-people-keeping-manager-notes-private-in-teams-without-creating-a-mess-of/4567222
+  parent_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_text_excerpt: How are people keeping manager notes private in Teams without creating a mess of separate files? We’re trying to get managers to keep better notes from 1:1s, performance conversations, development discussions, etc., but the privacy side gets messy pretty quickly.If everything...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-use-forms-inside-teams-to-aut
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-use-forms-inside-teams-to-automate-surveys-at-intervals/4567227
+  parent_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_text_excerpt: Can I use forms inside Teams to automate surveys at intervals? I’m trying to set up a few recurring surveys for things like monthly pulse checks and occasional employee feedback, ideally without someone from HR having to remember to send them out every time. I know Forms works...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-desperate-for-real-support-two-acoc
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/desperate-for-real-support-two-acocunts/1389836
+  parent_title: Desperate for real support.  Two acocunts,
+  report_title: Desperate for real support.  Two acocunts,
+  report_text_excerpt: 'Desperate for real support. Two acocunts, First, I get a message from Microsoft that&apos;s says:&amp;nbsp;&quot;It looks like this email is used with ore than one account from Microsoft.&amp;nbsp; Which one do you want to use?&amp;nbsp; Options: (1) Work or school account...'
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2020-05-14'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-redesigned-meeting-controls-4566208
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/redesigned-meeting-controls/4566208
+  parent_title: Redesigned meeting controls
+  report_title: Redesigned meeting controls
+  report_text_excerpt: Redesigned meeting controls I do not currently see the redesigned meeting controls in my Teams meetings. Are these scheduled for rollout on a certain date? Is there a beta for the rollout? Is an update required to see them?
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-people-keeping-manager-note
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-people-keeping-manager-notes-private-in-teams-without-creating-a-mess-of/4567222
+  parent_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_text_excerpt: How are people keeping manager notes private in Teams without creating a mess of separate files? We’re trying to get managers to keep better notes from 1:1s, performance conversations, development discussions, etc., but the privacy side gets messy pretty quickly.If everything...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-use-forms-inside-teams-to-aut
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-use-forms-inside-teams-to-automate-surveys-at-intervals/4567227
+  parent_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_text_excerpt: Can I use forms inside Teams to automate surveys at intervals? I’m trying to set up a few recurring surveys for things like monthly pulse checks and occasional employee feedback, ideally without someone from HR having to remember to send them out every time. I know Forms works...
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-desperate-for-real-support-two-acoc
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/desperate-for-real-support-two-acocunts/1389836
+  parent_title: Desperate for real support.  Two acocunts,
+  report_title: Desperate for real support.  Two acocunts,
+  report_text_excerpt: 'Desperate for real support. Two acocunts, First, I get a message from Microsoft that&apos;s says:&amp;nbsp;&quot;It looks like this email is used with ore than one account from Microsoft.&amp;nbsp; Which one do you want to use?&amp;nbsp; Options: (1) Work or school account...'
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2020-05-14'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-redesigned-meeting-controls-4566208
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/redesigned-meeting-controls/4566208
+  parent_title: Redesigned meeting controls
+  report_title: Redesigned meeting controls
+  report_text_excerpt: Redesigned meeting controls I do not currently see the redesigned meeting controls in my Teams meetings. Are these scheduled for rollout on a certain date? Is there a beta for the rollout? Is an update required to see them?
+  captured_at: '2026-10-25T05:45:45Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5127648-update-4566833
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5127648-update/4566833
+  parent_title: KB5127648 update
+  report_title: KB5127648 update
+  report_text_excerpt: KB5127648 update Hello,after the latest updates my sapphire pulse rx 7900 xtx with 9850x3D have micro stutters,stutters.lags and fps drops from 144 fps to 88~78 fps i was using Windows 11 25H2 and i dont remember which build but after the latest updates i have those issues and...
+  captured_at: '2026-10-25T05:53:36Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: obs-studio-33-0-0-github-issue-14082
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14082
+  parent_title: 'macOS: UI thread deadlock on popup_whitelist_mutex when YouTube Live Control Panel reloads chat dock (33.0.0)'
+  report_title: 'macOS: UI thread deadlock on popup_whitelist_mutex when YouTube Live Control Panel reloads chat dock (33.0.0)'
+  report_text_excerpt: 'comment: --- ### Operating System Info macOS 27.0.1 (Apple M1 Pro) ### OBS Studio Version 33.0.0 (macOS Apple Silicon, official release build) ### What happened After updating from 32.2.2 to 33.0.0, OBS hard-freezes (UI completely unresponsive, has to be force-quit), usually with'
+  captured_at: '2026-10-25T06:22:26Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14083
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14083
+  parent_title: Controller inputs not being read in browser source after OBS loses focus
+  report_title: Controller inputs not being read in browser source after OBS loses focus
+  report_text_excerpt: '26 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.0 ### OBS Studio Log URL https://obsproject.com/logs/vPDpg8eQx0eDXSEc ### OBS Studio Crash Log URL _No response_ ### Expected Behavior After loading up https://app.gpv.gg in the browser'
+  captured_at: '2026-10-25T06:22:26Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14085
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14085
+  parent_title: Constant Crashing on Bazzite Linux 44 (Fedora Fork) After October 24 Flatpak Update
+  report_title: Constant Crashing on Bazzite Linux 44 (Fedora Fork) After October 24 Flatpak Update
+  report_text_excerpt: '16-Core Processor - Display: single 49" ultrawide via DisplayPort ### OBS Studio Version 33.0.0-rc3 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OYa0KSchcNCWzYqQ ### OBS Studio Crash Log URL _No response_ ### Expected Behavior O'
+  captured_at: '2026-10-25T06:22:26Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
