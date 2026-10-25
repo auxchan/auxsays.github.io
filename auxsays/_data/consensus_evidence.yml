@@ -61259,3 +61259,120 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6048864-microsoft-store-for-desktop-issue
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6048864/microsoft-store-for-desktop-issue
+  parent_title: Microsoft  store for desktop  issue - Microsoft Q&A
+  report_title: Microsoft  store for desktop  issue - Microsoft Q&A
+  report_text_excerpt: Microsoft store for desktop issue - Microsoft Q&A You signed out of the Store The Store can work without being signed in. Some history information, app ownership info, and synchronization may disappear. This is normal behavior. Store cache got refreshed Sometimes after signing...
+  captured_at: '2026-10-25T12:36:59Z'
+  source_date: '2026-10-24'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6048702-how-to-fix-error-0x800f0922-when-insta
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6048702/how-to-fix-error-0x800f0922-when-installing-kb5127
+  parent_title: how to fix error 0x800f0922 when installing KB5127694  and KB5127648 on 26H2, - Microsoft Q&A
+  report_title: how to fix error 0x800f0922 when installing KB5127694  and KB5127648 on 26H2, - Microsoft Q&A
+  report_text_excerpt: how to fix error 0x800f0922 when installing KB5127694 and KB5127648 on 26H2, - Microsoft Q&A I have tried multiple times to fix error 0x800f0922 for updates KB5127694 and KN5127648 on windows 11 I have performed all the tips that i have found online. None of them help....
+  captured_at: '2026-10-25T12:36:59Z'
+  source_date: '2026-10-24'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6048947-cfupdateplaceholder-returns-0x80070179
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6048947/cfupdateplaceholder-returns-0x80070179-with-a-posi
+  parent_title: CfUpdatePlaceholder returns 0x80070179 with a positive UpdateUsn despite matching observed USN and IN_SYNC - Microsoft Q&A
+  report_title: CfUpdatePlaceholder returns 0x80070179 with a positive UpdateUsn despite matching observed USN and IN_SYNC - Microsoft Q&A
+  report_text_excerpt: CfUpdatePlaceholder returns 0x80070179 with a positive UpdateUsn despite matching observed USN and IN_SYNC - Microsoft Q&A I am developing a Windows Cloud Files API provider and need a supported way to identify which check rejects a remote update of an already hydrated, clean...
+  captured_at: '2026-10-25T12:36:59Z'
+  source_date: '2026-10-24'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6048744-createappcontainerprofile-under-cross
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6048744/createappcontainerprofile-under-cross-user-imperso
+  parent_title: CreateAppContainerProfile under cross-user impersonation fails at firewall registration with 0x80070005 - Microsoft Q&A
+  report_title: CreateAppContainerProfile under cross-user impersonation fails at firewall registration with 0x80070005 - Microsoft Q&A
+  report_text_excerpt: CreateAppContainerProfile under cross-user impersonation fails at firewall registration with 0x80070005 - Microsoft Q&A We are developing a Windows application that uses AppContainer to run application workloads with fewer permissions. We are testing the documented...
+  captured_at: '2026-10-25T12:37:11Z'
+  source_date: '2026-10-24'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
