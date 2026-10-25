@@ -17,8 +17,8 @@ update_version: New controls for Enterprise admins
 update_logo_text: FIG
 update_published_at: '2026-10-22T00:00:00.000Z'
 update_last_checked: '2026-10-22T19:44:59Z'
-source_last_checked: '2026-10-24T23:38:46Z'
-official_body_last_checked: '2026-10-24T23:38:46Z'
+source_last_checked: '2026-10-25T07:30:27Z'
+official_body_last_checked: '2026-10-25T07:30:27Z'
 record_last_updated: '2026-10-22T19:44:59Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-24T00:07:13Z'
-  url: https://www.figma.com/release-notes/?title=new-controls-enterprise-admins
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-24T07:21:10Z'
   url: https://www.figma.com/release-notes/?title=new-controls-enterprise-admins
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-24T23:38:46Z'
+  url: https://www.figma.com/release-notes/?title=new-controls-enterprise-admins
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-25T07:30:27Z'
   url: https://www.figma.com/release-notes/?title=new-controls-enterprise-admins
   status: captured-from-rss-feed
   body_captured: true
