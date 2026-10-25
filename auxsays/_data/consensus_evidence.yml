@@ -61259,7 +61259,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6048864-microsoft-store-for-desktop-issue
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -61347,7 +61346,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9711'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6048744-createappcontainerprofile-under-cross
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -61376,3 +61374,139 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9711'
+- id: acrobat-26-001-21431-adobe-community-bug-report-https-community-adobe-com-questions-9-i-ve-been-scanning-from-my-epson-etj-4750-for-years-recent
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21431
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/i-ve-been-scanning-from-my-epson-etj-4750-for-years-recently-i-open-the-create-from-scanner-and-my-printer-is-identified-but-when-i-hit-scan-the-details-pop-up-doesn-t-load-it-is-completely-greyed-out-1559529
+  parent_title: i've been scanning from my EPSON ETj-4750 for years; recently i open the create from scanner and my printer is identified but when I hit "SCAN", the details pop-up doesn't load (it is completely greyed out).
+  report_title: i've been scanning from my EPSON ETj-4750 for years; recently i open the create from scanner and my printer is identified but when I hit "SCAN", the details pop-up doesn't load (it is completely greyed out).
+  report_text_excerpt: i've been scanning from my EPSON ETj-4750 for years; recently i open the create from scanner and my printer is identified but when I hit "SCAN", the details pop-up doesn't load (it is completely greyed out). I open Create a PDF, choose Scanner and select my Scanner, EPSON...
+  captured_at: '2026-10-25T20:47:52Z'
+  source_date: '2026-04-29'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2026.001.21431
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-26-001-21431-adobe-community-bug-report-https-community-adobe-com-questions-9-i-ve-been-scanning-from-my-epson-etj-4750-for-years-recent
+  product_id: adobe-acrobat-reader
+  update_version: 26.001.21431
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/i-ve-been-scanning-from-my-epson-etj-4750-for-years-recently-i-open-the-create-from-scanner-and-my-printer-is-identified-but-when-i-hit-scan-the-details-pop-up-doesn-t-load-it-is-completely-greyed-out-1559529
+  parent_title: i've been scanning from my EPSON ETj-4750 for years; recently i open the create from scanner and my printer is identified but when I hit "SCAN", the details pop-up doesn't load (it is completely greyed out).
+  report_title: i've been scanning from my EPSON ETj-4750 for years; recently i open the create from scanner and my printer is identified but when I hit "SCAN", the details pop-up doesn't load (it is completely greyed out).
+  report_text_excerpt: i've been scanning from my EPSON ETj-4750 for years; recently i open the create from scanner and my printer is identified but when I hit "SCAN", the details pop-up doesn't load (it is completely greyed out). I open Create a PDF, choose Scanner and select my Scanner, EPSON...
+  captured_at: '2026-10-25T21:07:58Z'
+  source_date: '2026-04-29'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2026.001.21431
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-14088
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14088
+  parent_title: OBS Studio 33.0.0 crashes on startup with existing scene collection — libcef.dll
+  report_title: OBS Studio 33.0.0 crashes on startup with existing scene collection — libcef.dll
+  report_text_excerpt: 'd Behavior OBS should start normally with the existing scene collection, as it did in OBS 32.1.2. ### Current Behavior OBS crashes during startup, with the crash report pointing to libcef.dll. I suspect a regression involving CEF initialization or its interaction with the scene c'
+  captured_at: '2026-10-25T22:13:48Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14088
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14088
+  parent_title: OBS Studio 33.0.0 crashes on startup with existing scene collection — libcef.dll
+  report_title: OBS Studio 33.0.0 crashes on startup with existing scene collection — libcef.dll
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ThgAkHKBEfCopZAB ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS s'
+  captured_at: '2026-10-25T22:15:24Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196689
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/nvidia-renderer-error-obs-crash.196689/
+  parent_title: Nvidia Renderer Error, OBS Crash
+  report_title: Nvidia Renderer Error, OBS Crash
+  report_text_excerpt: Suggestion was to run OBS as administrator.. actually I would really want to avoid that. 32.2.2 change log didnt show anything related to that imho.
+  captured_at: '2026-10-25T22:15:09Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14088
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14088
+  parent_title: OBS Studio 33.0.0 crashes on startup with existing scene collection — libcef.dll
+  report_title: OBS Studio 33.0.0 crashes on startup with existing scene collection — libcef.dll
+  report_text_excerpt: 'interaction with the scene collection during startup. ### Steps to Reproduce 1.Start OBS 33.0.0 with my existing scene collection selected. 2.OBS crashes during startup. 3. Start OBS in Safe Mode — the collection loads successfully. 4. Start OBS normally with an empty collection'
+  captured_at: '2026-10-25T22:16:01Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
