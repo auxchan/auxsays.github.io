@@ -61510,3 +61510,31 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x9zw94-sombody-please-help-me-im-loosing-my-mind
+  product_id: blackmagic-davinci
+  update_version: 21.0.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x9zw94/sombody_please_help_me_im_loosing_my_mind/
+  parent_title: Sombody Please Help me, im loosing my mind
+  report_title: Sombody Please Help me, im loosing my mind
+  report_text_excerpt: 'Sombody Please Help me, im loosing my mind So ive been using DaVinci Resolve 21.0.4 and up until 1 week ago the program run fine and didnt have any issues, but 2 days ago it decided to stop opening, this are my specs: CPU: AMD K19 GPU: 8176MB ATI AMD Radeon RX 7600 (ASUStek...'
+  captured_at: '2026-10-26T05:30:39Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-08-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: 21.0.4
+  matched_field: report_text
+  matched_context: '...nd Sombody Please Help me, im loosing my mind So ive been using DaVinci Resolve 21.0.4 and up until 1 week ago the program run fine and didnt have any issues, but 2 d...'
