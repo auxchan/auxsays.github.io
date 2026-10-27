@@ -17,8 +17,8 @@ update_version: GPT-6.1 Terra in GitHub Copilot
 update_logo_text: GIT
 update_published_at: '2026-10-26T19:15:53Z'
 update_last_checked: '2026-10-27T01:21:12Z'
-source_last_checked: '2026-10-27T08:03:48Z'
-official_body_last_checked: '2026-10-27T08:03:48Z'
+source_last_checked: '2026-10-27T15:04:19Z'
+official_body_last_checked: '2026-10-27T15:04:19Z'
 record_last_updated: '2026-10-27T01:21:12Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -87,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-27T08:03:48Z'
+  url: https://github.blog/changelog/2026-10-26-gpt-6-1-terra-in-github-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-27T15:04:19Z'
   url: https://github.blog/changelog/2026-10-26-gpt-6-1-terra-in-github-copilot
   status: captured-from-rss-feed
   body_captured: true
