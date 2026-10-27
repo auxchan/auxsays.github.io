@@ -479,6 +479,9 @@ WL_3210_NOTES = ("Release Date : 5 August 2026 Download Links Windows Elgato Wav
                  "Elgato Wave Link 3.2.10.msix (arm64) What's new in Wave Link 3.2.10 (Windows)?")
 WL_209_NOTES = ("Release Date : 12 August 2026 Download Links macOS Elgato Wave Link 2.0.9.pkg "
                 "What's new in Wave Link 2.0.9?")
+# The article is "Stream Deck 7.1"; its files say 7.1.0.
+SD_71_NOTES = ("Release Date : 3 December 2025 \U0001f4bb Download Links macOS Elgato Stream Deck 7.1.0.pkg "
+               "Windows Elgato Stream Deck 7.1.0.msi What’s new in Stream Deck 7.1? In-App Marketplace Search")
 
 
 def section_j_joint_platform_evidence() -> None:
@@ -538,6 +541,34 @@ def section_j_joint_platform_evidence() -> None:
                 "3.4.pkg Windows Elgato Wave Link 3.4.msix", "3.4") == ("", "")
           and p("Elgato Stream Deck 7.6 Release Notes", "Elgato Stream Deck 7.6.pkg / Elgato Stream Deck 7.6.msi",
                 "7.6") == ("windows_macos", "installer_downloads"))
+    title_71 = "Elgato Stream Deck 7.1 Release Notes"
+    check("J21 a release's own files written with a trailing .0 are its own: Stream Deck 7.1 lists 7.1.0",
+          p(title_71, SD_71_NOTES, "7.1") == ("windows_macos", "installer_downloads")
+          and p("Elgato Stream Deck 7.1.0 Release Notes", SD_71_NOTES.replace("7.1.0.", "7.1."), "7.1.0")
+          == ("windows_macos", "installer_downloads")
+          and p("Elgato Stream Deck 7 Release Notes", SD_71_NOTES.replace("7.1.0.", "7.0.0."), "7")
+          == ("windows_macos", "installer_downloads"))
+    others = {"7.1": ("7.1.1", "7.1.0.1", "7.01", "7.10", "7.1.00"), "7.4.2": ("7.4", "7.4.2.1")}
+    check("J22 any other version stays another version: no rounding, no padding but '.0', no number parsing",
+          all(p(f"Elgato Stream Deck {version} Release Notes", SD_71_NOTES.replace("7.1.0.", f"{other}."), version)
+              == ("", "") for version, files in others.items() for other in files))
+    check("J23 the release's own file beside another version's still labels nothing",
+          p(title_71, SD_71_NOTES.replace("7.1.0.msi", "7.1.1.msi"), "7.1") == ("", "")
+          and zendesk.joint_platform_downloads(SD_71_NOTES.replace("7.1.0.msi", "7.1.1.msi"), "7.1",
+                                               ("stream deck",)) == ("", True))
+    # Wave Link publishes "3.1.0" (macOS) and "3.1" (Windows) as two articles. Matching a FILE to a
+    # release must not make them one record, nor let installers outvote a title.
+    twins, _ = run_fetch([
+        article(41, "Elgato Wave Link 3.1.0 Release Notes (macOS)", "2026-04-08T16:52:42Z",
+                body="<p>Download Links macOS Elgato Wave Link 3.1.0.dmg Windows Elgato Wave Link 3.1.msix</p>"),
+        article(42, "Elgato Wave Link 3.1 (Windows) Release Notes", "2026-04-21T17:16:58Z",
+                body="<p>Download Links macOS Elgato Wave Link 3.1.0.dmg Windows Elgato Wave Link 3.1.msix</p>")])
+    by_version = {r["version"]: r for r in twins}
+    check("J24 the 3.1 and 3.1.0 articles stay two records, each with its own title's platform",
+          sorted(by_version) == ["3.1", "3.1.0"]
+          and by_version["3.1"]["record_id"] != by_version["3.1.0"]["record_id"]
+          and by_version["3.1.0"].get("official_notes_platform") == "macos"
+          and by_version["3.1"].get("official_notes_platform") == "windows", str(sorted(by_version)))
     check("J16 another product's installers do not contradict the tracked product's",
           p("Elgato Stream Deck 7.6 Release Notes",
             SD_76_NOTES + " Requires Elgato Camera Hub 2.3.pkg or later.", "7.6")

@@ -156,8 +156,12 @@ def notes_platform_from_title(title: str) -> str:
 #     headings and list punctuation, the way Elgato lists them. A known-issue sentence that happens to
 #     name both files is prose, not a download list; so is "(coming soon)" or "(withdrawn)" beside a
 #     file, and "DemoPlugin for Stream Deck 7.6.pkg" is another product's file, not this one's;
-#   * every product installer in the notes names the record's EXACT version; another version's file is
-#     contradictory and labels nothing.
+#   * every product installer in the notes names the record's release; another version's file is
+#     contradictory and labels nothing. "Names the release" is string equality, or, for two dotted-numeric
+#     versions, equality once trailing ".0" components are dropped: the notes for "Stream Deck 7.1" list
+#     "Elgato Stream Deck 7.1.0.pkg". Components compare as written ("7.01" is not "7.1") and nothing
+#     here orders versions or touches a record's own version, so "Wave Link 3.1" and "Wave Link 3.1.0"
+#     stay two records.
 # Casual mentions of Windows or macOS in the text never count. Not read: an availability statement made
 # in prose elsewhere ("the macOS download is temporarily unavailable") -- a listed file is taken as
 # published.
@@ -182,6 +186,21 @@ def _product_installers(body: str, terms: tuple[str, ...]) -> list[re.Match[str]
     return list(artifact.finditer(body or ""))
 
 
+def _names_release(file_version: str, version: str) -> bool:
+    """Whether an installer file's version is the record's release (see the rules above).
+
+    The file's version is dotted-numeric by the pattern that found it, and only components that are
+    exactly "0" are dropped, so a record version that is not dotted-numeric can match only by equality.
+    """
+    def trimmed(value: str) -> list[str]:
+        parts = value.split(".")
+        while len(parts) > 1 and parts[-1] == "0":
+            parts.pop()
+        return parts
+
+    return trimmed(file_version) == trimmed(version)
+
+
 def _listed(body: str, match: re.Match[str]) -> bool:
     """A file is LISTED when only list vocabulary, or the start of the notes, stands in front of it."""
     lead = body[:match.start()]
@@ -191,7 +210,7 @@ def _listed(body: str, match: re.Match[str]) -> bool:
 def joint_platform_downloads(body: str, version: str, terms: tuple[str, ...]) -> tuple[str, bool]:
     """-> ('windows_macos' or '', installers_seen).
 
-    'windows_macos' only when every product installer in the notes is for THIS version and one download
+    'windows_macos' only when every product installer in the notes is for THIS release and one download
     block of listed files holds both a macOS and a Windows file. `installers_seen` lets the caller count
     notes that carried the product's installers but did not establish joint coverage.
     """
@@ -199,7 +218,7 @@ def joint_platform_downloads(body: str, version: str, terms: tuple[str, ...]) ->
     found = _product_installers(body, terms)
     if not found:
         return "", False
-    if any(m.group(1) != version for m in found):
+    if any(not _names_release(m.group(1), version) for m in found):
         return "", True
     listed = [m for m in found if _listed(body, m)]
     if not listed:

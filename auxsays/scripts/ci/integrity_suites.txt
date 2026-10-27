@@ -204,7 +204,7 @@ auxsays/scripts/tests/test_qa_patch_records.py = 32
 # A record built from one platform's release notes says whose notes they are, read from the
 # article TITLE only, on create AND refresh, without moving identity; and no per-platform vendor
 # may count community reports until acceptance can respect the label (AUX-049).
-auxsays/scripts/tests/test_official_notes_platform.py = 64
+auxsays/scripts/tests/test_official_notes_platform.py = 68
 # The one-time labelling of records the refresh window never revisits adds windows_macos only where
 # the record's own stored notes prove it, with the shipped classifier, and changes no other byte of
 # any file; zero network, idempotent, and its scope proof refuses a concurrent change (AUX-051).
