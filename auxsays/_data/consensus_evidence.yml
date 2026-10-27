@@ -61510,7 +61510,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x9zw94-sombody-please-help-me-im-loosing-my-mind
   product_id: blackmagic-davinci
   update_version: 21.0.4
@@ -61538,3 +61537,24 @@ evidence:
   matched_text: 21.0.4
   matched_field: report_text
   matched_context: '...nd Sombody Please Help me, im loosing my mind So ive been using DaVinci Resolve 21.0.4 and up until 1 week ago the program run fine and didnt have any issues, but 2 d...'
+- id: obs-studio-33-0-0-obs-forum-thread-196717
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/i-had-browser-docks-but-now-i-cant-get-them-back.196717/
+  parent_title: I had browser docks, but now I can't get them back
+  report_title: I had browser docks, but now I can't get them back
+  report_text_excerpt: Foolishly thought today's 33.0.0 update meant I could use Wayland again, so I went into Flatseal and set it to use Wayland instead of X11 again. Opened OBS (actually, had to set leave the X11 fallback enabled or it w
+  captured_at: '2026-10-27T00:13:31Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
