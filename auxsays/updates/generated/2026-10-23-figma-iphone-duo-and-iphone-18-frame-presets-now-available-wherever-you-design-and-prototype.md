@@ -18,8 +18,8 @@ update_version: iPhone Duo and iPhone 18 frame presets now available wherever yo
 update_logo_text: FIG
 update_published_at: '2026-10-23T00:00:00.000Z'
 update_last_checked: '2026-10-23T19:54:10Z'
-source_last_checked: '2026-10-27T01:20:56Z'
-official_body_last_checked: '2026-10-27T01:20:56Z'
+source_last_checked: '2026-10-27T08:03:35Z'
+official_body_last_checked: '2026-10-27T08:03:35Z'
 record_last_updated: '2026-10-23T19:54:10Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-25T18:56:04Z'
-  url: https://www.figma.com/release-notes/?title=iphone-duo-and-iphone-18-frame-presets-now-available-wherever-you-design-and-prototype
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-25T23:17:24Z'
   url: https://www.figma.com/release-notes/?title=iphone-duo-and-iphone-18-frame-presets-now-available-wherever-you-design-and-prototype
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-27T01:20:56Z'
+  url: https://www.figma.com/release-notes/?title=iphone-duo-and-iphone-18-frame-presets-now-available-wherever-you-design-and-prototype
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-27T08:03:35Z'
   url: https://www.figma.com/release-notes/?title=iphone-duo-and-iphone-18-frame-presets-now-available-wherever-you-design-and-prototype
   status: captured-from-rss-feed
   body_captured: true
