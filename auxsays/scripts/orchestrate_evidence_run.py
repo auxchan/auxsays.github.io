@@ -55,7 +55,7 @@ from lib import recent_reports as l3  # noqa: E402
 from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete_issue  # noqa: E402
 from lib.method_routing import fallback_justified, plan_methods  # noqa: E402
 from lib.patch_identity import is_build_aware, patch_key, require_build  # noqa: E402
-from lib.report_counts import reconcile_record_counts  # noqa: E402
+from lib.report_counts import load_evidence_store, reconcile_record_counts  # noqa: E402
 from patch_collectors.base import (  # noqa: E402
     CollectorContext, append_evidence_rows, finalize_method_health_delta, generated_records,
     load_evidence, method_health_row, normalize_evidence_row, upsert_method_health,
@@ -902,7 +902,9 @@ class Pipeline:
         if state.has_receipt("RECONCILE_COUNTS", identity):
             return state
         if self.write:
-            rows = load_evidence(self.evidence_path) if self.evidence_path.exists() else []
+            # Strict: a missing or malformed store raises here, before reconciliation can touch a
+            # record. It used to read as [] -- an empty population -- and zero every PowerPoint count.
+            rows = [normalize_evidence_row(item) for item in load_evidence_store(self.evidence_path)]
             # Scoped to the products THIS run actually collected for. Without the scope the
             # authority walks every generated record, so a pre-existing mismatch on an unrelated
             # product could be rewritten by a run that never collected it.

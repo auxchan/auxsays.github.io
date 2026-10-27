@@ -204,10 +204,8 @@ def _premiere_262_pilot_consensus(version: str) -> dict[str, Any]:
         "consensus_score_percent": 38,
         "report_count": 7,
         "consensus_confidence": "Low",
-        "consensus_collection_status": "pilot_initial_sample",
-        "evidence_state": "pilot_sample",
-        "evidence_state_label": "Verified reports",
-        "intelligence_stage": "pilot",
+        # No maturity axes here: record creation derives all four from report_count (lib.maturity)
+        # and refuses a caller-supplied value.
         "known_issues_present": True,
         "quick_verdict": (
             "Premiere Pro 26.2 has an official Adobe release record and an initial AUXSAYS verified-report set of "

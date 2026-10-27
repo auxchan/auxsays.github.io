@@ -222,10 +222,12 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
 
     generated_records: list[dict[str, Any]] = []
     generated_by_key: dict[tuple[str, str, str], dict[str, Any]] = {}
+    front_matters: list[dict[str, Any]] = []
     for path in sorted(GENERATED_DIR.glob("*.md")):
         data = load_front_matter(path)
         if not data.get("update_entry"):
             continue
+        front_matters.append(data)
         key = record_key(data)
         generated_count = report_count(data)
         source_state = source_state_by_product.get(key[0], {}) if isinstance(source_state_by_product, dict) else {}
@@ -263,6 +265,13 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
         if key[0] and key[1]:
             generated_by_key[key] = item
 
+    # The counted population per identity is the AUTHORITY's (`report_counts.counted_evidence_rows`,
+    # Windows current-patch gate included), not a private `counted is not False` that ignored
+    # `patch_version_matched` and the gate. Lazy import keeps this audit loadable without PyYAML.
+    from lib.report_counts import counted_evidence_rows, windows_targets_from_front_matter
+    authoritative = counted_evidence_rows(
+        evidence, windows_targets=windows_targets_from_front_matter(front_matters))
+
     records_with_reports = [item for item in generated_records if item["generated_report_count"] > 0]
     mismatches: list[dict[str, Any]] = []
     stale_records: list[dict[str, Any]] = []
@@ -270,7 +279,7 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
     for item in records_with_reports:
         key = patch_key(item["product_id"], item["update_version"], item.get("target_build"))
         evidence_rows = evidence_by_key.get(key, [])
-        counted_rows = [row for row in evidence_rows if row.get("counted") is not False]
+        counted_rows = authoritative.get(key, [])
         latest_evidence_checked = latest_time([row.get("captured_at") for row in evidence_rows])
         item["structured_evidence_count"] = len(counted_rows)
         item["structured_evidence_exists"] = bool(evidence_rows)
@@ -332,7 +341,7 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
     evidence_without_matching_record: list[dict[str, Any]] = []
     evidence_count_mismatches: list[dict[str, Any]] = []
     for key, rows in sorted(evidence_by_key.items()):
-        counted_rows = [row for row in rows if row.get("counted") is not False]
+        counted_rows = authoritative.get(key, [])
         generated = generated_by_key.get(key)
         if not generated:
             finding = {
@@ -375,7 +384,7 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
                 # Empty for every product without a build contract; the exact build for a
                 # build-aware product, so two builds under one YYMM report as two groups.
                 "target_build": build,
-                "structured_evidence_count": len([row for row in rows if row.get("counted") is not False]),
+                "structured_evidence_count": len(authoritative.get((product_id, version, build), [])),
                 "latest_structured_evidence_captured_at": latest_time([row.get("captured_at") for row in rows]),
             }
             for (product_id, version, build), rows in sorted(evidence_by_key.items())

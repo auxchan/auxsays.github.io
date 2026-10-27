@@ -3,9 +3,9 @@
 
 An in-collector `apply_consensus_writeback` runs BEFORE `lib.report_counts.reconcile_record_counts`
 and before the final consensus/coherence application. At that point it does not know the final
-counted-evidence population -- `_filter_rows` and `counted_evidence_counts` apply different
-predicates (live: Windows 25H2 is 9 vs 29, 26H1 is 1 vs 2) -- and reconciliation later rewrites the
-NUMBERS without rewriting the prose derived from them. Two verified consequences if the collector
+counted-evidence population -- later collectors in the run still add rows (at #69 the two predicates
+also differed outright, Windows 25H2 reading 9 vs 29, until #70; they now share one row predicate) --
+and reconciliation later rewrites the NUMBERS without rewriting the prose derived from them. Two verified consequences if the collector
 writes the full proposed field set:
 
   - it replaces human-authored editorial prose. premiere-pro-26-2's `quick_verdict`,

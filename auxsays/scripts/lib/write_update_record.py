@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 import yaml
 
+from . import maturity
 from .patch_identity import (
     REASON_BUILD_MISSING, REASON_FILENAME_BUILD_MISMATCH, InconsistentBuildIdentity,
     assert_build_identity, identity_build, is_build_aware, patch_display_label, permalink_path,
@@ -366,10 +367,21 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     report_count = int(record.get("report_count") or record.get("update_report_count") or 0)
     consensus_label = record.get("consensus_label") or record.get("update_consensus_label") or DEFAULT_CONSENSUS
     consensus_confidence = record.get("consensus_confidence") or record.get("update_consensus_confidence") or "Low"
-    consensus_status = record.get("consensus_collection_status") or ("pilot_initial_sample" if report_count else "deferred_official_only")
-    evidence_state = record.get("evidence_state") or ("pilot_sample" if report_count else "official_only")
-    evidence_state_label = record.get("evidence_state_label") or ("Verified reports" if report_count else "Official source only")
-    intelligence_stage = record.get("intelligence_stage") or ("pilot" if report_count else "official_live")
+    # Maturity is DERIVED from the count by the one authority, never trusted from the caller. Create
+    # used to copy each axis verbatim when supplied, so an adapter could open a record claiming
+    # `consensus_live` at zero reports. A supplied value that disagrees is refused, the same rule the
+    # attribution label below follows; a supplied value that agrees is redundant and harmless.
+    derived_maturity = maturity.maturity_for(report_count).axes()
+    conflicting = {axis: record.get(axis) for axis in maturity.AXES
+                   if record.get(axis) not in (None, "") and str(record.get(axis)) != derived_maturity[axis]}
+    if conflicting:
+        raise ValueError(f"Refusing caller-supplied maturity {conflicting} for a record with "
+                         f"{report_count} report(s): maturity is derived by lib.maturity, never "
+                         "supplied by an adapter.")
+    consensus_status = derived_maturity["consensus_collection_status"]
+    evidence_state = derived_maturity["evidence_state"]
+    evidence_state_label = derived_maturity["evidence_state_label"]
+    intelligence_stage = derived_maturity["intelligence_stage"]
     official_sources = record.get("official_sources") or []
     official_source_type = record.get("official_source_type") or record.get("source_type") or "official-source"
     official_note_status = record.get("official_note_status") or ("release_notes_captured" if official_source_type in {"release_notes", "fixed_issues", "security_advisory", "changelog"} else "official_source_captured")

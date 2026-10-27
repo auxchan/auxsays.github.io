@@ -598,7 +598,7 @@ def run() -> int:
             "count mismatch blocks writeback",
             count_writeback["success"] is False
             and count_record_path.read_text(encoding="utf-8") == count_record_before
-            and any("selected counted rows must total exactly 40" in reason for reason in count_writeback["guard_failures"]),
+            and any("selected counted rows must equal the generated record's report count 40; found 39" in reason for reason in count_writeback["guard_failures"]),
             json.dumps(count_writeback, indent=2),
         )
 
@@ -676,7 +676,7 @@ def run() -> int:
             "report count mismatch blocks writeback",
             report_count_writeback["success"] is False
             and report_count_record.read_text(encoding="utf-8") == report_count_before
-            and any("generated record report counts must still be 40" in reason for reason in report_count_writeback["guard_failures"]),
+            and any("selected counted rows must equal the generated record's report count 39; found 40" in reason for reason in report_count_writeback["guard_failures"]),
             json.dumps(report_count_writeback, indent=2),
         )
 
@@ -704,7 +704,7 @@ def run() -> int:
             "evidence_state not pilot_sample blocks writeback",
             evidence_state_writeback["success"] is False
             and evidence_state_record.read_text(encoding="utf-8") == evidence_state_before
-            and any("evidence_state must remain pilot_sample" in reason for reason in evidence_state_writeback["guard_failures"]),
+            and any("evidence_state must be pilot_sample" in reason for reason in evidence_state_writeback["guard_failures"]),
             json.dumps(evidence_state_writeback, indent=2),
         )
 
@@ -732,7 +732,7 @@ def run() -> int:
             "consensus_collection_status not pilot blocks writeback",
             consensus_status_writeback["success"] is False
             and consensus_status_record.read_text(encoding="utf-8") == consensus_status_before
-            and any("consensus_collection_status must remain pilot_initial_sample" in reason for reason in consensus_status_writeback["guard_failures"]),
+            and any("consensus_collection_status must be pilot_initial_sample" in reason for reason in consensus_status_writeback["guard_failures"]),
             json.dumps(consensus_status_writeback, indent=2),
         )
 

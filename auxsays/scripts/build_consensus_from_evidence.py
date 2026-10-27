@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 import re
 import sys
-from collections import Counter, defaultdict
+from collections import Counter
 from lib.patch_identity import patch_display_label, patch_key
 from datetime import datetime, timezone
 from pathlib import Path
@@ -16,9 +16,10 @@ from typing import Any
 
 import yaml
 
-from patch_collectors.base import WINDOWS_PRODUCT_ID, load_front_matter_and_body, windows_identity_gate
-from lib import patch_decision
-from lib.report_counts import (format_reconcile_detail, reconcile_record_counts,
+from patch_collectors.base import load_front_matter_and_body
+from lib import maturity, patch_decision
+from lib.report_counts import (EvidenceStoreError, counted_evidence_rows, format_reconcile_detail,
+                               load_evidence_store, reconcile_record_counts,
                                windows_targets_from_front_matter)
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,18 +57,6 @@ def load_evidence() -> list[dict[str, Any]]:
     return []
 
 
-def is_patch_specific(item: dict[str, Any]) -> bool:
-    if item.get("patch_version_matched") is True:
-        return True
-    version = str(item.get("update_version") or "").strip().lower()
-    text = " ".join([
-        str(item.get("parent_title") or ""),
-        str(item.get("report_title") or ""),
-        str(item.get("report_text_excerpt") or ""),
-    ]).lower()
-    return bool(version and version in text)
-
-
 def consensus_label(counts: Counter[str]) -> str:
     total = sum(counts.values())
     if total <= 0:
@@ -85,7 +74,7 @@ def confidence(total: int) -> str:
     # Community evidence strength of the confirmed patch-specific report sample.
     # Mirrors apply_consensus_to_records._confidence; not a patch-safety claim.
     # Scale: 0 Insufficient | 1-7 Low | 8-24 Low-Medium | 25-32 Medium | 33+ High.
-    if total >= 33:
+    if total >= maturity.HIGH_STRENGTH_MIN_REPORTS:
         return "High"
     if total >= 25:
         return "Medium"
@@ -97,12 +86,9 @@ def confidence(total: int) -> str:
 
 
 def evidence_state(total: int) -> str:
-    if total <= 0:
-        return "insufficient_data"
-    # Phase A keeps low-volume verified rows in pilot_sample. consensus_live
-    # should only be introduced after a higher-volume structured threshold and
-    # page-level structured-evidence rendering are both in place.
-    return "pilot_sample"
+    # The aggregate's state is the count's maturity, from the one authority. (It used to say
+    # `insufficient_data` at zero -- a word no record carries.)
+    return maturity.maturity_for(max(int(total), 0)).evidence_state
 
 
 def clean_public_phrase(value: Any, *, fallback: str = "") -> str:
@@ -392,7 +378,14 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     scope = {str(p).strip() for p in args.product_ids} if args.product_ids else None
 
-    evidence = load_evidence()
+    # Refuse a missing or malformed store BEFORE reconciliation can touch a record. The lenient
+    # `load_evidence` returned [] for a missing file, a key-less mapping or a wrong type, and an
+    # empty population zeroes and demotes every record. An explicit empty list stays legal.
+    try:
+        evidence = load_evidence_store(EVIDENCE_PATH)
+    except EvidenceStoreError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
     # AUTHORITATIVE RECONCILIATION (runs after all collectors, before QA): make every generated
     # record's update_report_count equal the final counted evidence for its exact (product_id,
     # version), using the same predicate QA enforces. Idempotent -- an already-aligned tree writes
@@ -408,43 +401,17 @@ def main(argv: list[str] | None = None) -> int:
         if not reconciled:
             print("Reconcile-only: every record already matches its exact-patch evidence population.")
         return 0
-    windows_targets = windows_target_index()
-    # Grouped by canonical patch identity: a build-aware product's two builds under one YYMM are
-    # two independent groups, so one build's reports can never move the other's counts or summary.
-    groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    # Grouped by canonical patch identity, and membership is EXACTLY the authoritative counted
+    # population (`report_counts.counted_evidence_rows`, which applies the Windows current-patch gate).
+    # This aggregate used to keep its own predicate, including a path that admitted a row with no
+    # patch match because its title happened to contain the version string.
+    groups = counted_evidence_rows(evidence, windows_targets=windows_target_index())
+    members = {id(item) for items in groups.values() for item in items}
     excluded: list[dict[str, Any]] = []
-
     for item in evidence:
-        product_id = str(item.get("product_id") or "").strip()
-        version = str(item.get("update_version") or "").strip()
-        sentiment = str(item.get("sentiment") or "").strip().lower()
-        severity = str(item.get("severity") or "").strip().lower()
-        if not product_id or not version:
-            item["exclusion_reason"] = item.get("exclusion_reason") or "missing_product_or_version"
+        if id(item) not in members:
+            item["exclusion_reason"] = item.get("exclusion_reason") or "not_in_counted_population"
             excluded.append(item)
-            continue
-        if sentiment not in VALID_SENTIMENTS:
-            item["exclusion_reason"] = item.get("exclusion_reason") or "invalid_sentiment"
-            excluded.append(item)
-            continue
-        if severity and severity not in VALID_SEVERITIES:
-            item["exclusion_reason"] = item.get("exclusion_reason") or "invalid_severity"
-            excluded.append(item)
-            continue
-        if item.get("counted") is False or not is_patch_specific(item):
-            item["exclusion_reason"] = item.get("exclusion_reason") or "not_confirmed_patch_specific"
-            excluded.append(item)
-            continue
-        # Windows-only fail-closed current-patch identity gate: exclude reports whose
-        # matched KB/OS build is not the record's current patch (stale after rollover).
-        if product_id == WINDOWS_PRODUCT_ID:
-            identity_ok, identity_reason = windows_identity_gate(
-                item, windows_targets.get(patch_key(product_id, version, item.get("target_build"))))
-            if not identity_ok:
-                item["exclusion_reason"] = item.get("exclusion_reason") or identity_reason
-                excluded.append(item)
-                continue
-        groups[patch_key(product_id, version, item.get("target_build"))].append(item)
 
     aggregate = []
     record_statuses = record_status_index()

@@ -12,14 +12,14 @@ from urllib.parse import urlparse
 
 import yaml
 
-from lib import patch_decision
+from lib import maturity, patch_decision
 from lib.patch_identity import patch_key
 # The dedup identity the append path itself applies (base.evidence_key uses it), imported rather
 # than re-derived. A hand-rolled canonicaliser was measured against the corpus first and was WRONG:
 # stripping query strings collapsed six genuinely distinct Blackmagic forum threads
 # (viewtopic.php?t=...) onto one path and falsely reported duplicate evidence. "Distinct" here means
 # exactly what it meant when the row was accepted.
-from patch_collectors.base import normalize_url
+from patch_collectors.base import normalize_url, row_is_counted
 
 from lib.report_counts import (counted_evidence_counts, counted_evidence_rows,
                                windows_targets_from_front_matter)
@@ -33,8 +33,10 @@ SOURCES_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 UPDATE_LAYOUT_PATH = ROOT / "_layouts" / "aux-update.html"
 
-VALID_EVIDENCE_STATES = {"official_only", "pilot_sample", "pilot_initial_sample", "consensus_live", "insufficient_data"}
-VALID_INTELLIGENCE_STAGES = {"staged", "official_live", "pilot", "consensus_live", "archived", "manual_watch"}
+# The maturity vocabulary is owned by lib.maturity (canonical words plus the legacy words a stored
+# record may still carry); QA reads it rather than keeping a fourth copy.
+VALID_EVIDENCE_STATES = set(maturity.VALID_EVIDENCE_STATES)
+VALID_INTELLIGENCE_STAGES = set(maturity.VALID_INTELLIGENCE_STAGES)
 PATCH_NOTE_SOURCE_TYPES = {"release_notes", "fixed_issues", "security_advisory", "changelog"}
 NON_PATCH_NOTE_SOURCE_TYPES = {"whats_new", "vendor_blog", "community_official_post", "download_portal"}
 OPERATIONAL_SOURCE_TYPES = {"release_health", "known_issues", "help_center_release_notes"}
@@ -254,14 +256,23 @@ def internal_term_findings(data: dict[str, Any], path: str) -> list[dict[str, An
     return findings
 
 
+def load_evidence_rows() -> list[Any]:
+    """The evidence store's rows; [] when it is absent or malformed (QA reports, it does not refuse
+    -- a live claim against an empty population fails its own checks). Read through `load_yaml` on
+    every call, deliberately uncached: tests substitute `load_yaml` to feed a population, and a cache
+    would serve the real store past that seam."""
+    payload = load_yaml(EVIDENCE_PATH, [])
+    rows = payload.get("evidence") if isinstance(payload, dict) else payload
+    return rows if isinstance(rows, list) else []
+
+
 def load_counted_evidence_counts(
         records: list[dict[str, Any]]) -> dict[tuple[str, str, str], int]:
     # Delegates to the single authoritative predicate (lib.report_counts.counted_evidence_counts) so
     # this QA gate and the post-collection reconciliation count evidence IDENTICALLY and can never
     # diverge -- that shared definition is what makes update_report_count == final counted evidence.
-    payload = load_yaml(EVIDENCE_PATH, [])
-    rows = payload.get("evidence") if isinstance(payload, dict) else payload
-    if not isinstance(rows, list):
+    rows = load_evidence_rows()
+    if not rows:
         return {}
     # `records` supplies the Windows current-patch identities the canonical predicate gates on, and
     # is REQUIRED for the same reason the predicate requires them: defaulting it would make a
@@ -281,9 +292,8 @@ def load_counted_accepted_urls(
     population; matching its SIZE is not the same thing, and a projection of the right cardinality
     carrying one fabricated or superseded citation is invisible to a length comparison.
     """
-    payload = load_yaml(EVIDENCE_PATH, [])
-    rows = payload.get("evidence") if isinstance(payload, dict) else payload
-    if not isinstance(rows, list):
+    rows = load_evidence_rows()
+    if not rows:
         return {}
     groups = counted_evidence_rows(
         rows, windows_targets=windows_targets_from_front_matter(records or []))
@@ -447,6 +457,30 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
     stage = str(data.get("intelligence_stage") or "").strip()
     if stage and stage not in VALID_INTELLIGENCE_STAGES:
         add(warnings, path, "unknown_intelligence_stage", f"Intelligence stage '{stage}' is not recognized.")
+    collection_status = str(data.get("consensus_collection_status") or "").strip()
+    if collection_status and collection_status not in maturity.VALID_COLLECTION_STATUSES:
+        add(warnings, path, "unknown_consensus_collection_status",
+            f"Consensus collection status '{collection_status}' is not recognized.")
+    state_label = str(data.get("evidence_state_label") or "").strip()
+    if state_label and state_label not in maturity.VALID_EVIDENCE_STATE_LABELS:
+        add(warnings, path, "unknown_evidence_state_label",
+            f"Evidence state label '{state_label}' is not recognized.")
+    # THE FOUR AXES MUST AGREE. Each surface reads a different one, so a record whose axes disagree
+    # shows readers different maturities on different pages -- and the homepage prints the stage
+    # beside the label. Live claims are validated as ERRORS by `scan_live_consensus_claims` (with
+    # the evidence in hand); this is the non-live half, a WARNING on purpose: it compares against
+    # the record's own stored count, and an in-lane error here would discard a whole cycle's evidence
+    # over a presentation field. Reconciliation writes all four axes, so it converges on its own.
+    if not maturity.claims_live(data):
+        differing = maturity.contradictions(data, report_count)
+        if differing:
+            # Clamped like `contradictions`: a malformed negative count must produce this warning,
+            # not an exception that aborts QA in every lane.
+            expected = maturity.maturity_for(max(report_count, 0)).axes()
+            add(warnings, path, "maturity_axes_inconsistent",
+                f"Maturity axes disagree with the {report_count}-report record: "
+                + ", ".join(f"{axis}={data.get(axis)!r} (expected {expected[axis]!r})"
+                            for axis in differing) + ".")
 
     for key in ("update_source_url", "official_patch_notes_source_url", "update_download_url"):
         value = data.get(key)
@@ -688,16 +722,14 @@ def scan_required_record_paths() -> tuple[list[dict[str, str]], list[dict[str, s
     return errors, warnings
 
 
-#: The accepted-report volume a live consensus claim must have behind it. NOT a new threshold: it is
-#: the top rung ("High") of the community evidence strength ladder the patch table already publishes
-#: and `test_evidence_strength_thresholds` already locks --
-#: 0 Insufficient | 1-7 Low | 8-24 Low-Medium | 25-32 Medium | 33+ High.
-LIVE_MIN_ACCEPTED_REPORTS = 33
+#: The accepted-report volume a live consensus claim must have behind it -- the High rung of the
+#: published strength ladder. Owned by lib.maturity; re-exported under the name callers already use.
+LIVE_MIN_ACCEPTED_REPORTS = maturity.LIVE_MIN_ACCEPTED_REPORTS
 
-LIVE_EVIDENCE_STATE = "consensus_live"
+LIVE_EVIDENCE_STATE = maturity.CONSENSUS_LIVE.evidence_state
 #: `live_consensus` is the legacy word order, accepted on READ only because aux-update.html:89 tests
-#: both. Nothing should write it.
-LIVE_COLLECTION_STATUSES = ("consensus_live", "live_consensus")
+#: both. Nothing writes it.
+LIVE_COLLECTION_STATUSES = maturity.LIVE_COLLECTION_STATUSES
 
 
 def scan_live_consensus_claims(
@@ -713,10 +745,11 @@ def scan_live_consensus_claims(
     `WRITEABLE_FIELDS` allow-list -- so the one sanctioned way to satisfy it raised
     `RuntimeError: Refusing to write unapproved field`.
 
-    WHY THE AUTHORITY AND NOT THE RECORD. `accepted_report_sources` carries
-    `patch_version_matched: True` as a HARDCODED LITERAL (`apply_consensus_to_records` writes the
-    constant for every entry), so believing that field would make the check unfalsifiable on any
-    record the consensus writer produced. Patch-matching is therefore established upstream, by
+    WHY THE AUTHORITY AND NOT THE RECORD. `accepted_report_sources` once carried
+    `patch_version_matched: True` as a hardcoded literal; AUX-043 made the writer earn it from the
+    row, but a projection is still the writer's own account of itself, and believing it would make
+    this check only as strong as the writer it exists to audit. Patch-matching is therefore
+    established upstream, by
     `lib.report_counts.counted_evidence_counts` applying the real per-row predicate
     (`counted is not False` AND `patch_version_matched is True` AND, for Windows, the record-relative
     current-patch gate) to the canonical evidence rows at this exact product/version/build identity.
@@ -741,8 +774,22 @@ def scan_live_consensus_claims(
         state_live = str(data.get("evidence_state") or "").strip() == LIVE_EVIDENCE_STATE
         status_live = (str(data.get("consensus_collection_status") or "").strip()
                        in LIVE_COLLECTION_STATUSES)
-        if not (state_live or status_live):
+        if not (state_live or status_live or maturity.claims_live(data)):
             continue
+
+        # ALL FOUR AXES, not just the pair. Each surface reads a different axis -- the patch page
+        # the collection status, the feed and My Patch Stack the evidence state, the homepage the
+        # label beside the intelligence stage -- so a claim on any one reaches a reader, and a
+        # pair-only promotion rendered "Live consensus · Early reports" on the homepage while
+        # passing every check here. A live claim must be the exact canonical live tuple, in the
+        # canonical spelling (the legacy `live_consensus` word is read, never accepted as a claim).
+        differing = [axis for axis in maturity.AXES
+                     if maturity.stored_axes(data)[axis] != maturity.CONSENSUS_LIVE.axes()[axis]]
+        if differing:
+            add(errors, path, "maturity_live_axes_inconsistent",
+                f"Record claims live consensus on at least one maturity axis but these axes are "
+                f"not the canonical live value: {', '.join(differing)}; a live claim must set "
+                f"{maturity.CONSENSUS_LIVE.axes()} together.")
 
         if state_live != status_live:
             add(errors, path, "live_state_pair_inconsistent",
@@ -916,6 +963,40 @@ def scan_unconfigured_platform_split(files: list[Path]) -> tuple[list[dict[str, 
             "official_notes_by_platform, so My Patch Stack may still compare across platforms for it "
             "(AUX-050). Flag it in patch_products.yml if its vendor publishes notes per platform.")
     return [], warnings
+
+
+#: The vocabularies the consensus writer projects a counted row through. A counted row outside them
+#: is refused by its `gate_11` / `gate_17` rather than silently dropped from the count.
+COUNTED_ROW_SENTIMENTS = frozenset({"positive", "moderate", "negative"})
+COUNTED_ROW_SEVERITIES = frozenset({"low", "medium", "high", "critical"})
+
+
+def scan_counted_row_classification(rows: list[Any]) -> list[dict[str, str]]:
+    """Counted rows the consensus writer cannot project: no source URL, or a sentiment or severity
+    outside its vocabulary.
+
+    Such a row still COUNTS -- reconciliation publishes the authoritative number -- but the writer
+    now refuses that identity's projection write (gate_11 / gate_17) instead of quietly publishing a
+    smaller count, so the record's sources and prose stop refreshing until the row is fixed. This
+    names the row. A WARNING: the write refusal already prevents a wrong publication, and an error
+    here would discard every product's evidence for the cycle over one malformed row."""
+    warnings: list[dict[str, str]] = []
+    for row in rows:
+        if not isinstance(row, dict) or not row_is_counted(row):
+            continue
+        problems = []
+        if not str(row.get("source_url") or "").strip():
+            problems.append("no source_url")
+        if str(row.get("sentiment") or "").strip().lower() not in COUNTED_ROW_SENTIMENTS:
+            problems.append(f"sentiment {row.get('sentiment')!r}")
+        if (str(row.get("severity") or "").strip().lower() or "low") not in COUNTED_ROW_SEVERITIES:
+            problems.append(f"severity {row.get('severity')!r}")
+        if problems:
+            label = f"{row.get('product_id')} {row.get('update_version')} {row.get('id') or row.get('source_url')}"
+            add(warnings, Path(str(EVIDENCE_PATH)), "counted_row_unclassified",
+                f"Counted evidence row {label} cannot be projected ({'; '.join(problems)}); the "
+                "consensus writer will refuse this patch's write until it is classified.")
+    return warnings
 
 
 def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -1191,6 +1272,7 @@ def main(argv: list[str] | None = None) -> int:
     e, w = scan_evidence_count_alignment(files)
     errors.extend(e)
     warnings.extend(w)
+    warnings.extend(scan_counted_row_classification(load_evidence_rows()))
     e, w = scan_unconfigured_platform_split(files)
     errors.extend(e)
     warnings.extend(w)

@@ -725,12 +725,26 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
     return added, len(existing), existing
 
 
+def row_is_counted(row: dict[str, Any]) -> bool:
+    """The ROW half of the authoritative counted-evidence predicate: `counted is not False` AND
+    `patch_version_matched is True`.
+
+    `lib.report_counts.counted_evidence_rows` adds the record-relative half (the Windows current-patch
+    identity gate) and groups by canonical identity. Defined here, at the lowest layer, so every
+    counter -- the consensus writer, the audit, revalidation and collector diagnostics -- reads this
+    one definition instead of re-deriving acceptance. Seven private copies of it disagreed in code
+    and agreed only because the stored rows happened to be clean."""
+    return row.get("counted") is not False and row.get("patch_version_matched") is True
+
+
 def counted_rows(rows: Iterable[dict[str, Any]], product_id: str, update_version: str) -> list[dict[str, Any]]:
+    """Version-level counted rows, for collector run diagnostics. Not identity-exact (no build, no
+    Windows gate) -- the published count is `lib.report_counts.counted_evidence_counts`."""
     return [
         row for row in rows
         if str(row.get("product_id") or "").strip() == product_id
         and str(row.get("update_version") or "").strip() == update_version
-        and row.get("counted") is not False
+        and row_is_counted(row)
     ]
 
 

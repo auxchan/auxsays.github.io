@@ -35,7 +35,7 @@ release_summary: DaVinci Resolve 11 includes professional online video editing, 
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source ingestion only.
 evidence_state: official_only
 evidence_state_label: Official source only
-intelligence_stage: pilot
+intelligence_stage: official_live
 official_source_captured: true
 confirmed_patch_specific_report_count: 0
 evidence_last_checked: '2026-08-15T13:41:19Z'

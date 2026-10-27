@@ -132,13 +132,23 @@ auxsays/scripts/tests/test_consensus_sample_honesty.py = 88
 # allow-list, whose else-branch raises. So the one sanctioned way to satisfy it crashed the writer --
 # which is why `consensus_live` had many consumers and no producer. The replacement validates the
 # published projection against the authoritative counted-evidence population instead, and
-# deliberately never reads `accepted_report_sources[*].patch_version_matched`, which the writer
-# stamps as a hardcoded True on every entry and which would make the check unfalsifiable.
+# deliberately never reads `accepted_report_sources[*].patch_version_matched` -- once a hardcoded
+# True, now earned from the row (AUX-043), but still the writer's own account of itself.
 auxsays/scripts/tests/test_consensus_live_gate.py = 61
+
+# One maturity authority, one counted population (AUX-053). Four writers kept private copies of the
+# four-axis maturity table, reconciliation never wrote intelligence_stage, and every copy hardcoded the
+# two-valued mapping, so nothing could keep a live state through one cycle. Pins that every writer
+# takes all four axes from lib.maturity; that a live certification survives every writer and is
+# revoked by the same function with counts and citations untouched; that the consensus writer's
+# population is the authority's row for row; that a missing or malformed evidence store is refused
+# before any write; that QA refuses a live claim on any axis without the full tuple; and that the
+# 24-record stage convergence edited one line each.
+auxsays/scripts/tests/test_maturity_authority.py = 40
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
-auxsays/scripts/tests/test_obs_consensus_projection.py = 49
+auxsays/scripts/tests/test_obs_consensus_projection.py = 50
 auxsays/scripts/tests/test_obs_forum_evidence_family.py = 190
 # The same projection-coherence class for DaVinci, whose count is moved by the scheduled lane's
 # unscoped reconcile while its rebuild authority lived only in a dispatch-only workflow. Pins the
