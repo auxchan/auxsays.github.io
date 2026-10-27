@@ -11,8 +11,10 @@
   monitoring state that build never earned, which is a fail-OPEN in the one place that must fail
   closed. An empty build on both sides is a no-op, so version-only products are unaffected.
   No manual allowlist -- "monitored" means EMH rows exist FOR THIS EXACT PATCH.
-  It FAILS CLOSED: missing, stale, future, disabled, blocked, broken, partial, low-confidence, or
-  manual-review telemetry can never produce a clean "no reports" read.
+  It FAILS CLOSED: missing, stale, future, blocked, broken, partial, low-confidence, or
+  manual-review telemetry can never produce a clean "no reports" read, and neither can a patch
+  whose every method is disabled. A disabled row BESIDE healthy active methods is neither healthy
+  nor failing (rule 7).
 
   Inputs:
     include.product_id    -- exact tracked product id

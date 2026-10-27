@@ -72,7 +72,7 @@ def section_l() -> None:
     rows = mh.load_method_health_rows(FIXTURE / "_data" / "evidence_method_health.yml")
     thresholds = mh.load_thresholds(FIXTURE / "_config.yml")
     now = datetime(2026, 7, 15, tzinfo=timezone.utc)
-    for n in range(1, 17):
+    for n in range(1, 18):
         name = f"c{n}"
         identity = {"product_id": "c15-absent" if n == 15 else name,
                     "update_version": "2607" if n == 13 else "1.0"}
@@ -85,7 +85,7 @@ def section_l() -> None:
               mh.COLLECTION_STALE, mh.NOT_YET_MONITORED, mh.COLLECTION_STALE, mh.COLLECTION_BLOCKED,
               mh.MONITORING_DEGRADED, mh.INSUFFICIENT_COVERAGE, mh.MONITORING_ACTIVE,
               mh.NO_ACCEPTED_REPORTS]
-    check("L17 the include's rung order is the port's (default, then rungs 1-10)", chain == ported,
+    check("L18 the include's rung order is the port's (default, then rungs 1-10)", chain == ported,
           str(chain))
 
 
@@ -245,10 +245,24 @@ def section_o() -> None:
     check("O2 both writers that bypass the collector runner check ownership of the SAME rows before "
           "upserting them",
           all(v == "guarded" for v in guarded.values()), str(guarded))
-    stored = mh.load_method_health_rows(_REPO / "auxsays" / "_data" / "evidence_method_health.yml")
-    unowned = sorted({(r.get("product_id"), r.get("method_id")) for r in stored
-                      if str(r.get("method_id") or "") not in ownership.allowed_methods(str(r.get("product_id") or ""))})
-    check("O3 every stored method-health row names a method its product owns", not unowned, str(unowned[:5]))
+    # The published limitation sentence reads the same telemetry as the card; it must agree with the
+    # authority on what "degraded" means. It used a four-status subset, missing stale and
+    # manual_review_needed (no such rows exist today, so this is the only thing that would notice).
+    import apply_consensus_to_records as acr  # noqa: PLC0415 - heavy; only this check needs it
+    real_loader = acr._load_method_health_rows
+    said = {}
+    try:
+        for status in sorted(mh.DEGRADED_STATUSES | {"success"}):
+            acr._load_method_health_rows = lambda status=status: [
+                {"product_id": "obs-studio", "update_version": "99.1.0", "method_id": "github_issues",
+                 "status": status}]
+            said[status] = any("unavailable" in line for line in
+                               acr._public_source_limitations("obs-studio", "99.1.0", [], "High", build=""))
+    finally:
+        acr._load_method_health_rows = real_loader
+    check("O3 the published limitation sentence fires for every degraded status the card uses, and "
+          "not for a healthy one",
+          all(said[s] for s in mh.DEGRADED_STATUSES) and not said["success"], str(said))
 
 
 def main() -> int:

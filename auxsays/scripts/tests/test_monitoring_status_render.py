@@ -57,6 +57,7 @@ cases:
   - { name: c14, product_id: c14,        version: "1.0",  reports: 3 }
   - { name: c15, product_id: c15-absent, version: "1.0",  reports: 0 }
   - { name: c16, product_id: c16,        version: "1.0",  reports: 0 }
+  - { name: c17, product_id: c17,        version: "1.0",  reports: 0 }
 ---
 {% for c in page.cases %}CASE|{{ c.name }}|{% include monitoring-status.html mode='cell' product_id=c.product_id version=c.version published_at=page.published_release report_count=c.reports %}|END
 {% endfor %}

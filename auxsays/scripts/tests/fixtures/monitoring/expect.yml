@@ -17,3 +17,4 @@ c13: no-accepted-patch-specific-reports  # numeric 2607 joins to "2607"
 c14: monitoring-active                   # healthy + accepted reports > 0
 c15: official-source-only                # no matching rows
 c16: collection-stale                    # valid post-release but all stale
+c17: insufficient-coverage                # two healthy methods, ONE family: families, not rows

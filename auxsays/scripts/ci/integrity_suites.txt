@@ -153,7 +153,7 @@ auxsays/scripts/tests/test_maturity_authority.py = 40
 # live certifier will consult, one condition at a time; the frozen 2026-10-27 High-rung snapshot
 # (OBS and Windows certify, both DaVinci identities fail for named reasons); and that every
 # method-health writer outside the collector runner is held to the ownership manifest.
-auxsays/scripts/tests/test_monitoring_health.py = 37
+auxsays/scripts/tests/test_monitoring_health.py = 38
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27

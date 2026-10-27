@@ -334,15 +334,16 @@ def promote(
     method_health_changed = 0
 
     if write:
-        evidence_rows_added, _total, _rows = append_evidence_rows(accepted, path=evidence_path)
         health_rows = build_method_health_rows(
             product_id=product_id,
             accepted=[*accepted, *duplicate_existing],
             rejected=rejected,
             generated_versions=generated_versions,
         )
+        # Ownership before ANY write, so a refusal leaves neither evidence nor health behind.
         from lib.collector_ownership import require_owned_methods  # noqa: PLC0415
         require_owned_methods(health_rows)
+        evidence_rows_added, _total, _rows = append_evidence_rows(accepted, path=evidence_path)
         method_health_changed, _health_total, _health = upsert_method_health(health_rows, path=method_health_path)
         updater = writeback_func or premiere.apply_consensus_writeback
         for version in sorted((accepted_versions | duplicate_existing_versions) & generated_versions):

@@ -53,3 +53,6 @@ methods:
 # c16 -> COLLECTION STALE: valid post-release rows but all stale (none fresh)
 - {product_id: c16, update_version: '1.0', method_id: m1, source_type: s, status: success, last_run: '2026-06-15T00:00:00Z'}
 - {product_id: c16, update_version: '1.0', method_id: m2, source_type: s, status: no_results, last_run: '2026-06-15T00:00:00Z'}
+# c17 -> INSUFFICIENT COVERAGE: two fresh healthy METHODS in ONE family -- coverage counts families, not rows
+- {product_id: c17, update_version: '1.0', method_id: m1, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c17, update_version: '1.0', method_id: m2, source_type: s, status: success, last_run: '2026-07-10T00:00:00Z'}

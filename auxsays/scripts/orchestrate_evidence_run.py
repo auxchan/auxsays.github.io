@@ -790,6 +790,9 @@ class Pipeline:
             state.evidence_changes = {"mode": "dry", "would_add": len(counted)}
             state.health_changes = {"mode": "dry", "would_upsert": len(health)}
         else:
+            # The graph writes health outside the collector runner, so ownership is checked here --
+            # BEFORE the evidence append, so a refusal stops the node before anything is saved.
+            require_owned_methods(health)
             persisted: list[dict[str, Any]] = []
             already_held: list[dict[str, Any]] = []
             added, dupes, _ = append_evidence_rows(
@@ -798,7 +801,6 @@ class Pipeline:
             # Between the append and the upsert is the only moment the real delta is known and the
             # health rows are still mutable. See base.finalize_method_health_delta.
             finalize_method_health_delta(health, persisted, already_held)
-            require_owned_methods(health)  # the graph writes health outside the collector runner
             changed, total, _ = upsert_method_health(health, self.health_path)
             state.evidence_changes = {"mode": "write", "added": added, "duplicates": dupes}
             state.health_changes = {"mode": "write", "changed": changed, "total": total}
