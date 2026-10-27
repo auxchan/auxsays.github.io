@@ -174,27 +174,26 @@ prose**, not a verdict; the verdict is still one of the eight above:
 
 ## Evidence states
 
-Allowed internal evidence states:
+A record's maturity is stored on four axes, and `auxsays/scripts/lib/maturity.py` is the only
+authority for them. Every writer takes all four from it; never write one by hand or in a writer of
+your own.
 
-- `official_only`
-- `pilot_sample`
-- `consensus_live`
-- `insufficient_data`
+| maturity | `evidence_state` | `consensus_collection_status` | `evidence_state_label` | `intelligence_stage` |
+|---|---|---|---|---|
+| official | `official_only` | `deferred_official_only` | **Official source only** | `official_live` |
+| pilot | `pilot_sample` | `pilot_initial_sample` | **Verified reports** | `pilot` |
+| live | `consensus_live` | `consensus_live` | **Live consensus** | `consensus_live` |
 
-Public-facing labels must use:
-
-- `official_only` → **Official source only**
-- `pilot_sample` → **Verified reports**
-- `consensus_live` → **Live consensus**
-- `insufficient_data` → **Insufficient data**
-
-Legacy internal handling for `static_sample` may remain only for backward compatibility, but it should not appear as public user-facing language.
+Legacy words (`insufficient_data`, `live_consensus`, `manual_watch`, `static_sample`) are recognised on
+read only and must not appear as public user-facing language.
 
 ## Consensus policy
 
 AUXSAYS consensus must be evidence-backed.
 
-Do not mark anything `consensus_live` unless structured evidence exists.
+`consensus_live` is decided only by `lib.maturity.certify_live`, never by a count alone and never by
+hand. QA refuses a live claim unless all four axes carry the live tuple and the authoritative accepted
+population backs it.
 
 ### Confirmed report rule
 

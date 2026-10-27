@@ -27,9 +27,12 @@ import yaml
 from patch_collectors.base import (
     WINDOWS_PRODUCT_ID,
     windows_identity_gate,
+    row_is_counted,
     split_front_matter,
     atomic_write_text,
 )
+from lib import maturity
+from lib.report_counts import EvidenceStoreError, load_evidence_store
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"
@@ -71,11 +74,13 @@ CONSENSUS_COHERENCE_FIELDS = {
 
 # POSITIVE collector write authority. An in-collector writeback runs BEFORE
 # lib.report_counts.reconcile_record_counts and before the final consensus/coherence application,
-# so at that moment it does not know the final counted-evidence population: `_filter_rows` and
-# `counted_evidence_counts` apply DIFFERENT predicates (live: Windows 25H2 is 9 vs 29, 26H1 is 1 vs
-# 2), and reconciliation later rewrites the NUMBERS without rewriting the prose derived from them.
-# A collector that writes count-derived narrative therefore publishes "9 user reports" beside a
-# reconciled count of 29 -- and qa_patch_records compares only the number, so nothing catches it.
+# so at that moment it does not know the final counted-evidence population: later collectors in the
+# same run still add rows, and reconciliation later rewrites the NUMBERS without rewriting the prose
+# derived from them. (At #69 the two predicates also differed outright -- Windows 25H2 read 9 here
+# and 29 in the authority -- until #70 put the identity gate inside the authority; they now share
+# one row predicate. The timing problem is what remains.) A collector that writes count-derived
+# narrative would publish "9 user reports" beside a reconciled count of 29 -- and qa_patch_records
+# compares only the number, so nothing would catch it.
 # It would also overwrite human-authored editorial prose: premiere-pro-26-2's quick_verdict,
 # update_decision_body and practical_recommendations came from a hand commit, not the engine.
 #
@@ -90,8 +95,8 @@ CONSENSUS_COHERENCE_FIELDS = {
 COLLECTOR_WRITABLE_FIELDS = frozenset({
     # "when did this collector last look at evidence for this patch". captured_at is stamped once
     # per RUN, not per row, so max(captured_at) over the collector's own included rows equals the
-    # max over the full population -- verified across four live groups including the 9-vs-29 Windows
-    # one. That is what makes it a run fact rather than a population fact. It is the field that makes
+    # max over the full population -- verified across four live groups including a Windows one.
+    # That is what makes it a run fact rather than a population fact. It is the field that makes
     # a collector write meaningful at all; record_last_updated alone is excluded from
     # substantiveness, so without this the in-collector write would be permanently inert.
     # (The later `promote` stage also writes it, so this is a freshness update BETWEEN collect and
@@ -256,7 +261,7 @@ def _confidence(total: int) -> str:
     # sample is for supporting the displayed consensus label. This is NOT a claim
     # that the patch is safe -- a "High" strength sample can carry a Negative verdict.
     # Scale: 0 Insufficient | 1-7 Low | 8-24 Low-Medium | 25-32 Medium | 33+ High.
-    if total >= 33:
+    if total >= maturity.HIGH_STRENGTH_MIN_REPORTS:
         return "High"
     if total >= 25:
         return "Medium"
@@ -265,14 +270,6 @@ def _confidence(total: int) -> str:
     if total > 0:
         return "Low"
     return "Insufficient"
-
-
-def _evidence_state(count: int) -> str:
-    return "official_only" if count == 0 else "pilot_sample"
-
-
-def _collection_status(count: int) -> str:
-    return "deferred_official_only" if count == 0 else "pilot_initial_sample"
 
 
 def _row_version(row: dict[str, Any], *, is_candidate_mode: bool) -> str:
@@ -341,6 +338,17 @@ def _evaluate_gates(
         _gate("gate_13_counted_required", len(counted_false) == 0, f"{len(counted_false)} evidence row(s) have counted: false.")
         source_date_failed = [r for r in included_rows if r.get("source_date_pass") is False]
         _gate("gate_16_source_date_gate_required", len(source_date_failed) == 0, f"{len(source_date_failed)} evidence row(s) failed the source-date gate.")
+        # A counted row this writer cannot classify is a defect to NAME, not a row to drop: dropping
+        # it published a smaller count than the authority's. Block this identity's projection write
+        # (reconciliation still publishes the authoritative count) and say which rows.
+        unclassified = [
+            r for r in included_rows
+            if str(r.get("sentiment") or "").strip().lower() not in VALID_SENTIMENTS
+            or (str(r.get("severity") or "").strip().lower() or "low") not in VALID_SEVERITIES
+        ]
+        _gate("gate_17_counted_rows_classified", len(unclassified) == 0,
+              f"{len(unclassified)} counted row(s) have a sentiment or severity outside the vocabulary: "
+              f"{[r.get('id') or r.get('source_url') for r in unclassified[:5]]}.")
 
     access_limited = [
         r for r in included_rows
@@ -374,16 +382,23 @@ def _filter_rows(rows: list[dict[str, Any]], *, product_id: str, version: str, i
             exc_reason = f"wrong_product_id (got {row_product!r})"
         elif row_version != version:
             exc_reason = f"version_mismatch (got {row_version!r}, expected {version!r})"
+        elif not is_candidate_mode:
+            # PRODUCTION evidence: membership is exactly the authoritative counted population
+            # (`base.row_is_counted` plus the Windows gate below), so this writer can never publish
+            # a count the reconciliation authority would not. It used to ALSO drop rows with a blank
+            # URL or an unclassified sentiment/severity -- silently, shrinking the count below the
+            # authority's. Those are now refusals of the WRITE (gate_11 / gate_17), which name the
+            # row, instead of a quietly smaller number.
+            if row.get("patch_version_matched") is not True:
+                exc_reason = "gate_12_patch_version_matched_false"
+            elif not row_is_counted(row):
+                exc_reason = "gate_13_counted_false"
         elif not str(row.get("source_url") or "").strip():
             exc_reason = "gate_11_missing_source_url"
-        elif is_candidate_mode and row.get("exact_version_match") is not True:
+        elif row.get("exact_version_match") is not True:
             exc_reason = "gate_12_exact_version_match_false"
-        elif not is_candidate_mode and row.get("patch_version_matched") is not True:
-            exc_reason = "gate_12_patch_version_matched_false"
-        elif is_candidate_mode and row.get("include_in_dry_run") is False:
+        elif row.get("include_in_dry_run") is False:
             exc_reason = row.get("rejection_reason") or "gate_13_include_in_dry_run_false"
-        elif not is_candidate_mode and row.get("counted") is False:
-            exc_reason = "gate_13_counted_false"
         elif str(row.get("sentiment") or "").strip().lower() not in VALID_SENTIMENTS:
             exc_reason = f"invalid_sentiment ({row.get('sentiment')!r})"
         else:
@@ -437,8 +452,8 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
             "excluded_candidate_count": len(rows),
             "confirmed_patch_specific_report_count": 0,
             "proposed_update_report_count": 0,
-            "proposed_evidence_state": "official_only",
-            "proposed_consensus_collection_status": "deferred_official_only",
+            "proposed_evidence_state": maturity.OFFICIAL_ONLY.evidence_state,
+            "proposed_consensus_collection_status": maturity.OFFICIAL_ONLY.consensus_collection_status,
             "proposed_consensus_label": "Insufficient data",
             "proposed_confidence": "Insufficient",
             "source_urls": [],
@@ -464,12 +479,17 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
     themes = _issue_counter(pid, included)
     count = len(included)
     gate_eval = _evaluate_gates(product_id=pid, version=ver, included_rows=included, excluded_rows=excluded, record=record, is_candidate_mode=is_candidate_mode, write_requested=write_requested)
+    # Production evidence asks the maturity authority (which consults the one live certifier);
+    # staged candidates are not accepted evidence and can only ever propose the count's maturity.
+    group_maturity = (maturity.maturity_for(count) if is_candidate_mode
+                      else maturity.record_maturity(record, included))
 
     evidence_last_checked = _latest_captured_at(included)
     proposed_fields: dict[str, Any] = {}
     effective_write_plan: dict[str, Any] = {}
     if gate_eval["would_write"]:
-        proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked, build=build)
+        proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked,
+                                                  build=build, record_maturity=group_maturity)
         if record:
             effective_write_plan = _public_write_plan(_load_front_matter(record["abs_path"]), proposed_fields)
 
@@ -485,8 +505,8 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
         "excluded_candidate_count": len(excluded),
         "confirmed_patch_specific_report_count": count,
         "proposed_update_report_count": count,
-        "proposed_evidence_state": _evidence_state(count),
-        "proposed_consensus_collection_status": _collection_status(count),
+        "proposed_evidence_state": group_maturity.evidence_state,
+        "proposed_consensus_collection_status": group_maturity.consensus_collection_status,
         "proposed_consensus_label": _consensus_label(sentiments),
         "proposed_confidence": _confidence(count),
         "proposed_issue_themes": dict(themes.most_common()),
@@ -873,8 +893,10 @@ def _public_source_item(pid: str, ver: str, row: dict[str, Any]) -> dict[str, An
     }
 
 
-def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str, *, build: str) -> dict[str, Any]:
+def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str, *, build: str, record_maturity: maturity.Maturity | None = None) -> dict[str, Any]:
     count = len(rows)
+    if record_maturity is None:
+        record_maturity = maturity.record_maturity(record, rows)
     sentiments = Counter(str(r.get("sentiment") or "").lower() for r in rows)
     themes = _issue_counter(pid, rows)
     consensus_label = _consensus_label(sentiments)
@@ -926,9 +948,8 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
     fields = {
         "update_report_count": count,
         "confirmed_patch_specific_report_count": count,
-        "evidence_state": _evidence_state(count),
-        "evidence_state_label": "Official source only" if count == 0 else "Verified reports",
-        "consensus_collection_status": _collection_status(count),
+        # All four maturity axes from the one authority, never a literal of this writer's own.
+        **record_maturity.axes(),
         "update_consensus_label": consensus_label,
         "update_consensus_confidence": confidence,
         "consensus_report_count_label": "user reports found",
@@ -936,7 +957,6 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         "consensus_report": report,
         "evidence_last_checked": evidence_last_checked,
         "record_last_updated": now,
-        "intelligence_stage": "manual_watch" if count == 0 else "pilot",
         "evidence_samples": samples,
         "evidence_sample_visible_limit": 5,
         "accepted_report_sources": accepted_report_sources,
@@ -1122,8 +1142,8 @@ def _davinci_version_is_beta(version: str) -> bool:
     return patch_decision.version_is_beta(version)
 
 
-def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False) -> list[dict[str, Any]]:
-    all_rows = _load_yaml_list(evidence_path)
+def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, rows: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+    all_rows = rows if rows is not None else _load_yaml_list(evidence_path)
     groups = _group_rows(all_rows, is_candidate_mode=is_candidate_mode)
     if product_id_filter:
         groups = {k: v for k, v in groups.items() if k[0] == product_id_filter}
@@ -1463,9 +1483,18 @@ def main(argv: list[str] | None = None) -> int:
     if not evidence_path.exists():
         print(f"ERROR: Evidence file not found: {evidence_path}", file=sys.stderr)
         return 1
+    production_rows: list[dict[str, Any]] | None = None
+    if not is_candidate_mode:
+        # The accepted-evidence store must be well formed before ANY record is touched: a key-less
+        # or wrongly typed store used to read as an empty population and demote every record.
+        try:
+            production_rows = load_evidence_store(evidence_path)
+        except EvidenceStoreError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
 
     records_index = _index_generated_records()
-    results = run_dry_run(evidence_path=evidence_path, product_id_filter=args.product_id, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested)
+    results = run_dry_run(evidence_path=evidence_path, product_id_filter=args.product_id, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, rows=production_rows)
 
     version_filter = args.update_version if args.update_version else args.version_filter
     if version_filter:

@@ -202,8 +202,7 @@ def run() -> int:
     # ---------- O4 ----------
     print("\n[O4] excluded evidence never reaches the projection")
     with_excluded = seven + [row("99999", counted=False),
-                             row("99998", matched=False),
-                             row("99997", sentiment="unclassified")]
+                             row("99998", matched=False)]
     g2 = acr._group_rows(with_excluded, is_candidate_mode=False)
     inc2, exc2 = acr._filter_rows(g2.get(key) or [], product_id=OBS, version=VER,
                                   is_candidate_mode=False, record=front)
@@ -211,9 +210,23 @@ def run() -> int:
     proj = " ".join(str(s) for s in f2["accepted_report_sources"])
     check("O4 the selector still admits exactly the seven", len(inc2) == 7, f"{len(inc2)}")
     check("O4 no excluded row appears in the source projection",
-          not any(bad in proj for bad in ("99999", "99998", "99997")), proj[:160])
+          not any(bad in proj for bad in ("99999", "99998")), proj[:160])
     check("O4 the count does not include excluded rows",
           f2["update_report_count"] == 7, str(f2["update_report_count"]))
+    # A COUNTED row the writer cannot classify is no longer dropped from the population -- that
+    # silently published a smaller count than the authority's (AUX-053). It stays in, and the write
+    # is refused by name until the row is classified.
+    with_unclassified = seven + [row("99997", sentiment="unclassified")]
+    inc3, exc3 = acr._filter_rows(with_unclassified, product_id=OBS, version=VER,
+                                  is_candidate_mode=False, record=front)
+    gates = acr._evaluate_gates(product_id=OBS, version=VER, included_rows=inc3, excluded_rows=exc3,
+                                record={"product_id": OBS, "update_version": VER,
+                                        "evidence_state": "pilot_sample"},
+                                is_candidate_mode=False)
+    check("O4 an unclassified counted row stays counted and blocks the write by name",
+          len(inc3) == 8 and gates["would_write"] is False
+          and "gate_17_counted_rows_classified" in gates["blocking_failures"],
+          f"{len(inc3)} {gates['blocking_failures']}")
 
     # ---------- O5 ----------
     print("\n[O5] only count-bearing text is rewritten; other editorial text is left alone")

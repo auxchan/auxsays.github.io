@@ -60,6 +60,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
 | AUX-051 | Resolved | Published claims | Medium | Four records made just before AUX-050 could never be labelled, so their readers were stuck on UNKNOWN |
 | AUX-052 | Resolved | Evidence coverage | Low | Installer files written "7.1.0" did not count for release "7.1", so its notes were never labelled |
+| AUX-053 | Resolved | Evidence integrity | High | Four writers each derived a record's maturity, and none of them could keep a live state |
 
 ---
 
@@ -3678,6 +3679,53 @@ now on are classified with the rule at creation.
 **Reopen only if** a version that differs other than by trailing ".0" components is accepted as the
 record's release, two records are merged or re-keyed by it, or an installer label overrides a title's
 platform.
+
+---
+
+### AUX-053 — Four writers each derived a record's maturity, and none of them could keep a live state
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-10-21 · **Resolved** 2026-10-27
+
+A record's maturity is stored on four axes: `evidence_state`, `consensus_collection_status`,
+`evidence_state_label` and `intelligence_stage`. Reconciliation, the consensus writer, record creation
+and the consensus aggregate each kept their own copy of the mapping. Reconciliation never wrote the
+stage, so 13 records that fell to zero reports kept stage `pilot`. The consensus writer wrote
+`manual_watch` at zero, while creation wrote `official_live`. Every copy hardcoded the two-valued
+table, so no writer could keep a live state through one cycle.
+
+**One authority.** `lib/maturity.py` owns the table and the High rung (33). Every writer gets all four
+axes from `record_maturity`, which consults a single live certifier, `certify_live`. Live promotion
+is not enabled yet: the certifier declines every patch, so stored states do not change today. Once it
+is enabled, promotion and revocation will run through that one function in every lane. Record creation
+refuses maturity values supplied by the caller.
+
+**One counted population.** The consensus writer used to drop counted rows with a blank URL or an
+unclassified sentiment or severity, so it silently published a smaller count than the authority's.
+Its population is now the authority's, row for row. A row like that now blocks that patch's write
+by name (`gate_11` / `gate_17`), and QA names it. The aggregate's title-substring admission path is
+gone. The audit and revalidation now use the same row predicate, and revalidation no longer
+hardcodes 40. The "9 vs 29" divergence that code comments still described was fixed by #70 on
+2026-08-27; those comments are corrected.
+
+**Missing store.** A missing, key-less, wrongly typed or unparseable evidence store used to read as
+an empty population and zero every record. Reconciliation, the consensus writer and the PowerPoint
+graph now refuse it before writing. An explicit empty list is still a valid, empty population.
+
+**Convergence.** `migrate_maturity_stage_convergence.py` makes no network calls and refuses to write
+if any other file's hash changes. It set `intelligence_stage: official_live` on the 24 records where
+the stage was the only axis that disagreed: 13 `pilot`, 1 `manual_watch` and 10 created before the
+field existed. The `manual_watch` value came from the writer, not from an operational watch. Each
+record changed by one line. The migration had to land with the writer change, because 10 of the 24
+are outside the scheduled lane's writeback allow-list.
+
+**Measured on 873ccade plus this change.** After the migration, a replay of the scheduled lane (the
+unscoped reconcile and all eight scoped promotions) changes 0 records. Read-only publish-strict QA
+reports 0 errors and 0 warnings.
+
+**Reopen only if** a writer stores a maturity axis that differs from `lib.maturity`, a live claim
+passes QA without the full canonical tuple, the consensus writer's included rows differ from
+`counted_evidence_rows` for any patch identity, or a missing or malformed store reaches reconciliation.
 
 ## Adding an entry
 

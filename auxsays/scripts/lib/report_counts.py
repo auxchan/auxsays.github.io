@@ -11,7 +11,9 @@ is LOOSER than QA (it omits the patch_version_matched requirement), so it can dr
 
 This module makes the count SINGLE-SOURCE: ``counted_evidence_counts`` is the authoritative predicate
 used by BOTH the QA gate and the post-collection reconciliation, so ``update_report_count`` can never
-diverge from what QA enforces. The predicate is deliberately the QA basis -- this does NOT weaken QA,
+diverge from what QA enforces. (Since AUX-053 the consensus writer's population is this one too: it
+reads the same row predicate, ``base.row_is_counted``, and refuses -- by name -- a counted row it
+cannot project rather than dropping it.) The predicate is deliberately the QA basis -- this does NOT weaken QA,
 does not change acceptance (the ``counted`` / ``patch_version_matched`` flags), and does not discard
 evidence; it only makes every record's rendered count equal the final counted evidence for that exact
 normalized canonical patch identity (product_id, update_version, target_build).
@@ -22,8 +24,11 @@ import re
 from pathlib import Path
 from typing import Any, Iterable
 
-from patch_collectors.base import (WINDOWS_PRODUCT_ID, load_front_matter_and_body,
+import yaml
+
+from patch_collectors.base import (WINDOWS_PRODUCT_ID, load_front_matter_and_body, row_is_counted,
                                    windows_identity_gate, write_front_matter_and_body)
+from . import maturity
 from .patch_identity import patch_display_label, patch_key, require_build
 from .write_update_record import (DEFAULT_CONSENSUS, DEFERRED_CONSENSUS_REPORT,
                                   deferred_quick_verdict)
@@ -93,9 +98,7 @@ def counted_evidence_rows(
         version = str(row.get("update_version") or "").strip()
         if not product_id or not version:
             continue
-        if row.get("counted") is False:
-            continue
-        if row.get("patch_version_matched") is not True:
+        if not row_is_counted(row):
             continue
         if product_id == WINDOWS_PRODUCT_ID:
             target = windows_targets.get(
@@ -127,19 +130,61 @@ def counted_evidence_counts(
             counted_evidence_rows(evidence_rows, windows_targets=windows_targets).items()}
 
 
-# Count-derived presentation fields. These MIRROR apply_consensus_to_records exactly -- this module is
-# not new scoring, it is the same mapping applied to the authoritative count so a reconciled record
-# stays internally consistent (a record can never show "14 reports" while labelled "official only").
+class EvidenceStoreError(RuntimeError):
+    """The evidence store is missing or malformed, so no count derived from it may be written."""
+
+
+def load_evidence_store(path: Path) -> list[dict[str, Any]]:
+    """The accepted-evidence store's rows, REFUSING a store that is not there or not well formed.
+
+    Every record-writing path used a loader that returned [] for a missing file, a key-less mapping
+    or a wrong type -- and an empty population is a legitimate input that zeroes every count. So a
+    deleted or truncated store reached reconciliation as "no patch has any reports" and demoted
+    every record. Only lane-level gates downstream stopped that reaching main.
+
+    The distinction is now made before any write: an EXPLICIT empty list (``evidence: []`` or a bare
+    ``[]``) is a real, empty population and is returned; a missing file, unparseable YAML, a mapping
+    without an ``evidence`` key, an ``evidence`` value that is not a list, or a row that is not a
+    mapping raises ``EvidenceStoreError``."""
+    path = Path(path)
+    if not path.is_file():
+        raise EvidenceStoreError(f"evidence store not found: {path}")
+    try:
+        payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except Exception as exc:  # any read or parse failure is a malformed store, never "empty"
+        raise EvidenceStoreError(f"evidence store unreadable: {path}: {exc}") from exc
+    if isinstance(payload, dict):
+        if "evidence" not in payload:
+            raise EvidenceStoreError(f"evidence store has no 'evidence' key: {path}")
+        rows = payload["evidence"]
+    elif isinstance(payload, list):
+        rows = payload
+    else:
+        raise EvidenceStoreError(f"evidence store is not a mapping or list "
+                                 f"({type(payload).__name__}): {path}")
+    if not isinstance(rows, list):
+        raise EvidenceStoreError(f"evidence store 'evidence' is not a list "
+                                 f"({type(rows).__name__}): {path}")
+    bad = [index for index, row in enumerate(rows) if not isinstance(row, dict)]
+    if bad:
+        raise EvidenceStoreError(f"evidence store has {len(bad)} non-mapping row(s), first at "
+                                 f"index {bad[0]}: {path}")
+    return rows
+
+
+# Count-derived maturity. Thin delegates to `lib.maturity`, the single authority, kept because their
+# names are what callers and tests already use. None of them can return live: that is a decision
+# `maturity.certify_live` makes for an identity, never a property of a count.
 def evidence_state_for(count: int) -> str:
-    return "official_only" if count == 0 else "pilot_sample"
+    return maturity.maturity_for(count).evidence_state
 
 
 def evidence_state_label_for(count: int) -> str:
-    return "Official source only" if count == 0 else "Verified reports"
+    return maturity.maturity_for(count).evidence_state_label
 
 
 def collection_status_for(count: int) -> str:
-    return "deferred_official_only" if count == 0 else "pilot_initial_sample"
+    return maturity.maturity_for(count).consensus_collection_status
 
 
 def _as_int(value: Any) -> int:
@@ -328,9 +373,10 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
     # scanning the tree twice or re-reading per row.
     loaded = [(path, *load_front_matter_and_body(path))
               for path in sorted(Path(generated_dir).glob("*.md"))]
-    counts = counted_evidence_counts(
+    populations = counted_evidence_rows(
         evidence_rows,
         windows_targets=windows_targets_from_front_matter(data for _p, data, _b in loaded))
+    counts = {key: len(rows) for key, rows in populations.items()}
     scope = {str(p).strip() for p in product_ids} if product_ids is not None else None
     changed: list[dict[str, Any]] = []
     for path, data, body in loaded:
@@ -342,38 +388,33 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
             continue
         if scope is not None and product_id not in scope:
             continue
-        n = counts.get(patch_key(product_id, version, data.get("target_build")), 0)
-        new_state = evidence_state_for(n)
-        new_status = collection_status_for(n)
-        cur_state = str(data.get("evidence_state") or "")
-        state_changed = cur_state != new_state
-        # Only re-derive the label when the count crosses the 0<->N state boundary. Otherwise leave
-        # the existing label untouched so this count fix never rewrites legitimate label variation
-        # (e.g. "User reports found" vs "Verified reports") or otherwise mutates verdict presentation.
-        new_label = evidence_state_label_for(n) if state_changed else str(data.get("evidence_state_label") or "")
+        rows = populations.get(patch_key(product_id, version, data.get("target_build")), [])
+        n = len(rows)
+        # ALL FOUR maturity axes, from the one authority. This used to write three of them from a
+        # private two-valued copy and never `intelligence_stage`, so a record demoted to zero kept
+        # stage `pilot` (13 records did), and a live claim on any axis was overwritten here every
+        # cycle. The label is no longer preserved across a same-state rewrite: the corpus carries
+        # exactly the two canonical labels, so there was no variation left to protect.
+        target = maturity.record_maturity(data, rows).axes()
         # At zero the record must also stop CLAIMING reports, not merely report the number 0.
-        # Two guards, both load-bearing. `counts` being wholly empty means the evidence file was
-        # missing, empty, or key-less -- `load_evidence()` returns [] for all three -- and NOT that
-        # every patch on earth lost its reports; retracting then would strip 124 records (570 source
-        # entries) in one pass, and only two products could ever rebuild them. Reconciling the
-        # NUMBERS on an empty map stays as it was, because that is self-healing: the next healthy run
-        # restores it. Deleting content is not.
+        # Two guards, both load-bearing. A missing or malformed store no longer reaches this
+        # function from a production caller -- `load_evidence_store` refuses it first -- but `counts`
+        # being wholly empty is still NOT evidence that every patch on earth lost its reports, and
+        # retracting then would strip 124 records (570 source entries) in one pass that only two
+        # products could ever rebuild. So deletion stays fenced on a non-empty population even for an
+        # explicitly empty store. Reconciling the NUMBERS on it is self-healing; deleting is not.
         may_retract = (bool(counts)
                        and product_id in CONSENSUS_PROMOTION_PRODUCTS)
         needs_retraction = n == 0 and may_retract and zero_count_projection_drift(data)
         if (_as_int(data.get("update_report_count")) == n
                 and _as_int(data.get("confirmed_patch_specific_report_count")) == n
-                and cur_state == new_state
-                and str(data.get("consensus_collection_status") or "") == new_status
-                and str(data.get("evidence_state_label") or "") == new_label
+                and maturity.stored_axes(data) == target
                 and not needs_retraction):
             continue  # already authoritative -> no write (idempotent)
         before = _as_int(data.get("update_report_count"))
         data["update_report_count"] = n
         data["confirmed_patch_specific_report_count"] = n
-        data["evidence_state"] = new_state
-        data["consensus_collection_status"] = new_status
-        data["evidence_state_label"] = new_label
+        data.update(target)
         retracted = (retract_zero_count_projections(data)
                      if n == 0 and may_retract else [])
         write_front_matter_and_body(path, data, body)

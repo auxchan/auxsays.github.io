@@ -11,7 +11,9 @@ with e.g. unclassified sentiment is counted by QA but excluded from the record -
 Fix: lib.report_counts.counted_evidence_counts is the SINGLE authoritative predicate (counted != False
 AND patch_version_matched is True), used by BOTH qa_patch_records (the gate) and reconcile_record_counts
 (the post-collection writer), so the record count can never diverge from what QA enforces -- without
-weakening QA, changing acceptance flags, or discarding evidence.
+weakening QA, changing acceptance flags, or discarding evidence. (Since AUX-053 the consensus writer
+reads the same population too, and refuses a counted row it cannot classify by name instead of
+dropping it -- see test_maturity_authority.)
 
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_report_count_reconciliation.py
 """

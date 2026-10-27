@@ -74,6 +74,7 @@ consensus_low_context_policy: excluded
 consensus_collection_status: deferred_official_only
 evidence_state: official_only
 evidence_state_label: Official source only
+intelligence_stage: official_live
 official_source_captured: true
 confirmed_patch_specific_report_count: 0
 known_issues_present: null

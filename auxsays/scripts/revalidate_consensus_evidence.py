@@ -25,6 +25,8 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - used in lightweight local shells.
     yaml = None
 
+from lib import maturity
+
 
 MODE = "dry_run_fixture_revalidation_no_fetch_no_write"
 LIVE_MODE = "dry_run_live_revalidation_no_write"
@@ -68,10 +70,10 @@ GITHUB_COMMENT_RE = re.compile(r"(?:^|[-_])comment-(\d+)$|issuecomment-(\d+)", f
 CREATIVE_COW_THREAD_RE = re.compile(r"^/forums/thread/[^/?#]+/?$", flags=re.I)
 EXPECTED_WRITEBACK_PRODUCT = "obs-studio"
 EXPECTED_WRITEBACK_VERSION = "32.1.1"
-EXPECTED_WRITEBACK_COUNTED_ROWS = 40
+# The guard's expected row count is the generated record's OWN published count, read at write time.
+# It was a hardcoded 40; the record grew to 44, so the guard refused every run. Likewise the expected
+# maturity is whatever the one authority derives for that count, not a pinned pair of literals.
 EXPECTED_WRITEBACK_GENERATED_FILE = "2026-04-02-obs-studio-32-1-1.md"
-EXPECTED_WRITEBACK_EVIDENCE_STATE = "pilot_sample"
-EXPECTED_WRITEBACK_CONSENSUS_STATUS = "pilot_initial_sample"
 
 
 class SourceFetchError(RuntimeError):
@@ -192,7 +194,11 @@ def replace_evidence_last_checked(path: Path, timestamp: str) -> str:
 
 
 def is_counted(row: dict[str, Any]) -> bool:
-    return row.get("counted") is True
+    # The one row predicate (`counted is not False` AND `patch_version_matched is True`), imported
+    # lazily so this harness still loads in a shell without PyYAML. It used to require
+    # `counted is True`, a third reading of the same field.
+    from patch_collectors.base import row_is_counted
+    return row_is_counted(row)
 
 
 def selected_rows(rows: list[dict[str, Any]], product_id: str, update_version: str) -> list[dict[str, Any]]:
@@ -567,9 +573,10 @@ def guarded_generated_freshness_writeback(
         "guard_failures": failures,
         "expected_product": EXPECTED_WRITEBACK_PRODUCT,
         "expected_version": EXPECTED_WRITEBACK_VERSION,
-        "expected_counted_rows": EXPECTED_WRITEBACK_COUNTED_ROWS,
+        "expected_counted_rows": None,
         "expected_generated_file": EXPECTED_WRITEBACK_GENERATED_FILE,
     }
+    selected = result.get("counted_rows_selected")
 
     if result.get("product_id") != EXPECTED_WRITEBACK_PRODUCT:
         failures.append(f"product must be exactly {EXPECTED_WRITEBACK_PRODUCT}")
@@ -579,20 +586,15 @@ def guarded_generated_freshness_writeback(
         failures.append(f"--confirm-product must be exactly {EXPECTED_WRITEBACK_PRODUCT}")
     if confirm_version != EXPECTED_WRITEBACK_VERSION:
         failures.append(f"--confirm-version must be exactly {EXPECTED_WRITEBACK_VERSION}")
-    if result.get("counted_rows_selected") != EXPECTED_WRITEBACK_COUNTED_ROWS:
-        failures.append(
-            f"selected counted rows must total exactly {EXPECTED_WRITEBACK_COUNTED_ROWS}; "
-            f"found {result.get('counted_rows_selected')}"
-        )
     if not result.get("fetches_urls"):
         failures.append("--live-fetch is required in the same command")
 
     counts = result.get("classification_counts") or {}
     verified = counts.get("verified", 0)
-    if verified != EXPECTED_WRITEBACK_COUNTED_ROWS:
+    if verified != selected:
         failures.append(
             f"all selected rows must verify live; verified={verified}, "
-            f"expected={EXPECTED_WRITEBACK_COUNTED_ROWS}"
+            f"expected={selected}"
         )
     for name in LIVE_CLASSIFICATIONS:
         if name == "verified":
@@ -627,19 +629,28 @@ def guarded_generated_freshness_writeback(
                     failures.append(f"generated record update_version must be {EXPECTED_WRITEBACK_VERSION}")
                 update_report_count = metadata.get("update_report_count")
                 confirmed_report_count = metadata.get("confirmed_patch_specific_report_count")
-                if update_report_count != EXPECTED_WRITEBACK_COUNTED_ROWS or confirmed_report_count != EXPECTED_WRITEBACK_COUNTED_ROWS:
+                writeback["expected_counted_rows"] = update_report_count
+                if (not isinstance(update_report_count, int) or update_report_count <= 0
+                        or confirmed_report_count != update_report_count):
                     failures.append(
-                        "generated record report counts must still be 40; "
+                        "generated record report counts must be one positive number; "
                         f"update_report_count={update_report_count}, "
                         f"confirmed_patch_specific_report_count={confirmed_report_count}"
                     )
-                if metadata.get("evidence_state") != EXPECTED_WRITEBACK_EVIDENCE_STATE:
-                    failures.append(f"generated record evidence_state must remain {EXPECTED_WRITEBACK_EVIDENCE_STATE}")
-                if metadata.get("consensus_collection_status") != EXPECTED_WRITEBACK_CONSENSUS_STATUS:
+                elif selected != update_report_count:
                     failures.append(
-                        "generated record consensus_collection_status must remain "
-                        f"{EXPECTED_WRITEBACK_CONSENSUS_STATUS}"
+                        "selected counted rows must equal the generated record's report count "
+                        f"{update_report_count}; found {selected}"
                     )
+                else:
+                    expected = maturity.maturity_for(update_report_count)
+                    if metadata.get("evidence_state") != expected.evidence_state:
+                        failures.append(f"generated record evidence_state must be {expected.evidence_state}")
+                    if metadata.get("consensus_collection_status") != expected.consensus_collection_status:
+                        failures.append(
+                            "generated record consensus_collection_status must be "
+                            f"{expected.consensus_collection_status}"
+                        )
 
     if failures:
         return writeback

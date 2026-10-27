@@ -10,10 +10,10 @@ unsatisfiable by data AND by the approved write path.
 
 Two further facts shaped the replacement:
 
-  * `accepted_report_sources` carries `patch_version_matched: True` as a HARDCODED LITERAL
-    (`apply_consensus_to_records` writes the constant for every entry). A gate that believed that
-    field would be unfalsifiable on any record the consensus writer produced, so patch-matching is
-    established upstream instead, by the real per-row predicate in `lib.report_counts`.
+  * `accepted_report_sources` carried `patch_version_matched: True` as a hardcoded literal (AUX-043
+    now earns it from the row). A gate that believed the writer's own projection would be only as
+    strong as that writer, so patch-matching is established upstream instead, by the real per-row
+    predicate in `lib.report_counts`.
   * `evidence_samples` is capped at five. `accepted_report_sources` is the exhaustive projection,
     so it is the one a maturity claim must agree with.
 
@@ -39,7 +39,7 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 import qa_patch_records as qa                                  # noqa: E402
-from lib import report_counts                                  # noqa: E402
+from lib import maturity, report_counts                        # noqa: E402
 
 PASS = FAIL = 0
 FAILURES: list[str] = []
@@ -92,11 +92,17 @@ def record(*, state: str = "consensus_live", status: str = "consensus_live",
            count: int | None = None, srcs: list | None = None,
            product: str = PRODUCT, version: str = VERSION) -> dict:
     n = N if count is None else count
+    # The label and stage follow the pair: a record claiming live on either half carries the live
+    # label and stage (AUX-053 requires all four axes), otherwise the pilot ones.
+    claims = state == "consensus_live" or status in qa.LIVE_COLLECTION_STATUSES
+    pair_maturity = maturity.CONSENSUS_LIVE if claims else maturity.PILOT_SAMPLE
     return {
         "product_id": product,
         "update_version": version,
         "evidence_state": state,
         "consensus_collection_status": status,
+        "evidence_state_label": pair_maturity.evidence_state_label,
+        "intelligence_stage": pair_maturity.intelligence_stage,
         "update_report_count": n,
         "confirmed_patch_specific_report_count": n,
         "accepted_report_sources": sources(N) if srcs is None else srcs,
@@ -208,11 +214,11 @@ def run_suite() -> int:
     check("Part D: and that half-claim is still VALIDATED, not waved through",
           "live_without_sufficient_accepted_evidence"
           in codes(record(state="pilot_sample"), {}))
-    # The legacy word order counts AS live, so the pair is consistent and a supported claim passes.
-    # It must not be read as a pilot status -- that would silently skip validation of a record the
-    # detail page renders as mature.
-    check("Part D: the legacy live_consensus spelling is accepted on read",
-          codes(record(status="live_consensus")) == set(),
+    # The legacy word order is READ as live -- it must not be read as a pilot status, which would
+    # silently skip validation of a record the detail page renders as mature -- but since AUX-053 it
+    # is not ACCEPTED as a claim: nothing writes it, and a live claim must carry the canonical tuple.
+    check("Part D: the legacy live_consensus spelling is read as a claim and refused as one",
+          codes(record(status="live_consensus")) == {"maturity_live_axes_inconsistent"},
           str(codes(record(status="live_consensus"))))
     check("Part D: and a legacy-spelled claim is validated like any other",
           "live_without_sufficient_accepted_evidence"
@@ -267,8 +273,7 @@ def run_suite() -> int:
         real_key = qa.patch_key(str(real.get("product_id")), str(real.get("update_version")),
                                 real.get("target_build"))
         promoted = dict(real)
-        promoted["evidence_state"] = qa.LIVE_EVIDENCE_STATE
-        promoted["consensus_collection_status"] = qa.LIVE_EVIDENCE_STATE
+        promoted.update(maturity.CONSENSUS_LIVE.axes())  # all four axes, as every writer now does
         errs, _w = qa.scan_live_consensus_claims([(candidate, promoted)], real_counts)
         check("Part F: promoting the real largest candidate yields NO gate error",
               errs == [], str([e["code"] for e in errs]))
@@ -357,7 +362,11 @@ def run_suite() -> int:
                              .replace("evidence_state: pilot_sample",
                                       f"evidence_state: {qa.LIVE_EVIDENCE_STATE}")
                              .replace("consensus_collection_status: pilot_initial_sample",
-                                      f"consensus_collection_status: {qa.LIVE_EVIDENCE_STATE}"))
+                                      f"consensus_collection_status: {qa.LIVE_EVIDENCE_STATE}")
+                             .replace("evidence_state_label: Verified reports",
+                                      "evidence_state_label: Live consensus")
+                             .replace("intelligence_stage: pilot",
+                                      "intelligence_stage: consensus_live"))
             target = gen / candidate.name
             target.write_text(promoted_text, encoding="utf-8")
             orig_dir, orig_loader = qa.GENERATED_DIR, qa.load_counted_evidence_counts
