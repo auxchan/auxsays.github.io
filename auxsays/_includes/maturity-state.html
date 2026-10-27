@@ -1,0 +1,57 @@
+{%- comment -%}
+  THE maturity presentation contract. Every surface that names a record's evidence maturity --
+  the patch page, both feed lists, the homepage and My Patch Stack -- takes it from here, so the
+  five copies that each decided "Live consensus" for themselves cannot disagree again.
+
+  Input:   include.record, a page or a site.pages item.
+  Outputs: maturity_class        live | pilot | official | insufficient
+           maturity_label        the reader-facing maturity words
+           maturity_stage_label  the homepage stage words, or ''
+           maturity_live         true only for a CERTIFIED live claim
+
+  A stored live claim is not trusted on its own. It renders as live only when the deploy-time
+  projection (_data/live_eligibility.yml, written by build_live_eligibility_projection.py) lists
+  the record's url, which it does only while the evidence and the monitoring behind the claim
+  still certify. An unlisted claim renders as Verified reports -- true of any record that has one
+  -- and so does every claim when the projection is absent. Missing data is never live.
+
+  Emits no output: every tag trims its whitespace, so it is safe inside a JSON capture.
+{%- endcomment -%}
+{%- assign maturity_record = include.record -%}
+{%- assign maturity_state = maturity_record.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' -%}
+{%- assign maturity_status = maturity_record.consensus_collection_status | default: '' | downcase | replace: '-', '_' -%}
+{%- assign maturity_claims_live = false -%}
+{%- if maturity_state == 'consensus_live' or maturity_state == 'live_consensus' or maturity_status == 'consensus_live' or maturity_status == 'live_consensus' -%}
+  {%- assign maturity_claims_live = true -%}
+{%- endif -%}
+{%- assign maturity_live = false -%}
+{%- if maturity_claims_live -%}
+  {%- if site.data.live_eligibility.urls contains maturity_record.url -%}{%- assign maturity_live = true -%}{%- endif -%}
+{%- endif -%}
+{%- assign maturity_pilot_word = false -%}
+{%- if maturity_state == 'pilot_sample' or maturity_state == 'static_sample' or maturity_state == 'pilot_initial_sample' or maturity_state == 'static_initial_sample' or maturity_status == 'pilot_initial_sample' or maturity_status == 'static_initial_sample' -%}
+  {%- assign maturity_pilot_word = true -%}
+{%- endif -%}
+{%- if maturity_live -%}
+  {%- assign maturity_class = 'live' -%}
+  {%- assign maturity_label = 'Live consensus' -%}
+{%- elsif maturity_claims_live or maturity_pilot_word -%}
+  {%- assign maturity_class = 'pilot' -%}
+  {%- assign maturity_label = 'Verified reports' -%}
+{%- elsif maturity_state == 'official_only' -%}
+  {%- assign maturity_class = 'official' -%}
+  {%- assign maturity_label = 'Official source only' -%}
+{%- elsif maturity_state == 'insufficient_data' -%}
+  {%- assign maturity_class = 'insufficient' -%}
+  {%- assign maturity_label = 'Insufficient data' -%}
+{%- else -%}
+  {%- assign maturity_class = 'insufficient' -%}
+  {%- assign maturity_label = maturity_record.evidence_state_label | default: maturity_state | replace: '_', ' ' | capitalize -%}
+{%- endif -%}
+{%- assign maturity_stage = maturity_record.intelligence_stage | default: '' -%}
+{%- assign maturity_stage_label = '' -%}
+{%- if maturity_live -%}{%- assign maturity_stage_label = 'Established reports' -%}
+{%- elsif maturity_stage == 'pilot' or maturity_stage == 'consensus_live' -%}{%- assign maturity_stage_label = 'Early reports' -%}
+{%- elsif maturity_stage == 'official_live' -%}{%- assign maturity_stage_label = 'Vendor information' -%}
+{%- elsif maturity_stage == 'manual_watch' -%}{%- assign maturity_stage_label = 'Watching' -%}
+{%- endif -%}

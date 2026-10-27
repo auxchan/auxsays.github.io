@@ -6,9 +6,10 @@ consensus". Those are different claims, and only the second is a consensus claim
 
 The canonical contract already existed and is unchanged here:
 
-  * evidence_state_class == 'live'  <=>  consensus_collection_status is live_consensus /
-    consensus_live. That is the ONLY state that means mature consensus. NO record in the repo
-    satisfies it (measured: 0 of 940), so today nothing is mature consensus.
+  * evidence_state_class == 'live'  <=>  the record claims live consensus AND the deploy-time
+    eligibility projection lists its page (`_includes/maturity-state.html`, AUX-055). That is the
+    ONLY state that means mature consensus. NO record in the repo claims it (measured: 0 of
+    1463), so today nothing is mature consensus.
   * community evidence strength is the ladder patch-table-row.html already renders and
     test_evidence_strength_thresholds already locks:
     0 Insufficient | 1-7 Low | 8-24 Low-Medium | 25-32 Medium | 33+ High.
@@ -83,13 +84,28 @@ print tpl.render!(payload['vars'])
 """
 
 
+MATURITY_INCLUDE = (_AUX / "_includes" / "maturity-state.html").read_text(encoding="utf-8")
+MATURITY_TAG = re.compile(r"\{%-?\s*include\s+maturity-state\.html\s+record=([\w.]+)\s*-?%\}")
+PAGE_URL = "/updates/microsoft/microsoft-powerpoint/2607/"
+
+
+def expand_maturity(text: str) -> str:
+    """Inline the shared maturity contract the layout includes, bound to its `record=` argument.
+
+    The include reads nothing but `include.record` (and `site.data`), so substituting the argument
+    is what Jekyll's include does; it lets the standalone render keep the contract instead of
+    cutting the window above it."""
+    return MATURITY_TAG.sub(lambda m: MATURITY_INCLUDE.replace("include.record", m.group(1)), text)
+
+
 def consensus_block(text: str = LAYOUT) -> str:
-    """The layout from the end of its front matter to just before its first {% include %}.
+    """The layout from the end of its front matter to just before its first OTHER {% include %}.
 
     Everything under test -- the evidence-state ladder, the strength ladder, the evidence card and
-    the verdict box -- lives in that span, and it contains no includes, so it renders standalone.
+    the verdict box -- lives in that span. Its one include, the maturity contract, is inlined by
+    `expand_maturity`, so the span renders standalone.
     """
-    lines = text.split("\n")
+    lines = expand_maturity(text).split("\n")
     end = next((i for i, line in enumerate(lines) if "{% include" in line), len(lines))
     return "\n".join(lines[3:end])
 
@@ -122,13 +138,17 @@ def page_vars(count: int, label: str, *, status: str = "pilot_initial_sample") -
         "evidence_last_checked": "2026-08-30T07:17:03Z",
         "update_product": "Microsoft PowerPoint",
         "update_version": "2607",
+        "url": PAGE_URL,
     }
 
 
 def visible(count: int, label: str = "Negative", *, status: str = "pilot_initial_sample",
-            template: str | None = None) -> str | None:
+            template: str | None = None, certified: bool = False) -> str | None:
+    # `certified` lists the page in the deploy-time eligibility projection, which is what makes a
+    # stored live claim render as live (AUX-055); without it a live claim reads as Verified reports.
+    site = {"data": {"live_eligibility": {"urls": [PAGE_URL]}}} if certified else {}
     out = liquid_render(template if template is not None else consensus_block(),
-                        {"page": page_vars(count, label, status=status), "site": {}})
+                        {"page": page_vars(count, label, status=status), "site": site})
     if out is None:
         return None
     return " ".join(re.sub(r"<[^>]+>", " ", out).split())
@@ -264,13 +284,19 @@ def run() -> int:
     print("=" * 96)
     if liquid_ok:
         for status in ("live_consensus", "consensus_live"):
-            live = visible(30, "Negative", status=status)
+            live = visible(30, "Negative", status=status, certified=True)
             check(f"C3.1 {status}: the not-established statement is GONE",
                   live is not None and NOT_ESTABLISHED not in live, (live or "")[:110])
             check(f"C3.2 {status}: the categorical label and scale still render",
                   live is not None and "Community signal: Negative" in live and SCALE_LABELS in live)
             check(f"C3.3 {status}: no early-evidence hedge",
                   live is not None and EARLY_EVIDENCE not in live)
+            # The stored claim alone no longer establishes anything: a claim the deploy-time
+            # projection does not list is presented as the verified reports it is (AUX-055).
+            stored_only = visible(30, "Negative", status=status)
+            check(f"C3.6 {status}: an UNCERTIFIED live claim still says consensus is not established",
+                  stored_only is not None and NOT_ESTABLISHED in stored_only,
+                  (stored_only or "")[:110])
         # A LARGE sub-live sample must not be hedged as though it were tiny: over-hedging a real
         # signal is its own dishonesty.
         big = visible(96)

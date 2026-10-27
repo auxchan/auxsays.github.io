@@ -122,6 +122,12 @@ def load_products() -> list[dict]:
 
 def render_page(records: list[dict], products: list[dict]) -> tuple[bool, str]:
     src = PAGE.read_text(encoding="utf-8").split("---", 2)[-1]
+    # The shared maturity contract is INLINED, bound to its `record=` argument -- it reads nothing
+    # but `include.record` and `site.data`, so this is what Jekyll's include does. It cannot be
+    # stripped like the monitoring include: `ev` is its output (AUX-055).
+    maturity = (AUX / "_includes" / "maturity-state.html").read_text(encoding="utf-8")
+    src = re.sub(r"\{%-?\s*include\s+maturity-state\.html\s+record=([\w.]+)\s*-?%\}",
+                 lambda m: maturity.replace("include.record", m.group(1)), src)
     # The monitoring status arrives from a Jekyll include, whose parameterised syntax core Liquid
     # cannot parse. Stripping it leaves `mon` empty here; that field is the include's to own.
     src = re.sub(r"\{%-?\s*include\s.*?-?%\}", "", src, flags=re.S)

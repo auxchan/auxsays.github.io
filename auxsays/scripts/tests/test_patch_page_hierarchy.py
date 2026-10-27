@@ -156,9 +156,22 @@ def html_excerpt(html: str) -> str:
     return f"card={'yes' if card else 'no'} aside={aside_of(html)!r}"
 
 
+PAGE_URL = "/updates/obs-project/obs-studio/31-0-4/"
+MATURITY_INCLUDE = (_AUX / "_includes" / "maturity-state.html").read_text(encoding="utf-8")
+MATURITY_TAG = re.compile(r"\{%-?\s*include\s+maturity-state\.html\s+record=([\w.]+)\s*-?%\}")
+
+
+def expand_maturity(text: str) -> str:
+    """Inline the shared maturity contract, bound to its `record=` argument. It reads nothing but
+    `include.record` and `site.data`, so this is what Jekyll's include does -- and unlike the other
+    includes it cannot be stripped: it decides the page's maturity class (AUX-055)."""
+    return MATURITY_TAG.sub(lambda m: MATURITY_INCLUDE.replace("include.record", m.group(1)), text)
+
+
 def _page(**over) -> dict:
     """A minimal but REAL page hash: every field the gate block reads, and nothing it does not."""
     base = {
+        "url": PAGE_URL,
         "product_id": "obs-studio", "update_version": "31.0.4", "target_build": "",
         "update_product": "OBS Studio", "update_consensus_label": "Negative",
         "update_published_at": "2025-06-27T00:00:00Z",
@@ -188,8 +201,8 @@ def render_gate_matrix():
     with the real cause -- rather than the six of ten cases that would otherwise pass quietly,
     because "the sentence is absent" is trivially true of output that was never produced.
     """
-    src = LAYOUT.split("---", 2)[-1]          # drop the `layout: aux-base` front matter
-    # Strip the two include tags. L2 asserts neither include emits an equivalent sentence, so this
+    src = expand_maturity(LAYOUT.split("---", 2)[-1])   # drop the `layout: aux-base` front matter
+    # Strip the remaining include tags. L2 asserts none of them emits an equivalent sentence, so this
     # can neither hide an occurrence nor invent one -- it only removes the need for a file system.
     src = re.sub(r"\{%-?\s*include\s.*?-?%\}", "", src, flags=re.S)
 
@@ -255,9 +268,14 @@ def render_gate_matrix():
         script.write_text(_RENDER_RB, encoding="utf-8")
         for name, page, hp, expect in cases:
             payload = Path(td) / "p.json"
+            # The page is listed in the live-eligibility projection, so the "live" cases model a
+            # CERTIFIED live page; for every other case the listing is inert, since only a page
+            # that claims live can be made live by it.
             payload.write_text(json.dumps({
                 "template": src,
-                "site": {"time": "2026-09-09T00:00:00Z", "data": {"evidence_method_health": hp}},
+                "site": {"time": "2026-09-09T00:00:00Z",
+                         "data": {"evidence_method_health": hp,
+                                  "live_eligibility": {"urls": [PAGE_URL]}}},
                 "cases": {name: page},
             }), encoding="utf-8")
             proc = subprocess.run([ruby, str(script), str(payload)],
@@ -313,8 +331,11 @@ def run() -> int:
 
     # The monitoring include must stay BELOW the verdict for a second, non-obvious reason:
     # test_consensus_sample_honesty.py renders "the layout up to its first {% include %}" and
-    # would lose the verdict box from its render window entirely.
-    first_include = LAYOUT.index("{% include ")
+    # would lose the verdict box from its render window entirely. That suite inlines the maturity
+    # contract (AUX-055) instead of cutting at it, so its window ends at the first OTHER include.
+    first_include = next((m.start() for m in re.finditer(r"\{% include ", LAYOUT)
+                          if not LAYOUT.startswith("{% include maturity-state.html", m.start())),
+                         len(LAYOUT))
     check("H8 the verdict is inside the first-include render window other suites rely on",
           verdict < first_include, f"verdict@{verdict} first_include@{first_include}")
 

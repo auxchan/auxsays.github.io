@@ -124,7 +124,8 @@ auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
 auxsays/scripts/tests/test_method_health_append_delta.py = 55
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
-auxsays/scripts/tests/test_consensus_sample_honesty.py = 88
+# +2 (C3.6): a stored live claim the deploy-time projection does not list is still hedged (AUX-055).
+auxsays/scripts/tests/test_consensus_sample_honesty.py = 90
 
 # The live-consensus precondition, which had never been satisfiable. The gate demanded front-matter
 # `consensus_evidence` / `structured_evidence` / `evidence_objects`; 0 of 1316 records carried any of
@@ -154,6 +155,14 @@ auxsays/scripts/tests/test_maturity_authority.py = 40
 # (OBS and Windows certify, both DaVinci identities fail for named reasons); and that every
 # method-health writer outside the collector runner is held to the ownership manifest.
 auxsays/scripts/tests/test_monitoring_health.py = 38
+
+# A stored live claim renders as live only while it certifies at deploy time (AUX-055). Five Liquid
+# copies each turned the stored maturity words into "Live consensus", and the words outlive the
+# collection behind them. Pins the eligibility core one condition at a time (promotion product, High
+# rung, distinct report URLs not counted on another identity, H0-H7 monitoring); that certify_live
+# stays disabled; the projection run as pages.yml runs it, failing closed and writing no record; and
+# the one Liquid contract every consumer now renders through, certified, uncertified and absent.
+auxsays/scripts/tests/test_live_render_projection.py = 64
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27

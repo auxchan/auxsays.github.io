@@ -83,13 +83,19 @@ layout: aux-base
 {% if source_url_present or official_body_present %}{% assign official_captured = true %}{% endif %}
 {% assign official_body_missing_renderable = false %}
 {% if official_body_renderable == false and source_url_present and official_body_polluted == false %}{% assign official_body_missing_renderable = true %}{% endif %}
-{% assign collection_status = page.consensus_collection_status | default: 'deferred_official_only' %}
+{%- comment -%}
+  Maturity comes from the shared contract, never from this page's own reading of the stored
+  fields: a stored live claim is live here only while the deploy-time eligibility projection
+  certifies it, and otherwise reads as Verified reports, as it does on every other surface. Below
+  the pilot rung this page keeps its own rule: official only when an official source was captured.
+{%- endcomment -%}
+{% include maturity-state.html record=page %}
 {% assign evidence_state = 'Insufficient data' %}
 {% assign evidence_state_class = 'insufficient' %}
-{% if collection_status == 'live_consensus' or collection_status == 'consensus_live' %}
+{% if maturity_class == 'live' %}
   {% assign evidence_state = 'Live consensus' %}
   {% assign evidence_state_class = 'live' %}
-{% elsif collection_status == 'pilot_initial_sample' or collection_status == 'static_initial_sample' or page.evidence_state == 'pilot_sample' or page.evidence_state == 'static_sample' %}
+{% elsif maturity_class == 'pilot' %}
   {% assign evidence_state = 'Verified reports' %}
   {% assign evidence_state_class = 'pilot' %}
 {% elsif official_captured %}
@@ -105,7 +111,7 @@ layout: aux-base
   SAMPLE SIZE ONLY -- it is never a statement that the patch is safe.
 
   consensus_established is the existing contract, not a new threshold: evidence_state_class is
-  'live' only for collection_status live_consensus / consensus_live. Nothing else is mature
+  'live' only for a live claim the maturity-state include certifies. Nothing else is mature
   consensus, so nothing else may be presented as though it were.
 {%- endcomment -%}
 {% assign evidence_strength = 'Insufficient' %}

@@ -180,6 +180,7 @@ WATCHED_IGNORED = (
     # Generated at deploy and git-ignored; a suite that writes them would otherwise go unseen.
     "auxsays/_data/monitoring_state.yml",
     "auxsays/_data/monitoring_company_state.yml",
+    "auxsays/_data/live_eligibility.yml",
     "auxsays/_site",
 )
 

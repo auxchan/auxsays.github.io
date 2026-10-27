@@ -190,10 +190,12 @@ layout: aux-base
                   {% if candidate.update_status != 'archived' %}
                     {% assign candidate_score = candidate_score | plus: 10000000000000 %}
                   {% endif %}
+                  {% comment %}Ranked by the shared contract: an uncertified live claim ranks as the verified reports it renders as.{% endcomment %}
+                  {% include maturity-state.html record=candidate %}
                   {% assign candidate_state_rank = 0 %}
-                  {% if candidate_evidence_state == 'consensus_live' %}
+                  {% if maturity_live %}
                     {% assign candidate_state_rank = 2 %}
-                  {% elsif candidate_evidence_state == 'pilot_sample' %}
+                  {% elsif maturity_class == 'pilot' %}
                     {% assign candidate_state_rank = 1 %}
                   {% endif %}
                   {% assign candidate_state_score = candidate_state_rank | times: 150000 %}
@@ -229,23 +231,12 @@ layout: aux-base
                 {% assign report_count = confirmed_report_count %}
               {% endif %}
               {% assign known_issues_value = item.known_issues_present | default: false %}
-              {% assign evidence_state = item.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' %}
               {% assign consensus_label = item.update_consensus_label | default: item.community_reaction | default: item.current_consensus | default: 'Insufficient data' %}
               {% assign consensus_key = consensus_label | downcase | replace: ' ', '-' %}
               {% assign is_known_issue = false %}
               {% if known_issues_value == true or known_issues_value == 'true' or known_issues_value == 'yes' %}
                 {% assign is_known_issue = true %}
               {% endif %}
-              {% assign evidence_label = item.evidence_state_label | default: evidence_state | replace: '_', ' ' | capitalize %}
-                {% if evidence_state == 'pilot_sample' or evidence_state == 'static_sample' or evidence_state == 'pilot_initial_sample' or evidence_state == 'static_initial_sample' %}
-                  {% assign evidence_label = 'Verified reports' %}
-                {% elsif evidence_state == 'official_only' %}
-                  {% assign evidence_label = 'Official source only' %}
-                {% elsif evidence_state == 'consensus_live' %}
-                  {% assign evidence_label = 'Live consensus' %}
-                {% elsif evidence_state == 'insufficient_data' %}
-                  {% assign evidence_label = 'Insufficient data' %}
-                {% endif %}
                 {%- comment -%}
                   `intelligence_stage_label` does not exist anywhere in this repository -- a
                   repo-wide grep finds it on this line only -- so the chain ALWAYS fell through
@@ -253,16 +244,13 @@ layout: aux-base
                   de-underscored on the home page: measured over 1,305 records, 1,052 rendered
                   "Official live", 233 "Pilot" and 1 "Manual watch". Mapped to reader-facing
                   words, defaulting to EMPTY rather than to a raw token, so an unmapped stage
-                  costs a label instead of publishing an identifier. Compared against '' and
-                  never `blank`, which is inert here.
+                  costs a label instead of publishing an identifier. Both words now come from
+                  the shared maturity contract, which says "Established reports" only beside a
+                  certified live claim.
                 {%- endcomment -%}
-                {% assign item_stage = item.intelligence_stage | default: '' %}
-                {% assign stage_label = '' %}
-                {% if item_stage == 'official_live' %}{% assign stage_label = 'Vendor information' %}
-                {% elsif item_stage == 'pilot' %}{% assign stage_label = 'Early reports' %}
-                {% elsif item_stage == 'consensus_live' %}{% assign stage_label = 'Established reports' %}
-                {% elsif item_stage == 'manual_watch' %}{% assign stage_label = 'Watching' %}
-                {% endif %}
+                {% include maturity-state.html record=item %}
+                {% assign evidence_label = maturity_label %}
+                {% assign stage_label = maturity_stage_label %}
                 {% assign item_official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
                 {% assign item_official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
                 <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal data-product-id="{{ item_product_identity }}">
