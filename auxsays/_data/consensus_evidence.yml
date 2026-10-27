@@ -61723,3 +61723,57 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-26-002-22031-adobe-community-bug-report-https-community-adobe-com-questions-9-acrocef-exe-constantly-crashing-while-acrobat-is-open-on-s
+  product_id: adobe-acrobat-pro
+  update_version: 26.002.22031
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrocef-exe-constantly-crashing-while-acrobat-is-open-on-server-2025-1653071
+  parent_title: AcroCEF.exe constantly crashing while Acrobat is open on Server 2025
+  report_title: AcroCEF.exe constantly crashing while Acrobat is open on Server 2025
+  report_text_excerpt: AcroCEF.exe constantly crashing while Acrobat is open on Server 2025 We have a customer running a number of RDS servers (Server 2025). Last week we observed all users getting a flashing blue circle cursor on their sessions and could see from Task Manager and Event Viewer that...
+  captured_at: '2026-10-27T17:58:08Z'
+  source_date: '2026-10-26'
+  target_release_date: '2026-10-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.002.22031
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-002-22031-adobe-community-bug-report-https-community-adobe-com-questions-9-acrocef-exe-constantly-crashing-while-acrobat-is-open-on-s
+  product_id: adobe-acrobat-reader
+  update_version: 26.002.22031
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrocef-exe-constantly-crashing-while-acrobat-is-open-on-server-2025-1653071
+  parent_title: AcroCEF.exe constantly crashing while Acrobat is open on Server 2025
+  report_title: AcroCEF.exe constantly crashing while Acrobat is open on Server 2025
+  report_text_excerpt: AcroCEF.exe constantly crashing while Acrobat is open on Server 2025 We have a customer running a number of RDS servers (Server 2025). Last week we observed all users getting a flashing blue circle cursor on their sessions and could see from Task Manager and Event Viewer that...
+  captured_at: '2026-10-27T18:18:32Z'
+  source_date: '2026-10-26'
+  target_release_date: '2026-10-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.002.22031
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
