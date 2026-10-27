@@ -1,0 +1,19 @@
+# Expected monitoring-status class per fixture case, shared by the Liquid render test
+# (test_monitoring_status_render, needs Jekyll) and the Python port (test_monitoring_health, runs in
+# PR CI). One table, so the shipped include and lib/monitoring_health.ladder cannot drift apart.
+c1: insufficient-coverage                # fresh success + stale success (min unmet)
+c2: no-accepted-patch-specific-reports   # two fresh no_results in two families (clean)
+c3: collection-blocked                   # fresh blocked + old success (zero healthy)
+c4: monitoring-degraded                  # healthy>=min + manual_review_needed
+c5: monitoring-degraded                  # healthy>=min + explicit stale (recent ts)
+c6: not-yet-monitored                    # valid but all pre-release
+c7: insufficient-coverage                # one fresh success at threshold
+c8: monitoring-degraded                  # fresh success + fresh blocked (degraded first)
+c9: no-accepted-patch-specific-reports   # two healthy families + one disabled (disabled is neither)
+c10: official-source-only                # every row disabled
+c11: monitoring-degraded                 # future ts + valid telemetry
+c12: collection-stale                    # future-only (no valid usable ts)
+c13: no-accepted-patch-specific-reports  # numeric 2607 joins to "2607"
+c14: monitoring-active                   # healthy + accepted reports > 0
+c15: official-source-only                # no matching rows
+c16: collection-stale                    # valid post-release but all stale

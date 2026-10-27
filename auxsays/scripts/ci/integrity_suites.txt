@@ -145,6 +145,15 @@ auxsays/scripts/tests/test_consensus_live_gate.py = 61
 # before any write; that QA refuses a live claim on any axis without the full tuple; and that the
 # 24-record stage convergence edited one line each.
 auxsays/scripts/tests/test_maturity_authority.py = 40
+
+# One monitoring-health authority in Python (AUX-054). Whether a patch's community collection is
+# healthy was decided only by the monitoring card in Liquid, whose render test needs Jekyll and had
+# drifted from the include unseen. Pins the Python port of the card to the same expectation table
+# the render test uses (fixtures/monitoring/expect.yml); the fail-closed H0-H7 certification the
+# live certifier will consult, one condition at a time; the frozen 2026-10-27 High-rung snapshot
+# (OBS and Windows certify, both DaVinci identities fail for named reasons); and that every
+# method-health writer outside the collector runner is held to the ownership manifest.
+auxsays/scripts/tests/test_monitoring_health.py = 37
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27

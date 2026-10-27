@@ -106,10 +106,11 @@ def run() -> int:
     for tok in ["partial", "blocked", "broken", "stale", "low_confidence", "manual_review_needed"]:
         check(f"degraded status detection includes '{tok}'",
               f"m_status == '{tok}'" in INCLUDE)
-    check("partial-disabled coverage fails closed (0 < disabled < total -> degraded)",
-          "mon_disabled > 0 and mon_disabled < mon_total" in INCLUDE)
-    check("degraded_present = bad status OR partial-disabled OR invalid timestamp",
-          "mon_has_degraded_status or mon_partial_disabled or mon_has_invalid_ts_usable" in INCLUDE)
+    check("a disabled row is neither healthy nor failing: disabled beside active is not degraded",
+          "mon_disabled > 0 and mon_disabled < mon_total" not in INCLUDE
+          and "mon_partial_disabled" not in INCLUDE)
+    check("degraded_present = bad status OR invalid timestamp",
+          "mon_has_degraded_status or mon_has_invalid_ts_usable" in INCLUDE)
 
     # --- All eight status strings present ----------------------------------------
     for status in ["OFFICIAL SOURCE ONLY", "NOT YET MONITORED", "COLLECTION STALE",

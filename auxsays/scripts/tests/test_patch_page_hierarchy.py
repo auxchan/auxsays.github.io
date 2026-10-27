@@ -361,8 +361,12 @@ def run() -> int:
           "{% capture blocked_status_tokens %}|blocked|broken|{% endcapture %}" in LAYOUT)
     check("F3 the notice text is derived, not hardcoded",
           "{{ freshness_headline }}" in LAYOUT and "{{ freshness_detail }}" in LAYOUT)
-    check("F4 a stale-only page says collection is healthy, not blocked",
-          "Collection itself is reporting healthy." in LAYOUT)
+    # A stale-only notice used to add "Collection itself is reporting healthy." without checking
+    # freshness: 97 Acrobat pages said it beside a COLLECTION STALE monitoring card built from the
+    # same telemetry. Collection health is the card's to state; the notice claims only staleness.
+    check("F4 a stale-only page claims nothing about collection health -- the monitoring card does",
+          "Collection itself is reporting healthy." not in LAYOUT
+          and "'This evidence has not been revalidated recently.'" in LAYOUT)
     check("F5 a blocked page says blocked", "Collection blocked." in LAYOUT)
     check("F6 a degraded page says degraded", "Collection degraded." in LAYOUT)
     # THE DEFECT: this exact sentence asserted blocked/pending collection on every page that

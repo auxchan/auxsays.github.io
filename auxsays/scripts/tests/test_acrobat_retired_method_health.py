@@ -298,17 +298,16 @@ def run_suite() -> int:
     warn("D.5b no stored Acrobat identity triggers the unavailable-source copy from a method nobody ran",
          not falsely, f"{len(falsely)} of {len(identities)} identities awaiting a walk of their record")
 
-    # KNOWN AND ACCEPTED CONSEQUENCE, pinned so it cannot change unnoticed.
-    # 69 Acrobat identities never carried a retired row -- their records postdate the
-    # retirement -- so they publish INSUFFICIENT COVERAGE today and will publish MONITORING
-    # DEGRADED once they gain a disabled row, because partial disablement is itself a degraded
-    # signal in the ladder. The substantive figure a reader acts on is identical either way
-    # ("1 fresh (success / no reports) - need 2"), and the alternative -- emitting a disabled
-    # row only where a stale row already exists -- would encode "the file already has a bad
-    # row" as a business rule and let new records drift back into silence.
-    check("D.6 partial disablement is a degraded signal, which is why 69 identities change label",
-          "mon_partial_disabled" in monitoring
-          and "mon_disabled > 0 and mon_disabled < mon_total" in monitoring)
+    # A disabled row is neither healthy nor failing, so emitting one for a retired method no longer
+    # changes an identity's label. (Until AUX-054 partial disablement was itself a degraded signal,
+    # so 69 Acrobat identities moved from INSUFFICIENT COVERAGE to MONITORING DEGRADED when they
+    # gained a disabled row -- a label driven by retirement bookkeeping, not by collection.) The
+    # alternative -- emitting a disabled row only where a stale row already exists -- would still
+    # encode "the file already has a bad row" as a business rule, so the row is still emitted.
+    check("D.6 a disabled row beside active ones is not a degraded signal, so retiring a method "
+          "cannot relabel an identity",
+          "mon_partial_disabled" not in monitoring
+          and "mon_disabled > 0 and mon_disabled < mon_total" not in monitoring)
     check("D.7 the healthy-source count is unmoved by a disabled row, so the figure a reader "
           "acts on does not change",
           "unless m_is_disabled" in monitoring)

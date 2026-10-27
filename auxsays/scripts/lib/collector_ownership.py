@@ -51,6 +51,10 @@ ALLOWED_METHODS: dict[str, set[str]] = {
         "reddit_search", "adobe_community_search", "adobe_community_bug_tab_index",
         "adobe_community_known_url_recheck", "brave_search_api", "wayback_snapshot_recheck",
         "creativecow_forum_index", "creativecow_brave_search", "known_watchlist",
+        # An operator's local capture promotion (promote_local_playwright_captures.py). Owned so its
+        # health rows are written under an identity this manifest declares; MANUAL_ONLY below keeps
+        # it from ever counting as -- or being expected of -- a running monitoring pipeline.
+        "local_playwright_capture_promotion",
     },
     "adobe-acrobat-reader": {
         "adobe_community_algolia_search", "adobe_community_search", "reddit_search",
@@ -69,9 +73,12 @@ ALLOWED_METHODS: dict[str, set[str]] = {
     # community, not a second route into Learn Q&A. See microsoft_windows.TECHCOMMUNITY_METHOD_ID
     # for the bake-off that chose it.
     "microsoft-windows-11": {"learn_qna_search_rss", "techcommunity_windows_sitemap"},
+    # learn_qna_segment_context is the orchestrated lane's context resolver; it writes a health row
+    # for every PowerPoint patch, so it is declared here rather than written from outside the manifest.
     "microsoft-powerpoint": {"learn_qna_search_rss", "learn_qna_powerpoint_tags", "reddit_search",
                              "stack_exchange_search", "github_officedev_issues",
-                             "tech_community_discussions", "open_web_discovery"},
+                             "tech_community_discussions", "open_web_discovery",
+                             "learn_qna_segment_context"},
     # Two source families, reusing the shared method ids rather than minting Teams-specific ones:
     # the acquisition-method registry catalogues each method once, and a per-product alias would
     # make the same method look like two.
@@ -222,8 +229,32 @@ def _violation(code: str, message: str, *, surface: str, product_id: str = "", v
     return OwnershipViolation(message, code=code, surface=surface, product_id=product_id, version=version)
 
 
+#: Owned methods an operator runs BY HAND. Their health rows are telemetry, but a manual capture is not
+#: an actively running pipeline: the monitoring authority never expects them and never counts them
+#: as healthy collection (lib/monitoring_health.certify_monitoring).
+MANUAL_ONLY_METHODS = frozenset({"local_playwright_capture_promotion"})
+
+
 def allowed_methods(product_id: str) -> set[str]:
     return ALLOWED_METHODS.get(product_id, set())
+
+
+def require_owned_methods(rows: list[dict[str, Any]]) -> None:
+    """Refuse a method-health row whose method this manifest does not declare for its product.
+
+    The scheduled collector path validates fully (`validate_method_health`). The two other writers of
+    `_data/evidence_method_health.yml` -- the orchestrated PowerPoint graph and the local capture
+    promotion -- wrote straight through `upsert_method_health`, so a method outside the manifest could
+    publish telemetry the monitoring authority would then read as a recognised source. This is the
+    ownership half of that validation, callable where a record set to resolve versions against is not
+    the production tree."""
+    for row in rows:
+        product_id = str(row.get("product_id") or "").strip()
+        method = str(row.get("method_id") or "").strip()
+        if method not in allowed_methods(product_id):
+            raise _violation("method_not_allowed",
+                             f"method-health row for '{product_id}' names undeclared method_id '{method}'",
+                             surface="method_health", product_id=product_id)
 
 
 def allowed_source_types(product_id: str) -> set[str]:

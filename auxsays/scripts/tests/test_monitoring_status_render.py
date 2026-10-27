@@ -4,8 +4,10 @@
 Builds a minimal fixture Jekyll site (scripts/tests/fixtures/monitoring) with a FIXED clock and
 synthetic method-health rows, running the REAL _includes/monitoring-status.html, and asserts the
 rendered status for each case. This exercises the actual Liquid the site ships (not a Python
-re-implementation), so the ladder, per-row freshness, future-timestamp handling, partial-disabled
-fail-close, and numeric-version join are all validated end to end.
+re-implementation), so the ladder, per-row freshness, future-timestamp handling, the disabled-row
+rule, and numeric-version join are all validated end to end. The expectations live in
+fixtures/monitoring/expect.yml, shared with test_monitoring_health, which pins the Python port
+(lib/monitoring_health.ladder) to the same table in PR CI.
 
 Build command comes from $MON_JEKYLL_BUILD (default "bundle exec jekyll build"); the test SKIPs
 (exit 0) if Jekyll cannot be invoked, so bare environments don't hard-fail. CI / the local ruby33
@@ -24,6 +26,8 @@ import subprocess
 import tempfile
 import traceback
 from pathlib import Path
+
+import yaml
 
 _REPO = Path(__file__).resolve().parents[3]
 _AUX = _REPO / "auxsays"
@@ -58,25 +62,9 @@ cases:
 {% endfor %}
 """
 
-# Expected monitoring-status CSS class (status lowercased, spaces -> dashes) per fixture case.
-EXPECT = {
-    "c1": "insufficient-coverage",                 # fresh success + stale success (min unmet)
-    "c2": "no-accepted-patch-specific-reports",    # two fresh no_results (clean)
-    "c3": "collection-blocked",                    # fresh blocked + old success (zero healthy)
-    "c4": "monitoring-degraded",                   # healthy>=min + manual_review_needed
-    "c5": "monitoring-degraded",                   # healthy>=min + explicit stale (recent ts)
-    "c6": "not-yet-monitored",                     # valid but all pre-release
-    "c7": "insufficient-coverage",                 # one fresh success at threshold
-    "c8": "monitoring-degraded",                   # fresh success + fresh blocked (degraded first)
-    "c9": "monitoring-degraded",                   # partial-disabled coverage
-    "c10": "official-source-only",                 # every row disabled
-    "c11": "monitoring-degraded",                  # future ts + valid telemetry
-    "c12": "collection-stale",                     # future-only (no valid usable ts)
-    "c13": "no-accepted-patch-specific-reports",   # numeric 2607 joins to "2607"
-    "c14": "monitoring-active",                    # healthy + accepted reports > 0
-    "c15": "official-source-only",                 # no matching rows
-    "c16": "collection-stale",                     # valid post-release but all stale
-}
+# Expected monitoring-status CSS class per fixture case -- ONE table, shared with the Python port.
+EXPECT = {str(k): str(v) for k, v in
+          yaml.safe_load((FIXTURE / "expect.yml").read_text(encoding="utf-8")).items()}
 
 _PASS = 0
 _FAIL = 0

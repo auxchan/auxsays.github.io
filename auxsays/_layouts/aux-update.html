@@ -274,7 +274,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% assign sample_framing_shown = false %}
 {% if consensus_established == false and report_count > 0 %}{% assign sample_framing_shown = true %}{% endif %}
 {% assign freshness_headline = 'Evidence freshness needs revalidation.' %}
-{% assign freshness_detail = 'This evidence has not been revalidated recently. Collection itself is reporting healthy.' %}
+{% assign freshness_detail = 'This evidence has not been revalidated recently.' %}
 {% if method_health_blocked %}
   {% assign freshness_headline = 'Collection blocked.' %}
   {% assign freshness_detail = 'Some collection methods are currently blocked or returning errors.' %}

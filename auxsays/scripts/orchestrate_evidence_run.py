@@ -56,6 +56,7 @@ from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete
 from lib.method_routing import fallback_justified, plan_methods  # noqa: E402
 from lib.patch_identity import is_build_aware, patch_key, require_build  # noqa: E402
 from lib.report_counts import load_evidence_store, reconcile_record_counts  # noqa: E402
+from lib.collector_ownership import require_owned_methods  # noqa: E402
 from patch_collectors.base import (  # noqa: E402
     CollectorContext, append_evidence_rows, finalize_method_health_delta, generated_records,
     load_evidence, method_health_row, normalize_evidence_row, upsert_method_health,
@@ -797,6 +798,7 @@ class Pipeline:
             # Between the append and the upsert is the only moment the real delta is known and the
             # health rows are still mutable. See base.finalize_method_health_delta.
             finalize_method_health_delta(health, persisted, already_held)
+            require_owned_methods(health)  # the graph writes health outside the collector runner
             changed, total, _ = upsert_method_health(health, self.health_path)
             state.evidence_changes = {"mode": "write", "added": added, "duplicates": dupes}
             state.health_changes = {"mode": "write", "changed": changed, "total": total}
