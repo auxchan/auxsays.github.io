@@ -59,6 +59,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
 | AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
 | AUX-051 | Resolved | Published claims | Medium | Four records made just before AUX-050 could never be labelled, so their readers were stuck on UNKNOWN |
+| AUX-052 | Resolved | Evidence coverage | Low | Installer files written "7.1.0" did not count for release "7.1", so its notes were never labelled |
 
 ---
 
@@ -3646,6 +3647,37 @@ fails toward UNKNOWN; it is a recall gap in AUX-050's classifier, not in this re
 **Reopen only if** the migration writes anything other than those two keys, labels a record whose
 stored notes do not satisfy the shipped classifier, touches an unflagged product, or a second run
 changes any byte.
+
+---
+
+### AUX-052 — Installer files written "7.1.0" did not count for release "7.1", so its notes were never labelled
+
+- **Status** Resolved · **Area** Evidence coverage · **Severity** Low
+- **First seen** 2026-10-27 · **Resolved** 2026-10-27
+
+The article "Stream Deck 7.1" lists "Elgato Stream Deck 7.1.0.pkg" and "Elgato Stream Deck 7.1.0.msi";
+7.4 does the same with 7.4.0. AUX-050's classifier compared an installer's version with the record's
+as strings, so the release's own files read as another version's and vetoed the label. That failed
+toward UNKNOWN, never toward a wrong claim, but readers on those versions got no answer.
+
+**The rule.** An installer names the record's release when the two versions are equal, or equal once
+trailing components that are exactly "0" are dropped. Nothing else: components compare as written,
+so 7.01, 7.10, 7.1.00, 7.1.1 and 7.1.0.1 are all other versions of 7.1, and 7.4 is not 7.4.2. This is
+identity, not order -- the My Patch Stack comparator, record versions, record ids and permalinks are
+untouched, and the product, listing and other-version rules all still apply.
+
+**Not conflated.** Wave Link publishes "3.1.0" (macOS, 8 April) and "3.1" (Windows, 21 April) as two
+articles and two records. The adapter still keys records on the version as written, and a title's
+platform token still decides before any installer evidence, so both stay as they were; a check pins it.
+
+**Measured.** Over all 110 Zendesk-sourced records' stored notes, exactly two classifications change:
+Stream Deck 7.1 and 7.4, both to `windows_macos`. Both are older than the refresh window, so the
+AUX-051 migration labelled them (two lines each; a second run labels nothing). Records created from
+now on are classified with the rule at creation.
+
+**Reopen only if** a version that differs other than by trailing ".0" components is accepted as the
+record's release, two records are merged or re-keyed by it, or an installer label overrides a title's
+platform.
 
 ## Adding an entry
 
