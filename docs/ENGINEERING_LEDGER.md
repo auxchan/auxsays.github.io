@@ -58,6 +58,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
 | AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
 | AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
+| AUX-051 | Resolved | Published claims | Medium | Four records made just before AUX-050 could never be labelled, so their readers were stuck on UNKNOWN |
 
 ---
 
@@ -3608,6 +3609,43 @@ unavailable"): a listed file is taken as published.
 an update or told CURRENT while one is later or higher, the version comparator ever produces a
 confident state on its own, `windows_macos` is set without same-version installers for both
 platforms, or an unflagged product's comparison changes.
+
+---
+
+### AUX-051 — Four records made just before AUX-050 could never be labelled, so their readers were stuck on UNKNOWN
+
+- **Status** Resolved · **Area** Published claims · **Severity** Medium
+- **First seen** 2026-10-23 · **Resolved** 2026-10-27
+
+The Zendesk lane re-observes only the newest records it has already seen, two per product per run.
+Stream Deck 7.4.2 and 7.5.0 and Camera Hub 2.1 and 2.2 were created by the run that landed an hour
+before AUX-050, so they carry no `official_notes_platform`, and nothing will ever revisit them: on a
+product flagged `official_notes_by_platform`, a reader on any of those versions saw PLATFORM
+APPLICABILITY UNKNOWN for good. Every record created since is classified at creation.
+
+**Deletion was considered and refused.** Their ids stay in the ingest seen list, which is consulted
+before any file check, so a deleted record is never re-created: deletion would have left four
+permanent holes in the version history and 404s for four sitemap URLs, and moved those readers from
+UNKNOWN to INSTALLED VERSION NO LONGER TRACKED. Clearing the seen ids would re-create them, at the
+price of a 404 window, a hand edit of the ingest state and a writeback conflict with any run in flight.
+Their content is correct; only the label was missing.
+
+**The repair** is `migrate_official_notes_platform_backlog.py`: zero network, dry run by default. It
+reads the notes each record already stores and decides with the SHIPPED classifier
+(`zendesk_help_center.joint_platform_downloads`), only for flagged products and only for records with
+no label, and appends exactly `official_notes_platform: windows_macos` and its basis through the
+writer's own serializer. It never removes or changes a label, a title, or anything a fresh vendor
+check would move, and it hashes every generated record before and after and refuses if any file other
+than the planned ones changed. Run on 4f972205 it labelled exactly the four; a second run labels
+nothing. Seven other unlabelled records keep the verdict the lane gave them at creation.
+
+**Known limit found on the way.** Stream Deck 7.1 and 7.4 list "7.1.0" and "7.4.0" installers, and the
+classifier compares version strings exactly, so they are refused as another version's files. That
+fails toward UNKNOWN; it is a recall gap in AUX-050's classifier, not in this repair.
+
+**Reopen only if** the migration writes anything other than those two keys, labels a record whose
+stored notes do not satisfy the shipped classifier, touches an unflagged product, or a second run
+changes any byte.
 
 ## Adding an entry
 
