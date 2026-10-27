@@ -45,8 +45,14 @@
   {%- assign maturity_class = 'insufficient' -%}
   {%- assign maturity_label = 'Insufficient data' -%}
 {%- else -%}
+  {%- comment -%}
+    An evidence_state outside the vocabulary. The copies this replaced printed the stored label
+    here, which let a hand-written live label reach the feed, homepage and My Patch Stack with no
+    certificate (and capitalize normalised any casing of it to the exact live words). An unknown
+    state claims nothing it has not earned: it reads as Insufficient data.
+  {%- endcomment -%}
   {%- assign maturity_class = 'insufficient' -%}
-  {%- assign maturity_label = maturity_record.evidence_state_label | default: maturity_state | replace: '_', ' ' | capitalize -%}
+  {%- assign maturity_label = 'Insufficient data' -%}
 {%- endif -%}
 {%- assign maturity_stage = maturity_record.intelligence_stage | default: '' -%}
 {%- assign maturity_stage_label = '' -%}

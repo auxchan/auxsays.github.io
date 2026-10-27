@@ -304,6 +304,7 @@ def section_p() -> None:
         check("P6 nothing but the projection was written: every generated record hashes the same",
               _tree_hashes(root, out_path) == before)
 
+        good_store = store.read_bytes()
         store.unlink()
         missing = _run_script(root)
         check("P7 a MISSING evidence store writes an empty projection, warns, and exits 0",
@@ -315,6 +316,17 @@ def section_p() -> None:
         check("P8 a MALFORMED evidence store fails closed the same way",
               malformed.returncode == 0 and _projection(root).get("urls") == []
               and "::warning::" in malformed.stdout, (malformed.stdout + malformed.stderr)[-400:])
+        # Not only the store: ANY failure fails closed. A raise here would fail the deploy and
+        # freeze the site's HTML -- a worse outcome than a live label withheld.
+        store.write_bytes(good_store)  # a VALID store, so only the config can fail
+        config = root / "_config.yml"
+        config_before = config.read_bytes()
+        config.write_bytes(config_before + b"\nmonitoring_max_age_days: fourteen\n")
+        bad_config = _run_script(root)
+        config.write_bytes(config_before)
+        check("P8b a malformed threshold in the config fails closed too, never failing the deploy",
+              bad_config.returncode == 0 and _projection(root).get("urls") == []
+              and "::warning::" in bad_config.stdout, (bad_config.stdout + bad_config.stderr)[-400:])
         check("P9 neither refusal touched a generated record",
               {k: v for k, v in _tree_hashes(root, out_path).items() if k.startswith("updates")}
               == {k: v for k, v in before.items() if k.startswith("updates")})
@@ -444,11 +456,12 @@ RENDER_CASES = {
         (page(evidence_state="insufficient_data"), ABSENT, "[insufficient|Insufficient data||false]"),
     "R11 no maturity fields at all":
         (page(), ABSENT, "[insufficient|Insufficient data||false]"),
-    "R12 an unknown state falls back to its own words":
-        (page(evidence_state="under_review"), ABSENT, "[insufficient|Under review||false]"),
-    "R13 an unknown state with a stored label uses the label, capitalized as before":
-        (page(evidence_state="under_review", evidence_state_label="Custom Label"), ABSENT,
-         "[insufficient|Custom label||false]"),
+    "R12 an unknown state reads as Insufficient data, never its own words":
+        (page(evidence_state="under_review"), ABSENT, "[insufficient|Insufficient data||false]"),
+    "R13 an unknown state with a stored live label cannot print it without a certificate":
+        (page(evidence_state="established_consensus", evidence_state_label="LIVE CONSENSUS",
+              consensus_collection_status="deferred_official_only"), ABSENT,
+         "[insufficient|Insufficient data||false]"),
     "R14 a manual_watch stage reads Watching":
         (page(evidence_state="official_only", intelligence_stage="manual_watch"), ABSENT,
          "[official|Official source only|Watching|false]"),

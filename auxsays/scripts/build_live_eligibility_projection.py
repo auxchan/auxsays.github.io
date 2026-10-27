@@ -13,9 +13,10 @@ record that does not claim live -- the projection can withdraw a claim, never ma
 never writes a generated record.
 
 FAIL CLOSED, NEVER BLOCK THE DEPLOY. A missing or malformed evidence store, a counted row with no
-build, or unreadable telemetry or config writes an EMPTY projection and exits 0 with a warning:
-every live claim then renders as "Verified reports", which is true of any record that has one. A
-defect in this code still fails the step loudly, like every other generator in pages.yml.
+build, unreadable telemetry or config -- or any failure while evaluating -- writes an EMPTY
+projection and exits 0 with a ::warning:: naming it: every live claim then renders as "Verified
+reports", which is true of any record that has one. Failing the step instead would freeze the whole
+site's HTML, monitoring cards included, at its last build.
 
 GENERATED AT DEPLOY, NEVER COMMITTED. Like the monitoring projection, the answer is a function of
 the current time, so a committed copy would be stale by the next build. Absent (a local render, a
@@ -49,7 +50,8 @@ HEADER = (
     "# The pages that may render their stored live-consensus claim as live, decided at deploy time.\n"
     "# A claim whose page is not listed renders as Verified reports. Never committed.\n"
 )
-# What a refusal to READ the inputs looks like. Anything else is a defect and propagates.
+# What a refusal to READ the inputs looks like -- named in the warning so an unreadable store is
+# told apart from a defect. Both fail closed (see main).
 INPUT_FAILURES = (EvidenceStoreError, MissingBuildIdentity, OSError, yaml.YAMLError)
 
 
@@ -100,16 +102,19 @@ def main(argv: list[str] | None = None) -> int:
     now = _parse_now(args.now)
     output = args.output or (args.root / "_data" / OUTPUT_NAME)
 
+    # FAIL CLOSED, on reading AND on evaluating. An empty projection costs a live label (every claim
+    # reads as Verified reports); a raise here would fail the deploy and freeze the whole site's
+    # HTML -- including every monitoring card -- at its last build. So any failure is a warning
+    # and an empty list, never a stopped deploy.
     try:
         inputs = live_eligibility.load_inputs(args.root)
-    except INPUT_FAILURES as exc:
-        print(f"::warning::live eligibility projection is EMPTY, so every live claim renders as "
-              f"Verified reports: {type(exc).__name__}: {exc}")
-        urls: list[str] = []
-        claims = 0
-    else:
         urls = certified_urls(inputs, now)
         claims = sum(1 for _p, data in inputs.records if maturity.claims_live(data))
+    except Exception as exc:  # noqa: BLE001 - deliberately broad; see above
+        kind = "unreadable input" if isinstance(exc, INPUT_FAILURES) else "evaluation failure"
+        print(f"::warning::live eligibility projection is EMPTY ({kind}), so every live claim "
+              f"renders as Verified reports: {type(exc).__name__}: {exc}")
+        urls, claims = [], 0
 
     atomic_write_text(output, render(urls, now))
     print(f"Wrote {output}: {len(urls)} of {claims} live claim(s) certified")

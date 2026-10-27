@@ -162,7 +162,7 @@ auxsays/scripts/tests/test_monitoring_health.py = 38
 # rung, distinct report URLs not counted on another identity, H0-H7 monitoring); that certify_live
 # stays disabled; the projection run as pages.yml runs it, failing closed and writing no record; and
 # the one Liquid contract every consumer now renders through, certified, uncertified and absent.
-auxsays/scripts/tests/test_live_render_projection.py = 64
+auxsays/scripts/tests/test_live_render_projection.py = 65
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
