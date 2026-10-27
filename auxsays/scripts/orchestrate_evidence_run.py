@@ -56,6 +56,7 @@ from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete
 from lib.method_routing import fallback_justified, plan_methods  # noqa: E402
 from lib.patch_identity import is_build_aware, patch_key, require_build  # noqa: E402
 from lib.report_counts import load_evidence_store, reconcile_record_counts  # noqa: E402
+from lib.collector_ownership import require_owned_methods  # noqa: E402
 from patch_collectors.base import (  # noqa: E402
     CollectorContext, append_evidence_rows, finalize_method_health_delta, generated_records,
     load_evidence, method_health_row, normalize_evidence_row, upsert_method_health,
@@ -789,6 +790,9 @@ class Pipeline:
             state.evidence_changes = {"mode": "dry", "would_add": len(counted)}
             state.health_changes = {"mode": "dry", "would_upsert": len(health)}
         else:
+            # The graph writes health outside the collector runner, so ownership is checked here --
+            # BEFORE the evidence append, so a refusal stops the node before anything is saved.
+            require_owned_methods(health)
             persisted: list[dict[str, Any]] = []
             already_held: list[dict[str, Any]] = []
             added, dupes, _ = append_evidence_rows(

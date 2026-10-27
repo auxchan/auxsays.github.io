@@ -11,8 +11,10 @@
   monitoring state that build never earned, which is a fail-OPEN in the one place that must fail
   closed. An empty build on both sides is a no-op, so version-only products are unaffected.
   No manual allowlist -- "monitored" means EMH rows exist FOR THIS EXACT PATCH.
-  It FAILS CLOSED: missing, stale, future, disabled, blocked, broken, partial, low-confidence, or
-  manual-review telemetry can never produce a clean "no reports" read.
+  It FAILS CLOSED: missing, stale, future, blocked, broken, partial, low-confidence, or
+  manual-review telemetry can never produce a clean "no reports" read, and neither can a patch
+  whose every method is disabled. A disabled row BESIDE healthy active methods is neither healthy
+  nor failing (rule 7).
 
   Inputs:
     include.product_id    -- exact tracked product id
@@ -31,14 +33,18 @@
     4  valid usable timestamps exist, but none are post-release  -> NOT YET MONITORED
     5  no fresh post-release usable methods                      -> COLLECTION STALE
     6  zero healthy methods and a blocked/broken method present  -> COLLECTION BLOCKED
-    7  any degraded telemetry (bad status / partial-disabled / invalid|future ts) -> MONITORING DEGRADED
+    7  any degraded telemetry (bad status / invalid|future ts)   -> MONITORING DEGRADED
     8  healthy methods below minimum                             -> INSUFFICIENT COVERAGE
     9  accepted reports > 0                                      -> MONITORING ACTIVE
     10 otherwise                                                 -> NO ACCEPTED PATCH-SPECIFIC REPORTS
 
   A healthy completed method is: usable (not disabled) AND fresh (0 <= age <= monitoring_max_age_days)
   AND post-release (last_run >= published_at) AND status success or no_results (the validator gives
-  no_results no failure semantics). Raw blocked_reason is NEVER rendered publicly -- only a
+  no_results no failure semantics). A DISABLED row (a retired or deliberately switched-off method) is
+  neither healthy nor failing: it no longer marks its active siblings degraded, so a patch whose
+  running methods are all healthy does not read as degraded forever because one slot was retired.
+  Too few healthy families is still disclosed, by rule 8. `scripts/lib/monitoring_health.py` is the
+  Python port of this ladder, pinned to the same fixture table. Raw blocked_reason is NEVER rendered publicly -- only a
   normalized, status-derived explanation is shown; the raw diagnostic stays in the repo telemetry.
 {%- endcomment -%}
 {%- assign mon_mode = include.mode | default: 'cell' -%}
@@ -116,10 +122,8 @@
 {%- endif -%}
 {%- endfor -%}
 {%- endif -%}
-{%- assign mon_partial_disabled = false -%}
-{%- if mon_disabled > 0 and mon_disabled < mon_total -%}{%- assign mon_partial_disabled = true -%}{%- endif -%}
 {%- assign mon_degraded_present = false -%}
-{%- if mon_has_degraded_status or mon_partial_disabled or mon_has_invalid_ts_usable -%}{%- assign mon_degraded_present = true -%}{%- endif -%}
+{%- if mon_has_degraded_status or mon_has_invalid_ts_usable -%}{%- assign mon_degraded_present = true -%}{%- endif -%}
 {%- assign mon_status = 'NO ACCEPTED PATCH-SPECIFIC REPORTS' -%}
 {%- if mon_total == 0 -%}{%- assign mon_status = 'OFFICIAL SOURCE ONLY' -%}
 {%- elsif mon_disabled == mon_total -%}{%- assign mon_status = 'OFFICIAL SOURCE ONLY' -%}

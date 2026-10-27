@@ -1,0 +1,200 @@
+# Frozen snapshot of the eight patch identities at the High rung (33+ counted reports), with their
+# exact-identity method-health rows, captured from origin/main 873ccade. A fixed clock (now) keeps
+# the certification reproducible: freshness is judged against it, never the wall clock.
+captured_from: origin/main 873ccade
+now: '2026-10-27T09:17:12Z'
+candidates:
+- product_id: obs-studio
+  update_version: 32.1.2
+  target_build: ''
+  update_published_at: '2026-04-21T00:00:00Z'
+  counted: 109
+  contributing_families:
+  - github_issue
+  - obs_forum_thread
+  family_counts:
+    github_issue: 104
+    obs_forum_thread: 5
+  method_health:
+  - method_id: github_issues
+    source_type: github_issue
+    status: success
+    last_run: '2026-10-27T06:41:14Z'
+  - method_id: known_watchlist
+    source_type: curated_watchlist
+    status: disabled
+    last_run: '2026-10-27T06:41:14Z'
+  - method_id: obs_forum
+    source_type: obs_forum_thread
+    status: success
+    last_run: '2026-10-27T06:41:14Z'
+- product_id: blackmagic-davinci
+  update_version: '21'
+  target_build: ''
+  update_published_at: '2026-04-14T00:00:00Z'
+  counted: 74
+  contributing_families:
+  - reddit_community_report
+  family_counts:
+    reddit_community_report: 74
+  method_health:
+  - method_id: known_watchlist
+    source_type: curated_watchlist
+    status: partial
+    last_run: '2026-10-27T06:05:58Z'
+  - method_id: reddit_search
+    source_type: reddit_community_report
+    status: blocked
+    last_run: '2026-10-27T06:05:58Z'
+  - method_id: creative_cow_forum_search
+    source_type: creator_forum_report
+    status: broken
+    last_run: '2026-10-27T06:05:58Z'
+  - method_id: vendor_forum_search
+    source_type: blackmagic_forum
+    status: blocked
+    last_run: '2026-10-27T06:05:58Z'
+  - method_id: web_search
+    source_type: web_search
+    status: disabled
+    last_run: '2026-10-27T06:05:58Z'
+- product_id: obs-studio
+  update_version: 32.2.2
+  target_build: ''
+  update_published_at: '2026-08-14T22:43:31Z'
+  counted: 56
+  contributing_families:
+  - github_issue
+  - obs_forum_thread
+  family_counts:
+    github_issue: 46
+    obs_forum_thread: 10
+  method_health:
+  - method_id: github_issues
+    source_type: github_issue
+    status: success
+    last_run: '2026-10-27T06:43:56Z'
+  - method_id: known_watchlist
+    source_type: curated_watchlist
+    status: disabled
+    last_run: '2026-10-27T06:43:56Z'
+  - method_id: obs_forum
+    source_type: obs_forum_thread
+    status: success
+    last_run: '2026-10-27T06:43:56Z'
+- product_id: microsoft-windows-11
+  update_version: 25H2
+  target_build: '26200.7462'
+  update_published_at: '2025-12-09T00:00:00Z'
+  counted: 52
+  contributing_families:
+  - microsoft_learn_qna
+  - microsoft_tech_community
+  family_counts:
+    microsoft_learn_qna: 51
+    microsoft_tech_community: 1
+  method_health:
+  - method_id: learn_qna_search_rss
+    source_type: microsoft_learn_qna
+    status: success
+    last_run: '2026-10-27T06:23:57Z'
+  - method_id: techcommunity_windows_sitemap
+    source_type: microsoft_tech_community
+    status: no_results
+    last_run: '2026-10-27T06:23:57Z'
+- product_id: microsoft-windows-11
+  update_version: 25H2
+  target_build: '26200.7623'
+  update_published_at: '2026-01-13T00:00:00Z'
+  counted: 45
+  contributing_families:
+  - microsoft_learn_qna
+  - microsoft_tech_community
+  family_counts:
+    microsoft_learn_qna: 44
+    microsoft_tech_community: 1
+  method_health:
+  - method_id: learn_qna_search_rss
+    source_type: microsoft_learn_qna
+    status: success
+    last_run: '2026-10-27T06:23:38Z'
+  - method_id: techcommunity_windows_sitemap
+    source_type: microsoft_tech_community
+    status: no_results
+    last_run: '2026-10-27T06:23:38Z'
+- product_id: obs-studio
+  update_version: 32.1.1
+  target_build: ''
+  update_published_at: '2026-04-02T19:54:40Z'
+  counted: 44
+  contributing_families:
+  - github_issue
+  - obs_forum_thread
+  family_counts:
+    github_issue: 43
+    obs_forum_thread: 1
+  method_health:
+  - method_id: github_issues
+    source_type: github_issue
+    status: no_results
+    last_run: '2026-10-27T06:40:21Z'
+  - method_id: known_watchlist
+    source_type: curated_watchlist
+    status: disabled
+    last_run: '2026-10-27T06:40:21Z'
+  - method_id: obs_forum
+    source_type: obs_forum_thread
+    status: no_results
+    last_run: '2026-10-27T06:40:21Z'
+- product_id: microsoft-windows-11
+  update_version: 25H2
+  target_build: '26200.7840'
+  update_published_at: '2026-02-10T00:00:00Z'
+  counted: 36
+  contributing_families:
+  - microsoft_learn_qna
+  - microsoft_tech_community
+  family_counts:
+    microsoft_learn_qna: 31
+    microsoft_tech_community: 5
+  method_health:
+  - method_id: learn_qna_search_rss
+    source_type: microsoft_learn_qna
+    status: success
+    last_run: '2026-10-27T06:22:30Z'
+  - method_id: techcommunity_windows_sitemap
+    source_type: microsoft_tech_community
+    status: no_results
+    last_run: '2026-10-27T06:22:30Z'
+- product_id: blackmagic-davinci
+  update_version: 20.3.2
+  target_build: ''
+  update_published_at: '2026-02-12T00:00:00Z'
+  counted: 33
+  contributing_families:
+  - creator_forum_report
+  - reddit_community_report
+  family_counts:
+    creator_forum_report: 1
+    reddit_community_report: 32
+  method_health:
+  - method_id: known_watchlist
+    source_type: curated_watchlist
+    status: blocked
+    last_run: '2026-10-26T23:28:40Z'
+  - method_id: reddit_search
+    source_type: reddit_community_report
+    status: partial
+    last_run: '2026-10-26T23:28:40Z'
+  - method_id: creative_cow_forum_search
+    source_type: creator_forum_report
+    status: success
+    last_run: '2026-10-26T23:28:40Z'
+  - method_id: vendor_forum_search
+    source_type: blackmagic_forum
+    status: blocked
+    last_run: '2026-10-26T23:28:40Z'
+  - method_id: web_search
+    source_type: web_search
+    status: disabled
+    last_run: '2026-10-26T23:28:40Z'

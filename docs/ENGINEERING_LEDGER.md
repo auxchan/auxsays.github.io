@@ -61,6 +61,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-051 | Resolved | Published claims | Medium | Four records made just before AUX-050 could never be labelled, so their readers were stuck on UNKNOWN |
 | AUX-052 | Resolved | Evidence coverage | Low | Installer files written "7.1.0" did not count for release "7.1", so its notes were never labelled |
 | AUX-053 | Resolved | Evidence integrity | High | Four writers each derived a record's maturity, and none of them could keep a live state |
+| AUX-054 | Resolved | Published claims | Medium | Collection health existed only in Liquid; a retired method made healthy pages read degraded |
 
 ---
 
@@ -3726,6 +3727,62 @@ reports 0 errors and 0 warnings.
 **Reopen only if** a writer stores a maturity axis that differs from `lib.maturity`, a live claim
 passes QA without the full canonical tuple, the consensus writer's included rows differ from
 `counted_evidence_rows` for any patch identity, or a missing or malformed store reaches reconciliation.
+
+---
+
+### AUX-054 — Collection health existed only in Liquid; a retired method made healthy pages read degraded
+
+- **Status** Resolved · **Area** Published claims · **Severity** Medium
+- **First seen** 2026-10-27 · **Resolved** 2026-10-27
+
+Whether one patch's community collection is healthy was decided only by the monitoring card,
+`_includes/monitoring-status.html`. Nothing in Python could ask, and the card's render test needs
+Jekyll, so PR CI never ran it. Its expectation table had drifted unseen: three cases expected outcomes
+the include no longer produces, because their fixture rows shared one source family and the card
+counts families.
+
+**One authority in Python.** `lib/monitoring_health.py` has two parts. `ladder` is a faithful port
+of the card, pinned to one expectation table that the Liquid render test now shares
+(`fixtures/monitoring/expect.yml`). `certify_monitoring` is the fail-closed predicate the live
+certifier will consult. It checks eight conditions, H0 to H7:
+
+- every method is owned;
+- every owned method reported for this patch;
+- at least one method is active;
+- timestamps are valid;
+- every active method ran after release and within `monitoring_max_age_days`;
+- no active method is degraded;
+- at least one method is healthy;
+- every source family behind the counted reports is healthy.
+
+There is no two-family minimum. A manual capture is never treated as proof that collection is running.
+On the frozen 2026-10-27 snapshot, the three OBS and three Windows High-rung patches certify, and
+both DaVinci ones fail for named reasons.
+
+**Disabled is neither.** The card marked a patch MONITORING DEGRADED whenever a `disabled` row sat
+beside active ones. The ledger has always defined `disabled` as neither healthy nor failing. OBS's
+retired watchlist slot therefore kept every OBS page degraded with all of its running methods
+healthy. Rule 7 now ignores disabled rows; too few healthy families is still disclosed, by rule 8.
+Measured on 873ccade, 67 of 1,459 monitoring lines change, all of them out of DEGRADED:
+
+- 50 move to INSUFFICIENT COVERAGE: Acrobat Pro 25, Reader 23, Premiere 2;
+- 12 OBS lines move to ACTIVE;
+- 5 OBS lines move to NO ACCEPTED PATCH-SPECIFIC REPORTS.
+
+**Copy that was not checked.** On a page where only staleness fired, the freshness notice added
+"Collection itself is reporting healthy." without checking freshness: 97 Acrobat pages said it beside
+a COLLECTION STALE card. The notice now claims only staleness; the card states collection health. The
+limitation sentence uses the authority's six degraded statuses instead of four of them.
+
+**Ownership.** The PowerPoint graph and the local capture promotion wrote method health straight
+through the store, outside the ownership manifest. Both now refuse an undeclared method
+(`require_owned_methods`). The manifest declares the graph's context resolver and the local capture,
+the latter as manual-only.
+
+**Reopen only if** the port and the shipped include disagree on any fixture case; a patch certifies
+with a degraded, stale, missing or unowned active method, or a contributing family without a healthy
+method; a disabled row alone marks a card degraded; or a method-health row is written for an
+undeclared method.
 
 ## Adding an entry
 

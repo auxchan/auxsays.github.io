@@ -31,7 +31,7 @@ from patch_collectors.base import (
     split_front_matter,
     atomic_write_text,
 )
-from lib import maturity
+from lib import maturity, monitoring_health
 from lib.report_counts import EvidenceStoreError, load_evidence_store
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -749,7 +749,9 @@ def _public_source_limitations(pid: str, ver: str, rows: list[dict[str, Any]], c
     target = patch_key(pid, ver, build)
     method_rows = [row for row in _load_method_health_rows() if key_from(row) == target]
     statuses = {str(row.get("status") or "").strip().lower() for row in method_rows}
-    if statuses & {"blocked", "partial", "low_confidence", "broken"}:
+    # The monitoring authority's degraded set (stale and manual_review_needed included), not a
+    # four-status subset of it: a sentence and the card must not disagree about one patch.
+    if statuses & monitoring_health.DEGRADED_STATUSES:
         limitations.append("Some community sources were unavailable during the last check; unavailable sources were not counted as reports.")
 
     clean: list[str] = []
