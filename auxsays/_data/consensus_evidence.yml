@@ -61796,3 +61796,48 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-3-2-2-freezes-sometimes-all-windows-wh
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-3-2-2-freezes-sometimes-all-windows-when-the-interface-changes-main-thread-stuck-in-accessibility-ui-automation-requests-1653348
+  parent_title: 'Premiere Pro 26.3.2.2 freezes (sometimes all windows) when the interface changes: main thread stuck in accessibility (UI Automation) requests'
+  report_title: 'Premiere Pro 26.3.2.2 freezes (sometimes all windows) when the interface changes: main thread stuck in accessibility (UI Automation) requests'
+  report_text_excerpt: 'System: Lenovo Legion 5 15IRX10, Intel Core i7-14700HX, 24 GB RAM, NVIDIA GeForce RTX 5060 Laptop (8 GB), Studio Driver 617.42 (clean install), dGPU mode, Windows 11 Home build 26300. Problem: Premiere Pro 26.3.2.2 freezes repeatedly when the interface changes: opening menus...'
+  captured_at: '2026-10-28T06:21:12Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: interface lag or freezing
+  workflow_area: editing interface
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-obs-forum-thread-196731
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/problems-with-update-to-33-0.196731/
+  parent_title: Problems with update to 33.0
+  report_title: Problems with update to 33.0
+  report_text_excerpt: Hello, I just recently updated my software to 33.0.0 and have noticed several problems. After updating, I am unable to use the Streamlabs plugin. It says there's a problem starting the dll. I tried uninstalling the plugin and re-install
+  captured_at: '2026-10-28T07:13:24Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
