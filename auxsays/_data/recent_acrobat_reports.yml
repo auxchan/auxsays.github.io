@@ -4,7 +4,7 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-10-28T05:37:40Z'
+  captured_at: '2026-10-28T12:49:03Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -23,7 +23,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-10-28T05:37:40Z'
+  captured_at: '2026-10-28T12:49:03Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -263,6 +263,47 @@ reports:
   window_end: '2025-11-20'
   window_start: '2025-11-13'
   window_version: 25.001.20918
+- attribution_state: not_established
+  captured_at: '2026-10-28T12:49:03Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|24.003.20121|24.003.20121
+  report_date: '2024-09-16'
+  report_excerpt: New Acrobat freezing constantly. WHenever asked to do a memory intensive task, Acrobat
+    DC Pro crashes/freezes. This time it was listing comments in a pdf (their number was over 3K marks/comments).
+    I like the interface but Acrobat has become dangerously unstable. The classic...
+  report_id: adobe-acrobat-pro:6b2a83b0aa074139
+  report_title: New Acrobat freezing constantly.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/new-acrobat-freezing-constantly-1296757
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 24.003.20121
+  window_end: '2024-10-03'
+  window_start: '2024-09-16'
+  window_version: 24.003.20121
+- attribution_state: not_established
+  captured_at: '2026-10-28T12:49:03Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|24.002.21005|24.002.21005
+  report_date: '2024-08-19'
+  report_excerpt: Adobe Acrobat going into not responding state on several computers after latest updates
+    from August Adobe Acrobat Pro going into not responding state on several computers after latest updates
+    from August 2024 optional and planned updates. Uninstalled, and re-installed, reset...
+  report_id: adobe-acrobat-pro:a949a41f994ac9d0
+  report_title: Adobe Acrobat going into not responding state on several computers after latest updates
+    from August
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-going-into-not-responding-state-on-several-computers-after-latest-updates-from-august-1295842
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 24.002.21005
+  window_end: '2024-08-26'
+  window_start: '2024-08-13'
+  window_version: 24.002.21005
 - attribution_state: not_established
   captured_at: '2026-09-09T14:09:12Z'
   classification: recent_report
@@ -523,7 +564,7 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
-  captured_at: '2026-10-28T05:59:29Z'
+  captured_at: '2026-10-28T13:09:28Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -542,7 +583,7 @@ reports:
   window_start: '2026-10-14'
   window_version: 26.002.22031
 - attribution_state: not_established
-  captured_at: '2026-10-28T05:59:29Z'
+  captured_at: '2026-10-28T13:09:28Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -643,7 +684,7 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
-  captured_at: '2026-10-28T05:59:29Z'
+  captured_at: '2026-10-28T13:09:28Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -703,7 +744,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-10-28T05:59:29Z'
+  captured_at: '2026-10-28T13:09:28Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true

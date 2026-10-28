@@ -61841,3 +61841,401 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: acrobat-24-003-20112-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-24-003-20112-update-fails-with-error-code-1642-129
+  product_id: adobe-acrobat-pro
+  update_version: 24.003.20112
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-24-003-20112-update-fails-with-error-code-1642-1296735
+  parent_title: Acrobat 24.003.20112 update fails with error code 1642
+  report_title: Acrobat 24.003.20112 update fails with error code 1642
+  report_text_excerpt: 'Acrobat 24.003.20112 update fails with error code 1642 We are trying to deploy the latest Acrobat update 24.003.20112 using Microsoft Configuration Manager. About half of our devices the update fails with error code 1642: "The upgrade cannot be installed by the Windows...'
+  captured_at: '2026-10-28T12:49:03Z'
+  source_date: '2024-09-16'
+  target_release_date: '2024-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.003.20112
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-24-003-20054-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-crashing-1296288
+  product_id: adobe-acrobat-pro
+  update_version: 24.003.20054
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-crashing-1296288
+  parent_title: Adobe Acrobat Pro crashing
+  report_title: Adobe Acrobat Pro crashing
+  report_text_excerpt: Adobe Acrobat Pro crashing Adobe Acrobat Pro is crashing when trying to zooming on PDFs and use PDFs with embedded videos. Below you will find some information as well as some troubleshooting steps myself and my IT team have tried to resolve this issue. Windows updates...
+  captured_at: '2026-10-28T12:49:03Z'
+  source_date: '2024-09-02'
+  target_release_date: '2024-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.003.20054
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-24-002-20933-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-crashes-when-i-open-a-pdf-in-the-fill-sign-tool-12
+  product_id: adobe-acrobat-pro
+  update_version: 24.002.20933
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-crashes-when-i-open-a-pdf-in-the-fill-sign-tool-1294879
+  parent_title: Acrobat crashes when I open a PDF in the Fill &amp; Sign-Tool
+  report_title: Acrobat crashes when I open a PDF in the Fill &amp; Sign-Tool
+  report_text_excerpt: Acrobat crashes when I open a PDF in the Fill &amp; Sign-Tool Greetings, My Acrobat crashes every time I try to use the Fill & Sign-Tool with a PDF file. Everything else works fine, I can edit the PDF (using this as a workaround) and the other functions. The problem occured...
+  captured_at: '2026-10-28T12:49:03Z'
+  source_date: '2024-07-16'
+  target_release_date: '2024-07-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20933
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-24-002-20857-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-acrobat-fill-and-sign-feature-crashes-program-1294
+  product_id: adobe-acrobat-pro
+  update_version: 24.002.20857
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-acrobat-fill-and-sign-feature-crashes-program-1294883
+  parent_title: Acrobat acrobat Fill and Sign feature crashes program.
+  report_title: Acrobat acrobat Fill and Sign feature crashes program.
+  report_text_excerpt: Acrobat acrobat Fill and Sign feature crashes program. once i click on fill and sign, the program closes by itself. i uninstalled the program and reinstall it back but it did not help. i have the version, 24.002.20857. can you assist on that please
+  captured_at: '2026-10-28T12:49:03Z'
+  source_date: '2024-07-16'
+  target_release_date: '2024-06-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20857
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5585407-screenshot-image-not-showing-on-team
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5585407/screenshot-image-not-showing-on-team
+  parent_title: Screenshot Image not showing on Team - Microsoft Q&A
+  report_title: Screenshot Image not showing on Team - Microsoft Q&A
+  report_text_excerpt: Screenshot Image not showing on Team suddenly from last 3 days this problem has been arised. unable to see posted images on Team.
+  captured_at: '2026-10-28T13:52:33Z'
+  source_date: '2025-10-15'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5585407-screenshot-image-not-showing-on-team-a
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5585407/screenshot-image-not-showing-on-team#answer-13020617
+  parent_title: Screenshot Image not showing on Team - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi, This is happening for me as well same behavior I did try the steps above of uninstalling the application and quitting the application as well but after every 3-4th reboot, The issue resurfaces. Is there a permanent solution to this issue? For me I can confirm this issue...
+  captured_at: '2026-10-28T13:52:33Z'
+  source_date: '2026-10-27T13:12:14.9366667+00:00'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6052192-microphone-and-speaker-not-working-on
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6052192/microphone-and-speaker-not-working-on-teams
+  parent_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_text_excerpt: Microphone and speaker not working on Teams My microphone and speaker are not working on test in Teams. They work fine for everything else, but when I run the test on teams, I don't hear anything. My camera is working.
+  captured_at: '2026-10-28T13:52:33Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6052192-microphone-and-speaker-not-working-on
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6052192/microphone-and-speaker-not-working-on-teams
+  parent_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_text_excerpt: Microphone and speaker not working on Teams My microphone and speaker are not working on test in Teams. They work fine for everything else, but when I run the test on teams, I don't hear anything. My camera is working.
+  captured_at: '2026-10-28T13:52:33Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6052192-microphone-and-speaker-not-working-on
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6052192/microphone-and-speaker-not-working-on-teams
+  parent_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_text_excerpt: Microphone and speaker not working on Teams My microphone and speaker are not working on test in Teams. They work fine for everything else, but when I run the test on teams, I don't hear anything. My camera is working.
+  captured_at: '2026-10-28T13:52:33Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6052192-microphone-and-speaker-not-working-on
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6052192/microphone-and-speaker-not-working-on-teams
+  parent_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_text_excerpt: Microphone and speaker not working on Teams My microphone and speaker are not working on test in Teams. They work fine for everything else, but when I run the test on teams, I don't hear anything. My camera is working.
+  captured_at: '2026-10-28T13:52:33Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6052192-microphone-and-speaker-not-working-on
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6052192/microphone-and-speaker-not-working-on-teams
+  parent_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_text_excerpt: Microphone and speaker not working on Teams My microphone and speaker are not working on test in Teams. They work fine for everything else, but when I run the test on teams, I don't hear anything. My camera is working.
+  captured_at: '2026-10-28T13:52:33Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6052192-microphone-and-speaker-not-working-on
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6052192/microphone-and-speaker-not-working-on-teams
+  parent_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_text_excerpt: Microphone and speaker not working on Teams My microphone and speaker are not working on test in Teams. They work fine for everything else, but when I run the test on teams, I don't hear anything. My camera is working.
+  captured_at: '2026-10-28T13:52:33Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6052192-microphone-and-speaker-not-working-on
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6052192/microphone-and-speaker-not-working-on-teams
+  parent_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_text_excerpt: Microphone and speaker not working on Teams My microphone and speaker are not working on test in Teams. They work fine for everything else, but when I run the test on teams, I don't hear anything. My camera is working.
+  captured_at: '2026-10-28T13:52:33Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6051239-bitlocker-decryption-paused-at-86-5-re
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6051239/bitlocker-decryption-paused-at-86-5-resuming-with
+  parent_title: 'Bitlocker : Decryption paused at 86.5%. Resuming with Error 0x803100d6 - Microsoft Q&A'
+  report_title: 'Bitlocker : Decryption paused at 86.5%. Resuming with Error 0x803100d6 - Microsoft Q&A'
+  report_text_excerpt: 'Bitlocker : Decryption paused at 86.5%. Resuming with Error 0x803100d6 - Microsoft Q&A Bitlocker Problem, i want to resume my Bitlocker Decryption by using the command manage-bde -resume C:, but the output in command prompt is "ERROR: An error occurred (code 0x803100d6):...'
+  captured_at: '2026-10-28T14:00:17Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6051315-existing-office-wifi-connecting-stoope
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6051315/existing-office-wifi-connecting-stooped-accepting
+  parent_title: Existing office wifi connecting stooped accepting credential as well VPN configuration was not going. - Microsoft Q&A
+  report_title: Existing office wifi connecting stooped accepting credential as well VPN configuration was not going. - Microsoft Q&A
+  report_text_excerpt: Existing office wifi connecting stooped accepting credential as well VPN configuration was not going. - Microsoft Q&A Hi, After installing 2026-10 Security Update (KB5127648) (26200.9711) I faced issue like my "Existing office wifi connecting stooped accepting credential as...
+  captured_at: '2026-10-28T14:00:26Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26200.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
+- id: obs-studio-33-0-0-github-issue-14106
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14106
+  parent_title: YouTube Account Linking to Brand Account with Manager permissions broken
+  report_title: YouTube Account Linking to Brand Account with Manager permissions broken
+  report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/5qITANJ92GtzVrWw ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-10-28T14:20:07Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
