@@ -40,6 +40,7 @@ from typing import Any, Iterable, Mapping
 from patch_collectors.base import load_front_matter_and_body, normalize_url
 
 from . import collector_ownership, maturity, monitoring_health
+from .evidence_classification import VALID_SENTIMENTS, VALID_SEVERITIES
 from .patch_identity import key_from
 from .report_counts import (CONSENSUS_PROMOTION_PRODUCTS, counted_evidence_rows,
                             load_evidence_store, windows_targets_from_front_matter)
@@ -99,7 +100,26 @@ def evaluate(record: Mapping[str, Any], counted_groups: Mapping[Key, Iterable[Ma
         owned_methods=collector_ownership.ALLOWED_METHODS,
         manual_only_methods=collector_ownership.MANUAL_ONLY_METHODS)
     reasons.extend(f"monitoring:{reason}" for reason in health.reasons)
+    # (e) The population must be PUBLISHABLE as a live claim. The consensus writer refuses to project
+    # a counted row with no URL, a failed source date, or a sentiment/severity outside its vocabulary
+    # (gate_11/16/17), and QA requires a live claim's citations to be valid, distinct http(s) URLs.
+    # Certifying an identity the writer cannot project turned a tolerated warning into QA errors that
+    # discard a whole cycle's evidence -- so such an identity is simply not live until it is fixed.
+    unprojectable = [row for row in rows if not _projectable(row)]
+    if unprojectable:
+        reasons.append(f"unprojectable_rows:{len(unprojectable)}")
+    urls = [normalize_url(str(row.get("source_url") or "")) for row in rows]
+    if len(set(urls)) != len(urls):
+        reasons.append("duplicate_citation_urls")
     return maturity.LiveDecision(live=not reasons, reasons=tuple(reasons))
+
+
+def _projectable(row: Mapping[str, Any]) -> bool:
+    url = str(row.get("source_url") or "").strip().lower()
+    return (url.startswith(("http://", "https://"))
+            and row.get("source_date_pass") is not False
+            and str(row.get("sentiment") or "").strip().lower() in VALID_SENTIMENTS
+            and (str(row.get("severity") or "").strip().lower() or "low") in VALID_SEVERITIES)
 
 
 @dataclass(frozen=True)

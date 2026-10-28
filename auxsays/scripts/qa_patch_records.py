@@ -828,8 +828,15 @@ def scan_live_consensus_claims(
         if accepted_urls is not None:
             own_urls = accepted_urls.get(patch_key(product_id, version, data.get("target_build")), set())
             exclusive = sum(1 for url in own_urls if url and url_owners.get(url) == 1)
+            # A WARNING, not an error. Exclusivity is a property of the WHOLE population, so a
+            # scoped lane (the PowerPoint graph, the DaVinci dispatch) can lower another product's
+            # count without revisiting -- and without being allowed to write -- that product's
+            # record. As an error, that blocked the scoped lane every cycle: only the unscoped lane
+            # can revoke the claim, and it never saw the rows. The claim still cannot publish: the
+            # deploy-time projection re-runs the same evaluation and renders it Verified reports,
+            # and the next unscoped reconcile revokes the stored claim.
             if exclusive < LIVE_MIN_ACCEPTED_REPORTS:
-                add(errors, path, "live_exclusive_below_high_rung",
+                add(warnings, path, "live_exclusive_below_high_rung",
                     f"Record claims live consensus but only {exclusive} of its accepted report URLs "
                     f"are counted on no other patch identity; {LIVE_MIN_ACCEPTED_REPORTS} is the "
                     "published High evidence-strength rung, and a report counted for several "

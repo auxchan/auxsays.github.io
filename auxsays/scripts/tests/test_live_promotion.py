@@ -485,23 +485,27 @@ def section_qa(root: Path) -> None:
     counts = {k: len(v) for k, v in groups.items()}
     urls = {k: {normalize_url(str(r.get("source_url") or "")) for r in v} for k, v in groups.items()}
 
-    def codes(data: dict) -> list[str]:
-        errors, _ = qa.scan_live_consensus_claims([(Path("x.md"), data)], counts, urls)
-        return [e["code"] for e in errors]
+    def codes(data: dict, population: dict = urls) -> tuple[list[str], list[str]]:
+        errors, warnings = qa.scan_live_consensus_claims([(Path("x.md"), data)], counts, population)
+        return [e["code"] for e in errors], [w["code"] for w in warnings]
 
     live_a = front(root, "A")
     s = front(root, "S")
     live_s = {**s, **maturity.CONSENSUS_LIVE.axes()}
-    check("K1 the writer's own live record passes every live-claim check", codes(live_a) == [],
+    check("K1 the writer's own live record passes every live-claim check", codes(live_a) == ([], []),
           str(codes(live_a)))
-    check("K2 a live claim with 40 reports but 30 exclusive URLs is an ERROR, by name",
-          "live_exclusive_below_high_rung" in codes(live_s), str(codes(live_s)))
-    check("K3 ...and it is the ONLY error: everything else about that claim is well formed",
-          codes(live_s) == ["live_exclusive_below_high_rung"], str(codes(live_s)))
+    # A WARNING, deliberately: a scoped lane can lower another product's exclusivity without being
+    # able to revisit that record, and an error there blocked the scoped lane every cycle. The
+    # projection still withholds the label and the next unscoped reconcile revokes the claim.
+    check("K2 a live claim with 40 reports but 30 exclusive URLs is WARNED, by name -- never an "
+          "error that would wedge a scoped lane",
+          "live_exclusive_below_high_rung" in codes(live_s)[1]
+          and "live_exclusive_below_high_rung" not in codes(live_s)[0], str(codes(live_s)))
+    check("K3 ...and it raises NO error: everything else about that claim is well formed",
+          codes(live_s)[0] == [], str(codes(live_s)))
     alone = {k: v for k, v in urls.items() if k != (OBS, X_VER, "")}
-    errors, _ = qa.scan_live_consensus_claims([(Path("x.md"), live_s)], counts, alone)
-    check("K4 the same claim passes once no other identity counts its URLs (non-vacuous)",
-          "live_exclusive_below_high_rung" not in [e["code"] for e in errors])
+    check("K4 the same claim is clean once no other identity counts its URLs (non-vacuous)",
+          "live_exclusive_below_high_rung" not in codes(live_s, alone)[1])
 
 
 # ------------------------------------------------------------------------------- [L] graph router

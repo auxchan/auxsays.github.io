@@ -122,7 +122,8 @@ def reports(product: str, version: str, n: int, *, start: int = 0, via: str | No
     method = via or methods(product)[0]
     return [{"product_id": product, "update_version": version, "target_build": "",
              "id": f"{product}-{version}-{i}", "source_url": f"https://forum.test/{product}/t/{i}",
-             "source_type": family(method), "counted": True, "patch_version_matched": True}
+             "source_type": family(method), "counted": True, "patch_version_matched": True,
+             "sentiment": "negative", "severity": "high"}
             for i in range(start, start + n)]
 
 
@@ -182,10 +183,25 @@ def section_e() -> None:
     dup_ok = own + [dict(own[0], id="dup")]
     dup_short = own[:-1] + [dict(own[0], id="dup")]
     ok_dec, short_dec = decide(rec, groups(dup_ok), emh), decide(rec, groups(dup_short), emh)
-    check("E7 (c) counts DISTINCT URLs: 34 rows over 33 URLs certify, 33 rows over 32 URLs do not",
-          ok_dec.live and not short_dec.live
-          and short_dec.reasons == (f"exclusive_below_high_rung:{HIGH - 1}",),
+    # Exclusivity counts DISTINCT URLs; and a live claim citing one URL twice is refused outright,
+    # because QA could not publish it (its citations must be distinct) -- certifying it would turn
+    # into a QA error that discards the cycle.
+    check("E7 (c)(e) 34 rows over 33 URLs refuse only as a duplicate citation; 33 rows over 32 URLs "
+          "also fall below the exclusive rung",
+          ok_dec.reasons == ("duplicate_citation_urls",)
+          and short_dec.reasons == (f"exclusive_below_high_rung:{HIGH - 1}", "duplicate_citation_urls"),
           f"{ok_dec.reasons} / {short_dec.reasons}")
+    unpublishable = {
+        "blank sentiment": dict(own[0], sentiment=""),
+        "severity outside the vocabulary": dict(own[0], severity="catastrophic"),
+        "failed source date": dict(own[0], source_date_pass=False),
+        "no http(s) URL": dict(own[0], source_url="forum.test/no-scheme"),
+    }
+    refused = {name: decide(rec, groups([bad] + own[1:]), emh).reasons
+               for name, bad in unpublishable.items()}
+    check("E15 (e) a counted row the writer cannot publish keeps the identity non-live, by name "
+          "(blank sentiment, bad severity, failed source date, no http(s) URL)",
+          all(reasons == ("unprojectable_rows:1",) for reasons in refused.values()), str(refused))
 
     stale = decide(rec, groups(own), health("obs-studio", "99.0.0", last_run=STALE))
     check("E8 (d) stale monitoring refuses, every reason prefixed monitoring:, one per method",

@@ -163,7 +163,7 @@ auxsays/scripts/tests/test_monitoring_health.py = 38
 # with no run context stays disabled; the projection run as pages.yml runs it, failing closed and
 # writing no record; and the one Liquid contract every consumer now renders through, certified,
 # uncertified and absent.
-auxsays/scripts/tests/test_live_render_projection.py = 65
+auxsays/scripts/tests/test_live_render_projection.py = 66
 
 # Every writer promotes and revokes live consensus from one decision (AUX-056). Until now no writer
 # could store it: the certifier declined everything, so the label existed only at render time. Each
