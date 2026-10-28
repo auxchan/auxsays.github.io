@@ -761,15 +761,26 @@ def scan_live_consensus_claims(
     mid-cycle and wrong for a published claim of mature consensus: a live claim the evidence does
     not support must not reach a reader, so here an unsupported claim blocks.
 
-    THE PAIR IS CHECKED TOGETHER because the surfaces disagree about which field decides.
-    `aux-update.html:86` keys the whole hero on `consensus_collection_status`; `evidence_state`
-    appears there only as a secondary `or` inside the pilot branch. So a record live in one field
-    and pilot in the other either publishes a mature claim this gate never validated, or renders
-    nothing at all while the data says otherwise. Both are defects, and neither is visible from one
-    field alone.
+    THE PAIR IS CHECKED TOGETHER because one field is enough to make a claim.
+    Every surface reads maturity through `_includes/maturity-state.html`, which treats a live word in
+    EITHER `evidence_state` or `consensus_collection_status` as a live claim. So a record live in one
+    field and pilot in the other publishes a claim the other field denies, and that is not visible
+    from either field alone.
+
+    EXCLUSIVITY. A live claim also needs at least the High rung of accepted report URLs that no other
+    identity's accepted population contains -- the condition `live_eligibility.evaluate` promotes on.
+    A thread counted for two versions is evidence about neither in particular. Judged from
+    `accepted_urls` (every identity, every product); no clock is read here, so monitoring freshness
+    stays the certifier's and the deploy projection's to judge.
     """
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
+    # How many identities' accepted populations hold each URL -- once, over the whole population.
+    url_owners: dict[str, int] = {}
+    for urls in (accepted_urls or {}).values():
+        for url in urls:
+            if url:
+                url_owners[url] = url_owners.get(url, 0) + 1
     for path, data in loaded:
         state_live = str(data.get("evidence_state") or "").strip() == LIVE_EVIDENCE_STATE
         status_live = (str(data.get("consensus_collection_status") or "").strip()
@@ -796,8 +807,8 @@ def scan_live_consensus_claims(
                 f"Record claims live consensus in one field but not the other "
                 f"(evidence_state={data.get('evidence_state')!r}, "
                 f"consensus_collection_status={data.get('consensus_collection_status')!r}); "
-                "the patch page keys on the collection status, so a half-claim either publishes "
-                "an unvalidated maturity claim or silently publishes nothing.")
+                "every surface reads a live word in either field as a live claim, so a half-claim "
+                "publishes a maturity claim the other field denies.")
 
         product_id = str(data.get("product_id") or "").strip()
         version = str(data.get("update_version") or "").strip()
@@ -814,6 +825,15 @@ def scan_live_consensus_claims(
                 f"Record claims live consensus with {authoritative} accepted patch-specific "
                 f"reports in the authoritative population; {LIVE_MIN_ACCEPTED_REPORTS} is the "
                 "published High evidence-strength rung.")
+        if accepted_urls is not None:
+            own_urls = accepted_urls.get(patch_key(product_id, version, data.get("target_build")), set())
+            exclusive = sum(1 for url in own_urls if url and url_owners.get(url) == 1)
+            if exclusive < LIVE_MIN_ACCEPTED_REPORTS:
+                add(errors, path, "live_exclusive_below_high_rung",
+                    f"Record claims live consensus but only {exclusive} of its accepted report URLs "
+                    f"are counted on no other patch identity; {LIVE_MIN_ACCEPTED_REPORTS} is the "
+                    "published High evidence-strength rung, and a report counted for several "
+                    "patches cannot carry a claim of mature consensus about one of them.")
 
         claimed = int(data.get("update_report_count")
                       or data.get("confirmed_patch_specific_report_count") or 0)

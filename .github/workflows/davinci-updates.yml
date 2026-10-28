@@ -50,8 +50,12 @@ jobs:
           fi
 
       - name: Build consensus status
+        # SCOPED like the promotion below. Reconciliation also writes maturity, live included, from
+        # the method-health telemetry at the moment it runs, so an unscoped reconcile from this
+        # dispatch-only lane would promote or revoke OBS and Windows records on a run that collected
+        # neither. The cron lane reconciles every product; this one owns DaVinci.
         if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: python auxsays/scripts/build_consensus_from_evidence.py
+        run: python auxsays/scripts/build_consensus_from_evidence.py --product-id blackmagic-davinci
 
       - name: Promote DaVinci consensus to its records
         # SCOPED to the one product this lane owns. It collects only blackmagic-davinci (see the
@@ -70,13 +74,12 @@ jobs:
         # outright, and it is measurable: running it rebuilds obs-studio 32.2.2 from 3 sources to 7.
         # That is why removing it is only safe now: #75 gave obs-studio, powerpoint and windows-11
         # their own scoped steps on obs-evidence-collection.yml, which runs on cron rather than
-        # dispatch. Acrobat Pro / Reader still have no scoped promotion anywhere -- see the steps
-        # added alongside the others in that lane.
+        # dispatch, and Acrobat Pro / Reader, Teams and Premiere have scoped steps there too.
         #
-        # The writeback --allow below stays broad ON PURPOSE: the consensus step above runs a GLOBAL
-        # reconcile_record_counts, so non-DaVinci records can legitimately change their counts, and
-        # automation_writeback fails the whole run when the tree holds material the commit candidate
-        # omits. Narrowing the allow without also restoring those records would fail-close the lane.
+        # The writeback --allow below is still the whole generated directory. With the reconcile
+        # above scoped to DaVinci, only DaVinci records should change here; narrowing the allow to
+        # match is a separate decision, because automation_writeback fails the whole run when the
+        # tree holds material the commit candidate omits.
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           python auxsays/scripts/apply_consensus_to_records.py \

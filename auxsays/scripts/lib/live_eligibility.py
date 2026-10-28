@@ -21,12 +21,18 @@ ALL of these are required, and each failure is named:
   d  `monitoring_health.certify_monitoring` (H0-H7) passes for this identity, judged over the
      families its counted reports actually came from
 
+The same function decides what a WRITER stores. Every record writer holds a `RunContext` for its
+run and `maturity.record_maturity` asks it, so a certifying identity is written live, and a live
+record whose monitoring stops is written back to Verified reports, by whichever writer runs next --
+there is no second eligibility rule for the lanes to drift from the projection's.
+
 Pure: callers hand in the record, the WHOLE counted population, the method-health rows, `now` and
-the thresholds. Reading them is `load_inputs`, kept separate so every decision is reproducible.
+the thresholds. Reading them is `load_inputs` / `load_run_context`, kept separate so every decision
+is reproducible.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Iterable, Mapping
@@ -94,6 +100,89 @@ def evaluate(record: Mapping[str, Any], counted_groups: Mapping[Key, Iterable[Ma
         manual_only_methods=collector_ownership.MANUAL_ONLY_METHODS)
     reasons.extend(f"monitoring:{reason}" for reason in health.reasons)
     return maturity.LiveDecision(live=not reasons, reasons=tuple(reasons))
+
+
+@dataclass(frozen=True)
+class RunContext:
+    """One writer run's eligibility inputs: the WHOLE counted population (every product, so
+    exclusivity is judged against everything), the method-health rows, the thresholds and ONE
+    instant. `maturity.record_maturity` consults `decide`; a writer holding no context never promotes.
+
+    `unavailable` names why the telemetry or config could not be read. A context carrying it declines
+    every identity -- fail closed, and never a raise: a writer that crashed would discard the whole
+    cycle's evidence to protect a label."""
+    counted_groups: Mapping[Key, list[dict[str, Any]]]
+    emh_rows: tuple[Mapping[str, Any], ...]
+    thresholds: monitoring_health.Thresholds | None
+    now: datetime
+    unavailable: str = ""
+    _exclusive: dict[Key, int] = field(init=False, repr=False, compare=False)
+    _emh_by_key: dict[Key, list[Mapping[str, Any]]] = field(init=False, repr=False, compare=False)
+
+    def __post_init__(self) -> None:
+        # Once per run, not once per record: a reconcile asks about every record in the tree.
+        object.__setattr__(self, "_exclusive", exclusive_url_counts(self.counted_groups))
+        by_key: dict[Key, list[Mapping[str, Any]]] = {}
+        for row in self.emh_rows:
+            try:
+                by_key.setdefault(key_from(row), []).append(row)
+            except Exception:  # noqa: BLE001 - an unkeyable telemetry row answers for no identity
+                continue
+        object.__setattr__(self, "_emh_by_key", by_key)
+
+    def bind(self, counted_groups: Mapping[Key, list[dict[str, Any]]]) -> "RunContext":
+        """This context over `counted_groups` -- the population the calling writer is counting, so
+        its decisions and its counts can never come from two different readings of the store."""
+        return replace(self, counted_groups=counted_groups)
+
+    def bind_evidence(self, rows: Iterable[Mapping[str, Any]],
+                      records: Iterable[Mapping[str, Any]]) -> "RunContext":
+        """`bind` the authoritative counted population of `rows`, gated against `records` (full
+        front matter). A store the authority refuses to group declines everything instead of raising."""
+        try:
+            groups = counted_evidence_rows(
+                rows, windows_targets=windows_targets_from_front_matter(records))
+        except Exception as exc:  # noqa: BLE001 - see the class docstring
+            return replace(self, counted_groups={},
+                           unavailable=f"population:{type(exc).__name__}")
+        return self.bind(groups)
+
+    def decide(self, record: Mapping[str, Any] | None,
+               counted_rows: Iterable[Mapping[str, Any]] | None = None) -> maturity.LiveDecision:
+        """`evaluate` for one record, from this run's population and instant. When the writer hands
+        in the rows it is counting, a count that differs from this population's declines: a decision
+        about one population must not be written beside a count from another."""
+        if self.unavailable or self.thresholds is None:
+            return maturity.LiveDecision(False, (f"context_unavailable:{self.unavailable or 'thresholds'}",))
+        if not record:
+            return maturity.LiveDecision(False, ("no_record",))
+        try:
+            key = key_from(record)
+            if counted_rows is not None:
+                mine, theirs = len(self.counted_groups.get(key, ())), len(list(counted_rows))
+                if mine != theirs:
+                    return maturity.LiveDecision(False, (f"population_mismatch:{theirs}!={mine}",))
+            return evaluate(record, self.counted_groups, emh_rows=self._emh_by_key.get(key, ()),
+                            now=self.now, thresholds=self.thresholds, exclusive=self._exclusive)
+        except Exception as exc:  # noqa: BLE001 - see the class docstring
+            return maturity.LiveDecision(False, (f"evaluation_failed:{type(exc).__name__}",))
+
+
+def load_run_context(aux_root: Path, *, now: datetime,
+                     counted_groups: Mapping[Key, list[dict[str, Any]]] | None = None) -> RunContext:
+    """A writer's `RunContext`, reading `_data/evidence_method_health.yml` and `_config.yml` from
+    the SAME site tree as the evidence store it counts. NEVER raises: unreadable telemetry or config
+    returns a context that declines everything and names why (`unavailable`). The population is
+    usually bound afterwards (`bind` / `bind_evidence`) from the rows the writer actually counts."""
+    aux_root = Path(aux_root)
+    groups = counted_groups if counted_groups is not None else {}
+    try:
+        emh_rows = tuple(monitoring_health.load_method_health_rows(
+            aux_root / "_data" / "evidence_method_health.yml"))
+        thresholds = monitoring_health.load_thresholds(aux_root / "_config.yml")
+    except Exception as exc:  # noqa: BLE001 - see RunContext
+        return RunContext(groups, (), None, now, unavailable=f"{type(exc).__name__}: {exc}"[:200])
+    return RunContext(groups, emh_rows, thresholds, now)
 
 
 @dataclass(frozen=True)

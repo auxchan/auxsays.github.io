@@ -11,8 +11,8 @@ WHAT IS PINNED HERE.
   [E] `live_eligibility.evaluate`: each condition (promotion product, High rung, exclusive URLs,
       monitoring health) refuses on its own; a synthetic identity passing all four certifies;
       exclusivity is over normalized URLs and over every other identity, another product's included.
-  [M] `maturity.certify_live` is still NOT enabled: this change decides what RENDERS, never what
-      a writer STORES.
+  [M] a writer handed no run context never promotes: `maturity.certify_live` without one declines
+      an identity `evaluate` certifies (writers that DO hold one: tests/test_live_promotion.py).
   [P] `build_live_eligibility_projection.py`, run as the bare script pages.yml runs, on a temp tree:
       a healthy claim is listed, a stale one is not, a non-claim never is, a missing or malformed
       store writes an empty projection and exits 0, and no generated record is touched. pages.yml
@@ -225,12 +225,12 @@ def section_e() -> None:
 
 # ------------------------------------------------------------------------------- [M] certify_live
 def section_m() -> None:
-    print("\n[M] the stored maturity is untouched: certify_live is still not enabled")
+    print("\n[M] without a run context, certify_live declines and no writer stores live")
     rec, own = record(), reports("obs-studio", "99.0.0", HIGH)
-    check("M1 certify_live declines an identity evaluate certifies",
+    check("M1 certify_live with no run context declines an identity evaluate certifies",
           maturity.certify_live(rec, own) == maturity.NOT_ENABLED
           and decide(rec, groups(own), health("obs-studio", "99.0.0")).live)
-    check("M2 so every writer still stores the non-live tuple at the High rung",
+    check("M2 so a writer with no run context stores the non-live tuple at the High rung",
           maturity.record_maturity(rec, own) == maturity.PILOT_SAMPLE)
 
 

@@ -160,9 +160,21 @@ auxsays/scripts/tests/test_monitoring_health.py = 38
 # copies each turned the stored maturity words into "Live consensus", and the words outlive the
 # collection behind them. Pins the eligibility core one condition at a time (promotion product, High
 # rung, distinct report URLs not counted on another identity, H0-H7 monitoring); that certify_live
-# stays disabled; the projection run as pages.yml runs it, failing closed and writing no record; and
-# the one Liquid contract every consumer now renders through, certified, uncertified and absent.
+# with no run context stays disabled; the projection run as pages.yml runs it, failing closed and
+# writing no record; and the one Liquid contract every consumer now renders through, certified,
+# uncertified and absent.
 auxsays/scripts/tests/test_live_render_projection.py = 65
+
+# Every writer promotes and revokes live consensus from one decision (AUX-056). Until now no writer
+# could store it: the certifier declined everything, so the label existed only at render time. Each
+# writer now holds a run context and asks the same evaluate the deploy projection runs. Pins, on
+# synthetic trees through both writers' real mains: promotion, survival across a second lane,
+# revocation by EITHER writer alone with counts, citations and verdict untouched, restoration, no
+# status event for a maturity-only flip, retraction at zero; that a writer with no context, an
+# unreadable one or a mismatched population never promotes; DaVinci and exclusivity-short identities
+# never promote; verdict invariance; QA's exclusivity error; the graph blocking on a failed PROMOTE;
+# the revalidation guard accepting the live tuple; and the DaVinci lane's scoped reconcile.
+auxsays/scripts/tests/test_live_promotion.py = 52
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
