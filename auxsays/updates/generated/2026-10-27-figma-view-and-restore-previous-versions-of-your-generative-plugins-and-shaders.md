@@ -18,8 +18,8 @@ update_version: View and restore previous versions of your generative plugins an
 update_logo_text: FIG
 update_published_at: '2026-10-27T00:00:00.000Z'
 update_last_checked: '2026-10-27T20:29:37Z'
-source_last_checked: '2026-10-27T20:29:37Z'
-official_body_last_checked: '2026-10-27T20:29:37Z'
+source_last_checked: '2026-10-28T01:04:35Z'
+official_body_last_checked: '2026-10-28T01:04:35Z'
 record_last_updated: '2026-10-27T20:29:37Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -72,6 +72,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-10-27T20:29:37Z'
+  url: https://www.figma.com/release-notes/?title=view-and-restore-previous-versions-of-your-generative-plugins-and-shaders
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-28T01:04:35Z'
   url: https://www.figma.com/release-notes/?title=view-and-restore-previous-versions-of-your-generative-plugins-and-shaders
   status: captured-from-rss-feed
   body_captured: true

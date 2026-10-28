@@ -18,8 +18,8 @@ update_version: GitHub Copilot assisted permissions generally available
 update_logo_text: GIT
 update_published_at: '2026-10-26T22:31:30Z'
 update_last_checked: '2026-10-27T08:03:48Z'
-source_last_checked: '2026-10-27T20:29:50Z'
-official_body_last_checked: '2026-10-27T20:29:50Z'
+source_last_checked: '2026-10-28T01:04:39Z'
+official_body_last_checked: '2026-10-28T01:04:39Z'
 record_last_updated: '2026-10-27T08:03:48Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -91,6 +91,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-27T20:29:50Z'
+  url: https://github.blog/changelog/2026-10-26-github-copilot-assisted-permissions-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-28T01:04:39Z'
   url: https://github.blog/changelog/2026-10-26-github-copilot-assisted-permissions-generally-available
   status: captured-from-rss-feed
   body_captured: true
