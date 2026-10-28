@@ -78,13 +78,9 @@ permalink: /updates/my-stack/
       {%- elsif vkey contains 'INSUFFICIENT DATA' -%}{%- assign verdict_rank = 6 -%}
       {%- elsif vkey contains 'MANUAL WATCH' -%}{%- assign verdict_rank = 7 -%}
       {%- endif -%}
-      {%- assign ev_state = chosen.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' -%}
-      {%- assign ev_label = chosen.evidence_state_label | default: ev_state | replace: '_', ' ' | capitalize -%}
-      {%- if ev_state == 'pilot_sample' or ev_state == 'static_sample' or ev_state == 'pilot_initial_sample' or ev_state == 'static_initial_sample' -%}{%- assign ev_label = 'Verified reports' -%}
-      {%- elsif ev_state == 'official_only' -%}{%- assign ev_label = 'Official source only' -%}
-      {%- elsif ev_state == 'consensus_live' -%}{%- assign ev_label = 'Live consensus' -%}
-      {%- elsif ev_state == 'insufficient_data' -%}{%- assign ev_label = 'Insufficient data' -%}
-      {%- endif -%}
+      {%- comment -%}Maturity words from the shared contract: a live claim reads as live only while it certifies.{%- endcomment -%}
+      {%- include maturity-state.html record=chosen -%}
+      {%- assign ev_label = maturity_label -%}
       {%- capture mon_discard -%}{%- include monitoring-status.html mode='cell' product_id=chosen.product_id version=chosen.update_version target_build=chosen.target_build published_at=chosen.update_published_at report_count=chosen.update_report_count -%}{%- endcapture -%}
       ,"href": {{ chosen.url | jsonify }}
       ,"ver": {{ chosen.update_version | default: '' | jsonify }}
@@ -182,13 +178,8 @@ permalink: /updates/my-stack/
             {%- elsif rec_vkey contains 'INSUFFICIENT DATA' -%}{%- assign rec_rank = 6 -%}
             {%- elsif rec_vkey contains 'MANUAL WATCH' -%}{%- assign rec_rank = 7 -%}
             {%- endif -%}
-            {%- assign rec_ev_state = rec.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' -%}
-            {%- assign rec_ev = rec.evidence_state_label | default: rec_ev_state | replace: '_', ' ' | capitalize -%}
-            {%- if rec_ev_state == 'pilot_sample' or rec_ev_state == 'static_sample' or rec_ev_state == 'pilot_initial_sample' or rec_ev_state == 'static_initial_sample' -%}{%- assign rec_ev = 'Verified reports' -%}
-            {%- elsif rec_ev_state == 'official_only' -%}{%- assign rec_ev = 'Official source only' -%}
-            {%- elsif rec_ev_state == 'consensus_live' -%}{%- assign rec_ev = 'Live consensus' -%}
-            {%- elsif rec_ev_state == 'insufficient_data' -%}{%- assign rec_ev = 'Insufficient data' -%}
-            {%- endif -%}
+            {%- include maturity-state.html record=rec -%}
+            {%- assign rec_ev = maturity_label -%}
             {%- comment -%}
               OFFICIAL NOTES: a FLAG, never the prose.
 

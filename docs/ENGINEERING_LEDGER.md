@@ -62,6 +62,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-052 | Resolved | Evidence coverage | Low | Installer files written "7.1.0" did not count for release "7.1", so its notes were never labelled |
 | AUX-053 | Resolved | Evidence integrity | High | Four writers each derived a record's maturity, and none of them could keep a live state |
 | AUX-054 | Resolved | Published claims | Medium | Collection health existed only in Liquid; a retired method made healthy pages read degraded |
+| AUX-055 | Resolved | Published claims | High | A stored live-consensus claim would keep rendering as live after the collection behind it stopped |
 
 ---
 
@@ -3783,6 +3784,45 @@ the latter as manual-only.
 with a degraded, stale, missing or unowned active method, or a contributing family without a healthy
 method; a disabled row alone marks a card degraded; or a method-health row is written for an
 undeclared method.
+
+---
+
+### AUX-055 — A stored live-consensus claim would keep rendering as live after the collection behind it stopped
+
+- **Status** Resolved · **Area** Published claims · **Severity** High
+- **First seen** 2026-10-27 · **Resolved** 2026-10-27
+
+Five Liquid copies (the patch page, both feed lists, the homepage and My Patch Stack) each turned a
+record's stored maturity words into "Live consensus", and they disagreed on which field decides: the
+patch page read the collection status, the others the evidence state. The words are written by the
+evidence lane and the page is built later. Once live promotion is enabled, a claim would have kept
+rendering as live after its collection went stale or blocked, until a lane happened to rewrite it.
+
+**Re-judged at deploy.** `lib/live_eligibility.py` decides whether an identity may be presented as
+live: a promotion product, at least 33 counted reports, at least 33 distinct report URLs not counted
+on another identity (URLs, not people), and `certify_monitoring` healthy.
+`build_live_eligibility_projection.py` runs before the Jekyll build, evaluates every record that
+claims live, and writes the permalinks that pass to `_data/live_eligibility.yml` (git-ignored). It
+never writes a record. An unreadable evidence store writes an empty list and exits 0. The Pages
+workflow now also runs daily, so a claim is re-judged without a commit.
+
+**One contract.** `_includes/maturity-state.html` is the only place the maturity words are decided.
+A claim renders as live only when the projection lists its page; otherwise it reads Verified reports
+and Early reports, as every claim does when the projection is absent. Every other state maps as
+before.
+
+**Measured on 102fb553 plus this change.** No record claims live, so nothing published changes.
+Rendered before and after for all 1,463 records, every consumer's maturity output is identical, as is
+the rank of all 243 ranked homepage candidates, both with no projection and with the real one
+(`urls: []`). Flipping one record to a live claim changes exactly that record on every output.
+`certify_live` is still disabled, so no writer stores a live claim yet. If the scheduled Pages build
+itself stops running, the deployed HTML stays as last built; the schedule shortens that window but
+cannot close it.
+
+**Reopen only if** a surface renders "Live consensus" for a page the projection does not list; the
+projection lists a page that does not claim live, or one that fails any of the four conditions at
+build time; the projection step writes a generated record or blocks the deploy on an unreadable
+store; or a consumer derives maturity words outside the include.
 
 ## Adding an entry
 

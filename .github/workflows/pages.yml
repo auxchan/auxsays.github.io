@@ -4,6 +4,13 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
+  # Daily, so the deploy-time projections (monitoring state, live-consensus eligibility) are
+  # re-judged against the clock even on a day no lane commits: a live claim whose collection went
+  # stale is withdrawn at the next build, not at the next push. The limit is this workflow itself --
+  # if the scheduled build stops running, the deployed static HTML stays frozen at its last build,
+  # and nothing here can notice. The schedule shortens that window; it cannot close it.
+  schedule:
+    - cron: '41 5 * * *'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -95,6 +102,12 @@ jobs:
       # enabled ingestion source, and four enabled-but-refused sources claimed nothing was wrong.
       - name: Generate public monitoring projection
         run: python auxsays/scripts/build_monitoring_projection.py
+
+      # Also BEFORE `jekyll build`: `_includes/maturity-state.html` renders a stored live claim as
+      # live only when this lists the page. It reads and never writes records, and on unreadable
+      # inputs writes an empty list and exits 0 -- every claim then reads Verified reports.
+      - name: Build the live-consensus eligibility projection
+        run: python auxsays/scripts/build_live_eligibility_projection.py
 
       - name: Validate logo assets
         run: python auxsays/scripts/validate_logo_assets.py
