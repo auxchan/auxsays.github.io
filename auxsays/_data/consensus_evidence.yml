@@ -61723,7 +61723,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-26-002-22031-adobe-community-bug-report-https-community-adobe-com-questions-9-acrocef-exe-constantly-crashing-while-acrobat-is-open-on-s
   product_id: adobe-acrobat-pro
   update_version: 26.002.22031
@@ -61750,7 +61749,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-26-002-22031-adobe-community-bug-report-https-community-adobe-com-questions-9-acrocef-exe-constantly-crashing-while-acrobat-is-open-on-s
   product_id: adobe-acrobat-reader
   update_version: 26.002.22031
@@ -61775,5 +61773,26 @@ evidence:
   workflow_area: application stability
   platform: unknown
   severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14105
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14105
+  parent_title: Crash when closing Audio properties
+  report_title: Crash when closing Audio properties
+  report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/tMtE2dW8zGOfBuik ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/L3fkW'
+  captured_at: '2026-10-27T23:55:15Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: macos
+  severity: medium
   sentiment: negative
   source_weight: 1
