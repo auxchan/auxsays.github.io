@@ -62596,3 +62596,94 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053821-how-to-enable-the-modern-progressive-r
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053821/how-to-enable-the-modern-progressive-ring-boot-ani
+  parent_title: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A
+  report_title: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A
+  report_text_excerpt: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A Hello Microsoft Windows Team, After updating to Windows 11 Build 26300.9818 (KB5127936), I noticed a visual regression with the OS boot and login animation. The...
+  captured_at: '2026-10-29T14:13:44Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053697-startmenu-dll-null-pointer-crash-0xc00
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053697/startmenu-dll-null-pointer-crash-0xc0000005-when-d
+  parent_title: StartMenu.dll null-pointer crash (0xc0000005) when dragging an app out of the Start menu — Windows 11 26H2 26300.9711 - Microsoft Q&A
+  report_title: StartMenu.dll null-pointer crash (0xc0000005) when dragging an app out of the Start menu — Windows 11 26H2 26300.9711 - Microsoft Q&A
+  report_text_excerpt: StartMenu.dll null-pointer crash (0xc0000005) when dragging an app out of the Start menu — Windows 11 26H2 26300.9711 - Microsoft Q&A Environment Windows 11 26H2, build 26300.9711 (Pro, AMD64, zh-CN), latest cumulative update 26100.9711 installed. Using the built-in Start menu...
+  captured_at: '2026-10-29T14:14:33Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053696-mouse-freezing-and-stuttering-even-aft
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053696/mouse-freezing-and-stuttering-even-after-kb5127648
+  parent_title: Mouse Freezing and Stuttering Even After KB5127648 Update (25H2) - Microsoft Q&A
+  report_title: Mouse Freezing and Stuttering Even After KB5127648 Update (25H2) - Microsoft Q&A
+  report_text_excerpt: Mouse Freezing and Stuttering Even After KB5127648 Update (25H2) - Microsoft Q&A Severe mouse stuttering and freezing issues are occurring with the Asus M3 Gen 2 mouse even after installing the latest security patch (KB5127648) on Windows Pro version 25H2. The problem...
+  captured_at: '2026-10-29T14:14:46Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26200.9711'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
