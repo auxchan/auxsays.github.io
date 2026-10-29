@@ -62239,7 +62239,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044896-ios-authenticator-app
   product_id: microsoft-teams
   update_version: 26276.513.5241.9675
@@ -62288,7 +62287,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044896-ios-authenticator-app
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -62337,7 +62335,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044896-ios-authenticator-app
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -62386,7 +62383,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044896-ios-authenticator-app
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -62435,7 +62431,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044896-ios-authenticator-app
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -62484,7 +62479,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044896-ios-authenticator-app
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -62533,7 +62527,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044896-ios-authenticator-app
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -62581,4 +62574,25 @@ evidence:
   platform: Windows
   severity: ''
   sentiment: ''
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14111
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14111
+  parent_title: OBS crashes on launch on new Steam OS update
+  report_title: OBS crashes on launch on new Steam OS update
+  report_text_excerpt: 'System Info Other ### Other OS SteamOS (steamdeck, latest version) ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://www.dropbox.com/scl/fi/lehztsdn7ofjjriy9hok1/OBS-crashlog.txt?rlkey=vewvmk13k3l9vf4jbzk6zkdto&st=mvf53yhb&d'
+  captured_at: '2026-10-29T07:24:41Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
   source_weight: 1
