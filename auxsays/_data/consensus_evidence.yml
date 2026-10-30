@@ -62596,7 +62596,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053821-how-to-enable-the-modern-progressive-r
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -62626,7 +62625,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9818'
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053697-startmenu-dll-null-pointer-crash-0xc00
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -62656,7 +62654,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9711'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053696-mouse-freezing-and-stuttering-even-aft
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -62687,3 +62684,276 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9711'
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037373-after-joing-team-meeting-can-not-scree
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037373/after-joing-team-meeting-can-not-screen-sharing
+  parent_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_text_excerpt: after joing team meeting can not screen sharing Hi, When join team meeting, I can not share screen sharing to another people, how to check whether I can have permission or not? Thanks.
+  captured_at: '2026-10-29T23:47:27Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037373-after-joing-team-meeting-can-not-scree
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037373/after-joing-team-meeting-can-not-screen-sharing
+  parent_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_text_excerpt: after joing team meeting can not screen sharing Hi, When join team meeting, I can not share screen sharing to another people, how to check whether I can have permission or not? Thanks.
+  captured_at: '2026-10-29T23:47:27Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037373-after-joing-team-meeting-can-not-scree
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037373/after-joing-team-meeting-can-not-screen-sharing
+  parent_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_text_excerpt: after joing team meeting can not screen sharing Hi, When join team meeting, I can not share screen sharing to another people, how to check whether I can have permission or not? Thanks.
+  captured_at: '2026-10-29T23:47:27Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037373-after-joing-team-meeting-can-not-scree
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037373/after-joing-team-meeting-can-not-screen-sharing
+  parent_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_text_excerpt: after joing team meeting can not screen sharing Hi, When join team meeting, I can not share screen sharing to another people, how to check whether I can have permission or not? Thanks.
+  captured_at: '2026-10-29T23:47:27Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037373-after-joing-team-meeting-can-not-scree
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037373/after-joing-team-meeting-can-not-screen-sharing
+  parent_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_text_excerpt: after joing team meeting can not screen sharing Hi, When join team meeting, I can not share screen sharing to another people, how to check whether I can have permission or not? Thanks.
+  captured_at: '2026-10-29T23:47:27Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037373-after-joing-team-meeting-can-not-scree
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037373/after-joing-team-meeting-can-not-screen-sharing
+  parent_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_text_excerpt: after joing team meeting can not screen sharing Hi, When join team meeting, I can not share screen sharing to another people, how to check whether I can have permission or not? Thanks.
+  captured_at: '2026-10-29T23:47:27Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037373-after-joing-team-meeting-can-not-scree
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037373/after-joing-team-meeting-can-not-screen-sharing
+  parent_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_text_excerpt: after joing team meeting can not screen sharing Hi, When join team meeting, I can not share screen sharing to another people, how to check whether I can have permission or not? Thanks.
+  captured_at: '2026-10-29T23:47:27Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-196761
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/restream-login-not-working-in-obs-on-macos-%E2%80%93-cannot-authenticate-or-access-chat.196761/
+  parent_title: Restream Login Not Working in OBS on macOS – Cannot Authenticate or Access Chat
+  report_title: Restream Login Not Working in OBS on macOS – Cannot Authenticate or Access Chat
+  report_text_excerpt: 'MacBook з Apple Silicon. Операційна система: macOS 26.6.2. OBS Studio: Оновлено до версії 32.1.2 (Apple Silicon) під час усунення несправностей. Сервіс потокового передавання: Restream. Місця для стрімінгу: YouTube та Facebook. Чат: Restream Chat, який я використовую для монітори'
+  captured_at: '2026-10-30T00:16:36Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14117
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14117
+  parent_title: Periodic, random white flash on an already-loaded, stable Browser Source, appeared with OBS 33.0.0 (not present in 32.x) — AMD APU (ROG Ally Z1 Extreme)  Setup
+  report_title: Periodic, random white flash on an already-loaded, stable Browser Source, appeared with OBS 33.0.0 (not present in 32.x) — AMD APU (ROG Ally Z1 Extreme)  Setup
+  report_text_excerpt: gression (black screen after a quick double-refresh), explicitly stated as not present in 32.2.2 — which confirms there have indeed been behavioral changes to Browser Sources between 32.x and 33.0, even though that specific ticket isn’t an exact match for my symptom. Question Is
+  captured_at: '2026-10-30T00:18:54Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14117
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14117
+  parent_title: Periodic, random white flash on an already-loaded, stable Browser Source, appeared with OBS 33.0.0 (not present in 32.x) — AMD APU (ROG Ally Z1 Extreme)  Setup
+  report_title: Periodic, random white flash on an already-loaded, stable Browser Source, appeared with OBS 33.0.0 (not present in 32.x) — AMD APU (ROG Ally Z1 Extreme)  Setup
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/IGVpiW9nu10NafLC ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Setup'
+  captured_at: '2026-10-30T00:19:46Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14114
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14114
+  parent_title: Moving the progress bar on the slider should update the position of the playback
+  report_title: Moving the progress bar on the slider should update the position of the playback
+  report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/6oR0iUZ3ezgiTOXP ### OBS Studio Crash Log URL _No response_ ### Expected Behavior * mov'
+  captured_at: '2026-10-30T00:19:46Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-0-obs-forum-thread-196759
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/slow-scene-loading-on-boot-and-nvenc-codec-out-of-memory.196759/
+  parent_title: Slow scene loading on boot and NVENC codec out of memory
+  report_title: Slow scene loading on boot and NVENC codec out of memory
+  report_text_excerpt: 'System: OBS version: 33.0.0 Ubuntu Studio (kbuntu 26.04) Kernel Version: 7.0.0-42-generic Compositor: Wayland GPU: Nvidia 3060 12gb Cpu: AMD Ryzen 7 9700x Memory: 32gb Installed method: lp_ppa_obsproject_obs_stu'
+  captured_at: '2026-10-30T00:19:34Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
