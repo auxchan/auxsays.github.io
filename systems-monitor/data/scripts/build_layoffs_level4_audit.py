@@ -95,6 +95,8 @@ def build_audit(config_root: Path) -> dict[str, Any]:
     accepted_factor_ids = {canonical_id(row["canonicalFactorId"]) for row in accepted_history["observations"]}
 
     for row in bls_dol["series"]:
+        if row.get("governance_scope") == "PHASE3_PUBLIC_METRIC":
+            continue
         factor_id = canonical_id(row["canonical_factor"])
         record = state.setdefault(factor_id, _blank_state(factor_id, row["label"], "SOURCE_ONLY"))
         role = _role_for(factor_id, class_by_id, source_id=row["source_id"], source_only=factor_id not in child_ids)
@@ -102,7 +104,11 @@ def build_audit(config_root: Path) -> dict[str, Any]:
             source_id=row["source_id"], selector=row["series_id"], role=role,
             status="EXACT_SELECTOR", exact=True, origin="sources_bls_dol.json",
         ))
-        _promote(record, "ACCEPTED" if row["activation_state"] == "ACCEPTED_EXISTING" else "SOURCE_ENABLED_PENDING_ACCEPTANCE")
+        accepted_for_configured_factor = (
+            row["activation_state"] == "ACCEPTED_EXISTING"
+            and canonical_id(row.get("observation_canonical_factor", row["canonical_factor"])) == factor_id
+        )
+        _promote(record, "ACCEPTED" if accepted_for_configured_factor else "SOURCE_ENABLED_PENDING_ACCEPTANCE")
 
     for source in census["sources"]:
         for row in source["series"]:

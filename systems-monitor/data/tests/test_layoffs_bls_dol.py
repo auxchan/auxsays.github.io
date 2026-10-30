@@ -12,6 +12,7 @@ from systems_monitor_data.layoffs_bls_dol import (
     parse_bls_api_response,
     parse_dol_national_xml,
     parse_dol_official_release_html,
+    parse_dol_official_release_text,
     repair_dol_candidate_batch,
     dol_source_freshness,
 )
@@ -26,13 +27,17 @@ class LayoffsBlsDolTests(unittest.TestCase):
         cls.acquisition, cls.specs = load_layoffs_bls_dol_registry(REGISTRY)
 
     def test_registry_has_reviewed_exact_series_and_no_credentials(self):
-        self.assertEqual(20, len(self.specs))
+        self.assertEqual(24, len(self.specs))
         ids = {spec.series_id for spec in self.specs}
         self.assertIn("JTS000000000000000LDL", ids)
         self.assertIn("LNS13026638", ids)
         self.assertIn("LNS13023653", ids)
         self.assertIn("CES0500000002", ids)
         self.assertIn("CES0000000001", ids)
+        self.assertIn("JTS000000000000000JOL", ids)
+        self.assertIn("JTS000000000000000HIL", ids)
+        self.assertIn("LNS14000000", ids)
+        self.assertIn("LNS11300000", ids)
         self.assertIn("BDS0000000000000000110004LQ5", ids)
         self.assertIn("BDS0000000000000000110005LQ5", ids)
         self.assertIn("BDS0000000000000000110006LQ5", ids)
@@ -49,7 +54,57 @@ class LayoffsBlsDolTests(unittest.TestCase):
         self.assertEqual("thousands of persons", payroll.unit)
         self.assertEqual("monthly", payroll.frequency)
         self.assertEqual("seasonally adjusted", payroll.seasonal_adjustment)
-        self.assertEqual("SOURCE_ENABLED_PENDING_ACCEPTANCE", payroll.activation_state)
+        self.assertEqual("ACCEPTED_EXISTING", payroll.activation_state)
+
+    def test_official_pdf_text_parser_covers_all_three_sa_measures_and_revisions(self):
+        specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
+        text = """
+        UNEMPLOYMENT INSURANCE WEEKLY CLAIMS
+        TRANSMISSION OF MATERIALS IN THIS RELEASE IS EMBARGOED UNTIL
+        8:30 A.M. (Eastern) Thursday, October 8, 2026
+        SEASONALLY ADJUSTED DATA
+        In the week ending October 3, the advance figure for seasonally adjusted initial claims was 197,000,
+        a decrease from the previous week's revised level. The previous week's level was revised up by 2,000 from 197,000 to 199,000.
+        The advance seasonally adjusted insured unemployment rate was 1.1 percent for the week ending September 26,
+        unchanged. The advance number for seasonally adjusted insured unemployment during the week ending September 26 was 1,716,000,
+        an increase from the previous week's revised level. The previous week's level was revised down by 2,000 from 1,701,000 to 1,699,000.
+        """
+        batch = parse_dol_official_release_text(
+            text,
+            specs,
+            artifact_sha256="d" * 64,
+            retrieved_time="2026-10-08T13:00:00Z",
+            provenance_url="https://www.dol.gov/ui/data.pdf",
+        )
+        current = {(row.source_series_id, row.observation_period): row.value for row in batch.observations}
+        self.assertEqual(Decimal("197000"), current[("DOL-UI-SA-INITIAL", "2026-10-03")])
+        self.assertEqual(Decimal("199000"), current[("DOL-UI-SA-INITIAL", "2026-09-26")])
+        self.assertEqual(Decimal("1716000"), current[("DOL-UI-SA-CONTINUED", "2026-09-26")])
+        self.assertEqual(Decimal("1699000"), current[("DOL-UI-SA-CONTINUED", "2026-09-19")])
+        self.assertEqual(Decimal("1.1"), current[("DOL-UI-SA-IUR", "2026-09-26")])
+
+    def test_official_release_uses_eastern_standard_time_and_allows_holiday_weekday(self):
+        specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
+        text = """
+        UNEMPLOYMENT INSURANCE WEEKLY CLAIMS
+        TRANSMISSION OF MATERIALS IN THIS RELEASE IS EMBARGOED UNTIL
+        8:30 A.M. (Eastern) Wednesday, November 25, 2026
+        SEASONALLY ADJUSTED DATA
+        In the week ending November 21, the advance figure for seasonally adjusted initial claims was 201,000,
+        a decrease from the previous week's revised level. The previous week's level was revised down by 1,000 from 203,000 to 202,000.
+        The advance seasonally adjusted insured unemployment rate was 1.1 percent for the week ending November 14,
+        unchanged. The advance number for seasonally adjusted insured unemployment during the week ending November 14 was 1,720,000,
+        an increase from the previous week's revised level. The previous week's level was revised up by 2,000 from 1,716,000 to 1,718,000.
+        """
+        parsed = parse_dol_official_release_text(
+            text,
+            specs,
+            artifact_sha256="d" * 64,
+            retrieved_time="2026-11-25T14:00:00Z",
+            provenance_url="https://www.dol.gov/ui/data.pdf",
+        )
+        self.assertTrue(parsed.observations)
+        self.assertTrue(all(row.public_time == "2026-11-25T13:30:00Z" for row in parsed.observations))
 
     def test_bls_parser_preserves_period_unit_adjustment_and_preliminary_marker(self):
         wanted = {
@@ -250,7 +305,7 @@ class LayoffsBlsDolTests(unittest.TestCase):
         self.assertEqual(first.observation_id, retry.observation_id)
         self.assertNotEqual(first.observation_id, revised.observation_id)
 
-    def test_collector_builds_one_bounded_bls_request_for_all_seventeen_series(self):
+    def test_collector_builds_one_bounded_bls_request_for_all_twenty_one_series(self):
         calls = []
 
         class FakeRetriever:
@@ -262,7 +317,7 @@ class LayoffsBlsDolTests(unittest.TestCase):
         bls_specs = [spec for spec in self.specs if spec.source_id != "dol-ui-claims"]
         self.assertEqual("artifact", collector.retrieve_bls(bls_specs, 2025, 2026))
         body = json.loads(calls[0][1]["body"])
-        self.assertEqual(17, len(body["seriesid"]))
+        self.assertEqual(21, len(body["seriesid"]))
         self.assertEqual("2025", body["startyear"])
         self.assertEqual("2026", body["endyear"])
 

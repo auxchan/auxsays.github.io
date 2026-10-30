@@ -30,7 +30,7 @@ describe("Continued Claims Level-4 Human QA surface", () => {
     expect(within(parent).getByText("percent")).toBeTruthy();
   });
 
-  it("exposes exactly ten governed child placements and 114 reused records", () => {
+  it("exposes exactly ten governed child placements, the approved 114-record baseline, and current append-only histories", () => {
     const { container } = render(<ContinuedClaimsLevel4QaView />);
     expect(container.querySelectorAll(".sm-l4qa-factor")).toHaveLength(10);
     exactTen.forEach((label) => expect(screen.getByRole("heading", { name: label })).toBeTruthy());
@@ -43,16 +43,18 @@ describe("Continued Claims Level-4 Human QA surface", () => {
     expect(screen.getByText("114")).toBeTruthy();
 
     const claims = screen.getByRole("heading", { name: "Initial Claims" }).closest("section")!;
-    expect(within(claims).getByText("36", { selector: "dd" })).toBeTruthy();
+    const claimsRecords = within(claims).getByText("Accepted records").parentElement?.querySelector("dd")?.childNodes[0].textContent ?? "0";
+    expect(Number(claimsRecords)).toBeGreaterThanOrEqual(36);
     const hires = screen.getByRole("heading", { name: "Hires Rate" }).closest("section")!;
-    expect(within(hires).getByText("19", { selector: "dd" })).toBeTruthy();
+    const hiresRecords = within(hires).getByText("Accepted records").parentElement?.querySelector("dd")?.childNodes[0].textContent ?? "0";
+    expect(Number(hiresRecords)).toBeGreaterThanOrEqual(19);
   });
 
   it("makes every unresolved child state and decision explicit", () => {
     render(<ContinuedClaimsLevel4QaView />);
     const payroll = screen.getByRole("heading", { name: "Total Nonfarm Payroll Change" }).closest("section")!;
-    expect(within(payroll).getAllByText(/GOVERNED CALC METHOD APPROVED INPUT HISTORY PENDING/).length).toBeGreaterThan(0);
-    expect(within(payroll).getByText(/no accepted compatible CES0000000001 input pair/i)).toBeTruthy();
+    expect(within(payroll).getAllByText(/GOVERNED CALC METHOD APPROVED OUTPUT ACCEPTANCE PENDING/).length).toBeGreaterThan(0);
+    expect(within(payroll).getByText(/CALC_CANDIDATE_PENDING_ACCEPTANCE/i)).toBeTruthy();
 
     const business = screen.getByRole("heading", { name: "Business Formations Within 4 Quarters" }).closest("section")!;
     expect(within(business).getAllByText(/SOURCE IDENTIFIED PENDING ACCEPTANCE/).length).toBeGreaterThan(0);

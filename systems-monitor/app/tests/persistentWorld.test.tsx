@@ -123,7 +123,7 @@ describe("premium persistent-world visual language", () => {
     expect(persistentWorldGraphNodeLabel(model, placements[3])).toBe("Initial UI Claims");
     expect(persistentWorldGraphNodeLabel(model, placements[3])).not.toContain("209");
     expect(persistentWorldGraphNodeLabel(model, placements[3])).not.toContain("thousand");
-    expect(compactPersistentValue(persistentWorldFactualBinding("Labor-Force Participation").displayValue)).toBe("61.4%");
+    expect(compactPersistentValue(persistentWorldFactualBinding("Labor-Force Participation").displayValue)).toMatch(/^\d+(\.\d+)?%$/);
     expect(compactPersistentValue("209 thousand")).toBe("209 thousand");
     expect(persistentWorldFingerprint(model)).toBe(before);
   });
@@ -652,15 +652,19 @@ describe("persistent world local-review shell", () => {
     const inspector = await screen.findByRole("complementary", { name: "Persistent world factor details" }, { timeout: 15_000 });
     const surface = screen.getByRole("application", { name: "U.S. systems factor map" });
     const topologyFingerprint = surface.getAttribute("data-topology-fingerprint");
+    const fullCurrentReading = persistentWorldFactualBinding("Labor-Force Participation").displayValue;
+    if (!fullCurrentReading) throw new Error("Labor-Force Participation must have a production reading");
+    const currentReading = compactPersistentValue(fullCurrentReading);
+    if (!currentReading) throw new Error("Labor-Force Participation reading must compact for display");
     expect(surface.getAttribute("data-factual-binding-count")).toBe("28");
-    expect(within(inspector).getAllByText("61.4%").length).toBeGreaterThan(0);
-    expect(within(inspector).queryByText("61.4 percent")).toBeNull();
+    expect(within(inspector).getAllByText(currentReading).length).toBeGreaterThan(0);
+    expect(within(inspector).queryByText(fullCurrentReading)).toBeNull();
     Object.defineProperty(surface, "getBoundingClientRect", { configurable: true, value: () => ({ x: 0, y: 0, left: 0, top: 0, right: 980, bottom: 720, width: 980, height: 720, toJSON: () => ({}) }) });
     fireEvent.pointerMove(surface, { pointerId: 1, clientX: 490, clientY: 360 });
     const hover = screen.getByRole("tooltip");
     expect(within(hover).getByText("Labor-Force Participation")).toBeTruthy();
-    expect(within(hover).getByText("61.4%")).toBeTruthy();
-    expect(within(hover).queryByText(/Labor-Force Participation\s*·\s*61\.4%/)).toBeNull();
+    expect(within(hover).getByText(currentReading)).toBeTruthy();
+    expect(within(hover).queryByText(new RegExp(`Labor-Force Participation\\s*·\\s*${currentReading.replace(".", "\\.")}`))).toBeNull();
     expect(surface.getAttribute("data-factual-binding-count")).toBe("28");
     expect(surface.getAttribute("data-topology-fingerprint")).toBe(topologyFingerprint);
     const factualLinks = within(inspector).getAllByRole("link", { name: "Open factual record" });
@@ -721,9 +725,11 @@ describe("persistent world local-review shell", () => {
     fireEvent.click(allScope);
     expect(screen.getByRole("region", { name: "What changed" }).querySelectorAll("ol > li").length).toBeGreaterThan(branchCount);
     fireEvent.click(selectedScope);
-    fireEvent.click(within(briefing).getByRole("button", { name: /Initial unemployment-insurance claims/ }));
+    const movements = briefing.querySelector(".sm-pw-briefing__moved");
+    expect(movements).toBeTruthy();
+    fireEvent.click(within(movements as HTMLElement).getAllByRole("button")[0]);
     const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
-    expect(within(inspector).getByRole("heading", { name: /Initial (UI )?Claims/ })).toBeTruthy();
+    expect(within(inspector).getByRole("heading", { level: 2 })).toBeTruthy();
   });
 
   it("indexes all resident placements and ranks reviewed factors above fixtures", () => {

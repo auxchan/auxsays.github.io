@@ -95,7 +95,8 @@ class ContinuedClaimsProductionTests(unittest.TestCase):
     def test_pending_children_are_truthfully_bounded(self):
         rows = {row["canonicalFactorId"]: row for row in load("continued_claims_production.json")["placements"]}
         payroll = rows["factor:canonical:total-nonfarm-payroll-change"]
-        self.assertEqual("GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING", payroll["productionDisposition"])
+        self.assertEqual("GOVERNED_CALC_METHOD_APPROVED_OUTPUT_ACCEPTANCE_PENDING", payroll["productionDisposition"])
+        self.assertEqual(21, payroll["expectedAcceptedHistoryRecords"])
         self.assertEqual(["CES0000000001", "PAYROLL_CHANGE_V1"], payroll["selectors"])
         self.assertIsNone(payroll["recommendation"])
         business = rows["factor:canonical:business-formations-within-4-quarters"]

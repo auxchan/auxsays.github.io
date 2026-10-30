@@ -1,4 +1,4 @@
-import activeFactualSnapshot from "../../../data/review/local-active-pdi-test-snapshot.json";
+import { productionFactualSnapshot as activeFactualSnapshot } from "./productionDataReadModel";
 import { laborMarketHierarchy, observationForFactor, evidenceForFactor } from "./laborMarketReadModel";
 import { createSnapshotViewModel } from "./snapshotViewModelFactory";
 import { validatePublicSnapshot } from "./validatePublicSnapshot";

@@ -54,7 +54,7 @@ class LayoffsSourceStateReconciliationTests(unittest.TestCase):
         self.assertNotIn("factor:canonical:establishment-deaths", by_factor)
         self.assertNotIn("factor:establishment-death-job-losses", by_factor)
 
-    def test_nonaccepted_series_do_not_inherit_source_level_acceptance(self):
+    def test_exact_series_with_accepted_history_resolves_as_accepted(self):
         layoffs = CONFIG / "layoffs"
         bls_dol = load(layoffs / "sources_bls_dol.json")
         census = load(layoffs / "sources_census.json")
@@ -69,8 +69,8 @@ class LayoffsSourceStateReconciliationTests(unittest.TestCase):
         }
         states = MODULE.factor_states(bls_dol, census, context, fema, taxonomy, accepted_history, health)
         by_factor = {row["canonicalFactorId"]: row for row in states}
-        self.assertEqual("SOURCE_ENABLED_PENDING_ACCEPTANCE", by_factor["factor:canonical:average-weekly-hours"]["activationState"])
-        self.assertNotIn("displayValue", by_factor["factor:canonical:average-weekly-hours"])
+        self.assertEqual("ACCEPTED", by_factor["factor:canonical:average-weekly-hours"]["activationState"])
+        self.assertIn("displayValue", by_factor["factor:canonical:average-weekly-hours"])
 
 
 if __name__ == "__main__":

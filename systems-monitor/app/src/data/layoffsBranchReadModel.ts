@@ -104,10 +104,15 @@ for (const group of layoffsBranchTaxonomy) {
 }
 
 for (const row of blsDolRegistry.series) {
+  // Phase-3 public-summary metrics share the governed production retriever,
+  // but they are not members of the frozen Layoffs Level-4 source taxonomy.
+  if ("governance_scope" in row && row.governance_scope === "PHASE3_PUBLIC_METRIC") continue;
   const id = canonicalId(row.canonical_factor);
   const state = mutable.get(id) ?? { activationState: "SOURCE_IDENTIFIED" as const, series: [] };
   state.series.push({ sourceId: row.source_id, seriesId: row.series_id, label: row.label, unit: row.unit, cadence: row.frequency, adjustment: row.seasonal_adjustment, evidenceUrl: row.human_evidence_url, methodologyUrl: row.methodology_url });
-  state.activationState = promoteState(state.activationState, row.activation_state === "ACCEPTED_EXISTING" ? "ACCEPTED" : "SOURCE_ENABLED_PENDING_ACCEPTANCE");
+  const acceptedForConfiguredFactor = row.activation_state === "ACCEPTED_EXISTING"
+    && (typeof row.observation_canonical_factor !== "string" || canonicalId(row.observation_canonical_factor) === id);
+  state.activationState = promoteState(state.activationState, acceptedForConfiguredFactor ? "ACCEPTED" : "SOURCE_ENABLED_PENDING_ACCEPTANCE");
   mutable.set(id, state);
 }
 

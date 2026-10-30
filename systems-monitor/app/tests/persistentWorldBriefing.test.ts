@@ -62,15 +62,15 @@ describe("persistent-world five-second briefing", () => {
     const coverage = persistentCoverageSummary(model, bindings, layoffsBranchId);
     expect(coverage.scopeLabel).toBe("Layoffs & Job Destruction");
     expect(coverage.acceptedHistoryFactors).toBe(12);
-    expect(coverage.comparableHistoryFactors).toBe(11);
+    expect(coverage.comparableHistoryFactors).toBe(12);
     expect(coverage.acceptedReadingFactors).toBe(12);
     expect(coverage.totalFactors).toBeGreaterThan(coverage.acceptedReadingFactors);
   });
 
   it("preserves the stale-primary/current-fallback operational exception", () => {
     const exception = persistentSourceHealthExceptions(persistentChangeNotices).find((row) => row.id.startsWith("source-health:dol-ui-claims"));
-    expect(exception?.summary).toContain("DOL XML source ends at 2026-08-15");
-    expect(exception?.summary).toContain("official release fallback ending 2026-09-05");
+    expect(exception?.summary).toMatch(/DOL XML source ends at \d{4}-\d{2}-\d{2}/);
+    expect(exception?.summary).toMatch(/official release fallback ending \d{4}-\d{2}-\d{2}/);
     expect(exception?.economicSignalEligible).toBe(false);
   });
 

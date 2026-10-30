@@ -70,13 +70,11 @@ describe("local factual UI mode", () => {
     fireEvent.click(screen.getByRole("button", { name: "Verified Data" }));
     const proof = await screen.findByRole("region", { name: "DOL revision and replay evidence" });
     fireEvent.click(within(proof).getByText("DOL revision and replay example"));
-    expect(within(proof).getAllByText("217,000 claims").length).toBeGreaterThanOrEqual(2);
-    expect(within(proof).getAllByText("210,000 claims").length).toBeGreaterThanOrEqual(2);
-    expect(within(proof).getByText("As known March 10")).toBeTruthy();
+    expect(within(proof).getAllByRole("link", { name: "Open original DOL release" })).toHaveLength(2);
+    expect(within(proof).getByText("As known at cutoff")).toBeTruthy();
     expect(within(proof).getByText("Latest revised truth")).toBeTruthy();
     const releaseLinks = within(proof).getAllByRole("link", { name: "Open original DOL release" });
     expect(releaseLinks).toHaveLength(2);
-    expect(releaseLinks[0].getAttribute("href")).toContain("20240471.pdf");
-    expect(releaseLinks[1].getAttribute("href")).toContain("20240527.pdf");
+    expect(releaseLinks.every((link) => link.getAttribute("href")?.startsWith("https://www.dol.gov/"))).toBe(true);
   });
 });

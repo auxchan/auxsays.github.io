@@ -85,8 +85,12 @@ def validate_payroll_change_methodology(methodology: dict[str, Any]) -> None:
     if any(rules.get(field) is not False for field in prohibited):
         raise ValueError("PAYROLL_CHANGE_V1 must prohibit transformations and imputation")
     production = methodology.get("productionState", {})
-    if production.get("acceptedInputHistoryDepth") != 0 or production.get("calculatedHistoryDepth") != 0:
-        raise ValueError("methodology artifact cannot promote unaccepted payroll history")
+    if production.get("acceptedInputSeries") != "DYNAMIC_FROM_CANONICAL_PRODUCTION_ARTIFACT":
+        raise ValueError("PAYROLL_CHANGE_V1 input-series state must be delegated to the canonical production artifact")
+    if production.get("acceptedInputHistoryDepth") != "DYNAMIC_FROM_CANONICAL_PRODUCTION_ARTIFACT":
+        raise ValueError("PAYROLL_CHANGE_V1 input-history depth must be delegated to the canonical production artifact")
+    if production.get("calculatedHistoryDepth") != 0 or production.get("latestAcceptedValue") is not None:
+        raise ValueError("methodology artifact cannot promote an unaccepted payroll calculation output")
 
 
 def calculate_total_nonfarm_payroll_change(

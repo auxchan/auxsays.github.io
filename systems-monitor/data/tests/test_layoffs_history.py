@@ -110,7 +110,7 @@ class LayoffsHistoryTests(unittest.TestCase):
             accepted_at="2026-09-12T12:02:00Z",
         )
         self.assertEqual("TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_14", ledger["authority"])
-        self.assertEqual(13, len(ledger["rules"]))
+        self.assertEqual(18, len(ledger["rules"]))
         self.assertEqual([], rows)
 
     def test_exact_series_scope_excludes_unrelated_rows_before_promotion(self):

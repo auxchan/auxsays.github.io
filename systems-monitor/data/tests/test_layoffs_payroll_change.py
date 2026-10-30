@@ -106,7 +106,8 @@ class TotalNonfarmPayrollChangeTests(unittest.TestCase):
             "percentChangeAllowed", "annualizationAllowed", "smoothingAllowed", "interpolationAllowed", "carryForwardAllowed"
         )))
         state = self.methodology["productionState"]
-        self.assertEqual(0, state["acceptedInputHistoryDepth"])
+        self.assertEqual("DYNAMIC_FROM_CANONICAL_PRODUCTION_ARTIFACT", state["acceptedInputSeries"])
+        self.assertEqual("DYNAMIC_FROM_CANONICAL_PRODUCTION_ARTIFACT", state["acceptedInputHistoryDepth"])
         self.assertEqual(0, state["calculatedHistoryDepth"])
         self.assertIsNone(state["latestAcceptedValue"])
 

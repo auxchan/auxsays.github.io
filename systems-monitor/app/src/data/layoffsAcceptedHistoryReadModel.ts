@@ -1,5 +1,4 @@
-import acceptedHistoryDocument from "../../../data/review/layoffs-accepted-history.json";
-import activationReportDocument from "../../../data/review/layoffs-history-activation-report.json";
+import { productionAcceptedHistory, productionSourceChecks, productionSourceDiagnostics } from "./productionDataReadModel";
 import { layoffsResolveCanonicalFactorId } from "./layoffsBranchTaxonomy";
 
 export interface AcceptedHistoryRow {
@@ -59,8 +58,9 @@ export interface LayoffsAcceptedFactorSummary {
   series: readonly LayoffsAcceptedSeriesSummary[];
 }
 
-const document = acceptedHistoryDocument as { schemaVersion: string; generatedAt: string; observations: AcceptedHistoryRow[] };
-const activation = activationReportDocument as { dolRepair?: { freshness?: { status?: string; newestObservationPeriod?: string; retrievedTime?: string; observationAgeHours?: number; staleAfterHours?: number }; primaryFreshness?: { status?: string; newestObservationPeriod?: string }; overallStatus?: string; methods?: Record<string, unknown> } };
+const document = productionAcceptedHistory as { schemaVersion: string; generatedAt: string; observations: AcceptedHistoryRow[] };
+const dolCheck = productionSourceChecks["dol-ui-claims"];
+const diagnostics = productionSourceDiagnostics as { dolFreshness?: { status?: string; newestObservationPeriod?: string; retrievedTime?: string; observationAgeHours?: number; staleAfterHours?: number }; dolPrimaryFreshness?: { status?: string; newestObservationPeriod?: string }; dolAcquisitionOverallStatus?: string };
 if (document.schemaVersion !== "layoffs-accepted-history-1.0.0") throw new Error("Unsupported Layoffs accepted-history schema");
 
 const seriesIdentity: Readonly<Record<string, { label: string; provider: string; dataset: string }>> = Object.freeze({
@@ -77,12 +77,18 @@ const seriesIdentity: Readonly<Record<string, { label: string; provider: string;
   BDS0000000000000000110006LQ5: { label: "Establishment closures", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
   BDS0000000000000000110008LQ5: { label: "Jobs lost at establishment deaths", provider: "U.S. Bureau of Labor Statistics", dataset: "Business Employment Dynamics" },
   "DOL-UI-SA-INITIAL": { label: "Initial unemployment-insurance claims", provider: "U.S. Department of Labor", dataset: "Unemployment Insurance Weekly Claims" },
+  CES0000000001: { label: "Total nonfarm payroll employment", provider: "U.S. Bureau of Labor Statistics", dataset: "Current Employment Statistics" },
+  LNS14000000: { label: "U-3 unemployment rate", provider: "U.S. Bureau of Labor Statistics", dataset: "Current Population Survey" },
+  LNS11300000: { label: "Labor-force participation rate", provider: "U.S. Bureau of Labor Statistics", dataset: "Current Population Survey" },
+  JTS000000000000000JOL: { label: "Job openings", provider: "U.S. Bureau of Labor Statistics", dataset: "Job Openings and Labor Turnover Survey" },
+  JTS000000000000000HIL: { label: "Hires", provider: "U.S. Bureau of Labor Statistics", dataset: "Job Openings and Labor Turnover Survey" },
 });
 
 const primarySeriesPriority = [
   "JTS000000000000000LDL", "JTS000000000000000LDR", "JTS000000000000000JOR", "JTS000000000000000HIR",
   "LNS13026638", "LNS13023653", "CES0500000002", "CES6056132001", "DOL-UI-SA-INITIAL",
   "BDS0000000000000000110004LQ5", "BDS0000000000000000110005LQ5", "BDS0000000000000000110006LQ5", "BDS0000000000000000110008LQ5",
+  "CES0000000001", "LNS14000000", "LNS11300000", "JTS000000000000000JOL", "JTS000000000000000HIL",
 ];
 
 export function displayAcceptedLayoffsValue(value: string, unit: string) {
@@ -176,17 +182,18 @@ export function acceptedLayoffsHistoryForFactor(canonicalFactorId: string) {
 }
 
 export function acceptedLayoffsHistoryFreshness(sourceId: string) {
-  if (sourceId !== "dol-ui-claims") return "accepted descriptive history";
-  return activation.dolRepair?.overallStatus === "SUCCESS_WITH_PRIMARY_STALE"
+  const check = productionSourceChecks[sourceId];
+  if (sourceId !== "dol-ui-claims") return check?.health === "CURRENT" ? "current accepted descriptive history" : "accepted history · source delayed";
+  return diagnostics.dolAcquisitionOverallStatus === "SUCCESS_WITH_PRIMARY_STALE"
     ? "current via official release fallback · primary XML stale"
-    : activation.dolRepair?.freshness?.status === "STALE"
+    : dolCheck?.health === "STALE"
       ? "accepted history · current structured source stale"
       : "accepted descriptive history";
 }
 
-export const LAYOFFS_DOL_SOURCE_FRESHNESS = Object.freeze({ ...(activation.dolRepair?.freshness ?? {}) });
-export const LAYOFFS_DOL_PRIMARY_FRESHNESS = Object.freeze({ ...(activation.dolRepair?.primaryFreshness ?? {}) });
-export const LAYOFFS_DOL_ACQUISITION_STATUS = activation.dolRepair?.overallStatus ?? "UNAVAILABLE";
+export const LAYOFFS_DOL_SOURCE_FRESHNESS = Object.freeze({ ...(diagnostics.dolFreshness ?? {}), lastSuccessfulCheck: dolCheck?.lastSuccessfulCheck });
+export const LAYOFFS_DOL_PRIMARY_FRESHNESS = Object.freeze({ ...(diagnostics.dolPrimaryFreshness ?? {}) });
+export const LAYOFFS_DOL_ACQUISITION_STATUS = diagnostics.dolAcquisitionOverallStatus ?? "UNAVAILABLE";
 
 export const LAYOFFS_ACCEPTED_OBSERVATION_COUNT = document.observations.length;
 export const LAYOFFS_ACCEPTED_HISTORY_FACTOR_COUNT = layoffsAcceptedFactorSummaries.length;

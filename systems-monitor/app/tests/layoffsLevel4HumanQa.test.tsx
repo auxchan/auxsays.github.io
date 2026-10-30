@@ -35,8 +35,8 @@ describe("Initial UI Claims Level-4 Human QA surface", () => {
     expect(within(layoffs).getByText("JTS000000000000000LDR")).toBeTruthy();
 
     const deaths = screen.getByRole("heading", { name: "Jobs Lost at Establishment Deaths" }).closest("section")!;
-    expect(within(deaths).getByText("Accepted history · 1 period")).toBeTruthy();
-    expect(within(deaths).getByText("Not yet available")).toBeTruthy();
+    expect(within(deaths).getByText(/Accepted history · [2-9]\d* periods/)).toBeTruthy();
+    expect(within(deaths).getByText("Comparable prior observation")).toBeTruthy();
     expect(within(deaths).getByText("Layoffs & Job Destruction › Firm Death / Shutdown Stress › Jobs Lost at Establishment Deaths")).toBeTruthy();
 
     const breadth = screen.getByRole("heading", { name: "Payroll Contraction Breadth" }).closest("section")!;

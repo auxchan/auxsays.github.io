@@ -2,6 +2,7 @@ import productionDocument from "../../../data/config/layoffs/continued_claims_pr
 import { acceptedLayoffsHistoryForFactor, type LayoffsAcceptedFactorSummary } from "./layoffsAcceptedHistoryReadModel";
 import { layoffsFactorSourceState, type LayoffsFactorSourceState } from "./layoffsBranchReadModel";
 import { layoffsBranchTaxonomy } from "./layoffsBranchTaxonomy";
+import { productionCalculations } from "./productionDataReadModel";
 
 export type ContinuedClaimsClass = "A_DIRECT_OBS" | "B_GOVERNED_CALC" | "D_TAXONOMY_OR_SOURCE_PROBLEM";
 export type ContinuedClaimsDisposition =
@@ -73,7 +74,14 @@ export const continuedClaimsProductionPlacements: readonly ContinuedClaimsProduc
       throw new Error(`Continued Claims production registry diverged at placement ${index + 1}`);
     }
     const acceptedHistory = acceptedLayoffsHistoryForFactor(row.canonicalFactorId);
-    if (acceptedRecordCount(acceptedHistory) !== row.expectedAcceptedHistoryRecords) {
+    const payrollInputs = row.selectors.includes("PAYROLL_CHANGE_V1")
+      ? Number((productionCalculations.PAYROLL_CHANGE_V1 as { acceptedProductionInputHistory?: number } | undefined)?.acceptedProductionInputHistory ?? 0)
+      : undefined;
+    const productionRecordCount = payrollInputs ?? acceptedRecordCount(acceptedHistory);
+    // The governed QA file records the accepted-history floor at approval time.
+    // Production automation may append newer accepted periods, but it must never
+    // lose or fall behind that approved baseline.
+    if (productionRecordCount < row.expectedAcceptedHistoryRecords) {
       throw new Error(`Continued Claims accepted-history reuse diverged for ${row.canonicalFactorId}`);
     }
     return Object.freeze({

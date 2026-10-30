@@ -96,7 +96,12 @@ def factor_states(bls_dol: dict, census: dict, context: dict, fema: dict, taxono
         source_id = series["source_id"]
         state = health[source_id]
         factor_id = canonical_factor_id(series["canonical_factor"], taxonomy)
-        accepted = accepted_by_series.get(series["series_id"]) if series["activation_state"] == "ACCEPTED_EXISTING" else None
+        observation_factor_id = canonical_factor_id(series.get("observation_canonical_factor", series["canonical_factor"]), taxonomy)
+        accepted = (
+            accepted_by_series.get(series["series_id"])
+            if series["activation_state"] == "ACCEPTED_EXISTING" and observation_factor_id == factor_id
+            else None
+        )
         activation_state = "ACCEPTED" if accepted else "SOURCE_ENABLED_PENDING_ACCEPTANCE" if state["health"] == "success" or state["activationState"] == "ACCEPTED" else state["activationState"]
         row = {
             "sourceId": source_id,

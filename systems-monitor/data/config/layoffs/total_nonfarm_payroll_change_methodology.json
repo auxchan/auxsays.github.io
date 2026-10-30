@@ -31,12 +31,12 @@
     "incompatibleOrMissingInput": "SUPPRESS_CALCULATION_EXPLICIT_UNAVAILABLE_STATE"
   },
   "productionState": {
-    "acceptedInputSeries": 0,
-    "acceptedInputHistoryDepth": 0,
+    "acceptedInputSeries": "DYNAMIC_FROM_CANONICAL_PRODUCTION_ARTIFACT",
+    "acceptedInputHistoryDepth": "DYNAMIC_FROM_CANONICAL_PRODUCTION_ARTIFACT",
     "calculatedHistoryDepth": 0,
     "latestAcceptedValue": null,
     "latestAcceptedPeriod": null,
-    "blocker": "No accepted compatible CES0000000001 t and t-1 input pair exists in the Continued Claims Level-4 production history."
+    "blocker": "Accepted CES0000000001 input history is read from the canonical production artifact; PAYROLL_CHANGE_V1 remains a non-public calculation candidate until separate calculation-output acceptance."
   },
   "calculationOutputContract": {
     "historyClass": "CURRENT_REVISED_HISTORY",

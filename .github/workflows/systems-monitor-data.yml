@@ -1,0 +1,90 @@
+name: Systems Monitor Production Data
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Evaluate every already-governed source regardless of cadence state"
+        required: false
+        default: false
+        type: boolean
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: auxsays-main-writeback
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Install deterministic data and UI dependencies
+        run: |
+          python -m pip install pypdf==6.14.2
+          npm ci --prefix systems-monitor/app
+
+      - name: Collect, validate, accept, and regenerate the production read model
+        run: |
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            python systems-monitor/data/run_production_update.py --force
+          else
+            python systems-monitor/data/run_production_update.py
+          fi
+
+      - name: Validate data governance and UI consumption
+        run: |
+          cd systems-monitor/data && python -m unittest discover -s tests -p 'test_*.py'
+          npm run test --prefix systems-monitor/app
+          npm run build --prefix systems-monitor/app
+
+      - name: Remove generated site and transient validation output
+        if: always()
+        run: |
+          npm run clean --prefix systems-monitor/app
+          find systems-monitor -type d -name __pycache__ -prune -exec rm -rf {} +
+          find systems-monitor -type f -name '*.pyc' -delete
+
+      - name: Commit production data and dispatch Pages (conflict-safe)
+        run: |
+          python auxsays/scripts/lib/automation_writeback.py \
+            --message "systems-monitor: update governed production data" \
+            --allow systems-monitor/data/production/systems-monitor-production.json \
+            --allow 'systems-monitor/data/production/raw/objects/**' \
+            --site-path 'systems-monitor/data/production/**' \
+            --validate 'cd systems-monitor/data && python -m unittest discover -s tests -p "test_*.py"' \
+            --validate 'npm run test --prefix systems-monitor/app' \
+            --validate 'npm run build --prefix systems-monitor/app && npm run clean --prefix systems-monitor/app' \
+            --validate-before-commit \
+            --max-retries 5 \
+            --pages-cmd 'gh workflow run pages.yml --ref main' \
+            --pages-max-attempts 3 --pages-backoff 5,15 \
+            --deploy-recovery \
+            --recovery-site-path 'systems-monitor/data/production/**' \
+            --recovery-commit-grep 'systems-monitor: update governed production data'

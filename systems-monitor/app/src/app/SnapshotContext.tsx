@@ -5,7 +5,7 @@ import { createCandidateViewModel, createSnapshotViewModel } from "../data/snaps
 import { validatePhase4bReadModel, type Phase4bReadModel } from "../data/phase4bReadModel";
 import { validateMotionQaReadModel, type MotionQaReadModel } from "../data/motionQaReadModel";
 import { phase2Fixture } from "../fixtures/phase2Fixture";
-import activeFactualSnapshot from "../../../data/review/local-active-pdi-test-snapshot.json";
+import { productionFactualSnapshot as activeFactualSnapshot } from "../data/productionDataReadModel";
 
 interface SnapshotContextValue {
   snapshot: SnapshotViewModel;

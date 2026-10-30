@@ -102,12 +102,12 @@
       "label": "Total Nonfarm Payroll Change",
       "canonicalFactorId": "factor:canonical:total-nonfarm-payroll-change",
       "claimClass": "B_GOVERNED_CALC",
-      "productionDisposition": "GOVERNED_CALC_METHOD_APPROVED_INPUT_HISTORY_PENDING",
+      "productionDisposition": "GOVERNED_CALC_METHOD_APPROVED_OUTPUT_ACCEPTANCE_PENDING",
       "sourceIds": ["bls-ces"],
       "selectors": ["CES0000000001", "PAYROLL_CHANGE_V1"],
-      "acceptedHistoryState": "METHOD_APPROVED_INPUT_HISTORY_PENDING",
-      "expectedAcceptedHistoryRecords": 0,
-      "blocker": "PAYROLL_CHANGE_V1 is approved, but no accepted compatible CES0000000001 input pair for t and t-1 exists in this Level-4 production history. No value is published.",
+      "acceptedHistoryState": "ACCEPTED_INPUT_HISTORY_AVAILABLE_OUTPUT_NOT_ACCEPTED",
+      "expectedAcceptedHistoryRecords": 21,
+      "blocker": "PAYROLL_CHANGE_V1 now recomputes deterministically from accepted compatible CES0000000001 inputs, but the calculated output remains CALC_CANDIDATE_PENDING_ACCEPTANCE. No value is published.",
       "recommendation": null
     },
     {
