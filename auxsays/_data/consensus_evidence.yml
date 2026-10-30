@@ -62957,3 +62957,66 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14118
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14118
+  parent_title: Local browser overlay unable to connect to port due preconnect
+  report_title: Local browser overlay unable to connect to port due preconnect
+  report_text_excerpt: 'eproduce 1. 2. 3. ... ### Anything else we should know? I think that something changed in 33.0.0 version because i did not experienced this issue before'
+  captured_at: '2026-10-30T07:32:21Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14119
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14119
+  parent_title: OBS Crashing on Latest CachyOS Kernel on AMD Radeon RX 580
+  report_title: OBS Crashing on Latest CachyOS Kernel on AMD Radeon RX 580
+  report_text_excerpt: '### Operating System Info Other ### Other OS CachyOS ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL No Log ### OBS Studio Crash Log URL No Log ### Expected Behavior Oct 30 02:13:15 vistacachy kernel: amdgpu 0000:01:'
+  captured_at: '2026-10-30T07:33:18Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14118
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14118
+  parent_title: Local browser overlay unable to connect to port due preconnect
+  report_title: Local browser overlay unable to connect to port due preconnect
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LyVFEc0y9go43Z19 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Rocks'
+  captured_at: '2026-10-30T07:33:18Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
