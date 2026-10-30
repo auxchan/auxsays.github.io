@@ -63020,3 +63020,1332 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054147/teams-for-ios-8-19-1-crashes-on-launch-sigabrt-abo
+  parent_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_text_excerpt: 'Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 Microsoft Teams for iOS (bundle com.microsoft.skype.teams , version 8.19.1, build 100772026192401) crashes within about one second of launching. Symptoms Crash type: EXC_CRASH (SIGABRT) ,...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: Teams Meeting quality - Microsoft Q&A
+  report_text_excerpt: Teams Meeting quality becomes unstable sound quality and vision after 30 minutes
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-13023575
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-13023575
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear Ken Knox , From your description, it appears that your Teams meetings start normally, but after about 30 minutes the audio becomes unstable, and the video quality drops. For better assist, could you please confirm the following? Which Teams client are you using (Windows,...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29T04:02:05.1966667+00:00'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-2867901
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-2867901
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 16,520 Reputation points • Microsoft External Staff • Moderator 2026-10-30T02:06:58.96+00:00 Dear Ken Knox , I hope you’re doing well. I wanted to follow up and see if you’ve had a chance to try...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-30T02:06:58.96'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-insider-community-is-gone-456
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-insider-community-is-gone/4568205
+  parent_title: teams insider community is gone?
+  report_title: teams insider community is gone?
+  report_text_excerpt: teams insider community is gone? I am a teams insider and the community has been removed from my app without any notification at all.&amp;nbsp;I am on a paid 365 subscription so I am not sure what is going on.Sure would of been nice to get some kind of notification about...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-teams-meeting-in-outlook-with-m
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-teams-meeting-in-outlook-with-multiple-accounts/1241309
+  parent_title: New Teams Meeting in Outlook with multiple accounts
+  report_title: New Teams Meeting in Outlook with multiple accounts
+  report_text_excerpt: New Teams Meeting in Outlook with multiple accounts Hello,I don&apos;t know if this problem is related to Teams or Outlook/Exchange so if is not appropriate here could be ignored or deleted.&amp;nbsp;I have to manage Teams meetings for two accounts. Because in the MS Teams app...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2020-03-20'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-update-you-can-now-control-teams-me
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/update-you-can-now-control-teams-meeting-recording-expiration-notification-email/4526017
+  parent_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_text_excerpt: 'Update: You can now control Teams Meeting Recording expiration notification emails Hey Teams community, &amp;nbsp; We&apos;ve heard the feedback. For admins and users managing a high volume of meetings, TMR expiration emails can pile up fast. We&apos;ve been working on giving...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054147/teams-for-ios-8-19-1-crashes-on-launch-sigabrt-abo
+  parent_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_text_excerpt: 'Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 Microsoft Teams for iOS (bundle com.microsoft.skype.teams , version 8.19.1, build 100772026192401) crashes within about one second of launching. Symptoms Crash type: EXC_CRASH (SIGABRT) ,...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: Teams Meeting quality - Microsoft Q&A
+  report_text_excerpt: Teams Meeting quality becomes unstable sound quality and vision after 30 minutes
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-13023575
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-13023575
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear Ken Knox , From your description, it appears that your Teams meetings start normally, but after about 30 minutes the audio becomes unstable, and the video quality drops. For better assist, could you please confirm the following? Which Teams client are you using (Windows,...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29T04:02:05.1966667+00:00'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-2867901
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-2867901
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 16,520 Reputation points • Microsoft External Staff • Moderator 2026-10-30T02:06:58.96+00:00 Dear Ken Knox , I hope you’re doing well. I wanted to follow up and see if you’ve had a chance to try...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-30T02:06:58.96'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-insider-community-is-gone-456
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-insider-community-is-gone/4568205
+  parent_title: teams insider community is gone?
+  report_title: teams insider community is gone?
+  report_text_excerpt: teams insider community is gone? I am a teams insider and the community has been removed from my app without any notification at all.&amp;nbsp;I am on a paid 365 subscription so I am not sure what is going on.Sure would of been nice to get some kind of notification about...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-teams-meeting-in-outlook-with-m
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-teams-meeting-in-outlook-with-multiple-accounts/1241309
+  parent_title: New Teams Meeting in Outlook with multiple accounts
+  report_title: New Teams Meeting in Outlook with multiple accounts
+  report_text_excerpt: New Teams Meeting in Outlook with multiple accounts Hello,I don&apos;t know if this problem is related to Teams or Outlook/Exchange so if is not appropriate here could be ignored or deleted.&amp;nbsp;I have to manage Teams meetings for two accounts. Because in the MS Teams app...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2020-03-20'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-update-you-can-now-control-teams-me
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/update-you-can-now-control-teams-meeting-recording-expiration-notification-email/4526017
+  parent_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_text_excerpt: 'Update: You can now control Teams Meeting Recording expiration notification emails Hey Teams community, &amp;nbsp; We&apos;ve heard the feedback. For admins and users managing a high volume of meetings, TMR expiration emails can pile up fast. We&apos;ve been working on giving...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054147/teams-for-ios-8-19-1-crashes-on-launch-sigabrt-abo
+  parent_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_text_excerpt: 'Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 Microsoft Teams for iOS (bundle com.microsoft.skype.teams , version 8.19.1, build 100772026192401) crashes within about one second of launching. Symptoms Crash type: EXC_CRASH (SIGABRT) ,...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: Teams Meeting quality - Microsoft Q&A
+  report_text_excerpt: Teams Meeting quality becomes unstable sound quality and vision after 30 minutes
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-13023575
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-13023575
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear Ken Knox , From your description, it appears that your Teams meetings start normally, but after about 30 minutes the audio becomes unstable, and the video quality drops. For better assist, could you please confirm the following? Which Teams client are you using (Windows,...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29T04:02:05.1966667+00:00'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-2867901
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-2867901
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 16,520 Reputation points • Microsoft External Staff • Moderator 2026-10-30T02:06:58.96+00:00 Dear Ken Knox , I hope you’re doing well. I wanted to follow up and see if you’ve had a chance to try...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-30T02:06:58.96'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-insider-community-is-gone-456
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-insider-community-is-gone/4568205
+  parent_title: teams insider community is gone?
+  report_title: teams insider community is gone?
+  report_text_excerpt: teams insider community is gone? I am a teams insider and the community has been removed from my app without any notification at all.&amp;nbsp;I am on a paid 365 subscription so I am not sure what is going on.Sure would of been nice to get some kind of notification about...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-teams-meeting-in-outlook-with-m
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-teams-meeting-in-outlook-with-multiple-accounts/1241309
+  parent_title: New Teams Meeting in Outlook with multiple accounts
+  report_title: New Teams Meeting in Outlook with multiple accounts
+  report_text_excerpt: New Teams Meeting in Outlook with multiple accounts Hello,I don&apos;t know if this problem is related to Teams or Outlook/Exchange so if is not appropriate here could be ignored or deleted.&amp;nbsp;I have to manage Teams meetings for two accounts. Because in the MS Teams app...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2020-03-20'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-update-you-can-now-control-teams-me
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/update-you-can-now-control-teams-meeting-recording-expiration-notification-email/4526017
+  parent_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_text_excerpt: 'Update: You can now control Teams Meeting Recording expiration notification emails Hey Teams community, &amp;nbsp; We&apos;ve heard the feedback. For admins and users managing a high volume of meetings, TMR expiration emails can pile up fast. We&apos;ve been working on giving...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054147/teams-for-ios-8-19-1-crashes-on-launch-sigabrt-abo
+  parent_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_text_excerpt: 'Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 Microsoft Teams for iOS (bundle com.microsoft.skype.teams , version 8.19.1, build 100772026192401) crashes within about one second of launching. Symptoms Crash type: EXC_CRASH (SIGABRT) ,...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: Teams Meeting quality - Microsoft Q&A
+  report_text_excerpt: Teams Meeting quality becomes unstable sound quality and vision after 30 minutes
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-13023575
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-13023575
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear Ken Knox , From your description, it appears that your Teams meetings start normally, but after about 30 minutes the audio becomes unstable, and the video quality drops. For better assist, could you please confirm the following? Which Teams client are you using (Windows,...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29T04:02:05.1966667+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-2867901
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-2867901
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 16,520 Reputation points • Microsoft External Staff • Moderator 2026-10-30T02:06:58.96+00:00 Dear Ken Knox , I hope you’re doing well. I wanted to follow up and see if you’ve had a chance to try...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-30T02:06:58.96'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-insider-community-is-gone-456
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-insider-community-is-gone/4568205
+  parent_title: teams insider community is gone?
+  report_title: teams insider community is gone?
+  report_text_excerpt: teams insider community is gone? I am a teams insider and the community has been removed from my app without any notification at all.&amp;nbsp;I am on a paid 365 subscription so I am not sure what is going on.Sure would of been nice to get some kind of notification about...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-teams-meeting-in-outlook-with-m
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-teams-meeting-in-outlook-with-multiple-accounts/1241309
+  parent_title: New Teams Meeting in Outlook with multiple accounts
+  report_title: New Teams Meeting in Outlook with multiple accounts
+  report_text_excerpt: New Teams Meeting in Outlook with multiple accounts Hello,I don&apos;t know if this problem is related to Teams or Outlook/Exchange so if is not appropriate here could be ignored or deleted.&amp;nbsp;I have to manage Teams meetings for two accounts. Because in the MS Teams app...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2020-03-20'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-update-you-can-now-control-teams-me
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/update-you-can-now-control-teams-meeting-recording-expiration-notification-email/4526017
+  parent_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_text_excerpt: 'Update: You can now control Teams Meeting Recording expiration notification emails Hey Teams community, &amp;nbsp; We&apos;ve heard the feedback. For admins and users managing a high volume of meetings, TMR expiration emails can pile up fast. We&apos;ve been working on giving...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054147/teams-for-ios-8-19-1-crashes-on-launch-sigabrt-abo
+  parent_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_text_excerpt: 'Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 Microsoft Teams for iOS (bundle com.microsoft.skype.teams , version 8.19.1, build 100772026192401) crashes within about one second of launching. Symptoms Crash type: EXC_CRASH (SIGABRT) ,...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: Teams Meeting quality - Microsoft Q&A
+  report_text_excerpt: Teams Meeting quality becomes unstable sound quality and vision after 30 minutes
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-13023575
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-13023575
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear Ken Knox , From your description, it appears that your Teams meetings start normally, but after about 30 minutes the audio becomes unstable, and the video quality drops. For better assist, could you please confirm the following? Which Teams client are you using (Windows,...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29T04:02:05.1966667+00:00'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-2867901
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-2867901
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 16,520 Reputation points • Microsoft External Staff • Moderator 2026-10-30T02:06:58.96+00:00 Dear Ken Knox , I hope you’re doing well. I wanted to follow up and see if you’ve had a chance to try...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-30T02:06:58.96'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-insider-community-is-gone-456
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-insider-community-is-gone/4568205
+  parent_title: teams insider community is gone?
+  report_title: teams insider community is gone?
+  report_text_excerpt: teams insider community is gone? I am a teams insider and the community has been removed from my app without any notification at all.&amp;nbsp;I am on a paid 365 subscription so I am not sure what is going on.Sure would of been nice to get some kind of notification about...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-teams-meeting-in-outlook-with-m
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-teams-meeting-in-outlook-with-multiple-accounts/1241309
+  parent_title: New Teams Meeting in Outlook with multiple accounts
+  report_title: New Teams Meeting in Outlook with multiple accounts
+  report_text_excerpt: New Teams Meeting in Outlook with multiple accounts Hello,I don&apos;t know if this problem is related to Teams or Outlook/Exchange so if is not appropriate here could be ignored or deleted.&amp;nbsp;I have to manage Teams meetings for two accounts. Because in the MS Teams app...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2020-03-20'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-update-you-can-now-control-teams-me
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/update-you-can-now-control-teams-meeting-recording-expiration-notification-email/4526017
+  parent_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_text_excerpt: 'Update: You can now control Teams Meeting Recording expiration notification emails Hey Teams community, &amp;nbsp; We&apos;ve heard the feedback. For admins and users managing a high volume of meetings, TMR expiration emails can pile up fast. We&apos;ve been working on giving...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054147/teams-for-ios-8-19-1-crashes-on-launch-sigabrt-abo
+  parent_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_text_excerpt: 'Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 Microsoft Teams for iOS (bundle com.microsoft.skype.teams , version 8.19.1, build 100772026192401) crashes within about one second of launching. Symptoms Crash type: EXC_CRASH (SIGABRT) ,...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: Teams Meeting quality - Microsoft Q&A
+  report_text_excerpt: Teams Meeting quality becomes unstable sound quality and vision after 30 minutes
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-13023575
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-13023575
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear Ken Knox , From your description, it appears that your Teams meetings start normally, but after about 30 minutes the audio becomes unstable, and the video quality drops. For better assist, could you please confirm the following? Which Teams client are you using (Windows,...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29T04:02:05.1966667+00:00'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-2867901
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-2867901
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 16,520 Reputation points • Microsoft External Staff • Moderator 2026-10-30T02:06:58.96+00:00 Dear Ken Knox , I hope you’re doing well. I wanted to follow up and see if you’ve had a chance to try...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-30T02:06:58.96'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-insider-community-is-gone-456
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-insider-community-is-gone/4568205
+  parent_title: teams insider community is gone?
+  report_title: teams insider community is gone?
+  report_text_excerpt: teams insider community is gone? I am a teams insider and the community has been removed from my app without any notification at all.&amp;nbsp;I am on a paid 365 subscription so I am not sure what is going on.Sure would of been nice to get some kind of notification about...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-teams-meeting-in-outlook-with-m
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-teams-meeting-in-outlook-with-multiple-accounts/1241309
+  parent_title: New Teams Meeting in Outlook with multiple accounts
+  report_title: New Teams Meeting in Outlook with multiple accounts
+  report_text_excerpt: New Teams Meeting in Outlook with multiple accounts Hello,I don&apos;t know if this problem is related to Teams or Outlook/Exchange so if is not appropriate here could be ignored or deleted.&amp;nbsp;I have to manage Teams meetings for two accounts. Because in the MS Teams app...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2020-03-20'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-update-you-can-now-control-teams-me
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/update-you-can-now-control-teams-meeting-recording-expiration-notification-email/4526017
+  parent_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_text_excerpt: 'Update: You can now control Teams Meeting Recording expiration notification emails Hey Teams community, &amp;nbsp; We&apos;ve heard the feedback. For admins and users managing a high volume of meetings, TMR expiration emails can pile up fast. We&apos;ve been working on giving...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054147/teams-for-ios-8-19-1-crashes-on-launch-sigabrt-abo
+  parent_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_text_excerpt: 'Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 Microsoft Teams for iOS (bundle com.microsoft.skype.teams , version 8.19.1, build 100772026192401) crashes within about one second of launching. Symptoms Crash type: EXC_CRASH (SIGABRT) ,...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: Teams Meeting quality - Microsoft Q&A
+  report_text_excerpt: Teams Meeting quality becomes unstable sound quality and vision after 30 minutes
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-13023575
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-13023575
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear Ken Knox , From your description, it appears that your Teams meetings start normally, but after about 30 minutes the audio becomes unstable, and the video quality drops. For better assist, could you please confirm the following? Which Teams client are you using (Windows,...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-29T04:02:05.1966667+00:00'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-2867901
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-2867901
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 16,520 Reputation points • Microsoft External Staff • Moderator 2026-10-30T02:06:58.96+00:00 Dear Ken Knox , I hope you’re doing well. I wanted to follow up and see if you’ve had a chance to try...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-30T02:06:58.96'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-insider-community-is-gone-456
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-insider-community-is-gone/4568205
+  parent_title: teams insider community is gone?
+  report_title: teams insider community is gone?
+  report_text_excerpt: teams insider community is gone? I am a teams insider and the community has been removed from my app without any notification at all.&amp;nbsp;I am on a paid 365 subscription so I am not sure what is going on.Sure would of been nice to get some kind of notification about...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-teams-meeting-in-outlook-with-m
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-teams-meeting-in-outlook-with-multiple-accounts/1241309
+  parent_title: New Teams Meeting in Outlook with multiple accounts
+  report_title: New Teams Meeting in Outlook with multiple accounts
+  report_text_excerpt: New Teams Meeting in Outlook with multiple accounts Hello,I don&apos;t know if this problem is related to Teams or Outlook/Exchange so if is not appropriate here could be ignored or deleted.&amp;nbsp;I have to manage Teams meetings for two accounts. Because in the MS Teams app...
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2020-03-20'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-update-you-can-now-control-teams-me
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/update-you-can-now-control-teams-meeting-recording-expiration-notification-email/4526017
+  parent_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_text_excerpt: 'Update: You can now control Teams Meeting Recording expiration notification emails Hey Teams community, &amp;nbsp; We&apos;ve heard the feedback. For admins and users managing a high volume of meetings, TMR expiration emails can pile up fast. We&apos;ve been working on giving...'
+  captured_at: '2026-10-30T13:59:41Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054493-windows-11-new-update-build-26300-9818
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054493/windows-11-new-update-build-26300-9818-has-a-bug
+  parent_title: Windows 11 new update build 26300.9818 has a bug - Microsoft Q&A
+  report_title: Windows 11 new update build 26300.9818 has a bug - Microsoft Q&A
+  report_text_excerpt: Windows 11 new update build 26300.9818 has a bug - Microsoft Q&A The day I posted this, I updated the windows version to the build 26300.9818 and it has a bug. The loading circle got changed from the Progressive Ring(continuous bar) to the old Spinning Dots animation during...
+  captured_at: '2026-10-30T14:08:30Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053821-boot-and-login-animation-regression-to
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053821/boot-and-login-animation-regression-to-old-dots-ri
+  parent_title: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A
+  report_title: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A
+  report_text_excerpt: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A Hello Microsoft Windows Team, After updating to Windows 11 Build 26300.9818 (KB5127936), I noticed a visual regression with the OS boot and login animation. The...
+  captured_at: '2026-10-30T14:08:30Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054296-visual-regression-boot-and-login-anima
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054296/visual-regression-boot-and-login-animation-reverte
+  parent_title: 'Visual Regression: Boot and login animation reverted to legacy dots after KB5127936 (Build 26300.9818) - Microsoft Q&A'
+  report_title: 'Visual Regression: Boot and login animation reverted to legacy dots after KB5127936 (Build 26300.9818) - Microsoft Q&A'
+  report_text_excerpt: 'Visual Regression: Boot and login animation reverted to legacy dots after KB5127936 (Build 26300.9818) - Microsoft Q&A Hello Microsoft Team, I am experiencing a visual regression bug on Windows 11 26H2 after installing the latest October Preview Update ( Build 26300.9818 /...'
+  captured_at: '2026-10-30T14:08:30Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053880-cloud-rebuild-fails-with-an-error-code
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053880/cloud-rebuild-fails-with-an-error-code-0x80070070
+  parent_title: Cloud Rebuild fails with an error code 0x80070070 - Microsoft Q&A
+  report_title: Cloud Rebuild fails with an error code 0x80070070 - Microsoft Q&A
+  report_text_excerpt: 'Cloud Rebuild fails with an error code 0x80070070 - Microsoft Q&A When trying to reinstall Windows by using Cloud Rebuild, whether to choose Remove files or Remove files and sanitise , I get an error message: Cloud Rebuild failed with 0x80070070 Even though I''m connected to my...'
+  captured_at: '2026-10-30T14:08:30Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055182-kb5127936-breaks-xbox-360-wireless-con
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6055182/kb5127936-breaks-xbox-360-wireless-controller-in-a
+  parent_title: KB5127936 breaks Xbox 360 Wireless Controller in all games (works in joy.cpl and Xbox app) - Microsoft Q&A
+  report_title: KB5127936 breaks Xbox 360 Wireless Controller in all games (works in joy.cpl and Xbox app) - Microsoft Q&A
+  report_text_excerpt: KB5127936 breaks Xbox 360 Wireless Controller in all games (works in joy.cpl and Xbox app) - Microsoft Q&A After installing KB5127936, my Xbox 360 Wireless Controller (with receiver) is detected by Windows, works in joy.cpl and in the Xbox app, but is not recognized in any...
+  captured_at: '2026-10-30T14:09:21Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
