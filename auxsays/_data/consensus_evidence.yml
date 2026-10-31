@@ -63020,7 +63020,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
   product_id: microsoft-teams
   update_version: 26276.513.5241.9675
@@ -63189,7 +63188,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -63358,7 +63356,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -63527,7 +63524,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -63696,7 +63692,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -63865,7 +63860,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -64034,7 +64028,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -64203,7 +64196,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054493-windows-11-new-update-build-26300-9818
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -64320,7 +64312,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9818'
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055182-kb5127936-breaks-xbox-360-wireless-con
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -64349,7 +64340,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9711'
-
 - id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
   product_id: microsoft-teams
   update_version: 26276.513.5241.9675
@@ -64422,7 +64412,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -64495,7 +64484,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -64568,7 +64556,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -64641,7 +64628,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -64714,7 +64700,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -64787,7 +64772,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -64859,4 +64843,354 @@ evidence:
   platform: Windows
   severity: ''
   sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056103-ms-teams-ignores-table-minwidth-so-wid
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056103/ms-teams-ignores-table-minwidth-so-wide-adaptive-c
+  parent_title: MS Teams ignores Table.minWidth, so wide Adaptive Card tables can't scroll horizontally - Microsoft Q&A
+  report_title: MS Teams ignores Table.minWidth, so wide Adaptive Card tables can't scroll horizontally - Microsoft Q&A
+  report_text_excerpt: MS Teams ignores Table.minWidth, so wide Adaptive Card tables can't scroll horizontally Problem In the Teams desktop client, an Adaptive Card Table with minWidth set does not get a horizontal scrollbar when the card is narrower than minWidth . The card renders the same as it...
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056354-teams-claims-it-cannot-get-access-to-t
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056354/teams-claims-it-cannot-get-access-to-the-internet
+  parent_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_text_excerpt: Teams claims it cannot get access to the internet - not true I'm using a Mac and my Teams all of a sudden doest not work. It claims that it does not have access to the internet. I have cleared the cashes and signed out and in. What's going on?
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055652-teams-desktop-system-wide-lag-when-dec
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6055652/teams-desktop-system-wide-lag-when-decoding-incomi
+  parent_title: 'Teams desktop: system-wide lag when decoding incoming camera video, Video Codec engine at 70 % (AMD Radeon integrated GPU) - Microsoft Q&A'
+  report_title: 'Teams desktop: system-wide lag when decoding incoming camera video, Video Codec engine at 70 % (AMD Radeon integrated GPU) - Microsoft Q&A'
+  report_text_excerpt: 'Teams desktop: system-wide lag when decoding incoming camera video, Video Codec engine at 70 % (AMD Radeon integrated GPU) In the Teams desktop app, my whole computer starts lagging as soon as another participant turns their camera on: audio becomes choppy, video drops to a...'
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26260.1717.5229.7049
+  match_basis: 26260.1717.5229.7049
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056354-teams-claims-it-cannot-get-access-to-t
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056354/teams-claims-it-cannot-get-access-to-the-internet
+  parent_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_text_excerpt: Teams claims it cannot get access to the internet - not true I'm using a Mac and my Teams all of a sudden doest not work. It claims that it does not have access to the internet. I have cleared the cashes and signed out and in. What's going on?
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055652-teams-desktop-system-wide-lag-when-dec
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6055652/teams-desktop-system-wide-lag-when-decoding-incomi
+  parent_title: 'Teams desktop: system-wide lag when decoding incoming camera video, Video Codec engine at 70 % (AMD Radeon integrated GPU) - Microsoft Q&A'
+  report_title: 'Teams desktop: system-wide lag when decoding incoming camera video, Video Codec engine at 70 % (AMD Radeon integrated GPU) - Microsoft Q&A'
+  report_text_excerpt: 'Teams desktop: system-wide lag when decoding incoming camera video, Video Codec engine at 70 % (AMD Radeon integrated GPU) In the Teams desktop app, my whole computer starts lagging as soon as another participant turns their camera on: audio becomes choppy, video drops to a...'
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056354-teams-claims-it-cannot-get-access-to-t
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056354/teams-claims-it-cannot-get-access-to-the-internet
+  parent_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_text_excerpt: Teams claims it cannot get access to the internet - not true I'm using a Mac and my Teams all of a sudden doest not work. It claims that it does not have access to the internet. I have cleared the cashes and signed out and in. What's going on?
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056354-teams-claims-it-cannot-get-access-to-t
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056354/teams-claims-it-cannot-get-access-to-the-internet
+  parent_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_text_excerpt: Teams claims it cannot get access to the internet - not true I'm using a Mac and my Teams all of a sudden doest not work. It claims that it does not have access to the internet. I have cleared the cashes and signed out and in. What's going on?
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056354-teams-claims-it-cannot-get-access-to-t
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056354/teams-claims-it-cannot-get-access-to-the-internet
+  parent_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_text_excerpt: Teams claims it cannot get access to the internet - not true I'm using a Mac and my Teams all of a sudden doest not work. It claims that it does not have access to the internet. I have cleared the cashes and signed out and in. What's going on?
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056354-teams-claims-it-cannot-get-access-to-t
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056354/teams-claims-it-cannot-get-access-to-the-internet
+  parent_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_text_excerpt: Teams claims it cannot get access to the internet - not true I'm using a Mac and my Teams all of a sudden doest not work. It claims that it does not have access to the internet. I have cleared the cashes and signed out and in. What's going on?
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056354-teams-claims-it-cannot-get-access-to-t
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056354/teams-claims-it-cannot-get-access-to-the-internet
+  parent_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_text_excerpt: Teams claims it cannot get access to the internet - not true I'm using a Mac and my Teams all of a sudden doest not work. It claims that it does not have access to the internet. I have cleared the cashes and signed out and in. What's going on?
+  captured_at: '2026-10-31T13:24:09Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055311-kb5127936-reproducible-firewall-2042-a
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6055311/kb5127936-reproducible-firewall-2042-and-wesp-7000
+  parent_title: 'KB5127936: reproducible Firewall 2042 and wesp 7000 errors at every boot - Microsoft Q&A'
+  report_title: 'KB5127936: reproducible Firewall 2042 and wesp 7000 errors at every boot - Microsoft Q&A'
+  report_text_excerpt: 'KB5127936: reproducible Firewall 2042 and wesp 7000 errors at every boot - Microsoft Q&A After installing the Windows 11 preview update KB5127936, released on 28 October 2026, two recurring startup errors appeared on my system. Uninstalling the update stops both errors;...'
+  captured_at: '2026-10-31T13:31:21Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055472-kb5127936-build-26300-9818-breaks-remo
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6055472/kb5127936-build-26300-9818-breaks-remote-desktop-t
+  parent_title: KB5127936 (build 26300.9818) breaks Remote Desktop through Barracuda SSL VPN local tunnel (error 0x204) - Microsoft Q&A
+  report_title: KB5127936 (build 26300.9818) breaks Remote Desktop through Barracuda SSL VPN local tunnel (error 0x204) - Microsoft Q&A
+  report_text_excerpt: KB5127936 (build 26300.9818) breaks Remote Desktop through Barracuda SSL VPN local tunnel (error 0x204) - Microsoft Q&A After installing the optional preview update KB5127936 (OS build 26300.9818, Windows 26H2 Pro) on 29/10/2026, Remote Desktop connections launched through the...
+  captured_at: '2026-10-31T13:31:21Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055560-windows-11-pro-retail-license-suddenly
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6055560/windows-11-pro-retail-license-suddenly-blocked-aft
+  parent_title: Windows 11 Pro Retail License Suddenly Blocked After KB5127648 Update – Error 0xC004C003 - Microsoft Q&A
+  report_title: Windows 11 Pro Retail License Suddenly Blocked After KB5127648 Update – Error 0xC004C003 - Microsoft Q&A
+  report_text_excerpt: Windows 11 Pro Retail License Suddenly Blocked After KB5127648 Update – Error 0xC004C003 - Microsoft Q&A Hello, I am experiencing a Windows 11 Pro activation issue that started immediately after installing Security Update KB5127648 on October 24, 2026 . My Windows 11 Pro...
+  captured_at: '2026-10-31T13:32:01Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
+- id: obs-studio-33-0-1-github-issue-14125
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14125
+  parent_title: OBS Constant Crashing
+  report_title: OBS Constant Crashing
+  report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OYNPGjBNkGOOHBeE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/B3MEa'
+  captured_at: '2026-10-31T13:51:42Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: macos
+  severity: medium
+  sentiment: negative
   source_weight: 1
