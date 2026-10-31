@@ -18,8 +18,8 @@ update_version: Internal publishing for Weave tools now available on Organizatio
 update_logo_text: FIG
 update_published_at: '2026-10-30T00:00:00.000Z'
 update_last_checked: '2026-10-30T15:56:09Z'
-source_last_checked: '2026-10-30T15:56:09Z'
-official_body_last_checked: '2026-10-30T15:56:09Z'
+source_last_checked: '2026-10-31T01:18:47Z'
+official_body_last_checked: '2026-10-31T01:18:47Z'
 record_last_updated: '2026-10-30T15:56:09Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-10-30T15:56:09Z'
+  url: https://www.figma.com/release-notes/?title=internal-publishing-weave-tools
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-31T01:18:47Z'
   url: https://www.figma.com/release-notes/?title=internal-publishing-weave-tools
   status: captured-from-rss-feed
   body_captured: true

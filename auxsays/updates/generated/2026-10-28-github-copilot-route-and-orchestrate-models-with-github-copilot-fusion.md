@@ -18,8 +18,8 @@ update_version: Route and orchestrate models with GitHub Copilot Fusion
 update_logo_text: GIT
 update_published_at: '2026-10-28T16:00:00Z'
 update_last_checked: '2026-10-29T01:12:13Z'
-source_last_checked: '2026-10-30T15:56:25Z'
-official_body_last_checked: '2026-10-30T15:56:25Z'
+source_last_checked: '2026-10-31T01:19:04Z'
+official_body_last_checked: '2026-10-31T01:19:04Z'
 record_last_updated: '2026-10-29T01:12:13Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -105,11 +105,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-29T08:35:10Z'
-  url: https://github.blog/changelog/2026-10-28-route-and-orchestrate-models-with-github-copilot-fusion
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-29T15:59:32Z'
   url: https://github.blog/changelog/2026-10-28-route-and-orchestrate-models-with-github-copilot-fusion
   status: captured-from-rss-feed
@@ -126,6 +121,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-30T15:56:25Z'
+  url: https://github.blog/changelog/2026-10-28-route-and-orchestrate-models-with-github-copilot-fusion
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-31T01:19:04Z'
   url: https://github.blog/changelog/2026-10-28-route-and-orchestrate-models-with-github-copilot-fusion
   status: captured-from-rss-feed
   body_captured: true
