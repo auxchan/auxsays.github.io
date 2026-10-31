@@ -17,8 +17,8 @@ update_version: Webhook IP ranges added to the Meta API
 update_logo_text: GIT
 update_published_at: '2026-10-29T17:14:38Z'
 update_last_checked: '2026-10-30T01:26:56Z'
-source_last_checked: '2026-10-31T01:19:04Z'
-official_body_last_checked: '2026-10-31T01:19:04Z'
+source_last_checked: '2026-10-31T08:40:57Z'
+official_body_last_checked: '2026-10-31T08:40:57Z'
 record_last_updated: '2026-10-30T01:26:56Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -91,6 +91,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-31T01:19:04Z'
+  url: https://github.blog/changelog/2026-10-29-webhook-ip-ranges-added-to-the-meta-api
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-10-31T08:40:57Z'
   url: https://github.blog/changelog/2026-10-29-webhook-ip-ranges-added-to-the-meta-api
   status: captured-from-rss-feed
   body_captured: true
