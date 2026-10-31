@@ -55,7 +55,10 @@ from lib import recent_reports as l3  # noqa: E402
 from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete_issue  # noqa: E402
 from lib.method_routing import fallback_justified, plan_methods  # noqa: E402
 from lib.patch_identity import is_build_aware, patch_key, require_build  # noqa: E402
-from lib.report_counts import load_evidence_store, reconcile_record_counts  # noqa: E402
+from lib.live_eligibility import load_run_context  # noqa: E402
+from lib.report_counts import (  # noqa: E402
+    format_maturity_transition, load_evidence_store, reconcile_record_counts,
+)
 from lib.collector_ownership import require_owned_methods  # noqa: E402
 from patch_collectors.base import (  # noqa: E402
     CollectorContext, append_evidence_rows, finalize_method_health_delta, generated_records,
@@ -909,12 +912,25 @@ class Pipeline:
             # Strict: a missing or malformed store raises here, before reconciliation can touch a
             # record. It used to read as [] -- an empty population -- and zero every PowerPoint count.
             rows = [normalize_evidence_row(item) for item in load_evidence_store(self.evidence_path)]
+            # Maturity is reconciled with the counts, live included, from the telemetry and config
+            # beside the store this node just read. Without a context this writer would write every
+            # certified identity back to Verified reports. It never raises: unreadable telemetry
+            # declines every live claim instead of failing the run.
+            live_context = load_run_context(self.evidence_path.parent.parent,
+                                            now=datetime.now(timezone.utc))
             # Scoped to the products THIS run actually collected for. Without the scope the
             # authority walks every generated record, so a pre-existing mismatch on an unrelated
             # product could be rewritten by a run that never collected it.
             changed, details = reconcile_record_counts(rows, self.generated_dir,
-                                                       product_ids=set(self.product_ids))
+                                                       product_ids=set(self.product_ids),
+                                                       live_context=live_context)
             state.promotion_changes["reconciled"] = changed
+            transitions = [line for line in map(format_maturity_transition, details) if line]
+            for line in transitions:
+                print(f"RECONCILE_COUNTS {line}", file=sys.stderr)
+            if transitions or live_context.unavailable:
+                state.promotion_changes["maturity_transitions"] = transitions
+                state.promotion_changes["live_context_unavailable"] = live_context.unavailable
         else:
             state.promotion_changes["reconciled"] = 0
         state.receipt("RECONCILE_COUNTS", identity, {"reconciled": state.promotion_changes["reconciled"]})
@@ -1035,6 +1051,12 @@ class Pipeline:
             return "FINALIZE_EVIDENCE"
         if node in ("RUN_FALLBACK_METHODS", "RESOLVE_CONTEXT"):
             return "NORMALIZE_CANDIDATES"  # bounded second pass over the new rows
+        if node == "PROMOTE" and (state.promotion_changes.get("promotion") or {}).get("rc", 0) != 0:
+            # A failed promotion leaves projections unrebuilt or half-rebuilt, and QA can still pass
+            # on that tree (a stale projection is only a warning), so the writeback would commit it.
+            # Same terminal as a failed QA.
+            state.fail(node, "promote_failed", str(state.promotion_changes.get("promotion")))
+            return BLOCKED
         if node == "QA" and state.qa_result.get("rc", 0) != 0:
             state.fail(node, "qa_failed", str(state.qa_result))
             return BLOCKED

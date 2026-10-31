@@ -3383,7 +3383,9 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
 }
 .update-decision-box--static { border-color: rgba(240, 202, 103, .36); }
 .update-decision-box--official { border-color: rgba(95, 212, 229, .28); }
-.update-decision-box--live { border-color: rgba(70, 209, 137, .40); }
+/* The verdict box frames the VERDICT, so maturity must not recolour it: a WAIT framed in the success
+   green would read as a go-ahead. Live shares the pilot border; the badge, not the box, names it. */
+.update-decision-box--live { border-color: rgba(240, 202, 103, .36); }
 .update-decision-box--insufficient { border-color: rgba(255,255,255,.14); }
 .update-decision-box__header { display: grid; gap: .35rem; margin-bottom: .9rem; }
 .update-decision-eyebrow {

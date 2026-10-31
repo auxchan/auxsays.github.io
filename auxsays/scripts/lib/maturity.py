@@ -15,12 +15,18 @@ Four writers each carried a private copy of that table (`report_counts.reconcile
 writer wrote `manual_watch` at zero while record creation wrote `official_live`; and every writer
 hardcoded the two-valued mapping, so nothing could ever keep a live state alive through one cycle.
 
-Now every writer asks `record_maturity`, which consults `certify_live` -- the single place a live
-decision is made -- and returns the whole canonical tuple. A writer cannot write three axes and
-forget the fourth, and cannot overrule a live certification with a literal of its own.
+Now every writer asks `record_maturity`, which consults `certify_live` and returns the whole
+canonical tuple. A writer cannot write three axes and forget the fourth, and cannot overrule a live
+certification with a literal of its own.
 
-Pure: no I/O and no imports from the writers, so `report_counts`, `apply_consensus_to_records`,
-`write_update_record` and `qa_patch_records` can all depend on it without a cycle.
+The live DECISION itself is `live_eligibility.evaluate`, the same function the deploy-time
+projection runs. A writer reaches it through the run context it was handed
+(`live_eligibility.RunContext`); a writer handed none can never promote, so a lane that forgets to
+build one fails closed to the count's non-live maturity rather than open.
+
+Pure: no I/O and no imports from the writers or from `live_eligibility` (the context is duck-typed),
+so `report_counts`, `apply_consensus_to_records`, `write_update_record` and `qa_patch_records` can
+all depend on it without a cycle.
 """
 from __future__ import annotations
 
@@ -111,32 +117,53 @@ class LiveDecision:
     reasons: tuple[str, ...] = ()
 
 
-#: Live promotion is not enabled yet: the health authority it depends on has not landed.
-NOT_ENABLED = LiveDecision(False, ("live_promotion_not_enabled",))
+#: What a writer with no run context decides. Live eligibility needs the whole counted population,
+#: the method-health telemetry and one instant, and a writer that was not handed them cannot know
+#: whether the collection behind a claim is still running -- so it never promotes, and a live claim
+#: it meets is written back as the count's non-live maturity.
+NOT_ENABLED = LiveDecision(False, ("no_run_context",))
 
 
 def certify_live(record: Mapping[str, Any] | None,
-                 counted_rows: Iterable[Mapping[str, Any]]) -> LiveDecision:
-    """THE live-consensus eligibility decision, and the only one.
+                 counted_rows: Iterable[Mapping[str, Any]], context: Any = None) -> LiveDecision:
+    """The live-consensus decision for one identity, as every writer reaches it.
 
-    Every writer reaches it through `record_maturity`, so promotion and revocation are one function
-    in every lane rather than a step one lane adds and the next lane's writer undoes. Until live
-    promotion is enabled it declines every identity, which writes exactly today's two-valued
-    maturity."""
-    return NOT_ENABLED
+    `context` is the run's `live_eligibility.RunContext`, whose `decide` is
+    `live_eligibility.evaluate` -- the one place eligibility is computed, shared with the deploy-time
+    projection. Every writer asks through here, so promotion and revocation are one function in every
+    lane rather than a step one lane adds and the next lane's writer undoes, and both happen on the
+    run that observes the change: there is no cooldown to keep a revoked claim alive."""
+    if context is None:
+        return NOT_ENABLED
+    return context.decide(record, counted_rows)
+
+
+def record_decision(record: Mapping[str, Any] | None, counted_rows: Iterable[Mapping[str, Any]],
+                    context: Any = None) -> tuple[Maturity, LiveDecision]:
+    """`record_maturity` plus the decision behind it, for a writer that logs transitions."""
+    rows = list(counted_rows)
+    decision = certify_live(record, rows, context)
+    return maturity_for(len(rows), live=decision.live), decision
 
 
 def record_maturity(record: Mapping[str, Any] | None,
-                    counted_rows: Iterable[Mapping[str, Any]]) -> Maturity:
+                    counted_rows: Iterable[Mapping[str, Any]], context: Any = None) -> Maturity:
     """The maturity a writer must store for one patch identity, from its AUTHORITATIVE counted rows
-    (`report_counts.counted_evidence_rows`, or the consensus writer's identical population)."""
-    rows = list(counted_rows)
-    return maturity_for(len(rows), live=certify_live(record, rows).live)
+    (`report_counts.counted_evidence_rows`, or the consensus writer's identical population).
+    `record` must be the record's full front matter: eligibility reads its release date and exact
+    build, which the consensus writer's index summary does not carry."""
+    return record_decision(record, counted_rows, context)[0]
 
 
 def stored_axes(data: Mapping[str, Any]) -> dict[str, str]:
     """A record's four stored maturity axes, normalised to strings ('' when absent)."""
     return {axis: str(data.get(axis) or "").strip() for axis in AXES}
+
+
+def stored_level(data: Mapping[str, Any]) -> str:
+    """The canonical level a record's four stored axes spell, or 'noncanonical'. Diagnostics only."""
+    axes = stored_axes(data)
+    return next((m.level for m in CANONICAL if m.axes() == axes), "noncanonical")
 
 
 def claims_live(data: Mapping[str, Any]) -> bool:
