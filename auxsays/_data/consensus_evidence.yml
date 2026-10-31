@@ -65194,3 +65194,51 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1xj677h-davinci-resolve-studio-21-instant-crash-o
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1xj677h/davinci_resolve_studio_21_instant_crash_on_ai/
+  parent_title: Davinci Resolve Studio 21 instant crash on AI audio analyze
+  report_title: Davinci Resolve Studio 21 instant crash on AI audio analyze
+  report_text_excerpt: 'Davinci Resolve Studio 21 instant crash on AI audio analyze My specs: I5-14600k on Asus Tuf B660M plus board 32Gb RAM DDR4 3200MT/s (16x2) Intel Arc b580 Sparkle Titan OC ed 12Gb VRAM 650W power supply (I forgot the name and can’t really see it from outside the case) Latest...'
+  captured_at: '2026-10-31T22:24:20Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve Studio 21
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: Davinci Resolve Studio 21
+  matched_field: parent_title
+  matched_context: Davinci Resolve Studio 21 instant crash on AI audio analyze Davinci Resolve Studio 21 instant crash on AI...
+- id: obs-studio-33-0-0-github-issue-14126
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14126
+  parent_title: OBS crashes when opening the settings menu
+  report_title: OBS crashes when opening the settings menu
+  report_text_excerpt: 'x Mint 22.3 - Cinnamon 64-bit ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.0 ### OBS Studio Log URL https://obsproject.com/logs/9vCingQ62xNyERQt ### OBS Studio Crash Log URL https://obsproject.com/logs/4xHJS1yHmjm7hA2V ### Expected Behavior OBS crashes when op'
+  captured_at: '2026-10-31T23:02:29Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
