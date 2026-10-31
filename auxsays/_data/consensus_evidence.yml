@@ -64349,3 +64349,514 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9711'
+
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053992/screen-sharing-ms-teams-need-a-url-that-works
+  parent_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_text_excerpt: 'Screen sharing. MS Teams. Need a URL that works. I want a url (that works) so I can log into and get screen sharing through microsoft teams. This is what I get now: {"error":"API_DEPRECATED","message":"This API endpoint has been deprecated and is no longer available."}'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-updates-two-present
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-updates--two-presenters-can-share-their-screens/4568517
+  parent_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_text_excerpt: 'Microsoft Teams updates : Two presenters can share their screens SummaryStarting in late November 2026, Microsoft Teams will support simultaneous screen sharing by two Microsoft Teams will allow two presenters to share screens simultaneously in meetings starting late November...'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-remove-old-account-sing-u
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-remove-old-account-sing-up-form-teams-on-mac-os/3715962
+  parent_title: Unable to remove old account sing up form Teams on Mac OS
+  report_title: Unable to remove old account sing up form Teams on Mac OS
+  report_text_excerpt: Unable to remove old account sing up form Teams on Mac OS I cannot remove an old sing account from Teams on Mac OS. I have to delete the keychain, I delete the temp folder, and remove and reinstall Teams, and the old account is still there. I have a case open with the...
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2023-01-13'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053992/screen-sharing-ms-teams-need-a-url-that-works
+  parent_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_text_excerpt: 'Screen sharing. MS Teams. Need a URL that works. I want a url (that works) so I can log into and get screen sharing through microsoft teams. This is what I get now: {"error":"API_DEPRECATED","message":"This API endpoint has been deprecated and is no longer available."}'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-updates-two-present
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-updates--two-presenters-can-share-their-screens/4568517
+  parent_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_text_excerpt: 'Microsoft Teams updates : Two presenters can share their screens SummaryStarting in late November 2026, Microsoft Teams will support simultaneous screen sharing by two Microsoft Teams will allow two presenters to share screens simultaneously in meetings starting late November...'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-remove-old-account-sing-u
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-remove-old-account-sing-up-form-teams-on-mac-os/3715962
+  parent_title: Unable to remove old account sing up form Teams on Mac OS
+  report_title: Unable to remove old account sing up form Teams on Mac OS
+  report_text_excerpt: Unable to remove old account sing up form Teams on Mac OS I cannot remove an old sing account from Teams on Mac OS. I have to delete the keychain, I delete the temp folder, and remove and reinstall Teams, and the old account is still there. I have a case open with the...
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2023-01-13'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053992/screen-sharing-ms-teams-need-a-url-that-works
+  parent_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_text_excerpt: 'Screen sharing. MS Teams. Need a URL that works. I want a url (that works) so I can log into and get screen sharing through microsoft teams. This is what I get now: {"error":"API_DEPRECATED","message":"This API endpoint has been deprecated and is no longer available."}'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-updates-two-present
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-updates--two-presenters-can-share-their-screens/4568517
+  parent_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_text_excerpt: 'Microsoft Teams updates : Two presenters can share their screens SummaryStarting in late November 2026, Microsoft Teams will support simultaneous screen sharing by two Microsoft Teams will allow two presenters to share screens simultaneously in meetings starting late November...'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-remove-old-account-sing-u
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-remove-old-account-sing-up-form-teams-on-mac-os/3715962
+  parent_title: Unable to remove old account sing up form Teams on Mac OS
+  report_title: Unable to remove old account sing up form Teams on Mac OS
+  report_text_excerpt: Unable to remove old account sing up form Teams on Mac OS I cannot remove an old sing account from Teams on Mac OS. I have to delete the keychain, I delete the temp folder, and remove and reinstall Teams, and the old account is still there. I have a case open with the...
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2023-01-13'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053992/screen-sharing-ms-teams-need-a-url-that-works
+  parent_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_text_excerpt: 'Screen sharing. MS Teams. Need a URL that works. I want a url (that works) so I can log into and get screen sharing through microsoft teams. This is what I get now: {"error":"API_DEPRECATED","message":"This API endpoint has been deprecated and is no longer available."}'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-updates-two-present
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-updates--two-presenters-can-share-their-screens/4568517
+  parent_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_text_excerpt: 'Microsoft Teams updates : Two presenters can share their screens SummaryStarting in late November 2026, Microsoft Teams will support simultaneous screen sharing by two Microsoft Teams will allow two presenters to share screens simultaneously in meetings starting late November...'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-remove-old-account-sing-u
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-remove-old-account-sing-up-form-teams-on-mac-os/3715962
+  parent_title: Unable to remove old account sing up form Teams on Mac OS
+  report_title: Unable to remove old account sing up form Teams on Mac OS
+  report_text_excerpt: Unable to remove old account sing up form Teams on Mac OS I cannot remove an old sing account from Teams on Mac OS. I have to delete the keychain, I delete the temp folder, and remove and reinstall Teams, and the old account is still there. I have a case open with the...
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2023-01-13'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053992/screen-sharing-ms-teams-need-a-url-that-works
+  parent_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_text_excerpt: 'Screen sharing. MS Teams. Need a URL that works. I want a url (that works) so I can log into and get screen sharing through microsoft teams. This is what I get now: {"error":"API_DEPRECATED","message":"This API endpoint has been deprecated and is no longer available."}'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-updates-two-present
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-updates--two-presenters-can-share-their-screens/4568517
+  parent_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_text_excerpt: 'Microsoft Teams updates : Two presenters can share their screens SummaryStarting in late November 2026, Microsoft Teams will support simultaneous screen sharing by two Microsoft Teams will allow two presenters to share screens simultaneously in meetings starting late November...'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-remove-old-account-sing-u
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-remove-old-account-sing-up-form-teams-on-mac-os/3715962
+  parent_title: Unable to remove old account sing up form Teams on Mac OS
+  report_title: Unable to remove old account sing up form Teams on Mac OS
+  report_text_excerpt: Unable to remove old account sing up form Teams on Mac OS I cannot remove an old sing account from Teams on Mac OS. I have to delete the keychain, I delete the temp folder, and remove and reinstall Teams, and the old account is still there. I have a case open with the...
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2023-01-13'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053992/screen-sharing-ms-teams-need-a-url-that-works
+  parent_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_text_excerpt: 'Screen sharing. MS Teams. Need a URL that works. I want a url (that works) so I can log into and get screen sharing through microsoft teams. This is what I get now: {"error":"API_DEPRECATED","message":"This API endpoint has been deprecated and is no longer available."}'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-updates-two-present
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-updates--two-presenters-can-share-their-screens/4568517
+  parent_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_text_excerpt: 'Microsoft Teams updates : Two presenters can share their screens SummaryStarting in late November 2026, Microsoft Teams will support simultaneous screen sharing by two Microsoft Teams will allow two presenters to share screens simultaneously in meetings starting late November...'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-remove-old-account-sing-u
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-remove-old-account-sing-up-form-teams-on-mac-os/3715962
+  parent_title: Unable to remove old account sing up form Teams on Mac OS
+  report_title: Unable to remove old account sing up form Teams on Mac OS
+  report_text_excerpt: Unable to remove old account sing up form Teams on Mac OS I cannot remove an old sing account from Teams on Mac OS. I have to delete the keychain, I delete the temp folder, and remove and reinstall Teams, and the old account is still there. I have a case open with the...
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2023-01-13'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053992-screen-sharing-ms-teams-need-a-url-tha
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053992/screen-sharing-ms-teams-need-a-url-that-works
+  parent_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_title: Screen sharing. MS Teams.  Need a URL that works. - Microsoft Q&A
+  report_text_excerpt: 'Screen sharing. MS Teams. Need a URL that works. I want a url (that works) so I can log into and get screen sharing through microsoft teams. This is what I get now: {"error":"API_DEPRECATED","message":"This API endpoint has been deprecated and is no longer available."}'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-updates-two-present
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-updates--two-presenters-can-share-their-screens/4568517
+  parent_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_text_excerpt: 'Microsoft Teams updates : Two presenters can share their screens SummaryStarting in late November 2026, Microsoft Teams will support simultaneous screen sharing by two Microsoft Teams will allow two presenters to share screens simultaneously in meetings starting late November...'
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-remove-old-account-sing-u
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-remove-old-account-sing-up-form-teams-on-mac-os/3715962
+  parent_title: Unable to remove old account sing up form Teams on Mac OS
+  report_title: Unable to remove old account sing up form Teams on Mac OS
+  report_text_excerpt: Unable to remove old account sing up form Teams on Mac OS I cannot remove an old sing account from Teams on Mac OS. I have to delete the keychain, I delete the temp folder, and remove and reinstall Teams, and the old account is still there. I have a case open with the...
+  captured_at: '2026-10-31T06:46:08Z'
+  source_date: '2023-01-13'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
