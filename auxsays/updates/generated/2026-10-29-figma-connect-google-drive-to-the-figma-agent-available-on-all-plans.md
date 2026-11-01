@@ -18,8 +18,8 @@ update_version: Connect Google Drive to the Figma agent, available on all plans
 update_logo_text: FIG
 update_published_at: '2026-10-29T00:00:00.000Z'
 update_last_checked: '2026-10-29T15:59:17Z'
-source_last_checked: '2026-11-01T00:06:04Z'
-official_body_last_checked: '2026-11-01T00:06:04Z'
+source_last_checked: '2026-11-01T08:43:20Z'
+official_body_last_checked: '2026-11-01T08:43:20Z'
 record_last_updated: '2026-10-29T15:59:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-10-29T15:59:17Z'
-  url: https://www.figma.com/release-notes/?title=connect-google-drive-to-the-figma-agent-available-on-all-plans
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-10-31T01:18:47Z'
   url: https://www.figma.com/release-notes/?title=connect-google-drive-to-the-figma-agent-available-on-all-plans
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-01T00:06:04Z'
+  url: https://www.figma.com/release-notes/?title=connect-google-drive-to-the-figma-agent-available-on-all-plans
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-01T08:43:20Z'
   url: https://www.figma.com/release-notes/?title=connect-google-drive-to-the-figma-agent-available-on-all-plans
   status: captured-from-rss-feed
   body_captured: true
