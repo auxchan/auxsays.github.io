@@ -65263,3 +65263,91 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056764-kb5127936-build-26300-9818-breaks-smoo
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056764/kb5127936-build-26300-9818-breaks-smooth-magnifier
+  parent_title: KB5127936 (build 26300.9818) breaks smooth Magnifier mouse tracking and zoom animation - Microsoft Q&A
+  report_title: KB5127936 (build 26300.9818) breaks smooth Magnifier mouse tracking and zoom animation - Microsoft Q&A
+  report_text_excerpt: KB5127936 (build 26300.9818) breaks smooth Magnifier mouse tracking and zoom animation - Microsoft Q&A After installing the optional preview update KB5127936 (OS build 26300.9818, Windows 11 26H2), Windows Magnifier became noticeably less smooth. Uninstalling the update fixes...
+  captured_at: '2026-11-01T14:34:21Z'
+  source_date: '2026-10-31'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056779-windows-update-2026-10-preview-update
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056779/windows-update-2026-10-preview-update-kb5127936-26
+  parent_title: (Windows Update) 2026-10 Preview Update (KB5127936) (26300.9818) is available. We couldn't install this update, but you can try again (0x800f081f). - Microsoft Q&A
+  report_title: (Windows Update) 2026-10 Preview Update (KB5127936) (26300.9818) is available. We couldn't install this update, but you can try again (0x800f081f). - Microsoft Q&A
+  report_text_excerpt: (Windows Update) 2026-10 Preview Update (KB5127936) (26300.9818) is available. We couldn't install this update, but you can try again (0x800f081f). - Microsoft Q&A
+  captured_at: '2026-11-01T14:34:21Z'
+  source_date: '2026-10-31'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6057127-the-newly-added-animation-present-befo
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6057127/the-newly-added-animation-present-before-version-2
+  parent_title: The newly added animation—present before version 26300.9818—reverted to the old Windows 10 / 8 animation upon installing version 26300.9818. - Microsoft Q&A
+  report_title: The newly added animation—present before version 26300.9818—reverted to the old Windows 10 / 8 animation upon installing version 26300.9818. - Microsoft Q&A
+  report_text_excerpt: The newly added animation—present before version 26300.9818—reverted to the old Windows 10 / 8 animation upon installing version 26300.9818. - Microsoft Q&A Hey Microsoft, I’d really appreciate it if you could fix this issue. I’m not used to this dotted animation, and it’s...
+  captured_at: '2026-11-01T14:34:21Z'
+  source_date: '2026-11-01'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
