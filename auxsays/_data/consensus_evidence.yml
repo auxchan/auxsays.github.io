@@ -65263,7 +65263,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056764-kb5127936-build-26300-9818-breaks-smoo
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -65351,3 +65350,50 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9818'
+- id: acrobat-26-002-22031-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-26-002-22031-not-responding-1653991
+  product_id: adobe-acrobat-reader
+  update_version: 26.002.22031
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-26-002-22031-not-responding-1653991
+  parent_title: adobe 26.002.22031  Not responding
+  report_title: adobe 26.002.22031  Not responding
+  report_text_excerpt: adobe 26.002.22031 Not responding Adobe Reader has been updated on all our PCs (version 6.002.22031) and all our users are having problems opening PDF files (the programme is not responding)
+  captured_at: '2026-11-02T16:05:50Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-10-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.002.22031
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14137
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14137
+  parent_title: SE Vertical Plug ins "Not Responding"
+  report_title: SE Vertical Plug ins "Not Responding"
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/0TbOw2auzqjgppIB ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/wo2zq'
+  captured_at: '2026-11-02T17:33:53Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
