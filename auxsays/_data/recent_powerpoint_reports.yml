@@ -4,6 +4,25 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
+  captured_at: '2026-11-02T08:26:45Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20112
+  report_date: '2026-11-02'
+  report_excerpt: error on my powerpoint error on my powerpoint i can't open my PowerPoint it keeps saying
+    error on your PowerPoint repair error but each time i try repairing it it still does not work
+  report_id: microsoft-powerpoint:9f64e4bc6efecbb1
+  report_title: error on my powerpoint
+  source_family: Microsoft Q&A
+  source_report_id: '6057918'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6057918/error-on-my-powerpoint
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20112'
+  window_start: '2026-10-28'
+  window_version: '2610'
+- attribution_state: not_established
   captured_at: '2026-10-27T07:57:59Z'
   classification: recent_report
   product_id: microsoft-powerpoint
@@ -24,7 +43,7 @@ reports:
   window_start: '2026-10-21'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -44,7 +63,7 @@ reports:
   window_start: '2026-10-21'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -84,7 +103,7 @@ reports:
   window_start: '2026-10-13'
   window_version: '2609'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -105,7 +124,7 @@ reports:
   window_start: '2026-09-22'
   window_version: '2609'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -126,7 +145,7 @@ reports:
   window_start: '2026-09-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -354,7 +373,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -585,7 +604,7 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -628,7 +647,7 @@ reports:
   window_start: '2025-01-30'
   window_version: '2501'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -649,7 +668,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -713,7 +732,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -734,7 +753,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-11-02T00:37:20Z'
+  captured_at: '2026-11-02T08:26:45Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
