@@ -65586,3 +65586,251 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059015-teams-crashes-as-soon-as-i-try-to-open
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059015/teams-crashes-as-soon-as-i-try-to-open-it-it-was-f
+  parent_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_text_excerpt: Teams crashes as soon as I try to open it, it was fine this morning! Teams is crashing on trying to open it, I have reset and repaired and uninstalled and reinstalled Microsoft Teams home edition, 64 bit processor
+  captured_at: '2026-11-03T15:15:53Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059015-teams-crashes-as-soon-as-i-try-to-open
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059015/teams-crashes-as-soon-as-i-try-to-open-it-it-was-f
+  parent_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_text_excerpt: Teams crashes as soon as I try to open it, it was fine this morning! Teams is crashing on trying to open it, I have reset and repaired and uninstalled and reinstalled Microsoft Teams home edition, 64 bit processor
+  captured_at: '2026-11-03T15:15:53Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059015-teams-crashes-as-soon-as-i-try-to-open
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059015/teams-crashes-as-soon-as-i-try-to-open-it-it-was-f
+  parent_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_text_excerpt: Teams crashes as soon as I try to open it, it was fine this morning! Teams is crashing on trying to open it, I have reset and repaired and uninstalled and reinstalled Microsoft Teams home edition, 64 bit processor
+  captured_at: '2026-11-03T15:15:53Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059015-teams-crashes-as-soon-as-i-try-to-open
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059015/teams-crashes-as-soon-as-i-try-to-open-it-it-was-f
+  parent_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_text_excerpt: Teams crashes as soon as I try to open it, it was fine this morning! Teams is crashing on trying to open it, I have reset and repaired and uninstalled and reinstalled Microsoft Teams home edition, 64 bit processor
+  captured_at: '2026-11-03T15:15:53Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059015-teams-crashes-as-soon-as-i-try-to-open
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059015/teams-crashes-as-soon-as-i-try-to-open-it-it-was-f
+  parent_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_text_excerpt: Teams crashes as soon as I try to open it, it was fine this morning! Teams is crashing on trying to open it, I have reset and repaired and uninstalled and reinstalled Microsoft Teams home edition, 64 bit processor
+  captured_at: '2026-11-03T15:15:53Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059015-teams-crashes-as-soon-as-i-try-to-open
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059015/teams-crashes-as-soon-as-i-try-to-open-it-it-was-f
+  parent_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_text_excerpt: Teams crashes as soon as I try to open it, it was fine this morning! Teams is crashing on trying to open it, I have reset and repaired and uninstalled and reinstalled Microsoft Teams home edition, 64 bit processor
+  captured_at: '2026-11-03T15:15:53Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059015-teams-crashes-as-soon-as-i-try-to-open
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059015/teams-crashes-as-soon-as-i-try-to-open-it-it-was-f
+  parent_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_title: Teams crashes as soon as I try to open it, it was fine this morning! - Microsoft Q&A
+  report_text_excerpt: Teams crashes as soon as I try to open it, it was fine this morning! Teams is crashing on trying to open it, I have reset and repaired and uninstalled and reinstalled Microsoft Teams home edition, 64 bit processor
+  captured_at: '2026-11-03T15:15:53Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6057787-getextendedtcptable-returns-dwstate-0
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6057787/getextendedtcptable-returns-dwstate-0-for-listenin
+  parent_title: GetExtendedTcpTable returns dwState 0 for LISTENING rows on Windows 11 26H2 build 26300.9818 - Microsoft Q&A
+  report_title: GetExtendedTcpTable returns dwState 0 for LISTENING rows on Windows 11 26H2 build 26300.9818 - Microsoft Q&A
+  report_text_excerpt: 'GetExtendedTcpTable returns dwState 0 for LISTENING rows on Windows 11 26H2 build 26300.9818 - Microsoft Q&A Product: Windows 11 Home, version 26H2 (OS Build 10.0.26300.9818), x64. BuildLabEx: 26100.1.amd64fre.ge_release.240331-1435. Patch: KB5127936 installed 2026-10-31....'
+  captured_at: '2026-11-03T15:24:47Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6058407-global-secure-access-client-causing-se
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6058407/global-secure-access-client-causing-serious-perfor
+  parent_title: Global Secure Access client causing serious performance issues on Surface Laptop 7 (Windows 11 26H2) - Microsoft Q&A
+  report_title: Global Secure Access client causing serious performance issues on Surface Laptop 7 (Windows 11 26H2) - Microsoft Q&A
+  report_text_excerpt: Global Secure Access client causing serious performance issues on Surface Laptop 7 (Windows 11 26H2) - Microsoft Q&A Since updating to Windows 11 26H2, we're experiencing serious performance issues on all our Microsoft Surface Laptop 7 devices with Snapdragon X Elite...
+  captured_at: '2026-11-03T15:24:47Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: obs-studio-33-0-1-obs-forum-thread-196806
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/urgent-%E2%80%93-obs-studio-33-0-1-%E2%80%93-audio-monitoring-device-failure-%E2%80%93-no-sound.196806/
+  parent_title: URGENT – OBS Studio 33.0.1 – Audio Monitoring Device Failure – No Sound
+  report_title: URGENT – OBS Studio 33.0.1 – Audio Monitoring Device Failure – No Sound
+  report_text_excerpt: 'Title: URGENT – OBS Studio 33.0.1 Audio Monitoring Device Failure – No Sound Hello OBS Support Team, I urgently need help resolving an audio problem with OBS Studio 33.0.1 on Windows 11. I use OBS Studio to broadcast'
+  captured_at: '2026-11-03T15:57:17Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
