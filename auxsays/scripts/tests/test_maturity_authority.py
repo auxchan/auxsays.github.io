@@ -144,8 +144,8 @@ def section_a() -> None:
           and qa.LIVE_MIN_ACCEPTED_REPORTS == 33 and acr._confidence(33) == "High"
           and acr._confidence(32) == "Medium" and bce.confidence(33) == "High")
     decision = maturity.certify_live({"product_id": OBS}, rows(500))
-    check("A6 live promotion is not enabled yet: the one certifier declines even 500 reports",
-          decision.live is False and decision.reasons == ("live_promotion_not_enabled",))
+    check("A6 a writer holding no run context never promotes: the certifier declines even 500 reports",
+          decision.live is False and decision.reasons == ("no_run_context",))
     pair_only = {**maturity.PILOT_SAMPLE.axes(), "evidence_state": "consensus_live",
                  "consensus_collection_status": "consensus_live"}
     check("A7 contradictions name exactly the disagreeing axes",
@@ -209,26 +209,38 @@ def section_b() -> None:
     check("B5 record creation derives maturity and refuses a caller-supplied value that disagrees",
           {a: created[a] for a in maturity.AXES} == maturity.PILOT_SAMPLE.axes() and refused)
 
-    # BY CONSTRUCTION: whatever the one certifier decides, every writer writes -- and keeps writing.
-    real_certify = maturity.certify_live
+    # BY CONSTRUCTION: whatever the run context decides, every writer writes -- and keeps writing.
+    # The stub stands in for live_eligibility.RunContext (whose real decisions are pinned in
+    # test_live_promotion); what is pinned here is that no writer overrules it.
+    class _Context:
+        def __init__(self, live: bool) -> None:
+            self.live = live
+
+        def bind(self, _groups):
+            return self
+
+        def decide(self, _record, _counted_rows=None):
+            return maturity.LiveDecision(self.live, () if self.live else ("test",))
+
     sources = [{"source_url": r["source_url"]} for r in rows(33)]
     with tempfile.TemporaryDirectory() as td:
         gen = Path(td)
         path = write_record(gen, count=33, sources=sources)
-        try:
-            maturity.certify_live = lambda record, counted: maturity.LiveDecision(True, ("test",))
-            quiet(report_counts.reconcile_record_counts, rows(33), gen)
-            promoted = axes_of(path)
-            again, _ = quiet(report_counts.reconcile_record_counts, rows(33), gen)
-            proposed = acr._proposed_record_fields(OBS, VER, rows(33), None, "2026-10-20T00:00:00Z", build="")
-        finally:
-            maturity.certify_live = real_certify
+        certifies = _Context(True)
+        quiet(report_counts.reconcile_record_counts, rows(33), gen, live_context=certifies)
+        promoted = axes_of(path)
+        again, _ = quiet(report_counts.reconcile_record_counts, rows(33), gen, live_context=certifies)
+        index = {KEY: {"path": path.name, "abs_path": path, "product_id": OBS, "update_version": VER,
+                       "evidence_state": "consensus_live", "legacy_manual_report_count": None}}
+        proposed = acr._result_for_group(OBS, VER, rows(33), is_candidate_mode=False, records_index=index,
+                                         live_context=certifies)["proposed_fields_if_written"]
         check("B6 a certified identity is written live on all four axes by reconciliation",
               promoted == maturity.CONSENSUS_LIVE.axes(), str(promoted))
         check("B7 ...and SURVIVES the next reconciliation (no demotion by any writer literal)", again == 0)
         check("B8 ...and the consensus writer proposes the same live tuple",
-              {a: proposed[a] for a in maturity.AXES} == maturity.CONSENSUS_LIVE.axes())
-        quiet(report_counts.reconcile_record_counts, rows(33), gen)
+              {a: proposed.get(a) for a in maturity.AXES} == maturity.CONSENSUS_LIVE.axes(),
+              str({a: proposed.get(a) for a in maturity.AXES}))
+        quiet(report_counts.reconcile_record_counts, rows(33), gen, live_context=_Context(False))
         after = front(path)
         check("B9 revocation is the same function: all four axes demote together, and the count and "
               "the cited sources are untouched",

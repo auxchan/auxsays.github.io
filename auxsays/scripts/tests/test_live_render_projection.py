@@ -11,8 +11,8 @@ WHAT IS PINNED HERE.
   [E] `live_eligibility.evaluate`: each condition (promotion product, High rung, exclusive URLs,
       monitoring health) refuses on its own; a synthetic identity passing all four certifies;
       exclusivity is over normalized URLs and over every other identity, another product's included.
-  [M] `maturity.certify_live` is still NOT enabled: this change decides what RENDERS, never what
-      a writer STORES.
+  [M] a writer handed no run context never promotes: `maturity.certify_live` without one declines
+      an identity `evaluate` certifies (writers that DO hold one: tests/test_live_promotion.py).
   [P] `build_live_eligibility_projection.py`, run as the bare script pages.yml runs, on a temp tree:
       a healthy claim is listed, a stale one is not, a non-claim never is, a missing or malformed
       store writes an empty projection and exits 0, and no generated record is touched. pages.yml
@@ -122,7 +122,8 @@ def reports(product: str, version: str, n: int, *, start: int = 0, via: str | No
     method = via or methods(product)[0]
     return [{"product_id": product, "update_version": version, "target_build": "",
              "id": f"{product}-{version}-{i}", "source_url": f"https://forum.test/{product}/t/{i}",
-             "source_type": family(method), "counted": True, "patch_version_matched": True}
+             "source_type": family(method), "counted": True, "patch_version_matched": True,
+             "sentiment": "negative", "severity": "high"}
             for i in range(start, start + n)]
 
 
@@ -182,10 +183,25 @@ def section_e() -> None:
     dup_ok = own + [dict(own[0], id="dup")]
     dup_short = own[:-1] + [dict(own[0], id="dup")]
     ok_dec, short_dec = decide(rec, groups(dup_ok), emh), decide(rec, groups(dup_short), emh)
-    check("E7 (c) counts DISTINCT URLs: 34 rows over 33 URLs certify, 33 rows over 32 URLs do not",
-          ok_dec.live and not short_dec.live
-          and short_dec.reasons == (f"exclusive_below_high_rung:{HIGH - 1}",),
+    # Exclusivity counts DISTINCT URLs; and a live claim citing one URL twice is refused outright,
+    # because QA could not publish it (its citations must be distinct) -- certifying it would turn
+    # into a QA error that discards the cycle.
+    check("E7 (c)(e) 34 rows over 33 URLs refuse only as a duplicate citation; 33 rows over 32 URLs "
+          "also fall below the exclusive rung",
+          ok_dec.reasons == ("duplicate_citation_urls",)
+          and short_dec.reasons == (f"exclusive_below_high_rung:{HIGH - 1}", "duplicate_citation_urls"),
           f"{ok_dec.reasons} / {short_dec.reasons}")
+    unpublishable = {
+        "blank sentiment": dict(own[0], sentiment=""),
+        "severity outside the vocabulary": dict(own[0], severity="catastrophic"),
+        "failed source date": dict(own[0], source_date_pass=False),
+        "no http(s) URL": dict(own[0], source_url="forum.test/no-scheme"),
+    }
+    refused = {name: decide(rec, groups([bad] + own[1:]), emh).reasons
+               for name, bad in unpublishable.items()}
+    check("E15 (e) a counted row the writer cannot publish keeps the identity non-live, by name "
+          "(blank sentiment, bad severity, failed source date, no http(s) URL)",
+          all(reasons == ("unprojectable_rows:1",) for reasons in refused.values()), str(refused))
 
     stale = decide(rec, groups(own), health("obs-studio", "99.0.0", last_run=STALE))
     check("E8 (d) stale monitoring refuses, every reason prefixed monitoring:, one per method",
@@ -225,12 +241,12 @@ def section_e() -> None:
 
 # ------------------------------------------------------------------------------- [M] certify_live
 def section_m() -> None:
-    print("\n[M] the stored maturity is untouched: certify_live is still not enabled")
+    print("\n[M] without a run context, certify_live declines and no writer stores live")
     rec, own = record(), reports("obs-studio", "99.0.0", HIGH)
-    check("M1 certify_live declines an identity evaluate certifies",
+    check("M1 certify_live with no run context declines an identity evaluate certifies",
           maturity.certify_live(rec, own) == maturity.NOT_ENABLED
           and decide(rec, groups(own), health("obs-studio", "99.0.0")).live)
-    check("M2 so every writer still stores the non-live tuple at the High rung",
+    check("M2 so a writer with no run context stores the non-live tuple at the High rung",
           maturity.record_maturity(rec, own) == maturity.PILOT_SAMPLE)
 
 

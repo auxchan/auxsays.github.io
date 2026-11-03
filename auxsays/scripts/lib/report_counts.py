@@ -301,6 +301,17 @@ def format_reconcile_detail(detail: dict[str, Any]) -> str:
             f"{detail['before']} -> {detail['after']}{suffix}")
 
 
+def format_maturity_transition(detail: dict[str, Any]) -> str | None:
+    """One log line for a reconciled record whose MATURITY moved, with the decision's reasons, or
+    None. A promotion or revocation changes no count, so the count line alone would print "33 -> 33"
+    for the one event a reader of the run log most needs to see."""
+    move = detail.get("maturity")
+    if not move:
+        return None
+    why = ", ".join(move.get("reasons") or []) or "certified"
+    return f"{detail['record']}: maturity {move['before']} -> {move['after']} ({why})"
+
+
 # A headline verdict that STATES a report count is a count projection, whatever field it lives in.
 # obs-studio's coherence branch writes "TEST FIRST: OBS Studio 32.2.2 has 7 user reports found" into
 # quick_verdict; Windows and PowerPoint have no such branch, so this matches nothing for them. It is
@@ -355,7 +366,8 @@ def retract_zero_count_projections(data: dict[str, Any]) -> list[str]:
 
 
 def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_dir: Path,
-                            product_ids: set[str] | None = None) -> tuple[int, list[dict[str, Any]]]:
+                            product_ids: set[str] | None = None, *,
+                            live_context: Any = None) -> tuple[int, list[dict[str, Any]]]:
     """One authoritative reconciliation: after all collectors + consensus, set every update record's
     ``update_report_count`` (and the count-derived state fields) to the final counted evidence for its
     exact canonical patch identity. Idempotent -- an already-aligned tree produces zero writes. Returns
@@ -367,6 +379,11 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
     scoped to microsoft-powerpoint -- passes its own product set so a pre-existing mismatch on an
     unrelated product's record cannot be silently rewritten by a run that never collected for it.
     The algorithm is unchanged; this only restricts which records are eligible.
+
+    ``live_context`` is the run's ``live_eligibility.RunContext``. It is re-bound to THIS function's
+    population, so every live decision is made over exactly the rows the count is written from.
+    Omitted, no record can be written live -- and a stored live claim is written back to the
+    count's non-live maturity.
     """
     # ONE pass of record I/O. The Windows identity gate needs each record's current target, so read
     # every record once, build the target map from what we already hold, then count -- rather than
@@ -377,6 +394,7 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
         evidence_rows,
         windows_targets=windows_targets_from_front_matter(data for _p, data, _b in loaded))
     counts = {key: len(rows) for key, rows in populations.items()}
+    context = live_context.bind(populations) if live_context is not None else None
     scope = {str(p).strip() for p in product_ids} if product_ids is not None else None
     changed: list[dict[str, Any]] = []
     for path, data, body in loaded:
@@ -395,7 +413,8 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
         # stage `pilot` (13 records did), and a live claim on any axis was overwritten here every
         # cycle. The label is no longer preserved across a same-state rewrite: the corpus carries
         # exactly the two canonical labels, so there was no variation left to protect.
-        target = maturity.record_maturity(data, rows).axes()
+        target_maturity, decision = maturity.record_decision(data, rows, context)
+        target = target_maturity.axes()
         # At zero the record must also stop CLAIMING reports, not merely report the number 0.
         # Two guards, both load-bearing. A missing or malformed store no longer reaches this
         # function from a production caller -- `load_evidence_store` refuses it first -- but `counts`
@@ -412,13 +431,19 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
                 and not needs_retraction):
             continue  # already authoritative -> no write (idempotent)
         before = _as_int(data.get("update_report_count"))
+        moved = (maturity.stored_axes(data) != target
+                 and {"before": maturity.stored_level(data), "after": target_maturity.level,
+                      "reasons": list(decision.reasons)})
         data["update_report_count"] = n
         data["confirmed_patch_specific_report_count"] = n
         data.update(target)
         retracted = (retract_zero_count_projections(data)
                      if n == 0 and may_retract else [])
         write_front_matter_and_body(path, data, body)
-        changed.append({"product_id": product_id, "version": version,
-                        "before": before, "after": n, "record": path.name,
-                        "retracted": retracted})
+        detail = {"product_id": product_id, "version": version,
+                  "before": before, "after": n, "record": path.name,
+                  "retracted": retracted}
+        if moved:
+            detail["maturity"] = moved
+        changed.append(detail)
     return len(changed), changed

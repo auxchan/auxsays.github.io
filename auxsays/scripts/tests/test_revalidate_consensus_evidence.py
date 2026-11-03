@@ -151,8 +151,11 @@ def generated_record_text(
     confirmed_count: int = 40,
     consensus_status: str = "pilot_initial_sample",
     evidence_state: str = "pilot_sample",
+    evidence_state_label: str = "Verified reports",
+    intelligence_stage: str = "pilot",
     evidence_last_checked: str = "2026-05-26T16:55:04Z",
 ) -> str:
+    # All four maturity axes, as the real record carries them: the guard compares the whole tuple.
     return (
         "---\n"
         f"product_id: {product_id}\n"
@@ -161,6 +164,8 @@ def generated_record_text(
         f"confirmed_patch_specific_report_count: {confirmed_count}\n"
         f"consensus_collection_status: {consensus_status}\n"
         f"evidence_state: {evidence_state}\n"
+        f"evidence_state_label: {evidence_state_label}\n"
+        f"intelligence_stage: {intelligence_stage}\n"
         f"evidence_last_checked: '{evidence_last_checked}'\n"
         "---\n"
         "Fixture body must remain untouched.\n"

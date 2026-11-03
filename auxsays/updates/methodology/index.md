@@ -66,7 +66,7 @@ permalink: /updates/methodology/
       <dl class="methodology-definition-list">
         <div><dt>Official source only</dt><dd>A vendor source has been captured. No confirmed patch-specific user reports are counted for this release. This is the most common state on the site, and it is not a safety finding.</dd></div>
         <div><dt>Verified reports</dt><dd>The page carries confirmed patch-specific reports that were captured earlier. Check the evidence date on the page before treating them as current.</dd></div>
-        <div><dt>Live consensus</dt><dd>Reserved for a release whose confirmed patch-specific reports are being refreshed on an ongoing basis. No release currently carries it.</dd></div>
+        <div><dt>Live consensus</dt><dd>The release&rsquo;s confirmed patch-specific user reports have reached the High evidence-strength level, and the community collection for that exact release is running and healthy. It is withdrawn automatically when that collection stops, fails or goes stale. A vendor&rsquo;s own release notes never count toward it.</dd></div>
         <div><dt>Insufficient data</dt><dd>There is not enough vendor or user evidence to support anything beyond a placeholder state.</dd></div>
       </dl>
       <p>No state means an update is safe. &ldquo;Official source only&rdquo; and &ldquo;Insufficient data&rdquo; both mean the user-report picture for that release is empty or thin, not that it is clear.</p>

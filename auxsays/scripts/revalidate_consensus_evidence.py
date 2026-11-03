@@ -643,14 +643,23 @@ def guarded_generated_freshness_writeback(
                         f"{update_report_count}; found {selected}"
                     )
                 else:
+                    # All four axes, and either canonical tuple this count may carry: the non-live
+                    # one, or -- at the High rung -- the live one the writers now promote to. A
+                    # live record is the one whose evidence most needs revalidating, so refusing it
+                    # would retire this guard exactly when it matters. Anything else is refused.
+                    stored = maturity.stored_axes(metadata)
                     expected = maturity.maturity_for(update_report_count)
-                    if metadata.get("evidence_state") != expected.evidence_state:
-                        failures.append(f"generated record evidence_state must be {expected.evidence_state}")
-                    if metadata.get("consensus_collection_status") != expected.consensus_collection_status:
-                        failures.append(
-                            "generated record consensus_collection_status must be "
-                            f"{expected.consensus_collection_status}"
-                        )
+                    allowed = [expected]
+                    if update_report_count >= maturity.LIVE_MIN_ACCEPTED_REPORTS:
+                        allowed.append(maturity.CONSENSUS_LIVE)
+                    if not any(stored == m.axes() for m in allowed):
+                        failures.extend(
+                            f"generated record {axis} must be {value}"
+                            for axis, value in expected.axes().items() if stored[axis] != value)
+                        if len(allowed) > 1:
+                            failures.append(
+                                "generated record maturity may instead be the whole canonical live "
+                                f"tuple {maturity.CONSENSUS_LIVE.axes()}; found {stored}")
 
     if failures:
         return writeback

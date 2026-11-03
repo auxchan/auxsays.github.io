@@ -31,7 +31,7 @@ from patch_collectors.base import (
     split_front_matter,
     atomic_write_text,
 )
-from lib import maturity, monitoring_health
+from lib import live_eligibility, maturity, monitoring_health
 from lib.report_counts import EvidenceStoreError, load_evidence_store
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -209,9 +209,18 @@ def _index_generated_records() -> dict[tuple[str, str, str], dict[str, Any]]:
 
     Keyed by the identity triple rather than (product_id, version): for a build-aware product two
     records under one YYMM are two distinct keys, so the second no longer overwrites the first."""
+    return _scan_generated_records()[0]
+
+
+def _scan_generated_records() -> tuple[dict[tuple[str, str, str], dict[str, Any]], list[dict[str, Any]]]:
+    """The index, plus every record's full front matter from the same single read. Live eligibility
+    needs the whole counted population, whose Windows gate reads every record's current target;
+    re-reading ~1500 records for it would double this writer's slowest step."""
     index: dict[tuple[str, str, str], dict[str, Any]] = {}
+    fronts: list[dict[str, Any]] = []
     for path in sorted(GENERATED_DIR.glob("*.md")):
         data = _load_front_matter(path)
+        fronts.append(data)
         if not data.get("update_entry"):
             continue
         product_id = str(data.get("product_id") or "").strip()
@@ -242,7 +251,7 @@ def _index_generated_records() -> dict[tuple[str, str, str], dict[str, Any]]:
                 "target_os_build": str(data.get("target_os_build") or "").strip(),
                 "target_release_date": str(data.get("target_release_date") or "").strip(),
             }
-    return index
+    return index, fronts
 
 
 def _consensus_label(counts: Counter) -> str:
@@ -441,7 +450,7 @@ def _group_rows(rows: list[dict[str, Any]], *, is_candidate_mode: bool) -> dict[
     return groups
 
 
-def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, build: str = "") -> dict[str, Any]:
+def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, build: str = "", live_context: Any = None) -> dict[str, Any]:
     if not ver:
         return {
             "product_id": pid,
@@ -479,10 +488,16 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
     themes = _issue_counter(pid, included)
     count = len(included)
     gate_eval = _evaluate_gates(product_id=pid, version=ver, included_rows=included, excluded_rows=excluded, record=record, is_candidate_mode=is_candidate_mode, write_requested=write_requested)
-    # Production evidence asks the maturity authority (which consults the one live certifier);
-    # staged candidates are not accepted evidence and can only ever propose the count's maturity.
-    group_maturity = (maturity.maturity_for(count) if is_candidate_mode
-                      else maturity.record_maturity(record, included))
+    # The record's FULL front matter: the index entry is a summary without the release date or the
+    # exact build, and eligibility reads both.
+    front = (_load_front_matter(record["abs_path"])
+             if record and (gate_eval["would_write"] or live_context is not None) else None)
+    # Production evidence asks the maturity authority with this run's live context; staged
+    # candidates are not accepted evidence and can only ever propose the count's maturity.
+    if is_candidate_mode:
+        group_maturity, decision = maturity.maturity_for(count), None
+    else:
+        group_maturity, decision = maturity.record_decision(front, included, live_context)
 
     evidence_last_checked = _latest_captured_at(included)
     proposed_fields: dict[str, Any] = {}
@@ -490,8 +505,14 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
     if gate_eval["would_write"]:
         proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked,
                                                   build=build, record_maturity=group_maturity)
-        if record:
-            effective_write_plan = _public_write_plan(_load_front_matter(record["abs_path"]), proposed_fields)
+        if front is not None:
+            effective_write_plan = _public_write_plan(front, proposed_fields)
+
+    # Internal diagnostic only: which way this identity's maturity would move, and why.
+    maturity_transition = None
+    if front is not None and decision is not None and maturity.stored_axes(front) != group_maturity.axes():
+        maturity_transition = {"before": maturity.stored_level(front), "after": group_maturity.level,
+                               "reasons": list(decision.reasons)}
 
     return {
         "product_id": pid,
@@ -519,6 +540,7 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
         "write_blocked_reason": gate_eval["write_blocked_reason"],
         "proposed_fields_if_written": proposed_fields,
         "effective_write_plan": effective_write_plan,
+        "maturity_transition": maturity_transition,
         "protected_fields_not_touched": sorted(PROTECTED_FIELDS),
     }
 
@@ -1144,12 +1166,14 @@ def _davinci_version_is_beta(version: str) -> bool:
     return patch_decision.version_is_beta(version)
 
 
-def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, rows: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, rows: list[dict[str, Any]] | None = None, live_context: Any = None) -> list[dict[str, Any]]:
+    # `live_context` is only ever honoured for production evidence: candidates never promote.
     all_rows = rows if rows is not None else _load_yaml_list(evidence_path)
     groups = _group_rows(all_rows, is_candidate_mode=is_candidate_mode)
     if product_id_filter:
         groups = {k: v for k, v in groups.items() if k[0] == product_id_filter}
-    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, build=build)
+    context = None if is_candidate_mode else live_context
+    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, build=build, live_context=context)
             for (pid, ver, build), rows in sorted(groups.items())]
 
 
@@ -1252,9 +1276,13 @@ RECORD_SUBSTANTIVE_COMPARE_IGNORED = {"record_last_updated", "status_events_appe
 STATUS_EVENT_SUBSTANTIVE_COMPARE_IGNORED = {"at", "timestamp", "captured_at", "updated_at"}
 
 
+def _substantive_changes(data: dict[str, Any], fields: dict[str, Any]) -> list[str]:
+    return [key for key, value in fields.items()
+            if key not in RECORD_SUBSTANTIVE_COMPARE_IGNORED and data.get(key) != value]
+
+
 def _has_substantive_record_change(data: dict[str, Any], fields: dict[str, Any]) -> bool:
-    comparable_fields = {key: value for key, value in fields.items() if key not in RECORD_SUBSTANTIVE_COMPARE_IGNORED}
-    return any(data.get(key) != value for key, value in comparable_fields.items())
+    return bool(_substantive_changes(data, fields))
 
 
 def _status_event_signature(event: Any) -> dict[str, Any] | None:
@@ -1288,7 +1316,13 @@ def _record_write_plan(data: dict[str, Any], fields: dict[str, Any]) -> dict[str
     fields_to_write = dict(fields)
     status_event = fields_to_write.get("status_events_append")
     status_event_requested = status_event is not None
-    substantive_change = _has_substantive_record_change(data, fields)
+    changes = _substantive_changes(data, fields)
+    substantive_change = bool(changes)
+    # A promotion or revocation is not news about the patch: no report was added or withdrawn, and
+    # the event's "User reports found / count updated to N" would repeat what the page already says
+    # every time monitoring flips. So a change confined to the four maturity axes is written without
+    # an event.
+    maturity_only = substantive_change and set(changes) <= set(maturity.AXES)
     latest_event_equivalent = (
         _latest_status_event_equivalent(data.get("status_events"), status_event)
         if status_event_requested
@@ -1298,9 +1332,11 @@ def _record_write_plan(data: dict[str, Any], fields: dict[str, Any]) -> dict[str
     status_event_would_apply = False
     status_event_reason = "not_requested"
     if status_event_requested:
-        status_event_would_apply = substantive_change and not latest_event_equivalent
+        status_event_would_apply = substantive_change and not maturity_only and not latest_event_equivalent
         if not substantive_change:
             status_event_reason = "skipped_no_substantive_record_change"
+        elif maturity_only:
+            status_event_reason = "skipped_maturity_only_change"
         elif latest_event_equivalent:
             status_event_reason = "skipped_latest_status_event_equivalent"
         else:
@@ -1427,6 +1463,29 @@ def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str,
     return {"before": before, "after": data, "write_plan": write_plan}
 
 
+def _written_transition(result: dict[str, Any], fields_written: dict[str, Any]) -> dict[str, Any] | None:
+    """The result's maturity transition, only when this write actually carried the axes."""
+    move = result.get("maturity_transition")
+    return move if move and any(axis in fields_written for axis in maturity.AXES) else None
+
+
+def _print_transitions(payload: dict[str, Any]) -> None:
+    """One stderr line per maturity transition this run WROTE (or, in a dry run, would write).
+    Stderr, because stdout may be the JSON payload a caller parses."""
+    if payload.get("write_mode_active"):
+        written = [*(payload.get("write_all_results") or []),
+                   *([payload["write_result"]] if payload.get("write_result") else [])]
+        moves = [(item.get("record_path"), item.get("maturity_transition"), "") for item in written]
+    else:
+        moves = [(item.get("matched_generated_record_path"), item.get("maturity_transition"),
+                  " (dry run)") for item in payload.get("results") or [] if item.get("would_write")]
+    for path, move, suffix in moves:
+        if move:
+            why = ", ".join(move.get("reasons") or []) or "certified"
+            print(f"[apply_consensus_to_records] maturity {path}: {move['before']} -> "
+                  f"{move['after']} ({why}){suffix}", file=sys.stderr)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Consensus-to-generated-record dry-run/write-back updater.")
     parser.add_argument("--dry-run", action="store_true", default=False, help="Show proposed changes without writing.")
@@ -1439,6 +1498,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", default=None, help="Path to write JSON output.")
     parser.add_argument("--version-filter", default=None, help="Dry-run filter to a specific update_version string.")
     args = parser.parse_args(argv)
+    run_started = datetime.now(timezone.utc)
 
     if args.write and args.write_all:
         print("ERROR: Choose either --write or --write-all, not both.", file=sys.stderr)
@@ -1495,8 +1555,21 @@ def main(argv: list[str] | None = None) -> int:
             print(f"ERROR: {exc}", file=sys.stderr)
             return 1
 
-    records_index = _index_generated_records()
-    results = run_dry_run(evidence_path=evidence_path, product_id_filter=args.product_id, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, rows=production_rows)
+    records_index, record_fronts = _scan_generated_records()
+    # This run's live context, PRODUCTION evidence only. Eligibility needs the WHOLE counted
+    # population -- exclusivity is judged against every product, not the one this run is scoped to
+    # -- plus the telemetry and config beside the store, all read once at one instant. Without it
+    # this writer would propose the non-live tuple for a certified identity and undo, every cycle,
+    # the promotion reconciliation just made.
+    live_context = None
+    if production_rows is not None:
+        live_context = live_eligibility.load_run_context(
+            evidence_path.parent.parent, now=run_started).bind_evidence(
+                production_rows, record_fronts)
+        if live_context.unavailable:
+            print(f"::warning::live eligibility unavailable, so no record is written live this run: "
+                  f"{live_context.unavailable}", file=sys.stderr)
+    results = run_dry_run(evidence_path=evidence_path, product_id_filter=args.product_id, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, rows=production_rows, live_context=live_context)
 
     version_filter = args.update_version if args.update_version else args.version_filter
     if version_filter:
@@ -1555,6 +1628,7 @@ def main(argv: list[str] | None = None) -> int:
             "pre_write_evidence_state": snapshot["before"].get("evidence_state"),
             "post_write_evidence_state": snapshot["after"].get("evidence_state"),
             "effective_write_plan": effective_write_plan,
+            "maturity_transition": _written_transition(result, fields_to_write),
         }
 
     if args.write_all:
@@ -1614,6 +1688,7 @@ def main(argv: list[str] | None = None) -> int:
                 "fields_written": _fields_written_labels(fields_to_write),
                 "pre_write_report_count": snapshot["before"].get("update_report_count"),
                 "post_write_report_count": snapshot["after"].get("update_report_count"),
+                "maturity_transition": _written_transition(result, fields_to_write),
             })
         payload["write_all_results"] = write_results
         payload["records_written"] = sum(1 for item in write_results if item.get("success") and not item.get("skipped"))
@@ -1626,6 +1701,7 @@ def main(argv: list[str] | None = None) -> int:
         f"{payload['total_included_candidates']} included; {payload['total_excluded_candidates']} excluded.",
         file=sys.stderr,
     )
+    _print_transitions(payload)
     return 0
 
 

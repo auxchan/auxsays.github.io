@@ -17,9 +17,9 @@ from typing import Any
 import yaml
 
 from patch_collectors.base import load_front_matter_and_body
-from lib import maturity, patch_decision
-from lib.report_counts import (EvidenceStoreError, counted_evidence_rows, format_reconcile_detail,
-                               load_evidence_store, reconcile_record_counts,
+from lib import live_eligibility, maturity, patch_decision
+from lib.report_counts import (EvidenceStoreError, counted_evidence_rows, format_maturity_transition,
+                               format_reconcile_detail, load_evidence_store, reconcile_record_counts,
                                windows_targets_from_front_matter)
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -377,6 +377,7 @@ def main(argv: list[str] | None = None) -> int:
               "entirely to reconcile every product.", file=sys.stderr)
         return 2
     scope = {str(p).strip() for p in args.product_ids} if args.product_ids else None
+    run_started = datetime.now(timezone.utc)
 
     # Refuse a missing or malformed store BEFORE reconciliation can touch a record. The lenient
     # `load_evidence` returned [] for a missing file, a key-less mapping or a wrong type, and an
@@ -391,12 +392,26 @@ def main(argv: list[str] | None = None) -> int:
     # version), using the same predicate QA enforces. Idempotent -- an already-aligned tree writes
     # nothing. This closes the generated_report_count_mismatch (record showed 4 while structured
     # evidence had 14) at one place instead of trusting each collector's per-run count.
-    reconciled, reconciled_detail = reconcile_record_counts(evidence, GENERATED_DIR, product_ids=scope)
+    #
+    # Maturity is reconciled in the same pass, live included: the context reads the method-health
+    # telemetry and config beside the store, so a certifying identity is promoted and one whose
+    # monitoring stopped is revoked on this run. Unreadable telemetry declines every live claim
+    # rather than failing the lane.
+    live_context = live_eligibility.load_run_context(EVIDENCE_PATH.parent.parent, now=run_started)
+    if live_context.unavailable:
+        print(f"::warning::live eligibility unavailable, so no record is written live this run: "
+              f"{live_context.unavailable}")
+    reconciled, reconciled_detail = reconcile_record_counts(evidence, GENERATED_DIR, product_ids=scope,
+                                                            live_context=live_context)
     if reconciled:
         scope_label = f" (scoped to {', '.join(sorted(scope))})" if scope else ""
         print(f"Reconciled report counts on {reconciled} record(s) to final counted evidence{scope_label}.")
         for d in reconciled_detail:
             print(f"  {format_reconcile_detail(d)}")
+        for d in reconciled_detail:
+            line = format_maturity_transition(d)
+            if line:
+                print(f"  {line}")
     if args.reconcile_only:
         if not reconciled:
             print("Reconcile-only: every record already matches its exact-patch evidence population.")

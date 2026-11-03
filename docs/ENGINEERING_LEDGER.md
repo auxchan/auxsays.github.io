@@ -63,6 +63,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-053 | Resolved | Evidence integrity | High | Four writers each derived a record's maturity, and none of them could keep a live state |
 | AUX-054 | Resolved | Published claims | Medium | Collection health existed only in Liquid; a retired method made healthy pages read degraded |
 | AUX-055 | Resolved | Published claims | High | A stored live-consensus claim would keep rendering as live after the collection behind it stopped |
+| AUX-056 | Resolved | Published claims | High | No writer could store live consensus, so a release that earned it could never show it |
 
 ---
 
@@ -3823,6 +3824,45 @@ cannot close it.
 projection lists a page that does not claim live, or one that fails any of the four conditions at
 build time; the projection step writes a generated record or blocks the deploy on an unreadable
 store; or a consumer derives maturity words outside the include.
+
+---
+
+### AUX-056 — No writer could store live consensus, so a release that earned it could never show it
+
+- **Status** Resolved · **Area** Published claims · **Severity** High
+- **First seen** 2026-10-27 · **Resolved** 2026-10-27
+
+`maturity.certify_live` declined every identity, so every writer stored Verified reports whatever the
+evidence and the monitoring said, and the deploy-time contract (AUX-055) had no claim to certify.
+
+**One decision, in every writer.** Each writer now holds a run context
+(`live_eligibility.RunContext`): the whole counted population, the method-health telemetry, the
+thresholds and one instant. `maturity.record_maturity` asks it, and its answer is
+`live_eligibility.evaluate`, the function the deploy projection runs. Reconciliation (the cron lane,
+patch ingestion and the PowerPoint graph) and the consensus writer's main (production evidence only)
+each build one from the site tree they write. A writer given no context never promotes, and
+unreadable telemetry or config declines every claim instead of failing the lane.
+
+**Transitions.** A claim is revoked on the run that sees its monitoring stop and restored on the run
+that sees it healthy; there is no cooldown. Counts, citations and the verdict never move with it, a
+maturity-only change appends no status event, and each transition is logged with its reasons.
+
+**Guards.** QA errors on a live claim without enough report URLs counted on no other identity
+(`live_exclusive_below_high_rung`). The revalidation guard accepts the live tuple as well as the pilot
+one. The graph blocks on a failed promotion, as it does on failed QA. The dispatch-only DaVinci lane
+now reconciles only DaVinci. The methodology page states the contract without thresholds, and the
+verdict box no longer turns green for a live record.
+
+**Measured on 74740eeb plus this change**, replaying the scheduled lane on a copy of the tree: six
+identities became live (OBS 32.1.1, 32.1.2, 32.2.2; Windows 25H2 26200.7462, .7623, .7840), each
+changing only its four maturity axes. A second lane, with the patch-ingestion Windows steps between,
+changed nothing. QA in publish-strict mode reported 0 errors and 0 warnings, and the deploy projection
+listed exactly those six pages.
+
+**Reopen only if** a writer holding a context stores a maturity `evaluate` would not give at that
+instant; a writer with no context, or an unreadable one, stores live; a maturity change moves a count,
+citation or verdict field or appends a status event; QA passes a live claim short of exclusive report
+URLs; unreadable telemetry fails a lane; or the graph reaches writeback after a failed promotion.
 
 ## Adding an entry
 
