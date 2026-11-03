@@ -65397,3 +65397,192 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-set-chat-tab-as-default-when
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-set-chat-tab-as-default-when-starting-teams/3973871
+  parent_title: How to set Chat tab as default when starting teams
+  report_title: How to set Chat tab as default when starting teams
+  report_text_excerpt: How to set Chat tab as default when starting teams Good morning.&amp;nbsp; I&apos;m an IT contractor with M365 admin access at all of my clients who use it.&amp;nbsp; I started using the new MS Teams because I am able to log into multiple accounts at once, but when I switch...
+  captured_at: '2026-11-03T02:05:42Z'
+  source_date: '2023-11-06'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-set-chat-tab-as-default-when
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-set-chat-tab-as-default-when-starting-teams/3973871
+  parent_title: How to set Chat tab as default when starting teams
+  report_title: How to set Chat tab as default when starting teams
+  report_text_excerpt: How to set Chat tab as default when starting teams Good morning.&amp;nbsp; I&apos;m an IT contractor with M365 admin access at all of my clients who use it.&amp;nbsp; I started using the new MS Teams because I am able to log into multiple accounts at once, but when I switch...
+  captured_at: '2026-11-03T02:05:42Z'
+  source_date: '2023-11-06'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-set-chat-tab-as-default-when
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-set-chat-tab-as-default-when-starting-teams/3973871
+  parent_title: How to set Chat tab as default when starting teams
+  report_title: How to set Chat tab as default when starting teams
+  report_text_excerpt: How to set Chat tab as default when starting teams Good morning.&amp;nbsp; I&apos;m an IT contractor with M365 admin access at all of my clients who use it.&amp;nbsp; I started using the new MS Teams because I am able to log into multiple accounts at once, but when I switch...
+  captured_at: '2026-11-03T02:05:42Z'
+  source_date: '2023-11-06'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-set-chat-tab-as-default-when
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-set-chat-tab-as-default-when-starting-teams/3973871
+  parent_title: How to set Chat tab as default when starting teams
+  report_title: How to set Chat tab as default when starting teams
+  report_text_excerpt: How to set Chat tab as default when starting teams Good morning.&amp;nbsp; I&apos;m an IT contractor with M365 admin access at all of my clients who use it.&amp;nbsp; I started using the new MS Teams because I am able to log into multiple accounts at once, but when I switch...
+  captured_at: '2026-11-03T02:05:42Z'
+  source_date: '2023-11-06'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-set-chat-tab-as-default-when
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-set-chat-tab-as-default-when-starting-teams/3973871
+  parent_title: How to set Chat tab as default when starting teams
+  report_title: How to set Chat tab as default when starting teams
+  report_text_excerpt: How to set Chat tab as default when starting teams Good morning.&amp;nbsp; I&apos;m an IT contractor with M365 admin access at all of my clients who use it.&amp;nbsp; I started using the new MS Teams because I am able to log into multiple accounts at once, but when I switch...
+  captured_at: '2026-11-03T02:05:42Z'
+  source_date: '2023-11-06'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-set-chat-tab-as-default-when
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-set-chat-tab-as-default-when-starting-teams/3973871
+  parent_title: How to set Chat tab as default when starting teams
+  report_title: How to set Chat tab as default when starting teams
+  report_text_excerpt: How to set Chat tab as default when starting teams Good morning.&amp;nbsp; I&apos;m an IT contractor with M365 admin access at all of my clients who use it.&amp;nbsp; I started using the new MS Teams because I am able to log into multiple accounts at once, but when I switch...
+  captured_at: '2026-11-03T02:05:42Z'
+  source_date: '2023-11-06'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-set-chat-tab-as-default-when
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-set-chat-tab-as-default-when-starting-teams/3973871
+  parent_title: How to set Chat tab as default when starting teams
+  report_title: How to set Chat tab as default when starting teams
+  report_text_excerpt: How to set Chat tab as default when starting teams Good morning.&amp;nbsp; I&apos;m an IT contractor with M365 admin access at all of my clients who use it.&amp;nbsp; I started using the new MS Teams because I am able to log into multiple accounts at once, but when I switch...
+  captured_at: '2026-11-03T02:05:42Z'
+  source_date: '2023-11-06'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14139
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14139
+  parent_title: Controller input detection in browser on Windows when out of focus is unreliable
+  report_title: Controller input detection in browser on Windows when out of focus is unreliable
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/mnG5U0ZgHQ4ytv5d ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Gamep'
+  captured_at: '2026-11-03T02:47:02Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
