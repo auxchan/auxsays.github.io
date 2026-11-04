@@ -167,6 +167,20 @@ def run_suite() -> int:
     check("T16 the counted 'system-wide lag when decoding incoming camera video' report is performance",
           lag[:2] == ("performance regression", "performance") and lag[3] == "medium", str(lag))
 
+    share_failures = ("I cannot share my screen in meetings.", "Screen sharing fails every time.",
+                      "The shared screen is black for everyone.", "Screen sharing freezes after a minute.",
+                      "The share button is disabled.", "Screen sharing stops unexpectedly.")
+    got_share = [teams.classify(text, "") for text in share_failures]
+    check("T17 concrete screen-sharing failures (cannot share, fails, black, freezes, button disabled, stops) "
+          "are still a screen-sharing failure",
+          all(g[:2] == ("screen sharing failure", "screen sharing") and g[3] == "medium" for g in got_share),
+          str(got_share))
+    share_mentions = ("I was screen sharing when Teams became slow.", "Screen sharing works, but audio cuts out.",
+                      "How do I enable screen sharing?", "The meeting included screen sharing.")
+    got_mentions = [teams.classify(text, "")[0] for text in share_mentions]
+    check("T18 a plain mention of screen sharing (slow, works, how-to, included) is not a sharing failure",
+          all(theme != "screen sharing failure" for theme in got_mentions), str(got_mentions))
+
     # --- no supported classification: unclassified, severity never invented -------------------
     unsupported = judge("Question about Teams", f"Teams {BUILD}: something is off and I do not know what.")
     check("U1 no supported theme -> empty theme, area and severity (nothing invented)",

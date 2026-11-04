@@ -281,6 +281,19 @@ _TEAMS_THEME_RULES: tuple[ec.ThemeRule, ...] = (
                  re.compile(r"\b(?:won't\s+(?:launch|open|start|load)|will\s+not\s+(?:launch|open|start|load)|"
                             r"(?:not|fails?\s+to|unable\s+to|cannot|can't)\s+(?:launch|launching|opening|start|starting)|"
                             r"black\s+screen|stuck\s+on\s+(?:loading|splash))\b", re.I)),
+    ec.ThemeRule("screen sharing failure", "screen sharing", "medium", "share",
+                 # FAILURE CONTEXT REQUIRED: "I was screen sharing when Teams became slow" and "how do I
+                 # enable screen sharing" mention the feature; they report no sharing fault.
+                 re.compile(r"\b(?:(?:cannot|can't|can\s+not|unable\s+to|not\s+able\s+to|couldn't|won't|"
+                            r"fail(?:s|ed|ing)?\s+to)\s+(?:\w+\s+){0,2}(?:share|present)\s+"
+                            r"(?:my\s+|the\s+|our\s+|a\s+)?(?:screen|content|window|desktop)|"
+                            r"(?:screen\s*shar\w*)\s+(?:\w+\s+){0,2}(?:fail\w*|broken|not\s+working|"
+                            r"doesn't\s+work|isn't\s+working|won't\s+work|freez\w*|frozen|stops?|stopped|crash\w*|"
+                            r"black|blank|gr[ae]y|disabled)|"
+                            r"shared\s+(?:screen|content|window)\s+(?:\w+\s+){0,2}(?:black|blank|gr[ae]y|"
+                            r"freez\w*|frozen|stops?|stopped|flicker\w*|not\s+(?:showing|visible))|"
+                            r"share\s+(?:screen\s+)?button\s+(?:\w+\s+){0,2}(?:disabled|gr[ae]yed|missing|"
+                            r"not\s+working))\b", re.I)),
     # `negatable`: "no crash, but audio drops" is not a crash report.
     ec.ThemeRule("crash or hang", "system stability", "high", "crash",
                  re.compile(r"\b(?:crash\w*|freez\w*|frozen|hang(?:s|ing)?|hung|not\s+responding)\b", re.I),
@@ -297,9 +310,6 @@ _TEAMS_THEME_RULES: tuple[ec.ThemeRule, ...] = (
                             r"(?:can't|cannot|unable\s+to|couldn't)\s+(?:hear|see)|"
                             r"(?:mic\w*|camera|webcam)\s+(?:not|isn't|doesn't|won't)|"
                             r"chipmunk|choppy|cut\s+out)\b", re.I)),
-    ec.ThemeRule("screen sharing failure", "screen sharing", "medium", "share",
-                 re.compile(r"\b(?:screen\s*shar\w*|shar(?:e|ing)\s+(?:my\s+|the\s+)?screen|"
-                            r"present(?:ing)?\s+(?:content|screen))\b", re.I)),
     ec.ThemeRule("chat or notification problem", "chat and notifications", "medium", "chat",
                  # FAILURE CONTEXT REQUIRED: a plain mention of chat, messages, notifications or channels
                  # establishes no malfunction.
