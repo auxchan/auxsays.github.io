@@ -69,7 +69,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
-| AUX-063 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
+| AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 
 ---
@@ -4068,7 +4068,7 @@ this one.
 
 ---
 
-### AUX-063 — Stored Teams evidence still said platform "Windows" and carried no theme, area or severity
+### AUX-066 — Stored Teams evidence still said platform "Windows" and carried no theme, area or severity
 
 - **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
 - **First seen** 2026-11-04 · **Resolved** 2026-11-04
