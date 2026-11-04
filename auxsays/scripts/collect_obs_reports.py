@@ -26,6 +26,7 @@ from typing import Any
 
 import yaml
 
+from lib import evidence_classification as ec
 from lib.normalize import split_front_matter, atomic_write_text
 from lib.patch_identity import patch_key
 from lib.report_counts import counted_evidence_counts
@@ -333,33 +334,62 @@ def evaluate_issue(issue: dict[str, Any], version: str, release_date=None) -> tu
     return basis, None
 
 
+# OBS's published theme vocabulary: the same themes, areas and severities as the if-chain this
+# replaces, in the same priority order (the first rule wins a tied score). What changed is that the
+# words are matched on word boundaries, scored, and weighted toward the issue title. The old
+# substring chain read "hang" inside every "change" and "changed", so an issue that mentioned a
+# settings change and nothing else was published as "freeze / hang".
+_OBS_THEME_RULES: tuple[ec.ThemeRule, ...] = (
+    ec.ThemeRule("crash / stability", "application stability", "high", "crash",
+                 re.compile(r"\b(?:crash(?:es)?\s+on\s+quit|crash\s+if)\b", re.I), negatable=True),
+    ec.ThemeRule("screen capture regression", "screen/window capture", "high", "screen_capture",
+                 re.compile(r"\b(?:screen\s+capture|xcomposite|black\s+screen)\b", re.I)),
+    ec.ThemeRule("visual capture artifact", "display capture / HDR workflow", "medium", "artifact",
+                 re.compile(r"\b(?:black\s+square|mouse\s+cursor)\b", re.I)),
+    ec.ThemeRule("audio mixer regression", "audio mixer UI", "medium", "audio",
+                 re.compile(r"\baudio\b", re.I)),
+    ec.ThemeRule("hotkey regression", "keyboard shortcuts", "medium", "hotkey",
+                 re.compile(r"\bhotkeys?\b", re.I)),
+    ec.ThemeRule("camera/source regression", "camera source workflow", "medium", "camera",
+                 re.compile(r"\b(?:web\s*)?cameras?\b", re.I)),
+    ec.ThemeRule("output configuration regression", "output settings", "medium", "output",
+                 re.compile(r"\brescale\s+output\b", re.I)),
+    # `negatable`: "no freeze since 32.1.2" is not a freeze report.
+    ec.ThemeRule("freeze / hang", "application stability", "high", "freeze",
+                 re.compile(r"\b(?:freeze\w*|hang(?:s|ing|ed)?)\b", re.I), negatable=True),
+    ec.ThemeRule("plugin compatibility", "plugins", "medium", "plugin",
+                 re.compile(r"\bplugin\w*\b", re.I)),
+)
+ec.validate_rules(_OBS_THEME_RULES)
+
+# The replaced chain's substring triggers, verbatim. Sentiment still follows THEM, not the scored
+# theme -- see `ec.legacy_substring_sentiment`.
+_OBS_SENTIMENT_TRIGGERS = ("crashes on quit", "crash if", "screen capture", "xcomposite", "black screen",
+                           "black square", "mouse cursor", "audio", "hotkey", "camera", "rescale output",
+                           "freeze", "hang", "plugin")
+
+
 def classify(issue: dict[str, Any]) -> tuple[str, str, str, str, str]:
-    title, body, labels, scrubbed_body = issue_text(issue)
-    combined = f"{title} {scrubbed_body} {labels}"
-    platform = "unknown"
-    for name in ("windows", "macos", "linux"):
-        if name in combined:
-            platform = name
-            break
-    if "crashes on quit" in combined or "crash if" in combined:
-        return "crash / stability", "application stability", platform, "high", "negative"
-    if "screen capture" in combined or "xcomposite" in combined or "black screen" in combined:
-        return "screen capture regression", "screen/window capture", platform, "high", "negative"
-    if "black square" in combined or "mouse cursor" in combined:
-        return "visual capture artifact", "display capture / HDR workflow", platform, "medium", "negative"
-    if "audio mixer" in combined or "audio" in combined:
-        return "audio mixer regression", "audio mixer UI", platform, "medium", "negative"
-    if "hotkey" in combined:
-        return "hotkey regression", "keyboard shortcuts", platform, "medium", "negative"
-    if "web camera" in combined or "camera" in combined:
-        return "camera/source regression", "camera source workflow", platform, "medium", "negative"
-    if "rescale output" in combined:
-        return "output configuration regression", "output settings", platform, "medium", "negative"
-    if "freeze" in combined or "hang" in combined:
-        return "freeze / hang", "application stability", platform, "high", "negative"
-    if "plugin" in combined:
-        return "plugin compatibility", "plugins", platform, "medium", "negative"
-    return "unspecified issue", "general OBS workflow", platform, "medium", "moderate"
+    """(theme, workflow_area, platform, severity, sentiment) for one OBS report.
+
+    PLATFORM is positive operating-system evidence or `unknown` (`ec.resolve_platform`), read from
+    the title, the body with its template headings removed, and the labels -- a maintainer's
+    `platform/windows` triage label is OS evidence. The old scan returned the first of
+    windows/macos/linux found anywhere, so "spawns numerous small windows" on a Flatpak (Linux)
+    report and an issue naming "Arch Linux and Windows 10" were both published as Windows.
+
+    SENTIMENT IS UNCHANGED, exactly: it is what the old chain returned for the same text --
+    `negative` when any of its substring triggers appears, `moderate` otherwise -- even where the
+    scored theme now differs. It is verdict-bearing, so the scorer cannot reach it.
+    """
+    title, _body, labels, scrubbed_body = issue_text(issue)
+    body = f"{scrubbed_body} {labels}".strip()
+    verdict = ec.score_themes(title, body, _OBS_THEME_RULES)
+    platform = ec.resolve_platform(body, heading=title).label
+    sentiment = ec.legacy_substring_sentiment(f"{title} {body}", _OBS_SENTIMENT_TRIGGERS)
+    if verdict is None:
+        return "unspecified issue", "general OBS workflow", platform, "medium", sentiment
+    return verdict.theme, verdict.area, platform, verdict.severity, sentiment
 
 
 def excerpt(text: str, version: str, width: int = 280) -> str:

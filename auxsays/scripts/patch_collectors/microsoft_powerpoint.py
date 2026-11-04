@@ -37,6 +37,7 @@ import os
 import re
 from typing import Any
 
+from lib import evidence_classification as ec
 from lib.build_claims import (
     BUILD_TOKEN_RE, OFFICE_FULL_VERSION_RE, extract_build_claims,
     select_current_failing_build, single_named_build,
@@ -536,31 +537,68 @@ def concrete_issue(text: str) -> bool:
 
 # --- theme classification (deterministic; no AI) -------------------------------
 
-def classify(text: str) -> tuple[str, str, str, str, str]:
-    lowered = (text or "").lower()
-    if any(t in lowered for t in ("corrupt", "damaged", "data loss", "lost my work", "lost slides", "lost changes")):
-        return "file corruption / data loss", "file integrity", "windows", "critical", "negative"
-    if "can't save" in lowered or "cannot save" in lowered or "save fail" in lowered or "unable to save" in lowered:
-        return "save failure", "save / storage", "windows", "high", "negative"
-    if any(t in lowered for t in ("won't open", "wont open", "cannot open", "can't open", "fails to open", "won't launch", "won't start", "fails to launch")):
-        return "launch / open failure", "startup", "windows", "high", "negative"
-    if "slideshow" in lowered or "slide show" in lowered or "presenter view" in lowered:
-        return "slideshow failure", "presenting", "windows", "high", "negative"
-    if "export" in lowered:
-        return "export failure", "export", "windows", "high", "negative"
-    if "animation" in lowered or "transition" in lowered:
-        return "animation / transition regression", "animation", "windows", "medium", "negative"
-    if "add-in" in lowered or "add in" in lowered or "addin" in lowered:
-        return "add-in incompatibility", "add-ins", "windows", "medium", "negative"
-    if "render" in lowered or "display" in lowered or "blank slide" in lowered:
-        return "rendering regression", "rendering", "windows", "medium", "negative"
-    if any(t in lowered for t in ("slow", "lag", "performance", "high cpu", "memory leak")):
-        return "performance regression", "performance", "windows", "medium", "negative"
-    if "install" in lowered or "update fail" in lowered:
-        return "install/update failure", "update", "windows", "high", "negative"
-    if any(t in lowered for t in ("crash", "freeze", "hang", "not responding")):
-        return "crash or hang", "system stability", "windows", "high", "negative"
-    return "unspecified PowerPoint issue", "PowerPoint workflow", "windows", "medium", "negative"
+# PowerPoint's published theme vocabulary: the same themes, areas and severities as the if-chain
+# this replaces, in the same priority order (the first rule wins a tied score). What changed is that
+# the words are matched on word boundaries and scored. The old substring chain read "hang" inside
+# "change", so an issue about document settings that changed was published as "crash or hang", and
+# "lag" inside "flag".
+_POWERPOINT_THEME_RULES: tuple[ec.ThemeRule, ...] = (
+    ec.ThemeRule("file corruption / data loss", "file integrity", "critical", "corruption",
+                 re.compile(r"\b(?:corrupt\w*|damaged|data\s+loss|lost\s+my\s+work|lost\s+slides|"
+                            r"lost\s+changes)\b", re.I)),
+    ec.ThemeRule("save failure", "save / storage", "high", "save",
+                 re.compile(r"\b(?:can't\s+save|cannot\s+save|save\s+fail\w*|unable\s+to\s+save)\b", re.I)),
+    ec.ThemeRule("launch / open failure", "startup", "high", "launch",
+                 re.compile(r"\b(?:won't\s+open|wont\s+open|cannot\s+open|can't\s+open|fails\s+to\s+open|"
+                            r"won't\s+launch|won't\s+start|fails\s+to\s+launch)\b", re.I)),
+    ec.ThemeRule("slideshow failure", "presenting", "high", "slideshow",
+                 re.compile(r"\b(?:slideshow\w*|slide\s+show\w*|presenter\s+view)\b", re.I)),
+    ec.ThemeRule("export failure", "export", "high", "export",
+                 re.compile(r"\bexport\w*\b", re.I)),
+    ec.ThemeRule("animation / transition regression", "animation", "medium", "animation",
+                 re.compile(r"\b(?:animation\w*|transition\w*)\b", re.I)),
+    ec.ThemeRule("add-in incompatibility", "add-ins", "medium", "addin",
+                 re.compile(r"\b(?:add-ins?|add\s+ins?|addins?)\b", re.I)),
+    ec.ThemeRule("rendering regression", "rendering", "medium", "rendering",
+                 re.compile(r"\b(?:render\w*|display\w*|blank\s+slides?)\b", re.I)),
+    ec.ThemeRule("performance regression", "performance", "medium", "performance",
+                 re.compile(r"\b(?:slow\w*|lag(?:s|gy|ging|ged)?|performance|high\s+cpu|memory\s+leak\w*)\b",
+                            re.I)),
+    ec.ThemeRule("install/update failure", "update", "high", "install",
+                 re.compile(r"\b(?:install\w*|uninstall\w*|reinstall\w*|update\s+fail\w*)\b", re.I)),
+    # `negatable`: "no crash, but the add-in pane is blank" is not a crash report.
+    ec.ThemeRule("crash or hang", "system stability", "high", "crash",
+                 re.compile(r"\b(?:crash\w*|freeze\w*|hang(?:s|ing|ed)?|not\s+responding)\b", re.I),
+                 negatable=True),
+)
+ec.validate_rules(_POWERPOINT_THEME_RULES)
+
+# The platform every counted PowerPoint report has by construction. A counted row must name the
+# record's exact Click-to-Run build (`missing_exact_build` otherwise), and Click-to-Run Current
+# Channel is the Windows desktop client: Office for Mac numbers its releases 16.x and the web app
+# has no build. So the build identity establishes Windows even when the reporter never writes the
+# word -- the same reason `microsoft-windows-11` is definitional. It is NOT asserted against the
+# text: a report that itself names only another operating system reads `unknown`.
+POWERPOINT_DEFINITIONAL_PLATFORM = "windows"
+
+
+def classify(heading: str, body: str = "") -> tuple[str, str, str, str, str]:
+    """(theme, workflow_area, platform, severity, sentiment) for one PowerPoint report.
+
+    The old chain returned the literal "windows" on every branch, from no evidence at all. The
+    answer is now stated with its basis (`POWERPOINT_DEFINITIONAL_PLATFORM`) and refused when the
+    report contradicts it. SENTIMENT IS UNCHANGED: every branch of the old chain, the fallback
+    included, returned `negative`.
+    """
+    named = ec.resolve_platform(body or "", heading=heading or "")
+    if set(named.mentioned) - {POWERPOINT_DEFINITIONAL_PLATFORM}:
+        platform = ec.UNKNOWN_PLATFORM
+    else:
+        platform = POWERPOINT_DEFINITIONAL_PLATFORM
+    verdict = ec.score_themes(heading or "", body or "", _POWERPOINT_THEME_RULES)
+    if verdict is None:
+        return "unspecified PowerPoint issue", "PowerPoint workflow", platform, "medium", "negative"
+    return verdict.theme, verdict.area, platform, verdict.severity, "negative"
 
 
 # --- ordered, deterministic acceptance -----------------------------------------
@@ -685,7 +723,9 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
     )
     version_matched = version_in_context(combined, version, str(target.get("target_build") or ""))
     matched_version = version if version_matched else ""
-    theme, workflow_area, platform, severity, sentiment = classify(combined)
+    # Title and body SEPARATELY, so the reporter's own headline outweighs a passing body mention.
+    heading = " ".join(dict.fromkeys(title for title in (report_title.strip(), parent_title.strip()) if title))
+    theme, workflow_area, platform, severity, sentiment = classify(heading, report_body)
 
     row = make_evidence_row(
         product_id=PRODUCT_ID,

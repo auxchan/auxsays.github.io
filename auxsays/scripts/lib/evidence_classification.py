@@ -131,6 +131,20 @@ class ThemeVerdict:
     suppressed_hits: int = 0
 
 
+def legacy_substring_sentiment(text: str, triggers: "tuple[str, ...]") -> str:
+    """`negative` when any trigger occurs anywhere in `text` (case-insensitive substring), else
+    `moderate`: the sentiment rule of the substring if-chains the scored theme tables replaced.
+
+    Sentiment is verdict-bearing, and a theme repair must not move it. Correcting a false theme
+    match ("hang" inside "change") sends a row to the fallback theme, and the chains returned
+    `moderate` on their fallback -- so deriving sentiment from the NEW theme would dilute negative
+    consensus as a side effect of fixing a label. A collector that keeps this rule passes its old
+    chain's triggers verbatim; changing sentiment policy is a separate decision.
+    """
+    lowered = (text or "").lower()
+    return "negative" if any(trigger in lowered for trigger in triggers) else "moderate"
+
+
 def validate_rules(rules: "tuple[ThemeRule, ...] | list[ThemeRule]") -> None:
     """Refuse a malformed theme table. Called at import time by every collector that ships one."""
     seen: set[str] = set()
@@ -169,6 +183,13 @@ _CLAUSE_BOUNDARY_RE = re.compile(
 _PLAIN_NEGATION_RE = re.compile(
     r"(?:\b(?:no|not|never|none|nothing|nor|neither)\b"
     r"|\b(?:is|are|was|were|do|does|did|has|have|had)n[o']?t\b)", re.I)
+
+# A "not" that heads one of these ASSERTS a failure, so it is never a denial of the next symptom.
+# The `protected` spans below cover this only when the phrase is the rule's own match; a rule that
+# does not list "not responding" left its "not" free to bind, and in "very slow and often not
+# responding, also crashes sometimes" (a counted DaVinci row) it suppressed "crashes".
+_ASSERTED_FAILURE_RE = re.compile(
+    r"not\s+(?:responding|working|loading|opening|starting|launching)\b", re.I)
 
 
 def clause_spans(text: str) -> list[tuple[int, int]]:
@@ -216,6 +237,8 @@ def is_negated(
         return False
     for marker in _PLAIN_NEGATION_RE.finditer(text, window_start, position):
         if any(start <= marker.start() < end for start, end in protected):
+            continue
+        if _ASSERTED_FAILURE_RE.match(text, marker.start()):
             continue
         intervening = _WORD_RE.findall(text[marker.end():position])
         if len(intervening) <= NEGATION_MAX_INTERVENING_WORDS:
@@ -317,10 +340,15 @@ _WIN_VERSION_RE = re.compile(r"\bwin(?:dows)?\s?(?:7|8\.1|8|10|11|12|20\d\d)\b",
 # "(windows)" to mean a UI window. Parentheses only: square brackets belong to the placeholder
 # scrubber, because "[Windows 11 Pro 24H2 / macOS version]" is an UNFILLED template, not an answer.
 _WINDOWS_ANNOTATION_RE = re.compile(r"\(\s*(?:windows|win)\s*\)", re.I)
+# A title that OPENS with the platform as a tag: "Windows: since 32.2.0, plugins ..." or
+# "[Windows] ...". Heading only, and only with a separator, so a title such as "Windows disappear
+# after docking" still needs OS context.
+_WINDOWS_TITLE_TAG_RE = re.compile(r"^\s*[\[(]?\s*windows\s*[\]):|\-–—]", re.I)
 # `windows` preceded by something that frames it as a platform.
 _WINDOWS_BEFORE_RE = re.compile(
     r"\b(?:on|under|using|running|runs|ran|installed|install|reinstall|reinstalled|upgraded|"
-    r"os|o/s|platform|system|pc|laptop|desktop|machine|via|native|both)\b[\s:=,/\-]*$", re.I)
+    r"os|o/s|platform|system|specifications?|specs?|pc|laptop|desktop|machine|via|native|both)\b"
+    r"[\s:=,/\-]*$", re.I)
 # `windows` followed by an edition, a device noun or a version label.
 _WINDOWS_AFTER_RE = re.compile(
     r"^[\s:=,/\-]*(?:7|8|8\.1|10|11|12|20\d\d|pro|professional|home|enterprise|education|server|"
@@ -377,6 +405,7 @@ def resolve_platform(
     *,
     definitional: str | None = None,
     scrub: bool = True,
+    heading: str = "",
 ) -> PlatformVerdict:
     """Positive OS evidence from `text`, or `unknown`.
 
@@ -384,6 +413,11 @@ def resolve_platform(
     collector lane scoped to one client. It short-circuits, because `microsoft-windows-11` reports
     do not have to say the word "Windows" -- 197 of 488 of them do not, and a text-only resolver
     would wrongly downgrade every one.
+
+    `heading` is the reporter's own title, read WITHOUT the scrubbers. A bracketed span in a body is
+    an unfilled template ("OS: [Windows 11 Pro 24H2 / macOS version]"); in a title it is the
+    reporter's tag for their own machine ("[Linux] DaVinci Resolve can't open existing projects",
+    "[macOS 26 Tahoe] OBS crashes ..."), and scrubbing it threw away the only platform evidence.
     """
     if definitional:
         return PlatformVerdict(
@@ -394,7 +428,12 @@ def resolve_platform(
 
     raw = text or ""
     scrubbed = scrub_platform_text(raw) if scrub else raw
+    if heading:
+        raw = f"{heading} {raw}"
+        scrubbed = f"{heading} {scrubbed}"
     named = _named_platforms(scrubbed)
+    if heading and "windows" not in named and _WINDOWS_TITLE_TAG_RE.search(heading):
+        named.insert(0, "windows")
     suppressed: list[str] = []
 
     if "windows" not in named and _WINDOWS_WORD_RE.search(scrubbed):
