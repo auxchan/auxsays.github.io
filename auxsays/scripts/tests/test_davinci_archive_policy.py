@@ -668,9 +668,16 @@ def run() -> int:
     check("W7 the existing writeback already allows the generated directory, so no new writer or workflow is needed",
           bool(allow_ok))
     wf_dir = _REPO / ".github" / "workflows"
-    check("W8 no workflow other than patch-ingest runs the archive CLI",
-          [p.name for p in wf_dir.glob("*.yml") if "apply_davinci_archive_policy" in p.read_text(encoding="utf-8")]
-          == ["patch-ingest.yml"])
+    bc_text = (wf_dir / "davinci-archive-build-check.yml").read_text(encoding="utf-8")
+    bc = yaml.safe_load(bc_text)
+    bc_run = " ".join(str(s.get("run") or "") for s in bc["jobs"]["build-check"]["steps"])
+    check("W8 only patch-ingest and the read-only PR build check run the archive CLI; the check commits, pushes and deploys nothing",
+          sorted(p.name for p in wf_dir.glob("*.yml") if "apply_davinci_archive_policy" in p.read_text(encoding="utf-8"))
+          == ["davinci-archive-build-check.yml", "patch-ingest.yml"]
+          and list((bc.get(True) or bc.get("on")).keys()) == ["pull_request"]
+          and bc["permissions"] == {"contents": "read"}
+          and not re.search(r"git (commit|push)|automation_writeback|gh workflow|deploy-pages", bc_run + bc_text.replace("deploy, dispatch", "")
+                            .replace("deployed or dispatched", "").replace("deploys nothing", "")))
 
     # execute the shell: refusal is annotated but does not wedge; any other failure fails the step
     bash = bash_exe()
