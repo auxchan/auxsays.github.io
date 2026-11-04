@@ -97,6 +97,13 @@ auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
 auxsays/scripts/tests/test_powerpoint_qna_tag_enumeration.py = 65
 auxsays/scripts/tests/test_acrobat_tiering.py = 136
 
+# Automated Reddit collection is off unless written data-access authorisation is recorded. This pins
+# every Reddit path (DaVinci's JSON/OAuth/RSS ladder and watchlist hydration, the shared module behind
+# Acrobat/Premiere/PowerPoint, the manual seed tool) refusing before a socket opens, the truthful
+# `disabled` policy row, the writer keeping the real last attempt, and certification not softening.
+# Offline: every transport is a counter that refuses.
+auxsays/scripts/tests/test_reddit_access_policy.py = 86
+
 # A retired Acrobat method must report that it is retired. adobe_community_search and
 # reddit_search stopped executing, and the comment that retired them claimed their health rows
 # stayed honest; 286 rows instead froze at `blocked` with last_run 2026-08-07/2026-09-01 beside
@@ -356,6 +363,12 @@ auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 78
 auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
 auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80
 auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
+# The Windows 11 Forum discovery adapter ships DISABLED. This suite pins that disabled means disabled
+# (no request, no pool, no health row, no ownership entry), the 9-page / 40-hydration / 1.5 s request
+# budget at the session level, challenge classification, the opening-post-only parser, and the known
+# attribution weakness the unchanged authority has on thread 50506 (AUX-063, an activation blocker).
+# Fixture-only; the dry-run script it drives is zero-write and its output is checked here.
+auxsays/scripts/tests/test_elevenforum_adapter.py = 104
 # A monitoring claim must describe what collection actually DID. `coverage_status_label` is a
 # static editorial string, and three render sites published it as a claim: 29 products asserted
 # "Monitoring active" with no enabled source, 27 companies asserted it with zero healthy

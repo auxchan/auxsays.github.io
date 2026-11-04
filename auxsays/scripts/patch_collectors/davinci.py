@@ -21,6 +21,12 @@ from datetime import datetime, timezone
 from typing import Any
 
 from lib import evidence_classification as ec
+from lib.reddit_access_policy import (
+    POLICY_NOTE as REDDIT_POLICY_NOTE,
+    POLICY_REASON as REDDIT_POLICY_REASON,
+    reddit_access_authorized,
+    require_reddit_access,
+)
 from lib.normalize_davinci_version import normalize_davinci_version
 
 from .base import (
@@ -541,6 +547,7 @@ def with_raw_json(url: str) -> str:
 
 
 def request_json(url: str, *, endpoint_family: str = "reddit_json") -> Any:
+    require_reddit_access()  # AUX D2: refuse before any socket is opened
     headers = dict(JSON_HEADERS)
     token = os.getenv("REDDIT_BEARER_TOKEN")
     if token:
@@ -627,6 +634,7 @@ def reddit_failure_summary(failures: list[dict[str, Any]]) -> str:
 
 
 def request_reddit_json_with_fallback(attempts: list[tuple[str, str]]) -> Any:
+    require_reddit_access()  # AUX D2: refuse before any socket is opened
     failures: list[dict[str, Any]] = []
     for endpoint_family, url in attempts:
         try:
@@ -647,6 +655,7 @@ def request_reddit_json_with_fallback(attempts: list[tuple[str, str]]) -> Any:
 
 
 def request_reddit_feed(url: str, *, endpoint_family: str) -> list[dict[str, Any]]:
+    require_reddit_access()  # AUX D2: refuse before any socket is opened
     headers = dict(FEED_HEADERS)
     headers_strategy = "reddit_descriptive_ua_feed"
     request = urllib.request.Request(url, headers=headers)
@@ -730,6 +739,7 @@ def request_reddit_feed(url: str, *, endpoint_family: str) -> list[dict[str, Any
 
 
 def request_reddit_feed_with_fallback(attempts: list[tuple[str, str]]) -> list[dict[str, Any]]:
+    require_reddit_access()  # AUX D2: refuse before any socket is opened
     failures: list[dict[str, Any]] = []
     for endpoint_family, url in attempts:
         try:
@@ -883,7 +893,26 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
         ("web_search", "web_search", web_search_candidates),
     )
 
+    reddit_unauthorised = not reddit_access_authorized()
     for method_id, source_type, method in method_stack:
+        if method_id == "reddit_search" and reddit_unauthorised:
+            # AUX D2: no written Reddit data-access authorisation, so nothing is requested. The row
+            # says `disabled` for POLICY, never no_results/success, and carries no last_run of its
+            # own: the writer keeps the prior row's real last attempt (base.upsert_method_health).
+            health.append(method_health_row(
+                product_id=PRODUCT_ID,
+                update_version=record.update_version,
+                method_id=method_id,
+                source_type=source_type,
+                status="disabled",
+                candidates_found=0,
+                accepted_reports=0,
+                rejected_reports=0,
+                blocked_reason=REDDIT_POLICY_REASON,
+                last_run="",
+                notes=REDDIT_POLICY_NOTE,
+            ))
+            continue
         errors: list[dict[str, Any]] = []
         candidates = method(record, context, errors)
         method_accepted, method_rejected = evaluate_candidates(record, candidates, captured_at, seen_urls)
@@ -943,6 +972,8 @@ def evaluate_candidates(
 
 
 def reddit_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if not reddit_access_authorized():
+        return []  # AUX D2: backstop; collect_for_record reports the method `disabled`
     queries = reddit_search_queries(record)
     candidates: list[dict[str, Any]] = []
     seen_queries: set[str] = set()
@@ -1633,6 +1664,8 @@ def source_probe_candidates(
     candidates: list[dict[str, Any]] = []
     for probe in probes:
         if "reddit.com" in probe["source_url"]:
+            if not reddit_access_authorized():
+                continue  # AUX D2: watchlist hydration of a Reddit post is a Reddit request
             try:
                 candidates.append(reddit_post_candidate(probe["source_url"], probe.get("source_name", "")))
             except Exception as exc:
