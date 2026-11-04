@@ -452,7 +452,7 @@ evidence:
   exclusion_reason: null
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: moderate
   source_weight: 1
@@ -788,7 +788,7 @@ evidence:
   exclusion_reason: null
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: moderate
   source_weight: 1
@@ -1146,10 +1146,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-1-1-github-issue-13300
@@ -2202,8 +2202,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: magic mask crash
-  workflow_area: color grading / Magic Mask
+  issue_theme: startup or application crash
+  workflow_area: application stability
   platform: macos
   severity: high
   sentiment: negative
@@ -2396,7 +2396,7 @@ evidence:
   exclusion_reason: null
   issue_theme: install issue
   workflow_area: installation
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -2708,7 +2708,7 @@ evidence:
   exclusion_reason: null
   issue_theme: freeze / hang
   workflow_area: application stability
-  platform: windows
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -4048,7 +4048,7 @@ evidence:
   exclusion_reason: null
   issue_theme: performance regression
   workflow_area: timeline / GPU performance
-  platform: macos
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -4366,7 +4366,7 @@ evidence:
   exclusion_reason: null
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: moderate
   source_weight: 1
@@ -4769,10 +4769,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uh7sl1-davinciresolve-just-crashes-after-selecti
@@ -4976,10 +4976,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ukwyid-color-difference-when-exporting-photos
@@ -5050,7 +5050,7 @@ evidence:
   exclusion_reason: null
   issue_theme: render/export failure
   workflow_area: render/export
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -5120,10 +5120,10 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: startup or application crash
-  workflow_area: application stability
+  issue_theme: render/export failure
+  workflow_area: render/export
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1um6nyq-moving-projects-between-mac-and-pc
@@ -6121,7 +6121,7 @@ evidence:
   exclusion_reason: null
   issue_theme: unspecified issue
   workflow_area: general DaVinci Resolve workflow
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: moderate
   source_weight: 1
@@ -6219,7 +6219,7 @@ evidence:
   exclusion_reason: null
   issue_theme: unspecified issue
   workflow_area: general DaVinci Resolve workflow
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: moderate
   source_weight: 1
@@ -7565,7 +7565,7 @@ evidence:
   exclusion_reason: null
   issue_theme: performance regression
   workflow_area: timeline / GPU performance
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -7707,10 +7707,10 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: startup or application crash
-  workflow_area: application stability
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-1-2-github-issue-13684
@@ -8117,7 +8117,7 @@ evidence:
   exclusion_reason: null
   issue_theme: screen capture regression
   workflow_area: screen/window capture
-  platform: windows
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -8448,10 +8448,10 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: startup or application crash
-  workflow_area: application stability
+  issue_theme: render/export failure
+  workflow_area: render/export
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qndlqo-problems-with-davinci-resolve-20
@@ -8546,7 +8546,7 @@ evidence:
   exclusion_reason: null
   issue_theme: compatibility issue
   workflow_area: plugins / codecs
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -8709,10 +8709,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-2-0-github-issue-13686
@@ -8730,10 +8730,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-2-0-github-issue-13689
@@ -8874,7 +8874,7 @@ evidence:
   exclusion_reason: multiple_builds_named_target_not_blamed
   issue_theme: install/update failure
   workflow_area: deployment
-  platform: windows
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -8952,7 +8952,7 @@ evidence:
   exclusion_reason: multiple_builds_named_target_not_blamed
   issue_theme: install/update failure
   workflow_area: deployment
-  platform: windows
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -9049,8 +9049,8 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: audio mixer regression
-  workflow_area: audio mixer UI
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: windows
   severity: medium
   sentiment: negative
@@ -9398,7 +9398,7 @@ evidence:
   exclusion_reason: null
   issue_theme: startup or application crash
   workflow_area: application stability
-  platform: windows
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -9422,7 +9422,7 @@ evidence:
   exclusion_reason: null
   issue_theme: startup or application crash
   workflow_area: application stability
-  platform: windows
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -9853,7 +9853,7 @@ evidence:
   exclusion_reason: null
   issue_theme: render/export failure
   workflow_area: render/export
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -11149,7 +11149,7 @@ evidence:
   exclusion_reason: null
   issue_theme: render/export failure
   workflow_area: render/export
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -11251,10 +11251,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: macos
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-1-0-github-issue-13713
@@ -11316,7 +11316,7 @@ evidence:
   exclusion_reason: null
   issue_theme: audio mixer regression
   workflow_area: audio mixer UI
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -11419,10 +11419,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: macos
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-2-1-github-issue-13724
@@ -11505,7 +11505,7 @@ evidence:
   exclusion_reason: null
   issue_theme: audio mixer regression
   workflow_area: audio mixer UI
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -30717,7 +30717,7 @@ evidence:
   exclusion_reason: null
   issue_theme: render/export failure
   workflow_area: render/export
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -30818,7 +30818,7 @@ evidence:
   exclusion_reason: null
   issue_theme: performance regression
   workflow_area: timeline / GPU performance
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -31298,7 +31298,7 @@ evidence:
   exclusion_reason: null
   issue_theme: render/export failure
   workflow_area: render/export
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -32144,7 +32144,7 @@ evidence:
   exclusion_reason: null
   issue_theme: startup or application crash
   workflow_area: application stability
-  platform: macos
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -32715,10 +32715,10 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: startup or application crash
-  workflow_area: application stability
+  issue_theme: render/export failure
+  workflow_area: render/export
   platform: unknown
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wgm2a5-cannot-for-the-life-of-me-get-a-clean-exp
@@ -48685,7 +48685,7 @@ evidence:
   exclusion_reason: null
   issue_theme: export/render failure
   workflow_area: export/render
-  platform: windows
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -48755,10 +48755,10 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: media decode or audio/video issue
-  workflow_area: media playback
+  issue_theme: application crash or hang
+  workflow_area: application stability
   platform: unknown
-  severity: medium
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-26-2-2-severe-ui-lag-and-freezing-on
@@ -48781,7 +48781,7 @@ evidence:
   exclusion_reason: null
   issue_theme: export/render failure
   workflow_area: export/render
-  platform: windows
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -48827,10 +48827,10 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: media decode or audio/video issue
-  workflow_area: media playback
+  issue_theme: application crash or hang
+  workflow_area: application stability
   platform: windows
-  severity: medium
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-pr-26-2-2-timeremapped-nest-bug-1632360
@@ -49117,7 +49117,7 @@ evidence:
   exclusion_reason: null
   issue_theme: export/render failure
   workflow_area: export/render
-  platform: windows
+  platform: unknown
   severity: high
   sentiment: negative
   source_weight: 1
@@ -49163,10 +49163,10 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: export/render failure
-  workflow_area: export/render
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
   platform: unknown
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wadm4j-export-seemingly-is-a-much-larger-file-th
@@ -51216,10 +51216,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: macos
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-0-0-obs-forum-thread-190590
@@ -51384,10 +51384,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: macos
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-2-1-obs-forum-thread-196249
@@ -56807,7 +56807,7 @@ evidence:
   exclusion_reason: null
   issue_theme: render/export failure
   workflow_area: render/export
-  platform: windows
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
@@ -61483,10 +61483,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: unknown
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-33-0-0-github-issue-14088
@@ -62972,10 +62972,10 @@ evidence:
   match_basis: body
   counted: true
   exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-33-0-1-github-issue-14119
