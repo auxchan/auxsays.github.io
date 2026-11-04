@@ -65,6 +65,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-055 | Resolved | Published claims | High | A stored live-consensus claim would keep rendering as live after the collection behind it stopped |
 | AUX-056 | Resolved | Published claims | High | No writer could store live consensus, so a release that earned it could never show it |
 | AUX-057 | Deferred | Published claims | Medium | A certified-live Windows page also says its evidence has not been revalidated recently |
+| AUX-058 | Resolved | Evidence integrity | Medium | DaVinci, OBS and PowerPoint still guessed themes and platforms from substrings |
 
 ---
 
@@ -3907,6 +3908,48 @@ it, and whether a separate field backed by actual report revalidation is needed.
 page rule, and never derive freshness from method-health telemetry.
 
 **Work that this item must not block** Live promotion and revocation, and the classification sprint.
+
+---
+
+### AUX-058 — DaVinci, OBS and PowerPoint still guessed themes and platforms from substrings
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
+
+AUX-041 repaired the Adobe collectors; three others kept the substring chains. Reproduced against
+the shipped functions on counted rows:
+
+    OBS      "... does not re-randomize ... on scene change"   -> freeze / hang  ("hang" in "change")
+    OBS      "spawns numerous small windows", Ubuntu 22.04     -> platform: windows (a UI noun)
+    OBS      "Other OS: Arch Linux and Windows 10"             -> platform: windows (two named)
+    DaVinci  "[Linux] DaVinci Resolve can't open ..."          -> platform: windows
+    DaVinci  "... segfault at GPUDetect ..."                   -> performance regression ("gpu")
+    PowerPoint, any text                                       -> platform: windows (a literal)
+
+**The repair.** Each collector now scores the shared classifier's word-boundary rules with the title
+weighted, keeps its own themes, areas and severities in the old priority order, and opts its
+symptom rules into negation. Platform is positive OS evidence or `unknown`. PowerPoint's is stated
+as definitional: a counted row names a Windows Click-to-Run build, so Windows holds unless the
+report names another OS.
+
+**Sentiment does not move.** It is verdict-bearing, and correcting a false theme sends a row to
+the fallback, which the chains scored `moderate`. So sentiment is still exactly what the replaced
+chain returned for the same text (`ec.legacy_substring_sentiment`). Measured over the retained text
+of all 630 stored rows of the three products: 0 sentiment changes. Changing sentiment policy is a
+separate decision.
+
+**Shared-resolver refinements, each from an audited row.** A title's bracketed tag ("[Linux]",
+"[macOS 26 Tahoe]") is the reporter's own label, so the heading is read without the template
+scrubber. "Windows:" opening a title, and "specifications: Windows", are OS evidence. A "not" that
+heads an asserted failure ("not responding") is never a denial. Adobe's suite is unchanged at 58/58.
+
+**Verification.** `test_collector_classification.py = 33` [blocking], frozen verbatim fixtures; 10
+single-fix mutants, each caught by a named check.
+
+**Reopen only if** a stored DaVinci, OBS or PowerPoint row names a theme its own text supports only
+through a substring of another word or a denied symptom, carries a platform with no positive OS
+evidence (PowerPoint: names another OS), or its sentiment differs from the replaced chain's for the
+same text.
 
 ## Adding an entry
 
