@@ -64,6 +64,11 @@ auxsays/scripts/tests/test_evidence_classification.py = 58
 # Sentiment is pinned to the replaced chains' own rule, so a theme repair cannot move a verdict.
 auxsays/scripts/tests/test_collector_classification.py = 33
 
+# The historical half: stored rows re-derived only where the classifier that wrote them reproduces the
+# label from the retained text. Platform downgrade-only, sentiment never written, edits block-scoped by
+# row position (ids repeat across Acrobat Pro/Reader), and a second run changes nothing.
+auxsays/scripts/tests/test_recompute_evidence_classification.py = 18
+
 # The merge authority. AUX-013 was not a missing rule, it was a rule with nothing behind it: PR #163
 # merged nineteen seconds after its own ci-integrity run concluded `failure`, because the status read
 # and the merge were one gesture. Server-side enforcement was measured and refused (three probes in

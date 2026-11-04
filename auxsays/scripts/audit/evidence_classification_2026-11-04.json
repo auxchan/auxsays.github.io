@@ -1,0 +1,970 @@
+{
+  "generated_at": "2026-11-04T04:17:53Z",
+  "store_sha256_before": "51bb180e80773f2a2edf5e162812318294777669b04ea684981a990132a2f775",
+  "store_sha256_after": "5f07cb5678eb538de291df39a30590e238371edaabf09b6aad9b7b40f93ef2cf",
+  "rows_in_scope": 971,
+  "rows_changed": 48,
+  "platform_labels_written": 28,
+  "themes_written": 20,
+  "summary": {
+    "adobe-premiere-pro:platform": {
+      "confirmed": 17,
+      "not_reproducible_from_retained_text": 7,
+      "downgraded_unsupported": 3,
+      "upgrade_withheld": 2
+    },
+    "adobe-premiere-pro:theme": {
+      "not_reproducible_from_retained_text": 15,
+      "confirmed": 10,
+      "rewritten_outranked_by_title": 3,
+      "kept_supported": 1
+    },
+    "obs-studio:platform": {
+      "confirmed": 229,
+      "upgrade_withheld": 11,
+      "not_reproducible_from_retained_text": 39,
+      "downgraded_unsupported": 5,
+      "downgraded_swap_refused": 2
+    },
+    "obs-studio:theme": {
+      "confirmed": 175,
+      "not_reproducible_from_retained_text": 98,
+      "kept_supported": 1,
+      "rewritten_unsupported": 12
+    },
+    "blackmagic-davinci:platform": {
+      "confirmed": 186,
+      "not_reproducible_from_retained_text": 129,
+      "upgrade_withheld": 4,
+      "downgraded_swap_refused": 1,
+      "downgraded_unsupported": 15
+    },
+    "blackmagic-davinci:theme": {
+      "not_reproducible_from_retained_text": 99,
+      "confirmed": 223,
+      "rewritten_outranked_by_title": 4,
+      "kept_supported": 8,
+      "rewritten_unsupported": 1
+    },
+    "adobe-acrobat-reader:platform": {
+      "confirmed": 131,
+      "not_reproducible_from_retained_text": 48,
+      "downgraded_unsupported": 2,
+      "upgrade_withheld": 7
+    },
+    "adobe-acrobat-reader:theme": {
+      "not_in_scope": 38,
+      "confirmed": 150
+    },
+    "adobe-acrobat-pro:platform": {
+      "not_reproducible_from_retained_text": 31,
+      "confirmed": 84,
+      "upgrade_withheld": 9
+    },
+    "adobe-acrobat-pro:theme": {
+      "confirmed": 104,
+      "not_in_scope": 20
+    },
+    "microsoft-powerpoint:platform": {
+      "confirmed": 9
+    },
+    "microsoft-powerpoint:theme": {
+      "kept_supported": 1,
+      "confirmed": 7,
+      "not_reproducible_from_retained_text": 1
+    }
+  },
+  "changes": [
+    {
+      "id": "obs-studio-32-1-1-github-issue-13278",
+      "product_id": "obs-studio",
+      "update_version": "32.1.1",
+      "counted": true,
+      "title": "OBS Dock size issue",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "obs-studio-32-1-1-github-issue-13340",
+      "product_id": "obs-studio",
+      "update_version": "32.1.1",
+      "counted": true,
+      "title": "starting OBS (flatpak) spawns numerous small windows",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_swap_refused",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "obs-studio-32-1-1-github-issue-13358",
+      "product_id": "obs-studio",
+      "update_version": "32.1.1",
+      "counted": true,
+      "title": "VLC Source: Shuffle/Random option does not re-randomize or update from disk on scene change",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sgdei7-need-help-to-figure-out-what-making-davin",
+      "product_id": "blackmagic-davinci",
+      "update_version": "20.3.2",
+      "counted": true,
+      "title": "Need help to figure out what making Davinci keep on crashing.",
+      "issue_theme": [
+        "magic mask crash",
+        "startup or application crash"
+      ],
+      "workflow_area": [
+        "color grading / Magic Mask",
+        "application stability"
+      ],
+      "severity": [
+        "high",
+        "high"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_outranked_by_title"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rtulu2-linux-davinci-resolve-cant-open-existing",
+      "product_id": "blackmagic-davinci",
+      "update_version": "20.3.2",
+      "counted": true,
+      "title": "[Linux] DaVinci Resolve can't open existing projects",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_swap_refused",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "obs-studio-32-1-2-github-issue-13436",
+      "product_id": "obs-studio",
+      "update_version": "32.1.2",
+      "counted": true,
+      "title": "GIFs from EmoteLab freeze every second",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tzqxgt-help-text-macro-animation-scales-to-the-f",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve Studio 21)",
+      "platform": [
+        "macos",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "obs-studio-32-1-2-github-issue-13556",
+      "product_id": "obs-studio",
+      "update_version": "32.1.2",
+      "counted": true,
+      "title": "YouTube Manage Broadcast dialog exceeds screen height on external monitors  - bottom buttons clipped",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "obs-studio-32-1-2-github-issue-13595",
+      "product_id": "obs-studio",
+      "update_version": "32.1.2",
+      "counted": true,
+      "title": "Consumes GPU watts , memory and processing power unnecessarily unless keeps changing process priority",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "obs-studio-32-1-2-github-issue-13613",
+      "product_id": "obs-studio",
+      "update_version": "32.1.2",
+      "counted": true,
+      "title": "Losing Additional Canvas with Enhanced Broadcasting after changing Output Resolution",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ukvckd-davinci-resolve-randomly-freezes-my-entir",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "DaVinci Resolve randomly freezes my entire Windows",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1umkzs4-problem-to-export-fbx-from-blender-to-fus",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21.0.2",
+      "counted": true,
+      "title": "Problem to export fbx from blender to fusion",
+      "issue_theme": [
+        "startup or application crash",
+        "render/export failure"
+      ],
+      "workflow_area": [
+        "application stability",
+        "render/export"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_outranked_by_title"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzxa5d-i-cannot-open-my-spline-window-in-fusion",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21.0.2",
+      "counted": true,
+      "title": "I cannot open my Spline window in Fusion",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzxa5d-i-cannot-open-my-spline-window-in-fusion",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "I cannot open my Spline window in Fusion",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ozn0cl-windows-color-managed-hdr-viewers-seconda",
+      "product_id": "blackmagic-davinci",
+      "update_version": "20.2.3",
+      "counted": true,
+      "title": "Windows color managed HDR viewers: Secondary window with HDR+SDR dual screen workspace has incorrect gamma, but main win",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1os2u3c-ai-multicam-smartswitch-the-gpu-failed-to",
+      "product_id": "blackmagic-davinci",
+      "update_version": "20.2.3",
+      "counted": true,
+      "title": "AI Multicam SmartSwitch - \"The GPU failed to perform image processing\" Error 9 Fix",
+      "issue_theme": [
+        "startup or application crash",
+        "performance regression"
+      ],
+      "workflow_area": [
+        "application stability",
+        "timeline / GPU performance"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "not_reproducible_from_retained_text",
+        "theme": "rewritten_outranked_by_title"
+      }
+    },
+    {
+      "id": "obs-studio-31-0-4-github-issue-13568",
+      "product_id": "obs-studio",
+      "update_version": "31.0.4",
+      "counted": true,
+      "title": "Game Capture black screen with Tibia client.exe, but Streamlabs captures correctly.",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qq2k3k-da-vinci-resolve-freeze-during-render-no",
+      "product_id": "blackmagic-davinci",
+      "update_version": "20",
+      "counted": true,
+      "title": "Da Vinci Resolve freeze during render. No crashes, the render process just drags to a halt.",
+      "issue_theme": [
+        "startup or application crash",
+        "render/export failure"
+      ],
+      "workflow_area": [
+        "application stability",
+        "render/export"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "not_reproducible_from_retained_text",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n36bvq-windows-davinci-resolve-studio-201-and-20",
+      "product_id": "blackmagic-davinci",
+      "update_version": "20.1",
+      "counted": true,
+      "title": "Windows Davinci Resolve Studio 20.1 and 20.1.1 won't work with DNxHR 444 anymore",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "obs-studio-32-1-2-github-issue-13686",
+      "product_id": "obs-studio",
+      "update_version": "32.1.2",
+      "counted": true,
+      "title": "Game Capture failing to capture in some environments due to DLL load changes",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "not_reproducible_from_retained_text",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "obs-studio-32-2-0-github-issue-13686",
+      "product_id": "obs-studio",
+      "update_version": "32.2.0",
+      "counted": true,
+      "title": "Game Capture failing to capture in some environments due to DLL load changes",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "acrobat-20-009-20067-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-install-adobe-acrobat-reader-dc-the-upgrade-pat",
+      "product_id": "adobe-acrobat-reader",
+      "update_version": "20.009.20067",
+      "counted": false,
+      "title": "Unable to install Adobe acrobat reader DC - the upgrade patch cannot be installed...",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "acrobat-20-009-20063-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-install-adobe-acrobat-reader-dc-the-upgrade-pat",
+      "product_id": "adobe-acrobat-reader",
+      "update_version": "20.009.20063",
+      "counted": false,
+      "title": "Unable to install Adobe acrobat reader DC - the upgrade patch cannot be installed...",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "obs-studio-32-2-0-github-issue-13692",
+      "product_id": "obs-studio",
+      "update_version": "32.2.0",
+      "counted": true,
+      "title": "CoreAudio not loading on 32.2 when DLLs in PATH-referenced folder",
+      "issue_theme": [
+        "audio mixer regression",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "audio mixer UI",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v2wign-davinci-resolve-19-studio-version-causing",
+      "product_id": "blackmagic-davinci",
+      "update_version": "19",
+      "counted": true,
+      "title": "Davinci Resolve 19 Studio Version causing black screen of death",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzkqzk-i-need-help-my-davinci-resolve-keeps-cras",
+      "product_id": "blackmagic-davinci",
+      "update_version": "19",
+      "counted": true,
+      "title": "I Need Help: My Davinci Resolve Keeps Crashing Despite Working Before",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v5o79j-davinci-resolve-2021-unsupported-gpu-proc",
+      "product_id": "blackmagic-davinci",
+      "update_version": "20",
+      "counted": true,
+      "title": "DaVinci Resolve 20/21: \"Unsupported GPU Processing Mode\" - RX 6600 detected by Windows but not by Resolve",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vbx2ti-davinci-resolve-out-of-gpu-memory",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "Davinci resolve out of gpu memory",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "obs-studio-31-1-2-github-issue-13711",
+      "product_id": "obs-studio",
+      "update_version": "31.1.2",
+      "counted": true,
+      "title": "Opening Image Source Properties or changing image file causes rendering lag and skipped rendering frames on macOS (Apple",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "obs-studio-32-1-2-github-issue-13746",
+      "product_id": "obs-studio",
+      "update_version": "32.1.2",
+      "counted": true,
+      "title": "OBS crashes after starting an existing scheduled YouTube broadcast — YouTubeStreamCheckThread / Qt6Core.dll",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "obs-studio-32-2-1-github-issue-13711",
+      "product_id": "obs-studio",
+      "update_version": "32.2.1",
+      "counted": true,
+      "title": "Opening Image Source Properties or changing image file causes rendering lag and skipped rendering frames on macOS (Apple",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "obs-studio-32-2-1-github-issue-13739",
+      "product_id": "obs-studio",
+      "update_version": "32.2.1",
+      "counted": true,
+      "title": "Browser Source audio control causes excessive WindowServer CPU usage on Intel macOS Tahoe",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_swap_refused",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v5o79j-davinci-resolve-2021-unsupported-gpu-proc",
+      "product_id": "blackmagic-davinci",
+      "update_version": "20.2.2",
+      "counted": true,
+      "title": "DaVinci Resolve 20/21: \"Unsupported GPU Processing Mode\" - RX 6600 detected by Windows but not by Resolve",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w927vk-why-isnt-my-gpu-being-recognized-resolve",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "Why isn't my GPU being recognized? (Resolve 21, Debian 13 KDE)",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wd9wok-davinci-resolve-fusion-cache-rendering-to",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21.0.2",
+      "counted": true,
+      "title": "DaVinci Resolve Fusion + cache Rendering too long",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wgob5a-resolve-211-preset-bug-help",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21.1",
+      "counted": true,
+      "title": "Resolve 21.1 Preset Bug Help",
+      "platform": [
+        "macos",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vkctcb-i-cant-get-davinci-to-export",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21.0.4",
+      "counted": true,
+      "title": "I cant get Davinci to export",
+      "issue_theme": [
+        "startup or application crash",
+        "render/export failure"
+      ],
+      "workflow_area": [
+        "application stability",
+        "render/export"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_outranked_by_title"
+      }
+    },
+    {
+      "id": "adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-26-2-2-severe-ui-lag-and-freezing-on",
+      "product_id": "adobe-premiere-pro",
+      "update_version": "26.2",
+      "counted": true,
+      "title": "Premiere Pro 26.2 / 26.2.2 — Severe UI lag and freezing on every click (resolved only by rolling back to 26.0.2)",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-in-26-2-2-the-app-would-freeze-whenever-i-needed-to-op",
+      "product_id": "adobe-premiere-pro",
+      "update_version": "26.2.2",
+      "counted": true,
+      "title": "In 26.2.2, the app would freeze whenever I needed to open a drop-down in the menu.",
+      "issue_theme": [
+        "media decode or audio/video issue",
+        "application crash or hang"
+      ],
+      "workflow_area": [
+        "media playback",
+        "application stability"
+      ],
+      "severity": [
+        "medium",
+        "high"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_outranked_by_title"
+      }
+    },
+    {
+      "id": "adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-26-2-2-severe-ui-lag-and-freezing-on",
+      "product_id": "adobe-premiere-pro",
+      "update_version": "26.2.2",
+      "counted": true,
+      "title": "Premiere Pro 26.2 / 26.2.2 — Severe UI lag and freezing on every click (resolved only by rolling back to 26.0.2)",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "not_reproducible_from_retained_text"
+      }
+    },
+    {
+      "id": "adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-in-version-26-2-2-auto-save-is-causing-premier-to-cras",
+      "product_id": "adobe-premiere-pro",
+      "update_version": "26.2.2",
+      "counted": true,
+      "title": "In version 26.2.2, auto-save is causing Premier to crash",
+      "issue_theme": [
+        "media decode or audio/video issue",
+        "application crash or hang"
+      ],
+      "workflow_area": [
+        "media playback",
+        "application stability"
+      ],
+      "severity": [
+        "medium",
+        "high"
+      ],
+      "basis": {
+        "platform": "not_reproducible_from_retained_text",
+        "theme": "rewritten_outranked_by_title"
+      }
+    },
+    {
+      "id": "adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-26-2-2-unstable-1624607",
+      "product_id": "adobe-premiere-pro",
+      "update_version": "26.2.2",
+      "counted": true,
+      "title": "Premiere 26.2.2 unstable",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "kept_supported"
+      }
+    },
+    {
+      "id": "adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-2-2-b3-does-not-transfer-audio-from-co",
+      "product_id": "adobe-premiere-pro",
+      "update_version": "26.2.2",
+      "counted": true,
+      "title": "Premiere Pro (26.2.2. B3) does not transfer audio from corresponding video clip when adding to an existing sequence (eit",
+      "issue_theme": [
+        "export/render failure",
+        "media decode or audio/video issue"
+      ],
+      "workflow_area": [
+        "export/render",
+        "media playback"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "upgrade_withheld",
+        "theme": "rewritten_outranked_by_title"
+      }
+    },
+    {
+      "id": "obs-studio-31-1-2-obs-forum-thread-196230",
+      "product_id": "obs-studio",
+      "update_version": "31.1.2",
+      "counted": true,
+      "title": "Image Source causes rendering lag and dropped frames when opening Properties or changing images on macOS",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "obs-studio-32-2-1-obs-forum-thread-196230",
+      "product_id": "obs-studio",
+      "update_version": "32.2.1",
+      "counted": true,
+      "title": "Image Source causes rendering lag and dropped frames when opening Properties or changing images on macOS",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x2ttin-a-second-preview-panel-has-hit-my-screen",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "A second preview panel has hit my screen and I cant remove it",
+      "platform": [
+        "windows",
+        "unknown"
+      ],
+      "basis": {
+        "platform": "downgraded_unsupported",
+        "theme": "confirmed"
+      }
+    },
+    {
+      "id": "obs-studio-32-2-2-obs-forum-thread-196689",
+      "product_id": "obs-studio",
+      "update_version": "32.2.2",
+      "counted": true,
+      "title": "Nvidia Renderer Error, OBS Crash",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "obs-studio-33-0-0-github-issue-14118",
+      "product_id": "obs-studio",
+      "update_version": "33.0.0",
+      "counted": true,
+      "title": "Local browser overlay unable to connect to port due preconnect",
+      "issue_theme": [
+        "freeze / hang",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "application stability",
+        "general OBS workflow"
+      ],
+      "severity": [
+        "high",
+        "medium"
+      ],
+      "basis": {
+        "platform": "not_reproducible_from_retained_text",
+        "theme": "rewritten_unsupported"
+      }
+    }
+  ],
+  "parent_commit": "9a2106d226af6d9c0f8a1c5e110bb46cf1e54bf7",
+  "classifier_sha256": {
+    "auxsays/scripts/lib/evidence_classification.py": "57861113bc2ee1b765354fbe04defcc9c374201d632f4c6efe9fe9e7adf70e77",
+    "auxsays/scripts/patch_collectors/davinci.py": "de7dfc9f26376a8b58fccfb58144eb86ae57fc120ac64934ed8b8539216ae6ee",
+    "auxsays/scripts/collect_obs_reports.py": "253c5ddd683c793154e396a507d0ba64eb2a9e76884b722cfc5580a74f3b4ce0",
+    "auxsays/scripts/patch_collectors/microsoft_powerpoint.py": "b24906d310f8c3d74d3dfd1b9dcad480b27ace11133b92a831f98acf729737a2",
+    "auxsays/scripts/patch_collectors/adobe_premiere.py": "2adf0ac29a933feda8f4dc78b81bf72841a5d138741439a922cb8894cc82d869",
+    "auxsays/scripts/patch_collectors/adobe_acrobat_community.py": "18920e1e404fb45df471252c3b58d5630435f2dfe4f093e141f403278e320998",
+    "auxsays/scripts/recompute_evidence_classification.py": "befd96cb5d2a93040ca1b090c7c7eb5b3255bd3e03dabb1875ec939bc9ae74f8"
+  },
+  "second_run_rows_changed": 0
+}

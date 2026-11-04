@@ -66,6 +66,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-056 | Resolved | Published claims | High | No writer could store live consensus, so a release that earned it could never show it |
 | AUX-057 | Deferred | Published claims | Medium | A certified-live Windows page also says its evidence has not been revalidated recently |
 | AUX-058 | Resolved | Evidence integrity | Medium | DaVinci, OBS and PowerPoint still guessed themes and platforms from substrings |
+| AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 
 ---
 
@@ -3950,6 +3951,52 @@ single-fix mutants, each caught by a named check.
 through a substring of another word or a denied symptom, carries a platform with no positive OS
 evidence (PowerPoint: names another OS), or its sentiment differs from the replaced chain's for the
 same text.
+
+---
+
+### AUX-059 — stored evidence kept the old classifiers' guesses after both repairs
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
+
+AUX-041 and AUX-058 fixed the producers. Rows are append-only inside a collector run, so every row
+already written kept its guessed theme and platform, and the theme is published prose.
+
+**The rule: re-judge only when the evidence is in hand.** The stored excerpt is truncated, so a
+label may have come from text no longer stored. `recompute_evidence_classification.py` re-judges a
+row only when the classifier that PRODUCED it reproduces the stored label from the retained text: a
+frozen copy of the replaced chain for rows captured before that collector's repair, the shipped one
+after. Then platform is downgrade-only (never upgraded, a different named OS refused), and a theme is
+rewritten only when its own rule no longer hits the retained text, or the reporter's title names the
+new theme and never the stored one. Severity and workflow area travel with a rewritten theme.
+
+**Never written:** sentiment, counted status, exclusion reason, identity, URLs, dates, version-match
+fields and the text. The edit is block-scoped and addressed by row POSITION -- an id is not an
+identity here, because Acrobat Pro and Reader rows share ids for a shared build -- and the run
+refuses unless every other field of every row parses back unchanged.
+
+**Measured** (`scripts/audit/evidence_classification_2026-11-04.json`, with the parent commit and
+classifier hashes): 971 rows in scope, 48 written (46 counted): 28 platform labels, every one to
+`unknown` (DaVinci 16, OBS 7, Premiere 3, Acrobat Reader 2), and 20 themes (OBS 12 -- each the
+"hang" inside "change" or a word-boundary miss -- DaVinci 5, Premiere 3). PowerPoint and Acrobat Pro: 0.
+Kept because the retained text cannot reproduce the stored label: 254 platform and 213 theme
+decisions, recorded per product in the artifact. A second run writes nothing.
+
+**Two would-be regressions found by auditing each change, both fixed in the classifier rather than
+excused in the migration** (AUX-058): a "Windows:" title tag, and a "not responding" that suppressed
+"crashes".
+
+**Published effect.** No count, citation, verdict or maturity field moves and no status event is
+appended; the next scheduled cycle regenerates the accepted-report sources and samples of the
+affected records, and the consensus summary of the two whose leading theme changed.
+
+**Verification.** `test_recompute_evidence_classification.py = 18` [blocking]: downgrade-only
+platform, both rewrite rules and both refusals, the write set, block-scoped editing with shared ids,
+idempotence, no transport and one write site. A second run over the migrated store changes nothing.
+
+**Reopen only if** the migration writes a field outside the write set, upgrades a platform, rewrites
+a theme its producing classifier cannot reproduce from the retained text, or changes anything on a
+second run.
 
 ## Adding an entry
 
