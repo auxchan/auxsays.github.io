@@ -176,6 +176,21 @@ def public_issue_bucket(product_id: str, item: dict[str, Any]) -> str:
     return "general workflow reports"
 
 
+UNSPECIFIED_SEVERITY = "unspecified"
+
+
+def severity_summary_key(item: dict[str, Any]) -> str:
+    """The `severity_summary` bucket for one counted row.
+
+    A row with no severity is reported as `unspecified`, NOT as `low`: turning a missing value
+    into the mildest real severity understated what the summary knows. This is the SUMMARY use
+    only. The three counting/validity predicates that default an empty severity to the lowest value
+    (apply_consensus_to_records, qa_patch_records, lib.live_eligibility) deliberately treat an
+    empty severity as valid, and they are a separate acceptance decision this does not touch.
+    """
+    return str(item.get("severity") or "").strip().lower() or UNSPECIFIED_SEVERITY
+
+
 def issue_counter(product_id: str, items: list[dict[str, Any]]) -> Counter[str]:
     return Counter(public_issue_bucket(product_id, item) for item in items)
 
@@ -434,7 +449,7 @@ def main(argv: list[str] | None = None) -> int:
     record_statuses = record_status_index()
     for (product_id, version, _build), items in sorted(groups.items()):  # noqa: B007
         sentiments = Counter(str(item.get("sentiment")).lower() for item in items)
-        severities = Counter(str(item.get("severity") or "low").lower() for item in items)
+        severities = Counter(severity_summary_key(item) for item in items)
         themes = issue_counter(product_id, items)
         aggregate.append({
             "product_id": product_id,
