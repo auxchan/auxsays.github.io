@@ -29,6 +29,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from lib.normalize_davinci_version import normalize_davinci_version  # noqa: E402
+from lib.reddit_access_policy import POLICY_REASON as REDDIT_POLICY_REASON, is_reddit_url, reddit_access_authorized  # noqa: E402
 
 PRODUCT_ID = "blackmagic-davinci"
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
@@ -350,6 +351,16 @@ def fetch_source(seed: Seed) -> dict[str, Any]:
     if not seed.fetch:
         return {
             "access_status": "not_fetched_discovery_or_metadata_source",
+            "body_accessed": False,
+            "source_title": seed.source_title,
+            "text_sample": "",
+            "http_status": None,
+        }
+    if is_reddit_url(seed.source_url) and not reddit_access_authorized():
+        # AUX D2: a manual run is still automated collection. No written Reddit data-access
+        # authorisation, so no request is made.
+        return {
+            "access_status": REDDIT_POLICY_REASON,
             "body_accessed": False,
             "source_title": seed.source_title,
             "text_sample": "",

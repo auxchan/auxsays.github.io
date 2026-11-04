@@ -64,6 +64,11 @@ from .base import (
 )
 from . import microsoft_learn_qna_source as learn_qna
 from . import reddit_source
+from lib.reddit_access_policy import (
+    POLICY_NOTE as REDDIT_POLICY_NOTE,
+    POLICY_REASON as REDDIT_POLICY_REASON,
+    reddit_access_authorized,
+)
 from . import stack_exchange_source
 from . import github_officedev_source
 from . import microsoft_qna_tags_source as qna_tags
@@ -1021,6 +1026,9 @@ def health_row(record: PatchRecord, method_id: str, source_type: str, status: st
 
 def reddit_fallback_enabled(env: dict[str, str] | None = None) -> bool:
     source = os.environ if env is None else env
+    # AUX D2: the opt-in flag alone is not permission. Written data-access authorisation is.
+    if not reddit_access_authorized(source):
+        return False
     return str(source.get(REDDIT_FALLBACK_ENV, "")).strip().lower() == "true"
 
 
@@ -1068,6 +1076,16 @@ def run_fallback_method(record: PatchRecord, target: dict[str, Any], context: Co
     False the method is honestly reported as "disabled" and nothing is fetched. Same acceptance
     gates as the primary, never weakened. Extracted from collect_for_record for the orchestration
     control plane; collect_for_record composes this same function."""
+    if not reddit_access_authorized():
+        # AUX D2: truthful policy row. No last_run of its own: the writer keeps the prior row's
+        # real last attempt. Never no_results, which would claim a check that did not happen.
+        row = method_health_row(
+            product_id=PRODUCT_ID, update_version=record.update_version,
+            target_build=record.target_build, method_id=REDDIT_METHOD_ID,
+            source_type=REDDIT_SOURCE_TYPE, status="disabled", candidates_found=0,
+            accepted_reports=0, rejected_reports=0, blocked_reason=REDDIT_POLICY_REASON,
+            last_run="", notes=REDDIT_POLICY_NOTE)
+        return [], [], row
     query_terms = search_query_terms(target)
     rd_errors: list[dict[str, Any]] = []
     rd_candidates: list[dict[str, Any]] = []

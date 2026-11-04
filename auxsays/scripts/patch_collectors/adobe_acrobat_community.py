@@ -32,6 +32,11 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 
 from . import reddit_source
+from lib.reddit_access_policy import (
+    POLICY_NOTE as REDDIT_POLICY_NOTE,
+    POLICY_REASON as REDDIT_POLICY_REASON,
+    reddit_access_authorized,
+)
 from . import runtime_budget as rb
 from lib import evidence_classification as ec
 from lib.target_outcome import (
@@ -1323,8 +1328,11 @@ class AdobeAcrobatCollector(ProductCollector):
             ("reddit_search", REDDIT_SOURCE_TYPE, reddit_search_candidates),
         )
         if _retired_methods_enabled():
-            methods = methods + retired
-            retired = ()
+            # AUX D2: the reachability re-test flag can restore the Adobe Community path, but it
+            # can never restore Reddit without written data-access authorisation.
+            restorable = tuple(m for m in retired if m[0] != "reddit_search" or reddit_access_authorized())
+            methods = methods + restorable
+            retired = tuple(m for m in retired if m not in restorable)
         all_accepted: list[dict[str, Any]] = []
         all_rejected: list[dict[str, Any]] = []
         method_health: list[dict[str, Any]] = []
@@ -1373,12 +1381,16 @@ class AdobeAcrobatCollector(ProductCollector):
                 candidates_found=0,
                 accepted_reports=0,
                 rejected_reports=0,
-                blocked_reason=None,
-                last_run=captured_at,
+                blocked_reason=REDDIT_POLICY_REASON if method_id == "reddit_search" else None,
+                # A policy-disabled Reddit row carries no last_run of its own: the writer keeps the
+                # prior row's real last attempt rather than restamping it.
+                last_run="" if method_id == "reddit_search" else captured_at,
                 # PUBLIC COPY. updates/methodology/index.md prints `notes` as the primary cell
                 # whenever blocked_reason is empty, which for these rows is always, so the
                 # reader-facing sentence leads and the collector attribution trails it.
-                notes=("Not run. This source refused every request it was given over a "
+                notes=(REDDIT_POLICY_NOTE + f" (acrobat community collector; edition={self.product_id})"
+                       if method_id == "reddit_search" else
+                       "Not run. This source refused every request it was given over a "
                        "sustained period, so AUXSAYS deliberately stopped calling it rather "
                        "than spending each cycle timing out against it. The method is "
                        "retained and can be restored if the source starts answering again. "

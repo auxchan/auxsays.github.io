@@ -69,6 +69,12 @@ auxsays/scripts/tests/test_collector_classification.py = 33
 # row position (ids repeat across Acrobat Pro/Reader), and a second run changes nothing.
 auxsays/scripts/tests/test_recompute_evidence_classification.py = 18
 
+# The same historical repair for Teams: legacy rows (constant platform "Windows", no theme) are
+# re-derived by CONSUMING the shipped Teams producer, never by a rule of its own. Only the four
+# classification fields are written, an unclassified row stays empty, a producer-written row is out of
+# scope, and a second run changes nothing.
+auxsays/scripts/tests/test_recompute_teams_classification.py = 32
+
 # The publication half: the page's "Current reports mention ..." bucket re-reads each report's title,
 # and its OBS branch still matched "hang" inside "changing" and "window" inside "Windows". Both
 # bucketer copies are pinned, and they must agree on every counted OBS row.
@@ -90,6 +96,13 @@ auxsays/scripts/tests/test_powerpoint_github_officedev.py = 22
 auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
 auxsays/scripts/tests/test_powerpoint_qna_tag_enumeration.py = 65
 auxsays/scripts/tests/test_acrobat_tiering.py = 136
+
+# Automated Reddit collection is off unless written data-access authorisation is recorded. This pins
+# every Reddit path (DaVinci's JSON/OAuth/RSS ladder and watchlist hydration, the shared module behind
+# Acrobat/Premiere/PowerPoint, the manual seed tool) refusing before a socket opens, the truthful
+# `disabled` policy row, the writer keeping the real last attempt, and certification not softening.
+# Offline: every transport is a counter that refuses.
+auxsays/scripts/tests/test_reddit_access_policy.py = 86
 
 # A retired Acrobat method must report that it is retired. adobe_community_search and
 # reddit_search stopped executing, and the comment that retired them claimed their health rows

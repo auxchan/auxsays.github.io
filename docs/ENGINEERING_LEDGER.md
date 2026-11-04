@@ -69,9 +69,11 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
+| AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
+| AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 
 ---
 
@@ -4069,6 +4071,47 @@ this one.
 
 ---
 
+### AUX-066 — Stored Teams evidence still said platform "Windows" and carried no theme, area or severity
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
+
+The Teams producer repair (#206) fixed new rows only. All 1,117 stored Teams rows still carried the
+constant platform "Windows" (capitalised, off-vocabulary, never read from the report) and an empty theme,
+workflow area and severity.
+
+**Fix** `recompute_teams_classification.py` re-derives the four fields by CALLING the shipped producer
+(`microsoft_teams._classify_candidate`) on the retained text; it holds no rule of its own, so a later rule
+change is followed, not contradicted. A row is in scope only when it is recognisably legacy (platform
+outside windows / macos / linux / unknown and no theme, area or severity), so a row the repaired producer
+wrote is never re-judged from its truncated excerpt. Where the producer finds no supported theme the row
+stays empty: no theme or severity is invented.
+
+**Never written:** sentiment, counted status, exclusion reason, identity, URLs, dates, weights, version
+match and the text. The edit reuses the block-scoped, position-addressed editor of AUX-059 and the run
+refuses unless every other field of every row parses back unchanged.
+
+**Measured** (`scripts/audit/teams_classification_2026-11-04.json`, with parent commit and classifier
+hashes): 1,117 rows written, 7 of them counted. Platform unknown 1,032, windows 46, macos 39. Theme 243
+classified (audio / video 55, crash or hang 46, install/update 31, chat 28, launch 22, performance 20,
+sign-in 18, screen sharing 13, join 10), 874 left empty. Severity high 96, medium 147. Counted rows,
+sentiment, identity and text are unchanged, and a second run writes nothing.
+
+**Published effect.** Lane simulation (build_consensus, then apply_consensus for microsoft-teams) over the
+migrated tree changes four Teams records, and only in prose generated from the evidence: the
+accepted-report sources and samples, `consensus_report` and the consensus summary now name the reported
+issue instead of "too varied to group cleanly". Counts, verdict class, maturity and status events are
+identical. `severity_summary` moves from `unspecified` to the producer's severity.
+
+**Verification.** `test_recompute_teams_classification.py = 32` [blocking]: the producer is consumed (a
+replaced producer changes the output), platform, theme as a unit, scope, write set, block-scoped editing
+with shared ids, idempotence, no transport, and the checked-in store.
+
+**Reopen only if** the migration writes a field outside the write set, re-judges a row the repaired
+producer wrote, invents a theme or severity, or changes anything on a second run.
+
+---
+
 ### AUX-065 — DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs
 
 - **Status** Resolved · **Area** Coverage · **Severity** Medium
@@ -4164,6 +4207,55 @@ is UNVERIFIED today) and a reviewed edit to `lib/collector_ownership.py`.
 reasons; or a decision to activate the Windows 11 Forum adapter.
 
 **Work that this item must not block** Everything except activating the adapter.
+
+---
+
+### AUX-064 — Reddit collection is switched off for lack of written authorisation; stored Reddit rows await review
+
+- **Status** Deferred · **Area** Compliance · **Severity** High
+- **First seen** 2026-11-04
+
+**Symptom / gap**
+- Commercial use of Reddit data needs explicit written permission. A search of the repository, its
+  configuration, its workflows (variable and secret names only) and its docs found none: no agreement,
+  no app registration record, no permission record. A configured client id or a polite User-Agent is not
+  that permission. Reddit's RSS ends 2026-11-13 and unregistered public API apps begin losing access
+  2027-01-12.
+- Automated collection was nonetheless live: DaVinci's `reddit_search` ladder (JSON, OAuth, RSS) and
+  its watchlist hydration of one Reddit post, plus the shared `reddit_source` module behind Acrobat
+  (both editions, retired but re-enableable by a flag), Premiere (routed `disabled`) and PowerPoint
+  (opt-in flag).
+
+**Contained (this item's code)** `lib/reddit_access_policy.py` is the one authority. Default: not
+authorised. Every Reddit path refuses before a socket opens, every Reddit method emits a `disabled`
+health row whose reason is `reddit_access_policy_unauthorised`, and the writer keeps the prior row's
+real last attempt instead of restamping it. Authorisation is a recorded reference in
+`AUXSAYS_REDDIT_ACCESS_AUTHORIZATION_REF`; no workflow sets it. Certification is unchanged: a disabled
+Reddit family is never healthy, so a patch whose counted evidence is Reddit stays uncertified
+(`contributing_family_unhealthy:reddit_community_report`). Measured on the committed store: 0 public
+monitoring labels change over 1517 records and 0 certification decisions flip.
+
+**Stored Reddit evidence needing a separate retention and publication-rights review** (untouched here)
+- `auxsays/_data/consensus_evidence.yml`: **326** counted rows, all `reddit_community_report`, all
+  `www.reddit.com/r/davinciresolve`, all `blackmagic-davinci`. Largest: 21 (75), 20 (33), 20.3.2 (32),
+  20.2.3 (17), 20.2 (16), 21.0.4 (16), 21.1 (14), 20.3.1 (13), 21.0.2 (13), 20.1 (12), 19 (11). No
+  uncounted Reddit rows are stored. No other product stores a Reddit row.
+- 28 generated DaVinci pages cite a `reddit.com` URL; 5 other generated pages (Elgato) mention Reddit
+  only in prose.
+- 386 `reddit_search` health rows (DaVinci 122, Acrobat Pro 137, Acrobat Reader 91, Premiere 2,
+  PowerPoint 34) are telemetry, not evidence; they are rewritten as policy rows by the lane.
+
+**Why deferred** Deleting, uncounting or editing stored evidence is a retention and rights decision, not
+an engineering one, and changing counts moves verdicts. It needs a decision on what may be retained and
+what may be published.
+
+**Current impact** DaVinci counts, verdicts and page citations still include Reddit rows. No new Reddit
+row is collected. Pages that rely on Reddit evidence keep an honest monitoring state.
+
+**Revisit trigger** Written Reddit authorisation is obtained (set the reference; the paths return), or
+the retention and publication-rights review concludes.
+
+**Work that this item must not block** D3 archival, Windows source diversification, Teams integrity.
 
 ## Adding an entry
 

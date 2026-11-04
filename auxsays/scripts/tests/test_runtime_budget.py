@@ -11,6 +11,7 @@ Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_runtime_budget.
 from __future__ import annotations
 
 import http.server
+import os
 import sys
 import threading
 import time
@@ -20,6 +21,9 @@ from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
+os.environ["AUXSAYS_REDDIT_ACCESS_AUTHORIZATION_REF"] = "test-fixture"  # D2: this suite exercises the Reddit
+# transport/parsing mechanics under the AUTHORISED state; the default-off policy is pinned by
+# test_reddit_access_policy.py.
 
 from patch_collectors import runtime_budget as rb  # noqa: E402
 from patch_collectors import reddit_source as rs  # noqa: E402
