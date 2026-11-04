@@ -11,6 +11,7 @@ Run with: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_davinci_re
 """
 from __future__ import annotations
 
+import os
 import sys
 import traceback
 import types
@@ -19,6 +20,9 @@ from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
+os.environ["AUXSAYS_REDDIT_ACCESS_AUTHORIZATION_REF"] = "test-fixture"  # D2: this suite exercises the Reddit
+# transport/parsing mechanics under the AUTHORISED state; the default-off policy is pinned by
+# test_reddit_access_policy.py.
 
 # Local/CI environments may lack PyYAML; the gate + transport helpers here need no YAML I/O.
 sys.modules.setdefault("yaml", types.SimpleNamespace(safe_load=lambda *_a, **_k: {}, safe_dump=lambda *_a, **_k: ""))

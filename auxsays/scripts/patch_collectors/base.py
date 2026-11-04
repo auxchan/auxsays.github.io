@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from lib.patch_identity import key_from as patch_key_from, require_build
+from lib.reddit_access_policy import is_policy_disabled_row
 from typing import Any, Iterable
 from urllib.parse import parse_qs, urlparse
 
@@ -540,6 +541,12 @@ def upsert_method_health(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_
         if not (product_id and version and method_id):
             continue
         current_idx = index.get(key)
+        if current_idx is not None and is_policy_disabled_row(normalized) and not normalized["last_run"]:
+            # AUX D2: a method switched off by ACCESS POLICY made no attempt this run, so it has
+            # no timestamp of its own to write. Keep the prior row's real last attempt rather
+            # than restamping history with a time nothing was attempted. Only policy rows
+            # (status disabled + reason reddit_access_policy_unauthorised) take this path.
+            normalized["last_run"] = existing[current_idx].get("last_run", "") or ""
         if current_idx is None:
             index[key] = len(existing)
             existing.append(normalized)

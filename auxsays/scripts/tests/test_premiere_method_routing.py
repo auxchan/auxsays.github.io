@@ -149,11 +149,18 @@ def run_suite() -> int:
     check("J.1 probe-only wayback reports disabled rather than a failure",
           statuses["wayback_snapshot_recheck"] == "disabled",
           statuses["wayback_snapshot_recheck"])
-    check("O.3 not one not-run row carries a blocked_reason",
+    # D2: reddit_search is switched off by ACCESS POLICY, so its row alone carries the policy reason and
+    # no timestamp of its own (the writer keeps the prior row's real last attempt). Every OTHER not-run
+    # row keeps both invariants unchanged.
+    _policy = [h for h in health if str(h["method_id"]) == "reddit_search"]
+    _others = [h for h in health if str(h["method_id"]) not in ("reddit_search",)]
+    check("O.3 not one not-run row carries a blocked_reason (except the Reddit POLICY row)",
           all(not str(h.get("blocked_reason") or "")
-              for h in health if str(h["method_id"]) != "adobe_community_algolia_search"))
-    check("O.4 every not-run row is stamped with THIS run's timestamp, so none can go stale",
-          len({str(h.get("last_run")) for h in health}) == 1)
+              for h in _others if str(h["method_id"]) != "adobe_community_algolia_search")
+          and all(str(h.get("blocked_reason")) == "reddit_access_policy_unauthorised" for h in _policy))
+    check("O.4 every other row is stamped with THIS run's timestamp, so none can go stale",
+          len({str(h.get("last_run")) for h in _others}) == 1
+          and all(str(h.get("last_run")) == "" for h in _policy))
 
     print()
     print("=" * 92)

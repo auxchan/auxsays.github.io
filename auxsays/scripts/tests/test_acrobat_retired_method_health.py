@@ -132,12 +132,17 @@ def run_suite() -> int:
               str({m: st.get(m) for m in RETIRED}))
         check(f"A.3 {edition}: the executing method reports its REAL health, not disabled",
               st.get(ACTIVE) != "disabled", str(st.get(ACTIVE)))
+        # D2: reddit_search is retired for ACCESS POLICY: its row carries that reason and no timestamp of
+        # its own (the writer keeps the prior row's real last attempt). Every other row keeps the invariant.
         check(f"A.4 {edition}: every row carries this run's timestamp, so none can go stale",
-              {str(h.get("last_run")) for h in health} == {"2026-10-08T14:00:00Z"},
+              {str(h.get("last_run")) for h in health if h["method_id"] != "reddit_search"} == {"2026-10-08T14:00:00Z"}
+              and {str(h.get("last_run")) for h in health if h["method_id"] == "reddit_search"} == {""},
               str({str(h.get('last_run')) for h in health}))
-        check(f"A.5 {edition}: a disabled row carries no blocked_reason",
+        check(f"A.5 {edition}: a disabled row carries no blocked_reason (Reddit: the access-policy reason)",
               all(not str(h.get("blocked_reason") or "")
-                  for h in health if str(h["method_id"]) in RETIRED))
+                  for h in health if str(h["method_id"]) in RETIRED and h["method_id"] != "reddit_search")
+              and all(str(h.get("blocked_reason")) == "reddit_access_policy_unauthorised"
+                      for h in health if h["method_id"] == "reddit_search"))
         check(f"A.6 {edition}: a disabled row claims no candidates and no reports",
               all(int(h.get("candidates_found") or 0) == 0
                   and int(h.get("accepted_candidates") or 0) == 0
@@ -162,8 +167,8 @@ def run_suite() -> int:
     for edition in EDITIONS:
         health = emit(edition, enabled=True)
         st = statuses(health)
-        check(f"B.1 {edition}: with the flag on, no method reports `disabled`",
-              "disabled" not in st.values(), str(st))
+        check(f"B.1 {edition}: with the flag on, no method reports `disabled` except Reddit (access policy)",
+              {m for m, s in st.items() if s == "disabled"} == {"reddit_search"}, str(st))
         check(f"B.2 {edition}: still exactly one row per method -- never a duplicate pair",
               len(health) == 3 and len(st) == 3, f"{len(health)} rows, {len(st)} ids")
     # The identity key is what makes the replacement clean: same (product, version, build, method).
