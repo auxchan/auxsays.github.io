@@ -70,7 +70,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
-| AUX-063 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
+| AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 
 ---
 
@@ -4093,7 +4093,7 @@ tables.
 
 ---
 
-### AUX-063 — Reddit collection is switched off for lack of written authorisation; stored Reddit rows await review
+### AUX-064 — Reddit collection is switched off for lack of written authorisation; stored Reddit rows await review
 
 - **Status** Deferred · **Area** Compliance · **Severity** High
 - **First seen** 2026-11-04
