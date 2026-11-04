@@ -361,6 +361,14 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% endif %}
 {% assign summary_text = page.release_summary | default: page.official_summary | default: page.description | default: '' | strip %}
 {% assign record_note_text = page.record_note | default: '' | strip %}
+{%- comment -%}
+  The publication bucketer's fallback bucket, "general workflow reports", means "no recognised
+  theme", not a reported issue. It is never listed as one. It is removed by an EXACT match on the
+  stripped, lower-cased label (never a substring, so a specific label that merely contains these
+  words survives), on both inputs below. If nothing specific remains the sentence is not built and
+  the truthful "User reports are present" line renders instead.
+{%- endcomment -%}
+{% assign issue_generic_label = 'general workflow reports' %}
 {% assign issue_cluster_text = '' %}
 {% assign issue_cluster_seen = '|' %}
 {% assign issue_cluster_count = 0 %}
@@ -371,7 +379,8 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
     {% if issue_label_first == ',' or issue_label_first == ';' %}
       {% assign issue_label = issue_label | slice: 1, 240 | strip %}
     {% endif %}
-    {% if issue_label != '' %}
+    {% assign issue_label_norm = issue_label | downcase | strip %}
+    {% if issue_label != '' and issue_label_norm != issue_generic_label %}
       {% assign issue_cluster_token = '|' | append: issue_label | append: '|' %}
       {% unless issue_cluster_seen contains issue_cluster_token %}
         {% if issue_cluster_text == '' %}
@@ -393,7 +402,8 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
     {% if issue_label_first == ',' or issue_label_first == ';' %}
       {% assign issue_label = issue_label | slice: 1, 240 | strip %}
     {% endif %}
-    {% if issue_label != '' %}
+    {% assign issue_label_norm = issue_label | downcase | strip %}
+    {% if issue_label != '' and issue_label_norm != issue_generic_label %}
       {% if issue_cluster_text == '' %}
         {% assign issue_cluster_text = issue_label %}
       {% else %}
@@ -423,9 +433,10 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 
   Measured over the rendered corpus: 77 records print both. On 66 of them every subject the issue
   sentence names is already in the body, so the sentence is pure restatement. On the other 11 the
-  cluster names something the body omits -- "general workflow reports" on the DaVinci records --
-  and that is real information, so it stays. This is the distinction the de-duplication has to
-  make: not "do they overlap" but "does the second one ADD anything".
+  cluster names something the body omits -- a specific subject such as an audio or capture
+  problem -- and that is real information, so it stays. (The fallback bucket "general workflow
+  reports" is NOT such information: it is filtered out before this comparison.) This is the
+  distinction the de-duplication has to make: not "do they overlap" but "does the second one ADD anything".
 
   Deterministic and narrow. The cluster appends a theme to each subject ("render/export failures in
   application stability"); the theme is internal taxonomy, so the subject is taken as the text

@@ -142,6 +142,7 @@ auxsays/scripts/tests/test_method_health_append_delta.py = 55
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
 # +2 (C3.6): a stored live claim the deploy-time projection does not list is still hedged (AUX-055).
 auxsays/scripts/tests/test_consensus_sample_honesty.py = 90
+auxsays/scripts/tests/test_issue_sentence_generic_label.py = 30
 
 # The live-consensus precondition, which had never been satisfiable. The gate demanded front-matter
 # `consensus_evidence` / `structured_evidence` / `evidence_objects`; 0 of 1316 records carried any of
