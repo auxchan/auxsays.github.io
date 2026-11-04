@@ -221,8 +221,7 @@ def run() -> int:
 
 
 def _summary() -> int:
-    print(f"
-Results: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")
+    print(f"\nResults: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")
     if _FAILURES:
         for f in _FAILURES:
             print(f"  FAILED: {f}")
