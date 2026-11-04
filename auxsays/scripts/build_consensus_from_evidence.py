@@ -156,11 +156,13 @@ def public_issue_bucket(product_id: str, item: dict[str, Any]) -> str:
             return "scene list workflow regressions"
         if "audio" in text or "mixer" in text or "monitoring" in text:
             return "audio mixer or routing issues"
-        if "capture" in text or "camera" in text or "xcomposite" in text or "screen" in text or "window" in text:
+        # "window" and "hang" are word-bounded: as substrings they matched "Windows" (the OS) and
+        # "change"/"changing" (AUX-060). Mirrored in apply_consensus_to_records._public_issue_bucket.
+        if "capture" in text or "camera" in text or "xcomposite" in text or "screen" in text or re.search(r"\bwindow\b", text):
             return "capture-source issues"
         if "plugin" in text or "setup" in text or "profile" in text:
             return "plugin or setup compatibility"
-        if "crash" in text or "freeze" in text or "hang" in text or "stability" in text:
+        if "crash" in text or "freeze" in text or re.search(r"\bhang(?:s|ing|ed)?\b", text) or "stability" in text:
             return "crash or stability problems"
         if "hotkey" in text or "shortcut" in text:
             return "keyboard shortcut regressions"

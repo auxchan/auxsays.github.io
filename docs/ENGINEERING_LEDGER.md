@@ -67,6 +67,9 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-057 | Deferred | Published claims | Medium | A certified-live Windows page also says its evidence has not been revalidated recently |
 | AUX-058 | Resolved | Evidence integrity | Medium | DaVinci, OBS and PowerPoint still guessed themes and platforms from substrings |
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
+| AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
+| AUX-061 | Deferred | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
+| AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 
 ---
 
@@ -3997,6 +4000,96 @@ idempotence, no transport and one write site. A second run over the migrated sto
 **Reopen only if** the migration writes a field outside the write set, upgrades a platform, rewrites
 a theme its producing classifier cannot reproduce from the retained text, or changes anything on a
 second run.
+
+---
+
+### AUX-060 — The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows"
+
+- **Status** Resolved · **Area** Published claims · **Severity** Medium
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
+
+Found by verifying AUX-059 in production. A page's "Current reports mention ..." phrases and each
+accepted report's issue label come from a public bucket. Two copies compute it:
+`apply_consensus_to_records._public_issue_bucket` and
+`build_consensus_from_evidence.public_issue_bucket`. Both re-read the stored theme, the workflow area
+and the report TITLE. Their OBS branch matched two cues as substrings:
+- "hang" matched inside "change" and "changing", producing "crash or stability problems";
+- "window" matched inside "Windows" the OS, producing "capture-source issues".
+
+The OBS 31.1.2 page published "crash or stability problems" when its only support was "changing" in
+two Image Source titles.
+
+**Fix.** Exactly those two conditions are word-bounded in both copies. Every other cue and the other
+products are unchanged.
+
+**Measured.** Over the 286 counted OBS rows:
+- 14 rows change bucket: 7 from "hang" and 7 from "window".
+- 3 records change their consensus sentence. 31.1.2 loses the stability claim; 32.2.0 reorders;
+  33.0.1's third phrase changes.
+- 7 records change accepted-report labels.
+
+The bucket feeds prose only. In a lane simulation, OBS promotion changed no count, verdict, maturity,
+store row or status event.
+
+**Verification.** `test_public_issue_bucket.py = 20` [blocking] pins both copies on verbatim rows,
+genuine hang and window controls, and one row per unchanged bucket. It also checks that the two copies
+agree on every counted OBS row. Each fix, reverted alone, fails named checks.
+
+The two copies still differ outside OBS, and that difference is not gated here: 7 DaVinci rows bucket
+as "plugin issues" in the writer and as "compatibility issue" in the builder.
+
+**Reopen only if** an OBS title bucketed by "hang" or "window" lacks that word, or the two copies
+disagree on a counted OBS row.
+
+---
+
+### AUX-061 — A patch page lists "general workflow reports" as if it were a reported issue
+
+- **Status** Deferred · **Area** Published claims · **Severity** Low
+- **First seen** 2026-11-04
+
+**Symptom / gap** `aux-update.html` builds "Current reports mention ..." from the first three
+distinct `evidence_samples` issue labels, and it does not skip the fallback bucket "general workflow
+reports". `_top_theme_phrases` does skip it.
+
+**Current impact** 22 of 234 pages with an issue sentence carried the phrase before AUX-060: DaVinci
+13, OBS 5 and Teams 4. Example: DaVinci 20.2.3. AUX-060 makes it 24:
+- on OBS 31.1.2 the phrase replaces the false stability claim;
+- on OBS 32.1.1 it displaces "audio mixer or routing issues".
+
+It is vague but not false. No count or verdict is affected.
+
+**Why deferred** It is a presentation decision outside the classification sprint: whether to skip the
+fallback, or to state how many reports carry no recognised theme.
+
+**Revisit trigger** The next change to the patch page's reasoning block or evidence samples.
+
+**Work that this item must not block** AUX-060 and the classification sprint.
+
+---
+
+### AUX-062 — Three classifier misses the sprint measured but did not fix
+
+- **Status** Deferred · **Area** Evidence integrity · **Severity** Low
+- **First seen** 2026-11-04
+
+**Symptom / gap**
+- A bare "Windows" with no OS context reads as unknown. Examples: "freezes my entire Windows",
+  "Windows Davinci Resolve Studio 20.1 ...", "Windows color managed HDR viewers". Three counted
+  DaVinci rows lost a supported label in AUX-059, though never to a wrong OS.
+- OBS has no generic crash theme, so "OBS Crashes if ..." falls to "unspecified issue".
+- DaVinci treats "gpu" as a performance cue, so "The GPU failed to perform image processing" reads as
+  a performance regression.
+
+**Current impact** Row platform feeds no count, verdict or template. A theme miss feeds prose only.
+
+**Why deferred** Each is a vocabulary change with its own corpus measurement. The sprint authorised
+only demonstrated defects.
+
+**Revisit trigger** The next change to `lib/evidence_classification.py` or to the OBS or DaVinci theme
+tables.
+
+**Work that this item must not block** Live promotion and the classification sprint.
 
 ## Adding an entry
 
