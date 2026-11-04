@@ -69,6 +69,12 @@ auxsays/scripts/tests/test_collector_classification.py = 33
 # row position (ids repeat across Acrobat Pro/Reader), and a second run changes nothing.
 auxsays/scripts/tests/test_recompute_evidence_classification.py = 18
 
+# The same historical repair for Teams: legacy rows (constant platform "Windows", no theme) are
+# re-derived by CONSUMING the shipped Teams producer, never by a rule of its own. Only the four
+# classification fields are written, an unclassified row stays empty, a producer-written row is out of
+# scope, and a second run changes nothing.
+auxsays/scripts/tests/test_recompute_teams_classification.py = 32
+
 # The publication half: the page's "Current reports mention ..." bucket re-reads each report's title,
 # and its OBS branch still matched "hang" inside "changing" and "window" inside "Windows". Both
 # bucketer copies are pinned, and they must agree on every counted OBS row.
