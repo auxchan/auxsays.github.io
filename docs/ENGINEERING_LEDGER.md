@@ -72,6 +72,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
+| AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 
 ---
 
@@ -4176,6 +4177,33 @@ row is collected. Pages that rely on Reddit evidence keep an honest monitoring s
 the retention and publication-rights review concludes.
 
 **Work that this item must not block** D3 archival, Windows source diversification, Teams integrity.
+
+### AUX-069 — `source_health.yml` was a stale tracked copy of a deploy-generated snapshot
+
+- **Status** Resolved · **Area** Deploy hygiene · **Severity** Low
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
+
+**Symptom / gap** `auxsays/_data/source_health.yml` was last committed on 2026-05-02: 37 rows against 47
+configured sources, in the retired Staged/Healthy/Failing vocabulary. `pages.yml` regenerates it before
+every `jekyll build`, so the live site was never wrong, but the stale tracked copy read as authoritative,
+and three writeback cleanups restored it with `git checkout --`.
+
+**Consumer audit** No template, include, layout or page reads it, and no Python module reads it (the
+generator only writes it). Named in code only by `source_health_snapshot.py`, `pages.yml`, the cleanup
+steps of `davinci-updates.yml`, `obs-evidence-collection.yml` and `promote-davinci-verified-reports.yml`,
+and two forbidden-write-path lists in the Playwright capture tooling (unaffected). A local build without
+it renders nothing different.
+
+**Fix** The file is untracked and git-ignored; deploy-time generation is unchanged. The three cleanups no
+longer `git checkout` it (an untracked pathspec fails the step) and `rm -f` any stray copy; they still
+restore the tracked `patch_ingest_state.json`. The generator now exits non-zero without writing when its
+source list is unreadable or empty, so a failed generation is never an empty snapshot that reads as success.
+Monitoring semantics are unchanged. `test_source_health_generated_snapshot.py` pins all of it.
+
+**Reopen only if** a template or module starts reading `source_health.yml` (it must then fail closed when
+the file is absent), or a lane needs to commit it.
+
+---
 
 ## Adding an entry
 
