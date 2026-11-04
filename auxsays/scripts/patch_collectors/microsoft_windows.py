@@ -34,6 +34,7 @@ are never reached; it only fetches Learn Q&A and prints candidate/acceptance/hea
 """
 from __future__ import annotations
 
+import os
 import re
 import urllib.parse
 from dataclasses import dataclass
@@ -64,6 +65,7 @@ from .base import (
     windows_identity_gate,
 )
 from lib.patch_identity import patch_key
+from . import elevenforum_source as elevenforum
 from . import microsoft_learn_qna_source as learn_qna
 from . import runtime_budget as rb
 from . import techcommunity_source as techcommunity
@@ -128,6 +130,44 @@ TECHCOMMUNITY_MAX_HYDRATIONS = 400
 
 # The window used when the caller supplied none. Matches the workflow's routine `--since-days 45`.
 TECHCOMMUNITY_DEFAULT_WINDOW_DAYS = 45
+
+
+# --- third discovery method: Windows 11 Forum (SHIPPED DISABLED) -------------
+#
+# elevenforum.com (XenForo). Opening posts only, three approved support listings, bounded request
+# budget -- see patch_collectors/elevenforum_source.py. It is a DISCOVERY method: its candidates go
+# through the same `evaluate_candidates`, the same claims map and the same identity, intent, date and
+# one-report-one-patch rules as the other two. Nothing here changes what counts.
+#
+# DISABLED MEANS DISABLED. With the flag below absent (or anything but the exact string "true"):
+#   * no elevenforum.com request is made, ever;
+#   * no pool is built, so `collect_for_record` receives `elevenforum_pool=None` and runs the exact
+#     code path it ran before this method existed;
+#   * NO health row is emitted for it. A `disabled` row would add a row to the public health store
+#     for a method that has never run, and the store retains what a run does not emit; the method
+#     simply does not exist in the output until it is activated (contrast the retired-method case,
+#     where a stale `blocked` row already exists and a fresh `disabled` one is the honest fix).
+#   * the ownership manifest (lib/collector_ownership.py) does not list this method id or source type,
+#     so even with the flag set a `--write` fails closed instead of storing a row. Activation is
+#     therefore a deliberate edit in a reviewed PR, not an environment variable.
+#
+# KNOWN ACTIVATION BLOCKER (ENGINEERING_LEDGER AUX-063). The shared authority accepts a thread when
+# a record's build or feature-train token appears ANYWHERE in the opening post, including as the
+# reporter's current baseline in a system-spec line or as a comparison. Thread 50506 (a 26H2
+# enablement-package boot BSOD whose author is back on 25H2 26200.9711) is attributed to the 25H2
+# record. Measured by tests/test_elevenforum_adapter.py. This method must not be activated while it can
+# contribute that attribution, and the authority is deliberately NOT changed here.
+ELEVENFORUM_METHOD_ID = "elevenforum_windows_listing"
+ELEVENFORUM_SOURCE_TYPE = elevenforum.DEFAULT_SOURCE_TYPE
+ELEVENFORUM_SOURCE_NAME = elevenforum.DEFAULT_SOURCE_NAME
+ELEVENFORUM_ENABLE_ENV = "AUXSAYS_ENABLE_WINDOWS_ELEVENFORUM_DISCOVERY"
+
+
+def elevenforum_discovery_enabled(env: dict[str, str] | None = None) -> bool:
+    """Default-off gate. True ONLY for the exact canonical boolean ``true`` (case-insensitive,
+    trimmed); absent, empty, ``false``, ``0``, ``1``, ``yes`` and ``on`` are all False."""
+    source = os.environ if env is None else env
+    return str(source.get(ELEVENFORUM_ENABLE_ENV, "")).strip().lower() == "true"
 
 
 def default_since_day(days: int) -> str:
@@ -928,6 +968,109 @@ def techcommunity_health(record: PatchRecord, captured_at: str, pool: TechCommun
     )
 
 
+# --- Windows 11 Forum discovery (disabled by default) -------------------------
+
+@dataclass(frozen=True)
+class ElevenForumPool:
+    """One run's Windows 11 Forum discovery, shared by every record. Same shape as the Tech
+    Community pool, plus the threads that were hydrated but yielded no candidate."""
+
+    candidates: list[dict[str, Any]]
+    telemetry: dict[str, Any]
+    errors: list[dict[str, Any]]
+    unparseable: list[dict[str, str]]
+
+
+def build_elevenforum_pool(context: CollectorContext,
+                           session: "elevenforum.Session | None" = None) -> ElevenForumPool:
+    """Enumerate and hydrate once per run. Only ever called behind ``elevenforum_discovery_enabled``.
+
+    ``session`` is injectable so a test or dry run supplies a fixture transport; the default session
+    is the real, paced, capped one."""
+    since = str(getattr(context, "since", "") or "") or default_since_day(TECHCOMMUNITY_DEFAULT_WINDOW_DAYS)
+
+    def _budget_expired() -> bool:
+        budget = rb.get_run_budget()
+        return bool(budget is not None and budget.collector_finalize_expired())
+
+    discovery = elevenforum.discover(session or elevenforum.Session(), since=since,
+                                     should_stop=_budget_expired)
+    return ElevenForumPool(candidates=discovery.candidates, telemetry=discovery.telemetry,
+                           errors=discovery.errors, unparseable=discovery.rejected_threads)
+
+
+def elevenforum_method_status(pool: ElevenForumPool, accepted: list[dict[str, Any]],
+                              rejected: list[dict[str, Any]]) -> str:
+    """Canonical source-health vocabulary, with the same meaning as the other two methods.
+
+    blocked     nothing could be read: a challenge or refusal, an unreachable site, or every
+                hydration refused.
+    partial     something was read but the walk was degraded (a listing page failed, the walk was
+                stopped, or one hydration in five failed) -- including a walk stopped by a block
+                after it had already read threads.
+    no_results  the source was reached and read cleanly and yielded nothing for this patch.
+    success     accepted reports and a clean walk.
+
+    Hitting the 40-hydration cap is NOT degradation: the cap is the approved design, and reporting
+    it as `partial` would mark every Windows patch MONITORING DEGRADED on every healthy run.
+    """
+    t = pool.telemetry
+    attempted = int(t.get("attempted") or 0)
+    hydration_errors = int(t.get("hydration_errors") or 0)
+    listing_ok = int(t.get("listing_ok") or 0)
+    listing_errors = int(t.get("listing_errors") or 0)
+    if t.get("blocked") and not pool.candidates:
+        return "blocked"
+    if listing_ok == 0:
+        return "blocked"
+    if attempted > 0 and hydration_errors == attempted:
+        return "blocked"
+    thin = attempted > 0 and hydration_errors * 5 >= attempted
+    degraded = bool(t.get("aborted")) or listing_errors > 0 or thin
+    if accepted:
+        return "partial" if degraded else "success"
+    if degraded:
+        return "partial"
+    return "no_results"
+
+
+def elevenforum_health(record: PatchRecord, captured_at: str, pool: ElevenForumPool,
+                       accepted: list[dict[str, Any]], rejected: list[dict[str, Any]]) -> dict[str, Any]:
+    t = pool.telemetry
+    notes = (
+        "Windows 11 Forum (elevenforum.com) listings "
+        f"{', '.join(elevenforum.APPROVED_LISTINGS)}, up to {elevenforum.MAX_LISTING_PAGES} pages each. "
+        f"Listing pages read {t.get('listing_ok', 0)}, threads listed {t.get('listed', 0)}, eligible by "
+        f"title cue and window {t.get('eligible', 0)}, hydrated {t.get('hydrated', 0)} of "
+        f"{t.get('attempted', 0)} attempted (cap {elevenforum.MAX_HYDRATIONS}), opening posts without a "
+        f"valid date or text {t.get('unparseable', 0)}. "
+        f"For this record: accepted {len(accepted)}, rejected {len(rejected)}. "
+        "Opening posts only; the original post date is the thread's JSON-LD datePublished. The pool is "
+        "enumerated once per run and the unchanged Windows authority decides which patch each thread "
+        "belongs to. Discovery admits only threads whose listing title already carries a patch cue."
+    )
+    if t.get("capped"):
+        notes += f" More eligible threads than the {elevenforum.MAX_HYDRATIONS}-hydration cap; the newest were read."
+    if t.get("aborted"):
+        notes += f" Walk stopped early: {t.get('abort_reason') or 'unknown'}."
+    if pool.errors:
+        notes += f" Fetch failures: {blocked_reason_from_errors(pool.errors)}."
+    return method_health_row(
+        product_id=PRODUCT_ID,
+        update_version=record.update_version,
+        target_build=record.target_build,
+        method_id=ELEVENFORUM_METHOD_ID,
+        source_type=ELEVENFORUM_SOURCE_TYPE,
+        status=elevenforum_method_status(pool, accepted, rejected),
+        candidates_found=len(pool.candidates),
+        accepted_reports=len(accepted),
+        rejected_reports=len(rejected),
+        blocked_reason=blocked_reason_from_errors(pool.errors),
+        last_run=captured_at,
+        notes=notes,
+    )
+
+
 # --- method health -----------------------------------------------------------
 
 def learn_qna_method_status(candidates: list[dict[str, Any]], accepted: list[dict[str, Any]], rejected: list[dict[str, Any]], errors: list[dict[str, Any]]) -> str:
@@ -1004,7 +1147,8 @@ def health_for_method(record: PatchRecord, target: dict[str, Any], captured_at: 
 
 def collect_for_record(record: PatchRecord, context: CollectorContext,
                        claims: dict[str, tuple[str, str, str]] | None = None,
-                       techcommunity_pool: TechCommunityPool | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+                       techcommunity_pool: TechCommunityPool | None = None,
+                       elevenforum_pool: ElevenForumPool | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     captured_at = utc_now()
     target = record_target(record)
     query_terms = search_query_terms(target)
@@ -1032,6 +1176,15 @@ def collect_for_record(record: PatchRecord, context: CollectorContext,
         rejected = rejected + tc_rejected
         health.append(techcommunity_health(record, captured_at, techcommunity_pool,
                                            tc_accepted, tc_rejected))
+    if elevenforum_pool is not None:
+        # Only reachable when the explicit flag built a pool. Same authority, same `claims` dict as
+        # the two methods above, so a URL taken by one method cannot be taken again by another.
+        ef_accepted, ef_rejected = evaluate_candidates(
+            record, target, elevenforum_pool.candidates, captured_at, claims)
+        accepted = accepted + ef_accepted
+        rejected = rejected + ef_rejected
+        health.append(elevenforum_health(record, captured_at, elevenforum_pool,
+                                         ef_accepted, ef_rejected))
     return accepted, rejected, health
 
 
@@ -1078,13 +1231,22 @@ class WindowsLearnQnaCollector(ProductCollector):
         # records never searched. Built before the loop so every record sees the same pool.
         techcommunity_pool = build_techcommunity_pool(context)
         rb.emit("windows_techcommunity_pool", product_id=PRODUCT_ID, **techcommunity_pool.telemetry)
+        # DISABLED BY DEFAULT: no flag, no pool, no request, no health row, no code-path change.
+        elevenforum_pool: ElevenForumPool | None = None
+        if elevenforum_discovery_enabled():
+            elevenforum_pool = build_elevenforum_pool(context)
+            rb.emit("windows_elevenforum_pool", product_id=PRODUCT_ID, **elevenforum_pool.telemetry)
         for record in records:
             _b = rb.get_run_budget()
             if _b is not None and _b.collector_finalize_expired():
                 rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
                 break
-            accepted, rejected, health = collect_for_record(record, context, claims,
-                                                            techcommunity_pool)
+            if elevenforum_pool is None:
+                accepted, rejected, health = collect_for_record(record, context, claims,
+                                                                techcommunity_pool)
+            else:
+                accepted, rejected, health = collect_for_record(record, context, claims,
+                                                                techcommunity_pool, elevenforum_pool)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
                 "version": record.update_version,
