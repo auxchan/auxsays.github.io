@@ -69,7 +69,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
-| AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
+| AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 
@@ -4069,28 +4069,69 @@ this one.
 
 ---
 
-### AUX-062 — Three classifier misses the sprint measured but did not fix
+### AUX-062 — Three classifier misses the sprint measured; the DaVinci two are fixed, two are deferred
 
-- **Status** Deferred · **Area** Evidence integrity · **Severity** Low
-- **First seen** 2026-11-04
+- **Status** Resolved for the DaVinci "gpu" cue (C) and the DaVinci "plugin issues" bucket (D) · A and B
+  Deferred · **Area** Evidence integrity · **Severity** Low
+- **First seen** 2026-11-04 · **C and D resolved** 2026-11-04
 
 **Symptom / gap**
-- A bare "Windows" with no OS context reads as unknown. Examples: "freezes my entire Windows",
-  "Windows Davinci Resolve Studio 20.1 ...", "Windows color managed HDR viewers". Three counted
-  DaVinci rows lost a supported label in AUX-059, though never to a wrong OS.
-- OBS has no generic crash theme, so "OBS Crashes if ..." falls to "unspecified issue".
-- DaVinci treats "gpu" as a performance cue, so "The GPU failed to perform image processing" reads as
-  a performance regression.
+- A. A bare "Windows" with no OS context reads as unknown. DEFERRED.
+- B. OBS has no generic crash theme, so "OBS Crashes if ..." falls to "unspecified issue". DEFERRED.
+- C. DaVinci treated "gpu" as a performance cue in the producer (`gpus?` in the performance rule) and in
+  BOTH publication bucketers (`"gpu" in text`). "The GPU failed to perform image processing", "Your GPU
+  memory is full" and a hardware spec line were published as performance slowdowns: 10 of the 36 stored
+  "performance regression" rows (28%), no false negatives. RESOLVED.
+- D. `apply_consensus_to_records._public_issue_bucket` had a DaVinci branch
+  (`if "plugin" in text: return "plugin issues"`) that the builder never had. "plugin" enters only through
+  the area label "plugins / codecs", so seven codec/media reports were published as "plugin issues" on
+  v16, 20.1, 20.1.1, 20.3.1, 21 PB1, 21 and 21.0. RESOLVED.
 
-**Current impact** Row platform feeds no count, verdict or template. A theme miss feeds prose only.
+**Fix (C and D)**
+- C: `gpus?` is removed from the DaVinci performance rule and `"gpu"` from both bucketers. `gpu` stays in the
+  frozen DaVinci sentiment triggers: sentiment is verdict-bearing and was not part of this item. Genuine
+  performance, lag and slow matches are unchanged.
+- D: the writer's "plugin issues" branch is deleted. The builder is the reference and already printed
+  "compatibility issue".
+- Historical rows: `recompute_evidence_classification.py` gained `--only-id` (with `--product-id`). It
+  considers only the named rows, refuses an unknown or repeated id, and never writes `platform`. Nine of
+  the ten rows were corrected through it, theme, workflow area and severity only (audit:
+  `scripts/audit/aux062_davinci_gpu_historical_2026-11-04.json`).
 
-**Why deferred** Each is a vocabulary change with its own corpus measurement. The sprint authorised
-only demonstrated defects.
+**Unresolved: one stored row.** `...1os2u3c-ai-multicam-smartswitch-the-gpu-failed-to` (stored on the
+20.2.3 page, "AI Multicam SmartSwitch - The GPU failed to perform image processing Error 9 Fix") still carries
+"performance regression". The recompute tool's producer guard refuses it: its retained text says "crash", so
+neither the replaced chain nor the shipped classifier reproduces the stored label, and the label's origin
+is not in hand. The shipped classifier would call it a crash (severity medium to high). It is NOT corrected,
+and no forward-only change is a historical correction. Its page keeps the bucket until that row is judged.
 
-**Revisit trigger** The next change to `lib/evidence_classification.py` or to the OBS or DaVinci theme
-tables.
+**Measured (scratch tree, DaVinci-scoped `apply_consensus_to_records`, no unscoped write)**
+- Code alone changes exactly seven pages: 16, 20.1, 20.1.1, 20.3.1, 21 PB1, 21 and 21.0 ("plugin issues"
+  becomes "compatibility issue"). Five of them carry it in the consensus sentence (16, 20.1, 20.1.1, 20.3.1, 21.0);
+  PB1 and 21 only in accepted-report labels.
+- With the nine rows corrected, four more pages change classification labels: 20.3.2 and 21.0.4 (labels
+  only), 21.1 (its third phrase "performance slowdowns" becomes "render/export failures") and 21.1.1
+  ("performance slowdowns" leaves its top three).
+- Counts, verdicts, maturity, sentiment, identity, URLs, dates and status events: unchanged on all 1517
+  records. Only `issue_theme`, `workflow_area` and, in page prose, issue labels differ.
 
-**Work that this item must not block** Live promotion and the classification sprint.
+**Verification.** `test_davinci_gpu_plugin_bucket.py = 34` [blocking]: verbatim false-positive titles,
+genuine controls, the frozen sentiment trigger, a parity test over the whole rule-table x title grid and
+every DaVinci row in the store (the two bucketers agree on all 335), the nine corrected rows, and
+`--only-id` on a temporary store. Each fix, reverted alone, fails named checks.
+
+**Deferred specs.**
+- A. 0 false positives, 11 false negatives (DaVinci 9 of 335, OBS 2 of 288). No consumer reads row
+  platform, and the broad fix regresses correct unknowns ("switch from Windows to Linux", Teams "Windows
+  only" contrasts). Smallest safe fix if ever wanted: add `installation` to `_WINDOWS_AFTER_RE` and a
+  `windows (10|11)` parenthesis form, which recovers 2 of the 11.
+- B. 52 OBS titles name a crash and only 2 are crash-themed. Appending a lookaround rule last changes 46
+  rows with 1 false positive, and it must not match the crash-log URL path. Public prose is unchanged on
+  all 13 versions, so the reader benefit is nil. Separately, the OBS sentiment triggers omit generic
+  "crash" (16 of 18 crash rows are moderate); that is verdict-bearing and not part of this item.
+
+**Reopen only if** a new, material production defect appears in the DaVinci classification, or the
+unresolved SmartSwitch row is judged.
 
 ---
 

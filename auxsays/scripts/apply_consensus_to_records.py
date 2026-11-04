@@ -632,12 +632,10 @@ def _public_issue_bucket(pid: str, row: dict[str, Any]) -> str:
             return "render/export failures"
         if "crash" in text or "startup" in text or "launch" in text:
             return "startup or application crashes"
-        if "performance" in text or "gpu" in text or "slow" in text:
+        if "performance" in text or "slow" in text:
             return "performance slowdowns"
         if "install" in text:
             return "installation problems"
-        if "plugin" in text:
-            return "plugin issues"
 
     if pid == "obs-studio":
         if "scene list" in text or ("scene" in text and "selection" in text):
