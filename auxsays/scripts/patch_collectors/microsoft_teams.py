@@ -33,6 +33,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from lib import evidence_classification as ec
 from lib import source_segments
 from lib.post_dates import original_post_date_from_html
 from lib.target_outcome import target_is_contradicted
@@ -252,6 +253,75 @@ def describes_issue(text: str) -> bool:
     return any(term in low for term in ISSUE_EXTRA_TERMS)
 
 
+# --- classification (deterministic; no AI) --------------------------------------------------------
+# Platform, theme, area and severity come from what the REPORTER wrote, through the shared scorer.
+# They used to be literals: every row carried platform "Windows" (including rows this collector
+# itself refused as Mac or VDI) and empty theme, area and severity.
+#
+# TEAMS HAS NO DEFINITIONAL PLATFORM. Teams is cross-platform, so a build number does not establish
+# the reporter's operating system, and the tracked identity (New Teams / Windows) is what the
+# ACCEPTANCE gate enforces, not a fact about any single row's text. A report that names no operating
+# system reads `unknown`; it is never filled in from the product's official release platform.
+#
+# Word-boundary rules, scored, heading outweighing body. First rule in table order wins a tie.
+_TEAMS_THEME_RULES: tuple[ec.ThemeRule, ...] = (
+    ec.ThemeRule("sign-in failure", "authentication", "high", "signin",
+                 re.compile(r"\b(?:sign[\s-]?in|signing\s+in|log[\s-]?in|logging\s+in|authenticat\w*)\b", re.I)),
+    ec.ThemeRule("launch / open failure", "startup", "high", "launch",
+                 re.compile(r"\b(?:won't\s+(?:launch|open|start|load)|will\s+not\s+(?:launch|open|start|load)|"
+                            r"(?:not|fails?\s+to|unable\s+to|cannot|can't)\s+(?:launch|launching|opening|start|starting)|"
+                            r"black\s+screen|stuck\s+on\s+(?:loading|splash))\b", re.I)),
+    # `negatable`: "no crash, but audio drops" is not a crash report.
+    ec.ThemeRule("crash or hang", "system stability", "high", "crash",
+                 re.compile(r"\b(?:crash\w*|freez\w*|frozen|hang(?:s|ing)?|hung|not\s+responding)\b", re.I),
+                 negatable=True),
+    ec.ThemeRule("meeting join / connection failure", "meetings", "high", "join",
+                 re.compile(r"\b(?:(?:cannot|can't|unable\s+to|fails?\s+to|failed\s+to|won't)\s+join\w*|"
+                            r"disconnect\w*|dropp(?:ed|ing)\s+(?:out|from)|kicked\s+out)\b", re.I)),
+    ec.ThemeRule("audio / video failure", "meeting audio and video", "medium", "av",
+                 re.compile(r"\b(?:audio|microphone|mic|speakers?|no\s+sound|echo|chipmunk|camera|webcam|"
+                            r"video)\b", re.I)),
+    ec.ThemeRule("screen sharing failure", "screen sharing", "medium", "share",
+                 re.compile(r"\b(?:screen\s*shar\w*|shar(?:e|ing)\s+(?:my\s+|the\s+)?screen|"
+                            r"present(?:ing)?\s+(?:content|screen))\b", re.I)),
+    ec.ThemeRule("chat or notification problem", "chat and notifications", "medium", "chat",
+                 re.compile(r"\b(?:chats?|messages?|messaging|notifications?|channels?)\b", re.I)),
+    ec.ThemeRule("performance regression", "performance", "medium", "performance",
+                 re.compile(r"\b(?:slow\w*|lag(?:s|gy|ging|ged)?|performance|high\s+cpu|cpu|"
+                            r"memory\s+(?:leak\w*|usage))\b", re.I)),
+    ec.ThemeRule("install/update failure", "update", "medium", "install",
+                 re.compile(r"\b(?:install\w*|uninstall\w*|reinstall\w*|update\s+(?:fail\w*|error\w*)|"
+                            r"fail\w*\s+to\s+update)\b", re.I)),
+)
+ec.validate_rules(_TEAMS_THEME_RULES)
+
+
+def classify(heading: str, body: str = "") -> tuple[str, str, str, str]:
+    """(theme, workflow_area, platform, severity) for one Teams report.
+
+    PLATFORM is positive operating-system evidence in the reporter's text or `unknown`
+    (`ec.resolve_platform`); never inferred from the tracked identity.
+
+    NO SUPPORTED THEME -> ("", "", platform, ""): the unclassified result the store already uses.
+    No theme is made up, and no severity: a severity is carried only by a matched theme rule, never
+    invented because a row happens to be counted.
+
+    SENTIMENT IS NOT RETURNED. It is verdict-bearing and unchanged by this function: the caller keeps
+    the existing rule ("negative" on a counted row, empty otherwise).
+    """
+    platform = ec.resolve_platform(body or "", heading=heading or "").label
+    verdict = ec.score_themes(heading or "", body or "", _TEAMS_THEME_RULES)
+    if verdict is None:
+        return "", "", platform, ""
+    return verdict.theme, verdict.area, platform, verdict.severity
+
+
+def _classify_candidate(parent: str, title: str, text: str) -> tuple[str, str, str, str]:
+    """Title and body SEPARATELY, so the reporter's own headline outweighs a passing body mention."""
+    heading = " ".join(dict.fromkeys(part for part in (title.strip(), parent.strip()) if part))
+    return classify(heading, text)
+
+
 def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
                        captured_at: str) -> dict[str, Any]:
     """ONE acceptance authority for every discovery method.
@@ -278,6 +348,8 @@ def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
     # point to it starting after build X" is not a user reporting their own failure either.
     # Tech Community already contributes opening posts only, so this also makes the two families
     # consistent. Replies are still discovered and stored for audit, just never counted.
+    theme, workflow_area, platform, severity = _classify_candidate(parent, title, text)
+
     if str(candidate.get("segment_type") or "question") != "question":
         reply = base.make_evidence_row(
             product_id=TEAMS_PRODUCT_ID, update_version=build,
@@ -289,7 +361,8 @@ def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
             target_release_date=release_date, patch_version_matched=False,
             matched_version="", match_basis="", counted=False,
             exclusion_reason="reply_segment_not_counted_v1",
-            issue_theme="", workflow_area="", platform="Windows", severity="", sentiment="")
+            issue_theme=theme, workflow_area=workflow_area, platform=platform,
+            severity=severity, sentiment="")
         reply["source_weight"] = 1
         return base.normalize_evidence_row(reply)
 
@@ -322,10 +395,10 @@ def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
         match_basis=basis,
         counted=False,
         exclusion_reason=reason,
-        issue_theme="",
-        workflow_area="",
-        platform="Windows",
-        severity="",
+        issue_theme=theme,
+        workflow_area=workflow_area,
+        platform=platform,
+        severity=severity,
         sentiment="",
     )
     if reason:
@@ -347,8 +420,8 @@ def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
     # apply_consensus_to_records refuses a row whose sentiment is not in VALID_SENTIMENTS, while
     # reconcile_record_counts counts it regardless. Leaving it blank therefore publishes
     # update_report_count > 0 with no summary and no samples -- the blocking QA error that discards
-    # every product's evidence for the cycle. Severity and issue_theme stay empty: those WOULD be
-    # invented, and nothing downstream requires them.
+    # every product's evidence for the cycle. Severity and issue_theme are NOT set here: they come
+    # only from `classify` (what the reporter wrote), and stay empty when no theme is supported.
     if gated.get("counted") is True:
         gated["sentiment"] = "negative"
     return base.normalize_evidence_row(gated)
