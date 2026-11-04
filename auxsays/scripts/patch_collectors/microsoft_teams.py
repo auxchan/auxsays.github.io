@@ -33,6 +33,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from lib import evidence_classification as ec
 from lib import source_segments
 from lib.post_dates import original_post_date_from_html
 from lib.target_outcome import target_is_contradicted
@@ -252,6 +253,110 @@ def describes_issue(text: str) -> bool:
     return any(term in low for term in ISSUE_EXTRA_TERMS)
 
 
+# --- classification (deterministic; no AI) --------------------------------------------------------
+# Platform, theme, area and severity come from what the REPORTER wrote, through the shared scorer.
+# They used to be literals: every row carried platform "Windows" (including rows this collector
+# itself refused as Mac or VDI) and empty theme, area and severity.
+#
+# TEAMS HAS NO DEFINITIONAL PLATFORM. Teams is cross-platform, so a build number does not establish
+# the reporter's operating system, and the tracked identity (New Teams / Windows) is what the
+# ACCEPTANCE gate enforces, not a fact about any single row's text. A report that names no operating
+# system reads `unknown`; it is never filled in from the product's official release platform.
+#
+# Word-boundary rules, scored, heading outweighing body. First rule in table order wins a tie.
+_TEAMS_THEME_RULES: tuple[ec.ThemeRule, ...] = (
+    ec.ThemeRule("sign-in failure", "authentication", "high", "signin",
+                 # FAILURE CONTEXT REQUIRED. "sign in" is also how every working session starts, so a
+                 # plain mention is not a malfunction: inability to sign in, a failed sign-in, an error
+                 # or a loop.
+                 re.compile(r"(?:\b(?:cannot|can't|can\s+not|unable\s+to|not\s+able\s+to|couldn't|won't|"
+                            r"will\s+not|fail(?:s|ed|ing)?\s+to)\s+(?:even\s+)?(?:sign|log)(?:\s?-?\s?in|ging\s+in)\b|"
+                            r"\b(?:sign|log)[\s-]?in\s+(?:loop|error|failure|failed|fails|failing|issue|problem|"
+                            r"broken|keeps|repeatedly)|"
+                            r"\b(?:sign|log)(?:ging|ing)\s+in\s+(?:loop|error|fail\w*)|"
+                            r"\bstuck\s+(?:on|in|at)\s+(?:the\s+|a\s+)?(?:sign|log)[\s-]?in|"
+                            r"\bauthentication\s+(?:fail\w*|error|loop)|\bfail\w*\s+(?:to\s+)?authenticat\w*)",
+                            re.I)),
+    ec.ThemeRule("launch / open failure", "startup", "high", "launch",
+                 re.compile(r"\b(?:won't\s+(?:launch|open|start|load)|will\s+not\s+(?:launch|open|start|load)|"
+                            r"(?:not|fails?\s+to|unable\s+to|cannot|can't)\s+(?:launch|launching|opening|start|starting)|"
+                            r"black\s+screen|stuck\s+on\s+(?:loading|splash))\b", re.I)),
+    ec.ThemeRule("screen sharing failure", "screen sharing", "medium", "share",
+                 # FAILURE CONTEXT REQUIRED: "I was screen sharing when Teams became slow" and "how do I
+                 # enable screen sharing" mention the feature; they report no sharing fault.
+                 re.compile(r"\b(?:(?:cannot|can't|can\s+not|unable\s+to|not\s+able\s+to|couldn't|won't|"
+                            r"fail(?:s|ed|ing)?\s+to)\s+(?:\w+\s+){0,2}(?:share|present)\s+"
+                            r"(?:my\s+|the\s+|our\s+|a\s+)?(?:screen|content|window|desktop)|"
+                            r"(?:screen\s*shar\w*)\s+(?:\w+\s+){0,2}(?:fail\w*|broken|not\s+working|"
+                            r"doesn't\s+work|isn't\s+working|won't\s+work|freez\w*|frozen|stops?|stopped|crash\w*|"
+                            r"black|blank|gr[ae]y|disabled)|"
+                            r"shared\s+(?:screen|content|window)\s+(?:\w+\s+){0,2}(?:black|blank|gr[ae]y|"
+                            r"freez\w*|frozen|stops?|stopped|flicker\w*|not\s+(?:showing|visible))|"
+                            r"share\s+(?:screen\s+)?button\s+(?:\w+\s+){0,2}(?:disabled|gr[ae]yed|missing|"
+                            r"not\s+working))\b", re.I)),
+    # `negatable`: "no crash, but audio drops" is not a crash report.
+    ec.ThemeRule("crash or hang", "system stability", "high", "crash",
+                 re.compile(r"\b(?:crash\w*|freez\w*|frozen|hang(?:s|ing)?|hung|not\s+responding)\b", re.I),
+                 negatable=True),
+    ec.ThemeRule("meeting join / connection failure", "meetings", "high", "join",
+                 re.compile(r"\b(?:(?:cannot|can't|unable\s+to|fails?\s+to|failed\s+to|won't)\s+join\w*|"
+                            r"disconnect\w*|dropp(?:ed|ing)\s+(?:out|from)|kicked\s+out)\b", re.I)),
+    ec.ThemeRule("audio / video failure", "meeting audio and video", "medium", "av",
+                 # FAILURE CONTEXT REQUIRED: "camera video" in a performance report is not an A/V fault.
+                 re.compile(r"\b(?:no\s+(?:[\w/]+\s+){0,2}(?:audio|sound|video)|"
+                            r"(?:audio|video|sound|mic\w*|camera|webcam|headset|speakers?)\s+(?:\w+\s+){0,2}"
+                            r"(?:cuts?|cutting|drops?|dropping|choppy|distorted|echo\w*|stutter\w*|garbled|robotic|"
+                            r"not\s+working|isn't\s+working|stops?|out\s+of\s+sync)|"
+                            r"(?:can't|cannot|unable\s+to|couldn't)\s+(?:hear|see)|"
+                            r"(?:mic\w*|camera|webcam)\s+(?:not|isn't|doesn't|won't)|"
+                            r"chipmunk|choppy|cut\s+out)\b", re.I)),
+    ec.ThemeRule("chat or notification problem", "chat and notifications", "medium", "chat",
+                 # FAILURE CONTEXT REQUIRED: a plain mention of chat, messages, notifications or channels
+                 # establishes no malfunction.
+                 re.compile(r"\b(?:(?:messages?|chats?|notifications?|channels?)\s+(?:\w+\s+){0,2}"
+                            r"(?:won't|wont|don't|doesn't|aren't|weren't|never|fail\w*|stuck|missing|disappear\w*|"
+                            r"delayed|duplicat\w*|not\s+(?:going|sending|sent|delivered|arriving|showing|loading|"
+                            r"syncing|appearing|working))|"
+                            r"(?:cannot|can't|unable\s+to|fail\w*\s+to|won't)\s+(?:\w+\s+){0,2}"
+                            r"(?:send|receive|post|load|see)\s+(?:\w+\s+){0,2}(?:messages?|chats?|notifications?)|"
+                            r"(?:missing|delayed|duplicate|no)\s+(?:\w+\s+)?(?:messages?|chats?|notifications?)|"
+                            r"not\s+(?:receiving|getting)\s+(?:\w+\s+){0,2}(?:messages?|notifications?))\b", re.I)),
+    ec.ThemeRule("performance regression", "performance", "medium", "performance",
+                 re.compile(r"\b(?:slow\w*|lag(?:s|gy|ging|ged)?|performance|high\s+cpu|cpu|"
+                            r"memory\s+(?:leak\w*|usage))\b", re.I)),
+    ec.ThemeRule("install/update failure", "update", "medium", "install",
+                 re.compile(r"\b(?:install\w*|uninstall\w*|reinstall\w*|update\s+(?:fail\w*|error\w*)|"
+                            r"fail\w*\s+to\s+update)\b", re.I)),
+)
+ec.validate_rules(_TEAMS_THEME_RULES)
+
+
+def classify(heading: str, body: str = "") -> tuple[str, str, str, str]:
+    """(theme, workflow_area, platform, severity) for one Teams report.
+
+    PLATFORM is positive operating-system evidence in the reporter's text or `unknown`
+    (`ec.resolve_platform`); never inferred from the tracked identity.
+
+    NO SUPPORTED THEME -> ("", "", platform, ""): the unclassified result the store already uses.
+    No theme is made up, and no severity: a severity is carried only by a matched theme rule, never
+    invented because a row happens to be counted.
+
+    SENTIMENT IS NOT RETURNED. It is verdict-bearing and unchanged by this function: the caller keeps
+    the existing rule ("negative" on a counted row, empty otherwise).
+    """
+    platform = ec.resolve_platform(body or "", heading=heading or "").label
+    verdict = ec.score_themes(heading or "", body or "", _TEAMS_THEME_RULES)
+    if verdict is None:
+        return "", "", platform, ""
+    return verdict.theme, verdict.area, platform, verdict.severity
+
+
+def _classify_candidate(parent: str, title: str, text: str) -> tuple[str, str, str, str]:
+    """Title and body SEPARATELY, so the reporter's own headline outweighs a passing body mention."""
+    heading = " ".join(dict.fromkeys(part for part in (title.strip(), parent.strip()) if part))
+    return classify(heading, text)
+
+
 def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
                        captured_at: str) -> dict[str, Any]:
     """ONE acceptance authority for every discovery method.
@@ -278,6 +383,8 @@ def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
     # point to it starting after build X" is not a user reporting their own failure either.
     # Tech Community already contributes opening posts only, so this also makes the two families
     # consistent. Replies are still discovered and stored for audit, just never counted.
+    theme, workflow_area, platform, severity = _classify_candidate(parent, title, text)
+
     if str(candidate.get("segment_type") or "question") != "question":
         reply = base.make_evidence_row(
             product_id=TEAMS_PRODUCT_ID, update_version=build,
@@ -289,7 +396,8 @@ def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
             target_release_date=release_date, patch_version_matched=False,
             matched_version="", match_basis="", counted=False,
             exclusion_reason="reply_segment_not_counted_v1",
-            issue_theme="", workflow_area="", platform="Windows", severity="", sentiment="")
+            issue_theme=theme, workflow_area=workflow_area, platform=platform,
+            severity=severity, sentiment="")
         reply["source_weight"] = 1
         return base.normalize_evidence_row(reply)
 
@@ -322,10 +430,10 @@ def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
         match_basis=basis,
         counted=False,
         exclusion_reason=reason,
-        issue_theme="",
-        workflow_area="",
-        platform="Windows",
-        severity="",
+        issue_theme=theme,
+        workflow_area=workflow_area,
+        platform=platform,
+        severity=severity,
         sentiment="",
     )
     if reason:
@@ -347,8 +455,8 @@ def evaluate_candidate(record: base.PatchRecord, candidate: dict[str, Any],
     # apply_consensus_to_records refuses a row whose sentiment is not in VALID_SENTIMENTS, while
     # reconcile_record_counts counts it regardless. Leaving it blank therefore publishes
     # update_report_count > 0 with no summary and no samples -- the blocking QA error that discards
-    # every product's evidence for the cycle. Severity and issue_theme stay empty: those WOULD be
-    # invented, and nothing downstream requires them.
+    # every product's evidence for the cycle. Severity and issue_theme are NOT set here: they come
+    # only from `classify` (what the reporter wrote), and stay empty when no theme is supported.
     if gated.get("counted") is True:
         gated["sentiment"] = "negative"
     return base.normalize_evidence_row(gated)
