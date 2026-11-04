@@ -193,6 +193,15 @@ def run_suite() -> int:
           ec.resolve_platform("OS: [Linux]").label == "unknown")
     check("H3 DaVinci classify takes (heading, body): the one-blob call is refused",
           _single_argument_call_is_refused())
+    check("H4 a title opening 'Windows:' is the platform (a counted OBS row)",
+          obs.classify(obs_issue("Windows: since 32.2.0, plugins whose dependencies are found via PATH "
+                                 "no longer load", ""))[2] == "windows")
+    not_responding = davinci.classify(
+        "Davinci not responding - Mac Studio M3 Ultra",
+        "Since changing to a Mac Studio M3 Ultra, when starting up DR Studio 20.2.3 it is very slow and "
+        "often not responding, also crashes sometimes.")
+    check("H5 'not responding' asserts a failure: it does not deny the 'crashes' after it",
+          not_responding[0] == "startup or application crash", str(not_responding))
 
     print("=" * 92)
     print(f"Results: {PASS}/{PASS + FAIL} passed, {FAIL} failed")

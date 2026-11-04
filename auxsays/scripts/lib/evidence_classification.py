@@ -184,6 +184,13 @@ _PLAIN_NEGATION_RE = re.compile(
     r"(?:\b(?:no|not|never|none|nothing|nor|neither)\b"
     r"|\b(?:is|are|was|were|do|does|did|has|have|had)n[o']?t\b)", re.I)
 
+# A "not" that heads one of these ASSERTS a failure, so it is never a denial of the next symptom.
+# The `protected` spans below cover this only when the phrase is the rule's own match; a rule that
+# does not list "not responding" left its "not" free to bind, and in "very slow and often not
+# responding, also crashes sometimes" (a counted DaVinci row) it suppressed "crashes".
+_ASSERTED_FAILURE_RE = re.compile(
+    r"not\s+(?:responding|working|loading|opening|starting|launching)\b", re.I)
+
 
 def clause_spans(text: str) -> list[tuple[int, int]]:
     """`text` split into clause spans. Always covers at least one span for non-empty text."""
@@ -230,6 +237,8 @@ def is_negated(
         return False
     for marker in _PLAIN_NEGATION_RE.finditer(text, window_start, position):
         if any(start <= marker.start() < end for start, end in protected):
+            continue
+        if _ASSERTED_FAILURE_RE.match(text, marker.start()):
             continue
         intervening = _WORD_RE.findall(text[marker.end():position])
         if len(intervening) <= NEGATION_MAX_INTERVENING_WORDS:
@@ -331,6 +340,10 @@ _WIN_VERSION_RE = re.compile(r"\bwin(?:dows)?\s?(?:7|8\.1|8|10|11|12|20\d\d)\b",
 # "(windows)" to mean a UI window. Parentheses only: square brackets belong to the placeholder
 # scrubber, because "[Windows 11 Pro 24H2 / macOS version]" is an UNFILLED template, not an answer.
 _WINDOWS_ANNOTATION_RE = re.compile(r"\(\s*(?:windows|win)\s*\)", re.I)
+# A title that OPENS with the platform as a tag: "Windows: since 32.2.0, plugins ..." or
+# "[Windows] ...". Heading only, and only with a separator, so a title such as "Windows disappear
+# after docking" still needs OS context.
+_WINDOWS_TITLE_TAG_RE = re.compile(r"^\s*[\[(]?\s*windows\s*[\]):|\-–—]", re.I)
 # `windows` preceded by something that frames it as a platform.
 _WINDOWS_BEFORE_RE = re.compile(
     r"\b(?:on|under|using|running|runs|ran|installed|install|reinstall|reinstalled|upgraded|"
@@ -419,6 +432,8 @@ def resolve_platform(
         raw = f"{heading} {raw}"
         scrubbed = f"{heading} {scrubbed}"
     named = _named_platforms(scrubbed)
+    if heading and "windows" not in named and _WINDOWS_TITLE_TAG_RE.search(heading):
+        named.insert(0, "windows")
     suppressed: list[str] = []
 
     if "windows" not in named and _WINDOWS_WORD_RE.search(scrubbed):

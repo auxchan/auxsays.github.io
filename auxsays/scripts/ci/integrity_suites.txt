@@ -62,7 +62,7 @@ auxsays/scripts/tests/test_evidence_classification.py = 58
 # "change" published OBS issues as "freeze / hang", a title tag "[Linux]" was thrown away, Fusion's
 # "Spline windows" read as Windows, and PowerPoint stamped a literal "windows" on every row.
 # Sentiment is pinned to the replaced chains' own rule, so a theme repair cannot move a verdict.
-auxsays/scripts/tests/test_collector_classification.py = 31
+auxsays/scripts/tests/test_collector_classification.py = 33
 
 # The merge authority. AUX-013 was not a missing rule, it was a rule with nothing behind it: PR #163
 # merged nineteen seconds after its own ci-integrity run concluded `failure`, because the status read
