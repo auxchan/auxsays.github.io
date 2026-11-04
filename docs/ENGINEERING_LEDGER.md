@@ -68,7 +68,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-058 | Resolved | Evidence integrity | Medium | DaVinci, OBS and PowerPoint still guessed themes and platforms from substrings |
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
-| AUX-061 | Deferred | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
+| AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 
 ---
@@ -4045,26 +4045,25 @@ disagree on a counted OBS row.
 
 ### AUX-061 — A patch page lists "general workflow reports" as if it were a reported issue
 
-- **Status** Deferred · **Area** Published claims · **Severity** Low
-- **First seen** 2026-11-04
+- **Status** Resolved · **Area** Published claims · **Severity** Low
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
 
 **Symptom / gap** `aux-update.html` builds "Current reports mention ..." from the first three
-distinct `evidence_samples` issue labels, and it does not skip the fallback bucket "general workflow
-reports". `_top_theme_phrases` does skip it.
+distinct `evidence_samples` issue labels (then `complaint_themes`), and it did not skip the fallback
+bucket "general workflow reports", which means "no recognised theme". `_top_theme_phrases` already did.
 
-**Current impact** 22 of 234 pages with an issue sentence carried the phrase before AUX-060: DaVinci
-13, OBS 5 and Teams 4. Example: DaVinci 20.2.3. AUX-060 makes it 24:
-- on OBS 31.1.2 the phrase replaces the false stability claim;
-- on OBS 32.1.1 it displaces "audio mixer or routing issues".
+**Fix** The template drops that label from both inputs by an exact match on the stripped, lower-cased
+label (never a substring), before the three-label limit is applied. When nothing specific remains the
+existing "User reports are present; review the source list" line renders. Presentation only: no
+evidence, count, verdict or classification changed.
 
-It is vague but not false. No count or verdict is affected.
+**Measured** Rendering the shipped template over all 1517 update records with the liquid gem: 25 pages
+showed the label before, 0 after; no other page's reasoning block changed. Of the 25, 18 now show the
+fallback line and 7 show their specific labels (a fourth label takes the freed slot).
+`test_issue_sentence_generic_label.py` pins the cases.
 
-**Why deferred** It is a presentation decision outside the classification sprint: whether to skip the
-fallback, or to state how many reports carry no recognised theme.
-
-**Revisit trigger** The next change to the patch page's reasoning block or evidence samples.
-
-**Work that this item must not block** AUX-060 and the classification sprint.
+**Reopen only if** another fallback or generic label reaches the issue sentence, or the bucketer renames
+this one.
 
 ---
 
