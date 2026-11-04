@@ -19,7 +19,7 @@ update_published_at: '2025-05-28T00:00:00Z'
 update_last_checked: '2026-07-22T08:47:09Z'
 source_last_checked: '2026-07-22T08:47:09Z'
 official_body_last_checked: '2026-07-22T08:47:09Z'
-record_last_updated: '2026-11-04T01:07:09.863672Z'
+record_last_updated: '2026-11-04T07:59:57.323368Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -338,8 +338,8 @@ accepted_report_sources:
   source_date: '2026-01-29'
   version_matched: '20'
   patch_version_matched: true
-  issue: render/export failures in application stability
-  workflow_area: application stability
+  issue: render/export failures
+  workflow_area: render/export
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1qndlqo/problems_with_davinci_resolve_20/

@@ -20,7 +20,7 @@ update_published_at: '2026-02-12T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-06-02T21:25:17Z'
 official_body_last_checked: '2026-06-02T21:25:17Z'
-record_last_updated: '2026-09-26T17:54:51.727363Z'
+record_last_updated: '2026-11-04T08:00:13.883601Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -300,8 +300,8 @@ accepted_report_sources:
   source_date: '2026-04-09'
   version_matched: 20.3.2
   patch_version_matched: true
-  issue: Magic Mask crashes in color grading / Magic Mask
-  workflow_area: color grading / Magic Mask
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sdvq2u/text_follower_shading_bug_options_showing_without/

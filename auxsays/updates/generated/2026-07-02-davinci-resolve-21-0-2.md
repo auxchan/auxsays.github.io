@@ -19,7 +19,7 @@ update_published_at: '2026-07-02T00:00:00Z'
 update_last_checked: '2026-07-02T09:35:52Z'
 source_last_checked: '2026-08-05T07:31:23Z'
 official_body_last_checked: '2026-08-05T07:31:23Z'
-record_last_updated: '2026-10-14T00:29:44.218456Z'
+record_last_updated: '2026-11-04T08:00:23.826170Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -181,8 +181,8 @@ evidence_samples:
   counted: true
   version_matched: 21.0.2
   patch_version_matched: true
-  issue: render/export failures in application stability
-  outcome: high
+  issue: render/export failures
+  outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1um6nyq/moving_projects_between_mac_and_pc/
   source_title: Moving projects between Mac and PC
@@ -225,8 +225,8 @@ accepted_report_sources:
   source_date: '2026-07-03'
   version_matched: 21.0.2
   patch_version_matched: true
-  issue: render/export failures in application stability
-  workflow_area: application stability
+  issue: render/export failures
+  workflow_area: render/export
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1um6nyq/moving_projects_between_mac_and_pc/

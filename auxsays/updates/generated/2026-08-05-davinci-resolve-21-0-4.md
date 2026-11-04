@@ -19,7 +19,7 @@ update_published_at: '2026-08-05T00:00:00Z'
 update_last_checked: '2026-08-05T07:31:23Z'
 source_last_checked: '2026-10-02T01:12:47Z'
 official_body_last_checked: '2026-10-02T01:12:47Z'
-record_last_updated: '2026-10-26T06:37:05.874445Z'
+record_last_updated: '2026-11-04T08:00:27.214752Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -168,8 +168,8 @@ evidence_samples:
   counted: true
   version_matched: 21.0.4
   patch_version_matched: true
-  issue: render/export failures in application stability
-  outcome: high
+  issue: render/export failures
+  outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1w4fphy/mein_davinci_playback_ist_sehr_laggy/
   source_title: Mein Davinci Playback ist sehr laggy
@@ -221,8 +221,8 @@ accepted_report_sources:
   source_date: '2026-08-10'
   version_matched: 21.0.4
   patch_version_matched: true
-  issue: render/export failures in application stability
-  workflow_area: application stability
+  issue: render/export failures
+  workflow_area: render/export
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1w7hxzy/the_never_stopping_crashes/
