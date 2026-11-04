@@ -60,6 +60,9 @@ print tpl.render!(payload['vars'])
 
 def layout_block(text: str = LAYOUT) -> str:
     """Front-matter end .. before the first non-maturity include (holds the whole reasoning block)."""
+    # The DaVinci archived-release notice (AUX-065) precedes the verdict and is not part of the issue
+    # sentence under test; an include tag cannot render standalone, so its one line is dropped first.
+    text = re.sub(r"[^\n]*\{%-?\s*include\s+archived-notice\.html[^\n]*\n", "", text)
     expanded = MATURITY_TAG.sub(lambda m: MATURITY_INCLUDE.replace("include.record", m.group(1)), text)
     lines = expanded.split("\n")
     end = next((i for i, line in enumerate(lines) if "{% include" in line), len(lines))
