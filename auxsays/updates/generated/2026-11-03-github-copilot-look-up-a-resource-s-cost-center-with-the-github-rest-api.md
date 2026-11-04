@@ -18,8 +18,8 @@ update_version: Look up a resource’s cost center with the GitHub REST API
 update_logo_text: GIT
 update_published_at: '2026-11-03T15:27:13Z'
 update_last_checked: '2026-11-03T17:12:24Z'
-source_last_checked: '2026-11-03T17:12:24Z'
-official_body_last_checked: '2026-11-03T17:12:24Z'
+source_last_checked: '2026-11-04T02:10:55Z'
+official_body_last_checked: '2026-11-04T02:10:55Z'
 record_last_updated: '2026-11-03T17:12:24Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -78,6 +78,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-11-03T17:12:24Z'
+  url: https://github.blog/changelog/2026-11-03-look-up-a-resources-cost-center-with-the-github-rest-api
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-04T02:10:55Z'
   url: https://github.blog/changelog/2026-11-03-look-up-a-resources-cost-center-with-the-github-rest-api
   status: captured-from-rss-feed
   body_captured: true
