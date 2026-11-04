@@ -401,7 +401,19 @@ def run() -> int:
             pp.learn_qna.collect_learn_qna_candidates = lambda **k: []
             pp.reddit_source.collect_reddit_candidates = _rd_blocked
             _restore = _offline_sources(pp)
-            _acc3, _rej3, health3 = pp.collect_for_record(record, SimpleNamespace(write=False, since=None, max_pages=1, target_versions=None), env={pp.REDDIT_FALLBACK_ENV: "true"})
+            # D2: the opt-in flag alone no longer enables Reddit; written authorisation does. This case
+            # exercises the fallback's blocked classification, so it runs under the authorised state.
+            import os as _os  # noqa: PLC0415
+            _auth_key = "AUXSAYS_REDDIT_ACCESS_AUTHORIZATION_REF"
+            _auth_before = _os.environ.get(_auth_key)
+            _os.environ[_auth_key] = "test-fixture"
+            try:
+                _acc3, _rej3, health3 = pp.collect_for_record(record, SimpleNamespace(write=False, since=None, max_pages=1, target_versions=None), env={pp.REDDIT_FALLBACK_ENV: "true", _auth_key: "test-fixture"})
+            finally:
+                if _auth_before is None:
+                    _os.environ.pop(_auth_key, None)
+                else:
+                    _os.environ[_auth_key] = _auth_before
             rd3 = next(h for h in health3 if h["method_id"] == pp.REDDIT_METHOD_ID)
             check("collect_for_record: reddit fallback enabled + blocked -> reddit health 'blocked'", rd3["status"] == "blocked", str(rd3["status"]))
         finally:

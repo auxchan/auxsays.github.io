@@ -91,6 +91,13 @@ auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
 auxsays/scripts/tests/test_powerpoint_qna_tag_enumeration.py = 65
 auxsays/scripts/tests/test_acrobat_tiering.py = 136
 
+# Automated Reddit collection is off unless written data-access authorisation is recorded. This pins
+# every Reddit path (DaVinci's JSON/OAuth/RSS ladder and watchlist hydration, the shared module behind
+# Acrobat/Premiere/PowerPoint, the manual seed tool) refusing before a socket opens, the truthful
+# `disabled` policy row, the writer keeping the real last attempt, and certification not softening.
+# Offline: every transport is a counter that refuses.
+auxsays/scripts/tests/test_reddit_access_policy.py = 86
+
 # A retired Acrobat method must report that it is retired. adobe_community_search and
 # reddit_search stopped executing, and the comment that retired them claimed their health rows
 # stayed honest; 286 rows instead froze at `blocked` with last_run 2026-08-07/2026-09-01 beside

@@ -70,6 +70,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
+| AUX-063 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 
 ---
 
@@ -4089,6 +4090,55 @@ only demonstrated defects.
 tables.
 
 **Work that this item must not block** Live promotion and the classification sprint.
+
+---
+
+### AUX-063 — Reddit collection is switched off for lack of written authorisation; stored Reddit rows await review
+
+- **Status** Deferred · **Area** Compliance · **Severity** High
+- **First seen** 2026-11-04
+
+**Symptom / gap**
+- Commercial use of Reddit data needs explicit written permission. A search of the repository, its
+  configuration, its workflows (variable and secret names only) and its docs found none: no agreement,
+  no app registration record, no permission record. A configured client id or a polite User-Agent is not
+  that permission. Reddit's RSS ends 2026-11-13 and unregistered public API apps begin losing access
+  2027-01-12.
+- Automated collection was nonetheless live: DaVinci's `reddit_search` ladder (JSON, OAuth, RSS) and
+  its watchlist hydration of one Reddit post, plus the shared `reddit_source` module behind Acrobat
+  (both editions, retired but re-enableable by a flag), Premiere (routed `disabled`) and PowerPoint
+  (opt-in flag).
+
+**Contained (this item's code)** `lib/reddit_access_policy.py` is the one authority. Default: not
+authorised. Every Reddit path refuses before a socket opens, every Reddit method emits a `disabled`
+health row whose reason is `reddit_access_policy_unauthorised`, and the writer keeps the prior row's
+real last attempt instead of restamping it. Authorisation is a recorded reference in
+`AUXSAYS_REDDIT_ACCESS_AUTHORIZATION_REF`; no workflow sets it. Certification is unchanged: a disabled
+Reddit family is never healthy, so a patch whose counted evidence is Reddit stays uncertified
+(`contributing_family_unhealthy:reddit_community_report`). Measured on the committed store: 0 public
+monitoring labels change over 1517 records and 0 certification decisions flip.
+
+**Stored Reddit evidence needing a separate retention and publication-rights review** (untouched here)
+- `auxsays/_data/consensus_evidence.yml`: **326** counted rows, all `reddit_community_report`, all
+  `www.reddit.com/r/davinciresolve`, all `blackmagic-davinci`. Largest: 21 (75), 20 (33), 20.3.2 (32),
+  20.2.3 (17), 20.2 (16), 21.0.4 (16), 21.1 (14), 20.3.1 (13), 21.0.2 (13), 20.1 (12), 19 (11). No
+  uncounted Reddit rows are stored. No other product stores a Reddit row.
+- 28 generated DaVinci pages cite a `reddit.com` URL; 5 other generated pages (Elgato) mention Reddit
+  only in prose.
+- 386 `reddit_search` health rows (DaVinci 122, Acrobat Pro 137, Acrobat Reader 91, Premiere 2,
+  PowerPoint 34) are telemetry, not evidence; they are rewritten as policy rows by the lane.
+
+**Why deferred** Deleting, uncounting or editing stored evidence is a retention and rights decision, not
+an engineering one, and changing counts moves verdicts. It needs a decision on what may be retained and
+what may be published.
+
+**Current impact** DaVinci counts, verdicts and page citations still include Reddit rows. No new Reddit
+row is collected. Pages that rely on Reddit evidence keep an honest monitoring state.
+
+**Revisit trigger** Written Reddit authorisation is obtained (set the reference; the paths return), or
+the retention and publication-rights review concludes.
+
+**Work that this item must not block** D3 archival, Windows source diversification, Teams integrity.
 
 ## Adding an entry
 
