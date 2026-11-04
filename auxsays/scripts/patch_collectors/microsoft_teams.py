@@ -266,7 +266,17 @@ def describes_issue(text: str) -> bool:
 # Word-boundary rules, scored, heading outweighing body. First rule in table order wins a tie.
 _TEAMS_THEME_RULES: tuple[ec.ThemeRule, ...] = (
     ec.ThemeRule("sign-in failure", "authentication", "high", "signin",
-                 re.compile(r"\b(?:sign[\s-]?in|signing\s+in|log[\s-]?in|logging\s+in|authenticat\w*)\b", re.I)),
+                 # FAILURE CONTEXT REQUIRED. "sign in" is also how every working session starts, so a
+                 # plain mention is not a malfunction: inability to sign in, a failed sign-in, an error
+                 # or a loop.
+                 re.compile(r"(?:\b(?:cannot|can't|can\s+not|unable\s+to|not\s+able\s+to|couldn't|won't|"
+                            r"will\s+not|fail(?:s|ed|ing)?\s+to)\s+(?:even\s+)?(?:sign|log)(?:\s?-?\s?in|ging\s+in)\b|"
+                            r"\b(?:sign|log)[\s-]?in\s+(?:loop|error|failure|failed|fails|failing|issue|problem|"
+                            r"broken|keeps|repeatedly)|"
+                            r"\b(?:sign|log)(?:ging|ing)\s+in\s+(?:loop|error|fail\w*)|"
+                            r"\bstuck\s+(?:on|in|at)\s+(?:the\s+|a\s+)?(?:sign|log)[\s-]?in|"
+                            r"\bauthentication\s+(?:fail\w*|error|loop)|\bfail\w*\s+(?:to\s+)?authenticat\w*)",
+                            re.I)),
     ec.ThemeRule("launch / open failure", "startup", "high", "launch",
                  re.compile(r"\b(?:won't\s+(?:launch|open|start|load)|will\s+not\s+(?:launch|open|start|load)|"
                             r"(?:not|fails?\s+to|unable\s+to|cannot|can't)\s+(?:launch|launching|opening|start|starting)|"
@@ -279,13 +289,28 @@ _TEAMS_THEME_RULES: tuple[ec.ThemeRule, ...] = (
                  re.compile(r"\b(?:(?:cannot|can't|unable\s+to|fails?\s+to|failed\s+to|won't)\s+join\w*|"
                             r"disconnect\w*|dropp(?:ed|ing)\s+(?:out|from)|kicked\s+out)\b", re.I)),
     ec.ThemeRule("audio / video failure", "meeting audio and video", "medium", "av",
-                 re.compile(r"\b(?:audio|microphone|mic|speakers?|no\s+sound|echo|chipmunk|camera|webcam|"
-                            r"video)\b", re.I)),
+                 # FAILURE CONTEXT REQUIRED: "camera video" in a performance report is not an A/V fault.
+                 re.compile(r"\b(?:no\s+(?:[\w/]+\s+){0,2}(?:audio|sound|video)|"
+                            r"(?:audio|video|sound|mic\w*|camera|webcam|headset|speakers?)\s+(?:\w+\s+){0,2}"
+                            r"(?:cuts?|cutting|drops?|dropping|choppy|distorted|echo\w*|stutter\w*|garbled|robotic|"
+                            r"not\s+working|isn't\s+working|stops?|out\s+of\s+sync)|"
+                            r"(?:can't|cannot|unable\s+to|couldn't)\s+(?:hear|see)|"
+                            r"(?:mic\w*|camera|webcam)\s+(?:not|isn't|doesn't|won't)|"
+                            r"chipmunk|choppy|cut\s+out)\b", re.I)),
     ec.ThemeRule("screen sharing failure", "screen sharing", "medium", "share",
                  re.compile(r"\b(?:screen\s*shar\w*|shar(?:e|ing)\s+(?:my\s+|the\s+)?screen|"
                             r"present(?:ing)?\s+(?:content|screen))\b", re.I)),
     ec.ThemeRule("chat or notification problem", "chat and notifications", "medium", "chat",
-                 re.compile(r"\b(?:chats?|messages?|messaging|notifications?|channels?)\b", re.I)),
+                 # FAILURE CONTEXT REQUIRED: a plain mention of chat, messages, notifications or channels
+                 # establishes no malfunction.
+                 re.compile(r"\b(?:(?:messages?|chats?|notifications?|channels?)\s+(?:\w+\s+){0,2}"
+                            r"(?:won't|wont|don't|doesn't|aren't|weren't|never|fail\w*|stuck|missing|disappear\w*|"
+                            r"delayed|duplicat\w*|not\s+(?:going|sending|sent|delivered|arriving|showing|loading|"
+                            r"syncing|appearing|working))|"
+                            r"(?:cannot|can't|unable\s+to|fail\w*\s+to|won't)\s+(?:\w+\s+){0,2}"
+                            r"(?:send|receive|post|load|see)\s+(?:\w+\s+){0,2}(?:messages?|chats?|notifications?)|"
+                            r"(?:missing|delayed|duplicate|no)\s+(?:\w+\s+)?(?:messages?|chats?|notifications?)|"
+                            r"not\s+(?:receiving|getting)\s+(?:\w+\s+){0,2}(?:messages?|notifications?))\b", re.I)),
     ec.ThemeRule("performance regression", "performance", "medium", "performance",
                  re.compile(r"\b(?:slow\w*|lag(?:s|gy|ging|ged)?|performance|high\s+cpu|cpu|"
                             r"memory\s+(?:leak\w*|usage))\b", re.I)),

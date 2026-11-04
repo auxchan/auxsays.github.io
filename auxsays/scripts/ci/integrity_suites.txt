@@ -344,7 +344,7 @@ auxsays/scripts/tests/test_microsoft_teams_community.py = 85
 # release platform), theme/area/severity from the shared scorer, nothing invented when unsupported, sentiment
 # frozen, and the builder's severity_summary no longer reads a missing severity as 'low'. Source-pins the three
 # counting predicates (acceptance) as untouched.
-auxsays/scripts/tests/test_teams_classification.py = 38
+auxsays/scripts/tests/test_teams_classification.py = 44
 auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 78
 auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
 auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80

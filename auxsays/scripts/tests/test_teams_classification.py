@@ -105,7 +105,7 @@ def run_suite() -> int:
 
     # --- theme / area / severity: a supported classification only ----------------------------
     cases = (
-        ("T1 sign-in", "Teams sign in loop", "I cannot get past the sign-in screen.",
+        ("T1 sign-in", "Teams sign in loop", "I am unable to sign in to Teams at all.",
          ("sign-in failure", "authentication", "high")),
         ("T2 crash", "Teams keeps crashing", "The desktop app crashes a minute into every meeting.",
          ("crash or hang", "system stability", "high")),
@@ -135,6 +135,37 @@ def run_suite() -> int:
 
     heading = teams.classify("Teams crashes on launch", "Also the camera preview is a little dark.")
     check("T10 the reporter's headline outweighs a passing body mention", heading[0] == "crash or hang", str(heading))
+
+    # --- failure context is required (a plain mention establishes no malfunction) ---------------
+    plain_signin = teams.classify("Teams crashes in meetings", "After I sign in each morning, Teams is fine until the call.")
+    plain_signin_only = teams.classify("Question about Teams", "I sign in every morning and log in to my tenant.")
+    check("T11 a plain mention of signing in is not a HIGH sign-in failure",
+          plain_signin[0] != "sign-in failure" and plain_signin_only == ("", "", "unknown", ""),
+          f"{plain_signin} {plain_signin_only}")
+    signin_failures = ("Reset and sign-in failed.", "Teams sign in loop after the update.",
+                       "I cannot log in to Teams.", "Stuck on the sign-in page.", "Authentication error 0xcaa20003.")
+    check("T12 a failed sign-in, a loop, an error or inability to sign in is still a HIGH sign-in failure",
+          all(teams.classify(text, "")[:2] + (teams.classify(text, "")[3],)
+              == ("sign-in failure", "authentication", "high") for text in signin_failures),
+          str([teams.classify(text, "") for text in signin_failures]))
+    plain_chat = teams.classify("Teams chat", "I read my messages and notifications in the channel every day.")
+    check("T13 a plain mention of chat, messages, notifications or channels establishes no malfunction",
+          plain_chat == ("", "", "unknown", ""), str(plain_chat))
+    chat_failures = ("Teams messages won't go through.", "I cannot send messages in a channel.",
+                     "Notifications are not showing.", "Missing chat messages after the update.",
+                     "Not receiving notifications.")
+    check("T14 a message that cannot be sent, a missing chat or absent notification is still a chat problem",
+          all(teams.classify(text, "")[0] == "chat or notification problem" for text in chat_failures),
+          str([teams.classify(text, "")[0] for text in chat_failures]))
+    plain_av = teams.classify("Teams", "I use my camera and video and audio every day.")
+    check("T15 a plain mention of camera, video or audio establishes no A/V fault", plain_av[0] == "", str(plain_av))
+    lag = teams.classify(
+        "Teams desktop: system-wide lag when decoding incoming camera video, Video Codec engine at 70 % "
+        "(AMD Radeon integrated GPU) - Microsoft Q&A",
+        "In the Teams desktop app, my whole computer starts lagging as soon as another participant turns "
+        "their camera on: audio becomes choppy, video drops to a")
+    check("T16 the counted 'system-wide lag when decoding incoming camera video' report is performance",
+          lag[:2] == ("performance regression", "performance") and lag[3] == "medium", str(lag))
 
     # --- no supported classification: unclassified, severity never invented -------------------
     unsupported = judge("Question about Teams", f"Teams {BUILD}: something is off and I do not know what.")
