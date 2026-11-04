@@ -70,6 +70,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
+| AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 
 ---
@@ -4090,6 +4091,42 @@ only demonstrated defects.
 tables.
 
 **Work that this item must not block** Live promotion and the classification sprint.
+
+---
+
+### AUX-063 — The Windows authority can attribute a report to the patch whose build is only the reporter's baseline
+
+- **Status** Deferred · **Area** Evidence acceptance · **Severity** Medium
+- **First seen** 2026-11-04
+
+**Symptom / gap** `microsoft_windows.row_from_candidate` stamps a build or feature-train match when the
+token appears ANYWHERE in the report text, and `windows_learn_qna_reason` then accepts on identity. A
+reporter's current baseline in a system-spec line, or a comparison, therefore counts as the build the
+defect is on. Windows 11 Forum thread 50506 ("Win11 26H2 (KB5121794) -> boot BSODs on cold start, 25H2
+stable"; the author's baseline is `Win11 Home 25H2 26200.9711 (current). Issue on 26H2 / KB5121794`) is
+accepted on the 25H2 26200.9711 record by `exact_os_build`, while the 26H2 record the report is about
+does not receive it. Demonstrated by `test_elevenforum_adapter.py` (section I) with the
+authority unchanged.
+
+**Current impact** None in production: the only source that exposes it, the Windows 11 Forum adapter
+(`patch_collectors/elevenforum_source.py`), ships disabled, and its method id and source type are absent
+from `lib/collector_ownership.py`, so a `--write` fails closed. Learn Q&A and Tech Community can in
+principle carry the same shape; the sibling `build_only_in_system_specs` veto narrows it for a build that
+appears only in a spec block but did not catch this wording.
+
+**Why deferred** The fix changes the shared acceptance contract (which clause of a post an identity
+token may come from), and the Q1 decision was explicit: preserve the authority, document the weakness,
+demonstrate it in a focused test, and do not rewrite it silently. It needs its own corpus measurement
+over the 535 counted Windows rows.
+
+**Activation blocker** The Windows 11 Forum adapter must not be activated while it can contribute this
+attribution. Activation also needs CI reachability measured through the existing source-health route (it
+is UNVERIFIED today) and a reviewed edit to `lib/collector_ownership.py`.
+
+**Revisit trigger** Any change to `row_from_candidate`, `windows_identity_gate` or the Windows intent
+reasons; or a decision to activate the Windows 11 Forum adapter.
+
+**Work that this item must not block** Everything except activating the adapter.
 
 ---
 

@@ -348,10 +348,21 @@ auxsays/scripts/tests/test_http_challenge_detection.py = 32
 auxsays/scripts/tests/test_http_credential_scope.py = 55
 auxsays/scripts/tests/test_microsoft_learn_qna_source.py = 28
 auxsays/scripts/tests/test_microsoft_teams_community.py = 85
+# Teams classification: platform from the reporter's text ('unknown' when not stated, never the product's
+# release platform), theme/area/severity from the shared scorer, nothing invented when unsupported, sentiment
+# frozen, and the builder's severity_summary no longer reads a missing severity as 'low'. Source-pins the three
+# counting predicates (acceptance) as untouched.
+auxsays/scripts/tests/test_teams_classification.py = 46
 auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 78
 auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
 auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80
 auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
+# The Windows 11 Forum discovery adapter ships DISABLED. This suite pins that disabled means disabled
+# (no request, no pool, no health row, no ownership entry), the 9-page / 40-hydration / 1.5 s request
+# budget at the session level, challenge classification, the opening-post-only parser, and the known
+# attribution weakness the unchanged authority has on thread 50506 (AUX-063, an activation blocker).
+# Fixture-only; the dry-run script it drives is zero-write and its output is checked here.
+auxsays/scripts/tests/test_elevenforum_adapter.py = 104
 # A monitoring claim must describe what collection actually DID. `coverage_status_label` is a
 # static editorial string, and three render sites published it as a claim: 29 products asserted
 # "Monitoring active" with no enabled source, 27 companies asserted it with zero healthy
