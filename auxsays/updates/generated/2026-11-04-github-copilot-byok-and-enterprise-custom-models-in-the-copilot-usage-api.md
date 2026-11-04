@@ -18,8 +18,8 @@ update_version: BYOK and enterprise custom models in the Copilot usage API
 update_logo_text: GIT
 update_published_at: '2026-11-04T00:32:19Z'
 update_last_checked: '2026-11-04T02:10:55Z'
-source_last_checked: '2026-11-04T08:56:28Z'
-official_body_last_checked: '2026-11-04T08:56:28Z'
+source_last_checked: '2026-11-04T17:28:27Z'
+official_body_last_checked: '2026-11-04T17:28:27Z'
 record_last_updated: '2026-11-04T02:10:55Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -108,6 +108,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-04T08:56:28Z'
+  url: https://github.blog/changelog/2026-11-03-byok-and-enterprise-custom-models-in-the-copilot-usage-api
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-04T17:28:27Z'
   url: https://github.blog/changelog/2026-11-03-byok-and-enterprise-custom-models-in-the-copilot-usage-api
   status: captured-from-rss-feed
   body_captured: true
