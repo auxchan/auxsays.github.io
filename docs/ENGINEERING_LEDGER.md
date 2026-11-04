@@ -64,6 +64,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-054 | Resolved | Published claims | Medium | Collection health existed only in Liquid; a retired method made healthy pages read degraded |
 | AUX-055 | Resolved | Published claims | High | A stored live-consensus claim would keep rendering as live after the collection behind it stopped |
 | AUX-056 | Resolved | Published claims | High | No writer could store live consensus, so a release that earned it could never show it |
+| AUX-057 | Deferred | Published claims | Medium | A certified-live Windows page also says its evidence has not been revalidated recently |
 
 ---
 
@@ -3847,8 +3848,12 @@ unreadable telemetry or config declines every claim instead of failing the lane.
 that sees it healthy; there is no cooldown. Counts, citations and the verdict never move with it, a
 maturity-only change appends no status event, and each transition is logged with its reasons.
 
-**Guards.** QA errors on a live claim without enough report URLs counted on no other identity
-(`live_exclusive_below_high_rung`). The revalidation guard accepts the live tuple as well as the pilot
+**Guards.** QA warns, and does not error, on a live claim without enough report URLs counted on no
+other identity (`live_exclusive_below_high_rung`). A scoped lane can lower another product's
+exclusivity by collecting a shared URL but cannot revisit that record, so an error would block it
+every cycle; the deploy projection still withholds the label and the next unscoped reconcile revokes.
+Eligibility also requires a population the consensus writer can publish (valid, distinct citations,
+classified rows, no failed source date). The revalidation guard accepts the live tuple as well as the pilot
 one. The graph blocks on a failed promotion, as it does on failed QA. The dispatch-only DaVinci lane
 now reconciles only DaVinci. The methodology page states the contract without thresholds, and the
 verdict box no longer turns green for a live record.
@@ -3859,10 +3864,49 @@ changing only its four maturity axes. A second lane, with the patch-ingestion Wi
 changed nothing. QA in publish-strict mode reported 0 errors and 0 warnings, and the deploy projection
 listed exactly those six pages.
 
+**Production-verified 2026-11-04** on the first scheduled run after the merge (run 41738121558,
+started 23:18:42Z, checkout `ea1a5af9`). Reconciliation promoted exactly those six; the writeback
+(`06164c0b`) deployed through Pages run 41752363692 with all six certified. The PowerPoint writeback
+(`936f704a`) and the chained official ingestion (`74e7c89b`) left them live, and the last deploy
+(41759346548) certified the same six. Five changed only their maturity axes; OBS 32.1.1 also gained
+one collected report (44 to 45), its verdict unchanged. DaVinci Resolve 20 reached 33 counted reports
+and stayed Verified reports: DaVinci is not a promotion product.
+
 **Reopen only if** a writer holding a context stores a maturity `evaluate` would not give at that
 instant; a writer with no context, or an unreadable one, stores live; a maturity change moves a count,
-citation or verdict field or appends a status event; QA passes a live claim short of exclusive report
-URLs; unreadable telemetry fails a lane; or the graph reaches writeback after a failed promotion.
+citation or verdict field or appends a status event; the deploy projection renders live a claim short
+of exclusive report URLs; unreadable telemetry fails a lane; or the graph reaches writeback after a
+failed promotion.
+
+---
+
+### AUX-057 — A certified-live Windows page also says its evidence has not been revalidated recently
+
+- **Status** Deferred · **Area** Published claims · **Severity** Medium
+- **First seen** 2026-11-04
+
+**Symptom / gap** The three live Windows 25H2 pages (26200.7462, .7623, .7840) show "Evidence
+freshness needs revalidation. This evidence has not been revalidated recently" beside a certified
+live state. The page treats `evidence_last_checked` older than seven days as stale, and theirs dates
+from September and October. Their collection methods did run against those exact builds this cycle,
+which is why monitoring certifies.
+
+**Why deferred** The two facts differ, and both can be true. `evidence_last_checked` is the newest
+accepted row's `captured_at` (`apply_consensus_to_records._latest_captured_at`), not the time
+collection last ran. A method's `last_run` proves an attempt, not that the accepted reports were
+revalidated. So stamping the field when a collector visits would make old evidence look freshly
+verified. The fix is a semantics decision, not a one-line repair.
+
+**Current impact** Reader-visible on three live pages: the live label and the freshness notice
+describe different scopes without saying so. Maturity, counts, citations and verdicts are unaffected.
+The three live OBS pages do not show the notice.
+
+**Revisit trigger** The next presentation or freshness change to the patch page, or a second product
+going live with old accepted evidence. First decide what `evidence_last_checked` means and who owns
+it, and whether a separate field backed by actual report revalidation is needed. Keep the seven-day
+page rule, and never derive freshness from method-health telemetry.
+
+**Work that this item must not block** Live promotion and revocation, and the classification sprint.
 
 ## Adding an entry
 
