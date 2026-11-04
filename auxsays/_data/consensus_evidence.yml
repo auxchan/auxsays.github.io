@@ -66266,3 +66266,246 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059545-missing-release-notes-for-microsoft-te
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059545/missing-release-notes-for-microsoft-teams
+  parent_title: Missing Release Notes for Microsoft Teams - Microsoft Q&A
+  report_title: Missing Release Notes for Microsoft Teams - Microsoft Q&A
+  report_text_excerpt: 'Missing Release Notes for Microsoft Teams Hello, as a Teams Administrator, I am currently facing an issue where many of my users can no longer end calls using their headset buttons. In the log files, I identified the following error blocking the routine:hidService: Error:...'
+  captured_at: '2026-11-04T15:37:45Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26276.513.5241.9675
+  match_basis: 26276.513.5241.9675
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6060066-audio-files-of-team-meeting-recordings
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6060066/audio-files-of-team-meeting-recordings
+  parent_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_text_excerpt: Audio files of Team Meeting recordings What format is the audio files when you record a meeting in MS Teams, please.
+  captured_at: '2026-11-04T15:37:45Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6060066-audio-files-of-team-meeting-recordings
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6060066/audio-files-of-team-meeting-recordings
+  parent_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_text_excerpt: Audio files of Team Meeting recordings What format is the audio files when you record a meeting in MS Teams, please.
+  captured_at: '2026-11-04T15:37:45Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6060066-audio-files-of-team-meeting-recordings
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6060066/audio-files-of-team-meeting-recordings
+  parent_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_text_excerpt: Audio files of Team Meeting recordings What format is the audio files when you record a meeting in MS Teams, please.
+  captured_at: '2026-11-04T15:37:45Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6060066-audio-files-of-team-meeting-recordings
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6060066/audio-files-of-team-meeting-recordings
+  parent_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_text_excerpt: Audio files of Team Meeting recordings What format is the audio files when you record a meeting in MS Teams, please.
+  captured_at: '2026-11-04T15:37:45Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6060066-audio-files-of-team-meeting-recordings
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6060066/audio-files-of-team-meeting-recordings
+  parent_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_text_excerpt: Audio files of Team Meeting recordings What format is the audio files when you record a meeting in MS Teams, please.
+  captured_at: '2026-11-04T15:37:45Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6060066-audio-files-of-team-meeting-recordings
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6060066/audio-files-of-team-meeting-recordings
+  parent_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_text_excerpt: Audio files of Team Meeting recordings What format is the audio files when you record a meeting in MS Teams, please.
+  captured_at: '2026-11-04T15:37:45Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6060066-audio-files-of-team-meeting-recordings
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6060066/audio-files-of-team-meeting-recordings
+  parent_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_title: Audio files of Team Meeting recordings - Microsoft Q&A
+  report_text_excerpt: Audio files of Team Meeting recordings What format is the audio files when you record a meeting in MS Teams, please.
+  captured_at: '2026-11-04T15:37:45Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: Windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059129-settings-keeps-offering-and-downloadin
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059129/settings-keeps-offering-and-downloading-the-curren
+  parent_title: Settings keeps offering and downloading the current cumulative update after it is already installed — pattern repeats every month (KB5127648, KB5127936), Windows 11 26H2 build 26300.9818 - Microsoft Q&A
+  report_title: Settings keeps offering and downloading the current cumulative update after it is already installed — pattern repeats every month (KB5127648, KB5127936), Windows 11 26H2 build 26300.9818 - Microsoft Q&A
+  report_text_excerpt: Settings keeps offering and downloading the current cumulative update after it is already installed — pattern repeats every month (KB5127648, KB5127936), Windows 11 26H2 build 26300.9818 - Microsoft Q&A Device / OS ASUS TUF Gaming A14 (TX Air FA401GM), BIOS FA401GM.306, AMD...
+  captured_at: '2026-11-04T15:43:04Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: obs-studio-33-0-1-github-issue-14144
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14144
+  parent_title: 'regression: #13589 breaks stinger monitor-only audio playback into external devices'
+  report_title: 'regression: #13589 breaks stinger monitor-only audio playback into external devices'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/EZ2v9Hqm2hZwASf0 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS 3'
+  captured_at: '2026-11-04T16:15:48Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
