@@ -20,6 +20,7 @@ from urllib.error import HTTPError, URLError
 from datetime import datetime, timezone
 from typing import Any
 
+from lib import evidence_classification as ec
 from lib.normalize_davinci_version import normalize_davinci_version
 
 from .base import (
@@ -1720,7 +1721,12 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
     # The exact occurrence the matcher accepted, retained so the row carries its own evidence: the
     # stored excerpt is truncated and on its own cannot show which occurrence established the match.
     provenance = match_provenance(parts, m_start, m_end) if matched else {}
-    theme, workflow_area, platform, severity, sentiment = classify(report_text)
+    # Classification sees the title and the body SEPARATELY, so the reporter's own headline can
+    # outweigh a passing body mention. Acceptance above still reads the joined text.
+    titles = [str(candidate.get(name) or "").strip() for name in ("report_title", "parent_title")]
+    heading = " ".join(dict.fromkeys(title for title in titles if title))
+    theme, workflow_area, platform, severity, sentiment = classify(
+        heading, str(candidate.get("report_text") or ""))
     row = make_evidence_row(
         product_id=PRODUCT_ID,
         update_version=record.update_version,
@@ -1802,26 +1808,59 @@ def error_reason(exc: Exception) -> str:
     return type(exc).__name__
 
 
-def classify(text: str) -> tuple[str, str, str, str, str]:
-    lowered = text.lower()
-    platform = "unknown"
-    for name in ("windows", "macos", "mac", "linux"):
-        if name in lowered:
-            platform = "macos" if name == "mac" else name
-            break
-    if "magic mask" in lowered and "crash" in lowered:
-        return "magic mask crash", "color grading / Magic Mask", platform, "high", "negative"
-    if "crash" in lowered or "won't open" in lowered or "does not open" in lowered:
-        return "startup or application crash", "application stability", platform, "high", "negative"
-    if "decode" in lowered or "render" in lowered or "export" in lowered:
-        return "render/export failure", "render/export", platform, "medium", "negative"
-    if "gpu" in lowered or "performance" in lowered or "lag" in lowered or "slow" in lowered:
-        return "performance regression", "timeline / GPU performance", platform, "medium", "negative"
-    if "plugin" in lowered or "codec" in lowered:
-        return "compatibility issue", "plugins / codecs", platform, "medium", "negative"
-    if "install" in lowered:
-        return "install issue", "installation", platform, "medium", "negative"
-    return "unspecified issue", "general DaVinci Resolve workflow", platform, "medium", "moderate"
+# DaVinci's published theme vocabulary: the same themes, areas and severities as the if-chain this
+# replaces, in the same priority order (the first rule wins a tied score). What changed is that the
+# words are matched on word boundaries, scored, and weighted toward the reporter's own title. The
+# old substring chain read "lag" inside "flag" and "install" inside every "I installed 20.3", and
+# took the theme from whichever rule came first anywhere in the text.
+_DAVINCI_THEME_RULES: tuple[ec.ThemeRule, ...] = (
+    # Both cues within 120 characters, in either order. The old chain accepted "magic mask" at the
+    # start of a long body and "crash" at the end of it as one claim.
+    ec.ThemeRule("magic mask crash", "color grading / Magic Mask", "high", "magic_mask",
+                 re.compile(r"(?:\bmagic\s+mask\b(?=[\s\S]{0,120}?\bcrash\w*\b)"
+                            r"|\bcrash\w*\b(?=[\s\S]{0,120}?\bmagic\s+mask\b))", re.I)),
+    # `negatable`: a DENIED crash ("no crash since the update") is not evidence of one. "won't open"
+    # and "does not open" are how a failure is reported, and a negation inside the rule's own match
+    # is never read as a denial.
+    ec.ThemeRule("startup or application crash", "application stability", "high", "crash",
+                 re.compile(r"\b(?:crash\w*|won't\s+open|does\s+not\s+open)\b", re.I),
+                 negatable=True),
+    ec.ThemeRule("render/export failure", "render/export", "medium", "render",
+                 re.compile(r"\b(?:decode\w*|render\w*|export\w*)\b", re.I)),
+    ec.ThemeRule("performance regression", "timeline / GPU performance", "medium", "performance",
+                 re.compile(r"\b(?:gpus?|performance|lag(?:s|gy|ging|ged)?|slow\w*)\b", re.I)),
+    ec.ThemeRule("compatibility issue", "plugins / codecs", "medium", "compatibility",
+                 re.compile(r"\b(?:plugin\w*|codec\w*)\b", re.I)),
+    ec.ThemeRule("install issue", "installation", "medium", "install",
+                 re.compile(r"\b(?:install\w*|uninstall\w*|reinstall\w*)\b", re.I)),
+)
+# An out-of-vocabulary severity silently un-counts a row downstream; refuse the table instead.
+ec.validate_rules(_DAVINCI_THEME_RULES)
+
+# The replaced chain's substring triggers, verbatim. Sentiment still follows THEM, not the scored
+# theme -- see `ec.legacy_substring_sentiment`.
+_DAVINCI_SENTIMENT_TRIGGERS = ("crash", "won't open", "does not open", "decode", "render", "export",
+                               "gpu", "performance", "lag", "slow", "plugin", "codec", "install")
+
+
+def classify(heading: str, body: str) -> tuple[str, str, str, str, str]:
+    """(theme, workflow_area, platform, severity, sentiment) for one DaVinci report.
+
+    PLATFORM is positive operating-system evidence or `unknown` (`ec.resolve_platform`). The old
+    scan returned the first of windows/mac/linux found anywhere: "mac" inside "machine" read as
+    macOS, a Fusion "Spline window" as Windows, and a report titled "[Linux] ..." whose body
+    mentioned windows was published as a Windows report.
+
+    SENTIMENT IS UNCHANGED, exactly: it is what the old chain returned for the same text --
+    `negative` when any of its substring triggers appears, `moderate` otherwise -- even where the
+    scored theme now differs. It is verdict-bearing, so the scorer cannot reach it.
+    """
+    verdict = ec.score_themes(heading, body, _DAVINCI_THEME_RULES)
+    platform = ec.resolve_platform(body, heading=heading).label
+    sentiment = ec.legacy_substring_sentiment(f"{heading} {body}", _DAVINCI_SENTIMENT_TRIGGERS)
+    if verdict is None:
+        return "unspecified issue", "general DaVinci Resolve workflow", platform, "medium", sentiment
+    return verdict.theme, verdict.area, platform, verdict.severity, sentiment
 
 
 def extract_title(text: str) -> str:
