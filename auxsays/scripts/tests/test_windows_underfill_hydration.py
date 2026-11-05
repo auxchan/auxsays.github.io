@@ -28,7 +28,8 @@ writes the live `_data`, a live record, or the network; no count of the live cor
                              vocabulary that reconciliation and the Windows writer both count
     I  seam                  rss_out never passed while off; the RSS lane's own lists; the SAME errors
                              object; the RSS row found by method_id
-    J  R1 flags              dry run only; rollback role; sibling-revision filter; write emits none
+    J  R1 flags              dry run only; the build's context (its role is read offline: the collector
+                             may not import lib.build_claims); sibling-revision filter; write emits none
     K  registry              the two Windows failure_modes clauses
     T  telemetry (D2)        structured block, run event, notes say optional/separately budgeted and
                              never claim complete inspection, run warning, an aborted pass changes nothing
@@ -1080,10 +1081,16 @@ def run() -> int:  # noqa: PLR0915
         print(NEWLINE + "[J] AUX-067 R1 flags (dry run only)")
         rows = (by_build(r1["r1_dry"])[IDS["U9457"][1]].get("underfill_hydration") or {}).get("would_be_rows", [])
         flagged = next((r for r in rows if r["url"] == url(8_001_001)), {})
-        claim = (flagged.get("r1") or {}).get("matched_build_claim") or {}
-        check("J1 an opening post that says 'rolled back to <target build>' is accepted AND flagged with role "
-              "rollback_previous (the R1 gate's S1 signal)",
-              claim.get("role") == "rollback_previous" and flagged.get("original_date") == day(u[3], 3)[:10]
+        context = (flagged.get("r1") or {}).get("matched_build_context") or ""
+        # The ROLE is computed here, offline, by the shipped primitive -- never by the Windows collector,
+        # which a governed check forbids from importing lib.build_claims (test_powerpoint_build_roles M).
+        from lib.build_claims import extract_build_claims  # noqa: PLC0415 - analysis side only
+        claim = next((c for c in extract_build_claims(context) if c.build == u[1]), None)
+        check("J1 an opening post that says 'rolled back to <target build>' is accepted AND its dry-run block "
+              "carries the build's own context, from which the shipped primitive reads rollback_previous "
+              "(the R1 gate's S1 signal)",
+              claim is not None and claim.role == "rollback_previous" and f"rolled back to {u[1]}" in context
+              and len(context) <= 160 and flagged.get("original_date") == day(u[3], 3)[:10]
               and flagged.get("rss_date") == "2026-11-01T10:00:00Z", str(flagged))
         check("J2 a same-revision build on a sibling train is not competing; a different revision is",
               (flagged.get("r1") or {}).get("competing_builds") == ["26200.9278"]
@@ -1092,7 +1099,7 @@ def run() -> int:  # noqa: PLR0915
         w_added = (yaml.safe_load(r1["r1_write"]["evidence_after"]) or {})["evidence"][
             len((yaml.safe_load(r1["r1_write"]["evidence_before"]) or {})["evidence"]):]
         check("J3 write mode emits no flag fields and no before/after rows; stored rows carry only schema fields",
-              "would_be_rows" not in w_blob and "rss_row_before" not in w_blob and "matched_build_claim" not in w_blob
+              "would_be_rows" not in w_blob and "rss_row_before" not in w_blob and "matched_build_context" not in w_blob
               and w_added and all(set(r) <= set(EVIDENCE_FIELDS) for r in w_added))
 
         # ---------------------------------------------------------------- K. registry

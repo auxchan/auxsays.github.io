@@ -1608,17 +1608,21 @@ def _post_date_source(page_html: str) -> str:
 
 def _r1_flags(candidate: dict[str, Any], target: dict[str, Any]) -> dict[str, Any]:
     """AUX-067 R1 diagnostics for a would-be row (dry run only; computed AFTER acceptance and never
-    able to change it): the matched build's author-stated role, the competing identities the opening
-    post names, and whether it states an open-ended affected range."""
-    from lib.build_claims import extract_build_claims  # noqa: PLC0415 - default-off path only
+    able to change it): the text around the matched build, the competing identities the opening post
+    names, and whether it states an open-ended affected range.
 
+    The matched build's author-stated ROLE is deliberately NOT computed here. `lib.build_claims` is
+    PowerPoint's build-role primitive, and a governed check (test_powerpoint_build_roles.py, section
+    M) keeps every other collector from consuming it, so no product acquires build semantics as a side
+    effect. Instead the block carries the same ~150-character window that primitive's
+    `BuildClaim.excerpt` would hold, and the activation analysis applies `extract_build_claims` to it
+    offline, outside the collector."""
     post = str(candidate.get("report_text") or "")
     build = str(target.get("target_os_build") or "").strip()
     revision = build.split(".")[-1] if "." in build else ""
-    claim = next((c for c in extract_build_claims(post) if c.build == build), None)
+    at = post.find(build) if build else -1
     return {
-        "matched_build_claim": ({"role": claim.role, "basis": claim.match_basis, "excerpt": claim.excerpt}
-                                if claim else None),
+        "matched_build_context": " ".join(post[max(0, at - 75):at + len(build) + 75].split()) if at >= 0 else "",
         "competing_kbs": sorted(_other_kbs(post, str(target.get("target_kb") or ""))),
         # A same-revision build on a sibling train is the SAME cumulative update, not a competitor.
         "competing_builds": sorted(b for b in _other_builds(post, build) if b.split(".")[-1] != revision),
