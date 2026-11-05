@@ -784,7 +784,8 @@ def bash_run(script: str, env: dict, cwd: Path, fake_python: bool = False) -> tu
             fp.write_text(FAKE_PYTHON, encoding="utf-8", newline="\n")
             fp.chmod(fp.stat().st_mode | stat.S_IEXEC)
             full["PATH"] = str(tmp) + os.pathsep + full.get("PATH", "")
-        # Exactly how GitHub runs a `run:` step on ubuntu: errexit and pipefail on.
+        # Exactly how GitHub runs a `run:` step under `shell: bash`: errexit and pipefail on. W33 pins
+        # that ci-integrity.yml declares that shell, so this is how CI really runs its steps.
         proc = subprocess.run(["bash", "--noprofile", "--norc", "-eo", "pipefail", str(sh)],
                               cwd=cwd, capture_output=True, text=True, encoding="utf-8",
                               errors="replace", env=full, timeout=300)
@@ -941,6 +942,13 @@ def section_workflow(runner, aggregator, gate) -> None:
     check("W26 executed: that step passes only for `success` -- a cancelled run cannot end green",
           outcomes["success"] == 0 and all(outcomes[r] != 0 for r in outcomes if r != "success"),
           str(outcomes))
+    # bash_run executes every step under -eo pipefail. That is what CI does only if the workflow
+    # names the shell: with none named, GitHub runs `bash -e`, without pipefail.
+    check("W33 every step runs under bash -eo pipefail, as bash_run simulates: defaults.run.shell is bash "
+          "and no job or step overrides it",
+          (wf.get("defaults") or {}).get("run") == {"shell": "bash"}
+          and all("defaults" not in job for job in jobs.values())
+          and walk_keys(wf, "shell") == 1, str(wf.get("defaults")))
 
     # The aggregate step, executed with the REAL python and aggregator, against receipts built for
     # this checkout's real HEAD.
