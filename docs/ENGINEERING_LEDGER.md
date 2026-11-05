@@ -4560,7 +4560,8 @@ using the policy's own predicate (`is_policy_disabled_row`: status `disabled` an
 row still needs it, and a non-empty value on a policy row must still look like a timestamp. Nothing stamps
 a time on a row that made no attempt, and the writer's carry-over for existing keys is unchanged. Every
 reader of `last_run` was checked: the monitoring card and the H0-H7 certifier both skip disabled rows before
-they read it, and the card prints no "last checked" date for an empty value. No other module reads it.
+they read it, and the card prints no "last checked" date for an empty value. The only other reader is a
+one-time Acrobat migration tool that no lane runs, and it is safe with an empty value.
 
 **Measured** Replaying the failed run's five 21.2 rows through the real writer onto the stored file at
 `main`: the validator now passes, 5 rows are appended and the 1,861 rows already stored are unchanged.
