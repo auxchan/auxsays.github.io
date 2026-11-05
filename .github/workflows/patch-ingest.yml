@@ -161,6 +161,39 @@ jobs:
             --product-id microsoft-windows-11 \
             --write-all --confirm-write
 
+      # DAVINCI ARCHIVE CONVERGENCE (AUX-065).
+      #
+      # The newest STABLE DaVinci major minus two, or older, is archived. Record CREATION always
+      # writes `update_status: current`, so a new stable major makes older records archivable at the
+      # instant this lane ingests it; nothing else converges them. This step is that convergence. It
+      # runs after ingestion (which may have created or refreshed DaVinci records) and before QA and
+      # the writeback below, so the archive edit travels in the SAME commit through the existing
+      # conflict-safe writeback and Pages deployment. There is no other writer or workflow.
+      #
+      # Gated like the Windows converge steps above: only when this run could have touched DaVinci.
+      # `source` is an optional product_id or company_id, so a dispatch scoped to another product
+      # ingested no DaVinci record and must not rewrite one; a dry run writes nothing at all.
+      #
+      # It edits exactly one line per record (`update_status: current` -> `archived`), writes no
+      # status event and no notification, and can never un-archive. A REFUSED plan (an implausible
+      # major jump, no stable record, ...) exits 3 and the CLI has already annotated the named
+      # reason on the run and in its summary; the step then lets ingestion's own results land
+      # rather than wedging the whole lane, but a refusal is never silent. Any other non-zero
+      # exit is a real failure and fails the step.
+      - name: Converge DaVinci archive status
+        if: ${{ github.event.inputs.dry_run != 'true'
+          && (github.event.inputs.source == '' || github.event.inputs.source == null
+              || github.event.inputs.source == 'blackmagic-davinci'
+              || github.event.inputs.source == 'blackmagic-design') }}
+        run: |
+          rc=0
+          python auxsays/scripts/apply_davinci_archive_policy.py --write --confirm-write || rc=$?
+          if [ "$rc" -eq 3 ]; then
+            echo "DaVinci archive convergence was refused; see the annotation above. Nothing was written."
+            exit 0
+          fi
+          exit "$rc"
+
       - name: Validate logo assets before commit
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/validate_logo_assets.py

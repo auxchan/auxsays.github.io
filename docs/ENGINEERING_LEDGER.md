@@ -70,6 +70,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
+| AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
@@ -4108,6 +4109,43 @@ with shared ids, idempotence, no transport, and the checked-in store.
 
 **Reopen only if** the migration writes a field outside the write set, re-judges a row the repaired
 producer wrote, invents a theme or severity, or changes anything on a second run.
+
+---
+
+### AUX-065 — DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs
+
+- **Status** Resolved · **Area** Coverage · **Severity** Medium
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04 (code); the 100 status changes land through the ingestion writeback
+
+**Symptom / gap** All 122 DaVinci records were `update_status: current`, including Resolve 10.x-19.x.
+Routine collection skips archived records and walks the rest, so a run covered about 25 of 122 records
+before its runtime cap, and spent about 146 s of it on the 19.x releases. Nothing archived a DaVinci
+record, and creating one always writes `current`.
+
+**Fix** `lib/davinci_archive_policy.py` plans the archive: the newest STABLE major minus two, or older,
+is archived (stable 21: every major <= 19, 100 records). A public beta never sets the baseline. The plan
+is a one-way ratchet and REFUSES by name on an implausible baseline (a stable major outside 1..99, a jump
+of more than one between the two newest stable majors, no stable record, an unreadable record, or an
+archived record at the baseline). `apply_davinci_archive_policy.py` is a dry run by default; with both
+write flags it rewrites only the one `update_status:` line. `patch-ingest.yml` runs it after ingestion and
+before QA and the writeback, gated like the Windows converge steps. The DaVinci "21" consensus projection
+no longer writes `update_status` (it would have reactivated an archived 21 once a stable 23 shipped), and
+no longer proposes `feed_hidden` / `status_change_type` for an archived record. `_includes/archived-notice.html`
+states on the page that an archived release is outside routine monitoring.
+
+**Measured** 122 records parse; 100 qualify, of which 7 carry counted evidence (22 reports). A scratch apply
+changes exactly those 100 files by one line each, a second apply is a byte no-op, and no count, verdict,
+evidence, URL or citation moves. The consensus writeback and the official-ingestion refresh both keep the
+records archived. `test_davinci_archive_policy.py` pins all of it.
+
+**Reopen only if** a DaVinci record becomes `current` again without an explicit restoration, a refused plan
+is skipped without its reason being reported, a beta moves the baseline, or the notice appears on another
+product.
+
+**Residual** My Patch Stack's "N older tracked releases not listed" hint counts only non-archived records, so
+it reads 0 for DaVinci once the 100 are archived; the archived releases stay reachable from the history page.
+Not fixed here: the count is a hint, "older" cannot be asserted for an arbitrary archived record, and a change
+would alter the payload for every product.
 
 ---
 

@@ -648,6 +648,8 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         {% if file_size_pill_value != '' %}<span class="update-meta-pill"><span class="update-meta-pill__label">File size</span><span class="update-meta-pill__value">{{ file_size_pill_value }}</span></span>{% endif %}
       </div>
 
+      {% include archived-notice.html product_id=page.product_id update_status=page.update_status %}
+
       {%- comment -%}
         DECISION FIRST. This block used to sit BELOW the community-evidence card, so the page a
         reader met was: identity, then a sentiment word on a three-zone graph, and only then the
