@@ -69,6 +69,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
+| AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -4068,6 +4069,52 @@ fallback line and 7 show their specific labels (a fourth label takes the freed s
 
 **Reopen only if** another fallback or generic label reaches the issue sentence, or the bucketer renames
 this one.
+
+---
+
+### AUX-070 — The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another
+
+- **Status** Resolved · **Area** CI governance · **Severity** Medium
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05 (code); the first sharded pull-request run is the
+  acceptance evidence
+
+**Symptom / gap** ci-integrity ran every governed suite serially in one job. Run 41932362848 (PR #210):
+123 suites, 1,949 s of suite time, ~34 min against `timeout-minutes: 45`; two suites alone took 386 s and
+383 s. Each new suite moved every pull request closer to a timeout on content that had passed.
+
+**Fix** Four `shard` matrix jobs (`fail-fast: false`, isolated checkouts) each run
+`run_integrity_tests.py --suite all --shard I/4 --receipt $RUNNER_TEMP/...`: every per-suite protection is
+unchanged (it is the same `run_one()` and the same tree hash), and the receipt records commit, manifest
+digest, shard, each suite's governed and actual counts and exit status, completion state and the mutation
+outcome. The slices are longest-first over `integrity_suites.txt`, weighted by `suite_duration_hints.json`,
+which is scheduling only: a suite it does not name runs at a default weight and it holds no count. The
+final job keeps the name `integrity`, needs the shards and runs under `always()`;
+`aggregate_integrity_receipts.py` re-reads the manifest from its own checkout, recomputes the partition,
+and accepts only when the passing suites are exactly the governed population, once each, at the governed
+count, on this commit and run, with `needs.shard.result == success` (26 named refusal codes). The
+downstream gates then run unchanged, and a last `always()` step re-checks the shard result so a cancelled
+run ends red. No step uses `continue-on-error`.
+
+**Measured** The hint table (run 41932362848's per-suite seconds) balances four shards at 487-491 s each,
+against 1,949 s serial. Local proof (Windows, this branch plus the #212 test fix, four isolated worktrees
+in parallel): the union is exactly run 41932362848's 123 suites plus this one, each executed once; all 123
+report the same totals as that run (7,195 checks), and the aggregate accepted. The same receipts with a
+`cancelled` shard result are rejected. Wall time and balance on the runners are measured by the first
+pull-request run.
+
+**Verification** `test_ci_integrity_sharding.py = 192` [blocking]: partition properties; the runner's
+protections inside a shard (child processes over a scratch git repository, including timeout, printed FAIL
+lines and both mutation guards); a negative case for every refusal code, with the set of codes reached
+required to equal the aggregator's; the workflow parsed and its `run:` scalars executed under bash; and
+`guarded_merge.decide()` refusing cancelled, failed, incomplete and absent runs.
+
+**Residual** A pull request that edits ci-integrity.yml still supplies its own verdict (AUX-013).
+Cancellation is pinned by `always()` and by executing the final step, not by a real cancelled run. The
+receipt upload uses `overwrite: true` so a re-run shard replaces its own receipt; whether a re-run attempt
+can download the first attempt's artifacts is unmeasured (if it cannot, the re-run fails closed).
+
+**Reopen only if** a sharded run can end green with a governed suite unexecuted, executed twice, or at a
+count other than its governed one, or a failed, cancelled or missing shard leaves the run `success`.
 
 ---
 
