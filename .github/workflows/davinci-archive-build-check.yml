@@ -1,0 +1,159 @@
+name: DaVinci archive build check
+
+# Pull-request validation only. It applies the DaVinci archive convergence to THIS runner's scratch
+# checkout, then builds the site exactly as pages.yml does, and proves the archived notice renders on
+# an archived page and on no active one. Nothing is committed, pushed, deployed or dispatched: the
+# job has read-only permissions and the converged tree is discarded with the runner.
+on:
+  pull_request:
+    paths:
+      - 'auxsays/scripts/lib/davinci_archive_policy.py'
+      - 'auxsays/scripts/apply_davinci_archive_policy.py'
+      - 'auxsays/_includes/archived-notice.html'
+      - 'auxsays/_layouts/aux-update.html'
+      - '.github/workflows/patch-ingest.yml'
+      - '.github/workflows/davinci-archive-build-check.yml'
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: davinci-archive-build-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (this is the scratch tree)
+        uses: actions/checkout@v7
+
+      # Same Ruby, same Gemfile location and same tracked lock as pages.yml.
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_GEMFILE: auxsays/Gemfile
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Setup Node for Systems Monitor
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install source health dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Install image metadata tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libimage-exiftool-perl
+
+      - name: Verify the dependency lock was used, not rewritten
+        working-directory: ./auxsays
+        env:
+          BUNDLE_GEMFILE: Gemfile
+        run: |
+          set -euo pipefail
+          test -f Gemfile.lock || { echo "::error::Gemfile.lock is missing."; exit 1; }
+          bundle config set --local frozen true
+          bundle check
+          if ! git diff --quiet -- Gemfile.lock; then
+            echo "::error::Gemfile.lock changed during installation."
+            git --no-pager diff -- Gemfile.lock
+            exit 1
+          fi
+          bundle list | sed -n '1,12p'
+
+      # The converged tree exists only on this runner. Nothing below commits or pushes it.
+      - name: Apply the archive convergence to the scratch tree
+        run: |
+          set -euo pipefail
+          python auxsays/scripts/apply_davinci_archive_policy.py --write --confirm-write
+
+      - name: Assert exactly 100 records became archived, by one line each
+        run: |
+          set -euo pipefail
+          changed=$(git diff --name-only -- auxsays/updates/generated | wc -l)
+          echo "changed generated records: ${changed}"
+          if [ "${changed}" -ne 100 ]; then
+            echo "::error::Expected exactly 100 records archived under the measured baseline, got ${changed}."
+            exit 1
+          fi
+          other=$(git diff --name-only | grep -v '^auxsays/updates/generated/' || true)
+          if [ -n "${other}" ]; then
+            echo "::error::The convergence changed files outside auxsays/updates/generated:"
+            echo "${other}"
+            exit 1
+          fi
+          added=$(git diff -U0 -- auxsays/updates/generated | grep -c '^+update_status: archived$' || true)
+          removed=$(git diff -U0 -- auxsays/updates/generated | grep -c '^-update_status: current$' || true)
+          # grep exits 1 on "no match", which is the GOOD outcome here, so the filter is grouped.
+          other_lines=$(git diff -U0 -- auxsays/updates/generated | { grep -E '^[+-]' || true; } | { grep -vE '^(\+\+\+|---) ' || true; } | { grep -vE '^(\+update_status: archived|-update_status: current)$' || true; } | wc -l)
+          echo "archived lines added: ${added}, current lines removed: ${removed}, other changed lines: ${other_lines}"
+          if [ "${added}" -ne 100 ] || [ "${removed}" -ne 100 ] || [ "${other_lines}" -ne 0 ]; then
+            echo "::error::The diff is not exactly 100 one-line current->archived edits."
+            exit 1
+          fi
+
+      # The next steps are copied from pages.yml, in the same order, up to and including the build.
+      - name: Strip image metadata
+        working-directory: ./auxsays
+        run: bash scripts/strip_image_metadata.sh assets/img
+
+      - name: Generate source health snapshot
+        run: python auxsays/scripts/source_health_snapshot.py
+
+      - name: Generate public monitoring projection
+        run: python auxsays/scripts/build_monitoring_projection.py
+
+      - name: Build the live-consensus eligibility projection
+        run: python auxsays/scripts/build_live_eligibility_projection.py
+
+      - name: Validate logo assets
+        run: python auxsays/scripts/validate_logo_assets.py
+
+      - name: Run generated record QA (publication-strict)
+        run: python auxsays/scripts/qa_patch_records.py --publish-strict
+
+      - name: Install Systems Monitor dependencies
+        run: npm ci --prefix systems-monitor/app
+
+      - name: Validate and build Systems Monitor
+        run: npm run validate --prefix systems-monitor/app
+
+      - name: Build site
+        working-directory: ./auxsays
+        run: bundle exec jekyll build --trace
+
+      - name: Verify Systems Monitor static integration
+        run: npm run verify:site --prefix systems-monitor/app
+
+      - name: Assert the archived notice renders on an archived page and on no active one
+        run: |
+          set -euo pipefail
+          site=auxsays/_site/updates/blackmagic-design/blackmagic-davinci
+          archived="${site}/19-1-4/index.html"
+          active="${site}/21-0-4/index.html"
+          test -f "${archived}" || { echo "::error::Missing archived page ${archived}"; exit 1; }
+          test -f "${active}" || { echo "::error::Missing active page ${active}"; exit 1; }
+          grep -q 'Archived release\.' "${archived}" || { echo "::error::Archived DaVinci 19.1.4 does not show the notice."; exit 1; }
+          if grep -q 'Archived release\.' "${active}"; then
+            echo "::error::Active DaVinci 21 shows the archived notice."
+            exit 1
+          fi
+          with_notice=$(grep -rl 'Archived release\.' "${site}" --include=index.html | wc -l)
+          echo "DaVinci record pages carrying the notice: ${with_notice}"
+          if [ "${with_notice}" -ne 100 ]; then
+            echo "::error::Expected the notice on exactly 100 DaVinci pages, found ${with_notice}."
+            exit 1
+          fi

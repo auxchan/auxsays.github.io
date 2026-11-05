@@ -44,6 +44,11 @@ from lib import evidence_classification as ec
 from lib.method_routing import fallback_justified, plan_methods
 from lib.target_outcome import target_is_contradicted
 from . import reddit_source
+from lib.reddit_access_policy import (
+    POLICY_NOTE as REDDIT_POLICY_NOTE,
+    POLICY_REASON as REDDIT_POLICY_REASON,
+    reddit_access_authorized,
+)
 
 PRODUCT_ID = "adobe-premiere-pro"
 SOURCE_TYPE = "adobe_community_bug_report"
@@ -203,6 +208,14 @@ def not_run_health_row(record: PatchRecord, captured_at: str, method_id: str,
     with a fresh last_run replaces that with the truth, and the monitoring include counts a
     disabled row as not-usable rather than as a failed attempt.
     """
+    if method_id == "reddit_search" and not reddit_access_authorized():
+        # AUX D2: a POLICY row, whatever role routing gave the method. No last_run of its own:
+        # the writer keeps the prior row's real last attempt rather than restamping it.
+        return method_health_row(
+            product_id=PRODUCT_ID, update_version=record.update_version, method_id=method_id,
+            source_type=method_source_type(method_id), status="disabled", candidates_found=0,
+            accepted_reports=0, rejected_reports=0, blocked_reason=REDDIT_POLICY_REASON,
+            last_run="", notes=f"{method_label(method_id)} {REDDIT_POLICY_NOTE}")
     return method_health_row(
         product_id=PRODUCT_ID,
         update_version=record.update_version,
@@ -230,13 +243,23 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
     primary_ids = [m for m in plan["primary"] if m in PREMIERE_METHODS]
     fallback_ids = [m for m in plan["fallback"] if m in PREMIERE_METHODS]
     not_run: list[tuple[str, str]] = []
+    if not reddit_access_authorized():
+        # AUX D2: whatever role a plan gives it, Reddit is never executed without written
+        # authorisation; it is reported through not_run_health_row as a policy row.
+        for role_ids in (primary_ids, fallback_ids):
+            if "reddit_search" in role_ids:
+                role_ids.remove("reddit_search")
+                not_run.append(("reddit_search", "disabled"))
 
     # No declared primary means no product-scoped routing. Run the whole catalogue rather than
     # silently collecting nothing: a missing declaration must not look like a product with no
     # sources, which is the one failure mode that would be invisible in the output.
     if not primary_ids:
-        primary_ids = list(PREMIERE_METHODS)
+        primary_ids = [m for m in PREMIERE_METHODS
+                       if m != "reddit_search" or reddit_access_authorized()]
         fallback_ids = []
+        if not reddit_access_authorized() and "reddit_search" in PREMIERE_METHODS:
+            not_run.append(("reddit_search", "disabled"))
 
     method_results = [run_one(record, context, mid, captured_at) for mid in primary_ids]
     primary_health = [health_for_method(record, captured_at, result) for result in method_results]
@@ -259,6 +282,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
     for method_id in plan["disabled"]:
         if method_id in PREMIERE_METHODS:
             not_run.append((method_id, "disabled"))
+    not_run = list(dict.fromkeys(not_run))  # one row per method and reason
     health.extend(not_run_health_row(record, captured_at, mid, why) for mid, why in not_run)
 
     rb.emit("premiere_routing", product_id=PRODUCT_ID,

@@ -27,6 +27,7 @@ from email.utils import parsedate_to_datetime
 from typing import Any
 from urllib.error import HTTPError, URLError
 
+from lib.reddit_access_policy import reddit_access_authorized, require_reddit_access
 from .base import date_part
 from . import runtime_budget as rb
 
@@ -234,6 +235,7 @@ def with_raw_json(url: str) -> str:
 # --- transport (product-agnostic) -------------------------------------------
 
 def request_json(url: str, *, endpoint_family: str = "reddit_json") -> Any:
+    require_reddit_access()  # AUX D2: refuse before any socket is opened
     headers = dict(JSON_HEADERS)
     token = os.getenv("REDDIT_BEARER_TOKEN")
     if token:
@@ -322,6 +324,7 @@ def _bounded_json(url: str, *, budget: "rb.RuntimeBudget", endpoint_family: str)
     """Bounded (hard total wall-clock deadline, byte-capped) Reddit JSON fetch + classify + diagnostic.
     Raises SourceAccessError on block/rate-limit/network/parse; MethodBudgetExhausted (NORMAL) if a
     method-level bound is hit."""
+    require_reddit_access()  # AUX D2: refuse before any socket is opened
     budget.note_request()
     headers = dict(JSON_HEADERS)
     token = os.getenv("REDDIT_BEARER_TOKEN")
@@ -394,6 +397,7 @@ def _bounded_json_fallback(attempts: list[tuple[str, str]], *, budget: "rb.Runti
 
 
 def request_reddit_json_with_fallback(attempts: list[tuple[str, str]], *, budget: "rb.RuntimeBudget | None" = None) -> Any:
+    require_reddit_access()  # AUX D2: refuse before any socket is opened
     if budget is not None:
         return _bounded_json_fallback(attempts, budget=budget)
     failures: list[dict[str, Any]] = []
@@ -417,6 +421,7 @@ def request_reddit_json_with_fallback(attempts: list[tuple[str, str]], *, budget
 
 def _bounded_feed(url: str, *, budget: "rb.RuntimeBudget", endpoint_family: str, source_type: str, source_name: str) -> list[dict[str, Any]]:
     """Bounded (hard total wall-clock deadline, byte-capped) Reddit feed fetch + parse + diagnostic."""
+    require_reddit_access()  # AUX D2: refuse before any socket is opened
     budget.note_request()
     strategy = "reddit_descriptive_ua_feed"
     try:
@@ -455,6 +460,7 @@ def _bounded_feed(url: str, *, budget: "rb.RuntimeBudget", endpoint_family: str,
 
 
 def request_reddit_feed(url: str, *, endpoint_family: str, source_type: str, source_name: str, budget: "rb.RuntimeBudget | None" = None) -> list[dict[str, Any]]:
+    require_reddit_access()  # AUX D2: refuse before any socket is opened
     if budget is not None:
         return _bounded_feed(url, budget=budget, endpoint_family=endpoint_family, source_type=source_type, source_name=source_name)
     headers = dict(FEED_HEADERS)
@@ -750,6 +756,10 @@ def collect_reddit_candidates(
     candidates are unfiltered discovery rows; the caller still applies exact
     version / product / issue / URL / date gates.
     """
+    if not reddit_access_authorized():
+        # AUX D2: no authorisation, no discovery. Callers must report `disabled` (see
+        # lib/reddit_access_policy.py); an empty list here must never be read as "no results".
+        return []
     results: list[dict[str, Any]] = []
     seen: set[str] = set()
     hints = [str(h or "").strip().lower() for h in (version_hints or []) if str(h or "").strip()]

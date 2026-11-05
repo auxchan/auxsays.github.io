@@ -451,6 +451,8 @@ def run() -> int:
     # cycle -- the PR #76 premiere hazard. Today every live value already equals what the writer
     # would produce, so the promotion proposes no change to them; this check is what turns a future
     # hand edit into a failing build instead of a silent revert.
+    # update_status stays LISTED although the projection no longer proposes it (AUX-065): archival
+    # belongs to lib/davinci_archive_policy, and this check is what fails if a writer ever takes it back.
     EDITORIAL = {"description", "official_summary", "release_summary", "update_status",
                  "status_change_type", "notification_message", "update_channel_label", "feed_hidden",
                  "record_note"}
