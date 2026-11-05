@@ -13,7 +13,7 @@
  ],
  "parent_commit": "bf662c02144d00f48cfb07979dd1159ac91d5565",
  "authority_sha256_parent": "02e280e4f524f3611b110550cadc147e5ea5c59ea849db6f29a35f1abb52a6fa",
- "authority_sha256": "1049276d636825f9099b6679e2998d5ed91a2e3438fc6b72ddc559f658e8ef74",
+ "authority_sha256": "7460bf108f57846e738c3cfef6d43c0d89e61e171c1f7e189ab5a33fe0c19c92",
  "store_path": "auxsays/_data/consensus_evidence.yml",
  "store_sha256": "050f8125d92c34f6a3312e0915cdd677af3f03542bf022ab836722b9e2749947",
  "replay": {

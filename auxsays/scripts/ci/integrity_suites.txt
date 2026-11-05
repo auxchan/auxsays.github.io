@@ -334,8 +334,9 @@ auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 # to the issue (the AUX-067 residual R1). Each occurrence of the build gets one anchored role, vetoes before
 # links, and every refusal is checked against the authority with the rule switched off. Frozen SYNTHETIC
 # fixtures only: the 24 corpus shapes are paraphrases, and no live store total is read or pinned, so
-# evidence growth cannot turn it red. Also pins one authority for all three Windows discovery methods.
-auxsays/scripts/tests/test_windows_identity_link_roles.py = 162
+# evidence growth cannot turn it red. Also pins one authority for all three Windows discovery methods, the
+# independent verifier's second-round probes, and one case per pattern (deleting any one pattern turns it red).
+auxsays/scripts/tests/test_windows_identity_link_roles.py = 295
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 # AUX-067: a build-only identity whose TITLE is about another KB or build is not a report on the build
 # the author merely quoted. Pins the eight confirmed false acceptances (stored fields as fixtures), the

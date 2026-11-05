@@ -11,13 +11,19 @@ evidence store, and no live total is pinned: corpus growth cannot turn this suit
     A  scope guards and placement: a KB match, a title naming the build or KB, a build absent from
        the body and an empty build are never touched; every earlier, more specific reason keeps
        its reason; the rule runs after identity_not_the_subject
-    B  preservation: synthetic linked phrasings, and the 10 kept corpus shapes
-    C  negatives: synthetic unlinked phrasings, and the 14 refused corpus shapes. Every refusal is
-       checked in the SAME check against the authority with the rule switched off, which must
-       accept it, so the rule is the deciding gate and not a passenger
+    B  preservation: synthetic linked phrasings, the 10 kept corpus shapes, and the second-round
+       cases (the independent verifier's "V-" probes and the implementer's "M-" probes, each kept
+       by the authority with the rule off, so the rule is what could wrongly refuse them)
+    C  negatives: synthetic unlinked phrasings, the 14 refused corpus shapes and the second-round
+       cases. Every refusal is checked in the SAME check against the authority with the rule
+       switched off, which must accept it, so the rule is the deciding gate and not a passenger
+       ("P-" cases pin one pattern each: deleting that pattern alone flips the case)
     D  role units: veto-before-link precedence, anchoring at the occurrence, the closed identity
        filler (no colon, no "on", no date, no other build), sentence and parenthesis masking,
-       leading-title-copy stripping, and "any linked occurrence keeps the row"
+       leading-title-copy stripping (at most the three copies the collectors add, whole words
+       only), the record's own month against another month, the exceptions that keep a clean,
+       successful-install or "previous" veto from swallowing a report that blames the build, and
+       "any linked occurrence keeps the row"
     E  declared limits, pinned as current behaviour and not claimed closed
     F  one authority for every Windows discovery method, and the consumers of the new reason
     G  the pinned refusal manifest (scripts/audit/r1_link_roles_refusals_2026-11-05.json)
@@ -99,16 +105,26 @@ def reason_of(target: dict, title: str, body: str, date: str = "2026-11-01") -> 
     return mw.windows_learn_qna_reason(target, URL, date, text, title, *ids(target, text))
 
 
-def both(target: dict, title: str, body: str) -> tuple[str | None, str | None]:
-    got = reason_of(target, title, body)
+def reason_live(target: dict, title: str, body: str) -> str | None:
+    """The PRODUCTION construction: every Windows source builds report_text as title + body (Learn Q&A,
+    Tech Community and the Windows 11 Forum alike), and row_from_candidate prepends parent_title and
+    report_title, so the authority sees three leading copies of the title before the post's own text."""
+    text = " ".join([title, title, title + " " + body]).strip()
+    return mw.windows_learn_qna_reason(target, URL, "2026-11-01", text, title, *ids(target, text))
+
+
+def both(target: dict, title: str, body: str, live: bool = False) -> tuple[str | None, str | None]:
+    decide = reason_live if live else reason_of
+    got = decide(target, title, body)
     with rule_off():
-        off = reason_of(target, title, body)
+        off = decide(target, title, body)
     return got, off
 
 
-def roles(target: dict, title: str, body: str) -> list[tuple[str, str]]:
+def roles(target: dict, title: str, body: str, date: str | None = None) -> list[tuple[str, str]]:
     text = " ".join([title, title, body]).strip()
-    return [(r, k) for r, k, _s in mw.identity_link_details(text, title, target["target_os_build"])]
+    when = target["target_release_date"] if date is None else date
+    return [(r, k) for r, k, _s in mw.identity_link_details(text, title, target["target_os_build"], when)]
 
 
 def retained(case: dict) -> str:
@@ -125,7 +141,8 @@ def case_decision(case: dict) -> tuple[str | None, str | None, list[list[str]]]:
     got = mw.windows_learn_qna_reason(*args)
     with rule_off():
         off = mw.windows_learn_qna_reason(*args)
-    det = [[r, k] for r, k, _s in mw.identity_link_details(text, case["report_title"], case["matched_os_build"])]
+    det = [[r, k] for r, k, _s in mw.identity_link_details(text, case["report_title"], case["matched_os_build"],
+                                                            case["target"]["target_release_date"])]
     return got, off, det
 
 
@@ -214,6 +231,140 @@ REFUSE = [
     ("N10", T7840, "Feature update fails", "Trying to upgrade 26200.7840 machines to 26H2 fails with error 0xC1900101."),
     ("N11", T7840, "Media Feature Pack fails", "Installing the Media Feature Pack on 26200.7840 fails with error 0x800F0991."),
     ("N12", T7840, "Update stack package", "Update stack package 922.415 fails to install. winver shows 26200.7840."),
+]
+
+T24 = {"target_feature_version": "24H2", "target_kb": "KB5077181", "target_os_build": "26100.7840",
+       "target_release_date": "2026-02-10", "update_version": "24H2"}
+
+# Second round (the AUX-076 fix pass). "V-" cases are the independent verifier's probes, "M-" cases the
+# implementer's own; every one is accepted by the authority with the rule off, so the rule decides it.
+KEEP2 = [
+    ("V-GK01", T7840, "Wi-Fi gone", "The 26200.7840 build broke my Wi-Fi. Rolling back the update fixed it."),
+    ("V-GK03", T7840, "Printer error 0x00000709", "Since the February update on 26200.7840 my printer fails with error 0x00000709."),
+    ("V-GK04", T7840, "Printer fails", "I'm having issues from the latest update (26200.7840): the printer fails after the update."),
+    ("V-GK05", T7840, "Printer stopped", "Apart from that, after installing 26200.7840 the printer stopped working."),
+    ("V-GK07", T7840, "Audio gone", "Successfully installed 26200.7840 yesterday, but since the update my audio is gone."),
+    ("V-GK10", T7840, "Printer fails", "After the February 2026 update (OS Builds 26100.7840 and 26200.7840) my printer fails."),
+    ("V-GK10b", T24, "Printer fails", "After the February 2026 update (OS Builds 26100.7840 and 26200.7840) my printer fails."),
+    ("V-GK20", T7840, "Audio gone", "26200.7840 came through last night and my audio is gone. The update broke it."),
+    ("V-GK32", T7840, "Bluetooth bug", "26200.7840 has a bug that breaks Bluetooth since I updated."),
+    ("V-GK34", T7840, "Printer fixed by rollback", "Rolling back 26200.7840 fixed the printer after the update broke it."),
+    ("V-GK02b", T7840, "Printer fixed by removal", "Uninstalling 26200.7840 fixed my printer. The update broke printing."),
+    ("V-GK06b", T7840, "Bluetooth gone", "26200.7840 installed without any issues, but since the update Bluetooth is gone."),
+    ("V-GK08b", T7840, "Printing broken", "The previous update, 26200.7840, broke printing after the update installed."),
+    ("V-GK37", T7840, "Printer fails", "Problems from the 26200.7840 update: the printer fails after the update."),
+    ("V-GK38", T7840, "Printer fails", "Since installing the update from Patch Tuesday (26200.7840) my printer fails."),
+    ("V-A1", T7840, "Printer fails", "Since the 2026-02 update on 26200.7840 my printer fails."),
+    ("V-A5", T7840, "Printer fails", "After the update from last week (build 26200.7840) my printer fails."),
+    ("M-K01", T7840, "Printer fails", "After restoring my files, I updated to 26200.7840 and the printer fails."),
+    ("M-K04", T7840, "Crashes", "26200.7840 keeps crashing after installing the update."),
+    ("M-K05", T7840, "Crashes", "26200.7840 crashes when I open File Explorer since the update."),
+    ("M-K06", T7840, "Issues", "Still having issues since installing 26200.7840: the printer fails."),
+    ("M-K07", T7840, "BSOD", "I'm still getting BSODs since updating to 26200.7840."),
+    ("M-K08", T7840, "Printer", "26200.7840 is still broken: the printer fails after the update."),
+    ("M-K10", T7840, "Boot slow", "Since the update to 26200.7840, compared with before, boot is twice as slow."),
+    ("M-K11", T7840, "Printer", "After the February update (26200.7840), my printer fails."),
+    ("M-K16", T7840, "Install fails", "26200.7840 fails to install on my laptop with 0x800f0922."),
+    ("M-K17", T7840, "Install fails", "26200.7840 can't install on our PCs, error 0x800f0922."),
+    ("M-K20", T7840, "Printer", "Since 26200.7840 is installed, the printer fails."),
+    ("M-K21", T7840, "Audio", "The 26200.7840 update restored my audio but broke printing."),
+    ("M-K22", T7840, "Printer", "I uninstalled 26200.7840 and that fixed the printer after the update broke it."),
+    ("M-K23", T7840, "Printer", "Removing 26200.7840 resolved the printer issue after the update."),
+    ("M-K27", T7840, "Printer", "Updated to 26200.7840 last week with no issues, but now the printer fails after the update."),
+    ("M-K30", T7840, "Printer", "Since the February 2026 update on 26200.7840 my printer fails."),
+    ("M-K31", T7840, "Printer", "26200.7840 since the February update: my printer fails."),
+    ("M-K32", T7840, "Printer", "Our PCs on 26200.7840 since the latest update cannot print."),
+    ("M-K36", T7623, "Printer", "Since the January update on 26200.7623 my printer fails."),
+    ("M-K37", T7840, "Printer", "After 26200.7840, the next morning my printer failed after the update."),
+    # Entry pins: each is decided by one pattern alone, so deleting that pattern flips it (one fix per mutant).
+    ("P-SRCFILLER", T7840, "Printer fails", "Since installing the update from Windows Update (26200.7840) my printer fails."),
+    ("P-GAP", T7840, "Install fails", "26200.7840 failed to install and then I installed the March update manually."),
+    ("P-XUPDATE", T7840, "Printer broken", "The 26200.7840 update broke my printer."),
+    ("P-SINCEUPDATING", T7840, "Printer fails", "26200.7840 since updating: my printer fails after the update."),
+]
+
+REFUSE2 = [
+    ("V-GR01", T7840, "Update keeps failing", "I'm still on 26200.7840 after the update failed to install with 0x800f0922."),
+    ("V-GR02", T7840, "Update keeps failing", "The update failed and returned me to 26200.7840, now it fails again with 0x800f0922."),
+    ("V-GR03", T7840, "Update keeps failing", "Windows reverted itself to 26200.7840 after the update failed with 0x800f0922."),
+    ("V-GR04", T7840, "Printing broke", "I restored my system to 26200.7840 after the March update broke printing."),
+    ("V-GR05", T7840, "Printing broke", "Updated to 26200.7840 with no issues; the March update broke printing."),
+    ("V-GR06", T7840, "Printing broke", "26200.7840 caused no problems for me, but the March update broke printing."),
+    ("V-GR07", T7840, "Update stuck at 0%", "My PC on 26200.7840 is stuck installing the March update at 0%."),
+    ("V-GR09", T7840, "Update fails 0x800f0922", "26200.7840 fails to install 26200.7922 with 0x800f0922."),
+    ("V-GR10", T7840, "Feature update fails", "Machines on 26200.7840 fail to upgrade to 26H2 with 0xC1900101."),
+    ("V-GR11", T7840, "Update fails 0x800f0922", "Trying to update 26200.7840 PCs with the March cumulative update fails with 0x800f0922."),
+    ("V-GR12", T7840, "Slow boot", "After the update, compared to 26200.7840, boot takes twice as long."),
+    ("V-GR13", T7840, "Update fails 0x800f0922",
+     "Since 26200.7840 is the current build on all our machines, the March update fails with 0x800f0922 on every one."),
+    ("V-GR14", T7840, "Next update fails", "After 26200.7840, the next update fails to install with 0x800f0922."),
+    ("V-GR15", T7840, "Rollback loop", "26200.7840 keeps rolling back the March update."),
+    ("V-GR17", T7840, "Printing fails", "On 26200.7840 everything worked. After updating to 26200.7922, printing fails."),
+    ("V-GR18", T7840, "Printing broke", "Our fleet moved off 26200.7840 last month; the new build breaks printing after the update."),
+    ("V-GR19", T7840, "Update fails", "My laptop came with 26200.7840 preinstalled and the March update fails."),
+    ("V-GR20", T7840, "Update fails", "I can't get past 26200.7840; every newer update fails with 0x800f0922."),
+    ("V-GR21", T7840, "Printer fails", "26200.7840 was the last build that worked; since the update my printer fails."),
+    ("V-GR22", T7840, "Update keeps failing", "Still on 26200.7840 since the March update keeps failing to install."),
+    ("V-GR23", T7840, "Update rolled back", "My PC is stuck on 26200.7840 after the update rolled back twice."),
+    ("V-GR24", T7840, "Update failed", "The update failed and System Restore took me to 26200.7840."),
+    ("V-GR25", T7840, "Update fails nightly", "26200.7840 fails to update to 26200.7922 every night."),
+    ("V-GR26", T7840, "Update stuck at 0%", "26200.7840 stuck at 0% downloading KB5079473 after the update check."),
+    ("V-GR27", T7840, "Update fails 0x800f0922", "26200.7840 can't install 26200.8037, error 0x800f0922."),
+    ("V-GR28", T7840, "Feature update fails", "Upgrade of 26200.7840 fails with 0xC1900101 when going to 26H2."),
+    ("V-GR29", T7840, "Printing broke", "Installed 26200.7840 with zero problems. The March update broke printing."),
+    ("V-GR30", T7840, "Update stuck", "26200.7840 freezes at 35% while installing the next cumulative update."),
+    ("V-GR31", T7840, "Update rolled back", "Windows restored 26200.7840 after the update rolled back."),
+    ("V-GR32", T7840, "Update keeps failing", "I remain on 26200.7840 since the update keeps failing with 0x800f0922."),
+    ("V-GR33", T7840, "Update keeps failing", "Stuck on 26200.7840 after the update failed again with 0x800f0922."),
+    ("V-GR34", T7840, "Update keeps failing", "We are still running 26200.7840 after the latest update failed to install."),
+    ("V-GR35", T7840, "Printing broke", "26200.7840 went in with no problems; the March update broke printing."),
+    ("M-R01", T7840, "Update fails", "I'm stuck at 26200.7840 because the March update fails."),
+    ("M-R02", T7840, "Update fails", "Still running 26200.7840 since the update keeps failing."),
+    ("M-R03", T7840, "Update fails", "We stayed on 26200.7840 after the update failed."),
+    ("M-R04", T7840, "Printing broke", "I rolled my PC back to 26200.7840 after the March update broke printing."),
+    ("M-R05", T7840, "Update fails", "The update rolled back and left me on 26200.7840 with error 0x800f0922."),
+    ("M-R06", T7840, "Printing broke", "26200.7840 with no problems at all; the March update broke printing."),
+    ("M-R07", T7840, "Printing broke", "26200.7840 never caused any issues; the next update broke printing."),
+    ("M-R08", T7840, "Update stuck", "26200.7840 stuck downloading the next update."),
+    ("M-R09", T7840, "Update fails", "26200.7840 refuses to install KB5079473 since the update check."),
+    ("M-R10", T7840, "Feature update fails", "26200.7840 fails to upgrade to Windows 11 26H2."),
+    ("M-R11", T7840, "Update fails", "Devices on 26200.7840 fail to update to the latest version."),
+    ("M-R13", T7840, "Update fails", "26200.7840 is our production build and the March update fails on it."),
+    ("M-R14", T7840, "Update fails", "After 26200.7840 the 2026-03 update fails to install."),
+    ("M-R15", T7840, "Update rolled back", "I'm on 26200.7840 after the update was rolled back."),
+    ("M-R16", T7840, "Update failed", "A restore point brought me back to 26200.7840 after the update failed."),
+    ("M-R17", T7840, "Printing broke", "Updated to 26200.7840 without problems, but the March update broke printing."),
+    ("M-R18", T7840, "Update fails", "26200.7840 PCs with the 2026-03 update fail to boot."),
+    ("M-R19", T7840, "Update fails", "26200.7840 keeps reverting the March cumulative update."),
+    ("M-R20", T7840, "Printing fails", "Since the March update on 26200.7840 printing fails."),
+    ("M-R21", T7840, "Printer", "26200.7840 since the March update: printing fails."),
+    ("M-R22", T7840, "Printing", "Successfully installed 26200.7840. The March update broke printing."),
+    ("M-R23", T7840, "Printing", "Updated to 26200.7840 with no issues, but the 2026-03 update broke printing."),
+    ("M-R24", T7840, "Printing", "26200.7840 installed without problems, but after the next update printing fails."),
+    ("M-R25", T7840, "Printing", "26200.7840 installed without problems, but KB5079473 broke printing."),
+    ("M-R26", T7840, "Printing", "26200.7840 installed without problems, but after upgrading to 26H2 printing fails."),
+    ("M-R27", T7840, "Printing", "26200.7840 installed without problems, but since the update to 26200.7922 printing fails."),
+    ("M-R30", T7840, "Printer", "Rolling back 26200.7840 fixed nothing; the March update broke printing."),
+    ("M-R31", T7840, "Printer", "Uninstalling 26200.7840 did not fix it; printing fails since the update."),
+    ("M-R32", T7840, "Printer", "The update failed to install (26200.7840 to 26200.7922) and printing fails."),
+    # Entry pins (see KEEP2).
+    ("P-LASTGOOD", T7840, "Printer", "I reinstalled the last working build 26200.7840 since the update broke printing."),
+    ("P-HISTORY", T7840, "Printer fails", "Update history shows 26200.7840 installed, and since the update my printer fails."),
+    ("P-SHOULDFIX", T7840, "Printer fails", "I'm installing 26200.7840 which should fix the printer bug. Printing fails since the update."),
+    ("P-SAFE", T7840, "Printer fails", "Is it safe to install 26200.7840? My printer fails since the update."),
+    ("P-WAITING", T7840, "Printer fails", "Waiting for the 26200.7840 update; printing fails since the update."),
+    ("P-WUFAILS", T7840, "Update fails", "Windows Update keeps failing on 26200.7840 after the latest update."),
+]
+
+# The production construction (three leading title copies): a body whose first clause begins with the
+# title keeps that clause, and a body that is only the build beside the title stays unlinked.
+LIVE_KEEP = [
+    ("TP1", T7840, "Printer not working after update", "Printer not working after update to 26200.7840. It worked before."),
+    ("TP2", T7840, "Audio stopped after installing", "Audio stopped after installing 26200.7840 yesterday."),
+    ("TP3", T7840, "Explorer crashes since updating", "Explorer crashes since updating to build 26200.7840, every launch."),
+]
+LIVE_REFUSE = [
+    ("R33-live", T7840, "Explorer crashes after the update", "26200.7840 here, Pro edition, and it happens every boot."),
 ]
 
 
@@ -306,12 +457,28 @@ def run() -> int:  # noqa: PLR0915
         check(f"B {c['case']} corpus shape {c['original'][1]} q{c['original'][2]}: kept with the original's roles {c['expected_roles']}",
               got is None and off is None and c["expected_reason"] is None and det == c["expected_roles"]
               and any(r == "affected" for r, _k in det), f"{got} {det}")
+    for name, target, title, body_text in KEEP2:
+        got, off = both(target, title, body_text)
+        check(f"B {name}: kept, as the authority without the rule keeps it -- {body_text[:60]}",
+              got is None and off is None, f"{got} / off {off} {roles(target, title, body_text)}")
+    for name, target, title, body_text in LIVE_KEEP:
+        got, off = both(target, title, body_text, live=True)
+        check(f"B {name}: kept under the production construction (the body's own first clause starts with the title)",
+              got is None and off is None, f"{got} / off {off}")
 
     # ---------------------------------------------------------------- C. negatives
     for name, target, title, body_text in REFUSE:
         got, off = both(target, title, body_text)
         check(f"C {name}: refused by this rule, and accepted with the rule off -- {body_text[:60]}",
               got == REASON and off is None, f"{got} / off {off} {roles(target, title, body_text)}")
+    for name, target, title, body_text in REFUSE2:
+        got, off = both(target, title, body_text)
+        check(f"C {name}: refused by this rule, and accepted with the rule off -- {body_text[:60]}",
+              got == REASON and off is None, f"{got} / off {off} {roles(target, title, body_text)}")
+    for name, target, title, body_text in LIVE_REFUSE:
+        got, off = both(target, title, body_text, live=True)
+        check(f"C {name}: refused under the production construction (all three leading title copies are removed)",
+              got == REASON and off is None, f"{got} / off {off}")
     n4 = reason_of(T7840, "Teams crashes on launch", "After installing the new Teams update on 26200.7840, Teams crashes on launch.")
     check("C N4: the foreign-product veto still answers first for another product's update", n4 == "foreign_product_subject_not_windows_patch", str(n4))
     for c in refusals:
@@ -401,6 +568,94 @@ def run() -> int:  # noqa: PLR0915
               "26200.7840 rolled back twice during restart with error 0x800f0922.")}
           == {"named:pre", "destination:pre", "attached:post", "onset:pre", "direct:post"})
 
+    # Second round: each new or narrowed pattern, both directions.
+    gk03 = "Since the February update on 26200.7840 my printer fails with error 0x00000709."
+    check("D24 months: the record's own month names the build ('the February update on X' on a February record), another "
+          "month is the platform, and with no release date every month counts as another month (fail closed)",
+          only(T7840, "Printer", gk03) == ("affected", "named:pre")
+          and only(T7840, "Printer", "Since the March update on 26200.7840 printing fails.") == ("platform", "platform:pre")
+          and only(T7623, "Printer", "Since the January update on 26200.7623 my printer fails.") == ("affected", "named:pre")
+          and roles(T7840, "Printer", gk03, date="") == [("platform", "platform:pre")]
+          and roles(T7840, "Printer", gk03, date="2026-03-10") == [("platform", "platform:pre")])
+    check("D25 an attached update phrase is month-aware: 'X since the February update' links, 'X since the March update' does not",
+          only(T7840, "Printer", "26200.7840 since the February update: my printer fails.") == ("affected", "attached:post")
+          and only(T7840, "Printer", "26200.7840 since the March update: printing fails.") == ("unlinked", ""))
+    check("D26 an update phrase that failed does not attach: 'on X after last night's update' links, 'on X after the update was rolled back' does not",
+          only(T7840, "Taskbar", "We are on 26200.7840 after last night's update and the taskbar keeps crashing every few minutes.")
+          == ("affected", "attached:post")
+          and only(T7840, "Update rolled back", "I'm on 26200.7840 after the update was rolled back.") == ("environment", ""))
+    check("D27 the upgrade source is anchored at the build: 'Upgrading from X' is source, while an unrelated earlier 'from' and "
+          "'issues from the latest update (X)' are not",
+          only(T7840, "Feature update", "Upgrading from 26200.7840 fails with 0xC1900101 every time since the update.")
+          == ("source", "source:pre")
+          and only(T7840, "Printer", "Apart from that, after installing 26200.7840 the printer stopped working.") == ("affected", "named:pre")
+          and only(T7840, "Printer", "I'm having issues from the latest update (26200.7840): the printer fails after the update.")
+          == ("affected", "named:pre"))
+    check("D28 a rollback or restore TARGET is a baseline, a removal that fixed it is a link, and a negated removal is neither",
+          {only(T7840, "x", b)[0] for b in (
+              "The update failed and returned me to 26200.7840, now it fails again with 0x800f0922.",
+              "Windows reverted itself to 26200.7840 after the update failed with 0x800f0922.",
+              "The update failed and System Restore took me to 26200.7840.",
+              "Windows restored 26200.7840 after the update rolled back.")} == {"baseline"}
+          and only(T7840, "x", "Rolling back 26200.7840 fixed the printer after the update broke it.") == ("affected", "remedy:mid")
+          and only(T7840, "x", "Uninstalling 26200.7840 did not fix it; printing fails since the update.") == ("unlinked", "")
+          and only(T7840, "x", "Rolling back 26200.7840 fixed nothing; the March update broke printing.") == ("unlinked", ""))
+    check("D29 clean/successful-install exception: a contrast clause with an issue lifts the veto, unless it names another update "
+          "(another month, KB, build or train)",
+          only(T7840, "x", "26200.7840 installed without any issues, but since the update Bluetooth is gone.") == ("affected", "named:post")
+          and only(T7840, "x", "Successfully installed 26200.7840 yesterday, but since the update my audio is gone.") == ("affected", "named:pre")
+          and {only(T7840, "x", b)[0] for b in (
+              "26200.7840 caused no problems for me, but the March update broke printing.",
+              "26200.7840 installed without problems, but KB5079473 broke printing.",
+              "26200.7840 installed without problems, but since the update to 26200.7922 printing fails.",
+              "26200.7840 installed without problems, but after upgrading to 26H2 printing fails.")} == {"clean"}
+          and only(T7840, "x", "Successfully installed 26200.7840. The March update broke printing.") == ("history", "history:pre"))
+    check("D30 'previous' is a baseline unless the build itself is then blamed",
+          only(T7840, "x", "The previous update, 26200.7840, broke printing after the update installed.") == ("affected", "named:pre")
+          and only(T7840, "x", "Previously on 26200.7840 it worked, but since the update printing fails.") == ("baseline", "baseline:pre"))
+    check("D31 the build as the SUBJECT that fails to install something else is the platform; failing itself is not",
+          only(T7840, "x", "My PC on 26200.7840 is stuck installing the March update at 0%.") == ("platform", "platform:post")
+          and only(T7840, "x", "26200.7840 fails to update to 26200.7922 every night.") == ("platform", "platform:post")
+          and only(T7840, "x", "26200.7840 keeps crashing after installing the update.") == ("affected", "direct:post")
+          and only(T7840, "x", "26200.7840 is stuck at 100% and rolls back.") == ("affected", "direct:post")
+          and reason_of(T7840, "Rollback", "The update to 26200.7840 failed to install and rolled back to 26200.7623.") is None)
+    check("D32 the build as the label of the machines another update is applied to is the platform",
+          only(T7840, "x", "Trying to update 26200.7840 PCs with the March cumulative update fails with 0x800f0922.")
+          == ("platform", "platform:post"))
+    check("D33 a state statement ('X is the current build') and a following update ('After X, the next update') are baselines; "
+          "a plain onset is not",
+          only(T7840, "x", REFUSE2[[n for n, *_ in REFUSE2].index("V-GR13")][3]) == ("baseline", "baseline:post")
+          and only(T7840, "x", "After 26200.7840, the next update fails to install with 0x800f0922.") == ("baseline", "baseline:post")
+          and only(T7840, "x", "After 26200.7840, the next morning my printer failed after the update.") == ("affected", "onset:pre")
+          and only(T7840, "x", "Since 26200.7840 is installed, the printer fails.") == ("affected", "onset:pre"))
+    check("D34 a comparison point is a baseline: 'compared to X' (the destination link needs a change, not a comparison)",
+          only(T7840, "x", "After the update, compared to 26200.7840, boot takes twice as long.") == ("baseline", "baseline:pre")
+          and only(T7840, "x", "Since the update to 26200.7840, compared with before, boot is twice as slow.") == ("affected", "named:pre"))
+    check("D35 where the reporter was left is a baseline ('still on X', 'stuck on X', 'left me on X'); 'still getting BSODs' is not",
+          {only(T7840, "x", b)[0] for b in (
+              "I'm still on 26200.7840 after the update failed to install with 0x800f0922.",
+              "My PC is stuck on 26200.7840 after the update rolled back twice.",
+              "The update rolled back and left me on 26200.7840 with error 0x800f0922.")} == {"baseline"}
+          and only(T7840, "x", "I'm still getting BSODs since updating to 26200.7840.") == ("affected", "named:pre"))
+    check("D36 an update noun with the build in a parenthesis that CLOSES at it names the build; an open one does not",
+          only(T7840, "x", "After the update from last week (build 26200.7840) my printer fails.") == ("affected", "named:mid")
+          and only(T24, "x", "After the February 2026 update (OS Builds 26100.7840 and 26200.7840) my printer fails.")
+          == ("affected", "named:mid")
+          and only(T7840, "x", "After the update from last week (build 26200.7840 here) my printer fails.") == ("unlinked", ""))
+    tp1_title, tp1_body = "Printer not working after update", "Printer not working after update to 26200.7840. It worked before."
+    check("D37 title copies: at most the three the collectors add are removed (a fourth is the post's own clause), and only "
+          "whole-word copies",
+          reason_live(T7840, tp1_title, tp1_body) is None
+          and reason_live(T7840, "Explorer crashes after the update", "26200.7840 here, Pro edition, and it happens every boot.") == REASON
+          and mw._r1_strip_title("Update Update Updated to 26200.7840 the printer fails.", "Update")
+          == "Updated to 26200.7840 the printer fails."
+          and reason_of(T7840, "Update", "Updated to 26200.7840 and the printer fails since the update.") is None)
+    check("D38 the build as a named change also covers 'X build broke', 'X came through' and 'X has a bug'",
+          {only(T7840, "x", b)[1] for b in (
+              "The 26200.7840 build broke my Wi-Fi. Rolling back the update fixed it.",
+              "26200.7840 has a bug that breaks Bluetooth since I updated.")} == {"direct:post"}
+          and only(T7840, "x", "26200.7840 came through last night and my audio is gone. The update broke it.") == ("affected", "named:post"))
+
     # ---------------------------------------------------------------- E. declared limits (pinned, not closed)
     check("E1 [limit L1] an attached link plus a later sentence blaming an unnamed update still counts",
           reason_of(T7840, "Next update keeps failing",
@@ -426,6 +681,20 @@ def run() -> int:  # noqa: PLR0915
           reason_of(T7840, e7_title, e7_body) is None)
     check("E8 [limit L7] the filler is a closed list: an unlisted identity word between the change word and X fails closed",
           both(T7840, "Camera fails", "After updating to Windows 11 Pro Workstation Edition 26200.7840 the camera fails.") == (REASON, None))
+    check("E9 [limit L5] 'X was successfully installed on <date>, but since then ...' is refused: 'installed on' is the Settings "
+          "label and the onset is not adjacent",
+          both(T7840, "Printer", "26200.7840 was successfully installed on 2/11, but since then my printer fails.") == (REASON, None))
+    check("E10 [limit L8] the contrast exception lifts a clean veto for an issue it does not give to another NAMED update, so "
+          "'... but the update fails' counts",
+          reason_of(T7840, "Printer old", "26200.7840 installed without problems, but my printer is old and the update fails.") is None)
+    check("E11 [limit L7] the closed filler spans an update noun and a parenthesis: 'Installing the update (X here) fails' counts",
+          reason_of(T7840, "Install fails", "Installing the update (26200.7840 here) fails with 0x800f0922.") is None)
+    check("E12 [limit L9] text built WITHOUT the source's own title prefix (two copies, as some older stored excerpts are) "
+          "loses a first clause that begins with the title",
+          both(T7840, tp1_title, tp1_body) == (REASON, None) and reason_live(T7840, tp1_title, tp1_body) is None)
+    check("E13 [limit L10] 'X - Successfully installed on <date>' reads as an update-history line, even after a change phrase",
+          both(T7840, "Printer", "After updating to 26200.7840 - Successfully installed on 2/11/2026 - the printer fails.")
+          == (REASON, None))
 
     # ---------------------------------------------------------------- F. one authority, and the reason's consumers
     rec = PatchRecord(WINDOWS_PRODUCT_ID, "25H2", Path("synthetic-25h2.md"), "2026-02-10T00:00:00Z", "current", "Windows 11", "26200.7840")

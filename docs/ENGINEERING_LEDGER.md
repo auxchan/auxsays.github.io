@@ -203,8 +203,8 @@ elevenforum fixture, 50506 is accepted on no record and 50447 (KB5127648 on 26H2
 `test_elevenforum_adapter.py` I4 now pins the rejection.
 
 **Known residual** A baseline mention whose title carries no competing KB or build (AUX-067 residual R1)
-is not closed by AUX-067; AUX-076 closes it for future acceptance. The Windows 11 Forum adapter ships disabled
-and is not activated by this change.
+is not closed by AUX-067; AUX-076 narrows it for future acceptance, within that entry's declared limits. The
+Windows 11 Forum adapter ships disabled and is not activated by this change.
 
 **Reopen only if** thread 50506, or any fixture of the same shape, is accepted by the Windows authority.
 
@@ -234,8 +234,8 @@ changes (25H2 9457 lands exactly on 25, still Medium); every verdict stays WAIT.
 pins the eight, row 51, the boundary of the exception and the shapes the rule must not touch, with 17 mutants.
 
 **Residuals** R1: a baseline mention whose title names no competing KB or build (the "M2" class, 16-84 rows
-by the characterization) is not deterministically separable and is not closed here; closed for future
-acceptance by AUX-076, a separate rule on the body's own build mentions. R2: a title that names only a
+by the characterization) is not deterministically separable and is not closed here; narrowed for future
+acceptance by AUX-076, a separate rule on the body's own build mentions, within its declared limits. R2: a title that names only a
 feature train is deliberately not a competing identity (the broader variants were measured and rejected).
 R3: the eight existing rows stay counted until the separate audited withdrawal (counted: false, reason
 `identity_not_the_subject`) goes through the guarded writeback; closed by AUX-072. R4: an Office build escaping the
@@ -286,7 +286,7 @@ counted Windows row (that is a new candidate and needs its own audited manifest,
 
 ### AUX-076 — A Windows report counted against a build its author only quoted as their current system
 
-- **Status** Resolved (future acceptance; stored rows change only by a separate audited withdrawal) · **Area** Evidence acceptance · **Severity** High
+- **Status** Resolved (future acceptance, within the declared limits below; stored rows change only by a separate audited withdrawal) · **Area** Evidence acceptance · **Severity** High
 - **First seen** 2026-11-04 (AUX-067 residual R1) · **Resolved** 2026-11-05
 
 **Symptom** A build-only identity whose title names neither the record's build nor its KB counted whenever any
@@ -299,16 +299,31 @@ refusal but never veto an acceptance.
 (AUX-067 included, so no existing reason is relabelled), only when all hold: the identity is build-only; the
 title names neither the target build nor the target KB; the build occurs in the body; and no occurrence of the
 build is linked to the issue. Each occurrence gets one role from patterns anchored at it: vetoes first (source,
-baseline, history, prospective, platform, clean), then links (named, destination, attached, onset, direct), else
-a label (environment, unlinked). A generic cue not anchored at the build never links. The same authority serves
-Learn Q&A, Tech Community and the disabled Windows 11 Forum adapter.
+baseline, history, prospective, platform, clean), then links (named, destination, attached, onset, direct,
+remedy), else a label (environment, unlinked). A generic cue not anchored at the build never links. A month
+name or YYYY-MM is compared with the record's release month, and at most the three leading title copies the
+collectors add are removed, whole words only. The same authority serves Learn Q&A, Tech Community and the
+disabled Windows 11 Forum adapter.
+
+**Fix pass** An independent verification of the first version (83 new probes plus 8 ad hoc) found it refused
+genuine reports the shipped authority counts and still admitted some it should refuse. Refused wrongly: an
+unanchored "from" window, the record's own month read as another update, a clean or successful-install
+statement followed by "but since the update ...", a "previous" build that is then blamed, title stripping that
+ate the post's own first clause, and a removal that fixed the issue. Admitted wrongly: "still / stuck on X",
+rollback and restore targets, inverse clean phrasings ("with no issues", "caused no problems"), and the build
+as the platform that fails to install, download, upgrade to or roll back something else. The second version
+fixes every one, and on the stored corpus gives exactly the same 14 refusals with the same per-occurrence roles.
+Fourteen patterns were pinned only together with a sibling; every pattern now has a case that flips when that
+pattern alone is deleted.
 
 **Measured** Retained-text replay of the 527 counted Windows rows on parent `bf662c02`: 14 rows change, every
 one from counted to this reason, none to any other reason (accepted on retained text 430 -> 416). Nothing stored
 changes in this entry's PR: `_data` and `updates` hash identical before and after. The 14 are pinned by
 five-field identity and block hash in `scripts/audit/r1_link_roles_refusals_2026-11-05.json`, the input for the
-separate withdrawal. `test_windows_identity_link_roles.py` (162 checks on synthetic fixtures only; 35 mutants,
-each killed by a named check); `test_windows_identity_not_the_subject.py` C7/C8 now pin the closure;
+separate withdrawal. `test_windows_identity_link_roles.py` (295 checks on synthetic fixtures only; 80 mutants, one change
+each, every entry of both pattern tables included: 79 killed by a named check, and the 80th is equivalent,
+a month-widened named link that the platform veto always answers first);
+`test_windows_identity_not_the_subject.py` C7/C8 now pin the two AUX-067 residual shapes as refused;
 `test_elevenforum_adapter.py` I9/I10 pin thread 50447 (refused on 26300.9457 in isolation, still counted once on
 26300.9711 by its KB). `diagnose_windows_link_roles.py` is the read-only, warn-only replay of the live corpus.
 
@@ -316,11 +331,16 @@ each killed by a named check); `test_windows_identity_not_the_subject.py` C7/C8 
 and persistence are not covered. L3 non-English link grammar is limited to a few prepositions. L4 a generic
 "after the update" beside a build stated only as the current state is refused (owner decision, default refuse;
 4 of the 14). L5 adjacency stands in for attachment. L6 a KB match is out of scope, including a KB that sits only
-in a hotfix list. L7 the identity filler is a closed list, so an unlisted word fails closed.
+in a hotfix list. L7 the identity filler is a closed list, so an unlisted word fails closed, and the list itself
+spans an update noun and a parenthesis. L8 a contrast clause lifts a clean or successful-install veto for any
+issue it does not hand to another named update. L9 text built without the source's own title prefix (two
+copies, as some older stored excerpts are) loses a first clause that begins with the title. L10 "X ...
+Successfully installed on <date>" reads as an update-history line.
 
 **Reopen only if** a counted build-only Windows row whose title names neither the record's build nor its KB has
 no occurrence of the build linked to the issue; the rule refuses a row whose title or KB names the patch; an
-existing reason is relabelled as this one; or any Windows discovery method is judged by another authority.
+existing reason is relabelled as this one; a case outside L1-L10 is shown to be refused while linked, or counted
+while unlinked; or any Windows discovery method is judged by another authority.
 
 ---
 

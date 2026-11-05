@@ -156,8 +156,9 @@ TECHCOMMUNITY_DEFAULT_WINDOW_DAYS = 45
 # including as the reporter's current baseline. Thread 50506 (a 26H2 enablement-package boot BSOD whose
 # author is back on 25H2 26200.9711) was attributed to the 25H2 record; `identity_not_the_subject` now
 # rejects it because the title names another KB. A baseline whose title names no competing KB or build (AUX-067
-# residual R1) is closed for future acceptance by `identity_not_linked_to_issue` (AUX-076); activation still
-# needs its own measurement, because the role vetoes are first exercised on full opening posts.
+# residual R1) is refused for future acceptance by `identity_not_linked_to_issue` (AUX-076) within that rule's
+# declared limits (L1-L10, ledger AUX-076); activation still needs its own measurement, because the role vetoes
+# are first exercised on full opening posts.
 ELEVENFORUM_METHOD_ID = "elevenforum_windows_listing"
 ELEVENFORUM_SOURCE_TYPE = elevenforum.DEFAULT_SOURCE_TYPE
 ELEVENFORUM_SOURCE_NAME = elevenforum.DEFAULT_SOURCE_NAME
@@ -494,7 +495,8 @@ def identity_named_as_prospective_fix(report_text: str, matched_os_build: str) -
 # Windows Update naming.
 #   1. a VETO, tested first: source, baseline, history, prospective, platform, clean;
 #   2. else a LINK -> "affected": the build named as the change, the destination of a change, an
-#      update phrase attached to it, an onset at it, or a failure predicated directly on it;
+#      update phrase attached to it, an onset at it, a failure predicated directly on it, or its
+#      removal fixing the issue;
 #   3. else "environment" (a running statement or spec label) or "unlinked" (diagnostics only).
 # A generic cue that is not anchored at the build never links: that was the R1 interaction itself,
 # and it is why "On X ... since the update" and "I'm on X and since the update" are treated alike.
@@ -502,11 +504,29 @@ def identity_named_as_prospective_fix(report_text: str, matched_os_build: str) -
 # breaks the link, so the rule fails closed. FORWARD-ONLY: collection never rewrites a stored row
 # (only accepted rows are appended, and a URL the store already holds is not appended again), so a
 # stored row changes only by an audited withdrawal.
+#
+# MONTHS. A month name (or YYYY-MM) is compared with the record's release month: "the February
+# update on X" on a February record names X, while "the March update on X" names another update
+# with X as its platform. Patterns carry <TM> (the target month) and <OM> (any other month), filled
+# in per record; with no release date every month counts as another month (fail closed).
+#
+# KINDS. "pre": the pattern ends at the occurrence; "post": it starts there; "mid": both a pre and a
+# post pattern hold; "pre~" / "post~": the first pattern holds and the second (a post pattern) does
+# NOT -- an exception that keeps a veto from swallowing a report that goes on to blame the build.
 R1_B = r"(?<!\d)\d{5}\.\d{3,5}"
 R1_PAREN_RE = re.compile(r"\([^()\n]{0,160}\)")
 R1_SENTENCE_SPLIT_RE = re.compile(r"[.;!?\n]+")
 R1_PAREN_MASK = str.maketrans({".": "\x1b", ";": "\x1d", "?": "\x1a", "!": "\x19"})
 R1_UNMASK = str.maketrans({"\x1f": ".", "\x1b": ".", "\x1d": ";", "\x1a": "?", "\x19": "!"})
+# Leading copies of the title the collectors produce: row_from_candidate prepends parent_title and
+# report_title, and every Windows source builds report_text as title + body (Learn Q&A, Tech Community
+# and the Windows 11 Forum alike). At most these three are removed, and only as whole words; a further
+# copy is the post's own first clause ("Printer not working after update to X") and is read.
+R1_TITLE_COPIES = 3
+R1_MONTHS = ("january", "february", "march", "april", "may", "june", "july", "august", "september",
+             "october", "november", "december")
+R1_MONTH_ABBR = ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sept?", "oct", "nov", "dec")
+R1_MONTH_KEY_RE = re.compile(r"^\s*(\d{4})-(0[1-9]|1[0-2])")
 R1_ID_WORDS = (
     r"the|a|an|new|newest|latest|recent|newer|current|this|that|it|its|windows|win|win1[01]|11|10|pro|"
     r"home|enterprise|education|edu|iot|ltsc|n|single|language|workstations?|for|os|build|version|ver|v|release|"
@@ -515,6 +535,10 @@ R1_ID_WORDS = (
 )
 # No colon: "OS: X" / "Version: X" is a spec LABEL, and a label never continues a change phrase.
 R1_FILLER = (r"(?:[\s()\[\]\"'“”‘’,;/–—-]|\(\s*kb\s?\d{6,7}\s*\)|\b(?:" + R1_ID_WORDS + r")\b){0,40}?")
+# The filler of an upgrade SOURCE ("upgrading from Windows 11 25H2 build X"): identity words only, never
+# an update noun, so "issues from the latest update (X)" is not a source.
+R1_SRC_FILLER = (r"(?:[\s()\[\]\"'“”‘’,/–—-]|\b(?:the|my|our|windows|win|win1[01]|11|10|pro|home|enterprise|education|"
+                 r"os|build|version|ver|v|v?2\dh[12]|insider|preview|release|old|older|previous|current|stable|latest)\b){0,24}?")
 R1_CHANGE = (
     r"(?:updat(?:e|es|ed|ing)|upgrad(?:e|es|ed|ing)|(?<!clean\s)(?<!fresh\s)install(?:s|ed|ing)?|"
     r"patch(?:es|ed|ing)?|download(?:s|ed|ing)?|received|(?<!'ve\s)(?<!’ve\s)(?<!have\s)(?<!has\s)got|"
@@ -524,41 +548,86 @@ R1_CHANGE = (
 )
 R1_TO = r"(?:\s+(?:up\s+)?(?:to|onto|auf|naar|vers|zu|na))?"
 R1_CHANGE_WORD_RE = re.compile(r"(?i)\b(?:updat\w*|upgrad\w*|install\w*|moved|went|jumped|bumped|switch\w*|migrat\w*)\b")
+# An update phrase that can name the record's own update: no other month and no other KB (a KB in a
+# build-only identity is by definition not the target's).
 R1_UPDATE_NP = (
     r"(?:(?:the|a|an|this|that|last|latest|recent|most|new|newest|todays|today['’]?s|yesterday['’]?s|"
     r"tonight['’]?s|last\s+night['’]?s|this\s+morning['’]?s|this\s+week['’]?s|last\s+week['’]?s|"
     r"(?:mon|tues|wednes|thurs|fri|satur|sun)day['’]?s|patch\s+tuesday['’]?s?|"
-    r"(?:january|february|march|april|may|june|july|august|september|october|november|december)(?:['’]s)?|"
-    r"\d{4}-\d{2}|windows|win|11|monthly|cumulative|security|quality|preview|optional|feature|"
-    r"automatic|overnight|kb\s?\d{6,7})\s+){0,6}(?:update|upgrade|patch)s?\b"
+    r"<TM>(?:['’]s)?|\d{4}|windows|win|11|monthly|cumulative|security|quality|preview|optional|feature|"
+    r"automatic|overnight)\s+){0,6}(?:update|upgrade|patch)s?\b"
 )
+# The update phrase did not install: the build beside it is where the reporter was left.
+R1_NP_FAILED = (r"(?!\s+(?:failed|fails|failing|keeps\s+failing|kept\s+failing|fail(?:s|ed)?\s+to\s+(?:install|download|apply|"
+                r"complete|finish)|did\s*n['’]?t\s+install|did\s+not\s+install|never\s+installed|(?:was\s+|got\s+)?rolled\s+back|"
+                r"(?:was\s+|got\s+)?reverted|was\s+undone)\b)")
 R1_VERSIONISH = r"(?:the\s+)?(?:build\s+|version\s+|windows\s+(?:11\s+)?|os\s+|v)?(?:\d|2\dh|latest|newest|next|new|newer|insider)"
-R1_INSTALL_OBJECT = (r"\s+(?:the|a|an|any|this|that|my|our|its|kb\s?\d|\d{4}-\d{2}|next|new|latest|january|february|march|"
-                     r"april|may|june|july|august|september|october|november|december|[\w.-]+\s+(?:update|pack|app|driver|feature))\b")
 R1_PLATFORM_HOST = (r"(?:(?:my|our|a|the|this|his|her)\s+)?(?:(?:pc|laptop|machine|device|computer|system|desktop|notebook)s?\s+)?"
                     r"(?:running\s+|with\s+)?")
+# Something other than the build: another build, train or version, or any determiner-led object.
+R1_OTHER_VERSION = (r"(?:(?<!\d)\d{5}\.\d{3,5}|v?2\dh[12]\b|windows\s+1[01]\b|(?:the\s+)?(?:next|new|newer|latest|following|later)\s+"
+                    r"(?:[\w-]+\s+){0,2}?(?:build|version|release|update|upgrade)s?\b)")
+R1_OTHER_THING = (r"(?:(?:the|a|an|any|this|that|its|their|my|our|next|new|newer|latest|another|other|following|subsequent)\s|"
+                  r"kb\s?\d|(?:<OM>)\b|(?<!\d)\d{5}\.\d{3,5}|v?2\dh[12]\b|windows\s+1[01]\b|"
+                  r"[\w.-]+\s+(?:update|pack|app|driver|feature|package)s?\b)")
+R1_OTHER_UPDATE = (r"(?:\b(?:next|following|subsequent|later|newer|another|other|<OM>)\s+(?:[\w-]+\s+){0,2}?"
+                   r"(?:update|upgrade|patch|build|cu|release)s?\b|\bkb\s?\d{6,7}|(?<!\d)\d{5}\.\d{3,5}|\b2\dh[12]\b)")
+# The exception to a clean/successful-install veto: the same sentence goes on, after a contrast word,
+# to an issue that it does not hand to another update ("X installed without any issues, but since the
+# update Bluetooth is gone").
+R1_CONTRAST_ISSUE = (r"<B>[^.;!?\n]*?\b(?:but|however|though|although|yet|except\s+that)\b(?![^.;!?\n]*?" + R1_OTHER_UPDATE + r")"
+                     r"[^.;!?\n]*?\b(?:(?:since|after|following)\s+(?:the|that|this|it|then|a|my|updat|upgrad|install|reboot|restart)|"
+                     r"fail|broke|break|crash|stopp?|gone\b|missing|not\s+working|no\s+longer|bsod|blue\s*screen|freez|froze|hang|"
+                     r"won['’]?t|can['’]?t|cannot|disappear|lost\b|error)")
+# The exception to a "previous" veto: the build itself is then blamed ("The previous update, X, broke printing").
+R1_DIRECT_FAIL = (r"<B>\W{0,4}(?:(?:has|had|have|is|was|keeps|just|then|also|really|completely|totally)\s+){0,2}"
+                  r"(?:caus\w*|crash\w*|break\w*|broke\w*|brick\w*|introduc\w*|fail\w*|ruin\w*|mess\w*|kill\w*|stopp\w*)\b")
+# Between a removal and its result ("Uninstalling X fixed it"): no negation and no hedge.
+R1_NO_NEGATION = (r"(?:(?!\b(?:not|never|no|didn|doesn|don|wasn|hasn|haven|won|isn|can|could|may|might|should|would|will)\b)"
+                  r"[^.;!?\n]){0,40}?")
+# "the update from Patch Tuesday (X)", "the update from last week (build X)": an update noun, a few time
+# words, then the build in parentheses names the build as that update.
+R1_APPOS_GAP = (r"(?:\s+(?:from|of|on|in|released|dated|installed|last|this|past|week|month|night|morning|evening|patch|"
+                r"windows|update|yesterday|today|tonight|\w+day|" + "|".join(R1_MONTHS) + r"|\d{4}|\d{1,2}(?:st|nd|rd|th)?)){0,6}")
 
 
-def _r1(rx: str) -> re.Pattern:
-    return re.compile(rx.replace("<B>", R1_B), re.I)
+def _r1(rx: str) -> str:
+    return rx.replace("<B>", R1_B)
 
 
-# Each entry: (role, kind, pattern[, second pattern]). kind "pre": the pattern must END at the
-# occurrence (searched with \Z over the sentence up to the occurrence's end); "post": it must START at
-# the occurrence; "mid": both a pre and a post pattern hold for the same occurrence.
+# Each entry: (role, kind, pattern[, second pattern]); see KINDS above.
 R1_VETOES = (
-    ("source", "pre", _r1(r"\bfrom\b(?:(?!\bto\b)[^.;!?\n]){0,40}<B>\Z")),
+    ("source", "pre", _r1(r"\b(?:upgrad\w*|updat\w*|migrat\w*|mov(?:e|es|ed|ing)|went|go(?:es|ing|ne)?|com(?:e|es|ing)|came|"
+                          r"switch\w*|jump\w*|downgrad\w*)\s+(?:(?:my|our|the|this|it|its|all|every|pc|pcs|machines?|laptops?|"
+                          r"devices?|computers?|systems?|windows|win|11|back|over|directly|straight)\s+){0,3}from\s+"
+                          + R1_SRC_FILLER + r"<B>\Z")),
     ("source", "post", _r1(r"<B>\W{0,6}(?:to|->|→|=>)\s*" + R1_VERSIONISH)),
     ("source", "mid", _r1(r"\b(?:upgrad\w*|updat\w*|migrat\w*|mov\w*)\s+(?:(?!to\b|from\b)\w+\s+){0,4}<B>\Z"),
      _r1(r"<B>\b[^.;!?\n]{0,40}?\bto\s+" + R1_VERSIONISH)),
     ("baseline", "pre", _r1(r"\b(?:was|were|had\s+been|used\s+to\s+be)\s+(?:on|running|using|at)\b" + R1_FILLER + r"<B>\Z")),
-    ("baseline", "pre", _r1(r"\bprevious(?:ly)?\b(?:\s+(?:on|running|using|installed|had))?" + R1_FILLER + r"<B>\Z")),
-    ("baseline", "pre", _r1(r"\b(?:back|revert(?:ed|ing)?|downgrad\w*)\s+to\b" + R1_FILLER + r"<B>\Z")),
+    # Where the reporter was left: "still on X", "stuck on X", "I remain on X", "left me on X".
+    ("baseline", "pre", _r1(r"\b(?:still|stuck|remain(?:s|ed|ing)?|stay(?:s|ed|ing)?|left(?:\s+(?:me|us|it|them|(?:my|our|the)\s+\w+))?)"
+                            r"\s+(?:on|at|running|using|with)\b" + R1_FILLER + r"<B>\Z")),
+    ("baseline", "pre~", _r1(r"\bprevious(?:ly)?\b(?:\s+(?:on|running|using|installed|had))?" + R1_FILLER + r"<B>\Z"),
+     _r1(R1_DIRECT_FAIL)),
+    # A rollback, restore or downgrade TARGET: "back to X", "reverted itself to X", "returned me to X",
+    # "System Restore took me to X", "Windows restored X".
+    ("baseline", "pre", _r1(r"\b(?:(?:back|revert\w*|restor\w*|return\w*|downgrad\w*|roll(?:s|ed|ing)?\s+back)\b(?:\s+(?:me|us|it|"
+                            r"itself|myself|ourselves|them|my|our|the|this|that|system|pc|pcs|computer|machine|laptop|device|"
+                            r"windows|everything|all|back|point|took|brought|sent|put|returned))*?\s+to|restor(?:e|es|ed|ing)|"
+                            r"reinstat\w*)\b" + R1_FILLER + r"<B>\Z")),
     ("baseline", "pre", _r1(r"\b(?:old|older|prior|last\s+(?:good|working|known\s+good)|known\s+good|stable)\s+"
                             r"(?:build|version|os|update)\b" + R1_FILLER + r"<B>\Z")),
-    ("history", "pre", _r1(r"\bsuccessfully\s+installed\b" + R1_FILLER + r"<B>\Z")),
+    ("baseline", "pre", _r1(r"\b(?:compared|comparison|comparing|relative|similar|identical|equal|equivalent|versus|vs)\b"
+                            r"(?:\s+(?:to|with))?" + R1_FILLER + r"<B>\Z")),
+    ("baseline", "post", _r1(r"<B>\W{0,4}(?:is|was|remains|has\s+been|are|were)\s+(?:still\s+)?(?:the|our|my|a|an)\s+"
+                             r"(?:current|installed|running|existing|baseline|production|standard|stable|working|good|base|deployed)\s+"
+                             r"(?:build|version|os|release|image)")),
+    ("baseline", "post", _r1(r"<B>\W{0,4}(?:(?:then|now|and)\s+)?(?:the\s+|a\s+|an\s+)?(?:next|following|subsequent|later|newer|"
+                             r"another|<OM>)\s+(?:[\w-]+\s+){0,2}?(?:update|upgrade|patch|build|cu|release)s?\b")),
+    ("history", "pre~", _r1(r"\bsuccessfully\s+installed\b" + R1_FILLER + r"<B>\Z"), _r1(R1_CONTRAST_ISSUE)),
     ("history", "pre", _r1(r"\bupdate\s+history\b[^.;!?\n]{0,80}<B>\Z")),
-    ("history", "post", _r1(r"<B>\W{0,6}(?:[\w-]+\W+){0,2}?successfully\s+installed\b")),
+    ("history", "post~", _r1(r"<B>\W{0,6}(?:[\w-]+\W+){0,2}?successfully\s+installed\s+on\b"), _r1(R1_CONTRAST_ISSUE)),
     ("prospective", "mid", _r1(r"\b(?:will|would|should|could|might|may|does|did|hopefully|supposed\s+to|meant\s+to|"
                                r"expected\s+to|going\s+to)\b[^.;!?\n]{0,40}<B>\Z"),
      _r1(r"<B>[^.;!?\n]{0,40}?\b(?:fix|resolve|solve|correct|address)\w*")),
@@ -572,50 +641,76 @@ R1_VETOES = (
     # Something else is installed / applied ON the build: the build is the platform, not the patch.
     # (a) an install-type VERB, any object ("fails to install on X", "installing the Media Feature
     # Pack on X"); (b) update/upgrade/patch followed by a predicate or an object before "on" ("Windows
-    # Update fails on X"); (c) a qualified update noun naming ANOTHER update ("the next update on X",
-    # "the Defender update on X"). A bare "the update on X" is none of these: it names the build as
-    # the update (see the named links), exactly as "the update to X" does.
+    # Update fails on X"); (c) a qualified update noun naming ANOTHER update, another month's included
+    # ("the next update on X", "the March update on X" on a February record); (d) the build as the
+    # SUBJECT that fails to install, download, upgrade to or roll back something else ("X is stuck
+    # installing the March update", "X fails to install 26200.7922", "X fail to upgrade to 26H2"). A bare
+    # "the update on X" is none of these: it names the build as the update (see the named links), as
+    # "the update to X" does, and so does "the February update on X" on a February record.
     ("platform", "pre", _r1(r"\b(?:install(?:s|ed|ing)?|download\w*|apply\w*|applied|enabl\w*|deploy\w*)\b"
                             r"(?:(?!\b(?:put|got|moved|brought|landed|placed)\b)[^.;!?\n]){0,60}?\bon\s+" + R1_PLATFORM_HOST
                             + R1_FILLER + r"<B>\Z")),
     ("platform", "pre", _r1(r"\b(?:updat\w*|upgrad\w*|patch\w*)\s+(?!on\b)(?:(?!\b(?:put|got|moved|brought|landed|placed)\b)"
                             r"[^.;!?\n]){1,60}?\s+on\s+" + R1_PLATFORM_HOST + R1_FILLER + r"<B>\Z")),
     ("platform", "pre", _r1(r"\b(?:next|following|subsequent|newer|later|other|another|defender|definitions?|driver|firmware|"
-                            r"bios|app|apps|store|office|edge|teams|framework|kb\s?\d{6,7}|january|february|march|april|may|"
-                            r"june|july|august|september|october|november|december)\s+(?:[\w.-]+\s+){0,2}?"
+                            r"bios|app|apps|store|office|edge|teams|framework|kb\s?\d{6,7}|<OM>)\s+(?:[\w.-]+\s+){0,2}?"
                             r"(?:update|upgrade|patch)e?s?\s+on\s+" + R1_PLATFORM_HOST + R1_FILLER + r"<B>\Z")),
-    ("clean", "post", _r1(r"<B>(?:(?!fail|error|crash|broke|stuck|won['’]?t|can['’]?t|cannot)[^.;!?\n]){0,60}?"
-                          r"\bwithout\s+(?:any\s+)?(?:problems?|issues?|trouble|a\s+hitch|incident)")),
-    ("clean", "post", _r1(r"<B>\W{0,4}(?:no|zero)\s+(?:problems?|issues?)\b")),
+    ("platform", "post", _r1(r"<B>\W{0,4}(?:(?:is|was|are|were|has\s+been|have\s+been|gets?|got|just|always|now|still|then|also|"
+                             r"again)\s+){0,2}(?:stuck|frozen|freez\w*|froze|hang\w*|hung|fail\w*|loop\w*|stall\w*|crash\w*|"
+                             r"can['’]?t|cannot|won['’]?t|unable\s+to|refus\w*|keeps|kept|repeatedly|tr(?:y|ies|ying)\s+to|"
+                             r"attempt\w*\s+to|while|when)\b(?:(?!\b(?:since|after|following|once|because|and|but|then|so)\b)"
+                             r"[^.;!?\n]){0,30}?\b(?:(?:install\w*|download\w*|updat\w*|upgrad\w*|appl(?:y|ies|ied|ying))"
+                             r"(?:\s+to\s+" + R1_OTHER_VERSION + r"|\s+" + R1_OTHER_THING + r")|(?:rolling\s+back|"
+                             r"roll(?:s|ed)?\s+back|revert\w*)\s+" + R1_OTHER_THING + r")")),
+    # (e) the build as the label of the machines another update is applied to ("update X PCs with the
+    # March cumulative update").
+    ("platform", "post", _r1(r"<B>\s+(?:pcs?|machines?|devices?|computers?|systems?|laptops?|clients?|endpoints?|workstations?|"
+                             r"hosts?|servers?|vms?)\s+(?:with|via|using|to)\s+(?:(?:the|a|an)\s+)?(?:[\w-]+\s+){0,3}?"
+                             r"(?:update|upgrade|patch|kb\s?\d|v?2\dh[12]\b|(?<!\d)\d{5}\.\d)")),
+    # The build went in cleanly ("X installed without any issues", "Updated to X with no issues", "X caused
+    # no problems for me"), unless the same sentence then turns to an issue it does not give to another update.
+    ("clean", "post~", _r1(r"<B>(?:(?!fail|error|crash|broke|stuck|won['’]?t|can['’]?t|cannot|\bbut\b|however)[^.;!?\n]){0,60}?"
+                           r"\b(?:without|no|zero|not|never\s+(?:had|caused|gave)(?:\s+(?:me|us))?)\s+(?:(?:any|real|major|serious|"
+                           r"noticeable)\s+){0,2}(?:problems?|issues?|trouble|errors?|hiccups?|complaints?|a\s+hitch|incident)\b"),
+     _r1(R1_CONTRAST_ISSUE)),
 )
 R1_LINKS = (
     ("named", "pre", _r1(r"\b" + R1_CHANGE + r"\b" + R1_TO + R1_FILLER + r"<B>\Z")),
     # "Since the update on 25H2 build X": a BARE update noun directly on the build names it (a
-    # qualified one, "the next update on X", is the platform veto above and never reaches here).
+    # qualified one, "the next update on X", is the platform veto above and never reaches here); so
+    # does the record's own month ("the February update on X" on a February record).
     ("named", "pre", _r1(r"\b(?:the|this|that|latest|last|recent|new)\s+(?:(?:windows|cumulative|security|quality|latest|"
-                         r"recent|monthly)\s+){0,2}(?:update|upgrade|patch)\s+on\s+" + R1_FILLER + r"<B>\Z")),
+                         r"recent|monthly|<TM>|\d{4})\s+){0,3}(?:update|upgrade|patch)\s+on\s+" + R1_FILLER + r"<B>\Z")),
+    # "the update from last week (build X)": the parenthesis names the build as that update, and closes at it.
+    ("named", "mid", _r1(r"\b(?:update|upgrade|patch|lcu|cu)s?\b" + R1_APPOS_GAP + r"\s*\(\s*(?:os\s+)?(?:builds?\s+|version\s+)?"
+                         r"(?:(?<!\d)\d{5}\.\d{3,5}\s+(?:and|&|/|,)\s+)?<B>\Z"),
+     _r1(r"<B>(?:\s+(?:and|&|/|,)\s+(?<!\d)\d{5}\.\d{3,5})?\s*\)")),
     ("named", "post", _r1(r"<B>\W{0,4}(?:cumulative\s+|security\s+|preview\s+|quality\s+|feature\s+)?(?:update|upgrade|patch)\b"
                           r"(?!\s+(?:health|stack|assistant|service|orchestrator|agent|catalog|troubleshoot\w*|history|"
                           r"settings|medic|components?|client|page))")),
     ("named", "post", _r1(r"<B>\W{0,4}(?:was\s+|got\s+|has\s+been\s+|have\s+been\s+|just\s+|finally\s+|then\s+)?"
-                          r"(?:installed|downloaded|arrived|landed|rolled\s+out)\b(?!\s+on\b)")),
+                          r"(?:installed|downloaded|arrived|landed|rolled\s+out|came\s+(?:through|in|down))\b(?!\s+on\b)")),
     ("named", "post", _r1(r"<B>\W{0,4}which\s+(?:\w+\s+)?(?:arrived|came|was\s+installed|got\s+installed|installed|"
                           r"was\s+pushed|was\s+delivered|landed|was\s+applied|got\s+applied)\b")),
     ("destination", "pre", _r1(r"\b(?:to|onto|auf|naar|vers|zu)\b" + R1_FILLER + r"<B>\Z")),
-    ("attached", "post", _r1(r"<B>\W{0,4}(?:ever\s+)?(?:since|after|with|following|via|through)\s+" + R1_UPDATE_NP)),
+    ("attached", "post", _r1(r"<B>\W{0,4}(?:ever\s+)?(?:since|after|with|following|via|through)\s+" + R1_UPDATE_NP + R1_NP_FAILED)),
     ("attached", "post", _r1(r"<B>\W{0,4}(?:ever\s+)?(?:since|after)\s+(?:updating|upgrading|installing|the\s+install\w*)\b")),
     ("onset", "pre", _r1(r"\b(?:since|after|following)\s+(?:installing\s+|updating\s+to\s+|upgrading\s+to\s+|moving\s+to\s+|"
                          r"getting\s+|receiving\s+)?" + R1_FILLER + r"<B>\Z")),
-    # A failure predicated on the build. When the build is the SUBJECT installing something else
-    # ("X fails to install the Media Feature Pack", "X can't install the March update") it is the
-    # platform, so an install predicate followed by an object does not link.
-    ("direct", "post", _r1(r"<B>\W{0,4}(?:(?:has|is|keeps|seems\s+to|just|now|also|then|again|apparently|completely|"
-                           r"totally|really)\s+){0,2}(?:caus\w*|crash\w*|break\w*|broke\w*|brick\w*|introduc\w*|"
-                           r"fail\w*(?!\s+to\s+(?:install|update|apply|download)\w*" + R1_INSTALL_OBJECT + r")|"
-                           r"(?:won['’]?t|can['’]?t|cannot)\s+install\b(?!" + R1_INSTALL_OBJECT + r")|"
+    # A failure predicated on the build. When the build is the SUBJECT installing something else it is
+    # the platform veto (d) above, which runs first.
+    ("direct", "post", _r1(r"<B>\W{0,4}(?:(?:build|version|release)\s+)?(?:(?:has|is|keeps|seems\s+to|just|now|also|then|again|"
+                           r"still|apparently|completely|totally|really)\s+){0,2}(?:caus\w*|crash\w*|break\w*|broke\w*|brick\w*|"
+                           r"introduc\w*|fail\w*|(?:won['’]?t|can['’]?t|cannot)\s+install\b|"
                            r"broken|not\s+working|does\s*n[o'’]?t\s+work|won['’]?t\s+(?:boot|start|load|work|finish|complete)|"
                            r"can['’]?t\s+(?:boot|start)|cannot\s+(?:boot|start)|froze|freez\w*|hang\w*|"
-                           r"roll\w*\s*back|reverted|stuck|bsod\w*|blue\s*screen\w*|killed|ruined|messed)\b")),
+                           r"roll\w*\s*back|reverted|stuck|bsod\w*|blue\s*screen\w*|killed|ruined|messed|"
+                           r"(?:has|had|have|introduced|contains|brought)\s+(?:a|an|some|serious|major|known|nasty)\s+(?:\w+\s+)?"
+                           r"(?:bug|issue|problem|regression|defect))\b")),
+    # Removing the build fixed the issue: "Uninstalling X fixed my printer", "Rolling back X fixed it".
+    ("remedy", "mid", _r1(r"\b(?:uninstall\w*|remov\w*|roll(?:ed|ing)?\s+back|revert(?:ed|ing)?|back(?:ed|ing)?\s+out)\s+"
+                          + R1_FILLER + r"<B>\Z"),
+     _r1(r"<B>" + R1_NO_NEGATION + r"\b(?:fix\w*|resolv\w*|solv\w*|cur(?:e|ed|es)\b|brought\s+back)\b(?!\s+(?:nothing|none|neither)\b)")),
 )
 # A running statement, a spec label or the Settings "Installed on" field. Diagnostic label only:
 # environment is not a veto (an attached link still counts) and not a link.
@@ -624,6 +719,30 @@ R1_ENVIRONMENT_RE = re.compile(
     r"|\b(?:running|using)\s+(?:windows|win\s?1[01])\b|\bdevice\s+running\b|\binstalled\s+on\b"
     r"|\b(?:os|system|environment|platform|configuration|product|version|build|edition)\s*:"
 )
+_R1_COMPILED: dict[tuple[str, str], re.Pattern] = {}
+
+
+def _r1_month_key(target_release_date: str) -> str:
+    m = R1_MONTH_KEY_RE.match(str(target_release_date or ""))
+    return f"{m.group(1)}-{m.group(2)}" if m else ""
+
+
+def _r1_months(key: str) -> tuple[str, str]:
+    """(<TM>, <OM>): the record's own month (name, abbreviation, YYYY-MM) and every other month."""
+    if not key:
+        return r"(?!)", "(?:" + "|".join(R1_MONTHS + R1_MONTH_ABBR) + r"|\d{4}-\d{2})"
+    i = int(key[5:7]) - 1
+    own = f"(?:{R1_MONTHS[i]}|{R1_MONTH_ABBR[i]}|{key})"
+    others = [n for j, n in enumerate(R1_MONTHS + R1_MONTH_ABBR) if j % 12 != i]
+    return own, "(?:" + "|".join(others) + rf"|(?!{key}\b)\d{{4}}-\d{{2}})"
+
+
+def _r1_rx(rx: str, key: str) -> re.Pattern:
+    hit = _R1_COMPILED.get((rx, key))
+    if hit is None:
+        own, other = _r1_months(key)
+        hit = _R1_COMPILED[(rx, key)] = re.compile(rx.replace("<TM>", own).replace("<OM>", other), re.I)
+    return hit
 
 
 def _r1_sentences(text: str) -> list[str]:
@@ -633,23 +752,27 @@ def _r1_sentences(text: str) -> list[str]:
     return [part.translate(R1_UNMASK) for part in R1_SENTENCE_SPLIT_RE.split(masked) if part.strip()]
 
 
-def _r1_holds(kind: str, patterns: tuple, sentence: str, start: int, end: int) -> bool:
-    if kind == "pre":
-        return patterns[0].search(sentence[:end]) is not None
-    if kind == "post":
-        return patterns[0].match(sentence, start) is not None
-    return patterns[0].search(sentence[:end]) is not None and patterns[1].match(sentence, start) is not None
+def _r1_holds(kind: str, patterns: tuple, sentence: str, start: int, end: int, key: str) -> bool:
+    first = _r1_rx(patterns[0], key)
+    if kind in ("pre", "pre~", "mid"):
+        held = first.search(sentence[:end]) is not None
+    else:
+        held = first.match(sentence, start) is not None
+    if not held or kind in ("pre", "post"):
+        return held
+    second = _r1_rx(patterns[1], key).match(sentence, start) is not None
+    return second if kind == "mid" else not second
 
 
-def _r1_occurrence_role(sentence: str, start: int, end: int) -> tuple[str, str]:
+def _r1_occurrence_role(sentence: str, start: int, end: int, key: str = "") -> tuple[str, str]:
     """(role, rule) for the build occurrence sentence[start:end]: a veto, else affected, else a label."""
     for role, kind, *patterns in R1_VETOES:
-        if _r1_holds(kind, patterns, sentence, start, end):
-            return role, f"{role}:{kind}"
+        if _r1_holds(kind, patterns, sentence, start, end, key):
+            return role, f"{role}:{kind.rstrip('~')}"
     for link, kind, *patterns in R1_LINKS:
         if link == "destination" and not R1_CHANGE_WORD_RE.search(sentence[:start]):
             continue
-        if _r1_holds(kind, patterns, sentence, start, end):
+        if _r1_holds(kind, patterns, sentence, start, end, key):
             return "affected", f"{link}:{kind}"
     spans = [m.span() for m in BUILD_TOKEN_RE.finditer(sentence)]
     left = max([e for _s, e in spans if e <= start], default=0)
@@ -660,32 +783,43 @@ def _r1_occurrence_role(sentence: str, start: int, end: int) -> tuple[str, str]:
     return "unlinked", ""
 
 
-def identity_link_details(report_text: str, report_title: str, build: str) -> list[tuple[str, str, str]]:
-    """(role, rule, sentence) for every occurrence of `build` in the body."""
-    # The title is the post's subject and names no build here. Only the LEADING copies are removed
-    # (row_from_candidate prepends parent_title + report_title, and a Learn/Tech Community body starts
-    # with its title again); a mid-body substring is kept.
+def _r1_strip_title(report_text: str, report_title: str) -> str:
+    """The body without the leading title copies the collectors add (at most R1_TITLE_COPIES, whole words only)."""
     body = (report_text or "").lstrip()
     title = (report_title or "").strip()
-    while title and body.startswith(title):
-        body = body[len(title):].lstrip()
+    for _copy in range(R1_TITLE_COPIES):
+        if not title or not body.startswith(title):
+            break
+        rest = body[len(title):]
+        if title[-1].isalnum() and rest[:1].isalnum():
+            break  # "Printer" is not a copy of the title inside "Printers ..."
+        body = rest.lstrip()
+    return body
+
+
+def identity_link_details(report_text: str, report_title: str, build: str,
+                          target_release_date: str = "") -> list[tuple[str, str, str]]:
+    """(role, rule, sentence) for every occurrence of `build` in the body."""
+    key = _r1_month_key(target_release_date)
     out = []
-    for sentence in _r1_sentences(body):
+    for sentence in _r1_sentences(_r1_strip_title(report_text, report_title)):
         for m in BUILD_TOKEN_RE.finditer(sentence):
             if m.group(0) == build:
-                role, rule = _r1_occurrence_role(sentence, m.start(), m.end())
+                role, rule = _r1_occurrence_role(sentence, m.start(), m.end(), key)
                 out.append((role, rule, sentence))
     return out
 
 
 def identity_link_roles(report_text: str, report_title: str, build: str,
-                        target_kb: str = "") -> list[tuple[str, str]]:
+                        target_kb: str = "", target_release_date: str = "") -> list[tuple[str, str]]:
     """(role, sentence) for every occurrence of `build` in the body. Diagnostics and tests read this."""
-    return [(role, sentence) for role, _rule, sentence in identity_link_details(report_text, report_title, build)]
+    return [(role, sentence) for role, _rule, sentence
+            in identity_link_details(report_text, report_title, build, target_release_date)]
 
 
 def identity_not_linked_to_issue(report_text: str, report_title: str, matched_kb: str,
-                                 matched_os_build: str, target_kb: str = "") -> bool:
+                                 matched_os_build: str, target_kb: str = "",
+                                 target_release_date: str = "") -> bool:
     """R1: a build-only identity, title silent on it, none of whose occurrences is linked as affected."""
     build = str(matched_os_build or "").strip()
     if not build or matched_kb:
@@ -693,7 +827,7 @@ def identity_not_linked_to_issue(report_text: str, report_title: str, matched_kb
     title = report_title or ""
     if _has_exact(title, build) or (target_kb and _has_exact(title, target_kb)):
         return False
-    roles = identity_link_roles(report_text, title, build, target_kb)
+    roles = identity_link_roles(report_text, title, build, target_kb, target_release_date)
     if not roles:
         return False
     return not any(role == "affected" for role, _w in roles)
@@ -931,7 +1065,7 @@ def windows_learn_qna_reason(
     # and only a row that would otherwise COUNT changes. A build-only identity whose title is silent
     # on it counts only when the body links the build itself to the issue.
     if identity_not_linked_to_issue(report_text, report_title, matched_kb, matched_os_build,
-                                    str(target.get("target_kb") or "")):
+                                    str(target.get("target_kb") or ""), str(target.get("target_release_date") or "")):
         return "identity_not_linked_to_issue"
     return None
 

@@ -79,7 +79,8 @@ def decide(target: dict[str, Any], url: str, date: str, parent: str, title: str,
     target_kb = str(target.get("target_kb") or "")
     in_scope = bool(build and not kb and not mw._has_exact(title, build)
                     and not (target_kb and mw._has_exact(title, target_kb)))
-    details = mw.identity_link_details(text, title, build) if in_scope else []
+    details = (mw.identity_link_details(text, title, build, str(target.get("target_release_date") or ""))
+               if in_scope else [])
     return {"reason": reason, "reason_without_link_rule": without, "in_scope": in_scope,
             "roles": [[role, rule] for role, rule, _sentence in details]}
 
