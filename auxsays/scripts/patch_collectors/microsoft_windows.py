@@ -1562,12 +1562,17 @@ def _hydrated_candidate(url: str, rss_candidate: dict[str, Any], final_url: str,
     thread's last activity (lib/post_dates); feeding it to the date gate would let a reply carry an
     old thread into a later patch. An undated page is refused, not re-judged.
 
-    The parser does not enforce identity, so this does: a page whose final URL or JSON-LD question id
-    is another question is refused, as is a page with no QAPage block, a mainEntity that is not a
-    Question, or a machine-generated question segment."""
+    The parser does not enforce identity, so this does. A page answered from anywhere but Learn over
+    https is refused (`off_host`): the question-id pattern ignores the host, so a matching path on
+    another host would otherwise be read as the question this run discovered. A page whose final URL
+    or JSON-LD question id is another question is refused, as is a page with no QAPage block, a
+    mainEntity that is not a Question, or a machine-generated question segment."""
     from lib import source_segments as seg  # noqa: PLC0415 - default-off path only
     from lib.post_dates import original_post_date_from_html  # noqa: PLC0415
+    from . import microsoft_qna_tags_source as qna_tags  # noqa: PLC0415
 
+    if qna_tags.url_origin(url) != qna_tags.LEARN_ORIGIN or qna_tags.url_origin(final_url) != qna_tags.LEARN_ORIGIN:
+        return None, "off_host"
     wanted = seg.learn_qna_question_id(url)
     if not wanted or seg.learn_qna_question_id(final_url) != wanted:
         return None, "redirect"
@@ -1606,23 +1611,67 @@ def _post_date_source(page_html: str) -> str:
     return "jsonld_date_created" if re.search(r'"dateCreated"\s*:', page_html or "") else "earliest_datetime_attribute"
 
 
+# R1 context windows (dry run only). The build-role primitive credits a cue to a build only inside
+# that mention's neighbourhood: its clause, cut at the neighbouring build tokens. Its longest cue
+# reaches about 105 characters from the build ("another workstation", up to 80 characters, then the
+# build). A window is ONE mention's neighbourhood, capped at this reach on each side, so the windows
+# hold every cue the primitive could credit, each exactly once.
+R1_CONTEXT_REACH = 120
+# The primitive's own clause breaks (lib/build_claims `_CLAUSE_SPLIT_RE`) without its token masking: a
+# "." followed by a digit can sit inside a build or version token there, so it never breaks a clause
+# here. A window can be wider than the primitive's clause, never narrower; the primitive re-splits it.
+_R1_CLAUSE_BREAK_RE = re.compile(
+    r"[;!?\n,]|\.(?!\d)|\b(?:whilst|while|whereas|however|but|although|though)\b", re.I)
+
+
+def _r1_build_contexts(post: str, build: str) -> list[str]:
+    """One window per mention of `build` (a bare token: not inside a longer number or dotted version),
+    in order, duplicates dropped. A window stops at a clause break, at the neighbouring mention of the
+    same build, or at the reach cap; a word the cap splits is dropped, because a fragment ("version"
+    cut to "ion") can read as a cue the post does not contain."""
+    if not build:
+        return []
+    mentions = list(re.finditer(rf"(?<![\d.]){re.escape(build)}(?!\.?\d)", post))
+    breaks = list(_R1_CLAUSE_BREAK_RE.finditer(post))
+    contexts: list[str] = []
+    for index, mention in enumerate(mentions):
+        start, end = mention.start(), mention.end()
+        left_cap, right_cap = start - R1_CONTEXT_REACH, end + R1_CONTEXT_REACH
+        left_stop = max([0] + [d.end() for d in breaks if d.end() <= start]
+                        + ([mentions[index - 1].end()] if index else []))
+        right_stop = min([len(post)] + [d.start() for d in breaks if d.start() >= end]
+                         + ([mentions[index + 1].start()] if index + 1 < len(mentions) else []))
+        left, right = max(left_cap, left_stop), min(right_cap, right_stop)
+        if left == left_cap > left_stop and not post[left - 1].isspace():
+            space = post.find(" ", left, start)
+            left = space + 1 if space >= 0 else start
+        if right == right_cap < right_stop and not post[right].isspace():
+            space = post.rfind(" ", end, right)
+            right = space if space >= 0 else end
+        window = post[left:right].strip()
+        if window and window not in contexts:
+            contexts.append(window)
+    return contexts
+
+
 def _r1_flags(candidate: dict[str, Any], target: dict[str, Any]) -> dict[str, Any]:
     """AUX-067 R1 diagnostics for a would-be row (dry run only; computed AFTER acceptance and never
-    able to change it): the text around the matched build, the competing identities the opening post
-    names, and whether it states an open-ended affected range.
+    able to change it): the text around EVERY mention of the matched build, the competing identities
+    the opening post names, and whether it states an open-ended affected range.
 
     The matched build's author-stated ROLE is deliberately NOT computed here. `lib.build_claims` is
     PowerPoint's build-role primitive, and a governed check (test_powerpoint_build_roles.py, section
     M) keeps every other collector from consuming it, so no product acquires build semantics as a side
-    effect. Instead the block carries the same ~150-character window that primitive's
-    `BuildClaim.excerpt` would hold, and the activation analysis applies `extract_build_claims` to it
-    offline, outside the collector."""
+    effect. Instead the block carries one clause window per mention (`_r1_build_contexts`), and the
+    activation analysis runs `extract_build_claims` offline over those windows joined by newlines, so
+    the primitive's own precedence and contradiction rule combines the mentions exactly as it does
+    over the whole post. Every mention, not the first: a rollback cue beside a later mention is the
+    R1 stop signal, and a first-mention window alone read it as unlabelled."""
     post = str(candidate.get("report_text") or "")
     build = str(target.get("target_os_build") or "").strip()
     revision = build.split(".")[-1] if "." in build else ""
-    at = post.find(build) if build else -1
     return {
-        "matched_build_context": " ".join(post[max(0, at - 75):at + len(build) + 75].split()) if at >= 0 else "",
+        "matched_build_contexts": _r1_build_contexts(post, build),
         "competing_kbs": sorted(_other_kbs(post, str(target.get("target_kb") or ""))),
         # A same-revision build on a sibling train is the SAME cumulative update, not a competitor.
         "competing_builds": sorted(b for b in _other_builds(post, build) if b.split(".")[-1] != revision),

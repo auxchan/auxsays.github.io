@@ -16,20 +16,25 @@ writes the live `_data`, a live record, or the network; no count of the live cor
     B  scope and dedup       only the two excerpt-explainable reasons; never live, outside the window,
                              claimed, stored in any state, or Tech Community; a shared URL fetched once
     C  segment and date      opening post only (never an answer or a comment), the RSS title kept, the
-                             page's own date with no fallback, identity of the page enforced
+                             page's own date with no fallback, identity of the page enforced (its id
+                             AND its origin: a page answered from another host is refused)
     D  attribution           newest-first sibling wins, the other gets cross_patch_duplicate; discovery
-                             URL kept; same family; one URL one row
-    E  isolation (E2)        seven failure kinds leave status, counters and Tech Community identical to
-                             flag-off apart from notes; accepted+failed is success; 840-case property
+                             URL kept; same family; one URL one row; an off-host page refused end to end
+    E  isolation (E2)        eight failure kinds, each surfacing as ITS OWN reason, leave status, counters
+                             and Tech Community identical to flag-off apart from notes, and never abort
+                             the pass; accepted+failed is success; 840-case property
     F  live fixtures         7462 / 7623 / 7840 still certify through the shipped evaluate
     G  budgets               45/run, 30/identity, pace, 429 circuit, 5-failure circuit, headroom and
-                             deadline skips, the D3 reserve end to end
+                             deadline skips, the D3 reserve end to end, the runtime METHOD deadline and
+                             the pass's own 180 s clock, the budget-capped connect timeout, redirects
+                             only within the requested origin (never urllib's default urlopen)
     H  write path            ownership, ALLOWED_* unchanged, append-only, finalize counters validate,
                              vocabulary that reconciliation and the Windows writer both count
     I  seam                  rss_out never passed while off; the RSS lane's own lists; the SAME errors
                              object; the RSS row found by method_id
-    J  R1 flags              dry run only; the build's context (its role is read offline: the collector
-                             may not import lib.build_claims); sibling-revision filter; write emits none
+    J  R1 flags              dry run only; one window per MENTION of the build (its role is read offline
+                             over the windows and equals the role over the whole post: the collector may
+                             not import lib.build_claims); sibling-revision filter; write emits none
     K  registry              the two Windows failure_modes clauses
     T  telemetry (D2)        structured block, run event, notes say optional/separately budgeted and
                              never claim complete inspection, run warning, an aborted pass changes nothing
@@ -42,6 +47,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -282,11 +288,62 @@ def bulk_rss(counts: dict[str, int]) -> dict:
     return terms
 
 
+def later_mention_post(build: str) -> str:
+    """The build is named twice; only the SECOND mention carries the author's rollback cue."""
+    return (f"After the update the printer stopped working. Windows 11 25H2 OS build {build}. Nothing prints "
+            "at all, the spooler keeps stopping and restarting, and reinstalling the driver from the vendor "
+            "site did not help either, nor did removing and re-adding the printer. Update: rolled back to "
+            f"{build} and printing works again.")
+
+
+def whole_post_role(text: str, build: str) -> tuple[str | None, str | None]:
+    """SPEC L1 section 10: the matched build's BuildClaim over the whole opening post."""
+    from lib.build_claims import extract_build_claims  # noqa: PLC0415 - analysis side only
+    claim = next((c for c in extract_build_claims(text) if c.build == build), None)
+    return (claim.role, claim.match_basis) if claim else (None, None)
+
+
+def offline_role(contexts: list[str], build: str) -> tuple[str | None, str | None]:
+    """The R1 analysis: the shipped primitive over the dry-run windows joined by newlines (a clause break),
+    so ITS precedence and contradiction rule combines the mentions. Offline only: the Windows collector may
+    not import lib.build_claims (test_powerpoint_build_roles M)."""
+    return whole_post_role(NEWLINE.join(contexts), build)
+
+
+def s1(role: str | None, basis: str | None) -> bool:
+    return role in ("rollback_previous", "reference_other") or (
+        role == "ambiguous" and basis == "contradictory_role_claims")
+
+
+def r1_corpus(b: str) -> list[tuple[str, bool]]:
+    """(opening post, whether its only cue sits more than 75 characters from the build)."""
+    return [
+        (f"After installing KB5130001 the printer broke, so I rolled back to {b} and it works again.", False),
+        (later_mention_post(b), False),
+        ("Printing broke after the update. On the other workstation that sits in the office downstairs next "
+         f"to the old laser printer we still run {b} and it prints.", True),
+        (f"{b} is installed and printing stopped after that and the same thing happens on a "
+         "different laptop at home.", True),
+        (f"I am on build {b} and Explorer crashes when I open a folder. Yesterday I rolled back to {b} but it "
+         "came back.", False),
+        (f"Printing stopped after the update. My build is {b}. Nothing helps.", False),
+        (f"Winver shows 10.0.{b} here. Printing stopped after the update and I went back to {b} later.", False),
+        (f"After the update to {b}, printing fails. Reinstalling the driver, e.g. the vendor one, did not "
+         f"help. I am on {b} still.", False),
+        # Two mentions in ONE clause: each window must hold its own mention only.
+        (f"Went from {b} to {b} and back again.", False),
+        # A clause longer than the reach on both sides, cut by the cap INSIDE a word on each side.
+        ("The printer in the office downstairs next to the old laser printers stopped printing every single "
+         f"sheet right after the update on build {b} and the spooler service keeps restarting itself every "
+         "few minutes for the whole team in the main building downstairs and upstairs.", False),
+    ]
+
+
 # =====================================================================================================
 # the sandbox
 # =====================================================================================================
 DRIVER = r'''
-import contextlib, io, json, os, socket, sys, urllib.error, urllib.request
+import contextlib, http.client, io, json, os, socket, sys, time, urllib.error, urllib.request
 from datetime import datetime
 from pathlib import Path
 
@@ -336,6 +393,8 @@ class FakeResp:
         return self.final
 
     def read1(self, n=-1):
+        if self.behaviour.get("incomplete"):
+            raise http.client.IncompleteRead(b"partial", 100)
         n = len(self.body) - self.pos if n is None or n < 0 else n
         chunk = self.body[self.pos:self.pos + n]
         self.pos += len(chunk)
@@ -351,6 +410,7 @@ class FakeResp:
 def fake_urlopen(request, timeout=None):
     target = getattr(request, "full_url", request)
     STATE["urlopen"].append(target)
+    STATE["timeouts"].append(timeout)
     CLOCK["t"] += STATE["advance"]
     b = STATE["pages"].get(target) or STATE["default"] or {"http": 404}
     if "http" in b:
@@ -365,7 +425,20 @@ def fake_urlopen(request, timeout=None):
     return FakeResp(b.get("final_url") or target, html.encode("utf-8"), b)
 
 
-urllib.request.urlopen = fake_urlopen
+class FakeOpener:
+    def open(self, request, timeout=None):
+        return fake_urlopen(request, timeout)
+
+
+def default_urlopen_tripwire(*a, **k):
+    # fetch_bounded must go through its same-origin opener; urllib's default urlopen follows a
+    # redirect to any host, so a call here is recorded and refused.
+    STATE["default_urlopen"] += 1
+    raise OSError("urllib.request.urlopen used instead of the same-origin opener")
+
+
+urllib.request.urlopen = default_urlopen_tripwire
+qna_tags._bounded_opener = lambda: FakeOpener()
 _real_bounded_read = rb.bounded_read
 
 
@@ -432,7 +505,8 @@ def evaluate_keys(results, names):
 
 
 def one_run(run):
-    STATE.update(urlopen=[], pace=0, pages=run.get("pages") or spec.get("pages") or {},
+    STATE.update(urlopen=[], timeouts=[], default_urlopen=0, pace=0,
+                 pages=run.get("pages") or spec.get("pages") or {},
                  default=run.get("default_page"), advance=float(run.get("advance_per_get") or 0),
                  rss_errors=run.get("rss_errors") or {}, rss=run.get("rss") or spec["rss"])
     SOCKETS["n"] = 0
@@ -445,11 +519,25 @@ def one_run(run):
     if run.get("budget") is not None:
         b = run["budget"]
         cfg = rb.BudgetConfig(collector_deadline=float(b) + 30.0, collector_finalize_reserve=30.0,
-                              run_collection_deadline=100000.0, method_deadline=180.0,
+                              run_collection_deadline=100000.0,
+                              method_deadline=float(run.get("method_deadline") or 180.0),
+                              per_request_total=float(run.get("per_request_total") or 30.0),
                               max_requests_per_method=60)
         budget = rb.RuntimeBudget(cfg, clock=lambda: CLOCK["t"])
         budget.start_collector(mw.PRODUCT_ID)
     rb.set_run_budget(budget)
+    real_time = mw.time
+    if run.get("pass_clock_is_fixture_clock"):
+        # The pass's OWN 180 s clock reads time.monotonic; here it reads the fixture clock instead, which
+        # only a GET advances, so the clock can be driven past 180 s with no runtime budget at all.
+        class FixtureTime:
+            def __getattr__(self, name):
+                return getattr(real_time, name)
+
+            @staticmethod
+            def monotonic():
+                return CLOCK["t"]
+        mw.time = FixtureTime()
     events = []
     real_emit = rb.emit
 
@@ -511,11 +599,13 @@ def one_run(run):
     finally:
         rb.emit = real_emit
         rb.set_run_budget(None)
+        mw.time = real_time
         mw.collect_for_record, mw.health_for_method = REAL["cfr"], REAL["hfm"]
         mw._underfill_pass, mw.claims_and_stored_urls = REAL["pass"], REAL["cas"]
         le.evaluate = REAL["evaluate"]
     out = {"name": run["name"], "results": results, "error": error, "sockets": SOCKETS["n"],
-           "urlopen": list(STATE["urlopen"]), "pace": STATE["pace"], "events": events,
+           "urlopen": list(STATE["urlopen"]), "timeouts": list(STATE["timeouts"]),
+           "default_urlopen": STATE["default_urlopen"], "pace": STATE["pace"], "events": events,
            "stdout": stdout.getvalue(), "probe": probe}
     if run.get("evaluate"):
         out["evaluate"] = evaluate_keys(results, set(run["evaluate"]))
@@ -688,6 +778,18 @@ def section_pure() -> None:
           and accepting_post("U9457") in cand["report_text"] and cand["source_type"] == mw.SOURCE_TYPE)
     check("C12 the date is the page's own, never the RSS last-activity date",
           cand["source_date"] == day(u[3], 3)[:10] and cand["source_date"] != "2026-11-01")
+    good = page_html(8_009_001, "t", accepting_post("U9457"), date=day(u[3], 3))
+    path = "/en-us/answers/questions/8009001/fixture"
+    off = {final: judge(good, final=final)[1] for final in (
+        f"https://evil.example.net{path}", f"http://learn.microsoft.com{path}",
+        f"https://learn.microsoft.com:8443{path}", f"https://learn.microsoft.com@evil.example.net{path}",
+        f"https://learn.microsoft.com.evil.example.net{path}")}
+    _, r_disc = mw._hydrated_candidate(f"https://evil.example.net{path}", rss_cand,
+                                       f"https://learn.microsoft.com{path}", good)
+    _, r_same = judge(good, final=f"https://LEARN.microsoft.com{path}")
+    check("C13 the SAME question id answered from another host, port, userinfo or scheme is refused "
+          "(off_host), as is a discovery URL off Learn; the Learn origin itself is not",
+          set(off.values()) == {"off_host"} and r_disc == "off_host" and r_same == "", f"{off} {r_disc} {r_same!r}")
 
     print(NEWLINE + "[E9/G3] the status property and the pace")
     from lib import monitoring_health as mh_mod  # noqa: PLC0415
@@ -728,7 +830,29 @@ def section_pure() -> None:
     body = src.split("def fetch_bounded(")[1].split("\ndef ")[0]
     check("G3 every bounded GET is paced by the module's own 0.35 s interval (fetch_bounded calls _pace)",
           qna_tags._MIN_REQUEST_INTERVAL == 0.35 and len(stamps) == 1 and abs(stamps[0] - 0.25) < 1e-9
-          and body.count("_pace()") == 1 and body.index("_pace()") < body.index("urlopen("), str(stamps))
+          and body.count("_pace()") == 1 and body.index("_pace()") < body.index(".open("), str(stamps))
+
+    print(NEWLINE + "[G12] a redirect is followed only within the requested origin")
+    import urllib.request as ur  # noqa: PLC0415
+    handler = qna_tags._SameOriginRedirect()
+    asked = f"{Q}/8009001/fixture"
+    refused: dict[str, str] = {}
+    for hop in ("https://evil.example.net/en-us/answers/questions/8009001/fixture",
+                "http://learn.microsoft.com/en-us/answers/questions/8009001/fixture",
+                "https://learn.microsoft.com:8443/en-us/answers/questions/8009001/fixture",
+                "https://learn.microsoft.com@evil.example.net/en-us/answers/questions/8009001/fixture"):
+        try:
+            handler.redirect_request(ur.Request(asked), None, 302, "Found", {}, hop)
+            refused[hop] = "followed"
+        except qna_tags.QnaTagError as exc:
+            refused[hop] = f"{exc.reason}:{exc.status}"
+    renamed = handler.redirect_request(ur.Request(asked), None, 301, "Moved", {}, f"{Q}/8009001/renamed")
+    redirectors = [h for h in qna_tags._bounded_opener().handlers if isinstance(h, ur.HTTPRedirectHandler)]
+    check("G12 fetch_bounded's opener refuses a cross-origin redirect BEFORE requesting it "
+          "(redirect_off_host, with the 30x status) and still follows a same-origin slug rename",
+          set(refused.values()) == {"redirect_off_host:302"} and renamed is not None
+          and renamed.full_url == f"{Q}/8009001/renamed" and len(redirectors) == 1
+          and isinstance(redirectors[0], qna_tags._SameOriginRedirect), f"{refused} {redirectors}")
 
 
 def section_workflow() -> None:
@@ -828,7 +952,18 @@ def run() -> int:  # noqa: PLR0915
         fail_kinds = {"http_503": {"http": 503}, "http_429": {"http": 429}, "urlerror": {"urlerror": 1},
                       "timeout": {"timeout": 1}, "deadline": {"deadline": 1, "html": "x"},
                       "budget": {"budget": 1, "html": "x"},
+                      "incomplete": {"incomplete": 1, "html": "x"},
                       "parse": {"generic": 1, "broken": 1}}
+        # Each kind must surface as ITS OWN reason. A predicate that also counted refusals let a body read
+        # WITHOUT the bounded read pass as a deadline: the fixture body "x" is simply refused (no_qapage).
+        own_reason = {"http_503": ("failure_reasons", "http_503_error"),
+                      "http_429": ("failure_reasons", "rate_limited"),
+                      "urlerror": ("failure_reasons", "network_unreachable"),
+                      "timeout": ("failure_reasons", "network_TimeoutError"),
+                      "deadline": ("failure_reasons", "budget_request_deadline"),
+                      "budget": ("failure_reasons", "budget_network"),
+                      "incomplete": ("failure_reasons", "error_IncompleteRead"),
+                      "parse": ("refused_reasons", "parse_error_")}
         runs = [{"name": "off", "flag": None, "evaluate": ["|".join(key(n)) for n in every]}]
         runs += [{"name": f"off_{i}", "flag": v} for i, v in enumerate(disabled)]
         runs += [{"name": "on", "flag": "true", "evaluate": ["|".join(key(n)) for n in every]}]
@@ -853,6 +988,18 @@ def run() -> int:  # noqa: PLR0915
              "default_page": {"generic": 1}},
             {"name": "bulk_all", "flag": "true", "rss": bulk_rss({"U9457": 40, "N9711": 20, "C9818": 10}),
              "pages": {"__none__": {}}, "default_page": {"generic": 1}},
+            # The runtime budget's METHOD deadline (50 s) is far shorter than the finalize headroom
+            # (~1000 s), and the connect timeout is capped by a 12 s per-request total.
+            {"name": "method_budget", "flag": "true", "budget": 1000, "method_deadline": 50,
+             "per_request_total": 12, "advance_per_get": 20, "rss": bulk_rss({"U9457": 40}),
+             "pages": {"__none__": {}}, "default_page": {"generic": 1}},
+            # No runtime budget at all: only the pass's own 180 s clock bounds it.
+            {"name": "own_clock", "flag": "true", "pass_clock_is_fixture_clock": True, "advance_per_get": 70,
+             "rss": bulk_rss({"U9457": 40}), "pages": {"__none__": {}}, "default_page": {"generic": 1}},
+            # Question 8001001's page is answered from ANOTHER HOST on the same /answers/questions/<id>/ path.
+            {"name": "offhost", "flag": "true", "pages": {
+                **discovery()[2], url(8_001_001): {**discovery()[2][url(8_001_001)],
+                                                   "final_url": "https://evil.example.net/en-us/answers/questions/8001001/x"}}},
         ]
         # The parse failure: a page whose QAPage carries a non-list answer bucket makes the parser raise.
         out = drive(sandbox, runs, generic_page=GENERIC_PAGE)
@@ -870,6 +1017,8 @@ def run() -> int:  # noqa: PLR0915
             8_001_001, ELIGIBLE_TITLE,
             f"After installing KB5130001 the printer broke, so I rolled back to {u[1]} and it works again. "
             f"My other PC on 26100.9457 and the one on 26200.9278 are fine.", date=day(u[3], 3))}
+        r1_pages[url(8_001_002)] = {"html": page_html(8_001_002, ELIGIBLE_TITLE, later_mention_post(u[1]),
+                                                      date=day(u[3], 3))}
         r1 = drive(rsandbox, [{"name": "r1_dry", "flag": "true", "pages": r1_pages},
                               {"name": "r1_write", "flag": "true", "pages": r1_pages, "write": True}])
 
@@ -942,6 +1091,13 @@ def run() -> int:  # noqa: PLR0915
         urls_all = [r["source_url"] for r in stored if r.get("counted") is not False]
         check("D4 one URL, one counted row: the shared report exists exactly once in the store",
               urls_all.count(url(8_002_001)) == 1 and len(added) == len({r["source_url"] for r in added}))
+        oh = (by_build(out["offhost"])[IDS["U9457"][1]].get("underfill_hydration") or {})
+        check("D5 a page answered from ANOTHER HOST for a discovered question id is refused end to end "
+              "(off_host): never accepted, the patch keeps the rest",
+              oh.get("refused_reasons", {}).get("off_host") == 1 and url(8_001_001) not in oh.get("accepted_urls", [])
+              and url(8_001_001) in blocks[IDS["U9457"][1]].get("accepted_urls", [])
+              and oh.get("accepted") == blocks[IDS["U9457"][1]].get("accepted", 0) - 1 and out["offhost"]["error"] is None,
+              str({k: oh.get(k) for k in ("refused_reasons", "accepted", "accepted_urls")}))
 
         # ---------------------------------------------------------------- E. isolation
         print(NEWLINE + "[E] isolation: an enrichment failure never touches the method's health")
@@ -950,14 +1106,24 @@ def run() -> int:  # noqa: PLR0915
         for kind in fail_kinds:
             res = out[f"fail_{kind}"]
             got = by_build(res)
-            failures = sum(int((r.get("underfill_hydration") or {}).get("failures") or 0)
-                           + int((r.get("underfill_hydration") or {}).get("refused") or 0)
-                           for r in res["results"])
-            check(f"E {kind}: status, counters and Tech Community rows are identical to flag-off; "
-                  "only the RSS notes differ",
-                  dumps(strip_underfill(res["results"], queued)) == off_stripped and failures >= 1
+            field, want = own_reason[kind]
+            other_field = "refused_reasons" if field == "failure_reasons" else "failure_reasons"
+            seen: dict[str, int] = {}
+            other: dict[str, int] = {}
+            for r in res["results"]:
+                blk = r.get("underfill_hydration") or {}
+                for reason, n in (blk.get(field) or {}).items():
+                    seen[reason] = seen.get(reason, 0) + int(n)
+                for reason, n in (blk.get(other_field) or {}).items():
+                    other[reason] = other.get(reason, 0) + int(n)
+            own = (set(seen) == {want}) if field == "failure_reasons" else (
+                bool(seen) and all(k.startswith(want) for k in seen))
+            ran = [e.get("outcome") for e in res["events"] if e["event"] == "windows_underfill"] == ["ran"]
+            check(f"E {kind}: every fetched page carries ITS OWN reason and the pass is not aborted; status, "
+                  "counters and Tech Community rows are identical to flag-off; only the RSS notes differ",
+                  dumps(strip_underfill(res["results"], queued)) == off_stripped and own and not other and ran
                   and all(health_of(got[b])["status"] == health_of(by_build(off)[b])["status"] for b in got),
-                  f"failures {failures}")
+                  f"want {field}={want} got {seen} other {other} ran {ran}")
         c_on, c_off = health_of(ob[IDS["C9818"][1]]), health_of(by_build(off)[IDS["C9818"][1]])
         check("E8 accepted + failed hydrations on one patch give success, never partial",
               c_off["status"] == "no_results" and c_on["status"] == "success"
@@ -1009,6 +1175,28 @@ def run() -> int:  # noqa: PLR0915
               "absorb all 45, and it is fetched FIRST",
               c_attempts == 5 and all(f"/{8_102_000 + i}/" in allb["urlopen"][i] for i in range(5)),
               f"{c_attempts} {allb['urlopen'][:5]}")
+
+        def stopped(o: dict) -> tuple[int, str, int]:
+            ev = next((e for e in o["events"] if e["event"] == "windows_underfill"), {})
+            blk = by_build(o)[IDS["U9457"][1]].get("underfill_hydration") or {}
+            return len(o["urlopen"]), str(ev.get("stop_reason")), int((blk.get("not_reached_reasons") or {}).get("deadline") or 0)
+        mb = stopped(out["method_budget"])
+        check("G9 the runtime budget's METHOD deadline (50 s, finalize headroom ~1000 s) stops the GETs: 3 at "
+              "20 s each, then 'deadline', long before the finalize reserve or the 30/identity cap",
+              mb[0] == 3 and mb[1] == "deadline" and mb[2] >= 1, str(mb))
+        oc = stopped(out["own_clock"])
+        check("G10 with no runtime budget at all, the pass's OWN 180 s clock stops the GETs: 3 at 70 s each, "
+              "then 'deadline'",
+              oc[0] == 3 and oc[1] == "deadline" and oc[2] >= 1 and out["own_clock"]["error"] is None, str(oc))
+        check("G11 the connect timeout is the budget's request_timeout (capped at the 12 s per-request total), "
+              "not the bare 30 s constant",
+              out["method_budget"]["timeouts"] == [12.0, 12.0, 12.0]
+              and set(on["timeouts"]) == {float(qna_tags.REQUEST_TIMEOUT)}, str(out["method_budget"]["timeouts"]))
+        everyone = [*out.values(), wout, *r1.values()]
+        check("G13 every page GET in every run went through the same-origin opener: urllib's default "
+              "urlopen (which follows a redirect to any host) is never called",
+              all(o["default_urlopen"] == 0 for o in everyone) and sum(len(o["urlopen"]) for o in everyone) > 100,
+              str([o["name"] for o in everyone if o["default_urlopen"]]))
 
         # ---------------------------------------------------------------- H. write path
         print(NEWLINE + "[H] the write path uses only the existing writers")
@@ -1081,20 +1269,65 @@ def run() -> int:  # noqa: PLR0915
         print(NEWLINE + "[J] AUX-067 R1 flags (dry run only)")
         rows = (by_build(r1["r1_dry"])[IDS["U9457"][1]].get("underfill_hydration") or {}).get("would_be_rows", [])
         flagged = next((r for r in rows if r["url"] == url(8_001_001)), {})
-        context = (flagged.get("r1") or {}).get("matched_build_context") or ""
-        # The ROLE is computed here, offline, by the shipped primitive -- never by the Windows collector,
-        # which a governed check forbids from importing lib.build_claims (test_powerpoint_build_roles M).
-        from lib.build_claims import extract_build_claims  # noqa: PLC0415 - analysis side only
-        claim = next((c for c in extract_build_claims(context) if c.build == u[1]), None)
+        contexts = (flagged.get("r1") or {}).get("matched_build_contexts") or []
+        role = offline_role(contexts, u[1])
         check("J1 an opening post that says 'rolled back to <target build>' is accepted AND its dry-run block "
-              "carries the build's own context, from which the shipped primitive reads rollback_previous "
-              "(the R1 gate's S1 signal)",
-              claim is not None and claim.role == "rollback_previous" and f"rolled back to {u[1]}" in context
-              and len(context) <= 160 and flagged.get("original_date") == day(u[3], 3)[:10]
+              "carries that mention's own clause, from which the shipped primitive (offline) reads "
+              "rollback_previous (the R1 gate's S1 signal)",
+              role == ("rollback_previous", "explicit_rollback_phrase") and len(contexts) == 1
+              and f"rolled back to {u[1]}" in contexts[0]
+              and all(len(w) <= 2 * mw.R1_CONTEXT_REACH + len(u[1]) for w in contexts)
+              and flagged.get("original_date") == day(u[3], 3)[:10]
               and flagged.get("rss_date") == "2026-11-01T10:00:00Z", str(flagged))
         check("J2 a same-revision build on a sibling train is not competing; a different revision is",
               (flagged.get("r1") or {}).get("competing_builds") == ["26200.9278"]
               and (flagged.get("r1") or {}).get("competing_kbs") == ["KB5130001"], str(flagged.get("r1")))
+        later = next((r for r in rows if r["url"] == url(8_001_002)), {})
+        later_ctx = (later.get("r1") or {}).get("matched_build_contexts") or []
+        later_cand, _ = mw._hydrated_candidate(
+            url(8_001_002), rss(8_001_002, ELIGIBLE_TITLE, ELIGIBLE_DESC), url(8_001_002),
+            page_html(8_001_002, ELIGIBLE_TITLE, later_mention_post(u[1]), date=day(u[3], 3)))
+        whole = whole_post_role(later_cand["report_text"], u[1])
+        check("J4 the rollback cue at the SECOND mention of the build: the block carries one clause per mention, "
+              "so the offline role equals the whole opening post's (S1), where the first mention alone reads "
+              "unlabelled",
+              bool(later) and later_ctx == [f"Windows 11 25H2 OS build {u[1]}",
+                                            f"Update: rolled back to {u[1]} and printing works again"]
+              and offline_role(later_ctx, u[1]) == whole == ("rollback_previous", "explicit_rollback_phrase")
+              and s1(*whole) and offline_role(later_ctx[:1], u[1]) == ("ambiguous", "no_role_stated"),
+              f"{later_ctx} {whole}")
+        mismatched, first_only_wrong, reach_wrong, roles_seen = [], 0, 0, set()
+        shape: list[str] = []
+        bare = re.compile(rf"(?<![\d.]){re.escape(u[1])}(?!\.?\d)")
+        for text, far in r1_corpus(u[1]):
+            windows = mw._r1_flags({"report_text": text}, target("U9457"))["matched_build_contexts"]
+            full = whole_post_role(text, u[1])
+            roles_seen.add(full)
+            if offline_role(windows, u[1]) != full:
+                mismatched.append((text[:60], offline_role(windows, u[1]), full))
+            for w in windows:
+                at_w = text.find(w)
+                if len(bare.findall(w)) != 1:
+                    shape.append(f"mentions:{w[:40]}")
+                if at_w < 0 or (at_w and text[at_w - 1].isalnum() and w[0].isalnum()) or (
+                        at_w + len(w) < len(text) and text[at_w + len(w)].isalnum() and w[-1].isalnum()):
+                    shape.append(f"word_cut:{w[:40]}")
+            at = text.find(u[1])
+            first_75 = " ".join(text[max(0, at - 75):at + len(u[1]) + 75].split())
+            if offline_role([first_75], u[1]) != full:
+                first_only_wrong += 1
+                reach_wrong += 1 if far else 0
+        check("J5 for every post in a role corpus (cue at the first or a later mention, a cue up to ~100 "
+              "characters away on either side, current + rollback across two mentions, no cue, a dotted "
+              "version, commas, two mentions in one clause, a clause longer than the reach), the role read "
+              "offline from the windows equals the role over the whole post; each window holds exactly one "
+              "mention and never starts or ends inside a word",
+              not mismatched and not shape and first_only_wrong >= 4 and reach_wrong >= 2
+              and {("rollback_previous", "explicit_rollback_phrase"),
+                   ("reference_other", "explicit_other_machine_or_person"),
+                   ("ambiguous", "contradictory_role_claims"), ("ambiguous", "no_role_stated")} <= roles_seen,
+              f"mismatched {mismatched} shape {shape} first_only_wrong {first_only_wrong} "
+              f"reach_wrong {reach_wrong} {sorted(roles_seen, key=str)}")
         w_blob = dumps(r1["r1_write"]["results"])
         w_added = (yaml.safe_load(r1["r1_write"]["evidence_after"]) or {})["evidence"][
             len((yaml.safe_load(r1["r1_write"]["evidence_before"]) or {})["evidence"]):]

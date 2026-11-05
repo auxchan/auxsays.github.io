@@ -333,12 +333,14 @@ auxsays/scripts/tests/test_windows_patch_identity.py = 30
 auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
 # AUX-073: Windows Learn Q&A opening-post hydration ships DEFAULT OFF. Disabled means zero sockets and
 # byte-identical output; enabled, it is enrichment inside learn_qna_search_rss (E2): a failed page fetch
-# never enters that method's error list, so seven failure kinds leave status, counters and Tech
-# Community identical to flag-off and the live fixtures still certify through the shipped evaluate.
-# Opening post only, the page's own date with no fallback, the unchanged authority (C1b included),
-# 45/30 caps, circuit breaker, structured telemetry, and the dispatch-only dry-run input EXECUTED.
-# Hermetic: a sandbox copy of the scripts and a fixture site, driven in a subprocess.
-auxsays/scripts/tests/test_windows_underfill_hydration.py = 75
+# never enters that method's error list, so eight failure kinds (each pinned to its own reason) leave
+# status, counters and Tech Community identical to flag-off and the live fixtures still certify through
+# the shipped evaluate. Opening post only, the page's own date with no fallback, its id AND origin
+# enforced (no redirect off Learn), the unchanged authority (C1b included), 45/30 caps, the method
+# deadline and own 180 s clock, circuit breaker, structured telemetry, R1 windows for every mention of
+# the build, and the dispatch-only dry-run input EXECUTED. Hermetic: a sandbox copy of the scripts and a
+# fixture site, driven in a subprocess.
+auxsays/scripts/tests/test_windows_underfill_hydration.py = 85
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit

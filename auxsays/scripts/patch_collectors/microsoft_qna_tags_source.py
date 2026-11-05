@@ -139,6 +139,40 @@ def fetch(url: str) -> str:
     return raw.decode("utf-8", "replace")
 
 
+def url_origin(url: str) -> tuple[str, str]:
+    """(scheme, netloc), lower-cased. A port or userinfo stays in the netloc, so it never matches."""
+    parts = urllib.parse.urlsplit(str(url or "").strip())
+    return parts.scheme.lower(), parts.netloc.lower()
+
+
+LEARN_ORIGIN = url_origin(BASE)
+
+
+class _SameOriginRedirect(urllib.request.HTTPRedirectHandler):
+    """Follow a redirect only within the requested URL's own scheme and host.
+
+    urllib's default handler follows a 30x to ANY http(s) host, so a question URL this run discovered
+    could be answered by a host it never discovered. A cross-origin hop (another host, another port,
+    userinfo, an https->http downgrade) is refused BEFORE it is requested, as ``redirect_off_host``.
+    A same-origin hop (a renamed slug) is still followed; the caller checks the final URL's origin
+    and question id itself."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: PLR0913 - urllib's signature
+        if url_origin(newurl) != url_origin(req.full_url):
+            if fp is not None:
+                try:
+                    fp.close()
+                except Exception:  # noqa: BLE001 - best effort; the refusal is what matters
+                    pass
+            raise QnaTagError("redirect_off_host", status=code)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def _bounded_opener() -> urllib.request.OpenerDirector:
+    """``urlopen``'s default handler chain with the redirect handler replaced by the same-origin one."""
+    return urllib.request.build_opener(_SameOriginRedirect)
+
+
 def fetch_bounded(url: str, *, budget) -> tuple[str, str]:
     """One question page under the run's wall-clock budget. Returns (final_url, html).
 
@@ -146,13 +180,17 @@ def fetch_bounded(url: str, *, budget) -> tuple[str, str]:
     sibling exists because ``fetch`` is not budget-aware -- its connect timeout and its read are
     bounded only per recv(). Here the connect timeout is ``runtime_budget.request_timeout`` and the
     body is read by ``runtime_budget.bounded_read`` (a hard total deadline and the same byte cap),
-    so one slow page cannot carry a caller past its collector's finalize reserve.
+    so one slow page cannot carry a caller past its collector's finalize reserve. A redirect is
+    followed only within the requested origin (``_SameOriginRedirect``), so no request goes to a
+    host the caller did not ask for.
 
     Same request shape as ``fetch`` (headers, pacing). It never decides what a page means: the
     caller checks the final URL and the page's structure. Raises ``QnaTagError`` for HTTP and
-    transport failures (``status`` carries the HTTP code, so a caller can treat 429 differently),
-    and lets ``runtime_budget.RequestDeadlineExceeded`` / ``BudgetError`` propagate -- they are not
-    ``OSError``s, so a caller must catch them explicitly.
+    transport failures and for a cross-origin redirect (``status`` carries the HTTP code, so a
+    caller can treat 429 differently), and lets ``runtime_budget.RequestDeadlineExceeded`` /
+    ``BudgetError`` propagate -- they are not ``OSError``s, so a caller must catch them explicitly.
+    Anything else the transport raises (``http.client.IncompleteRead``, say) propagates too; the
+    caller isolates it per URL.
     """
     from . import runtime_budget as rb  # noqa: PLC0415 - only the bounded path needs it
 
@@ -160,7 +198,7 @@ def fetch_bounded(url: str, *, budget) -> tuple[str, str]:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT,
                                                    "Accept": "text/html,application/xhtml+xml"})
     try:
-        with urllib.request.urlopen(request, timeout=rb.request_timeout(budget, REQUEST_TIMEOUT)) as response:
+        with _bounded_opener().open(request, timeout=rb.request_timeout(budget, REQUEST_TIMEOUT)) as response:
             final = response.geturl()
             raw = rb.bounded_read(response, budget=budget, endpoint_family=ENDPOINT_FAMILY,
                                   max_bytes=MAX_BYTES)

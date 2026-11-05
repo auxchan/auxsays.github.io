@@ -4428,19 +4428,24 @@ record walk and before the writeback, a patch the shipped `live_eligibility.eval
 count reasons, released within `UNDERFILL_PLANS` `window_days` (90, capped by `UNDERFILL_MAX_WINDOW_DAYS`),
 has those rejected URLs from THIS run re-fetched (`qna_tags.fetch_bounded`), rebuilt from the RSS title
 plus the asker's own question segment, dated from the page with no fallback, and re-judged by the
-unchanged `evaluate_candidates` (C1b included). Never a URL the store holds in any state, never a live or
+unchanged `evaluate_candidates` (C1b included). A page is the question only if it is answered from Learn
+over https with the same question id: a redirect off that origin is refused before it is requested, and a
+final URL on another host is refused (`off_host`). Never a URL the store holds in any state, never a live or
 out-of-window patch, never Tech Community. 45 GETs/run, 30/patch, a 5-GET recency reserve for the newest
 patches (D3), pace 0.35 s, 429 or 5 consecutive failures open the circuit, skipped below 60 s of headroom,
-stops 30 s before the finalize reserve, 180 s clock, every exception contained. Enrichment inside
+stops 30 s before the finalize reserve, the runtime method deadline and an own 180 s clock, a
+budget-capped connect timeout and bounded read, every exception contained per URL. Enrichment inside
 `learn_qna_search_rss` (E2): no health row, no owned method, no new source type; a failed page never
 enters that method's error list. Disclosed in the row's notes, a structured `underfill_hydration` result
-block, `rb.emit` events and a run warning. The workflow input `windows_underfill_hydration` is
-dispatch-only and exports the flag only when `dry_run` is also true.
+block, `rb.emit` events and a run warning. A dry run's R1 diagnostics carry one clause window per
+mention of the matched build, so the role read offline equals the role over the whole opening post. The
+workflow input `windows_underfill_hydration` is dispatch-only and exports the flag only when `dry_run` is
+also true.
 
 **Measured (offline)** Flag off: byte-identical to main on the real corpus, zero sockets. Every page
 failing: statuses and counters identical, the three live Windows patches still certify. Fixture pages
 through the write chain: counts move only by the fixture-accepted rows, no revocation, evidence-loss guard
-passes. Pinned by `test_windows_underfill_hydration.py` (75) and `test_underfill_routing.py` (26); the
+passes. Pinned by `test_windows_underfill_hydration.py` (85) and `test_underfill_routing.py` (26); the
 mutants are listed in the PR.
 
 **Activation gate (not done here)** Phase 1, an explicitly authorised bounded read-only probe, must
@@ -4450,7 +4455,7 @@ separate PR sets the env line and `proven_on`. Incremental accepted reports: UNM
 **Reopen only if** with the flag absent a Windows run makes any page request or its output differs from
 the same run without this change; or with it on, a hydration failure changes a `learn_qna_search_rss`
 status or counter, a hydrated row carries the RSS date, another source type, or a URL the store already
-held, or a live patch is queued.
+held, a page answered from another host is accepted, or a live patch is queued.
 
 ### AUX-071 — Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red
 
