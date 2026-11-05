@@ -830,7 +830,7 @@ def section_pure() -> None:
     body = src.split("def fetch_bounded(")[1].split("\ndef ")[0]
     check("G3 every bounded GET is paced by the module's own 0.35 s interval (fetch_bounded calls _pace)",
           qna_tags._MIN_REQUEST_INTERVAL == 0.35 and len(stamps) == 1 and abs(stamps[0] - 0.25) < 1e-9
-          and body.count("_pace()") == 1 and body.index("_pace()") < body.index(".open("), str(stamps))
+          and body.count("_pace()") == 1 and 0 <= body.index("_pace()") < body.find("open("), str(stamps))
 
     print(NEWLINE + "[G12] a redirect is followed only within the requested origin")
     import urllib.request as ur  # noqa: PLC0415
