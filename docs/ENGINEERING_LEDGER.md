@@ -74,6 +74,8 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
+| AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
+| AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 
 ---
 
@@ -175,6 +177,63 @@ detected.
 **Known residuals** Every other layout still has it — see AUX-010.
 
 **Reopen only if** patch-page headings regress below 4.5:1 in either OS theme.
+
+---
+
+### AUX-063 — The Windows authority can attribute a report to the patch whose build is only the reporter's baseline
+
+- **Status** Resolved (the thread-50506 shape; the wider baseline-only class is a residual of AUX-067) · **Area** Evidence acceptance · **Severity** Medium
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04 · **Closed by** AUX-067
+
+**Symptom** Windows 11 Forum thread 50506 ("Win11 26H2 (KB5121794) -> boot BSODs on cold start, 25H2
+stable"; baseline `Win11 Home 25H2 26200.9711 (current). Issue on 26H2 / KB5121794`) was accepted on
+the 25H2 26200.9711 record by `exact_os_build`, while the 26H2 record it is about did not receive it.
+
+**Resolution** AUX-067's `identity_not_the_subject` rejects it on 25H2: a build-only identity, a title
+naming neither the record's build nor its KB, and a competing KB in the title. Re-run against the
+elevenforum fixture, 50506 is accepted on no record and 50447 (KB5127648 on 26H2) is still accepted once.
+`test_elevenforum_adapter.py` I4 now pins the rejection.
+
+**Known residual** A baseline mention whose title carries no competing KB or build (AUX-067 residual R1)
+is not closed. The Windows 11 Forum adapter ships disabled and is not activated by this change.
+
+**Reopen only if** thread 50506, or any fixture of the same shape, is accepted by the Windows authority.
+
+---
+
+### AUX-067 — A Windows report whose title is about another update counted against the build it merely quoted
+
+- **Status** Resolved (Part A: future acceptance; Part B, the withdrawal of existing rows, is a separate step) · **Area** Evidence acceptance · **Severity** High
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04 (Part A)
+
+**Symptom** `row_from_candidate` stamps `matched_os_build` wherever the record's build appears in the title
+plus body, and a build alone is an accepted identity. A post whose title is about a DIFFERENT KB or build
+therefore counted against whichever record's build the author quoted in a spec line. Measured offline over
+the 535 counted Windows rows: eight false acceptances (25H2 9168 x2, 9278, 8328, 8246, 9457 x2; 26H2 9711).
+
+**Fix** `windows_learn_qna_reason` rejects with `identity_not_the_subject`, after the identity gate and
+before the intent filter, only when ALL hold: the identity is build-only (no KB matched); the title names
+neither the target build nor the target KB; the title names a competing KB or build; and the title does not
+state an affected range. The one exception is mechanical: a same-train build with an explicit `+`,
+`and later` or `or later` written against it, at or below the target build, with no remedy wording in the
+title. It keeps the legitimate row 51 (25H2 26200.8894, "build 26200.8875+"). It is never "any older build
+counts".
+
+**Measured** Whole counted population replayed offline: 8 rows rejected, 1 kept by the exception, 535 -> 527;
+six records lose 1-2 reports; no evidence-strength band, maturity, live-eligibility or exclusive-URL gate
+changes (25H2 9457 lands exactly on 25, still Medium); every verdict stays WAIT. `test_windows_identity_not_the_subject.py`
+pins the eight, row 51, the boundary of the exception and the shapes the rule must not touch, with 17 mutants.
+
+**Residuals** R1: a baseline mention whose title names no competing KB or build (the "M2" class, 16-84 rows
+by the characterization) is not deterministically separable and is not closed. R2: a title that names only a
+feature train is deliberately not a competing identity (the broader variants were measured and rejected).
+R3: the eight existing rows stay counted until the separate audited withdrawal (counted: false, reason
+`identity_not_the_subject`) goes through the guarded writeback. R4: an Office build escaping the
+foreign-product veto (row 41) is rejected here by identity, but the veto gap itself is a separate item.
+
+**Reopen only if** a counted Windows row has a title that names another update and neither the record's
+build nor KB (outside a stated affected range), or the exception ever keeps a range that starts above the
+target or is on another train.
 
 ---
 
@@ -4276,7 +4335,6 @@ release) are unchanged. Same 16 governed checks.
 request is green. The archive pull request ran its integrity suites before any record was archived.
 A policy that rewrites the corpus at run time should also run the integrity suites over the converged
 tree.
-
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.
