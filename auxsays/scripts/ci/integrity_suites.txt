@@ -199,6 +199,16 @@ auxsays/scripts/tests/test_maturity_authority.py = 40
 # (OBS and Windows certify, both DaVinci identities fail for named reasons); and that every
 # method-health writer outside the collector runner is held to the ownership manifest.
 auxsays/scripts/tests/test_monitoring_health.py = 38
+# Every owned method is emitted by its product's production path, in the state that path runs it
+# (AUX-074). The ownership manifest is also H7's list of EXPECTED methods, and five owned pairs that no
+# collector ever implemented blocked all 398 Acrobat and Premiere identities; every earlier check
+# asserted only emitted <= owned. Calls the 7 promotion products' real paths (the PowerPoint graph
+# included) offline, transports stubbed and counted per method, under the workflow's own env, all
+# mode flags on, and the code default, with every source answering and every source refusing:
+# emitted set == owned, disabled rows make no call and executing rows do, states match the plan or
+# pinned table, refusal is never relabelled, no H7/H0 reason, every AUXSAYS_* name classified. Six
+# self-tests prove each check fails on its defect (the five pairs reintroduced fail B1).
+auxsays/scripts/tests/test_owned_method_lifecycle.py = 278
 
 # A stored live claim renders as live only while it certifies at deploy time (AUX-055). Five Liquid
 # copies each turned the stored maturity words into "Live consensus", and the words outlive the

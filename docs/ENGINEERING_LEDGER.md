@@ -82,6 +82,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
+| AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
 
 ---
 
@@ -4548,6 +4549,54 @@ Monitoring semantics are unchanged. `test_source_health_generated_snapshot.py` p
 
 **Reopen only if** a template or module starts reading `source_health.yml` (it must then fail closed when
 the file is absent), or a lane needs to commit it.
+
+---
+
+### AUX-074 — Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying
+
+- **Status** Resolved · **Area** Collector ownership · **Severity** Medium
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom** Since AUX-054, `collector_ownership.ALLOWED_METHODS` is also the monitoring authority's list of
+EXPECTED methods (H7). Five owned pairs had never been implemented or emitted: Acrobat Pro and Reader
+`adobe_community_bug_tab_index` and `adobe_community_known_url_recheck`, and Premiere `known_watchlist`.
+Every identity of those three products therefore carried `missing_method_telemetry` for a method nothing
+runs: 398 identities, 794 H7 reasons.
+
+**Root cause** A copy error from when the manifest was created (#36, "EMH ground truth + collector code").
+At that commit the two Acrobat ids existed only in the Premiere collector, and Premiere never had a
+known_watchlist method. Rows found: 0 at HEAD and 0 in all 1,318 historical versions of
+`evidence_method_health.yml`. No producer, flag-gated route or retired-method emitter writes any of the 5.
+As a write allow-list the extra entries were harmless; as an expectation list they blocked certification.
+Every earlier ownership check asserted only emitted ⊆ owned.
+
+**Fix** Three deletions in `lib/collector_ownership.py`. Premiere keeps both Acrobat ids, which it routes and
+implements. DaVinci and OBS keep `known_watchlist`. No collector, data, template, workflow, threshold or
+certifier change. `tests/test_owned_method_lifecycle.py` (278 checks, `[blocking]`) calls the 7
+promotion products' production paths offline, PowerPoint graph included. It checks three environments
+(the workflow's own, every mode flag on, and the code default) and two scenarios (every source answers;
+every source refuses). It pins:
+- emitted == owned;
+- transport accounting;
+- the plan or pinned state;
+- refusal never relabelled;
+- no H7/H0 reason;
+- every `AUXSAYS_*` name classified.
+
+Six self-tests make each check fail on its defect. Reintroducing the 5 pairs fails B1 on exactly the 3 products.
+
+**Measured** On the shipped `live_eligibility.evaluate` over all 1,521 records:
+- live stays 6 → 6, the same 6;
+- 0 identities have H0 before or after, and no persisted row is unowned;
+- 398 decisions change their reasons only: 0 live flips, 0 reasons added, 794 H7 removed.
+
+The genuine collection gaps stay visible: 489 H7 reasons on 168 Acrobat identities, plus PowerPoint's 8 on
+1 not-yet-walked record. The walk owns those (L5), not ownership. 59 identities are now left with count
+reasons only, so the immediate live unlock is 0. Both write gates now refuse the removed pairs.
+
+**Reopen only if** `test_owned_method_lifecycle.py` reports anything but its governed 278. Also reopen if an
+owned (product, method) pair has no committed telemetry row one scheduled cycle after the ownership landed
+(the suite's corpus guard warns), or if a method is owned for a product whose production path never emits it.
 
 ---
 
