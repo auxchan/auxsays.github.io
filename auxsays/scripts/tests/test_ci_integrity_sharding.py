@@ -580,6 +580,10 @@ def section_aggregator(runner, aggregator) -> None:
             lambda r: r.extra_files.update({aggregator.artifact_name(1, 4) + "/notes.txt": "x"}))
     refuses("a loose file in the receipts directory", "UNEXPECTED_ARTIFACT",
             lambda r: r.extra_files.update({"receipt.json": "{}"}))
+    # download-artifact extracts flat, with no artifact directory, when exactly one artifact matches.
+    flat = json.dumps(pristine.shard(1))
+    refuses("one surviving artifact extracted flat by download-artifact", "UNEXPECTED_ARTIFACT",
+            lambda r: (r.receipts.clear(), r.extra_files.update({"receipt.json": flat})))
     refuses("an artifact for shard 5 of 4", "UNEXPECTED_SHARD",
             lambda r: r.extra_files.update({"integrity-receipt-shard-5-of-4/receipt.json": "{}"}))
     refuses("an artifact from a 3-shard layout", "UNEXPECTED_SHARD",

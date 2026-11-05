@@ -236,7 +236,9 @@ jobs:
       - name: Verify the test manifest is closed-world
         run: python auxsays/scripts/ci/run_integrity_tests.py --check-manifest
 
-      # Every shard artifact, one sub-directory each, into runner temporary storage.
+      # Every shard artifact, one sub-directory each, into runner temporary storage. (When exactly one
+      # artifact matches, download-artifact extracts it flat instead; the aggregator then refuses the
+      # loose file and names the missing shards, so that case fails closed too.)
       - name: Download the shard receipts
         uses: actions/download-artifact@v8
         with:
