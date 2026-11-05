@@ -9,10 +9,12 @@ was parsed as the Learn thread the run had discovered.
 
 HOW THIS SUITE TESTS IT. Over REAL urllib and REAL HTTP on loopback servers only. The transport's
 connection classes are routed so ``https://learn.microsoft.com``, ``http://learn.microsoft.com``,
-``https://learn.microsoft.com:8443`` and ``https://evil.example.net`` each land on their own loopback
-server, while the URLs, Host headers and Location headers stay exactly what production would see.
-DNS is fenced: a lookup of anything but 127.0.0.1 is recorded and refused, so no third-party request
-can leave this machine. Every refused case asserts three things: a NAMED refusal, ZERO requests at
+``https://learn.microsoft.com:8443`` and ``https://evil.example.net`` (with the lookalikes and the
+subdomain) each land on their own loopback server, while the URLs, Host headers and Location headers
+stay exactly what production would see. The network is fenced BEFORE any collector is imported: a
+DNS lookup or a TCP connection to anything but 127.0.0.1 is recorded and refused for the life of the
+process, and every child interpreter that imports a collector installs the same fence before its
+first import and reports its attempt count, so no third-party request can leave this machine. Every refused case asserts three things: a NAMED refusal, ZERO requests at
 the other host, and nothing parsed or stored. The other host always serves a page that WOULD count if
 it were read, so a policy that stopped working changes a verdict, not just a number.
 
@@ -21,7 +23,7 @@ the pre-change transports (byte-identical output and request headers); [H] metho
 refusal (Windows, PowerPoint, Teams, the context resolver), including a Teams write run against a
 temp store and an orchestrated PowerPoint run; [A] the structural pin over the AST -- no production
 Learn fetcher calls the default ``urlopen``; [B] the new imports resolve when the entry points run
-as bare scripts.
+as bare scripts; [Z] the process-lifetime network fence saw zero attempts.
 
 Deterministic, offline (loopback only), no repo mutation.
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_learn_fetch_same_origin.py
@@ -47,6 +49,43 @@ from types import SimpleNamespace
 _REPO = Path(__file__).resolve().parents[3]
 _SCRIPTS = _REPO / "auxsays" / "scripts"
 sys.path.insert(0, str(_SCRIPTS))
+
+# THE NETWORK FENCE, installed BEFORE the first collector import and never removed: a DNS lookup or a
+# TCP connection to anything but loopback is recorded and refused for the life of this process.
+_LOOPBACK_NAMES = ("127.0.0.1", "localhost")
+_REAL_GETADDRINFO = socket.getaddrinfo
+_REAL_CREATE_CONNECTION = socket.create_connection
+DNS_ATTEMPTS: list[str] = []
+TCP_ATTEMPTS: list[str] = []
+
+
+def fenced_getaddrinfo(host, *args, **kwargs):
+    if str(host) not in _LOOPBACK_NAMES:
+        DNS_ATTEMPTS.append(str(host))
+        raise socket.gaierror(f"test fence: no lookup of {host}")
+    return _REAL_GETADDRINFO(host, *args, **kwargs)
+
+
+def fenced_create_connection(address, *args, **kwargs):
+    host = str(address[0]) if isinstance(address, tuple) and address else str(address)
+    if host not in _LOOPBACK_NAMES:
+        TCP_ATTEMPTS.append(host)
+        raise OSError(f"test fence: no connection to {host}")
+    return _REAL_CREATE_CONNECTION(address, *args, **kwargs)
+
+
+socket.getaddrinfo = fenced_getaddrinfo
+socket.create_connection = fenced_create_connection
+
+# The same fence for a child interpreter, run before the child imports anything; the child prints
+# its attempt count so a check can require zero.
+CHILD_FENCE = ("import socket, sys\n"
+               "tried = []\n"
+               "def fence(*a, **k):\n"
+               "    tried.append(str(a[0]) if a else '')\n"
+               "    raise OSError('test fence: no network')\n"
+               "socket.getaddrinfo = fence\n"
+               "socket.create_connection = fence\n")
 
 import orchestrate_evidence_run as orch  # noqa: E402
 from lib import context_resolution as cr  # noqa: E402
@@ -137,14 +176,13 @@ ROUTES = {
     ("https", "learn.microsoft.com:8443"): PORT,
     ("https", "evil.example.net"): EVIL, ("http", "evil.example.net"): EVIL,
     ("https", "learn.microsoft.com.evil.example.net"): EVIL,
+    ("https", "evil-learn.microsoft.com"): EVIL, ("https", "x.learn.microsoft.com"): EVIL,
 }
 UNROUTED: list[tuple[str, str]] = []
-DNS_ATTEMPTS: list[str] = []
 
 _REAL = {
     "HTTPSHandler": urllib.request.HTTPSHandler, "HTTPHandler": urllib.request.HTTPHandler,
     "ProxyHandler": urllib.request.ProxyHandler, "urlopen": urllib.request.urlopen,
-    "getaddrinfo": socket.getaddrinfo,
 }
 
 
@@ -175,13 +213,6 @@ class NoProxy(_REAL["ProxyHandler"]):
         super().__init__({})
 
 
-def fenced_getaddrinfo(host, *args, **kwargs):
-    if str(host) not in ("127.0.0.1", "localhost"):
-        DNS_ATTEMPTS.append(str(host))
-        raise socket.gaierror(f"test fence: no lookup of {host}")
-    return _REAL["getaddrinfo"](host, *args, **kwargs)
-
-
 URLOPEN_CALLS = {"n": 0}
 
 
@@ -198,7 +229,6 @@ def install_loopback() -> None:
     urllib.request.ProxyHandler = NoProxy
     urllib.request.urlopen = urlopen_tripwire
     urllib.request._opener = None  # noqa: SLF001 - the old reference transport must be routed too
-    socket.getaddrinfo = fenced_getaddrinfo
 
 
 def remove_loopback() -> None:
@@ -207,7 +237,6 @@ def remove_loopback() -> None:
     urllib.request.ProxyHandler = _REAL["ProxyHandler"]
     urllib.request.urlopen = _REAL["urlopen"]
     urllib.request._opener = None  # noqa: SLF001
-    socket.getaddrinfo = _REAL["getaddrinfo"]
 
 
 def reset_world() -> None:
@@ -260,25 +289,38 @@ def tag_page_html() -> str:
             ' asked <local-time datetime="2026-09-20T10:00:00Z"></local-time>')
 
 
-# One refused case: the Location the asked page answers with, and the refusal it must produce.
-def refused_cases(ask_path: str) -> list[tuple[str, str, str]]:
+# A Location whose scheme urllib refuses outright (it raises a bare HTTPError before any redirect
+# hook runs). Each must still be named by the policy, not reported as an ordinary http_30x error.
+FILE_LOCATION = "file:///C:/Windows/win.ini"
+DATA_LOCATION = "data:text/html;base64,PGh0bWw+YmFpdDwvaHRtbD4="
+
+
+# One refused case: the Location the asked page answers with, the refusal it must produce, and the
+# redirect status (the non-http(s) schemes use 301/302/307 so every re-pointed alias is exercised).
+def refused_cases(ask_path: str) -> list[tuple[str, str, str, int]]:
     return [
-        ("another host", "https://evil.example.net" + ask_path, "redirect_off_host"),
-        ("an http downgrade", "http://learn.microsoft.com" + ask_path, "redirect_not_https"),
-        ("a lookalike host", "https://learn.microsoft.com.evil.example.net" + ask_path, "redirect_off_host"),
-        ("a userinfo authority", "https://learn.microsoft.com@evil.example.net" + ask_path, "redirect_off_host"),
-        ("an explicit non-443 port", "https://learn.microsoft.com:8443" + ask_path, "redirect_off_host"),
-        ("a scheme-relative Location", "//evil.example.net" + ask_path, "redirect_off_host"),
-        ("a chain that leaves and returns", "https://evil.example.net/bounce", "redirect_off_host"),
-        ("a same-host sign-in path", "/en-us/signin?returnUrl=" + ask_path, "redirect_path_not_allowed"),
+        ("another host", "https://evil.example.net" + ask_path, "redirect_off_host", 302),
+        ("an http downgrade", "http://learn.microsoft.com" + ask_path, "redirect_not_https", 302),
+        ("a lookalike host", "https://learn.microsoft.com.evil.example.net" + ask_path, "redirect_off_host", 302),
+        ("a prefix lookalike host", "https://evil-learn.microsoft.com" + ask_path, "redirect_off_host", 302),
+        ("a subdomain of Learn", "https://x.learn.microsoft.com" + ask_path, "redirect_off_host", 302),
+        ("a userinfo authority", "https://learn.microsoft.com@evil.example.net" + ask_path, "redirect_off_host", 302),
+        ("an explicit non-443 port", "https://learn.microsoft.com:8443" + ask_path, "redirect_off_host", 302),
+        ("a scheme-relative Location", "//evil.example.net" + ask_path, "redirect_off_host", 302),
+        ("a chain that leaves and returns", "https://evil.example.net/bounce", "redirect_off_host", 302),
+        ("a same-host sign-in path", "/en-us/signin?returnUrl=" + ask_path, "redirect_path_not_allowed", 302),
+        ("a file: Location", FILE_LOCATION, "redirect_not_https", 302),
+        ("a data: Location", DATA_LOCATION, "redirect_not_https", 307),
+        ("an ftp: Location", "ftp://learn.microsoft.com" + ask_path, "redirect_not_https", 301),
     ]
 
 
-def arm(ask_path: str, location: str, bait: str, bait_ctype: str = "text/html; charset=utf-8") -> None:
+def arm(ask_path: str, location: str, bait: str, bait_ctype: str = "text/html; charset=utf-8",
+        status: int = 302) -> None:
     """LEARN redirects the asked page; every other origin serves the bait at the same path, and the
     chain's /bounce returns to a Learn page that would be accepted if the chain were ever followed."""
     reset_world()
-    LEARN.redirect(ask_path, location)
+    LEARN.redirect(ask_path, location, status)
     for server in OTHERS:
         server.page(ask_path, bait, bait_ctype)
         server.redirect("/bounce", L + ask_path.rstrip("/") + "-returned/")
@@ -486,6 +528,18 @@ def section_policy() -> None:
           "one for this family, and no cookie or auth handler",
           len(redirectors) == 1 and isinstance(redirectors[0], lfp.SameOriginRedirect)
           and redirectors[0].family == lfp.QUESTION_PAGE and not forbidden, f"{redirectors} {forbidden}")
+    # The host test is EQUALITY. A suffix match (endswith) would let a prefix lookalike or any
+    # subdomain through; a prefix match (startswith) would let learn.microsoft.com.<anything> through.
+    near = ["evil-learn.microsoft.com", "xlearn.microsoft.com", "learn.microsoft.com.evil.net",
+            "learn.microsoft.com.evil.example.net", "learn.microsoft.comx", "x.learn.microsoft.com",
+            "a.b.learn.microsoft.com", "www.learn.microsoft.com", "earn.microsoft.com", "microsoft.com",
+            "learn.microsoft.co", "learn-microsoft.com"]
+    hosts = {(h, stage): lfp.refusal(f"https://{h}{path}", lfp.QUESTION_PAGE, stage)
+             for h in near for stage in lfp.STAGES}
+    wrong = {k: v for k, v in hosts.items() if v != f"{k[1]}_off_host"}
+    check("P10 the host must EQUAL learn.microsoft.com: prefix lookalikes (evil-learn..., "
+          "learn.microsoft.com.evil.net), subdomains (x.learn...) and near-misses are each off_host at "
+          "every stage", not wrong, str(sorted(wrong.items())[:6]))
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -505,8 +559,8 @@ def section_loopback() -> None:
     ]
     for name, drive, ask, bait, ctype in fetchers:
         results = {}
-        for label, location, expected in refused_cases(ask):
-            arm(ask, location, bait, ctype)
+        for label, location, expected, code in refused_cases(ask):
+            arm(ask, location, bait, ctype, code)
             reason, body = drive(L + ask)
             results[label] = (reason, body is None, other_host_requests(), len(LEARN.requests), expected)
         for label, (reason, nobody, others, learn_hits, expected) in results.items():
@@ -519,6 +573,8 @@ def section_loopback() -> None:
     for name, drive, ask in (("context", drive_context, Q_PATH), ("qna_tags", drive_qna, Q_PATH),
                              ("rss", drive_rss, RSS_PATH)):
         cases = {"https://learn.microsoft.com.evil.example.net" + ask: "url_off_host",
+                 "https://evil-learn.microsoft.com" + ask: "url_off_host",
+                 "https://x.learn.microsoft.com" + ask: "url_off_host",
                  "http://learn.microsoft.com" + ask: "url_not_https",
                  L + "/en-us/windows/release-health/": "url_path_not_allowed"}
         reset_world()
@@ -526,8 +582,9 @@ def section_loopback() -> None:
             server.page(ask, BAIT_Q)
         got = {u: drive(u)[0] for u in cases}
         hits = len(LEARN.requests) + other_host_requests()
-        check(f"I[{name}] a lookalike host, an http URL and a non-Learn-Q&A path are refused with no "
-              "request made anywhere", got == cases and hits == 0, f"{got} hits={hits}")
+        check(f"I[{name}] a lookalike host, a prefix lookalike, a subdomain, an http URL and a "
+              "non-Learn-Q&A path are refused with no request made anywhere",
+              got == cases and hits == 0, f"{got} hits={hits}")
 
     print("\n[L] same-origin behaviour is unchanged")
     reset_world()
@@ -668,12 +725,12 @@ COUNTABLE_TEAMS = qapage("5990001", "Teams crashes every time I join a meeting s
 UNCOUNTABLE_TEAMS = qapage("5990002", "How do I change my Teams background?")
 
 
-def arm_teams() -> None:
+def arm_teams(location: str = "https://evil.example.net" + REFUSED_Q) -> None:
     reset_world()
     LEARN.prefix_routes["/api/search/rss?"] = (200, [("Content-Type", "application/rss+xml")],
                                                rss(L + GONE_Q.rstrip("/"), L + REFUSED_Q.rstrip("/"),
                                                    L + READ_Q.rstrip("/")).encode())
-    LEARN.redirect(REFUSED_Q, "https://evil.example.net" + REFUSED_Q)
+    LEARN.redirect(REFUSED_Q, location)
     EVIL.page(REFUSED_Q, COUNTABLE_TEAMS)
     LEARN.page(READ_Q, UNCOUNTABLE_TEAMS)
 
@@ -845,12 +902,72 @@ def section_health() -> None:
           and not any(r["accepted_rows"] for r in rows) and evil_hits == 0,
           f"{[o.get('resolution_result') for o in outcomes]} evil={evil_hits}")
 
+    section_scheme_health()
+
     print("\n[G] the default urlopen was never reached by a production fetcher")
     check("G1 zero calls to urllib.request.urlopen across every new-fetcher run above "
           "(the frozen pre-change references call it by a saved name)", URLOPEN_CALLS["n"] == 0,
           str(URLOPEN_CALLS))
     check("G2 no lookup of any non-loopback name was attempted, and every connection had a loopback route",
-          DNS_ATTEMPTS == [] and UNROUTED == [], f"dns={DNS_ATTEMPTS} unrouted={UNROUTED}")
+          DNS_ATTEMPTS == [] and TCP_ATTEMPTS == [] and UNROUTED == [],
+          f"dns={DNS_ATTEMPTS} tcp={TCP_ATTEMPTS} unrouted={UNROUTED}")
+
+
+def section_scheme_health() -> None:
+    """A Location urllib will not follow at all (file:, data:) was never fetched, but it surfaced as
+    an ordinary http_30x error -- and the PowerPoint tag lane, with that error among pages it did
+    read, published no_results. Each lane must name it redirect_not_https and publish blocked."""
+    print("\n[H] a redirect to file: or data: is a named refusal, and every lane publishes it as blocked")
+    reset_world()
+    LEARN.prefix_routes["/api/search/rss?"] = (302, [("Location", FILE_LOCATION)], b"")
+    errors: list = []
+    found, crash = attempt(learn_qna.collect_learn_qna_candidates, queries=["KB5099999"],
+                           context=SimpleNamespace(since=None), errors=errors)
+    named = "learn_qna_search_fetch_failed:redirect_not_https"
+    check("H19 Windows and PowerPoint search-RSS: a feed redirected to file: is named and blocked",
+          crash is None and found == [] and [e.get("reason") for e in errors] == [named]
+          and win.learn_qna_method_status([], [], [], errors) == "blocked"
+          and win.blocked_reason_from_errors(errors) == named
+          and ppt.learn_qna_method_status([], [], [], errors) == "blocked"
+          and ppt.blocked_reason_from_errors(errors) == named, f"{errors} crash={crash!r}")
+
+    reset_world()
+    LEARN.page(TAG_PATH, tag_page_html())
+    LEARN.redirect(TAG_PATH + "?page=2", DATA_LOCATION, 307)
+    tag_errors: list = []
+    rows, pages = qna_tags.enumerate_tag("1464", "m365-office-office-powerpoint-home-platform-windows",
+                                         since="2026-01-01", max_pages=2, errors=tag_errors)
+    status = ppt.qna_tag_method_status([{"source_url": "x"}], [], [], tag_errors, enumerated=len(rows))
+    check("H20 PowerPoint tag lane: page 1 read, page 2 redirected to data: -- named, and blocked rather "
+          "than the no_results it used to publish",
+          len(rows) >= 1 and pages == 1 and [e["reason"] for e in tag_errors] == ["redirect_not_https"]
+          and status == "blocked" and ppt.qna_lane_blocked_reason(status, tag_errors) == "redirect_not_https",
+          f"rows={len(rows)} pages={pages} errors={tag_errors} status={status}")
+
+    real_sleep = learn_qna.learn_qna_sleep
+    learn_qna.learn_qna_sleep = lambda _s: None
+    try:
+        arm_teams(FILE_LOCATION)
+        t_errors: list = []
+        cands, crash = attempt(teams.discover_learn_qna, TEAMS_RECORD, SimpleNamespace(since=None, max_pages=1),
+                               t_errors)
+    finally:
+        learn_qna.learn_qna_sleep = real_sleep
+    cands = cands or []
+    refused_url = L + REFUSED_Q.rstrip("/")
+    check("H21 Teams: a question page redirected to file: yields no candidate, is named, and the lane is blocked",
+          crash is None and [e["reason"] for e in t_errors][1:] == ["redirect_not_https"]
+          and all(not str(c["source_url"]).startswith(refused_url) for c in cands)
+          and teams.method_status(cands, t_errors, 0) == "blocked",
+          f"errors={t_errors} status={teams.method_status(cands, t_errors, 0)} crash={crash!r}")
+
+    url = L + "/en-us/answers/questions/5975101/ppt-crash"
+    arm("/en-us/answers/questions/5975101/ppt-crash", DATA_LOCATION, BAIT_Q, status=308)
+    out = cr.resolve_candidate({"source_url": url, "report_text": "PowerPoint 2603 crashes"},
+                               cr.RESOLVABLE_REASON, fetch_thread=CONTEXT_FETCH, budget=cr.ResolutionBudget())
+    check("H22 context resolver: a thread redirected (308) to data: is fetch_blocked naming the refusal",
+          out.resolution_result == cr.FETCH_BLOCKED and out.detail == "refused:redirect_not_https",
+          f"{out.resolution_result} {out.detail!r}")
 
 
 PPT = "microsoft-powerpoint"
@@ -1033,27 +1150,38 @@ def section_bare_scripts() -> None:
     print("\n[B] the new imports resolve when the entry points run as bare scripts")
     env = {k: v for k, v in os.environ.items() if k not in ("GITHUB_OUTPUT", "GITHUB_STEP_SUMMARY")}
     env["PYTHONDONTWRITEBYTECODE"] = "1"
+    # Every child below imports collectors, so every child fences DNS and TCP BEFORE its first import
+    # and prints its attempt count: even a broken policy (a mutant that stops refusing http) can only
+    # fail a check -- it can never reach a real host.
+    bare = CHILD_FENCE + (
+        "import os, runpy\n"
+        "script = sys.argv[1]\n"
+        "sys.argv = [script, '--help']\n"
+        "sys.path[0] = os.path.dirname(os.path.abspath(script))  # exactly what a bare script gets\n"
+        "code = 0\n"
+        "try:\n"
+        "    runpy.run_path(script, run_name='__main__')\n"
+        "except SystemExit as exc:\n"
+        "    code = exc.code if isinstance(exc.code, int) else (0 if exc.code is None else 1)\n"
+        "sys.stdout.flush()\n"
+        "print('network attempts', len(tried))\n"
+        "sys.exit(code)\n")
     with tempfile.TemporaryDirectory() as td:
         for script in ("orchestrate_evidence_run.py", "run_patch_evidence_collection.py"):
-            proc = subprocess.run([sys.executable, str(_SCRIPTS / script), "--help"], capture_output=True,
+            proc = subprocess.run([sys.executable, "-c", bare, str(_SCRIPTS / script)], capture_output=True,
                                   text=True, cwd=td, env=env, timeout=120)
-            check(f"B1 {script} --help runs as a bare script from outside the repo",
-                  proc.returncode == 0, proc.stderr.strip()[-300:])
-        # The child fences DNS and TCP BEFORE importing anything, so even a broken policy (a mutant
-        # that stops refusing http) can only fail this check -- it can never reach the real host.
-        probe = ("import socket, sys\n"
-                 "tried = []\n"
-                 "def fence(*a, **k):\n"
-                 "    tried.append(a[0] if a else '')\n"
-                 "    raise OSError('test fence: no network')\n"
-                 "socket.getaddrinfo = fence\n"
-                 "socket.create_connection = fence\n"
-                 "sys.path.insert(0, sys.argv[1])\n"
-                 "import orchestrate_evidence_run as o\n"
-                 "from patch_collectors import microsoft_qna_tags_source as q, microsoft_learn_qna_source as s\n"
-                 "from patch_collectors import microsoft_teams, microsoft_powerpoint, microsoft_windows\n"
-                 "print(o.default_context_fetch()('http://learn.microsoft.com/en-us/answers/questions/1/x'))\n"
-                 "print('network attempts', len(tried))\n")
+            check(f"B1 {script} --help runs as a bare script from outside the repo, network-fenced from "
+                  "before its first import, with zero network attempts",
+                  proc.returncode == 0 and "usage" in proc.stdout.lower()
+                  and proc.stdout.rstrip().endswith("network attempts 0"),
+                  (proc.stdout[-200:] + proc.stderr.strip()[-300:]))
+        probe = CHILD_FENCE + (
+            "sys.path.insert(0, sys.argv[1])\n"
+            "import orchestrate_evidence_run as o\n"
+            "from patch_collectors import microsoft_qna_tags_source as q, microsoft_learn_qna_source as s\n"
+            "from patch_collectors import microsoft_teams, microsoft_powerpoint, microsoft_windows\n"
+            "print(o.default_context_fetch()('http://learn.microsoft.com/en-us/answers/questions/1/x'))\n"
+            "print('network attempts', len(tried))\n")
         proc = subprocess.run([sys.executable, "-c", probe, str(_SCRIPTS)], capture_output=True, text=True,
                               cwd=td, env=env, timeout=120)
         check("B2 in a fresh interpreter with only the scripts directory on sys.path, the deferred import in "
@@ -1082,6 +1210,12 @@ def run() -> int:
     for server in (LEARN, *OTHERS):
         server.httpd.shutdown()
         server.httpd.server_close()
+    print("\n[Z] the process-lifetime network fence")
+    check("Z1 from before the first collector import to exit, this process attempted no non-loopback DNS "
+          "lookup and no non-loopback TCP connection",
+          DNS_ATTEMPTS == [] and TCP_ATTEMPTS == [] and socket.getaddrinfo is fenced_getaddrinfo
+          and socket.create_connection is fenced_create_connection,
+          f"dns={DNS_ATTEMPTS} tcp={TCP_ATTEMPTS}")
 
     print()
     print("=" * 78)

@@ -11,9 +11,11 @@ class on its own new path; this module is that protection, extracted and shared,
 fetchers get it too.
 
 WHAT A FETCH MAY TOUCH. A URL is acceptable only when all three hold:
-  * the scheme is ``https`` (an ``http`` downgrade is refused);
-  * the authority is exactly ``learn.microsoft.com`` -- no userinfo, no port other than 443, no
-    lookalike such as ``learn.microsoft.com.example.net``;
+  * the scheme is ``https`` (an ``http`` downgrade is refused, and so is ``file:``, ``data:`` or
+    ``ftp:``);
+  * the host is exactly ``learn.microsoft.com`` -- no userinfo, no port other than 443, no
+    lookalike such as ``learn.microsoft.com.example.net`` or ``evil-learn.microsoft.com``, and no
+    subdomain such as ``x.learn.microsoft.com`` (equality, never a suffix or prefix match);
   * the path has the shape the calling fetcher already uses (a question page, a tag page or the tag
     index, or the search-RSS endpoint). A question fetch that is redirected to a sign-in page or to a
     tag listing is refused even on the right host.
@@ -22,7 +24,8 @@ WHEN IT IS CHECKED. Three times, and the middle one is the point:
   1. the initial URL, before any request;
   2. every redirect destination, BEFORE the redirected request is made (``SameOriginRedirect``). A
      final-URL check alone cannot see a chain that leaves Learn and comes back, and by then the other
-     host has already been asked;
+     host has already been asked. A Location urllib would refuse outright (``file:``, ``data:``) is
+     refused here too, by name, instead of surfacing as a bare ``HTTPError``;
   3. the final URL of the response, before a single byte of the body is read.
 
 WHAT IT DOES NOT DO. It decides nothing about what a page means, adds no endpoint and no request, and
@@ -167,6 +170,27 @@ class SameOriginRedirect(urllib.request.HTTPRedirectHandler):
     def __init__(self, family: str) -> None:
         super().__init__()
         self.family = family
+
+    def http_error_302(self, req, fp, code, msg, headers):  # noqa: PLR0913 - urllib's signature
+        """Name a redirect to a scheme urllib will not follow at all.
+
+        urllib refuses a ``Location`` whose scheme is not http, https, ftp or empty (``file:``,
+        ``data:``, ...) with a bare ``HTTPError`` BEFORE ``redirect_request`` is reached. Nothing is
+        fetched, but the fetchers would report it as an ordinary ``http_302_error``, and a tag lane
+        with that error among pages it did read published ``no_results``. Any absolute scheme other
+        than https is therefore refused HERE, under the policy's own name (``redirect_not_https``),
+        before urllib's scheme check runs. The Location is read exactly as urllib reads it; a
+        relative or https Location goes on to urllib and then to ``redirect_request``, unchanged."""
+        location = headers["location"] if "location" in headers else headers["uri"] if "uri" in headers else None
+        if location is not None and urllib.parse.urlparse(location).scheme not in ("", LEARN_SCHEME):
+            reason = refusal(location, self.family, STAGE_REDIRECT)
+            _close(fp)
+            raise LearnFetchRefused(reason, url=str(location), status=code)
+        return super().http_error_302(req, fp, code, msg, headers)
+
+    # urllib binds every redirect code to ITS http_error_302 in the base class body, so each alias
+    # must be re-pointed here or a 301/303/307/308 to file: would still be a bare HTTPError.
+    http_error_301 = http_error_303 = http_error_307 = http_error_308 = http_error_302
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: PLR0913 - urllib's signature
         reason = refusal(newurl, self.family, STAGE_REDIRECT)

@@ -4604,31 +4604,43 @@ Teams and open-web discovery (`microsoft_learn_qna_source._fetch_feed_text`). Th
 under the URL they asked for. Found while reviewing the shelved AUX-073 branch, which had closed the same
 gap on its own new path. No such redirect has been observed in production.
 
-**Fix** One shared policy, `lib/learn_fetch_policy.py`: https only; host exactly `learn.microsoft.com`
-(no userinfo, no port other than 443, no lookalike); and the page shape the fetcher already uses (a
-question page; a tag page or the tag index; the search endpoint). It is checked on the initial URL, on
-every redirect destination BEFORE the redirected request is made, and on the final URL before the body
-is read. Same-origin redirects (a renamed slug, a retired tag sent to the tag index) are followed as
-before. No cookies, login or challenge handling; no new endpoint, request or budget. A refusal is one of
-nine named reasons (`redirect_off_host`, ...) and reaches method health as a named failure:
+**Fix** One shared policy, `lib/learn_fetch_policy.py`: https only; host EQUAL to `learn.microsoft.com`
+(no userinfo, no port other than 443, no lookalike such as `evil-learn.microsoft.com` or
+`learn.microsoft.com.evil.net`, no subdomain such as `x.learn.microsoft.com`); and the page shape the
+fetcher already uses (a question page; a tag page or the tag index; the search endpoint). It is checked
+on the initial URL, on every redirect destination BEFORE the redirected request is made, and on the final
+URL before the body is read. A redirect to a scheme urllib refuses outright (`file:`, `data:`) is named
+`redirect_not_https` too, instead of surfacing as a plain `http_302_error`. Same-origin redirects (a
+renamed slug, a retired tag sent to the tag index) are followed as before. No cookies, login or challenge
+handling; no new endpoint, request or budget. A refusal is one of nine named reasons
+(`redirect_off_host`, ...) and reaches method health as a named failure:
 - Windows and PowerPoint search lanes: `blocked`, the reason in `blocked_reason`;
 - PowerPoint tag and open-web lanes: `blocked` (a refusal among pages that were read used to fall
   through to `no_results`), the refusal named first;
 - Teams: `blocked`, the refusal named (its page-failure reason used to print the error class);
 - context resolver: `fetch_blocked`, health reason `context_fetch_refused:<reason>`.
 
-`test_learn_fetch_same_origin.py` (89 checks, blocking) drives every fetcher through real urllib against
-loopback servers with DNS fenced. It covers 8 redirect shapes per fetcher, initial and final URL checks,
-byte-identical same-origin output against the frozen pre-change transports, a Teams write run against a
-temp store, an orchestrated PowerPoint run, an AST pin and bare-script imports. 25 mutants, one fix each,
-each fail a named check.
+`test_learn_fetch_same_origin.py` (115 checks, blocking) drives every fetcher through real urllib
+against loopback servers, with DNS and TCP fenced from before the first collector import (child
+interpreters too). It covers 13 redirect shapes per fetcher (including a prefix lookalike, a subdomain,
+`file:`, `data:` and `ftp:`), a host-equality table, initial and final URL checks, byte-identical
+same-origin output against the frozen pre-change transports, a Teams write run against a temp store, an
+orchestrated PowerPoint run, `blocked` health for a `file:`/`data:` redirect in every lane, an AST pin
+and bare-script imports. 30 mutants, one fix each, each fail a named check; they include a suffix,
+a prefix and a containment host match.
 
-**Not covered** Official documentation ingestion from learn.microsoft.com (release notes, release
-health) uses `lib/http.fetch_text`, a separate path this item does not change.
+**Residual: Unprotected, deferred (residual, not Q&A)** Official documentation ingestion from
+learn.microsoft.com is NOT covered by this policy and is deferred: the Office update history and Teams
+version pages (`adapters/microsoft_office_updates.py` `fetch`), the Windows release-health pages and
+their status pages (`adapters/microsoft_release_health.py` `fetch` and the status-page enrichment), and
+the linked official body refresh (`patch_ingest.py` `refresh_linked_official_bodies`). All go through
+`lib/http.fetch_text`, whose redirect handler strips credentials off-host but follows a redirect to any
+host. These are vendor documentation pages, not Q&A threads, and they are unchanged here.
 
-**Reopen only if** `test_learn_fetch_same_origin.py` reports anything but its governed 89, a production
-Learn Q&A fetch path does not go through `learn_fetch_policy.open_url`, or a health row names a refusal
-for a redirect that stayed on Learn's own question, tag or search pages.
+**Reopen only if** `test_learn_fetch_same_origin.py` reports anything but its governed 115, a production
+Learn Q&A fetch path does not go through `learn_fetch_policy.open_url`, a health row names a refusal
+for a redirect that stayed on Learn's own question, tag or search pages, or the official documentation
+residual is taken up (it needs its own item and its own per-source path list).
 
 ---
 

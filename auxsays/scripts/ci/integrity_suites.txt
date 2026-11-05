@@ -283,12 +283,13 @@ auxsays/scripts/tests/test_powerpoint_build_identity.py = 54
 auxsays/scripts/tests/test_powerpoint_build_roles.py = 108
 auxsays/scripts/tests/test_powerpoint_context_resolution.py = 101
 # AUX-077: every production Learn Q&A fetcher (context resolver, tag/question pages, search RSS) goes
-# through the shared same-origin policy. Real urllib over loopback servers only, DNS fenced: each
-# off-host, http, lookalike, userinfo, port, scheme-relative, leave-and-return and off-path redirect
-# is refused BEFORE it is followed, by name, with zero requests at the other host and nothing parsed
-# or stored; same-origin fetches are byte-identical to the frozen pre-change transports; the AST pin
-# forbids urlopen in every Learn fetch module.
-auxsays/scripts/tests/test_learn_fetch_same_origin.py = 89
+# through the shared same-origin policy. Real urllib over loopback servers only, DNS and TCP fenced
+# from before the first collector import (children too): each off-host, http, lookalike, prefix
+# lookalike, subdomain, userinfo, port, scheme-relative, leave-and-return, off-path, file:, data: and
+# ftp: redirect is refused BEFORE it is followed, by name, with zero requests at the other host and
+# nothing parsed or stored; the host test is equality; same-origin fetches are byte-identical to the
+# frozen pre-change transports; the AST pin forbids urlopen in every Learn fetch module.
+auxsays/scripts/tests/test_learn_fetch_same_origin.py = 115
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
