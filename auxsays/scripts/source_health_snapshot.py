@@ -8,6 +8,13 @@ backend, database, or long-running service. It combines:
 - patch_ingest_state.json: what happened during the latest official ingestion
 
 The output is render-ready Jekyll data for methodology/source audit pages.
+
+GENERATED AT DEPLOY, NEVER COMMITTED (AUX-069). `_data/source_health.yml` is git-ignored: pages.yml
+runs this script before `jekyll build`. A committed copy went stale (37 rows against 47 sources, an
+older status vocabulary) because no lane regenerates it between deploys. No template, include or
+layout reads it today, so a local build without it renders nothing different. A future reader must
+treat the file as possibly absent and fail closed; this script never writes an empty snapshot when
+the source list is unreadable (it exits non-zero instead).
 """
 from __future__ import annotations
 
@@ -136,6 +143,12 @@ def main() -> int:
     sources = load_yaml(CONFIG_PATH)
     state = load_json(STATE_PATH)
     state_sources = state.get("sources") or {}
+
+    # Fail closed: an unreadable or empty source list must not become an empty snapshot that reads
+    # as "monitoring succeeded with nothing to report".
+    if not isinstance(sources, list) or not sources:
+        print(f"ERROR: no sources in {CONFIG_PATH.name}; refusing to write an empty source-health snapshot")
+        return 1
 
     error_map: dict[str, str] = {}
     for item in state.get("last_errors") or []:

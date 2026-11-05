@@ -58,9 +58,14 @@ layout: aux-base
 {% else %}
   {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
 {% endif %}
-{% assign evidence_checked_at = page.evidence_last_checked | default: page.consensus_last_checked | default: '' %}
+{% assign evidence_checked_at = page.evidence_last_checked | default: '' %}
 {% assign evidence_checked_label = 'Not recorded' %}
 {% if evidence_checked_at != '' %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
+{% assign evidence_capture_date_known = false %}
+{% if evidence_checked_at != '' %}
+  {% assign evidence_capture_epoch = evidence_checked_at | date: "%s" | plus: 0 %}
+  {% if evidence_capture_epoch > 0 %}{% assign evidence_capture_date_known = true %}{% endif %}
+{% endif %}
 {% assign source_checked_at = page.source_last_checked | default: '' %}
 {% assign source_checked_label = 'Not recorded' %}
 {% if source_checked_at != '' %}{% assign source_checked_label = source_checked_at | date: "%b %-d, %Y" %}{% endif %}
@@ -219,11 +224,24 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   Re-measured 2026-09-09 the same way: 148 pages render the notice -- 60 stale AND unhealthy, 53 on
   health alone, and 35 on STALENESS ALONE. The stale-only class is the one that grew (10 -> 35), which
   is precisely why the sentence had to stop asserting collection health it had not checked.
+
+  WHAT THE DATE IS (AUX-057). `evidence_last_checked` is the capture time of the newest ACCEPTED
+  report, not the time anyone last re-verified anything. The old wording said the evidence had
+  "not been revalidated", which asserted a verification step that this field never recorded. The
+  notice now states only what is known: how long ago the newest accepted report was captured, or
+  that the capture date is not recorded. Collection health is stated by the collection branches or
+  deferred to the monitoring card. The seven-day rule, the method-health logic and every stored
+  timestamp are unchanged. A consensus calculation timestamp is a different fact from a capture
+  date, so it is never used as a fallback here: a record with only that field reads as "not
+  recorded" (0 records today). The card line beside the verdict uses the same field and the same
+  validity test, and is omitted where no accepted report exists to have been captured.
+  Re-measured 2026-11-05: 222 pages carried the old sentence; the set of pages with a notice is
+  identical before and after.
 {%- endcomment -%}
 {%- comment -%}
   WHO OWNS "this is a sample, not telemetry". The evidence-summary card one screen above already
   says "This is a verified report sample, not live consensus telemetry." and prints
-  "Last evidence checked: <date>". The freshness aside repeated both -- the same caveat in two large
+  "Newest accepted report captured: <date>". The freshness aside repeated both -- the same caveat in two large
   boxes, which the layout sprint explicitly forbids. #114 moved the aside below the verdict but left
   the wording untouched, so the duplication survived the move.
 
@@ -257,10 +275,10 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   THE ASIDE BODY MUST NOT RE-NAME THE SAMPLE. `freshness_detail` is interpolated OUTSIDE the unless
   guard (see the rule below about writing tag delimiters here), so wording placed in it is NOT
   covered by the handoff at all -- the guard only wraps the clause that follows it. The
-  first draft of this repair left "This report sample has not been revalidated recently" there, which
+  first draft of this repair left a detail string there that named the report sample, which
   put "report sample" back in the aside on 93 of the pages the card was already qualifying -- the
-  same two-boxes-one-claim defect, one noun quieter. The detail strings now say "This evidence",
-  and test_patch_page_hierarchy F12 keeps them that way. The aside names freshness and collection
+  same two-boxes-one-claim defect, one noun quieter. The detail strings now name the newest
+  accepted report and its capture date, and test_patch_page_hierarchy F12 keeps them that way. The aside names freshness and collection
   health; naming what the evidence IS belongs to the card.
 
   The flag is computed HERE and not inside the card, and the card's if / paragraph / endif block is
@@ -279,8 +297,12 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {%- endcomment -%}
 {% assign sample_framing_shown = false %}
 {% if consensus_established == false and report_count > 0 %}{% assign sample_framing_shown = true %}{% endif %}
-{% assign freshness_headline = 'Evidence freshness needs revalidation.' %}
-{% assign freshness_detail = 'This evidence has not been revalidated recently.' %}
+{% assign freshness_headline = 'No recently captured accepted reports.' %}
+{% capture freshness_detail %}The newest accepted report was captured on {{ evidence_checked_label }}. Collection status is reported separately.{% endcapture %}
+{% unless evidence_capture_date_known %}
+  {% assign freshness_headline = 'Capture date not recorded.' %}
+  {% assign freshness_detail = 'The capture date of the newest accepted report is not recorded, so its age cannot be checked. Collection status is reported separately.' %}
+{% endunless %}
 {% if method_health_blocked %}
   {% assign freshness_headline = 'Collection blocked.' %}
   {% assign freshness_detail = 'Some collection methods are currently blocked or returning errors.' %}
@@ -288,8 +310,14 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   {% assign freshness_headline = 'Collection degraded.' %}
   {% assign freshness_detail = 'Some collection methods reported partial or low-confidence results.' %}
 {% endif %}
-{% if report_evidence_stale and method_health_blocked_or_pending %}
-  {% capture freshness_detail %}{{ freshness_detail }} This evidence has also not been revalidated recently.{% endcapture %}
+{% assign collection_warns = false %}
+{% if method_health_blocked_or_pending or source_freshness_note_warns %}{% assign collection_warns = true %}{% endif %}
+{% if report_evidence_stale and collection_warns %}
+  {% if evidence_capture_date_known %}
+    {% capture freshness_detail %}{{ freshness_detail }} No recently captured accepted reports. The newest accepted report was captured on {{ evidence_checked_label }}.{% endcapture %}
+  {% else %}
+    {% capture freshness_detail %}{{ freshness_detail }} The capture date of the newest accepted report is not recorded, so its age cannot be checked.{% endcapture %}
+  {% endif %}
 {% endif %}
 {% assign aside_eligible_state = false %}
 {% if evidence_state_class == 'pilot' or evidence_state_class == 'live' %}{% assign aside_eligible_state = true %}{% endif %}
@@ -757,7 +785,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           {% if consensus_established and report_count > 0 %}
           <p class="consensus-chart-meta consensus-live-scope-note">Based on {{ report_count }} publicly posted user report{% unless report_count == 1 %}s{% endunless %}, evidence strength {{ evidence_strength }}. This is not a measure of how many installations are affected.</p>
           {% endif %}
-          {% if evidence_checked_at != '' %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
+          {% if report_bearing_count > 0 and evidence_capture_date_known %}<p class="consensus-chart-meta">Newest accepted report captured: {{ evidence_checked_label }}</p>{% endif %}
         </div>
       </div>
 

@@ -451,9 +451,9 @@ def run() -> int:
               "INSUFFICIENT DATA" in mtext, mtext[:160])
         dated = rendered({"evidence_last_checked": "", "consensus_last_checked": ""})
         dtext = " ".join(re.sub(r"<[^>]+>", " ", dated or "").split())
-        check("D.4 a record with no evidence date renders no dangling 'Last evidence checked:'",
-              "Last evidence checked:" not in dtext
-              or not re.search(r"Last evidence checked:\s*(?:$|[A-Z][a-z]* ?$)", dtext),
+        check("D.4 a record with no evidence date renders no dangling 'Newest accepted report captured:'",
+              "Newest accepted report captured:" not in dtext
+              or not re.search(r"Newest accepted report captured:\s*(?:$|[A-Z][a-z]* ?$)", dtext),
               dtext[-160:])
         # The row carries one {% include %} the standalone renderer cannot resolve, so render the
         # span above it -- which is where the label is derived -- exactly as consensus_block does.

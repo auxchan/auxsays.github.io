@@ -256,7 +256,7 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 180
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
-auxsays/scripts/tests/test_patch_page_hierarchy.py = 144
+auxsays/scripts/tests/test_patch_page_hierarchy.py = 262
 # My Patch Watchlist: the visitor's own product list, local to their browser. Renders the shipped
 # patch layout to prove the control binds `page.product_id` (a patch page watches the PRODUCT, not
 # that one build), parses the other surfaces for their accessible state and their two distinct
@@ -336,6 +336,12 @@ auxsays/scripts/tests/test_windows_patch_identity.py = 30
 # narrow affected-range exception that keeps row 51, the shapes the rule must not touch, and the thread
 # 50506 re-run against the elevenforum fixture.
 auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
+# AUX-072: the audited withdrawal of those eight stored rows. Selected by the full five-field identity
+# (a Q&A thread is stored once per build it matched, so id or URL alone names several rows), pinned by
+# block hash, derived from the shared authority, three lines per row, row 51 and every sibling build
+# byte-identical, all-or-nothing refusal on any drift, idempotent. Run as the bare script on frozen
+# verbatim fixtures; never reads or writes the live store beyond hashing it.
+auxsays/scripts/tests/test_withdraw_windows_identity_not_the_subject_rows.py = 44
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
@@ -417,6 +423,11 @@ auxsays/scripts/tests/test_elevenforum_adapter.py = 104
 # that tracks configuration rather than outcome, so section [A] pins fail-closed directly:
 # `healthy` is checked last and must be earned.
 auxsays/scripts/tests/test_monitoring_truthfulness.py = 58
+# source_health.yml is a GENERATED deploy snapshot, never tracked (AUX-069): the committed copy was 37 rows
+# against 47 sources in a retired vocabulary. Pins that it is git-ignored, that no template or module
+# reads it, that the generator refuses an empty snapshot, and that no lane `git checkout`s the now
+# untracked path (which fails the whole cleanup step).
+auxsays/scripts/tests/test_source_health_generated_snapshot.py = 33
 auxsays/scripts/tests/test_monitoring_status.py = 42
 auxsays/scripts/tests/test_orchestration_production_adoption.py = 75
 auxsays/scripts/tests/test_orchestration_r1.py = 55

@@ -64,7 +64,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-054 | Resolved | Published claims | Medium | Collection health existed only in Liquid; a retired method made healthy pages read degraded |
 | AUX-055 | Resolved | Published claims | High | A stored live-consensus claim would keep rendering as live after the collection behind it stopped |
 | AUX-056 | Resolved | Published claims | High | No writer could store live consensus, so a release that earned it could never show it |
-| AUX-057 | Deferred | Published claims | Medium | A certified-live Windows page also says its evidence has not been revalidated recently |
+| AUX-057 | Deferred | Published claims | Medium | The patch-page freshness notice claimed a revalidation that no field records (fix pending deploy verification) |
 | AUX-058 | Resolved | Evidence integrity | Medium | DaVinci, OBS and PowerPoint still guessed themes and platforms from substrings |
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
@@ -80,6 +80,8 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
+| AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
+| AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
 
 ---
@@ -233,12 +235,49 @@ pins the eight, row 51, the boundary of the exception and the shapes the rule mu
 by the characterization) is not deterministically separable and is not closed. R2: a title that names only a
 feature train is deliberately not a competing identity (the broader variants were measured and rejected).
 R3: the eight existing rows stay counted until the separate audited withdrawal (counted: false, reason
-`identity_not_the_subject`) goes through the guarded writeback. R4: an Office build escaping the
+`identity_not_the_subject`) goes through the guarded writeback; closed by AUX-072. R4: an Office build escaping the
 foreign-product veto (row 41) is rejected here by identity, but the veto gap itself is a separate item.
 
 **Reopen only if** a counted Windows row has a title that names another update and neither the record's
 build nor KB (outside a stated affected range), or the exception ever keeps a range that starts above the
 target or is on another train.
+
+---
+
+### AUX-072 — Eight stored Windows rows stayed counted after AUX-067 refused their shape
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-11-04 (AUX-067 residual R3) · **Resolved** 2026-11-05
+
+**Symptom** AUX-067 stops new acceptances of a build-only identity whose title is about another update, but
+the eight rows it measured stayed counted: the store is append/dedupe oriented and Microsoft Learn Q&A has no
+revalidation adapter. Six Windows pages kept publishing them (25H2 8246, 8328, 9168 x2, 9278, 9457 x2; 26H2 9711).
+
+**Fix** `withdraw_windows_identity_not_the_subject_rows.py` withdraws the rows pinned in
+`scripts/audit/windows_identity_not_the_subject_withdrawal.json`: `counted: false`, `exclusion_reason:
+identity_not_the_subject`, `evidence_valid_for_current_patch: false`, row kept. A row is selected by its full
+five-field identity (product_id, update_version, target_build, id, source_url): a Q&A thread is stored once per
+build it matched, so the product/version/URL selector of the Acrobat and OBS tools names several rows here. The
+block must hash to its pinned value and the shared predicate must still refuse it against its record's current
+identity; a sweep refuses the run if the predicate refuses any counted row the manifest does not name. Dry run
+by default, `--write --confirm-write`, all or nothing, idempotent. Row 51 (25H2 8894) is pinned unchanged. The six
+records were regenerated only by the scoped lane writers (`build_consensus_from_evidence.py --product-id
+microsoft-windows-11 --reconcile-only`, then `apply_consensus_to_records.py --product-id microsoft-windows-11
+--write-all --confirm-write`), in the same commit as the store edit, so evidence and its counts move together.
+
+**Measured** Windows counted 535 -> 527 (all products 1485 -> 1477); all 2658 rows kept; store diff 24 lines.
+8246 21->20, 8328 7->6, 9168 22->20, 9278 7->6, 9457 27->25 (still Medium, at its floor), 26H2 9711 20->19.
+Verdicts (WAIT), maturity, bands, the live set (6) and the 33 gate unchanged; one "User report count updated
+to N." event per record; homepage Patch Signals and the Patch Feed order unchanged. 26H2 9711's newest accepted
+capture moves back a day (2026-10-30 -> 10-29) because the withdrawn row was the newest. A second run of the tool
+and both writers changes nothing. `test_withdraw_windows_identity_not_the_subject_rows.py` pins it (44 checks,
+18 mutants each killed by a named check). Re-baselined when main moved to 2c8f1861 (natural official-ingestion
+runs had rewritten the six records): main's records were taken and regenerated by the same two writers; the
+store bytes, all eight decisions and every figure above were unchanged
+(`scripts/audit/windows_identity_withdrawal_rebaseline_2026-11-05.json`, beside the original record).
+
+**Reopen only if** any of the eight counts again, row 51 stops counting, or `identity_not_the_subject` refuses a
+counted Windows row (that is a new candidate and needs its own audited manifest, never a widened run of this one).
 
 ---
 
@@ -3953,31 +3992,53 @@ failed promotion.
 
 ---
 
-### AUX-057 — A certified-live Windows page also says its evidence has not been revalidated recently
+### AUX-057 — The patch-page freshness notice claimed a revalidation that no field records
 
-- **Status** Deferred · **Area** Published claims · **Severity** Medium
+- **Status** Deferred (fix on branch `fix/freshness-capture-age-wording`; mark Resolved only after the new wording is verified on the deployed site) · **Area** Published claims · **Severity** Medium
 - **First seen** 2026-11-04
 
-**Symptom / gap** The three live Windows 25H2 pages (26200.7462, .7623, .7840) show "Evidence
-freshness needs revalidation. This evidence has not been revalidated recently" beside a certified
-live state. The page treats `evidence_last_checked` older than seven days as stale, and theirs dates
-from September and October. Their collection methods did run against those exact builds this cycle,
-which is why monitoring certifies.
+**Symptom / gap** On 2026-11-04 the three Windows 25H2 pages 26200.7462, .7623 and .7840 were
+certified live and showed "Evidence freshness needs revalidation. This evidence has not been
+revalidated recently" beside that live state. The page treats `evidence_last_checked` older than
+seven days as stale, and theirs dated from September and October. Their collection methods did run
+against those exact builds, which is why monitoring certified them.
 
-**Why deferred** The two facts differ, and both can be true. `evidence_last_checked` is the newest
-accepted row's `captured_at` (`apply_consensus_to_records._latest_captured_at`), not the time
-collection last ran. A method's `last_run` proves an attempt, not that the accepted reports were
-revalidated. So stamping the field when a collector visits would make old evidence look freshly
-verified. The fix is a semantics decision, not a one-line repair.
+**History, both facts preserved** The original observation was a certified-live page. Those three
+pages were afterwards correctly revoked from live when Tech Community collection was blocked, and
+today render as Verified reports with "Collection blocked". Their status can change again as
+collection and certification change; nothing here treats them as permanently pilot. The wording
+defect was never about their maturity: it applied to every page that showed the notice, 222 on
+2026-11-05 across eight products, none of them live.
 
-**Current impact** Reader-visible on three live pages: the live label and the freshness notice
-describe different scopes without saying so. Maturity, counts, citations and verdicts are unaffected.
-The three live OBS pages do not show the notice.
+**Root cause** `evidence_last_checked` is the capture time of the newest accepted report
+(`apply_consensus_to_records._latest_captured_at`), not the time anyone re-verified anything. A
+method's `last_run` proves an attempt, not that accepted reports were revalidated, so stamping the
+field when a collector visits would make old evidence look freshly verified. The notice said
+"revalidated" about a date that records no revalidation. The card line beside the verdict had the
+same misnomer ("Last evidence checked").
 
-**Revisit trigger** The next presentation or freshness change to the patch page, or a second product
-going live with old accepted evidence. First decide what `evidence_last_checked` means and who owns
-it, and whether a separate field backed by actual report revalidation is needed. Keep the seven-day
-page rule, and never derive freshness from method-health telemetry.
+**Fix (presentation only)** The notice states only what is known: "No recently captured accepted
+reports. The newest accepted report was captured on <date>. Collection status is reported
+separately.", or "Capture date not recorded." with an age that cannot be checked when the date is
+missing or invalid. The blocked and degraded branches keep their headline and add the same capture
+sentence. The card line is now "Newest accepted report captured: <date>", printed only where an
+accepted report and a valid date exist; 13 zero-report pages that carried a collector date lose the
+line rather than claim a capture. The seven-day rule, method-health logic, stored timestamps,
+evidence and verdicts are unchanged. The set of pages showing the notice is identical before and
+after (225).
+
+**Fallback audit** The layout used to fall back to `consensus_last_checked`. That field is a
+consensus calculation time, and its semantics were never shown equivalent to a capture date, so it
+no longer stands in for one: a record with only that field reads "Capture date not recorded". No
+record carries it today (0 of 1517), so no page changed because of this. Python readers
+(`write_update_record`, `audit_consensus_evidence`) still fall back to it for their own purposes
+and were left alone. One residual: the guarded OBS 32.1.1 writeback in `revalidate_consensus_evidence.py`
+can stamp `evidence_last_checked` with the run time. It is manual only, wired to no workflow, and the
+stored value today equals the newest accepted `captured_at`.
+
+**Revisit trigger** A writer other than the capture-time derivation sets `evidence_last_checked`,
+or a separate field backed by actual report revalidation is introduced. Never derive freshness from
+method-health telemetry, and never present a consensus check time as a capture date.
 
 **Work that this item must not block** Live promotion and revocation, and the classification sprint.
 
@@ -4461,6 +4522,33 @@ change ships without a measured need (budget tuning is a separate decision).
 16 checks on a commit that changes only generated data (a natural ingestion or archive run), or another
 governed suite that reads the real corpus through `generated_records()` goes red on such a data-only
 commit.
+
+---
+
+### AUX-069 — `source_health.yml` was a stale tracked copy of a deploy-generated snapshot
+
+- **Status** Resolved · **Area** Deploy hygiene · **Severity** Low
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
+
+**Symptom / gap** `auxsays/_data/source_health.yml` was last committed on 2026-05-02: 37 rows against 47
+configured sources, in the retired Staged/Healthy/Failing vocabulary. `pages.yml` regenerates it before
+every `jekyll build`, so the live site was never wrong, but the stale tracked copy read as authoritative,
+and three writeback cleanups restored it with `git checkout --`.
+
+**Consumer audit** No template, include, layout or page reads it, and no Python module reads it (the
+generator only writes it). Named in code only by `source_health_snapshot.py`, `pages.yml`, the cleanup
+steps of `davinci-updates.yml`, `obs-evidence-collection.yml` and `promote-davinci-verified-reports.yml`,
+and two forbidden-write-path lists in the Playwright capture tooling (unaffected). A local build without
+it renders nothing different.
+
+**Fix** The file is untracked and git-ignored; deploy-time generation is unchanged. The three cleanups no
+longer `git checkout` it (an untracked pathspec fails the step) and `rm -f` any stray copy; they still
+restore the tracked `patch_ingest_state.json`. The generator now exits non-zero without writing when its
+source list is unreadable or empty, so a failed generation is never an empty snapshot that reads as success.
+Monitoring semantics are unchanged. `test_source_health_generated_snapshot.py` pins all of it.
+
+**Reopen only if** a template or module starts reading `source_health.yml` (it must then fail closed when
+the file is absent), or a lane needs to commit it.
 
 ---
 
