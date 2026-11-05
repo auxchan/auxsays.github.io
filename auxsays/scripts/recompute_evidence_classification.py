@@ -28,6 +28,8 @@ excerpt disagrees with the full thread on 44 of 105 rows measured).
 
 Run:  python auxsays/scripts/recompute_evidence_classification.py            # dry run, JSON on stdout
       python auxsays/scripts/recompute_evidence_classification.py --write    # in-place, block-scoped
+      python auxsays/scripts/recompute_evidence_classification.py --product-id P --only-id ID ... [--write]
+                                                                              # a NAMED handful only
 """
 from __future__ import annotations
 
@@ -55,6 +57,10 @@ ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / "_data" / "consensus_evidence.yml"
 
 WRITABLE = frozenset({"platform", "issue_theme", "workflow_area", "severity"})
+
+# An id-scoped run (`--only-id`) is for correcting a NAMED handful of rows after a classifier fix
+# (AUX-062). It never writes `platform`, and it considers no row that was not named.
+ONLY_ID_WRITABLE = frozenset({"issue_theme", "workflow_area", "severity"})
 
 # When each collector's repaired classifier merged. A row captured earlier was produced by the
 # replaced chain; a later one by the shipped classifier.
@@ -326,11 +332,26 @@ def apply_writes(text: str, row_ids: list[Any], writes: dict[int, dict[str, str]
     return "".join(pieces)
 
 
-def run(store: Path, write: bool) -> dict[str, Any]:
+def run(store: Path, write: bool, only_ids: tuple[str, ...] = (), product_id: str = "") -> dict[str, Any]:
     raw = store.read_bytes().decode("utf-8")
     rows = yaml.load(raw, Loader=yaml.SafeLoader)["evidence"]
+    named: dict[str, list[int]] = {}
+    if only_ids:
+        if product_id not in REPAIRED_AT:
+            raise SystemExit("refusing: --only-id needs --product-id naming one repaired product")
+        for rid in only_ids:
+            hits = [i for i, row in enumerate(rows) if _s(row, "product_id") == product_id and row.get("id") == rid]
+            if len(hits) != 1:
+                raise SystemExit(f"refusing: --only-id {rid!r} matches {len(hits)} {product_id} rows, not exactly one")
+            named[rid] = hits
+        if len(set(only_ids)) != len(only_ids):
+            raise SystemExit("refusing: --only-id repeats an id")
+    selected = {i for hits in named.values() for i in hits}
     decisions = [(index, decide(row)) for index, row in enumerate(rows)
-                 if _s(row, "product_id") in REPAIRED_AT]
+                 if _s(row, "product_id") in REPAIRED_AT and (not only_ids or index in selected)]
+    if only_ids:
+        for _index, d in decisions:
+            d["write"] = {k: v for k, v in d["write"].items() if k in ONLY_ID_WRITABLE}
     writes = {index: d["write"] for index, d in decisions if d["write"]}
     summary: dict[str, dict[str, int]] = {}
     for _index, d in decisions:
@@ -362,6 +383,9 @@ def run(store: Path, write: bool) -> dict[str, Any]:
         "themes_written": sum("issue_theme" in w for w in writes.values()),
         "summary": summary, "changes": changes, "written": False,
     }
+    if only_ids:
+        report["only_ids"] = {rows[i].get("id"): {"theme": basis[i]["theme"], "written": i in writes}
+                              for i in sorted(selected)}
     if write and writes:
         store.write_bytes(new_text.encode("utf-8"))
         report["written"] = True
@@ -372,8 +396,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     parser.add_argument("--store", type=Path, default=STORE)
     parser.add_argument("--write", action="store_true", help="apply the decided edits in place")
+    parser.add_argument("--product-id", default="", help="required with --only-id")
+    parser.add_argument("--only-id", action="append", default=[], metavar="ID",
+                        help="consider ONLY this row id (repeatable); writes theme, workflow_area and "
+                             "severity only, never platform")
     args = parser.parse_args(argv)
-    print(json.dumps(run(args.store, args.write), indent=2, ensure_ascii=False))
+    if args.product_id and not args.only_id:
+        parser.error("--product-id is only meaningful with --only-id")
+    print(json.dumps(run(args.store, args.write, tuple(args.only_id), args.product_id),
+                     indent=2, ensure_ascii=False))
     return 0
 
 

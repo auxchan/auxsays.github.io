@@ -73,10 +73,12 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
+| AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
+| AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
 
 ---
@@ -4258,26 +4260,71 @@ would alter the payload for every product.
 
 ### AUX-062 — Three classifier misses the sprint measured but did not fix
 
-- **Status** Deferred · **Area** Evidence integrity · **Severity** Low
-- **First seen** 2026-11-04
+---
+
+### AUX-062 — Three classifier misses the sprint measured; the DaVinci two are fixed, two are deferred
+
+- **Status** Resolved for the DaVinci "gpu" cue (C) and the DaVinci "plugin issues" bucket (D) · A and B
+  Deferred · **Area** Evidence integrity · **Severity** Low
+- **First seen** 2026-11-04 · **C and D resolved** 2026-11-04
 
 **Symptom / gap**
-- A bare "Windows" with no OS context reads as unknown. Examples: "freezes my entire Windows",
-  "Windows Davinci Resolve Studio 20.1 ...", "Windows color managed HDR viewers". Three counted
-  DaVinci rows lost a supported label in AUX-059, though never to a wrong OS.
-- OBS has no generic crash theme, so "OBS Crashes if ..." falls to "unspecified issue".
-- DaVinci treats "gpu" as a performance cue, so "The GPU failed to perform image processing" reads as
-  a performance regression.
+- A. A bare "Windows" with no OS context reads as unknown. DEFERRED.
+- B. OBS has no generic crash theme, so "OBS Crashes if ..." falls to "unspecified issue". DEFERRED.
+- C. DaVinci treated "gpu" as a performance cue in the producer (`gpus?` in the performance rule) and in
+  BOTH publication bucketers (`"gpu" in text`). "The GPU failed to perform image processing", "Your GPU
+  memory is full" and a hardware spec line were published as performance slowdowns: 10 of the 36 stored
+  "performance regression" rows (28%), no false negatives. RESOLVED.
+- D. `apply_consensus_to_records._public_issue_bucket` had a DaVinci branch
+  (`if "plugin" in text: return "plugin issues"`) that the builder never had. "plugin" enters only through
+  the area label "plugins / codecs", so seven codec/media reports were published as "plugin issues" on
+  v16, 20.1, 20.1.1, 20.3.1, 21 PB1, 21 and 21.0. RESOLVED.
 
-**Current impact** Row platform feeds no count, verdict or template. A theme miss feeds prose only.
+**Fix (C and D)**
+- C: `gpus?` is removed from the DaVinci performance rule and `"gpu"` from both bucketers. `gpu` stays in the
+  frozen DaVinci sentiment triggers: sentiment is verdict-bearing and was not part of this item. Genuine
+  performance, lag and slow matches are unchanged.
+- D: the writer's "plugin issues" branch is deleted. The builder is the reference and already printed
+  "compatibility issue".
+- Historical rows: `recompute_evidence_classification.py` gained `--only-id` (with `--product-id`). It
+  considers only the named rows, refuses an unknown or repeated id, and never writes `platform`. Nine of
+  the ten rows were corrected through it, theme, workflow area and severity only (audit:
+  `scripts/audit/aux062_davinci_gpu_historical_2026-11-04.json`).
 
-**Why deferred** Each is a vocabulary change with its own corpus measurement. The sprint authorised
-only demonstrated defects.
+**Unresolved: one stored row.** `...1os2u3c-ai-multicam-smartswitch-the-gpu-failed-to` (stored on the
+20.2.3 page, "AI Multicam SmartSwitch - The GPU failed to perform image processing Error 9 Fix") still carries
+"performance regression". The recompute tool's producer guard refuses it: its retained text says "crash", so
+neither the replaced chain nor the shipped classifier reproduces the stored label, and the label's origin
+is not in hand. The shipped classifier would call it a crash (severity medium to high). It is NOT corrected,
+and no forward-only change is a historical correction. Its page keeps the bucket until that row is judged.
 
-**Revisit trigger** The next change to `lib/evidence_classification.py` or to the OBS or DaVinci theme
-tables.
+**Measured (scratch tree, DaVinci-scoped `apply_consensus_to_records`, no unscoped write)**
+- Code alone changes exactly seven pages: 16, 20.1, 20.1.1, 20.3.1, 21 PB1, 21 and 21.0 ("plugin issues"
+  becomes "compatibility issue"). Five of them carry it in the consensus sentence (16, 20.1, 20.1.1, 20.3.1, 21.0);
+  PB1 and 21 only in accepted-report labels.
+- With the nine rows corrected, four more pages change classification labels: 20.3.2 and 21.0.4 (labels
+  only), 21.1 (its third phrase "performance slowdowns" becomes "render/export failures") and 21.1.1
+  ("performance slowdowns" leaves its top three).
+- Counts, verdicts, maturity, sentiment, identity, URLs, dates and status events: unchanged on all 1517
+  records. Only `issue_theme`, `workflow_area` and, in page prose, issue labels differ.
 
-**Work that this item must not block** Live promotion and the classification sprint.
+**Verification.** `test_davinci_gpu_plugin_bucket.py = 34` [blocking]: verbatim false-positive titles,
+genuine controls, the frozen sentiment trigger, a parity test over the whole rule-table x title grid and
+every DaVinci row in the store (the two bucketers agree on all 335), the nine corrected rows, and
+`--only-id` on a temporary store. Each fix, reverted alone, fails named checks.
+
+**Deferred specs.**
+- A. 0 false positives, 11 false negatives (DaVinci 9 of 335, OBS 2 of 288). No consumer reads row
+  platform, and the broad fix regresses correct unknowns ("switch from Windows to Linux", Teams "Windows
+  only" contrasts). Smallest safe fix if ever wanted: add `installation` to `_WINDOWS_AFTER_RE` and a
+  `windows (10|11)` parenthesis form, which recovers 2 of the 11.
+- B. 52 OBS titles name a crash and only 2 are crash-themed. Appending a lookaround rule last changes 46
+  rows with 1 false positive, and it must not match the crash-log URL path. Public prose is unchanged on
+  all 13 versions, so the reader benefit is nil. Separately, the OBS sentiment triggers omit generic
+  "crash" (16 of 18 crash rows are moderate); that is verdict-bearing and not part of this item.
+
+**Reopen only if** a new, material production defect appears in the DaVinci classification, or the
+unresolved SmartSwitch row is judged.
 
 ---
 
@@ -4384,6 +4431,31 @@ request is green. The archive pull request ran its integrity suites before any r
 A policy that rewrites the corpus at run time should also run the integrity suites over the converged
 tree.
 
+---
+
+### AUX-068 — PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the ceiling, the thread population or exhaustion
+
+- **Status** Resolved · **Area** Observability · **Severity** Low
+- **First seen** 2026-11-04
+
+**Symptom / gap** All 29 `learn_qna_segment_context` rows carried `fetches=200` against a configured
+200, so a saturated stage and a finished one read the same. The orchestrator already computed the
+distinct and eligible thread counts but sent them only to a receipt.
+
+**Resolved** The context-resolution health note now appends `max_fetches`, `successful_fetches`
+(threads fetched AND parsed, counted from the per-thread outcome cache, independent of the attempt
+counter), `distinct_threads`, `eligible_threads`, `thread_scope`, `budget_exhausted`,
+`threads_refused_budget` and, when exhausted, `coverage_bounded=yes`. `fetches=` is attempts, bumped
+before the transport call. **Scope:** the two thread counts describe the RUN-WIDE population across
+every patch target of the run (`thread_scope=all_patch_targets_of_this_run`), not the row's patch, so
+every row of a run carries the same values; `eligible_threads` is the subset ranked 0 or 1 by
+`resolution_priority`. `budget_exhausted` means attempts reached the ceiling; whether anything was
+actually left unfetched is `threads_refused_budget`. Telemetry only: the 200 budget, discovery order,
+acceptance, counts, verdicts and status vocabulary are untouched. Pinned by
+`test_powerpoint_budget_telemetry.py` (33 checks, 14 mutants killed), including the real writer.
+
+**Reopen only if** the note loses a field, a thread count is presented as per-patch, or a budget
+change ships without a measured need (budget tuning is a separate decision).
 **Reopen only if** `test_collector_traversal_order.py` fails or reports anything other than its governed
 16 checks on a commit that changes only generated data (a natural ingestion or archive run), or another
 governed suite that reads the real corpus through `generated_records()` goes red on such a data-only

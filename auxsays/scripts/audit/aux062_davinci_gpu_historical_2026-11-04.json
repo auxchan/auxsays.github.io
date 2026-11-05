@@ -1,0 +1,271 @@
+{
+  "generated_at": "2026-11-04T21:52:24Z",
+  "store_sha256_before": "dda3a99bcff12acd9c99a7e7400c4a04b0f4da7d72e4a512936026392adee1fc",
+  "store_sha256_after": "cc6a73c1351b3f43f0cf75fe667307882e40a5e9f749aa048a0bc94a99da1372",
+  "rows_in_scope": 10,
+  "rows_changed": 9,
+  "platform_labels_written": 0,
+  "themes_written": 9,
+  "summary": {
+    "blackmagic-davinci:platform": {
+      "confirmed": 8,
+      "not_reproducible_from_retained_text": 2
+    },
+    "blackmagic-davinci:theme": {
+      "rewritten_unsupported": 9,
+      "not_reproducible_from_retained_text": 1
+    }
+  },
+  "changes": [
+    {
+      "id": "blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t1gyr9-can-somebody-help-me-please",
+      "product_id": "blackmagic-davinci",
+      "update_version": "20.3.2",
+      "counted": true,
+      "title": "Can somebody help me please?",
+      "issue_theme": [
+        "performance regression",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "timeline / GPU performance",
+        "general DaVinci Resolve workflow"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uizkd7-gpu-failed-to-perform-image-processing-be",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "GPU failed to perform image processing because of an error. Error code 1",
+      "issue_theme": [
+        "performance regression",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "timeline / GPU performance",
+        "general DaVinci Resolve workflow"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wazcmw-davinci-resolve-211-your-gpu-memory-is-fu",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "DaVinci Resolve 21.1 - Your GPU memory is full",
+      "issue_theme": [
+        "performance regression",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "timeline / GPU performance",
+        "general DaVinci Resolve workflow"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w927vk-why-isnt-my-gpu-being-recognized-resolve",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "Why isn't my GPU being recognized? (Resolve 21, Debian 13 KDE)",
+      "issue_theme": [
+        "performance regression",
+        "install issue"
+      ],
+      "workflow_area": [
+        "timeline / GPU performance",
+        "installation"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wazcmw-davinci-resolve-211-your-gpu-memory-is-fu",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21.1",
+      "counted": true,
+      "title": "DaVinci Resolve 21.1 - Your GPU memory is full",
+      "issue_theme": [
+        "performance regression",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "timeline / GPU performance",
+        "general DaVinci Resolve workflow"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1waholl-the-new-davinci-resolve-211-version-is-br",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21.1",
+      "counted": true,
+      "title": "The new DaVinci Resolve 21.1 version is broken",
+      "issue_theme": [
+        "performance regression",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "timeline / GPU performance",
+        "general DaVinci Resolve workflow"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wygy6n-davinci-resolve-2111-timeline-bug",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21.1.1",
+      "counted": true,
+      "title": "DaVinci Resolve 21.1.1 Timeline bug",
+      "issue_theme": [
+        "performance regression",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "timeline / GPU performance",
+        "general DaVinci Resolve workflow"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x6lczv-solved-davinci-resolve-21-unsupported-gpu",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21",
+      "counted": true,
+      "title": "SOLVED: DaVinci Resolve 21 “Unsupported GPU Processing Mode” on Windows 11 — Root cause was CUDA_VISIBLE_DEVICES=-1",
+      "issue_theme": [
+        "performance regression",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "timeline / GPU performance",
+        "general DaVinci Resolve workflow"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "confirmed",
+        "theme": "rewritten_unsupported"
+      }
+    },
+    {
+      "id": "blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x9zw94-sombody-please-help-me-im-loosing-my-mind",
+      "product_id": "blackmagic-davinci",
+      "update_version": "21.0.4",
+      "counted": true,
+      "title": "Sombody Please Help me, im loosing my mind",
+      "issue_theme": [
+        "performance regression",
+        "unspecified issue"
+      ],
+      "workflow_area": [
+        "timeline / GPU performance",
+        "general DaVinci Resolve workflow"
+      ],
+      "severity": [
+        "medium",
+        "medium"
+      ],
+      "basis": {
+        "platform": "not_reproducible_from_retained_text",
+        "theme": "rewritten_unsupported"
+      }
+    }
+  ],
+  "written": true,
+  "only_ids": {
+    "blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t1gyr9-can-somebody-help-me-please": {
+      "theme": "rewritten_unsupported",
+      "written": true
+    },
+    "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uizkd7-gpu-failed-to-perform-image-processing-be": {
+      "theme": "rewritten_unsupported",
+      "written": true
+    },
+    "blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1os2u3c-ai-multicam-smartswitch-the-gpu-failed-to": {
+      "theme": "not_reproducible_from_retained_text",
+      "written": false
+    },
+    "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wazcmw-davinci-resolve-211-your-gpu-memory-is-fu": {
+      "theme": "rewritten_unsupported",
+      "written": true
+    },
+    "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w927vk-why-isnt-my-gpu-being-recognized-resolve": {
+      "theme": "rewritten_unsupported",
+      "written": true
+    },
+    "blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wazcmw-davinci-resolve-211-your-gpu-memory-is-fu": {
+      "theme": "rewritten_unsupported",
+      "written": true
+    },
+    "blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1waholl-the-new-davinci-resolve-211-version-is-br": {
+      "theme": "rewritten_unsupported",
+      "written": true
+    },
+    "blackmagic-davinci-21-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wygy6n-davinci-resolve-2111-timeline-bug": {
+      "theme": "rewritten_unsupported",
+      "written": true
+    },
+    "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x6lczv-solved-davinci-resolve-21-unsupported-gpu": {
+      "theme": "rewritten_unsupported",
+      "written": true
+    },
+    "blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1x9zw94-sombody-please-help-me-im-loosing-my-mind": {
+      "theme": "rewritten_unsupported",
+      "written": true
+    }
+  }
+}

@@ -86,6 +86,14 @@ auxsays/scripts/tests/test_recompute_teams_classification.py = 32
 # bucketer copies are pinned, and they must agree on every counted OBS row.
 auxsays/scripts/tests/test_public_issue_bucket.py = 20
 
+# AUX-062 C+D, the final DaVinci classification item. "gpu" read as a performance cue in the producer and
+# both bucketers ("GPU memory is full", an error dialog or a spec line published as a performance
+# slowdown); one bucketer also carried a "plugin issues" branch the other never had, so seven codec
+# reports were mislabelled. Pins the verbatim titles, a parity test over every DaVinci row and the
+# full rule x title grid, the frozen sentiment trigger, and the id-scoped `--only-id` recompute that
+# corrected the stored rows (never platform, never an unnamed row).
+auxsays/scripts/tests/test_davinci_gpu_plugin_bucket.py = 34
+
 # The merge authority. AUX-013 was not a missing rule, it was a rule with nothing behind it: PR #163
 # merged nineteen seconds after its own ci-integrity run concluded `failure`, because the status read
 # and the merge were one gesture. Server-side enforcement was measured and refused (three probes in
@@ -258,6 +266,10 @@ auxsays/scripts/tests/test_powerpoint_context_resolution.py = 101
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
+# AUX-068: the PowerPoint Learn Q&A collection budget (attempted vs max, successful, run-wide distinct
+# and eligible threads, exhaustion) is written into the context-resolution health note, and survives
+# the real writer. Offline: the thread transport is injected.
+auxsays/scripts/tests/test_powerpoint_budget_telemetry.py = 33
 auxsays/scripts/tests/test_premiere_editorial_protection.py = 36
 auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
 

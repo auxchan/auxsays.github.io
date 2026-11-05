@@ -2130,8 +2130,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -4931,8 +4931,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -30792,8 +30792,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -30816,8 +30816,8 @@ evidence:
   match_basis: exact_version_alias
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: install issue
+  workflow_area: installation
   platform: unknown
   severity: medium
   sentiment: negative
@@ -32286,8 +32286,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -32358,8 +32358,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -48535,8 +48535,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: macos
   severity: medium
   sentiment: negative
@@ -56781,8 +56781,8 @@ evidence:
   match_basis: exact_version_alias
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: windows
   severity: medium
   sentiment: negative
@@ -61528,8 +61528,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: windows
   severity: medium
   sentiment: negative
