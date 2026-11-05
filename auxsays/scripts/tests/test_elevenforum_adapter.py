@@ -18,7 +18,8 @@ Nothing here writes `_data`, a record or the evidence store.
     G  health vocabulary       blocked / partial / no_results / success; the cap is not degradation
     H  disabled means disabled no flag -> no request, no pool, no health row, no ownership entry
     I  AUX-063 RESOLVED        thread 50506 was attributed to the wrong patch by the pre-AUX-067
-                               authority; it is now rejected as identity_not_the_subject
+                               authority; it is now rejected as identity_not_the_subject. AUX-076:
+                               thread 50447's running baseline (26300.9457) is refused in isolation
     J  duplicates              similarity is an annotation, never a reason to drop a row
     K  registry, ledger, dry run
 
@@ -601,6 +602,26 @@ def run() -> int:  # noqa: PLR0915
     check("I8 the weakness is ledgered AUX-063 Resolved by AUX-067, which records the residual it does not close",
           "| AUX-063 | Resolved |" in ledger and "### AUX-063" in ledger and "AUX-067" in ledger.split("### AUX-063", 1)[1]
           and "### AUX-067" in ledger and "residual" in ledger.split("### AUX-067", 1)[1].lower())
+    # AUX-076 tripwire (the AUX-067 residual R1 on a full opening post). 50447's author is RUNNING 26H2
+    # 26300.9457 and reports KB5127648 (26300.9711) failing to install. Judged against the 26300.9457 record ALONE
+    # (claims=None, so no claim order can hide the result) the build is only the reporter's baseline.
+    rec_9457 = PatchRecord(WINDOWS_PRODUCT_ID, "26H2", Path("synthetic-26h2-9457.md"), "2026-09-29T00:00:00Z",
+                           "current", "Windows 11", "26300.9457")
+    target_9457 = {"target_feature_version": "26H2", "target_kb": "", "target_os_build": "26300.9457",
+                   "target_release_date": "2026-09-29T00:00:00Z", "update_version": "26H2"}
+    acc_9457, rej_9457 = mw.evaluate_candidates(rec_9457, target_9457, [threads["50447"]], CAPTURED, claims=None)
+    check("I9 [AUX-076] in isolation, 50447 is REFUSED on 26H2 26300.9457 as identity_not_linked_to_issue (its running baseline)",
+          not acc_9457 and len(rej_9457) == 1 and rej_9457[0]["exclusion_reason"] == "identity_not_linked_to_issue"
+          and rej_9457[0]["matched_os_build"] == "26300.9457",
+          str([r.get("exclusion_reason") for r in rej_9457]))
+    lane: dict[str, list[str]] = {}
+    claims_lane: dict = {}
+    for rec_l, target_l in ((REC_26H2, TARGET_26H2), (rec_9457, target_9457), (REC_25H2, TARGET_25H2)):
+        acc_l, _rej_l = mw.evaluate_candidates(rec_l, target_l, [threads["50447"]], CAPTURED, claims_lane)
+        for row_l in acc_l:
+            lane.setdefault(row_l["source_url"], []).append(rec_l.target_build)
+    check("I10 [AUX-076] in lane order 50447 still counts exactly once, on 26H2 26300.9711 by its KB, and never on 26300.9457",
+          lane == {u50447: ["26300.9711"]}, str(lane))
 
     # ---------------------------------------------------------------- J. duplicates are candidates only
     base_text = "KB5127648 fails to install on my 26H2 laptop with error 0x80070017 every time I try."

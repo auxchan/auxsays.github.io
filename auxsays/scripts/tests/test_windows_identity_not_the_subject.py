@@ -10,7 +10,8 @@ reads or writes `_data`, a record or the evidence store.
     B  row 51 ("build 26200.8875+") is kept by the affected-range exception, and the exception is
        exactly as narrow as documented (marker, same train, at or below the target, no remedy wording)
     C  synthetic shapes: M1 / M3 rejected; M4 / M5 / M6 / M7 kept; M2 and a train-only title are the
-       documented residuals the rule does not claim to close
+       documented residuals this rule does not claim to close (closed for future acceptance by the
+       later link rule, AUX-076, which C7 / C8 now pin)
     D  everything the rule must NOT touch: KB + train identity, target build or KB in the title,
        no competing token, and the date / release / identity gates that run before it
     E  the rule's position and vocabulary, and the end-to-end row shape through evaluate_candidates
@@ -171,12 +172,18 @@ def run() -> int:  # noqa: PLR0915
     check("C6 M7: another KB in the title but the target KB named too -> kept", m7 is None, str(m7))
     m2 = replay(T25, "Blue screen on startup after update",
                 "I am on 25H2 26200.9711 (current). Blue screen every morning since the update, removing the update fixed it.")
-    check("C7 RESIDUAL M2: a baseline mention with no competing token in the title is NOT closed (documented, not claimed)",
-          m2 is None, str(m2))
+    # Residual R1 is closed for future acceptance by AUX-076 (identity_not_linked_to_issue), which runs AFTER
+    # this rule: the two shapes this rule deliberately leaves alone are now refused by that one, not by this.
+    check("C7 RESIDUAL M2 (closed by AUX-076): a baseline mention with no competing token in the title is not THIS rule's, "
+          "and the link rule refuses it",
+          m2 == "identity_not_linked_to_issue"
+          and mw.identity_not_the_subject(T25, "Blue screen on startup after update", "", "26200.9711") is False, str(m2))
     m1_train = replay(T25, "Win11 26H2 boot BSOD after update",
                       "Win11 Home 25H2 26200.9711 (current). Issue on 26H2 / KB5121794. Removing KB5121794 fixed it, BSOD gone.")
-    check("C8 RESIDUAL: a TRAIN-only title (no competing KB or build) is not rejected; the broader train variant is out of scope",
-          m1_train is None, str(m1_train))
+    check("C8 RESIDUAL (closed by AUX-076): a TRAIN-only title is still not a competing identity for THIS rule; the link rule "
+          "refuses the unlinked baseline build instead",
+          m1_train == "identity_not_linked_to_issue"
+          and mw.identity_not_the_subject(T25, "Win11 26H2 boot BSOD after update", "", "26200.9711") is False, str(m1_train))
     e = replay(T26, "KB5127936 breaks Xbox 360 Wireless Controller in all games",
                "After installing KB5127936 my Xbox controller fails. I am on 26H2 26300.9711 and it stopped working after the update.")
     check("C9 a title naming ANOTHER KB with the record's build only in the body is rejected on the 26H2 record too", e == REASON, str(e))

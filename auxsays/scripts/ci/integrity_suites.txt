@@ -320,6 +320,12 @@ auxsays/scripts/tests/test_ingestion_run_health.py = 128
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
 auxsays/scripts/tests/test_windows_count_authority.py = 104
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
+# AUX-076: a build-only identity whose title is silent on it counts only when the body links the build ITSELF
+# to the issue (the AUX-067 residual R1). Each occurrence of the build gets one anchored role, vetoes before
+# links, and every refusal is checked against the authority with the rule switched off. Frozen SYNTHETIC
+# fixtures only: the 24 corpus shapes are paraphrases, and no live store total is read or pinned, so
+# evidence growth cannot turn it red. Also pins one authority for all three Windows discovery methods.
+auxsays/scripts/tests/test_windows_identity_link_roles.py = 162
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 # AUX-067: a build-only identity whose TITLE is about another KB or build is not a report on the build
 # the author merely quoted. Pins the eight confirmed false acceptances (stored fields as fixtures), the
@@ -404,7 +410,7 @@ auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
 # budget at the session level, challenge classification, the opening-post-only parser, and the known
 # attribution weakness thread 50506 exposed (AUX-063), now rejected as identity_not_the_subject (AUX-067).
 # Fixture-only; the dry-run script it drives is zero-write and its output is checked here.
-auxsays/scripts/tests/test_elevenforum_adapter.py = 104
+auxsays/scripts/tests/test_elevenforum_adapter.py = 106
 # A monitoring claim must describe what collection actually DID. `coverage_status_label` is a
 # static editorial string, and three render sites published it as a claim: 29 products asserted
 # "Monitoring active" with no enabled source, 27 companies asserted it with zero healthy

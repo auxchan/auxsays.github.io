@@ -1,0 +1,776 @@
+{
+ "schema": 1,
+ "ledger": "AUX-076",
+ "about": "SYNTHETIC paraphrases written for this test, one per stored Windows row; no third-party text. Each keeps the structure the link rule reads (build position, cue words, sentence breaks, spec labels, the title-copy opening) and names its stored original only by (update_version, target_build, question id). Equivalence with the originals is checked by diagnose_windows_link_roles.py --fixture-equivalence, never by the governed suite.",
+ "text_rule": "text = parent_title + report_title + report_text_excerpt, a trailing '...' removed",
+ "cases": [
+  {
+   "case": "C01",
+   "kind": "refuse",
+   "original": [
+    "24H2",
+    "26100.7840",
+    "5816189"
+   ],
+   "declared_limit_l4": true,
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5077181",
+    "target_os_build": "26100.7840",
+    "target_release_date": "2026-02-10T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5816189/synthetic-fixture-c01",
+   "source_date": "2026-03-10",
+   "parent_title": "Ethernet and Wi-Fi both down after the Windows 11 24H2 update - Microsoft Q&A",
+   "report_title": "Ethernet and Wi-Fi both down after the Windows 11 24H2 update - Microsoft Q&A",
+   "report_text_excerpt": "Ethernet and Wi-Fi both down after the Windows 11 24H2 update - Microsoft Q&A wired and wireless networking stopped working after the Windows 11 24H2 update Windows Release OS: 26100.7840 Tried so far: both adapters appear in Device Manager with no warning icon. ipconfig output is empty...",
+   "matched_kb": "",
+   "matched_os_build": "26100.7840",
+   "matched_feature_version": "24H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C02",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.7462",
+    "6034766"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5072033",
+    "target_os_build": "26200.7462",
+    "target_release_date": "2025-12-09T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6034766/synthetic-fixture-c02",
+   "source_date": "2026-10-12",
+   "parent_title": "26H2 feature update installation error 0x800f0993 - Microsoft Q&A",
+   "report_title": "26H2 feature update installation error 0x800f0993 - Microsoft Q&A",
+   "report_text_excerpt": "26H2 feature update installation error 0x800f0993 - Microsoft Q&A I own a Beelink SER8 mini PC with a Ryzen 7 8845HS and Windows 11 Pro OS Build 26200.7462. Nearly every month updates are a struggle on this one PC and never on my other Windows machines. I...",
+   "matched_kb": "",
+   "matched_os_build": "26200.7462",
+   "matched_feature_version": "",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C03",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.7840",
+    "5816066"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077181",
+    "target_os_build": "26200.7840",
+    "target_release_date": "2026-02-10T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5816066/synthetic-fixture-c03",
+   "source_date": "2026-08-26",
+   "parent_title": "WSL2 install stuck at 14 percent, Virtual Machine Platform will not turn on - Microsoft Q&A",
+   "report_title": "WSL2 install stuck at 14 percent, Virtual Machine Platform will not turn on - Microsoft Q&A",
+   "report_text_excerpt": "WSL2 install stuck at 14 percent, Virtual Machine Platform will not turn on - Microsoft Q&A System: Windows 11 Home, Version 25H2, OS Build 26200.7840 Hardware: CPU virtualization turned on in firmware (checked via msinfo32) Region: Kenya (this matters, see the cause below) First...",
+   "matched_kb": "",
+   "matched_os_build": "26200.7840",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C04",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.7840",
+    "5779394"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077181",
+    "target_os_build": "26200.7840",
+    "target_release_date": "2026-02-10T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5779394/synthetic-fixture-c04",
+   "source_date": "2026-02-24",
+   "parent_title": "Disk Cleanup always lists 24 MB of temporary internet files though the Temp directory has nothing in it - Microsoft Q&A",
+   "report_title": "Disk Cleanup always lists 24 MB of temporary internet files though the Temp directory has nothing in it - Microsoft Q&A",
+   "report_text_excerpt": "Disk Cleanup always lists 24 MB of temporary internet files though the Temp directory has nothing in it - Microsoft Q&A I am running Windows 11 Home 25H2, build 26200.7840, and ever since an update roughly three months back, Disk Cleanup reports about 24 MB of temporary internet files each time I open it. I...",
+   "matched_kb": "",
+   "matched_os_build": "26200.7840",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C05",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.8246",
+    "5864200"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5864200/synthetic-fixture-c05",
+   "source_date": "2026-04-20",
+   "parent_title": "Windows Update fails to check for updates, error 0x80240438. - Microsoft Q&A",
+   "report_title": "Windows Update fails to check for updates, error 0x80240438. - Microsoft Q&A",
+   "report_text_excerpt": "Windows Update fails to check for updates, error 0x80240438. - Microsoft Q&A Each time I search for updates this same error code returns. Edition Windows 11 Pro Version 25H2 Installed on ‎3/‎28/‎26 OS build 26200.8246 Experience Windows Feature Experience Pack...",
+   "matched_kb": "",
+   "matched_os_build": "26200.8246",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C06",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.8457",
+    "5915720"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5915720/synthetic-fixture-c06",
+   "source_date": "2026-06-12",
+   "parent_title": "Surface Dock 2 firmware will not update - Microsoft Q&A",
+   "report_title": "Surface Dock 2 firmware will not update - Microsoft Q&A",
+   "report_text_excerpt": "Surface Dock 2 firmware will not update - Microsoft Q&A The update is being run on a Surface Book 2, running Windows 11 25H2 build 26200.8457 I completed every step in the Surface Dock firmware update guide. After I receive code 2007 for update complete, Component10 still shows...",
+   "matched_kb": "",
+   "matched_os_build": "26200.8457",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C07",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.8973",
+    "5965983"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5101684",
+    "target_os_build": "26200.8973",
+    "target_release_date": "2026-07-28T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5965983/synthetic-fixture-c07",
+   "source_date": "2026-08-06",
+   "parent_title": "Windows 11: component store (CBS/WinSxS) becomes corrupt a few days after a clean install of Windows - Microsoft Q&A",
+   "report_title": "Windows 11: component store (CBS/WinSxS) becomes corrupt a few days after a clean install of Windows - Microsoft Q&A",
+   "report_text_excerpt": "Windows 11: component store (CBS/WinSxS) becomes corrupt a few days after a clean install of Windows - Microsoft Q&A Windows Version: Windows 11 Pro Build: 26200.8973 Licence: OEM Hardware: MSI B650 board, Ryzen 7 7700, 32GB DDR5, RX 7600, WD SN850X (newest...",
+   "matched_kb": "",
+   "matched_os_build": "26200.8973",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C08",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.9168",
+    "5981040"
+   ],
+   "declared_limit_l4": true,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5121003",
+    "target_os_build": "26200.9168",
+    "target_release_date": "2026-08-11T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5981040/synthetic-fixture-c08",
+   "source_date": "2026-08-20",
+   "parent_title": "Why has my Bluetooth stopped working since the Win 11 update - Microsoft Q&A",
+   "report_title": "Why has my Bluetooth stopped working since the Win 11 update - Microsoft Q&A",
+   "report_text_excerpt": "Why has my Bluetooth stopped working since the Win 11 update - Microsoft Q&A Why has my Bluetooth stopped working since the Win 11 update? Is there somewhere to flag this as a bug? Edition Windows 11 Home Version 25H2 Installed on ‎8/‎18/‎2026 OS build 26200.9168 Experience Windows Feature...",
+   "matched_kb": "",
+   "matched_os_build": "26200.9168",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C09",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.9168",
+    "5980613"
+   ],
+   "declared_limit_l4": true,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5121003",
+    "target_os_build": "26200.9168",
+    "target_release_date": "2026-08-11T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5980613/synthetic-fixture-c09",
+   "source_date": "2026-09-02",
+   "parent_title": "Windows Firewall broken after the Windows 11 update - Microsoft Q&A",
+   "report_title": "Windows Firewall broken after the Windows 11 update - Microsoft Q&A",
+   "report_text_excerpt": "Windows Firewall broken after the Windows 11 update - Microsoft Q&A Windows 11 25H2 build 26200.9168. After a restart, and again after an in-place repair reinstall, the Defender Firewall service ( ) is still stuck in . The service reports specific error 87 (“The parameter...",
+   "matched_kb": "",
+   "matched_os_build": "26200.9168",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "unlinked",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C10",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.9457",
+    "6008687"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5129195",
+    "target_os_build": "26200.9457",
+    "target_release_date": "2026-09-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6008687/synthetic-fixture-c10",
+   "source_date": "2026-09-19",
+   "parent_title": "Microsoft Store shows error 0x80070422 - Microsoft Q&A",
+   "report_title": "Microsoft Store shows error 0x80070422 - Microsoft Q&A",
+   "report_text_excerpt": "Microsoft Store shows error 0x80070422 - Microsoft Q&A Running Windows 11 Home, Version 25H2, OS Build 26200.9457, Windows Feature Experience Pack 1000.26100.300.0 I already restarted the Windows Update service, BITS and the Update Orchestrator and all of them run normally. I also tried...",
+   "matched_kb": "",
+   "matched_os_build": "26200.9457",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C11",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.9457",
+    "6015696"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5129195",
+    "target_os_build": "26200.9457",
+    "target_release_date": "2026-09-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6015696/synthetic-fixture-c11",
+   "source_date": "2026-09-27",
+   "parent_title": "Windows Update fails, Settings says \"Something went wrong\" and the UpdateOrchestrator log is gone after a repair install - Microsoft Q&A",
+   "report_title": "Windows Update fails, Settings says \"Something went wrong\" and the UpdateOrchestrator log is gone after a repair install - Microsoft Q&A",
+   "report_text_excerpt": "Windows Update fails, Settings says \"Something went wrong\" and the UpdateOrchestrator log is gone after a repair install - Microsoft Q&A Windows 11 25H2 (build 26200.9457), first upgraded from 21H2. Problem: the Windows Update page in Settings says \"Something went wrong. Try again...",
+   "matched_kb": "",
+   "matched_os_build": "26200.9457",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "unlinked",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C12",
+   "kind": "refuse",
+   "original": [
+    "25H2",
+    "26200.9457",
+    "6030149"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5129195",
+    "target_os_build": "26200.9457",
+    "target_release_date": "2026-09-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6030149/synthetic-fixture-c12",
+   "source_date": "2026-10-09",
+   "parent_title": "Windows Update not working at all - Microsoft Q&A",
+   "report_title": "Windows Update not working at all - Microsoft Q&A",
+   "report_text_excerpt": "Windows Update not working at all - Microsoft Q&A Windows Update on my PC does not work, it only shows the spinning loading circle over and over. I'm running: Edition Windows 11 Home Version 25H2 Installed on ‎2025/‎02/‎11 OS build 26200.9457 Experience Windows Feature Experience Pack...",
+   "matched_kb": "",
+   "matched_os_build": "26200.9457",
+   "matched_feature_version": "25H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C13",
+   "kind": "refuse",
+   "original": [
+    "26H2",
+    "26300.9457",
+    "6025889"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "26H2",
+    "target_kb": "",
+    "target_os_build": "26300.9457",
+    "target_release_date": "2026-09-29T00:00:00Z",
+    "update_version": "26H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6025889/synthetic-fixture-c13",
+   "source_date": "2026-10-05",
+   "parent_title": "After the Windows 11 26H2 update: apps forget saved sign-ins and a chat app will not open (DPAPI master key error) - what causes it and the fix - Microsoft Q&A",
+   "report_title": "After the Windows 11 26H2 update: apps forget saved sign-ins and a chat app will not open (DPAPI master key error) - what causes it and the fix - Microsoft Q&A",
+   "report_text_excerpt": "After the Windows 11 26H2 update: apps forget saved sign-ins and a chat app will not open (DPAPI master key error) - what causes it and the fix - Microsoft Q&A Environment: Windows 11 Enterprise, version 26H2 (build 26300.9457), using a Microsoft account plus a Windows Hello PIN...",
+   "matched_kb": "",
+   "matched_os_build": "26300.9457",
+   "matched_feature_version": "26H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "C14",
+   "kind": "refuse",
+   "original": [
+    "26H2",
+    "26300.9711",
+    "6036208"
+   ],
+   "declared_limit_l4": true,
+   "target": {
+    "target_feature_version": "26H2",
+    "target_kb": "KB5127648",
+    "target_os_build": "26300.9711",
+    "target_release_date": "2026-10-13T00:00:00Z",
+    "update_version": "26H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6036208/synthetic-fixture-c14",
+   "source_date": "2026-10-14",
+   "parent_title": "Defender offline scan reboots into the recovery environment - Microsoft Q&A",
+   "report_title": "Defender offline scan reboots into the recovery environment - Microsoft Q&A",
+   "report_text_excerpt": "Defender offline scan reboots into the recovery environment - Microsoft Q&A 26H2 26300.9711 This is new to me, has anyone else hit it? After todays update I started a Defender Offline scan. Once the scan began I saw it had opened in the Preparing for Recovery screen. I...",
+   "matched_kb": "",
+   "matched_os_build": "26300.9711",
+   "matched_feature_version": "26H2",
+   "expected_reason": "identity_not_linked_to_issue",
+   "expected_roles": [
+    [
+     "unlinked",
+     ""
+    ]
+   ]
+  },
+  {
+   "case": "K01",
+   "kind": "keep",
+   "original": [
+    "24H2",
+    "26100.8875",
+    "6006183"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6006183/synthetic-fixture-k01",
+   "source_date": "2026-09-17",
+   "parent_title": "WinUI 3 fullscreen window renders wrongly on kiosk devices since a Win11 update. - Microsoft Q&A",
+   "report_title": "WinUI 3 fullscreen window renders wrongly on kiosk devices since a Win11 update. - Microsoft Q&A",
+   "report_text_excerpt": "WinUI 3 fullscreen window renders wrongly on kiosk devices since a Win11 update. - Microsoft Q&A Our WinUI 3 app shows a layout fault after we updated our Windows 11 IoT Enterprise LTSC devices from \"OS build 26100.7623\" to \"OS build (26100.8875)\":...",
+   "matched_kb": "",
+   "matched_os_build": "26100.8875",
+   "matched_feature_version": "",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "destination:pre"
+    ]
+   ]
+  },
+  {
+   "case": "K02",
+   "kind": "keep",
+   "original": [
+    "25H2",
+    "26200.7462",
+    "5660795"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5072033",
+    "target_os_build": "26200.7462",
+    "target_release_date": "2025-12-09T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5660795/synthetic-fixture-k02",
+   "source_date": "2026-05-25",
+   "parent_title": "Two physical disks shown after update, used to appear as a single C: drive - Microsoft Q&A",
+   "report_title": "Two physical disks shown after update, used to appear as a single C: drive - Microsoft Q&A",
+   "report_text_excerpt": "Two physical disks shown after update, used to appear as a single C: drive - Microsoft Q&A My laptop is an HP Omen 16 with a 14th Gen i7 and 2 TB of NVMe storage overall. Before a recent Windows 11 update (build 26200.7462), only a single C: drive was listed. After...",
+   "matched_kb": "",
+   "matched_os_build": "26200.7462",
+   "matched_feature_version": "",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "named:pre"
+    ]
+   ]
+  },
+  {
+   "case": "K03",
+   "kind": "keep",
+   "original": [
+    "25H2",
+    "26200.7462",
+    "5662529"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5072033",
+    "target_os_build": "26200.7462",
+    "target_release_date": "2025-12-09T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5662529/synthetic-fixture-k03",
+   "source_date": "2026-05-14",
+   "parent_title": "SEARCH FIELD DEAD SINCE THE WINDOWS 11 UPDATE - Microsoft Q&A",
+   "report_title": "SEARCH FIELD DEAD SINCE THE WINDOWS 11 UPDATE - Microsoft Q&A",
+   "report_text_excerpt": "SEARCH FIELD DEAD SINCE THE WINDOWS 11 UPDATE - Microsoft Q&A After letting the update to Windows 11 25H2 OS Build 26200.7462 install, the Search Box no longer responds. I cannot type anything at all. Clicking the blue window opens the big menu with the search field. But once I click...",
+   "matched_kb": "",
+   "matched_os_build": "26200.7462",
+   "matched_feature_version": "25H2",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "named:pre"
+    ]
+   ]
+  },
+  {
+   "case": "K04",
+   "kind": "keep",
+   "original": [
+    "25H2",
+    "26200.7623",
+    "5768487"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5074109",
+    "target_os_build": "26200.7623",
+    "target_release_date": "2026-01-13T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5768487/synthetic-fixture-k04",
+   "source_date": "2026-02-13",
+   "parent_title": "Search in Windows broken after the latest update - Microsoft Q&A",
+   "report_title": "Search in Windows broken after the latest update - Microsoft Q&A",
+   "report_text_excerpt": "Search in Windows broken after the latest update - Microsoft Q&A On Friday I was offered the latest update, so I installed it (25H2; Build 26200.7623). Once it restarted, search would not work, so I went through every fix I could find, beginning with...",
+   "matched_kb": "",
+   "matched_os_build": "26200.7623",
+   "matched_feature_version": "25H2",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "named:pre"
+    ]
+   ]
+  },
+  {
+   "case": "K05",
+   "kind": "keep",
+   "original": [
+    "25H2",
+    "26200.8246",
+    "5863430"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5863430/synthetic-fixture-k05",
+   "source_date": "2026-04-21",
+   "parent_title": "Older NAS network drive can no longer be opened - Microsoft Q&A",
+   "report_title": "Older NAS network drive can no longer be opened - Microsoft Q&A",
+   "report_text_excerpt": "Older NAS network drive can no longer be opened - Microsoft Q&A I own a WD My Cloud network drive, an older single-bay model. After a recent Windows update (Version 25H2, build 26200.8246) the drive cannot be reached anymore. Changing its permissions failed...",
+   "matched_kb": "",
+   "matched_os_build": "26200.8246",
+   "matched_feature_version": "25H2",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "named:pre"
+    ]
+   ]
+  },
+  {
+   "case": "K06",
+   "kind": "keep",
+   "original": [
+    "25H2",
+    "26200.8457",
+    "5901486"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5901486/synthetic-fixture-k06",
+   "source_date": "2026-08-25",
+   "parent_title": "How to resolve download error code 0x80040155 - Microsoft Q&A",
+   "report_title": "How to resolve download error code 0x80040155 - Microsoft Q&A",
+   "report_text_excerpt": "How to resolve download error code 0x80040155 - Microsoft Q&A Error code 0x80040155 shows up whenever these updates fail: 2026-05 .NET Framework Security update (KB5087051) 2026-05 Security Update (KB5089459) (26200.8457) How can I fix this? Thank you,",
+   "matched_kb": "",
+   "matched_os_build": "26200.8457",
+   "matched_feature_version": "",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "named:pre"
+    ]
+   ]
+  },
+  {
+   "case": "K07",
+   "kind": "keep",
+   "original": [
+    "25H2",
+    "26200.8457",
+    "5899841"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5899841/synthetic-fixture-k07",
+   "source_date": "2026-05-23",
+   "parent_title": "Problem with a security update - Microsoft Q&A",
+   "report_title": "Problem with a security update - Microsoft Q&A",
+   "report_text_excerpt": "Problem with a security update - Microsoft Q&A Why is the 2026-05 security update (KB5089544) (26200.8457) failing to update? I retried many times and it still does not update. What is going wrong?",
+   "matched_kb": "",
+   "matched_os_build": "26200.8457",
+   "matched_feature_version": "",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "named:pre"
+    ]
+   ]
+  },
+  {
+   "case": "K08",
+   "kind": "keep",
+   "original": [
+    "25H2",
+    "26200.8737",
+    "5933035"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5095093",
+    "target_os_build": "26200.8737",
+    "target_release_date": "2026-06-23T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5933035/synthetic-fixture-k08",
+   "source_date": "2026-07-02",
+   "parent_title": "Trouble with the 2026-06 update - Microsoft Q&A",
+   "report_title": "Trouble with the 2026-06 update - Microsoft Q&A",
+   "report_text_excerpt": "Trouble with the 2026-06 update - Microsoft Q&A It began last week when I tried to install the 2026-06 Preview Update (KB 5095093) (26200.8737) update. After several failed attempts, I called Microsoft Support. A technician connected remotely and told me I had to...",
+   "matched_kb": "",
+   "matched_os_build": "26200.8737",
+   "matched_feature_version": "",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "named:pre"
+    ]
+   ]
+  },
+  {
+   "case": "K09",
+   "kind": "keep",
+   "original": [
+    "25H2",
+    "26200.8875",
+    "5946896"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26200.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5946896/synthetic-fixture-k09",
+   "source_date": "2026-07-14",
+   "parent_title": "Offline Defender scan restarts into Automatic Repair - Microsoft Q&A",
+   "report_title": "Offline Defender scan restarts into Automatic Repair - Microsoft Q&A",
+   "report_text_excerpt": "Offline Defender scan restarts into Automatic Repair - Microsoft Q&A so I've just upgraded to Windows 11 25H2 26200.8875 Release Preview and after the install finished I ran every DISM command plus sfc. When those were done I restarted the system. After the restart I...",
+   "matched_kb": "",
+   "matched_os_build": "26200.8875",
+   "matched_feature_version": "25H2",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "named:pre"
+    ]
+   ]
+  },
+  {
+   "case": "K10",
+   "kind": "keep",
+   "original": [
+    "25H2",
+    "26200.9278",
+    "5988811"
+   ],
+   "declared_limit_l4": false,
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5120998",
+    "target_os_build": "26200.9278",
+    "target_release_date": "2026-08-27T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5988811/synthetic-fixture-k10",
+   "source_date": "2026-08-30",
+   "parent_title": "Slideshow option gone since updating - Microsoft Q&A",
+   "report_title": "Slideshow option gone since updating - Microsoft Q&A",
+   "report_text_excerpt": "Slideshow option gone since updating - Microsoft Q&A Following the update to Windows 11 Home 25H2 build 26200.9278 the Slideshow background can no longer be chosen in Personalization. The dropdown jumps straight back to Picture whenever Slideshow is picked.",
+   "matched_kb": "",
+   "matched_os_build": "26200.9278",
+   "matched_feature_version": "25H2",
+   "expected_reason": null,
+   "expected_roles": [
+    [
+     "affected",
+     "named:pre"
+    ]
+   ]
+  }
+ ]
+}

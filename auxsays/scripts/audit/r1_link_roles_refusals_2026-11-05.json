@@ -1,0 +1,340 @@
+{
+ "schema": 1,
+ "ledger": "AUX-076",
+ "purpose": "Pinned set of stored, counted Windows rows that the link rule refuses on their retained text. Input (Track A) for a later audited withdrawal; this change edits no stored row.",
+ "authority": "patch_collectors/microsoft_windows.py windows_learn_qna_reason -> identity_not_linked_to_issue",
+ "exclusion_reason": "identity_not_linked_to_issue",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "parent_commit": "bf662c02144d00f48cfb07979dd1159ac91d5565",
+ "authority_sha256_parent": "02e280e4f524f3611b110550cadc147e5ea5c59ea849db6f29a35f1abb52a6fa",
+ "authority_sha256": "1049276d636825f9099b6679e2998d5ed91a2e3438fc6b72ddc559f658e8ef74",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256": "050f8125d92c34f6a3312e0915cdd677af3f03542bf022ab836722b9e2749947",
+ "replay": {
+  "population": "every counted microsoft-windows-11 row (live_eligibility.load_inputs)",
+  "text": "parent_title + report_title + report_text_excerpt, a trailing '...' removed",
+  "identity_fields": "the row's stored matched_kb / matched_os_build / matched_feature_version; the record's target",
+  "counted_rows": 527,
+  "accepted_on_retained_text_parent": 430,
+  "accepted_on_retained_text_with_rule": 416,
+  "changed": 14,
+  "changed_to_another_reason": 0
+ },
+ "note": "block_sha256 is the sha256 of the row's YAML block in the store at store_sha256 (the block parser of withdraw_windows_identity_not_the_subject_rows.py). declared_limit_l4 marks the generic-cue rows SPEC limit L4 keeps as an owner decision (default refuse).",
+ "entries": [
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "24H2",
+   "target_build": "26100.7840",
+   "id": "microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5816189-network-not-working-after-windows-11-2",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5816189/network-not-working-after-windows-11-24h2-update",
+   "question_id": "5816189",
+   "target_kb": "KB5077181",
+   "target_os_build": "26100.7840",
+   "matched_kb": "",
+   "matched_os_build": "26100.7840",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": true,
+   "block_sha256": "8d88d1a414b6761e6ce4d81e7cd22b78de777e8cdd30fcb6e2ceb26c9f6541f8"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7462",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6034766-windows-11-version-26h2-install-error",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6034766/windows-11-version-26h2-install-error-0x800f0993",
+   "question_id": "6034766",
+   "target_kb": "KB5072033",
+   "target_os_build": "26200.7462",
+   "matched_kb": "",
+   "matched_os_build": "26200.7462",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "231535f46eaf043de701fd9afa7a77f23ad1d9a347f947d852c040c003018b35"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7840",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5779394-disc-cleanup-shows-25mb-temporary-inte",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5779394/disc-cleanup-shows-25mb-temporary-internet-files-b",
+   "question_id": "5779394",
+   "target_kb": "KB5077181",
+   "target_os_build": "26200.7840",
+   "matched_kb": "",
+   "matched_os_build": "26200.7840",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "d09e98d600076385462a8643b0c5aee1cc1bb03a982689c815fd173c1c135d9f"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7840",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5816066-wsl2-install-stuck-at-14-virtualmachin",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5816066/wsl2-install-stuck-at-14-virtualmachineplatform-ca",
+   "question_id": "5816066",
+   "target_kb": "KB5077181",
+   "target_os_build": "26200.7840",
+   "matched_kb": "",
+   "matched_os_build": "26200.7840",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "9e0b6c89ce6c6439ca9dd1482ac8b2d61faf2dc92198fc59b0d54d3b30345e1e"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8246",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5864200-windows-update-failed-to-check-for-upd",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5864200/windows-update-failed-to-check-for-updates-with-er",
+   "question_id": "5864200",
+   "target_kb": "KB5083769",
+   "target_os_build": "26200.8246",
+   "matched_kb": "",
+   "matched_os_build": "26200.8246",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "3506f7d171c7df2605f8244c5d921516366d97c0ba3f468672956349c035cca3"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8457",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5915720-surface-dock-1-firmware-not-updating",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5915720/surface-dock-1-firmware-not-updating",
+   "question_id": "5915720",
+   "target_kb": "KB5089549",
+   "target_os_build": "26200.8457",
+   "matched_kb": "",
+   "matched_os_build": "26200.8457",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "c6fd32a9b6058901be1ba93ba8d2ab53aa992ae9576eaf31b7e45221b18d7fb7"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8973",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5965983-windows-11-component-store-cbs-winsxs",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5965983/windows-11-component-store-cbs-winsxs-corruption-o",
+   "question_id": "5965983",
+   "target_kb": "KB5101684",
+   "target_os_build": "26200.8973",
+   "matched_kb": "",
+   "matched_os_build": "26200.8973",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "e4d5b61dbb43d8f6bbb10645ec2e010a354d6e0719c4b7cdd31c5405de1380bd"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5980613-windows-firewall-not-working-after-upd",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5980613/windows-firewall-not-working-after-updating-to-win",
+   "question_id": "5980613",
+   "target_kb": "KB5121003",
+   "target_os_build": "26200.9168",
+   "matched_kb": "",
+   "matched_os_build": "26200.9168",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "unlinked",
+     ""
+    ]
+   ],
+   "declared_limit_l4": true,
+   "block_sha256": "98a111e8c4bff138a6dc9d3fa8a4aa53d39fc3e515af54fa5eda062265eff043"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981040-why-did-my-bluetooth-stop-working-afte",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5981040/why-did-my-bluetooth-stop-working-after-win-11-upd",
+   "question_id": "5981040",
+   "target_kb": "KB5121003",
+   "target_os_build": "26200.9168",
+   "matched_kb": "",
+   "matched_os_build": "26200.9168",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": true,
+   "block_sha256": "062ff743520c3d1f4a5c48624ada3875ed74b86953ba1f5f20505385f9c85d41"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6008687-microsoft-store-error-0x80070422",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6008687/microsoft-store-error-0x80070422",
+   "question_id": "6008687",
+   "target_kb": "KB5129195",
+   "target_os_build": "26200.9457",
+   "matched_kb": "",
+   "matched_os_build": "26200.9457",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "4943ef5c60e348e5a38b395411b78c243b1c461db4b92b303c98e975a9919ba1"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6015696-windows-update-fails-with-something-we",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6015696/windows-update-fails-with-something-went-wrong-upd",
+   "question_id": "6015696",
+   "target_kb": "KB5129195",
+   "target_os_build": "26200.9457",
+   "matched_kb": "",
+   "matched_os_build": "26200.9457",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "unlinked",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "68daa4997c9e4313e095bbc6017c601099ef255f84ae8fd570d9ac8ebbe30de2"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6030149-windows-update-not-working",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6030149/windows-update-not-working",
+   "question_id": "6030149",
+   "target_kb": "KB5129195",
+   "target_os_build": "26200.9457",
+   "matched_kb": "",
+   "matched_os_build": "26200.9457",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "37c5bbba90ec212355780c6f6e06a4d3085d86d39d57283e4bff350af916d48a"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9457",
+   "id": "microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6025889-after-windows-11-26h2-update-apps-lose",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6025889/after-windows-11-26h2-update-apps-lose-saved-login",
+   "question_id": "6025889",
+   "target_kb": "",
+   "target_os_build": "26300.9457",
+   "matched_kb": "",
+   "matched_os_build": "26300.9457",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "environment",
+     ""
+    ]
+   ],
+   "declared_limit_l4": false,
+   "block_sha256": "0a779f4a69c5f40dd77ea40c24f93747ed2a0b98fef4a9183579d521e157ecb0"
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "id": "microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6036208-defender-offline-scan-boots-into-recov",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6036208/defender-offline-scan-boots-into-recovery-mode",
+   "question_id": "6036208",
+   "target_kb": "KB5127648",
+   "target_os_build": "26300.9711",
+   "matched_kb": "",
+   "matched_os_build": "26300.9711",
+   "reason_parent": null,
+   "reason_with_rule": "identity_not_linked_to_issue",
+   "occurrence_roles": [
+    [
+     "unlinked",
+     ""
+    ]
+   ],
+   "declared_limit_l4": true,
+   "block_sha256": "fd1f5e0e5cc4d1437274228a7fa56c2e7d8a00df4ac79dbef9979bdd9658d945"
+  }
+ ]
+}
