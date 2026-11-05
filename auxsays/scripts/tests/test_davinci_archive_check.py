@@ -488,8 +488,11 @@ def _run(td: Path) -> int:
     res = after_n3(lambda: edit_line_after_status(fx.gen / three[0].path.name))
     check("F1 a planned record whose status edit comes with a second front-matter edit -> UNAUTHORIZED_CHANGE",
           failed_with(res, chk.UNAUTHORIZED_CHANGE), res[1])
-    res = after_n3(lambda: (fx.gen / three[0].path.name).write_bytes((fx.gen / three[0].path.name).read_bytes() + b"tail\n"))
-    check("F2 a planned record with an appended line (line count moved) -> UNAUTHORIZED_CHANGE",
+    # Appended AFTER the file's final newline, so every line the two versions share is untouched apart
+    # from the status: only the line count can see it.
+    res = after_n3(lambda: (fx.gen / three[0].path.name).write_bytes(
+        (fx.gen / three[0].path.name).read_bytes() + b"\nAn appended paragraph.\n"))
+    check("F2 a planned record with a paragraph appended (line count moved) -> UNAUTHORIZED_CHANGE",
           failed_with(res, chk.UNAUTHORIZED_CHANGE), res[1])
     res = after_n3(lambda: replace_once(fx.gen / three[0].path.name, b"\nupdate_status: archived", b"\nupdate_status: \"archived\""))
     check("F3 a planned record archived with a value the CLI never writes (quoted) -> UNAUTHORIZED_CHANGE",
