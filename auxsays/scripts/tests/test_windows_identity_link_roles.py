@@ -5,28 +5,37 @@ Offline and deterministic, on SYNTHETIC text only. The corpus shapes come from
 tests/fixtures/windows_link_roles/corpus_shapes.json: paraphrases written for this suite, one per
 stored row the rule refuses (14) or keeps (10), each reaching the same decision and the same
 per-occurrence roles as its stored original (checked once, outside CI, by
-diagnose_windows_link_roles.py --fixture-equivalence). Nothing here reads `_data`, a record or the
-evidence store, and no live total is pinned: corpus growth cannot turn this suite red.
+diagnose_windows_link_roles.py --fixture-equivalence). The second independent verifier's 53 probes
+are frozen as written in tests/fixtures/windows_link_roles/verifier2_probes.json. Nothing here reads
+`_data`, a record or the evidence store, and no live total is pinned: corpus growth cannot turn this
+suite red.
 
     A  scope guards and placement: a KB match, a title naming the build or KB, a build absent from
        the body and an empty build are never touched; every earlier, more specific reason keeps
        its reason; the rule runs after identity_not_the_subject
-    B  preservation: synthetic linked phrasings, the 10 kept corpus shapes, and the second-round
-       cases (the independent verifier's "V-" probes and the implementer's "M-" probes, each kept
-       by the authority with the rule off, so the rule is what could wrongly refuse them)
-    C  negatives: synthetic unlinked phrasings, the 14 refused corpus shapes and the second-round
-       cases. Every refusal is checked in the SAME check against the authority with the rule
+    B  preservation: synthetic linked phrasings, the 10 kept corpus shapes, the second-round cases
+       (the first verifier's "V-" probes and the implementer's "M-" probes), the second verifier's
+       27 keep probes and the third-round "M3-" probes; each is kept by the authority with the rule
+       off, so the rule is what could wrongly refuse them. M3K21-M3K28 carry no link at all: each
+       is the root fix of one veto, so reverting that fix alone refuses it
+    C  negatives: synthetic phrasings the rule refuses, the 14 refused corpus shapes and the later
+       rounds. Every refusal is checked in the SAME check against the authority with the rule
        switched off, which must accept it, so the rule is the deciding gate and not a passenger
        ("P-" cases pin one pattern each: deleting that pattern alone flips the case)
-    D  role units: veto-before-link precedence, anchoring at the occurrence, the closed identity
+    D  role units: same-mention precedence (a link outweighs a veto unless the veto's own words
+       contain it), refusal on positive evidence only (every occurrence a veto or the stated
+       current state; an unlinked occurrence fails open), the environment reading anchored before
+       the build and the bare identity line, anchoring at the occurrence, the closed identity
        filler (no colon, no "on", no date, no other build), sentence and parenthesis masking,
        leading-title-copy stripping (at most the three copies the collectors add, whole words
-       only), the record's own month against another month, the exceptions that keep a clean,
-       successful-install or "previous" veto from swallowing a report that blames the build, and
-       "any linked occurrence keeps the row"
+       only, the title matched as stored and after clean_html), the record's own month against
+       another month, and the two-pattern exceptions
     E  declared limits, pinned as current behaviour and not claimed closed
     F  one authority for every Windows discovery method, and the consumers of the new reason
     G  the pinned refusal manifest (scripts/audit/r1_link_roles_refusals_2026-11-05.json)
+    H  declared residual admissions R1R-01..R1R-05 (ledger AUX-076): shapes the rule does not
+       refuse and the authority on main admits too, pinned as admitted so a later fix flips them on
+       purpose; none is introduced by this change
 
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_windows_identity_link_roles.py
 """
@@ -50,6 +59,7 @@ from patch_collectors import microsoft_windows as mw  # noqa: E402
 from patch_collectors.base import PatchRecord, WINDOWS_PRODUCT_ID  # noqa: E402
 
 FIX = _SCRIPTS / "tests" / "fixtures" / "windows_link_roles" / "corpus_shapes.json"
+FIX_V2 = _SCRIPTS / "tests" / "fixtures" / "windows_link_roles" / "verifier2_probes.json"
 MANIFEST = _SCRIPTS / "audit" / "r1_link_roles_refusals_2026-11-05.json"
 REASON = "identity_not_linked_to_issue"
 NEWLINE = chr(10)
@@ -113,8 +123,19 @@ def reason_live(target: dict, title: str, body: str) -> str | None:
     return mw.windows_learn_qna_reason(target, URL, "2026-11-01", text, title, *ids(target, text))
 
 
-def both(target: dict, title: str, body: str, live: bool = False) -> tuple[str | None, str | None]:
-    decide = reason_live if live else reason_of
+def reason_row(target: dict, title: str, body: str) -> str | None:
+    """The second verifier's construction: a Learn Q&A candidate through row_from_candidate, with
+    report_text = clean_html(title + " " + body) exactly as the Learn source builds it."""
+    rec = PatchRecord(WINDOWS_PRODUCT_ID, target["update_version"], Path("synthetic.md"), target["target_release_date"],
+                      "current", "Windows 11", target["target_os_build"])
+    cand = {"source_type": "microsoft_learn_qna", "source_name": "Microsoft Learn Q&A", "source_url": URL,
+            "parent_title": title, "report_title": title,
+            "report_text": mw.learn_qna.clean_html(" ".join([title, body]).strip()), "source_date": "2026-11-01"}
+    return mw.row_from_candidate(rec, target, cand, "2026-11-05T00:00:00Z")["exclusion_reason"]
+
+
+def both(target: dict, title: str, body: str, live: bool | str = False) -> tuple[str | None, str | None]:
+    decide = reason_row if live == "row" else reason_live if live else reason_of
     got = decide(target, title, body)
     with rule_off():
         off = decide(target, title, body)
@@ -367,6 +388,84 @@ LIVE_REFUSE = [
     ("R33-live", T7840, "Explorer crashes after the update", "26200.7840 here, Pro edition, and it happens every boot."),
 ]
 
+# Third round (v3, the bounded fix pass after the second independent verification). "M3-" cases are the
+# implementer's own; the second verifier's probes are in FIX_V2.
+T8246 = {"target_feature_version": "25H2", "target_kb": "KB5083769", "target_os_build": "26200.8246",
+         "target_release_date": "2026-04-14", "update_version": "25H2"}
+KEEP3 = [
+    ("M3K01", T8246, "Printer broke", "Windows 11 25H2 build 26200.8246 broke my printer after the update."),
+    ("M3K02", T8246, "Printer broke", "26200.8246, my printer broke after the update."),
+    ("M3K03", T8246, "Printer fails", "On Windows 11 25H2 26200.8246 my printer fails since the update."),
+    ("M3K04", T8246, "Printer fails", "26200.8246 was installed on my PC and since then the printer fails."),
+    ("M3K06", T8246, "Printer fails", "After installing 26200.8246 my printer fails; it had no trouble before."),
+    ("M3K07", T8246, "Printer fails", "Every boot on 26200.8246 the printer is gone after the update."),
+    ("M3K08", T8246, "Printer fails", "My laptop took 26200.8246 overnight and printing fails after the update."),
+    ("M3K09", T8246, "Printer fails", "Compared to 25H2 26200.8037, 26200.8246 prints three times slower after the update."),
+    ("M3K10", T8246, "Wi-Fi broke", "Did 26200.8246 break Wi-Fi for anyone? Mine stopped after the update."),
+    ("M3K11", T8246, "Wi-Fi broke", "Rolled back from 26200.8246 to 26200.8037 because Wi-Fi broke after the update."),
+    ("M3K12", T8246, "Wi-Fi broke", "I went back from 26200.8246 because Wi-Fi broke after the update."),
+    ("M3K13", T8246, "Wi-Fi broke", "The problems come from 26200.8246, Wi-Fi broke after the update."),
+    ("M3K14", T8246, "Printer drops", "26200.8246 is a stable build mostly, but since installing it the printer drops."),
+    ("M3K15", T8246, "Spooler crash", "All 26200.8246 PCs with the April update crash the spooler after the update."),
+    ("M3K16", T8246, "Install loop", "26200.8246 keeps failing to install every time with 0x800f0922."),
+    ("M3K17", T8246, "Install loop", "26200.8246 rolls back the second time it reaches 100% after the update."),
+    ("M3K19", T8246, "Printer fails", "I'm on 26200.8246 now. After installing 26200.8246 the printer fails."),
+    ("M3K20", T8246, "Explorer", "Explorer crashes  after updating 26200.8246 every time I open it."),
+    # Root-fix pins: no link at all, so only the veto's own fix keeps each of these.
+    ("M3K21", T8246, "Start menu", "26200.8246 makes the Start menu not open, with no errors in Event Viewer, since the update."),
+    ("M3K22", T8246, "Mouse", "On 26200.8246 the mouse is jerky in games after the update, no trouble before."),
+    ("M3K23", T8246, "Wi-Fi", "Did 26200.8246 make Wi-Fi drop for anyone, any fix? It started after the update."),
+    ("M3K24", T8246, "Boot slow", "Compared to 24H2 26200.8246 boots slower since the update."),
+    ("M3K25", T8246, "Boot slow", "Compared to Windows 11, 26200.8246 boots slower since the update."),
+    ("M3K26", T8246, "Printer", "26200.8246 - Successfully installed on 4/16/2026 - but since then the printer fails."),
+    ("M3K27", T8246, "Boot", "It will not boot since installing 26200.8246, error 0xc000021a after the update."),
+    ("M3K28", T8246, "Wi-Fi", "Why does 26200.8246 drop Wi-Fi every hour, is there a fix? It began after the update."),
+    ("M3K29", T8246, "Printing", "26200.8246 installed without problems, but since the April update printing fails."),
+    ("M3K30", T8246, "Printer", "Moving from a 26200.8246 machine to a new one fixed printing, which failed since the update."),
+    ("M3K31", T8246, "Wi-Fi", "Why did 26200.8246 break Wi-Fi and how do I fix it? It began after the update."),
+    ("M3K32", T8246, "Wi-Fi", "Did 26200.8246 drop Wi-Fi, and did a rollback fix it? It started after the update."),
+    ("M3K33", T8246, "Wi-Fi", "Does 26200.8246 drop Wi-Fi for everyone or is there a fix? It began after the update."),
+    ("M3K34", T8246, "Wi-Fi", "Downgraded from 26200.8246 to 24H2 because Wi-Fi broke after the update."),
+    ("M3K35", T7840, "Printer", "Since February update on 26200.7840 my printer fails."),
+    ("P3-SINCEUPDATING", T8246, "Printer", "I'm on 26200.8246 since updating and the printer fails."),
+]
+REFUSE3 = [
+    ("M3R01", T8246, "Printer fails", "I'm running Windows 11 Pro 25H2, build 26200.8246. Since the update the printer fails."),
+    ("M3R02", T8246, "Printer fails", "Windows 11 25H2 build 26200.8246. Since the update the printer fails."),
+    ("M3R03", T8246, "Printer fails", "Windows 11 Pro 25H2 (build 26200.8246), clean install. Since the update the printer fails."),
+    ("M3R04", T8246, "Printer fails", "25H2 26200.8246 Printing stopped since the update."),
+    ("M3R05", T8246, "Printer fails",
+     "Edition Windows 11 Pro Version 25H2 Installed on 4/16/2026 OS build 26200.8246. Printing fails since the update."),
+    ("M3R06", T8246, "Printer fails", "OS: Windows 11 Pro 25H2 26200.8246 Printing fails since the update."),
+    ("M3R07", T8246, "Printer fails", "Successfully installed 26200.8246. The May update broke printing."),
+    ("M3R08", T8246, "Printer fails", "26200.8246 fails to install the May update with 0x800f0922."),
+    ("M3R09", T8246, "Printer fails", "Should I install 26200.8246? Printing fails since the May update."),
+    ("M3R10", T8246, "Printer fails", "The 26200.8246 upgrade to 26H2 fails with 0xC1900101."),
+    ("M3R11", T8246, "Printer fails", "Update history: 26200.8246 installed 4/16/2026. The May update broke printing."),
+    # Entry pins for vetoes whose earlier pin became a declared residual (a link on the other side now keeps
+    # it): each of these carries no link, so the one veto decides it.
+    ("P3-LASTGOOD", T8246, "Printer", "I reinstalled the last working build 26200.8246 and printing fails since the update."),
+    ("P3-SHOULDFIX", T8246, "Printer", "The new 26200.8246 build should fix the printer bug; printing fails since the update."),
+    ("P3-TOFIX", T8246, "Printer", "I'm told to get 26200.8246 to fix the printer bug; printing fails since the update."),
+    ("P3-WAITING", T8246, "Printer", "Still waiting for 26200.8246; printing fails since the update."),
+    ("P3-INSTALLON", T8246, "Feature pack", "Installing the Media Feature Pack on 26200.8246 never completes since the update."),
+    ("P3-CLEANINSTALL", T8246, "Printer", "I'm running a clean install Windows 11 Pro 25H2 26200.8246 and printing fails since the update."),
+]
+
+# Earlier refusals this change no longer makes (the authority on main admits every one of them too), by
+# declared residual class (ledger AUX-076; section H):
+#   R1R-01 same-mention precedence: a veto reads the mention correctly, but an independent link on the
+#          other side of the build keeps it (A1 item 1: a veto never outweighs such a link);
+#   R1R-02 fail-open: no link, no veto and no stated-state marker, so the occurrence is unlinked and kept.
+RESIDUAL = {
+    **{name: "R1R-01" for name in (
+        "R19", "R21", "R25", "R26", "R30", "R32", "N2", "N11", "V-GR05", "V-GR11", "V-GR13", "V-GR14", "V-GR29",
+        "M-R14", "M-R17", "M-R23", "M-R32", "P-LASTGOOD", "P-HISTORY", "P-SHOULDFIX", "P-WAITING", "P-WUFAILS")},
+    **{name: "R1R-02" for name in (
+        "R14", "R15", "R22", "R24", "R33", "R35", "N9", "N12", "V-GR17", "V-GR18", "V-GR19", "V-GR20", "V-GR21",
+        "M-R21", "M-R30", "M-R31", "R33-live")},
+}
+
 
 def run() -> int:  # noqa: PLR0915
     print("=" * 78)
@@ -417,7 +516,7 @@ def run() -> int:  # noqa: PLR0915
           reason_of(T7840, a8_title, a8_body) == "build_only_in_system_specs"
           and mw.identity_not_linked_to_issue(a8_text, a8_title, "", "26200.7840", "KB5077181") is True,
           str(reason_of(T7840, a8_title, a8_body)))
-    a9_title, a9_body = "Explorer crashes", "Explorer crashes randomly on 26200.7840 every morning."
+    a9_title, a9_body = "Explorer crashes", "I'm running 26200.7840 and Explorer crashes randomly every morning."
     a9_text = " ".join([a9_title, a9_title, a9_body])
     check("A9 an unattributed report keeps missing_update_attribution, although this rule alone would refuse it",
           reason_of(T7840, a9_title, a9_body) == "missing_update_attribution"
@@ -465,20 +564,44 @@ def run() -> int:  # noqa: PLR0915
         got, off = both(target, title, body_text, live=True)
         check(f"B {name}: kept under the production construction (the body's own first clause starts with the title)",
               got is None and off is None, f"{got} / off {off}")
+    v2 = json.loads(FIX_V2.read_text(encoding="utf-8"))["cases"]
+    v2_keep = [c for c in v2 if c["kind"] == "keep"]
+    v2_refuse = [c for c in v2 if c["kind"] == "refuse"]
+    check("B00 the second verifier's fixture holds its 53 probes (27 keep, 26 refuse), each named once, every keep expected kept",
+          len(v2) == 53 and len(v2_keep) == 27 and len(v2_refuse) == 26 and len({c["case"] for c in v2}) == 53
+          and all(c["expected"] == "kept" for c in v2_keep))
+    for c in v2_keep:
+        got, off = both(c["target"], c["title"], c["body"], live="row")
+        check(f"B {c['case']} (second verifier): kept, as the authority without the rule keeps it -- {c['body'][:60]}",
+              got is None and off is None, f"{got} / off {off} {roles(c['target'], c['title'], c['body'])}")
+    for name, target, title, body_text in KEEP3:
+        got, off = both(target, title, body_text)
+        check(f"B {name}: kept, as the authority without the rule keeps it -- {body_text[:60]}",
+              got is None and off is None, f"{got} / off {off} {roles(target, title, body_text)}")
 
     # ---------------------------------------------------------------- C. negatives
-    for name, target, title, body_text in REFUSE:
-        got, off = both(target, title, body_text)
-        check(f"C {name}: refused by this rule, and accepted with the rule off -- {body_text[:60]}",
-              got == REASON and off is None, f"{got} / off {off} {roles(target, title, body_text)}")
-    for name, target, title, body_text in REFUSE2:
+    for name, target, title, body_text in REFUSE + REFUSE2:
+        if name in RESIDUAL:
+            continue  # section H
         got, off = both(target, title, body_text)
         check(f"C {name}: refused by this rule, and accepted with the rule off -- {body_text[:60]}",
               got == REASON and off is None, f"{got} / off {off} {roles(target, title, body_text)}")
     for name, target, title, body_text in LIVE_REFUSE:
+        if name in RESIDUAL:
+            continue
         got, off = both(target, title, body_text, live=True)
         check(f"C {name}: refused under the production construction (all three leading title copies are removed)",
               got == REASON and off is None, f"{got} / off {off}")
+    for c in v2_refuse:
+        if c["expected"] != "refused":
+            continue  # section H
+        got, off = both(c["target"], c["title"], c["body"], live="row")
+        check(f"C {c['case']} (second verifier): refused by this rule, and accepted with the rule off -- {c['body'][:60]}",
+              got == REASON and off is None, f"{got} / off {off} {roles(c['target'], c['title'], c['body'])}")
+    for name, target, title, body_text in REFUSE3:
+        got, off = both(target, title, body_text)
+        check(f"C {name}: refused by this rule, and accepted with the rule off -- {body_text[:60]}",
+              got == REASON and off is None, f"{got} / off {off} {roles(target, title, body_text)}")
     n4 = reason_of(T7840, "Teams crashes on launch", "After installing the new Teams update on 26200.7840, Teams crashes on launch.")
     check("C N4: the foreign-product veto still answers first for another product's update", n4 == "foreign_product_subject_not_windows_patch", str(n4))
     for c in refusals:
@@ -492,14 +615,19 @@ def run() -> int:  # noqa: PLR0915
     def only(target, title, body_text):
         r = roles(target, title, body_text)
         return r[0] if len(r) == 1 else ("<%d occurrences>" % len(r), "")
-    check("D1 clean beats a named link: 'updated to X ... without problems' is clean, not affected (N2)",
-          only(T7840, *REFUSE[[n for n, *_ in REFUSE].index("N2")][2:]) == ("clean", "clean:post"))
-    check("D2 source beats a named link: 'upgrade X machines to 26H2' is source (N10)",
+    check("D1 same-mention precedence: a link on the other side of the build outweighs a veto ('updated to X ... without "
+          "problems' is affected, R1R-01), while a veto whose own words contain the link consumes it ('Successfully installed "
+          "X' re-reads 'installed X')",
+          only(T7840, *REFUSE[[n for n, *_ in REFUSE].index("N2")][2:]) == ("affected", "named:pre")
+          and only(T7840, "Printing", "Successfully installed 26200.7840. The March update broke printing.") == ("history", "history:pre")
+          and both(T7840, "Printing", "Successfully installed 26200.7840. The March update broke printing.") == (REASON, None))
+    check("D2 source beats a named link its words contain: 'upgrade X machines to 26H2' is source (N10)",
           only(T7840, "Feature update fails", "Trying to upgrade 26200.7840 machines to 26H2 fails with error 0xC1900101.")[0] == "source")
-    check("D3 platform beats an attached update phrase (R32)",
-          only(T7840, "Defender definitions", "The Defender update KB2267602 fails to install on 26200.7840 since the February update.")[0] == "platform")
-    check("D4 baseline beats an attached update phrase (R30)",
-          only(T7840, "26H2 upgrade fails", "I was on 26200.7840 after the February update, then the 26H2 upgrade failed with 0xC1900101.")[0] == "baseline")
+    check("D3 platform beats a failure link its words contain: 'X fails to install 26200.7922' is the platform, not 'X fails' (V-GR09)",
+          only(T7840, "Update fails", "26200.7840 fails to install 26200.7922 with 0x800f0922.") == ("platform", "platform:post"))
+    check("D4 a rollback target beats the destination link it contains: 'returned me to X' is a baseline, not 'to X' (V-GR02)",
+          only(T7840, "Update keeps failing", "The update failed and returned me to 26200.7840, now it fails again with 0x800f0922.")
+          == ("baseline", "baseline:pre"))
     check("D5 an environment marker is a label, not a veto: 'We are on X after last night's update' is affected (P1)",
           only(T7840, "Taskbar keeps crashing", "We are on 26200.7840 after last night's update and the taskbar keeps crashing every few minutes.")
           == ("affected", "attached:post"))
@@ -513,9 +641,11 @@ def run() -> int:  # noqa: PLR0915
           and both(T7623, "Rollback", k17) == (REASON, None))
     d8_title = "Updated to the new build"
     d8_body = "Yesterday all was fine. Updated to the new build 26200.7840 overnight and printing fails since the update."
-    check("D8 only LEADING title copies are stripped: a title copy mid-body still links the build (and R33's leading copy does not)",
+    check("D8 only LEADING title copies are stripped: a title copy mid-body still links the build (and R33's leading copy, "
+          "'... after the update', is removed rather than read as an onset at the build)",
           reason_of(T7840, d8_title, d8_body) is None and only(T7840, d8_title, d8_body) == ("affected", "named:pre")
-          and reason_of(T7840, "Explorer crashes after the update", "26200.7840 here, Pro edition, and it happens every boot.") == REASON)
+          and only(T7840, "Explorer crashes after the update", "26200.7840 here, Pro edition, and it happens every boot.")
+          == ("unlinked", ""))
     check("D9 no colon in the identity filler: 'update Windows Release OS: X' is a spec label (environment), not a named link (R34)",
           only(T7840, "Network not working", "Network not working after Windows 11 25H2 update Windows Release OS: 26200.7840 What I've already tried: drivers.")
           == ("environment", ""))
@@ -524,12 +654,17 @@ def run() -> int:  # noqa: PLR0915
                "Edition Windows 11 Pro Version 25H2 Installed on 2/14/2026 OS build 26200.7840 Experience Windows Feature Experience Pack.")
           == ("environment", ""))
     d11 = "Switched Windows 11 Pro on 26200.7840 to dark mode and since the update Explorer crashes."
-    check("D11 no 'on' in the identity filler: 'Switched Windows 11 Pro on X' does not name the build as the change",
-          only(T7840, "Explorer crashes", d11) == ("unlinked", "") and both(T7840, "Explorer crashes", d11) == (REASON, None),
-          str(only(T7840, "Explorer crashes", d11)))
+    d11s = "I'm running Windows 11 Pro and switched it on 26200.7840 to dark mode, and since the update Explorer crashes."
+    check("D11 no 'on' in the identity filler: 'Switched Windows 11 Pro on X' does not name the build as the change (unlinked, so "
+          "kept by fail-open; refused once a running statement precedes it)",
+          only(T7840, "Explorer crashes", d11) == ("unlinked", "") and both(T7840, "Explorer crashes", d11) == (None, None)
+          and only(T7840, "Explorer crashes", d11s) == ("environment", "") and both(T7840, "Explorer crashes", d11s) == (REASON, None),
+          f"{only(T7840, 'Explorer crashes', d11)} {only(T7840, 'Explorer crashes', d11s)}")
     d12 = "I updated to 26200.7623 (the 26200.7840 package never installed) and printing fails since the update."
+    d12s = "I'm on 26200.7623 now; I'm running 26200.7623 (the 26200.7840 package never installed) and printing fails since the update."
     check("D12 no other build in the identity filler: 'updated to A (the X package never installed)' does not link X",
-          only(T7840, "Printing fails", d12) == ("unlinked", "") and both(T7840, "Printing fails", d12) == (REASON, None),
+          only(T7840, "Printing fails", d12) == ("unlinked", "") and both(T7840, "Printing fails", d12) == (None, None)
+          and both(T7840, "Printing fails", d12s) == (None, None),
           str(only(T7840, "Printing fails", d12)))
     k12 = "Since I installed the latest update on Friday, I installed it (25H2; Build 26200.7840). After the restart search fails."
     check("D13 a short parenthetical is one unit: '(25H2; Build X)' after 'installed it' is a named link (K12)",
@@ -554,7 +689,8 @@ def run() -> int:  # noqa: PLR0915
     check("D20 a bare 'the update on X' names the build as the update (K25); a qualified one is the platform (R26)",
           only(T7840, "Printer stopped", "Since the update on 26200.7840 my printer stopped working. Uninstalling the update fixed it.")
           == ("affected", "named:pre")
-          and only(T7840, "Next update", "The next update on 26200.7840 fails to install with error 0x800f0922 every night.")[0] == "platform")
+          and only(T7840, "Next update", "The next update on 26200.7840 never finishes downloading since the update check.")
+          == ("platform", "platform:pre"))
     check("D21 history: 'Successfully installed X' in an update-history line is not a report on X (N6)",
           only(T7840, "Screen flickers", REFUSE[[n for n, *_ in REFUSE].index("N6")][3])[0] == "history")
     check("D22 prospective: 'Will installing X fix this?' names X as a remedy, not a cause (N7)",
@@ -586,7 +722,7 @@ def run() -> int:  # noqa: PLR0915
           and only(T7840, "Update rolled back", "I'm on 26200.7840 after the update was rolled back.") == ("environment", ""))
     check("D27 the upgrade source is anchored at the build: 'Upgrading from X' is source, while an unrelated earlier 'from' and "
           "'issues from the latest update (X)' are not",
-          only(T7840, "Feature update", "Upgrading from 26200.7840 fails with 0xC1900101 every time since the update.")
+          only(T7840, "Feature update", "Upgrading from 26200.7840 never completes, error 0xC1900101 since the update.")
           == ("source", "source:pre")
           and only(T7840, "Printer", "Apart from that, after installing 26200.7840 the printer stopped working.") == ("affected", "named:pre")
           and only(T7840, "Printer", "I'm having issues from the latest update (26200.7840): the printer fails after the update.")
@@ -619,15 +755,19 @@ def run() -> int:  # noqa: PLR0915
           and only(T7840, "x", "26200.7840 keeps crashing after installing the update.") == ("affected", "direct:post")
           and only(T7840, "x", "26200.7840 is stuck at 100% and rolls back.") == ("affected", "direct:post")
           and reason_of(T7840, "Rollback", "The update to 26200.7840 failed to install and rolled back to 26200.7623.") is None)
-    check("D32 the build as the label of the machines another update is applied to is the platform",
-          only(T7840, "x", "Trying to update 26200.7840 PCs with the March cumulative update fails with 0x800f0922.")
-          == ("platform", "platform:post"))
-    check("D33 a state statement ('X is the current build') and a following update ('After X, the next update') are baselines; "
-          "a plain onset is not",
-          only(T7840, "x", REFUSE2[[n for n, *_ in REFUSE2].index("V-GR13")][3]) == ("baseline", "baseline:post")
-          and only(T7840, "x", "After 26200.7840, the next update fails to install with 0x800f0922.") == ("baseline", "baseline:post")
+    check("D32 the build as the label of the machines ANOTHER update is applied to is the platform; the record's own month is "
+          "not another update",
+          only(T7840, "x", "26200.7840 PCs with the 2026-03 update fail to boot.") == ("platform", "platform:post")
+          and only(T8246, "x", "All 26200.8246 PCs with the April update crash the spooler after the update.") == ("unlinked", ""))
+    check("D33 a state statement ('X is the current build') and a following update ('X, then the next update') are baselines; "
+          "a plain onset is not, and a contrast to an issue lifts the state reading",
+          only(T7840, "x", "26200.7840 is the current build on all our machines and the March update fails on every one.")
+          == ("baseline", "baseline:post")
+          and only(T7840, "x", "26200.7840, then the next update fails to install with 0x800f0922.") == ("baseline", "baseline:post")
           and only(T7840, "x", "After 26200.7840, the next morning my printer failed after the update.") == ("affected", "onset:pre")
-          and only(T7840, "x", "Since 26200.7840 is installed, the printer fails.") == ("affected", "onset:pre"))
+          and only(T7840, "x", "Since 26200.7840 is installed, the printer fails.") == ("affected", "onset:pre")
+          and only(T8246, "x", "26200.8246 is a good build otherwise, but since installing it my printer drops off the network.")
+          == ("unlinked", ""))
     check("D34 a comparison point is a baseline: 'compared to X' (the destination link needs a change, not a comparison)",
           only(T7840, "x", "After the update, compared to 26200.7840, boot takes twice as long.") == ("baseline", "baseline:pre")
           and only(T7840, "x", "Since the update to 26200.7840, compared with before, boot is twice as slow.") == ("affected", "named:pre"))
@@ -646,7 +786,9 @@ def run() -> int:  # noqa: PLR0915
     check("D37 title copies: at most the three the collectors add are removed (a fourth is the post's own clause), and only "
           "whole-word copies",
           reason_live(T7840, tp1_title, tp1_body) is None
-          and reason_live(T7840, "Explorer crashes after the update", "26200.7840 here, Pro edition, and it happens every boot.") == REASON
+          and mw._r1_strip_title(" ".join([tp1_title] * 3 + [tp1_body]), tp1_title) == tp1_body
+          and mw._r1_strip_title(" ".join(["Explorer crashes after the update"] * 3 + ["26200.7840 here, and it happens every boot."]),
+                                 "Explorer crashes after the update") == "26200.7840 here, and it happens every boot."
           and mw._r1_strip_title("Update Update Updated to 26200.7840 the printer fails.", "Update")
           == "Updated to 26200.7840 the printer fails."
           and reason_of(T7840, "Update", "Updated to 26200.7840 and the printer fails since the update.") is None)
@@ -656,6 +798,75 @@ def run() -> int:  # noqa: PLR0915
               "26200.7840 has a bug that breaks Bluetooth since I updated.")} == {"direct:post"}
           and only(T7840, "x", "26200.7840 came through last night and my audio is gone. The update broke it.") == ("affected", "named:post"))
 
+    # Third round (v3): precedence, positive-evidence refusal, the state readings, title normalisation, the
+    # two-pattern exceptions and each veto's root fix, in both directions.
+    d39_mixed = "I'm running 26200.7840. Printing on 26200.7840 is flaky since the update."
+    d39_both = "I'm running 26200.7840. Is it safe to install 26200.7840 again? Printing fails since the update."
+    check("D39 refusal needs positive evidence on every occurrence: an unlinked mention keeps the row (fail-open), and a "
+          "stated-state mention beside a veto is refused",
+          only(T8246, "BitLocker recovery", "After the update, every reboot on 26200.8246 asks for the BitLocker recovery key.")
+          == ("unlinked", "")
+          and roles(T7840, "Printing", d39_mixed) == [("environment", ""), ("unlinked", "")]
+          and both(T7840, "Printing", d39_mixed) == (None, None)
+          and roles(T7840, "Printing", d39_both) == [("environment", ""), ("prospective", "prospective:pre")]
+          and both(T7840, "Printing", d39_both) == (REASON, None),
+          f"{roles(T7840, 'Printing', d39_mixed)} {roles(T7840, 'Printing', d39_both)}")
+    check("D40 the environment reading stands BEFORE the build: 'Installed on <date> OS build X' and 'OS Build X' are environment, "
+          "'X was successfully installed on 2/11 ...' is not",
+          only(T7840, "x", "Edition Windows 11 Pro Version 25H2 Installed on 2/14/2026 OS build 26200.7840 Experience Pack.")
+          == ("environment", "")
+          and only(T7840, "x", "I own a mini PC with a Ryzen 7 and Windows 11 Pro OS Build 26200.7840.") == ("environment", "")
+          and only(T7840, "Printer", "26200.7840 was successfully installed on 2/11, but since then my printer fails.") == ("unlinked", ""))
+    check("D41 a bare identity line is the stated state: the build ends an identity-only opening, or is followed by a comma, a "
+          "parenthesis or a new capitalised clause; a sentence that merely starts with the build is not one",
+          {only(T9711 if "26300" in b else T7840, "x", b) for b in (
+              "Windows 11 25H2 build 26200.7840.",
+              "Windows 11 Pro 25H2 build 26200.7840, clean install.",
+              "Windows 11 25H2 (build 26200.7840), originally upgraded from 21H2.",
+              "Win11 Home 25H2 26200.7840 (current).",
+              "26H2 26300.9711 Never seen this before, has anyone seen this?")} == {("environment", "")}
+          and only(T8246, "x", "26200.8246, my printer broke after the update.") == ("unlinked", "")
+          and only(T7840, "Mic muted", "Windows 11 Pro (OS build 26200.7840) after the latest update my mic is muted.")
+          == ("affected", "attached:post"))
+    q14_title, q14_body = "Explorer crashes  after updating", "26200.8246 here, Pro edition, and it happens every boot."
+    q14_text = " ".join([q14_title, q14_title, mw.learn_qna.clean_html(q14_title + " " + q14_body)])
+    check("D42 the title is matched as stored AND after clean_html, so the collapsed copy inside report_text is removed and not "
+          "read as 'after updating X' (second verifier Q-R14)",
+          mw._r1_strip_title(q14_text, q14_title) == q14_body
+          and [r[:2] for r in mw.identity_link_details(q14_text, q14_title, "26200.8246", "2026-04-14")] == [("unlinked", "")])
+    check("D43 two-pattern exceptions decide on their own: 'X - Successfully installed on <date> - but since then ...' lifts the "
+          "history reading (kept) while a new sentence does not (refused); 'will ... X' is prospective only when X is what "
+          "'fixes' (A1 item 4)",
+          both(T8246, "Printer", "26200.8246 - Successfully installed on 4/16/2026 - but since then the printer fails.") == (None, None)
+          and both(T8246, "Printer", "26200.8246 - Successfully installed on 4/16/2026. Since the update the printer fails.")
+          == (REASON, None)
+          and only(T8246, "Boot", "It will not boot since installing 26200.8246, error 0xc000021a after the update.")
+          == ("affected", "named:pre")
+          and only(T7840, "Wi-Fi drops", "Will installing 26200.7840 fix this? My Wi-Fi drops since the January update.")
+          == ("prospective", "prospective:mid"))
+    check("D44 each veto's root fix, with its control: clean words after an issue or as a prior state, a request for 'a fix', a "
+          "comparison across a comma or another train, 'come from X', the way back from X, and a time phrase after a failure",
+          only(T7840, "x", "26200.7840 with no problems at all; the March update broke printing.") == ("clean", "clean:post")
+          and only(T8246, "x", "26200.8246 makes the Start menu not open, with no errors in Event Viewer, since the update.") == ("unlinked", "")
+          and only(T8246, "x", "On 26200.8246 the mouse is jerky in games after the update, no trouble before.") == ("unlinked", "")
+          and only(T8246, "x", "Did 26200.8246 make Wi-Fi drop for anyone, any fix? It started after the update.") == ("unlinked", "")
+          and only(T7840, "x", "After the update, compared to 26200.7840, boot takes twice as long.") == ("baseline", "baseline:pre")
+          and only(T8246, "x", "Compared to 24H2 26200.8246 boots slower since the update.") == ("unlinked", "")
+          and only(T8246, "x", "Compared to Windows 11, 26200.8246 boots slower since the update.") == ("unlinked", "")
+          and only(T8246, "x", "The crashes come from 26200.8246 for sure, they began right after the update.") == ("unlinked", "")
+          and only(T8246, "x", "Rolled back from 26200.8246 to 26200.8037 because Wi-Fi broke after the update.") == ("affected", "remedy:pre")
+          and only(T7840, "x", "Upgrading from 26200.7840 to 26H2 fails with 0x800f0993.") == ("source", "source:pre")
+          and only(T8246, "x", "26200.8246 keeps failing to install this week with 0x800f0922.") == ("affected", "direct:post")
+          and only(T7840, "x", "My PC on 26200.7840 is stuck installing the March update at 0%.") == ("platform", "platform:post"))
+    check("D45 'X installed <date>' is an update-history entry, not a change; 'X installed and since then ...' names the change",
+          only(T8246, "x", "Update history: 26200.8246 installed 4/16/2026. Since the May update the printer is offline.")
+          == ("history", "history:pre")
+          and only(T7840, "x", "Build 26200.7840 installed and after the update the laptop is in a boot loop.") == ("affected", "named:post"))
+    check("D46 'the X update / upgrade to Y' is the road from X (source); 'the X update broke ...' names X",
+          only(T8246, "x", "The 26200.8246 upgrade to 26H2 fails with 0xC1900101 at 35%.") == ("source", "source:post")
+          and only(T8246, "x", "The 26200.8246 update to 26200.8328 fails with 0x800f0922 every night.") == ("source", "source:post")
+          and only(T7840, "x", "The 26200.7840 update broke my printer.") == ("affected", "named:post"))
+
     # ---------------------------------------------------------------- E. declared limits (pinned, not closed)
     check("E1 [limit L1] an attached link plus a later sentence blaming an unnamed update still counts",
           reason_of(T7840, "Next update keeps failing",
@@ -663,38 +874,50 @@ def run() -> int:  # noqa: PLR0915
     check("E2 [limit L2] onset and persistence are not covered: 'I have since updated to X and it still shuts down' counts",
           reason_of(T7840, "Shutdowns",
                     "This has been happening for a year. I have since updated to 26200.7840 and it still shuts down randomly after every update.") is None)
-    check("E3 [limit L3] non-English link grammar is limited to the change-word prepositions: 'Seit X ...' is refused",
-          both(T7840, "Explorer", "Seit 26200.7840 stuerzt der Explorer ab, error 0x80070005.") == (REASON, None))
+    check("E3 [limit L3] non-English link grammar is limited to the change-word prepositions; an unread phrasing fails open: "
+          "'Seit X ...' is unlinked and kept",
+          both(T7840, "Explorer", "Seit 26200.7840 stuerzt der Explorer ab, error 0x80070005.") == (None, None)
+          and only(T7840, "Explorer", "Seit 26200.7840 stuerzt der Explorer ab, error 0x80070005.") == ("unlinked", ""))
     check("E4 [limit L4] a generic 'after today's update' beside a build stated only as the current state is refused (owner decision, default refuse)",
           both(T9711, "Defender offline scan boots into recovery",
                "26H2 26300.9711 Never seen this before. After todays update I ran a Defender Offline scan and it booted into recovery.")
           == (REASON, None))
-    check("E5 [limit L4b] 'Build now: X' after a generic update sentence is refused",
+    check("E5 [limit L4b] a state label the environment reading does not list ('Build now: X') fails open: kept",
           both(T7840, "Bluetooth gone", "Bluetooth vanished from Device Manager. This happened after the update. Build now: 26200.7840")
-          == (REASON, None))
-    check("E6 [limit L5] adjacency is the attachment proxy: 'On X the search box ... since the update' is refused while 'On X since the update ...' is kept",
-          both(T7840, "Search broke", "On 26200.7840 the search box is not working since the update yesterday.") == (REASON, None)
-          and reason_of(T7840, "Search box", "On 26200.7840 since the update yesterday the search box is not working.") is None)
+          == (None, None))
+    check("E6 [limit L5] adjacency is the attachment proxy: 'I'm on X and since the update ...' is refused, 'On X since the update ...' "
+          "is kept, and 'On X the search box ... since the update' (no stated-state marker) fails open",
+          both(T7840, "Explorer crashes on launch", "I'm on 26200.7840 and since the update File Explorer crashes on launch.")
+          == (REASON, None)
+          and reason_of(T7840, "Search box", "On 26200.7840 since the update yesterday the search box is not working.") is None
+          and both(T7840, "Search broke", "On 26200.7840 the search box is not working since the update yesterday.") == (None, None))
     e7_title = "Update fails 0x800f0922"
     e7_body = "Hotfix list: KB5077181 KB5050021. OS Build 26200.7840. The update fails with 0x800f0922."
     check("E7 [limit L6] a KB match is out of scope even when the KB sits only in a hotfix list",
           reason_of(T7840, e7_title, e7_body) is None)
-    check("E8 [limit L7] the filler is a closed list: an unlisted identity word between the change word and X fails closed",
-          both(T7840, "Camera fails", "After updating to Windows 11 Pro Workstation Edition 26200.7840 the camera fails.") == (REASON, None))
-    check("E9 [limit L5] 'X was successfully installed on <date>, but since then ...' is refused: 'installed on' is the Settings "
-          "label and the onset is not adjacent",
-          both(T7840, "Printer", "26200.7840 was successfully installed on 2/11, but since then my printer fails.") == (REASON, None))
+    check("E8 [limit L7] the filler is a closed list: an unlisted identity word between the change word and X breaks the link, and "
+          "the mention then fails open (unlinked, kept)",
+          both(T7840, "Camera fails", "After updating to Windows 11 Pro Workstation Edition 26200.7840 the camera fails.") == (None, None)
+          and only(T7840, "Camera fails", "After updating to Windows 11 Pro Workstation Edition 26200.7840 the camera fails.")
+          == ("unlinked", ""))
+    check("E9 [was limit L5, closed in v3] 'X was successfully installed on <date>, but since then ...' is kept: 'installed on' after "
+          "the build is not the Settings label",
+          both(T7840, "Printer", "26200.7840 was successfully installed on 2/11, but since then my printer fails.") == (None, None))
     check("E10 [limit L8] the contrast exception lifts a clean veto for an issue it does not give to another NAMED update, so "
           "'... but the update fails' counts",
           reason_of(T7840, "Printer old", "26200.7840 installed without problems, but my printer is old and the update fails.") is None)
     check("E11 [limit L7] the closed filler spans an update noun and a parenthesis: 'Installing the update (X here) fails' counts",
           reason_of(T7840, "Install fails", "Installing the update (26200.7840 here) fails with 0x800f0922.") is None)
     check("E12 [limit L9] text built WITHOUT the source's own title prefix (two copies, as some older stored excerpts are) "
-          "loses a first clause that begins with the title",
-          both(T7840, tp1_title, tp1_body) == (REASON, None) and reason_live(T7840, tp1_title, tp1_body) is None)
-    check("E13 [limit L10] 'X - Successfully installed on <date>' reads as an update-history line, even after a change phrase",
+          "loses a first clause that begins with the title; the mention is then unlinked and fails open",
+          both(T7840, tp1_title, tp1_body) == (None, None) and only(T7840, tp1_title, tp1_body) == ("unlinked", "")
+          and reason_live(T7840, tp1_title, tp1_body) is None)
+    check("E13 [limit L10] 'X - Successfully installed on <date>' reads as an update-history line; a change phrase on the other "
+          "side of the build outweighs it (same-mention precedence)",
           both(T7840, "Printer", "After updating to 26200.7840 - Successfully installed on 2/11/2026 - the printer fails.")
-          == (REASON, None))
+          == (None, None)
+          and only(T7840, "Printer", "26200.7840 - Successfully installed on 2/11/2026. The printer fails since then.")
+          == ("history", "history:post"))
 
     # ---------------------------------------------------------------- F. one authority, and the reason's consumers
     rec = PatchRecord(WINDOWS_PRODUCT_ID, "25H2", Path("synthetic-25h2.md"), "2026-02-10T00:00:00Z", "current", "Windows 11", "26200.7840")
@@ -786,6 +1009,25 @@ def run() -> int:  # noqa: PLR0915
           and sum(e["declared_limit_l4"] for e in entries) == 4)
     check("G5 the pinned roles are the fixture's roles: no stored refusal was paraphrased into a different role",
           all(pinned[tuple(c["original"])]["occurrence_roles"] == c["expected_roles"] for c in refusals))
+
+    # ---------------------------------------------------------------- H. declared residual admissions (main admits them too)
+    earlier = {name: (target, title, body_text, live) for live, rows in ((False, REFUSE + REFUSE2), (True, LIVE_REFUSE))
+               for name, target, title, body_text in rows}
+    check("H0 every residual name is an earlier refusal case, and the declared classes are exactly R1R-01..R1R-05",
+          set(RESIDUAL) <= set(earlier)
+          and set(RESIDUAL.values()) | {c["expected"] for c in v2_refuse if c["expected"] != "refused"}
+          == {"R1R-01", "R1R-02", "R1R-03", "R1R-04", "R1R-05"})
+    for name, cls in RESIDUAL.items():
+        target, title, body_text, live = earlier[name]
+        got, off = both(target, title, body_text, live=live)
+        check(f"H {name} [{cls}]: admitted, and admitted with the rule off as on main (declared residual, not introduced) "
+              f"-- {body_text[:50]}", got is None and off is None, f"{got} / off {off} {roles(target, title, body_text)}")
+    for c in v2_refuse:
+        if c["expected"] == "refused":
+            continue
+        got, off = both(c["target"], c["title"], c["body"], live="row")
+        check(f"H {c['case']} (second verifier) [{c['expected']}]: admitted, and admitted with the rule off as on main "
+              f"(declared residual, not introduced) -- {c['body'][:50]}", got is None and off is None, f"{got} / off {off}")
 
     print()
     print("=" * 78)

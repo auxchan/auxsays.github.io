@@ -13,7 +13,7 @@
  ],
  "parent_commit": "bf662c02144d00f48cfb07979dd1159ac91d5565",
  "authority_sha256_parent": "02e280e4f524f3611b110550cadc147e5ea5c59ea849db6f29a35f1abb52a6fa",
- "authority_sha256": "7460bf108f57846e738c3cfef6d43c0d89e61e171c1f7e189ab5a33fe0c19c92",
+ "authority_sha256": "83cf0acfabbecdb079462b4fb649066ea669c6ed69ff168896e38073059b9fcc",
  "store_path": "auxsays/_data/consensus_evidence.yml",
  "store_sha256": "050f8125d92c34f6a3312e0915cdd677af3f03542bf022ab836722b9e2749947",
  "replay": {
@@ -197,7 +197,7 @@
    "reason_with_rule": "identity_not_linked_to_issue",
    "occurrence_roles": [
     [
-     "unlinked",
+     "environment",
      ""
     ]
    ],
@@ -263,7 +263,7 @@
    "reason_with_rule": "identity_not_linked_to_issue",
    "occurrence_roles": [
     [
-     "unlinked",
+     "environment",
      ""
     ]
    ],
@@ -329,7 +329,7 @@
    "reason_with_rule": "identity_not_linked_to_issue",
    "occurrence_roles": [
     [
-     "unlinked",
+     "environment",
      ""
     ]
    ],

@@ -80,7 +80,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
-| AUX-076 | Resolved | Evidence acceptance | High | A Windows report counted against a build its author only quoted as their current system |
+| AUX-076 | Partially resolved | Evidence acceptance | High | A Windows report counted against a build its author only quoted as their current system |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
@@ -287,8 +287,8 @@ counted Windows row (that is a new candidate and needs its own audited manifest,
 
 ### AUX-076 — A Windows report counted against a build its author only quoted as their current system
 
-- **Status** Resolved (future acceptance, within the declared limits below; stored rows change only by a separate audited withdrawal) · **Area** Evidence acceptance · **Severity** High
-- **First seen** 2026-11-04 (AUX-067 residual R1) · **Resolved** 2026-11-05
+- **Status** Partially resolved (R1 PARTIALLY RESOLVED: future acceptance only, within the declared limits and the declared residual classes R1R-01..R1R-05 below; stored rows change only by a separate audited withdrawal) · **Area** Evidence acceptance · **Severity** High
+- **First seen** 2026-11-04 (AUX-067 residual R1) · **Partially resolved** 2026-11-05
 
 **Symptom** A build-only identity whose title names neither the record's build nor its KB counted whenever any
 install or update wording appeared anywhere in the post, even when the build itself sat only in a spec block, a
@@ -317,31 +317,81 @@ fixes every one, and on the stored corpus gives exactly the same 14 refusals wit
 Fourteen patterns were pinned only together with a sibling; every pattern now has a case that flips when that
 pattern alone is deleted.
 
-**Measured** Retained-text replay of the 527 counted Windows rows on parent `bf662c02`: 14 rows change, every
-one from counted to this reason, none to any other reason (accepted on retained text 430 -> 416). Nothing stored
-changes in this entry's PR: `_data` and `updates` hash identical before and after. The 14 are pinned by
+**v3, one bounded fix pass** A second independent verification (53 new synthetic probes) found 14 genuine
+reports refused (a veto overriding a link on the same mention, and vetoes reading past their own phrase: "no
+issues before", "no errors in Event Viewer" after a reported failure, "compared to 24H2, X", "the crashes come
+from X", "back to 24H2", "keeps failing to install this week", "the moment", "the first time", "is a good build
+otherwise, but ...", "X machines with the April update" on an April record, "Why did X break Wi-Fi, any fix?"),
+22 refuse probes still counted (every one counted by the authority on main as well), and two two-pattern
+exceptions with no pin. v3 changes the rule in five ways and adds no new acceptance path:
+1. Same-mention precedence: a link on an occurrence keeps it even when a veto also holds there, unless the veto's
+   own words contain the link ("Successfully installed X" re-reads "installed X"; "X fails to install the March
+   update" re-reads "X fails").
+2. Refusal needs positive evidence on every occurrence: each must be a veto or the stated current state (a running
+   statement or spec label before the build, or a bare identity line such as "Windows 11 25H2 build X."). An
+   unlinked occurrence keeps the row, so unlisted vocabulary now fails open instead of refusing.
+3. Each listed veto is fixed at its root, and each fix has a pin with no link at all, so reverting that fix
+   alone refuses it.
+4. The title is matched as stored and after `clean_html` when the leading copies are removed.
+5. Both two-pattern exceptions (history `post~`, prospective `mid`) are pinned on their own.
+Two narrow readings were added where an existing veto already applied: "the X update / upgrade to Y" is the road
+from X, and "X installed <date>" is an update-history entry. One link was added for the way back from a build
+("Rolled back from X to Y because ..."), which only keeps reports.
+
+**Measured** Retained-text replay of the 527 counted Windows rows on parent `bf662c02` (store `050f8125`): 14 rows
+change, every one from counted to this reason, none to any other reason (accepted on retained text 430 -> 416).
+Over all 562 stored Windows rows, v3 and v2 decide identically, so the 14 are unchanged (block hashes 14/14). All
+14 now read as the stated current state (11 running statements or spec labels, 3 bare identity lines). Nothing
+stored changes in this entry's PR: `_data` and `updates` hash identical before and after. The 14 are pinned by
 five-field identity and block hash in `scripts/audit/r1_link_roles_refusals_2026-11-05.json`, the input for the
-separate withdrawal. `test_windows_identity_link_roles.py` (295 checks on synthetic fixtures only; 80 mutants, one change
-each, every entry of both pattern tables included: 79 killed by a named check, and the 80th is equivalent,
-a month-widened named link that the platform veto always answers first);
-`test_windows_identity_not_the_subject.py` C7/C8 now pin the two AUX-067 residual shapes as refused;
-`test_elevenforum_adapter.py` I9/I10 pin thread 50447 (refused on 26300.9457 in isolation, still counted once on
-26300.9711 by its KB). `diagnose_windows_link_roles.py` is the read-only, warn-only replay of the live corpus.
+separate withdrawal. `test_windows_identity_link_roles.py` runs 409 checks on synthetic fixtures only, including
+the second verifier's 53 probes frozen as written. Mutation: 118 one-change mutants (every entry of both pattern
+tables deleted, every second pattern neutralised, plus structural and root-fix mutants), each killed by a named
+check; the second verifier's own harness kills 48 of 48. Probe sets from both verifications, the implementer's
+rounds and the suite at `1c27bde6` (407 probes) give 0 refused keep probes and 0 admissions that main does not also
+make. `test_windows_identity_not_the_subject.py` C7/C8 still pin the two AUX-067 residual shapes as refused;
+`test_elevenforum_adapter.py` I9/I10 still pin thread 50447. `diagnose_windows_link_roles.py` is the read-only,
+warn-only replay of the live corpus, and now also measures the residual classes.
 
 **Declared limits** L1 an attached link plus a later sentence blaming an unnamed update still counts. L2 onset
-and persistence are not covered. L3 non-English link grammar is limited to a few prepositions. L4 a generic
-"after the update" beside a build stated only as the current state is refused (owner decision, default refuse;
-4 of the 14). L5 adjacency stands in for attachment. L6 a KB match is out of scope, including a KB that sits only
-in a hotfix list. L7 the identity filler is a closed list, so an unlisted word fails closed, and the list itself
-spans an update noun and a parenthesis. L8 a contrast clause lifts a clean or successful-install veto for any
-issue it does not hand to another named update. L9 text built without the source's own title prefix (two
-copies, as some older stored excerpts are) loses a first clause that begins with the title. L10 "X ...
-Successfully installed on <date>" reads as an update-history line.
+and persistence are not covered. L3 non-English link grammar is limited to a few prepositions; an unread
+phrasing now fails open. L4 a generic "after the update" beside a build stated only as the current state is
+refused (owner decision; all 14 stored refusals are this shape); since v3 that needs a listed state marker before
+the build or a bare identity line, so an unlisted label ("Build now: X") fails open. L5 adjacency stands in for
+attachment ("I'm on X and since the update ..." is refused, "I'm on X since the update ..." is kept). L6 a KB
+match is out of scope, including a KB that sits only in a hotfix list. L7 the identity filler is a closed list:
+an unlisted word breaks the link, and the mention then fails open. L8 a contrast clause lifts a clean or
+successful-install veto for any issue it does not hand to another named update. L9 text built without the
+source's own title prefix loses a first clause that begins with the title (that mention then fails open). L10
+"X ... Successfully installed on <date>" reads as an update-history line unless a link on the other side of the
+build outweighs it.
+
+**Residuals (R1 PARTIALLY RESOLVED)** Shapes the rule does not refuse. The authority on main admits every one of
+them too, and none is introduced here. Each is pinned as admitted in section H of the suite. Stored-corpus impact
+is measured by `diagnose_windows_link_roles.py` `residual_impact` on store `050f8125`.
+- **R1R-01, same-mention precedence.** A veto reads the mention correctly, but a link on the other side of the
+  build keeps it ("I updated to X in February without problems. The March update ..."). 22 earlier suite
+  refusals. Stored impact: 0 rows.
+- **R1R-02, fail-open.** No link, no veto and no state marker, so the mention is unlinked and kept ("On X the
+  search box is not working since the update", "X here, Pro edition ..."). 17 earlier suite refusals and
+  second-verifier Q-R14. Stored impact: 0 rows.
+- **R1R-03, link misread.** A link reads a phrase that does not name the build as the change, and no veto or
+  state applies: re-install, clean install, an unrelated change word before "to X", "which came preinstalled",
+  "Windows Update for Business", possessive "Ive got", "reset ... to X", "took me to X", a log line, "the newer
+  update for X machines", "thinking about installing X", another product's update "to X machines", a spec line.
+  13 second-verifier probes.
+- **R1R-04, outcome vocabulary.** A clean outcome or prior state phrased outside the clean vocabulary ("installed
+  fine", "without drama", "broke nothing", "was fine for weeks"). 5 second-verifier probes.
+- **R1R-05, cross-sentence.** The issue belongs to a later, named update in another sentence (L1-adjacent). 1
+  second-verifier probe.
+R1R-03..05 can only touch a row that a link keeps. 10 stored rows are kept by a link (9 named, 1 destination),
+and all 10 are the reviewed keep rows of the R1 audit, so the stored impact is 0 known rows.
 
 **Reopen only if** a counted build-only Windows row whose title names neither the record's build nor its KB has
-no occurrence of the build linked to the issue; the rule refuses a row whose title or KB names the patch; an
-existing reason is relabelled as this one; a case outside L1-L10 is shown to be refused while linked, or counted
-while unlinked; or any Windows discovery method is judged by another authority.
+every occurrence of the build stated only as the current state or vetoed, and none linked; the rule refuses a row
+whose title or KB names the patch; an existing reason is relabelled as this one; a case outside L1-L10 is
+refused while linked; a stored row is shown to belong to R1R-01..R1R-05 (then `residual_impact` is non-zero, and
+that class needs its own measured fix); or any Windows discovery method is judged by another authority.
 
 ---
 

@@ -1,0 +1,802 @@
+{
+ "schema": 1,
+ "ledger": "AUX-076",
+ "about": "The second independent verifier's 53 SYNTHETIC probes (27 keep, 26 refuse), frozen as written. Driven through row_from_candidate as a Learn Q&A candidate is built (parent_title = report_title = title, report_text = clean_html(title + ' ' + body)). 'expected' is this change's decision: kept, refused, or a declared residual class R1R-nn (admitted by main and by this change alike, ledger AUX-076).",
+ "cases": [
+  {
+   "case": "Q-K01",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Printer stopped working",
+   "body": "After installing 26200.8246 the printer stopped, it had no issues before.",
+   "note": "clean veto vs 'no issues before'"
+  },
+  {
+   "case": "Q-K02",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Start menu will not open",
+   "body": "Since 26200.8246 the Start menu does not open, with no errors in Event Viewer. It began right after the update.",
+   "note": "clean veto vs 'no errors'"
+  },
+  {
+   "case": "Q-K03",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi broken",
+   "body": "I had to uninstall 26200.8246 to fix my Wi-Fi after the update.",
+   "note": "prospective 'X to fix' vs removal remedy"
+  },
+  {
+   "case": "Q-K04",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Slow boot",
+   "body": "Compared to 24H2, 26200.8246 boots three times slower since the update.",
+   "note": "baseline 'compared to' with train filler"
+  },
+  {
+   "case": "Q-K05",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Explorer crashes",
+   "body": "The crashes come from 26200.8246 for sure, they began right after the update.",
+   "note": "source 'come from' causal"
+  },
+  {
+   "case": "Q-K06",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi drops",
+   "body": "Updated Windows 11 26200.8246 and the printer fails, back to 24H2 for me. It started right after the update.",
+   "note": "source mid over 40 chars"
+  },
+  {
+   "case": "Q-K07",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Install keeps failing",
+   "body": "26200.8246 keeps failing to install this week with 0x800f0922.",
+   "note": "platform (d) 'this' as object"
+  },
+  {
+   "case": "Q-K08",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Update rolls back",
+   "body": "26200.8246 keeps rolling back the moment it reaches 100% after the update restarts.",
+   "note": "platform (d) rolling back 'the'"
+  },
+  {
+   "case": "Q-K09",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "26H2",
+    "target_kb": "KB5127648",
+    "target_os_build": "26300.9711",
+    "target_release_date": "2026-10-13T00:00:00Z",
+    "update_version": "26H2"
+   },
+   "title": "Printer offline",
+   "body": "Similar to 24H2, the 26H2 build 26300.9711 broke my printer after the update.",
+   "note": "baseline 'similar to' + filler"
+  },
+  {
+   "case": "Q-K10",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Printer drops off network",
+   "body": "26200.8246 is a good build otherwise, but since installing it my printer drops off the network.",
+   "note": "baseline post 'is a good build'"
+  },
+  {
+   "case": "Q-K11",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi broke",
+   "body": "Why did 26200.8246 break Wi-Fi, any fix? It started right after the update.",
+   "note": "prospective mid 'did ... fix'"
+  },
+  {
+   "case": "Q-K12",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Print spooler crashes",
+   "body": "Since installing it, all 26200.8246 machines with the April update crash the print spooler.",
+   "note": "platform (e) not month-aware"
+  },
+  {
+   "case": "Q-K13",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Audio gone",
+   "body": "My PC auto-updated to 26200.8246 overnight and the printer has been offline since the update.",
+   "note": "control: named"
+  },
+  {
+   "case": "Q-K14",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Memory leak",
+   "body": "Build 26200.8246 introduced a memory leak in explorer.exe after the update.",
+   "note": "control: direct introduced"
+  },
+  {
+   "case": "Q-K15",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5074109",
+    "target_os_build": "26100.7623",
+    "target_release_date": "2026-01-13T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Remote Desktop freezes",
+   "body": "Since moving to 26100.7623 my Remote Desktop sessions freeze after the update.",
+   "note": "control: onset"
+  },
+  {
+   "case": "Q-K16",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "26H2",
+    "target_kb": "KB5127648",
+    "target_os_build": "26300.9711",
+    "target_release_date": "2026-10-13T00:00:00Z",
+    "update_version": "26H2"
+   },
+   "title": "Audio dead",
+   "body": "Same as the previous one, 26300.9711 also killed my audio after the update.",
+   "note": "previous + direct"
+  },
+  {
+   "case": "Q-K17",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5079473",
+    "target_os_build": "26200.8037",
+    "target_release_date": "2026-03-10T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Bluetooth headset",
+   "body": "The March cumulative update (26200.8037) made File Explorer crash; it crashes after the update every time.",
+   "note": "control: named mid, own month"
+  },
+  {
+   "case": "Q-K18",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "23H2",
+    "target_kb": "KB5082052",
+    "target_os_build": "22631.6936",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "23H2"
+   },
+   "title": "Taskbar missing",
+   "body": "Windows Update pushed 22631.6936 to my PC and the taskbar has been missing since the update.",
+   "note": "control: pushed, 23H2"
+  },
+  {
+   "case": "Q-K19",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Network shares",
+   "body": "Network shares stopped working the day 26200.8246 landed after the update.",
+   "note": "control: X landed"
+  },
+  {
+   "case": "Q-K20",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "BitLocker recovery",
+   "body": "After the update, every reboot on 26200.8246 asks for the BitLocker recovery key.",
+   "note": "expected L4 (generic cue, build as state)"
+  },
+  {
+   "case": "Q-K21",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Touchpad ignores taps",
+   "body": "Ever since my laptop took 26200.8246, the touchpad ignores taps after the update.",
+   "note": "unlisted change verb 'took'"
+  },
+  {
+   "case": "Q-K22",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "26H2",
+    "target_kb": "KB5127648",
+    "target_os_build": "26300.9711",
+    "target_release_date": "2026-10-13T00:00:00Z",
+    "update_version": "26H2"
+   },
+   "title": "Network printing fails",
+   "body": "26300.9711 is the cause: printing to network printers fails after the update.",
+   "note": "unlisted predicate 'is the cause'"
+  },
+  {
+   "case": "Q-K23",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Mouse lag",
+   "body": "Since installing 26200.8246 my mouse lags in games, no trouble before.",
+   "note": "clean veto vs 'no trouble before'"
+  },
+  {
+   "case": "Q-K24",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Update loops",
+   "body": "26200.8246 failed to install the first time with 0x800f0922 and now the update loops.",
+   "note": "platform (d) 'the first time'"
+  },
+  {
+   "case": "Q-K25",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Explorer crashes for users",
+   "body": "We pushed 26200.8246 through Intune last night, and now Explorer crashes for every user after the update.",
+   "note": "control: pushed"
+  },
+  {
+   "case": "Q-K26",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Printing broke",
+   "body": "Printing broke the minute 26200.8246 came down from Windows Update, and it has failed since the update.",
+   "note": "named post came down vs source 'from'"
+  },
+  {
+   "case": "Q-K27",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Sound gone",
+   "body": "Uninstalling 26200.8246 brought my sound back; it vanished after the update.",
+   "note": "remedy vocabulary 'brought my sound back'"
+  },
+  {
+   "case": "Q-R01",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi gone",
+   "body": "I re-installed 26200.8246 from the ISO after the May update broke Wi-Fi.",
+   "note": "rollback target via hyphenated re-install"
+  },
+  {
+   "case": "Q-R02",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Store fails",
+   "body": "I clean-installed 26200.8246 last month and since the update the Store fails with 0x80070005.",
+   "note": "clean-install lookbehind bypass by hyphen"
+  },
+  {
+   "case": "Q-R03",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Cannot reach remote desktops",
+   "body": "Since I updated the RDP client, my laptop cannot connect to 26200.8246 hosts any more.",
+   "note": "destination fed by unrelated change word"
+  },
+  {
+   "case": "Q-R04",
+   "kind": "refuse",
+   "expected": "R1R-04",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Start menu broken",
+   "body": "26200.8246 installed fine back in April. The May update is the one that broke my Start menu.",
+   "note": "named post 'installed' + other named update"
+  },
+  {
+   "case": "Q-R05",
+   "kind": "refuse",
+   "expected": "R1R-04",
+   "target": {
+    "target_feature_version": "26H2",
+    "target_kb": "KB5127648",
+    "target_os_build": "26300.9711",
+    "target_release_date": "2026-10-13T00:00:00Z",
+    "update_version": "26H2"
+   },
+   "title": "Audio dead",
+   "body": "Got 26300.9711 in October without drama; the November preview update is what broke my audio, it no longer plays.",
+   "note": "clean vocabulary gap"
+  },
+  {
+   "case": "Q-R06",
+   "kind": "refuse",
+   "expected": "R1R-04",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi gone",
+   "body": "26200.8246 broke nothing for me; the May update broke Wi-Fi.",
+   "note": "direct 'broke nothing'"
+  },
+  {
+   "case": "Q-R07",
+   "kind": "refuse",
+   "expected": "refused",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Feature update fails",
+   "body": "The 26200.8246 upgrade to 26H2 fails with 0xC1900101 at 35%.",
+   "note": "upgrade source via 'X upgrade to'"
+  },
+  {
+   "case": "Q-R08",
+   "kind": "refuse",
+   "expected": "refused",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Update fails nightly",
+   "body": "The 26200.8246 update to 26200.8328 fails with 0x800f0922 every night.",
+   "note": "upgrade source via 'X update to'"
+  },
+  {
+   "case": "Q-R09",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Touchpad dead",
+   "body": "My new laptop runs 26200.8246, which came preinstalled; since the May update the touchpad is dead.",
+   "note": "factory baseline 'which came preinstalled'"
+  },
+  {
+   "case": "Q-R10",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "USB-C docks disconnect",
+   "body": "We keep our fleet at 26200.8246 with Windows Update for Business, and after the Intel driver update the docks disconnect.",
+   "note": "attached 'with Windows Update' product name"
+  },
+  {
+   "case": "Q-R11",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Audio crackles",
+   "body": "Ive got Windows 11 Pro 25H2 26200.8246 and since the update my audio crackles.",
+   "note": "possessive got without apostrophe"
+  },
+  {
+   "case": "Q-R12",
+   "kind": "refuse",
+   "expected": "R1R-05",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Update fails 0x800f0922",
+   "body": "My PC has been on 26200.8246 since the April update. The May update fails to install with 0x800f0922.",
+   "note": "L1 shape but the later update is NAMED"
+  },
+  {
+   "case": "Q-R13",
+   "kind": "refuse",
+   "expected": "R1R-04",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi drops",
+   "body": "After 26200.8246 my PC was fine for weeks; the May update broke Wi-Fi.",
+   "note": "onset + clean vocabulary gap"
+  },
+  {
+   "case": "Q-R14",
+   "kind": "refuse",
+   "expected": "R1R-02",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Explorer crashes  after updating",
+   "body": "26200.8246 here, Pro edition, and it happens every boot.",
+   "note": "R33-live shape, title with a double space"
+  },
+  {
+   "case": "Q-R15",
+   "kind": "refuse",
+   "expected": "refused",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Printer fails",
+   "body": "Before the May update my PC sat at 26200.8246 for weeks without trouble; now the printer fails since the update.",
+   "note": "control: clean"
+  },
+  {
+   "case": "Q-R16",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi broke",
+   "body": "When the May update broke Wi-Fi I reset the laptop to 26200.8246 from the recovery partition.",
+   "note": "rollback target via 'reset ... to'"
+  },
+  {
+   "case": "Q-R17",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Printing broke",
+   "body": "Uninstalling the May update took me to 26200.8246 and printing works again. Printing had stopped working after the update.",
+   "note": "rollback target via 'took me to'"
+  },
+  {
+   "case": "Q-R18",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Update fails to install",
+   "body": "Update log shows 26200.8246 was downloaded in April; the May update has failed to install ever since.",
+   "note": "history line via 'X was downloaded' + other named update"
+  },
+  {
+   "case": "Q-R19",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Bluetooth fails",
+   "body": "Last night I installed the newer cumulative update for 26200.8246 machines. Since installing it Bluetooth fails.",
+   "note": "platform via 'newer ... update for X'"
+  },
+  {
+   "case": "Q-R20",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi breaking?",
+   "body": "Thinking about installing 26200.8246, but people here say Wi-Fi breaks after the update.",
+   "note": "prospective, not yet installed"
+  },
+  {
+   "case": "Q-R21",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "App crashes on our fleet",
+   "body": "IT pushed the Zoom update to 26200.8246 machines yesterday and now the client crashes after the update.",
+   "note": "other product update deployed to X machines"
+  },
+  {
+   "case": "Q-R22",
+   "kind": "refuse",
+   "expected": "refused",
+   "target": {
+    "target_feature_version": "23H2",
+    "target_kb": "KB5082052",
+    "target_os_build": "22631.6936",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "23H2"
+   },
+   "title": "Upgrade blocked",
+   "body": "The upgrade from 22631.6936 is blocked by a compatibility hold since the update.",
+   "note": "control: source"
+  },
+  {
+   "case": "Q-R23",
+   "kind": "refuse",
+   "expected": "R1R-04",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5074109",
+    "target_os_build": "26100.7623",
+    "target_release_date": "2026-01-13T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Printing broke",
+   "body": "The January patch 26100.7623 was fine; it was the February update that broke printing.",
+   "note": "own-month patch noun + other named update"
+  },
+  {
+   "case": "Q-R24",
+   "kind": "refuse",
+   "expected": "R1R-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Screen flickers",
+   "body": "Specs: i7-12700, 32 GB RAM, 26200.8246 with the 2026-04 update, RTX 4070. Since the NVIDIA driver update the screen flickers.",
+   "note": "spec line attached via own month"
+  },
+  {
+   "case": "Q-R25",
+   "kind": "refuse",
+   "expected": "refused",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Printer fails",
+   "body": "Update history: 26200.8246 installed 4/16/2026. Since the May update the printer is offline.",
+   "note": "control: history"
+  },
+  {
+   "case": "Q-R26",
+   "kind": "refuse",
+   "expected": "refused",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5083769",
+    "target_os_build": "26200.8246",
+    "target_release_date": "2026-04-14T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Printing broke",
+   "body": "Downgraded to 26200.8246 because the May update broke printing.",
+   "note": "control: baseline downgrade"
+  }
+ ]
+}

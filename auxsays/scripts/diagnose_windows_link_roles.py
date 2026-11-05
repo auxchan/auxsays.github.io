@@ -12,7 +12,11 @@ the corpus says, unless it cannot read its inputs.
         authority on its retained text (parent_title + report_title + stored excerpt), prints the
         rows the link rule refuses and the per-occurrence role tallies, and diffs the refusal set
         against the pinned manifest (scripts/audit/r1_link_roles_refusals_2026-11-05.json). A row
-        missing from, or added to, the pinned set is a WARN line, not a failure.
+        missing from, or added to, the pinned set is a WARN line, not a failure. `residual_impact`
+        measures the declared residual classes R1R-01..R1R-05 (ledger AUX-076) on the same rows: how
+        many a veto outweighed by a link (R1R-01), how many are kept only because an occurrence fails
+        open (R1R-02), and how many a link keeps at all (the whole exposure of R1R-03..05), listing any
+        link-kept row outside the reviewed keep fixture.
 
     python auxsays/scripts/diagnose_windows_link_roles.py --fixture-equivalence
         The fixture builder's check. Every case in the frozen synthetic fixture names its stored
@@ -116,12 +120,68 @@ def question_id(url: str) -> str:
     return part.split("/", 1)[0]
 
 
+def veto_outweighed(item: dict[str, Any]) -> bool:
+    """R1R-01 on a stored row: some occurrence has a veto that a link on the other side of the build outweighs."""
+    row, target = item["row"], item["target"]
+    title = str(row.get("report_title") or "")
+    text = retained_text(str(row.get("parent_title") or ""), title, str(row.get("report_text_excerpt") or ""))
+    build = str(row.get("matched_os_build") or "")
+    key = mw._r1_month_key(str(target.get("target_release_date") or ""))
+    for sentence in mw._r1_sentences(mw._r1_strip_title(text, title)):
+        for m in mw.BUILD_TOKEN_RE.finditer(sentence):
+            if m.group(0) != build:
+                continue
+            vetoed = any(mw._r1_holds(kind, patterns, sentence, m.start(), m.end(), key)
+                         for _role, kind, *patterns in mw.R1_VETOES)
+            if vetoed and mw._r1_occurrence_role(sentence, m.start(), m.end(), key)[0] == "affected":
+                return True
+    return False
+
+
+def residual_impact(items: list[dict[str, Any]], decided: list[dict[str, Any]]) -> dict[str, Any]:
+    """How many stored, counted, in-scope rows each declared residual class (ledger AUX-076) can touch."""
+    keep_originals = {tuple(c["original"]) for c in json.loads(FIXTURE.read_text(encoding="utf-8"))["cases"]
+                      if c["kind"] == "keep"}
+    by_link, fail_open, outweighed, link_rows = Counter(), [], [], []
+    for item, got in zip(items, decided):
+        if not got["roles"] or got["reason"] is not None:
+            continue
+        found = [role for role, _rule in got["roles"]]
+        if "affected" in found:
+            link_rows.append(item)
+            for role, rule in got["roles"]:
+                if role == "affected":
+                    by_link[rule] += 1
+        elif "unlinked" in found:
+            fail_open.append(item["five"])
+        if veto_outweighed(item):
+            outweighed.append(item["five"])
+
+    def row_key(it: dict[str, Any]) -> tuple[str, str, str]:
+        r = it["row"]
+        return (str(r.get("update_version") or ""), str(r.get("target_build") or ""),
+                question_id(str(r.get("source_url") or "")))
+    return {
+        "R1R-01_veto_outweighed_by_link_rows": len(outweighed),
+        "R1R-02_kept_only_by_fail_open_rows": len(fail_open),
+        # R1R-03..05 can only touch a row that a link keeps: these rows are their whole exposure.
+        "R1R-03_05_rows_kept_by_a_link": len(link_rows),
+        "R1R-03_05_kept_by_link_occurrences_by_rule": dict(sorted(by_link.items())),
+        "R1R-03_05_link_rows_outside_the_reviewed_keep_fixture": sorted(list(it["five"]) for it in link_rows
+                                                                        if row_key(it) not in keep_originals),
+        "fail_open_rows": sorted(fail_open),
+        "veto_outweighed_rows": sorted(outweighed),
+    }
+
+
 def replay(aux_root: Path) -> dict[str, Any]:
     items = counted_windows_rows(aux_root)
     refused, roles = [], Counter()
     reasons, scope = Counter(), Counter()
+    decided = []
     for item in items:
         got = decide_row(item)
+        decided.append(got)
         reasons[str(got["reason"])] += 1
         scope["in_scope_build_visible" if got["roles"] else ("in_scope_build_not_retained" if got["in_scope"]
                                                               else "out_of_scope")] += 1
@@ -150,6 +210,8 @@ def replay(aux_root: Path) -> dict[str, Any]:
         # Still counted, but the current authority no longer refuses it: the rule or the row changed.
         "missing_from_replay": sorted(list(f) for f in (pin_set & counted_set) - got_set),
         "not_in_pinned_manifest": sorted(list(f) for f in got_set - pin_set),
+        # The declared residual classes R1R-01..R1R-05 (ledger AUX-076), measured on this corpus.
+        "residual_impact": residual_impact(items, decided),
     }
     return report
 
