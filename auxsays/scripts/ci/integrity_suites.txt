@@ -309,6 +309,11 @@ auxsays/scripts/tests/test_version_outcome_attribution.py = 64
 auxsays/scripts/tests/test_windows_count_authority.py = 104
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
+# AUX-067: a build-only identity whose TITLE is about another KB or build is not a report on the build
+# the author merely quoted. Pins the eight confirmed false acceptances (stored fields as fixtures), the
+# narrow affected-range exception that keeps row 51, the shapes the rule must not touch, and the thread
+# 50506 re-run against the elevenforum fixture.
+auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
@@ -379,7 +384,7 @@ auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
 # The Windows 11 Forum discovery adapter ships DISABLED. This suite pins that disabled means disabled
 # (no request, no pool, no health row, no ownership entry), the 9-page / 40-hydration / 1.5 s request
 # budget at the session level, challenge classification, the opening-post-only parser, and the known
-# attribution weakness the unchanged authority has on thread 50506 (AUX-063, an activation blocker).
+# attribution weakness thread 50506 exposed (AUX-063), now rejected as identity_not_the_subject (AUX-067).
 # Fixture-only; the dry-run script it drives is zero-write and its output is checked here.
 auxsays/scripts/tests/test_elevenforum_adapter.py = 104
 # A monitoring claim must describe what collection actually DID. `coverage_status_label` is a
