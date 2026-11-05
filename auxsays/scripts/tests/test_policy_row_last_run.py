@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A never-run, policy-disabled method row on a NEW patch must validate (AUX-079).
+"""A never-run, policy-disabled method row on a NEW patch must validate (AUX-081).
 
 Production incident 2026-11-05: the first new patch since the Reddit access policy (AUX-064),
 DaVinci Resolve 21.2, made its collector emit a `reddit_search` row with status `disabled`, reason
@@ -9,8 +9,9 @@ last_run -- and `validate_evidence_method_health.py` required last_run on every 
 refused before committing, on every run, for every product.
 
 The rule now: last_run may be empty ONLY on a policy-disabled row (`is_policy_disabled_row`: status
-`disabled` AND that reason). Every other row still needs it, and a non-empty value on a policy row must
-still look like a timestamp. Nothing stamps a time on a row that made no attempt.
+`disabled` AND exactly that reason -- not a reason that resembles it or contains it). Every other row
+still needs it, and a non-empty value on a policy row must still look like a timestamp. Nothing stamps a
+time on a row that made no attempt.
 
 Offline and deterministic. Fixtures are frozen: section B/C use the five 21.2 rows exactly as the
 failed run's receipt recorded them. Every store is a temp file; nothing under auxsays/_data is read
@@ -144,7 +145,7 @@ def refused_last_run(code: int, output: str, row_index: int = 1) -> bool:
 
 def run() -> int:
     print("=" * 60)
-    print("Policy-disabled method row on a new patch: last_run (AUX-079)")
+    print("Policy-disabled method row on a new patch: last_run (AUX-081)")
     print("=" * 60)
 
     with tempfile.TemporaryDirectory() as td:
@@ -203,6 +204,25 @@ def run() -> int:
 
         code, out = one(list(PRIOR_STORE) + list(RUN_21_2), tmp, "a13")
         check("A.13 the failed run's 21.2 rows beside an older patch validate", code == 0, out)
+
+        # The policy reason is one exact token. A reason that only RESEMBLES it, or merely CONTAINS it,
+        # names some other condition, and that row still needs last_run.
+        def near_misses(reasons, name: str) -> list[str]:
+            accepted = []
+            for idx, reason in enumerate(reasons):
+                code, out = one([variant(POLICY_21_2, blocked_reason=reason)], tmp, f"{name}_{idx}")
+                if not refused_last_run(code, out):
+                    accepted.append(reason)
+            return accepted
+
+        accepted = near_misses(("reddit_rate_limited", "reddit_access_policy_unauthorized",
+                                pol.POLICY_REASON.upper()), "a14")
+        check("A.14 a disabled row whose reason only RESEMBLES the policy reason (another Reddit reason, "
+              "the US spelling, upper case) and no last_run is refused", not accepted, f"accepted: {accepted}")
+
+        accepted = near_misses((f"{pol.POLICY_REASON} x2", f"probe_failed:{pol.POLICY_REASON}"), "a15")
+        check("A.15 a disabled row whose reason merely CONTAINS the policy reason (a suffix, a prefix) and "
+              "no last_run is refused", not accepted, f"accepted: {accepted}")
 
         # ---- B: the real writer feeding the validator --------------------------------------------
         print("B. writer -> validator")

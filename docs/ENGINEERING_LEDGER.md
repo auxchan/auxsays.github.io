@@ -77,8 +77,8 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
-| AUX-079 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
+| AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
@@ -4538,7 +4538,7 @@ tree.
 
 ---
 
-### AUX-079 — A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product
+### AUX-081 — A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product
 
 - **Status** Resolved · **Area** Collector telemetry · **Severity** High
 - **First seen** 2026-11-05 · **Resolved** 2026-11-05
@@ -4565,12 +4565,13 @@ one-time Acrobat migration tool that no lane runs, and it is safe with an empty 
 
 **Measured** Replaying the failed run's five 21.2 rows through the real writer onto the stored file at
 `main`: the validator now passes, 5 rows are appended and the 1,861 rows already stored are unchanged.
-`test_policy_row_last_run.py` (29 checks, `[blocking]`) uses those rows as frozen fixtures. It drives the
+`test_policy_row_last_run.py` (31 checks, `[blocking]`) uses those rows as frozen fixtures. It drives the
 writer and the validator in process and as bare-script child processes, and covers each row shape that
-must still be refused. Removing the exemption, narrowing it to status or to reason alone, and widening it
-to every row each fail a named check.
+must still be refused, including reasons that only resemble the policy reason or contain it. Removing the
+exemption, narrowing it to status or to reason alone, widening it to every row, and matching the reason
+loosely (as a substring, by its `reddit` prefix, or ignoring case) each fail a named check.
 
-**Reopen only if** `test_policy_row_last_run.py` reports anything but its governed 29, the validator
+**Reopen only if** `test_policy_row_last_run.py` reports anything but its governed 31, the validator
 accepts an empty `last_run` on any row other than a policy-disabled one, or a writer stamps a run time
 on a policy row that made no attempt.
 

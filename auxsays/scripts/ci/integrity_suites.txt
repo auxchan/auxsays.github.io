@@ -330,10 +330,10 @@ auxsays/scripts/tests/test_teams_record_cleanup.py = 9
 auxsays/scripts/tests/test_transactional_writeback.py = 10
 auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
 # A NEW patch's policy-disabled Reddit row has no prior attempt to inherit, so it is stored with an
-# empty last_run, and the validator refused it on every writeback for every product (AUX-079). Only
+# empty last_run, and the validator refused it on every writeback for every product (AUX-081). Only
 # that row shape may leave last_run empty; the suite drives the real writer and the validator as a
 # bare script over the failed run's own rows, and checks that no monitoring or H0-H7 decision moves.
-auxsays/scripts/tests/test_policy_row_last_run.py = 29
+auxsays/scripts/tests/test_policy_row_last_run.py = 31
 auxsays/scripts/tests/test_validate_ingestion_sources.py = 40
 # A green patch-ingestion run must not hide an enabled source that failed. Covers the nine
 # required counterfactuals (healthy / quiet / 403 / transport failure / parser rot / mixed /
