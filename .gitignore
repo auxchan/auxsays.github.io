@@ -19,6 +19,10 @@ auxsays/_data/live_eligibility.yml
 # went stale between push and CI. The layouts fail closed to 'unverified' when it is absent.
 auxsays/_data/monitoring_state.yml
 auxsays/_data/monitoring_company_state.yml
+# Generated at deploy by source_health_snapshot.py (pages.yml), never committed. It is a function of
+# ingest state that every scheduled lane moves, so the committed copy went stale (37 rows against 47
+# sources, an older status vocabulary). No template, include or layout reads it; see AUX-069.
+auxsays/_data/source_health.yml
 auxsays/assets/img/patch-logos/_generation-report.json
 auxsays/tools/local-browser-capture/launcher/*.exe
 # Ruby/Bundler — local dev only, not part of the repo deliverable

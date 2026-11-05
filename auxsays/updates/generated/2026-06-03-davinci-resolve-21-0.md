@@ -19,7 +19,7 @@ update_published_at: '2026-06-03T00:00:00Z'
 update_last_checked: '2026-06-03T05:20:18Z'
 source_last_checked: '2026-06-08T20:36:21Z'
 official_body_last_checked: '2026-06-08T20:36:21Z'
-record_last_updated: '2026-09-19T22:12:09.025470Z'
+record_last_updated: '2026-11-05T08:04:05.354241Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -37,8 +37,8 @@ release_summary: This software update installs the final release of DaVinci Reso
   for keyframing, MultiMaster trim passes, layer list node graphs and more. This version requires a DaVinci Resolve
   Studio license dongle, Blackmagic Cloud license or software activation code.
 consensus_report: '4 user reports found for DaVinci Resolve 21.0. Current reports mention startup or application
-  crashes, render/export failures, and plugin issues. Current reports are Reddit-heavy, so production users should
-  test before updating. Sources represented: r/davinciresolve.'
+  crashes, render/export failures, and compatibility issue. Current reports are Reddit-heavy, so production users
+  should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -145,8 +145,8 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 update_consensus_summary: 'WAIT: DaVinci Resolve 21.0 has 4 user reports found. Small sample size. Current reports
-  mention startup or application crashes, render/export failures, and plugin issues. Production editors with active
-  export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production
+  mention startup or application crashes, render/export failures, and compatibility issue. Production editors with
+  active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production
   users should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
@@ -171,7 +171,7 @@ evidence_samples:
   counted: true
   version_matched: '21.0'
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1vjls37/planar_tracker_crashing_instantly_when_using/
@@ -208,7 +208,7 @@ accepted_report_sources:
   source_date: '2026-06-15'
   version_matched: '21.0'
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   workflow_area: plugins / codecs
 - source_name: r/davinciresolve
   source_type: reddit community report
@@ -223,8 +223,8 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention startup or application crashes, render/export failures, and plugin
-  issues. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention startup or application crashes, render/export failures, and compatibility
+  issue. Production editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.

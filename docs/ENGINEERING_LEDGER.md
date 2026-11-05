@@ -64,11 +64,12 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-054 | Resolved | Published claims | Medium | Collection health existed only in Liquid; a retired method made healthy pages read degraded |
 | AUX-055 | Resolved | Published claims | High | A stored live-consensus claim would keep rendering as live after the collection behind it stopped |
 | AUX-056 | Resolved | Published claims | High | No writer could store live consensus, so a release that earned it could never show it |
-| AUX-057 | Deferred | Published claims | Medium | A certified-live Windows page also says its evidence has not been revalidated recently |
+| AUX-057 | Deferred | Published claims | Medium | The patch-page freshness notice claimed a revalidation that no field records (fix pending deploy verification) |
 | AUX-058 | Resolved | Evidence integrity | Medium | DaVinci, OBS and PowerPoint still guessed themes and platforms from substrings |
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
+| AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -77,6 +78,9 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
+| AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
+| AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
+| AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
 
 ---
@@ -3984,31 +3988,53 @@ failed promotion.
 
 ---
 
-### AUX-057 — A certified-live Windows page also says its evidence has not been revalidated recently
+### AUX-057 — The patch-page freshness notice claimed a revalidation that no field records
 
-- **Status** Deferred · **Area** Published claims · **Severity** Medium
+- **Status** Deferred (fix on branch `fix/freshness-capture-age-wording`; mark Resolved only after the new wording is verified on the deployed site) · **Area** Published claims · **Severity** Medium
 - **First seen** 2026-11-04
 
-**Symptom / gap** The three live Windows 25H2 pages (26200.7462, .7623, .7840) show "Evidence
-freshness needs revalidation. This evidence has not been revalidated recently" beside a certified
-live state. The page treats `evidence_last_checked` older than seven days as stale, and theirs dates
-from September and October. Their collection methods did run against those exact builds this cycle,
-which is why monitoring certifies.
+**Symptom / gap** On 2026-11-04 the three Windows 25H2 pages 26200.7462, .7623 and .7840 were
+certified live and showed "Evidence freshness needs revalidation. This evidence has not been
+revalidated recently" beside that live state. The page treats `evidence_last_checked` older than
+seven days as stale, and theirs dated from September and October. Their collection methods did run
+against those exact builds, which is why monitoring certified them.
 
-**Why deferred** The two facts differ, and both can be true. `evidence_last_checked` is the newest
-accepted row's `captured_at` (`apply_consensus_to_records._latest_captured_at`), not the time
-collection last ran. A method's `last_run` proves an attempt, not that the accepted reports were
-revalidated. So stamping the field when a collector visits would make old evidence look freshly
-verified. The fix is a semantics decision, not a one-line repair.
+**History, both facts preserved** The original observation was a certified-live page. Those three
+pages were afterwards correctly revoked from live when Tech Community collection was blocked, and
+today render as Verified reports with "Collection blocked". Their status can change again as
+collection and certification change; nothing here treats them as permanently pilot. The wording
+defect was never about their maturity: it applied to every page that showed the notice, 222 on
+2026-11-05 across eight products, none of them live.
 
-**Current impact** Reader-visible on three live pages: the live label and the freshness notice
-describe different scopes without saying so. Maturity, counts, citations and verdicts are unaffected.
-The three live OBS pages do not show the notice.
+**Root cause** `evidence_last_checked` is the capture time of the newest accepted report
+(`apply_consensus_to_records._latest_captured_at`), not the time anyone re-verified anything. A
+method's `last_run` proves an attempt, not that accepted reports were revalidated, so stamping the
+field when a collector visits would make old evidence look freshly verified. The notice said
+"revalidated" about a date that records no revalidation. The card line beside the verdict had the
+same misnomer ("Last evidence checked").
 
-**Revisit trigger** The next presentation or freshness change to the patch page, or a second product
-going live with old accepted evidence. First decide what `evidence_last_checked` means and who owns
-it, and whether a separate field backed by actual report revalidation is needed. Keep the seven-day
-page rule, and never derive freshness from method-health telemetry.
+**Fix (presentation only)** The notice states only what is known: "No recently captured accepted
+reports. The newest accepted report was captured on <date>. Collection status is reported
+separately.", or "Capture date not recorded." with an age that cannot be checked when the date is
+missing or invalid. The blocked and degraded branches keep their headline and add the same capture
+sentence. The card line is now "Newest accepted report captured: <date>", printed only where an
+accepted report and a valid date exist; 13 zero-report pages that carried a collector date lose the
+line rather than claim a capture. The seven-day rule, method-health logic, stored timestamps,
+evidence and verdicts are unchanged. The set of pages showing the notice is identical before and
+after (225).
+
+**Fallback audit** The layout used to fall back to `consensus_last_checked`. That field is a
+consensus calculation time, and its semantics were never shown equivalent to a capture date, so it
+no longer stands in for one: a record with only that field reads "Capture date not recorded". No
+record carries it today (0 of 1517), so no page changed because of this. Python readers
+(`write_update_record`, `audit_consensus_evidence`) still fall back to it for their own purposes
+and were left alone. One residual: the guarded OBS 32.1.1 writeback in `revalidate_consensus_evidence.py`
+can stamp `evidence_last_checked` with the run time. It is manual only, wired to no workflow, and the
+stored value today equals the newest accepted `captured_at`.
+
+**Revisit trigger** A writer other than the capture-time derivation sets `evidence_last_checked`,
+or a separate field backed by actual report revalidation is introduced. Never derive freshness from
+method-health telemetry, and never present a consensus check time as a capture date.
 
 **Work that this item must not block** Live promotion and revocation, and the classification sprint.
 
@@ -4163,6 +4189,52 @@ fallback line and 7 show their specific labels (a fourth label takes the freed s
 
 **Reopen only if** another fallback or generic label reaches the issue sentence, or the bucketer renames
 this one.
+
+---
+
+### AUX-070 — The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another
+
+- **Status** Resolved · **Area** CI governance · **Severity** Medium
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05 (code); the first sharded pull-request run is the
+  acceptance evidence
+
+**Symptom / gap** ci-integrity ran every governed suite serially in one job. Run 41932362848 (PR #210):
+123 suites, 1,949 s of suite time, ~34 min against `timeout-minutes: 45`; two suites alone took 386 s and
+383 s. Each new suite moved every pull request closer to a timeout on content that had passed.
+
+**Fix** Four `shard` matrix jobs (`fail-fast: false`, isolated checkouts) each run
+`run_integrity_tests.py --suite all --shard I/4 --receipt $RUNNER_TEMP/...`: every per-suite protection is
+unchanged (it is the same `run_one()` and the same tree hash), and the receipt records commit, manifest
+digest, shard, each suite's governed and actual counts and exit status, completion state and the mutation
+outcome. The slices are longest-first over `integrity_suites.txt`, weighted by `suite_duration_hints.json`,
+which is scheduling only: a suite it does not name runs at a default weight and it holds no count. The
+final job keeps the name `integrity`, needs the shards and runs under `always()`;
+`aggregate_integrity_receipts.py` re-reads the manifest from its own checkout, recomputes the partition,
+and accepts only when the passing suites are exactly the governed population, once each, at the governed
+count, on this commit and run, with `needs.shard.result == success` (26 named refusal codes). The
+downstream gates then run unchanged, and a last `always()` step re-checks the shard result so a cancelled
+run ends red. No step uses `continue-on-error`.
+
+**Measured** The hint table (run 41932362848's per-suite seconds) balances four shards at 487-491 s each,
+against 1,949 s serial. Local proof (Windows, this branch plus the #212 test fix, four isolated worktrees
+in parallel): the union is exactly run 41932362848's 123 suites plus this one, each executed once; all 123
+report the same totals as that run (7,195 checks), and the aggregate accepted. The same receipts with a
+`cancelled` shard result are rejected. Wall time and balance on the runners are measured by the first
+pull-request run.
+
+**Verification** `test_ci_integrity_sharding.py = 192` [blocking]: partition properties; the runner's
+protections inside a shard (child processes over a scratch git repository, including timeout, printed FAIL
+lines and both mutation guards); a negative case for every refusal code, with the set of codes reached
+required to equal the aggregator's; the workflow parsed and its `run:` scalars executed under bash; and
+`guarded_merge.decide()` refusing cancelled, failed, incomplete and absent runs.
+
+**Residual** A pull request that edits ci-integrity.yml still supplies its own verdict (AUX-013).
+Cancellation is pinned by `always()` and by executing the final step, not by a real cancelled run. The
+receipt upload uses `overwrite: true` so a re-run shard replaces its own receipt; whether a re-run attempt
+can download the first attempt's artifacts is unmeasured (if it cannot, the re-run fails closed).
+
+**Reopen only if** a sharded run can end green with a governed suite unexecuted, executed twice, or at a
+count other than its governed one, or a failed, cancelled or missing shard leaves the run `success`.
 
 ---
 
@@ -4416,6 +4488,66 @@ release) are unchanged. Same 16 governed checks.
 request is green. The archive pull request ran its integrity suites before any record was archived.
 A policy that rewrites the corpus at run time should also run the integrity suites over the converged
 tree.
+
+---
+
+### AUX-068 — PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the ceiling, the thread population or exhaustion
+
+- **Status** Resolved · **Area** Observability · **Severity** Low
+- **First seen** 2026-11-04
+
+**Symptom / gap** All 29 `learn_qna_segment_context` rows carried `fetches=200` against a configured
+200, so a saturated stage and a finished one read the same. The orchestrator already computed the
+distinct and eligible thread counts but sent them only to a receipt.
+
+**Resolved** The context-resolution health note now appends `max_fetches`, `successful_fetches`
+(threads fetched AND parsed, counted from the per-thread outcome cache, independent of the attempt
+counter), `distinct_threads`, `eligible_threads`, `thread_scope`, `budget_exhausted`,
+`threads_refused_budget` and, when exhausted, `coverage_bounded=yes`. `fetches=` is attempts, bumped
+before the transport call. **Scope:** the two thread counts describe the RUN-WIDE population across
+every patch target of the run (`thread_scope=all_patch_targets_of_this_run`), not the row's patch, so
+every row of a run carries the same values; `eligible_threads` is the subset ranked 0 or 1 by
+`resolution_priority`. `budget_exhausted` means attempts reached the ceiling; whether anything was
+actually left unfetched is `threads_refused_budget`. Telemetry only: the 200 budget, discovery order,
+acceptance, counts, verdicts and status vocabulary are untouched. Pinned by
+`test_powerpoint_budget_telemetry.py` (33 checks, 14 mutants killed), including the real writer.
+
+**Reopen only if** the note loses a field, a thread count is presented as per-patch, or a budget
+change ships without a measured need (budget tuning is a separate decision).
+**Reopen only if** `test_collector_traversal_order.py` fails or reports anything other than its governed
+16 checks on a commit that changes only generated data (a natural ingestion or archive run), or another
+governed suite that reads the real corpus through `generated_records()` goes red on such a data-only
+commit.
+
+---
+
+### AUX-069 — `source_health.yml` was a stale tracked copy of a deploy-generated snapshot
+
+- **Status** Resolved · **Area** Deploy hygiene · **Severity** Low
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
+
+**Symptom / gap** `auxsays/_data/source_health.yml` was last committed on 2026-05-02: 37 rows against 47
+configured sources, in the retired Staged/Healthy/Failing vocabulary. `pages.yml` regenerates it before
+every `jekyll build`, so the live site was never wrong, but the stale tracked copy read as authoritative,
+and three writeback cleanups restored it with `git checkout --`.
+
+**Consumer audit** No template, include, layout or page reads it, and no Python module reads it (the
+generator only writes it). Named in code only by `source_health_snapshot.py`, `pages.yml`, the cleanup
+steps of `davinci-updates.yml`, `obs-evidence-collection.yml` and `promote-davinci-verified-reports.yml`,
+and two forbidden-write-path lists in the Playwright capture tooling (unaffected). A local build without
+it renders nothing different.
+
+**Fix** The file is untracked and git-ignored; deploy-time generation is unchanged. The three cleanups no
+longer `git checkout` it (an untracked pathspec fails the step) and `rm -f` any stray copy; they still
+restore the tracked `patch_ingest_state.json`. The generator now exits non-zero without writing when its
+source list is unreadable or empty, so a failed generation is never an empty snapshot that reads as success.
+Monitoring semantics are unchanged. `test_source_health_generated_snapshot.py` pins all of it.
+
+**Reopen only if** a template or module starts reading `source_health.yml` (it must then fail closed when
+the file is absent), or a lane needs to commit it.
+
+---
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.

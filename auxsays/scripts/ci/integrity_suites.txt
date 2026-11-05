@@ -48,6 +48,12 @@ auxsays/scripts/tests/test_automation_writeback.py = 152
 # per event, and pins no count of the live store.
 auxsays/scripts/tests/test_evidence_loss_guard.py = 80
 auxsays/scripts/tests/test_ci_integrity_runner.py = 39
+# CI runs these suites as four parallel shards plus one `integrity` aggregate (AUX-070). Splitting a
+# job creates ways for green to hide something the serial job could not: a suite in no shard, a
+# failed or cancelled shard outvoted by clean receipts, a receipt from another commit. This suite
+# drives the real partitioner, runner (child processes over a scratch repo), aggregator and
+# workflow (parsed, its run: scalars executed), with a negative case for every refusal code.
+auxsays/scripts/tests/test_ci_integrity_sharding.py = 192
 
 # A published theme may not contradict the reporter. `issue_theme` is printed on the patch page as
 # "Current reports mention ...", and it was produced by a first-match substring scan: a disk label
@@ -240,7 +246,7 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 180
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
-auxsays/scripts/tests/test_patch_page_hierarchy.py = 144
+auxsays/scripts/tests/test_patch_page_hierarchy.py = 262
 # My Patch Watchlist: the visitor's own product list, local to their browser. Renders the shipped
 # patch layout to prove the control binds `page.product_id` (a patch page watches the PRODUCT, not
 # that one build), parses the other surfaces for their accessible state and their two distinct
@@ -260,6 +266,10 @@ auxsays/scripts/tests/test_powerpoint_context_resolution.py = 101
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
+# AUX-068: the PowerPoint Learn Q&A collection budget (attempted vs max, successful, run-wide distinct
+# and eligible threads, exhaustion) is written into the context-resolution health note, and survives
+# the real writer. Offline: the thread transport is injected.
+auxsays/scripts/tests/test_powerpoint_budget_telemetry.py = 33
 auxsays/scripts/tests/test_premiere_editorial_protection.py = 36
 auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
 
@@ -403,6 +413,11 @@ auxsays/scripts/tests/test_elevenforum_adapter.py = 104
 # that tracks configuration rather than outcome, so section [A] pins fail-closed directly:
 # `healthy` is checked last and must be earned.
 auxsays/scripts/tests/test_monitoring_truthfulness.py = 58
+# source_health.yml is a GENERATED deploy snapshot, never tracked (AUX-069): the committed copy was 37 rows
+# against 47 sources in a retired vocabulary. Pins that it is git-ignored, that no template or module
+# reads it, that the generator refuses an empty snapshot, and that no lane `git checkout`s the now
+# untracked path (which fails the whole cleanup step).
+auxsays/scripts/tests/test_source_health_generated_snapshot.py = 33
 auxsays/scripts/tests/test_monitoring_status.py = 42
 auxsays/scripts/tests/test_orchestration_production_adoption.py = 75
 auxsays/scripts/tests/test_orchestration_r1.py = 55
