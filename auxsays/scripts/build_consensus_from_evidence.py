@@ -146,7 +146,7 @@ def public_issue_bucket(product_id: str, item: dict[str, Any]) -> str:
             return "render/export failures"
         if "crash" in text or "startup" in text or "launch" in text:
             return "startup or application crashes"
-        if "performance" in text or "gpu" in text or "slow" in text:
+        if "performance" in text or "slow" in text:
             return "performance slowdowns"
         if "install" in text:
             return "installation problems"

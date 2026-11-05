@@ -454,8 +454,9 @@ def run() -> int:
         build="",
     )
     check(
-        "stable evidence promotes archived DaVinci 21 to current",
-        stable_fields.get("update_status") == "current" and stable_fields.get("feed_hidden") is False,
+        "stable evidence leaves an ARCHIVED DaVinci 21 archived (AUX-065: the projection no longer owns update_status)",
+        "update_status" not in stable_fields and "feed_hidden" not in stable_fields
+        and "status_change_type" not in stable_fields,
         f"status={stable_fields.get('update_status')!r}, feed_hidden={stable_fields.get('feed_hidden')!r}",
     )
     # The invariant is the PROSE the promotion publishes, not the field slot it happens to occupy.

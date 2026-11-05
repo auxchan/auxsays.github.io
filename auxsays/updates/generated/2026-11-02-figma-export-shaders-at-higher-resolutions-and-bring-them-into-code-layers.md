@@ -18,8 +18,8 @@ update_version: Export shaders at higher resolutions and bring them into code la
 update_logo_text: FIG
 update_published_at: '2026-11-02T00:00:00.000Z'
 update_last_checked: '2026-11-02T18:47:33Z'
-source_last_checked: '2026-11-04T17:28:23Z'
-official_body_last_checked: '2026-11-04T17:28:23Z'
+source_last_checked: '2026-11-05T02:20:54Z'
+official_body_last_checked: '2026-11-05T02:20:54Z'
 record_last_updated: '2026-11-02T18:47:33Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-11-03T03:58:50Z'
-  url: https://www.figma.com/release-notes/?title=export-shaders-at-higher-resolutions-and-bring-them-into-code-layers
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-03T17:12:10Z'
   url: https://www.figma.com/release-notes/?title=export-shaders-at-higher-resolutions-and-bring-them-into-code-layers
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-04T17:28:23Z'
+  url: https://www.figma.com/release-notes/?title=export-shaders-at-higher-resolutions-and-bring-them-into-code-layers
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-05T02:20:54Z'
   url: https://www.figma.com/release-notes/?title=export-shaders-at-higher-resolutions-and-bring-them-into-code-layers
   status: captured-from-rss-feed
   body_captured: true

@@ -2130,8 +2130,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -4931,8 +4931,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -30792,8 +30792,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -30816,8 +30816,8 @@ evidence:
   match_basis: exact_version_alias
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: install issue
+  workflow_area: installation
   platform: unknown
   severity: medium
   sentiment: negative
@@ -32286,8 +32286,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -32358,8 +32358,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: unknown
   severity: medium
   sentiment: negative
@@ -48535,8 +48535,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: macos
   severity: medium
   sentiment: negative
@@ -56781,8 +56781,8 @@ evidence:
   match_basis: exact_version_alias
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: windows
   severity: medium
   sentiment: negative
@@ -61528,8 +61528,8 @@ evidence:
   match_basis: exact_version_text
   counted: true
   exclusion_reason: null
-  issue_theme: performance regression
-  workflow_area: timeline / GPU performance
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
   platform: windows
   severity: medium
   sentiment: negative
@@ -66505,6 +66505,138 @@ evidence:
   exclusion_reason: null
   issue_theme: audio mixer regression
   workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-19-creator-forum-report-https-creativecow-net-forums-thread-how-to-export-multiple-clips-from-one-timeline-that-all-star
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: creator_forum_report
+  source_name: Creative COW DaVinci Resolve
+  source_url: https://creativecow.net/forums/thread/how-to-export-multiple-clips-from-one-timeline-that-all-start-with-time-code-00/
+  parent_title: Creative Communities of the World Forums
+  report_title: Creative Communities of the World Forums
+  report_text_excerpt: How to Export Multiple Clips from One Timeline That All Start With Time Code 00 - DaVinci Resolve - Creative COW FORUMS Adobe After Effects Adobe After Effects Expressions Adobe Premiere Pro A.I. Apple Final Cut Pro Apple Motion Avid Media Composer Blackmagic Fusion Blender...
+  captured_at: '2026-11-05T00:24:43Z'
+  source_date: '2026-10-20'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 19
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: Davinci Resolve 19
+  matched_field: report_text
+  matched_context: '...20, 2026 at 11:15 pm Hi All, I am exporting multiple clips from one timeline in Davinci Resolve 19 (see attached screenshot). However, I want each clip to start its time code at...'
+- id: obs-studio-33-0-1-github-issue-14148
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14148
+  parent_title: 'macOS: Stream Deck-generated hotkeys ignored when OBS is unfocused; physical shortcuts work'
+  report_title: 'macOS: Stream Deck-generated hotkeys ignored when OBS is unfocused; physical shortcuts work'
+  report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/TKtyk4enB0xNwRJK ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Hotke'
+  captured_at: '2026-11-05T01:11:59Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: hotkey regression
+  workflow_area: keyboard shortcuts
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14147
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14147
+  parent_title: OBS doesn't working properly when a game is running from Everything program
+  report_title: OBS doesn't working properly when a game is running from Everything program
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/KOL2DZ5KhAh7gMYD ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Shoul'
+  captured_at: '2026-11-05T01:11:59Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14146
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14146
+  parent_title: Plug-in Manager errors break/prevent OBS from Updating correctly
+  report_title: Plug-in Manager errors break/prevent OBS from Updating correctly
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LCrYcb7bhqnw6ZIY ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS u'
+  captured_at: '2026-11-05T01:11:59Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196817
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/error-iniciate-stream.196817/
+  parent_title: Error iniciate stream
+  report_title: Error iniciate stream
+  report_text_excerpt: 'but in streamlabs works OBS Plugin Version: 1.2.0 Stream deck Plugin version: 1.2.1 OBS: 33.0.1'
+  captured_at: '2026-11-05T01:11:52Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196807
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/severe-blockiness-and-pixelation-during-youtube-livestreams-but-local-recordings-are-clean-rtx-3070-laptop-nvenc-h-264-obs-33-0-1.196807/
+  parent_title: Severe Blockiness and Pixelation During YouTube Livestreams, but Local Recordings Are Clean (RTX 3070 Laptop / NVENC H.264 / OBS 33.0.1)
+  report_title: Severe Blockiness and Pixelation During YouTube Livestreams, but Local Recordings Are Clean (RTX 3070 Laptop / NVENC H.264 / OBS 33.0.1)
+  report_text_excerpt: 'appreciate any help identifying the cause. 1. PC and hardware specifications OBS Studio: 33.0.1 (64-bit) OS: Windows 11 (Build 26300, as reported in the log) CPU: Intel Core i7-12700H (12th Gen) GPU: NVIDIA GeForce RTX 3070 Laptop GPU Integrated GPU: Intel Iris Xe Graphics RAM:'
+  captured_at: '2026-11-05T01:11:52Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
   platform: windows
   severity: medium
   sentiment: negative
