@@ -260,6 +260,10 @@ auxsays/scripts/tests/test_powerpoint_context_resolution.py = 101
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
+# AUX-068: the PowerPoint Learn Q&A collection budget (attempted vs max, successful, run-wide distinct
+# and eligible threads, exhaustion) is written into the context-resolution health note, and survives
+# the real writer. Offline: the thread transport is injected.
+auxsays/scripts/tests/test_powerpoint_budget_telemetry.py = 33
 auxsays/scripts/tests/test_premiere_editorial_protection.py = 36
 auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
 

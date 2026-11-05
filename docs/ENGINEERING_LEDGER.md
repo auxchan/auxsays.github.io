@@ -77,6 +77,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
+| AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 
 ---
 
@@ -4381,6 +4382,35 @@ release) are unchanged. Same 16 governed checks.
 request is green. The archive pull request ran its integrity suites before any record was archived.
 A policy that rewrites the corpus at run time should also run the integrity suites over the converged
 tree.
+
+---
+
+### AUX-068 — PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the ceiling, the thread population or exhaustion
+
+- **Status** Resolved · **Area** Observability · **Severity** Low
+- **First seen** 2026-11-04
+
+**Symptom / gap** All 29 `learn_qna_segment_context` rows carried `fetches=200` against a configured
+200, so a saturated stage and a finished one read the same. The orchestrator already computed the
+distinct and eligible thread counts but sent them only to a receipt.
+
+**Resolved** The context-resolution health note now appends `max_fetches`, `successful_fetches`
+(threads fetched AND parsed, counted from the per-thread outcome cache, independent of the attempt
+counter), `distinct_threads`, `eligible_threads`, `thread_scope`, `budget_exhausted`,
+`threads_refused_budget` and, when exhausted, `coverage_bounded=yes`. `fetches=` is attempts, bumped
+before the transport call. **Scope:** the two thread counts describe the RUN-WIDE population across
+every patch target of the run (`thread_scope=all_patch_targets_of_this_run`), not the row's patch, so
+every row of a run carries the same values; `eligible_threads` is the subset ranked 0 or 1 by
+`resolution_priority`. `budget_exhausted` means attempts reached the ceiling; whether anything was
+actually left unfetched is `threads_refused_budget`. Telemetry only: the 200 budget, discovery order,
+acceptance, counts, verdicts and status vocabulary are untouched. Pinned by
+`test_powerpoint_budget_telemetry.py` (33 checks, 14 mutants killed), including the real writer.
+
+**Reopen only if** the note loses a field, a thread count is presented as per-patch, or a budget
+change ships without a measured need (budget tuning is a separate decision).
+
+---
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.
