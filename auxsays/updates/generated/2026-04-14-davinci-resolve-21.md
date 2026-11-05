@@ -279,7 +279,7 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 evidence_last_checked: '2026-10-31T22:24:20Z'
-record_last_updated: '2026-10-31T23:10:21.360166Z'
+record_last_updated: '2026-11-05T08:04:02.760899Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
@@ -547,8 +547,8 @@ accepted_report_sources:
   source_date: '2026-06-29'
   version_matched: '21'
   patch_version_matched: true
-  issue: performance slowdowns in timeline / GPU performance
-  workflow_area: timeline / GPU performance
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1uif7k8/bug_in_latest_release_farilight_presets_lost_when/
@@ -556,7 +556,7 @@ accepted_report_sources:
   source_date: '2026-06-29'
   version_matched: '21'
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   workflow_area: plugins / codecs
 - source_name: r/davinciresolve
   source_type: reddit community report
@@ -748,8 +748,8 @@ accepted_report_sources:
   source_date: '2026-09-08'
   version_matched: '21'
   patch_version_matched: true
-  issue: performance slowdowns in timeline / GPU performance
-  workflow_area: timeline / GPU performance
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1w927vk/why_isnt_my_gpu_being_recognized_resolve_21/
@@ -757,8 +757,8 @@ accepted_report_sources:
   source_date: '2026-09-06'
   version_matched: Resolve 21
   patch_version_matched: true
-  issue: performance slowdowns in timeline / GPU performance
-  workflow_area: timeline / GPU performance
+  issue: installation problems
+  workflow_area: installation
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1w7nwz2/why_davinci_resolve_21_is_making_my_imagens_get/
@@ -985,8 +985,8 @@ accepted_report_sources:
   source_date: '2026-10-15'
   version_matched: DaVinci Resolve 21
   patch_version_matched: true
-  issue: performance slowdowns in timeline / GPU performance
-  workflow_area: timeline / GPU performance
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1x2ttin/a_second_preview_panel_has_hit_my_screen_and_i/

@@ -17,9 +17,9 @@ update_version: 21.1.1
 update_logo_text: DAV
 update_published_at: '2026-10-02T00:00:00Z'
 update_last_checked: '2026-10-02T01:12:47Z'
-source_last_checked: '2026-11-05T02:21:09Z'
-official_body_last_checked: '2026-11-05T02:21:09Z'
-record_last_updated: '2026-10-23T13:15:08.104850Z'
+source_last_checked: '2026-11-05T09:02:46Z'
+official_body_last_checked: '2026-11-05T09:02:46Z'
+record_last_updated: '2026-11-05T08:04:13.433943Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -35,9 +35,9 @@ release_summary: This software update improves trim editor support for audio cli
   for Windows 11 computers and provides control over clips with multiple Fusion effects. This update also improves connection
   stability in multi-user projects and provides general performance and stability improvements. This version requires a DaVinci
   Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
-consensus_report: '4 user reports found for DaVinci Resolve 21.1.1. Current reports mention performance slowdowns, startup
-  or application crashes, and render/export failures. Current reports are Reddit-heavy, so production users should test before
-  updating. Sources represented: r/davinciresolve.'
+consensus_report: '4 user reports found for DaVinci Resolve 21.1.1. Current reports mention startup or application crashes
+  and render/export failures. Current reports are Reddit-heavy, so production users should test before updating. Sources represented:
+  r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -94,11 +94,6 @@ official_sources:
   trust_level: official
   extraction_status: version_metadata_captured
 official_source_attempts:
-- at: '2026-11-03T17:12:21Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-04T02:10:46Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
@@ -115,6 +110,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-05T02:21:09Z'
+  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+  status: captured-from-official-blackmagic-support-api
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-05T09:02:46Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
@@ -143,9 +143,8 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 update_consensus_summary: 'WAIT: DaVinci Resolve 21.1.1 has 4 user reports found. Small sample size. Current reports mention
-  performance slowdowns, startup or application crashes, and render/export failures. Production editors with active export
-  deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production users should test
-  before updating.'
+  startup or application crashes and render/export failures. Production editors with active export deadlines should wait unless
+  they need a specific fix. Current reports are Reddit-heavy, so production users should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1wygy6n/davinci_resolve_2111_timeline_bug/
@@ -153,7 +152,7 @@ evidence_samples:
   counted: true
   version_matched: 21.1.1
   patch_version_matched: true
-  issue: performance slowdowns in timeline / GPU performance
+  issue: general workflow reports
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1x0mw4u/resolve_keeps_crashing_on_macbook_pro/
@@ -164,20 +163,20 @@ evidence_samples:
   issue: startup or application crashes in application stability
   outcome: high
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1x6vstv/v2111_path_modifier_control_display_bug/
-  source_title: V.21.1.1 Path Modifier Control Display Bug?
-  counted: true
-  version_matched: 21.1.1
-  patch_version_matched: true
-  issue: general workflow reports
-  outcome: medium
-- source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1x7sy6d/audio_video_misaligned_with_youtube_render/
   source_title: Audio / Video misaligned with YouTube render
   counted: true
   version_matched: 21.1.1
   patch_version_matched: true
   issue: render/export failures
+  outcome: medium
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1x6vstv/v2111_path_modifier_control_display_bug/
+  source_title: V.21.1.1 Path Modifier Control Display Bug?
+  counted: true
+  version_matched: 21.1.1
+  patch_version_matched: true
+  issue: general workflow reports
   outcome: medium
 evidence_sample_visible_limit: 5
 accepted_report_sources:
@@ -188,8 +187,8 @@ accepted_report_sources:
   source_date: '2026-10-05'
   version_matched: 21.1.1
   patch_version_matched: true
-  issue: performance slowdowns in timeline / GPU performance
-  workflow_area: timeline / GPU performance
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1x0mw4u/resolve_keeps_crashing_on_macbook_pro/
@@ -221,8 +220,8 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention performance slowdowns, startup or application crashes, and render/export failures.
-  Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention startup or application crashes and render/export failures. Production editors
+  with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.

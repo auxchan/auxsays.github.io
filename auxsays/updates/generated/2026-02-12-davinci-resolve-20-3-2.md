@@ -20,7 +20,7 @@ update_published_at: '2026-02-12T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-06-02T21:25:17Z'
 official_body_last_checked: '2026-06-02T21:25:17Z'
-record_last_updated: '2026-11-04T08:00:13.883601Z'
+record_last_updated: '2026-11-05T08:04:00.017278Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -215,6 +215,14 @@ evidence_samples:
   issue: startup or application crashes in application stability
   outcome: high
 - source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t1gyr9/can_somebody_help_me_please/
+  source_title: Can somebody help me please?
+  counted: true
+  version_matched: 20.3.2
+  patch_version_matched: true
+  issue: general workflow reports
+  outcome: medium
+- source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sdvq2u/text_follower_shading_bug_options_showing_without/
   source_title: 'Text+ Follower Shading Bug: Options showing without enabling & no live updates (Resolve 20.3.2)'
   counted: true
@@ -223,16 +231,8 @@ evidence_samples:
   issue: installation problems
   outcome: medium
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1sh3754/samsung_q990f_for_dolby_atmos_audio_mixing_in/
-  source_title: Samsung Q990F for Dolby Atmos Audio Mixing in Davinci Resolve
-  counted: true
-  version_matched: 20.3.2
-  patch_version_matched: true
-  issue: general workflow reports
-  outcome: medium
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1t1gyr9/can_somebody_help_me_please/
-  source_title: Can somebody help me please?
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1slsb48/freeze_pink_screen_hard_reboot/
+  source_title: Freeze, Pink Screen, Hard Reboot
   counted: true
   version_matched: 20.3.2
   patch_version_matched: true
@@ -273,8 +273,8 @@ accepted_report_sources:
   source_date: '2026-05-02'
   version_matched: 20.3.2
   patch_version_matched: true
-  issue: performance slowdowns in timeline / GPU performance
-  workflow_area: timeline / GPU performance
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sm6gl6/for_the_love_of_god_help_me_to_understand_how_do/

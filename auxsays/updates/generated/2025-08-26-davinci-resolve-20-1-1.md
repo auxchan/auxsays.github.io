@@ -19,7 +19,7 @@ update_published_at: '2025-08-26T00:00:00Z'
 update_last_checked: '2026-07-21T19:55:13Z'
 source_last_checked: '2026-07-21T19:55:13Z'
 official_body_last_checked: '2026-07-21T19:55:13Z'
-record_last_updated: '2026-07-22T17:15:23.633256Z'
+record_last_updated: '2026-11-05T08:03:50.807435Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -35,8 +35,8 @@ release_summary: This software update adds support for faster load times of Blac
   timelines, improved retention of clip copy and paste options and cleaner layer and node layout for PSD file imports
   in Fusion. This version requires a DaVinci Resolve Studio license dongle or software activation code.
 consensus_report: '3 user reports found for DaVinci Resolve 20.1.1. Current reports mention startup or application
-  crashes, plugin issues, and render/export failures. Current reports are Reddit-heavy, so production users should
-  test before updating. Sources represented: r/davinciresolve.'
+  crashes, compatibility issue, and render/export failures. Current reports are Reddit-heavy, so production users
+  should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -118,8 +118,8 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 update_consensus_summary: 'WAIT: DaVinci Resolve 20.1.1 has 3 user reports found. Small sample size. Current reports
-  mention startup or application crashes, plugin issues, and render/export failures. Production editors with active
-  export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production
+  mention startup or application crashes, compatibility issue, and render/export failures. Production editors with
+  active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production
   users should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
@@ -136,7 +136,7 @@ evidence_samples:
   counted: true
   version_matched: 20.1.1
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1n1nd3s/performance_issues_with_recent_updates/
@@ -164,7 +164,7 @@ accepted_report_sources:
   source_date: '2025-08-27'
   version_matched: 20.1.1
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   workflow_area: plugins / codecs
 - source_name: r/davinciresolve
   source_type: reddit community report
@@ -179,8 +179,8 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention startup or application crashes, plugin issues, and render/export failures.
-  Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention startup or application crashes, compatibility issue, and render/export
+  failures. Production editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
