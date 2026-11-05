@@ -351,6 +351,13 @@ auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
 # byte-identical, all-or-nothing refusal on any drift, idempotent. Run as the bare script on frozen
 # verbatim fixtures; never reads or writes the live store beyond hashing it.
 auxsays/scripts/tests/test_withdraw_windows_identity_not_the_subject_rows.py = 44
+# AUX-079: the audited withdrawal of ten Windows rows both adjudicators judged off-topic (Track B) and four
+# later captures of a Q&A question already counted on the same patch (Track C, keep-first, derived). The
+# AUX-072 mechanism: five-field selection, pinned block hashes, three lines per row with each track's own
+# reason, kept rows and every other row byte-identical, no row starts counting, no patch counts one Learn
+# report twice, all-or-nothing refusal on any drift, idempotent; a same-question row on another patch is
+# never re-homed. Bare script on frozen verbatim fixtures; the live store is read only for the 14 pins.
+auxsays/scripts/tests/test_withdraw_windows_confirmed_and_duplicate_rows.py = 57
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
