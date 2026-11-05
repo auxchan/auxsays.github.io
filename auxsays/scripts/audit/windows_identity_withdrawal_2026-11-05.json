@@ -1,0 +1,164 @@
+{
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973207-windows-update-kb5101650-continually-f",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5973207/windows-update-kb5101650-continually-failing-with",
+   "block_sha256_before_run": "6051d80f62b91299eb0c978fa57851230cce1915d5005ea92a74d078fb3f22f9",
+   "counted_before_run": true,
+   "authority_refuses": true,
+   "action": "withdraw"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9278",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5989625/file-history-ui-and-previous-versions-broken-after",
+   "block_sha256_before_run": "581044acffe9aba7771c8dd08497a6520645795fa0832f0bedf52bdae0db8c80",
+   "counted_before_run": true,
+   "authority_refuses": true,
+   "action": "withdraw"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5987983-excel-2608-build-16-0-20326-20100-cras",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5987983/excel-2608-build-16-0-20326-20100-crashes-when-fil",
+   "block_sha256_before_run": "947f891882fdbaf4c9138888bc2d897d5b7de03bb59e801b2580c17a0d43d726",
+   "counted_before_run": true,
+   "authority_refuses": true,
+   "action": "withdraw"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8328",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5885634-i-cant-install-kb2267602",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5885634/i-cant-install-kb2267602",
+   "block_sha256_before_run": "d98fa8871c0ab5565de0b8f8f0cc4861955e2b11dffa1f0cc1fd03ab0f6aa032",
+   "counted_before_run": true,
+   "authority_refuses": true,
+   "action": "withdraw"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8246",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897669-install-failed-2026-05-net-framework-s",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5897669/install-failed-2026-05-net-framework-security-upda",
+   "block_sha256_before_run": "09c29a218730431bed213deaf6ba899d72b11cb95d5c1330a79297daafdc623f",
+   "counted_before_run": true,
+   "authority_refuses": true,
+   "action": "withdraw"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6006784-windows-security-stuck-on-logo-securit",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6006784/windows-security-stuck-on-logo-securityhealthservi",
+   "block_sha256_before_run": "cb59ea62a9767f77020e0bb63223c91e9d3fb20d0a81393e6cc591f029bbac8f",
+   "counted_before_run": true,
+   "authority_refuses": true,
+   "action": "withdraw"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6012710-windows-security-app-microsoft-secheal",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6012710/windows-security-app-microsoft-sechealthui-stuck-a",
+   "block_sha256_before_run": "aa3fd218e4c97ae62840a17099055a307e184ac60d4586cab1b20560af010cce",
+   "counted_before_run": true,
+   "authority_refuses": true,
+   "action": "withdraw"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "id": "microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055182-kb5127936-breaks-xbox-360-wireless-con",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6055182/kb5127936-breaks-xbox-360-wireless-controller-in-a",
+   "block_sha256_before_run": "9c3274d72ad81e8e08867f6336b2e3ff4697c7df55cfbabe8f6854a280c83085",
+   "counted_before_run": true,
+   "authority_refuses": true,
+   "action": "withdraw"
+  },
+  {
+   "role": "retain",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8894",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render",
+   "block_sha256_before_run": "6184670045ecac190ccab0a1083e9b8670a03fbbc855753b92727e608d87e5eb",
+   "counted_before_run": true,
+   "authority_refuses": false,
+   "action": "kept"
+  }
+ ],
+ "withdrawn_now": 8,
+ "counted_windows_rows_swept": 535,
+ "windows_counted_population": [
+  535,
+  527
+ ],
+ "per_patch": [
+  {
+   "update_version": "25H2",
+   "target_build": "26200.8246",
+   "before": 21,
+   "after": 20
+  },
+  {
+   "update_version": "25H2",
+   "target_build": "26200.8328",
+   "before": 7,
+   "after": 6
+  },
+  {
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "before": 22,
+   "after": 20
+  },
+  {
+   "update_version": "25H2",
+   "target_build": "26200.9278",
+   "before": 7,
+   "after": 6
+  },
+  {
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "before": 27,
+   "after": 25
+  },
+  {
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "before": 20,
+   "after": 19
+  }
+ ],
+ "generated_at": "2026-11-05T05:26:37Z",
+ "exclusion_reason": "identity_not_the_subject",
+ "store_sha256_before": "17fe9997eb59f65d42e5c75f8eb38ca17e8ebabe1fe7fdc07068d9ba9d76e07b",
+ "store_sha256_after": "050f8125d92c34f6a3312e0915cdd677af3f03542bf022ab836722b9e2749947",
+ "authority_sha256": "02e280e4f524f3611b110550cadc147e5ea5c59ea849db6f29a35f1abb52a6fa",
+ "manifest_sha256": "687df823293d26ad7ef2fc68d59230073f07df15da11fa95f60dd2ef80d5c6e0",
+ "written": true,
+ "parent_commit": "48bec6ebac4e38a349b71f7a44404c4d1585bd22"
+}
