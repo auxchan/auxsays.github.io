@@ -7,6 +7,10 @@ name: CI integrity
 # This workflow is READ-ONLY by construction. It never commits, never deploys, never touches Actions
 # state, and the runner it invokes fails the build if any test writes a tracked file or one of the
 # gitignored status snapshots.
+#
+# Shape: four `shard` jobs run the governed suites in parallel and each leaves a receipt; one
+# `integrity` job then proves those receipts are the whole governed population exactly once, and
+# runs the downstream gates. The run is green only if that job is. (AUX-070)
 
 on:
   pull_request:
@@ -47,10 +51,21 @@ env:
   PYTHONIOENCODING: "utf-8"
 
 jobs:
-  # Stable, unique check name. GitHub required-status rules are keyed on the job/check name, so this
-  # must not collide with a job in any other workflow.
-  integrity:
-    name: integrity
+  # The governed suites, run as four parallel shards. Each shard is a whole, isolated job -- its own
+  # runner, its own checkout -- and runs every per-suite protection of run_integrity_tests.py on its
+  # slice: the Results line, the governed check count, the exit status, printed FAIL lines, the
+  # 900 s timeout, and the tracked-file and watched-ignored-file mutation guard. The slice comes from
+  # integrity_suites.txt (what runs and what counts) and suite_duration_hints.json (where it runs;
+  # scheduling only, it cannot drop a suite or change a count).
+  #
+  # A shard decides nothing about the run. It leaves a receipt, and the `integrity` job below is the
+  # only place receipts become a verdict.
+  #
+  # The shard count appears four times -- the matrix, the --shard argument, the artifact name and the
+  # aggregator's --shards -- because a matrix cannot read `env`. test_ci_integrity_sharding.py parses
+  # all four from this file and requires them to agree.
+  shard:
+    name: integrity shard ${{ matrix.shard }} of 4
     runs-on: ubuntu-latest
     # The "~5.5 min for 66 suites, 20 min is generous" budget this carried stopped being true as
     # the suite count grew to 96. Measured on the ten most recent runs: 10, 13, 13, 14, 16, 17,
@@ -64,7 +79,17 @@ jobs:
     # reach it, while a genuinely hung job is still bounded. The real per-suite ceiling is
     # unchanged: the runner caps each suite at 900s itself, so one stuck suite cannot consume
     # this budget quietly.
+    #
+    # By 123 suites the single job took ~34 min of that 45 (run 41932362848: 1,949 s of suite
+    # time), which is why it is now four shards of roughly 490 s each. The ceiling is kept per
+    # shard rather than cut, so sharding cannot introduce a timeout the serial job did not have.
     timeout-minutes: 45
+    strategy:
+      # Every shard runs to its own verdict. Failing fast would cancel the others, and a cancelled
+      # shard says nothing about how much of the population was actually red.
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
 
     steps:
       - name: Check out the pull request
@@ -124,11 +149,111 @@ jobs:
       - name: Verify the test manifest is closed-world
         run: python auxsays/scripts/ci/run_integrity_tests.py --check-manifest
 
-      # Every executed suite, in one job. A missing Results line, an import error, a crash or a
-      # timeout is a failure -- never a skip. Exits 2 if any tracked file or watched status snapshot
-      # changed while the tests ran.
-      - name: Run integrity suites
-        run: python auxsays/scripts/ci/run_integrity_tests.py --suite all
+      # This shard's slice of every executed suite. A missing Results line, an import error, a
+      # crash or a timeout is a failure -- never a skip. Exits 2 if any tracked file or watched
+      # status snapshot changed while the tests ran.
+      #
+      # The receipt is written to runner temporary storage, OUTSIDE the checkout (the runner refuses
+      # a path inside it), after every suite and once more at the end, so a shard that is killed
+      # mid-run still leaves a receipt that says `running` rather than none at all.
+      - name: Run integrity suites (this shard)
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          python auxsays/scripts/ci/run_integrity_tests.py --suite all --shard "$SHARD/4" \
+            --receipt "$RUNNER_TEMP/integrity-receipt/receipt.json"
+
+      # Belt and braces alongside the runner's own hash check, made about THIS checkout: the
+      # integrity job's final proof never sees the checkout these suites ran in.
+      - name: Prove the checkout was not modified
+        run: |
+          git diff --exit-code
+          git diff --cached --exit-code
+          if [ -n "$(git status --porcelain --untracked-files=normal)" ]; then
+            echo "::error::CI produced repository changes; it must be read-only"
+            git status --porcelain --untracked-files=normal
+            exit 1
+          fi
+
+      # Uploaded whatever happened above, so a failed or timed-out shard still delivers its receipt
+      # and the aggregate can name what failed. `always()` only decides that the upload is attempted;
+      # it cannot make this job pass. One artifact per shard, named by shard and total. `overwrite`
+      # lets a re-run of a failed shard replace that shard's own receipt; the aggregate still
+      # requires exactly one complete, clean receipt per shard, and a re-run that fails to upload
+      # leaves the failing receipt in place.
+      - name: Upload the shard receipt
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: integrity-receipt-shard-${{ matrix.shard }}-of-4
+          path: ${{ runner.temp }}/integrity-receipt/receipt.json
+          if-no-files-found: error
+          retention-days: 7
+          overwrite: true
+
+  # Stable, unique check name. GitHub required-status rules are keyed on the job/check name, so this
+  # must not collide with a job in any other workflow. guarded_merge.py reads this WORKFLOW's run
+  # conclusion, and this is the job that decides it.
+  #
+  # `if: always()` so that it runs -- and fails -- when a shard failed, was cancelled or never
+  # started. A skipped job reads as passing to GitHub's required-check rules, so the aggregate must
+  # never be skipped; it must be red. Nothing in this workflow uses continue-on-error.
+  integrity:
+    name: integrity
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    # The suites run in the shards. This job aggregates their receipts and then runs the downstream
+    # gates, which took about 80 s of the serial job.
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out the pull request
+        uses: actions/checkout@v4
+        # No test needs git history: every suite that uses git builds its own repository in a temp
+        # directory, and a depth-1 checkout was verified to produce identical results.
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Report environment
+        run: |
+          python --version
+          python -c "import yaml; print('PyYAML', yaml.__version__)"
+          git --version
+
+      # Fails when a test file exists that no category claims, when a category names a file that is
+      # gone, or when a suite is classified twice. Runs first so a classification mistake is
+      # reported immediately rather than after five minutes of tests.
+      - name: Verify the test manifest is closed-world
+        run: python auxsays/scripts/ci/run_integrity_tests.py --check-manifest
+
+      # Every shard artifact, one sub-directory each, into runner temporary storage.
+      - name: Download the shard receipts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: integrity-receipt-shard-*
+          path: ${{ runner.temp }}/integrity-receipts
+
+      # The only step that turns shard receipts into a verdict. It re-reads the manifest from THIS
+      # checkout, recomputes the partition, and accepts only when the suites that passed are exactly
+      # the governed population, each once, at its governed check count, on this commit, with every
+      # shard job successful. A partial result is a rejection. See aggregate_integrity_receipts.py.
+      - name: Aggregate the shard receipts
+        env:
+          SHARD_RESULT: ${{ needs.shard.result }}
+        run: |
+          python auxsays/scripts/ci/aggregate_integrity_receipts.py \
+            --receipts "$RUNNER_TEMP/integrity-receipts" --shards 4 \
+            --needs-result "$SHARD_RESULT" --expected-commit "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID"
 
       # Read-only data gates, proven not to write: a full-tree hash before/after all three is
       # unchanged. `qa_patch_records.py` used to be excluded here for exactly one reason -- it wrote
@@ -209,5 +334,19 @@ jobs:
           if [ -n "$(git status --porcelain --untracked-files=normal)" ]; then
             echo "::error::CI produced repository changes; it must be read-only"
             git status --porcelain --untracked-files=normal
+            exit 1
+          fi
+
+      # The last word, independent of every script above. `always()` makes it run even when the run
+      # was cancelled -- when every other step here is skipped -- so a cancelled or failed shard
+      # always leaves this job red rather than green with nothing done.
+      - name: Require every shard job to have succeeded
+        if: always()
+        env:
+          SHARD_RESULT: ${{ needs.shard.result }}
+        run: |
+          echo "shard jobs: $SHARD_RESULT"
+          if [ "$SHARD_RESULT" != "success" ]; then
+            echo "::error::a shard job concluded '$SHARD_RESULT'; the integrity run cannot pass"
             exit 1
           fi
