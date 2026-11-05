@@ -1,0 +1,548 @@
+schema_version: 1
+evidence:
+- id: adobe-premiere-pro-26-2-interface-slowdown-build-65
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/constant-crashes-on-version-26-2-0-1558068
+  parent_title: Constant Crashes on Version 26.2.0
+  report_title: Constant Crashes on Version 26.2.0
+  report_text_excerpt: '26.2.0 Build 65: Timeline crash when dragging a clip. Reverting to 26.0.2 resolved it.'
+  captured_at: '2026-05-01T00:00:00Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
+  patch_version_matched: true
+  matched_version: null
+  match_basis: null
+  counted: true
+  exclusion_reason: null
+  issue_theme: timeline crash
+  workflow_area: timeline editing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973207-windows-update-kb5101650-continually-f
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  target_build: '26200.9168'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5973207/windows-update-kb5101650-continually-failing-with
+  parent_title: Windows Update KB5101650 continually failing with 0x800f0920 - Microsoft Q&A
+  report_title: Windows Update KB5101650 continually failing with 0x800f0920 - Microsoft Q&A
+  report_text_excerpt: Windows Update KB5101650 continually failing with 0x800f0920 - Microsoft Q&A I've been having trouble getting an update to go through for over a month now. I've tried all the basic stuff like resetting Windows Update, including doing the upgrade in place through Windows...
+  captured_at: '2026-08-13T14:48:40Z'
+  source_date: '2026-08-13'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9168'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  target_build: '26200.9278'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5989625/file-history-ui-and-previous-versions-broken-after
+  parent_title: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A
+  report_title: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A
+  report_text_excerpt: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A win 10 22H2 desktop computer os build 19045.7663 BIOS american megatrends inc P11-A4 202108acerPC win 11 25H2 latop OS Builds 26200.9278 BIOS Inysde...
+  captured_at: '2026-09-01T12:53:12Z'
+  source_date: '2026-09-01'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9278'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9278'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5987983-excel-2608-build-16-0-20326-20100-cras
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5987983/excel-2608-build-16-0-20326-20100-crashes-when-fil
+  parent_title: Excel 2608 (Build 16.0.20326.20100) crashes when filtering a PivotTable - Microsoft Q&A
+  report_title: Excel 2608 (Build 16.0.20326.20100) crashes when filtering a PivotTable - Microsoft Q&A
+  report_text_excerpt: 'Excel 2608 (Build 16.0.20326.20100) crashes when filtering a PivotTable - Microsoft Q&A Environment Product: Microsoft 365 Apps for enterprise Update channel: Current Channel Excel version: 2608, Build 16.0.20326.20100, 64-bit OS: Windows 11 Enterprise, Version 25H2 (OS Build...'
+  captured_at: '2026-09-05T04:16:19Z'
+  source_date: '2026-08-31'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9168'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5989625/file-history-ui-and-previous-versions-broken-after
+  parent_title: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A
+  report_title: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A
+  report_text_excerpt: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A win 10 22H2 desktop computer os build 19045.7663 BIOS american megatrends inc P11-A4 202108acerPC win 11 25H2 latop OS Builds 26200.9278 BIOS Inysde...
+  captured_at: '2026-09-05T04:16:28Z'
+  source_date: '2026-09-02'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: false
+  stale_due_to_patch_rollover: false
+  counted: false
+  exclusion_reason: cross_patch_duplicate
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:32Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8894'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_kb: KB5101650
+  matched_os_build: '26200.8875'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: false
+  stale_due_to_patch_rollover: false
+  counted: false
+  exclusion_reason: cross_patch_duplicate
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:41Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101650
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101650
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: false
+  stale_due_to_patch_rollover: false
+  counted: false
+  exclusion_reason: cross_patch_duplicate
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:47Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: false
+  stale_due_to_patch_rollover: false
+  counted: false
+  exclusion_reason: cross_patch_duplicate
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8737'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:49Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5095093
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5095093
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: false
+  stale_due_to_patch_rollover: false
+  counted: false
+  exclusion_reason: cross_patch_duplicate
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8737'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:53Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8655'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8655'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: false
+  stale_due_to_patch_rollover: false
+  counted: false
+  exclusion_reason: cross_patch_duplicate
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5886887-windows-11-kb5083631-persistent-0x800f
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5886887/windows-11-kb5083631-persistent-0x800f0922-install
+  parent_title: Windows 11 KB5083631 — Persistent 0x800f0922 Installation Failure - Microsoft Q&A
+  report_title: Windows 11 KB5083631 — Persistent 0x800f0922 Installation Failure - Microsoft Q&A
+  report_text_excerpt: 'Windows 11 KB5083631 — Persistent 0x800f0922 Installation Failure - Microsoft Q&A System Info OS : Windows 11 Pro, Version 25H2, Build 26200.8246 Problem Update KB5083631 fails to install with error 0x800f0922 . The issue persists after extensive troubleshooting. Steps Already...'
+  captured_at: '2026-09-05T22:24:18Z'
+  source_date: '2026-05-14'
+  target_release_date: '2026-04-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5083631
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5083631
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8328'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5885634-i-cant-install-kb2267602
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5885634/i-cant-install-kb2267602
+  parent_title: I can't install KB2267602 - Microsoft Q&A
+  report_title: I can't install KB2267602 - Microsoft Q&A
+  report_text_excerpt: 'I can''t install KB2267602 - Microsoft Q&A I can''t install KB2267602 on my thinkpad x1 extreme gen 3. OS: windows 11 Pro 25H2 26200.8328 with all updated (in lenovo vantage too). After installing and rebooting, windows update asks me to install it again. I read the methods on...'
+  captured_at: '2026-09-05T22:24:18Z'
+  source_date: '2026-05-16'
+  target_release_date: '2026-04-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8328'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8328'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8328'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897669-install-failed-2026-05-net-framework-s
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5897669/install-failed-2026-05-net-framework-security-upda
+  parent_title: install failed 2026-05 .NET Framework Security Update (KB5087051) - Microsoft Q&A
+  report_title: install failed 2026-05 .NET Framework Security Update (KB5087051) - Microsoft Q&A
+  report_text_excerpt: install failed 2026-05 .NET Framework Security Update (KB5087051) - Microsoft Q&A May 2026 security update fails to install with error 0x800f0920. I cannot find ANY resources for this error code. I have attempted the update FIVE times without success. I have run DISM and SFC...
+  captured_at: '2026-09-05T22:24:25Z'
+  source_date: '2026-06-01'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8246'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8246'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8246'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6004289-two-culprits-security-update-from-9-9
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6004289/two-culprits-security-update-from-9-9-kb5124008-26
+  parent_title: 'Two culprits: Security Update from 9/9, (KB5124008)(26200.9445) and (KB5129195)(26200.9457) installed on 9/15 - Microsoft Q&A'
+  report_title: 'Two culprits: Security Update from 9/9, (KB5124008)(26200.9445) and (KB5129195)(26200.9457) installed on 9/15 - Microsoft Q&A'
+  report_text_excerpt: 'Two culprits: Security Update from 9/9, (KB5124008)(26200.9445) and (KB5129195)(26200.9457) installed on 9/15 - Microsoft Q&A 2026-09 Security Update from 9/9, (KB5124008)(26200.9445) and (KB5129195)(26200.9457) installed today, both managed to render File History useless. I...'
+  captured_at: '2026-09-16T12:32:42Z'
+  source_date: '2026-09-15'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_kb: KB5129195
+  matched_os_build: '26200.9457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6006784-windows-security-stuck-on-logo-securit
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6006784/windows-security-stuck-on-logo-securityhealthservi
+  parent_title: Windows Security stuck on logo; SecurityHealthService starts then stops, KB5007651 repeatedly reinstalls on Windows 11 25H2 - Microsoft Q&A
+  report_title: Windows Security stuck on logo; SecurityHealthService starts then stops, KB5007651 repeatedly reinstalls on Windows 11 25H2 - Microsoft Q&A
+  report_text_excerpt: Windows Security stuck on logo; SecurityHealthService starts then stops, KB5007651 repeatedly reinstalls on Windows 11 25H2 - Microsoft Q&A I am using Windows 11 25H2, build 26200.9457 . Windows Security does not open properly. It stays on the logo screen, and Event Viewer...
+  captured_at: '2026-09-18T12:19:42Z'
+  source_date: '2026-09-18'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6012710-windows-security-app-microsoft-secheal
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6012710/windows-security-app-microsoft-sechealthui-stuck-a
+  parent_title: Windows Security App (Microsoft.SecHealthUI) stuck at 1000.26100.1.0 after KB5007651 and SecurityHealthSetup installation - Microsoft Q&A
+  report_title: Windows Security App (Microsoft.SecHealthUI) stuck at 1000.26100.1.0 after KB5007651 and SecurityHealthSetup installation - Microsoft Q&A
+  report_text_excerpt: Windows Security App (Microsoft.SecHealthUI) stuck at 1000.26100.1.0 after KB5007651 and SecurityHealthSetup installation - Microsoft Q&A I am troubleshooting a vulnerability reported by Qualys (QID 383341 / CVE-2025-47956). Microsoft documentation indicates that Windows...
+  captured_at: '2026-09-24T12:49:44Z'
+  source_date: '2026-09-24'
+  target_release_date: '2026-09-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9457'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6036208-defender-offline-scan-boots-into-recov
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6036208/defender-offline-scan-boots-into-recovery-mode
+  parent_title: Defender Offline Scan boots into Recovery Mode - Microsoft Q&A
+  report_title: Defender Offline Scan boots into Recovery Mode - Microsoft Q&A
+  report_text_excerpt: Defender Offline Scan boots into Recovery Mode - Microsoft Q&A 26H2 26300.9711 Never seen this before, has anyone seen this? After todays update I ran a Defender Offline scan. When the scan started I noticed that it had started in the Preparing for Recovery window. I have...
+  captured_at: '2026-10-14T13:01:31Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055182-kb5127936-breaks-xbox-360-wireless-con
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6055182/kb5127936-breaks-xbox-360-wireless-controller-in-a
+  parent_title: KB5127936 breaks Xbox 360 Wireless Controller in all games (works in joy.cpl and Xbox app) - Microsoft Q&A
+  report_title: KB5127936 breaks Xbox 360 Wireless Controller in all games (works in joy.cpl and Xbox app) - Microsoft Q&A
+  report_text_excerpt: KB5127936 breaks Xbox 360 Wireless Controller in all games (works in joy.cpl and Xbox app) - Microsoft Q&A After installing KB5127936, my Xbox 360 Wireless Controller (with receiver) is detected by Windows, works in joy.cpl and in the Xbox app, but is not recognized in any...
+  captured_at: '2026-10-30T14:09:21Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'

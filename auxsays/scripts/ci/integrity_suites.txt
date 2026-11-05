@@ -316,6 +316,12 @@ auxsays/scripts/tests/test_windows_patch_identity.py = 30
 # narrow affected-range exception that keeps row 51, the shapes the rule must not touch, and the thread
 # 50506 re-run against the elevenforum fixture.
 auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
+# AUX-072: the audited withdrawal of those eight stored rows. Selected by the full five-field identity
+# (a Q&A thread is stored once per build it matched, so id or URL alone names several rows), pinned by
+# block hash, derived from the shared authority, three lines per row, row 51 and every sibling build
+# byte-identical, all-or-nothing refusal on any drift, idempotent. Run as the bare script on frozen
+# verbatim fixtures; never reads or writes the live store beyond hashing it.
+auxsays/scripts/tests/test_withdraw_windows_identity_not_the_subject_rows.py = 44
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit

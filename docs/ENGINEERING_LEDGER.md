@@ -77,6 +77,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
+| AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
 
 ---
 
@@ -229,12 +230,46 @@ pins the eight, row 51, the boundary of the exception and the shapes the rule mu
 by the characterization) is not deterministically separable and is not closed. R2: a title that names only a
 feature train is deliberately not a competing identity (the broader variants were measured and rejected).
 R3: the eight existing rows stay counted until the separate audited withdrawal (counted: false, reason
-`identity_not_the_subject`) goes through the guarded writeback. R4: an Office build escaping the
+`identity_not_the_subject`) goes through the guarded writeback; closed by AUX-072. R4: an Office build escaping the
 foreign-product veto (row 41) is rejected here by identity, but the veto gap itself is a separate item.
 
 **Reopen only if** a counted Windows row has a title that names another update and neither the record's
 build nor KB (outside a stated affected range), or the exception ever keeps a range that starts above the
 target or is on another train.
+
+---
+
+### AUX-072 — Eight stored Windows rows stayed counted after AUX-067 refused their shape
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-11-04 (AUX-067 residual R3) · **Resolved** 2026-11-05
+
+**Symptom** AUX-067 stops new acceptances of a build-only identity whose title is about another update, but
+the eight rows it measured stayed counted: the store is append/dedupe oriented and Microsoft Learn Q&A has no
+revalidation adapter. Six Windows pages kept publishing them (25H2 8246, 8328, 9168 x2, 9278, 9457 x2; 26H2 9711).
+
+**Fix** `withdraw_windows_identity_not_the_subject_rows.py` withdraws the rows pinned in
+`scripts/audit/windows_identity_not_the_subject_withdrawal.json`: `counted: false`, `exclusion_reason:
+identity_not_the_subject`, `evidence_valid_for_current_patch: false`, row kept. A row is selected by its full
+five-field identity (product_id, update_version, target_build, id, source_url): a Q&A thread is stored once per
+build it matched, so the product/version/URL selector of the Acrobat and OBS tools names several rows here. The
+block must hash to its pinned value and the shared predicate must still refuse it against its record's current
+identity; a sweep refuses the run if the predicate refuses any counted row the manifest does not name. Dry run
+by default, `--write --confirm-write`, all or nothing, idempotent. Row 51 (25H2 8894) is pinned unchanged. The six
+records were regenerated only by the scoped lane writers (`build_consensus_from_evidence.py --product-id
+microsoft-windows-11 --reconcile-only`, then `apply_consensus_to_records.py --product-id microsoft-windows-11
+--write-all --confirm-write`), in the same commit as the store edit, so evidence and its counts move together.
+
+**Measured** Windows counted 535 -> 527 (all products 1485 -> 1477); all 2658 rows kept; store diff 24 lines.
+8246 21->20, 8328 7->6, 9168 22->20, 9278 7->6, 9457 27->25 (still Medium, at its floor), 26H2 9711 20->19.
+Verdicts (WAIT), maturity, bands, the live set (6) and the 33 gate unchanged; one "User report count updated
+to N." event per record; homepage Patch Signals and the Patch Feed order unchanged. 26H2 9711's newest accepted
+capture moves back a day (2026-10-30 -> 10-29) because the withdrawn row was the newest. A second run of the tool
+and both writers changes nothing. `test_withdraw_windows_identity_not_the_subject_rows.py` pins it (44 checks,
+18 mutants each killed by a named check).
+
+**Reopen only if** any of the eight counts again, row 51 stops counting, or `identity_not_the_subject` refuses a
+counted Windows row (that is a new candidate and needs its own audited manifest, never a widened run of this one).
 
 ---
 
