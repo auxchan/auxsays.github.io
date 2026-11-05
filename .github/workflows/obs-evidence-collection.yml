@@ -26,6 +26,13 @@ on:
           before 2025-01-01, which is older than any record AUXSAYS tracks."
         required: false
         type: string
+      windows_underfill_hydration:
+        description: "Optional, DRY RUN ONLY: enable the default-off Windows Learn Q&A opening-post
+          hydration pass (AUX-073) for this dispatch. Ignored unless dry_run is also true. The
+          scheduled path and the writer-queue reaper pass no inputs, so it stays off for them."
+        required: false
+        default: false
+        type: boolean
   schedule:
     # Temporary bounded-recovery cadence: every 6 hours (was 4h). A run can take up to the 300-min
     # job timeout; a 6h (360-min) interval leaves 60 min after the job bound before the next slot is
@@ -169,6 +176,15 @@ jobs:
             args+=(--dry-run)
           else
             args+=(--write)
+          fi
+
+          # WINDOWS OPENING-POST HYDRATION (AUX-073), dispatch-only AND dry-run-only. The flag is
+          # exported only when this dispatch asked for it and is also a dry run, so no write run can
+          # hydrate; the scheduled path and the reaper's re-dispatch pass no inputs, so it is off for
+          # them. Activation is a separate, reviewed change to the env of this step.
+          if [ "${{ github.event.inputs.windows_underfill_hydration }}" = "true" ] && [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            export AUXSAYS_ENABLE_WINDOWS_UNDERFILL_HYDRATION=true
+            echo "Windows opening-post hydration: enabled for this dry run only."
           fi
 
           python auxsays/scripts/run_patch_evidence_collection.py "${args[@]}"

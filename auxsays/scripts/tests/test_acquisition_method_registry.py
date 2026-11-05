@@ -144,9 +144,18 @@ def run() -> int:
     routed: set[str] = set()
     for plan in method_routing.METHOD_PLANS.values():
         routed |= set(plan.get("primary", [])) | set(plan.get("fallback", []))
+    # An underfill plan routes too (B3 §12): its adapters are as real a routing target as a fallback.
+    underfill_routed: set[str] = set()
+    for plan in method_routing.UNDERFILL_PLANS.values():
+        underfill_routed |= set(plan.get("adapters", []))
+    routed |= underfill_routed
     unknown_routed = sorted(routed - set(ids))
     check(f"R11 every method method_routing routes to ({len(routed)}) is in the registry",
           not unknown_routed, str(unknown_routed))
+    by_id = {m["method_id"]: m for m in methods}
+    not_active = sorted(m for m in underfill_routed if (by_id.get(m) or {}).get("status") != "active")
+    check(f"R11b every underfill-routed adapter ({len(underfill_routed)}) is an ACTIVE registry method",
+          bool(underfill_routed) and not not_active, str(not_active))
 
     # Product references must be real product ids, since the registry claims where a method is proven.
     import yaml                                       # noqa: PLC0415 - test-only

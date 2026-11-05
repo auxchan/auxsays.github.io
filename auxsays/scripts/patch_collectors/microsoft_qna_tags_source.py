@@ -139,6 +139,42 @@ def fetch(url: str) -> str:
     return raw.decode("utf-8", "replace")
 
 
+def fetch_bounded(url: str, *, budget) -> tuple[str, str]:
+    """One question page under the run's wall-clock budget. Returns (final_url, html).
+
+    ADDITIVE: ``fetch`` above is unchanged, so the PowerPoint tag lane is byte-identical. This
+    sibling exists because ``fetch`` is not budget-aware -- its connect timeout and its read are
+    bounded only per recv(). Here the connect timeout is ``runtime_budget.request_timeout`` and the
+    body is read by ``runtime_budget.bounded_read`` (a hard total deadline and the same byte cap),
+    so one slow page cannot carry a caller past its collector's finalize reserve.
+
+    Same request shape as ``fetch`` (headers, pacing). It never decides what a page means: the
+    caller checks the final URL and the page's structure. Raises ``QnaTagError`` for HTTP and
+    transport failures (``status`` carries the HTTP code, so a caller can treat 429 differently),
+    and lets ``runtime_budget.RequestDeadlineExceeded`` / ``BudgetError`` propagate -- they are not
+    ``OSError``s, so a caller must catch them explicitly.
+    """
+    from . import runtime_budget as rb  # noqa: PLC0415 - only the bounded path needs it
+
+    _pace()
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT,
+                                                   "Accept": "text/html,application/xhtml+xml"})
+    try:
+        with urllib.request.urlopen(request, timeout=rb.request_timeout(budget, REQUEST_TIMEOUT)) as response:
+            final = response.geturl()
+            raw = rb.bounded_read(response, budget=budget, endpoint_family=ENDPOINT_FAMILY,
+                                  max_bytes=MAX_BYTES)
+    except urllib.error.HTTPError as exc:
+        if exc.code == 429:
+            raise QnaTagError("rate_limited", status=exc.code) from exc
+        raise QnaTagError(f"http_{exc.code}_error", status=exc.code) from exc
+    except urllib.error.URLError as exc:
+        raise QnaTagError("network_unreachable") from exc
+    except (TimeoutError, OSError) as exc:
+        raise QnaTagError(f"network_{type(exc).__name__}") from exc
+    return str(final or url), raw.decode("utf-8", "replace")
+
+
 def tag_page_url(slug: str, tag_id: str, page: int) -> str:
     base = f"{BASE}/en-us/answers/tags/{tag_id}/{slug}/"
     return base if page <= 1 else f"{base}?page={page}"

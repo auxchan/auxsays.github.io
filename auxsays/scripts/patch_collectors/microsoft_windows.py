@@ -36,7 +36,9 @@ from __future__ import annotations
 
 import os
 import re
+import time
 import urllib.parse
+from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Any
@@ -168,6 +170,49 @@ def elevenforum_discovery_enabled(env: dict[str, str] | None = None) -> bool:
     trimmed); absent, empty, ``false``, ``0``, ``1``, ``yes`` and ``on`` are all False."""
     source = os.environ if env is None else env
     return str(source.get(ELEVENFORUM_ENABLE_ENV, "")).strip().lower() == "true"
+
+
+# --- underfilled-evidence enrichment: Learn Q&A opening-post hydration (SHIPPED DISABLED) -----------
+#
+# WHAT IT IS. The search-RSS lane judges a question by its RSS title and description. When that text
+# names no KB or build ("missing_kb_or_build") or no attribution ("missing_update_attribution"), the
+# full opening post sometimes does. For a patch that the shipped certifier refuses ONLY for being
+# short of reports, inside a recency window, this pass fetches the question page of each such
+# candidate THIS RUN discovered, rebuilds the candidate from the opening post (title + the asker's
+# question only; never an answer or a comment), dates it from the page, and hands it back to the
+# unchanged authority, `evaluate_candidates` -- the same claims map, the same identity, intent, date
+# and identity-not-the-subject rules. Configuration lives in lib/method_routing.UNDERFILL_PLANS.
+#
+# WHAT IT IS NOT. A method. It owns no health row, adds no source_type and is not in the ownership
+# manifest: an enrichment step that owned a row would revoke the very patch it helped (measured, L1
+# spec §7). Its failures NEVER enter learn_qna_search_rss's error list -- that list, and therefore
+# that method's status, stays decided by the search feed alone. A primary RSS failure still reads as
+# a failure; an enrichment failure is disclosed in the row's notes, in a structured per-record
+# `underfill_hydration` block, in `rb.emit` events and in a run warning, and never hidden.
+#
+# DISABLED MEANS DISABLED. With the flag below absent (or anything but the exact string "true") no
+# pass runs, no page is requested, `collect_for_record` is called exactly as before, and the output is
+# byte-identical. The workflow exports the flag only on a manual dispatch that is also a dry run.
+UNDERFILL_ENABLE_ENV = "AUXSAYS_ENABLE_WINDOWS_UNDERFILL_HYDRATION"
+HYDRATION_ADAPTER_ID = "learn_qna_question_hydration"
+# The pass starts only with this much collector discovery time left, and stops requesting once less
+# than UNDERFILL_WRITEBACK_RESERVE_S remains, so the existing writeback keeps its own finalize reserve
+# untouched AND this margin on top of it. If the budget cannot support enrichment, it is skipped.
+UNDERFILL_MIN_START_HEADROOM_S = 60.0
+UNDERFILL_WRITEBACK_RESERVE_S = 30.0
+# The pass's own wall clock, independent of AUXSAYS_METHOD_DEADLINE_SECONDS.
+UNDERFILL_METHOD_SECONDS = 180.0
+# Circuit breaker: a 429 opens it at once; so do this many consecutive transport failures.
+HYDRATION_CIRCUIT_CONSECUTIVE_FAILURES = 5
+# Disclosure only (same share as Tech Community's `thin`): at least one GET in five failed.
+HYDRATION_WARNING_FAILURE_FRACTION = 0.2
+
+
+def windows_underfill_hydration_enabled(env: dict[str, str] | None = None) -> bool:
+    """Default-off gate. True ONLY for the exact canonical boolean ``true`` (case-insensitive,
+    trimmed); absent, empty, ``false``, ``0``, ``1``, ``yes`` and ``on`` are all False."""
+    source = os.environ if env is None else env
+    return str(source.get(UNDERFILL_ENABLE_ENV, "")).strip().lower() == "true"
 
 
 def default_since_day(days: int) -> str:
@@ -784,6 +829,29 @@ def claimed_urls() -> dict[str, tuple[str, str, str]]:
     return claims
 
 
+def claims_and_stored_urls() -> tuple[dict[str, tuple[str, str, str]], set[str]]:
+    """``claimed_urls()`` plus the canonical URL of EVERY stored Windows row, from ONE store read.
+
+    Used only by the default-off hydration pass. `claims` skips ``counted: false`` rows, so a report
+    that was refused or audited-withdrawn is not in it -- and the append guard refuses a held URL
+    only under the SAME (product, version, build) key. Without the second set, hydration could
+    re-accept a withdrawn report onto a sibling patch, arguing an audited withdrawal again."""
+    claims: dict[str, tuple[str, str, str]] = {}
+    stored: set[str] = set()
+    for row in load_evidence():
+        if str(row.get("product_id") or "").strip() != PRODUCT_ID:
+            continue
+        url = learn_qna.canonical_learn_qna_url(str(row.get("source_url") or ""))
+        if not url:
+            continue
+        stored.add(url.lower())
+        if row.get("counted") is False:
+            continue
+        claims.setdefault(url.lower(),
+                          patch_key(PRODUCT_ID, row.get("update_version"), row.get("target_build")))
+    return claims, stored
+
+
 def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates: list[dict[str, Any]],
                         captured_at: str,
                         claims: dict[str, tuple[str, str, str]] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -1209,7 +1277,15 @@ def health_for_method(record: PatchRecord, target: dict[str, Any], captured_at: 
 def collect_for_record(record: PatchRecord, context: CollectorContext,
                        claims: dict[str, tuple[str, str, str]] | None = None,
                        techcommunity_pool: TechCommunityPool | None = None,
-                       elevenforum_pool: ElevenForumPool | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+                       elevenforum_pool: ElevenForumPool | None = None,
+                       *, rss_out: dict[str, Any] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    """One record's discovery and acceptance. Returns (accepted, rejected, health) over every method.
+
+    ``rss_out`` is an OPTIONAL out-parameter (the ``append_evidence_rows(out_added=...)`` pattern):
+    when given, it receives the Learn Q&A search lane's OWN lists -- before the Tech Community and
+    Windows 11 Forum merges -- so the default-off opening-post hydration pass can rebuild that one
+    method's health row from the same inputs. The return value is unchanged, and a caller that does
+    not pass it runs exactly the code path it ran before the parameter existed."""
     captured_at = utc_now()
     target = record_target(record)
     query_terms = search_query_terms(target)
@@ -1225,6 +1301,12 @@ def collect_for_record(record: PatchRecord, context: CollectorContext,
         )
     accepted, rejected = evaluate_candidates(record, target, candidates, captured_at, claims)
     health = [health_for_method(record, target, captured_at, candidates, accepted, rejected, errors, query_terms)]
+    if rss_out is not None:
+        # The SAME objects, not copies: the hydration pass must rebuild the row from the identical
+        # `errors` list, so a primary RSS failure keeps deciding this method's status.
+        rss_out.update({"candidates": candidates, "accepted": accepted, "rejected": rejected,
+                        "errors": errors, "query_terms": query_terms, "target": target,
+                        "captured_at": captured_at})
     if techcommunity_pool is not None:
         # THE SAME AUTHORITY, DELIBERATELY. Discovery diversity must never become acceptance
         # divergence: the Tech Community pool goes through `evaluate_candidates`, i.e. the same
@@ -1285,7 +1367,17 @@ class WindowsLearnQnaCollector(ProductCollector):
         pending: list[tuple[tuple[str, str, str], dict[str, Any]]] = []
         # ONE REPORT, ONE PATCH. Seeded from stored evidence so the rule holds across runs, then
         # extended in place as this run accepts. See evaluate_candidates for what broke without it.
-        claims = claimed_urls()
+        # DEFAULT OFF: with the hydration flag absent, `claimed_urls()` is called exactly as before
+        # and nothing below this collector's original path runs. With it on, the same read also
+        # yields every stored Windows URL in ANY state (see claims_and_stored_urls).
+        underfill = windows_underfill_hydration_enabled()
+        stored_urls: set[str] = set()
+        if underfill:
+            claims, stored_urls = claims_and_stored_urls()
+        else:
+            claims = claimed_urls()
+        underfill_states: list[dict[str, Any]] = []
+        loop_stopped_on_finalize = False
         # ONE ENUMERATION PER RUN. See collect_techcommunity_candidates: the sitemaps do not vary
         # by record, so walking them inside the loop would cost 71x the fetches for the identical
         # thread set -- and it would spend that out of the collector's wall-clock budget, i.e. in
@@ -1301,13 +1393,18 @@ class WindowsLearnQnaCollector(ProductCollector):
             _b = rb.get_run_budget()
             if _b is not None and _b.collector_finalize_expired():
                 rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
+                loop_stopped_on_finalize = True
                 break
+            # Flag off: `extra` is empty, so the call is byte-for-byte the call this loop always made.
+            rss_out: dict[str, Any] = {}
+            extra: dict[str, Any] = {"rss_out": rss_out} if underfill else {}
             if elevenforum_pool is None:
                 accepted, rejected, health = collect_for_record(record, context, claims,
-                                                                techcommunity_pool)
+                                                                techcommunity_pool, **extra)
             else:
                 accepted, rejected, health = collect_for_record(record, context, claims,
-                                                                techcommunity_pool, elevenforum_pool)
+                                                                techcommunity_pool, elevenforum_pool,
+                                                                **extra)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
                 "version": record.update_version,
@@ -1320,9 +1417,14 @@ class WindowsLearnQnaCollector(ProductCollector):
                 "rejection_reasons": rejection_counts(rejected),
                 "method_health": health,
             }
+            persisted: list[dict[str, Any]] = []
+            already_held: list[dict[str, Any]] = []
+            if underfill:
+                underfill_states.append({
+                    "record": record, "result": result, "health": health, "accepted": accepted,
+                    "rejected": rejected, "rss_out": rss_out, "persisted": persisted,
+                    "already_held": already_held})
             if context.write:
-                persisted: list[dict[str, Any]] = []
-                already_held: list[dict[str, Any]] = []
                 added, total, rows = append_evidence_rows(
                     accepted, out_added=persisted, out_already_held=already_held)
                 # The health rows were built before the append and could not know the delta; this is
@@ -1341,6 +1443,13 @@ class WindowsLearnQnaCollector(ProductCollector):
                     pending.append((patch_key(PRODUCT_ID, record.update_version,
                                               record.target_build), result))
             results.append(result)
+        if underfill:
+            # AFTER the walk, BEFORE the writeback: it spends only time the walk left over, it cannot
+            # starve a record of its walk, and it never displaces the existing writer (see
+            # _underfill_pass for the skip conditions).
+            _underfill_pass(underfill_states, context=context, claims=claims,
+                            stored_urls=stored_urls, pending=pending,
+                            loop_stopped_on_finalize=loop_stopped_on_finalize)
         if context.write and pending:
             _writeback_all(pending)
         return results
@@ -1397,6 +1506,545 @@ def _writeback_all(pending: list[tuple[tuple[str, str, str], dict[str, Any]]]) -
         applied = apply_collector_record_fields(record_path, fields) or {}
         result_row["windows_record_updated"] = bool(
             ((applied.get("write_plan") or {}).get("fields")))
+
+
+# --- underfilled-evidence enrichment: the pass (default off; see UNDERFILL_ENABLE_ENV) -------------
+
+def _underfill_now() -> datetime:
+    """The instant the trigger is judged at. A seam, so a test can pin it."""
+    return datetime.now(timezone.utc)
+
+
+def _release_age_days(published_at: str, now: datetime) -> float | None:
+    text = str(published_at or "").strip()
+    if not text:
+        return None
+    try:
+        when = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    return (now - when).total_seconds() / 86400.0
+
+
+def _url_key(url: str) -> str:
+    return learn_qna.canonical_learn_qna_url(str(url or "")).lower()
+
+
+def _hydrate_question(url: str, budget: Any) -> dict[str, Any]:
+    """ONE bounded GET of a question page. Never raises: every failure becomes a reason token.
+
+    `RequestDeadlineExceeded` and `BudgetError` are not `OSError`s, so they are caught by name; an
+    exception escaping here would roll back the whole Windows collector -- every record's rows."""
+    from . import microsoft_qna_tags_source as qna_tags  # noqa: PLC0415 - default-off path only
+
+    try:
+        final_url, html = qna_tags.fetch_bounded(url, budget=budget)
+    except qna_tags.QnaTagError as exc:
+        return {"fetched": False, "reason": exc.reason, "status": exc.status}
+    except rb.BudgetError as exc:
+        return {"fetched": False, "reason": f"budget_{exc.reason}", "status": None}
+    except Exception as exc:  # noqa: BLE001 - isolated per URL by design
+        return {"fetched": False, "reason": f"error_{type(exc).__name__}", "status": None}
+    return {"fetched": True, "final_url": final_url, "html": html}
+
+
+def _hydrated_candidate(url: str, rss_candidate: dict[str, Any], final_url: str,
+                        page_html: str) -> tuple[dict[str, Any] | None, str]:
+    """A fetched question page -> (candidate, "") or (None, refusal reason).
+
+    The candidate is the tag lane's shape: the RSS title as `parent_title`/`report_title` (so a
+    title-only rule judges the SAME title it judged on the excerpt), and `report_text` = that title
+    plus the asker's OWN question segment. Answers and comments are never read.
+
+    The date is the opening post's own date from the page, with NO fallback. The RSS date is the
+    thread's last activity (lib/post_dates); feeding it to the date gate would let a reply carry an
+    old thread into a later patch. An undated page is refused, not re-judged.
+
+    The parser does not enforce identity, so this does: a page whose final URL or JSON-LD question id
+    is another question is refused, as is a page with no QAPage block, a mainEntity that is not a
+    Question, or a machine-generated question segment."""
+    from lib import source_segments as seg  # noqa: PLC0415 - default-off path only
+    from lib.post_dates import original_post_date_from_html  # noqa: PLC0415
+
+    wanted = seg.learn_qna_question_id(url)
+    if not wanted or seg.learn_qna_question_id(final_url) != wanted:
+        return None, "redirect"
+    thread = seg.parse_learn_qna_thread(url, page_html)
+    if thread.parse_status == seg.PARSE_UNEXPECTED_SHAPE:
+        return None, "not_a_question"
+    question = thread.question() if thread.ok else None
+    if question is None:
+        return None, "no_qapage"
+    if str(question.segment_id or "").strip() != wanted:
+        return None, "id_mismatch"
+    if question.machine_generated:
+        return None, "machine_generated"
+    opening = str(question.segment_text or "").strip()
+    if not opening:
+        return None, "no_opening_post"
+    posted = original_post_date_from_html(page_html)
+    if not posted:
+        return None, "undated"
+    title = str(rss_candidate.get("report_title") or rss_candidate.get("parent_title") or "").strip()
+    return {
+        "source_type": SOURCE_TYPE,
+        "source_name": SOURCE_NAME,
+        "source_url": url,
+        "parent_title": str(rss_candidate.get("parent_title") or title),
+        "report_title": title,
+        "report_text": " ".join(x for x in (title, opening) if x)[:6000],
+        "source_date": posted,
+        "original_post_date": posted,
+        "qna_question_id": wanted,
+    }, ""
+
+
+def _post_date_source(page_html: str) -> str:
+    """Diagnostic only: which rule of lib/post_dates dated the page."""
+    return "jsonld_date_created" if re.search(r'"dateCreated"\s*:', page_html or "") else "earliest_datetime_attribute"
+
+
+def _r1_flags(candidate: dict[str, Any], target: dict[str, Any]) -> dict[str, Any]:
+    """AUX-067 R1 diagnostics for a would-be row (dry run only; computed AFTER acceptance and never
+    able to change it): the matched build's author-stated role, the competing identities the opening
+    post names, and whether it states an open-ended affected range."""
+    from lib.build_claims import extract_build_claims  # noqa: PLC0415 - default-off path only
+
+    post = str(candidate.get("report_text") or "")
+    build = str(target.get("target_os_build") or "").strip()
+    revision = build.split(".")[-1] if "." in build else ""
+    claim = next((c for c in extract_build_claims(post) if c.build == build), None)
+    return {
+        "matched_build_claim": ({"role": claim.role, "basis": claim.match_basis, "excerpt": claim.excerpt}
+                                if claim else None),
+        "competing_kbs": sorted(_other_kbs(post, str(target.get("target_kb") or ""))),
+        # A same-revision build on a sibling train is the SAME cumulative update, not a competitor.
+        "competing_builds": sorted(b for b in _other_builds(post, build) if b.split(".")[-1] != revision),
+        "states_affected_range": title_states_affected_range(post, build),
+    }
+
+
+def _bracket(counts: Counter) -> str:
+    return f" [{', '.join(f'{k}={v}' for k, v in sorted(counts.items()))}]" if counts else ""
+
+
+def _hydration_notes_clause(c: dict[str, Any]) -> str:
+    """The fixed-format disclosure appended to the learn_qna_search_rss row of a queued patch.
+    It says what the pass is, what it did, and -- always -- that it is not a complete inspection."""
+    clause = (
+        "Opening-post hydration (optional enrichment of this method, separately budgeted; it never "
+        "sets this method's status): "
+        f"queued {c['queued']}, held {c['held']}, skipped {sum(c['skipped'].values())}{_bracket(c['skipped'])}, "
+        f"fetched {c['fetched']}, cache hits {c['cache_hits']}, parsed {c['parsed']}, "
+        f"undated {c['undated']}, refused-page {c['refused']}{_bracket(c['refused_reasons'])}, "
+        f"accepted {c['accepted']}, still rejected {c['still_rejected']}{_bracket(c['still_rejected_reasons'])}, "
+        f"failed {c['failed']}{_bracket(c['failure_reasons'])}, "
+        f"not reached {c['not_reached']}{_bracket(c['not_reached_reasons'])}."
+    )
+    queued, parsed = c["queued"], c["parsed"]
+    if queued == 0:
+        clause += " Nothing was eligible to hydrate."
+    elif parsed < queued:
+        clause += (f" Hydration incomplete: {parsed} of {queued} queued opening posts were read and "
+                   f"re-judged; the other {queued - parsed} keep their excerpt-time rejection.")
+    else:
+        clause += (f" All {queued} queued opening posts were read and re-judged; the queue holds only "
+                   "this run's excerpt rejections of two kinds, so this is not a complete inspection.")
+    return clause
+
+
+_RUN_COUNTERS = ("queued", "held", "fetched", "cache_hits", "parsed", "undated", "refused", "accepted",
+                 "still_rejected", "failed", "not_reached")
+
+
+def _underfill_pass(states: list[dict[str, Any]], *, context: CollectorContext,
+                    claims: dict[str, tuple[str, str, str]], stored_urls: set[str],
+                    pending: list[tuple[tuple[str, str, str], dict[str, Any]]],
+                    loop_stopped_on_finalize: bool) -> dict[str, Any]:
+    """Opening-post hydration for underfilled patches. Default off; see UNDERFILL_ENABLE_ENV.
+
+    SKIPPED (no request, nothing changed, the reason recorded) when the walk already stopped on the
+    collector's finalize reserve, when less than UNDERFILL_MIN_START_HEADROOM_S of discovery time is
+    left, or when the product declares no valid underfill plan. Then two phases:
+
+      network, in memory -- the trigger through the shipped `live_eligibility.evaluate`, the queues,
+        the bounded GETs, and the re-judgement through `evaluate_candidates`. Any exception here
+        DISCARDS the whole pass (`hydration_aborted:<type>`) and changes nothing.
+      write -- only what the existing loop already does: replace the RSS row (found by method_id),
+        append through `append_evidence_rows`, re-finalize the health delta over the loop's AND the
+        pass's persisted rows, and add a record that gained rows to the existing writeback.
+    """
+    started = time.monotonic()
+    budget = rb.get_run_budget()
+    summary: dict[str, Any] = {"outcome": "skipped", "reason": ""}
+    skip = ""
+    plan: dict[str, Any] | None = None
+    if loop_stopped_on_finalize:
+        skip = "collector_finalize_expired"
+    elif budget is not None and budget.remaining_collector_finalize() < UNDERFILL_MIN_START_HEADROOM_S:
+        skip = "insufficient_headroom"
+    else:
+        try:
+            from lib import method_routing  # noqa: PLC0415 - default-off path only
+            plan = method_routing.plan_underfill(PRODUCT_ID)
+        except Exception as exc:  # noqa: BLE001 - a bad plan disables the pass, never the collector
+            skip = f"invalid_plan:{type(exc).__name__}"
+        else:
+            if plan is None:
+                skip = "no_plan"
+    if not skip:
+        try:
+            prepared, summary = _underfill_network_phase(
+                states, plan=plan or {}, claims=dict(claims), stored_urls=stored_urls, budget=budget,
+                dry_run=not context.write)
+        except Exception as exc:  # noqa: BLE001 - failure isolation: discard the pass, keep the run
+            skip = f"hydration_aborted:{type(exc).__name__}"
+            summary = {"outcome": "aborted", "reason": skip}
+    if skip:
+        summary.setdefault("outcome", "skipped")
+        summary["reason"] = skip
+        for state in states:
+            state["result"]["underfill_hydration"] = {"decision": "not_evaluated",
+                                                      "pass": summary["outcome"], "reason": skip}
+    else:
+        _underfill_write_phase(prepared, write=bool(context.write), pending=pending)
+    summary["wall_s"] = round(time.monotonic() - started, 1)
+    _emit_underfill_summary(summary)
+    return summary
+
+
+def _underfill_network_phase(states: list[dict[str, Any]], *, plan: dict[str, Any],
+                             claims: dict[str, tuple[str, str, str]], stored_urls: set[str],
+                             budget: Any, dry_run: bool) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    from lib import live_eligibility, maturity, method_routing, monitoring_health  # noqa: PLC0415
+    from lib.report_counts import (counted_evidence_rows, load_evidence_store,  # noqa: PLC0415
+                                   windows_targets_from_front_matter)
+    from lib.source_segments import learn_qna_question_id  # noqa: PLC0415
+    from .base import GENERATED_DIR, evidence_key  # noqa: PLC0415
+
+    now = _underfill_now()
+    thresholds = monitoring_health.load_thresholds(ROOT / "_config.yml")
+    # The trigger's population: the WHOLE store (exclusivity is a property of every product's rows)
+    # read by the strict loader -- a missing or malformed store aborts the pass rather than reading
+    # as "nobody has any reports" -- plus this run's accepted rows that are not stored yet (a dry run).
+    fronts: dict[str, dict[str, Any]] = {}
+    for path in sorted(GENERATED_DIR.glob("*.md")):
+        data, _body = load_front_matter_and_body(path)
+        if isinstance(data, dict) and data.get("update_entry") is True \
+                and str(data.get("product_id") or "").strip() == PRODUCT_ID:
+            fronts[str(path)] = data
+    stored_rows = load_evidence_store(EVIDENCE_PATH)
+    held_keys = {evidence_key(r, "source_url") for r in stored_rows if r.get("source_url")}
+    run_rows: list[dict[str, Any]] = []
+    for state in states:
+        for row in state["accepted"]:
+            key = evidence_key(row, "source_url")
+            if key not in held_keys:
+                held_keys.add(key)
+                run_rows.append(row)
+    groups = counted_evidence_rows(stored_rows + run_rows,
+                                   windows_targets=windows_targets_from_front_matter(fronts.values()))
+    exclusive = live_eligibility.exclusive_url_counts(groups)
+    live_min = maturity.LIVE_MIN_ACCEPTED_REPORTS
+
+    decisions: Counter = Counter()
+    entries: list[dict[str, Any]] = []
+    candidate_for: dict[str, dict[str, Any]] = {}
+    get_url: dict[str, str] = {}
+    for state in states:
+        record: PatchRecord = state["record"]
+        mine = patch_key(PRODUCT_ID, record.update_version, record.target_build)
+        state["key"] = mine
+        decision = live_eligibility.evaluate(
+            fronts.get(str(record.path)) or {}, groups, emh_rows=state["health"], now=now,
+            thresholds=thresholds, exclusive=exclusive)
+        age = _release_age_days(record.update_published_at, now)
+        justified, why = method_routing.underfill_justified(
+            decision.live, decision.reasons, release_age_days=age, window_days=plan["window_days"])
+        decisions[why] += 1
+        block: dict[str, Any] = {"decision": why, "window_days": plan["window_days"],
+                                 "release_age_days": None if age is None else round(age, 1)}
+        state["block"] = block
+        state["queue"] = []
+        if not justified:
+            continue
+        rss = state["rss_out"]
+        shortfall = max(0, live_min - int(exclusive.get(mine, 0)), live_min - len(groups.get(mine, ())))
+        by_key = {}
+        for cand in rss.get("candidates") or []:
+            k = _url_key(cand.get("source_url"))
+            if k:
+                by_key.setdefault(k, cand)
+        held = 0
+        skipped: Counter = Counter()
+        seen: set[str] = set()
+        for row in rss.get("rejected") or []:
+            if str(row.get("exclusion_reason") or "") not in plan["enrichable_reasons"]:
+                continue
+            if str(row.get("source_type") or "") != SOURCE_TYPE:
+                continue
+            url = learn_qna.canonical_learn_qna_url(str(row.get("source_url") or ""))
+            key = url.lower()
+            if not url or key in seen:
+                continue
+            seen.add(key)
+            if not learn_qna_question_id(url) or not source_url_is_specific(url):
+                skipped["not_a_question_url"] += 1
+                continue
+            holder = claims.get(key)
+            if holder == mine:
+                held += 1
+                continue
+            if holder is not None:
+                skipped["claimed_by_another_patch"] += 1
+                continue
+            if key in stored_urls:
+                skipped["stored_in_any_state"] += 1
+                continue
+            state["queue"].append({"url": key, "date": str(row.get("source_date") or ""), "row": row})
+            candidate_for.setdefault(key, by_key.get(key) or row)
+            get_url.setdefault(key, url)
+        block.update({"shortfall": shortfall, "queued": len(state["queue"]), "held": held,
+                      "skipped": dict(skipped)})
+        state["held"], state["skipped"] = held, skipped
+        entries.append({"key": mine, "release_date": record.update_published_at,
+                        "shortfall": shortfall,
+                        "queue": [{"url": q["url"], "date": q["date"]} for q in state["queue"]]})
+
+    order = method_routing.underfill_order(
+        entries, max_fetches_per_run=plan["max_fetches_per_run"],
+        max_fetches_per_identity=plan["max_fetches_per_identity"],
+        recency_reserve=plan["recency_reserve"])
+
+    # --- the bounded GETs ------------------------------------------------------------------------
+    memo: dict[str, dict[str, Any]] = {}
+    stop_reason = ""
+    circuit = "closed"
+    consecutive = 0
+    method_started = time.monotonic()
+    if budget is not None and order["fetch"]:
+        budget.start_method(HYDRATION_ADAPTER_ID)
+    for key in order["fetch"]:
+        if circuit != "closed":
+            stop_reason = "circuit"
+            break
+        if time.monotonic() - method_started >= UNDERFILL_METHOD_SECONDS:
+            stop_reason = "deadline"
+            break
+        if budget is not None:
+            if budget.remaining_collector_finalize() < UNDERFILL_WRITEBACK_RESERVE_S or budget.method_expired():
+                stop_reason = "deadline"
+                break
+            try:
+                budget.note_request()
+            except rb.MethodBudgetExhausted as exc:
+                stop_reason = "cap" if exc.reason == "max_requests" else "deadline"
+                break
+        outcome = _hydrate_question(get_url[key], budget)
+        if not outcome["fetched"]:
+            consecutive += 1
+            memo[key] = {"kind": "failed", "reason": str(outcome["reason"])}
+            rb.emit("windows_hydration_failure", url=get_url[key], product_id=PRODUCT_ID,
+                    reason=str(outcome["reason"]))
+            if outcome.get("status") == 429:
+                circuit = "open:rate_limited"
+            elif consecutive >= HYDRATION_CIRCUIT_CONSECUTIVE_FAILURES:
+                circuit = "open:consecutive_failures"
+            continue
+        consecutive = 0
+        try:
+            candidate, refusal = _hydrated_candidate(get_url[key], candidate_for.get(key) or {},
+                                                     outcome["final_url"], outcome["html"])
+        except Exception as exc:  # noqa: BLE001 - a page that breaks the parser is refused, not fatal
+            candidate, refusal = None, f"parse_error_{type(exc).__name__}"
+        if candidate is None:
+            memo[key] = {"kind": "undated" if refusal == "undated" else "refused", "reason": refusal}
+        else:
+            memo[key] = {"kind": "parsed", "candidate": candidate,
+                         "date_source": _post_date_source(outcome["html"])}
+
+    # --- re-judgement through the unchanged authority, in the newest-first WALK order -------------
+    planned = set(order["fetch"])
+    totals: Counter = Counter()
+    prepared: list[dict[str, Any]] = []
+    for state in states:
+        item: dict[str, Any] = {"state": state, "block": state["block"]}
+        prepared.append(item)
+        if state["block"]["decision"] != "underfilled":
+            continue
+        record = state["record"]
+        rss = state["rss_out"]
+        mine = state["key"]
+        c: dict[str, Any] = {"queued": len(state["queue"]), "held": state["held"], "skipped": state["skipped"],
+                             "fetched": 0, "cache_hits": 0, "parsed": 0, "undated": 0, "refused": 0,
+                             "accepted": 0, "still_rejected": 0, "failed": 0, "not_reached": 0,
+                             "refused_reasons": Counter(), "still_rejected_reasons": Counter(),
+                             "failure_reasons": Counter(), "not_reached_reasons": Counter()}
+        candidates: list[dict[str, Any]] = []
+        excerpt_reason: dict[str, str] = {}
+        for q in state["queue"]:
+            key = q["url"]
+            excerpt_reason[key] = str(q["row"].get("exclusion_reason") or "")
+            outcome = memo.get(key)
+            if outcome is None:
+                c["not_reached"] += 1
+                c["not_reached_reasons"]["cap" if key not in planned else (stop_reason or "deadline")] += 1
+                continue
+            if order["charged"].get(key) == mine:
+                c["fetched"] += 1
+            else:
+                c["cache_hits"] += 1
+            kind = outcome["kind"]
+            if kind == "failed":
+                c["failed"] += 1
+                c["failure_reasons"][outcome["reason"]] += 1
+            elif kind == "undated":
+                c["undated"] += 1
+            elif kind == "refused":
+                c["refused"] += 1
+                c["refused_reasons"][outcome["reason"]] += 1
+            else:
+                c["parsed"] += 1
+                candidates.append(outcome["candidate"])
+        accepted, rejected = evaluate_candidates(record, rss["target"], candidates, rss["captured_at"], claims)
+        c["accepted"] = len(accepted)
+        c["still_rejected"] = len(rejected)
+        for row in rejected:
+            c["still_rejected_reasons"][str(row.get("exclusion_reason") or "unknown")] += 1
+        moved = {_url_key(row.get("source_url")) for row in accepted}
+
+        positions = [i for i, row in enumerate(state["health"]) if row.get("method_id") == METHOD_ID]
+        if len(positions) != 1:
+            raise RuntimeError(f"expected exactly one {METHOD_ID} row, found {len(positions)}")
+        before = dict(state["health"][positions[0]])
+        new_accepted = list(rss["accepted"]) + accepted
+        new_rejected = [row for row in rss["rejected"] if _url_key(row.get("source_url")) not in moved]
+        # THE SAME `errors` OBJECT: hydration failures are not in it and never will be, so the
+        # status this row carries is still decided by the search feed alone.
+        new_row = health_for_method(record, rss["target"], rss["captured_at"], rss["candidates"],
+                                    new_accepted, new_rejected, rss["errors"], rss["query_terms"])
+        new_row["notes"] = f"{new_row['notes']} {_hydration_notes_clause(c)}"
+
+        block = state["block"]
+        block.update({
+            "closable": len(state["queue"]) >= block["shortfall"] > 0,
+            "attempts": c["fetched"], "cache_hits": c["cache_hits"],
+            "successes": c["parsed"] + c["undated"] + c["refused"],
+            "failures": c["failed"], "failure_reasons": dict(c["failure_reasons"]),
+            "parsed": c["parsed"], "undated": c["undated"], "refused": c["refused"],
+            "refused_reasons": dict(c["refused_reasons"]),
+            "accepted": c["accepted"], "accepted_urls": [row["source_url"] for row in accepted],
+            "still_rejected": c["still_rejected"], "still_rejected_reasons": dict(c["still_rejected_reasons"]),
+            "not_reached": c["not_reached"], "not_reached_reasons": dict(c["not_reached_reasons"]),
+            "circuit_breaker": circuit,
+            "rss_status_before": before.get("status"), "rss_status_after": new_row.get("status"),
+        })
+        if dry_run:
+            block["rss_row_before"] = before
+            block["rss_row_after"] = dict(new_row)
+            would_be = []
+            for row in accepted:
+                key = _url_key(row.get("source_url"))
+                cand = memo[key]["candidate"]
+                rss_cand = candidate_for.get(key) or {}
+                would_be.append({
+                    "url": row["source_url"], "question_id": cand.get("qna_question_id"),
+                    "update_version": row.get("update_version"), "target_build": row.get("target_build"),
+                    "match_basis": row.get("match_basis"), "original_date": cand.get("source_date"),
+                    "original_date_source": memo[key]["date_source"],
+                    "rss_date": str(rss_cand.get("source_date") or ""),
+                    "release_date": row.get("target_release_date"),
+                    "excerpt_reason": excerpt_reason.get(key, ""),
+                    "r1": _r1_flags(cand, rss["target"]),
+                })
+            block["would_be_rows"] = would_be
+        for name in _RUN_COUNTERS:
+            totals[name] += int(c[name])
+        totals["skipped"] += sum(state["skipped"].values())
+        item.update({"rss_index": positions[0], "new_row": new_row, "accepted_rows": accepted,
+                     "moved": moved})
+
+    attempts = len(memo)
+    failures = sum(1 for m in memo.values() if m["kind"] == "failed")
+    summary: dict[str, Any] = {
+        "outcome": "ran", "reason": "",
+        "window_days": plan["window_days"], "max_fetches_per_run": plan["max_fetches_per_run"],
+        "max_fetches_per_identity": plan["max_fetches_per_identity"],
+        "recency_reserve": plan["recency_reserve"],
+        "identities_walked": len(states), "identities_queued": len(entries),
+        "planned": len(order["fetch"]), "attempts": attempts, "successes": attempts - failures,
+        "failures": failures, "stop_reason": stop_reason, "circuit_breaker": circuit,
+        "method_wall_s": round(time.monotonic() - method_started, 1),
+        **{f"decision_{name}": decisions.get(name, 0) for name in
+           ("underfilled", "live", "certifier_unreachable", "not_count_limited", "outside_recency_window")},
+        **{f"total_{name}": totals.get(name, 0) for name in (*_RUN_COUNTERS, "skipped")},
+    }
+    return prepared, summary
+
+
+def _underfill_write_phase(prepared: list[dict[str, Any]], *, write: bool,
+                           pending: list[tuple[tuple[str, str, str], dict[str, Any]]]) -> None:
+    """Apply the in-memory pass through the collector's EXISTING writers only."""
+    pending_keys = {key for key, _result in pending}
+    for item in prepared:
+        state = item["state"]
+        result = state["result"]
+        result["underfill_hydration"] = item["block"]
+        if "new_row" not in item:
+            continue
+        record: PatchRecord = state["record"]
+        health = state["health"]
+        health[item["rss_index"]] = item["new_row"]
+        accepted = item["accepted_rows"]
+        moved = item["moved"]
+        merged_rejected = [row for row in state["rejected"]
+                           if not (str(row.get("source_type") or "") == SOURCE_TYPE
+                                   and _url_key(row.get("source_url")) in moved)]
+        result.update({
+            "accepted_count": int(result.get("accepted_count") or 0) + len(accepted),
+            "rejected_count": len(merged_rejected),
+            "accepted_urls": list(result.get("accepted_urls") or []) + [row["source_url"] for row in accepted],
+            "rejection_reasons": rejection_counts(merged_rejected),
+        })
+        if write:
+            persisted: list[dict[str, Any]] = []
+            already_held: list[dict[str, Any]] = []
+            if accepted:
+                added, total, rows = append_evidence_rows(
+                    accepted, out_added=persisted, out_already_held=already_held)
+                result.update({
+                    "evidence_rows_added": int(result.get("evidence_rows_added") or 0) + added,
+                    "evidence_rows_total": total,
+                    "structured_count_for_version": len(counted_rows(rows, PRODUCT_ID, record.update_version)),
+                })
+                key = patch_key(PRODUCT_ID, record.update_version, record.target_build)
+                if key not in pending_keys:
+                    pending_keys.add(key)
+                    pending.append((key, result))
+            # Over the loop's AND the pass's persisted rows: the rebuilt row starts at zero stored.
+            finalize_method_health_delta(health, list(state["persisted"]) + persisted,
+                                         list(state["already_held"]) + already_held)
+            item["block"]["evidence_rows_added"] = len(persisted)
+        for row in accepted:
+            rb.emit("windows_hydration_accept", url=str(row.get("source_url") or ""),
+                    product_id=PRODUCT_ID, update_version=str(row.get("update_version") or ""),
+                    target_build=str(row.get("target_build") or ""), stored=write)
+
+
+def _emit_underfill_summary(summary: dict[str, Any]) -> None:
+    """Run-level structured telemetry, plus a run warning when enrichment was degraded."""
+    rb.emit("windows_underfill", product_id=PRODUCT_ID, **summary)
+    attempts = int(summary.get("attempts") or 0)
+    failures = int(summary.get("failures") or 0)
+    circuit = str(summary.get("circuit_breaker") or "closed")
+    if summary.get("outcome") == "aborted" or circuit != "closed" or (
+            attempts and failures >= HYDRATION_WARNING_FAILURE_FRACTION * attempts):
+        print("::warning title=Windows opening-post hydration::optional enrichment degraded "
+              f"(outcome {summary.get('outcome')}, {failures} of {attempts} page fetches failed, "
+              f"circuit {circuit}{', ' + str(summary.get('reason')) if summary.get('reason') else ''}); "
+              "learn_qna_search_rss status is unaffected.", flush=True)
 
 
 def apply_consensus_writeback(update_version: str, target_build: str = "") -> bool:
