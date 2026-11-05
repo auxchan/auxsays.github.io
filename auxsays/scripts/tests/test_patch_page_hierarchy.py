@@ -334,7 +334,8 @@ def run() -> int:
     # would lose the verdict box from its render window entirely. That suite inlines the maturity
     # contract (AUX-055) instead of cutting at it, so its window ends at the first OTHER include.
     first_include = next((m.start() for m in re.finditer(r"\{% include ", LAYOUT)
-                          if not LAYOUT.startswith("{% include maturity-state.html", m.start())),
+                          if not LAYOUT.startswith("{% include maturity-state.html", m.start())
+                          and not LAYOUT.startswith("{% include archived-notice.html", m.start())),
                          len(LAYOUT))
     check("H8 the verdict is inside the first-include render window other suites rely on",
           verdict < first_include, f"verdict@{verdict} first_include@{first_include}")

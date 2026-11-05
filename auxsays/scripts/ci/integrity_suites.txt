@@ -69,6 +69,12 @@ auxsays/scripts/tests/test_collector_classification.py = 33
 # row position (ids repeat across Acrobat Pro/Reader), and a second run changes nothing.
 auxsays/scripts/tests/test_recompute_evidence_classification.py = 18
 
+# The same historical repair for Teams: legacy rows (constant platform "Windows", no theme) are
+# re-derived by CONSUMING the shipped Teams producer, never by a rule of its own. Only the four
+# classification fields are written, an unclassified row stays empty, a producer-written row is out of
+# scope, and a second run changes nothing.
+auxsays/scripts/tests/test_recompute_teams_classification.py = 32
+
 # The publication half: the page's "Current reports mention ..." bucket re-reads each report's title,
 # and its OBS branch still matched "hang" inside "changing" and "window" inside "Windows". Both
 # bucketer copies are pinned, and they must agree on every counted OBS row.
@@ -217,6 +223,13 @@ auxsays/scripts/tests/test_obs_forum_evidence_family.py = 190
 # lane step (scoped, after reconciliation, before the first QA) and drives the real writer over a
 # temp tree, asserting through the SHIPPED qa_patch_records predicates rather than copies of them.
 auxsays/scripts/tests/test_davinci_projection_coherence.py = 29
+# DaVinci archive convergence (AUX-065): the newest STABLE major minus two, or older, is archived by
+# a one-way ratchet that refuses, by name, on an implausible baseline. Drives the pure plan, the
+# byte-preserving CLI, every persistence path that could reactivate an archived record (consensus
+# writeback including the old hard-coded version "21", ingestion refresh, repeated cycles), EXECUTES
+# the patch-ingest converge step's shell, renders the shipped notice through the liquid gem, and
+# guards the real corpus without pinning a state the writer is about to change.
+auxsays/scripts/tests/test_davinci_archive_policy.py = 116
 # ONE decision per patch. Three generators each chose an install/wait/avoid word from their own
 # policy, so one DaVinci beta record shipped "WAIT for production systems" as its verdict beside
 # "AVOID for production" as its summary -- and both reached readers, on the patch page and on the
@@ -298,6 +311,11 @@ auxsays/scripts/tests/test_version_outcome_attribution.py = 64
 auxsays/scripts/tests/test_windows_count_authority.py = 104
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
+# AUX-067: a build-only identity whose TITLE is about another KB or build is not a report on the build
+# the author merely quoted. Pins the eight confirmed false acceptances (stored fields as fixtures), the
+# narrow affected-range exception that keeps row 51, the shapes the rule must not touch, and the thread
+# 50506 re-run against the elevenforum fixture.
+auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
@@ -368,7 +386,7 @@ auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
 # The Windows 11 Forum discovery adapter ships DISABLED. This suite pins that disabled means disabled
 # (no request, no pool, no health row, no ownership entry), the 9-page / 40-hydration / 1.5 s request
 # budget at the session level, challenge classification, the opening-post-only parser, and the known
-# attribution weakness the unchanged authority has on thread 50506 (AUX-063, an activation blocker).
+# attribution weakness thread 50506 exposed (AUX-063), now rejected as identity_not_the_subject (AUX-067).
 # Fixture-only; the dry-run script it drives is zero-write and its output is checked here.
 auxsays/scripts/tests/test_elevenforum_adapter.py = 104
 # A monitoring claim must describe what collection actually DID. `coverage_status_label` is a

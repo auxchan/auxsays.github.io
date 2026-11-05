@@ -17,8 +17,8 @@ Nothing here writes `_data`, a record or the evidence store.
     F  discovery behaviour     ordering, window, early stop, abort on a block, isolated failures
     G  health vocabulary       blocked / partial / no_results / success; the cap is not degradation
     H  disabled means disabled no flag -> no request, no pool, no health row, no ownership entry
-    I  KNOWN AUTHORITY WEAKNESS thread 50506 is attributed to the wrong patch by the UNCHANGED
-                               authority; demonstrated here, ledgered as AUX-063, not fixed
+    I  AUX-063 RESOLVED        thread 50506 was attributed to the wrong patch by the pre-AUX-067
+                               authority; it is now rejected as identity_not_the_subject
     J  duplicates              similarity is an annotation, never a reason to drop a row
     K  registry, ledger, dry run
 
@@ -576,23 +576,31 @@ def run() -> int:  # noqa: PLR0915
     title_50506 = threads["50506"]["report_title"]
     check("I3 thread 50506's own TITLE puts the defect on 26H2 (KB5121794) and never names the 25H2 build",
           "26H2" in title_50506 and "KB5121794" in title_50506 and "26200" not in title_50506, title_50506)
-    check("I4 [KNOWN AUTHORITY WEAKNESS, AUX-063] the UNCHANGED authority attributes 50506 to 25H2 26200.9711",
-          len(u50506) == 1 and [p for p, _ in accepted_map[u50506[0]]] == ["25H2 26200.9711"],
-          str(accepted_map.get(u50506[0] if u50506 else "", [])))
-    row_50506 = accepted_map[u50506[0]][0][1] if u50506 else {}
+    rejected_50506 = {}
+    claims_i: dict = {}
+    for rec_i, target_i in ((REC_26H2, TARGET_26H2), (REC_25H2, TARGET_25H2)):
+        _acc, rej_i = mw.evaluate_candidates(rec_i, target_i, [c for c in threads.values() if c], CAPTURED, claims_i)
+        for row_i in rej_i:
+            if row_i["source_url"].endswith(".50506"):
+                rejected_50506[rec_i.update_version] = row_i
+    check("I4 [AUX-063 RESOLVED by AUX-067] the authority REJECTS 50506 on 25H2 26200.9711 as identity_not_the_subject",
+          not u50506 and rejected_50506.get("25H2", {}).get("exclusion_reason") == "identity_not_the_subject"
+          and rejected_50506["25H2"].get("counted") is False,
+          str({k: v.get("exclusion_reason") for k, v in rejected_50506.items()}))
+    row_50506 = rejected_50506.get("25H2", {})
     body_50506 = threads["50506"]["report_text"]
     check("I5 the matched build is the reporter's CURRENT BASELINE in a system-spec line, not the build with the defect",
           row_50506.get("match_basis") == "exact_os_build" and "25H2 26200.9711 (current)" in body_50506
           and "Issue on 26H2" in body_50506)
-    check("I6 the 26H2 record the report is actually about does NOT receive it",
-          not any(p.startswith("26H2") for p, _ in accepted_map[u50506[0]]))
+    check("I6 the 26H2 record the report is actually about does NOT receive it either (no identity of that record is named)",
+          "26H2" in rejected_50506 and rejected_50506["26H2"].get("counted") is False)
     check("I7 this is the shared authority's behaviour, not the adapter's: the adapter's candidate carries no identity",
           not any(k in threads["50506"] for k in ("matched_kb", "matched_os_build", "matched_feature_version",
                                                   "target_build", "counted")))
     ledger = (_REPO / "docs" / "ENGINEERING_LEDGER.md").read_text(encoding="utf-8")
-    check("I8 the weakness is ledgered as an activation blocker (AUX-063), Deferred",
-          "### AUX-063" in ledger and "| AUX-063 | Deferred |" in ledger
-          and "activation blocker" in ledger.split("### AUX-063", 1)[1].lower())
+    check("I8 the weakness is ledgered AUX-063 Resolved by AUX-067, which records the residual it does not close",
+          "| AUX-063 | Resolved |" in ledger and "### AUX-063" in ledger and "AUX-067" in ledger.split("### AUX-063", 1)[1]
+          and "### AUX-067" in ledger and "residual" in ledger.split("### AUX-067", 1)[1].lower())
 
     # ---------------------------------------------------------------- J. duplicates are candidates only
     base_text = "KB5127648 fails to install on my 26H2 laptop with error 0x80070017 every time I try."
@@ -641,11 +649,13 @@ def run() -> int:  # noqa: PLR0915
           report.get("write_surfaces_unchanged") is True and before == after and report.get("write") is False)
     check("K7 DRY RUN: inside the request budget with real spacing",
           report.get("requests", {}).get("total", 99) <= 49 and report.get("requests", {}).get("min_gap_seconds", 0) >= 1.5)
-    check("K8 DRY RUN: accepts exactly the two threads, and flags 50506 as the known misattribution",
-          sorted(a["source_url"].rsplit(".", 1)[-1] for a in report.get("accepted", [])) == ["50447", "50506"]
-          and [a["known_misattribution"] for a in report.get("accepted", []) if a["source_url"].endswith(".50506")] == [True])
-    check("K9 DRY RUN: rejects the other 18 hydrated threads, each with a reason",
-          len(report.get("rejected", [])) == 18 and all(r.get("reason") for r in report.get("rejected", [])))
+    check("K8 DRY RUN: accepts exactly thread 50447, and 50506 is no longer accepted (AUX-063 resolved by AUX-067)",
+          sorted(a["source_url"].rsplit(".", 1)[-1] for a in report.get("accepted", [])) == ["50447"]
+          and not any(a.get("known_misattribution") for a in report.get("accepted", [])))
+    check("K9 DRY RUN: rejects the other 19 hydrated threads, each with a reason, 50506 among them",
+          len(report.get("rejected", [])) == 19 and all(r.get("reason") for r in report.get("rejected", []))
+          and any(r["source_url"].endswith(".50506") and r["reason"] == "identity_not_the_subject"
+                  for r in report.get("rejected", [])))
     check("K10 DRY RUN: names the listing pages it had to serve empty rather than implying the forum had none",
           len(report.get("unrecorded_listing_pages_served_empty", [])) == 3)
 

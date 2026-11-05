@@ -37,7 +37,9 @@ from patch_collectors.base import (  # noqa: E402
 
 FIXTURES = _HERE / "tests" / "fixtures" / "elevenforum"
 WRITE_SURFACES = (ROOT / "_data", GENERATED_DIR)
-# The thread the shared authority attributes to the wrong patch (see AUX-063 and the adapter test).
+# The thread the shared authority USED to attribute to the wrong patch (AUX-063, resolved by AUX-067:
+# it is now rejected as identity_not_the_subject). Kept as a tripwire: if it is ever accepted again, the
+# report flags it as `known_misattribution` and the adapter test fails.
 KNOWN_MISATTRIBUTION_THREAD = "50506"
 
 # The two targets the authority produced from the real 26H2/25H2 records on 2026-11-04, kept as
@@ -151,7 +153,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     for url, reasons in sorted(rejected_by_url.items()):
         if url in accepted_urls:
             continue
-        top = max(set(reasons), key=reasons.count)
+        top = max(sorted(set(reasons)), key=reasons.count)  # sorted: a tie must not depend on hash order
         rejected.append({"source_url": url, "reason": top})
     reason_counts: dict[str, int] = {}
     for item in rejected:

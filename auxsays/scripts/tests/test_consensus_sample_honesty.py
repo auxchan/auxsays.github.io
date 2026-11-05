@@ -95,6 +95,10 @@ def expand_maturity(text: str) -> str:
     The include reads nothing but `include.record` (and `site.data`), so substituting the argument
     is what Jekyll's include does; it lets the standalone render keep the contract instead of
     cutting the window above it."""
+    # The DaVinci archived-release notice (AUX-065) sits ABOVE the verdict and emits nothing on a
+    # current page. It is not part of the consensus block under test, and an include tag cannot
+    # render standalone, so its one line is dropped here as the other suites drop includes.
+    text = re.sub(r"[^\n]*\{%-?\s*include\s+archived-notice\.html[^\n]*\n", "", text)
     return MATURITY_TAG.sub(lambda m: MATURITY_INCLUDE.replace("include.record", m.group(1)), text)
 
 

@@ -1057,7 +1057,6 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
                     f"Published Apr 14, 2026. This page covers the stable {product_label} {ver} release. Public beta reports are excluded."
                 ),
                 "feed_hidden": False,
-                "update_status": "current",
                 "status_change_type": "new",
                 "notification_message": "",
                 "update_channel_label": "Stable / Studio release",
@@ -1068,6 +1067,15 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
                     f"{product_label} {ver} is the stable/Studio release. Use this page for stable release risk."
                 ),
             })
+            # ARCHIVAL IS NOT OWNED HERE (AUX-065). This projection used to write
+            # `update_status: current`, which flipped an archived "21" back to current as soon as a
+            # stable 23 made it archivable. It no longer writes update_status at all; the archive
+            # policy (lib/davinci_archive_policy) is the only authority. The two fields below are
+            # a "new, visible" signal that has no meaning on a retired release, so they are not
+            # proposed for a record that is already archived.
+            if str(record.get("update_status") or "").strip().lower() == "archived":
+                fields.pop("feed_hidden", None)
+                fields.pop("status_change_type", None)
         return fields
 
     if pid == "obs-studio":

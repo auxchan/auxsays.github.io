@@ -151,12 +151,12 @@ TECHCOMMUNITY_DEFAULT_WINDOW_DAYS = 45
 #     so even with the flag set a `--write` fails closed instead of storing a row. Activation is
 #     therefore a deliberate edit in a reviewed PR, not an environment variable.
 #
-# KNOWN ACTIVATION BLOCKER (ENGINEERING_LEDGER AUX-063). The shared authority accepts a thread when
-# a record's build or feature-train token appears ANYWHERE in the opening post, including as the
-# reporter's current baseline in a system-spec line or as a comparison. Thread 50506 (a 26H2
-# enablement-package boot BSOD whose author is back on 25H2 26200.9711) is attributed to the 25H2
-# record. Measured by tests/test_elevenforum_adapter.py. This method must not be activated while it can
-# contribute that attribution, and the authority is deliberately NOT changed here.
+# ACTIVATION CAVEAT (ENGINEERING_LEDGER AUX-063, closed by AUX-067 for this shape). The shared authority
+# accepts a thread when a record's build or feature-train token appears ANYWHERE in the opening post,
+# including as the reporter's current baseline. Thread 50506 (a 26H2 enablement-package boot BSOD whose
+# author is back on 25H2 26200.9711) was attributed to the 25H2 record; `identity_not_the_subject` now
+# rejects it because the title names another KB. A baseline whose title names no competing KB or build is
+# NOT closed (AUX-067 residual R1), so activation still needs its own measurement.
 ELEVENFORUM_METHOD_ID = "elevenforum_windows_listing"
 ELEVENFORUM_SOURCE_TYPE = elevenforum.DEFAULT_SOURCE_TYPE
 ELEVENFORUM_SOURCE_NAME = elevenforum.DEFAULT_SOURCE_NAME
@@ -588,6 +588,59 @@ def classify(text: str) -> tuple[str, str, str, str, str]:
     return "unspecified Windows issue", "Windows workflow", "windows", "medium", "negative"
 
 
+# --- identity is not the subject (AUX-067) -------------------------------------
+#
+# WHAT THIS CLOSES, MEASURED OFFLINE OVER THE 535 COUNTED WINDOWS ROWS. `row_from_candidate` stamps
+# `matched_os_build` wherever the record's build token appears in the title + body, and a build alone
+# is an accepted identity (`exact_os_build`). So a post whose TITLE is about a different update --
+# "I can't install KB2267602", "KB5127936 breaks Xbox 360 Wireless Controller", "Excel 2608 (Build
+# 16.0.20326.20100) crashes" -- counted against whichever record's build the author happened to quote
+# in a system-spec line. Eight published rows were false acceptances of exactly this shape.
+#
+# THE RULE (all four, nothing broader): the identity is build-ONLY (no KB matched); the TITLE names
+# neither the target build nor the target KB; the TITLE names a competing KB or build; and nothing in
+# the title establishes the target build as AFFECTED. A KB match is never touched: a report that quotes
+# the record's own KB has identified the patch it is about. The train alone is never a competing
+# identity (a "24H2 and 25H2" title is one report about two trains), and neither is the body: the
+# title is the post's subject, the body quotes baselines constantly. The broader variants that count a
+# train in the title, or a baseline clause in the body, were measured and rejected.
+#
+# THE ONE EXCEPTION. "... update (build 26200.8875+)" says the defect begins at 26200.8875 and persists
+# above it, so 26200.8894 IS affected. The exception is deliberately mechanical: a build of the SAME
+# train with an explicit "+" / "and later" / "or later" marker written directly against it, at or
+# below the target build. It is never "any older build mentioned counts for all later patches", and it
+# is withheld when the title uses remedy vocabulary ("fixed in 26200.8875+" names a fix, not a defect).
+AFFECTED_RANGE_RE = re.compile(r"\b(\d{5})\.(\d{3,5})\s*(?:\+|(?:and|or)\s+later\b)", re.I)
+FIXED_IN_TITLE_RE = re.compile(r"(?i)\b(?:fix(?:ed|es)?|resolv\w*|address(?:ed|es)?|patch(?:ed)?|solved)\b")
+
+
+def title_states_affected_range(report_title: str, target_build: str) -> bool:
+    """The title explicitly says an open-ended range starting at or below the target build is affected."""
+    parts = str(target_build or "").strip().split(".")
+    if len(parts) != 2 or not all(p.isdigit() for p in parts):
+        return False
+    title = report_title or ""
+    if FIXED_IN_TITLE_RE.search(title):
+        return False
+    train, revision = parts[0], int(parts[1])
+    return any(m.group(1) == train and int(m.group(2)) <= revision
+               for m in AFFECTED_RANGE_RE.finditer(title))
+
+
+def identity_not_the_subject(target: dict[str, Any], report_title: str, matched_kb: str, matched_os_build: str) -> bool:
+    """A build-only identity whose TITLE is about some other update; see the block above."""
+    if not matched_os_build or matched_kb:
+        return False
+    title = report_title or ""
+    target_build = str(target.get("target_os_build") or "").strip()
+    target_kb = str(target.get("target_kb") or "").strip()
+    if _has_exact(title, target_build) or _has_exact(title, target_kb):
+        return False
+    if not (_other_kbs(title, target_kb) or _other_builds(title, target_build)):
+        return False
+    return not title_states_affected_range(title, target_build)
+
+
 def windows_learn_qna_reason(
     target: dict[str, Any],
     source_url: str,
@@ -639,7 +692,15 @@ def windows_learn_qna_reason(
         return gate_reason  # missing_kb_or_build / wrong_feature_train_for_kb / stale_due_to_patch_rollover / windows_record_missing_target_identity
     # Intent / update-attribution hardening: the concrete issue must be attributed to the
     # exact update (not a question/config/meta post that merely cites the KB/build).
-    return windows_intent_reason(report_text, report_title, matched_kb, matched_os_build)
+    reason = windows_intent_reason(report_text, report_title, matched_kb, matched_os_build)
+    if reason is not None:
+        return reason
+    # LAST, so an existing, more specific rejection (spam, how-to, system-spec) keeps its reason and
+    # only a row that would otherwise COUNT is affected. A build-only identity whose title is about
+    # another update is a report about THAT update.
+    if identity_not_the_subject(target, report_title, matched_kb, matched_os_build):
+        return "identity_not_the_subject"
+    return None
 
 
 def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: dict[str, Any], captured_at: str) -> dict[str, Any]:
