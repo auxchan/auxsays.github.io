@@ -84,6 +84,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
+| AUX-078 | Resolved | Evidence integrity | Medium | A Microsoft Q&A question re-found under an edited title was counted twice on one patch |
 
 ---
 
@@ -4318,6 +4319,53 @@ product.
 it reads 0 for DaVinci once the 100 are archived; the archived releases stay reachable from the history page.
 Not fixed here: the count is a hint, "older" cannot be asserted for an arbitrary archived record, and a change
 would alter the payload for every product.
+
+---
+
+### AUX-078 — A Microsoft Q&A question re-found under an edited title was counted twice on one patch
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-05 (R1 audit; measured read-only the same day) · **Resolved** 2026-11-05 (producer
+  fix; the stored duplicates are withdrawn by a separate audited correction)
+
+**Symptom** Four Windows patches (25H2 26200.8737 and 26200.9445, 26H2 26300.9711 and 26300.9818) each counted
+one Microsoft Learn Q&A report twice, once under each of two URL title slugs. Count and exclusive-URL count were
+each one too high on those four. No live identity was affected.
+
+**Root cause** Every dedup key in the Learn path was the slugged URL, or a hash of it. The slug follows the
+question title, so after a title edit a later feed hit (feed dates are last activity) arrived under a new slug and
+passed every guard, the durable append guard `base.evidence_key` included. The one key built on the question id,
+`SourceSegment.segment_key`, was used only by context resolution.
+
+**Fix** `lib/source_segments.learn_report_key(url)` is the canonical identity: `learn:<qid>:question:<qid>`,
+`learn:<qid>:comment:<cid>` for a `#comment-` anchor, and `learn:<qid>:reply:<id>` for an `#answer-` anchor,
+because `anchor_url` writes `#answer-` for comments too and a URL cannot tell the two apart. Anything else
+returns "", and `report_url_key` then keeps the historical normalised URL, so every other host is byte for byte
+unchanged. It is applied at:
+- the append guard and the write-authority validator (both read `evidence_key`);
+- the shared RSS run dedup;
+- the Windows row id and cross-patch claims;
+- Teams thread and candidate dedup;
+- PowerPoint's seen set and run-wide exclusivity;
+- the orchestrator's checkpointed seen-set (re-keyed on restore), reply harvest, higher-level exclusion and
+  in-run Tier 2 / Level 3 dedup;
+- the Tier 2 and Level 3 merges (held ids are never re-hashed; a new slug merges into the held row);
+- live exclusivity and duplicate citation, and QA's live-source distinctness.
+
+Stored ids and URLs are never rewritten. `audit_learn_report_identity.py` is a read-only, WARN-only replay of the
+store.
+
+**Measured** Forward-only: `auxsays/_data` and `auxsays/updates` are byte-identical (1,661 files), and the
+shipped writers change nothing on either tree. The diagnostic finds exactly the four groups above and no other
+same-identity spelling in any counted state. Under the shipped eligibility authority the four identities' exclusive
+counts drop by one and gain `duplicate_citation_urls`; nothing else changes, and the live set stays at 6.
+`test_learn_report_identity.py` (99 checks, `[blocking]`) pins it: 36 one-change mutants are each killed by a named
+check, and one is declared equivalent. Two older fixtures gave distinct reports one question id under different
+slugs; they now use distinct ids.
+
+**Reopen only if** the diagnostic reports a class (a) group whose later row was captured after this change; a
+non-Learn URL's dedup key differs from `normalize_url`; or a new Learn dedup site keys on the URL rather than
+`report_url_key`.
 
 ---
 

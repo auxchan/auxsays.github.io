@@ -43,7 +43,7 @@ from lib.build_claims import (
     select_current_failing_build, single_named_build,
 )
 from lib.patch_identity import is_build_aware, patch_key
-from lib.source_segments import parse_learn_qna_thread
+from lib.source_segments import learn_report_key, parse_learn_qna_thread
 from .base import (
     CollectorContext,
     PatchRecord,
@@ -774,13 +774,18 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
     within this record (cross-method dedup). ``run_accepted_urls`` is a run-wide map of
     canonical-URL -> canonical PATCH IDENTITY that enforces cross-PATCH exclusivity (Part D): a single report URL
     may be attributed to at most one PowerPoint version across the whole run. The two are separate
-    (cross-method dedup vs cross-version exclusivity)."""
+    (cross-method dedup vs cross-version exclusivity).
+
+    Both are keyed on the REPORT identity: the canonical Learn report identity (question id +
+    anchored segment) for a Learn Q&A URL, so a title-slug rename is the same report, and the
+    lowercased URL for every other host, exactly as before (AUX-078). ``seen`` is the set the
+    orchestrator persists per patch, so every writer into it must use this same key."""
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     seen = seen if seen is not None else set()
     for candidate in candidates:
         url = str(candidate.get("source_url") or "").strip().rstrip("/")
-        key = url.lower()
+        key = learn_report_key(url) or url.lower()
         if not url or key in seen:
             continue  # per-record cross-method canonical-URL dedup
         seen.add(key)

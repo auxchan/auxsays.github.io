@@ -60,6 +60,7 @@ from lib.report_counts import (  # noqa: E402
     format_maturity_transition, load_evidence_store, reconcile_record_counts,
 )
 from lib.collector_ownership import require_owned_methods  # noqa: E402
+from lib.source_segments import report_url_key  # noqa: E402
 from patch_collectors.base import (  # noqa: E402
     CollectorContext, append_evidence_rows, finalize_method_health_delta, generated_records,
     load_evidence, method_health_row, normalize_evidence_row, upsert_method_health,
@@ -362,9 +363,20 @@ class Pipeline:
     # ---- durable discovery-dedup state -------------------------------------
 
     def _restore_url_state(self, state: OrchestrationState) -> None:
-        """Rehydrate the dedup set / ownership map from checkpointed state."""
-        self._seen = {k: set(v) for k, v in (state.seen_urls_by_patch or {}).items()}
-        self._run_urls = dict(state.accepted_url_owners or {})
+        """Rehydrate the dedup set / ownership map from checkpointed state.
+
+        Every entry is re-keyed through ``report_url_key``, the identity PowerPoint's
+        ``evaluate_candidates`` and the reply harvest write into these structures. A checkpoint
+        written before AUX-078 holds lowercased URLs; without re-keying, a resumed run would miss
+        every Learn report it had already seen under that spelling, and the run-wide exclusivity map
+        would let one question be accepted for a second patch. The key is idempotent, so a current
+        checkpoint restores unchanged; on a re-keyed collision the first owner in stored order wins."""
+        self._seen = {k: {report_url_key(u) for u in v}
+                      for k, v in (state.seen_urls_by_patch or {}).items()}
+        owners: dict[str, str] = {}
+        for url, owner in (state.accepted_url_owners or {}).items():
+            owners.setdefault(report_url_key(url), owner)
+        self._run_urls = owners
 
     def _persist_url_state(self, state: OrchestrationState) -> None:
         state.seen_urls_by_patch = {k: sorted(v) for k, v in self._seen.items()}
@@ -709,7 +721,9 @@ class Pipeline:
             for report in cr.independent_reports(candidate, budget=budget,
                                                  exclude_segment_key=outcome.segment_key,
                                                  issue_predicate=ppt.concrete_issue):
-                url_key = str(report.segment_url).strip().rstrip("/").lower()
+                # The SAME key PowerPoint's evaluate_candidates writes into this per-patch set: a
+                # reply is identified by its question id and anchor, never by the title slug.
+                url_key = report_url_key(str(report.segment_url))
                 if url_key in self._seen.setdefault(key, set()):
                     continue
                 self._seen[key].add(url_key)
@@ -891,10 +905,12 @@ class Pipeline:
                 if built is None:
                     continue
                 # One report is one row even when several methods or several patch targets
-                # surfaced it: the identity is the report, not the route that found it.
-                if built.report_id in seen_ids:
+                # surfaced it: the identity is the report, not the route that found it -- and for a
+                # Learn Q&A report not the title slug either (AUX-078).
+                run_key = t2.report_merge_key(built.product_id, built.source_url, built.report_id)
+                if run_key in seen_ids:
                     continue
-                seen_ids.add(built.report_id)
+                seen_ids.add(run_key)
                 fresh.append(built.as_dict())
         # Promotion must consider the STORED corpus, not only what this run happened to accept. A
         # report confirmed by an earlier run would otherwise stay published as update-linked
@@ -919,8 +935,10 @@ class Pipeline:
         # `unresolved` retention rows, which render nowhere and are strictly LOWER than Level 3 --
         # counting those as "higher" silently emptied this layer on the run after it was populated,
         # and suppressed every fresh candidate too, because the same set gates admission.
-        higher = {str(u).strip().rstrip("/").lower() for u in confirmed_urls}
-        higher |= {str(r.get("source_url") or "").strip().rstrip("/").lower() for r in merged
+        # Keyed on the report identity, so a Learn report confirmed or update-linked under one
+        # title slug evicts its Level-3 card under another (AUX-078); other hosts unchanged.
+        higher = {report_url_key(str(u)) for u in confirmed_urls}
+        higher |= {report_url_key(str(r.get("source_url") or "")) for r in merged
                    if r.get("classification") == t2.TIER_UPDATE_LINKED}
         recent_fresh: list[dict[str, Any]] = []
         recent_seen: set[str] = set()
@@ -932,9 +950,13 @@ class Pipeline:
                     states_problem=_l3_states_problem,
                     states_target_build=_l3_states_target_build,
                     exclude_urls=higher)
-                if built is None or built.report_id in recent_seen:
+                if built is None:
                     continue
-                recent_seen.add(built.report_id)
+                recent_key = t2.report_merge_key(built.product_id, built.source_url,
+                                                 built.report_id)
+                if recent_key in recent_seen:
+                    continue
+                recent_seen.add(recent_key)
                 recent_fresh.append(built.as_dict())
         existing_recent = l3.load_recent(self.recent_path) if self.recent_path.exists() else []
         recent_merged, recent_stats = l3.merge_recent_reports(

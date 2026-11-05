@@ -351,6 +351,13 @@ auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
 # byte-identical, all-or-nothing refusal on any drift, idempotent. Run as the bare script on frozen
 # verbatim fixtures; never reads or writes the live store beyond hashing it.
 auxsays/scripts/tests/test_withdraw_windows_identity_not_the_subject_rows.py = 44
+# AUX-078: ONE canonical Microsoft Learn Q&A report identity (question id + anchored segment, never the
+# title slug) at every dedup site -- the durable append guard and its write-authority twin, the RSS run
+# dedup, Windows ids and cross-patch claims, Teams fetch/candidate dedup, PowerPoint seen/exclusivity,
+# the orchestrator's checkpointed seen-set, reply harvest and higher-level exclusion, Tier 2 / Level 3
+# merges, live exclusivity and QA distinctness. Every non-Learn host keeps its key byte for byte.
+# Frozen synthetic fixtures; bare-script entry points run as network-fenced subprocesses.
+auxsays/scripts/tests/test_learn_report_identity.py = 99
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit

@@ -25,6 +25,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any
 
+from .source_segments import learn_report_key, report_url_key
 from .update_linkage import LinkageOutcome, classify_update_linkage
 
 TIER_CONFIRMED = "confirmed_patch_specific"
@@ -161,6 +162,10 @@ def report_identity(product_id: str, source_url: str) -> str:
     Deliberately keyed on the report itself and not on the build, the tier, or the run, so that when
     a reporter later supplies the exact build the same row is PROMOTED rather than a second row
     appearing beside it. Promotion must never look like a new report.
+
+    The hash is deliberately left on the URL: re-hashing would re-key every held row. A Learn Q&A
+    report re-found under a new title slug mints a different id here, and the MERGE maps it back to
+    the held row by its canonical report identity (``held_report_id``, AUX-078).
     """
     canonical = str(source_url or "").strip().rstrip("/").lower()
     digest = hashlib.sha256(f"{product_id}|{canonical}".encode("utf-8")).hexdigest()[:16]
@@ -406,6 +411,48 @@ def tier2_row_from_rejection(rejected_row: dict[str, Any], *, windows: list[Rele
         captured_at=captured_at)
 
 
+# A fresh row that is a held report under a new spelling takes these from the HELD row: the held
+# row wins its identity, and a stored id or cited URL is never rewritten (AUX-078).
+HELD_IDENTITY_FIELDS = ("report_id", "source_url", "source_report_id")
+
+
+def _report_identity_key(row: dict[str, Any]) -> tuple[str, str] | None:
+    """(product, canonical Learn report identity), or None for every non-Learn row."""
+    key = learn_report_key(str(row.get("source_url") or ""))
+    return (str(row.get("product_id") or ""), key) if key else None
+
+
+def index_report_identities(by_id: dict[str, dict[str, Any]]) -> dict[tuple[str, str], str]:
+    """Held Learn rows by (product, canonical report identity) -> report id; first held row wins."""
+    index: dict[tuple[str, str], str] = {}
+    for rid, row in by_id.items():
+        key = _report_identity_key(row)
+        if key is not None:
+            index.setdefault(key, rid)
+    return index
+
+
+def held_report_id(index: dict[tuple[str, str], str], row: dict[str, Any]) -> str | None:
+    """The report id already held for this row's Learn report, or None.
+
+    Learn Q&A only: the question id plus the anchored segment identify the report, the title slug
+    does not. Two different questions, a question and its reply, and two products never match."""
+    key = _report_identity_key(row)
+    return index.get(key) if key is not None else None
+
+
+def report_merge_key(product_id: str, source_url: str, report_id: str) -> str:
+    """In-run identity of a fresh Tier-2 / Level-3 row: (product, canonical Learn report identity)
+    for a Learn Q&A URL, so two title slugs found in one run are one report; the report id for
+    every other host, exactly as before (AUX-078)."""
+    key = learn_report_key(str(source_url or ""))
+    return f"{product_id}|{key}" if key else str(report_id or "")
+
+
+def _adopt_held_identity(row: dict[str, Any], held: dict[str, Any]) -> dict[str, Any]:
+    return {**row, **{f: held[f] for f in HELD_IDENTITY_FIELDS if f in held}}
+
+
 def merge_tier2_rows(existing: list[dict[str, Any]], fresh: list[dict[str, Any]],
                      *, confirmed_urls: set[str]) -> tuple[list[dict[str, Any]], dict[str, int]]:
     """Merge a run's Tier-2 rows into the stored set, keyed on the stable report id.
@@ -413,14 +460,24 @@ def merge_tier2_rows(existing: list[dict[str, Any]], fresh: list[dict[str, Any]]
     A report that has since been CONFIRMED is removed here rather than left alongside its Tier-1
     row: the same report must never be visible in both tiers at once, or a reader counts it twice.
     That is what makes promotion a state change instead of a second row.
+
+    A Learn Q&A report re-found under a new title slug arrives with a new report id; it is merged
+    INTO the held row (which keeps its id and URL), and eviction compares report identities, so a
+    confirmation under either spelling removes it (AUX-078). Every other host is unchanged.
     """
     by_id: dict[str, dict[str, Any]] = {str(r.get("report_id")): dict(r) for r in existing
                                         if r.get("report_id")}
+    identities = index_report_identities(by_id)
     stats = {"added": 0, "updated": 0, "promoted_out": 0, "unchanged": 0}
     for row in fresh:
         rid = str(row.get("report_id") or "")
         if not rid:
             continue
+        if rid not in by_id:
+            held = held_report_id(identities, row)
+            if held is not None:
+                row = _adopt_held_identity(row, by_id[held])
+                rid = held
         if rid in by_id:
             merged = {**by_id[rid], **row}
             stats["updated" if merged != by_id[rid] else "unchanged"] += 1
@@ -428,9 +485,12 @@ def merge_tier2_rows(existing: list[dict[str, Any]], fresh: list[dict[str, Any]]
         else:
             by_id[rid] = dict(row)
             stats["added"] += 1
-    canonical_confirmed = {str(u).strip().rstrip("/").lower() for u in confirmed_urls}
+            key = _report_identity_key(row)
+            if key is not None:
+                identities.setdefault(key, rid)
+    canonical_confirmed = {report_url_key(str(u)) for u in confirmed_urls}
     for rid, row in list(by_id.items()):
-        if str(row.get("source_url") or "").strip().rstrip("/").lower() in canonical_confirmed:
+        if report_url_key(str(row.get("source_url") or "")) in canonical_confirmed:
             del by_id[rid]
             stats["promoted_out"] += 1
     ordered = sorted(by_id.values(),

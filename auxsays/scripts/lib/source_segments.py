@@ -37,6 +37,7 @@ from __future__ import annotations
 import html as _html
 import json
 import re
+import urllib.parse
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -82,6 +83,93 @@ def is_machine_generated(author_name: str, author_id: str) -> bool:
 def learn_qna_question_id(url: str) -> str:
     match = _QUESTION_ID_RE.search(str(url or ""))
     return match.group(1) if match else ""
+
+
+# --- canonical Learn report identity (AUX-078) ---------------------------------------------------
+#
+# WHY. A Learn Q&A question URL carries a title SLUG after the question id, and the slug follows the
+# title: when a title is edited (a "(SOLVED)" prefix, a reworded month, a translated first draft) a
+# later feed hit arrives under a new slug. Every dedup key in the Learn path was the slugged URL, so
+# the same report passed every guard a second time and was counted twice on one patch. The question
+# id never changes. It is the identity; the slug is decoration.
+#
+# THE TWO FORMATS, RECONCILED.
+#   * ``SourceSegment.segment_key`` is ``<qid>:<type>:<id>`` with type question / answer / comment.
+#     It needs the PARSED thread, so only segment-aware code has it (context resolution).
+#   * ``learn_report_key(url)`` is derived from the URL alone, because that is all a stored row keeps
+#     (rows carry no segment type and no segment id). It is ``learn:`` followed by the same three
+#     slots, read from the URL:
+#
+#       stored URL form                     learn_report_key                 the segment it can be
+#       .../questions/<q>/<slug>            learn:<q>:question:<q>           the question  (= learn: + segment_key)
+#       .../questions/<q>/<slug>#comment-<c> learn:<q>:comment:<c>           comment <c>   (= learn: + segment_key)
+#       .../questions/<q>/<slug>#answer-<i>  learn:<q>:reply:<i>             answer <i> OR comment <i>
+#
+#     ``reply`` is deliberate: ``anchor_url`` writes ``#answer-<id>`` for comments too (Teams stores
+#     every reply segment that way), so a URL CANNOT tell an answer from a comment and the key does
+#     not pretend to. Two consequences, both conservative: one comment stored once as ``#answer-<c>``
+#     and once as ``#comment-<c>`` keeps two keys (no producer writes ``#comment-`` today), and an
+#     answer and a comment that shared one numeric id would share a key -- exactly as their identical
+#     URLs already did before this key existed.
+#
+# WHO CAN DISTINGUISH WHAT. Segment-aware sites (context resolution's receipts, Teams segment
+# discovery, the orchestrator's reply harvest) hold the segment object and could tell an answer from
+# a comment, but every dedup decision compares a candidate against something that is only a URL --
+# a stored row, a claim, a persisted seen-set -- so every dedup site keys on the URL form, and the
+# precise ``segment_key`` stays what it was: the receipt key for context resolution.
+#
+# SAFETY PROPERTY. Two URLs share a key only if they name the same question id AND the same anchor.
+# What it merges that the old key kept apart is ONLY the slug, the locale segment, the scheme, the
+# host's case, a query string and a trailing slash. It never merges two question ids, a question with
+# one of its replies, or two replies of one thread. Anything it does not recognise -- another host,
+# another path shape, an unknown fragment -- returns "" and the caller keeps its historical key byte
+# for byte, so a URL this parser does not understand can never collapse into another report.
+LEARN_REPORT_KEY_PREFIX = "learn:"
+SEGMENT_REPLY_ANCHOR = "reply"
+_LEARN_QNA_HOST = "learn.microsoft.com"
+_LEARN_QUESTION_PATH_RE = re.compile(
+    r"/(?:[a-z]{2}-[a-z]{2}/)?answers/questions/(\d+)(?:/[^/]*)?/?", re.I)
+_ANSWER_ANCHOR_RE = re.compile(r"answer-(\d+)", re.I)
+_COMMENT_ANCHOR_RE = re.compile(r"comment-(\d+)", re.I)
+
+
+def learn_report_key(url: str) -> str:
+    """Canonical identity of one Microsoft Learn Q&A report, from its URL; "" when not one.
+
+    See the block comment above for the format, the reconciliation with ``segment_key`` and the
+    safety property. Callers use ``learn_report_key(url) or <their historical key>``."""
+    text = str(url or "").strip()
+    if not text:
+        return ""
+    try:
+        parts = urllib.parse.urlsplit(text)
+    except ValueError:
+        return ""
+    if parts.scheme.lower() not in {"http", "https"} or parts.netloc.lower() != _LEARN_QNA_HOST:
+        return ""
+    path = _LEARN_QUESTION_PATH_RE.fullmatch(parts.path)
+    if not path:
+        return ""
+    qid = path.group(1)
+    fragment = parts.fragment.strip()
+    if not fragment:
+        return f"{LEARN_REPORT_KEY_PREFIX}{qid}:{SEGMENT_QUESTION}:{qid}"
+    answer = _ANSWER_ANCHOR_RE.fullmatch(fragment)
+    if answer:
+        return f"{LEARN_REPORT_KEY_PREFIX}{qid}:{SEGMENT_REPLY_ANCHOR}:{answer.group(1)}"
+    comment = _COMMENT_ANCHOR_RE.fullmatch(fragment)
+    if comment:
+        return f"{LEARN_REPORT_KEY_PREFIX}{qid}:{SEGMENT_COMMENT}:{comment.group(1)}"
+    return ""
+
+
+def report_url_key(url: str) -> str:
+    """The dedup identity of a report URL: the canonical Learn key for a Learn Q&A URL, otherwise
+    the historical normalised URL (strip, trailing slash, lowercase), byte for byte.
+
+    Idempotent: a key is its own key, so a set of keys can be re-keyed safely (a persisted seen-set
+    written before this function existed is re-keyed on restore without changing any later entry)."""
+    return learn_report_key(url) or str(url or "").strip().rstrip("/").lower()
 
 
 @dataclass(frozen=True)

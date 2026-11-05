@@ -25,6 +25,7 @@ _REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
 
 from patch_collectors.base import PatchRecord
+from lib.source_segments import report_url_key
 import patch_collectors.microsoft_powerpoint as pp
 
 _PASS = 0
@@ -558,7 +559,7 @@ def run() -> int:
     a07, j07 = pp.evaluate_candidates(R07, T07, [dict(cD)], CAPTURED, set(), run_map)
     check("D1 one URL (subject 2410) accepts for 2410 only, 2407 rejects", len(a10) == 1 and len(a07) == 0, f"2410={len(a10)} 2407={len(a07)} r={[x.get('exclusion_reason') for x in j07]}")
     check("D1 run map attributes the URL to exactly one PATCH (2410 + its exact build)",
-          run_map.get(SHARED.lower()) == "microsoft-powerpoint|2410|18129.20158", str(run_map))
+          run_map.get(report_url_key(SHARED)) == "microsoft-powerpoint|2410|18129.20158", str(run_map))
 
     run_map2: dict = {}
     cAmb = cand("PowerPoint crash", "Seen on PowerPoint Version 2410 and also PowerPoint Version 2407; it crashes on open.", url=SHARED + "/amb")
@@ -578,7 +579,8 @@ def run() -> int:
     e07, _ = pp.evaluate_candidates(R07, T07, [dict(cUpg)], CAPTURED, set(), run_map4)
     check("D4 historical 'upgraded from 2407 to 2410' -> 2410 accepts, 2407 rejects", len(e10) == 1 and len(e07) == 0, f"2410={len(e10)} 2407={len(e07)}")
 
-    run_map5 = {SHARED.lower(): "microsoft-powerpoint|2410|18129.20158"}
+    # Keyed as evaluate_candidates keys the run map: the report identity (AUX-078).
+    run_map5 = {report_url_key(SHARED): "microsoft-powerpoint|2410|18129.20158"}
     R11, T11 = _rec("2411", "2024-12-05T00:00:00Z"), _tgt("2411", "18227.20152", "2024-12-05T00:00:00Z")
     cReuse = cand("PowerPoint Version 2411 (Build 18227.20152) crashes", "PowerPoint Version 2411 (Build 18227.20152) crashes on open after the update.", url=SHARED)
     f11, j11 = pp.evaluate_candidates(R11, T11, [dict(cReuse)], CAPTURED, set(), run_map5)

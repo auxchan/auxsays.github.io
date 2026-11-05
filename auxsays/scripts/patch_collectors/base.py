@@ -16,6 +16,7 @@ from pathlib import Path
 
 from lib.patch_identity import key_from as patch_key_from, require_build
 from lib.reddit_access_policy import is_policy_disabled_row
+from lib.source_segments import report_url_key
 from typing import Any, Iterable
 from urllib.parse import parse_qs, urlparse
 
@@ -641,9 +642,19 @@ def evidence_key(row: dict[str, Any], key_field: str) -> tuple[str, str, str, st
     whose build slot is '' for every product without a build contract -- so this stays semantically
     identical for OBS/DaVinci/Premiere/Acrobat/Windows. For a build-aware product the exact build
     participates, so two reports sharing a source URL and YYMM but naming DIFFERENT builds are two
-    rows, while two discoveries of the same report for the SAME build still deduplicate."""
+    rows, while two discoveries of the same report for the SAME build still deduplicate.
+
+    The URL slot is the canonical REPORT identity (``lib.source_segments.report_url_key``), not the
+    raw URL. For every host but Microsoft Learn Q&A that is ``normalize_url`` byte for byte. For a
+    Learn Q&A URL it is the question id plus the anchored segment, because the URL's title slug
+    follows the title: four Windows reports were stored and counted twice on one patch under two
+    slugs of one question (AUX-078). The id slot stays ``normalize_url`` of the stored id; ids are
+    labels and are never rewritten. This one function is the identity of the durable append guard
+    AND of the write-authority validator (``collector_ownership``), so the two cannot drift."""
     product_id, version, build = patch_key_from(row)
-    return (product_id, version, build, normalize_url(str(row.get(key_field) or "")))
+    value = str(row.get(key_field) or "")
+    slot = report_url_key(value) if key_field == "source_url" else normalize_url(value)
+    return (product_id, version, build, slot)
 
 
 def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
@@ -663,6 +674,10 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
     because an earlier row in this same batch had the identical URL, and neither is the same as a
     batch abandoned mid-flight by the build gate. Only this loop can tell them apart, because only
     it knows which keys were present before the batch started.
+
+    Both guard sets are ``evidence_key``, so a Microsoft Learn Q&A report re-found under a new title
+    slug is "already held" (and counted in ``out_already_held``), never a second row. The row the
+    store holds wins: its id and source_url are never rewritten, and the new spelling is not stored.
     """
     existing = load_evidence(path)
     # The keys the store held BEFORE this batch. `seen_ids` / `seen_urls` grow as the loop accepts,
@@ -756,6 +771,8 @@ def counted_rows(rows: Iterable[dict[str, Any]], product_id: str, update_version
 
 
 def normalize_url(url: str) -> str:
+    """Spelling normalisation (strip, trailing slash, lowercase). NOT a report identity on its own:
+    dedup compares ``report_url_key``, which is this for every host except Learn Q&A (AUX-078)."""
     return url.strip().rstrip("/").lower()
 
 

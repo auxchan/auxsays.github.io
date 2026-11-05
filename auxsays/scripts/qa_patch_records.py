@@ -19,7 +19,10 @@ from lib.patch_identity import patch_key
 # stripping query strings collapsed six genuinely distinct Blackmagic forum threads
 # (viewtopic.php?t=...) onto one path and falsely reported duplicate evidence. "Distinct" here means
 # exactly what it meant when the row was accepted.
-from patch_collectors.base import normalize_url, row_is_counted
+# `normalize_url` is the CITATION spelling (exact correspondence with the accepted population);
+# `report_url_key` is the REPORT identity the append guard dedups on, which differs from it only for
+# Microsoft Learn Q&A, where two title slugs of one question are one report (AUX-078).
+from patch_collectors.base import normalize_url, report_url_key, row_is_counted
 
 from lib.report_counts import (counted_evidence_counts, counted_evidence_rows,
                                windows_targets_from_front_matter)
@@ -874,10 +877,11 @@ def scan_live_consensus_claims(
                 "Record claims live consensus but at least one accepted report source carries no "
                 "usable http(s) URL, so that report cannot be verified by a reader.")
         normalized = {normalize_url(url) for url in urls if url}
-        if len(normalized) != len(sources):
+        distinct_reports = {report_url_key(url) for url in urls if url}
+        if len(distinct_reports) != len(sources):
             add(errors, path, "live_sources_not_distinct",
                 f"Record claims live consensus from {len(sources)} sources that resolve to "
-                f"{len(normalized)} distinct reports; repeated discoveries or cross-posts of one "
+                f"{len(distinct_reports)} distinct reports; repeated discoveries or cross-posts of one "
                 "report are not independent corroboration.")
 
         # THE CONTENTS, not just the shape. Every check above compares the projection's SIZE to the
