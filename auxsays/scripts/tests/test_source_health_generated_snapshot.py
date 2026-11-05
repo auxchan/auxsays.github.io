@@ -223,10 +223,27 @@ def section_d() -> None:
     check("D5 pages.yml still generates the snapshot at deploy", gen != -1)
     check("D6 and does so BEFORE the site build", gen != -1 and build != -1 and gen < build)
 
-    # no other lane regenerates + commits it (it would need an --allow, which D1 forbids)
-    others = [p.name for p in WORKFLOWS.glob("*.yml") if p.name != "pages.yml"
-              and "source_health_snapshot.py" in strip_comments(p.read_text(encoding="utf-8"))]
-    check("D7 only the deploy generates it", not others, ",".join(others))
+    # No other lane regenerates + commits it (it would need an --allow, which D1 forbids). A lane may
+    # still RUN the generator to mirror the deploy build (davinci-archive-build-check.yml does, as a
+    # pull-request build check), but only when it is read-only and cannot commit: then its snapshot
+    # is discarded with the runner. A lane with no top-level `contents: read`, any `contents: write`,
+    # `write-all`, a git commit/push, or the writeback helper fails this check.
+    writers = []
+    for p in sorted(WORKFLOWS.glob("*.yml")):
+        if p.name == "pages.yml":
+            continue
+        code = strip_comments(p.read_text(encoding="utf-8"))
+        if "source_health_snapshot.py" not in code:
+            continue
+        can_write = (re.search(r"contents:\s*write\b", code) is not None
+                     or re.search(r"\bwrite-all\b", code) is not None
+                     or re.search(r"\bgit\s+(commit|push)\b", code) is not None
+                     or "automation_writeback" in code)
+        read_only = re.search(r"^permissions:[ \t]*\r?\n[ \t]+contents:[ \t]*read\b", code, re.M) is not None
+        if can_write or not read_only:
+            writers.append(p.name)
+    check("D7 only the deploy generates it; any other lane running the generator is read-only "
+          "and never commits", not writers, ",".join(writers))
 
 
 def section_e() -> None:
