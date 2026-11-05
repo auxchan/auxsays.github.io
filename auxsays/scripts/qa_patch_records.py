@@ -639,7 +639,7 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         "Methodology",
         "AUXSAYS verdict",
         "Release date",
-        "Last evidence checked",
+        "Newest accepted report captured",
     ]
     for phrase in required_public_labels:
         if phrase not in text:
