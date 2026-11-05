@@ -53,7 +53,7 @@ auxsays/scripts/tests/test_ci_integrity_runner.py = 39
 # failed or cancelled shard outvoted by clean receipts, a receipt from another commit. This suite
 # drives the real partitioner, runner (child processes over a scratch repo), aggregator and
 # workflow (parsed, its run: scalars executed), with a negative case for every refusal code.
-auxsays/scripts/tests/test_ci_integrity_sharding.py = 189
+auxsays/scripts/tests/test_ci_integrity_sharding.py = 190
 
 # A published theme may not contradict the reporter. `issue_theme` is printed on the patch page as
 # "Current reports mention ...", and it was produced by a first-match substring scan: a disk label

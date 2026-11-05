@@ -624,6 +624,10 @@ def section_aggregator(runner, aggregator) -> None:
             lambda r: r.shard(4).update(commit="d" * 40))
     refuses("a receipt with no commit", "WRONG_COMMIT", lambda r: r.shard(4).update(commit=None))
     refuses("a checkout whose commit is unknown", "WRONG_COMMIT", own=None)
+    # Receipts that name no commit agree with a checkout that cannot name one: None == None. Only the
+    # checkout-side check stands between that pair and an acceptance.
+    refuses("an unknown checkout commit beside receipts that name none either", "WRONG_COMMIT",
+            lambda r: [r.shard(i).update(commit=None) for i in range(1, 5)], own=None)
     refuses("a checkout that is not the commit the event names", "WRONG_COMMIT", expected="e" * 40)
     refuses("a receipt from another run", "WRONG_RUN", lambda r: r.shard(1).update(run_id="1"))
     refuses("a receipt against another manifest", "WRONG_MANIFEST_DIGEST",
