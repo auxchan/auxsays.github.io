@@ -1,0 +1,332 @@
+{
+ "kind": "rebaseline",
+ "ledger": "AUX-072",
+ "generated_at": "2026-11-05T10:28:23Z",
+ "why": "origin/main advanced after the original application; its natural official-ingestion runs rewrote the six records' official-source fields. The branch merged main, took main's side for the six records, and regenerated them with the two scoped writers. The original application record beside this file is unchanged.",
+ "original_application_record": {
+  "path": "auxsays/scripts/audit/windows_identity_withdrawal_2026-11-05.json",
+  "sha256": "bff164055ce37186f88ac4f83731c5ea869b473bb30e5773585a1b5049d106af",
+  "parent_commit": "48bec6ebac4e38a349b71f7a44404c4d1585bd22"
+ },
+ "previous_branch_head": "a77960bd63a43f019b0e3861e5ca07d885f6ee72",
+ "new_parent": "2c8f1861a1e654719441b244f3cfca5a21f0006a",
+ "merge_commit": "950e39574bfbd9ae9c0522de3d612e8f4c2d81a5",
+ "store": {
+  "path": "auxsays/_data/consensus_evidence.yml",
+  "sha256_on_new_parent": "17fe9997eb59f65d42e5c75f8eb38ca17e8ebabe1fe7fdc07068d9ba9d76e07b",
+  "sha256_on_branch": "050f8125d92c34f6a3312e0915cdd677af3f03542bf022ab836722b9e2749947",
+  "new_parent_store_equals_original_before": true,
+  "branch_store_equals_original_after": true,
+  "tool_dry_run_on_new_parent": {
+   "withdrawn": 8,
+   "store_sha256_after": "050f8125d92c34f6a3312e0915cdd677af3f03542bf022ab836722b9e2749947",
+   "decisions_equal_original": true
+  }
+ },
+ "authority_sha256": "02e280e4f524f3611b110550cadc147e5ea5c59ea849db6f29a35f1abb52a6fa",
+ "authority_unchanged": true,
+ "manifest_sha256": "687df823293d26ad7ef2fc68d59230073f07df15da11fa95f60dd2ef80d5c6e0",
+ "manifest_unchanged": true,
+ "revalidation": [
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973207-windows-update-kb5101650-continually-f",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5973207/windows-update-kb5101650-continually-failing-with",
+   "matches_on_main": 1,
+   "matches_on_branch": 1,
+   "block_sha256_on_main": "6051d80f62b91299eb0c978fa57851230cce1915d5005ea92a74d078fb3f22f9",
+   "block_on_main_equals_pinned_before": true,
+   "block_sha256_on_branch": "81a40889276ac505e09916d30996755959bc3ae466464e4517ff85e1f820a876",
+   "block_on_branch_equals_pinned_after": true,
+   "counted_on_main": true,
+   "counted_on_branch": false,
+   "exclusion_reason_on_branch": "identity_not_the_subject",
+   "authority_refuses": true
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9278",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5989625/file-history-ui-and-previous-versions-broken-after",
+   "matches_on_main": 1,
+   "matches_on_branch": 1,
+   "block_sha256_on_main": "581044acffe9aba7771c8dd08497a6520645795fa0832f0bedf52bdae0db8c80",
+   "block_on_main_equals_pinned_before": true,
+   "block_sha256_on_branch": "ad779a1c4acbc9b35ade40e288497e39fb66c151c5420435c962b04a04fe1270",
+   "block_on_branch_equals_pinned_after": true,
+   "counted_on_main": true,
+   "counted_on_branch": false,
+   "exclusion_reason_on_branch": "identity_not_the_subject",
+   "authority_refuses": true
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5987983-excel-2608-build-16-0-20326-20100-cras",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5987983/excel-2608-build-16-0-20326-20100-crashes-when-fil",
+   "matches_on_main": 1,
+   "matches_on_branch": 1,
+   "block_sha256_on_main": "947f891882fdbaf4c9138888bc2d897d5b7de03bb59e801b2580c17a0d43d726",
+   "block_on_main_equals_pinned_before": true,
+   "block_sha256_on_branch": "0701527ccc539a9880cedccbf1d54789cd3ad7a697137cf7b72c9bc3e0fe567b",
+   "block_on_branch_equals_pinned_after": true,
+   "counted_on_main": true,
+   "counted_on_branch": false,
+   "exclusion_reason_on_branch": "identity_not_the_subject",
+   "authority_refuses": true
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8328",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5885634-i-cant-install-kb2267602",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5885634/i-cant-install-kb2267602",
+   "matches_on_main": 1,
+   "matches_on_branch": 1,
+   "block_sha256_on_main": "d98fa8871c0ab5565de0b8f8f0cc4861955e2b11dffa1f0cc1fd03ab0f6aa032",
+   "block_on_main_equals_pinned_before": true,
+   "block_sha256_on_branch": "6832d34a31cc23b90f9a6ce57e8ea6ab8a83f11d973f69cbcddec2da61552fc2",
+   "block_on_branch_equals_pinned_after": true,
+   "counted_on_main": true,
+   "counted_on_branch": false,
+   "exclusion_reason_on_branch": "identity_not_the_subject",
+   "authority_refuses": true
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8246",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897669-install-failed-2026-05-net-framework-s",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5897669/install-failed-2026-05-net-framework-security-upda",
+   "matches_on_main": 1,
+   "matches_on_branch": 1,
+   "block_sha256_on_main": "09c29a218730431bed213deaf6ba899d72b11cb95d5c1330a79297daafdc623f",
+   "block_on_main_equals_pinned_before": true,
+   "block_sha256_on_branch": "01a9424fda6c8d297926312ebd42f52b76f128f0946deb3c6c46fb2c08ca6750",
+   "block_on_branch_equals_pinned_after": true,
+   "counted_on_main": true,
+   "counted_on_branch": false,
+   "exclusion_reason_on_branch": "identity_not_the_subject",
+   "authority_refuses": true
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6006784-windows-security-stuck-on-logo-securit",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6006784/windows-security-stuck-on-logo-securityhealthservi",
+   "matches_on_main": 1,
+   "matches_on_branch": 1,
+   "block_sha256_on_main": "cb59ea62a9767f77020e0bb63223c91e9d3fb20d0a81393e6cc591f029bbac8f",
+   "block_on_main_equals_pinned_before": true,
+   "block_sha256_on_branch": "7e50903d8aa2193d3133556b54cd05774a4bb525c3fcb26a34f6a7609d80b393",
+   "block_on_branch_equals_pinned_after": true,
+   "counted_on_main": true,
+   "counted_on_branch": false,
+   "exclusion_reason_on_branch": "identity_not_the_subject",
+   "authority_refuses": true
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6012710-windows-security-app-microsoft-secheal",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6012710/windows-security-app-microsoft-sechealthui-stuck-a",
+   "matches_on_main": 1,
+   "matches_on_branch": 1,
+   "block_sha256_on_main": "aa3fd218e4c97ae62840a17099055a307e184ac60d4586cab1b20560af010cce",
+   "block_on_main_equals_pinned_before": true,
+   "block_sha256_on_branch": "8a7cb9f1295fb9c1986c960bf93225a04f2f79c24676b7b6ae01ea0913be0e3e",
+   "block_on_branch_equals_pinned_after": true,
+   "counted_on_main": true,
+   "counted_on_branch": false,
+   "exclusion_reason_on_branch": "identity_not_the_subject",
+   "authority_refuses": true
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "id": "microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6055182-kb5127936-breaks-xbox-360-wireless-con",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6055182/kb5127936-breaks-xbox-360-wireless-controller-in-a",
+   "matches_on_main": 1,
+   "matches_on_branch": 1,
+   "block_sha256_on_main": "9c3274d72ad81e8e08867f6336b2e3ff4697c7df55cfbabe8f6854a280c83085",
+   "block_on_main_equals_pinned_before": true,
+   "block_sha256_on_branch": "cfd7ebe2238e85ecb6c91f2ee5c06ea1083a8bb04ac684295b7741dae86869eb",
+   "block_on_branch_equals_pinned_after": true,
+   "counted_on_main": true,
+   "counted_on_branch": false,
+   "exclusion_reason_on_branch": "identity_not_the_subject",
+   "authority_refuses": true
+  }
+ ],
+ "retained_row_51": {
+  "update_version": "25H2",
+  "target_build": "26200.8894",
+  "source_url": "https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render",
+  "block_sha256": "6184670045ecac190ccab0a1083e9b8670a03fbbc855753b92727e608d87e5eb",
+  "unchanged": true,
+  "counted_on_branch": true,
+  "authority_refuses": false
+ },
+ "predicate_sweep_hits": {
+  "on_new_parent": 8,
+  "on_branch": 0
+ },
+ "population": {
+  "windows_counted": [
+   535,
+   527
+  ],
+  "all_products_counted": [
+   1485,
+   1477
+  ],
+  "store_rows": [
+   2658,
+   2658
+  ],
+  "rows_left_population": 8,
+  "rows_joined_population": 0
+ },
+ "per_record": [
+  {
+   "record_file": "auxsays/updates/generated/2026-04-14-windows-11-25h2-26200-8246.md",
+   "update_version": "25H2",
+   "target_build": "26200.8246",
+   "counted_on_main": 21,
+   "counted_on_branch": 20,
+   "delta": -1,
+   "update_report_count": [
+    21,
+    20
+   ],
+   "record_sha256_on_main": "851f4dbb7b882ffa34b4d035a395c64362d57c2961bcf34ad7f802553e4b1dc6",
+   "record_sha256_on_branch": "0ec65c69889036268fae96e6c3d55e12f82e283e41945094fbf617232aefc5c3"
+  },
+  {
+   "record_file": "auxsays/updates/generated/2026-04-30-windows-11-25h2-26200-8328.md",
+   "update_version": "25H2",
+   "target_build": "26200.8328",
+   "counted_on_main": 7,
+   "counted_on_branch": 6,
+   "delta": -1,
+   "update_report_count": [
+    7,
+    6
+   ],
+   "record_sha256_on_main": "f01a6cfaa426e3aaabfafd2c3beb234be3d57ee2d36bd3f9a87f944f704f3920",
+   "record_sha256_on_branch": "80a4188a6b09110edd7d0313d50ba57ea513e80fde64538dffa5fedad7cd1c76"
+  },
+  {
+   "record_file": "auxsays/updates/generated/2026-08-11-windows-11-25h2-26200-9168.md",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "counted_on_main": 22,
+   "counted_on_branch": 20,
+   "delta": -2,
+   "update_report_count": [
+    22,
+    20
+   ],
+   "record_sha256_on_main": "d0d2cb7c85995950a6330e792177c053a48f4913d6fc2e4719e3ab1ccfc68135",
+   "record_sha256_on_branch": "05d3bee957f32ce7e4a648713199a966d177cffbc593d046869cb6d16be17d71"
+  },
+  {
+   "record_file": "auxsays/updates/generated/2026-08-27-windows-11-25h2-26200-9278.md",
+   "update_version": "25H2",
+   "target_build": "26200.9278",
+   "counted_on_main": 7,
+   "counted_on_branch": 6,
+   "delta": -1,
+   "update_report_count": [
+    7,
+    6
+   ],
+   "record_sha256_on_main": "744ed64b49906e532c376d3dba4352b07c0e9053028b3698ff2d444c4294e6d9",
+   "record_sha256_on_branch": "7d4b479a8b725e610511ba7f00fc6a325ccc774db95c5d57a4e0accf62f3de2d"
+  },
+  {
+   "record_file": "auxsays/updates/generated/2026-09-14-windows-11-25h2-26200-9457.md",
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "counted_on_main": 27,
+   "counted_on_branch": 25,
+   "delta": -2,
+   "update_report_count": [
+    27,
+    25
+   ],
+   "record_sha256_on_main": "7a8ee5d7c1b0c00dc2dc1409b7a8363f5ca93496a505efdc2309519f2f39c05e",
+   "record_sha256_on_branch": "08d9f5f5daf0f4ee0a6ec8a057d093b0274b011ffaea1f986b926808f96d809e"
+  },
+  {
+   "record_file": "auxsays/updates/generated/2026-10-13-windows-11-26h2-26300-9711.md",
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "counted_on_main": 20,
+   "counted_on_branch": 19,
+   "delta": -1,
+   "update_report_count": [
+    20,
+    19
+   ],
+   "record_sha256_on_main": "5f1639c5016267312e9499385ea457f7f2218ab73052c01a58e254c783415f51",
+   "record_sha256_on_branch": "12907d99b5870d0404d3d3a23d21a547422b946117e0184ecf73ad2aee807b07"
+  }
+ ],
+ "writers": [
+  {
+   "command": "build_consensus_from_evidence.py --product-id microsoft-windows-11 --reconcile-only",
+   "records_reconciled": [
+    "2026-04-14-windows-11-25h2-26200-8246.md: microsoft-windows-11 25H2 21 -> 20",
+    "2026-04-30-windows-11-25h2-26200-8328.md: microsoft-windows-11 25H2 7 -> 6",
+    "2026-08-11-windows-11-25h2-26200-9168.md: microsoft-windows-11 25H2 22 -> 20",
+    "2026-08-27-windows-11-25h2-26200-9278.md: microsoft-windows-11 25H2 7 -> 6",
+    "2026-09-14-windows-11-25h2-26200-9457.md: microsoft-windows-11 25H2 27 -> 25",
+    "2026-10-13-windows-11-26h2-26300-9711.md: microsoft-windows-11 26H2 20 -> 19"
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id microsoft-windows-11 --write-all --confirm-write",
+   "records_written": 6,
+   "records_skipped": 49,
+   "included": 527,
+   "excluded": 35
+  }
+ ],
+ "new_parent_already_converged": {
+  "apply_records_written": 0,
+  "reconcile": "Reconcile-only: every record already matches its exact-patch evidence population."
+ },
+ "second_run": {
+  "reconcile": "Reconcile-only: every record already matches its exact-patch evidence population.",
+  "apply_records_written": 0,
+  "tree_byte_identical": true
+ },
+ "live_set": {
+  "on_new_parent": [
+   "2025-12-09-windows-11-25h2-26200-7462.md",
+   "2026-01-13-windows-11-25h2-26200-7623.md",
+   "2026-02-10-windows-11-25h2-26200-7840.md",
+   "2026-04-02-obs-studio-32-1-1.md",
+   "2026-04-21-obs-studio-32-1-2.md",
+   "2026-08-14-obs-studio-32-2-2.md"
+  ],
+  "on_branch": [
+   "2025-12-09-windows-11-25h2-26200-7462.md",
+   "2026-01-13-windows-11-25h2-26200-7623.md",
+   "2026-02-10-windows-11-25h2-26200-7840.md",
+   "2026-04-02-obs-studio-32-1-1.md",
+   "2026-04-21-obs-studio-32-1-2.md",
+   "2026-08-14-obs-studio-32-2-2.md"
+  ],
+  "unchanged": true
+ },
+ "problems": []
+}
