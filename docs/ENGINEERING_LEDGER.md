@@ -77,6 +77,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
+| AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
 
 ---
 
@@ -4382,6 +4383,14 @@ release) are unchanged. Same 16 governed checks.
 request is green. The archive pull request ran its integrity suites before any record was archived.
 A policy that rewrites the corpus at run time should also run the integrity suites over the converged
 tree.
+
+**Reopen only if** `test_collector_traversal_order.py` fails or reports anything other than its governed
+16 checks on a commit that changes only generated data (a natural ingestion or archive run), or another
+governed suite that reads the real corpus through `generated_records()` goes red on such a data-only
+commit.
+
+---
+
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.
