@@ -31,9 +31,8 @@ from email.utils import parsedate_to_datetime
 from typing import Any
 from urllib.error import HTTPError, URLError
 
-from lib.source_segments import learn_report_key
-
 from .base import date_part, source_url_is_specific
+from lib.source_segments import learn_report_key
 
 LEARN_QNA_RSS_ENDPOINT = "https://learn.microsoft.com/api/search/rss"
 DEFAULT_SOURCE_TYPE = "microsoft_learn_qna"
