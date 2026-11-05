@@ -1,0 +1,93 @@
+[
+ {
+  "file": "2026-04-14-windows-11-25h2-26200-8246.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8246",
+   "target_kb": "KB5083769",
+   "target_os_build": "26200.8246",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-04-14T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-04-30-windows-11-25h2-26200-8328.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8328",
+   "target_kb": "KB5083631",
+   "target_os_build": "26200.8328",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-04-30T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-07-18-windows-11-25h2-26200-8894.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8894",
+   "target_kb": "KB5121767",
+   "target_os_build": "26200.8894",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-07-18T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-08-11-windows-11-25h2-26200-9168.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "target_kb": "KB5121003",
+   "target_os_build": "26200.9168",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-08-11T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-08-27-windows-11-25h2-26200-9278.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9278",
+   "target_kb": "KB5120998",
+   "target_os_build": "26200.9278",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-08-27T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-09-14-windows-11-25h2-26200-9457.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9457",
+   "target_kb": "KB5129195",
+   "target_os_build": "26200.9457",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-09-14T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-10-13-windows-11-26h2-26300-9711.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "target_kb": "KB5127648",
+   "target_os_build": "26300.9711",
+   "target_feature_version": "26H2",
+   "target_release_date": "2026-10-13T00:00:00Z"
+  }
+ }
+]

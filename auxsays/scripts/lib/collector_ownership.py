@@ -10,6 +10,11 @@ which the runner treats as a collector failure -> full transaction rollback.
 The authoritative ownership key is product_id (a collector's identity). ALLOWED_METHODS is the
 per-product method allowlist derived from committed telemetry + collector code; it is the deliberate
 control point -- adding a genuinely new method to a collector requires updating this manifest.
+
+ALLOWED_METHODS is ALSO the monitoring authority's list of EXPECTED methods (monitoring_health H7):
+an owned method with no telemetry row refuses live certification for every identity of its product.
+So every owned method must be emitted by its product's production path on every identity that path
+walks, executing or `disabled`. Pinned by tests/test_owned_method_lifecycle.py (AUX-074).
 """
 from __future__ import annotations
 
@@ -37,7 +42,8 @@ from patch_collectors.base import (
     generated_records,
 )
 
-# Per-product allowed method IDs (EMH ground truth + collector code). See audit notes.
+# Per-product allowed method IDs (EMH ground truth + collector code). See audit notes. Every entry
+# is also an H7 expectation, so a method no production path emits must not be listed (AUX-074).
 ALLOWED_METHODS: dict[str, set[str]] = {
     "blackmagic-davinci": {
         "known_watchlist", "reddit_search", "creative_cow_forum_search",
@@ -50,19 +56,20 @@ ALLOWED_METHODS: dict[str, set[str]] = {
         "adobe_community_algolia_search",
         "reddit_search", "adobe_community_search", "adobe_community_bug_tab_index",
         "adobe_community_known_url_recheck", "brave_search_api", "wayback_snapshot_recheck",
-        "creativecow_forum_index", "creativecow_brave_search", "known_watchlist",
+        # known_watchlist removed (AUX-074): not in PREMIERE_METHODS or its plan, 0 Premiere rows ever.
+        "creativecow_forum_index", "creativecow_brave_search",
         # An operator's local capture promotion (promote_local_playwright_captures.py). Owned so its
         # health rows are written under an identity this manifest declares; MANUAL_ONLY below keeps
         # it from ever counting as -- or being expected of -- a running monitoring pipeline.
         "local_playwright_capture_promotion",
     },
     "adobe-acrobat-reader": {
+        # bug_tab_index / known_url_recheck removed (AUX-074): Premiere methods, never in the Acrobat collector.
         "adobe_community_algolia_search", "adobe_community_search", "reddit_search",
-        "adobe_community_bug_tab_index", "adobe_community_known_url_recheck",
     },
     "adobe-acrobat-pro": {
+        # bug_tab_index / known_url_recheck removed (AUX-074): Premiere methods, never in the Acrobat collector.
         "adobe_community_algolia_search", "adobe_community_search", "reddit_search",
-        "adobe_community_bug_tab_index", "adobe_community_known_url_recheck",
     },
     # obs_forum is the SECOND source family for OBS -- the project's own support forum, a
     # different platform and different authors, not a second route into GitHub Issues.
