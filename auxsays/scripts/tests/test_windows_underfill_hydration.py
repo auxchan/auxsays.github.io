@@ -430,11 +430,12 @@ class FakeOpener:
         return fake_urlopen(request, timeout)
 
 
-def default_urlopen_tripwire(*a, **k):
+def default_urlopen_tripwire(request, timeout=None):
     # fetch_bounded must go through its same-origin opener; urllib's default urlopen follows a
-    # redirect to any host, so a call here is recorded and refused.
+    # redirect to any host. A call here is COUNTED (check G13) and then served like any other, so a
+    # reverted transport changes that one number and nothing else.
     STATE["default_urlopen"] += 1
-    raise OSError("urllib.request.urlopen used instead of the same-origin opener")
+    return fake_urlopen(request, timeout)
 
 
 urllib.request.urlopen = default_urlopen_tripwire
@@ -1173,7 +1174,8 @@ def run() -> int:  # noqa: PLR0915
         c_attempts = (by_build(allb)[IDS["C9818"][1]].get("underfill_hydration") or {}).get("attempts")
         check("G8 D3 end to end: the newest patch is fetched even though older closable patches could "
               "absorb all 45, and it is fetched FIRST",
-              c_attempts == 5 and all(f"/{8_102_000 + i}/" in allb["urlopen"][i] for i in range(5)),
+              c_attempts == 5 and len(allb["urlopen"]) >= 5
+              and all(f"/{8_102_000 + i}/" in allb["urlopen"][i] for i in range(5)),
               f"{c_attempts} {allb['urlopen'][:5]}")
 
         def stopped(o: dict) -> tuple[int, str, int]:
