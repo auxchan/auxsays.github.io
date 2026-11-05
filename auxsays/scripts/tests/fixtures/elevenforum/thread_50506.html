@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html id="XF" lang="en-US" dir="LTR">
 <head>
-<title>Win11 26H2 (KB5121794) -&gt; boot BSODs on cold start, 25H2 stable | MSI GF63 12VF, dual boot | Windows 11 Forum</title>
+<title>Win11 26H2 (KB5121794): cold-start BSODs, 25H2 fine | Windows 11 Forum</title>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
  "@type": "WebPage",
- "url": "https://www.elevenforum.com/t/win11-26h2-kb5121794-boot-bsods-on-cold-start-25h2-stable-msi-gf63-12vf-dual-boot.50506/",
+ "url": "https://www.elevenforum.com/t/win11-26h2-kb5121794-cold-start-bsods-25h2-fine.50506/",
  "mainEntity": {
   "@type": "DiscussionForumPosting",
-  "@id": "https://www.elevenforum.com/t/win11-26h2-kb5121794-boot-bsods-on-cold-start-25h2-stable-msi-gf63-12vf-dual-boot.50506/",
-  "headline": "Win11 26H2 (KB5121794) -> boot BSODs on cold start, 25H2 stable | MSI GF63 12VF, dual boot",
+  "@id": "https://www.elevenforum.com/t/win11-26h2-kb5121794-cold-start-bsods-25h2-fine.50506/",
+  "headline": "Win11 26H2 (KB5121794): cold-start BSODs, 25H2 fine",
   "datePublished": "2026-10-30T18:48:00+00:00",
-  "url": "https://www.elevenforum.com/t/win11-26h2-kb5121794-boot-bsods-on-cold-start-25h2-stable-msi-gf63-12vf-dual-boot.50506/",
-  "text": "Hi,\n\nRecurring BSODs on first boot of the day since mid Oct. Reproducible with\n26H2 enablement package (KB5121794), gone on 25H2. Summary of what I've\nalready ruled out below.\n\nENV\n  MSI Thin GF63 12VF (MS-16R8)\n  i7-12650H / 16GB / RTX 4060 Laptop + Intel UHD\n  SSD: Kingston OM8PGP4512Q-AI 512GB NVMe\n  BIOS: E16R8IMS.117 (flashed 21 Oct, was 10E from 2023)\n  Win11 Home 25H2 26200.9711 (current). Issue on 26H2 / KB5121794.\n  Dual boot Linux Mint 22.3, UEFI + GRUB, Secure Boot on\n  Disk 0: EFI 300M | C: 406.5G NTFS | Linux 47.85G | Recovery 1.03G | Recovery 21.13G\n\nCONFIG (partly changed during dual boot setup)\n  BitLocker:       fully decrypted, protection off\n  Hibernation:     off (-> no Fast Startup)\n  Pagefile:        was 0 MB until 16 Oct, now system managed\n  System Restore:  was off until 16 Oct, now on\n  BIOS:            VMD off, Fast Boot on, UEFI, SB on\n  WU:              paused until 04 Dec, \"get latest updates\" off\n\nTIMELINE\n  pre dual boot  no issues, updates fine\n  post setup     Windows Hello PIN lost (TPM related), re-enrolled\n  16 Oct  26H2 + Rainbow Six Siege -> 0x13A KERNEL_MODE_HEAP_CORRUPTION,\n          reproducible. Removing KB5121794 fixed it (matches Ubisoft advisory)\n  18 Oct  cold boot, 25H2 -> 0xc0000218, hangs at 0%. 2nd boot OK.\n          chkdsk /scan clean (0 bad sectors), sfc repaired files,\n          DISM RestoreHealth OK, sfc rerun clean\n  19 Oct  cold boot -> 0xc0000218 again (twice that day). 2nd boot OK\n  21 Oct  cold boot -> 0x74 BAD_SYSTEM_CONFIG_INFO. 2nd boot OK.\n          Get-PhysicalDisk: Healthy/OK, wear 0, 25C\n          mdsched: no errors, sfc clean. PIN lost again after mdsched.\n          BIOS 10E -> 117 via USB (UEFI BIOS Update)\n  22-29 Oct  25H2 + new BIOS: clean cold boots every day\n  29 Oct  KB5121794 reinstalled by WU\n  30 Oct  cold boot, 26H2 -> 0x7A KERNEL_DATA_INPAGE_ERROR, hangs at 0%,\n          then Automatic Repair failed (SrtTrail.txt).\n          Booted on next try, removed KB5121794, back on 25H2\n\nNOTES\n  - only on first boot after several hours powered off, warm reboots never crash\n  - all codes = disk read / registry hive load failing during boot\n  - BSOD hangs at 0%, volmgr 161 \"Dump file creation failed\" logged after each one\n  - clean shutdown logged before every crashed boot\n  - no disk/stornvme errors for the internal SSD in the System log\n  - Linux booted once in that period, didn't touch NTF"
+  "url": "https://www.elevenforum.com/t/win11-26h2-kb5121794-cold-start-bsods-25h2-fine.50506/",
+  "text": "Synthetic test post.\n\nSince mid October the first boot of each day ends in a BSOD. It happens with the 26H2 enablement package (KB5121794) and not on 25H2. What I have ruled out is below.\n\nSETUP\n  Generic 15-inch laptop, 12th-gen CPU, 16 GB RAM, NVMe SSD (fixture values)\n  Win11 Home 25H2 26200.9711 (current). Issue on 26H2 / KB5121794.\n  Dual boot with a Linux distribution, UEFI, Secure Boot on\n\nTIMELINE\n  16 Oct  26H2 plus a game -> 0x13A KERNEL_MODE_HEAP_CORRUPTION, repeatable. Removing KB5121794 fixed it\n  18 Oct  cold boot on 25H2 -> 0xc0000218, stuck at 0%. Second boot fine. chkdsk, sfc and DISM clean\n  21 Oct  cold boot -> 0x74 BAD_SYSTEM_CONFIG_INFO. Second boot fine. Firmware reflashed from USB\n  22-29 Oct  25H2 with the new firmware: clean cold boots every day\n  29 Oct  Windows Update put KB5121794 back\n  30 Oct  cold boot on 26H2 -> 0x7A KERNEL_DATA_INPAGE_ERROR, then Automatic Repair failed. Removed KB5121794 again, back on 25H2\n\nNOTES\n  - only the first boot after hours powered off; warm restarts never crash\n  - every code points at disk or registry reads failing during boot\n  - no storage errors in the System log"
  }
 }
 </script>
 </head>
 <body>
-<!-- fixture: trimmed to the JSON-LD block the adapter reads; replies omitted -->
+<!-- fixture: SYNTHETIC opening post written by AUXSAYS for tests; structure mirrors the JSON-LD block the adapter reads; no replies -->
 </body>
 </html>
