@@ -80,6 +80,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
+| AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 
 ---
 
@@ -4460,6 +4461,33 @@ change ships without a measured need (budget tuning is a separate decision).
 16 checks on a commit that changes only generated data (a natural ingestion or archive run), or another
 governed suite that reads the real corpus through `generated_records()` goes red on such a data-only
 commit.
+
+---
+
+### AUX-069 — `source_health.yml` was a stale tracked copy of a deploy-generated snapshot
+
+- **Status** Resolved · **Area** Deploy hygiene · **Severity** Low
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
+
+**Symptom / gap** `auxsays/_data/source_health.yml` was last committed on 2026-05-02: 37 rows against 47
+configured sources, in the retired Staged/Healthy/Failing vocabulary. `pages.yml` regenerates it before
+every `jekyll build`, so the live site was never wrong, but the stale tracked copy read as authoritative,
+and three writeback cleanups restored it with `git checkout --`.
+
+**Consumer audit** No template, include, layout or page reads it, and no Python module reads it (the
+generator only writes it). Named in code only by `source_health_snapshot.py`, `pages.yml`, the cleanup
+steps of `davinci-updates.yml`, `obs-evidence-collection.yml` and `promote-davinci-verified-reports.yml`,
+and two forbidden-write-path lists in the Playwright capture tooling (unaffected). A local build without
+it renders nothing different.
+
+**Fix** The file is untracked and git-ignored; deploy-time generation is unchanged. The three cleanups no
+longer `git checkout` it (an untracked pathspec fails the step) and `rm -f` any stray copy; they still
+restore the tracked `patch_ingest_state.json`. The generator now exits non-zero without writing when its
+source list is unreadable or empty, so a failed generation is never an empty snapshot that reads as success.
+Monitoring semantics are unchanged. `test_source_health_generated_snapshot.py` pins all of it.
+
+**Reopen only if** a template or module starts reading `source_health.yml` (it must then fail closed when
+the file is absent), or a lane needs to commit it.
 
 ---
 

@@ -407,6 +407,11 @@ auxsays/scripts/tests/test_elevenforum_adapter.py = 104
 # that tracks configuration rather than outcome, so section [A] pins fail-closed directly:
 # `healthy` is checked last and must be earned.
 auxsays/scripts/tests/test_monitoring_truthfulness.py = 58
+# source_health.yml is a GENERATED deploy snapshot, never tracked (AUX-069): the committed copy was 37 rows
+# against 47 sources in a retired vocabulary. Pins that it is git-ignored, that no template or module
+# reads it, that the generator refuses an empty snapshot, and that no lane `git checkout`s the now
+# untracked path (which fails the whole cleanup step).
+auxsays/scripts/tests/test_source_health_generated_snapshot.py = 33
 auxsays/scripts/tests/test_monitoring_status.py = 42
 auxsays/scripts/tests/test_orchestration_production_adoption.py = 75
 auxsays/scripts/tests/test_orchestration_r1.py = 55
