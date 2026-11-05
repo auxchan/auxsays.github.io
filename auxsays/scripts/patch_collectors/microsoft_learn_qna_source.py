@@ -31,6 +31,8 @@ from email.utils import parsedate_to_datetime
 from typing import Any
 from urllib.error import HTTPError, URLError
 
+from lib import learn_fetch_policy
+
 from .base import date_part, source_url_is_specific
 
 LEARN_QNA_RSS_ENDPOINT = "https://learn.microsoft.com/api/search/rss"
@@ -181,15 +183,24 @@ def blocked_signature(text: str, *, status: int | None, content_type: str) -> st
 
 def _fetch_feed_text(url: str, *, timeout: int = 30, max_bytes: int = 1_500_000) -> tuple[int, str, str]:
     """Fetch raw RSS text. Returns (status, content_type, text) on a 2xx response; raises
-    LearnQnaAccessError on any HTTP/network failure. Tests monkeypatch THIS function."""
+    LearnQnaAccessError on any HTTP/network failure. Tests monkeypatch THIS function.
+
+    The transport is the shared Learn same-origin policy (lib/learn_fetch_policy): only the search
+    endpoint on learn.microsoft.com over https, and no redirect away from it. A feed answered from
+    anywhere else would otherwise be parsed into candidates whose links nobody checked. A refusal is
+    ``LearnQnaAccessError`` with the policy's own reason and signature "blocked", so the callers'
+    existing handling records it as a named failure instead of crashing on an unknown exception."""
     request = urllib.request.Request(url, headers=FEED_HEADERS)
     try:
-        with urllib.request.urlopen(request, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
+        with learn_fetch_policy.open_url(request, family=learn_fetch_policy.SEARCH_RSS,
+                                         timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
             raw = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="windows_learn", max_bytes=max_bytes)
             status = int(getattr(response, "status", 200) or 200)
             content_type = response.headers.get("content-type", "")
             charset = response.headers.get_content_charset() or "utf-8"
             return status, content_type, raw.decode(charset, errors="replace")
+    except learn_fetch_policy.LearnFetchRefused as exc:
+        raise LearnQnaAccessError(exc.reason, status=exc.status, signature="blocked") from exc
     except HTTPError as exc:
         body = ""
         try:

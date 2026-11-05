@@ -34,6 +34,7 @@ import re
 from typing import Any
 
 from lib import evidence_classification as ec
+from lib import learn_fetch_policy
 from lib import source_segments
 from lib.post_dates import original_post_date_from_html
 from lib.target_outcome import target_is_contradicted
@@ -506,6 +507,20 @@ def qna_segment_candidates(thread_url: str, page_html: str, *,
     return out
 
 
+def page_error_reason(exc: Exception) -> str:
+    """The reason a question-page fetch failed, for method health.
+
+    The page fetcher is ``qna_tags.fetch``, whose errors are ``QnaTagError``s -- which the RSS
+    module's ``error_reason`` does not know, so it reported every one of them by class name. For a
+    Learn same-origin refusal that would have published a refused off-site redirect as the
+    meaningless "QnaTagError". A refusal keeps the policy's own name; every other failure is
+    reported exactly as before."""
+    reason = str(getattr(exc, "reason", "") or "")
+    if learn_fetch_policy.is_refusal(reason):
+        return reason
+    return qna_source.error_reason(exc)
+
+
 def discover_learn_qna(record: base.PatchRecord, context: Any, errors: list[dict[str, Any]],
                        *, fetch_page: Any = None) -> list[dict[str, Any]]:
     """Identity + symptom queries -> thread URLs -> authored segments."""
@@ -532,7 +547,7 @@ def discover_learn_qna(record: base.PatchRecord, context: Any, errors: list[dict
         try:
             page = fetcher(canonical if canonical.endswith("/") else canonical + "/")
         except Exception as exc:                                  # noqa: BLE001
-            errors.append({"source_url": canonical, "reason": qna_source.error_reason(exc)})
+            errors.append({"source_url": canonical, "reason": page_error_reason(exc)})
             continue
         if not page:
             continue
@@ -630,6 +645,11 @@ def method_status(candidates: list, errors: list, accepted: int) -> str:
     """
     reasons = " ".join(str(e.get("reason") or "") for e in (errors or [])).lower()
     if any(tok in reasons for tok in _REFUSAL_TOKENS):
+        return "blocked"
+    # A page the Learn same-origin policy refused (redirect_off_host, ...) is a refusal too. Matched
+    # against the closed vocabulary, not a token list, and BEFORE the budget and fallback branches,
+    # so a refused redirect can never publish as partial-with-no-name or as nothing found.
+    if learn_fetch_policy.first_refusal(errors):
         return "blocked"
     if any(tok in reasons for tok in _BREAKAGE_TOKENS):
         return "broken"
@@ -740,7 +760,9 @@ class TeamsCommunityCollector(base.ProductCollector):
                 status = method_status(cands, errs, m_accepted)
                 blocked = ""
                 if status in ("blocked", "broken") and errs:
-                    blocked = str(errs[0].get("reason") or "")[:120]
+                    # A same-origin refusal is named first: it is the reason a page was not read.
+                    blocked = str(learn_fetch_policy.first_refusal(errs)
+                                  or errs[0].get("reason") or "")[:120]
                 method_health.append(base.method_health_row(
                     product_id=TEAMS_PRODUCT_ID,
                     update_version=str(record.update_version or ""),
