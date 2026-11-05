@@ -69,11 +69,18 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
+| AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
+| AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
+| AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
+| AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
+| AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
+| AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
+| AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 
 ---
 
@@ -175,6 +182,63 @@ detected.
 **Known residuals** Every other layout still has it — see AUX-010.
 
 **Reopen only if** patch-page headings regress below 4.5:1 in either OS theme.
+
+---
+
+### AUX-063 — The Windows authority can attribute a report to the patch whose build is only the reporter's baseline
+
+- **Status** Resolved (the thread-50506 shape; the wider baseline-only class is a residual of AUX-067) · **Area** Evidence acceptance · **Severity** Medium
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04 · **Closed by** AUX-067
+
+**Symptom** Windows 11 Forum thread 50506 ("Win11 26H2 (KB5121794) -> boot BSODs on cold start, 25H2
+stable"; baseline `Win11 Home 25H2 26200.9711 (current). Issue on 26H2 / KB5121794`) was accepted on
+the 25H2 26200.9711 record by `exact_os_build`, while the 26H2 record it is about did not receive it.
+
+**Resolution** AUX-067's `identity_not_the_subject` rejects it on 25H2: a build-only identity, a title
+naming neither the record's build nor its KB, and a competing KB in the title. Re-run against the
+elevenforum fixture, 50506 is accepted on no record and 50447 (KB5127648 on 26H2) is still accepted once.
+`test_elevenforum_adapter.py` I4 now pins the rejection.
+
+**Known residual** A baseline mention whose title carries no competing KB or build (AUX-067 residual R1)
+is not closed. The Windows 11 Forum adapter ships disabled and is not activated by this change.
+
+**Reopen only if** thread 50506, or any fixture of the same shape, is accepted by the Windows authority.
+
+---
+
+### AUX-067 — A Windows report whose title is about another update counted against the build it merely quoted
+
+- **Status** Resolved (Part A: future acceptance; Part B, the withdrawal of existing rows, is a separate step) · **Area** Evidence acceptance · **Severity** High
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04 (Part A)
+
+**Symptom** `row_from_candidate` stamps `matched_os_build` wherever the record's build appears in the title
+plus body, and a build alone is an accepted identity. A post whose title is about a DIFFERENT KB or build
+therefore counted against whichever record's build the author quoted in a spec line. Measured offline over
+the 535 counted Windows rows: eight false acceptances (25H2 9168 x2, 9278, 8328, 8246, 9457 x2; 26H2 9711).
+
+**Fix** `windows_learn_qna_reason` rejects with `identity_not_the_subject`, after the identity gate and
+before the intent filter, only when ALL hold: the identity is build-only (no KB matched); the title names
+neither the target build nor the target KB; the title names a competing KB or build; and the title does not
+state an affected range. The one exception is mechanical: a same-train build with an explicit `+`,
+`and later` or `or later` written against it, at or below the target build, with no remedy wording in the
+title. It keeps the legitimate row 51 (25H2 26200.8894, "build 26200.8875+"). It is never "any older build
+counts".
+
+**Measured** Whole counted population replayed offline: 8 rows rejected, 1 kept by the exception, 535 -> 527;
+six records lose 1-2 reports; no evidence-strength band, maturity, live-eligibility or exclusive-URL gate
+changes (25H2 9457 lands exactly on 25, still Medium); every verdict stays WAIT. `test_windows_identity_not_the_subject.py`
+pins the eight, row 51, the boundary of the exception and the shapes the rule must not touch, with 17 mutants.
+
+**Residuals** R1: a baseline mention whose title names no competing KB or build (the "M2" class, 16-84 rows
+by the characterization) is not deterministically separable and is not closed. R2: a title that names only a
+feature train is deliberately not a competing identity (the broader variants were measured and rejected).
+R3: the eight existing rows stay counted until the separate audited withdrawal (counted: false, reason
+`identity_not_the_subject`) goes through the guarded writeback. R4: an Office build escaping the
+foreign-product veto (row 41) is rejected here by identity, but the veto gap itself is a separate item.
+
+**Reopen only if** a counted Windows row has a title that names another update and neither the record's
+build nor KB (outside a stated affected range), or the exception ever keeps a range that starts above the
+target or is on another train.
 
 ---
 
@@ -4093,6 +4157,52 @@ this one.
 
 ---
 
+### AUX-070 — The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another
+
+- **Status** Resolved · **Area** CI governance · **Severity** Medium
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05 (code); the first sharded pull-request run is the
+  acceptance evidence
+
+**Symptom / gap** ci-integrity ran every governed suite serially in one job. Run 41932362848 (PR #210):
+123 suites, 1,949 s of suite time, ~34 min against `timeout-minutes: 45`; two suites alone took 386 s and
+383 s. Each new suite moved every pull request closer to a timeout on content that had passed.
+
+**Fix** Four `shard` matrix jobs (`fail-fast: false`, isolated checkouts) each run
+`run_integrity_tests.py --suite all --shard I/4 --receipt $RUNNER_TEMP/...`: every per-suite protection is
+unchanged (it is the same `run_one()` and the same tree hash), and the receipt records commit, manifest
+digest, shard, each suite's governed and actual counts and exit status, completion state and the mutation
+outcome. The slices are longest-first over `integrity_suites.txt`, weighted by `suite_duration_hints.json`,
+which is scheduling only: a suite it does not name runs at a default weight and it holds no count. The
+final job keeps the name `integrity`, needs the shards and runs under `always()`;
+`aggregate_integrity_receipts.py` re-reads the manifest from its own checkout, recomputes the partition,
+and accepts only when the passing suites are exactly the governed population, once each, at the governed
+count, on this commit and run, with `needs.shard.result == success` (26 named refusal codes). The
+downstream gates then run unchanged, and a last `always()` step re-checks the shard result so a cancelled
+run ends red. No step uses `continue-on-error`.
+
+**Measured** The hint table (run 41932362848's per-suite seconds) balances four shards at 487-491 s each,
+against 1,949 s serial. Local proof (Windows, this branch plus the #212 test fix, four isolated worktrees
+in parallel): the union is exactly run 41932362848's 123 suites plus this one, each executed once; all 123
+report the same totals as that run (7,195 checks), and the aggregate accepted. The same receipts with a
+`cancelled` shard result are rejected. Wall time and balance on the runners are measured by the first
+pull-request run.
+
+**Verification** `test_ci_integrity_sharding.py = 192` [blocking]: partition properties; the runner's
+protections inside a shard (child processes over a scratch git repository, including timeout, printed FAIL
+lines and both mutation guards); a negative case for every refusal code, with the set of codes reached
+required to equal the aggregator's; the workflow parsed and its `run:` scalars executed under bash; and
+`guarded_merge.decide()` refusing cancelled, failed, incomplete and absent runs.
+
+**Residual** A pull request that edits ci-integrity.yml still supplies its own verdict (AUX-013).
+Cancellation is pinned by `always()` and by executing the final step, not by a real cancelled run. The
+receipt upload uses `overwrite: true` so a re-run shard replaces its own receipt; whether a re-run attempt
+can download the first attempt's artifacts is unmeasured (if it cannot, the re-run fails closed).
+
+**Reopen only if** a sharded run can end green with a governed suite unexecuted, executed twice, or at a
+count other than its governed one, or a failed, cancelled or missing shard leaves the run `success`.
+
+---
+
 ### AUX-066 — Stored Teams evidence still said platform "Windows" and carried no theme, area or severity
 
 - **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
@@ -4173,26 +4283,71 @@ would alter the payload for every product.
 
 ### AUX-062 — Three classifier misses the sprint measured but did not fix
 
-- **Status** Deferred · **Area** Evidence integrity · **Severity** Low
-- **First seen** 2026-11-04
+---
+
+### AUX-062 — Three classifier misses the sprint measured; the DaVinci two are fixed, two are deferred
+
+- **Status** Resolved for the DaVinci "gpu" cue (C) and the DaVinci "plugin issues" bucket (D) · A and B
+  Deferred · **Area** Evidence integrity · **Severity** Low
+- **First seen** 2026-11-04 · **C and D resolved** 2026-11-04
 
 **Symptom / gap**
-- A bare "Windows" with no OS context reads as unknown. Examples: "freezes my entire Windows",
-  "Windows Davinci Resolve Studio 20.1 ...", "Windows color managed HDR viewers". Three counted
-  DaVinci rows lost a supported label in AUX-059, though never to a wrong OS.
-- OBS has no generic crash theme, so "OBS Crashes if ..." falls to "unspecified issue".
-- DaVinci treats "gpu" as a performance cue, so "The GPU failed to perform image processing" reads as
-  a performance regression.
+- A. A bare "Windows" with no OS context reads as unknown. DEFERRED.
+- B. OBS has no generic crash theme, so "OBS Crashes if ..." falls to "unspecified issue". DEFERRED.
+- C. DaVinci treated "gpu" as a performance cue in the producer (`gpus?` in the performance rule) and in
+  BOTH publication bucketers (`"gpu" in text`). "The GPU failed to perform image processing", "Your GPU
+  memory is full" and a hardware spec line were published as performance slowdowns: 10 of the 36 stored
+  "performance regression" rows (28%), no false negatives. RESOLVED.
+- D. `apply_consensus_to_records._public_issue_bucket` had a DaVinci branch
+  (`if "plugin" in text: return "plugin issues"`) that the builder never had. "plugin" enters only through
+  the area label "plugins / codecs", so seven codec/media reports were published as "plugin issues" on
+  v16, 20.1, 20.1.1, 20.3.1, 21 PB1, 21 and 21.0. RESOLVED.
 
-**Current impact** Row platform feeds no count, verdict or template. A theme miss feeds prose only.
+**Fix (C and D)**
+- C: `gpus?` is removed from the DaVinci performance rule and `"gpu"` from both bucketers. `gpu` stays in the
+  frozen DaVinci sentiment triggers: sentiment is verdict-bearing and was not part of this item. Genuine
+  performance, lag and slow matches are unchanged.
+- D: the writer's "plugin issues" branch is deleted. The builder is the reference and already printed
+  "compatibility issue".
+- Historical rows: `recompute_evidence_classification.py` gained `--only-id` (with `--product-id`). It
+  considers only the named rows, refuses an unknown or repeated id, and never writes `platform`. Nine of
+  the ten rows were corrected through it, theme, workflow area and severity only (audit:
+  `scripts/audit/aux062_davinci_gpu_historical_2026-11-04.json`).
 
-**Why deferred** Each is a vocabulary change with its own corpus measurement. The sprint authorised
-only demonstrated defects.
+**Unresolved: one stored row.** `...1os2u3c-ai-multicam-smartswitch-the-gpu-failed-to` (stored on the
+20.2.3 page, "AI Multicam SmartSwitch - The GPU failed to perform image processing Error 9 Fix") still carries
+"performance regression". The recompute tool's producer guard refuses it: its retained text says "crash", so
+neither the replaced chain nor the shipped classifier reproduces the stored label, and the label's origin
+is not in hand. The shipped classifier would call it a crash (severity medium to high). It is NOT corrected,
+and no forward-only change is a historical correction. Its page keeps the bucket until that row is judged.
 
-**Revisit trigger** The next change to `lib/evidence_classification.py` or to the OBS or DaVinci theme
-tables.
+**Measured (scratch tree, DaVinci-scoped `apply_consensus_to_records`, no unscoped write)**
+- Code alone changes exactly seven pages: 16, 20.1, 20.1.1, 20.3.1, 21 PB1, 21 and 21.0 ("plugin issues"
+  becomes "compatibility issue"). Five of them carry it in the consensus sentence (16, 20.1, 20.1.1, 20.3.1, 21.0);
+  PB1 and 21 only in accepted-report labels.
+- With the nine rows corrected, four more pages change classification labels: 20.3.2 and 21.0.4 (labels
+  only), 21.1 (its third phrase "performance slowdowns" becomes "render/export failures") and 21.1.1
+  ("performance slowdowns" leaves its top three).
+- Counts, verdicts, maturity, sentiment, identity, URLs, dates and status events: unchanged on all 1517
+  records. Only `issue_theme`, `workflow_area` and, in page prose, issue labels differ.
 
-**Work that this item must not block** Live promotion and the classification sprint.
+**Verification.** `test_davinci_gpu_plugin_bucket.py = 34` [blocking]: verbatim false-positive titles,
+genuine controls, the frozen sentiment trigger, a parity test over the whole rule-table x title grid and
+every DaVinci row in the store (the two bucketers agree on all 335), the nine corrected rows, and
+`--only-id` on a temporary store. Each fix, reverted alone, fails named checks.
+
+**Deferred specs.**
+- A. 0 false positives, 11 false negatives (DaVinci 9 of 335, OBS 2 of 288). No consumer reads row
+  platform, and the broad fix regresses correct unknowns ("switch from Windows to Linux", Teams "Windows
+  only" contrasts). Smallest safe fix if ever wanted: add `installation` to `_WINDOWS_AFTER_RE` and a
+  `windows (10|11)` parenthesis form, which recovers 2 of the 11.
+- B. 52 OBS titles name a crash and only 2 are crash-themed. Appending a lookaround rule last changes 46
+  rows with 1 false positive, and it must not match the crash-log URL path. Public prose is unchanged on
+  all 13 versions, so the reader benefit is nil. Separately, the OBS sentiment triggers omit generic
+  "crash" (16 of 18 crash rows are moderate); that is verdict-bearing and not part of this item.
+
+**Reopen only if** a new, material production defect appears in the DaVinci classification, or the
+unresolved SmartSwitch row is judged.
 
 ---
 
@@ -4278,6 +4433,85 @@ row is collected. Pages that rely on Reddit evidence keep an honest monitoring s
 the retention and publication-rights review concludes.
 
 **Work that this item must not block** D3 archival, Windows source diversification, Teams integrity.
+
+### AUX-071 — Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red
+
+- **Status** Resolved · **Area** Test integrity · **Severity** High
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom** After the first natural ingestion run applied the archive policy (AUX-065: 100 of 122 DaVinci
+records archived), `test_collector_traversal_order.py` crashed with `IndexError` in its budget simulation,
+so the integrity run failed on every pull request (first seen on the C1b Part A run). The suite reads the
+real corpus through `generated_records("blackmagic-davinci")`, which skips archived records by default,
+leaving 22 records against a measured budget of 33.
+
+**Fix** The simulation now reads the whole DaVinci corpus (`include_archived=True`). The defect it pins is
+the ordering over the full corpus, so the non-vacuity checks (the old order provably misses the newest
+release) are unchanged. Same 16 governed checks.
+
+**Lesson** A suite that reads the live corpus can be broken by a natural data change after its pull
+request is green. The archive pull request ran its integrity suites before any record was archived.
+A policy that rewrites the corpus at run time should also run the integrity suites over the converged
+tree.
+
+---
+
+### AUX-068 — PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the ceiling, the thread population or exhaustion
+
+- **Status** Resolved · **Area** Observability · **Severity** Low
+- **First seen** 2026-11-04
+
+**Symptom / gap** All 29 `learn_qna_segment_context` rows carried `fetches=200` against a configured
+200, so a saturated stage and a finished one read the same. The orchestrator already computed the
+distinct and eligible thread counts but sent them only to a receipt.
+
+**Resolved** The context-resolution health note now appends `max_fetches`, `successful_fetches`
+(threads fetched AND parsed, counted from the per-thread outcome cache, independent of the attempt
+counter), `distinct_threads`, `eligible_threads`, `thread_scope`, `budget_exhausted`,
+`threads_refused_budget` and, when exhausted, `coverage_bounded=yes`. `fetches=` is attempts, bumped
+before the transport call. **Scope:** the two thread counts describe the RUN-WIDE population across
+every patch target of the run (`thread_scope=all_patch_targets_of_this_run`), not the row's patch, so
+every row of a run carries the same values; `eligible_threads` is the subset ranked 0 or 1 by
+`resolution_priority`. `budget_exhausted` means attempts reached the ceiling; whether anything was
+actually left unfetched is `threads_refused_budget`. Telemetry only: the 200 budget, discovery order,
+acceptance, counts, verdicts and status vocabulary are untouched. Pinned by
+`test_powerpoint_budget_telemetry.py` (33 checks, 14 mutants killed), including the real writer.
+
+**Reopen only if** the note loses a field, a thread count is presented as per-patch, or a budget
+change ships without a measured need (budget tuning is a separate decision).
+**Reopen only if** `test_collector_traversal_order.py` fails or reports anything other than its governed
+16 checks on a commit that changes only generated data (a natural ingestion or archive run), or another
+governed suite that reads the real corpus through `generated_records()` goes red on such a data-only
+commit.
+
+---
+
+### AUX-069 — `source_health.yml` was a stale tracked copy of a deploy-generated snapshot
+
+- **Status** Resolved · **Area** Deploy hygiene · **Severity** Low
+- **First seen** 2026-11-04 · **Resolved** 2026-11-04
+
+**Symptom / gap** `auxsays/_data/source_health.yml` was last committed on 2026-05-02: 37 rows against 47
+configured sources, in the retired Staged/Healthy/Failing vocabulary. `pages.yml` regenerates it before
+every `jekyll build`, so the live site was never wrong, but the stale tracked copy read as authoritative,
+and three writeback cleanups restored it with `git checkout --`.
+
+**Consumer audit** No template, include, layout or page reads it, and no Python module reads it (the
+generator only writes it). Named in code only by `source_health_snapshot.py`, `pages.yml`, the cleanup
+steps of `davinci-updates.yml`, `obs-evidence-collection.yml` and `promote-davinci-verified-reports.yml`,
+and two forbidden-write-path lists in the Playwright capture tooling (unaffected). A local build without
+it renders nothing different.
+
+**Fix** The file is untracked and git-ignored; deploy-time generation is unchanged. The three cleanups no
+longer `git checkout` it (an untracked pathspec fails the step) and `rm -f` any stray copy; they still
+restore the tracked `patch_ingest_state.json`. The generator now exits non-zero without writing when its
+source list is unreadable or empty, so a failed generation is never an empty snapshot that reads as success.
+Monitoring semantics are unchanged. `test_source_health_generated_snapshot.py` pins all of it.
+
+**Reopen only if** a template or module starts reading `source_health.yml` (it must then fail closed when
+the file is absent), or a lane needs to commit it.
+
+---
 
 ## Adding an entry
 

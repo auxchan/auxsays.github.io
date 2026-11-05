@@ -134,7 +134,11 @@ def main() -> int:
         check(f"3b {filename} still calls it", uses)
 
     print(NEWLINE + "[4] budget simulation over the REAL corpus")
-    real = generated_records("blackmagic-davinci")
+    # The defect is a property of the ORDERING over the whole corpus, so simulate over every
+    # DaVinci record, archived ones included. Since the archive policy (AUX-065) the default
+    # `generated_records` walk skips archived releases (100 of 122 on its first run), which left
+    # fewer records than the measured budget and crashed this section with an IndexError.
+    real = generated_records("blackmagic-davinci", include_archived=True)
     check("4a the corpus is large enough for traversal order to matter",
           len(real) > 40, f"{len(real)} records")
     if real:

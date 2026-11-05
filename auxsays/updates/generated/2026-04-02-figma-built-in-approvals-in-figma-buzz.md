@@ -17,8 +17,8 @@ update_version: Built-in Approvals in Figma Buzz
 update_logo_text: FIG
 update_published_at: '2026-04-02T00:00:00.000Z'
 update_last_checked: '2026-07-22T08:46:37Z'
-source_last_checked: '2026-10-03T00:52:07Z'
-official_body_last_checked: '2026-10-03T00:52:07Z'
+source_last_checked: '2026-11-05T02:20:54Z'
+official_body_last_checked: '2026-11-05T02:20:54Z'
 record_last_updated: '2026-07-22T08:46:37Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-03T00:52:07Z'
+  url: https://www.figma.com/release-notes/?title=built-in-approvals-in-figma-buzz
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-05T02:20:54Z'
   url: https://www.figma.com/release-notes/?title=built-in-approvals-in-figma-buzz
   status: captured-from-rss-feed
   body_captured: true

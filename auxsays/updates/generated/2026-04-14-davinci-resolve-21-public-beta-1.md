@@ -164,21 +164,11 @@ legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evi
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
-source_last_checked: '2026-11-04T17:28:57Z'
-official_body_last_checked: '2026-11-04T17:28:57Z'
+source_last_checked: '2026-11-05T09:03:36Z'
+official_body_last_checked: '2026-11-05T09:03:36Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-11-03T03:59:19Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
-- at: '2026-11-03T17:13:14Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
 - at: '2026-11-04T02:11:34Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
@@ -194,8 +184,18 @@ official_source_attempts:
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
+- at: '2026-11-05T02:22:30Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
+- at: '2026-11-05T09:03:36Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
 evidence_last_checked: '2026-06-14T06:05:56Z'
-record_last_updated: '2026-10-13T02:09:21.339342Z'
+record_last_updated: '2026-11-05T08:04:04.063122Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
@@ -345,7 +345,7 @@ accepted_report_sources:
   source_date: '2026-05-16'
   version_matched: Resolve 21 beta
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   workflow_area: plugins / codecs
 - source_name: r/davinciresolve
   source_type: reddit community report

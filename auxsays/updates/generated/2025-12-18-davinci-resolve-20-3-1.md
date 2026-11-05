@@ -20,7 +20,7 @@ update_published_at: '2025-12-18T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-20T20:31:58Z'
 official_body_last_checked: '2026-05-20T20:31:58Z'
-record_last_updated: '2026-09-27T18:30:33.770697Z'
+record_last_updated: '2026-11-05T08:03:58.691015Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -36,8 +36,8 @@ official_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separ
 release_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
   Beta 1. Use this page for stable/Studio evidence and the beta page for beta-build risk.
 consensus_report: '14 user reports found for DaVinci Resolve 20.3.1. Current reports mention render/export failures,
-  startup or application crashes, and plugin issues. Current reports are Reddit-heavy, so production users should
-  test before updating. Sources represented: r/davinciresolve and Creative COW DaVinci Resolve.'
+  startup or application crashes, and compatibility issue. Current reports are Reddit-heavy, so production users
+  should test before updating. Sources represented: r/davinciresolve and Creative COW DaVinci Resolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -173,7 +173,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.1 has 14 user reports found. User reports show a repeat pattern.
-  Current reports mention render/export failures, startup or application crashes, and plugin issues. Production
+  Current reports mention render/export failures, startup or application crashes, and compatibility issue. Production
   editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
   so production users should test before updating.'
 evidence_samples:
@@ -207,7 +207,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1qxstro/bad_playback_performance_on_good_hardware/
@@ -222,8 +222,8 @@ status_change_type: new
 notification_message: ''
 update_channel_label: Stable / Studio evidence record
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures, startup or application crashes, and plugin
-  issues. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures, startup or application crashes, and compatibility
+  issue. Production editors with active delivery deadlines should wait or test on copied projects.
 record_note: This page covers DaVinci Resolve 20.3.1. Beta reports are excluded from this record.
 evidence_sample_visible_limit: 5
 accepted_report_sources:
@@ -306,7 +306,7 @@ accepted_report_sources:
   source_date: '2026-02-07'
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   workflow_area: plugins / codecs
 - source_name: r/davinciresolve
   source_type: reddit community report

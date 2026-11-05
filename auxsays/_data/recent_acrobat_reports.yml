@@ -4,7 +4,26 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-11-04T14:29:48Z'
+  captured_at: '2026-11-05T06:40:47Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.003.22075|26.003.22075
+  report_date: '2026-11-04'
+  report_excerpt: Output Preview not showing overprinting on white object accurately When reviewing white
+    objects that have been mistakenly set to overprint, the output preview is not showing them accurately,
+    whether "Simulate Overprinting" is on or off if they are set to overprint. This seems...
+  report_id: adobe-acrobat-pro:a3112b6ec9d2a4bd
+  report_title: Output Preview not showing overprinting on white object accurately
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/output-preview-not-showing-overprinting-on-white-object-accurately-1654371
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.003.22075
+  window_start: '2026-11-02'
+  window_version: 26.003.22075
+- attribution_state: not_established
+  captured_at: '2026-11-05T06:40:47Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -23,7 +42,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-04T14:29:48Z'
+  captured_at: '2026-11-05T06:40:47Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -43,7 +62,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-04T14:29:48Z'
+  captured_at: '2026-11-05T06:40:47Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -144,7 +163,7 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
-  captured_at: '2026-11-04T14:29:48Z'
+  captured_at: '2026-11-05T06:40:47Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -184,7 +203,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-11-04T06:13:10Z'
+  captured_at: '2026-11-05T06:40:47Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -224,7 +243,7 @@ reports:
   window_start: '2026-05-18'
   window_version: 26.001.21563
 - attribution_state: not_established
-  captured_at: '2026-11-04T06:13:10Z'
+  captured_at: '2026-11-05T06:40:47Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -584,7 +603,26 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
-  captured_at: '2026-11-04T14:51:07Z'
+  captured_at: '2026-11-05T07:02:03Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.003.22075|26.003.22075
+  report_date: '2026-11-04'
+  report_excerpt: Output Preview not showing overprinting on white object accurately When reviewing white
+    objects that have been mistakenly set to overprint, the output preview is not showing them accurately,
+    whether "Simulate Overprinting" is on or off if they are set to overprint. This seems...
+  report_id: adobe-acrobat-reader:3a29224efefc488d
+  report_title: Output Preview not showing overprinting on white object accurately
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/output-preview-not-showing-overprinting-on-white-object-accurately-1654371
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.003.22075
+  window_start: '2026-11-02'
+  window_version: 26.003.22075
+- attribution_state: not_established
+  captured_at: '2026-11-05T07:02:03Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -705,7 +743,7 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
-  captured_at: '2026-11-04T14:51:07Z'
+  captured_at: '2026-11-05T07:02:03Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -765,7 +803,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-11-04T06:34:02Z'
+  captured_at: '2026-11-05T07:02:03Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -785,7 +823,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-11-02T06:18:22Z'
+  captured_at: '2026-11-05T07:02:03Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true

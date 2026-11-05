@@ -19,7 +19,7 @@ update_published_at: '2026-08-05T00:00:00Z'
 update_last_checked: '2026-08-05T07:31:23Z'
 source_last_checked: '2026-10-02T01:12:47Z'
 official_body_last_checked: '2026-10-02T01:12:47Z'
-record_last_updated: '2026-11-04T08:00:27.214752Z'
+record_last_updated: '2026-11-05T08:04:10.669315Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -338,8 +338,8 @@ accepted_report_sources:
   source_date: '2026-10-19'
   version_matched: 21.0.4
   patch_version_matched: true
-  issue: performance slowdowns in timeline / GPU performance
-  workflow_area: timeline / GPU performance
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.

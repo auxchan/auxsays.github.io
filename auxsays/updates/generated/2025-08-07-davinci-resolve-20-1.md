@@ -19,7 +19,7 @@ update_published_at: '2025-08-07T00:00:00Z'
 update_last_checked: '2026-07-22T04:19:49Z'
 source_last_checked: '2026-07-22T04:19:49Z'
 official_body_last_checked: '2026-07-22T04:19:49Z'
-record_last_updated: '2026-10-19T14:55:42.218944Z'
+record_last_updated: '2026-11-05T08:03:49.562519Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -40,8 +40,8 @@ release_summary: This software update adds support for Apple Iimmersive workflow
   from http://bmd.link/Ndw4pz. This version requires a DaVinci Resolve Studio license dongle or software activation
   code.
 consensus_report: '12 user reports found for DaVinci Resolve 20.1. Current reports mention render/export failures,
-  startup or application crashes, and plugin issues. Current reports are Reddit-heavy, so production users should
-  test before updating. Sources represented: r/davinciresolve.'
+  startup or application crashes, and compatibility issue. Current reports are Reddit-heavy, so production users
+  should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -142,7 +142,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 update_consensus_summary: 'WAIT: DaVinci Resolve 20.1 has 12 user reports found. User reports show a repeat pattern.
-  Current reports mention render/export failures, startup or application crashes, and plugin issues. Production
+  Current reports mention render/export failures, startup or application crashes, and compatibility issue. Production
   editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
   so production users should test before updating.'
 evidence_samples:
@@ -176,7 +176,7 @@ evidence_samples:
   counted: true
   version_matched: '20.1'
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1muhe61/davinci_resolve_20_keeps_crashing/
@@ -240,7 +240,7 @@ accepted_report_sources:
   source_date: '2025-08-29'
   version_matched: '20.1'
   patch_version_matched: true
-  issue: plugin issues in plugins / codecs
+  issue: compatibility issue in plugins / codecs
   workflow_area: plugins / codecs
 - source_name: r/davinciresolve
   source_type: reddit community report
@@ -302,8 +302,8 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures, startup or application crashes, and plugin
-  issues. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures, startup or application crashes, and compatibility
+  issue. Production editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.

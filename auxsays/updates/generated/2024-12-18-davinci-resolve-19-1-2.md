@@ -23,7 +23,7 @@ record_last_updated: '2026-07-26T02:20:57.556247Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
-update_status: current
+update_status: archived
 update_feed_title: DaVinci Resolve 19.1.2
 update_detail_title: DaVinci Resolve 19.1.2
 update_consensus_label: Negative

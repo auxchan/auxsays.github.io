@@ -23,7 +23,7 @@ record_last_updated: '2026-08-06T06:39:21.894702Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
-update_status: current
+update_status: archived
 update_feed_title: DaVinci Resolve 17.4
 update_detail_title: DaVinci Resolve 17.4
 update_consensus_label: Negative
