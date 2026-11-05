@@ -2,11 +2,19 @@ name: DaVinci archive build check
 
 # Pull-request validation only. It applies the DaVinci archive convergence to THIS runner's scratch
 # checkout, then builds the site exactly as pages.yml does, and proves the archived notice renders on
-# an archived page and on no active one. Nothing is committed, pushed, deployed or dispatched: the
-# job has read-only permissions and the converged tree is discarded with the runner.
+# every archived DaVinci page and on no other page. Nothing is committed, pushed, deployed or
+# dispatched: the job has read-only permissions and the converged tree is discarded with the runner.
+#
+# Every assertion is time-invariant. The first version asserted the one-time migration baseline (a
+# fixed count of changed records and of notice pages, and one fixed active page), so once the
+# migration ran in production the convergence changed nothing and the check failed on every pull
+# request that triggered it. The rules now hold for zero changed records and for any later
+# legitimate ratchet; they live in auxsays/scripts/ci/davinci_archive_check.py, where
+# test_davinci_archive_check.py drives each one.
 on:
   pull_request:
     paths:
+      - 'auxsays/scripts/ci/davinci_archive_check.py'
       - 'auxsays/scripts/lib/davinci_archive_policy.py'
       - 'auxsays/scripts/apply_davinci_archive_policy.py'
       - 'auxsays/_includes/archived-notice.html'
@@ -74,36 +82,32 @@ jobs:
           fi
           bundle list | sed -n '1,12p'
 
-      # The converged tree exists only on this runner. Nothing below commits or pushes it.
+      # The converged tree exists only on this runner. Nothing below writes it back anywhere.
+      # Before convergence: the archive plan must not be refused, the tracked tree must equal the
+      # commit, and no untracked file may sit among the generated records, so every later change is
+      # attributable to the convergence. The plan is kept in runner temporary storage, outside the
+      # checkout.
+      - name: Validate the archive plan before convergence
+        run: |
+          set -euo pipefail
+          python auxsays/scripts/ci/davinci_archive_check.py preplan --out "$RUNNER_TEMP/davinci-archive-preplan.json"
+
       - name: Apply the archive convergence to the scratch tree
         run: |
           set -euo pipefail
           python auxsays/scripts/apply_davinci_archive_policy.py --write --confirm-write
 
-      - name: Assert exactly 100 records became archived, by one line each
+      # Any number of transitions, including none. Judged per FILE against the commit, with rename
+      # detection off: each changed file must be an existing DaVinci record (read from the commit's own
+      # front matter, since other products share the directory) that the plan held, changed by exactly
+      # one front-matter line from current to archived. An added, deleted or renamed record, an
+      # unarchive, any other edit and any file outside the generated records fail by name, and every
+      # pending transition must be one of the accepted edits. The plan is then taken again and must
+      # be accepted with nothing pending.
+      - name: Assert the convergence made only planned current-to-archived edits and left nothing pending
         run: |
           set -euo pipefail
-          changed=$(git diff --name-only -- auxsays/updates/generated | wc -l)
-          echo "changed generated records: ${changed}"
-          if [ "${changed}" -ne 100 ]; then
-            echo "::error::Expected exactly 100 records archived under the measured baseline, got ${changed}."
-            exit 1
-          fi
-          other=$(git diff --name-only | grep -v '^auxsays/updates/generated/' || true)
-          if [ -n "${other}" ]; then
-            echo "::error::The convergence changed files outside auxsays/updates/generated:"
-            echo "${other}"
-            exit 1
-          fi
-          added=$(git diff -U0 -- auxsays/updates/generated | grep -c '^+update_status: archived$' || true)
-          removed=$(git diff -U0 -- auxsays/updates/generated | grep -c '^-update_status: current$' || true)
-          # grep exits 1 on "no match", which is the GOOD outcome here, so the filter is grouped.
-          other_lines=$(git diff -U0 -- auxsays/updates/generated | { grep -E '^[+-]' || true; } | { grep -vE '^(\+\+\+|---) ' || true; } | { grep -vE '^(\+update_status: archived|-update_status: current)$' || true; } | wc -l)
-          echo "archived lines added: ${added}, current lines removed: ${removed}, other changed lines: ${other_lines}"
-          if [ "${added}" -ne 100 ] || [ "${removed}" -ne 100 ] || [ "${other_lines}" -ne 0 ]; then
-            echo "::error::The diff is not exactly 100 one-line current->archived edits."
-            exit 1
-          fi
+          python auxsays/scripts/ci/davinci_archive_check.py convergence --plan "$RUNNER_TEMP/davinci-archive-preplan.json"
 
       # The next steps are copied from pages.yml, in the same order, up to and including the build.
       - name: Strip image metadata
@@ -138,22 +142,12 @@ jobs:
       - name: Verify Systems Monitor static integration
         run: npm run verify:site --prefix systems-monitor/app
 
-      - name: Assert the archived notice renders on an archived page and on no active one
+      # Exhaustive, not a count: every DaVinci record's page, resolved from its permalink, exists and
+      # carries the notice exactly once if the record is archived and not at all otherwise; no other
+      # page carries it; the archived population is at least the ratchet floor and at least one record
+      # is active. 19.1.4 is the fixed archived spot page (the ratchet keeps it archived for good);
+      # the active spot page is chosen from the converged tree, so it moves when a new major ships.
+      - name: Assert every DaVinci page shows the archived notice exactly when its record is archived
         run: |
           set -euo pipefail
-          site=auxsays/_site/updates/blackmagic-design/blackmagic-davinci
-          archived="${site}/19-1-4/index.html"
-          active="${site}/21-0-4/index.html"
-          test -f "${archived}" || { echo "::error::Missing archived page ${archived}"; exit 1; }
-          test -f "${active}" || { echo "::error::Missing active page ${active}"; exit 1; }
-          grep -q 'Archived release\.' "${archived}" || { echo "::error::Archived DaVinci 19.1.4 does not show the notice."; exit 1; }
-          if grep -q 'Archived release\.' "${active}"; then
-            echo "::error::Active DaVinci 21 shows the archived notice."
-            exit 1
-          fi
-          with_notice=$(grep -rl 'Archived release\.' "${site}" --include=index.html | wc -l)
-          echo "DaVinci record pages carrying the notice: ${with_notice}"
-          if [ "${with_notice}" -ne 100 ]; then
-            echo "::error::Expected the notice on exactly 100 DaVinci pages, found ${with_notice}."
-            exit 1
-          fi
+          python auxsays/scripts/ci/davinci_archive_check.py render --site auxsays/_site

@@ -72,6 +72,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
+| AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 | AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
@@ -4317,6 +4318,47 @@ product.
 it reads 0 for DaVinci once the 100 are archived; the archived releases stay reachable from the history page.
 Not fixed here: the count is a hint, "older" cannot be asserted for an arbitrary archived record, and a change
 would alter the payload for every product.
+
+---
+
+### AUX-075 — The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran
+
+- **Status** Resolved · **Area** CI governance · **Severity** Medium
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom** `davinci-archive-build-check.yml` (AUX-065) asserted the migration baseline: exactly 100 records
+changed by the convergence, exactly 100 pages carrying the archived notice, and 21.0.4 as the active page.
+Once the migration ran in production, the convergence on a pull request changes nothing, so the check failed
+on every pull request that touched its paths ("got 0"). It is not a required check, so nothing was blocked,
+but a check that is always red teaches people to ignore red, and those pull requests lost the build-and-render
+proof the check exists to give.
+
+**Fix** `scripts/ci/davinci_archive_check.py` holds rules that are true for any number of archive transitions,
+including none. Before convergence the archive plan must be accepted, the tracked tree must equal the
+commit, and no untracked file may sit among the generated records. After it, each changed file is judged
+against the commit with rename detection off: it must be an existing DaVinci record (read from the commit's
+own front matter, because other products share the directory) that the plan held, changed by exactly one
+front-matter line from current to archived. Additions, deletions, renames, unarchives, any other edit and any
+file outside the generated records fail by name, every pending transition must be one of the accepted edits,
+and the plan taken again must be accepted with nothing pending. After the build, every DaVinci record's page must exist and
+carry the notice exactly once when the record is archived and not at all otherwise, no other page may carry
+it, at least 100 records stay archived (the ratchet floor) and at least one stays active. 19.1.4 is the fixed
+archived spot page; the active spot page is chosen from the converged tree. `ci-integrity.yml` now runs every
+step under `bash -eo pipefail` (`defaults.run.shell: bash`); none of its steps contains a pipe, so no
+current outcome changes.
+
+**Measured** On a local Jekyll build of main (N = 0): 123 records, 100 archived, 23 active, every page as
+expected. `test_davinci_archive_check.py` (76 checks) drives the real check and the real archive CLI over a
+scratch repository holding every real DaVinci record: N = 0, N = 3 and a simulated next stable major pass
+(every record two majors behind it archives and the active spot page moves to it), every refusal arrives under
+its named check, and the workflow's steps are executed rather than grepped. The simulated major is the corpus's
+own newest stable major plus one, never a literal, so the suite stays green when that major really ships; it
+was run against copies of the corpus with a stable 22, and with 22 and 23, already converged. Each enforcement
+predicate was mutated on its own, and every mutant failed its named case.
+
+**Reopen only if** the check fails on a pull request whose convergence is a pure archive ratchet, passes a
+change to a record other than one current-to-archived status line, or passes a build in which an archived
+page lacks the notice or an active page carries it.
 
 ---
 

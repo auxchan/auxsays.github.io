@@ -50,6 +50,15 @@ env:
   PYTHONDONTWRITEBYTECODE: "1"
   PYTHONIOENCODING: "utf-8"
 
+# Every run: step under `bash --noprofile --norc -eo pipefail`. With no shell named, GitHub runs
+# `bash -e`, which has no pipefail: a failing command on the left of a pipe is swallowed, so a
+# piped gate can pass on a failure. test_ci_integrity_sharding.py executes these steps under
+# -eo pipefail, and pins this default so that simulation and CI agree. No step here contains a
+# pipe today, so the default changes no current step's outcome; it binds every future one.
+defaults:
+  run:
+    shell: bash
+
 jobs:
   # The governed suites, run as four parallel shards. Each shard is a whole, isolated job -- its own
   # runner, its own checkout -- and runs every per-suite protection of run_integrity_tests.py on its
