@@ -191,6 +191,82 @@ def _page(**over) -> dict:
 FRESH = "2099-01-01T00:00:00Z"   # far future => never stale, whatever the build clock says
 
 
+def _page_without(*keys: str) -> dict:
+    page = _page()
+    for key in keys:
+        del page[key]
+    return page
+
+
+# AUX-057. What the notice and the card line must say, case by case. These are written out in full
+# on purpose: a test that derives its expectation from the template cannot catch the template.
+# _D is the default page date (Jan 1, 2026); the matrix clock is 2026-09-09, so it is 251 days old.
+_D = "Jan 1, 2026"
+_UNKNOWN = "The capture date of the newest accepted report is not recorded, so its age cannot be checked."
+_OLD = f"No recently captured accepted reports. The newest accepted report was captured on {_D}."
+_BLOCKED = "Collection blocked. Some collection methods are currently blocked or returning errors."
+_DEGRADED = "Collection degraded. Some collection methods reported partial or low-confidence results."
+_OLD_HEALTHY = f"{_OLD} Collection status is reported separately."
+_UNKNOWN_HEALTHY = f"Capture date not recorded. {_UNKNOWN} Collection status is reported separately."
+_CLAUSE = " Report counts are preserved from structured evidence and are not live telemetry."
+_CARD = "Newest accepted report captured: "
+
+# name -> exact aside text (None = no aside)
+ASIDE_EXPECT = {
+    "fresh+healthy": None,
+    "stale-only": _OLD_HEALTHY,
+    "fresh+blocked": _BLOCKED,
+    "stale+blocked": f"{_BLOCKED} {_OLD}",
+    "fresh+degraded": _DEGRADED,
+    "stale+degraded": f"{_DEGRADED} {_OLD}",
+    "divergence": _OLD_HEALTHY + _CLAUSE,
+    "live stale": _OLD_HEALTHY + _CLAUSE,
+    "live fresh+blocked": _BLOCKED + _CLAUSE,
+    "live fresh+healthy": None,
+    "no reports at all": None,
+    "official+reports": None,
+    "official+divergence": None,
+    "missing date+healthy": _UNKNOWN_HEALTHY,
+    "missing date+blocked": f"{_BLOCKED} {_UNKNOWN}",
+    "invalid date+degraded": f"{_DEGRADED} {_UNKNOWN}",
+    "no date key+healthy": _UNKNOWN_HEALTHY,
+    "consensus_last_checked only": _UNKNOWN_HEALTHY,
+    "boundary exactly 7 days": ("No recently captured accepted reports. The newest accepted report was "
+                                "captured on Sep 2, 2026. Collection status is reported separately."),
+    "boundary 7 days minus 1s": None,
+    "live missing date+blocked": f"{_BLOCKED} {_UNKNOWN}" + _CLAUSE,
+    "official+stale+blocked": None,
+    "freshness note warns": f"{_DEGRADED} {_OLD}",
+}
+# name -> the card line (None = no line). The line is backed ONLY by evidence_last_checked and only
+# where an accepted report exists to have been captured.
+CARD_EXPECT = {
+    "fresh+healthy": _CARD + "Jan 1, 2099",
+    "stale-only": _CARD + _D,
+    "fresh+blocked": _CARD + "Jan 1, 2099",
+    "stale+blocked": _CARD + _D,
+    "fresh+degraded": _CARD + "Jan 1, 2099",
+    "stale+degraded": _CARD + _D,
+    "divergence": _CARD + _D,
+    "live stale": _CARD + _D,
+    "live fresh+blocked": _CARD + "Jan 1, 2099",
+    "live fresh+healthy": _CARD + "Jan 1, 2099",
+    "no reports at all": None,
+    "official+reports": _CARD + _D,
+    "official+divergence": _CARD + _D,
+    "missing date+healthy": None,
+    "missing date+blocked": None,
+    "invalid date+degraded": None,
+    "no date key+healthy": None,
+    "consensus_last_checked only": None,
+    "boundary exactly 7 days": _CARD + "Sep 2, 2026",
+    "boundary 7 days minus 1s": _CARD + "Sep 2, 2026",
+    "live missing date+blocked": None,
+    "official+stale+blocked": _CARD + _D,
+    "freshness note warns": _CARD + _D,
+}
+
+
 def render_gate_matrix():
     """Render the WHOLE layout over one case per gate branch. Returns (liquid_ok, cases).
 
@@ -255,6 +331,30 @@ def render_gate_matrix():
         ("official+divergence", _page(update_report_count=0,
                                       confirmed_patch_specific_report_count=4,
                                       **official),                               healthy,  0),
+        # AUX-057: every capture-date state against every collection state. The date is the capture
+        # time of the newest accepted report; "" / missing / unparseable all stay stale and say the
+        # age cannot be checked rather than inventing one.
+        ("stale+degraded",      _page(),                                         health("partial"), 1),
+        ("missing date+healthy", _page(evidence_last_checked=""),                healthy,  1),
+        ("missing date+blocked", _page(evidence_last_checked=""),                health("blocked"), 1),
+        ("invalid date+degraded", _page(evidence_last_checked="garbage"),        health("partial"), 1),
+        ("no date key+healthy", _page_without("evidence_last_checked"),          healthy,  1),
+        # The consensus-check timestamp is a different fact from a capture date. It must not stand in.
+        ("consensus_last_checked only",
+                                dict(_page_without("evidence_last_checked"),
+                                     consensus_last_checked="2026-01-01T00:00:00Z"), healthy, 1),
+        # The seven-day rule is unchanged: exactly seven days is stale, one second less is not.
+        ("boundary exactly 7 days", _page(evidence_last_checked="2026-09-02T00:00:00Z"), healthy, 1),
+        ("boundary 7 days minus 1s", _page(evidence_last_checked="2026-09-02T00:00:01Z"), healthy, 1),
+        ("live missing date+blocked", _page(update_report_count=5,
+                                      confirmed_patch_specific_report_count=5,
+                                      consensus_collection_status="live_consensus",
+                                      evidence_state="live",
+                                      evidence_last_checked=""),                 health("blocked"), 1),
+        ("official+stale+blocked", _page(**official),                             health("blocked"), 1),
+        # A source note that warns, with every method healthy, behaves like degraded and now also
+        # states the capture age (it used to drop an old date silently).
+        ("freshness note warns", _page(source_freshness_note="Source check pending"), healthy, 1),
     ]
 
     ruby = shutil.which("ruby")
@@ -388,7 +488,20 @@ def run() -> int:
     # same telemetry. Collection health is the card's to state; the notice claims only staleness.
     check("F4 a stale-only page claims nothing about collection health -- the monitoring card does",
           "Collection itself is reporting healthy." not in LAYOUT
-          and "'This evidence has not been revalidated recently.'" in LAYOUT)
+          and "No recently captured accepted reports." in LAYOUT_EMITTED
+          and "Capture date not recorded." in LAYOUT_EMITTED)
+    # AUX-057: the old wording asserted a revalidation step the field never recorded.
+    # (The unrelated listing-card credibility note legitimately says revalidation is pending for
+    # URLs; this check is about the freshness notice, so it reads only the notice's own strings.)
+    notice_lines = [ln for ln in LAYOUT_EMITTED.splitlines()
+                    if "freshness_headline" in ln or "freshness_detail" in ln]
+    check("F4b no freshness notice string claims anything was revalidated",
+          len(notice_lines) >= 8 and not [ln for ln in notice_lines if "revalidat" in ln.lower()],
+          f"{len(notice_lines)} lines; {[ln for ln in notice_lines if 'revalidat' in ln.lower()]}")
+    # The consensus calculation timestamp is not a report capture date.
+    check("F4c the capture date is read from evidence_last_checked ALONE",
+          "assign evidence_checked_at = page.evidence_last_checked | default: '' %}" in LAYOUT_EMITTED
+          and "consensus_last_checked" not in LAYOUT_EMITTED)
     check("F5 a blocked page says blocked", "Collection blocked." in LAYOUT)
     check("F6 a degraded page says degraded", "Collection degraded." in LAYOUT)
     # THE DEFECT: this exact sentence asserted blocked/pending collection on every page that
@@ -507,6 +620,16 @@ def run() -> int:
         aside = aside_of(html)
         check(f"L5 {name}: the aside never re-names the sample",
               aside is None or "sample" not in aside.lower(), str(aside))
+        # AUX-057: the exact words, and the exact card line, for this case.
+        check(f"L10 {name}: the aside says exactly what is known",
+              name in ASIDE_EXPECT and aside == ASIDE_EXPECT[name],
+              f"got {aside!r} wanted {ASIDE_EXPECT.get(name, '<no expectation>')!r}")
+        card_line = re.search(r"Newest accepted report captured: [^<]*", html)
+        check(f"L11 {name}: the card line is backed by an accepted report and a valid date",
+              name in CARD_EXPECT and (card_line.group(0).strip() if card_line else None) == CARD_EXPECT[name],
+              f"got {card_line.group(0) if card_line else None!r} wanted {CARD_EXPECT.get(name, '<no expectation>')!r}")
+        check(f"L12 {name}: the retired label and the revalidation wording never render",
+              "Last evidence checked" not in html and "revalidat" not in html.lower())
         # A live page must never be left with NO statement of what its counts are. Either the aside
         # carries the not-live-telemetry clause, or the scope note does -- never neither.
         if name.startswith("live"):
@@ -570,11 +693,22 @@ def run() -> int:
     check("C4b ...inside the evidence card, which now follows the verdict",
           -1 < o_verdict < o_note < o_aside,
           f"verdict={o_verdict} note={o_note} aside={o_aside}")
-    check("C4c the card still prints the staleness date next to it",
-          "Last evidence checked: {{ evidence_checked_label }}" in LAYOUT_EMITTED)
-    check("C5 the freshness caveat renders exactly once",
-          LAYOUT_EMITTED.count("Evidence freshness needs revalidation") == 1,
-          str(LAYOUT_EMITTED.count("Evidence freshness needs revalidation")))
+    check("C4c the card still prints the capture date next to it, under its true name",
+          "Newest accepted report captured: {{ evidence_checked_label }}" in LAYOUT_EMITTED
+          and "Last evidence checked" not in LAYOUT_EMITTED)
+    # The line says a report was captured, so it needs an accepted report and a valid date.
+    check("C4d ...and only where an accepted report and a valid capture date exist",
+          "{% if report_bearing_count > 0 and evidence_capture_date_known %}"
+          '<p class="consensus-chart-meta">Newest accepted report captured:' in LAYOUT_EMITTED)
+    # Rendered, not counted in source: each notice reaches the reader exactly once, and the retired
+    # heading never does.
+    notice_counts = {n: by_name[n].count('<aside class="update-evidence-freshness-notice"')
+                     for n in by_name}
+    check("C5 the freshness caveat renders exactly once, and the retired heading never does",
+          "needs revalidation" not in LAYOUT_EMITTED
+          and all(notice_counts[n] == (0 if ASIDE_EXPECT.get(n, "x") is None else 1)
+                  for n in notice_counts),
+          str(notice_counts))
 
     # ---------- T: no light-theme leak on a dark page ----------
     print("\n[T] every --aux-* token resolves to a dark-theme value, in the LIVE cascade")

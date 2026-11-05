@@ -64,7 +64,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-054 | Resolved | Published claims | Medium | Collection health existed only in Liquid; a retired method made healthy pages read degraded |
 | AUX-055 | Resolved | Published claims | High | A stored live-consensus claim would keep rendering as live after the collection behind it stopped |
 | AUX-056 | Resolved | Published claims | High | No writer could store live consensus, so a release that earned it could never show it |
-| AUX-057 | Deferred | Published claims | Medium | A certified-live Windows page also says its evidence has not been revalidated recently |
+| AUX-057 | Deferred | Published claims | Medium | The patch-page freshness notice claimed a revalidation that no field records (fix pending deploy verification) |
 | AUX-058 | Resolved | Evidence integrity | Medium | DaVinci, OBS and PowerPoint still guessed themes and platforms from substrings |
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
@@ -3953,31 +3953,53 @@ failed promotion.
 
 ---
 
-### AUX-057 — A certified-live Windows page also says its evidence has not been revalidated recently
+### AUX-057 — The patch-page freshness notice claimed a revalidation that no field records
 
-- **Status** Deferred · **Area** Published claims · **Severity** Medium
+- **Status** Deferred (fix on branch `fix/freshness-capture-age-wording`; mark Resolved only after the new wording is verified on the deployed site) · **Area** Published claims · **Severity** Medium
 - **First seen** 2026-11-04
 
-**Symptom / gap** The three live Windows 25H2 pages (26200.7462, .7623, .7840) show "Evidence
-freshness needs revalidation. This evidence has not been revalidated recently" beside a certified
-live state. The page treats `evidence_last_checked` older than seven days as stale, and theirs dates
-from September and October. Their collection methods did run against those exact builds this cycle,
-which is why monitoring certifies.
+**Symptom / gap** On 2026-11-04 the three Windows 25H2 pages 26200.7462, .7623 and .7840 were
+certified live and showed "Evidence freshness needs revalidation. This evidence has not been
+revalidated recently" beside that live state. The page treats `evidence_last_checked` older than
+seven days as stale, and theirs dated from September and October. Their collection methods did run
+against those exact builds, which is why monitoring certified them.
 
-**Why deferred** The two facts differ, and both can be true. `evidence_last_checked` is the newest
-accepted row's `captured_at` (`apply_consensus_to_records._latest_captured_at`), not the time
-collection last ran. A method's `last_run` proves an attempt, not that the accepted reports were
-revalidated. So stamping the field when a collector visits would make old evidence look freshly
-verified. The fix is a semantics decision, not a one-line repair.
+**History, both facts preserved** The original observation was a certified-live page. Those three
+pages were afterwards correctly revoked from live when Tech Community collection was blocked, and
+today render as Verified reports with "Collection blocked". Their status can change again as
+collection and certification change; nothing here treats them as permanently pilot. The wording
+defect was never about their maturity: it applied to every page that showed the notice, 222 on
+2026-11-05 across eight products, none of them live.
 
-**Current impact** Reader-visible on three live pages: the live label and the freshness notice
-describe different scopes without saying so. Maturity, counts, citations and verdicts are unaffected.
-The three live OBS pages do not show the notice.
+**Root cause** `evidence_last_checked` is the capture time of the newest accepted report
+(`apply_consensus_to_records._latest_captured_at`), not the time anyone re-verified anything. A
+method's `last_run` proves an attempt, not that accepted reports were revalidated, so stamping the
+field when a collector visits would make old evidence look freshly verified. The notice said
+"revalidated" about a date that records no revalidation. The card line beside the verdict had the
+same misnomer ("Last evidence checked").
 
-**Revisit trigger** The next presentation or freshness change to the patch page, or a second product
-going live with old accepted evidence. First decide what `evidence_last_checked` means and who owns
-it, and whether a separate field backed by actual report revalidation is needed. Keep the seven-day
-page rule, and never derive freshness from method-health telemetry.
+**Fix (presentation only)** The notice states only what is known: "No recently captured accepted
+reports. The newest accepted report was captured on <date>. Collection status is reported
+separately.", or "Capture date not recorded." with an age that cannot be checked when the date is
+missing or invalid. The blocked and degraded branches keep their headline and add the same capture
+sentence. The card line is now "Newest accepted report captured: <date>", printed only where an
+accepted report and a valid date exist; 13 zero-report pages that carried a collector date lose the
+line rather than claim a capture. The seven-day rule, method-health logic, stored timestamps,
+evidence and verdicts are unchanged. The set of pages showing the notice is identical before and
+after (225).
+
+**Fallback audit** The layout used to fall back to `consensus_last_checked`. That field is a
+consensus calculation time, and its semantics were never shown equivalent to a capture date, so it
+no longer stands in for one: a record with only that field reads "Capture date not recorded". No
+record carries it today (0 of 1517), so no page changed because of this. Python readers
+(`write_update_record`, `audit_consensus_evidence`) still fall back to it for their own purposes
+and were left alone. One residual: the guarded OBS 32.1.1 writeback in `revalidate_consensus_evidence.py`
+can stamp `evidence_last_checked` with the run time. It is manual only, wired to no workflow, and the
+stored value today equals the newest accepted `captured_at`.
+
+**Revisit trigger** A writer other than the capture-time derivation sets `evidence_last_checked`,
+or a separate field backed by actual report revalidation is introduced. Never derive freshness from
+method-health telemetry, and never present a consensus check time as a capture date.
 
 **Work that this item must not block** Live promotion and revocation, and the classification sprint.
 
