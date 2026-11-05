@@ -280,18 +280,34 @@ def _run(td: Path) -> int:
     archived = sorted((r for r in recs if r.status == pol.ARCHIVED), key=lambda r: r.path.name)
     active = sorted((r for r in recs if r.status != pol.ARCHIVED), key=lambda r: r.path.name)
     spot19 = next((r for r in recs if r.version == chk.FIXED_ARCHIVED_SPOT), None)
-    victims = [r for r in archived if r is not spot19]
-    held = [r for r in active if r.major is not None and not r.is_beta and r.major < (newest or 0)]
-    top = [r for r in active if r.major == newest and not r.is_beta]
+
+    def holds_once(r, line: bytes) -> bool:  # the literal status line the edits below rewrite
+        return r.path.read_bytes().count(b"\n" + line + b"\n") == 1
+
+    deletable = [r for r in archived if r is not spot19]
+    victims = [r for r in deletable if holds_once(r, b"update_status: archived")]
+    held = [r for r in active if r.major is not None and not r.is_beta and r.major < (newest or 0)
+            and r.status == "current" and holds_once(r, b"update_status: current")]
+    top = [r for r in active if r.major == newest and not r.is_beta
+           and r.status == "current" and holds_once(r, b"update_status: current")]
     spot_active = chk.pick_active_spot(recs)
     plain_active = [r for r in active if r is not spot_active]
+    # The future the check must survive: the NEXT stable major ships. Derived from the corpus, never a
+    # literal, so the suite stays green when that major really ships (and the one after it). Its
+    # permalink is one no real record can hold.
+    future_major = (newest or 0) + 1
+    future_link = f"/updates/blackmagic-design/blackmagic-davinci/suite-only-next-stable-{future_major}/"
+    future_pending = [r for r in active if r.major is not None and not r.rejected and r.major <= future_major - pol.GAP]
+    links = {pol.read_front_matter(r.path).get("permalink") for r in recs}
 
     section("[fixture] a scratch repository holding every real DaVinci record")
     check("fixture holds every real DaVinci record, converged, with each role this suite needs",
           len(recs) == fx.real_count and not plan0.refused and not plan0.to_archive and spot19 is not None
-          and len(victims) >= 3 and held and top and spot_active is not None and plain_active,
+          and len(victims) >= 4 and held and top and spot_active is not None and len(plain_active) >= 2
+          and future_pending and future_major <= pol.MAJOR_MAX and future_link not in links,
           f"records={len(recs)} refused={plan0.refused} pending={len(plan0.to_archive)} victims={len(victims)} "
-          f"held={len(held)} top={len(top)}")
+          f"held={len(held)} top={len(top)} plain_active={len(plain_active)} future={future_major} "
+          f"future_pending={len(future_pending)}")
     check("the check's constants are the measured ones, not parameters: floor 100, at least one active, 19.1.4",
           chk.ARCHIVED_FLOOR == 100 and chk.MIN_ACTIVE == 1 and chk.FIXED_ARCHIVED_SPOT == "19.1.4"
           and chk.NOTICE_MARKER in NOTICE_HTML)
@@ -344,25 +360,32 @@ def _run(td: Path) -> int:
     build_site(fx, site)
     check("C02d N = 3: render passes", passed(render()))
 
-    # C02 -- the real future: a stable 22 ships, so every major-20 record archives
+    # C02 -- the real future: the next stable major ships (newest + 1, today 22), so every record of
+    # the major below the current one (today 20.x) archives
     fx.reset()
     src = max(top, key=lambda r: r.path.name)
     text = src.path.read_text(encoding="utf-8")
-    text = set_field(text, "update_version", "'22'")
-    text = set_field(text, "permalink", "/updates/blackmagic-design/blackmagic-davinci/22/")
-    (fx.gen / "2099-01-01-davinci-resolve-22.md").write_text(text, encoding="utf-8", newline="")
-    fx.commit("stable 22")
-    expect = len(pol.plan_archive(fx.gen).to_archive)
+    text = set_field(text, "update_version", f"'{future_major}'")
+    text = set_field(text, "permalink", future_link)
+    (fx.gen / f"2099-01-01-davinci-resolve-suite-only-next-stable-{future_major}.md").write_text(
+        text, encoding="utf-8", newline="")
+    fx.commit(f"next stable major {future_major}")
+    plan_f = pol.plan_archive(fx.gen)
+    expect = len(plan_f.to_archive)
     pre = preplan()
-    check("C02e stable 22 at HEAD: preplan passes with every major-20 record pending (N > 0)",
-          expect > 0 and passed(pre) and f", {expect} pending" in pre[1], f"expect={expect} {pre[1]}")
+    check(f"C02e next stable major ({future_major}) at HEAD: preplan passes with every record of major "
+          f"{future_major - pol.GAP} or older that is still active pending (N > 0)",
+          expect > 0 and expect == len(future_pending) and plan_f.newest_stable_major == future_major
+          and passed(pre) and f", {expect} pending" in pre[1],
+          f"expect={expect} future_pending={len(future_pending)} {pre[1]}")
     run_apply(fx.root)
     res = conv()
-    check("C02f stable 22: convergence passes with that N", passed(res) and f"N = {expect} record(s)" in res[1], res[1])
+    check("C02f next stable major: convergence passes with that N",
+          passed(res) and f"N = {expect} record(s)" in res[1], res[1])
     build_site(fx, site)
     res = render()
-    check("C02g stable 22: render passes and the active spot page moves to 22 by itself (no hard-coded page)",
-          passed(res) and "active spot page (chosen from the converged tree): 22 ->" in res[1], res[1])
+    check("C02g next stable major: render passes and the active spot page moves to it by itself (no hard-coded page)",
+          passed(res) and f"active spot page (chosen from the converged tree): {future_major} ->" in res[1], res[1])
 
     # C03..C07 run against the converged base: one preplan, then one edit per case.
     fx.reset()
@@ -425,7 +448,7 @@ def _run(td: Path) -> int:
 
     surplus = len(archived) - chk.ARCHIVED_FLOOR
     fx.reset()
-    for r in victims[:surplus + 1]:
+    for r in deletable[:surplus + 1]:
         (fx.gen / r.path.name).unlink()
     build_site(fx, site)
     res = render()
@@ -433,7 +456,7 @@ def _run(td: Path) -> int:
           surplus >= 0 and failed_with(res, chk.ARCHIVED_BELOW_FLOOR)
           and f"archived: {chk.ARCHIVED_FLOOR - 1} " in res[1], res[1])
     fx.reset()
-    for r in victims[:surplus]:
+    for r in deletable[:surplus]:
         (fx.gen / r.path.name).unlink()
     build_site(fx, site)
     res = render()
@@ -594,6 +617,28 @@ def _run(td: Path) -> int:
           res[0] == 2 and "DAVINCI ARCHIVE CHECK ERROR" in res[1], res[1])
     res = run_check(fx.root, "convergence", "--plan", str(td / "no-such-plan.json"))
     check("P4 convergence without a plan is an error (exit 2), never a pass", res[0] == 2, res[1])
+
+    # A qualifying record that exists only UNTRACKED before preplan: the plan (which reads the
+    # directory) holds it as pending, the CLI archives it, and convergence never sees that edit
+    # because untracked files present at preplan are not attributed to the convergence.
+    fx.reset()
+    ghost = fx.gen / "2099-08-08-davinci-resolve-untracked.md"
+    t = set_field(victims[0].path.read_text(encoding="utf-8"), "update_status", "current")
+    ghost.write_text(set_field(t, "permalink", "/updates/blackmagic-design/blackmagic-davinci/suite-only-untracked/"),
+                     encoding="utf-8", newline="")
+    pre = preplan()
+    check("P5 an untracked record among the generated records before convergence -> UNTRACKED_IN_SCOPE",
+          failed_with(pre, chk.UNTRACKED_IN_SCOPE) and ", 1 pending" in pre[1], pre[1])
+    code, _out = run_apply(fx.root)
+    res = conv()
+    check("P6 ... and a pending transition no judged edit accounts for (N = 0 of 1 pending) -> PENDING_NOT_ACCEPTED",
+          code == 0 and b"\nupdate_status: archived\n" in ghost.read_bytes()
+          and failed_with(res, chk.PENDING_NOT_ACCEPTED) and "N = 0 record(s)" in res[1], f"rc={code} {res[1]}")
+    bad_plan = td / "bad-plan.json"
+    bad_plan.write_text("[1, 2]\n", encoding="utf-8")
+    res = run_check(fx.root, "convergence", "--plan", str(bad_plan))
+    check("P7 a malformed plan file is an error (exit 2) even when it crashes the check, never a named failure",
+          res[0] == 2 and "DAVINCI ARCHIVE CHECK ERROR" in res[1] and not re.search(r"^\s*FAIL\s", res[1], re.M), res[1])
 
     # ================================================================ render details
     section("[R] render parity details")

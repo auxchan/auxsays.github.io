@@ -242,8 +242,9 @@ auxsays/scripts/tests/test_davinci_archive_policy.py = 116
 # an existing DaVinci record changed by exactly one current -> archived line, the plan accepted before
 # and empty after, and every record's page showing the notice iff archived. Drives the real check and
 # the real CLI over a scratch git repository holding every real DaVinci record; each refusal must
-# arrive under its named check, and the workflow's run: scalars are executed, not grepped.
-auxsays/scripts/tests/test_davinci_archive_check.py = 73
+# arrive under its named check, and the workflow's run: scalars are executed, not grepped. Its future
+# case is the corpus's own next stable major, never a literal, so it stays green when that ships.
+auxsays/scripts/tests/test_davinci_archive_check.py = 76
 # ONE decision per patch. Three generators each chose an install/wait/avoid word from their own
 # policy, so one DaVinci beta record shipped "WAIT for production systems" as its verdict beside
 # "AVOID for production" as its summary -- and both reached readers, on the patch page and on the

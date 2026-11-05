@@ -4295,12 +4295,13 @@ but a check that is always red teaches people to ignore red, and those pull requ
 proof the check exists to give.
 
 **Fix** `scripts/ci/davinci_archive_check.py` holds rules that are true for any number of archive transitions,
-including none. Before convergence the archive plan must be accepted and the tracked tree must equal the
-commit. After it, each changed file is judged against the commit with rename detection off: it must be an
-existing DaVinci record (read from the commit's own front matter, because other products share the directory)
-that the plan held, changed by exactly one front-matter line from current to archived. Additions, deletions,
-renames, unarchives, any other edit and any file outside the generated records fail by name, and the plan
-taken again must be accepted with nothing pending. After the build, every DaVinci record's page must exist and
+including none. Before convergence the archive plan must be accepted, the tracked tree must equal the
+commit, and no untracked file may sit among the generated records. After it, each changed file is judged
+against the commit with rename detection off: it must be an existing DaVinci record (read from the commit's
+own front matter, because other products share the directory) that the plan held, changed by exactly one
+front-matter line from current to archived. Additions, deletions, renames, unarchives, any other edit and any
+file outside the generated records fail by name, every pending transition must be one of the accepted edits,
+and the plan taken again must be accepted with nothing pending. After the build, every DaVinci record's page must exist and
 carry the notice exactly once when the record is archived and not at all otherwise, no other page may carry
 it, at least 100 records stay archived (the ratchet floor) and at least one stays active. 19.1.4 is the fixed
 archived spot page; the active spot page is chosen from the converged tree. `ci-integrity.yml` now runs every
@@ -4308,11 +4309,13 @@ step under `bash -eo pipefail` (`defaults.run.shell: bash`); none of its steps c
 current outcome changes.
 
 **Measured** On a local Jekyll build of main (N = 0): 123 records, 100 archived, 23 active, every page as
-expected. `test_davinci_archive_check.py` (73 checks) drives the real check and the real archive CLI over a
-scratch repository holding every real DaVinci record: N = 0, N = 3 and a simulated stable 22 (every 20.x record
-archives and the active spot page moves to 22) pass, every refusal arrives under its named check, and the
-workflow's steps are executed rather than grepped. Each enforcement predicate was mutated on its own, and every
-mutant failed its named case.
+expected. `test_davinci_archive_check.py` (76 checks) drives the real check and the real archive CLI over a
+scratch repository holding every real DaVinci record: N = 0, N = 3 and a simulated next stable major pass
+(every record two majors behind it archives and the active spot page moves to it), every refusal arrives under
+its named check, and the workflow's steps are executed rather than grepped. The simulated major is the corpus's
+own newest stable major plus one, never a literal, so the suite stays green when that major really ships; it
+was run against copies of the corpus with a stable 22, and with 22 and 23, already converged. Each enforcement
+predicate was mutated on its own, and every mutant failed its named case.
 
 **Reopen only if** the check fails on a pull request whose convergence is a pure archive ratchet, passes a
 change to a record other than one current-to-archived status line, or passes a build in which an archived

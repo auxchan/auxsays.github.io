@@ -10,10 +10,11 @@ N > 0 (when a stable 22 ships, every 20.x record archives on the next convergenc
 
 THREE SUBCOMMANDS, in the order the workflow runs them:
 
-  preplan      BEFORE convergence. The policy plan must not be refused, and the tracked tree must
-               equal HEAD (so every later change is attributable to the convergence). Writes the
-               plan (pending paths, HEAD, untracked files already present) to --out, which must be
-               OUTSIDE the checkout.
+  preplan      BEFORE convergence. The policy plan must not be refused, the tracked tree must
+               equal HEAD, and no untracked file may sit in the generated-record directory (so
+               every later change is attributable to the convergence, and every pending record is
+               one HEAD holds). Writes the plan (pending paths, HEAD, untracked files already
+               present) to --out, which must be OUTSIDE the checkout.
 
   convergence  AFTER `apply_davinci_archive_policy.py --write --confirm-write`. Judged per FILE
                against HEAD (`git diff --no-renames`, plus files that were not there before):
@@ -22,8 +23,9 @@ THREE SUBCOMMANDS, in the order the workflow runs them:
                by preplan, and its only change is exactly one front-matter line going from
                `update_status: current` to `update_status: archived`. An added, deleted or renamed
                record, an unarchive, any other edit, and any file outside the generated-record
-               directory are refused. The plan is then taken again: it must not be refused and
-               must have ZERO pending transitions.
+               directory are refused. Every transition pending before convergence must be among
+               the accepted edits (N equals the pending count). The plan is then taken again: it
+               must not be refused and must have ZERO pending transitions.
 
   render       AFTER the site build. Every DaVinci record (the policy module's own selection,
                archived ones included) has its page, resolved from its permalink; an archived
@@ -33,7 +35,8 @@ THREE SUBCOMMANDS, in the order the workflow runs them:
                chosen active record is an active one.
 
 Every failure is reported under a NAMED check id (the constants below) and exits 1. Exit 2 means
-the check could not run at all (bad arguments, git unavailable): never a pass.
+the check could not run at all (bad arguments, git unavailable, a malformed plan file, any
+unexpected error): never a pass, and never mistaken for a named failure.
 
 Read-only: it writes nothing except the preplan file it is told to write, outside the checkout.
 
@@ -48,6 +51,7 @@ import os
 import re
 import subprocess
 import sys
+import traceback
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -82,6 +86,7 @@ _CURRENT_LINE = re.compile(r"""update_status:[ \t]*(?:current|'current'|"current
 # ---- named checks ------------------------------------------------------------------------------
 PLAN_REFUSED = "PLAN_REFUSED"                    # the policy refused the plan before convergence
 TREE_NOT_CLEAN = "TREE_NOT_CLEAN"                # tracked files already differed from HEAD
+UNTRACKED_IN_SCOPE = "UNTRACKED_IN_SCOPE"        # an untracked file among the generated records before convergence
 HEAD_MOVED = "HEAD_MOVED"                        # HEAD changed between preplan and convergence
 OUT_OF_SCOPE = "OUT_OF_SCOPE"                    # a changed path outside the generated records
 RECORD_ADDED = "RECORD_ADDED"                    # a new file in the generated-record directory
@@ -91,6 +96,7 @@ UNARCHIVE = "UNARCHIVE"                          # an archived record became any
 UNAUTHORIZED_CHANGE = "UNAUTHORIZED_CHANGE"      # not exactly one current -> archived status line
 FRONT_MATTER_DRIFT = "FRONT_MATTER_DRIFT"        # parsed front matter moved beyond that one status
 UNPLANNED_CHANGE = "UNPLANNED_CHANGE"            # a status edit the pre-convergence plan did not hold
+PENDING_NOT_ACCEPTED = "PENDING_NOT_ACCEPTED"    # a pending transition that is not among the accepted edits
 POSTPLAN_REFUSED = "POSTPLAN_REFUSED"            # the policy refused the converged tree
 POSTPLAN_PENDING = "POSTPLAN_PENDING"            # the converged tree still has pending transitions
 UNREADABLE_RECORD = "UNREADABLE_RECORD"          # a DaVinci record the policy could not read
@@ -268,12 +274,19 @@ def preplan(root: Path) -> tuple[list[Failure], dict[str, Any], list[str]]:
     if tracked:
         failures.append(Failure(TREE_NOT_CLEAN, f"{len(tracked)} tracked path(s) already differ from HEAD "
                                                 f"before convergence, e.g. {tracked[0][0]} {tracked[0][1]}"))
+    untracked = untracked_files(root)
+    # The plan reads the directory, not HEAD: an untracked record there could be pending, and its
+    # convergence would never be judged (untracked files present now are not attributed to it).
+    stray = [p for p in untracked if p.startswith(GENERATED_REL + "/")]
+    if stray:
+        failures.append(Failure(UNTRACKED_IN_SCOPE, f"{len(stray)} untracked file(s) among the generated records "
+                                                    f"before convergence, e.g. {stray[0]}"))
     pending = sorted(_rel_record(r) for r in plan.to_archive)
     data = {
         "head": head_commit(root),
         "refused": plan.refused,
         "pending": pending,
-        "untracked_before": untracked_files(root),
+        "untracked_before": untracked,
     }
     lines = [f"pre-convergence plan: {plan.records} DaVinci records, newest stable major "
              f"{plan.newest_stable_major}, threshold {plan.threshold_major}, {plan.already_archived} already "
@@ -312,6 +325,12 @@ def convergence(root: Path, pre: dict[str, Any]) -> tuple[list[Failure], list[st
             failures.append(Failure(UNPLANNED_CHANGE, f"{path}: archived, but not pending before convergence"))
             continue
         accepted.append(path)
+    # N must equal the pending count: a planned transition that no judged edit accounts for was made
+    # where this check cannot see it, or not made at all.
+    unaccounted = sorted(pending - set(accepted))
+    if unaccounted:
+        failures.append(Failure(PENDING_NOT_ACCEPTED, f"{len(unaccounted)} of {len(pending)} pending transition(s) "
+                                                      f"not among the accepted edits, e.g. {unaccounted[0]}"))
     post = plan_tree(root)
     if post.refused:
         failures.append(Failure(POSTPLAN_REFUSED, f"{post.refusal_reason}: {post.refusal_detail}"))
@@ -487,10 +506,12 @@ def main(argv: list[str] | None = None) -> int:
         site = Path(args.site) if args.site else root / SITE_REL
         failures, lines = render(root, site)
         return report("render", failures, lines)
-    except (CheckError, OSError, ValueError) as exc:
-        print(f"DAVINCI ARCHIVE CHECK ERROR ({args.cmd}): {exc}")
+    except Exception as exc:  # noqa: BLE001 -- ANY error means "could not run" (exit 2), never a named failure
+        if not isinstance(exc, (CheckError, OSError, ValueError)):
+            traceback.print_exc()
+        print(f"DAVINCI ARCHIVE CHECK ERROR ({args.cmd}): {exc.__class__.__name__}: {exc}")
         if os.environ.get("GITHUB_ACTIONS") == "true":
-            print(f"::error title=DaVinci archive check could not run::{exc}")
+            print(f"::error title=DaVinci archive check could not run::{exc.__class__.__name__}: {exc}")
         return EXIT_ERROR
 
 

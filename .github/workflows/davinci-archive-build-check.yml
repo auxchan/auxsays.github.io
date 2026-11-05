@@ -83,9 +83,10 @@ jobs:
           bundle list | sed -n '1,12p'
 
       # The converged tree exists only on this runner. Nothing below writes it back anywhere.
-      # Before convergence: the archive plan must not be refused, and the tracked tree must equal the
-      # commit, so every later change is attributable to the convergence. The plan is kept in runner
-      # temporary storage, outside the checkout.
+      # Before convergence: the archive plan must not be refused, the tracked tree must equal the
+      # commit, and no untracked file may sit among the generated records, so every later change is
+      # attributable to the convergence. The plan is kept in runner temporary storage, outside the
+      # checkout.
       - name: Validate the archive plan before convergence
         run: |
           set -euo pipefail
@@ -100,8 +101,9 @@ jobs:
       # detection off: each changed file must be an existing DaVinci record (read from the commit's own
       # front matter, since other products share the directory) that the plan held, changed by exactly
       # one front-matter line from current to archived. An added, deleted or renamed record, an
-      # unarchive, any other edit and any file outside the generated records fail by name. The plan
-      # is then taken again and must be accepted with nothing pending.
+      # unarchive, any other edit and any file outside the generated records fail by name, and every
+      # pending transition must be one of the accepted edits. The plan is then taken again and must
+      # be accepted with nothing pending.
       - name: Assert the convergence made only planned current-to-archived edits and left nothing pending
         run: |
           set -euo pipefail
