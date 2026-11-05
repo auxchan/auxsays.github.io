@@ -23,14 +23,28 @@ Usage:
     python auxsays/scripts/ci/run_integrity_tests.py --suite diagnostic
     python auxsays/scripts/ci/run_integrity_tests.py --check-manifest
     python auxsays/scripts/ci/run_integrity_tests.py --list blocking
+    python auxsays/scripts/ci/run_integrity_tests.py --suite all --shard 2/4 --receipt /tmp/r.json
+
+SHARDING. `--shard I/N` runs the I-th of N disjoint, exhaustive slices of the selected suites, and
+`--receipt PATH` records what this process actually ran (one JSON file, written OUTSIDE the
+checkout). A shard runs every protection above, unchanged, on its slice: each suite still goes
+through run_one(), and the tree is still hashed before and after. The slices come from
+partition_suites() over the manifest's population, weighted by suite_duration_hints.json. That
+table is scheduling only: a suite it does not name still runs (at a default weight), a name it has
+that the manifest lacks is ignored, and it holds no check count. aggregate_integrity_receipts.py is
+what decides whether N receipts together are the whole governed population, exactly once.
 
 Exit codes: 0 green and tree unchanged; 1 a suite failed; 2 the working tree was mutated;
-3 the manifest is not a valid closed-world classification.
+3 the manifest is not a valid closed-world classification (or the duration-hint table is
+malformed); 4 a bad --shard or --receipt argument; 5 the receipt could not be written.
 """
 from __future__ import annotations
 
 import argparse
+import datetime
 import hashlib
+import json
+import math
 import os
 import re
 import subprocess
@@ -41,6 +55,9 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[3]
 TESTS = REPO / "auxsays" / "scripts" / "tests"
 MANIFEST = Path(__file__).resolve().parent / "integrity_suites.txt"
+# Scheduling only -- see SHARDING above. Never consulted for what runs or what counts.
+HINTS = Path(__file__).resolve().parent / "suite_duration_hints.json"
+RECEIPT_SCHEMA = "auxsays-integrity-shard-receipt/1"
 
 RESULTS_RE = re.compile(r"^Results:\s*(\d+)\s*/\s*(\d+)\s+passed,\s*(\d+)\s+failed", re.M)
 # A suite may SKIP individual assertions when an optional tool is missing. That is not a failure,
@@ -58,6 +75,8 @@ CATEGORIES = EXECUTED + NOT_EXECUTED
 
 MANIFEST_ERROR = 3
 MUTATION_ERROR = 2
+USAGE_ERROR = 4
+RECEIPT_ERROR = 5
 
 # suite path -> governed number of checks it must report, filled in by load_manifest()
 EXPECTED_CHECKS: dict[str, int] = {}
@@ -237,8 +256,15 @@ def _env() -> dict[str, str]:
     return env
 
 
-def run_one(name: str) -> tuple[bool, str, int, int, int, float]:
-    """Run one suite. Returns (ok, detail, checks_passed, checks_failed, checks_skipped, seconds)."""
+def run_one(name: str, facts: dict | None = None) -> tuple[bool, str, int, int, int, float]:
+    """Run one suite. Returns (ok, detail, checks_passed, checks_failed, checks_skipped, seconds).
+
+    `facts`, when given, additionally receives the raw observations a shard receipt records --
+    `exit_status` (None on timeout), `total` (None without a Results line) and `timed_out`. It is
+    an out-parameter so that the verdict below stays exactly the code CI has always run.
+    """
+    facts = {} if facts is None else facts
+    facts.update(exit_status=None, total=None, timed_out=False)
     path = REPO / name
     started = time.monotonic()
     try:
@@ -246,8 +272,10 @@ def run_one(name: str) -> tuple[bool, str, int, int, int, float]:
             [sys.executable, str(path)], cwd=REPO, capture_output=True, text=True,
             encoding="utf-8", errors="replace", timeout=PER_TEST_TIMEOUT, env=_env())
     except subprocess.TimeoutExpired:
+        facts["timed_out"] = True
         return False, f"TIMEOUT after {PER_TEST_TIMEOUT}s", 0, 0, 0, time.monotonic() - started
     elapsed = time.monotonic() - started
+    facts["exit_status"] = proc.returncode
     # STDOUT ONLY decides the verdict. Because the two streams were concatenated, a `Results:` line
     # on stderr always sorted last under the "last line wins" rule -- so a suite could print its
     # real failing summary to stdout and a fabricated passing one to stderr and be recorded PASS.
@@ -264,6 +292,7 @@ def run_one(name: str) -> tuple[bool, str, int, int, int, float]:
         return False, f"NO RESULTS LINE (exit {proc.returncode})\n{tail}", 0, 0, 0, elapsed
 
     passed, total, failed = int(match.group(1)), int(match.group(2)), int(match.group(3))
+    facts["total"] = total
     skipped = len(SKIP_RE.findall(blob))
     # A suite counts its own checks, so its summary must at least be self-consistent. Two ways it
     # was not, each reproduced against a real child process:
@@ -309,6 +338,122 @@ def run_one(name: str) -> tuple[bool, str, int, int, int, float]:
     return True, f"{passed}/{total}" + (f" ({skipped} skipped)" if skipped else ""), passed, failed, skipped, elapsed
 
 
+# ------------------------------------------------------------------------------------------------
+# Sharding. Everything below decides only WHERE a suite runs, never WHETHER it runs or what counts.
+# ------------------------------------------------------------------------------------------------
+SHARD_RE = re.compile(r"([1-9][0-9]*)/([1-9][0-9]*)")
+
+
+def parse_shard(spec: str) -> tuple[int, int]:
+    """`I/N` -> (I, N) with 1 <= I <= N. Anything else raises ValueError, never a guess."""
+    match = SHARD_RE.fullmatch(spec or "")
+    if match is None:
+        raise ValueError(f"--shard must be I/N with 1 <= I <= N, got {spec!r}")
+    index, total = int(match.group(1)), int(match.group(2))
+    if index > total:
+        raise ValueError(f"--shard {spec}: shard {index} does not exist in a set of {total}")
+    return index, total
+
+
+def _hint_ms(value, where: str) -> int:
+    # bool is an int subclass, and NaN/inf compare false against everything; refuse all three
+    # rather than let a typo silently reshape the partition.
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) \
+            or value < 0:
+        raise ValueError(f"{where} must be a finite number of seconds >= 0, got {value!r}")
+    return int(round(value * 1000))
+
+
+def load_duration_hints(path: Path | None = None) -> tuple[dict[str, int], int]:
+    """(suite path -> weight in ms, default weight in ms) from the committed hint table.
+
+    Scheduling only. The weights are integers so the partition is exact arithmetic on every
+    platform. A malformed table raises ValueError: it is a committed file, so a broken one is a
+    bug to fix, not a reason to schedule blind.
+    """
+    path = Path(HINTS if path is None else path)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError(f"{path.name}: top level must be an object")
+    default_ms = _hint_ms(data.get("default_seconds"), "default_seconds")
+    if default_ms <= 0:
+        raise ValueError("default_seconds must be > 0")
+    seconds = data.get("seconds")
+    if not isinstance(seconds, dict):
+        raise ValueError(f"{path.name}: `seconds` must be an object of suite path -> seconds")
+    hints = {}
+    for name, value in seconds.items():
+        hints[str(name)] = _hint_ms(value, f"seconds[{name!r}]")
+    return hints, default_ms
+
+
+def partition_suites(names: list[str], shards: int, hints: dict[str, int],
+                     default_ms: int) -> list[list[str]]:
+    """Split `names` into `shards` disjoint lists whose union is exactly `names`.
+
+    Longest-processing-time first: heaviest suite first (ties by path), each onto the currently
+    lightest shard (ties by lowest index). The SET each shard receives depends only on the set of
+    names and the weights, never on their order; within a shard suites keep their order in
+    `names` (the manifest's). A suite the table does not name weighs `default_ms`; a table entry
+    for a suite not in `names` is never consulted. Deterministic, so every shard job and the
+    aggregator compute the same assignment from the same commit.
+    """
+    if isinstance(shards, bool) or not isinstance(shards, int) or shards < 1:
+        raise ValueError(f"shard count must be a positive integer, got {shards!r}")
+    if len(set(names)) != len(names):
+        raise ValueError("cannot partition a population that names a suite twice")
+
+    def weight(name: str) -> int:
+        return hints.get(name, default_ms)
+
+    loads = [0] * shards
+    buckets: list[list[str]] = [[] for _ in range(shards)]
+    for name in sorted(names, key=lambda n: (-weight(n), n)):
+        target = min(range(shards), key=lambda k: (loads[k], k))
+        buckets[target].append(name)
+        loads[target] += weight(name)
+    position = {name: i for i, name in enumerate(names)}
+    buckets = [sorted(bucket, key=position.__getitem__) for bucket in buckets]
+    # The property everything downstream relies on, checked rather than assumed.
+    flat = [name for bucket in buckets for name in bucket]
+    if len(flat) != len(names) or set(flat) != set(names):
+        raise AssertionError("partition is not a disjoint, exhaustive cover of the population")
+    return buckets
+
+
+def file_digest(path: Path) -> str:
+    return "sha256:" + hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def head_commit(repo: Path | None = None) -> str | None:
+    """The commit actually checked out, from git itself; None when git cannot say."""
+    try:
+        out = subprocess.run(["git", "rev-parse", "--verify", "HEAD"], cwd=repo or REPO,
+                             capture_output=True, text=True, check=True)
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    sha = out.stdout.strip()
+    return sha if re.fullmatch(r"[0-9a-f]{40}", sha) else None
+
+
+def _is_inside(path: Path, root: Path) -> bool:
+    child = os.path.normcase(os.path.abspath(path))
+    parent = os.path.normcase(os.path.abspath(root))
+    return child == parent or child.startswith(parent.rstrip(os.sep) + os.sep)
+
+
+def write_receipt(path: Path, receipt: dict) -> None:
+    """Atomic replace, so a reader never sees half a receipt."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".partial")
+    tmp.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def _utc_now() -> str:
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     ap.add_argument("--suite", default="blocking", choices=(*EXECUTED, "all"),
@@ -317,6 +462,10 @@ def main(argv: list[str] | None = None) -> int:
                     help="print the category's suites and exit")
     ap.add_argument("--check-manifest", action="store_true",
                     help="validate the closed-world classification and exit")
+    ap.add_argument("--shard", metavar="I/N",
+                    help="run only the I-th of N duration-balanced, disjoint slices of the suites")
+    ap.add_argument("--receipt", metavar="PATH",
+                    help="write a JSON receipt of exactly what ran here; must be outside the checkout")
     args = ap.parse_args(argv)
 
     sections, problems = load_manifest()
@@ -347,8 +496,70 @@ def main(argv: list[str] | None = None) -> int:
         print(f"manifest classifies no suites as '{args.suite}'", file=sys.stderr)
         return MANIFEST_ERROR
 
+    shard_index, shard_total = 1, 1
+    population = len(names)
+    if args.shard is not None:
+        try:
+            shard_index, shard_total = parse_shard(args.shard)
+        except ValueError as exc:
+            print(f"USAGE: {exc}", file=sys.stderr)
+            return USAGE_ERROR
+        try:
+            hints, default_ms = load_duration_hints()
+        except (OSError, ValueError) as exc:
+            print(f"DURATION HINTS INVALID ({HINTS.name}): {exc}", file=sys.stderr)
+            return MANIFEST_ERROR
+        assigned = partition_suites(names, shard_total, hints, default_ms)[shard_index - 1]
+        if not assigned:
+            # A shard that runs nothing proves nothing; more shards than suites is a misconfiguration.
+            print(f"shard {shard_index}/{shard_total} was assigned no suites", file=sys.stderr)
+            return MANIFEST_ERROR
+        estimate = sum(hints.get(n, default_ms) for n in assigned) / 1000
+        unhinted = [n for n in assigned if n not in hints]
+        names = assigned
+
+    receipt_path: Path | None = None
+    receipt: dict = {}
+    if args.receipt is not None:
+        receipt_path = Path(os.path.abspath(args.receipt))
+        if _is_inside(receipt_path, REPO):
+            # The checkout must end exactly as it began; a receipt written into it would be the
+            # first thing the write guard below catches, after every suite had already run.
+            print(f"USAGE: --receipt must be outside the checkout ({REPO}), got {receipt_path}",
+                  file=sys.stderr)
+            return USAGE_ERROR
+        receipt = {
+            "schema": RECEIPT_SCHEMA,
+            "shard": {"index": shard_index, "total": shard_total},
+            "category": args.suite,
+            "commit": head_commit(),
+            "run_id": os.environ.get("GITHUB_RUN_ID") or None,
+            "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT") or None,
+            "manifest_digest": file_digest(MANIFEST),
+            "hints_digest": file_digest(HINTS) if HINTS.exists() else None,
+            "population": population,
+            "assigned": list(names),
+            "suites": [],
+            "completion_state": "running",
+            "mutation_check": "not_run",
+            "suites_failed": None,
+            "exit_code": None,
+            "started_at": _utc_now(),
+            "finished_at": None,
+        }
+        try:
+            write_receipt(receipt_path, receipt)
+        except OSError as exc:
+            print(f"RECEIPT UNWRITABLE: {receipt_path}: {exc}", file=sys.stderr)
+            return RECEIPT_ERROR
+
     before = tracked_snapshot()
-    print(f"AUXSAYS integrity runner -- category '{args.suite}': {len(names)} suite(s)")
+    if args.shard is not None:
+        print(f"AUXSAYS integrity runner -- category '{args.suite}', shard {shard_index}/{shard_total}: "
+              f"{len(names)} of {population} suite(s), estimated {estimate:.0f}s"
+              + (f", {len(unhinted)} without a duration hint" if unhinted else ""))
+    else:
+        print(f"AUXSAYS integrity runner -- category '{args.suite}': {len(names)} suite(s)")
     print(f"repo {REPO}  python {sys.version.split()[0]}  platform {sys.platform}")
     print("=" * 84)
 
@@ -357,7 +568,8 @@ def main(argv: list[str] | None = None) -> int:
     total_passed = total_failed = total_skipped = 0
     started = time.monotonic()
     for i, name in enumerate(names, 1):
-        ok, detail, passed, failed, skipped, secs = run_one(name)
+        facts: dict = {}
+        ok, detail, passed, failed, skipped, secs = run_one(name, facts)
         total_passed += passed
         total_failed += failed
         total_skipped += skipped
@@ -370,6 +582,25 @@ def main(argv: list[str] | None = None) -> int:
             print(line, flush=True)
         if not ok:
             failures.append((name, detail))
+        if receipt_path is not None:
+            receipt["suites"].append({
+                "path": name,
+                "expected_checks": EXPECTED_CHECKS.get(name),
+                "verdict": "pass" if ok else "fail",
+                "passed": passed,
+                "failed": failed,
+                "total": facts["total"],
+                "skipped": skipped,
+                "exit_status": facts["exit_status"],
+                "timed_out": facts["timed_out"],
+                "detail": head,
+                "seconds": round(secs, 1),
+            })
+            try:
+                write_receipt(receipt_path, receipt)
+            except OSError as exc:
+                print(f"RECEIPT UNWRITABLE: {receipt_path}: {exc}", file=sys.stderr)
+                return RECEIPT_ERROR
 
     elapsed = time.monotonic() - started
     print("=" * 84)
@@ -398,6 +629,7 @@ def main(argv: list[str] | None = None) -> int:
         # the run reported "SKIPPED" and still exited 0 while a test clobbered a tracked file.
         print("\nworking-tree check: FAILED -- git unavailable, so writes cannot be detected")
         exit_code = max(exit_code, MUTATION_ERROR)
+        mutation_check = "unavailable"
     else:
         moved = diff_snapshots(before, tracked_snapshot() or {})
         if moved:
@@ -408,8 +640,20 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  ... and {len(moved) - 25} more")
             print("A test mutated the checkout. CI must never write production files.")
             exit_code = max(exit_code, MUTATION_ERROR)
+            mutation_check = "mutated"
         else:
             print("\nworking-tree check: clean (no tracked file added, modified or removed)")
+            mutation_check = "clean"
+
+    if receipt_path is not None:
+        receipt.update(completion_state="complete", mutation_check=mutation_check,
+                       suites_failed=len(failures), exit_code=exit_code, finished_at=_utc_now())
+        try:
+            write_receipt(receipt_path, receipt)
+        except OSError as exc:
+            print(f"RECEIPT UNWRITABLE: {receipt_path}: {exc}", file=sys.stderr)
+            return max(exit_code, RECEIPT_ERROR)
+        print(f"receipt        : {receipt_path}")
 
     return exit_code
 
