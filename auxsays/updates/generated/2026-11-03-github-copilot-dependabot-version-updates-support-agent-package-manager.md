@@ -18,8 +18,8 @@ update_version: Dependabot version updates support Agent Package Manager
 update_logo_text: GIT
 update_published_at: '2026-11-03T20:24:07Z'
 update_last_checked: '2026-11-04T02:10:55Z'
-source_last_checked: '2026-11-04T17:28:27Z'
-official_body_last_checked: '2026-11-04T17:28:27Z'
+source_last_checked: '2026-11-05T02:21:12Z'
+official_body_last_checked: '2026-11-05T02:21:12Z'
 record_last_updated: '2026-11-04T02:10:55Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -88,6 +88,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-04T17:28:27Z'
+  url: https://github.blog/changelog/2026-11-03-dependabot-version-updates-support-agent-package-manager
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-05T02:21:12Z'
   url: https://github.blog/changelog/2026-11-03-dependabot-version-updates-support-agent-package-manager
   status: captured-from-rss-feed
   body_captured: true
