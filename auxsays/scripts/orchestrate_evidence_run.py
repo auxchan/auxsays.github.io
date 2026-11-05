@@ -273,6 +273,46 @@ def resolution_priority(row: dict[str, Any]) -> tuple[int, str]:
     return rank, str(row.get("source_url") or "")
 
 
+THREAD_SCOPE = "all_patch_targets_of_this_run"
+
+
+def budget_telemetry_suffix(budget: Any, distinct_threads: int, eligible_threads: int) -> str:
+    """Collection-budget diagnostics appended to a context-resolution health note.
+
+    TELEMETRY ONLY -- every value is read from counters the stage already keeps; nothing here
+    feeds acceptance, counts, verdicts or the budget itself.
+
+    Scope and meaning of each field:
+      fetches                 thread fetches ATTEMPTED this run (ResolutionBudget.fetched, bumped
+                              before the transport call, so a fetch that raised still counts).
+                              Written by the caller as the note's original leading counter.
+      max_fetches             the configured ceiling on that counter.
+      successful_fetches      threads whose fetch AND parse succeeded ("ok"), counted from the
+                              per-thread outcome cache -- independent of `fetches`, so 200 attempted
+                              is distinguishable from 200 usable.
+      distinct_threads        distinct thread URLs among ALL resolvable rows of the run.
+      eligible_threads        the subset ranked 0 or 1 by resolution_priority (build gap, or a
+                              concrete failure with no version): the threads the budget is for.
+      thread_scope            both thread counts describe the run-wide discovery population across
+                              every patch target of the run (one product), NOT this health row's
+                              patch; the same values appear on every row of the run.
+      budget_exhausted        attempted >= max_fetches; `coverage_bounded` is then stated.
+      threads_refused_budget  threads that were never fetched because the budget ran out.
+    """
+    attempted = int(getattr(budget, "fetched", 0))
+    maximum = int(getattr(budget, "max_fetches", 0))
+    threads = getattr(budget, "threads", {}) or {}
+    successful = sum(1 for _parsed, status in threads.values() if status == "ok")
+    refused = sum(1 for _parsed, status in threads.values() if status == "budget_exhausted")
+    exhausted = bool(budget.exhausted())
+    return (f"; max_fetches={maximum}; successful_fetches={successful}"
+            f"; distinct_threads={int(distinct_threads)}; eligible_threads={int(eligible_threads)}"
+            f"; thread_scope={THREAD_SCOPE}"
+            f"; budget_exhausted={'yes' if exhausted else 'no'}"
+            f"; threads_refused_budget={refused}"
+            + ("; coverage_bounded=yes" if exhausted else ""))
+
+
 class Pipeline:
     def __init__(self, repo_root: Path, product_ids: list[str], *, write: bool,
                  checkpoint_dir: Path, evidence_path: Path | None = None,
@@ -743,7 +783,9 @@ class Pipeline:
                     rejected_reports=max(0, len(key_outcomes) - len(key_resolved)),
                     blocked_reason="context_fetch_blocked" if blocked else None,
                     last_run=captured_at,
-                    notes=f"segment-scoped exact-build resolution; fetches={budget.fetched}"),
+                    notes=("segment-scoped exact-build resolution; fetches=" + str(budget.fetched)
+                           + budget_telemetry_suffix(budget, len(distinct_threads),
+                                                     len(eligible_threads)))),
             })
         # Role-attribution telemetry: enough to tell WHY a candidate resolved or did not, without
         # re-reading the source. No hidden semantic resolution -- every count here is the sum of

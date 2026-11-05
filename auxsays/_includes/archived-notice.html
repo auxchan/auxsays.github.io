@@ -1,0 +1,23 @@
+{%- comment -%}
+  ARCHIVED RELEASE NOTICE (AUX-065). Shown on a DaVinci Resolve patch page whose record is archived.
+
+  Inputs:
+    include.product_id     -- the record's product id; the notice is DaVinci-scoped and renders for
+                              no other product
+    include.update_status  -- the record's update_status; the notice renders only when it is
+                              archived
+
+  Both inputs are normalised to plain strings before the comparison. The `blank` keyword is not
+  used: Liquid resolves it through ActiveSupport, which Jekyll does not load, so a comparison
+  against it never behaves as written.
+
+  The wording is the approved text and is pinned verbatim by the archive-policy suite. The notice
+  reuses the existing evidence-freshness notice styling, so it adds no stylesheet rule.
+{%- endcomment -%}
+{%- assign archived_notice_product = include.product_id | default: '' | strip -%}
+{%- assign archived_notice_status = include.update_status | default: '' | strip | downcase -%}
+{%- if archived_notice_product == 'blackmagic-davinci' and archived_notice_status == 'archived' -%}
+<aside class="update-evidence-freshness-notice update-archived-notice" role="note" aria-label="Archived release">
+  <p><strong>Archived release.</strong> This DaVinci Resolve version is no longer included in routine patch monitoring. Historical report counts and recorded decisions are retained for reference; they are not a current assessment of whether to install this version.</p>
+</aside>
+{%- endif -%}

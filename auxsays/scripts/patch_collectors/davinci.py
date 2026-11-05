@@ -1861,7 +1861,7 @@ _DAVINCI_THEME_RULES: tuple[ec.ThemeRule, ...] = (
     ec.ThemeRule("render/export failure", "render/export", "medium", "render",
                  re.compile(r"\b(?:decode\w*|render\w*|export\w*)\b", re.I)),
     ec.ThemeRule("performance regression", "timeline / GPU performance", "medium", "performance",
-                 re.compile(r"\b(?:gpus?|performance|lag(?:s|gy|ging|ged)?|slow\w*)\b", re.I)),
+                 re.compile(r"\b(?:performance|lag(?:s|gy|ging|ged)?|slow\w*)\b", re.I)),
     ec.ThemeRule("compatibility issue", "plugins / codecs", "medium", "compatibility",
                  re.compile(r"\b(?:plugin\w*|codec\w*)\b", re.I)),
     ec.ThemeRule("install issue", "installation", "medium", "install",

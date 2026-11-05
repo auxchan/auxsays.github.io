@@ -17,8 +17,8 @@ update_version: Clone connected GitHub repositories into Figma by default
 update_logo_text: FIG
 update_published_at: '2026-11-03T00:00:00.000Z'
 update_last_checked: '2026-11-03T17:12:10Z'
-source_last_checked: '2026-11-04T17:28:23Z'
-official_body_last_checked: '2026-11-04T17:28:23Z'
+source_last_checked: '2026-11-05T02:20:54Z'
+official_body_last_checked: '2026-11-05T02:20:54Z'
 record_last_updated: '2026-11-03T17:12:10Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-04T17:28:23Z'
+  url: https://www.figma.com/release-notes/?title=close-connected-github-repositories
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-05T02:20:54Z'
   url: https://www.figma.com/release-notes/?title=close-connected-github-repositories
   status: captured-from-rss-feed
   body_captured: true
