@@ -245,7 +245,8 @@ def aggregate(receipts_dir: Path, *, shards: int, needs_result: str, own_commit:
             reject("MISSING_SHARD", f"no receipt for shard {index}/{shards}")
 
     # 6. Each receipt on its own.
-    executed_anywhere: Counter = Counter()
+    executed_anywhere: Counter = Counter()   # every execution, wherever it happened
+    shards_running: Counter = Counter()      # how many receipts ran each suite at all
     succeeded: Counter = Counter()
     observed_checks = 0
     unique_valid = 0
@@ -280,6 +281,7 @@ def aggregate(receipts_dir: Path, *, shards: int, needs_result: str, own_commit:
                                         f"are not its slice of {len(own_slice)}")
 
         paths = [s["path"] for s in r["suites"]]
+        shards_running.update(set(paths))
         for path, count in Counter(paths).items():
             if count > 1:
                 reject("DUPLICATE_SUITE", f"{tag} ran {path} {count} times")
@@ -329,9 +331,9 @@ def aggregate(receipts_dir: Path, *, shards: int, needs_result: str, own_commit:
         })
 
     # 7. Across receipts: the union of passing suites must be the population, each exactly once.
-    for path, count in sorted(executed_anywhere.items()):
+    for path, count in sorted(shards_running.items()):
         if count > 1:
-            reject("DUPLICATE_SUITE", f"{path} executed {count} times across shards")
+            reject("DUPLICATE_SUITE", f"{path} executed in {count} shards")
     uncovered = sorted(pop_set - set(succeeded))
     if uncovered:
         shown = ", ".join(uncovered[:8]) + (f" and {len(uncovered) - 8} more" if len(uncovered) > 8

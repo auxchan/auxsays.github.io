@@ -700,6 +700,11 @@ def section_aggregator(runner, aggregator) -> None:
         s.update(expected_checks=n, total=n, passed=n, detail=f"{n}/{n}")
     refuses("a receipt that lowered a suite's governed count to match", "COUNT_MISMATCH", undercount)
 
+    def misstated(r):
+        s = r.shard(3)["suites"][0]
+        s.update(expected_checks=s["expected_checks"] - 1)  # ran the governed count, claims another
+    refuses("a receipt that misstates a suite's governed count", "COUNT_MISMATCH", misstated)
+
     def ran_fewer(r):
         s = r.shard(3)["suites"][1]
         n = s["total"] - 2
