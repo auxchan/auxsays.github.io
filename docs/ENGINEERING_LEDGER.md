@@ -4315,6 +4315,26 @@ row is collected. Pages that rely on Reddit evidence keep an honest monitoring s
 the retention and publication-rights review concludes.
 
 **Work that this item must not block** D3 archival, Windows source diversification, Teams integrity.
+
+### AUX-071 — Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red
+
+- **Status** Resolved · **Area** Test integrity · **Severity** High
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom** After the first natural ingestion run applied the archive policy (AUX-065: 100 of 122 DaVinci
+records archived), `test_collector_traversal_order.py` crashed with `IndexError` in its budget simulation,
+so the integrity run failed on every pull request (first seen on the C1b Part A run). The suite reads the
+real corpus through `generated_records("blackmagic-davinci")`, which skips archived records by default,
+leaving 22 records against a measured budget of 33.
+
+**Fix** The simulation now reads the whole DaVinci corpus (`include_archived=True`). The defect it pins is
+the ordering over the full corpus, so the non-vacuity checks (the old order provably misses the newest
+release) are unchanged. Same 16 governed checks.
+
+**Lesson** A suite that reads the live corpus can be broken by a natural data change after its pull
+request is green. The archive pull request ran its integrity suites before any record was archived.
+A policy that rewrites the corpus at run time should also run the integrity suites over the converged
+tree.
 ## Adding an entry
 
 Keep it to the fields above. Resolved entries need **Reopen only if** with objective conditions.
