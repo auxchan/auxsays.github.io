@@ -273,6 +273,14 @@ auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
 auxsays/scripts/tests/test_patch_page_hierarchy.py = 262
+# The patch page's freshness notice said "Collection blocked." about one failed visit long after the
+# monitoring card beside it said COLLECTION STALE (AUX-084): it read method-health rows with no
+# freshness check. Renders the shipped layout with every include it uses resolved (the real card
+# included) at FIXED clocks over synthetic fixtures -- the Acrobat Pro shape before, at and after its
+# failed run ages out, both boundary seconds, every degraded status at four ages, rows that ran
+# before release or carry no usable time, live pages, a non-default limit -- and fails any case where
+# the notice claims a current problem the card does not show. Also pins the glossary's wording.
+auxsays/scripts/tests/test_freshness_notice_currency.py = 153
 # My Patch Watchlist: the visitor's own product list, local to their browser. Renders the shipped
 # patch layout to prove the control binds `page.product_id` (a patch page watches the PRODUCT, not
 # that one build), parses the other surfaces for their accessible state and their two distinct
@@ -283,8 +291,9 @@ auxsays/scripts/tests/test_patch_watchlist.py = 35
 # My Patch Stack: the personal dashboard over that same watchlist. Renders the shipped page with
 # Liquid and checks the half Jekyll owns -- a bounded payload (no 1,200-record dump), the newest
 # dated non-archived record per product, and a verdict derived exactly as patch-table-row does.
-# The client rendering is verified live; the storage contract it reuses is the Node suite's.
-auxsays/scripts/tests/test_patch_stack_dashboard.py = 110
+# The client rendering is verified live; the storage contract it reuses is the Node suite's. [CL]
+# runs the real card renderer: the date is "Newest accepted report captured", shown only with a report.
+auxsays/scripts/tests/test_patch_stack_dashboard.py = 113
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over
