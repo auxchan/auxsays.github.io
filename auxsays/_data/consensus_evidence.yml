@@ -66641,3 +66641,645 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-5-2-windows-freezes-for-minutes-not-re
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-5-2-windows-freezes-for-minutes-not-responding-media-pending-when-an-accessibility-ui-automation-tool-reads-the-window-1654452
+  parent_title: Premiere Pro 26.5.2 (Windows) freezes for minutes - "Not Responding" + "Media Pending" when an accessibility / UI Automation tool reads the window
+  report_title: Premiere Pro 26.5.2 (Windows) freezes for minutes - "Not Responding" + "Media Pending" when an accessibility / UI Automation tool reads the window
+  report_text_excerpt: 'Premiere Pro version: 26.5.2 (Build 5), latest release OS: Windows 11 Pro 26H2, build 26300.9818 (also reproduced on 26300.9711) Hardware: Intel Core i9-14900KS, 64 GB RAM, NVIDIA GeForce RTX 5070 Ti 16 GB (Studio driver 621.14) + Intel UHD 770 (driver 32.0.101.7092) Media: 4K...'
+  captured_at: '2026-11-06T07:21:15Z'
+  source_date: '2026-11-05'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: interface lag or freezing
+  workflow_area: editing interface
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_text_excerpt: 'Error Code: 399287 Dear Microsoft Support Team, Kindly need your Assistant to solving my problem : Issue with Call/Text authentication (Error Code: 399287) Error Code: 399287 Request Id: e417a495-1604-421a-a230-db4190733200 Correlation Id: cea749fb-c9f5-4972-8573-5249890290c0...'
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-06-04'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2061931
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2061931
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: '@Haqi As you were initially unable to log in to the tenant, we collected the necessary information from you and shared it with our internal team. After reviewing and processing those details, you were successfully able to log in to the tenant. I hope this information is...'
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-06-16T18:12:34.5366667+00:00'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2058380
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2058380
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs margin-bottom-xxs " > Anonymous 2025-06-06T17:24:20.9733333+00:00 Hello @Haqi You are facing this issue because your account has been blocked for MFA due to a bad reputation. To unblock MFA, we need to contact our...
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-06-06T17:24:20.9733333'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2059621
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2059621
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="1" class="margin-top-xxs is-unstyled padding-block-xxs margin-bottom-xxs " > Anonymous 2025-06-09T18:50:21.1+00:00 Hello @Haqi Did you get a chance to see my previous comment? Please feel free to reach out if you have any further questions 0 votes
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-06-09T18:50:21.1'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2059775
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2059775
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="2" class="margin-top-xxs is-unstyled padding-block-xxs margin-bottom-xxs " > Haqi • Follow 55 Reputation points 2025-06-10T01:33:06.7+00:00 Hello @Anonymous I had sent the detail on the messaging, hopefully you can resolve the problem. Thank You 0 votes
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-06-10T01:33:06.7'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2061474
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2061474
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="3" class="margin-top-xxs is-unstyled padding-block-xxs margin-bottom-xxs " > Yannick Michon • Follow 0 Reputation points 2025-06-11T13:37:33.9166667+00:00 Dear Microsoft Support Team, I'm facing the same issue with one of my organisation user can I send you the same...
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-06-11T13:37:33.9166667'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2063487
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2063487
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="5" class="margin-top-xxs is-unstyled padding-block-xxs margin-bottom-xxs expandable" > Saber Ezbiri • Follow 0 Reputation points 2025-06-13T14:09:14.31+00:00 @Anonymous PLS HELP I HAVE THE SAME ISSUE 0 votes
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-06-13T14:09:14.31'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2063594
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2063594
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="6" class="margin-top-xxs is-unstyled padding-block-xxs margin-bottom-xxs expandable" > Saber Ezbiri • Follow 0 Reputation points 2025-06-13T15:45:32.9433333+00:00 @rachak alaeddine did they help you ? 0 votes
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-06-13T15:45:32.9433333'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2239029
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2239029
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="7" class="margin-top-xxs is-unstyled padding-block-xxs margin-bottom-xxs expandable" > Damian • Follow 0 Reputation points 2025-09-27T09:11:21.5366667+00:00 Dear Microsoft Support Team, i have the same problem. Can You help me? 0 votes
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-09-27T09:11:21.5366667'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2874294
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2874294
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="8" class="margin-top-xxs is-unstyled padding-block-xxs margin-bottom-xxs expandable" > aiman zulkifli • Follow 0 Reputation points 2026-11-04T22:34:47.0266667+00:00 Dear Microsoft Support Team, I am unable to complete the SMS/phone verification process when signing in to...
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2026-11-04T22:34:47.0266667'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2874855
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2874855
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="9" class="margin-top-xxs is-unstyled padding-block-xxs expandable" > JuliaMarvin • Follow 23,870 Reputation points • Volunteer Moderator 2026-11-05T09:06:38.27+00:00 @aiman zulkifli Please start your own thread. Do not resurrect old threads. 0 votes
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2026-11-05T09:06:38.27'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2874849
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2874849
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: 'data="0" class="margin-top-xxs is-unstyled padding-block-xxs margin-bottom-xxs " > Hien. Vu Trung • Follow 0 Reputation points 2025-08-13T03:05:37.6866667+00:00 Dear Microsoft Support Team, Kindly need your Assistant to solving my problem : Troubleshooting details If you...'
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-08-13T03:05:37.6866667'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-2281009-error-code-399287-answer-2173811
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/2281009/error-code-399287#answer-2173811
+  parent_title: 'Error Code: 399287 - Microsoft Q&A'
+  report_title: ''
+  report_text_excerpt: data="1" class="margin-top-xxs is-unstyled padding-block-xxs " > Bui Tuan Anh • Follow 0 Reputation points 2025-08-20T06:53:52.08+00:00 Chào b, b fix được việc này chưa? toàn bị user bên mình cũng gặp tình trạng này. 0 votes
+  captured_at: '2026-11-06T07:28:14Z'
+  source_date: '2025-08-20T06:53:52.08'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6061690-question-6061690
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061690/windows-audio-service-keeps-stopping-with-error-0x
+  parent_title: Windows Audio Service Keeps Stopping with Error 0x80070005 (Access Denied) on Windows 11 26H2 - Microsoft Q&A
+  report_title: Windows Audio Service Keeps Stopping with Error 0x80070005 (Access Denied) on Windows 11 26H2 - Microsoft Q&A
+  report_text_excerpt: 'Windows Audio Service Keeps Stopping with Error 0x80070005 (Access Denied) on Windows 11 26H2 - Microsoft Q&A I''m experiencing a serious audio issue on my Windows 11 PC, and I would appreciate your help. System Information: OS: Windows 11 Version 26H2 OS Build: 26300.9818...'
+  captured_at: '2026-11-06T07:37:13Z'
+  source_date: '2026-11-05'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6061196-question-6061196
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061196/update-kb5127936-26300-9818-crashing-system
+  parent_title: Update KB5127936/26300.9818 Crashing System - Microsoft Q&A
+  report_title: Update KB5127936/26300.9818 Crashing System - Microsoft Q&A
+  report_text_excerpt: Update KB5127936/26300.9818 Crashing System - Microsoft Q&A The latest windows update provided by Microsoft is causing technical issues with my computer system. On reboot, Microsoft Windows produces this error - D:WINDOWS\System32\Logfiles\SRT\srttrail.txt The exact...
+  captured_at: '2026-11-06T07:37:13Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6061272-question-6061272
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061272/org-wide-kernel-memory-leak-in-luafv-sys-luaf-tag
+  parent_title: Org-wide kernel memory leak in luafv.sys (Luaf tag) after KB5127648, Windows 11 25H2/26H2 - Microsoft Q&A
+  report_title: Org-wide kernel memory leak in luafv.sys (Luaf tag) after KB5127648, Windows 11 25H2/26H2 - Microsoft Q&A
+  report_text_excerpt: Org-wide kernel memory leak in luafv.sys (Luaf tag) after KB5127648, Windows 11 25H2/26H2 - Microsoft Q&A Since the October 2026 cumulative update KB5127648 was installed, our Windows 11 machines leak kernel paged pool memory until they run out of RAM. They become slow, then...
+  captured_at: '2026-11-06T07:38:03Z'
+  source_date: '2026-11-05'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-learn-6060723-question-6060723
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6060723/update-2026-10-security-update-kb5127648-26100-971
+  parent_title: Update 2026-10 Security Update (KB5127648) (26100.9711) is failing every time and causing a boot loop. - Microsoft Q&A
+  report_title: Update 2026-10 Security Update (KB5127648) (26100.9711) is failing every time and causing a boot loop. - Microsoft Q&A
+  report_text_excerpt: Update 2026-10 Security Update (KB5127648) (26100.9711) is failing every time and causing a boot loop. - Microsoft Q&A Each time the above update tries to install it hits 0%, says something went wrong and tries to undo the changes. It seems to not go through correctly and...
+  captured_at: '2026-11-06T07:38:24Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.9711'
+  match_basis: exact_os_build
+  matched_kb: KB5127648
+  matched_os_build: '26100.9711'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: boot failure
+  workflow_area: startup / boot
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.9711'
+- id: obs-studio-32-1-2-github-issue-14152
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14152
+  parent_title: OBS 33.0.1 crashes with c0000005 in obs-browser.dll (QCefWidgetInternal::Init) when creating a browser widget
+  report_title: OBS 33.0.1 crashes with c0000005 in obs-browser.dll (QCefWidgetInternal::Init) when creating a browser widget
+  report_text_excerpt: 'it likely affects any plugin creating a browser dock. 4. Version Rollback: Installing OBS 32.1.2 "over the top" (a dirty install, without cleaning previous files) with the exact same plugin set (including Aitum Vertical 1.6.7) works absolutely fine without any crashes. This clear'
+  captured_at: '2026-11-06T08:03:51Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-obs-forum-thread-196824
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BE%D0%BA-obs-33-0-1-%D0%BF%D0%B0%D0%B4%D0%B0%D0%B5%D1%82-%D1%81-c0000005-%D0%B2-obs-browser-dll-qcefwidgetinternal-init-%D0%BF%D1%80%D0%B8-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B8-%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B2%D0%B8%D0%B4%D0%B6%D0%B5%D1%82%D0%B0-32-x-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82.196824/
+  parent_title: 'Заголовок: OBS 33.0.1 падает с c0000005 в obs-browser.dll (QCefWidgetInternal::Init) при создании браузерного виджета; 32.x работает'
+  report_title: 'Заголовок: OBS 33.0.1 падает с c0000005 в obs-browser.dll (QCefWidgetInternal::Init) при создании браузерного виджета; 32.x работает'
+  report_text_excerpt: 'на 33.0.1. Обходной путь, который сработал: После полного удаления 33.0.1 я установил OBS 32.1.2 обычным установщиком «поверх» (без предварительной очистки, то есть, по сути, «грязная» установка) — всё запускается и работает без крашей , с тем же самым Aitum Vertical 1.6.7. То ес'
+  captured_at: '2026-11-06T08:03:47Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14155
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14155
+  parent_title: 'OBS 33.0.1 crashes after upgrade from OBS 32 (Unhandled exception: 80000003, libcef.dll)'
+  report_title: 'OBS 33.0.1 crashes after upgrade from OBS 32 (Unhandled exception: 80000003, libcef.dll)'
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Gb0jfzcwBZo2RRT7 ### OBS Studio Crash Log URL https://obsproject.com/logs/FUCxyCzZ7M9EW'
+  captured_at: '2026-11-06T08:08:50Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14152
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14152
+  parent_title: OBS 33.0.1 crashes with c0000005 in obs-browser.dll (QCefWidgetInternal::Init) when creating a browser widget
+  report_title: OBS 33.0.1 crashes with c0000005 in obs-browser.dll (QCefWidgetInternal::Init) when creating a browser widget
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/crashes/vpbNG0Y6A2GLlZ7M ### OBS Studio Crash Log URL _No response_ ### Expected Behavi'
+  captured_at: '2026-11-06T08:08:50Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14153
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14153
+  parent_title: 'Custom Output (FFmpeg): a frame from the previous recording leaks into the next one, which then fails with "Error writing packet: Invalid argument"'
+  report_title: 'Custom Output (FFmpeg): a frame from the previous recording leaks into the next one, which then fails with "Error writing packet: Invalid argument"'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Lko2Z0NoaupzOk9h ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Stopp'
+  captured_at: '2026-11-06T08:08:50Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14154
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14154
+  parent_title: Cant find Camera
+  report_title: Cant find Camera
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS Tahoe 26.6.2 ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/W2aHreqr8rGjeX7M ### OBS Studio Crash Log URL _No response_ ### Expected Behavior <img'
+  captured_at: '2026-11-06T08:08:50Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14156
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14156
+  parent_title: Frame timing problems when running on high refresh rate displays
+  report_title: Frame timing problems when running on high refresh rate displays
+  report_text_excerpt: '### Operating System Info Other ### Other OS Fedora 45 ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) Flatpak ### OBS Studio Log URL https://obsproject.com/logs/Mm9tSlDBvKOnQLUD ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS to rend'
+  captured_at: '2026-11-06T08:08:50Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196823
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-not-opening-33-0-1.196823/
+  parent_title: OBS Not Opening - 33.0.1
+  report_title: OBS Not Opening - 33.0.1
+  report_text_excerpt: Hi, Just a run down of what has happened. - opened OBS (33.0.1), got stuck on the autostarter and kept crashing - went in and deleted the autostarter dll file from plugins folder (in case it was making it crash) - I go to open OBS - it tells me t
+  captured_at: '2026-11-06T08:08:39Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196824
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BE%D0%BA-obs-33-0-1-%D0%BF%D0%B0%D0%B4%D0%B0%D0%B5%D1%82-%D1%81-c0000005-%D0%B2-obs-browser-dll-qcefwidgetinternal-init-%D0%BF%D1%80%D0%B8-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B8-%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B2%D0%B8%D0%B4%D0%B6%D0%B5%D1%82%D0%B0-32-x-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82.196824/
+  parent_title: 'Заголовок: OBS 33.0.1 падает с c0000005 в obs-browser.dll (QCefWidgetInternal::Init) при создании браузерного виджета; 32.x работает'
+  report_title: 'Заголовок: OBS 33.0.1 падает с c0000005 в obs-browser.dll (QCefWidgetInternal::Init) при создании браузерного виджета; 32.x работает'
+  report_text_excerpt: 'Здравствуйте. Сообщаю о воспроизводимом краше в OBS Studio 33.0.1. Краш происходит в штатном коде OBS (obs-browser) при создании браузерного виджета, а не в каком-либо стороннем плагине как таковом. Система: OBS Studio 33.0.1 (64-bit), чистый устано'
+  captured_at: '2026-11-06T08:08:39Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
