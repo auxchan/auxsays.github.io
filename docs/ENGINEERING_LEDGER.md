@@ -4437,8 +4437,9 @@ inner passes, each printing its own indentation. The analytics tag was a static 
 - Commit 4 against origin/main: signal rows identical; titles, meta descriptions, canonicals and og:url
   identical on all 1,664 existing pages; one new page (/privacy/); `auxsays/_data` and
   `auxsays/updates/generated` trees hash-identical; published payload gate clean; record QA 0 errors.
-- First screen, 1440x900: signals in view 0 -> 3, tracker links 0 -> 15 of 16, entrances 0 -> 3.
-  390x844: entrances 0 -> 3; first signal y=2566 -> 1527; tracker list starts at y=917.
+- First screen, 1440x900: signals in view 0 -> 3, tracker links 0 -> 15 of 16, patch entrances (Patch
+  Feed, My Patch Stack, methodology) 1 -> 3. 390x844: patch entrances 1 -> 3; first signal y=2566 -> 1527;
+  tracker list starts at y=917.
 - gtag.js elements in built pages: static on 1,651 -> 0; the guard on all 1,652 site-frame pages.
 
 **Not changed** The signal selection and row wording (including "confirmed community reports" and the
