@@ -320,7 +320,7 @@ def run() -> int:  # noqa: PLR0915
     check("R8 the forum row keeps its own identity", frow["id"] == "obs-studio-32-2-2-obs-forum-thread-196001"
           and frow["source_type"] == forum.SOURCE_TYPE, frow["id"])
     check("R9 the producer emits only the store's format for the day",
-          obs.normalize_row(row)[FIELD] == "2026-09-01" and FIELD not in obs.normalize_row(bare))
+          obs.normalize_row(row).get(FIELD) == "2026-09-01" and FIELD not in obs.normalize_row(bare))
 
     print("D the release-date gate is unchanged")
     release = obs.parse_date("2026-09-02")
@@ -333,7 +333,7 @@ def run() -> int:  # noqa: PLR0915
     check("D4 the gate still reads the stamp's own day: a forum post at 00:20+0100 on release day passes",
           obs.release_date_gate(post, release) is None)
     check("D5 ...and that same report stores the UTC day, the evening before (AUX-090 semantics)",
-          frow[FIELD] == "2026-09-01" and obs.issue_source_date(post).isoformat() == "2026-09-02")
+          frow.get(FIELD) == "2026-09-01" and obs.issue_source_date(post).isoformat() == "2026-09-02")
     check("D6 a naive stamp still passes the gate on its own day (and stores no day)",
           obs.release_date_gate({"created_at": "2026-09-02T10:00:00"}, release) is None)
 
@@ -401,8 +401,8 @@ def run() -> int:  # noqa: PLR0915
                 and c["issue"]["updated_at"][:10] != r[FIELD]]
     check("N5 non-vacuous: >= 50 dated rows whose issue was last active on another day", len(activity) >= 50,
           str(len(activity)))
-    before_gate_day = [r for c, r in pairs if FIELD in r
-                       and r[FIELD] != obs.parse_date(c["issue"]["created_at"]).isoformat()]
+    before_gate_day = [r for c, r in pairs if FIELD in r and obs.parse_date(c["issue"].get("created_at"))
+                       and r[FIELD] != obs.parse_date(c["issue"].get("created_at")).isoformat()]
     check("N6 non-vacuous: accepted reports whose UTC day differs from the gate's own day occur",
           len(before_gate_day) >= 5, str(len(before_gate_day)))
     yaml_shape = re.compile(r"\n  captured_at: '[^'\n]+'\n  source_date: '\d{4}-\d{2}-\d{2}'\n")
