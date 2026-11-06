@@ -91,6 +91,12 @@ NOT_APPLICABLE = "not_applicable"
 CROSS_SEGMENT_BUILD_IGNORED = "cross_segment_build_ignored"
 SEGMENT_NOT_IDENTIFIED = "segment_not_identified"
 
+# A fetch_thread status of FETCH_REFUSED_PREFIX + <reason> means the transport's Learn same-origin
+# policy declined the page (lib/learn_fetch_policy.REFUSAL_REASONS). It resolves to FETCH_BLOCKED --
+# counted with the blocked fetches, so it can never read as a healthy "no build" -- and keeps the
+# reason as the outcome's detail so method health can name it.
+FETCH_REFUSED_PREFIX = "refused:"
+
 RESOLUTION_RESULTS = frozenset({
     RESOLVED_EXACT_BUILD, NO_EXPLICIT_BUILD, CONFLICTING_BUILD,
     FETCH_BLOCKED, FETCH_BROKEN, NOT_APPLICABLE,
@@ -228,6 +234,10 @@ def _fetch_thread(url: str, *, fetch_thread: Callable[[str], tuple[str, str]],
 
     if status == "blocked":
         budget.threads[url] = (None, "blocked")
+    elif str(status).startswith(FETCH_REFUSED_PREFIX):
+        # The transport declined the page (another host, http, a non-question path) -- kept
+        # verbatim so the refusal stays named all the way to method health.
+        budget.threads[url] = (None, str(status))
     elif status != "ok":
         budget.threads[url] = (None, f"broken:status={status}")
     else:
@@ -243,7 +253,9 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
     """Attempt deterministic, segment-scoped exact-build resolution for ONE rejected candidate.
 
     ``fetch_thread(url) -> (page_html, status)`` is injected: production binds the shared HTTP
-    transport, fixtures bind a deterministic stand-in. ``status`` is "ok" | "blocked" | "broken".
+    transport, fixtures bind a deterministic stand-in. ``status`` is "ok" | "blocked" | "broken" |
+    ``FETCH_REFUSED_PREFIX + <reason>`` (the Learn same-origin policy declined the page; it lands as
+    ``fetch_blocked`` with the reason as its detail, and the page is never parsed).
     The page must be RAW HTML -- the segment model reads the page's schema.org structured data.
 
     Returns an outcome; the caller decides whether to re-run the acceptance authority. This
@@ -276,6 +288,9 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
         if status == "blocked":
             outcome.resolution_result = FETCH_BLOCKED
             outcome.detail = "source refused the request"
+        elif str(status).startswith(FETCH_REFUSED_PREFIX):
+            outcome.resolution_result = FETCH_BLOCKED
+            outcome.detail = str(status)
         elif status == "budget_exhausted":
             outcome.resolution_attempted = False
             outcome.resolution_result = NOT_APPLICABLE
