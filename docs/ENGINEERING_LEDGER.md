@@ -73,6 +73,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
+| AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -87,6 +88,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
+| AUX-087 | Deferred | Coverage | Medium | Premiere Pro release discovery is source-blocked, and the lane read healthy while HelpX refused it |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-077 | Resolved | Evidence integrity | Medium | Learn Q&A fetchers followed a redirect to any host and would have parsed that page as the Learn thread |
@@ -4460,6 +4462,57 @@ loop over the patch records is nested inside another; gtag.js is requested on an
 
 ---
 
+### AUX-088 — Twenty community reports cited on the live pages were credited to an update they were not about
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-11-06 (citation audit of the six live pages; blind second review) · **Resolved** 2026-11-06
+
+**Symptom** A citation audit read every counted report on the six live-consensus pages (Windows 11 25H2
+26200.7462, 26200.7623 and 26200.7840; OBS Studio 32.1.1, 32.1.2 and 32.2.2) and flagged 43 placements. A
+second reviewer then labelled those placements and a set of controls blind, without seeing the first labels.
+Both judged 21 placements, 20 stored rows (one row was cited twice), incorrect for the credited update:
+another product, version or KB was the subject; the author later withdrew the claim (their own setting, a
+driver, a damaged install); the credited version is the one that works or the one the author went back to;
+the post is a feature request, or intended behaviour the author accepted; or it is the same author's
+cross-post of a report the page already counts. Two are Windows rows (26200.7623, 26200.7840) and eighteen
+OBS (32.1.1: 2, 32.1.2: 10, 32.2.2: 6).
+
+**Scope** Only rows both reviews labelled incorrect. The 22 placements on which the two disagree stay counted,
+and so does every report of a problem that began earlier but is experienced on the credited version. No
+acceptance rule changed.
+
+**Fix** `withdraw_live_citation_rows.py` withdraws the rows pinned in `scripts/audit/live_citation_withdrawal.json`
+with the AUX-072 and AUX-079 mechanism, imported and scoped to Windows and OBS: five-field selection (the build
+is part of a Windows identity and absent from an OBS one), pinned block hashes, three lines per Windows row and
+two per OBS row, every row kept, all or nothing, idempotent. Each row takes the reason its two reviews support,
+from a closed set of names the store already uses (`identity_not_the_subject`, `version_named_but_working`,
+`version_is_rollback_target`, `not_a_real_issue_report`, `duplicate_existing_evidence`); its two labels and a
+one-line basis sit beside it in the manifest. The two duplicates name the earlier GitHub issue they cross-post,
+which must still count and is left untouched. A row of the same report stored on another version is never
+re-homed. The five records were regenerated only by the scoped lane writers (the reconcile, then the Windows
+and the OBS promotion), which `--regenerate` runs after the store step; live eligibility was re-decided by the
+shipped authority, not by this change.
+
+**Measured** Counted rows: Windows 517 -> 515, OBS 301 -> 283 (all products 1477 -> 1457); all 2685 rows kept;
+store diff 42 lines. 25H2 7623 42 -> 41, 7840 34 -> 33; OBS 32.1.1 45 -> 43 (distinct citations counted on no
+other version 43 -> 41), 32.1.2 112 -> 102 (98 -> 93), 32.2.2 59 -> 53 (50 -> 47). The live set is unchanged:
+all six pages still certify, and 7840 now sits exactly at the minimum. Verdicts (WAIT), maturity and labels are
+unchanged; each record loses exactly its withdrawn sources and gains one "User report count updated to N."
+event. 7623's newest accepted capture moves back from 2026-10-16 to 2026-09-06 and 32.1.2's from 2026-11-06 to
+2026-10-30, because a withdrawn row was the newest, and one 32.1.2 evidence sample changes by the writer's own
+selection. OBS 33.0.0 and 33.0.1 each gain two distinct citations (their rows had been shared with a withdrawn
+copy) and stay below live; their records do not change. A second run of the tool and the writers changes
+nothing. `test_withdraw_live_citation_rows.py` pins it (72 checks; 37 mutants, each killed by a named check);
+the AUX-079 suite gains a check that the two manifests share no row (58).
+
+**Not changed here** One further placement the first audit flagged, a forum cross-post on OBS 32.1.2, was not
+in the blind review's case set (both placements of that thread were presented as 32.2.2), so it stays counted.
+
+**Reopen only if** any of the twenty counts again, either kept original stops counting without an audited
+withdrawal of its own, or a row the two reviews disagreed on is withdrawn without a fresh independent review.
+
+---
+
 ### AUX-078 — A Microsoft Q&A question re-found under an edited title was counted twice on one patch
 
 - **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
@@ -4673,6 +4726,53 @@ comes from the existing search feed only.
 reviews.
 
 **Work that this item must not block** AUX-077 and all existing collection.
+
+---
+
+### AUX-087 — Premiere Pro release discovery is source-blocked, and the lane read healthy while HelpX refused it
+
+- **Status** Deferred (discovery is SOURCE-BLOCKED; the reporting fix is resolved) · **Area** Coverage · **Severity** Medium
+- **First seen** 2026-11-06 · **Reporting fixed** 2026-11-06 (`fix/premiere-source-truth`)
+
+**Symptom** Premiere Pro 26.5, 26.5.1 and 26.5.2 have shipped, and AUXSAYS has no record of them. The
+official lane still reported `healthy` / "Fetch succeeded." (run 42194448565: one candidate, the pinned
+26.2.2 announcement), and the product page said "Official updates monitored".
+
+**Cause** Since 2026-09-08 (run 34252632666) HelpX has refused CI at once with HTTP 403 "Access Denied".
+Before that date, every run spent about 25 s on a HelpX timeout. `_fetch_first_available` threw that
+error away whenever the pinned announcement answered. No other official route reachable from CI lists
+26.5.x:
+- every other Adobe official route is already `blocked` in `lib/acquisition_methods.py`;
+- the public Premiere Announcements board has had no release post since 26.3 (2026-06-17);
+- 26.5 appears only as a non-public product-update entry, and 26.5.1 and 26.5.2 only in user reports.
+
+**Fixed here (reporting only)**
+- The HelpX error survives the fallback. The source records `partial`: never `healthy`, never "Fetch
+  succeeded.". The run is degraded and annotated.
+- The monitoring projection publishes "Official source is refusing automated checks". It never gives the
+  fallback's date as the last successful check. The source-health snapshot says Partial.
+- An unknown version no longer inherits the 26.2 announcement URL.
+- A page with no readable date no longer becomes a release dated today.
+- Identity and date come from the announcement's own title. A candidate without both is dropped, and the
+  drop is reported.
+- No request, source or record changed. The 26.2.2 record comes out byte-identical under the old and the
+  new code. Test: `test_premiere_source_truth.py` (49 checks).
+
+**Why deferred** No approved official method that carries Premiere release identity is reachable from
+production. Getting past the HelpX refusal would be a bypass, and user reports are not an official source.
+
+**Current impact** The newest Premiere record stays 26.2.2. After the next ingestion run, the product reads
+as blocked rather than monitored, and the Adobe company card counts 2 of 7 products monitored instead of 3.
+
+**Revisit trigger** Reopen only if one of these happens:
+- an official Adobe route that carries Premiere release identity (version and date) answers HTTP 200 from
+  CI;
+- Adobe resumes public Premiere release posts on the Announcements board.
+
+A listing over that board alone would yield 26.3 only.
+
+**Work that this item must not block** GROWTH-1B and all other ingestion. The pinned 26.2.2 fallback stays
+as it is.
 
 ---
 

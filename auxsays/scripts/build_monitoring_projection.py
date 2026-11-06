@@ -185,6 +185,17 @@ def derive_state(source: dict | None, state: dict | None, *, now: datetime) -> s
         if error_type == "timeout":
             return "unreachable"
         return "unverified"   # failing for a reason this file does not recognise
+    if status == "partial":
+        # The PRIMARY official source failed and only a fallback answered. Premiere Pro: HelpX
+        # refuses every automated request and a pinned announcement of one release answers, which
+        # is not monitoring of official updates. Same mapping as a failing source, on the
+        # primary's error; never healthy.
+        primary_type = str(state.get("primary_source_error_type") or "").strip().lower()
+        if primary_type in ("blocked", "challenged"):
+            return "blocked"
+        if primary_type == "timeout":
+            return "unreachable"
+        return "unverified"
 
     if status != "healthy":
         return "unverified"   # an unrecognised status is never an affirmative claim
@@ -242,6 +253,16 @@ COMPANY_STATES = ("healthy", "partial", "failing", "stale", "disabled", "unconfi
                   "unverified")
 
 
+def _success_field(state: dict | None) -> Any:
+    """The success a reader may be told about. For a `partial` source that is the PRIMARY's last
+    success, never the fallback's: "refusing automated checks, last successful check <today>" was
+    the fallback's date sitting beside the primary's refusal."""
+    st = state or {}
+    if str(st.get("status") or "").strip().lower() == "partial":
+        return st.get("primary_last_success_at")
+    return st.get("last_success_at")
+
+
 def day(value: Any) -> str:
     """A date, never a timestamp: the hour a check ran is operational detail."""
     dt = parse_instant(value)
@@ -278,7 +299,7 @@ def build_rows(*, now: datetime | None = None) -> list[dict]:
             "label": STATE_LABELS[public_state],
             # Dates only, and only when they exist. A reader judging an absence of reports needs
             # to know how old that absence is; they do not need the hour or the adapter.
-            "last_success": day((st or {}).get("last_success_at")) if st else "",
+            "last_success": day(_success_field(st)) if st else "",
             "last_checked": day((st or {}).get("last_checked_at")) if st else "",
         }
         rows.append(row)

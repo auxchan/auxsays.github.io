@@ -296,6 +296,14 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     # A mismatch claim only means anything when the extractor produced nothing. If records came
     # back, extraction worked on this run whatever else the listing contained.
     extraction_mismatch = bool(probe.get("extraction_mismatch")) and candidate_count == 0
+    # An adapter with an ordered primary/fallback chain reports its primary's error here even when
+    # the fallback answered ("" = the primary answered). Absent = no such chain. A primary failure
+    # makes the source `partial`, never `healthy`: the Premiere lane read "healthy / Fetch
+    # succeeded." for two months while HelpX refused every request and only a pinned announcement
+    # of one release answered.
+    primary_source_error = None
+    if "primary_source_error" in probe:
+        primary_source_error = sanitize_error_message(probe.get("primary_source_error") or "")[:300]
     written = []
     skipped = []
     refreshed = []
@@ -403,6 +411,7 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
             skipped=len(skipped),
             extraction_mismatch=extraction_mismatch,
             upstream_candidates=upstream_candidates,
+            primary_source_error=primary_source_error,
             **({"tolerance": int(tolerance)} if tolerance is not None else {}),
         )
 
@@ -416,6 +425,9 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         "candidate_count": candidate_count,
         "upstream_candidates": upstream_candidates,
         "extraction_mismatch": extraction_mismatch,
+        # Observed this run, so a dry run grades the source exactly as a write run would. Only
+        # present for an adapter that reports a primary/fallback chain.
+        **({"primary_source_error": primary_source_error} if primary_source_error is not None else {}),
         "created": created_count,
         "skipped_existing": len(skipped),
         "deferred_count": len(deferred),

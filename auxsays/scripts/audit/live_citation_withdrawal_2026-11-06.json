@@ -1,0 +1,428 @@
+{
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6039416-how-do-i-fix-error-0x80070306-when-ins",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6039416/how-do-i-fix-error-0x80070306-when-installing-upda",
+   "block_sha256_before_run": "8cf6b14cd9790dd743ef8714ae305a6ed0f03ef15fc8b7ed49449fb355248d22",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7840",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-unable-to-manually-install-kb5074109-449",
+   "source_url": "https://techcommunity.microsoft.com/discussions/windows11/unable-to-manually-install-kb5074109/4494943",
+   "block_sha256_before_run": "85082f5b77898edc6203c251b078bc5755e1a9879605d6a1891473dec7b540d9",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.1",
+   "target_build": "",
+   "id": "obs-studio-32-1-1-github-issue-13291",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13291",
+   "block_sha256_before_run": "b6c97fa1d23ed8e496a6867a6666d5cab8f8d6ec72d39d34e3651d11d81baa0b",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.1",
+   "target_build": "",
+   "id": "obs-studio-32-1-1-github-issue-13332",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13332",
+   "block_sha256_before_run": "d23639cdafb70e1f2152d201089af6889283b71c5bfa7b8d033cd5afdcf06edb",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13370",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13370",
+   "block_sha256_before_run": "76b5c01246a549b916a17eb8886a8fd4f511d1636d0af8d801d650ff31bac6ef",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "not_a_real_issue_report"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13373",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13373",
+   "block_sha256_before_run": "d4aa733dd90124b415861be960af2e1318d723e434b753a580b0d21c5757a3f1",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "version_named_but_working"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13437",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13437",
+   "block_sha256_before_run": "5b9fad13d1ecf6b1255cd05fb613bd8678decee7ad1c1fe7e6abe823cf001c68",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13466",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13466",
+   "block_sha256_before_run": "5070cb3da1a7bdf9e20f5092f9a345b829348abebadb9cf7f6ff1e9873d457a4",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13995",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13995",
+   "block_sha256_before_run": "7da91e6e0fdcc4e076a9bd17d1d1c383f71e4efe23a5e7a7dcf830cfcd347344",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-14088",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14088",
+   "block_sha256_before_run": "9a54dddcf5a107b108277d0e3990ea498c139a6189cc706be2e94f87fe51b2c8",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "version_named_but_working"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-14152",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14152",
+   "block_sha256_before_run": "b5f929974e71a27b41bd899719f68d5d6c757ff84e277f9a7c0baeaa459c6146",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "version_is_rollback_target"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-obs-forum-thread-195299",
+   "source_url": "https://obsproject.com/forum/threads/window-capture-no-longer-working.195299/",
+   "block_sha256_before_run": "9c45df6a75a6e401e6fc59eaacfddb5564ff2bfafcde5b9aab0ef8562da47872",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-obs-forum-thread-195407",
+   "source_url": "https://obsproject.com/forum/threads/srt-media-source-ffmpeg_source-cannot-recreate-listener-socket-on-reconnect-while-recording-or-streaming-is-active.195407/",
+   "block_sha256_before_run": "6674dc14411f92150500cd52ce1a227b2a18574f10fcc8384fc70318f6eee842",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-obs-forum-thread-196824",
+   "source_url": "https://obsproject.com/forum/threads/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BE%D0%BA-obs-33-0-1-%D0%BF%D0%B0%D0%B4%D0%B0%D0%B5%D1%82-%D1%81-c0000005-%D0%B2-obs-browser-dll-qcefwidgetinternal-init-%D0%BF%D1%80%D0%B8-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B8-%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B2%D0%B8%D0%B4%D0%B6%D0%B5%D1%82%D0%B0-32-x-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82.196824/",
+   "block_sha256_before_run": "4e3ad390b3d3e9c988cbd66e2996e4be27360c885b9ce2fea60fb7e1dbbd0a4c",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "version_is_rollback_target"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-14023",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14023",
+   "block_sha256_before_run": "84024445c0bb6d318bde84ae8cbeec4667b15dabf9da0f93ec0bf18f6c229081",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-14040",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14040",
+   "block_sha256_before_run": "ede0396cd1d4e704a5e4c35e077f549f62b0b6574de31cfd7ed5c64bc68d1773",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-14088",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14088",
+   "block_sha256_before_run": "df47131662b3fd2dd5e71b019d2f4b5681c0b28af570de80315e9e925a067b77",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-14117",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14117",
+   "block_sha256_before_run": "2261fe6d94e8eae5e177d13471768a23a1780e471f91ab1fdfd70168fcfd037a",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "version_named_but_working"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-obs-forum-thread-196184",
+   "source_url": "https://obsproject.com/forum/threads/zoominator-wayland-mouse-follow-broken-requesting-xdg-desktop-portal-support.196184/",
+   "block_sha256_before_run": "9994111c95779ffee43a01e9c7f5a4e084c4343b9000981e111bada403023a2e",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "not_a_real_issue_report"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-obs-forum-thread-196545",
+   "source_url": "https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/",
+   "block_sha256_before_run": "68ab66abcde9cea0c8d31689d8ce17ff1f8a224ceeba62e3e1bca97d375c1f40",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "duplicate_existing_evidence"
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-github-issue-13506",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13506",
+   "block_sha256_before_run": "6b340982e79be9c1f98a2e45c0a3c39a9869bbbde73abe999e0b012cf7b5da1f",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "retain",
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-13997",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13997",
+   "block_sha256_before_run": "3ba9754af7720e0986a7895b9be73cdd4591458a290554dc82d9a0b0597b94c8",
+   "counted_before_run": true,
+   "action": "kept"
+  }
+ ],
+ "withdrawn_now": 20,
+ "counted_population": {
+  "microsoft-windows-11": [
+   517,
+   515
+  ],
+  "obs-studio": [
+   301,
+   283
+  ]
+ },
+ "per_patch": [
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "before": 42,
+   "after": 41
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7840",
+   "before": 34,
+   "after": 33
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.1.1",
+   "target_build": "",
+   "before": 45,
+   "after": 43
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "before": 112,
+   "after": 102
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "before": 59,
+   "after": 53
+  }
+ ],
+ "newly_counted_rows": [],
+ "same_report_rows_on_other_identities": [
+  {
+   "product_id": "obs-studio",
+   "update_version": "31.1.2",
+   "target_build": "",
+   "id": "obs-studio-31-1-2-github-issue-13995",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13995",
+   "counted": true,
+   "exclusion_reason": null,
+   "unchanged": true
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.2.2",
+   "target_build": "",
+   "id": "obs-studio-32-2-2-github-issue-13995",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/13995",
+   "counted": true,
+   "exclusion_reason": null,
+   "unchanged": true
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "32.1.2",
+   "target_build": "",
+   "id": "obs-studio-32-1-2-obs-forum-thread-196545",
+   "source_url": "https://obsproject.com/forum/threads/video-capture-device-green-flickering.196545/",
+   "counted": true,
+   "exclusion_reason": null,
+   "unchanged": true
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "33.0.0",
+   "target_build": "",
+   "id": "obs-studio-33-0-0-github-issue-14088",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14088",
+   "counted": true,
+   "exclusion_reason": null,
+   "unchanged": true
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "33.0.0",
+   "target_build": "",
+   "id": "obs-studio-33-0-0-github-issue-14117",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14117",
+   "counted": true,
+   "exclusion_reason": null,
+   "unchanged": true
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "33.0.1",
+   "target_build": "",
+   "id": "obs-studio-33-0-1-github-issue-14152",
+   "source_url": "https://github.com/obsproject/obs-studio/issues/14152",
+   "counted": true,
+   "exclusion_reason": null,
+   "unchanged": true
+  },
+  {
+   "product_id": "obs-studio",
+   "update_version": "33.0.1",
+   "target_build": "",
+   "id": "obs-studio-33-0-1-obs-forum-thread-196824",
+   "source_url": "https://obsproject.com/forum/threads/%D0%97%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BE%D0%BA-obs-33-0-1-%D0%BF%D0%B0%D0%B4%D0%B0%D0%B5%D1%82-%D1%81-c0000005-%D0%B2-obs-browser-dll-qcefwidgetinternal-init-%D0%BF%D1%80%D0%B8-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B8-%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B2%D0%B8%D0%B4%D0%B6%D0%B5%D1%82%D0%B0-32-x-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82.196824/",
+   "counted": true,
+   "exclusion_reason": null,
+   "unchanged": true
+  }
+ ],
+ "generated_at": "2026-11-06T14:18:48Z",
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "store_sha256_before": "5d6b22a68e5dbc6cc9298f8e473d2a05e9409148e9214f66a85ebcf2982ea2ac",
+ "store_sha256_after": "68dceaeac8af11e9abb4594db895deaee1aa4b60d9f0460c8e22fad5de84f3a9",
+ "manifest_sha256": "e7fda1cf2cdf42a1dc88a8ab962c2ef3fbaec9599bff26077a6880f0247d9d24",
+ "written": true,
+ "writers": [
+  {
+   "command": "build_consensus_from_evidence.py --product-id microsoft-windows-11 --product-id obs-studio --reconcile-only",
+   "returncode": 0,
+   "output": [
+    "Reconciled report counts on 5 record(s) to final counted evidence (scoped to microsoft-windows-11, obs-studio).",
+    "  2026-01-13-windows-11-25h2-26200-7623.md: microsoft-windows-11 25H2 42 -> 41",
+    "  2026-02-10-windows-11-25h2-26200-7840.md: microsoft-windows-11 25H2 34 -> 33",
+    "  2026-04-02-obs-studio-32-1-1.md: obs-studio 32.1.1 45 -> 43",
+    "  2026-04-21-obs-studio-32-1-2.md: obs-studio 32.1.2 112 -> 102",
+    "  2026-08-14-obs-studio-32-2-2.md: obs-studio 32.2.2 59 -> 53"
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id microsoft-windows-11 --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 55 group(s); 55 would write; 0 blocked; 515 included; 51 excluded."
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id obs-studio --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 13 group(s); 13 would write; 0 blocked; 283 included; 19 excluded."
+   ]
+  }
+ ],
+ "parent_commit": "4e7ac7b49d537b1a2bbe3bfa641c620fee89ad37"
+}

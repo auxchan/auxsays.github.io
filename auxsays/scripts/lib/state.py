@@ -91,6 +91,18 @@ def mismatch_note(upstream_candidates: int) -> str:
             "this source's extraction rules.")
 
 
+def partial_note(primary_error_type: str) -> str:
+    """The one sentence for a source whose PRIMARY failed while a fallback answered.
+
+    Shared by the persisted bucket and the run's health row, like `mismatch_note`. It never says
+    "Fetch succeeded": the fetch that succeeded was the fallback, and a fallback (for Premiere Pro,
+    a pinned announcement of one release) cannot show whether newer releases exist.
+    """
+    kind = str(primary_error_type or "").strip() or "error"
+    return (f"The primary official source failed on this check ({kind}). Only the fallback source "
+            "answered, so this check does not show whether newer releases exist.")
+
+
 def has_ever_extracted(bucket: dict[str, Any]) -> bool:
     """Has this source EVER produced a record, over its whole life?
 
@@ -115,7 +127,8 @@ def classify_success(fetched: int, written: int, skipped: int,
                      *, consecutive_empty: int = 0,
                      tolerance: int = DEFAULT_EMPTY_EXTRACTION_TOLERANCE,
                      ever_extracted: bool = False,
-                     extraction_mismatch: bool = False) -> str:
+                     extraction_mismatch: bool = False,
+                     primary_failed: bool = False) -> str:
     """Classify a successful adapter run without pretending every success is equal.
 
     A FETCH that succeeds is not an EXTRACTION that succeeded, and the difference is the whole
@@ -141,9 +154,15 @@ def classify_success(fetched: int, written: int, skipped: int,
     `adapters/html_changelog.py` requires `/changelog/YYYY/M/D/slug/`. Zero of the 41 match, because
     the site moved to slug-only URLs. The fetch is perfect, the extractor matches nothing, and every
     run since has reported `status: "success"`.
+
+    partial     (`primary_failed`) the source's PRIMARY failed and a fallback answered. It replaces
+                `healthy` and `no_results` only; `stale` and `broken` are worse and stay. Measured
+                on Premiere Pro: HelpX has refused CI with HTTP 403 since 2026-09-08, the pinned
+                26.2.2 announcement answered every run, and the lane read `healthy` while it could
+                see nothing newer than May.
     """
     if fetched > 0:
-        return "healthy"
+        return "partial" if primary_failed else "healthy"
     # STRUCTURAL EVIDENCE BEATS THE CLOCK. `extraction_mismatch` means the adapter looked at the
     # upstream listing, recognised entries that belong to this source, and mapped NONE of them --
     # Netlify's 9 changelog entries against a detail pattern that requires a date path, or an
@@ -165,7 +184,8 @@ def classify_success(fetched: int, written: int, skipped: int,
         return "stale" if ever_extracted else "broken"
     if consecutive_empty > max(0, int(tolerance)):
         return "stale" if ever_extracted else "broken"
-    return "no_results"
+    # A quiet check is only "quiet" when the source that would show a new release answered.
+    return "partial" if primary_failed else "no_results"
 
 
 def update_source_success(
@@ -181,14 +201,22 @@ def update_source_success(
     tolerance: int = DEFAULT_EMPTY_EXTRACTION_TOLERANCE,
     extraction_mismatch: bool = False,
     upstream_candidates: int = 0,
+    primary_source_error: str | None = None,
 ) -> None:
+    """Persist a run that did not raise.
+
+    `primary_source_error` is None for an adapter with no primary/fallback chain (every source but
+    the Adobe release-notes lane), "" when the primary answered, and the primary's error when a
+    fallback answered after it. Only the last makes the source `partial`.
+    """
     bucket = source_state(state, product_id)
     previous_failures = int(bucket.get("consecutive_failures") or 0)
     consecutive_empty = 0 if fetched > 0 else int(bucket.get("consecutive_empty_extractions") or 0) + 1
     status = classify_success(fetched, written, skipped,
                               consecutive_empty=consecutive_empty, tolerance=tolerance,
                               ever_extracted=has_ever_extracted(bucket),
-                              extraction_mismatch=extraction_mismatch)
+                              extraction_mismatch=extraction_mismatch,
+                              primary_failed=bool(primary_source_error))
     bucket.update({
         "status": status,
         "last_checked_at": checked_at,
@@ -214,9 +242,14 @@ def update_source_success(
         "extraction_mismatch": bool(extraction_mismatch),
         "last_upstream_candidates": int(upstream_candidates),
     })
+    _record_primary_source(bucket, primary_source_error, checked_at)
     if fetched > 0:
         bucket["last_extraction_at"] = checked_at
         bucket["last_extraction_records"] = int(fetched)
+    if status == "partial":
+        # Never "Fetch succeeded.": the fetch that succeeded was the fallback.
+        bucket["last_health_note"] = partial_note(bucket.get("primary_source_error_type"))
+    elif fetched > 0:
         bucket["last_health_note"] = "Fetch succeeded."
     elif extraction_mismatch:
         # Said in terms of what was measured this run, not how long it has been going on. The
@@ -233,6 +266,27 @@ def update_source_success(
         bucket["last_health_note"] = (
             "Fetch succeeded and extracted no records. Still within the tolerated quiet window for "
             "this source.")
+
+
+# Written only for an adapter that reports a primary/fallback chain, so the other buckets in this
+# committed file stay byte-identical.
+PRIMARY_SOURCE_FIELDS = ("primary_source_error", "primary_source_error_type", "primary_last_success_at")
+
+
+def _record_primary_source(bucket: dict[str, Any], primary_source_error: str | None, checked_at: str) -> None:
+    if primary_source_error is None:
+        for key in PRIMARY_SOURCE_FIELDS:
+            bucket.pop(key, None)
+        return
+    error = str(primary_source_error)
+    bucket["primary_source_error"] = error
+    bucket["primary_source_error_type"] = classify_error(error) if error else ""
+    if error:
+        # When the PRIMARY last answered. A fallback success is not one, so a partial source can
+        # never publish "last successful check: today" about a source that refused it today.
+        bucket.setdefault("primary_last_success_at", "")
+    else:
+        bucket["primary_last_success_at"] = checked_at
 
 
 def update_source_error(
