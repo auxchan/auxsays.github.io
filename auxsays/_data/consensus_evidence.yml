@@ -232,8 +232,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: title
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: version_named_but_working
   issue_theme: screen capture regression
   workflow_area: screen/window capture
   platform: unknown
@@ -280,8 +280,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: not_a_real_issue_report
   issue_theme: camera/source regression
   workflow_area: camera source workflow
   platform: windows
@@ -808,8 +808,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.1
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: windows
@@ -1216,8 +1216,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.1
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: screen capture regression
   workflow_area: screen/window capture
   platform: windows
@@ -2728,8 +2728,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: audio mixer regression
   workflow_area: audio mixer UI
   platform: linux
@@ -3180,8 +3180,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: audio mixer regression
   workflow_area: audio mixer UI
   platform: windows
@@ -27696,10 +27696,10 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5077181
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -48407,8 +48407,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: camera/source regression
   workflow_area: camera source workflow
   platform: macos
@@ -51340,8 +51340,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: audio mixer regression
   workflow_area: audio mixer UI
   platform: linux
@@ -51487,8 +51487,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: camera/source regression
   workflow_area: camera source workflow
   platform: macos
@@ -51550,8 +51550,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: not_a_real_issue_report
   issue_theme: screen capture regression
   workflow_area: screen/window capture
   platform: linux
@@ -51571,8 +51571,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: linux
@@ -53521,10 +53521,10 @@ evidence:
   match_basis: exact_os_build
   matched_kb: KB5074109
   matched_os_build: '26200.7623'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -53566,8 +53566,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: plugin compatibility
   workflow_area: plugins
   platform: windows
@@ -55747,8 +55747,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: title
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: linux
@@ -61439,8 +61439,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: version_named_but_working
   issue_theme: plugin compatibility
   workflow_area: plugins
   platform: windows
@@ -61460,8 +61460,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: plugin compatibility
   workflow_area: plugins
   platform: windows
@@ -62886,8 +62886,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: version_named_but_working
   issue_theme: screen capture regression
   workflow_area: screen/window capture
   platform: windows
@@ -67107,8 +67107,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: version_is_rollback_target
   issue_theme: plugin compatibility
   workflow_area: plugins
   platform: windows
@@ -67128,8 +67128,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: version_is_rollback_target
   issue_theme: plugin compatibility
   workflow_area: plugins
   platform: windows

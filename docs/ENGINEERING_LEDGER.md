@@ -73,6 +73,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
+| AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -4457,6 +4458,57 @@ footer link removed (PV3).
 50,000; the shipped selection and the frozen reference loop give different rows on any corpus; a homepage
 loop over the patch records is nested inside another; gtag.js is requested on any other host or when
 `navigator.webdriver` is set; or /privacy/ loses its footer link or claims compliance.
+
+---
+
+### AUX-088 — Twenty community reports cited on the live pages were credited to an update they were not about
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** High
+- **First seen** 2026-11-06 (citation audit of the six live pages; blind second review) · **Resolved** 2026-11-06
+
+**Symptom** A citation audit read every counted report on the six live-consensus pages (Windows 11 25H2
+26200.7462, 26200.7623 and 26200.7840; OBS Studio 32.1.1, 32.1.2 and 32.2.2) and flagged 43 placements. A
+second reviewer then labelled those placements and a set of controls blind, without seeing the first labels.
+Both judged 21 placements, 20 stored rows (one row was cited twice), incorrect for the credited update:
+another product, version or KB was the subject; the author later withdrew the claim (their own setting, a
+driver, a damaged install); the credited version is the one that works or the one the author went back to;
+the post is a feature request, or intended behaviour the author accepted; or it is the same author's
+cross-post of a report the page already counts. Two are Windows rows (26200.7623, 26200.7840) and eighteen
+OBS (32.1.1: 2, 32.1.2: 10, 32.2.2: 6).
+
+**Scope** Only rows both reviews labelled incorrect. The 22 placements on which the two disagree stay counted,
+and so does every report of a problem that began earlier but is experienced on the credited version. No
+acceptance rule changed.
+
+**Fix** `withdraw_live_citation_rows.py` withdraws the rows pinned in `scripts/audit/live_citation_withdrawal.json`
+with the AUX-072 and AUX-079 mechanism, imported and scoped to Windows and OBS: five-field selection (the build
+is part of a Windows identity and absent from an OBS one), pinned block hashes, three lines per Windows row and
+two per OBS row, every row kept, all or nothing, idempotent. Each row takes the reason its two reviews support,
+from a closed set of names the store already uses (`identity_not_the_subject`, `version_named_but_working`,
+`version_is_rollback_target`, `not_a_real_issue_report`, `duplicate_existing_evidence`); its two labels and a
+one-line basis sit beside it in the manifest. The two duplicates name the earlier GitHub issue they cross-post,
+which must still count and is left untouched. A row of the same report stored on another version is never
+re-homed. The five records were regenerated only by the scoped lane writers (the reconcile, then the Windows
+and the OBS promotion), which `--regenerate` runs after the store step; live eligibility was re-decided by the
+shipped authority, not by this change.
+
+**Measured** Counted rows: Windows 517 -> 515, OBS 301 -> 283 (all products 1477 -> 1457); all 2685 rows kept;
+store diff 42 lines. 25H2 7623 42 -> 41, 7840 34 -> 33; OBS 32.1.1 45 -> 43 (distinct citations counted on no
+other version 43 -> 41), 32.1.2 112 -> 102 (98 -> 93), 32.2.2 59 -> 53 (50 -> 47). The live set is unchanged:
+all six pages still certify, and 7840 now sits exactly at the minimum. Verdicts (WAIT), maturity and labels are
+unchanged; each record loses exactly its withdrawn sources and gains one "User report count updated to N."
+event. 7623's newest accepted capture moves back from 2026-10-16 to 2026-09-06 and 32.1.2's from 2026-11-06 to
+2026-10-30, because a withdrawn row was the newest, and one 32.1.2 evidence sample changes by the writer's own
+selection. OBS 33.0.0 and 33.0.1 each gain two distinct citations (their rows had been shared with a withdrawn
+copy) and stay below live; their records do not change. A second run of the tool and the writers changes
+nothing. `test_withdraw_live_citation_rows.py` pins it (72 checks; 37 mutants, each killed by a named check);
+the AUX-079 suite gains a check that the two manifests share no row (58).
+
+**Not changed here** One further placement the first audit flagged, a forum cross-post on OBS 32.1.2, was not
+in the blind review's case set (both placements of that thread were presented as 32.2.2), so it stays counted.
+
+**Reopen only if** any of the twenty counts again, either kept original stops counting without an audited
+withdrawal of its own, or a row the two reviews disagreed on is withdrawn without a fresh independent review.
 
 ---
 
