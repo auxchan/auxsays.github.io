@@ -1,7 +1,7 @@
-import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { generatedInclude, publishedAssetRoot, publishedMediaRoot, reviewedMediaRoot, viteManifest, viteOutput } from "./paths.mjs";
+import { committedNotices, generatedInclude, publishedAssetRoot, publishedMediaRoot, publishedNotices, reviewedMediaRoot, viteManifest, viteOutput } from "./paths.mjs";
 
 const manifest = JSON.parse(await readFile(viteManifest, "utf8"));
 const entry = manifest["src/main.tsx"];
@@ -10,6 +10,8 @@ await mkdir(publishedAssetRoot, { recursive: true });
 await cp(path.join(viteOutput, "assets"), publishedAssetRoot, { recursive: true });
 await mkdir(publishedMediaRoot, { recursive: true });
 await cp(reviewedMediaRoot, publishedMediaRoot, { recursive: true });
+// The bundle is minified without its licence comments; the notices ship beside it at a fixed URL.
+await copyFile(committedNotices, publishedNotices);
 const assetFiles = [entry.file, ...(entry.css ?? [])];
 const hash = createHash("sha256").update(JSON.stringify(manifest)).digest("hex").slice(0, 16);
 const tags = assetFiles.map((file) => {

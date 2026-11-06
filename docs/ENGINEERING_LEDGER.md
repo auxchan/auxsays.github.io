@@ -77,6 +77,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
+| AUX-082 | Resolved | Compliance | Medium | The published Systems Monitor bundle shipped its dependencies without their licence notices |
 | AUX-073 | Deferred | Coverage | Low | Windows Learn opening-post hydration (L1) shelved by owner decision O1; never merged |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
@@ -4587,6 +4588,52 @@ row is collected. Pages that rely on Reddit evidence keep an honest monitoring s
 the retention and publication-rights review concludes.
 
 **Work that this item must not block** D3 archival, Windows source diversification, Teams integrity.
+
+---
+
+### AUX-082 — The published Systems Monitor bundle shipped its dependencies without their licence notices
+
+- **Status** Resolved · **Area** Compliance · **Severity** Medium
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom** The deployed bundle `/systems-monitor/assets/main-*.js` (about 248 KB) contains React,
+react-dom, react-is, Recharts and their dependencies, all MIT, ISC or BSD-3-Clause. The minifier strips
+every licence comment, and nothing served beside the bundle reproduced the copyright and permission
+notices those licences require of a copy. `DEPENDENCY_LICENSE_INVENTORY.json` names each licence but
+reproduces none, and it is not published.
+
+**Fix** `npm run notices` (`systems-monitor/app/scripts/generate-third-party-notices.mjs`) writes
+`systems-monitor/app/THIRD_PARTY_NOTICES.txt` for exactly the lockfile's production set, using the
+inventory's own predicate (now shared in `production-dependencies.mjs`). Each package gets its name,
+version, licence id and copyright lines, plus every licence file it ships, NOTICE and vendored files
+included. A text shared word for word is printed once. Output bytes are deterministic. The build copies
+the file to `/systems-monitor/THIRD_PARTY_NOTICES.txt`, beside the bundle, and both production shells link
+it from their footer. Three checks guard it:
+- after `npm ci`, the deploy build regenerates the file and refuses different bytes, before it publishes;
+- `verify:site` refuses a built site that does not serve the committed bytes beside the bundle, or whose
+  bundle no longer links them;
+- the published-payload verifier already allowed `.txt`, and a test now pins that.
+
+One reviewed supplement exists. victory-vendor declares MIT AND ISC and ships the ISC licence of each d3
+module it vendors, but no MIT text and no copyright line for its own code. The standard MIT text is
+reproduced for it. The supplement is refused as soon as the package ships a root licence file.
+
+**Measured** 44 packages, 26 distinct texts, 41,551 bytes. Regeneration was byte-identical across two
+independent installs of the committed lockfile. A local Jekyll build serves the file with HTTP 200
+`text/plain` beside `main-*.js`, the bundle links it, and `verify_published_payload.py` is clean.
+`test_systems_monitor_third_party_notices.py` (47 checks, `[blocking]`) runs the real Node scripts. Each of
+these fails a named check: dropping a package, adding a dependency without a notice, a stale version, a
+hand-edited text, and the file missing from the built output. So do 27 code mutants.
+
+**Not fixed here** victory-vendor's declared expression leaves out the BSD-3-Clause and MIT texts that its
+vendored d3-voronoi ships; the notices reproduce them anyway.
+
+**Reopen only if** `test_systems_monitor_third_party_notices.py` reports anything but its governed 47,
+or a deploy succeeds while `/systems-monitor/THIRD_PARTY_NOTICES.txt` is missing, differs from the
+committed file, or omits a production package in the lockfile. Also reopen if a pull request that adds a
+production dependency without regenerating the file is green.
+
+---
 
 ### AUX-071 — Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red
 

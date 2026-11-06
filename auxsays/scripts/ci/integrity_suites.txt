@@ -285,6 +285,12 @@ auxsays/scripts/tests/test_patch_watchlist.py = 35
 # dated non-archived record per product, and a verdict derived exactly as patch-table-row does.
 # The client rendering is verified live; the storage contract it reuses is the Node suite's.
 auxsays/scripts/tests/test_patch_stack_dashboard.py = 110
+# The published Systems Monitor bundle is minified without its dependencies' licence comments, so
+# THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
+# absence a failure): the committed file names exactly the lockfile's production set; regeneration over
+# a fixture node_modules is byte-identical; dropping a package, adding a dependency without a notice, a
+# stale version, a hand-edited text and a missing file in the built output each fail a NAMED check.
+auxsays/scripts/tests/test_systems_monitor_third_party_notices.py = 47
 auxsays/scripts/tests/test_powerpoint_attribution.py = 65
 auxsays/scripts/tests/test_powerpoint_build_identity.py = 54
 auxsays/scripts/tests/test_powerpoint_build_roles.py = 108
