@@ -25,6 +25,8 @@ except ModuleNotFoundError:
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lib.patch_identity import BUILD_AWARE_PRODUCTS  # noqa: E402
+# Stdlib only, so it is as safe for this bare script as `lib.patch_identity` above.
+from lib.reddit_access_policy import is_policy_disabled_row  # noqa: E402
 
 DEFAULT_PATH = Path("auxsays/_data/evidence_method_health.yml")
 
@@ -175,6 +177,15 @@ def validate(path: Path = DEFAULT_PATH) -> int:
         for field in REQUIRED_FIELDS:
             value = row.get(field)
             if value in (None, ""):
+                if field == "last_run" and is_policy_disabled_row(row):
+                    # A row switched off by ACCESS POLICY (status `disabled` + reason
+                    # `reddit_access_policy_unauthorised`) made no attempt, so it has no run time
+                    # to record. For a key that already exists the writer keeps the prior row's
+                    # real last attempt; a NEW patch has no prior row, so its policy row is stored
+                    # with an empty last_run. Stamping a time there would claim an attempt that
+                    # never happened. Every other row still needs last_run, and a non-empty value
+                    # on a policy row is still checked below.
+                    continue
                 _add_error(errors, row_index, field, "is required")
 
         # A BUILD-AWARE PRODUCT'S TELEMETRY MUST NAME ITS BUILD, for the same reason its counted

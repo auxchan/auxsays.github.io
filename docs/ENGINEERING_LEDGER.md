@@ -77,11 +77,14 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
+| AUX-073 | Deferred | Coverage | Low | Windows Learn opening-post hydration (L1) shelved by owner decision O1; never merged |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
+| AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
+| AUX-077 | Resolved | Evidence integrity | Medium | Learn Q&A fetchers followed a redirect to any host and would have parsed that page as the Learn thread |
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
 | AUX-078 | Resolved | Evidence integrity | Medium | A Microsoft Q&A question re-found under an edited title was counted twice on one patch |
@@ -4516,6 +4519,28 @@ reasons; or a decision to activate the Windows 11 Forum adapter.
 
 ---
 
+### AUX-073 — Windows Learn opening-post hydration (L1) shelved by owner decision O1
+
+- **Status** Deferred · **Area** Coverage · **Severity** Low
+- **First seen** 2026-11-05 · **Shelved** 2026-11-05
+
+L1 Windows Learn opening-post hydration: SHELVED 2026-11-05 by owner decision O1 (keep new Microsoft
+Q&A collection off). Branch `feat/windows-underfill-hydration` (`65e2c921`) is kept as reference only;
+it was never merged. Its same-origin redirect protection was extracted into AUX-077.
+
+**Why deferred** The owner decided to keep new Microsoft Q&A collection off. Hydration would add a new
+kind of Learn page request to the Windows lane.
+
+**Current impact** None on production: the hydration path never shipped. Windows Learn evidence still
+comes from the existing search feed only.
+
+**Revisit trigger** Reopen only if the owner reverses O1, followed by the access-rights and activation
+reviews.
+
+**Work that this item must not block** AUX-077 and all existing collection.
+
+---
+
 ### AUX-064 — Reddit collection is switched off for lack of written authorisation; stored Reddit rows await review
 
 - **Status** Deferred · **Area** Compliance · **Severity** High
@@ -4585,6 +4610,45 @@ tree.
 
 ---
 
+### AUX-081 — A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product
+
+- **Status** Resolved · **Area** Collector telemetry · **Severity** High
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom** The scheduled evidence collection run of 2026-11-05 collected normally and then refused its
+writeback before committing: `validate_evidence_method_health.py` reported `last_run: is required` on one
+row. Nothing was pushed and no page was rebuilt, and every later run would fail the same way, for every
+product, because all evidence lanes validate the same file.
+
+**Root cause** DaVinci Resolve 21.2 was the first new patch since the Reddit access policy (AUX-064). Its
+collector emitted the policy's `reddit_search` row: status `disabled`, reason
+`reddit_access_policy_unauthorised`, and an empty `last_run`, because no attempt was made. The writer keeps
+the prior row's real last attempt for a key that already exists, but a new key has no prior row, so the
+row was stored empty. The validator required `last_run` on every row. The writer's suite had pinned the
+empty value (F.5) without running the validator over it.
+
+**Fix** In `validate_evidence_method_health.py` only, `last_run` may be empty on a policy-disabled row,
+using the policy's own predicate (`is_policy_disabled_row`: status `disabled` and that reason). Every other
+row still needs it, and a non-empty value on a policy row must still look like a timestamp. Nothing stamps
+a time on a row that made no attempt, and the writer's carry-over for existing keys is unchanged. Every
+reader of `last_run` was checked: the monitoring card and the H0-H7 certifier both skip disabled rows before
+they read it, and the card prints no "last checked" date for an empty value. The only other reader is a
+one-time Acrobat migration tool that no lane runs, and it is safe with an empty value.
+
+**Measured** Replaying the failed run's five 21.2 rows through the real writer onto the stored file at
+`main`: the validator now passes, 5 rows are appended and the 1,861 rows already stored are unchanged.
+`test_policy_row_last_run.py` (31 checks, `[blocking]`) uses those rows as frozen fixtures. It drives the
+writer and the validator in process and as bare-script child processes, and covers each row shape that
+must still be refused, including reasons that only resemble the policy reason or contain it. Removing the
+exemption, narrowing it to status or to reason alone, widening it to every row, and matching the reason
+loosely (as a substring, by its `reddit` prefix, or ignoring case) each fail a named check.
+
+**Reopen only if** `test_policy_row_last_run.py` reports anything but its governed 31, the validator
+accepts an empty `last_run` on any row other than a policy-disabled one, or a writer stamps a run time
+on a policy row that made no attempt.
+
+---
+
 ### AUX-068 — PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the ceiling, the thread population or exhaustion
 
 - **Status** Resolved · **Area** Observability · **Severity** Low
@@ -4612,6 +4676,59 @@ change ships without a measured need (budget tuning is a separate decision).
 16 checks on a commit that changes only generated data (a natural ingestion or archive run), or another
 governed suite that reads the real corpus through `generated_records()` goes red on such a data-only
 commit.
+
+---
+
+### AUX-077 — Learn Q&A fetchers followed a redirect to any host and would have parsed that page as the Learn thread
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom / gap** Every production Microsoft Learn Q&A fetcher used urllib's default `urlopen`, which
+follows a redirect to any host, and none checked where the response came from: the PowerPoint context
+resolver (`orchestrate_evidence_run.default_context_fetch`), the tag and question page fetcher shared by
+PowerPoint and Teams (`microsoft_qna_tags_source.fetch`), and the search feed behind Windows, PowerPoint,
+Teams and open-web discovery (`microsoft_learn_qna_source._fetch_feed_text`). The callers parse the body
+under the URL they asked for. Found while reviewing the shelved AUX-073 branch, which had closed the same
+gap on its own new path. No such redirect has been observed in production.
+
+**Fix** One shared policy, `lib/learn_fetch_policy.py`: https only; host EQUAL to `learn.microsoft.com`
+(no userinfo, no port other than 443, no lookalike such as `evil-learn.microsoft.com` or
+`learn.microsoft.com.evil.net`, no subdomain such as `x.learn.microsoft.com`); and the page shape the
+fetcher already uses (a question page; a tag page or the tag index; the search endpoint). It is checked
+on the initial URL, on every redirect destination BEFORE the redirected request is made, and on the final
+URL before the body is read. A redirect to a scheme urllib refuses outright (`file:`, `data:`) is named
+`redirect_not_https` too, instead of surfacing as a plain `http_302_error`. Same-origin redirects (a
+renamed slug, a retired tag sent to the tag index) are followed as before. No cookies, login or challenge
+handling; no new endpoint, request or budget. A refusal is one of nine named reasons
+(`redirect_off_host`, ...) and reaches method health as a named failure:
+- Windows and PowerPoint search lanes: `blocked`, the reason in `blocked_reason`;
+- PowerPoint tag and open-web lanes: `blocked` (a refusal among pages that were read used to fall
+  through to `no_results`), the refusal named first;
+- Teams: `blocked`, the refusal named (its page-failure reason used to print the error class);
+- context resolver: `fetch_blocked`, health reason `context_fetch_refused:<reason>`.
+
+`test_learn_fetch_same_origin.py` (115 checks, blocking) drives every fetcher through real urllib
+against loopback servers, with DNS and TCP fenced from before the first collector import (child
+interpreters too). It covers 13 redirect shapes per fetcher (including a prefix lookalike, a subdomain,
+`file:`, `data:` and `ftp:`), a host-equality table, initial and final URL checks, byte-identical
+same-origin output against the frozen pre-change transports, a Teams write run against a temp store, an
+orchestrated PowerPoint run, `blocked` health for a `file:`/`data:` redirect in every lane, an AST pin
+and bare-script imports. 30 mutants, one fix each, each fail a named check; they include a suffix,
+a prefix and a containment host match.
+
+**Residual: Unprotected, deferred (residual, not Q&A)** Official documentation ingestion from
+learn.microsoft.com is NOT covered by this policy and is deferred: the Office update history and Teams
+version pages (`adapters/microsoft_office_updates.py` `fetch`), the Windows release-health pages and
+their status pages (`adapters/microsoft_release_health.py` `fetch` and the status-page enrichment), and
+the linked official body refresh (`patch_ingest.py` `refresh_linked_official_bodies`). All go through
+`lib/http.fetch_text`, whose redirect handler strips credentials off-host but follows a redirect to any
+host. These are vendor documentation pages, not Q&A threads, and they are unchanged here.
+
+**Reopen only if** `test_learn_fetch_same_origin.py` reports anything but its governed 115, a production
+Learn Q&A fetch path does not go through `learn_fetch_policy.open_url`, a health row names a refusal
+for a redirect that stayed on Learn's own question, tag or search pages, or the official documentation
+residual is taken up (it needs its own item and its own per-source path list).
 
 ---
 

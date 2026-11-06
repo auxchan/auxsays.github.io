@@ -135,10 +135,18 @@ def default_context_fetch() -> Callable[[str], tuple[str, str]]:
     """Bind the shared Learn Q&A transport for same-thread context resolution.
 
     Returns RAW HTML: the segment model reads the page's schema.org structured data, which is how
-    a build is attributed to the author who actually stated it."""
+    a build is attributed to the author who actually stated it.
+
+    The transport is the shared Learn same-origin policy (lib/learn_fetch_policy). The resolver
+    parses the body under the URL it ASKED for, so urllib's default urlopen -- which follows a
+    redirect to any host -- would have let another host's page be read as this Learn thread. Now a
+    question URL that is not Learn over https, or a redirect away from Learn's question pages, is
+    refused before it is requested and reported as ``refused:<reason>``, which the resolver records
+    as a blocked fetch that names the refusal."""
     import urllib.error  # noqa: PLC0415
     import urllib.request  # noqa: PLC0415
 
+    from lib import learn_fetch_policy  # noqa: PLC0415
     from patch_collectors import microsoft_learn_qna_source as learn  # noqa: PLC0415
 
     def _fetch(url: str) -> tuple[str, str]:
@@ -148,7 +156,8 @@ def default_context_fetch() -> Callable[[str], tuple[str, str]]:
             "Accept-Language": "en-US,en;q=0.9",
         })
         try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            with learn_fetch_policy.open_url(req, family=learn_fetch_policy.QUESTION_PAGE,
+                                             timeout=30) as resp:
                 body = resp.read(1_500_000).decode("utf-8", errors="replace")
                 if resp.status != 200:
                     return "", "broken"
@@ -156,6 +165,8 @@ def default_context_fetch() -> Callable[[str], tuple[str, str]]:
                 if "captcha" in low or "access denied" in low or "request blocked" in low:
                     return "", "blocked"
                 return body, "ok"
+        except learn_fetch_policy.LearnFetchRefused as exc:
+            return "", cr.FETCH_REFUSED_PREFIX + exc.reason
         except urllib.error.HTTPError as exc:
             return "", "blocked" if exc.code in (401, 403, 429) else "broken"
         except Exception:  # noqa: BLE001 -- transport failure is telemetry, not a crash
@@ -759,6 +770,12 @@ class Pipeline:
             accepted_rows = key_resolved + key_independent
             blocked = sum(1 for o in key_outcomes if o["resolution_result"] == cr.FETCH_BLOCKED)
             broken = sum(1 for o in key_outcomes if o["resolution_result"] == cr.FETCH_BROKEN)
+            # A page the Learn same-origin policy refused is already one of the blocked fetches
+            # above; this only NAMES it, so the health row says "refused:redirect_off_host" rather
+            # than the generic context_fetch_blocked. Every other run's reason is unchanged.
+            refused = next((str(o.get("detail") or "") for o in key_outcomes
+                            if o["resolution_result"] == cr.FETCH_BLOCKED
+                            and str(o.get("detail") or "").startswith(cr.FETCH_REFUSED_PREFIX)), "")
             # Status must come from the SHARED vocabulary; anything outside it is normalized to
             # "broken", which would report a healthy stage as a failure. "The source stated no
             # usable build" is low_confidence, not broken -- a working method finding nothing.
@@ -795,7 +812,8 @@ class Pipeline:
                     accepted_candidates=len(accepted_rows),
                     accepted_reports=len(accepted_rows),
                     rejected_reports=max(0, len(key_outcomes) - len(key_resolved)),
-                    blocked_reason="context_fetch_blocked" if blocked else None,
+                    blocked_reason=("context_fetch_" + refused if refused
+                                    else "context_fetch_blocked" if blocked else None),
                     last_run=captured_at,
                     notes=("segment-scoped exact-build resolution; fetches=" + str(budget.fetched)
                            + budget_telemetry_suffix(budget, len(distinct_threads),
