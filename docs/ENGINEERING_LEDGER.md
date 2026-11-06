@@ -80,6 +80,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-082 | Resolved | Compliance | Medium | The published Systems Monitor bundle shipped its dependencies without their licence notices |
+| AUX-085 | Resolved | Test integrity | Medium | A Systems Monitor test timing race failed a site deploy after every test had passed |
 | AUX-073 | Deferred | Coverage | Low | Windows Learn opening-post hydration (L1) shelved by owner decision O1; never merged |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
 | AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
@@ -4699,6 +4700,44 @@ withdrawal of its own, or a Windows patch counts one Microsoft Q&A question twic
 different attribution approach shows better precision without refusing genuine reports.
 
 ---
+
+---
+
+### AUX-085 — A Systems Monitor test timing race failed a site deploy after every test had passed
+
+- **Status** Resolved · **Area** Test integrity · **Severity** Medium
+- **First seen** 2026-11-06 · **Resolved** 2026-11-06
+
+**Symptom** Pages run 42187702645, dispatched by the collection writeback `7e01e0d5`, stopped at
+"Validate and build Systems Monitor". Vitest passed 251 of 251 tests and still exited 1 on two unhandled
+`ReferenceError: cancelAnimationFrame is not defined`, raised from the `requestAnimationFrame` stand-in in
+`tests/setup.ts` after `factualApp.test.tsx` had finished. The deploy job was skipped, so the site stayed
+on the previous build. It was 1 failure in the last 60 Pages runs; the same code had deployed at 06:17Z.
+
+**Cause** The stand-in runs each frame on a zero-delay Node timer. When vitest tears a test file's jsdom
+environment down it deletes the frame globals, but a Node timer outlives that. Recharts' store
+(`@reduxjs/toolkit` batched notifications) queues a frame plus a 100 ms fallback timer, and both callbacks
+call the global `cancelAnimationFrame`. Unmounting the charts after the last test of `app.test.tsx` and of
+`factualApp.test.tsx` queues two of them. Usually the frames run before teardown. When one ran after it,
+the run failed.
+
+**Fix (test setup only)** The stand-in records its pending frames, and `cancelAnimationFrame` removes and
+clears its frame. After every test (after `cleanup()`), and once more after each file, the setup runs every
+pending frame once while the environment is still alive, then drops any frame those callbacks requested.
+The frames are run, not dropped: dropping a frame leaves the store's fallback timer armed, and it fails the
+same way 100 ms later. No application code or dependency changed.
+
+**Measured** At the end of `app.test.tsx` and `factualApp.test.tsx`, two store fallback timers were still
+armed under the old setup and under a drop-only variant; under the fix, none were. The new
+`tests/animationFrameTeardown.test.ts` leaves a batched notification and an animation loop pending, then
+removes the frame globals as teardown does and waits past the fallback deadline. On the old setup it failed
+5 of 5 runs with the deploy's two errors and exit 1; with the fix it passed 5 of 5. It fails again without
+the after-test step (3 of 3) and with a drop-only variant (3 of 3). Full suite repeated 30 times: 0 unhandled errors.
+
+**Reopen only if** a Systems Monitor vitest run reports an unhandled error from an animation-frame
+callback, or from a timer one queued, after its test ended. Also reopen if `tests/setup.ts` stops running
+pending frames after each test, or if `animationFrameTeardown.test.ts` is removed or still passes with
+that step deleted.
 
 ---
 
