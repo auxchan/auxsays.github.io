@@ -360,7 +360,7 @@ auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 # as written, and no live store total is read or pinned, so evidence growth cannot turn it red. Also pins one
 # authority for all three Windows discovery methods, one witness per alternative of the rule, and the declared
 # residual admissions R1N-01..03 (each admitted on main too).
-auxsays/scripts/tests/test_windows_identity_link_roles.py = 663
+auxsays/scripts/tests/test_windows_identity_link_roles.py = 664
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 # AUX-067: a build-only identity whose TITLE is about another KB or build is not a report on the build
 # the author merely quoted. Pins the eight confirmed false acceptances (stored fields as fixtures), the
