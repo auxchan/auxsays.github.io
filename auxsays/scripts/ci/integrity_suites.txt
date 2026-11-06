@@ -407,7 +407,17 @@ auxsays/scripts/tests/test_withdraw_windows_identity_not_the_subject_rows.py = 4
 # reason, kept rows and every other row byte-identical, no row starts counting, no patch counts one Learn
 # report twice, all-or-nothing refusal on any drift, idempotent; a same-question row on another patch is
 # never re-homed. Bare script on frozen verbatim fixtures; the live store is read only for the 14 pins.
-auxsays/scripts/tests/test_withdraw_windows_confirmed_and_duplicate_rows.py = 57
+# A12 (AUX-088): it shares no row with the later live-page withdrawal's manifest.
+auxsays/scripts/tests/test_withdraw_windows_confirmed_and_duplicate_rows.py = 58
+# AUX-088: the audited withdrawal of twenty live-page rows (two Windows, eighteen OBS) that the citation
+# audit and an independent blind second review both labelled INCORRECT for the credited update. The same
+# mechanism scoped to Windows and OBS: five-field selection (target_build only for Windows), pinned block
+# hashes, three lines per Windows row and two per OBS row with each row's own reason from a closed set the
+# store already uses, two duplicates pinned to their kept originals, every other row byte-identical, no row
+# starts counting, all-or-nothing refusal on any drift, idempotent; a same-report row on another identity is
+# never re-homed. Bare script on frozen fixtures whose free text is synthetic; the live store is read only
+# for the pins.
+auxsays/scripts/tests/test_withdraw_live_citation_rows.py = 72
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
