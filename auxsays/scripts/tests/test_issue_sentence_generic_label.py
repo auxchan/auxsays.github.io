@@ -26,7 +26,18 @@ from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[3]
 _AUX = _REPO / "auxsays"
-LAYOUT = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
+# GROWTH-1C moved the patch page's maturity rung and decision ladder into two includes that the
+# homepage renders too. They are the patch page's own code, so they are inlined here, bound to their
+# record= argument, before anything reads the layout -- as the maturity contract is.
+PAGE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=([\w.]+)\s*-?%\}")
+
+
+def expand_page_includes(text: str) -> str:
+    return PAGE_INCLUDE_TAG.sub(lambda m: (_AUX / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
+                                .replace("include.record", m.group(2)), text)
+
+
+LAYOUT = expand_page_includes((_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8"))
 MATURITY_INCLUDE = (_AUX / "_includes" / "maturity-state.html").read_text(encoding="utf-8")
 MATURITY_TAG = re.compile(r"\{%-?\s*include\s+maturity-state\.html\s+record=([\w.]+)\s*-?%\}")
 

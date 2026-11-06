@@ -13,6 +13,10 @@ layout: aux-base
   carries its product_id, grouped once with group_by (no loop over the records inside another
   loop). The lead order below only sorts the products the hero names first; every other product
   with records follows in _data/patch_products.yml order.
+
+  Each tracker names the source its updates come from: the product's own source_label in
+  _data/patch_products.yml, the same words its product page links as the official source
+  (home-tracker-item.html). Nothing is written here that the product data does not say.
 {%- endcomment -%}
 <section class="home-hero home-hero--patch reveal-up">
   <article class="panel hero-panel hero-panel--dashboard hero-panel--patch">
@@ -38,7 +42,7 @@ layout: aux-base
 <section class="home-dashboard home-dashboard--patch reveal-up reveal-delay-1">
   <nav class="panel home-tracker-nav" aria-labelledby="home-trackers-title">
     <h2 class="home-section-label home-section-label--inline" id="home-trackers-title"><span>Tracked software</span></h2>
-    <p>Each product page lists the updates AUXSAYS tracks for it.</p>
+    <p>Pick your software. Each tracker follows the source named under it and lists every update AUXSAYS tracks; each update opens to its verdict and recommendation.</p>
     {%- assign home_tracker_ids = site.pages | where: "update_entry", true | group_by: "product_id" | map: "name" -%}
     {%- assign home_tracker_lead = "microsoft-windows-11|obs-studio|adobe-premiere-pro|adobe-acrobat-pro|adobe-acrobat-reader|microsoft-teams|microsoft-powerpoint|blackmagic-davinci" | split: "|" %}
     <ul class="home-tracker-list" data-home-tracker-list>
@@ -46,14 +50,14 @@ layout: aux-base
         {%- if home_tracker_ids contains tracker_id -%}
           {%- assign tracker = site.data.patch_products | where: "id", tracker_id | first -%}
           {%- if tracker %}
-      <li><a class="home-tracker-link" href="{{ tracker.product_url | relative_url }}" data-home-tracker>{{ tracker.product_name }}</a></li>
+      <li class="home-tracker-item">{% include home-tracker-item.html tracker=tracker %}</li>
           {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
       {%- for tracker in site.data.patch_products -%}
         {%- if home_tracker_ids contains tracker.id -%}
           {%- unless home_tracker_lead contains tracker.id %}
-      <li><a class="home-tracker-link" href="{{ tracker.product_url | relative_url }}" data-home-tracker>{{ tracker.product_name }}</a></li>
+      <li class="home-tracker-item">{% include home-tracker-item.html tracker=tracker %}</li>
           {%- endunless -%}
         {%- endif -%}
       {%- endfor %}
@@ -65,7 +69,7 @@ layout: aux-base
       <div class="home-patch-head">
         <div>
           <h2 class="home-section-label home-section-label--inline" id="home-signals-title"><span>Latest patch signals</span></h2>
-          <p>Showing the latest actionable signal per product. See Patch Feed for the full archive.</p>
+          <p>One update per product: the exact release, the verdict its page gives and the evidence behind it. Open one for its recommendation, or see the Patch Feed for the full archive.</p>
         </div>
       </div>
 
@@ -190,44 +194,47 @@ layout: aux-base
           {%- unless home_product_seen contains item_product_key -%}
             {%- assign item_signal_key = item_product_identity | append: ' ' | append: item.url -%}
             {%- if home_signal_winners contains item_signal_key and home_patch_count < home_patch_limit %}
-              {% assign update_report_count = item.update_report_count | default: 0 | plus: 0 %}
-              {% assign confirmed_report_count = item.confirmed_patch_specific_report_count | default: 0 | plus: 0 %}
-              {% assign report_count = update_report_count %}
-              {% if report_count == 0 and confirmed_report_count > 0 %}
-                {% assign report_count = confirmed_report_count %}
-              {% endif %}
+              {%- comment -%}
+                THE ROW SAYS WHAT THE PATCH PAGE SAYS (GROWTH-1C). The row used to print the stored
+                community sentiment (update_consensus_label, "Negative" on every row the day this
+                changed) beside a count, while the page it links to printed a verdict -- WAIT --
+                from a different field: a sentiment word read as the call, on a different axis.
+                The row now prints the patch page's own verdict and maturity, from the same
+                two includes aux-update.html renders, so the two cannot disagree. Their inputs are
+                set here exactly as the patch page sets them (the three count lines below are the
+                page's own, with page read as item; test_homepage_signals pins that). The capture
+                keeps the includes' whitespace off the homepage.
+              {%- endcomment -%}
+              {% assign report_count = item.update_report_count | default: 0 | plus: 0 %}
+              {% assign confirmed_report_count = item.confirmed_patch_specific_report_count | default: report_count | plus: 0 %}
+              {% assign report_bearing_count = report_count %}
+              {% if report_bearing_count == 0 and confirmed_report_count > 0 %}{% assign report_bearing_count = confirmed_report_count %}{% endif %}
+              {%- capture home_decision_render -%}{% include patch-evidence-state.html record=item %}{% include patch-decision.html record=item %}{%- endcapture -%}
               {% assign known_issues_value = item.known_issues_present | default: false %}
-              {% assign consensus_label = item.update_consensus_label | default: item.community_reaction | default: item.current_consensus | default: 'Insufficient data' %}
-              {% assign consensus_key = consensus_label | downcase | replace: ' ', '-' %}
               {% assign is_known_issue = false %}
               {% if known_issues_value == true or known_issues_value == 'true' or known_issues_value == 'yes' %}
                 {% assign is_known_issue = true %}
               {% endif %}
                 {%- comment -%}
-                  `intelligence_stage_label` does not exist anywhere in this repository -- a
-                  repo-wide grep finds it on this line only -- so the chain ALWAYS fell through
-                  to `intelligence_stage` and printed the internal stage vocabulary
-                  de-underscored on the home page: measured over 1,305 records, 1,052 rendered
-                  "Official live", 233 "Pilot" and 1 "Manual watch". Mapped to reader-facing
-                  words, defaulting to EMPTY rather than to a raw token, so an unmapped stage
-                  costs a label instead of publishing an identifier. Both words now come from
-                  the shared maturity contract, which says "Established reports" only beside a
+                  The stage words come from the shared maturity contract, which the evidence-state
+                  include has just run for this record. `intelligence_stage_label` never existed,
+                  so this line once printed the internal stage vocabulary ("Official live", "Pilot",
+                  "Manual watch"); the contract maps it to reader-facing words, defaulting to EMPTY
+                  rather than to a raw token, and says "Established reports" only beside a
                   certified live claim.
                 {%- endcomment -%}
-                {% include maturity-state.html record=item %}
-                {% assign evidence_label = maturity_label %}
                 {% assign stage_label = maturity_stage_label %}
                 {% assign item_official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
                 {% assign item_official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
                 <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal data-product-id="{{ item_product_identity }}">
-                  <span class="home-patch-dot home-patch-dot--{{ consensus_key }}" aria-hidden="true"></span>
+                  <span class="home-patch-dot home-patch-dot--{{ evidence_state_class }}" aria-hidden="true"></span>
                   <span class="home-watch-flag" data-home-watch-flag hidden>Watching</span>
                   <span class="home-patch-copy">
                     <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
                     <em>
-                      {{ consensus_label }}
+                      <span class="home-patch-verdict" data-home-verdict>Verdict: {{ decision_label }}</span>
                       {% if report_count > 0 %}
-                        • {{ report_count }} confirmed community report{% unless report_count == 1 %}s{% endunless %}
+                        • {{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} counted for this release
                       {% elsif item_official_active > 0 or item_official_safeguard > 0 %}
                         • {% if item_official_active > 0 %}{{ item_official_active }} active Microsoft issue{% unless item_official_active == 1 %}s{% endunless %}{% endif %}{% if item_official_active > 0 and item_official_safeguard > 0 %}, {% endif %}{% if item_official_safeguard > 0 %}{{ item_official_safeguard }} safeguard hold{% unless item_official_safeguard == 1 %}s{% endunless %}{% endif %}
                       {% elsif is_known_issue == true %}
@@ -235,7 +242,7 @@ layout: aux-base
                       {% endif %}
                     </em>
                     <span class="home-patch-meta">
-                      <span>{{ evidence_label }}</span>
+                      <span data-home-evidence-state>{{ evidence_state }}</span>
                       {% if stage_label != '' %}<span>{{ stage_label }}</span>{% endif %}
                     </span>
                   </span>
