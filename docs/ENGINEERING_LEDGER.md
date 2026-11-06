@@ -87,6 +87,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
+| AUX-087 | Deferred | Coverage | Medium | Premiere Pro release discovery is source-blocked, and the lane read healthy while HelpX refused it |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-077 | Resolved | Evidence integrity | Medium | Learn Q&A fetchers followed a redirect to any host and would have parsed that page as the Learn thread |
@@ -4672,6 +4673,53 @@ comes from the existing search feed only.
 reviews.
 
 **Work that this item must not block** AUX-077 and all existing collection.
+
+---
+
+### AUX-087 — Premiere Pro release discovery is source-blocked, and the lane read healthy while HelpX refused it
+
+- **Status** Deferred (discovery is SOURCE-BLOCKED; the reporting fix is resolved) · **Area** Coverage · **Severity** Medium
+- **First seen** 2026-11-06 · **Reporting fixed** 2026-11-06 (`fix/premiere-source-truth`)
+
+**Symptom** Premiere Pro 26.5, 26.5.1 and 26.5.2 have shipped, and AUXSAYS has no record of them. The
+official lane still reported `healthy` / "Fetch succeeded." (run 42194448565: one candidate, the pinned
+26.2.2 announcement), and the product page said "Official updates monitored".
+
+**Cause** Since 2026-09-08 (run 34252632666) HelpX has refused CI at once with HTTP 403 "Access Denied".
+Before that date, every run spent about 25 s on a HelpX timeout. `_fetch_first_available` threw that
+error away whenever the pinned announcement answered. No other official route reachable from CI lists
+26.5.x:
+- every other Adobe official route is already `blocked` in `lib/acquisition_methods.py`;
+- the public Premiere Announcements board has had no release post since 26.3 (2026-06-17);
+- 26.5 appears only as a non-public product-update entry, and 26.5.1 and 26.5.2 only in user reports.
+
+**Fixed here (reporting only)**
+- The HelpX error survives the fallback. The source records `partial`: never `healthy`, never "Fetch
+  succeeded.". The run is degraded and annotated.
+- The monitoring projection publishes "Official source is refusing automated checks". It never gives the
+  fallback's date as the last successful check. The source-health snapshot says Partial.
+- An unknown version no longer inherits the 26.2 announcement URL.
+- A page with no readable date no longer becomes a release dated today.
+- Identity and date come from the announcement's own title. A candidate without both is dropped, and the
+  drop is reported.
+- No request, source or record changed. The 26.2.2 record comes out byte-identical under the old and the
+  new code. Test: `test_premiere_source_truth.py` (49 checks).
+
+**Why deferred** No approved official method that carries Premiere release identity is reachable from
+production. Getting past the HelpX refusal would be a bypass, and user reports are not an official source.
+
+**Current impact** The newest Premiere record stays 26.2.2. After the next ingestion run, the product reads
+as blocked rather than monitored, and the Adobe company card counts 2 of 7 products monitored instead of 3.
+
+**Revisit trigger** Reopen only if one of these happens:
+- an official Adobe route that carries Premiere release identity (version and date) answers HTTP 200 from
+  CI;
+- Adobe resumes public Premiere release posts on the Announcements board.
+
+A listing over that board alone would yield 26.3 only.
+
+**Work that this item must not block** GROWTH-1B and all other ingestion. The pinned 26.2.2 fallback stays
+as it is.
 
 ---
 

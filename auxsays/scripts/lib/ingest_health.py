@@ -61,7 +61,8 @@ RUN_FAILED = "failed"
 # the per-source buckets in the same file still read `failing, consecutive_failures: 13`.
 RUN_NOT_EVALUATED = "not-evaluated"
 
-# Per-source statuses that represent trustworthy output from this run.
+# Per-source statuses that represent trustworthy output from this run. `partial` (the primary
+# failed, a fallback answered) is deliberately absent: it degrades the run and is annotated.
 TRUSTWORTHY = {"healthy", "no_results"}
 
 
@@ -109,7 +110,9 @@ def observed_status(result: dict[str, Any] | None, error: dict[str, Any] | None,
         # Observed this run, exactly like `fetched`. Reading a persisted mismatch flag here would
         # reintroduce the dry-run defect this function exists to fix: a dry run would grade today's
         # extraction against the last write run's evidence.
-        extraction_mismatch=bool(result.get("extraction_mismatch")))
+        extraction_mismatch=bool(result.get("extraction_mismatch")),
+        # Observed this run too: the primary failed and only a fallback answered.
+        primary_failed=bool(result.get("primary_source_error")))
 
 
 def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
@@ -127,7 +130,7 @@ def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
     since the source last actually produced a record -- which is NOT the same question as when the
     fetch last succeeded, and conflating the two is what let Netlify look current for months.
     """
-    from lib.state import mismatch_note
+    from lib.state import classify_error, mismatch_note, partial_note
     by_result = {str(r.get("product_id") or ""): r for r in (results or [])}
     by_error = {str(e.get("product_id") or ""): e for e in (errors or [])}
     rows: list[dict[str, Any]] = []
@@ -148,6 +151,12 @@ def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
         # the annotation and the step summary quote. Say what this run saw instead, in the same
         # words the bucket will carry, so the two surfaces cannot drift.
         note = mismatch_note(upstream) if mismatch else str(b.get("last_health_note") or "")
+        # The same rule for a primary that failed behind a fallback that answered: the stored note
+        # of a dry run, or of the first partial run, would still say "Fetch succeeded."
+        primary_error = (res or {}).get("primary_source_error")
+        if status == "partial":
+            note = partial_note(classify_error(str(primary_error or "")))
+        extra = {} if primary_error is None else {"primary_source_error": str(primary_error)}
         rows.append({
             "source_id": pid,
             "product_id": pid,
@@ -173,6 +182,7 @@ def source_rows(state: dict[str, Any], attempted: list[dict[str, Any]],
             "last_success_at": str(b.get("last_success_at") or ""),
             "last_extraction_at": str(b.get("last_extraction_at") or ""),
             "health_note": note,
+            **extra,
         })
     return rows
 
