@@ -4104,8 +4104,8 @@ not show. `test_patch_stack_dashboard.py` [CL] runs the real card renderer. Each
 reverted fix apiece, fails a named check.
 
 **Not changed** When a fresh row and an older failed row coexist, the card still reads the older
-row's status and says MONITORING DEGRADED. The notice then makes no present-tense claim and defers to
-the card. A stored `source_freshness_note` that mentions blocked, pending or stale still produces
+row's status: it says MONITORING DEGRADED, or COLLECTION BLOCKED when the older row is blocked or broken
+and the fresh row is not healthy. The notice then makes no present-tense claim and defers to the card. A stored `source_freshness_note` that mentions blocked, pending or stale still produces
 "Collection degraded." with no date check. No record carries such a note (100 carry the field, all
 empty).
 
