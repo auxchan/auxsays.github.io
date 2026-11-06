@@ -1,0 +1,581 @@
+schema_version: 1
+evidence:
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5945620-2026-06-update-kb5095093-26200-8737-wi
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  target_build: '26200.8737'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5945620/2026-06-update-(kb5095093)-(26200-8737)-will-not-i
+  parent_title: 2026-06 Update (KB5095093) (26200.8737) will not install - Microsoft Q&A
+  report_title: 2026-06 Update (KB5095093) (26200.8737) will not install - Microsoft Q&A
+  report_text_excerpt: 2026-06 Update (KB5095093) (26200.8737) will not install - Microsoft Q&A i am trying to install the above update with no success
+  captured_at: '2026-07-14T12:54:27Z'
+  source_date: '2026-07-13'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5858421-kb5077181-unable-to-switch-between-log
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5858421/kb5077181-unable-to-switch-between-logged-in-users
+  parent_title: 'KB5077181: Unable to switch between logged-in users when using UPN - Microsoft Q&A'
+  report_title: 'KB5077181: Unable to switch between logged-in users when using UPN - Microsoft Q&A'
+  report_text_excerpt: 'KB5077181: Unable to switch between logged-in users when using UPN - Microsoft Q&A Background We are experiencing problems when end users try to switch between logged-in users on computers shared by multiple people. This issue started after KB5077181 was automatically...'
+  captured_at: '2026-09-05T04:18:02Z'
+  source_date: '2026-07-22'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5077181
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5077181
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5993083-inquiry-regarding-update-rollback-undo
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5993083/inquiry-regarding-update-rollback-undoing-changes
+  parent_title: Inquiry Regarding Update Rollback (Undoing changes) from Build 26200.7840 to Build 9168 - Microsoft Q&A
+  report_title: Inquiry Regarding Update Rollback (Undoing changes) from Build 26200.7840 to Build 9168 - Microsoft Q&A
+  report_text_excerpt: Inquiry Regarding Update Rollback (Undoing changes) from Build 26200.7840 to Build 9168 - Microsoft Q&A Dear Microsoft Support Team, Good day. I am writing to seek technical clarification regarding a recurring update failure we are experiencing on Windows 11. During the...
+  captured_at: '2026-09-05T04:18:02Z'
+  source_date: '2026-09-03'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7840'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7840'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5945620-2026-june-update-kb5095093-26200-8737
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5945620/2026-june-update-(kb5095093)-(26200-8737)-will-not
+  parent_title: 2026 June Update (KB5095093) (26200.8737) will not install - Microsoft Q&A
+  report_title: 2026 June Update (KB5095093) (26200.8737) will not install - Microsoft Q&A
+  report_text_excerpt: 2026 June Update (KB5095093) (26200.8737) will not install - Microsoft Q&A i am trying to install the above update with no success
+  captured_at: '2026-09-05T22:23:44Z'
+  source_date: '2026-07-16'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8737'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5804809-windows-update
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5804809/windows-update
+  parent_title: Windows Update - Microsoft Q&A
+  report_title: Windows Update - Microsoft Q&A
+  report_text_excerpt: Windows Update - Microsoft Q&A 2026-02 Security Update (KB5077181) (26200.7840) Failed to install on ‎3/‎03/‎2026 - 0x800f0983 How to fix?
+  captured_at: '2026-09-05T22:25:12Z'
+  source_date: '2026-04-01'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7840'
+  match_basis: exact_os_build
+  matched_kb: KB5077181
+  matched_os_build: '26200.7840'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5779394-disc-cleanup-shows-25mb-temporary-inte
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5779394/disc-cleanup-shows-25mb-temporary-internet-files-b
+  parent_title: Disc Cleanup shows 25mb Temporary Internet files but /temp/ folder is empty - Microsoft Q&A
+  report_title: Disc Cleanup shows 25mb Temporary Internet files but /temp/ folder is empty - Microsoft Q&A
+  report_text_excerpt: Disc Cleanup shows 25mb Temporary Internet files but /temp/ folder is empty - Microsoft Q&A I am running Win11, v25H2, build 26200.7840, and ever since an update about 2-3 months ago, when I run Disk Cleanup it always shows 23-25mb of Temporary Internet files when I open it. I...
+  captured_at: '2026-09-05T22:25:12Z'
+  source_date: '2026-02-24'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7840'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7840'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: network regression
+  workflow_area: networking
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5870615-i-am-unable-to-fix-update-stack-packag
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5870615/i-am-unable-to-fix-update-stack-package-922-415-11
+  parent_title: I am unable to fix update stack package 922.415.111.0 . - Microsoft Q&A
+  report_title: I am unable to fix update stack package 922.415.111.0 . - Microsoft Q&A
+  report_text_excerpt: 'I am unable to fix update stack package 922.415.111.0 . - Microsoft Q&A I have tried everything that I could find on the web, but nothing I have found is working for me. please help. laptop: Probook 445 G8 Windows 11 Pro edu Version 25H2 Type of file system is NTFS OS build...'
+  captured_at: '2026-09-05T22:25:43Z'
+  source_date: '2026-04-25'
+  target_release_date: '2026-01-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7623'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7623'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7623'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5809263-microsoft-update-health-tools
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5809263/microsoft-update-health-tools
+  parent_title: Microsoft Update Health Tools - Microsoft Q&A
+  report_title: Microsoft Update Health Tools - Microsoft Q&A
+  report_text_excerpt: Microsoft Update Health Tools - Microsoft Q&A I have downloaded Microsoft Update Health Tools from this site; the installation fails each time. Can someone please help. I see other articles online saying that people have issues with this. Edition Windows 11 Enterprise Version...
+  captured_at: '2026-09-05T22:25:43Z'
+  source_date: '2026-03-05'
+  target_release_date: '2026-01-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7623'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7623'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7623'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5737538-fully-updated-windows-11-keeps-turning
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5737538/fully-updated-windows-11-keeps-turning-off-instant
+  parent_title: Fully updated windows 11 keeps turning off instantly - Microsoft Q&A
+  report_title: Fully updated windows 11 keeps turning off instantly - Microsoft Q&A
+  report_text_excerpt: Fully updated windows 11 keeps turning off instantly - Microsoft Q&A My 3.5 year old computer for the last year will not stop turning off randomly through out the day. I have tried new ram, new psu, I have tried many updates and some are more stable then others but I cant get...
+  captured_at: '2026-09-05T22:25:43Z'
+  source_date: '2026-01-26'
+  target_release_date: '2026-01-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7623'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7623'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7623'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5671947-please-revoke-the-upgrade-the-bug-buil
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5671947/please-revoke-the-upgrade-the-bug-builds-for-asia
+  parent_title: Please revoke the upgrade the bug builds for Asia users - Microsoft Q&A
+  report_title: Please revoke the upgrade the bug builds for Asia users - Microsoft Q&A
+  report_text_excerpt: Please revoke the upgrade the bug builds for Asia users - Microsoft Q&A Hi Buddies! I'm experiencing a Teams desktop client issue with my corporation's Asia users. Until now, 8 users have been affected by this issue, and I'm one of those. An unstable Build of the Teams client,...
+  captured_at: '2026-09-05T22:25:52Z'
+  source_date: '2026-01-13'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7462'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7462'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7462'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5698431-running-wsreset-exe-has-broken-ms-stor
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5698431/running-wsreset-exe-has-broken-ms-stores-app-in-wi
+  parent_title: Running wsreset.exe has broken MS Stores app in windows 11 Pro 25H2 build 26200.7462 - Microsoft Q&A
+  report_title: Running wsreset.exe has broken MS Stores app in windows 11 Pro 25H2 build 26200.7462 - Microsoft Q&A
+  report_text_excerpt: Running wsreset.exe has broken MS Stores app in windows 11 Pro 25H2 build 26200.7462 - Microsoft Q&A Hai all while following help on running whatsup app, I ran wsreset.exe which has broken MS Stores app in windows 11 Pro 25H2 build 26200.7462. Please help rajaraman
+  captured_at: '2026-09-05T22:25:52Z'
+  source_date: '2026-01-08'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7462'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7462'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7462'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5674430-video-engine-timeout-detected-141-and
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5674430/video-engine-timeout-detected-(141)-and-video-tdr
+  parent_title: VIDEO_ENGINE_TIMEOUT_DETECTED (141) and VIDEO_TDR_TIMEOUT_DETECTED (117) - Microsoft Q&A
+  report_title: VIDEO_ENGINE_TIMEOUT_DETECTED (141) and VIDEO_TDR_TIMEOUT_DETECTED (117) - Microsoft Q&A
+  report_text_excerpt: VIDEO_ENGINE_TIMEOUT_DETECTED (141) and VIDEO_TDR_TIMEOUT_DETECTED (117) - Microsoft Q&A My PC has been experiencing hard freezes for a month now and I don’t know the cause. It happens during UAC checks for games like Wuwa/ZZZ/Where Winds Meet, etc. It happens when I alt+tab...
+  captured_at: '2026-09-05T22:25:52Z'
+  source_date: '2025-12-21'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7462'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7462'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7462'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998917-kb5124008-26200-9445-breaks-machine-se
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5998917/kb5124008-26200-9445-breaks-machine-secure-channel
+  parent_title: KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A
+  report_title: KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A
+  report_text_excerpt: KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A After installing KB5124008 (OS Build 26200.9445) on Windows 11 domain-joined workstations, affected machines lose their domain secure channel and users can no...
+  captured_at: '2026-09-10T12:35:01Z'
+  source_date: '2026-09-10'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998917-solved-kb5124008-26200-9445-breaks-mac
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5998917/solved-kb5124008-26200-9445-breaks-machine-secure
+  parent_title: (SOLVED) KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A
+  report_title: (SOLVED) KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A
+  report_text_excerpt: (SOLVED) KB5124008 (26200.9445) breaks machine secure channel / domain trust — reproducible, Server 2019 DCs - Microsoft Q&A After installing KB5124008 (OS Build 26200.9445) on Windows 11 domain-joined workstations, affected machines lose their domain secure channel and users...
+  captured_at: '2026-09-15T12:58:16Z'
+  source_date: '2026-09-14'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9445'
+  match_basis: exact_os_build
+  matched_kb: KB5124008
+  matched_os_build: '26200.9445'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9445'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6034766-windows-11-version-26h2-install-error
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6034766/windows-11-version-26h2-install-error-0x800f0993
+  parent_title: Windows 11, version 26H2 Install error - 0x800f0993 - Microsoft Q&A
+  report_title: Windows 11, version 26H2 Install error - 0x800f0993 - Microsoft Q&A
+  report_text_excerpt: Windows 11, version 26H2 Install error - 0x800f0993 - Microsoft Q&A I have a GMKtec NucBox K12 with AMD Ryzen 7 255H and Windows 11 Pro OS Build 26200.7462. Almost every month I have great difficulty with updates on this machine and none of my other multiple Windows devices. I...
+  captured_at: '2026-10-13T15:26:35Z'
+  source_date: '2026-10-12'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7462'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7462'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7462'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6040671-after-a-sept-2026-kb-update-i-cannet-g
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6040671/after-a-sept-2026-kb-update-i-cannet-get-by-back-e
+  parent_title: After a Sept 2026 KB update i cannet get by back external drive to connect with MS back up utility - Microsoft Q&A
+  report_title: After a Sept 2026 KB update i cannet get by back external drive to connect with MS back up utility - Microsoft Q&A
+  report_text_excerpt: After a Sept 2026 KB update i cannet get by back external drive to connect with MS back up utility - Microsoft Q&A How can i get my back up drive to connect back with MS HOME Windows and have my files recognizwd agian ? I see them through explorer, but i canniot get the drive...
+  captured_at: '2026-10-17T11:52:14Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9711'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6043315-windows-spotlight-ne-t-l-charge-plus-d
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6043315/windows-spotlight-ne-t-l-charge-plus-d-images-sur
+  parent_title: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A
+  report_title: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A
+  report_text_excerpt: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A Hello Microsoft Support Team, I would like to report a persistent issue with Windows Spotlight on my Windows 11 computer. 1. Problem Description Windows Spotlight (“Windows Spotlight” / “À la une de Windows”)...
+  captured_at: '2026-10-22T13:03:34Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6043315-windows-spotlight-fails-to-update-lock
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6043315/windows-spotlight-fails-to-update-lock-screen-imag
+  parent_title: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A
+  report_title: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A
+  report_text_excerpt: Windows Spotlight Fails to Update Lock Screen Images - Microsoft Q&A Hello Microsoft Support Team, I would like to report a persistent issue with Windows Spotlight on my Windows 11 computer. 1. Problem Description Windows Spotlight (“Windows Spotlight” / “À la une de Windows”)...
+  captured_at: '2026-10-23T12:45:34Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9711'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053821-how-to-enable-the-modern-progressive-r
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053821/how-to-enable-the-modern-progressive-ring-boot-ani
+  parent_title: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A
+  report_title: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A
+  report_text_excerpt: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A Hello Microsoft Windows Team, After updating to Windows 11 Build 26300.9818 (KB5127936), I noticed a visual regression with the OS boot and login animation. The...
+  captured_at: '2026-10-29T14:13:44Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053821-boot-and-login-animation-regression-to
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6053821/boot-and-login-animation-regression-to-old-dots-ri
+  parent_title: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A
+  report_title: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A
+  report_text_excerpt: Boot and login animation regression to old dots ring after installing Build 26300.9818 (KB5127936) - Microsoft Q&A Hello Microsoft Windows Team, After updating to Windows 11 Build 26300.9818 (KB5127936), I noticed a visual regression with the OS boot and login animation. The...
+  captured_at: '2026-10-30T14:08:30Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
