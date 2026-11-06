@@ -39,14 +39,32 @@
         } catch (e) { /* never let arming failure hide the page */ }
       })();
     </script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4SVH0YHB76"></script>
+    {%- comment -%}
+      GOOGLE ANALYTICS ON THE PRODUCTION HOST ONLY. The tag used to be a static async script
+      element in every page, so every copy of the site reported its visits to the auxsays.com
+      property: a local build, a file preview, a generated preview host, and every automated
+      browser a test or an audit drove. gtag.js is now requested only when the page is served from
+      auxsays.com (or www, which redirects there) and the browser does not declare itself automated
+      (navigator.webdriver). Anywhere else nothing is requested and no gtag function exists.
+      Deliberately NOT gated on jekyll.environment: production builds as development here.
+      The measurement id is written once, inside the guard. /privacy/ says what GA collects.
+      test_template_presence_guards.py [GA] executes this script for each host.
+    {%- endcomment %}
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-4SVH0YHB76');
+      (function () {
+        var host = window.location.hostname;
+        if (host !== 'auxsays.com' && host !== 'www.auxsays.com') return;
+        if (window.navigator && window.navigator.webdriver) return;
+        var id = 'G-4SVH0YHB76';
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', id);
+        var tag = document.createElement('script');
+        tag.async = true;
+        tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+        document.head.appendChild(tag);
+      })();
     </script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
     <script defer src="{{ '/assets/js/auxsays.js' | relative_url }}"></script>
@@ -75,10 +93,10 @@
 
         <nav class="aux-nav" aria-label="Primary">
           <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="is-active"{% endif %}>Home</a>
-          <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about/' %}class="is-active"{% endif %}>About Aux</a>
-          <a href="{{ '/articles/' | relative_url }}" {% if page.url contains '/articles/' or page.layout == 'aux-post' %}class="is-active"{% endif %}>Articles</a>
           <a href="{{ '/updates/' | relative_url }}" {% if page.url contains '/updates/' or page.layout == 'aux-update' or page.layout == 'aux-updates' %}class="is-active"{% endif %}>Patch Feed</a>
           <a href="{{ '/systems-monitor/' | relative_url }}" {% if page.url contains '/systems-monitor/' %}class="is-active"{% endif %}>Systems Monitor</a>
+          <a href="{{ '/articles/' | relative_url }}" {% if page.url contains '/articles/' or page.layout == 'aux-post' %}class="is-active"{% endif %}>Articles</a>
+          <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about/' %}class="is-active"{% endif %}>About Aux</a>
         </nav>
       </div>
     </header>
@@ -89,7 +107,7 @@
 
     <footer class="aux-footer">
       <span>© {{ site.time | date: '%Y' }} {{ site.title }}.</span>
-      <span>Signals • Systems • Articles • <a href="{{ '/updates/' | relative_url }}">Patch Feed</a> • <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a></span>
+      <span>Signals • Systems • Articles • <a href="{{ '/updates/' | relative_url }}">Patch Feed</a> • <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a> • <a href="{{ '/privacy/' | relative_url }}">Privacy</a></span>
     </footer>
   </body>
 </html>

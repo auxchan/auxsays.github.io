@@ -522,11 +522,23 @@ auxsays/scripts/tests/test_zendesk_help_center_adapter.py = 60
 # render checks fail with it instead of skipping. The V checks cover the second way content
 # went missing: `.reveal-up` defaulted to opacity 0 with an observer threshold of 0.08, which
 # an element taller than ~12 viewports can never satisfy, so the Adobe company page's 410-row
-# history stayed invisible on desktop permanently.
-auxsays/scripts/tests/test_template_presence_guards.py = 49
+# history stayed invisible on desktop permanently. [GA] (GROWTH-1A) executes the base layout's
+# analytics guard under node per host: gtag.js loads on auxsays.com and www only, never on
+# localhost, 127.0.0.1, file://, preview or look-alike hosts, and never when navigator.webdriver.
+# [PV] the /privacy/ notice: linked from the footer, factual, no compliance claim, published.
+auxsays/scripts/tests/test_template_presence_guards.py = 66
 auxsays/scripts/tests/test_patch_ingest_record_limit.py = 79
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54
+# GROWTH-1A: the homepage was 124,107,478 bytes because its Patch Signals loop re-scanned the whole
+# patch collection for every record and printed indentation on every pass; crawlers stop reading
+# HTML at 2 MB, so no signal link was ever seen. Renders the shipped selection beside the old nested
+# loop (frozen verbatim as a reference fixture) over synthetic corpora that reach every ranking
+# branch, holds the real corpus to the same oracle, and caps the full page at the real corpus size.
+# [D] pins the patch-first entrance: the question h1, the heading outline, one link per product
+# tracker with records (derived), and the signals ahead of everything else.
+# Needs ruby + liquid; without them the render checks fail rather than skip.
+auxsays/scripts/tests/test_homepage_signals.py = 58
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
 # The public projection of how evidence was gathered. The methodology page rendered the whole
 # method-health store (1,554,238 bytes; reddit_search 1,064 times) and the per-patch card

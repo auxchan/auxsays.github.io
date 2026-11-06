@@ -69,6 +69,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-059 | Resolved | Evidence integrity | Medium | Stored evidence kept the old classifiers' guesses after both repairs |
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
+| AUX-086 | Resolved | Publication | High | The homepage was 124 MB of HTML, so search crawlers never reached a patch signal |
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
@@ -4392,6 +4393,69 @@ product.
 it reads 0 for DaVinci once the 100 are archived; the archived releases stay reachable from the history page.
 Not fixed here: the count is a hint, "older" cannot be asserted for an arbitrary archived record, and a change
 would alter the payload for every product.
+
+---
+
+### AUX-086 — The homepage was 124 MB of HTML, so search crawlers never reached a patch signal
+
+- **Status** Resolved · **Area** Publication · **Severity** High
+- **First seen** 2026-11-06 · **Resolved** 2026-11-06 (production size to be confirmed after the deploy)
+
+**Symptom** The live homepage measured 124,107,478 bytes of HTML (1,325,066 bytes gzipped) on 2026-11-06,
+and its first Patch Signals link sat at byte 4,079,213. Google reads the first 2 MB of a page's HTML, so no
+crawler saw a single signal link. The page also opened on creator-publication copy with the signals in a
+side column below the fold (first signal at y=940 on a 1440x900 screen, y=2566 on a 390x844 phone), linked
+none of the 16 product trackers, ran Google Analytics on every copy of the site (local builds, previews,
+automated browsers), and had no privacy notice: /privacy/ returned 404.
+
+**Cause** Patch Signals chose one record per product with a loop over the visible records nested inside
+another loop over the same records. The outer loop re-ran the inner one for every record until it reached
+that product's winner, and for every record of a product with no signal at all: 866 x 1,426 = 1,234,916
+inner passes, each printing its own indentation. The analytics tag was a static script element in
+`aux-base.html`.
+
+**Fix** Four commits, in this order.
+1. The records are grouped by the same product identity once (`group_by_exp`), each group is scored once
+   by the unchanged rules inside a capture that prints nothing, and the display loop walks the feed order
+   once. The winner is still the first record in feed order with the highest score.
+2. The homepage leads with the patch question: a hero asking "Should you install this update?" with
+   entrances to the Patch Feed, My Patch Stack and the methodology; links to every product tracker that
+   has records, derived with one `group_by`; the signals in the main column. Systems Monitor, the coverage
+   cards and recent articles follow. The primary nav keeps its five routes with Patch Feed after Home.
+3. gtag.js is requested only on auxsays.com and www.auxsays.com, and not when `navigator.webdriver` is
+   set. Same measurement id, written once.
+4. A factual /privacy/ notice, linked from every footer. Its wording awaits the owner's review, and it
+   claims no consent or privacy-law compliance; whether EEA/UK visitors must be asked first is an open
+   owner decision.
+
+**Measured** Full local Jekyll 4.4.1 builds of origin/main 01734ea6 and of each commit, same data.
+- Homepage 124,219,267 -> 24,636 bytes after commit 1, 27,954 after commit 4. First signal link at byte
+  4,079,213 -> 15,012 (commit 1) -> 10,382 (commit 4).
+- Commit 1: normalised links (27), signal rows (8) and visible text identical. Every other built page
+  byte-identical except build timestamps. The frozen old loop over all 1,527 records, rendered with the
+  liquid gem, gave the same rows (33.4 s, 123,902,085 bytes).
+- Commit 4 against origin/main: signal rows identical; titles, meta descriptions, canonicals and og:url
+  identical on all 1,664 existing pages; one new page (/privacy/); `auxsays/_data` and
+  `auxsays/updates/generated` trees hash-identical; published payload gate clean; record QA 0 errors.
+- First screen, 1440x900: signals in view 0 -> 3, tracker links 0 -> 15 of 16, patch entrances (Patch
+  Feed, My Patch Stack, methodology) 1 -> 3. 390x844: patch entrances 1 -> 3; first signal y=2566 -> 1527;
+  tracker list starts at y=917.
+- gtag.js elements in built pages: static on 1,651 -> 0; the guard on all 1,652 site-frame pages.
+
+**Not changed** The signal selection and row wording (including "confirmed community reports" and the
+maturity labels), titles, meta descriptions, verdicts and evidence. Rendering the action verdict on the
+homepage needs the shared decision include planned for the snippet work; a homepage-only copy would be a
+third copy of the verdict policy.
+
+**Tests** `test_homepage_signals.py` (new, 58) and `test_template_presence_guards.py` [GA] and [PV]
+(49 -> 66). Mutants, each failing a named check: the nested loop restored (B2-B4), the tie rule flipped
+(P ranking parity, P tie branch), the host guard removed (GA7), the webdriver guard removed (GA8), the
+footer link removed (PV3).
+
+**Reopen only if** the built homepage exceeds 200,000 bytes or its first signal link moves past byte
+50,000; the shipped selection and the frozen reference loop give different rows on any corpus; a homepage
+loop over the patch records is nested inside another; gtag.js is requested on any other host or when
+`navigator.webdriver` is set; or /privacy/ loses its footer link or claims compliance.
 
 ---
 
