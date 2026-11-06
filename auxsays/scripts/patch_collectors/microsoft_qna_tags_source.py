@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import re
 
+from lib import learn_fetch_policy
 from lib.post_dates import original_post_date_from_html
 import time
 import urllib.error
@@ -119,13 +120,22 @@ def _pace() -> None:
 
 
 def fetch(url: str) -> str:
+    """One tag page or question page. The request shape is unchanged; the transport is the shared
+    Learn same-origin policy (lib/learn_fetch_policy), so what comes back was served by Learn over
+    https at the shape that was asked for -- a tag fetch stays on tag pages and the tag index, a
+    question fetch on question pages. A refused URL or redirect raises ``QnaTagError`` carrying the
+    policy's own reason (``redirect_off_host``...), so every caller's method health names it."""
     _pace()
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT,
                                                    "Accept": "text/html,application/xhtml+xml"})
+    family = learn_fetch_policy.page_family(url, (learn_fetch_policy.QUESTION_PAGE,
+                                                  learn_fetch_policy.TAG_PAGE))
     try:
-        with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT) as response:
+        with learn_fetch_policy.open_url(request, family=family, timeout=REQUEST_TIMEOUT) as response:
             final = response.geturl()
             raw = response.read(MAX_BYTES)
+    except learn_fetch_policy.LearnFetchRefused as exc:
+        raise QnaTagError(exc.reason, status=exc.status) from exc
     except urllib.error.HTTPError as exc:
         if exc.code in (429, 503):
             raise QnaTagError("rate_limited", status=exc.code) from exc
