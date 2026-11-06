@@ -14,6 +14,7 @@ Verified 2026-08-17 for `systems-monitor/app/` on Node `24.16.0` and npm `11.13.
 - Registry metadata and the installed lock graph were checked before/after installation.
 - `npm audit --json` and `npm audit --omit=dev --json`: zero known vulnerabilities.
 - Production lock inventory: 44 unique package/version records; all licenses are approved permissive SPDX expressions. See `DEPENDENCY_LICENSE_INVENTORY.json`.
+- Third-party notices: `THIRD_PARTY_NOTICES.txt` reproduces each production package's copyright lines and licence files for the same set. Regenerate it with `npm run notices` after any dependency change; the build serves it at `/systems-monitor/THIRD_PARTY_NOTICES.txt` and refuses a stale copy (AUX-082).
 - React/Recharts peer ranges resolve without invalid or unmet peers (`npm ls --depth=0`).
 - No premium/commercial feature is required.
 - Graphology, Sigma, and a motion library were not installed.

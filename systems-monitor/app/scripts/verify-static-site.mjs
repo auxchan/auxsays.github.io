@@ -1,6 +1,7 @@
 import { access, readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import { builtPage, builtSiteRoot } from "./paths.mjs";
+import { builtPage, builtSiteRoot, committedNotices, licenseInventory, lockfile } from "./paths.mjs";
+import { checkBuiltSite, formatFindings, NOTICES_URL } from "./third-party-notices.mjs";
 
 const html = await readFile(builtPage, "utf8");
 if (!html.includes('id="systems-monitor-root"')) throw new Error("Built page is missing the Systems Monitor root");
@@ -19,4 +20,6 @@ for (const media of ["employment-exposure-public-domain.jpg", "industrial-demand
   if ((await stat(file)).size === 0) throw new Error(`Built media is empty: ${file}`);
 }
 if (/src\/main\.tsx|node_modules/.test(html)) throw new Error("Built page leaked a source or node_modules reference");
-console.log(`static site valid: ${builtPage} with ${matches.length} hashed asset references`);
+const noticeFindings = await checkBuiltSite({ siteRoot: builtSiteRoot, lockfile, inventoryFile: licenseInventory, noticesFile: committedNotices });
+if (noticeFindings.length) throw new Error(`Built site does not ship the third-party notices:\n${formatFindings(noticeFindings)}`);
+console.log(`static site valid: ${builtPage} with ${matches.length} hashed asset references; third-party notices served at ${NOTICES_URL}`);

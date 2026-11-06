@@ -1,0 +1,310 @@
+{
+ "entries": [
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7462",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5671947-please-revoke-the-upgrade-the-bug-buil",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5671947/please-revoke-the-upgrade-the-bug-builds-for-asia",
+   "block_sha256_before_run": "456fde5d009cae4ab1f6b7bacb2662ebc2a353b1c4b93fff19533b4fa38b2f73",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7462",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5698431-running-wsreset-exe-has-broken-ms-stor",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5698431/running-wsreset-exe-has-broken-ms-stores-app-in-wi",
+   "block_sha256_before_run": "f7dc26fb369944eb97ccea26dd9d708c020de058482bc8b8e63e799fd7418d61",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7462",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5674430-video-engine-timeout-detected-141-and",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5674430/video-engine-timeout-detected-(141)-and-video-tdr",
+   "block_sha256_before_run": "eba8baa8c0d97ed77901ab129e2a8be1fec8fc5a2ebc90222779b0bdf0f8cc3b",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7462",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6034766-windows-11-version-26h2-install-error",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6034766/windows-11-version-26h2-install-error-0x800f0993",
+   "block_sha256_before_run": "5656ba8c9afaaf9add15d4d5947b9e07b22219186cc3822c352eae568b3e539f",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5870615-i-am-unable-to-fix-update-stack-packag",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5870615/i-am-unable-to-fix-update-stack-package-922-415-11",
+   "block_sha256_before_run": "f51719499dcab6f3916bea5fc993391f7f49b9f664b03d3649e2254228c761a2",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5809263-microsoft-update-health-tools",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5809263/microsoft-update-health-tools",
+   "block_sha256_before_run": "304f8b72e80effa2c2ba3b8db3e7a78b6cf6f25d81983a2af52e232ac4746bc1",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5737538-fully-updated-windows-11-keeps-turning",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5737538/fully-updated-windows-11-keeps-turning-off-instant",
+   "block_sha256_before_run": "f29f7e16a69e69fb68eadad84896dc713437c5f749202db254a8b8538bce1877",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7840",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5993083-inquiry-regarding-update-rollback-undo",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5993083/inquiry-regarding-update-rollback-undoing-changes",
+   "block_sha256_before_run": "09a54560c33e55e6e70edd3391211685907a8e4c9419424607ca09be1b4b2ce6",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7840",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5779394-disc-cleanup-shows-25mb-temporary-inte",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5779394/disc-cleanup-shows-25mb-temporary-internet-files-b",
+   "block_sha256_before_run": "68fd5cf6724770dcc252603e4a828232717ca69b50ad8e74d90e2ca4b2772a71",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "B",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9711",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6040671-after-a-sept-2026-kb-update-i-cannet-g",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6040671/after-a-sept-2026-kb-update-i-cannet-get-by-back-e",
+   "block_sha256_before_run": "7eb7855dcc13464a136c5a3b202c44b8d17f340a992e9585d3e6f14064a4615e",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "withdraw",
+   "track": "C",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8737",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5945620-2026-june-update-kb5095093-26200-8737",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5945620/2026-june-update-(kb5095093)-(26200-8737)-will-not",
+   "block_sha256_before_run": "0397e3767cc36071459a0d41bc360383c0f1306c67a7d07a1e91c7e17ee307c8",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "retain",
+   "track": "C",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8737",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5945620-2026-06-update-kb5095093-26200-8737-wi",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5945620/2026-06-update-(kb5095093)-(26200-8737)-will-not-i",
+   "block_sha256_before_run": "667360c5e56f6bc9eef38cca8997808197a48877aa4659f55e3946fbe002bb63",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "track": "C",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9445",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998917-solved-kb5124008-26200-9445-breaks-mac",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5998917/solved-kb5124008-26200-9445-breaks-machine-secure",
+   "block_sha256_before_run": "6a1db8a2bc82cdcc9ccdcd5391d17a19d86fe5bf82f5dfe88b89afa02732d209",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "retain",
+   "track": "C",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9445",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5998917-kb5124008-26200-9445-breaks-machine-se",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5998917/kb5124008-26200-9445-breaks-machine-secure-channel",
+   "block_sha256_before_run": "8e87f0e86a241ed10046e6a251532b872d4cbbb6bee6045ac37da2e70a48c0ab",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "track": "C",
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "id": "microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6043315-windows-spotlight-fails-to-update-lock",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6043315/windows-spotlight-fails-to-update-lock-screen-imag",
+   "block_sha256_before_run": "8bb47b20ae4a445811fd15a7de559cadc460e2c0295c4ebad24b9e9cdd32d143",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "retain",
+   "track": "C",
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "id": "microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6043315-windows-spotlight-ne-t-l-charge-plus-d",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6043315/windows-spotlight-ne-t-l-charge-plus-d-images-sur",
+   "block_sha256_before_run": "e19a17c0c341e7098df3424cd8512e9442d28fb31f30ffe4d627b94f5be6388f",
+   "counted_before_run": true,
+   "action": "kept"
+  },
+  {
+   "role": "withdraw",
+   "track": "C",
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9818",
+   "id": "microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053821-boot-and-login-animation-regression-to",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6053821/boot-and-login-animation-regression-to-old-dots-ri",
+   "block_sha256_before_run": "c1fd5841aa993e664ac7f723384fdbdbf98160cd2dbd6e21fddf855ec1812cd9",
+   "counted_before_run": false,
+   "action": "already_withdrawn"
+  },
+  {
+   "role": "retain",
+   "track": "C",
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9818",
+   "id": "microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6053821-how-to-enable-the-modern-progressive-r",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/6053821/how-to-enable-the-modern-progressive-ring-boot-ani",
+   "block_sha256_before_run": "979cae6a023c00f7f8802da1b482441aa885a93c2f10da01bd8edc6f1a41759e",
+   "counted_before_run": true,
+   "action": "kept"
+  }
+ ],
+ "withdrawn_now": 0,
+ "windows_counted_population": [
+  513,
+  513
+ ],
+ "per_patch": [
+  {
+   "update_version": "25H2",
+   "target_build": "26200.7462",
+   "before": 48,
+   "after": 48
+  },
+  {
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "before": 42,
+   "after": 42
+  },
+  {
+   "update_version": "25H2",
+   "target_build": "26200.7840",
+   "before": 34,
+   "after": 34
+  },
+  {
+   "update_version": "25H2",
+   "target_build": "26200.8737",
+   "before": 12,
+   "after": 12
+  },
+  {
+   "update_version": "25H2",
+   "target_build": "26200.9445",
+   "before": 15,
+   "after": 15
+  },
+  {
+   "update_version": "25H2",
+   "target_build": "26200.9711",
+   "before": 8,
+   "after": 8
+  },
+  {
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "before": 18,
+   "after": 18
+  },
+  {
+   "update_version": "26H2",
+   "target_build": "26300.9818",
+   "before": 12,
+   "after": 12
+  }
+ ],
+ "counted_learn_duplicates_after": [],
+ "newly_counted_rows": [],
+ "same_question_siblings": [],
+ "stranded_cross_patch_duplicates": [],
+ "generated_at": "2026-11-06T03:26:36Z",
+ "exclusion_reasons": {
+  "B": "identity_not_the_subject",
+  "C": "duplicate_existing_evidence"
+ },
+ "store_sha256_before": "dad7e02c80cac81e5fe0477904e27d3f3b6d8e38421dd75e02c37090578ef204",
+ "store_sha256_after": "dad7e02c80cac81e5fe0477904e27d3f3b6d8e38421dd75e02c37090578ef204",
+ "manifest_sha256": "083f2a985bf044ac5cdf03ca8edfe337a6ea2a909b68cc85bcf42e9ba59feef3",
+ "written": false,
+ "writers": [
+  {
+   "command": "build_consensus_from_evidence.py --product-id microsoft-windows-11 --reconcile-only",
+   "returncode": 0,
+   "output": [
+    "Reconciled report counts on 5 record(s) to final counted evidence (scoped to microsoft-windows-11).",
+    "  2026-06-23-windows-11-25h2-26200-8737.md: microsoft-windows-11 25H2 13 -> 12",
+    "  2026-09-08-windows-11-25h2-26200-9445.md: microsoft-windows-11 25H2 16 -> 15",
+    "  2026-10-13-windows-11-25h2-26200-9711.md: microsoft-windows-11 25H2 9 -> 8",
+    "  2026-10-13-windows-11-26h2-26300-9711.md: microsoft-windows-11 26H2 19 -> 18",
+    "  2026-10-28-windows-11-26h2-26300-9818.md: microsoft-windows-11 26H2 13 -> 12"
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id microsoft-windows-11 --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 55 group(s); 55 would write; 0 blocked; 513 included; 49 excluded."
+   ]
+  }
+ ],
+ "parent_commit": "aaffba7dd3fb8184dcee33fad79d5d55dc09d136"
+}

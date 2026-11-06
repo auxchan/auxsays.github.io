@@ -348,6 +348,10 @@
 [data-aux-product="systems-monitor"] .sm-app-shell--immersive .sm-view-switcher button.is-active { box-shadow: none; background: var(--aux-sm-accent); color: #061119; }
 [data-aux-product="systems-monitor"] .sm-view-region--immersive { padding-top: clamp(2.5rem, 6vw, 5.4rem); }
 [data-aux-product="systems-monitor"] .sm-immersive-footer { display: flex; justify-content: space-between; gap: 1rem; margin-top: 5rem; padding: 1.2rem 0; border-top: 1px solid var(--aux-sm-line); color: #647b7d; font-size: .72rem; }
+[data-aux-product="systems-monitor"] .sm-app-footer { display: flex; justify-content: flex-end; margin-top: 3rem; padding: 1.2rem 0; border-top: 1px solid var(--aux-sm-line); color: #647b7d; font-size: .72rem; }
+[data-aux-product="systems-monitor"] .sm-notices-link { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+[data-aux-product="systems-monitor"] .sm-notices-link:hover,
+[data-aux-product="systems-monitor"] .sm-notices-link:focus-visible { color: var(--aux-sm-accent); }
 [data-aux-product="systems-monitor"] .sm-kicker { display: inline-flex; align-items: center; gap: .6rem; color: var(--aux-sm-accent); font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
 [data-aux-product="systems-monitor"] .sm-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 25rem); align-items: center; min-height: 27rem; gap: 4rem; margin-bottom: clamp(3rem, 8vw, 6.5rem); }
 [data-aux-product="systems-monitor"] .sm-hero h1,

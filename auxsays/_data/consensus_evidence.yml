@@ -18313,10 +18313,10 @@ evidence:
   matched_version: '26200.7840'
   match_basis: exact_os_build
   matched_os_build: '26200.7840'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -18515,10 +18515,10 @@ evidence:
   match_basis: exact_os_build
   matched_kb: KB5095093
   matched_os_build: '26200.8737'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -22876,10 +22876,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.7840'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: network regression
   workflow_area: networking
   platform: windows
@@ -24357,10 +24357,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.7623'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -24386,10 +24386,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.7623'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -24765,10 +24765,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.7623'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: unspecified Windows issue
   workflow_area: Windows workflow
   platform: windows
@@ -26706,10 +26706,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.7462'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -26764,10 +26764,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.7462'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: unspecified Windows issue
   workflow_area: Windows workflow
   platform: windows
@@ -26880,10 +26880,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.7462'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: BSOD / stop error
   workflow_area: system stability
   platform: windows
@@ -31732,10 +31732,10 @@ evidence:
   matched_kb: KB5124008
   matched_os_build: '26200.9445'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -51910,10 +51910,10 @@ evidence:
   matched_version: '26200.7462'
   match_basis: exact_os_build
   matched_os_build: '26200.7462'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -56149,10 +56149,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.9711'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: identity_not_the_subject
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -57636,10 +57636,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26300.9711'
   matched_feature_version: 26H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -64242,10 +64242,10 @@ evidence:
   match_basis: exact_os_build
   matched_kb: KB5127936
   matched_os_build: '26300.9818'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
