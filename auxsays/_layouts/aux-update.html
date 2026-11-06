@@ -179,6 +179,30 @@ layout: aux-base
 their method-health rows carries the same update_version, so this join needs the build too
 or a sibling's telemetry decides this build's freshness notice. {%- endcomment -%}
 {% assign page_target_build_token = page.target_build | default: '' | append: '' %}
+{%- comment -%}
+  A ROW SPEAKS FOR NOW ONLY WHILE THE CARD CALLS IT FRESH. The notice says collection is CURRENTLY
+  blocked or degraded, so only a row the monitoring card would count as a fresh, post-release,
+  usable run may make it say so. This join used to read the status of every row with no freshness
+  check, so a single failed visit kept reading as a present condition long after the card beside
+  it had moved to COLLECTION STALE: from about 2026-11-11 ten Acrobat Pro 25.001 pages would have
+  said "Collection blocked." about one failed visit on 2026-10-28 while their card said the
+  collection was stale.
+
+  This is the card's own rule over the card's own inputs, not a second freshness authority:
+  monitoring_max_age_days from the site config with the card's default, the same build clock, the
+  record's release time (the value the page passes the card as published_at), a timestamp that is
+  present and not in the future, a run at or after release, and an age at or below the limit
+  (exactly at the limit is still fresh, as on the card). test_freshness_notice_currency renders this
+  page with the real monitoring card beside it and fails on any case where the notice claims a
+  current problem the card does not show. An old row is still reported: the card lists it with its
+  own date, and a stale capture still produces the capture-age sentence below.
+{%- endcomment -%}
+{% assign notice_max_age_days = site.monitoring_max_age_days | default: 14 %}
+{% assign notice_max_age_s = notice_max_age_days | times: 86400 %}
+{% assign notice_now_s = site.time | date: '%s' | plus: 0 %}
+{% assign notice_pub_s = 0 %}
+{% assign notice_pub_raw = page.update_published_at | default: '' | strip %}
+{% if notice_pub_raw != '' %}{% assign notice_pub_s = notice_pub_raw | date: '%s' | plus: 0 %}{% endif %}
 {% if site.data.evidence_method_health and site.data.evidence_method_health.methods %}
   {% for method in site.data.evidence_method_health.methods %}
     {% assign method_product_id_token = method.product_id | append: '' %}
@@ -190,11 +214,20 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {% assign method_source_type_key = method.source_type | default: '' | downcase | replace: '_', ' ' | replace: '-', ' ' | strip %}
       {% assign method_source_type_token = '|' | append: method_source_type_key | append: '|' %}
       {% if method_health_status_tokens contains method_status_token and evidence_source_type_tokens contains method_source_type_token %}
-        {% assign method_health_blocked_or_pending = true %}
-        {% if blocked_status_tokens contains method_status_token %}
-          {% assign method_health_blocked = true %}
-        {% else %}
-          {% assign method_health_degraded = true %}
+        {% assign method_row_current = false %}
+        {% assign method_run_raw = method.last_run | default: '' | strip %}
+        {% if method_run_raw != '' %}
+          {% assign method_run_s = method_run_raw | date: '%s' | plus: 0 %}
+          {% assign method_run_age_s = notice_now_s | minus: method_run_s %}
+          {% if method_run_s <= notice_now_s and method_run_s >= notice_pub_s and method_run_age_s <= notice_max_age_s %}{% assign method_row_current = true %}{% endif %}
+        {% endif %}
+        {% if method_row_current %}
+          {% assign method_health_blocked_or_pending = true %}
+          {% if blocked_status_tokens contains method_status_token %}
+            {% assign method_health_blocked = true %}
+          {% else %}
+            {% assign method_health_degraded = true %}
+          {% endif %}
         {% endif %}
       {% endif %}
     {% endif %}

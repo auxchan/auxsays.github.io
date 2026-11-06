@@ -4002,7 +4002,7 @@ failed promotion.
 
 ### AUX-057 — The patch-page freshness notice claimed a revalidation that no field records
 
-- **Status** Deferred (fix on branch `fix/freshness-capture-age-wording`; mark Resolved only after the new wording is verified on the deployed site) · **Area** Published claims · **Severity** Medium
+- **Status** Deferred (fix merged in #217; mark Resolved only after the new wording is verified on the deployed site) · **Area** Published claims · **Severity** Medium
 - **First seen** 2026-11-04
 
 **Symptom / gap** On 2026-11-04 the three Windows 25H2 pages 26200.7462, .7623 and .7840 were
@@ -4013,10 +4013,15 @@ against those exact builds, which is why monitoring certified them.
 
 **History, both facts preserved** The original observation was a certified-live page. Those three
 pages were afterwards correctly revoked from live when Tech Community collection was blocked, and
-today render as Verified reports with "Collection blocked". Their status can change again as
-collection and certification change; nothing here treats them as permanently pilot. The wording
-defect was never about their maturity: it applied to every page that showed the notice, 222 on
-2026-11-05 across eight products, none of them live.
+the next scheduled collection run promoted them again on 2026-11-05 once that collection recovered.
+Their status can change again as collection and certification change; nothing here treats them as
+permanently pilot or permanently live. The wording defect was never about their maturity: it
+applied to every page that showed the notice. On 2026-11-05 that was 222 pages across eight
+products, none of them live when measured. On 2026-11-06 at 04:26Z it was 223, and four of them
+were certified live: Windows 11 25H2 26200.7462, .7623 and .7840, and OBS Studio 32.1.2. All four
+state their capture dates truthfully. Collection ran against each of them on 2026-11-05 and
+accepted nothing new, and live consensus depends on that collection running and staying healthy,
+not on how recently a report was captured (AUX-084 makes the glossary say so).
 
 **Root cause** `evidence_last_checked` is the capture time of the newest accepted report
 (`apply_consensus_to_records._latest_captured_at`), not the time anyone re-verified anything. A
@@ -4049,6 +4054,67 @@ or a separate field backed by actual report revalidation is introduced. Never de
 method-health telemetry, and never present a consensus check time as a capture date.
 
 **Work that this item must not block** Live promotion and revocation, and the classification sprint.
+
+---
+
+### AUX-084 — A collection failure that was no longer current still read as current on the patch page
+
+- **Status** Resolved · **Area** Published claims · **Severity** Medium
+- **First seen** 2026-11-06 · **Resolved** 2026-11-06
+
+**Symptom** A patch page states collection health in two places: the monitoring card and the
+freshness notice below the verdict. The card compares each collection method's last run with the
+14-day freshness limit and reads COLLECTION STALE once nothing has run within it. The notice read the
+same method rows by status alone. So one failed visit kept producing "Collection blocked. Some
+collection methods are currently blocked or returning errors." for as long as the row stayed
+stored. Every record on `47720db4` was rendered at two pinned instants. At 2026-11-06T05:00Z no page
+contradicted its card. At 2026-11-12T00:00Z 10 pages did, all of them Acrobat Pro 25.001 builds:
+"Collection blocked." beside COLLECTION STALE. On each of them a single Adobe community search had
+returned an error on 2026-10-28, and the newest-first schedule had not visited the build again. That
+run passes the limit on 2026-11-11.
+
+**Fix (presentation only)** A blocked or degraded row now makes the notice speak in the present tense
+only while the card would count that run as fresh. The run time must be present and not in the
+future, at or after the release, and no older than the limit. The notice applies the card's rule to
+the card's inputs: the same setting with the same default, the same build clock and the same release
+time. It adds no limit of its own. An older failure is still listed on the card with its own date,
+and an old capture date still gets "No recently captured accepted reports. ... Collection status is
+reported separately." This is collection freshness, decided from method run times; the capture date
+of the newest accepted report is still never derived from them (AUX-057).
+
+**Wording** My Patch Stack printed the capture date as "Evidence checked <date>". A live Windows build
+whose collection ran on Nov 5 therefore read "Evidence checked Sep 06, 2026". The card now says
+"Newest accepted report captured: <date>", the patch page's label, and only on a card that counts a
+report. The methodology glossary said live consensus is withdrawn when its collection "goes stale",
+which reads as old reports. It now says "has not run for 14 days", and it states that the newest
+report's capture date is a separate fact. Four more public sentences described that date as an
+evidence check or an "evidence date": the patch-page contents list, the Verified reports definition,
+the note on dates and the My Patch Stack empty state. All four are reworded.
+
+**Measured** All 1,525 records were rendered before and after through the real layout with every
+include live, at both instants. After the fix there are 0 disagreements at each instant. At
+2026-11-06 no page's notice changes. At 2026-11-12 exactly those 10 notices change, to the
+capture-age sentence beside COLLECTION STALE. The set of pages showing a notice is identical, 223 and
+233. No card changes, and nothing outside the notice changes. Evidence, counts, verdicts, live
+eligibility, method-health telemetry and stored timestamps are untouched.
+`test_freshness_notice_currency.py` (153 checks, `[blocking]`) renders the shipped layout with the
+real card at fixed clocks. It covers the Acrobat shape before, at and after the limit, both boundary
+seconds, six statuses at four ages, rows that ran before release or have no usable time, live pages
+and a non-default limit. It fails any case where the notice claims a current problem the card does
+not show. `test_patch_stack_dashboard.py` [CL] runs the real card renderer. Each of 11 mutants, one
+reverted fix apiece, fails a named check.
+
+**Not changed** When a fresh row and an older failed row coexist, the card still reads the older
+row's status: it says MONITORING DEGRADED, or COLLECTION BLOCKED when the older row is blocked or broken
+and the fresh row is not healthy. The notice then makes no present-tense claim and defers to the card. A stored `source_freshness_note` that mentions blocked, pending or stale still produces
+"Collection degraded." with no date check. No record carries such a note (100 carry the field, all
+empty).
+
+**Reopen only if** at any fixed clock a rendered patch page's notice says "Collection blocked." or
+"Collection degraded." while its card is in neither COLLECTION BLOCKED nor MONITORING DEGRADED. Also
+reopen if the notice's limit stops reading the card's setting, if My Patch Stack or the glossary
+again calls the capture date an evidence check, or if `test_freshness_notice_currency.py` reports
+anything but its governed 153.
 
 ---
 

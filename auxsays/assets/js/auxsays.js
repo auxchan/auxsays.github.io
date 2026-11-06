@@ -790,7 +790,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const meta = [];
         meta.push(`${Number(entry.n) || 0} confirmed report${Number(entry.n) === 1 ? '' : 's'}`);
         if (entry.ev) meta.push(esc(entry.ev));
-        if (entry.checked) meta.push(`Evidence checked ${esc(entry.checked)}`);
+        // `checked` is when the record's newest ACCEPTED report was captured, not the last time
+        // collection looked (the monitoring line below states that). So it carries the patch page's
+        // label, and it is shown only where the card counts a report.
+        if (entry.checked && Number(entry.n) > 0) meta.push(`Newest accepted report captured: ${esc(entry.checked)}`);
         if (entry.mon === 'COLLECTION BLOCKED') meta.push('Collection blocked');
         else if (entry.mon === 'COLLECTION STALE') meta.push('Collection stale');
         else if (entry.mon === 'MONITORING DEGRADED') meta.push('Monitoring degraded');

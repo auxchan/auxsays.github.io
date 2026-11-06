@@ -282,9 +282,14 @@ def render_gate_matrix():
     # can neither hide an occurrence nor invent one -- it only removes the need for a file system.
     src = re.sub(r"\{%-?\s*include\s.*?-?%\}", "", src, flags=re.S)
 
+    # Every row ran the day before the matrix clock. A blocked or degraded row makes the notice say
+    # so in the present tense only while the monitoring card would still call that run fresh, so a
+    # row with no run time at all is NOT a current problem (the card reads it as COLLECTION STALE).
+    # The freshness boundary itself is pinned by test_freshness_notice_currency.
     def health(status: str) -> dict:
         return {"methods": [{"product_id": "obs-studio", "update_version": "31.0.4",
-                             "target_build": "", "source_type": "forum_thread", "status": status}]}
+                             "target_build": "", "source_type": "forum_thread", "status": status,
+                             "last_run": "2026-09-08T00:00:00Z"}]}
 
     healthy = health("success")
     # `official` is not a curiosity: consensus_collection_status is deferred_official_only on 942 of

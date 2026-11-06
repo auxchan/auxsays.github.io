@@ -28,7 +28,7 @@ permalink: /updates/methodology/
         <li>The exact release identity, including the build where a product ships several builds under one version.</li>
         <li>Links to the vendor source and to every counted report.</li>
         <li>How many confirmed patch-specific reports were counted, including when that number is zero.</li>
-        <li>The evidence state, and the dates on which the vendor source and the user-report evidence were last checked.</li>
+        <li>The evidence state, the date the vendor source was last checked, and the date the newest accepted user report was captured.</li>
         <li>Whether coverage for that exact release is limited, incomplete or out of date.</li>
       </ul>
     </article>
@@ -65,8 +65,8 @@ permalink: /updates/methodology/
       <h2>Evidence states</h2>
       <dl class="methodology-definition-list">
         <div><dt>Official source only</dt><dd>A vendor source has been captured. No confirmed patch-specific user reports are counted for this release. This is the most common state on the site, and it is not a safety finding.</dd></div>
-        <div><dt>Verified reports</dt><dd>The page carries confirmed patch-specific reports that were captured earlier. Check the evidence date on the page before treating them as current.</dd></div>
-        <div><dt>Live consensus</dt><dd>The release&rsquo;s confirmed patch-specific user reports have reached the High evidence-strength level, and the community collection for that exact release is running and healthy. It is withdrawn automatically when that collection stops, fails or goes stale. A vendor&rsquo;s own release notes never count toward it.</dd></div>
+        <div><dt>Verified reports</dt><dd>The page carries confirmed patch-specific reports that were captured earlier. Check when the newest accepted report was captured before treating them as current.</dd></div>
+        <div><dt>Live consensus</dt><dd>The release&rsquo;s confirmed patch-specific user reports have reached the High evidence-strength level, and the community collection for that exact release is running and healthy. It is withdrawn automatically when that collection stops, fails, or has not run for 14 days. That is a test of the collection, not of the reports: the date the newest accepted report was captured is a separate fact, and a live release can show an older date there while collection keeps running and finds nothing new to accept. A vendor&rsquo;s own release notes never count toward it.</dd></div>
         <div><dt>Insufficient data</dt><dd>There is not enough vendor or user evidence to support anything beyond a placeholder state.</dd></div>
       </dl>
       <p>No state means an update is safe. &ldquo;Official source only&rdquo; and &ldquo;Insufficient data&rdquo; both mean the user-report picture for that release is empty or thin, not that it is clear.</p>
@@ -82,7 +82,7 @@ permalink: /updates/methodology/
 
     <article class="methodology-card">
       <h2>Dates mean different things</h2>
-      <p>A patch page can carry several dates: when the vendor source was last checked, when vendor detail was last captured, when the record itself last changed, and when user-report evidence was last checked. They move independently. One recent date is not proof that the others are recent, and a vendor check moving does not mean the recommendation, the report count or the evidence state changed.</p>
+      <p>A patch page can carry several dates: when the vendor source was last checked, when vendor detail was last captured, when the record itself last changed, and when the newest accepted user report was captured. They move independently. A recent collection check does not mean a new report was accepted, and an old capture date does not mean collection has stopped: the monitoring status states that separately. One recent date is not proof that the others are recent, and a vendor check moving does not mean the recommendation, the report count or the evidence state changed.</p>
     </article>
 
     <article class="methodology-card">

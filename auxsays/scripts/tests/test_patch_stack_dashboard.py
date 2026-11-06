@@ -1041,6 +1041,29 @@ def run() -> int:
     check("PS-K version order lives only in the platform-split branch, never in installedState",
           "versionOrder" in scoped_body and "versionOrder" not in installed_body, "")
 
+    # ---------- CL: the date on a card is a capture date, not an evidence check (AUX-084) ----------
+    # The payload's `checked` is the record's evidence_last_checked: when its newest ACCEPTED report
+    # was captured. The card printed it as "Evidence checked <date>", so a live Windows build whose
+    # collection ran on Nov 5 read "Evidence checked Sep 06, 2026". The patch page already calls this
+    # date "Newest accepted report captured" (AUX-057); the card now uses the same words, and prints
+    # them only where it counts a report, since the words claim one was captured. Run through the
+    # REAL cardHtml, because a label is only proven by what the renderer emits.
+    print("\n[CL] My Patch Stack names the date for what it is")
+    cl_base = dict(obs_entry or card_entry, href="/updates/obs-project/obs-studio/32-1-2/", ver="32.1.2",
+                   recs=[], ev="Live consensus", mon="MONITORING ACTIVE", checked="Sep 06, 2026")
+    cl_counted = render_card(dict(cl_base, n=36), {})
+    check("CL1 a card that counts reports names the date as the newest accepted report's capture",
+          cl_counted is not None
+          and "<li>Newest accepted report captured: Sep 06, 2026</li>" in cl_counted,
+          (cl_counted or "node unavailable")[:400])
+    check("CL2 the retired 'Evidence checked' label is gone from the card and from the script",
+          cl_counted is not None and "Evidence checked" not in cl_counted and "Evidence checked" not in js,
+          "still present")
+    cl_zero = render_card(dict(cl_base, n=0), {})
+    check("CL3 a card that counts no report prints no capture date",
+          cl_zero is not None and "Newest accepted report captured" not in cl_zero
+          and "<li>0 confirmed reports</li>" in cl_zero, (cl_zero or "node unavailable")[:400])
+
     print()
     print("=" * 78)
     print(f"Results: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")

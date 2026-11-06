@@ -259,7 +259,7 @@ permalink: /updates/my-stack/
   <section class="panel patch-stack-empty" data-stack-empty hidden>
     <h2>Your Patch Stack is empty.</h2>
     <p>Watch the software you use and its latest patch status appears here — the current AUXSAYS
-      decision, how much evidence sits behind it, and when it was last checked.</p>
+      decision, how much evidence sits behind it, and when its newest accepted report was captured.</p>
     <p class="patch-card-links">
       <a class="patch-source-link patch-source-link--primary" href="{{ '/updates/' | relative_url }}">Browse the Patch Feed →</a>
     </p>
