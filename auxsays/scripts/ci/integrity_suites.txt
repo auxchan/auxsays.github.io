@@ -527,6 +527,13 @@ auxsays/scripts/tests/test_template_presence_guards.py = 49
 auxsays/scripts/tests/test_patch_ingest_record_limit.py = 79
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54
+# GROWTH-1A: the homepage was 124,107,478 bytes because its Patch Signals loop re-scanned the whole
+# patch collection for every record and printed indentation on every pass; crawlers stop reading
+# HTML at 2 MB, so no signal link was ever seen. Renders the shipped selection beside the old nested
+# loop (frozen verbatim as a reference fixture) over synthetic corpora that reach every ranking
+# branch, holds the real corpus to the same oracle, and caps the full page at the real corpus size.
+# Needs ruby + liquid; without them the render checks fail rather than skip.
+auxsays/scripts/tests/test_homepage_signals.py = 46
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
 # The public projection of how evidence was gathered. The methodology page rendered the whole
 # method-health store (1,554,238 bytes; reddit_search 1,064 times) and the per-patch card

@@ -148,82 +148,109 @@ layout: aux-base
           Within each product, the representative record is chosen by:
           featured, current status, release/update recency, then evidence strength for close calls.
         {% endcomment %}
+        {%- comment -%}
+          BOUNDED SELECTION. This block used to find each product's representative by scanning
+          the WHOLE patch list again for every record it visited, and every one of those passes
+          printed its own indentation: over the 1,426 visible records that was 1,234,916 passes
+          and a 124,107,478-byte homepage (1.3 MB gzipped) made almost entirely of blank space. Search
+          crawlers stop reading a page's HTML after 2 MB, and the first signal link sat at byte
+          4,079,213, so no crawler ever reached one.
 
-        {% for item in update_pages %}
-          {% assign item_product_identity = item.product_id | default: item.update_brand_id | default: item.update_product | default: item.url | downcase | replace: ' ', '-' | replace: '/', '-' | replace: '|', '-' %}
-          {% assign item_product_key = '|' | append: item_product_identity | append: '|' %}
-          {% unless home_product_seen contains item_product_key %}
+          The ranking is unchanged. The records are grouped by the same product identity in ONE
+          pass (group_by_exp), each group is scored once by the same rules, and the winner is the
+          first record in feed order with the highest score, exactly what the strict greater-than
+          comparison chose before. The scoring runs inside a capture that is thrown away, so it
+          prints nothing at any corpus size. The display loop then walks the feed order once and
+          prints a product's row when it reaches that product's winner, under the same limit, so
+          the rows, their order and their destinations are what they were.
+
+          The identity expression appears twice, in the grouping and in the display loop's
+          item_product_identity, and the two must stay character-identical:
+          scripts/tests/test_homepage_signals.py pins that, and proves the selection against a
+          reference copy of the old nested loop.
+        {%- endcomment -%}
+        {%- capture home_signal_selection -%}
+          {% assign home_signal_groups = update_pages | group_by_exp: "item", "item.product_id | default: item.update_brand_id | default: item.update_product | default: item.url | downcase | replace: ' ', '-' | replace: '/', '-' | replace: '|', '-'" %}
+          {% assign home_signal_winners = '' | split: '' %}
+          {% for signal_group in home_signal_groups %}
             {% assign best_item_url = '' %}
             {% assign best_item_score = 0 %}
+            {% for candidate in signal_group.items %}
+              {% assign candidate_update_report_count = candidate.update_report_count | default: 0 | plus: 0 %}
+              {% assign candidate_confirmed_report_count = candidate.confirmed_patch_specific_report_count | default: 0 | plus: 0 %}
+              {% assign candidate_known_issues_value = candidate.known_issues_present | default: false %}
+              {% assign candidate_evidence_state = candidate.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' %}
+              {% assign candidate_intelligence_stage = candidate.intelligence_stage | default: '' | downcase | replace: '-', '_' %}
+              {% assign candidate_is_known_issue = false %}
+              {% if candidate_known_issues_value == true or candidate_known_issues_value == 'true' or candidate_known_issues_value == 'yes' %}
+                {% assign candidate_is_known_issue = true %}
+              {% endif %}
+              {% assign candidate_has_report_signal = false %}
+              {% if candidate_update_report_count > 0 or candidate_confirmed_report_count > 0 %}
+                {% assign candidate_has_report_signal = true %}
+              {% endif %}
+              {% assign candidate_official_active = candidate.official_active_issue_count | default: 0 | plus: 0 %}
+              {% assign candidate_official_safeguard = candidate.official_safeguard_hold_count | default: 0 | plus: 0 %}
+              {% assign candidate_has_official_issue = false %}
+              {% if candidate_official_active > 0 or candidate_official_safeguard > 0 %}
+                {% assign candidate_has_official_issue = true %}
+              {% endif %}
+              {% assign candidate_is_meaningful = false %}
+              {% if candidate.homepage_featured == true or candidate_has_report_signal == true or candidate_has_official_issue == true or candidate_is_known_issue == true or candidate_evidence_state == 'pilot_sample' or candidate_evidence_state == 'consensus_live' or candidate_intelligence_stage == 'pilot' or candidate_intelligence_stage == 'consensus_live' %}
+                {% assign candidate_is_meaningful = true %}
+              {% endif %}
 
-            {% for candidate in update_pages %}
-              {% assign candidate_product_identity = candidate.product_id | default: candidate.update_brand_id | default: candidate.update_product | default: candidate.url | downcase | replace: ' ', '-' | replace: '/', '-' | replace: '|', '-' %}
-              {% if candidate_product_identity == item_product_identity %}
-                {% assign candidate_update_report_count = candidate.update_report_count | default: 0 | plus: 0 %}
-                {% assign candidate_confirmed_report_count = candidate.confirmed_patch_specific_report_count | default: 0 | plus: 0 %}
-                {% assign candidate_known_issues_value = candidate.known_issues_present | default: false %}
-                {% assign candidate_evidence_state = candidate.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' %}
-                {% assign candidate_intelligence_stage = candidate.intelligence_stage | default: '' | downcase | replace: '-', '_' %}
-                {% assign candidate_is_known_issue = false %}
-                {% if candidate_known_issues_value == true or candidate_known_issues_value == 'true' or candidate_known_issues_value == 'yes' %}
-                  {% assign candidate_is_known_issue = true %}
+              {% if candidate_is_meaningful == true %}
+                {% assign candidate_timestamp = candidate.update_published_at | default: candidate.record_last_updated | default: candidate.evidence_last_checked | default: candidate.update_last_checked %}
+                {% assign candidate_time_rank = candidate_timestamp | date: "%s" | plus: 0 %}
+                {% assign candidate_score = candidate_time_rank %}
+                {% if candidate.update_status != 'archived' %}
+                  {% assign candidate_score = candidate_score | plus: 10000000000000 %}
                 {% endif %}
-                {% assign candidate_has_report_signal = false %}
-                {% if candidate_update_report_count > 0 or candidate_confirmed_report_count > 0 %}
-                  {% assign candidate_has_report_signal = true %}
+                {% comment %}Ranked by the shared contract: an uncertified live claim ranks as the verified reports it renders as.{% endcomment %}
+                {% include maturity-state.html record=candidate %}
+                {% assign candidate_state_rank = 0 %}
+                {% if maturity_live %}
+                  {% assign candidate_state_rank = 2 %}
+                {% elsif maturity_class == 'pilot' %}
+                  {% assign candidate_state_rank = 1 %}
                 {% endif %}
-                {% assign candidate_official_active = candidate.official_active_issue_count | default: 0 | plus: 0 %}
-                {% assign candidate_official_safeguard = candidate.official_safeguard_hold_count | default: 0 | plus: 0 %}
-                {% assign candidate_has_official_issue = false %}
-                {% if candidate_official_active > 0 or candidate_official_safeguard > 0 %}
-                  {% assign candidate_has_official_issue = true %}
+                {% assign candidate_state_score = candidate_state_rank | times: 150000 %}
+                {% assign candidate_score = candidate_score | plus: candidate_state_score %}
+                {% if candidate_is_known_issue == true %}
+                  {% assign candidate_score = candidate_score | plus: 200000 %}
                 {% endif %}
-                {% assign candidate_is_meaningful = false %}
-                {% if candidate.homepage_featured == true or candidate_has_report_signal == true or candidate_has_official_issue == true or candidate_is_known_issue == true or candidate_evidence_state == 'pilot_sample' or candidate_evidence_state == 'consensus_live' or candidate_intelligence_stage == 'pilot' or candidate_intelligence_stage == 'consensus_live' %}
-                  {% assign candidate_is_meaningful = true %}
+                {% if candidate_has_official_issue == true %}
+                  {% assign candidate_score = candidate_score | plus: 220000 %}
                 {% endif %}
-
-                {% if candidate_is_meaningful == true %}
-                  {% assign candidate_timestamp = candidate.update_published_at | default: candidate.record_last_updated | default: candidate.evidence_last_checked | default: candidate.update_last_checked %}
-                  {% assign candidate_time_rank = candidate_timestamp | date: "%s" | plus: 0 %}
-                  {% assign candidate_score = candidate_time_rank %}
-                  {% if candidate.update_status != 'archived' %}
-                    {% assign candidate_score = candidate_score | plus: 10000000000000 %}
-                  {% endif %}
-                  {% comment %}Ranked by the shared contract: an uncertified live claim ranks as the verified reports it renders as.{% endcomment %}
-                  {% include maturity-state.html record=candidate %}
-                  {% assign candidate_state_rank = 0 %}
-                  {% if maturity_live %}
-                    {% assign candidate_state_rank = 2 %}
-                  {% elsif maturity_class == 'pilot' %}
-                    {% assign candidate_state_rank = 1 %}
-                  {% endif %}
-                  {% assign candidate_state_score = candidate_state_rank | times: 150000 %}
-                  {% assign candidate_score = candidate_score | plus: candidate_state_score %}
-                  {% if candidate_is_known_issue == true %}
-                    {% assign candidate_score = candidate_score | plus: 200000 %}
-                  {% endif %}
-                  {% if candidate_has_official_issue == true %}
-                    {% assign candidate_score = candidate_score | plus: 220000 %}
-                  {% endif %}
-                  {% if candidate_has_report_signal == true %}
-                    {% assign candidate_score = candidate_score | plus: 250000 %}
-                  {% endif %}
-                  {% if candidate_intelligence_stage == 'pilot' or candidate_intelligence_stage == 'consensus_live' %}
-                    {% assign candidate_score = candidate_score | plus: 50000 %}
-                  {% endif %}
-                  {% if candidate.homepage_featured == true %}
-                    {% assign candidate_score = candidate_score | plus: 1000000000000000 %}
-                  {% endif %}
-                  {% if candidate_score > best_item_score %}
-                    {% assign best_item_score = candidate_score %}
-                    {% assign best_item_url = candidate.url %}
-                  {% endif %}
+                {% if candidate_has_report_signal == true %}
+                  {% assign candidate_score = candidate_score | plus: 250000 %}
+                {% endif %}
+                {% if candidate_intelligence_stage == 'pilot' or candidate_intelligence_stage == 'consensus_live' %}
+                  {% assign candidate_score = candidate_score | plus: 50000 %}
+                {% endif %}
+                {% if candidate.homepage_featured == true %}
+                  {% assign candidate_score = candidate_score | plus: 1000000000000000 %}
+                {% endif %}
+                {% if candidate_score > best_item_score %}
+                  {% assign best_item_score = candidate_score %}
+                  {% assign best_item_url = candidate.url %}
                 {% endif %}
               {% endif %}
             {% endfor %}
+            {% if best_item_url != '' %}
+              {% assign home_signal_winner = signal_group.name | append: ' ' | append: best_item_url %}
+              {% assign home_signal_winners = home_signal_winners | push: home_signal_winner %}
+            {% endif %}
+          {% endfor %}
+        {%- endcapture -%}
 
-            {% if best_item_url == item.url and home_patch_count < home_patch_limit %}
+        {%- for item in update_pages -%}
+          {%- assign item_product_identity = item.product_id | default: item.update_brand_id | default: item.update_product | default: item.url | downcase | replace: ' ', '-' | replace: '/', '-' | replace: '|', '-' -%}
+          {%- assign item_product_key = '|' | append: item_product_identity | append: '|' -%}
+          {%- unless home_product_seen contains item_product_key -%}
+            {%- assign item_signal_key = item_product_identity | append: ' ' | append: item.url -%}
+            {%- if home_signal_winners contains item_signal_key and home_patch_count < home_patch_limit %}
               {% assign update_report_count = item.update_report_count | default: 0 | plus: 0 %}
               {% assign confirmed_report_count = item.confirmed_patch_specific_report_count | default: 0 | plus: 0 %}
               {% assign report_count = update_report_count %}
@@ -277,9 +304,9 @@ layout: aux-base
                 </a>
                 {% assign home_product_seen = home_product_seen | append: item_product_identity | append: '|' %}
                 {% assign home_patch_count = home_patch_count | plus: 1 %}
-            {% endif %}
-          {% endunless %}
-        {% endfor %}
+            {% endif -%}
+          {%- endunless -%}
+        {%- endfor %}
 
         {% if home_patch_count == 0 %}
           <div class="home-patch-empty">
