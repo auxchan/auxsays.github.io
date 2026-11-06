@@ -12,10 +12,13 @@ provenance line are unchanged. This is display only: no evidence, record or `_da
     S  the shipped layout's emitting markup reads no title field on the three lists
     R  the SHIPPED layout rendered with the liquid gem over FROZEN SYNTHETIC fixtures: every link
        keeps its URL, no stored title of 20+ characters appears anywhere in the page (text or
-       attribute), the descriptor carries source, date and issue, and the counts and framing hold
+       attribute), the descriptor carries source, date and issue, and the counts and framing hold;
+       a confirmed source with no issue label reads "issue not classified" even when its
+       workflow_area, theme, outcome and classification are set (one named check per field)
     A  attributes and accessible names
-    N  non-vacuity: the detector finds a planted title, and the same layout with the old link text
-       put back exposes the titles on all three surfaces
+    N  non-vacuity: the detector finds a planted title, the same layout with the old link text
+       put back exposes the titles on all three surfaces, and a neutral branch that prints the
+       sibling fields exposes all four
     W  WARN-ONLY diagnostic: the real records rendered through the shipped layout, reporting any
        stored title still present. It never fails and never adds a check, so evidence growth
        cannot change this suite's governed count.
@@ -222,6 +225,8 @@ T = {
     "t2_other": "SYNTHETIC L2 TITLE for another patch: must not render here",
     "ac2": "SYNTHETIC ACROBAT L2 TITLE: signature panel greys out",
 }
+T["sib_empty"] = "SYNTHETIC TITLE eight: empty issue label beside other fields"
+T["sib_absent"] = "SYNTHETIC TITLE nine: no issue key at all beside other fields"
 for i in range(1, 11):
     T[f"l3_{i}"] = f"SYNTHETIC L3 TITLE number {i:02d}: a slide master stops saving"
 for i in range(1, 4):
@@ -266,6 +271,31 @@ SAMPLES_PAGE = {
          "source_title": T["sample_b"], "counted": True, "issue": ""},
     ],
 }
+# "Never invent an issue" on the confirmed-sources list, pinned against the fields that sit beside the
+# label. Both rows carry NO issue label (one empty, one with the key missing) but distinctive values in
+# every sibling field a template could be tempted to fall back on. Each value has its own marker word,
+# so a leak is attributed to the one field it came from.
+SIBLING_FIELDS = {"workflow_area": "kestrel", "theme": "osprey", "outcome": "plover", "classification": "merlin"}
+SIBLING_VALUES = {field: f"{word} {field.replace('_', ' ')} value" for field, word in SIBLING_FIELDS.items()}
+SIBLING_PAGE = {
+    "layout": "aux-update", "title": "OBS Studio 98.0 (synthetic)", "product_id": "obs-studio",
+    "update_product": "OBS Studio", "update_version": "98.0", "update_published_at": "2026-10-02T00:00:00Z",
+    "update_report_count": 2, "confirmed_patch_specific_report_count": 2,
+    "accepted_report_sources": [
+        {"source_name": "OBS Project Support Forum", "source_type": "obs_forum_thread", "source_date": "2026-10-11",
+         "source_url": "https://example.test/sib/empty", "source_title": T["sib_empty"], "issue": "",
+         **SIBLING_VALUES},
+        {"source_name": "obsproject/obs-studio", "source_type": "github_issue", "source_date": "2026-10-12",
+         "source_url": "https://example.test/sib/absent", "source_title": T["sib_absent"], **SIBLING_VALUES},
+    ],
+}
+SIBLING_EXPECTED = ["OBS Project Support Forum report, October 11, 2026: issue not classified",
+                    "obsproject/obs-studio report, October 12, 2026: issue not classified"]
+# The confirmed-sources neutral branch, and a control that prints every sibling field there instead.
+S1_NEUTRAL = "{% else %}issue not classified{% endif %}{% endcapture %}"
+S1_SIBLING_CONTROL = ("{% else %}{{ source.workflow_area }} {{ source.theme }} {{ source.outcome }} "
+                      "{{ source.classification }}{% endif %}{% endcapture %}")
+
 PPT_KEY = "microsoft-powerpoint|2699|20399.20100"
 PPT_PAGE = {
     "layout": "aux-update", "title": "PowerPoint 2699 (synthetic)", "product_id": "microsoft-powerpoint",
@@ -312,7 +342,7 @@ SITE = {
              "window_build": "26.009.20001", "window_start": "2026-10-14"} for i in range(1, 4)]},
     },
 }
-PAGES = [WIN_PAGE, SAMPLES_PAGE, PPT_PAGE, ACRO_PAGE]
+PAGES = [WIN_PAGE, SAMPLES_PAGE, PPT_PAGE, ACRO_PAGE, SIBLING_PAGE]
 ALL_TITLES = sorted(set(T.values()))
 
 # The link-text expressions of the three surfaces before this change, for the N control.
@@ -475,7 +505,7 @@ def run() -> int:  # noqa: PLR0915
     check("L1 the liquid gem is available and the shipped layout renders every fixture page",
           rendered is not None and not any(h.startswith("<<ERR") for h in rendered),
           why or str([h[:200] for h in (rendered or []) if h.startswith("<<ERR")]))
-    win, samples, ppt, acro = (rendered or ["", "", "", ""])[:4]
+    win, samples, ppt, acro, sib = (rendered or [""] * len(PAGES))[:5]
 
     # ---- R: confirmed sources -------------------------------------------------------------
     src_links = [ln for ln in parse_links(sources_section(win)).links]
@@ -557,14 +587,36 @@ def run() -> int:  # noqa: PLR0915
     check("R19 no Acrobat title renders",
           bool(acro) and not titles_found(acro, ALL_TITLES), str(titles_found(acro, ALL_TITLES)))
 
+    # ---- R: confirmed sources never invent an issue from the fields beside the label ----------
+    sib_links = parse_links(sources_section(sib)).links
+    check("R20 a confirmed source with an empty or missing issue label reads 'issue not classified', even "
+          "with workflow_area, theme, outcome and classification set",
+          [ln["attrs"].get("href") for ln in sib_links] == ["https://example.test/sib/empty", "https://example.test/sib/absent"]
+          and [ln["text"] for ln in sib_links] == SIBLING_EXPECTED and bool(sib) and not titles_found(sib, ALL_TITLES),
+          str([ln["text"] for ln in sib_links]))
+
+    def sibling_leaks(field: str) -> list[str]:
+        """Link texts or accessible-name attributes of the unlabelled rows that carry `field`'s marker."""
+        word = SIBLING_FIELDS[field]
+        names = [v for ln in sib_links for v in (ln["text"], ln["attrs"].get("aria-label") or "",
+                                                 ln["attrs"].get("title") or "")]
+        return [v for v in names if word in v.lower()]
+
+    check("R21 ... its link text and accessible name never carry the workflow_area",
+          len(sib_links) == 2 and not sibling_leaks("workflow_area"), str(sibling_leaks("workflow_area")))
+    check("R22 ... never the theme", len(sib_links) == 2 and not sibling_leaks("theme"), str(sibling_leaks("theme")))
+    check("R23 ... never the outcome", len(sib_links) == 2 and not sibling_leaks("outcome"), str(sibling_leaks("outcome")))
+    check("R24 ... never the classification",
+          len(sib_links) == 2 and not sibling_leaks("classification"), str(sibling_leaks("classification")))
+
     # ---- A: attributes and accessible names --------------------------------------------------
     leaked_attrs = [v for h in (rendered or []) for v in parse_links(h).attr_values
                     if any(norm(t) in norm(v) for t in ALL_TITLES)]
     check("A1 no attribute value (title, aria-label, data-*, href, alt) carries a stored title",
           bool(rendered) and not leaked_attrs, str(leaked_attrs[:3]))
-    report_links = (src_links + s_links + t2_links + l3_links + a2 + a3)
+    report_links = (src_links + s_links + t2_links + l3_links + a2 + a3 + sib_links)
     check("A2 every report link's accessible name carries a date (or 'date not recorded') and an issue",
-          len(report_links) == 22 and all(DATE_PART_RE.search(ln["text"]) for ln in report_links),
+          len(report_links) == 24 and all(DATE_PART_RE.search(ln["text"]) for ln in report_links),
           str([ln["text"] for ln in report_links if not DATE_PART_RE.search(ln["text"])][:3]))
     check("A3 no report link has an aria-label or title attribute that could differ from its text",
           not [ln for ln in report_links if "aria-label" in ln["attrs"] or "title" in ln["attrs"]])
@@ -583,6 +635,15 @@ def run() -> int:  # noqa: PLR0915
     check("N4 CONTROL: ... and the Level 3 titles",
           T["l3_1"] in titles_found(l3_section(cw[2]), ALL_TITLES)
           and T["ac3_1"] in titles_found(l3_section(cw[3]), ALL_TITLES))
+    # R21-R24 are only as good as their fixture: a neutral branch that prints the sibling fields must
+    # put every one of the four marker words into the unlabelled rows' link text.
+    sib_control = template.replace(S1_NEUTRAL, S1_SIBLING_CONTROL, 1) if template.count(S1_NEUTRAL) == 1 else ""
+    sib_rendered, sib_why = render(sib_control, SITE, [SIBLING_PAGE]) if sib_control else (None, "neutral branch not found once")
+    sib_control_texts = [ln["text"].lower() for ln in parse_links(sources_section((sib_rendered or [""])[0])).links]
+    check("N5 CONTROL: a neutral branch that prints the sibling fields exposes all four in the link text",
+          len(sib_control_texts) == 2
+          and all(word in text for text in sib_control_texts for word in SIBLING_FIELDS.values()),
+          sib_why or str(sib_control_texts))
 
     # ---- W: real records, WARN only ------------------------------------------------------------
     print()

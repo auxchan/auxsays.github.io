@@ -13,12 +13,12 @@
   "headline": "KB5127936 & Ctrl-Alt-Del: restart hangs, any fix?",
   "datePublished": "2026-11-03T21:25:13+00:00",
   "url": "https://www.elevenforum.com/t/kb5127936-ctrl-alt-del-restart-hangs-any-fix.50594/",
-  "text": "Synthetic test post. I held off until today (03 Nov 2026) before installing KB5127936. It took a while and restarted three times, and the PC seemed fine afterwards, but it was not.\n\nDISM /Online /Cleanup-Image /AnalyzeComponentStore stopped at 98.1% and could not be ended, and SFC /ScanNow reported errors it said it had repaired.\n\nRestarting from Ctrl-Alt-Del then left both screens blank apart from the cursor until I cut the power. DISM /RestoreHealth also stopped at 98.1%.\n\nI have a full disk image from yesterday. Should I restore it, or wait for the next update? The PC runs, so this is not urgent."
+  "text": "KB5127936 got installed today (03 Nov 2026), which I had been putting off. Three reboots and a long wait, all normal, and the PC looked healthy afterwards. It wasn't.\n\nAn elevated DISM /Online /Cleanup-Image /AnalyzeComponentStore stalled at 98.1% and would not cancel. SFC /ScanNow then ran to the end and claimed to have repaired some errors.\n\nHoping that would unblock DISM, I chose Restart from the Ctrl-Alt-Del menu: both monitors went dark apart from the spinning cursor, and only pulling the power got the PC back. A repeat gave the same outcome, and a later DISM /Online /Cleanup-Image /RestoreHealth stalled at 98.1% as well; the CBS log meant nothing to me.\n\nI have yesterday's full disk image. Restore it, or sit tight for the next official patch? Everything else works, so it isn't urgent."
  }
 }
 </script>
 </head>
 <body>
-<!-- fixture: SYNTHETIC opening post written by AUXSAYS for tests; structure mirrors the JSON-LD block the adapter reads; no replies -->
+<!-- fixture: SYNTHETIC opening post written by AUXSAYS for tests. Modelled on a thread recorded 2026-11-04: it keeps that thread's id, dates, version identifiers, error codes and commands; the wording is AUXSAYS's own. Structure mirrors the JSON-LD block the adapter reads; no replies -->
 </body>
 </html>

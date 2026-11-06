@@ -4750,14 +4750,18 @@ for the disabled adapter (#207) held recorded listing titles and opening-post te
 instead of inventing either. The descriptor is the link's whole accessible name. Source URLs, counts,
 report dates, the Level 2/3 source line, the counted / not-counted framing, verdicts, maturity and
 monitoring are unchanged, and no evidence, record or `_data` file changed (P0 counts, evidence states,
-verdicts and live-eligibility reasons identical before and after). The 24 fixtures are rewritten with
-synthetic AUXSAYS text that keeps their thread ids, pinned flags, activity and post dates and version
-identifiers; every outcome the suites derive from them, compared offline before and after, is unchanged.
-This does not remove the recorded text from git history.
+verdicts and live-eligibility reasons identical before and after). The 24 fixtures are rewritten in
+AUXSAYS's own words: each keeps its page's scenario, thread id, pinned flag, activity and post dates,
+version identifiers, error codes and commands, and apart from those identifiers no run of five or more
+consecutive words of any recorded page remains (each file measured against all 24). Every outcome the
+suites derive from them, compared offline before and after (520 per-thread verdicts, listings, claim
+sequences and three replays), is unchanged. This does not remove the recorded text from git history.
 
-`test_publication_title_minimisation.py` (30 checks, blocking) renders the shipped layout with the liquid
+`test_publication_title_minimisation.py` (36 checks, blocking) renders the shipped layout with the liquid
 gem over frozen synthetic fixtures: every link keeps its URL, no stored title reaches the page as text or
-attribute, and a control that puts the old link text back exposes the titles on all three lists. Its
+attribute, a confirmed source with no issue label reads "issue not classified" even when its workflow
+area, theme, outcome and classification are set (one named check per field, and a control that must expose
+all four), and a control that puts the old link text back exposes the titles on all three lists. Its
 real-record pass is WARN-only (0 titles on the 270 pages after the change). The presence-guard citation
 ladder is amended (C6 now requires the descriptor and the title's absence); the forum suites keep their
 counts, and K4 also requires every fixture to carry the synthetic marker.
@@ -4768,7 +4772,7 @@ fixtures and audit JSON (for example `windows_c1b/c1b_rows.json`), the AUX-063 e
 history, including the replaced fixtures. The record writer can still fall back to a truncated title as
 a sample's issue label; none reaches a rendered report list today.
 
-**Reopen only if** the suite reports anything but its governed 30, its WARN pass reports a stored title on
+**Reopen only if** the suite reports anything but its governed 36, its WARN pass reports a stored title on
 a rendered page, a layout or include prints `report_title`, `source_title` or `parent_title` again, or a
 file under `tests/fixtures/elevenforum/` lacks the synthetic marker.
 

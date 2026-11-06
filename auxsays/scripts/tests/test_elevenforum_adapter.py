@@ -2,10 +2,11 @@
 """Windows 11 Forum (elevenforum.com) discovery adapter: shipped DISABLED.
 
 Offline and deterministic. Every page comes from tests/fixtures/elevenforum/ or from an inline synthetic
-page. The fixture files are SYNTHETIC: AUXSAYS-written titles and opening posts that keep the structure,
-thread ids, dates and version identifiers of pages recorded 2026-11-04, and none of their text. The
-network is replaced by an injected transport, and the one test that runs the whole collector asserts
-that no request is made.
+page. The fixture files are SYNTHETIC: titles and opening posts written by AUXSAYS, each modelled on a
+page recorded 2026-11-04. They keep that page's structure, scenario, thread id, dates, version
+identifiers, error codes and commands; apart from those identifiers, no run of five or more consecutive
+words of the recorded text remains. The network is replaced by an injected transport, and the one test
+that runs the whole collector asserts that no request is made.
 Nothing here writes `_data`, a record or the evidence store.
 
     A  URL policy              only the three approved listings and /t/ threads can be requested;
@@ -271,7 +272,7 @@ def run() -> int:  # noqa: PLR0915
     assert cand is not None
     check("D2 the post date is the JSON-LD datePublished", cand["source_date"] == "2026-10-28"
           and cand["original_post_date"] == "2026-10-28")
-    stale, _ = ef.parse_thread("https://www.elevenforum.com/t/windows-update-asks-for-a-restart-while-a-second-update-is-still-installing.44141/",
+    stale, _ = ef.parse_thread("https://www.elevenforum.com/t/restart-request-shows-up-midway-through-a-running-update.44141/",
                                fixture("thread_44141.html"), today=TODAY)
     last_activity = {r["thread_id"]: r["last_activity"] for r in page1}
     check("D3 an old thread bumped by a reply keeps its ORIGINAL date, not its last-activity time",

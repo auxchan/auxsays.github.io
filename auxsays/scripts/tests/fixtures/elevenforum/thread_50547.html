@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html id="XF" lang="en-US" dir="LTR">
 <head>
-<title>Settings window nearly all black (winver: 26H2, Home) | Windows 11 Forum</title>
+<title>26H2 Home: Settings and Control Panel open as dark empty windows | Windows 11 Forum</title>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
  "@type": "WebPage",
- "url": "https://www.elevenforum.com/t/settings-window-nearly-all-black-winver-26h2-home.50547/",
+ "url": "https://www.elevenforum.com/t/26h2-home-settings-and-control-panel-open-as-dark-empty-windows.50547/",
  "mainEntity": {
   "@type": "DiscussionForumPosting",
-  "@id": "https://www.elevenforum.com/t/settings-window-nearly-all-black-winver-26h2-home.50547/",
-  "headline": "Settings window nearly all black (winver: 26H2, Home)",
+  "@id": "https://www.elevenforum.com/t/26h2-home-settings-and-control-panel-open-as-dark-empty-windows.50547/",
+  "headline": "26H2 Home: Settings and Control Panel open as dark empty windows",
   "datePublished": "2026-11-01T15:10:37+00:00",
-  "url": "https://www.elevenforum.com/t/settings-window-nearly-all-black-winver-26h2-home.50547/",
-  "text": "Synthetic test post.\n\nThe Settings app is almost entirely black, and so is Control Panel.\n\nFrom an elevated prompt I re-registered the Settings package:\nGet-AppXPackage -AllUsers -Name windows.immersivecontrolpanel | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register \"$($_.InstallLocation)\\AppXManifest.xml\"}\n\nIt made no difference. Any suggestions?"
+  "url": "https://www.elevenforum.com/t/26h2-home-settings-and-control-panel-open-as-dark-empty-windows.50547/",
+  "text": "Both the Settings app and Control Panel open as nearly solid black windows (winver shows 26H2, Home).\n\nFrom an admin PowerShell I re-registered the Settings package with\nGet-AppxPackage -AllUsers windows.immersivecontrolpanel | ForEach-Object { Add-AppxPackage -Register -DisableDevelopmentMode \"$($_.InstallLocation)\\AppxManifest.xml\" }\nbut nothing changed. Ideas?"
  }
 }
 </script>
 </head>
 <body>
-<!-- fixture: SYNTHETIC opening post written by AUXSAYS for tests; structure mirrors the JSON-LD block the adapter reads; no replies -->
+<!-- fixture: SYNTHETIC opening post written by AUXSAYS for tests. Modelled on a thread recorded 2026-11-04: it keeps that thread's id, dates, version identifiers, error codes and commands; the wording is AUXSAYS's own. Structure mirrors the JSON-LD block the adapter reads; no replies -->
 </body>
 </html>
