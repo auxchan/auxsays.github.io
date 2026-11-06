@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """Windows 11 Forum (elevenforum.com) discovery adapter: shipped DISABLED.
 
-Offline and deterministic. Every page comes from tests/fixtures/elevenforum/ (recorded 2026-11-04,
-trimmed to what the parser reads) or from an inline synthetic page; the network is replaced by an
-injected transport, and the one test that runs the whole collector asserts that no request is made.
+Offline and deterministic. Every page comes from tests/fixtures/elevenforum/ or from an inline synthetic
+page. The fixture files are SYNTHETIC: titles and opening posts written by AUXSAYS, each modelled on a
+page recorded 2026-11-04. They keep that page's structure, scenario, thread id, dates, version
+identifiers, error codes and commands; apart from those identifiers, no run of five or more consecutive
+words of the recorded text remains. The network is replaced by an injected transport, and the one test
+that runs the whole collector asserts that no request is made.
 Nothing here writes `_data`, a record or the evidence store.
 
     A  URL policy              only the three approved listings and /t/ threads can be requested;
@@ -193,7 +196,7 @@ def run() -> int:  # noqa: PLR0915
               L + "install-update-activate/", L + "general-support/", L + "bsod/",
               L + "bsod/page-2", L + "general-support/page-3")))
     check("A2 a thread permalink is requestable",
-          ef.classify_url("https://www.elevenforum.com/t/update-not-installing.50447/") == "thread")
+          ef.classify_url("https://www.elevenforum.com/t/security-update-keeps-failing-to-install.50447/") == "thread")
     check("A3 /search/, /members/ and /whats-new/ are refused (robots.txt Disallow)",
           not any(ef.classify_url(u) for u in (
               "https://www.elevenforum.com/search/", "https://www.elevenforum.com/search/1/?q=KB5127648",
@@ -213,8 +216,8 @@ def run() -> int:  # noqa: PLR0915
           ef.listing_url("bsod", 1) == L + "bsod/" and ef.listing_url("bsod", 3) == L + "bsod/page-3"
           and all(_raises(lambda p=p: ef.listing_url("bsod", p)) for p in (0, 4)))
     check("A9 canonical_thread_url strips the trailing slash and refuses non-threads",
-          ef.canonical_thread_url("https://www.elevenforum.com/t/update-not-installing.50447/")
-          == "https://www.elevenforum.com/t/update-not-installing.50447"
+          ef.canonical_thread_url("https://www.elevenforum.com/t/security-update-keeps-failing-to-install.50447/")
+          == "https://www.elevenforum.com/t/security-update-keeps-failing-to-install.50447"
           and ef.canonical_thread_url(L + "bsod/") == ""
           and ef.canonical_thread_url("https://example.com/t/x.1/") == "")
 
@@ -251,8 +254,8 @@ def run() -> int:  # noqa: PLR0915
     check("C3 last activity is read as a date and is NOT the post date",
           by_id["50594"]["last_activity"] == "2026-11-04")
     check("C4 titles are unescaped and canonical urls built",
-          by_id["50594"]["title"].startswith("KB5127936 broke")
-          and by_id["50594"]["source_url"].endswith("/t/kb5127936-broke-ctrl-alt-del-restart-is-there-a-fix.50594"))
+          by_id["50594"]["title"] == "KB5127936 & Ctrl-Alt-Del: restart hangs, any fix?"
+          and by_id["50594"]["source_url"].endswith("/t/kb5127936-ctrl-alt-del-restart-hangs-any-fix.50594"))
     check("C5 the title prefilter admits a KB, an OS build, a feature train, 'update' and 'patch'",
           all(ef.title_has_patch_cue(t) for t in (
               "KB5127936 broke it", "Build 26200.9711 crash", "How to move to 24H2",
@@ -263,20 +266,20 @@ def run() -> int:  # noqa: PLR0915
           ef.parse_listing("") == [] and ef.parse_listing("<html>no threads</html>") == [])
 
     # ---------------------------------------------------------------- D. opening-post parser
-    cand, why = ef.parse_thread("https://www.elevenforum.com/t/update-not-installing.50447/",
+    cand, why = ef.parse_thread("https://www.elevenforum.com/t/security-update-keeps-failing-to-install.50447/",
                                 fixture("thread_50447.html"), today=TODAY)
-    check("D1 a recorded thread yields one candidate", cand is not None and why == "", why)
+    check("D1 a fixture thread yields one candidate", cand is not None and why == "", why)
     assert cand is not None
     check("D2 the post date is the JSON-LD datePublished", cand["source_date"] == "2026-10-28"
           and cand["original_post_date"] == "2026-10-28")
-    stale, _ = ef.parse_thread("https://www.elevenforum.com/t/why-does-windows-update-prompt-me-to-restart-even-though-another-update-is-still-installing.44141/",
+    stale, _ = ef.parse_thread("https://www.elevenforum.com/t/restart-request-shows-up-midway-through-a-running-update.44141/",
                                fixture("thread_44141.html"), today=TODAY)
     last_activity = {r["thread_id"]: r["last_activity"] for r in page1}
     check("D3 an old thread bumped by a reply keeps its ORIGINAL date, not its last-activity time",
           stale is not None and stale["source_date"] == "2026-01-28" and last_activity["44141"] >= "2026-10-31",
           f"{stale and stale['source_date']} vs listing {last_activity.get('44141')}")
     check("D4 the candidate carries the url, source identity and an excerpt-sized text",
-          cand["source_url"] == "https://www.elevenforum.com/t/update-not-installing.50447"
+          cand["source_url"] == "https://www.elevenforum.com/t/security-update-keeps-failing-to-install.50447"
           and cand["source_type"] == ef.DEFAULT_SOURCE_TYPE and 0 < len(cand["report_text"]) <= ef.EXCERPT_CHARS)
     long_text = "KB5127648 fails to install. " * 400
     capped, _ = ef.parse_thread("https://www.elevenforum.com/t/some-thread.1/",
@@ -565,10 +568,10 @@ def run() -> int:  # noqa: PLR0915
     for tid in ("50447", "50506"):
         c, why = ef.parse_thread(f"https://www.elevenforum.com/t/x.{tid}/", fixture(f"thread_{tid}.html"), today=TODAY)
         threads[tid] = c
-    check("I1 both recorded threads parse (the demonstration below is not vacuous)",
+    check("I1 both fixture threads parse (the demonstration below is not vacuous)",
           all(threads.values()))
     accepted_map = evaluate_all([c for c in threads.values() if c])
-    u50447 = "https://www.elevenforum.com/t/update-not-installing.50447"
+    u50447 = "https://www.elevenforum.com/t/security-update-keeps-failing-to-install.50447"
     u50506 = [u for u in accepted_map if u.endswith(".50506")]
     check("I2 CLEAN CASE: thread 50447 (KB5127648 on 26H2) is accepted once, on 26H2 26300.9711, by KB + train",
           [p for p, _ in accepted_map.get(u50447, [])] == ["26H2 26300.9711"]
@@ -629,8 +632,12 @@ def run() -> int:  # noqa: PLR0915
           bool(entry) and "AUX-063" in json.dumps(entry) and "challenge_page" in json.dumps(entry))
     check("K3 the registry names the flag that would enable it",
           bool(entry) and mw.ELEVENFORUM_ENABLE_ENV in json.dumps(entry))
-    check("K4 the fixture set is complete: 4 listings and 20 threads",
-          len(list(FIX.glob("listing_*.html"))) == 4 and len(list(FIX.glob("thread_*.html"))) == 20)
+    fixture_files = sorted(FIX.glob("*.html"))
+    check("K4 the fixture set is complete (4 listings, 20 threads) and every file is marked SYNTHETIC",
+          len(list(FIX.glob("listing_*.html"))) == 4 and len(list(FIX.glob("thread_*.html"))) == 20
+          and len(fixture_files) == 24
+          and all("fixture: SYNTHETIC" in p.read_text(encoding="utf-8") for p in fixture_files),
+          str([p.name for p in fixture_files if "fixture: SYNTHETIC" not in p.read_text(encoding="utf-8")]))
 
     surfaces = (_REPO / "auxsays" / "_data", _REPO / "auxsays" / "updates" / "generated")
     before = tree_digest(*surfaces)

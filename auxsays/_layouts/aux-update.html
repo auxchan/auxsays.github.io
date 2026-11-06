@@ -938,19 +938,32 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {% if has_listing_card_evidence %}
       <p class="update-credibility-note">Some preserved report rows came from listing-card evidence rather than durable direct report URLs. AUXSAYS keeps the count visible but treats revalidation as pending until durable source URLs are available.</p>
       {% endif %}
+      {%- comment -%}
+        PUBLICATION MINIMISATION (D1). The three report lists on this page (this one, the Level 2
+        update-linked card and the Level 3 recent-reports card) link to each source by a descriptor
+        AUXSAYS composes from its own stored fields -- source name, report date and the AUXSAYS issue
+        label -- and never print the thread title the source's author wrote. The link, the date, the
+        counts and the counted / not-counted framing are unchanged; only the visible link text moved
+        from the author's words to AUXSAYS's. The descriptor is the whole accessible name of the
+        link, so it always carries a date and an issue: when either is missing it says so ("date not
+        recorded", "issue not classified") rather than inventing one. This list also renders the
+        evidence-samples fallback above, so the fallback is covered by the same markup.
+      {%- endcomment -%}
       <ul class="update-source-list update-source-list--accepted">
         {% for source in accepted_report_sources %}
-        {% assign source_title = source.source_title | default: source.title | default: 'User report' %}
         {% assign source_type_label = source.source_type | default: source.source_name | default: 'user report' %}
         {% assign source_issue = source.issue | default: source.issue_theme | default: '' | strip %}
         {% assign source_name_clean = source.source_name | default: '' | strip %}
         {% assign source_date_clean = source.source_date | default: '' | strip %}
         {% assign source_url_clean = source.source_url | default: '' | strip %}
         {% assign source_workflow = source.workflow_area | default: '' | strip %}
+        {% assign source_family = source_name_clean | default: 'Community' %}
+        {% assign source_family_tail = source_family | downcase | slice: -6, 6 %}
+        {% if source_family_tail == 'report' %}{% assign source_noun = source_family %}{% else %}{% assign source_noun = source_family | append: ' report' %}{% endif %}
+        {% capture source_link_text %}{{ source_noun }}, {% if source_date_clean != '' %}{{ source_date_clean | date: "%B %-d, %Y" }}{% else %}date not recorded{% endif %}: {% if source_issue != '' %}{{ source_issue }}{% else %}issue not classified{% endif %}{% endcapture %}
         <li>
-          <cite>{% if source_name_clean != '' %}{{ source_name_clean }}. {% endif %}{% if source_date_clean != '' %}({{ source_date_clean | date: "%Y, %B %-d" }}). {% endif %}{% if source_url_clean != '' %}<a href="{{ source_url_clean }}">{{ source_title }}</a>{% else %}{{ source_title }}{% endif %}.</cite>
+          <cite>{% if source_url_clean != '' %}<a href="{{ source_url_clean }}">{{ source_link_text | strip | escape }}</a>{% else %}{{ source_link_text | strip | escape }}{% endif %}.</cite>
           <span>{{ source_type_label | replace: '_', ' ' }}</span>
-          {% if source_issue != '' %}<small>Issue: {{ source_issue }}</small>{% endif %}
           {% if source_workflow != '' %}<small>Workflow: {{ source_workflow }}</small>{% endif %}
         </li>
         {% endfor %}
@@ -1108,8 +1121,16 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             here and are <strong>not</strong> counted toward the consensus above.</p>
           <ul class="update-linked-list">
             {% for r in t2_rows %}
+            {%- comment -%} D1: the link text is the AUXSAYS descriptor (source, date, AUXSAYS issue
+              label), never the reporter's own title. See the note above the confirmed-sources list. {%- endcomment -%}
+            {%- assign r_issue = r.issue_summary | default: r.issue_theme | default: '' | strip -%}
+            {%- assign r_family = r.source_family | default: '' | strip | default: 'Community' -%}
+            {%- assign r_date = r.report_date | default: '' | strip -%}
+            {%- assign r_family_tail = r_family | downcase | slice: -6, 6 -%}
+            {%- if r_family_tail == 'report' -%}{%- assign r_noun = r_family -%}{%- else -%}{%- assign r_noun = r_family | append: ' report' -%}{%- endif -%}
+            {%- capture r_link_text -%}{{ r_noun }}, {% if r_date != '' %}{{ r_date | date: "%b %-d, %Y" }}{% else %}date not recorded{% endif %}: {% if r_issue != '' %}{{ r_issue }}{% else %}issue not classified{% endif %}{%- endcapture -%}
             <li class="update-linked-item">
-              <a class="update-linked-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r.report_title | escape_once }}</a>
+              <a class="update-linked-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r_link_text | strip | escape }}</a>
               <span class="update-linked-item__meta">{{ r.source_family | escape }} &middot; <time datetime="{{ r.report_date }}">{{ r.report_date | date: "%b %-d, %Y" }}</time></span>
               {%- comment -%}
                 `update_link_reason` is MIXED-TYPE across the two Tier-2 data files, so printing it
@@ -1175,8 +1196,16 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             <strong>not</strong> counted toward the consensus above.</p>
           <ul class="recent-reports-list">
             {% for r in l3_rows limit: 8 %}
+            {%- comment -%} D1: the AUXSAYS descriptor again, never the reporter's own title. These rows
+              carry no AUXSAYS issue label, so they read "issue not classified" until one exists. {%- endcomment -%}
+            {%- assign r_issue = r.issue_summary | default: r.issue_theme | default: '' | strip -%}
+            {%- assign r_family = r.source_family | default: '' | strip | default: 'Community' -%}
+            {%- assign r_date = r.report_date | default: '' | strip -%}
+            {%- assign r_family_tail = r_family | downcase | slice: -6, 6 -%}
+            {%- if r_family_tail == 'report' -%}{%- assign r_noun = r_family -%}{%- else -%}{%- assign r_noun = r_family | append: ' report' -%}{%- endif -%}
+            {%- capture r_link_text -%}{{ r_noun }}, {% if r_date != '' %}{{ r_date | date: "%b %-d, %Y" }}{% else %}date not recorded{% endif %}: {% if r_issue != '' %}{{ r_issue }}{% else %}issue not classified{% endif %}{%- endcapture -%}
             <li class="recent-reports-item">
-              <a class="recent-reports-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r.report_title | escape_once }}</a>
+              <a class="recent-reports-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r_link_text | strip | escape }}</a>
               <span class="recent-reports-item__meta">{{ r.source_family | escape }} &middot; <time datetime="{{ r.report_date }}">{{ r.report_date | date: "%b %-d, %Y" }}</time></span>
               {%- assign win_start = r.window_start | default: '' -%}
               {%- assign win_end = r.window_end | default: '' -%}
