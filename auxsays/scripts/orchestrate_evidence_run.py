@@ -60,6 +60,7 @@ from lib.report_counts import (  # noqa: E402
     format_maturity_transition, load_evidence_store, reconcile_record_counts,
 )
 from lib.collector_ownership import require_owned_methods  # noqa: E402
+from lib.source_segments import report_url_key  # noqa: E402
 from patch_collectors.base import (  # noqa: E402
     CollectorContext, append_evidence_rows, finalize_method_health_delta, generated_records,
     load_evidence, method_health_row, normalize_evidence_row, upsert_method_health,
@@ -134,10 +135,18 @@ def default_context_fetch() -> Callable[[str], tuple[str, str]]:
     """Bind the shared Learn Q&A transport for same-thread context resolution.
 
     Returns RAW HTML: the segment model reads the page's schema.org structured data, which is how
-    a build is attributed to the author who actually stated it."""
+    a build is attributed to the author who actually stated it.
+
+    The transport is the shared Learn same-origin policy (lib/learn_fetch_policy). The resolver
+    parses the body under the URL it ASKED for, so urllib's default urlopen -- which follows a
+    redirect to any host -- would have let another host's page be read as this Learn thread. Now a
+    question URL that is not Learn over https, or a redirect away from Learn's question pages, is
+    refused before it is requested and reported as ``refused:<reason>``, which the resolver records
+    as a blocked fetch that names the refusal."""
     import urllib.error  # noqa: PLC0415
     import urllib.request  # noqa: PLC0415
 
+    from lib import learn_fetch_policy  # noqa: PLC0415
     from patch_collectors import microsoft_learn_qna_source as learn  # noqa: PLC0415
 
     def _fetch(url: str) -> tuple[str, str]:
@@ -147,7 +156,8 @@ def default_context_fetch() -> Callable[[str], tuple[str, str]]:
             "Accept-Language": "en-US,en;q=0.9",
         })
         try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            with learn_fetch_policy.open_url(req, family=learn_fetch_policy.QUESTION_PAGE,
+                                             timeout=30) as resp:
                 body = resp.read(1_500_000).decode("utf-8", errors="replace")
                 if resp.status != 200:
                     return "", "broken"
@@ -155,6 +165,8 @@ def default_context_fetch() -> Callable[[str], tuple[str, str]]:
                 if "captcha" in low or "access denied" in low or "request blocked" in low:
                     return "", "blocked"
                 return body, "ok"
+        except learn_fetch_policy.LearnFetchRefused as exc:
+            return "", cr.FETCH_REFUSED_PREFIX + exc.reason
         except urllib.error.HTTPError as exc:
             return "", "blocked" if exc.code in (401, 403, 429) else "broken"
         except Exception:  # noqa: BLE001 -- transport failure is telemetry, not a crash
@@ -362,9 +374,20 @@ class Pipeline:
     # ---- durable discovery-dedup state -------------------------------------
 
     def _restore_url_state(self, state: OrchestrationState) -> None:
-        """Rehydrate the dedup set / ownership map from checkpointed state."""
-        self._seen = {k: set(v) for k, v in (state.seen_urls_by_patch or {}).items()}
-        self._run_urls = dict(state.accepted_url_owners or {})
+        """Rehydrate the dedup set / ownership map from checkpointed state.
+
+        Every entry is re-keyed through ``report_url_key``, the identity PowerPoint's
+        ``evaluate_candidates`` and the reply harvest write into these structures. A checkpoint
+        written before AUX-078 holds lowercased URLs; without re-keying, a resumed run would miss
+        every Learn report it had already seen under that spelling, and the run-wide exclusivity map
+        would let one question be accepted for a second patch. The key is idempotent, so a current
+        checkpoint restores unchanged; on a re-keyed collision the first owner in stored order wins."""
+        self._seen = {k: {report_url_key(u) for u in v}
+                      for k, v in (state.seen_urls_by_patch or {}).items()}
+        owners: dict[str, str] = {}
+        for url, owner in (state.accepted_url_owners or {}).items():
+            owners.setdefault(report_url_key(url), owner)
+        self._run_urls = owners
 
     def _persist_url_state(self, state: OrchestrationState) -> None:
         state.seen_urls_by_patch = {k: sorted(v) for k, v in self._seen.items()}
@@ -709,7 +732,9 @@ class Pipeline:
             for report in cr.independent_reports(candidate, budget=budget,
                                                  exclude_segment_key=outcome.segment_key,
                                                  issue_predicate=ppt.concrete_issue):
-                url_key = str(report.segment_url).strip().rstrip("/").lower()
+                # The SAME key PowerPoint's evaluate_candidates writes into this per-patch set: a
+                # reply is identified by its question id and anchor, never by the title slug.
+                url_key = report_url_key(str(report.segment_url))
                 if url_key in self._seen.setdefault(key, set()):
                     continue
                 self._seen[key].add(url_key)
@@ -745,6 +770,12 @@ class Pipeline:
             accepted_rows = key_resolved + key_independent
             blocked = sum(1 for o in key_outcomes if o["resolution_result"] == cr.FETCH_BLOCKED)
             broken = sum(1 for o in key_outcomes if o["resolution_result"] == cr.FETCH_BROKEN)
+            # A page the Learn same-origin policy refused is already one of the blocked fetches
+            # above; this only NAMES it, so the health row says "refused:redirect_off_host" rather
+            # than the generic context_fetch_blocked. Every other run's reason is unchanged.
+            refused = next((str(o.get("detail") or "") for o in key_outcomes
+                            if o["resolution_result"] == cr.FETCH_BLOCKED
+                            and str(o.get("detail") or "").startswith(cr.FETCH_REFUSED_PREFIX)), "")
             # Status must come from the SHARED vocabulary; anything outside it is normalized to
             # "broken", which would report a healthy stage as a failure. "The source stated no
             # usable build" is low_confidence, not broken -- a working method finding nothing.
@@ -781,7 +812,8 @@ class Pipeline:
                     accepted_candidates=len(accepted_rows),
                     accepted_reports=len(accepted_rows),
                     rejected_reports=max(0, len(key_outcomes) - len(key_resolved)),
-                    blocked_reason="context_fetch_blocked" if blocked else None,
+                    blocked_reason=("context_fetch_" + refused if refused
+                                    else "context_fetch_blocked" if blocked else None),
                     last_run=captured_at,
                     notes=("segment-scoped exact-build resolution; fetches=" + str(budget.fetched)
                            + budget_telemetry_suffix(budget, len(distinct_threads),
@@ -891,10 +923,12 @@ class Pipeline:
                 if built is None:
                     continue
                 # One report is one row even when several methods or several patch targets
-                # surfaced it: the identity is the report, not the route that found it.
-                if built.report_id in seen_ids:
+                # surfaced it: the identity is the report, not the route that found it -- and for a
+                # Learn Q&A report not the title slug either (AUX-078).
+                run_key = t2.report_merge_key(built.product_id, built.source_url, built.report_id)
+                if run_key in seen_ids:
                     continue
-                seen_ids.add(built.report_id)
+                seen_ids.add(run_key)
                 fresh.append(built.as_dict())
         # Promotion must consider the STORED corpus, not only what this run happened to accept. A
         # report confirmed by an earlier run would otherwise stay published as update-linked
@@ -919,8 +953,10 @@ class Pipeline:
         # `unresolved` retention rows, which render nowhere and are strictly LOWER than Level 3 --
         # counting those as "higher" silently emptied this layer on the run after it was populated,
         # and suppressed every fresh candidate too, because the same set gates admission.
-        higher = {str(u).strip().rstrip("/").lower() for u in confirmed_urls}
-        higher |= {str(r.get("source_url") or "").strip().rstrip("/").lower() for r in merged
+        # Keyed on the report identity, so a Learn report confirmed or update-linked under one
+        # title slug evicts its Level-3 card under another (AUX-078); other hosts unchanged.
+        higher = {report_url_key(str(u)) for u in confirmed_urls}
+        higher |= {report_url_key(str(r.get("source_url") or "")) for r in merged
                    if r.get("classification") == t2.TIER_UPDATE_LINKED}
         recent_fresh: list[dict[str, Any]] = []
         recent_seen: set[str] = set()
@@ -932,9 +968,13 @@ class Pipeline:
                     states_problem=_l3_states_problem,
                     states_target_build=_l3_states_target_build,
                     exclude_urls=higher)
-                if built is None or built.report_id in recent_seen:
+                if built is None:
                     continue
-                recent_seen.add(built.report_id)
+                recent_key = t2.report_merge_key(built.product_id, built.source_url,
+                                                 built.report_id)
+                if recent_key in recent_seen:
+                    continue
+                recent_seen.add(recent_key)
                 recent_fresh.append(built.as_dict())
         existing_recent = l3.load_recent(self.recent_path) if self.recent_path.exists() else []
         recent_merged, recent_stats = l3.merge_recent_reports(

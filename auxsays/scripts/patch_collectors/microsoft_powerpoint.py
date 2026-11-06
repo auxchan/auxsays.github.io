@@ -38,12 +38,13 @@ import re
 from typing import Any
 
 from lib import evidence_classification as ec
+from lib import learn_fetch_policy
 from lib.build_claims import (
     BUILD_TOKEN_RE, OFFICE_FULL_VERSION_RE, extract_build_claims,
     select_current_failing_build, single_named_build,
 )
 from lib.patch_identity import is_build_aware, patch_key
-from lib.source_segments import parse_learn_qna_thread
+from lib.source_segments import learn_report_key, parse_learn_qna_thread
 from .base import (
     CollectorContext,
     PatchRecord,
@@ -774,13 +775,18 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
     within this record (cross-method dedup). ``run_accepted_urls`` is a run-wide map of
     canonical-URL -> canonical PATCH IDENTITY that enforces cross-PATCH exclusivity (Part D): a single report URL
     may be attributed to at most one PowerPoint version across the whole run. The two are separate
-    (cross-method dedup vs cross-version exclusivity)."""
+    (cross-method dedup vs cross-version exclusivity).
+
+    Both are keyed on the REPORT identity: the canonical Learn report identity (question id +
+    anchored segment) for a Learn Q&A URL, so a title-slug rename is the same report, and the
+    lowercased URL for every other host, exactly as before (AUX-078). ``seen`` is the set the
+    orchestrator persists per patch, so every writer into it must use this same key."""
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     seen = seen if seen is not None else set()
     for candidate in candidates:
         url = str(candidate.get("source_url") or "").strip().rstrip("/")
-        key = url.lower()
+        key = learn_report_key(url) or url.lower()
         if not url or key in seen:
             continue  # per-record cross-method canonical-URL dedup
         seen.add(key)
@@ -1198,6 +1204,10 @@ def qna_tag_method_status(candidates: list[dict[str, Any]], accepted: list[dict[
         return "partial" if errors else "success"
     if errors and any("rate_limited" in str(e.get("reason") or "") for e in errors):
         return "blocked"
+    # A page the Learn same-origin policy refused was NOT read, so the lane cannot report an honest
+    # absence -- without this a refusal among otherwise-read pages fell through to no_results.
+    if learn_fetch_policy.first_refusal(errors):
+        return "blocked"
     if enumerated <= 0:
         return "broken" if errors else "no_results"
     if errors and not candidates:
@@ -1205,6 +1215,16 @@ def qna_tag_method_status(candidates: list[dict[str, Any]], accepted: list[dict[
     if rejected and any(str(r.get("exclusion_reason")) in NEAR_MISS_REASONS for r in rejected):
         return "low_confidence"
     return "no_results"
+
+
+def qna_lane_blocked_reason(status: str, errors: list[dict[str, Any]]) -> str | None:
+    """blocked_reason for the tag and open-web lanes: a same-origin refusal is named whenever one
+    happened (even beside accepted reports, where the status is partial); otherwise the first error
+    of a blocked lane, exactly as before."""
+    refused = learn_fetch_policy.first_refusal(errors)
+    if refused:
+        return refused
+    return errors[0].get("reason") if status == "blocked" and errors else None
 
 
 def run_qna_tag_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext,
@@ -1290,7 +1310,7 @@ def run_qna_tag_method(record: PatchRecord, target: dict[str, Any], context: Col
         target_build=str(target.get("target_build") or ""), method_id=QNA_TAG_METHOD_ID,
         source_type=LEARN_QNA_SOURCE_TYPE, status=status, candidates_found=len(tag_candidates),
         accepted_reports=len(accepted), rejected_reports=len(rejected),
-        blocked_reason=(tag_errors[0].get("reason") if status == "blocked" and tag_errors else None),
+        blocked_reason=qna_lane_blocked_reason(status, tag_errors),
         last_run=captured_at, notes=notes)
     return accepted, rejected, row
 
@@ -1468,7 +1488,7 @@ def run_open_web_method(record: PatchRecord, target: dict[str, Any], context: Co
         target_build=build, method_id=OPEN_WEB_METHOD_ID, source_type=LEARN_QNA_SOURCE_TYPE,
         status=status, candidates_found=len(candidates), accepted_reports=len(accepted),
         rejected_reports=len(rejected),
-        blocked_reason=(ow_errors[0].get("reason") if status == "blocked" and ow_errors else None),
+        blocked_reason=qna_lane_blocked_reason(status, ow_errors),
         last_run=captured_at, notes=notes)
     return accepted, rejected, row
 

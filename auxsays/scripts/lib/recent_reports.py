@@ -27,11 +27,16 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
+from .source_segments import report_url_key
 from .tier2_evidence import (
     NEVER_PROMOTE,
     PROMOTABLE_REJECTIONS,
     ReleaseWindow,
+    _adopt_held_identity,
+    _report_identity_key,
     _source_report_id,
+    held_report_id,
+    index_report_identities,
     normalise_text,
     report_identity,
     source_family,
@@ -227,9 +232,14 @@ def recent_report_from_rejection(rejected_row: dict[str, Any], *, windows: list[
         return None
 
     product = str(rejected_row.get("product_id") or "")
+    # The id hash stays on the URL (held ids are never re-keyed); `merge_recent_reports` maps a new
+    # title slug of a held Learn report back to it. The exclusion compares REPORT identities: the
+    # orchestrator's higher-level set is keyed by `report_url_key`, so a report confirmed under one
+    # slug is excluded under another. The plain normalised URL is still honoured, for a caller that
+    # passes URLs (AUX-078).
     identity = report_identity(product, url)
-    canonical = url.rstrip("/").lower()
-    if exclude_urls and canonical in exclude_urls:
+    canonical = report_url_key(url)
+    if exclude_urls and (canonical in exclude_urls or url.rstrip("/").lower() in exclude_urls):
         return None
 
     # The ORIGINAL post date, never the feed's last-activity stamp -- see lib/post_dates. A reply
@@ -284,11 +294,19 @@ def merge_recent_reports(existing: list[dict[str, Any]], fresh: list[dict[str, A
     """
     by_id: dict[str, dict[str, Any]] = {str(r.get("report_id")): dict(r) for r in existing
                                         if r.get("report_id")}
+    # A held Learn report re-found under a new title slug is merged INTO the held card, which keeps
+    # its id and URL; eviction compares report identities (AUX-078). Other hosts unchanged.
+    identities = index_report_identities(by_id)
     stats = {"added": 0, "updated": 0, "promoted_out": 0, "unchanged": 0}
     for row in fresh:
         rid = str(row.get("report_id") or "")
         if not rid:
             continue
+        if rid not in by_id:
+            held = held_report_id(identities, row)
+            if held is not None:
+                row = _adopt_held_identity(row, by_id[held])
+                rid = held
         if rid in by_id:
             merged = {**by_id[rid], **row}
             stats["updated" if merged != by_id[rid] else "unchanged"] += 1
@@ -296,9 +314,12 @@ def merge_recent_reports(existing: list[dict[str, Any]], fresh: list[dict[str, A
         else:
             by_id[rid] = dict(row)
             stats["added"] += 1
-    canonical = {str(u).strip().rstrip("/").lower() for u in promoted_urls}
+            key = _report_identity_key(row)
+            if key is not None:
+                identities.setdefault(key, rid)
+    canonical = {report_url_key(str(u)) for u in promoted_urls}
     for rid, row in list(by_id.items()):
-        if str(row.get("source_url") or "").strip().rstrip("/").lower() in canonical:
+        if report_url_key(str(row.get("source_url") or "")) in canonical:
             del by_id[rid]
             stats["promoted_out"] += 1
     ordered = sorted(by_id.values(),

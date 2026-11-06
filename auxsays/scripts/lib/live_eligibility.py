@@ -37,19 +37,23 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
-from patch_collectors.base import load_front_matter_and_body, normalize_url
+from patch_collectors.base import load_front_matter_and_body
 
 from . import collector_ownership, maturity, monitoring_health
 from .evidence_classification import VALID_SENTIMENTS, VALID_SEVERITIES
 from .patch_identity import key_from
 from .report_counts import (CONSENSUS_PROMOTION_PRODUCTS, counted_evidence_rows,
                             load_evidence_store, windows_targets_from_front_matter)
+from .source_segments import report_url_key
 
 Key = tuple[str, str, str]
 
 
 def _url(row: Mapping[str, Any]) -> str:
-    return normalize_url(str(row.get("source_url") or ""))
+    """The REPORT a counted row cites: the canonical Learn report identity for a Learn Q&A URL (two
+    title slugs of one question are one report, not two exclusive URLs), the normalised URL for
+    every other host, exactly as before (AUX-078)."""
+    return report_url_key(str(row.get("source_url") or ""))
 
 
 def exclusive_url_counts(counted_groups: Mapping[Key, Iterable[Mapping[str, Any]]]) -> dict[Key, int]:
@@ -108,7 +112,9 @@ def evaluate(record: Mapping[str, Any], counted_groups: Mapping[Key, Iterable[Ma
     unprojectable = [row for row in rows if not _projectable(row)]
     if unprojectable:
         reasons.append(f"unprojectable_rows:{len(unprojectable)}")
-    urls = [normalize_url(str(row.get("source_url") or "")) for row in rows]
+    # Same identity as exclusivity: one report counted twice under two spellings is a duplicate
+    # citation, whatever its URLs say (AUX-078).
+    urls = [report_url_key(str(row.get("source_url") or "")) for row in rows]
     if len(set(urls)) != len(urls):
         reasons.append("duplicate_citation_urls")
     return maturity.LiveDecision(live=not reasons, reasons=tuple(reasons))
