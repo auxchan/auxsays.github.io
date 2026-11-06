@@ -22,9 +22,9 @@
  "parent_commit": "65aec9fd5f9e4e6a86e24848a4686ca271213f65",
  "store_path": "auxsays/_data/consensus_evidence.yml",
  "store_sha256_at_pin": "050f8125d92c34f6a3312e0915cdd677af3f03542bf022ab836722b9e2749947",
- "track_b_basis": "Retained-text adjudication (title plus stored excerpt, no fetch) by two adjudicators; a row is here only when both labels are B. sub_label: B-source = the credited build is the state the reporter was updating FROM; B-onset = the problem began before the credited patch shipped (the stored source_date is last activity, an upper bound); B-cause = another update, package or action is blamed. Every block hashes to the same value in the tree the adjudicators labelled (commit 6eaa75052f07ba8a34d7153e7e29acf0a87cbcf8).",
+ "track_b_basis": "Retained-text adjudication (title plus stored excerpt, no fetch) by two adjudicators; a row is here only when both labels are B. sub_label: B-source = the credited build is the state the reporter was updating FROM; B-onset = the problem began before the credited patch shipped (the stored source_date is last activity, an upper bound); B-cause = another update, package or action is blamed. Every block hashes to the same value in the tree the adjudicators labelled (commit 6eaa75052f07ba8a34d7153e7e29acf0a87cbcf8). For three rows (questions 5698431, 5809263 and 5993083) one of the two judgements was made on review rather than blind; each of the three was then corroborated from the same retained text, and the concrete basis is in that row's note.",
  "track_c_basis": "Derived by the tool, not listed: same patch, same question id, both the question itself (no answer anchor), the kept row is the earlier capture and still counts.",
- "note": "Each entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn). retain entries must stay counted and unchanged. Two Track B rows (questions 5779394 on 25H2 26200.7840 and 6034766 on 25H2 26200.7462) are also refused by a later rule; they are withdrawn once, here.",
+ "note": "Each entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn). retain entries must stay counted and unchanged. Two Track B rows (questions 5779394 on 25H2 26200.7840 and 6034766 on 25H2 26200.7462) were also flagged while an attribution correction was evaluated; that correction was not shipped, and both rows are withdrawn here on their own adjudication.",
  "entries": [
   {
    "role": "withdraw",
@@ -74,7 +74,7 @@
     "sub_label": "B-cause",
     "rationale": "non-R1 (build in title): the title blames running wsreset.exe for breaking the Store app.",
     "r1_class": false,
-    "note": "non-R1; auditor B on review; verifier B on review, not blind"
+    "note": "non-R1; auditor B on review; verifier B on review, not blind. Corroborated 2026-11-06 from the retained title and excerpt (no fetch): the reporter says the Store app broke after they ran wsreset.exe themselves while following help for another app; 26200.7462 appears only as the build the machine runs, and nothing retained says the credited update caused or changed the problem."
    }
   },
   {
@@ -176,7 +176,7 @@
     "rationale": "The failing installation is the separately installed Microsoft Update Health Tools package, not the credited update.",
     "r1_class": true,
     "auditor_rationale_blind": "Microsoft Update Health Tools installer fails; build position not retained.",
-    "note": "Revised U->B on re-reading: the failing installation is the separately installed Microsoft Update Health Tools package; the excerpt is cut where a spec block begins."
+    "note": "Revised U->B on re-reading: the failing installation is the separately installed Microsoft Update Health Tools package; the excerpt is cut where a spec block begins. Corroborated 2026-11-06 from the retained title and excerpt (no fetch): the title is the package's name, the reporter downloaded that package separately and its installer fails every time, and they note others have the same trouble with that tool; the retained text never names the credited build or update (the excerpt stops at the start of the system specification), so nothing retained ties the failure to it."
    }
   },
   {
@@ -227,7 +227,7 @@
     "sub_label": "B-source",
     "rationale": "non-R1 (build in title): rollback while updating FROM 26200.7840 TO build 9168; the failing update is 9168.",
     "r1_class": false,
-    "note": "non-R1; auditor B on review; verifier B on review, not blind"
+    "note": "non-R1; auditor B on review; verifier B on review, not blind. Corroborated 2026-11-06 from the retained title and excerpt (no fetch): the title states the rollback is from build 26200.7840 to build 9168 and the excerpt describes a recurring update failure, so the update that fails and rolls back is the later 26200.9168 (released 2026-08-11), and 26200.7840 is only the build the machine stays on."
    }
   },
   {

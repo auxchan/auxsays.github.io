@@ -4600,6 +4600,10 @@ updating from, or a problem that began before the patch shipped. Four more were 
 Q&A question the same patch already counted under an earlier title slug, so one report counted twice. Eight
 Windows pages published them, three of them live (25H2 7462, 7623, 7840).
 
+**Disclosure** For three of the ten off-topic rows, one of the two judgements was made on review rather than
+blind. Each of those three was then corroborated from the same retained text, and the basis is recorded beside
+the row in the manifest.
+
 **Fix** `withdraw_windows_confirmed_and_duplicate_rows.py` withdraws the rows pinned in
 `scripts/audit/windows_confirmed_and_duplicate_withdrawal.json` with the AUX-072 mechanism (imported, not
 copied): five-field selection, pinned block hashes, three lines per row, every row kept, all or nothing,
@@ -4617,8 +4621,14 @@ newest accepted capture moves back from 2026-10-13 to 2026-09-06 because a withd
 second run of the tool and both writers changes nothing. `test_withdraw_windows_confirmed_and_duplicate_rows.py`
 pins it (57 checks; 23 mutants, each killed by a named check).
 
+**R1 status** (AUX-067 residual R1) A producer-side attribution correction was evaluated and not shipped,
+because independent review found it would refuse genuine reports. R1 stays Partially resolved: this entry
+withdraws only the rows above, and the remaining reviewed rows stay counted and are kept on record as named
+findings.
+
 **Reopen only if** any of the fourteen counts again, any of the four kept rows stops counting without an audited
-withdrawal of its own, or a Windows patch counts one Microsoft Q&A question twice.
+withdrawal of its own, or a Windows patch counts one Microsoft Q&A question twice. For R1: only if a materially
+different attribution approach shows better precision without refusing genuine reports.
 
 ### AUX-071 — Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red
 
