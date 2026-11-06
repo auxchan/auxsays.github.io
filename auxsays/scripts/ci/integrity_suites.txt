@@ -146,6 +146,13 @@ auxsays/scripts/tests/test_acrobat_retired_method_health.py = 50
 # AST, because the module docstring legitimately names the things it must not do.
 auxsays/scripts/tests/test_acrobat_edition_and_health_migration.py = 59
 auxsays/scripts/tests/test_update_linked_tier2.py = 243
+# AUX-078: ONE canonical Microsoft Learn Q&A report identity (question id + anchored segment, never the
+# title slug) at every dedup site -- the durable append guard and its write-authority twin, the RSS run
+# dedup, Windows ids and cross-patch claims, Teams fetch/candidate dedup, PowerPoint seen/exclusivity,
+# the orchestrator's checkpointed seen-set, reply harvest and higher-level exclusion, Tier 2 / Level 3
+# merges, live exclusivity and QA distinctness. Every non-Learn host keeps its key byte for byte.
+# Frozen synthetic fixtures; bare-script entry points run as network-fenced subprocesses.
+auxsays/scripts/tests/test_learn_report_identity.py = 99
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
@@ -345,6 +352,11 @@ auxsays/scripts/tests/test_acquisition_method_registry.py = 30
 auxsays/scripts/tests/test_teams_record_cleanup.py = 9
 auxsays/scripts/tests/test_transactional_writeback.py = 10
 auxsays/scripts/tests/test_validate_evidence_method_health.py = 13
+# A NEW patch's policy-disabled Reddit row has no prior attempt to inherit, so it is stored with an
+# empty last_run, and the validator refused it on every writeback for every product (AUX-081). Only
+# that row shape may leave last_run empty; the suite drives the real writer and the validator as a
+# bare script over the failed run's own rows, and checks that no monitoring or H0-H7 decision moves.
+auxsays/scripts/tests/test_policy_row_last_run.py = 31
 auxsays/scripts/tests/test_validate_ingestion_sources.py = 40
 # A green patch-ingestion run must not hide an enabled source that failed. Covers the nine
 # required counterfactuals (healthy / quiet / 403 / transport failure / parser rot / mixed /

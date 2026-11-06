@@ -34,6 +34,7 @@ from urllib.error import HTTPError, URLError
 from lib import learn_fetch_policy
 
 from .base import date_part, source_url_is_specific
+from lib.source_segments import learn_report_key
 
 LEARN_QNA_RSS_ENDPOINT = "https://learn.microsoft.com/api/search/rss"
 DEFAULT_SOURCE_TYPE = "microsoft_learn_qna"
@@ -121,6 +122,10 @@ def normalize_feed_date(value: str) -> str:
 
 
 def canonical_learn_qna_url(url: str) -> str:
+    """The CITATION spelling of a Learn URL: https, lowercase host, no query, no fragment, no
+    trailing slash. It keeps the title slug, so it is NOT an identity -- two slugs of one question
+    canonicalise to two different URLs. What a stored row cites is this string, unchanged; whether
+    two candidates are one report is decided by ``lib.source_segments.learn_report_key`` (AUX-078)."""
     parsed = urllib.parse.urlsplit(str(url or "").strip())
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
         return ""
@@ -311,7 +316,9 @@ def collect_learn_qna_candidates(
 ) -> list[dict[str, Any]]:
     """Discover candidate Learn Q&A question threads for a set of exact query terms.
 
-    Runs one search-RSS request per query, de-duplicating by canonical question URL.
+    Runs one search-RSS request per query, de-duplicating by question id (``learn_report_key``):
+    the same question surfaced by two queries under two title slugs is one candidate, and the first
+    spelling seen is the one kept.
     Fetch failures are appended to ``errors`` (never raised) so the caller's method health
     becomes ``blocked``/``partial`` instead of crashing. Returned candidates are unfiltered
     discovery rows; the caller still applies exact KB/build identity, concrete-issue,
@@ -340,11 +347,12 @@ def collect_learn_qna_candidates(
         since = getattr(context, "since", None)
         for candidate in candidates:
             url = str(candidate.get("source_url") or "").strip().rstrip("/").lower()
-            if not url or url in seen:
+            key = learn_report_key(url) or url
+            if not url or key in seen:
                 continue
             if since and candidate.get("source_date") and date_part(candidate.get("source_date")) < since:
                 continue
-            seen.add(url)
+            seen.add(key)
             candidate = {**candidate, "matched_query": query}
             results.append(candidate)
         pace_learn_qna_request()

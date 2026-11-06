@@ -80,6 +80,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-073 | Deferred | Coverage | Low | Windows Learn opening-post hydration (L1) shelved by owner decision O1; never merged |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
+| AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
@@ -87,6 +88,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-077 | Resolved | Evidence integrity | Medium | Learn Q&A fetchers followed a redirect to any host and would have parsed that page as the Learn thread |
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
+| AUX-078 | Resolved | Evidence integrity | Medium | A Microsoft Q&A question re-found under an edited title was counted twice on one patch |
 
 ---
 
@@ -4324,6 +4326,53 @@ would alter the payload for every product.
 
 ---
 
+### AUX-078 — A Microsoft Q&A question re-found under an edited title was counted twice on one patch
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-05 (R1 audit; measured read-only the same day) · **Resolved** 2026-11-05 (producer
+  fix; the stored duplicates are withdrawn by a separate audited correction)
+
+**Symptom** Four Windows patches (25H2 26200.8737 and 26200.9445, 26H2 26300.9711 and 26300.9818) each counted
+one Microsoft Learn Q&A report twice, once under each of two URL title slugs. Count and exclusive-URL count were
+each one too high on those four. No live identity was affected.
+
+**Root cause** Every dedup key in the Learn path was the slugged URL, or a hash of it. The slug follows the
+question title, so after a title edit a later feed hit (feed dates are last activity) arrived under a new slug and
+passed every guard, the durable append guard `base.evidence_key` included. The one key built on the question id,
+`SourceSegment.segment_key`, was used only by context resolution.
+
+**Fix** `lib/source_segments.learn_report_key(url)` is the canonical identity: `learn:<qid>:question:<qid>`,
+`learn:<qid>:comment:<cid>` for a `#comment-` anchor, and `learn:<qid>:reply:<id>` for an `#answer-` anchor,
+because `anchor_url` writes `#answer-` for comments too and a URL cannot tell the two apart. Anything else
+returns "", and `report_url_key` then keeps the historical normalised URL, so every other host is byte for byte
+unchanged. It is applied at:
+- the append guard and the write-authority validator (both read `evidence_key`);
+- the shared RSS run dedup;
+- the Windows row id and cross-patch claims;
+- Teams thread and candidate dedup;
+- PowerPoint's seen set and run-wide exclusivity;
+- the orchestrator's checkpointed seen-set (re-keyed on restore), reply harvest, higher-level exclusion and
+  in-run Tier 2 / Level 3 dedup;
+- the Tier 2 and Level 3 merges (held ids are never re-hashed; a new slug merges into the held row);
+- live exclusivity and duplicate citation, and QA's live-source distinctness.
+
+Stored ids and URLs are never rewritten. `audit_learn_report_identity.py` is a read-only, WARN-only replay of the
+store.
+
+**Measured** Forward-only: `auxsays/_data` and `auxsays/updates` are byte-identical (1,661 files), and the
+shipped writers change nothing on either tree. The diagnostic finds exactly the four groups above and no other
+same-identity spelling in any counted state. Under the shipped eligibility authority the four identities' exclusive
+counts drop by one and gain `duplicate_citation_urls`; nothing else changes, and the live set stays at 6.
+`test_learn_report_identity.py` (99 checks, `[blocking]`) pins it: 36 one-change mutants are each killed by a named
+check, and one is declared equivalent. Two older fixtures gave distinct reports one question id under different
+slugs; they now use distinct ids.
+
+**Reopen only if** the diagnostic reports a class (a) group whose later row was captured after this change; a
+non-Learn URL's dedup key differs from `normalize_url`; or a new Learn dedup site keys on the URL rather than
+`report_url_key`.
+
+---
+
 ### AUX-075 — The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran
 
 - **Status** Resolved · **Area** CI governance · **Severity** Medium
@@ -4559,6 +4608,45 @@ release) are unchanged. Same 16 governed checks.
 request is green. The archive pull request ran its integrity suites before any record was archived.
 A policy that rewrites the corpus at run time should also run the integrity suites over the converged
 tree.
+
+---
+
+### AUX-081 — A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product
+
+- **Status** Resolved · **Area** Collector telemetry · **Severity** High
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom** The scheduled evidence collection run of 2026-11-05 collected normally and then refused its
+writeback before committing: `validate_evidence_method_health.py` reported `last_run: is required` on one
+row. Nothing was pushed and no page was rebuilt, and every later run would fail the same way, for every
+product, because all evidence lanes validate the same file.
+
+**Root cause** DaVinci Resolve 21.2 was the first new patch since the Reddit access policy (AUX-064). Its
+collector emitted the policy's `reddit_search` row: status `disabled`, reason
+`reddit_access_policy_unauthorised`, and an empty `last_run`, because no attempt was made. The writer keeps
+the prior row's real last attempt for a key that already exists, but a new key has no prior row, so the
+row was stored empty. The validator required `last_run` on every row. The writer's suite had pinned the
+empty value (F.5) without running the validator over it.
+
+**Fix** In `validate_evidence_method_health.py` only, `last_run` may be empty on a policy-disabled row,
+using the policy's own predicate (`is_policy_disabled_row`: status `disabled` and that reason). Every other
+row still needs it, and a non-empty value on a policy row must still look like a timestamp. Nothing stamps
+a time on a row that made no attempt, and the writer's carry-over for existing keys is unchanged. Every
+reader of `last_run` was checked: the monitoring card and the H0-H7 certifier both skip disabled rows before
+they read it, and the card prints no "last checked" date for an empty value. The only other reader is a
+one-time Acrobat migration tool that no lane runs, and it is safe with an empty value.
+
+**Measured** Replaying the failed run's five 21.2 rows through the real writer onto the stored file at
+`main`: the validator now passes, 5 rows are appended and the 1,861 rows already stored are unchanged.
+`test_policy_row_last_run.py` (31 checks, `[blocking]`) uses those rows as frozen fixtures. It drives the
+writer and the validator in process and as bare-script child processes, and covers each row shape that
+must still be refused, including reasons that only resemble the policy reason or contain it. Removing the
+exemption, narrowing it to status or to reason alone, widening it to every row, and matching the reason
+loosely (as a substring, by its `reddit` prefix, or ignoring case) each fail a named check.
+
+**Reopen only if** `test_policy_row_last_run.py` reports anything but its governed 31, the validator
+accepts an empty `last_run` on any row other than a policy-disabled one, or a writer stamps a run time
+on a policy row that made no attempt.
 
 ---
 
