@@ -27,7 +27,7 @@ permalink: /privacy/
       <h2>How to opt out</h2>
       <ul>
         <li>Block or delete cookies for auxsays.com, or block third-party scripts, in your browser's privacy settings or with a content blocker.</li>
-        <li>Install Google's <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics opt-out browser add-on</a>.</li>
+        <li>Install the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics opt-out browser add-on</a> that Google provides.</li>
       </ul>
       <p>The site works the same either way. Google explains how it uses information from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites">policies.google.com/technologies/partner-sites</a>.</p>
     </article>
