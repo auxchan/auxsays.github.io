@@ -381,6 +381,11 @@ auxsays/scripts/tests/test_validate_ingestion_sources.py = 40
 # a simulation of the pre-fix semantics, and a mutation harness whose catches are asserted to
 # be semantic rather than crashes.
 auxsays/scripts/tests/test_ingestion_run_health.py = 128
+# GROWTH-2A closed SOURCE-BLOCKED: the Premiere lane read healthy while HelpX refused every request
+# and only a pinned one-release announcement answered. Pins the primary failure surviving the
+# fallback (partial, never healthy, in state, run health, monitoring projection and snapshot), no
+# record without a title identity and a source date, and no inherited announcement URL.
+auxsays/scripts/tests/test_premiere_source_truth.py = 49
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
 auxsays/scripts/tests/test_windows_count_authority.py = 104
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92

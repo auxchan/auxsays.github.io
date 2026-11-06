@@ -380,19 +380,19 @@ METHODS: list[dict[str, Any]] = [
         "Both apostrophe forms are handled explicitly, curly and straight — the marker list carries each phrase twice",
     ],
         "blind_spots": [
-        "No test in tests/ exercises this fallback — test_adobe_release_notes_adapter.py calls _records_from_version_headings directly and never...",
+        "test_premiere_source_truth.py exercises this fallback offline (a frozen page of the pinned announcement's shape behind a frozen HelpX 403); before it, no test reached fetch()'s prose path",
         "Because the page is a forum thread, replies below the vendor post are on the same URL; only the end markers keep them out of the body",
     ],
         "failure_modes": [
         "Every marker is a hardcoded English string, several of them PRODUCT-specific (\"What's new in Premiere Pro\"); a different Adobe product's...",
-        "If no version appears anywhere in the page text the record's version becomes the literal 'official-update' (adobe_release_notes.py:89),...",
+        "Identity and date come from the page TITLE only; a title without a dotted version or a date yields NO record and reports an extraction mismatch (until 2026-11-06 it minted the literal version 'official-update' and dated a dateless page today)",
         "One cleanup rule is a literal one-off: a regex that rewrites 'welcome to premiere 26.2! welcome to premiere 26.2! | community' to a single...",
         "The 2600-character body cap is tighter than every other path in the fleet (6000 in html_changelog, 7000 for the html_changelog Adobe path,...",
         "A community-hosted URL sets official_source_type 'community_official_post', which downgrades the HelpX entry in official_sources[] to...",
     ],
         "execution": "No auth, no key, no JS, no pagination. Reachable from CI — this is the fetch-stable host the lane was redesigned around.",
         "evidence_rules": "official_ingestion authority ONLY. The module states it directly at adobe_release_notes.py:272: 'Official Adobe posts are not counted as user consensus evidence.' A vendor post on a community platform must not be read as a user report — the record sets official_note_status 'official_source_captured' and...",
-        "measured_notes": "This is the production path for adobe-premiere-pro today: secondary_official_url is a community.adobe.com announcement and the live run at 2026-09-29T08:02:18Z produced exactly 1 record (fetched 1, written 1, seen ledger 2, status healthy). PREMIERE_OFFICIAL_CONTEXT_URLS pins the two real announcement URLs it has been built against: 26.2 -> community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825 and 26.2.2 -> .../what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755 (adobe_release_notes.py:53-56).",
+        "measured_notes": "This is the production path for adobe-premiere-pro today: secondary_official_url is a community.adobe.com announcement and the live run at 2026-09-29T08:02:18Z produced exactly 1 record (fetched 1, written 1, seen ledger 2, status healthy). PREMIERE_OFFICIAL_CONTEXT_URLS pins the two real announcement URLs it has been built against: 26.2 -> community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825 and 26.2.2 -> .../what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755 (adobe_release_notes.py:53-56). 2026-11-06: HelpX has refused CI with HTTP 403 since 2026-09-08 (run 34252632666), so this fallback is the only page that answers, and it is ONE release's announcement: the source now records `partial`, never healthy, and nothing newer than 26.2.2 can be discovered from it (GROWTH-2A closed SOURCE-BLOCKED).",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/adapters/adobe_release_notes.py:53-56, :87-102, :105-141, :232-240, :281-341, :353-366; D:/Auxsays/.am/auxsays/_data/patch_ingest_state.json (adobe-premiere-pro bucket, 2026-09-29T08:02:18Z).",
     },
     {
@@ -2142,7 +2142,7 @@ METHODS: list[dict[str, Any]] = [
         "purpose": ["official_ingestion"],
         "discovery_model": ["enumeration"],
         "transport": ["subprocess_curl"],
-        "health_statuses": ["blocked", "no_results", "success"],
+        "health_statuses": ["blocked", "no_results", "partial", "success"],
         "proven_on": ["adobe-premiere-pro"],
         "strengths": [
         "The failover is DECLARED in source config, not inferred: patch_ingestion_sources.yml records update_detection_method 'Adobe HelpX release...",
@@ -2150,11 +2150,11 @@ METHODS: list[dict[str, Any]] = [
         "An empty 200 counts as a failure, which is the precise failure shape the module docstring says HelpX exhibits",
     ],
         "blind_spots": [
-        "PREMIERE_OFFICIAL_CONTEXT_URLS hardcodes two community announcement URLs keyed by version string '26.2' and '26.2.2', with a hardcoded...",
+        "PREMIERE_OFFICIAL_CONTEXT_URLS hardcodes two community announcement URLs keyed by version string '26.2' and '26.2.2'; any other version gets no announcement link (until 2026-11-06 it inherited the 26.2 URL)",
         "official_sources[] is populated only when product_id == 'adobe-premiere-pro' (adobe_release_notes.py:310); the other three Adobe sources on...",
     ],
         "failure_modes": [
-        "The module docstring states the measured problem verbatim: 'Adobe HelpX release notes are official but have repeatedly timed out from...",
+        "HelpX refused CI with a fast HTTP 403 from 2026-09-08 (it had timed out before); until 2026-11-06 the failover DISCARDED that error whenever the fallback answered, so the lane read healthy. The primary's error is now kept and the source records `partial`",
         "Only 2 candidates are ever tried; there is no third tier",
         "retries defaults to 0 for this adapter, and adobe-premiere-pro's config leaves it at 0 — so a single transient failure on HelpX immediately...",
         "Only the last two error strings survive into the raised message (adobe_release_notes.py:171), so with a longer candidate list the earliest...",
@@ -2163,7 +2163,7 @@ METHODS: list[dict[str, Any]] = [
         "evidence_rules": "official_ingestion only, and the module is explicit that an official community post is NOT user evidence: 'Official Adobe posts are not counted as user consensus evidence.' (adobe_release_notes.py:272). Consensus stays patch-specific and separate.",
         "measured_notes": "Live state 2026-09-29T08:02:18Z: adobe-premiere-pro status healthy, last_adapter adobe_release_notes, fetched 1, written 1, skipped 0, 1013 ms, seen ledger 2, consecutive_failures 0. Config: official_url https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html, secondary_official_url https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755, request {timeout_seconds 25, retries 0, backoff_seconds 2.0, max_bytes 500000, curl_fallback false, headers...",
         "break_history": "The lane exists because the canonical Adobe documentation host became unreliable from CI; the module was written to keep HelpX as a 'secondary official reference' while a fetch-stable community announcement carries the fetch (adobe_release_notes.py:1-10).",
-        "revisit_trigger": "A Premiere version beyond 26.2.2 ships — PREMIERE_OFFICIAL_CONTEXT_URLS will hand it the 26.2 announcement URL as context.",
+        "revisit_trigger": "An official Adobe route carrying Premiere release identity answers 200 from CI, or Adobe resumes public release posts (the GROWTH-2A reopen condition).",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/adapters/adobe_release_notes.py:1-10, :53-56, :59-70, :144-154, :157-172, :232-240, :281-310, :336-338, :353-357; D:/Auxsays/.am/auxsays/_data/patch_ingestion_sources.yml:927 (adobe-premiere-pro block, incl....",
     },
 ]
