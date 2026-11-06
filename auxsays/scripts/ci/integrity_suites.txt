@@ -339,15 +339,15 @@ auxsays/scripts/tests/test_ingestion_run_health.py = 128
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
 auxsays/scripts/tests/test_windows_count_authority.py = 104
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
-# AUX-076: a build-only identity whose title is silent on it is refused only when every body occurrence of
-# the build is a veto or the stated current state and none is linked to the issue (the AUX-067 residual R1;
-# v3: a link outweighs a veto on the same mention unless the veto's words contain it, and an unlinked
-# mention fails open). Every refusal is checked against the authority with the rule switched off. Frozen
-# SYNTHETIC fixtures only: the 24 corpus shapes are paraphrases, the second verifier's 53 probes are frozen
+# AUX-076 (the narrow rule): a build-only identity whose title is silent on it is refused only when EVERY body
+# mention of the build is a pure stated state (a spec label, "I'm running ...", "running Windows", the "OS build"
+# label or a bare identity line, not continued, taken up or blocked) and the body has no link word (the AUX-067
+# residual R1). Every refusal is checked against the authority with the rule switched off. Frozen SYNTHETIC
+# fixtures only: the 24 corpus shapes are paraphrases, the second and third verifiers' 53 and 77 probes are frozen
 # as written, and no live store total is read or pinned, so evidence growth cannot turn it red. Also pins one
-# authority for all three Windows discovery methods, one case per pattern and per root fix, and the declared
-# residual admissions R1R-01..05 (each admitted on main too).
-auxsays/scripts/tests/test_windows_identity_link_roles.py = 409
+# authority for all three Windows discovery methods, one witness per alternative of the rule, and the declared
+# residual admissions R1N-01..03 (each admitted on main too).
+auxsays/scripts/tests/test_windows_identity_link_roles.py = 663
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 # AUX-067: a build-only identity whose TITLE is about another KB or build is not a report on the build
 # the author merely quoted. Pins the eight confirmed false acceptances (stored fields as fixtures), the

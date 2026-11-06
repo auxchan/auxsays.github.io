@@ -34,7 +34,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C02",
@@ -56,7 +57,7 @@
    "source_date": "2026-10-12",
    "parent_title": "26H2 feature update installation error 0x800f0993 - Microsoft Q&A",
    "report_title": "26H2 feature update installation error 0x800f0993 - Microsoft Q&A",
-   "report_text_excerpt": "26H2 feature update installation error 0x800f0993 - Microsoft Q&A I own a Beelink SER8 mini PC with a Ryzen 7 8845HS and Windows 11 Pro OS Build 26200.7462. Nearly every month updates are a struggle on this one PC and never on my other Windows machines. I...",
+   "report_text_excerpt": "26H2 feature update installation error 0x800f0993 - Microsoft Q&A I own a Beelink SER8 mini PC with a Ryzen 7 8845HS and Windows 11 Pro OS Build 26200.7462. Nearly every month updates are a struggle on this PC and never on my other Windows machines. I...",
    "matched_kb": "",
    "matched_os_build": "26200.7462",
    "matched_feature_version": "",
@@ -66,7 +67,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C03",
@@ -98,7 +100,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C04",
@@ -130,7 +133,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C05",
@@ -162,7 +166,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C06",
@@ -194,7 +199,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C07",
@@ -226,7 +232,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C08",
@@ -258,7 +265,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C09",
@@ -290,7 +298,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C10",
@@ -322,7 +331,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C11",
@@ -354,7 +364,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C12",
@@ -386,7 +397,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C13",
@@ -418,7 +430,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "C14",
@@ -440,7 +453,7 @@
    "source_date": "2026-10-14",
    "parent_title": "Defender offline scan reboots into the recovery environment - Microsoft Q&A",
    "report_title": "Defender offline scan reboots into the recovery environment - Microsoft Q&A",
-   "report_text_excerpt": "Defender offline scan reboots into the recovery environment - Microsoft Q&A 26H2 26300.9711 This is new to me, has anyone else hit it? After todays update I started a Defender Offline scan. Once the scan began I saw it had opened in the Preparing for Recovery screen. I...",
+   "report_text_excerpt": "Defender offline scan reboots into the recovery environment - Microsoft Q&A 26H2 26300.9711 Never had this happen before, has anyone else hit it? After todays update I started a Defender Offline scan. Once the scan began I saw it had opened in the Preparing for Recovery screen. I...",
    "matched_kb": "",
    "matched_os_build": "26300.9711",
    "matched_feature_version": "26H2",
@@ -450,7 +463,8 @@
      "environment",
      ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "K01",
@@ -472,17 +486,18 @@
    "source_date": "2026-09-17",
    "parent_title": "Kiosk devices: a WinUI 3 full-screen window is drawn incorrectly since a Win11 update. - Microsoft Q&A",
    "report_title": "Kiosk devices: a WinUI 3 full-screen window is drawn incorrectly since a Win11 update. - Microsoft Q&A",
-   "report_text_excerpt": "Kiosk devices: a WinUI 3 full-screen window is drawn incorrectly since a Win11 update. - Microsoft Q&A Our WinUI 3 app shows a layout fault after we updated our Windows 11 IoT Enterprise LTSC devices from \"OS build 26100.7623\" to \"OS build (26100.8875)\":...",
+   "report_text_excerpt": "Kiosk devices: a WinUI 3 full-screen window is drawn incorrectly since a Win11 update. - Microsoft Q&A Our WinUI 3 app shows a layout glitch after we updated our Windows 11 IoT Enterprise LTSC devices from \"OS build 26100.7623\" to \"OS build (26100.8875)\":...",
    "matched_kb": "",
    "matched_os_build": "26100.8875",
    "matched_feature_version": "",
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "destination:pre"
+     "unlinked",
+     ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "K02",
@@ -511,10 +526,11 @@
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "named:pre"
+     "unlinked",
+     ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "K03",
@@ -536,17 +552,18 @@
    "source_date": "2026-05-14",
    "parent_title": "SEARCH FIELD DEAD SINCE THE WINDOWS 11 UPDATE - Microsoft Q&A",
    "report_title": "SEARCH FIELD DEAD SINCE THE WINDOWS 11 UPDATE - Microsoft Q&A",
-   "report_text_excerpt": "SEARCH FIELD DEAD SINCE THE WINDOWS 11 UPDATE - Microsoft Q&A Once I let the 25H2 feature update install (OS Build 26200.7462), the Search Box stopped responding. I cannot type anything at all. Clicking the blue window opens the big menu with the search field. But once I click...",
+   "report_text_excerpt": "SEARCH FIELD DEAD SINCE THE WINDOWS 11 UPDATE - Microsoft Q&A Once I let the update to Windows 11 25H2 OS Build 26200.7462 through, the Search Box stopped responding. I cannot type anything at all. Clicking the blue window opens the big menu with the search field. But once I click...",
    "matched_kb": "",
    "matched_os_build": "26200.7462",
    "matched_feature_version": "25H2",
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "named:pre"
+     "linked",
+     "blocked:to"
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "K04",
@@ -575,10 +592,11 @@
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "named:pre"
+     "unlinked",
+     ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "K05",
@@ -607,10 +625,11 @@
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "named:pre"
+     "unlinked",
+     ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "K06",
@@ -632,17 +651,18 @@
    "source_date": "2026-08-25",
    "parent_title": "How do I get past download error 0x80040155 - Microsoft Q&A",
    "report_title": "How do I get past download error 0x80040155 - Microsoft Q&A",
-   "report_text_excerpt": "How do I get past download error 0x80040155 - Microsoft Q&A Error code 0x80040155 shows up whenever these updates fail: 2026-05 .NET Framework Security update (KB5087051) 2026-05 Security Update (KB5089459) (26200.8457) How can I fix this? Thank you,",
+   "report_text_excerpt": "How do I get past download error 0x80040155 - Microsoft Q&A Error code 0x80040155 shows up whenever the updates below fail: 2026-05 .NET Framework Security update (KB5087051) 2026-05 Security Update (KB5089459) (26200.8457) How can I fix this? Thank you,",
    "matched_kb": "",
    "matched_os_build": "26200.8457",
    "matched_feature_version": "",
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "named:pre"
+     "unlinked",
+     ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "K07",
@@ -671,10 +691,11 @@
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "named:pre"
+     "unlinked",
+     ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "K08",
@@ -703,10 +724,11 @@
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "named:pre"
+     "unlinked",
+     ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   },
   {
    "case": "K09",
@@ -728,16 +750,19 @@
    "source_date": "2026-07-14",
    "parent_title": "Offline Defender scan restarts into Automatic Repair - Microsoft Q&A",
    "report_title": "Offline Defender scan restarts into Automatic Repair - Microsoft Q&A",
-   "report_text_excerpt": "Offline Defender scan restarts into Automatic Repair - Microsoft Q&A I recently got the upgrade to Windows 11 25H2 26200.8875 on the Release Preview channel, and after the install finished I ran the DISM commands and sfc. When those were done I restarted the system. After the restart I...",
+   "report_text_excerpt": "Offline Defender scan restarts into Automatic Repair - Microsoft Q&A I recently got the upgrade to Windows 11 25H2 26200.8875 Release Preview. After it finished installing I ran the DISM commands and sfc. When those were done I restarted the system. After the restart I...",
    "matched_kb": "",
    "matched_os_build": "26200.8875",
    "matched_feature_version": "25H2",
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "named:pre"
+     "unlinked",
+     ""
     ]
+   ],
+   "expected_link_words": [
+    "since_then"
    ]
   },
   {
@@ -767,10 +792,11 @@
    "expected_reason": null,
    "expected_roles": [
     [
-     "affected",
-     "named:pre"
+     "unlinked",
+     ""
     ]
-   ]
+   ],
+   "expected_link_words": []
   }
  ]
 }

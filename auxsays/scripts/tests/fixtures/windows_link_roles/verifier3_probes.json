@@ -1,0 +1,1162 @@
+{
+ "schema": 1,
+ "ledger": "AUX-076",
+ "about": "The third independent verifier's 77 fresh SYNTHETIC probes (42 keep, 35 refuse), frozen as written. Driven through row_from_candidate as a Learn Q&A candidate is built (parent_title = report_title = title, report_text = clean_html(title + ' ' + body)). 'expected' is this change's decision: kept, refused, an earlier reason that answers first on main and here alike, or a declared residual class R1N-nn (admitted by main and by this change alike, ledger AUX-076). V3-K36 is the shape the v3 draft declared as its limit L10; the narrow rule keeps it.",
+ "cases": [
+  {
+   "case": "V3-K01",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi adapter vanished",
+   "body": "I'm on 26200.8457, which broke my Wi-Fi adapter: it has not shown in Device Manager since the update and I have no internet.",
+   "note": "env + 'which broke'"
+  },
+  {
+   "case": "V3-K02",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Remote Desktop broken for staff",
+   "body": "We are running 26200.8457 and it broke Remote Desktop for every user in the office after the update went out.",
+   "note": "env + 'and it broke'"
+  },
+  {
+   "case": "V3-K03",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Audio crackling on XPS",
+   "body": "I'm using a Dell XPS 15 and the audio crackling and freezing was introduced by 26100.8875, it started right after updating.",
+   "note": "env + passive 'introduced by X'"
+  },
+  {
+   "case": "V3-K04",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "BSOD on wake",
+   "body": "Device running 25H2: the BSOD on wake is caused by 26200.8457, removing the update stops the crashes.",
+   "note": "env + passive 'caused by X'"
+  },
+  {
+   "case": "V3-K05",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Taskbar icons missing",
+   "body": "I'm on Windows 11 26H1 and the missing taskbar icons are due to 28000.2113, they vanished right after the update installed and Explorer crashes.",
+   "note": "env + 'due to X'"
+  },
+  {
+   "case": "V3-K06",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Scanner not detected",
+   "body": "Using Windows 11 Pro here, and 26100.8875 is the culprit for my scanner not being detected, it stopped working after updating.",
+   "note": "env + 'X is the culprit'"
+  },
+  {
+   "case": "V3-K07",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Laptop wakes from sleep",
+   "body": "Running Windows 11 Home 26200.7922, which wrecked sleep mode: since the update the laptop wakes up every few minutes and freezes.",
+   "note": "env + 'which wrecked'"
+  },
+  {
+   "case": "V3-K08",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Explorer hangs on network folders",
+   "body": "OS build 26200.8457. This build makes File Explorer hang whenever I open a network folder, it started after the update.",
+   "note": "spec label + 'This build makes'"
+  },
+  {
+   "case": "V3-K09",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Network printer offline",
+   "body": "Windows 11 Pro 25H2 26200.8457, it knocked my network printer offline after the update and it stays offline after every reboot.",
+   "note": "identity line + 'it knocked'"
+  },
+  {
+   "case": "V3-K10",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Bluetooth mouse lag",
+   "body": "Windows 11 24H2 build 26100.8875. It installed on Saturday and my Bluetooth mouse has lagged and frozen ever since the update.",
+   "note": "identity line + 'It installed ... ever since'"
+  },
+  {
+   "case": "V3-K11",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "VPN drops every hour",
+   "body": "Since I'm on 26200.7922 the VPN drops every hour, and uninstalling the update stops it.",
+   "note": "'Since I'm on X' onset"
+  },
+  {
+   "case": "V3-K12",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Mail app crashes at launch",
+   "body": "We're using 28000.2113 on the pilot ring and that build is responsible for the Mail app crashing at launch since the update.",
+   "note": "env + 'that build is responsible'"
+  },
+  {
+   "case": "V3-K13",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Second monitor black",
+   "body": "Windows Update said Successfully installed 26200.8457 and after the restart following the update my second monitor shows a black screen.",
+   "note": "history pre, onset with 'and after the restart'"
+  },
+  {
+   "case": "V3-K14",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Bluetooth toggle gone",
+   "body": "26100.8875 installed without errors, and ever since the update my Bluetooth toggle is gone and the adapter is not working after reboot.",
+   "note": "clean veto, no contrast word"
+  },
+  {
+   "case": "V3-K15",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Printer stopped responding",
+   "body": "26200.7922 went in with no problems, and then my printer stopped working after the update rebooted the PC.",
+   "note": "clean veto, 'and then'"
+  },
+  {
+   "case": "V3-K16",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi drops worse",
+   "body": "26200.8457 should have fixed the Wi-Fi drops, instead it made them far worse: since updating I have no internet every few minutes.",
+   "note": "prospective post 'should have fixed'"
+  },
+  {
+   "case": "V3-K17",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Search broken completely",
+   "body": "I was told 26100.8875 would fix search, instead it broke search completely and Explorer crashes after the update.",
+   "note": "prospective post 'would fix', then 'it broke'"
+  },
+  {
+   "case": "V3-K18",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Group Policy not applied",
+   "body": "26200.8457 fails to apply our Group Policy settings; gpresult shows nothing applied since the update.",
+   "note": "platform (d) 'fails to apply our'"
+  },
+  {
+   "case": "V3-K19",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Cannot add printers",
+   "body": "28000.2113 cannot install any network printer, the Add Printer wizard fails with 0x00000709.",
+   "note": "platform (d) 'cannot install any'"
+  },
+  {
+   "case": "V3-K20",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Store downloads fail",
+   "body": "26200.7922 keeps failing to download Store apps with error 0x80070005 since it installed.",
+   "note": "platform (d) Store apps"
+  },
+  {
+   "case": "V3-K21",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Explorer crashes every hour",
+   "body": "Still on 26200.8457 because rolling it back fails, and it still crashes Explorer every hour since the update.",
+   "note": "baseline 'still on X' + 'it still crashes'"
+  },
+  {
+   "case": "V3-K22",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Start menu dead",
+   "body": "Stuck on 26100.8875 since Tuesday and the Start menu has been dead since it installed.",
+   "note": "baseline 'stuck on X' + 'since it installed'"
+  },
+  {
+   "case": "V3-K23",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Audio service crashes",
+   "body": "26200.8457 caused no problems for a day, then the audio service started crashing every few minutes after the update.",
+   "note": "clean 'caused no problems', then onset"
+  },
+  {
+   "case": "V3-K24",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Fingerprint reader dead",
+   "body": "26200.8457 installed overnight and the fingerprint reader stopped working right after the update.",
+   "note": "control named 'X installed'"
+  },
+  {
+   "case": "V3-K25",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "HDR washed out",
+   "body": "After my laptop pulled down 26100.8875 the HDR picture looks washed out and games freeze since the update.",
+   "note": "unlisted change verb 'pulled down'"
+  },
+  {
+   "case": "V3-K26",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Brightness slider gone",
+   "body": "Upgraded the tablet to 28000.2113 and since the upgrade the brightness slider is gone and the screen freezes on wake.",
+   "note": "control named"
+  },
+  {
+   "case": "V3-K27",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Explorer restarts",
+   "body": "26200.7922 is crashing explorer.exe every few minutes on two of my PCs since the update.",
+   "note": "control direct"
+  },
+  {
+   "case": "V3-K28",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Sound returned after removal",
+   "body": "Removing 26200.8457 fixed the sound, so the update clearly broke it.",
+   "note": "control remedy"
+  },
+  {
+   "case": "V3-K29",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Camera app fails",
+   "body": "Ever since 26100.8875 installed, the Camera app fails with error 0xA00F4244.",
+   "note": "control onset 'ever since X'"
+  },
+  {
+   "case": "V3-K30",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Night light schedule broken",
+   "body": "With 26200.8457 the night light schedule is broken since the update; before it the schedule worked.",
+   "note": "'With X' + 'before it'"
+  },
+  {
+   "case": "V3-K31",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Docking station not detected",
+   "body": "Our helpdesk confirmed 26200.7922 breaks the USB-C dock on every Latitude: no display after the update.",
+   "note": "control direct 'breaks'"
+  },
+  {
+   "case": "V3-K32",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Keyboard layout resets",
+   "body": "Since updating, the keyboard layout resets and the login screen freezes on every login because of 28000.2113.",
+   "note": "'because of X'"
+  },
+  {
+   "case": "V3-K33",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "PDF viewer freezes",
+   "body": "I'm currently on 26200.8457 and since installing it the built-in PDF viewer freezes when I open files.",
+   "note": "env + 'since installing it'"
+  },
+  {
+   "case": "V3-K34",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "File copy slow",
+   "body": "System: Windows 11 Pro 24H2. File copies crawl at 2 MB/s, a problem I only see since 26100.8875. Copying freezes at 99% since the update.",
+   "note": "spec label + 'since X'"
+  },
+  {
+   "case": "V3-K35",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Mic mutes itself",
+   "body": "Since the update my mic mutes itself, a bug that 26200.7922 brought with it, and calls freeze.",
+   "note": "'a bug that X brought'"
+  },
+  {
+   "case": "V3-K36",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Wi-Fi drops since then",
+   "body": "26200.8457 shows as successfully installed on 5/14 and since then my Wi-Fi drops every hour after the update.",
+   "note": "history post (declared L10 shape)"
+  },
+  {
+   "case": "V3-K37",
+   "kind": "keep",
+   "expected": "missing_update_attribution",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Black screen after sleep",
+   "body": "All 28000.2113 laptops with the update installed show a black screen after sleep.",
+   "note": "platform (e) 'X laptops with the update'"
+  },
+  {
+   "case": "V3-K38",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Black screen after sleep on fleet",
+   "body": "Our 28000.2113 machines with this update show a black screen after sleep since installing it.",
+   "note": "platform (e) 'X machines with this update'"
+  },
+  {
+   "case": "V3-K39",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Touch keyboard broken",
+   "body": "26200.7922 is the current build on our kiosks and it has broken the touch keyboard since the update.",
+   "note": "baseline post~ 'is the current build' + 'it has broken'"
+  },
+  {
+   "case": "V3-K40",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Touchpad stopped",
+   "body": "I'm on 26100.8875 (installed last night) and the touchpad stopped working after the update.",
+   "note": "control env + parenthetical installed"
+  },
+  {
+   "case": "V3-K41",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Headset disconnects",
+   "body": "I'm on 26200.8457 and the Bluetooth bug came with it: since the update my headset disconnects and audio freezes every minute.",
+   "note": "env + 'came with it'"
+  },
+  {
+   "case": "V3-K42",
+   "kind": "keep",
+   "expected": "kept",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Display flicker",
+   "body": "Running Windows 11 Pro 26100.8875 - the build itself is the problem, the display flickers and freezes after the update.",
+   "note": "env + 'the build itself is the problem'"
+  },
+  {
+   "case": "V3-R01",
+   "kind": "refuse",
+   "expected": "refused",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Printer offline after driver update",
+   "body": "Specs: Windows 11 Pro 25H2, OS build 26200.8457, 16 GB RAM. After the HP driver update last night the printer shows offline.",
+   "note": "spec + other update"
+  },
+  {
+   "case": "V3-R02",
+   "kind": "refuse",
+   "expected": "foreign_product_subject_not_windows_patch",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Teams crashes at launch",
+   "body": "I'm on 26100.8875. Since the Teams update yesterday the app crashes at launch.",
+   "note": "env + other product update"
+  },
+  {
+   "case": "V3-R03",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Sound back after rollback",
+   "body": "After the June update broke audio, I rolled back to 26200.8457 and sound works again.",
+   "note": "rollback target"
+  },
+  {
+   "case": "V3-R04",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Feature update fails at 61%",
+   "body": "The upgrade from 28000.2113 to the next feature update fails at 61% with 0xC1900101.",
+   "note": "upgrade source"
+  },
+  {
+   "case": "V3-R05",
+   "kind": "refuse",
+   "expected": "missing_update_attribution",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Spooler crash began in March",
+   "body": "Update history lists 26200.7922 as installed on 2/26/2026; the spooler crash only began with the March preview update.",
+   "note": "history line + other update"
+  },
+  {
+   "case": "V3-R06",
+   "kind": "refuse",
+   "expected": "foreign_product_subject_not_windows_patch",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "OneDrive stops syncing",
+   "body": "Device: Surface Pro 9, Windows 11 25H2 26200.8457. OneDrive stops syncing after its own update this week.",
+   "note": "spec + app update"
+  },
+  {
+   "case": "V3-R07",
+   "kind": "refuse",
+   "expected": "generic_support_request",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Will this build fix Wi-Fi",
+   "body": "Will 26100.8875 fix the Wi-Fi drops that started with the June update?",
+   "note": "prospective mid"
+  },
+  {
+   "case": "V3-R08",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Install or wait",
+   "body": "Should I install 26200.8457 or wait? My audio crackles since the April update and I am worried.",
+   "note": "prospective pre"
+  },
+  {
+   "case": "V3-R09",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Split tunnelling broken",
+   "body": "Our VPN client update broke split tunnelling on 26100.8875 machines last night.",
+   "note": "platform (b) other product"
+  },
+  {
+   "case": "V3-R10",
+   "kind": "refuse",
+   "expected": "missing_update_attribution",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Defender definitions fail",
+   "body": "The Defender definitions update on 28000.2113 keeps failing with 0x80070643.",
+   "note": "platform (c)"
+  },
+  {
+   "case": "V3-R11",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Webcam broke in March",
+   "body": "26200.7922 ran perfectly for weeks; the trouble began with the March update, which broke my webcam.",
+   "note": "clean vocabulary gap 'ran perfectly'"
+  },
+  {
+   "case": "V3-R12",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "June update will not install",
+   "body": "Still stuck on 26200.8457 because the June cumulative update fails to install with 0x800f0922.",
+   "note": "baseline 'still stuck on'"
+  },
+  {
+   "case": "V3-R13",
+   "kind": "refuse",
+   "expected": "missing_update_attribution",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Printer fine after downgrade",
+   "body": "Downgraded from 26H2 back to 26100.8875 and the printer issue from the feature update is gone.",
+   "note": "rollback target 'back to'"
+  },
+  {
+   "case": "V3-R14",
+   "kind": "refuse",
+   "expected": "missing_update_attribution",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Boot slower after June",
+   "body": "Compared to 26200.8457, the June update boots twice as slow on my laptop.",
+   "note": "comparison baseline"
+  },
+  {
+   "case": "V3-R15",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Hoping for a fix",
+   "body": "Hoping for 28000.2113 to fix the audio dropouts I have had since the March update.",
+   "note": "prospective 'hoping for'"
+  },
+  {
+   "case": "V3-R16",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Kiosk app broken",
+   "body": "We pinned the fleet to known good build 26200.7922 because the March update broke the kiosk app.",
+   "note": "baseline 'known good build'"
+  },
+  {
+   "case": "V3-R17",
+   "kind": "refuse",
+   "expected": "foreign_product_subject_not_windows_patch",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Edge crashes at start",
+   "body": "My system has been on 26200.8457 since mid-May. Yesterday the Edge update made the browser crash at start.",
+   "note": "L1 shape, other named update"
+  },
+  {
+   "case": "V3-R18",
+   "kind": "refuse",
+   "expected": "foreign_product_subject_not_windows_patch",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Outlook search empty",
+   "body": "Version: 24H2 / Build: 26100.8875 / CPU: Ryzen 5. Outlook search returns nothing after the Office update.",
+   "note": "spec labels + Office update"
+  },
+  {
+   "case": "V3-R19",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": ".NET update fails",
+   "body": "Installing the .NET Framework update on 26200.8457 fails with 0x80073712.",
+   "note": "platform (a)"
+  },
+  {
+   "case": "V3-R20",
+   "kind": "refuse",
+   "expected": "generic_support_request",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Update keeps rolling back",
+   "body": "The following update on 26200.7922 keeps rolling back at 98%.",
+   "note": "platform (c) 'following update on X'"
+  },
+  {
+   "case": "V3-R21",
+   "kind": "refuse",
+   "expected": "missing_update_attribution",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "VPN broken by Insider flight",
+   "body": "Coming from 28000.2113, the new Insider flight broke my VPN.",
+   "note": "source 'coming from'"
+  },
+  {
+   "case": "V3-R22",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Game bar broken",
+   "body": "Update history: 2026-05 Cumulative Update for Windows 11 Version 25H2 (26200.8457) Successfully installed on 5/14/2026. The Xbox app update this week broke game bar.",
+   "note": "history list + app update"
+  },
+  {
+   "case": "V3-R23",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": ".NET update loop",
+   "body": "26100.8875 keeps failing to install the July .NET update with 0x80070643.",
+   "note": "platform (d) .NET"
+  },
+  {
+   "case": "V3-R24",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Sound gone after June",
+   "body": "System Restore put me back on 26200.8457 after the June update broke my sound.",
+   "note": "rollback target 'put me back on'"
+  },
+  {
+   "case": "V3-R25",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Start menu broken",
+   "body": "Waiting for 28000.2113 to reach our ring; the current build has a broken Start menu since the March update.",
+   "note": "prospective 'waiting for'"
+  },
+  {
+   "case": "V3-R26",
+   "kind": "refuse",
+   "expected": "missing_update_attribution",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Audio issue from January",
+   "body": "Would installing 26200.7922 help fix the audio issue the January update caused?",
+   "note": "prospective mid 'would ... help fix'"
+  },
+  {
+   "case": "V3-R27",
+   "kind": "refuse",
+   "expected": "missing_kb_or_build",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "No sound after Realtek update",
+   "body": "OS Name Microsoft Windows 11 Pro, OS Version 10.0.26200.8457. Since the Realtek audio driver update there is no sound.",
+   "note": "systeminfo + driver update"
+  },
+  {
+   "case": "V3-R28",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Other PC lost Wi-Fi",
+   "body": "My other PC was updated to 26100.8875 without trouble; this one is on 26100.8737 and its Wi-Fi died after the June update.",
+   "note": "the build on another machine"
+  },
+  {
+   "case": "V3-R29",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Second display broken",
+   "body": "26200.8457 caused no problems here. The NVIDIA driver update is what broke my second display.",
+   "note": "clean 'caused no problems'"
+  },
+  {
+   "case": "V3-R30",
+   "kind": "refuse",
+   "expected": "R1N-01",
+   "target": {
+    "target_feature_version": "26H1",
+    "target_kb": "KB5089548",
+    "target_os_build": "28000.2113",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "26H1"
+   },
+   "title": "Nightly update fails",
+   "body": "The 28000.2113 to 28000.2179 update fails with 0x800f081f every night.",
+   "note": "source post 'X to Y'"
+  },
+  {
+   "case": "V3-R31",
+   "kind": "refuse",
+   "expected": "generic_support_request",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "PC froze twice",
+   "body": "My previous build 26200.7922 was fine; the March update froze the PC twice.",
+   "note": "baseline 'previous build'"
+  },
+  {
+   "case": "V3-R32",
+   "kind": "refuse",
+   "expected": "R1N-02",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Mic muted after today's update",
+   "body": "I am on 26200.8457 and since today's update my mic is muted.",
+   "note": "L4 generic, build as state"
+  },
+  {
+   "case": "V3-R33",
+   "kind": "refuse",
+   "expected": "R1N-02",
+   "target": {
+    "target_feature_version": "24H2",
+    "target_kb": "KB5101650",
+    "target_os_build": "26100.8875",
+    "target_release_date": "2026-07-14T00:00:00Z",
+    "update_version": "24H2"
+   },
+   "title": "Desktop lost Wi-Fi",
+   "body": "Build 26100.8875 on the laptop and 26100.8737 on the desktop; only the desktop lost Wi-Fi after the June update.",
+   "note": "build of the unaffected machine"
+  },
+  {
+   "case": "V3-R34",
+   "kind": "refuse",
+   "expected": "R1N-03",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5077241",
+    "target_os_build": "26200.7922",
+    "target_release_date": "2026-02-24T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Graphics driver update broke HDR",
+   "body": "Edition: Windows 11 Pro. OS build: 26200.7922. The Intel graphics driver update broke HDR.",
+   "note": "spec labels + driver update"
+  },
+  {
+   "case": "V3-R35",
+   "kind": "refuse",
+   "expected": "generic_support_request",
+   "target": {
+    "target_feature_version": "25H2",
+    "target_kb": "KB5089549",
+    "target_os_build": "26200.8457",
+    "target_release_date": "2026-05-12T00:00:00Z",
+    "update_version": "25H2"
+   },
+   "title": "Feature update blocked",
+   "body": "Upgrading this PC from 26200.8457 to 26H2 is blocked by a safeguard hold.",
+   "note": "upgrade source mid"
+  }
+ ]
+}

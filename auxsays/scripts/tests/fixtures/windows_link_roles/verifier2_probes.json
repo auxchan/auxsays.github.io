@@ -1,7 +1,7 @@
 {
  "schema": 1,
  "ledger": "AUX-076",
- "about": "The second independent verifier's 53 SYNTHETIC probes (27 keep, 26 refuse), frozen as written. Driven through row_from_candidate as a Learn Q&A candidate is built (parent_title = report_title = title, report_text = clean_html(title + ' ' + body)). 'expected' is this change's decision: kept, refused, or a declared residual class R1R-nn (admitted by main and by this change alike, ledger AUX-076).",
+ "about": "The second independent verifier's 53 SYNTHETIC probes (27 keep, 26 refuse), frozen as written. Driven through row_from_candidate as a Learn Q&A candidate is built (parent_title = report_title = title, report_text = clean_html(title + ' ' + body)). 'expected' is this change's decision: kept, refused, or a declared residual class R1N-nn (admitted by main and by this change alike, ledger AUX-076).",
  "cases": [
   {
    "case": "Q-K01",
@@ -411,7 +411,7 @@
   {
    "case": "Q-R01",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -426,7 +426,7 @@
   {
    "case": "Q-R02",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -441,7 +441,7 @@
   {
    "case": "Q-R03",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -456,7 +456,7 @@
   {
    "case": "Q-R04",
    "kind": "refuse",
-   "expected": "R1R-04",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -471,7 +471,7 @@
   {
    "case": "Q-R05",
    "kind": "refuse",
-   "expected": "R1R-04",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "26H2",
     "target_kb": "KB5127648",
@@ -486,7 +486,7 @@
   {
    "case": "Q-R06",
    "kind": "refuse",
-   "expected": "R1R-04",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -501,7 +501,7 @@
   {
    "case": "Q-R07",
    "kind": "refuse",
-   "expected": "refused",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -516,7 +516,7 @@
   {
    "case": "Q-R08",
    "kind": "refuse",
-   "expected": "refused",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -531,7 +531,7 @@
   {
    "case": "Q-R09",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -546,7 +546,7 @@
   {
    "case": "Q-R10",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -561,7 +561,7 @@
   {
    "case": "Q-R11",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -576,7 +576,7 @@
   {
    "case": "Q-R12",
    "kind": "refuse",
-   "expected": "R1R-05",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -591,7 +591,7 @@
   {
    "case": "Q-R13",
    "kind": "refuse",
-   "expected": "R1R-04",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -606,7 +606,7 @@
   {
    "case": "Q-R14",
    "kind": "refuse",
-   "expected": "R1R-02",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -621,7 +621,7 @@
   {
    "case": "Q-R15",
    "kind": "refuse",
-   "expected": "refused",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -636,7 +636,7 @@
   {
    "case": "Q-R16",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -651,7 +651,7 @@
   {
    "case": "Q-R17",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -666,7 +666,7 @@
   {
    "case": "Q-R18",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -681,7 +681,7 @@
   {
    "case": "Q-R19",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -696,7 +696,7 @@
   {
    "case": "Q-R20",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -711,7 +711,7 @@
   {
    "case": "Q-R21",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -726,7 +726,7 @@
   {
    "case": "Q-R22",
    "kind": "refuse",
-   "expected": "refused",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "23H2",
     "target_kb": "KB5082052",
@@ -741,7 +741,7 @@
   {
    "case": "Q-R23",
    "kind": "refuse",
-   "expected": "R1R-04",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "24H2",
     "target_kb": "KB5074109",
@@ -756,7 +756,7 @@
   {
    "case": "Q-R24",
    "kind": "refuse",
-   "expected": "R1R-03",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -771,7 +771,7 @@
   {
    "case": "Q-R25",
    "kind": "refuse",
-   "expected": "refused",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",
@@ -786,7 +786,7 @@
   {
    "case": "Q-R26",
    "kind": "refuse",
-   "expected": "refused",
+   "expected": "R1N-01",
    "target": {
     "target_feature_version": "25H2",
     "target_kb": "KB5083769",

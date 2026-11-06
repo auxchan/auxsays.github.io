@@ -13,17 +13,18 @@ the corpus says, unless it cannot read its inputs.
         rows the link rule refuses and the per-occurrence role tallies, and diffs the refusal set
         against the pinned manifest (scripts/audit/r1_link_roles_refusals_2026-11-05.json). A row
         missing from, or added to, the pinned set is a WARN line, not a failure. `residual_impact`
-        measures the declared residual classes R1R-01..R1R-05 (ledger AUX-076) on the same rows: how
-        many a veto outweighed by a link (R1R-01), how many are kept only because an occurrence fails
-        open (R1R-02), and how many a link keeps at all (the whole exposure of R1R-03..05), listing any
-        link-kept row outside the reviewed keep fixture.
+        measures the declared residual classes R1N-01..R1N-03 (ledger AUX-076) on the same rows: the
+        in-scope rows the narrow rule keeps because a mention is not a stated state (R1N-01), because
+        a stated state is continued, taken up or follows a blocking word (R1N-02), or because the body
+        has a link word (R1N-03), listing every such row outside the reviewed keep fixture.
 
     python auxsays/scripts/diagnose_windows_link_roles.py --fixture-equivalence
         The fixture builder's check. Every case in the frozen synthetic fixture names its stored
         original by (update_version, target_build, question id); the synthetic text must reach the
-        same decision AND the same per-occurrence roles as the stored original, and both must be
-        accepted by the authority with the link rule switched off. Exits 1 on any mismatch, because
-        a paraphrase that changes the decision does not test the rule it claims to test.
+        same decision, the same per-occurrence roles AND the same link words as the stored
+        original, and both must be accepted by the authority with the link rule switched off. Exits
+        1 on any mismatch, because a paraphrase that changes the decision does not test the rule it
+        claims to test.
 
 Zero writes: it reads the store and the records through `live_eligibility.load_inputs`, prints JSON
 and returns.
@@ -85,8 +86,9 @@ def decide(target: dict[str, Any], url: str, date: str, parent: str, title: str,
                     and not (target_kb and mw._has_exact(title, target_kb)))
     details = (mw.identity_link_details(text, title, build, str(target.get("target_release_date") or ""))
                if in_scope else [])
+    words = sorted({name for name, _w in mw.identity_link_words(text, title)}) if in_scope else []
     return {"reason": reason, "reason_without_link_rule": without, "in_scope": in_scope,
-            "roles": [[role, rule] for role, rule, _sentence in details]}
+            "roles": [[role, rule] for role, rule, _sentence in details], "link_words": words}
 
 
 def counted_windows_rows(aux_root: Path) -> list[dict[str, Any]]:
@@ -120,57 +122,43 @@ def question_id(url: str) -> str:
     return part.split("/", 1)[0]
 
 
-def veto_outweighed(item: dict[str, Any]) -> bool:
-    """R1R-01 on a stored row: some occurrence has a veto that a link on the other side of the build outweighs."""
-    row, target = item["row"], item["target"]
-    title = str(row.get("report_title") or "")
-    text = retained_text(str(row.get("parent_title") or ""), title, str(row.get("report_text_excerpt") or ""))
-    build = str(row.get("matched_os_build") or "")
-    key = mw._r1_month_key(str(target.get("target_release_date") or ""))
-    for sentence in mw._r1_sentences(mw._r1_strip_title(text, title)):
-        for m in mw.BUILD_TOKEN_RE.finditer(sentence):
-            if m.group(0) != build:
-                continue
-            vetoed = any(mw._r1_holds(kind, patterns, sentence, m.start(), m.end(), key)
-                         for _role, kind, *patterns in mw.R1_VETOES)
-            if vetoed and mw._r1_occurrence_role(sentence, m.start(), m.end(), key)[0] == "affected":
-                return True
-    return False
+def residual_class(got: dict[str, Any]) -> str:
+    """The declared residual class (ledger AUX-076) of an in-scope row the narrow rule keeps."""
+    found = [role for role, _rule in got["roles"]]
+    if "unlinked" in found:
+        return "R1N-01"
+    if "linked" in found:
+        return "R1N-02"
+    return "R1N-03"
 
 
 def residual_impact(items: list[dict[str, Any]], decided: list[dict[str, Any]]) -> dict[str, Any]:
-    """How many stored, counted, in-scope rows each declared residual class (ledger AUX-076) can touch."""
+    """How many stored, counted, in-scope rows each declared residual class (ledger AUX-076) keeps, and
+    which of them lie outside the reviewed keep fixture (each of those needs a look)."""
     keep_originals = {tuple(c["original"]) for c in json.loads(FIXTURE.read_text(encoding="utf-8"))["cases"]
                       if c["kind"] == "keep"}
-    by_link, fail_open, outweighed, link_rows = Counter(), [], [], []
-    for item, got in zip(items, decided):
-        if not got["roles"] or got["reason"] is not None:
-            continue
-        found = [role for role, _rule in got["roles"]]
-        if "affected" in found:
-            link_rows.append(item)
-            for role, rule in got["roles"]:
-                if role == "affected":
-                    by_link[rule] += 1
-        elif "unlinked" in found:
-            fail_open.append(item["five"])
-        if veto_outweighed(item):
-            outweighed.append(item["five"])
 
     def row_key(it: dict[str, Any]) -> tuple[str, str, str]:
         r = it["row"]
         return (str(r.get("update_version") or ""), str(r.get("target_build") or ""),
                 question_id(str(r.get("source_url") or "")))
+    by_class: dict[str, list[dict[str, Any]]] = {"R1N-01": [], "R1N-02": [], "R1N-03": []}
+    by_rule = Counter()
+    for item, got in zip(items, decided):
+        if not got["roles"] or got["reason"] is not None:
+            continue
+        by_class[residual_class(got)].append(item)
+        for role, rule in got["roles"]:
+            if role == "linked":
+                by_rule[rule] += 1
+        for name in got["link_words"]:
+            by_rule["link_word:" + name] += 1
     return {
-        "R1R-01_veto_outweighed_by_link_rows": len(outweighed),
-        "R1R-02_kept_only_by_fail_open_rows": len(fail_open),
-        # R1R-03..05 can only touch a row that a link keeps: these rows are their whole exposure.
-        "R1R-03_05_rows_kept_by_a_link": len(link_rows),
-        "R1R-03_05_kept_by_link_occurrences_by_rule": dict(sorted(by_link.items())),
-        "R1R-03_05_link_rows_outside_the_reviewed_keep_fixture": sorted(list(it["five"]) for it in link_rows
-                                                                        if row_key(it) not in keep_originals),
-        "fail_open_rows": sorted(fail_open),
-        "veto_outweighed_rows": sorted(outweighed),
+        **{f"{cls}_rows": len(rows) for cls, rows in by_class.items()},
+        "kept_by_rule": dict(sorted(by_rule.items())),
+        "rows_outside_the_reviewed_keep_fixture": {cls: sorted(list(it["five"]) for it in rows
+                                                               if row_key(it) not in keep_originals)
+                                                   for cls, rows in by_class.items()},
     }
 
 
@@ -210,7 +198,7 @@ def replay(aux_root: Path) -> dict[str, Any]:
         # Still counted, but the current authority no longer refuses it: the rule or the row changed.
         "missing_from_replay": sorted(list(f) for f in (pin_set & counted_set) - got_set),
         "not_in_pinned_manifest": sorted(list(f) for f in got_set - pin_set),
-        # The declared residual classes R1R-01..R1R-05 (ledger AUX-076), measured on this corpus.
+        # The declared residual classes R1N-01..R1N-03 (ledger AUX-076), measured on this corpus.
         "residual_impact": residual_impact(items, decided),
     }
     return report
@@ -251,11 +239,13 @@ def fixture_equivalence(aux_root: Path) -> dict[str, Any]:
             "stored": stored, "synthetic": synth, "same_target": same_target, "same_stored_identity_fields": same_ids,
             "synthetic_rematches_kb_and_build": rematched == {"matched_kb": case["matched_kb"],
                                                               "matched_os_build": case["matched_os_build"]},
-            "expected": {"reason": case["expected_reason"], "roles": case["expected_roles"]},
+            "expected": {"reason": case["expected_reason"], "roles": case["expected_roles"],
+                         "link_words": case["expected_link_words"]},
         })
         good = (same_target and same_ids and entry["synthetic_rematches_kb_and_build"]
                 and stored == synth
                 and synth["reason"] == case["expected_reason"] and synth["roles"] == case["expected_roles"]
+                and synth["link_words"] == case["expected_link_words"]
                 and synth["reason_without_link_rule"] is None)
         entry["verdict"] = "EQUIVALENT" if good else "MISMATCH"
         ok = ok and good

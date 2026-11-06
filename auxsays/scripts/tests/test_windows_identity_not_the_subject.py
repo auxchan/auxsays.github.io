@@ -10,8 +10,8 @@ reads or writes `_data`, a record or the evidence store.
     B  row 51 ("build 26200.8875+") is kept by the affected-range exception, and the exception is
        exactly as narrow as documented (marker, same train, at or below the target, no remedy wording)
     C  synthetic shapes: M1 / M3 rejected; M4 / M5 / M6 / M7 kept; M2 and a train-only title are the
-       documented residuals this rule does not claim to close (refused for future acceptance by the
-       later link rule, AUX-076, within its declared limits; C7 / C8 now pin these two shapes)
+       documented residuals this rule does not claim to close. The later link rule (AUX-076, the narrow
+       rule) refuses the train-only shape (C8) and admits M2 as a declared residual (C7, R1N-03)
     D  everything the rule must NOT touch: KB + train identity, target build or KB in the title,
        no competing token, and the date / release / identity gates that run before it
     E  the rule's position and vocabulary, and the end-to-end row shape through evaluate_candidates
@@ -172,13 +172,17 @@ def run() -> int:  # noqa: PLR0915
     check("C6 M7: another KB in the title but the target KB named too -> kept", m7 is None, str(m7))
     m2 = replay(T25, "Blue screen on startup after update",
                 "I am on 25H2 26200.9711 (current). Blue screen every morning since the update, removing the update fixed it.")
-    # AUX-076 (identity_not_linked_to_issue) runs AFTER this rule: the two shapes this rule deliberately leaves
-    # alone are now refused by that one, not by this. R1 as a class is narrowed, not closed: AUX-076 declares
-    # its limits (L1-L10) in the ledger and pins them as current behaviour in its own suite.
-    check("C7 RESIDUAL M2 (refused by AUX-076): a baseline mention with no competing token in the title is not THIS rule's, "
-          "and the link rule refuses it",
-          m2 == "identity_not_linked_to_issue"
-          and mw.identity_not_the_subject(T25, "Blue screen on startup after update", "", "26200.9711") is False, str(m2))
+    # AUX-076 (identity_not_linked_to_issue, the narrow rule) runs AFTER this rule. It refuses a build-only identity
+    # only when every body mention is a pure stated state AND the body has no word that could tie the build to the
+    # issue. M2 says "removing the update fixed it", which may name the build, so the narrow rule admits it, as main
+    # does: a declared residual of AUX-076 (R1N-03), not closed here.
+    check("C7 RESIDUAL M2: a baseline mention with no competing token in the title is NOT closed by this rule, and the "
+          "AUX-076 narrow rule admits it too ('removing the update' is a link word; declared residual R1N-03)",
+          m2 is None
+          and mw.identity_not_the_subject(T25, "Blue screen on startup after update", "", "26200.9711") is False
+          and [n for n, _w in mw.identity_link_words(
+              "I am on 25H2 26200.9711 (current). Blue screen every morning since the update, removing the update fixed it.",
+              "Blue screen on startup after update")] == ["removal"], str(m2))
     m1_train = replay(T25, "Win11 26H2 boot BSOD after update",
                       "Win11 Home 25H2 26200.9711 (current). Issue on 26H2 / KB5121794. Removing KB5121794 fixed it, BSOD gone.")
     check("C8 RESIDUAL (refused by AUX-076): a TRAIN-only title is still not a competing identity for THIS rule; the link rule "

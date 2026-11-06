@@ -13,7 +13,7 @@
  ],
  "parent_commit": "bf662c02144d00f48cfb07979dd1159ac91d5565",
  "authority_sha256_parent": "02e280e4f524f3611b110550cadc147e5ea5c59ea849db6f29a35f1abb52a6fa",
- "authority_sha256": "83cf0acfabbecdb079462b4fb649066ea669c6ed69ff168896e38073059b9fcc",
+ "authority_sha256": "f55bb8464dd42f3b561c61ea80082436eb600b4c4fc1cc6ee2276ea8af46afb5",
  "store_path": "auxsays/_data/consensus_evidence.yml",
  "store_sha256": "050f8125d92c34f6a3312e0915cdd677af3f03542bf022ab836722b9e2749947",
  "replay": {
@@ -26,7 +26,7 @@
   "changed": 14,
   "changed_to_another_reason": 0
  },
- "note": "block_sha256 is the sha256 of the row's YAML block in the store at store_sha256 (the block parser of withdraw_windows_identity_not_the_subject_rows.py). declared_limit_l4 marks the generic-cue rows SPEC limit L4 keeps as an owner decision (default refuse).",
+ "note": "block_sha256 is the sha256 of the row's YAML block in the store at store_sha256 (the block parser of withdraw_windows_identity_not_the_subject_rows.py). declared_limit_l4 marks the generic-cue rows SPEC limit L4 keeps as an owner decision (default refuse); in the narrow rule that ships (ledger AUX-076) this is declared limit L1. authority_sha256 is the narrow rule's authority; the 14 identities and block hashes are unchanged from the earlier drafts.",
  "entries": [
   {
    "product_id": "microsoft-windows-11",
