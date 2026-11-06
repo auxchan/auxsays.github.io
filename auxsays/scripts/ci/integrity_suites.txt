@@ -522,8 +522,10 @@ auxsays/scripts/tests/test_zendesk_help_center_adapter.py = 60
 # render checks fail with it instead of skipping. The V checks cover the second way content
 # went missing: `.reveal-up` defaulted to opacity 0 with an observer threshold of 0.08, which
 # an element taller than ~12 viewports can never satisfy, so the Adobe company page's 410-row
-# history stayed invisible on desktop permanently.
-auxsays/scripts/tests/test_template_presence_guards.py = 49
+# history stayed invisible on desktop permanently. [GA] (GROWTH-1A) executes the base layout's
+# analytics guard under node per host: gtag.js loads on auxsays.com and www only, never on
+# localhost, 127.0.0.1, file://, preview or look-alike hosts, and never when navigator.webdriver.
+auxsays/scripts/tests/test_template_presence_guards.py = 57
 auxsays/scripts/tests/test_patch_ingest_record_limit.py = 79
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54

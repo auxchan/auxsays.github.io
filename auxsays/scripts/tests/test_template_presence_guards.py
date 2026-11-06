@@ -43,6 +43,10 @@ K1-K3 are the keystone. They prove `blank` really is inert HERE rather than taki
 faith, so S1's ban is grounded in measurement. If a future dependency change makes `blank`
 work, K1-K3 fail loudly and the ban can be revisited on evidence.
 
+[GA] (GROWTH-1A) is the base layout's other guard: Google Analytics loads only on the production
+host and never in an automated browser. The inline guard is executed under node once per host
+against a stub DOM; without node GA1 fails rather than skipping.
+
 Needs ruby + the liquid gem for the render half, like the hierarchy suite. Without them L1
 fails and every render check fails with it, rather than skipping silently.
 
@@ -514,6 +518,8 @@ def run() -> int:
           "'.reveal-up:not(.is-visible)'" in js and "setTimeout" in js,
           "a missed callback must not be able to leave content hidden permanently")
 
+    section_ga()
+
     print()
     print("=" * 78)
     total = _PASS + _FAIL
@@ -523,6 +529,114 @@ def run() -> int:
         for e in _ERRORS:
             print(f"  - {e}")
     return 1 if _FAIL else 0
+
+
+# ------------------------------------------------------------------------- [GA] analytics host gate
+# GROWTH-1A. Every page carried a static async gtag.js element, so every copy of the site -- a local
+# build, a file preview, a preview host, each automated browser a test or audit drove -- reported its
+# visits to the auxsays.com property. The guard in aux-base.html is EXECUTED here under node, once per
+# host, against a stub DOM: which script it appends, and what it pushes to dataLayer.
+GA_ID = "G-4SVH0YHB76"
+GA_SRC = f"https://www.googletagmanager.com/gtag/js?id={GA_ID}"
+PRODUCTION_HOSTS = ["auxsays.com", "www.auxsays.com"]
+NON_PRODUCTION_HOSTS = ["localhost", "127.0.0.1", "[::1]", "", "auxchan.github.io", "auxsays.github.io",
+                        "staging.auxsays.com", "auxsays.com.preview.test", "preview-auxsays.com",
+                        "growth1a.auxsays.localhost"]
+
+_GA_NODE = r"""
+const fs = require('fs');
+const vm = require('vm');
+const { script, cases } = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+const out = {};
+for (const [name, c] of Object.entries(cases)) {
+  const appended = [];
+  const document = {
+    createElement: (tag) => ({ tagName: String(tag).toUpperCase() }),
+    head: { appendChild: (el) => { appended.push(el); return el; } },
+  };
+  const navigator = c.noWebdriverProperty ? {} : { webdriver: c.webdriver };
+  const window = { location: { hostname: c.hostname }, navigator };
+  window.window = window;
+  const ctx = vm.createContext({ window, document, navigator, location: window.location, Date });
+  let error = null;
+  try { vm.runInContext(script, ctx); } catch (e) { error = String(e); }
+  out[name] = {
+    error,
+    scripts: appended.map((el) => ({ tag: el.tagName, src: el.src || '', async: el.async === true })),
+    dataLayer: (window.dataLayer || []).map((entry) => Array.from(entry).map((v) => (v instanceof Date ? 'DATE' : String(v)))),
+    gtag: typeof window.gtag,
+  };
+}
+process.stdout.write(JSON.stringify(out));
+"""
+
+
+def ga_guard_script(base: str) -> str:
+    """The inline script in aux-base that references gtag.js (Liquid comments removed)."""
+    for m in re.finditer(r"<script>(.*?)</script>", COMMENT_RE.sub("", base), re.S):
+        if "googletagmanager" in m.group(1):
+            return m.group(1)
+    return ""
+
+
+def run_ga_cases(script: str, cases: dict) -> dict:
+    node = shutil.which("node")
+    if not node or not script:
+        return {}
+    with tempfile.TemporaryDirectory(prefix="auxsays-ga-") as td:
+        drv, payload = Path(td) / "ga.js", Path(td) / "cases.json"
+        drv.write_text(_GA_NODE, encoding="utf-8")
+        payload.write_text(json.dumps({"script": script, "cases": cases}), encoding="utf-8")
+        proc = subprocess.run([node, str(drv), str(payload)], capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=120)
+    if proc.returncode != 0 or not proc.stdout.strip():
+        return {"__error__": (proc.stderr or "")[-400:]}
+    return json.loads(proc.stdout)
+
+
+def section_ga() -> None:
+    print("\n[GA] Google Analytics loads only on the production host, never in an automated browser")
+    base = BASE_LAYOUT_PATH.read_text(encoding="utf-8")
+    markup = COMMENT_RE.sub("", base)
+    script = ga_guard_script(base)
+    check("GA1 node is on PATH (the guard is executed, never just read; without node this fails)",
+          shutil.which("node") is not None)
+    check("GA2 the measurement id is written exactly once in aux-base, inside the guard",
+          markup.count(GA_ID) == 1 and GA_ID in script, f"{markup.count(GA_ID)} occurrence(s)")
+    static = [p.name for p in template_files()
+              if re.search(r"<script[^>]*\bsrc=[\"'][^\"']*googletagmanager", p.read_text(encoding="utf-8"))]
+    check("GA3 no layout or include loads gtag.js with a static script element", not static, str(static))
+    check("GA4 the guard does not key on jekyll.environment (production builds as development here)",
+          bool(script) and "jekyll.environment" not in markup)
+
+    cases = {f"prod:{h}": {"hostname": h, "webdriver": False} for h in PRODUCTION_HOSTS}
+    cases["prod:no-webdriver-property"] = {"hostname": "auxsays.com", "noWebdriverProperty": True}
+    cases.update({f"other:{h}": {"hostname": h, "webdriver": False} for h in NON_PRODUCTION_HOSTS})
+    cases["automated:auxsays.com"] = {"hostname": "auxsays.com", "webdriver": True}
+    cases["automated:www.auxsays.com"] = {"hostname": "www.auxsays.com", "webdriver": True}
+    res = run_ga_cases(script, cases)
+    check("GA5 the guard executes without error for every host", bool(res) and "__error__" not in res
+          and all(r.get("error") is None for r in res.values()), str(res.get("__error__") or "")[:300])
+
+    def loaded(r: dict) -> bool:
+        return (r.get("scripts") == [{"tag": "SCRIPT", "src": GA_SRC, "async": True}]
+                and ["config", GA_ID] in r.get("dataLayer", []) and r.get("gtag") == "function")
+
+    def silent(r: dict) -> bool:
+        return r.get("scripts") == [] and r.get("dataLayer") == [] and r.get("gtag") == "undefined"
+
+    prod = {k: v for k, v in res.items() if k.startswith("prod:")}
+    check(f"GA6 auxsays.com and www.auxsays.com load gtag.js once, async, configured for {GA_ID}",
+          len(prod) == len(PRODUCTION_HOSTS) + 1 and all(loaded(v) for v in prod.values()),
+          json.dumps(prod)[:400])
+    other = {k: v for k, v in res.items() if k.startswith("other:")}
+    leaking = sorted(k for k, v in other.items() if not silent(v))
+    check(f"GA7 every other host ({len(NON_PRODUCTION_HOSTS)}: localhost, 127.0.0.1, file://, preview and "
+          "look-alike hosts) requests nothing and defines no gtag",
+          len(other) == len(NON_PRODUCTION_HOSTS) and not leaking, str(leaking))
+    automated = {k: v for k, v in res.items() if k.startswith("automated:")}
+    check("GA8 a browser that declares navigator.webdriver requests nothing, even on auxsays.com",
+          len(automated) == 2 and all(silent(v) for v in automated.values()), json.dumps(automated)[:300])
 
 
 if __name__ == "__main__":
