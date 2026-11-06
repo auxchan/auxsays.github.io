@@ -76,6 +76,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
 | AUX-090 | Resolved | Publication | Medium | Every OBS report on a patch page read "date not recorded", though each source states when it was posted |
+| AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -4622,6 +4623,52 @@ with 43 mutants each killed by a named check.
 **Reopen only if** a stored OBS date differs from its source's own creation time, a reply is dated by its
 parent, a pinned row's `captured_at` or `counted` changes without its own audited change, or a pinned row moves
 without a recorded successor.
+
+---
+### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks
+
+- **Status** Resolved · **Area** Publication · **Severity** Medium
+- **First seen** 2026-11-06 (left open by AUX-090) · **Resolved** 2026-11-06 (the next natural OBS run to be
+  confirmed after deploy)
+
+**Symptom** AUX-090 dated the 282 stored OBS reports by hand. The collector itself still built every new row
+without a `source_date`, so each OBS report collected after it would read "date not recorded" again.
+
+**Cause** `collect_obs_reports.evaluate_issue` already reads each report's own creation stamp for its
+release-date gate (`issue_source_date`: the GitHub issue's `created_at`; the forum opening post's own `<time>`,
+which `parse_opening_post` hands over under the same key), but `evidence_row`, which both OBS families use to
+build rows, never copied it into the row.
+
+**Fix** `report_source_day` turns that same stamp into the store's value, the UTC day `YYYY-MM-DD`, as AUX-090
+wrote it, and `evidence_row` stores it directly after `captured_at`. A stamp without a time zone, a missing one
+or an impossible one gives no day and no key, so that row is exactly what it was. The gate is unchanged: it
+still reads the stamp's own calendar day, so a forum post made just after local midnight is gated on the day the
+forum shows and stored under the UTC day before, as AUX-090 stored three such posts. Nothing that counts, ranks
+maturity or decides live consensus reads `source_date`; only the public source list shows it. `captured_at`,
+identities, `normalize_row` and stored rows are untouched.
+
+**Measured** The day the producer derives from each AUX-090 pin's served stamp equals the pinned day for all
+282. A frozen corpus, 155 real candidates from those rows and 333 date and gate variants (3,611 decisions), run
+through the old producer and the new one: identical decisions, 728 accepted, identical stored rows apart from
+the day, identical counts, maturity and live decisions. Of the 721 rows stored, 532 gain a day; 189 stay
+undated, all variants whose stamp is missing, invalid or names no time zone.
+A rehearsal of the scheduled OBS lane (collection, consensus build, OBS promotion, QA, audit) on a copy of the
+tree, with a fixed GitHub and forum transport, old producer against new: every step exits 0 in both; the store
+before the run is a byte-exact prefix of the store after it; the same 5 rows are added (an issue already stored
+is found again and not re-added; 2 reports posted before their release are refused); those rows differ only by
+the day, and their pages list them with a day instead of a blank. The collector's full rewrite reproduces
+today's store byte for byte, all 282 AUX-090 dated blocks included.
+
+**Verification of the next natural run** On the first scheduled OBS collection after deploy: every row it adds
+carries `source_date`, equal to the day its issue or opening post was created; every row stored before the run
+is byte-identical (the 282 dated blocks included); counts move only by the rows added.
+
+**Tests** `test_obs_source_date_producer.py` (63 checks: the pins, the derivation, the row, the unchanged gate,
+the corpus guard, a forum page end to end, the collector's write path, the bare-script entry points), with 12
+mutants each killed by a named check.
+
+**Reopen only if** a new OBS row stores a date other than its own creation day (a last-activity, reply or
+collection date), the gate's decision changes, or a run rewrites a stored OBS row.
 
 ---
 
