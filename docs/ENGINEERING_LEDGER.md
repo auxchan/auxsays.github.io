@@ -70,6 +70,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
 | AUX-086 | Resolved | Publication | High | The homepage was 124 MB of HTML, so search crawlers never reached a patch signal |
+| AUX-091 | Resolved | Publication | Medium | The homepage rows printed a sentiment word while the pages they open printed a verdict |
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
@@ -4396,6 +4397,61 @@ product.
 it reads 0 for DaVinci once the 100 are archived; the archived releases stay reachable from the history page.
 Not fixed here: the count is a hint, "older" cannot be asserted for an arbitrary archived record, and a change
 would alter the payload for every product.
+
+---
+
+### AUX-091 — The homepage rows printed a sentiment word while the pages they open printed a verdict
+
+- **Status** Resolved · **Area** Publication · **Severity** Medium
+- **First seen** 2026-11-06 · **Resolved** 2026-11-06 (production homepage to be confirmed after deploy)
+
+**Symptom** Every homepage Patch Signal row printed the stored community sentiment, `update_consensus_label`,
+beside "N confirmed community reports": on 2026-11-06 all eight rows read "Negative", while every patch page
+they open printed the AUXSAYS verdict WAIT. A sentiment word sat where a reader looks for the call, on a
+different axis from the verdict, and "confirmed" overstated what a counted report is. The tracker list named
+each product and nothing about what it follows.
+
+**Cause** The verdict is decided by a ladder written inline in `aux-update.html` (label chain, vocabulary
+refusal, official-only rescue) on top of a maturity rung that is also inline. A row has no page to read the
+verdict back from (the search-meta include of AUX-089 reads the page's own render), and the only other copy,
+`patch-table-row.html`, uses a different official-only condition. No projection or field carries the rendered
+verdict. So the homepage had nothing to reuse and printed the sentiment field it did have.
+
+**Fix (templates and the deploy gate's layout scan)** The maturity rung (with `official_captured`, which feeds
+nothing else) and the decision ladder move, line for line, into `_includes/patch-evidence-state.html` and
+`_includes/patch-decision.html`. `aux-update.html` renders them where the code was, so the page keeps its exact
+bytes. The homepage renders the same two includes for each row inside a discarded capture, with the counts set by
+the patch page's own three lines, and prints "Verdict: <the page's verdict>", the page's maturity and
+"N user reports counted for this release"; the dot takes the colour of the page's verdict-box border instead
+of the sentiment colour. Neither layout keeps a verdict or maturity decision of its own. Each tracker link now
+carries the product's own `source_label` (from `_data/patch_products.yml`, the words its product page links as
+the official source); a product without one shows its name alone. The two intros say how to go from a product to
+an update and its recommendation. `qa_patch_records.scan_update_layout_public_copy` reads the two includes as
+part of the layout: it requires the rung's "Verified reports" assignment to be in the layout text, so without
+this the `--publish-strict` deploy gate would have failed on a correct page, and a phrase it forbids could have
+been written into an include unscanned.
+
+**Measured** Full local Jekyll builds of origin/main 0c518de4 and of the branch, with the deploy projections:
+1,527 of 1,527 patch pages byte-identical; of 1,823 built files only `index.html` and `auxsays-custom.css` changed
+in content (about, articles, feed.xml and sitemap.xml differ by build timestamp only). Homepage 27,954 → 30,599
+bytes (5,534 → 5,782 gzipped), first signal at byte 12,921, the same 8 rows, 16 tracker links and 45 links with
+identical destinations, an identical head (title, description, canonical). Rows: "Negative" on 8 of 8 → the page's
+WAIT on 8 of 8. First viewport, headless Chrome: signals in view unchanged (3 at 1440×900, 1 at 1280×720); trackers
+in view at 1440×900 15 → 6 because each chip now carries its source; at 390×844 the first signal moves from
+y 1,527 to 1,790; no horizontal overflow at any size. `qa_patch_records --publish-strict`: 1,527 records, 0 errors.
+`test_homepage_signals` 58 → 73 ([V] V1-V11 render the shipped patch page and the homepage over the same
+records through every ladder branch; [T] T1-T4), `test_qa_patch_records` 32 → 34,
+`test_live_render_projection` 66 → 68; five suites that read `aux-update.html` as text inline the two includes.
+10 of 10 single-change mutants are caught by a named check.
+
+**Not changed** The Patch Feed (`aux-updates.html`) still prints "confirmed community report(s)" in four places,
+and the patch page itself still says "0 confirmed patch-specific community reports"; the product-table row keeps
+its own copy of the ladder with its stored-state official-only condition. Each is a candidate for the same
+treatment, not part of this homepage change.
+
+**Reopen only if** a homepage row prints a verdict or maturity other than the one its patch page prints, prints
+the stored sentiment or the word "confirmed", or any patch page's bytes change when only these includes are
+moved; or `aux-update.html` or `aux-home.html` decides a verdict or maturity outside the two includes (V8, V9).
 
 ---
 
