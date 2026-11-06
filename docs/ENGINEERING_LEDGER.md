@@ -75,6 +75,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
+| AUX-090 | Resolved | Publication | Medium | Every OBS report on a patch page read "date not recorded", though each source states when it was posted |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -4526,7 +4527,7 @@ loop over the patch records is nested inside another; gtag.js is requested on an
 **Symptom** A citation audit read every counted report on the six live-consensus pages (Windows 11 25H2
 26200.7462, 26200.7623 and 26200.7840; OBS Studio 32.1.1, 32.1.2 and 32.2.2) and flagged 43 placements. A
 second reviewer then labelled those placements and a set of controls blind, without seeing the first labels.
-Both judged 21 placements, 20 stored rows (one row was cited twice), incorrect for the credited update:
+Both judged 21 placements, 20 stored rows (one row was presented twice to the blind reviewer), incorrect for the credited update:
 another product, version or KB was the subject; the author later withdrew the claim (their own setting, a
 driver, a damaged install); the credited version is the one that works or the one the author went back to;
 the post is a feature request, or intended behaviour the author accepted; or it is the same author's
@@ -4566,6 +4567,61 @@ in the blind review's case set (both placements of that thread were presented as
 
 **Reopen only if** any of the twenty counts again, either kept original stops counting without an audited
 withdrawal of its own, or a row the two reviews disagreed on is withdrawn without a fresh independent review.
+
+*Corrected 2026-11-06 (AUX-090):* this entry first said "one row was cited twice". It was one row presented
+twice to the blind reviewer, both times under OBS 32.2.2. The forum cross-post named under **Not changed
+here** was then reviewed on its own and withdrawn by AUX-090 as the same report as the GitHub issue that page
+still counts. The two kept rows here have since gained their posting date; that change is recorded in a
+supplemental baseline, and this entry's manifest and run audit are unchanged.
+
+---
+
+### AUX-090 — Every OBS report on a patch page read "date not recorded", though each source states when it was posted
+
+- **Status** Resolved · **Area** Publication · **Severity** Medium
+- **First seen** 2026-11-06 (live citation audit: all 216 OBS citations on live pages have a public creation
+  date, and the store held none) · **Resolved** 2026-11-06
+
+**Symptom** All 302 stored OBS rows had no `source_date`, so every OBS source on a patch page read "date not
+recorded". The OBS evidence row never carried the date, although the OBS acceptance check already reads each
+report's own date (the GitHub issue's `created_at`; the forum opening post's own `<time>`).
+
+**Which field** `source_date` is the store's field for the day the report itself was written, in every lane
+that fills it: the PowerPoint GitHub lane stores `created_at`, Windows Tech Community the page's original post
+date, Teams `dateCreated`, Premiere the first post's `creationDate`. Last-activity stamps were a collector input
+defect those lanes fixed by writing the original date into this field (AUX-020 is the one deferred residual).
+So the fill uses `source_date`, the UTC day, the store's format.
+
+**Fix** `fill_obs_report_dates.py` writes the day from the rows pinned in `scripts/audit/obs_report_dates.json`:
+five-field identity, block hashes before and after, and the source timestamp each day comes from. The date is
+the creation time of the post the row's URL names: an issue's `created_at`, a comment's own, the opening post's
+own `<time>`, a reply's own, never a parent's or the page's last activity. One line per row; `captured_at`,
+`counted`, identities, verdicts and every other byte stay, and no acceptance field is set. All or nothing,
+idempotent; `--verify-sources` re-reads every pinned source. The 13 OBS records were regenerated only by the OBS
+lane's writers.
+
+**N3** The one OBS 32.1.2 citation the AUX-088 blind review never saw, forum thread 196545, is the same report
+as GitHub issue 13997 on that page: the same title, the same uploaded OBS log URL, the same device setup,
+symptoms and version history, posted after a maintainer pointed the issue to the forum. It is withdrawn as
+`duplicate_existing_evidence` through the AUX-088 tool with a new manifest,
+`live_citation_withdrawal_v2.json`; the issue stays counted. The same worker that implemented this judged it,
+because a separate reviewer context could not be started; the manifest records that.
+
+**AUX-088's pins** Three kept rows that the AUX-088 manifests pin gained their date. Those manifests are never
+rewritten. `live_citation_withdrawal_baseline_v2.json` records each pinned hash, the hash the date produced and
+the date, and the AUX-088 tool and suite accept a successor only against the exact pinned hash it was recorded
+for, never for a row still to withdraw.
+
+**Measured** 282 rows dated (254 GitHub issue openers, 28 forum opening posts), from 239 issues and 28 threads
+read once each; 0 unverifiable; every date agreed with the citation audit's 198 independent reads. 282 record
+sources gain a date; one (32.1.1, GitHub 13278) predates its release by a day, because it was filed against
+32.1.0 and later edited. Counts: OBS 32.1.2 102 -> 101 (N3); no other count, verdict or live decision changes;
+the six live pages stay live. `test_fill_obs_report_dates.py` (47 checks) and the AUX-088 suite (81) pin it,
+with 43 mutants each killed by a named check.
+
+**Reopen only if** a stored OBS date differs from its source's own creation time, a reply is dated by its
+parent, a pinned row's `captured_at` or `counted` changes without its own audited change, or a pinned row moves
+without a recorded successor.
 
 ---
 

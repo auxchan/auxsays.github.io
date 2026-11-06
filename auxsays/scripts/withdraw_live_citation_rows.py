@@ -57,6 +57,14 @@ the shipped authority (lib/live_eligibility.py), and a page that no longer certi
   python auxsays/scripts/withdraw_live_citation_rows.py --write --confirm-write --regenerate
          ... --audit PATH --parent-commit SHA                                    # also write the audit
 
+LATER AUDITED CHANGES. A pinned row may legitimately move after its pin was taken: AUX-090 filled
+the day each OBS report was posted into kept rows this manifest pins. The pins are never rewritten to
+follow. Instead a versioned supplemental baseline (audit/live_citation_withdrawal_baseline_v2.json)
+names, per row, the pinned hash, the hash the later audited change produced and that change, and a
+pinned hash is also satisfied by its recorded successor -- for a kept row (before) and an already
+withdrawn row (after), never for a row still to withdraw, whose edit must start from the pinned bytes.
+A successor that is not recorded against that exact pinned hash still refuses.
+
 Exit: 0 dry run, written, or nothing left to do; 1 refused (nothing written); 2 usage error;
 3 a scoped writer failed after the store step.
 """
@@ -87,6 +95,7 @@ ROOT = SCRIPTS.parent
 STORE = ROOT / "_data" / "consensus_evidence.yml"
 GENERATED = ROOT / "updates" / "generated"
 MANIFEST = SCRIPTS / "audit" / "live_citation_withdrawal.json"
+BASELINE = SCRIPTS / "audit" / "live_citation_withdrawal_baseline_v2.json"
 
 OBS_PRODUCT_ID = "obs-studio"
 PRODUCTS = (WINDOWS_PRODUCT_ID, OBS_PRODUCT_ID)
@@ -211,6 +220,40 @@ def manifest_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: PLR0
     return entries
 
 
+def load_baseline(path: Path | None) -> dict[tuple[str, ...], dict[str, str]]:
+    """Five-field identity -> {pinned hash: successor hash}, from the supplemental baseline.
+
+    An absent file is an empty baseline (every pin must then match exactly). A present file that does
+    not have the expected shape refuses: a malformed baseline must never read as "nothing changed"."""
+    if path is None or not Path(path).exists():
+        return {}
+    doc = json.loads(Path(path).read_text(encoding="utf-8"))
+    if list(doc.get("selector") or []) != list(SELECTOR) or not isinstance(doc.get("version"), int):
+        raise Refusal("baseline: not a versioned five-field baseline")
+    entries = doc.get("entries")
+    if not isinstance(entries, list):
+        raise Refusal("baseline: no entry list")
+    out: dict[tuple[str, ...], dict[str, str]] = {}
+    for entry in entries:
+        ident = _ident(entry)
+        pinned, now = str(entry.get("block_sha256_pinned") or ""), str(entry.get("block_sha256_now") or "")
+        change = entry.get("change")
+        if not (SHA256_RE.match(pinned) and SHA256_RE.match(now)) or pinned == now:
+            raise Refusal(f"baseline: malformed hashes for {ident[3]}")
+        if not isinstance(change, dict) or not change or not str(entry.get("changed_by") or "").strip():
+            raise Refusal(f"baseline: the change or its audit is not named for {ident[3]}")
+        if pinned in out.get(ident, {}):
+            raise Refusal(f"baseline: pinned hash listed twice for {ident[3]}")
+        out.setdefault(ident, {})[pinned] = now
+    return out
+
+
+def _pin_holds(entry: dict[str, Any], key: str, digest: str, baseline: dict) -> bool:
+    """The block still is what was pinned, or what a recorded later audited change made of it."""
+    pinned = entry[key]
+    return digest == pinned or (baseline or {}).get(_ident(entry), {}).get(pinned) == digest
+
+
 def patch_records(generated_dir: Path) -> dict[tuple[str, str, str], list[tuple[str, dict[str, Any]]]]:
     """Canonical patch key -> [(file name, front matter)] for every Windows and OBS update record.
     Only files whose front matter names one of the two products are parsed."""
@@ -262,7 +305,8 @@ def _duplicate_refusal(row: dict[str, Any], kept: dict[str, Any]) -> str:
     return ""
 
 
-def plan(text: str, entries: list[dict[str, Any]], records: dict) -> dict[str, Any]:  # noqa: PLR0912, PLR0915
+def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR0912, PLR0915
+         baseline: dict | None = None) -> dict[str, Any]:
     """Decide every entry and prove the resulting text, without writing. Raises Refusal."""
     blocks = aux072.store_blocks(text)
     by_identity: dict[tuple[str, ...], list[int]] = {}
@@ -292,12 +336,12 @@ def plan(text: str, entries: list[dict[str, Any]], records: dict) -> dict[str, A
         item = {"role": entry["role"], **dict(zip(SELECTOR, ident)),
                 "block_sha256_before_run": digest, "counted_before_run": row.get("counted")}
         if entry["role"] == "retain":
-            if digest != entry["block_sha256_before"]:
+            if not _pin_holds(entry, "block_sha256_before", digest, baseline):
                 refusals.append(f"kept row changed: {label}")
             elif row.get("counted") is not True:
                 refusals.append(f"kept row no longer counts: {label}")
             item["action"] = "kept"
-        elif digest == entry["block_sha256_after"]:
+        elif _pin_holds(entry, "block_sha256_after", digest, baseline):
             item["action"] = "already_withdrawn"
             item["exclusion_reason"] = entry["exclusion_reason"]
         elif digest != entry["block_sha256_before"]:
@@ -380,10 +424,11 @@ def plan(text: str, entries: list[dict[str, Any]], records: dict) -> dict[str, A
     }
 
 
-def run(store: Path, generated_dir: Path, manifest: Path, write: bool) -> dict[str, Any]:
+def run(store: Path, generated_dir: Path, manifest: Path, write: bool,
+        baseline: Path | None = BASELINE) -> dict[str, Any]:
     raw = Path(store).read_bytes()
     text = raw.decode("utf-8")
-    result = plan(text, load_manifest(manifest), patch_records(generated_dir))
+    result = plan(text, load_manifest(manifest), patch_records(generated_dir), load_baseline(baseline))
     new_text = result.pop("new_text")
     result.update({
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -391,6 +436,7 @@ def run(store: Path, generated_dir: Path, manifest: Path, write: bool) -> dict[s
         "store_sha256_before": sha(raw),
         "store_sha256_after": sha(new_text),
         "manifest_sha256": sha(Path(manifest).read_bytes()),
+        "baseline_sha256": sha(Path(baseline).read_bytes()) if baseline and Path(baseline).exists() else "",
         "written": False,
     })
     if write and result["withdrawn_now"]:
@@ -399,12 +445,12 @@ def run(store: Path, generated_dir: Path, manifest: Path, write: bool) -> dict[s
     return result
 
 
-def regenerate() -> list[dict[str, Any]]:
+def regenerate(writers: tuple = WRITERS) -> list[dict[str, Any]]:
     """The lane's scoped writers, as subprocesses, in order. Stops at the first failure.
     apply_consensus_to_records' JSON report goes to a discarded temporary file (--output)."""
     done = []
     with tempfile.TemporaryDirectory(prefix="aux088-") as tmp:
-        for script, *argv in WRITERS:
+        for script, *argv in writers:
             extra = ["--output", str(Path(tmp) / "apply.json")] if script.startswith("apply_") else []
             proc = subprocess.run([sys.executable, str(SCRIPTS / script), *argv, *extra], cwd=str(SCRIPTS),
                                   capture_output=True, text=True, encoding="utf-8")
@@ -422,6 +468,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--store", type=Path, default=STORE)
     ap.add_argument("--generated-dir", type=Path, default=GENERATED)
     ap.add_argument("--manifest", type=Path, default=MANIFEST)
+    ap.add_argument("--baseline", type=Path, default=BASELINE,
+                    help="supplemental baseline of later audited changes to pinned rows")
     ap.add_argument("--write", action="store_true", help="apply the withdrawal in place")
     ap.add_argument("--confirm-write", action="store_true", help="required together with --write")
     ap.add_argument("--regenerate", action="store_true",
@@ -441,7 +489,7 @@ def main(argv: list[str] | None = None) -> int:
               "--generated-dir must be the defaults")
         return 2
     try:
-        result = run(args.store, args.generated_dir, args.manifest, args.write)
+        result = run(args.store, args.generated_dir, args.manifest, args.write, args.baseline)
     except Refusal as exc:
         print("REFUSED, nothing written: " + str(exc))
         return 1

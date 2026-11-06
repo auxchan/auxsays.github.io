@@ -421,8 +421,17 @@ auxsays/scripts/tests/test_withdraw_windows_confirmed_and_duplicate_rows.py = 58
 # store already uses, two duplicates pinned to their kept originals, every other row byte-identical, no row
 # starts counting, all-or-nothing refusal on any drift, idempotent; a same-report row on another identity is
 # never re-homed. Bare script on frozen fixtures whose free text is synthetic; the live store is read only
-# for the pins.
-auxsays/scripts/tests/test_withdraw_live_citation_rows.py = 72
+# for the pins. H (AUX-090): a later audited change to a pinned row is accepted only through the versioned
+# supplemental baseline (the pins and the run audit stay byte-identical), only against the exact pinned hash,
+# never for a row still to withdraw; G5 proves each recorded successor is its pin plus one date line.
+auxsays/scripts/tests/test_withdraw_live_citation_rows.py = 81
+# AUX-090: the audited fill of the day each surviving counted OBS report was posted (source_date), from a
+# pinned manifest: the report's OWN creation time (an issue's created_at, a comment's own, the opening post's
+# own <time>, a reply's own, never a parent's or the page's last activity), the UTC day, one line per row,
+# captured_at and every other byte unchanged, no acceptance field, no count moves, all-or-nothing refusal,
+# idempotent; and the v2 withdrawal manifest (one forum copy of a GitHub issue the same page counts). Bare
+# script on a synthetic store and synthetic source payloads; the live store is read only for the pins.
+auxsays/scripts/tests/test_fill_obs_report_dates.py = 47
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit
