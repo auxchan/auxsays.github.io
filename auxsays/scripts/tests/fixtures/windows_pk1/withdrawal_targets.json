@@ -1,0 +1,106 @@
+[
+ {
+  "file": "2025-12-09-windows-11-25h2-26200-7462.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7462",
+   "target_kb": "KB5072033",
+   "target_os_build": "26200.7462",
+   "target_feature_version": "25H2",
+   "target_release_date": "2025-12-09T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-01-13-windows-11-25h2-26200-7623.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7623",
+   "target_kb": "KB5074109",
+   "target_os_build": "26200.7623",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-01-13T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-02-10-windows-11-25h2-26200-7840.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.7840",
+   "target_kb": "KB5077181",
+   "target_os_build": "26200.7840",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-02-10T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-06-23-windows-11-25h2-26200-8737.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.8737",
+   "target_kb": "KB5095093",
+   "target_os_build": "26200.8737",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-06-23T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-09-08-windows-11-25h2-26200-9445.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9445",
+   "target_kb": "KB5124008",
+   "target_os_build": "26200.9445",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-09-08T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-10-13-windows-11-25h2-26200-9711.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9711",
+   "target_kb": "KB5127648",
+   "target_os_build": "26200.9711",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-10-13T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-10-13-windows-11-26h2-26300-9711.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9711",
+   "target_kb": "KB5127648",
+   "target_os_build": "26300.9711",
+   "target_feature_version": "26H2",
+   "target_release_date": "2026-10-13T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-10-28-windows-11-26h2-26300-9818.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "26H2",
+   "target_build": "26300.9818",
+   "target_kb": "KB5127936",
+   "target_os_build": "26300.9818",
+   "target_feature_version": "26H2",
+   "target_release_date": "2026-10-28T00:00:00Z"
+  }
+ }
+]
