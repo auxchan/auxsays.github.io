@@ -593,7 +593,7 @@ def check_detail_page_failsafe() -> None:
     "GitHub / Copilot Copilot code review" in the detail page's AUXSAYS verdict box -- the two
     surfaces disagreeing about one patch, which is the invariant this sprint exists to establish.
     """
-    layout = DETAIL_LAYOUT.read_text(encoding="utf-8")
+    layout = detail_layout_text()
     check("B8 the detail layout reads the shared vocabulary",
           "site.data.patch_verdicts" in layout,
           "the detail page still publishes unvalidated labels")
@@ -990,6 +990,16 @@ def check_corpus_audit(tmp: Path) -> None:
 # ---------------------------------------------------------------- [V] what the reader is told
 
 DETAIL_LAYOUT = _REPO / "auxsays" / "_layouts" / "aux-update.html"
+PAGE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=([\w.]+)\s*-?%\}")
+
+
+def detail_layout_text() -> str:
+    """The patch-detail layout with its maturity rung and decision ladder inlined. GROWTH-1C moved
+    both into _includes/patch-evidence-state.html and patch-decision.html, which the layout renders
+    (and the homepage too); they are the page's own code, bound here to their record= argument."""
+    return PAGE_INCLUDE_TAG.sub(
+        lambda m: (_REPO / "auxsays" / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
+        .replace("include.record", m.group(2)), DETAIL_LAYOUT.read_text(encoding="utf-8"))
 
 # render! rather than render, so a Liquid error RAISES instead of landing in the output where an
 # extraction that finds no verdict would read as "no contradiction".
@@ -1023,7 +1033,7 @@ def render_detail(cases: dict[str, dict], vocab: dict | None = None) -> tuple[bo
     Rendering with an empty `site` would blank every verdict and these assertions would be
     measuring the harness instead of the template.
     """
-    src = DETAIL_LAYOUT.read_text(encoding="utf-8").split("---", 2)[-1]
+    src = detail_layout_text().split("---", 2)[-1]
     src = re.sub(r"\{%-?\s*include\s.*?-?%\}", "", src, flags=re.S)
     ruby = shutil.which("ruby")
     if not ruby:

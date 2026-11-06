@@ -67,7 +67,18 @@ MON_PATH = _AUX / "_includes" / "monitoring-status.html"
 CSS_PATH = _AUX / "assets" / "css" / "auxsays-custom.css"
 DATA_DIR = _AUX / "_data"
 
-LAYOUT = LAYOUT_PATH.read_text(encoding="utf-8")
+# GROWTH-1C moved the patch page's maturity rung and decision ladder into two includes that the
+# homepage renders too. They are the patch page's own code, so they are inlined here, bound to their
+# record= argument, before anything reads the layout -- as the maturity contract is.
+PAGE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=([\w.]+)\s*-?%\}")
+
+
+def expand_page_includes(text: str) -> str:
+    return PAGE_INCLUDE_TAG.sub(lambda m: (_AUX / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
+                                .replace("include.record", m.group(2)), text)
+
+
+LAYOUT = expand_page_includes(LAYOUT_PATH.read_text(encoding="utf-8"))
 MON = MON_PATH.read_text(encoding="utf-8")
 CSS = CSS_PATH.read_text(encoding="utf-8")
 COMMENT_RE = re.compile(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", re.S)

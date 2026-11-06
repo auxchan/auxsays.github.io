@@ -224,7 +224,7 @@ auxsays/scripts/tests/test_owned_method_lifecycle.py = 278
 # with no run context stays disabled; the projection run as pages.yml runs it, failing closed and
 # writing no record; and the one Liquid contract every consumer now renders through, certified,
 # uncertified and absent.
-auxsays/scripts/tests/test_live_render_projection.py = 66
+auxsays/scripts/tests/test_live_render_projection.py = 68
 
 # Every writer promotes and revokes live consensus from one decision (AUX-056). Until now no writer
 # could store it: the certifier declined everything, so the label existed only at render time. Each
@@ -359,7 +359,7 @@ auxsays/scripts/tests/test_premiere_method_routing.py = 48
 # green and then broke Pages. scan_update_layout_public_copy() is the only part of that gate
 # which reads a template, and it is pure, so the suite calls it directly against the shipped
 # layout.
-auxsays/scripts/tests/test_qa_patch_records.py = 32
+auxsays/scripts/tests/test_qa_patch_records.py = 34
 # A record built from one platform's release notes says whose notes they are, read from the
 # article TITLE only, on create AND refresh, without moving identity; and no per-platform vendor
 # may count community reports until acceptance can respect the label (AUX-049).
@@ -567,7 +567,7 @@ auxsays/scripts/tests/test_product_page_layout.py = 54
 # [D] pins the patch-first entrance: the question h1, the heading outline, one link per product
 # tracker with records (derived), and the signals ahead of everything else.
 # Needs ruby + liquid; without them the render checks fail rather than skip.
-auxsays/scripts/tests/test_homepage_signals.py = 58
+auxsays/scripts/tests/test_homepage_signals.py = 73
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
 # The public projection of how evidence was gathered. The methodology page rendered the whole
 # method-health store (1,554,238 bytes; reddit_search 1,064 times) and the per-patch card

@@ -18,7 +18,8 @@ WHAT IS PINNED HERE.
       ranking branch (featured, report, official issue, known issue, certified live and pilot
       rungs, an exact score tie, identity fallbacks and case folding, archived and hidden
       records, the 10-row limit, the empty state) and the real record corpus -- and must emit
-      the same rows: destination, product id and visible text, in the same order.
+      the same rows: destination, product id and title, in the same order. (The words printed
+      beside the title changed in GROWTH-1C and are held by [V], not by the frozen loop.)
   [B] the size budget at the real corpus size: the whole homepage (aux-home inside aux-base)
       renders under HOME_BYTE_CEILING with the first signal inside the first 50 KB, and the
       layout keeps no loop over the patch list nested inside another.
@@ -27,6 +28,16 @@ WHAT IS PINNED HERE.
       the hero's entrances, one link to every product tracker that has records (derived from the
       records, not typed), the signals in the main column ahead of everything else, the primary
       nav keeping every route, and no certainty word in the copy written around the signal rows.
+  [V] GROWTH-1C: each row prints its patch page's OWN verdict and evidence state. The patch page's
+      rung and decision ladder live in _includes/patch-evidence-state.html and patch-decision.html,
+      which aux-update.html and this homepage both render; the shipped patch page and the homepage
+      are rendered over the same records (every ladder branch: stored, legacy, refused, derived,
+      the official-only rescue, nothing captured, certified and uncertified live) and must agree,
+      with the expected words written out. No row prints the stored sentiment
+      (update_consensus_label), counted reports read "N user reports counted for this release",
+      and neither layout keeps a verdict or evidence-state decision of its own.
+  [T] GROWTH-1C: each product tracker names, inside its one link, the source its updates come from
+      (the product's own source_label); and every signal row sits under a tracker the page links.
 
 Needs ruby + the liquid gem (CI installs liquid 4.0.4); without them the render checks FAIL.
 
@@ -352,7 +363,8 @@ def real_corpus() -> list[dict]:
 def real_site() -> dict:
     config = yaml.safe_load((_AUX / "_config.yml").read_text(encoding="utf-8"))
     data = {"home": json.loads((_AUX / "_data" / "home.json").read_text(encoding="utf-8")),
-            "patch_products": yaml.safe_load((_AUX / "_data" / "patch_products.yml").read_text(encoding="utf-8"))}
+            "patch_products": yaml.safe_load((_AUX / "_data" / "patch_products.yml").read_text(encoding="utf-8")),
+            "patch_verdicts": yaml.safe_load((_AUX / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8"))}
     posts = []
     for path in sorted((_AUX / "_posts").glob("*.md"), reverse=True):
         fm = load_front_matter(path) or {}
@@ -471,35 +483,66 @@ LIVE_URLS = {"urls": ["/updates/t/e-live/"]}
 
 # ------------------------------------------------------------------------------- row extraction
 class Rows(HTMLParser):
+    """Signal rows: destination, product id, and the text of each part the row prints."""
+
+    PARTS = {"strong": "title", "data-home-verdict": "verdict", "data-home-evidence-state": "state"}
+
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.rows: list[list] = []
+        self.rows: list[dict] = []
         self.depth = 0
         self.empty = False
+        self._part: list[tuple[str, str]] = []  # (part, closing tag) while inside a named part
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         if "data-empty-state" in a:
             self.empty = True
         if tag == "a" and "data-home-patch-signal" in a:
-            self.rows.append([a.get("href"), a.get("data-product-id"), []])
+            self.rows.append({"href": a.get("href"), "pid": a.get("data-product-id"), "text": [],
+                              "title": [], "verdict": [], "state": [], "dot": None})
             self.depth = 1
-        elif tag == "a" and self.depth:
+            return
+        if tag == "a" and self.depth:
             self.depth += 1
+        if not self.depth or not self.rows:
+            return
+        cls = a.get("class") or ""
+        if tag == "span" and "home-patch-dot" in cls.split():
+            self.rows[-1]["dot"] = cls
+        part = "title" if tag == "strong" else next((v for k, v in self.PARTS.items() if k in a), None)
+        if part:
+            self._part.append((part, tag))
 
     def handle_endtag(self, tag):
+        if self._part and self._part[-1][1] == tag:
+            self._part.pop()
         if tag == "a" and self.depth:
             self.depth -= 1
 
     def handle_data(self, data):
         if self.depth and self.rows:
-            self.rows[-1][2].append(data)
+            self.rows[-1]["text"].append(data)
+            for part, _tag in self._part:
+                self.rows[-1][part].append(data)
+
+
+def _norm(parts) -> str:
+    return re.sub(r"\s+", " ", "".join(parts)).strip()
+
+
+def row_details(html: str) -> list[dict]:
+    p = Rows()
+    p.feed(html)
+    return [{k: (_norm(v) if isinstance(v, list) else v) for k, v in r.items()} for r in p.rows]
 
 
 def rows_of(html: str) -> tuple[list[tuple], bool]:
+    """(destination, product id, title) per row: what the SELECTION decides. The words printed
+    beside the title are GROWTH-1C's and are held by [V], not by the frozen loop."""
     p = Rows()
     p.feed(html)
-    return [(h, pid, re.sub(r"\s+", " ", "".join(t)).strip()) for h, pid, t in p.rows], p.empty
+    return [(r["href"], r["pid"], _norm(r["title"])) for r in p.rows], p.empty
 
 
 # ------------------------------------------------------------------------------- sections
@@ -578,7 +621,7 @@ def section_p(out: dict, real_count: int) -> None:
         old_rows, old_empty = rows_of(old_html)
         ok_render = not new_html.startswith("<<ERR") and not old_html.startswith("<<ERR")
         check(f"P {name}: both selections render", ok_render, new_html[:200] + " / " + old_html[:200])
-        check(f"P {name}: identical rows, order, destinations, product ids and text ({len(new_rows)} rows)",
+        check(f"P {name}: identical rows, order, destinations, product ids and titles ({len(new_rows)} rows)",
               ok_render and new_rows == old_rows and new_empty == old_empty,
               f"new={new_rows[:4]} old={old_rows[:4]}")
         check(f"P {name}: the corpus reaches the case it was built for ({expected} rows"
@@ -754,12 +797,12 @@ def section_d(out: dict, real: list[dict]) -> None:
     check("D3 the sections are real headings: trackers, signals, then everything else", h2 == want_h2, str(h2))
 
     links = [(h, norm(t), a, primary) for h, t, a, primary in o.links]
-    pos = {m: html.find(m) for m in ("<h1", 'data-home-tracker>', "data-home-patch-signal", 'id="home-also-title"',
+    pos = {m: html.find(m) for m in ("<h1", 'class="home-tracker-link"', "data-home-patch-signal", 'id="home-also-title"',
                                      'id="home-monitor-title"', 'id="home-coverage-title"', 'id="home-articles-title"')}
     order = list(pos.values())
     check("D4 document order: question, trackers, signals, then Systems Monitor, coverage and articles",
           all(v >= 0 for v in order) and order == sorted(order), str(pos))
-    hero = html[pos["<h1"]:pos['data-home-tracker>']] if min(order) >= 0 else ""
+    hero = html[pos["<h1"]:pos['class="home-tracker-link"']] if min(order) >= 0 else ""
     check("D5 the hero's entrances lead to the Patch Feed, My Patch Stack and the methodology",
           all(f'href="{u}"' in hero for u in ("/updates/", "/updates/my-stack/", "/updates/methodology/")), hero[-600:])
 
@@ -785,8 +828,7 @@ def section_d(out: dict, real: list[dict]) -> None:
     check("D10 Systems Monitor and Articles stay reachable from the page body too",
           any(h == "/systems-monitor/" and not p for h, _t, _a, p in links)
           and any(h.startswith("/articles/") and not p for h, _t, _a, p in links))
-    # The signal rows keep their existing wording (GROWTH-1A does not touch evidence language); the copy
-    # this change wrote around them claims no certainty.
+    # The words inside the signal rows are held by [V]; the copy written around them claims no certainty.
     written = re.sub(r"<a [^>]*data-home-patch-signal.*?</a>", "", html, flags=re.S)
     visible = re.sub(r"<[^>]+>", " ", re.sub(r"<(script|style)\b.*?</\1>", "", written, flags=re.S))
     hits = sorted(set(m.group(0).lower() for m in NO_CERTAINTY.finditer(visible)))
@@ -796,6 +838,209 @@ def section_d(out: dict, real: list[dict]) -> None:
     column_at = html.find('class="home-signals-column"')
     check("D12 the signal list sits in the main column of the first dashboard, not an aside",
           0 <= column_at < signals_at < pos['id="home-also-title"'], f"column={column_at} list={signals_at}")
+
+
+# ------------------------------------------------------------------------------- [V] verdict rows
+UPDATE_LAYOUT = _LAYOUTS / "aux-update.html"
+STATE_INCLUDE = _INCLUDES / "patch-evidence-state.html"
+DECISION_INCLUDE = _INCLUDES / "patch-decision.html"
+TRACKER_INCLUDE = _INCLUDES / "home-tracker-item.html"
+VERDICTS = yaml.safe_load((_AUX / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8"))
+PAGE_HEAD_END = "{% assign summary_text"
+VERDICT_PROBE = "@@VERDICT[{{ decision_label }}|{{ evidence_state }}|{{ evidence_state_class }}]"
+NOTES = "https://vendor.test/release-notes"
+SENTIMENT = {"update_consensus_label": "Negative", "community_reaction": "Positive", "current_consensus": "Mixed"}
+PILOT = {"evidence_state": "pilot_sample", "intelligence_stage": "pilot"}
+
+# name: (record fields, verdict the patch page prints, its evidence state, its box class).
+# Every record is featured and is its own product, so each one is a homepage row. The expected words
+# are written out so the page and the row cannot be wrong together.
+VERDICT_CASES = {
+    "stored-wait": (dict(update_decision_label="WAIT", update_report_count=5, **PILOT, **SENTIMENT),
+                    "WAIT", "Verified reports", "pilot"),
+    "test-first": (dict(update_decision_label="TEST FIRST", update_report_count=1, **PILOT),
+                   "TEST FIRST", "Verified reports", "pilot"),
+    "legacy-phrase": (dict(update_decision_label="WAIT for production systems", update_report_count=4, **PILOT),
+                      "WAIT for production systems", "Verified reports", "pilot"),
+    "refused-label": (dict(update_decision_label="SHIP IT", update_report_count=4, **PILOT),
+                      "INSUFFICIENT DATA", "Verified reports", "pilot"),
+    "from-summary": (dict(update_decision_label="", update_consensus_summary="TEST FIRST: early reports",
+                          update_report_count=2, **PILOT), "TEST FIRST", "Verified reports", "pilot"),
+    "from-quick-verdict": (dict(update_decision_label="", update_consensus_summary="", quick_verdict="WAIT: hold off",
+                                update_report_count=2, **PILOT), "WAIT", "Verified reports", "pilot"),
+    "official-rescue": (dict(update_decision_label="WAIT", update_source_url=NOTES, official_active_issue_count=1,
+                             **SENTIMENT), "INSUFFICIENT DATA", "Official source only", "official"),
+    "security-rescue": (dict(update_decision_label="", update_security_sensitive=True,
+                             official_patch_notes_body="Security fixes.", official_safeguard_hold_count=1),
+                        "INSUFFICIENT DATA", "Official source only", "official"),
+    # Nothing official was captured, so the page's own rung says Insufficient data -- not the stored
+    # official_only the maturity contract alone would print -- and the stored WAIT is not rescued.
+    "nothing-captured": (dict(update_decision_label="WAIT", known_issues_present=True),
+                         "WAIT", "Insufficient data", "insufficient"),
+    "certified-live": (dict(update_decision_label="WAIT", update_report_count=9, evidence_state="consensus_live",
+                            intelligence_stage="consensus_live"), "WAIT", "Live consensus", "live"),
+    "uncertified-live": (dict(update_decision_label="TEST FIRST", update_report_count=6,
+                              consensus_collection_status="consensus_live"), "TEST FIRST", "Verified reports", "pilot"),
+}
+VERDICT_LIVE = {"urls": ["/updates/t/v-certified-live/"]}
+
+
+def verdict_records() -> list[list[dict]]:
+    """The cases as homepage corpora of at most 10 products each (the row limit)."""
+    recs = [rec(f"v-{name}", BASE_T - i * DAY, product_id=f"v-{name}", homepage_featured=True, **fields)
+            for i, (name, (fields, _v, _s, _c)) in enumerate(VERDICT_CASES.items())]
+    return [recs[:6], recs[6:]]
+
+
+def page_head() -> str:
+    src = body(UPDATE_LAYOUT)
+    end = src.find(PAGE_HEAD_END)
+    if end < 0:
+        raise AssertionError("aux-update.html no longer carries the summary_text marker after its verdict")
+    return src[:end] + VERDICT_PROBE
+
+
+def page_verdict(html: str) -> tuple | None:
+    m = re.search(r"@@VERDICT\[(.*?)\|(.*?)\|(.*?)\]", html)
+    return m.groups() if m else None
+
+
+def section_v(out: dict) -> None:
+    print("\n[V] each signal row prints its patch page's own verdict and evidence state")
+    rows = {}
+    for i in range(2):
+        for r in row_details(out.get(f"verdict:home:{i}", {}).get("html", "")):
+            rows[r["href"]] = r
+    pages, rendered, wrong_page, wrong_row, wrong_state = {}, True, [], [], []
+    for name, (_f, verdict, state, cls) in VERDICT_CASES.items():
+        html = out.get(f"verdict:page:{name}", {}).get("html", "<<missing>>")
+        rendered = rendered and not html.startswith("<<ERR")
+        got = page_verdict(html)
+        pages[name] = got
+        if got != (verdict, state, cls):
+            wrong_page.append((name, got))
+        row = rows.get(f"/updates/t/v-{name}/")
+        if not row or row["verdict"] != f"Verdict: {verdict}":
+            wrong_row.append((name, row and row["verdict"]))
+        if not row or row["state"] != state or (row["dot"] or "").split()[-1:] != [f"home-patch-dot--{cls}"]:
+            wrong_state.append((name, row and (row["state"], row["dot"])))
+    n = len(VERDICT_CASES)
+    check(f"V1 the shipped patch page renders each case's verdict and evidence state ({n} cases)",
+          rendered and not wrong_page, str(wrong_page)[:600])
+    check(f"V2 every homepage row prints the verdict its patch page prints ({len(rows)} rows)",
+          len(rows) == n and not wrong_row, str(wrong_row)[:600])
+    check("V3 ...and the page's evidence state, with the dot in that state's class",
+          len(rows) == n and not wrong_state, str(wrong_state)[:600])
+
+    texts = [r["text"] for r in rows.values()]
+    sentiment = sorted({w for t in texts for w in ("Negative", "Positive", "Mixed") if w in t})
+    home = COMMENT_RE.sub("", body(HOME_LAYOUT))
+    legacy = [f for f in ("update_consensus_label", "community_reaction", "current_consensus", "consensus_key")
+              if f in home]
+    check("V4 no row prints the stored sentiment, and the homepage no longer reads it",
+          len(texts) == n and not sentiment and not legacy, f"printed={sentiment} read={legacy}")
+
+    counted = {name: rows.get(f"/updates/t/v-{name}/", {}).get("text", "") for name in ("stored-wait", "test-first")}
+    real_html = out.get("page:real", {}).get("html", "")
+    causal = re.compile(r"\b(confirmed|caused|causes|broke|breaks|due to|because of)\b", re.I)
+    check("V5 counted reports read 'N user reports counted for this release' (singular at 1)",
+          "• 5 user reports counted for this release" in counted["stored-wait"]
+          and "• 1 user report counted for this release" in counted["test-first"], str(counted))
+    real_rows = row_details(real_html)
+    hits = sorted({m.group(0).lower() for r in real_rows + list(rows.values()) for m in causal.finditer(r["text"])})
+    check("V6 no row on the real or synthetic homepage claims confirmation or causation, and the old phrase is gone",
+          bool(real_rows) and not hits and "confirmed community report" not in real_html, str(hits))
+
+    inc = re.findall(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=(\w+)\s*-?%\}", home)
+    capture = re.search(r"\{%-?\s*capture\s+\w+\s*-?%\}\{% include patch-evidence-state\.html record=item %\}"
+                        r"\{% include patch-decision\.html record=item %\}\{%-?\s*endcapture\s*-?%\}", home)
+    check("V7 the homepage renders the verdict through the patch page's two includes, once, inside a capture",
+          sorted(inc) == [("patch-decision", "item"), ("patch-evidence-state", "item")] and capture is not None,
+          str(inc))
+    own = [t for t in ("update_decision_label", "update_consensus_summary", "quick_verdict", "patch_verdicts",
+                       "'INSUFFICIENT DATA'", "'Official source only'", "'Verified reports'", "'Live consensus'",
+                       "assign decision_label", "assign evidence_state") if t in home]
+    check("V8 the homepage decides no verdict or evidence state of its own (no ladder input, word or assignment)",
+          not own, str(own))
+    upd = COMMENT_RE.sub("", body(UPDATE_LAYOUT))
+    upd_inc = re.findall(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=(\w+)\s*-?%\}", upd)
+    upd_own = [t for t in ("assign decision_label", "assign evidence_state", "assign official_captured",
+                           "update_consensus_summary", "verdict_vocab") if t in upd]
+    check("V9 the patch page decides through the same two includes, once each, and keeps no copy of either",
+          sorted(upd_inc) == [("patch-decision", "page"), ("patch-evidence-state", "page")] and not upd_own,
+          f"includes={upd_inc} own={upd_own}")
+    page_lines = [ln.strip() for ln in upd.split("\n")]
+    want = ["{% assign report_count = page.update_report_count | default: 0 | plus: 0 %}",
+            "{% assign confirmed_report_count = page.confirmed_patch_specific_report_count | default: report_count | plus: 0 %}",
+            "{% assign report_bearing_count = report_count %}",
+            "{% if report_bearing_count == 0 and confirmed_report_count > 0 %}{% assign report_bearing_count = confirmed_report_count %}{% endif %}"]
+    home_lines = [ln.strip() for ln in home.split("\n")]
+    missing = [w for w in want if w not in page_lines or w.replace("page.", "item.") not in home_lines]
+    check("V10 the counts the decision reads are set on the homepage by the patch page's own lines (page as item)",
+          not missing, str(missing))
+    silent = {k: out.get(f"verdict:silent:{k}", {}).get("html", "<<missing>>") for k in ("state", "decision")}
+    check("V11 both includes print nothing but whitespace, so no stray text reaches a patch page",
+          all(v.startswith("[") and v.endswith("]") and not v[1:-1].strip() for v in silent.values()),
+          str({k: v[:120] for k, v in silent.items()}))
+
+
+def section_t(out: dict, real: list[dict]) -> None:
+    print("\n[T] each product tracker says where its updates come from")
+    html = out.get("page:real", {}).get("html", "")
+    products = {p["product_url"]: p for p in yaml.safe_load((_AUX / "_data" / "patch_products.yml")
+                                                           .read_text(encoding="utf-8"))}
+    items = re.findall(r'<li class="home-tracker-item">(.*?)</li>', html, re.S)
+    chip = re.compile(r'<a class="home-tracker-link" href="([^"]+)" data-home-tracker><span class="home-tracker-name">'
+                      r'([^<]*)</span><span class="home-tracker-desc" data-home-tracker-desc>([^<]*)</span></a>')
+    wrong, outside = [], []
+    for item in items:
+        m = chip.fullmatch(item.strip())
+        if not m:
+            outside.append(item.strip()[:160])
+            continue
+        product = products.get(m.group(1)) or {}
+        if m.group(2) != product.get("product_name") or m.group(3) != str(product.get("source_label") or "").strip():
+            wrong.append(m.groups())
+    want = expected_trackers(real)
+    check(f"T1 every tracker names its product and, under it, the source_label the product data gives it "
+          f"({len(items)} trackers)", len(items) == len(want) and not wrong and not outside, str(wrong)[:400])
+    check("T2 ...inside the one link to the product page, so it adds no second target and no text outside it",
+          bool(items) and not outside, str(outside)[:300])
+    none = out.get("tracker:no-source", {}).get("html", "<<missing>>")
+    check("T3 a product with no source_label shows its name alone, rather than an invented line",
+          re.fullmatch(r'<a class="home-tracker-link" href="/updates/x/x/" data-home-tracker>'
+                       r'<span class="home-tracker-name">X</span></a>', none.strip()) is not None, none[:300])
+    rows = [r["href"] for r in row_details(html)]
+    trackers = re.findall(r'<a class="home-tracker-link" href="([^"]+)"', html)
+    orphans = [h for h in rows if not any(h.startswith(t) and h != t for t in trackers)]
+    check("T4 every signal row's patch page sits under a product tracker the homepage links "
+          "(home -> product -> exact patch)", bool(rows) and not orphans, str(orphans))
+
+
+def verdict_jobs() -> tuple[dict, dict]:
+    """Render jobs and corpora for [V] and [T]."""
+    site = {"data": {"patch_verdicts": VERDICTS, "live_eligibility": VERDICT_LIVE}, "time": FIXED_TIME}
+    jobs, corpora = {}, {}
+    block = shipped_block() + TRAILER
+    for i, recs in enumerate(verdict_records()):
+        corpora[f"verdict:{i}"] = recs
+        jobs[f"verdict:home:{i}"] = {"template": block, "corpus": f"verdict:{i}", "site": site}
+    head = page_head()
+    for i, recs in enumerate(verdict_records()):
+        for r in recs:
+            name = r["url"].split("/")[-2][2:]
+            jobs[f"verdict:page:{name}"] = {"template": head, "corpus": "none", "site": site, "page": r}
+    some = verdict_records()[0][0]
+    jobs["verdict:silent:state"] = {"template": "[{% include patch-evidence-state.html record=page %}]",
+                                    "corpus": "none", "site": site, "page": some}
+    jobs["verdict:silent:decision"] = {
+        "template": "{% capture pre %}{% include patch-evidence-state.html record=page %}{% endcapture %}"
+                    "{% assign report_count = 5 %}{% assign report_bearing_count = 5 %}"
+                    "[{% include patch-decision.html record=page %}]",
+        "corpus": "none", "site": site, "page": some}
+    jobs["tracker:no-source"] = {"template": "{% include home-tracker-item.html tracker=page %}", "corpus": "none",
+                                 "site": site, "page": {"id": "x", "product_name": "X", "product_url": "/updates/x/x/"}}
+    return jobs, corpora
 
 
 PROBE = ("{% assign g = list | group_by_exp: \"x\", \"x.k | downcase | replace: ' ', '-'\" %}"
@@ -830,6 +1075,9 @@ def main() -> int:
     jobs["probe:real"] = {"template": scoring, "corpus": "real", "site": plain}
     jobs["page:real"] = {"template": body(HOME_LAYOUT), "base": body(BASE_LAYOUT), "corpus": "real",
                          "site": real_site(), "page": {"layout": "aux-home", "url": "/", "title": "Home"}}
+    v_jobs, v_corpora = verdict_jobs()
+    jobs.update(v_jobs)
+    corpora.update(v_corpora)
     out = render(jobs, corpora)
 
     section_h(out)
@@ -837,6 +1085,8 @@ def main() -> int:
     section_b(out)
     section_i()
     section_d(out, real)
+    section_v(out)
+    section_t(out, real)
     print("\n  (render seconds: " + ", ".join(f"{k}={v.get('seconds', 0):.1f}" for k, v in out.items())
           + f"; total {time.time() - started:.1f}s)")
     print()

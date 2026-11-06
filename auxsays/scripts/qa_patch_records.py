@@ -35,6 +35,10 @@ PRODUCTS_PATH = ROOT / "_data" / "patch_products.yml"
 SOURCES_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 UPDATE_LAYOUT_PATH = ROOT / "_layouts" / "aux-update.html"
+# The patch page's maturity rung and decision ladder live in these two includes, which aux-update.html
+# renders (and the homepage renders too). Their text is the layout's text for the public-copy scan:
+# a phrase moved into one of them is still on every patch page.
+UPDATE_LAYOUT_INCLUDES = (ROOT / "_includes" / "patch-evidence-state.html", ROOT / "_includes" / "patch-decision.html")
 
 # The maturity vocabulary is owned by lib.maturity (canonical words plus the legacy words a stored
 # record may still carry); QA reads it rather than keeping a fourth copy.
@@ -594,6 +598,11 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         return errors, warnings
 
     text = UPDATE_LAYOUT_PATH.read_text(encoding="utf-8")
+    for include in UPDATE_LAYOUT_INCLUDES:
+        if not include.exists():
+            add(errors, include, "missing_update_layout_include", f"{include.name}, rendered by aux-update.html, is missing.")
+            continue
+        text += "\n" + include.read_text(encoding="utf-8")
     forbidden_public_copy = {
         "Record Note": "Record notes must be folded into the verdict context, not rendered as a standalone card.",
         "Sample size": "Sample size should not render as a standalone public field.",

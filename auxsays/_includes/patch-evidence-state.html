@@ -1,0 +1,38 @@
+{%- comment -%}
+  THE PATCH PAGE'S EVIDENCE STATE (GROWTH-1C). The rung that decides which maturity a patch page's
+  verdict box shows, moved here unchanged so the homepage can show the same state for a record
+  instead of a sentiment word. It is not a second rung: aux-update.html renders this file.
+
+  Maturity comes from the shared contract (maturity-state.html), never from a reading of the stored
+  fields: a stored live claim is live only while the deploy-time eligibility projection certifies
+  it, and otherwise reads as Verified reports, as it does on every other surface. Below the pilot
+  rung the patch page keeps its own rule: official only when an official source was captured, that
+  is a vendor source URL, a release-notes URL or a captured release-notes body.
+
+  Input:   include.record, a patch page (page) or a site.pages item.
+  Outputs: evidence_state        'Live consensus' | 'Verified reports' | 'Official source only' |
+                                 'Insufficient data'
+           evidence_state_class  live | pilot | official | insufficient
+           official_captured     true when one of the three official fields is non-blank
+           and every output of maturity-state.html for the same record.
+
+  WHITESPACE. The lines below keep the line structure they had inside aux-update.html, so the patch
+  page emits exactly the bytes it emitted before (proved over every patch page when this moved).
+  A caller that must print nothing wraps the include in a capture, as the homepage does.
+{%- endcomment -%}
+{%- assign pes_record = include.record -%}
+{% assign official_captured = false %}
+{% assign pes_source_url = pes_record.update_source_url | default: '' | strip %}{% assign pes_notes_url = pes_record.official_patch_notes_source_url | default: '' | strip %}{% assign pes_notes_body = pes_record.official_patch_notes_body | default: '' | strip %}{% if pes_source_url != '' or pes_notes_url != '' or pes_notes_body != '' %}{% assign official_captured = true %}{% endif %}
+{% include maturity-state.html record=pes_record %}
+{% assign evidence_state = 'Insufficient data' %}
+{% assign evidence_state_class = 'insufficient' %}
+{% if maturity_class == 'live' %}
+  {% assign evidence_state = 'Live consensus' %}
+  {% assign evidence_state_class = 'live' %}
+{% elsif maturity_class == 'pilot' %}
+  {% assign evidence_state = 'Verified reports' %}
+  {% assign evidence_state_class = 'pilot' %}
+{% elsif official_captured %}
+  {% assign evidence_state = 'Official source only' %}
+  {% assign evidence_state_class = 'official' %}
+{% endif %}{%- comment -%} This file ends inside this tag, so it adds no final newline to the page. {%- endcomment -%}
