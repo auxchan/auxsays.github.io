@@ -95,6 +95,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
 | AUX-078 | Resolved | Evidence integrity | Medium | A Microsoft Q&A question re-found under an edited title was counted twice on one patch |
+| AUX-089 | Resolved | Publication | Medium | Search titles and descriptions of every patch page hid the decision behind "official update breakdown" |
 
 ---
 
@@ -4864,6 +4865,47 @@ withdrawal of its own, or a Windows patch counts one Microsoft Q&A question twic
 different attribution approach shows better precision without refusing genuine reports.
 
 ---
+
+---
+
+### AUX-089 — Search titles and descriptions of every patch page hid the decision behind "official update breakdown"
+
+- **Status** Resolved · **Area** Publication · **Severity** Medium
+- **First seen** 2026-11-06 · **Resolved** 2026-11-06 (merge only after the live-evidence withdrawal; production titles to be confirmed after that deploy)
+
+**Symptom** All 1,527 patch pages were titled "<product> <version> official update breakdown" and described as
+"Official <product> update record captured from <source>": the writers' front-matter defaults, printed by the
+site-wide SEO tag. 0 of the 235 report-bearing pages carried their verdict in the title, and 0 of the 96 Windows
+pages that record a KB carried it, although searchers look for exact KBs and "should I install" answers.
+
+**Cause** The head of every page came from the jekyll-seo-tag `seo` tag, which can only print `page.title` and
+`page.description`. The verdict is decided at render time by the patch page's own ladder in `aux-update.html`, and
+nothing carried it to the head.
+
+**Fix (templates only)** `_includes/patch-search-meta.html` writes the title and meta description of an
+`aux-update` page from what that page itself rendered: `aux-base.html` receives the finished page as `content`,
+so the include reads the verdict under "AUXSAYS verdict", the verdict-box class, the early-evidence sentence, the
+first recommendation sentence and the h1. It chooses nothing: no second verdict authority, and no change to
+`aux-update.html`, to records, writers or `patch_decision.py`. Wording: "<identity>: <VERDICT>, <n> user reports";
+"on early evidence" where the page says so; "live consensus" only when the page's box is live AND the render-time
+eligibility projection certifies the record; "no verdict yet" for INSUFFICIENT DATA; the exact `target_kb` for
+Windows ("Windows 11 KB… (25H2, Build …)"). Supersession is not labelled: no record field names a replacement, and a
+later build or date alone does not prove one. The include emits the same tag set the SEO tag emits for these pages
+(canonical computed the same way); every other page, and a patch page whose verdict cannot be read back exactly
+once, keeps the unchanged SEO tag.
+
+**Measured** Full local Jekyll builds of origin/main 6d4dec25 and of the branch, both with the deploy projections
+(6 of 6 live certified), compared page by page. Report-bearing titles carrying the page's own verdict: 0 → 235 of
+235 (0 mismatches); Windows titles with their KB: 0 → 96 of 96; INSUFFICIENT DATA pages claiming a verdict: 0 of
+1,292; live wording: 6 titles, exactly the 6 certified pages; 1 title, 1 description and 1 canonical on all 1,527.
+Canonicals, h1s, rendered verdicts and every page body unchanged on all 1,527; the other 296 built files are
+byte-identical, apart from the build timestamp in 4 of them (about, articles, feed.xml, sitemap.xml). `test_patch_decision_authority.py` [S] adds S1-S25 (180 → 205); 12 of 12
+single-change mutants are caught by a named check.
+
+**Reopen only if** a built patch page's title or description names a verdict other than the one its body prints,
+carries live wording while its body does not show a certified live box, carries a decision word on an INSUFFICIENT
+DATA page, or a Windows page with a `target_kb` omits it; or `_config.yml` gains a setting the SEO tag reacts to
+(twitter, facebook, webmaster verifications, logo, author, image) without the include mirroring it (S24 fails).
 
 ---
 

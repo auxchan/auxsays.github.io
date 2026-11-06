@@ -1,0 +1,158 @@
+{%- comment -%}
+  THE SEARCH TITLE AND META DESCRIPTION OF A PATCH PAGE (GROWTH-1B), one include for both.
+
+  WHY. Every patch page was titled "<product> <version> official update breakdown" and described as
+  "Official <product> update record captured from <source>", the writer's front-matter defaults that
+  the site-wide SEO tag prints. A search result therefore never said what the page exists to say,
+  whether to install the update, and 0 of the 96 Windows titles carried the KB people search for.
+
+  NO SECOND VERDICT AUTHORITY. This include does not choose a verdict and does not re-run the
+  decision ladder. It reads what the patch page itself just rendered: aux-base receives the finished
+  aux-update markup as `content`, so the verdict is the text under the page's own "AUXSAYS verdict"
+  eyebrow, the maturity is the page's own verdict-box class, the early-evidence qualifier is the
+  page's own sentence, the recommendation is the page's own first sentence, and the identity is the
+  page's own h1. A search result cannot claim a verdict the page does not print, because there is
+  only one place the verdict is decided.
+
+  LIVE WORDING NEEDS A CERTIFICATE AT RENDER TIME. The words "live consensus" appear only when the
+  page's box reads live AND the shared maturity contract, which reads the deploy-time live
+  eligibility projection, certifies the record now. A stored live claim the projection no longer
+  lists reads as verified reports here exactly as it does on the page, so titles follow the
+  corrected live set with no change to this file.
+
+  HONEST STATES. INSUFFICIENT DATA prints "no verdict yet", never a decision word and never a claim
+  that nothing is wrong; zero counted reports is stated as zero counted reports. A decision word is
+  printed exactly as the page's verdict resolves (a legacy phrasing prints its canonical action).
+  No safety claim is added beyond the page's own verdict and recommendation.
+
+  SUPERSESSION IS NOT LABELLED. No record field names a replacement update, and a higher build or a
+  later date alone does not prove one, so no title or description calls a page superseded.
+
+  FAIL CLOSED. If the page markup does not carry exactly one verdict, one verdict box and one h1, or
+  the verdict is outside the published vocabulary, this include emits nothing and the base layout
+  falls back to the unchanged site-wide SEO tag.
+
+  OUTPUT. Sets patch_search_emitted. When true it has emitted the same tags the site-wide SEO tag
+  emits for a patch page (title, generator, og:title, og:locale, description, og:description,
+  canonical, og:url, og:site_name, og:type, twitter:card, twitter:title, JSON-LD WebPage), with the
+  canonical URL computed exactly as that tag computes it. The tag reacts to site settings this file
+  does not read (twitter, facebook, webmaster verifications, a site logo or image);
+  test_patch_decision_authority S24 pins that none is configured, so adding one fails a check
+  instead of silently diverging.
+
+  The heading is found by its class alone and cut at the next closing tag, so this file never
+  contains a literal heading element: test_patch_heading_contrast R5 reads every include as markup
+  and would otherwise take the search anchor for a heading this file emits.
+{%- endcomment -%}
+{%- assign patch_search_emitted = false -%}
+{%- assign psm_record = include.record -%}
+{%- assign psm_verdict_parts = content | split: '<span class="update-decision-eyebrow">AUXSAYS verdict</span>' -%}
+{%- assign psm_box_parts = content | split: 'class="update-decision-box update-decision-box--' -%}
+{%- assign psm_h1_parts = content | split: 'class="update-title">' -%}
+{%- if psm_verdict_parts.size == 2 and psm_box_parts.size == 2 and psm_h1_parts.size == 2 -%}
+  {%- assign psm_label = psm_verdict_parts[1] | split: '</strong>' | first | split: '<strong>' | last | strip_html | strip_newlines | strip -%}
+  {%- assign psm_box = psm_box_parts[1] | split: '"' | first | strip -%}
+  {%- assign psm_h1 = psm_h1_parts[1] | split: '</' | first | strip_html | strip_newlines | strip -%}
+  {%- assign psm_vocab = site.data.patch_verdicts -%}
+  {%- assign psm_alias = psm_vocab.legacy_aliases[psm_label] -%}
+  {%- if psm_alias -%}{%- assign psm_action = psm_alias -%}{%- else -%}{%- assign psm_action = psm_label -%}{%- endif -%}
+  {%- assign psm_known = false -%}
+  {%- for psm_known_action in psm_vocab.risk_order -%}
+    {%- if psm_known_action == psm_action -%}{%- assign psm_known = true -%}{%- break -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if psm_known and psm_h1 != '' -%}
+    {%- include maturity-state.html record=psm_record -%}
+    {%- assign psm_live = false -%}
+    {%- if psm_box == 'live' and maturity_live -%}{%- assign psm_live = true -%}{%- endif -%}
+    {%- assign psm_early = false -%}
+    {%- if content contains 'treat this as early evidence' -%}{%- assign psm_early = true -%}{%- endif -%}
+    {%- assign psm_count = psm_record.update_report_count | default: 0 | plus: 0 -%}
+    {%- capture psm_reports -%}{{ psm_count }} user report{% unless psm_count == 1 %}s{% endunless %}{%- endcapture -%}
+    {%- assign psm_kb = psm_record.target_kb | default: '' | strip -%}
+    {%- assign psm_product = psm_record.update_product | default: '' | strip -%}
+    {%- assign psm_version = psm_record.update_version | default: '' | strip -%}
+    {%- assign psm_build = psm_record.target_build | default: '' | strip -%}
+    {%- assign psm_identity = psm_h1 -%}
+    {%- if psm_kb != '' -%}
+      {%- if psm_product != '' and psm_version != '' and psm_build != '' -%}
+        {%- capture psm_identity -%}{{ psm_product }} {{ psm_kb }} ({{ psm_version }}, Build {{ psm_build }}){%- endcapture -%}
+      {%- else -%}
+        {%- capture psm_identity -%}{{ psm_h1 }} ({{ psm_kb }}){%- endcapture -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- assign psm_released = '' -%}
+    {%- assign psm_published = psm_record.update_published_at | default: '' | strip -%}
+    {%- if psm_published != '' -%}{%- assign psm_released = psm_published | date: "%b %-d, %Y" -%}{%- endif -%}
+    {%- assign psm_sentence = '' -%}
+    {%- assign psm_body_parts = content | split: '<p class="update-decision-recommendation">' -%}
+    {%- if psm_body_parts.size == 2 -%}
+      {%- assign psm_body = psm_body_parts[1] | split: '</p>' | first | strip_html | strip_newlines | strip -%}
+      {%- assign psm_sentence = psm_body | split: '. ' | first | strip -%}
+      {%- if psm_sentence != '' -%}
+        {%- assign psm_last = psm_sentence | slice: -1 -%}
+        {%- unless psm_last == '.' or psm_last == '!' or psm_last == '?' -%}{%- assign psm_sentence = psm_sentence | append: '.' -%}{%- endunless -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- if psm_action == 'INSUFFICIENT DATA' -%}
+      {%- if psm_count > 0 -%}
+        {%- capture psm_title -%}{{ psm_identity }}: no verdict yet, {{ psm_reports }} so far{%- endcapture -%}
+        {%- capture psm_description -%}{{ psm_reports }} matched to {{ psm_identity }} so far, too few for an AUXSAYS verdict yet.{% if psm_released != '' %} Released {{ psm_released }}.{% endif %}{%- endcapture -%}
+      {%- elsif psm_box == 'official' -%}
+        {%- capture psm_title -%}{{ psm_identity }}: official notes, no verdict yet{%- endcapture -%}
+        {%- capture psm_description -%}Official release notes for {{ psm_identity }}{% if psm_released != '' %}, released {{ psm_released }}{% endif %}. No user reports have been counted for this update yet, so there is no AUXSAYS verdict.{%- endcapture -%}
+      {%- else -%}
+        {%- capture psm_title -%}{{ psm_identity }}: no verdict yet{%- endcapture -%}
+        {%- capture psm_description -%}{{ psm_identity }}{% if psm_released != '' %}, released {{ psm_released }}{% endif %}. No user reports have been counted for this update yet, so there is no AUXSAYS verdict.{%- endcapture -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- if psm_count == 0 -%}
+        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_action }}, no user reports counted{%- endcapture -%}
+        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_action }}. No user reports have been counted for this update yet.{%- endcapture -%}
+      {%- elsif psm_live -%}
+        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_action }}, live consensus of {{ psm_reports }}{%- endcapture -%}
+        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_action }}, live consensus of {{ psm_reports }} matched to this update.{%- endcapture -%}
+      {%- elsif psm_early -%}
+        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_action }} on early evidence, {{ psm_reports }}{%- endcapture -%}
+        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_action }} on early evidence, {{ psm_reports }} matched to this update.{%- endcapture -%}
+      {%- else -%}
+        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_action }}, {{ psm_reports }}{%- endcapture -%}
+        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_action }}, from {{ psm_reports }} matched to this update.{%- endcapture -%}
+      {%- endif -%}
+      {%- capture psm_description -%}{{ psm_lead }}{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{%- endcapture -%}
+    {%- endif -%}
+    {%- assign psm_title = psm_title | strip_html | strip_newlines | strip | escape_once -%}
+    {%- assign psm_description = psm_description | strip_html | strip_newlines | strip | escape_once -%}
+    {%- assign psm_site_title = site.title | default: 'AUXSAYS' | strip_html | strip | escape_once -%}
+    {%- assign psm_canonical = psm_record.canonical_url | default: '' | strip -%}
+    {%- if psm_canonical == '' -%}
+      {%- assign psm_canonical = psm_record.url | absolute_url -%}
+      {%- assign psm_index_suffix = psm_canonical | slice: -11, 11 -%}
+      {%- if psm_index_suffix == '/index.html' -%}
+        {%- assign psm_keep = psm_canonical.size | minus: 10 -%}
+        {%- assign psm_canonical = psm_canonical | slice: 0, psm_keep -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- assign psm_canonical = psm_canonical | escape_once -%}
+    {%- assign psm_locale = psm_record.locale | default: site.locale | default: psm_record.lang | default: site.lang | default: 'en_US' | replace: '-', '_' | escape_once -%}
+    {%- assign psm_json_description = psm_description | jsonify | replace: '&', '&' | replace: '<', '<' | replace: '>', '>' -%}
+    {%- assign psm_json_headline = psm_title | jsonify | replace: '&', '&' | replace: '<', '<' | replace: '>', '>' -%}
+    {%- assign psm_json_url = psm_canonical | jsonify | replace: '&', '&' | replace: '<', '<' | replace: '>', '>' -%}
+    {%- assign patch_search_emitted = true -%}
+<!-- Patch page search metadata: title and description from the page's own verdict -->
+<title>{{ psm_title }} | {{ psm_site_title }}</title>
+<meta name="generator" content="Jekyll v{{ jekyll.version }}" />
+<meta property="og:title" content="{{ psm_title }}" />
+<meta property="og:locale" content="{{ psm_locale }}" />
+<meta name="description" content="{{ psm_description }}" />
+<meta name="twitter:description" property="og:description" content="{{ psm_description }}" />
+<link rel="canonical" href="{{ psm_canonical }}" />
+<meta property="og:url" content="{{ psm_canonical }}" />
+<meta property="og:site_name" content="{{ psm_site_title }}" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="{{ psm_title }}" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":{{ psm_json_description }},"headline":{{ psm_json_headline }},"url":{{ psm_json_url }}}</script>
+<!-- End patch page search metadata -->
+  {%- endif -%}
+{%- endif -%}

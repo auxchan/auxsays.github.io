@@ -268,7 +268,12 @@ auxsays/scripts/tests/test_davinci_archive_check.py = 76
 # feed. Proves the single authority by SUBSTITUTING it and watching every decision-bearing field
 # move, which a grep for the module name cannot do, and pins the decisions themselves so that
 # "make them agree" cannot drift into "make them lenient".
-auxsays/scripts/tests/test_patch_decision_authority.py = 180
+# [S] (GROWTH-1B) the search title and meta description: written from the verdict the patch page
+# itself rendered, never from stored fields, so a result cannot claim a verdict the page does not;
+# the exact Windows KB; "no verdict yet" for INSUFFICIENT DATA; live wording only with the page's
+# live box AND the render-time projection certificate; no supersession or safety claim; one title,
+# description and canonical; every other page keeps the site-wide SEO tag. Needs ruby + liquid.
+auxsays/scripts/tests/test_patch_decision_authority.py = 205
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93

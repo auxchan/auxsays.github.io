@@ -3,7 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% seo %}
+    {%- comment -%}
+      A patch page gets its search title and description from the verdict it just rendered
+      (_includes/patch-search-meta.html, GROWTH-1B); every other page, and a patch page whose
+      verdict cannot be read back, keeps the site-wide SEO tag exactly as before.
+    {%- endcomment %}
+    {% assign patch_search_emitted = false %}{% if page.layout == 'aux-update' %}{% include patch-search-meta.html record=page %}{% endif %}{% unless patch_search_emitted %}{% seo %}{% endunless %}
     <link rel="stylesheet" href="{{ '/assets/css/jekyll-theme-chirpy.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/auxsays-custom.css' | relative_url }}">
     <script>
