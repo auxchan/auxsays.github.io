@@ -67501,3 +67501,444 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-webcam-quality-bad-on-teams-desktop
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/webcam-quality-bad-on-teams-desktop-but-good-on-team-web/3130569
+  parent_title: Webcam quality bad on Teams desktop but good on Team web
+  report_title: Webcam quality bad on Teams desktop but good on Team web
+  report_text_excerpt: Webcam quality bad on Teams desktop but good on Team web Hello,Has anyone noticed the webcam quality in Teams desktop is bad vs Teams web? I am not sure if I am doing something wrong, but this is happening to me on the same computer with the same webcam.
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2022-02-07'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ability-to-take-personal-notes-on-i
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ability-to-take-personal-notes-on-interactions-in-teams/2237979
+  parent_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_text_excerpt: Ability to take Personal Notes on Interactions in TEAMS I have a lot of situations where I would like to take and keep personal notes associated to a specific TEAMS interactions. I don&apos;t want to have to keep my notes in a separate place like OneNote or...
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2021-03-26'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-webcam-quality-bad-on-teams-desktop
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/webcam-quality-bad-on-teams-desktop-but-good-on-team-web/3130569
+  parent_title: Webcam quality bad on Teams desktop but good on Team web
+  report_title: Webcam quality bad on Teams desktop but good on Team web
+  report_text_excerpt: Webcam quality bad on Teams desktop but good on Team web Hello,Has anyone noticed the webcam quality in Teams desktop is bad vs Teams web? I am not sure if I am doing something wrong, but this is happening to me on the same computer with the same webcam.
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2022-02-07'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ability-to-take-personal-notes-on-i
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ability-to-take-personal-notes-on-interactions-in-teams/2237979
+  parent_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_text_excerpt: Ability to take Personal Notes on Interactions in TEAMS I have a lot of situations where I would like to take and keep personal notes associated to a specific TEAMS interactions. I don&apos;t want to have to keep my notes in a separate place like OneNote or...
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2021-03-26'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-webcam-quality-bad-on-teams-desktop
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/webcam-quality-bad-on-teams-desktop-but-good-on-team-web/3130569
+  parent_title: Webcam quality bad on Teams desktop but good on Team web
+  report_title: Webcam quality bad on Teams desktop but good on Team web
+  report_text_excerpt: Webcam quality bad on Teams desktop but good on Team web Hello,Has anyone noticed the webcam quality in Teams desktop is bad vs Teams web? I am not sure if I am doing something wrong, but this is happening to me on the same computer with the same webcam.
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2022-02-07'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ability-to-take-personal-notes-on-i
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ability-to-take-personal-notes-on-interactions-in-teams/2237979
+  parent_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_text_excerpt: Ability to take Personal Notes on Interactions in TEAMS I have a lot of situations where I would like to take and keep personal notes associated to a specific TEAMS interactions. I don&apos;t want to have to keep my notes in a separate place like OneNote or...
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2021-03-26'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-webcam-quality-bad-on-teams-desktop
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/webcam-quality-bad-on-teams-desktop-but-good-on-team-web/3130569
+  parent_title: Webcam quality bad on Teams desktop but good on Team web
+  report_title: Webcam quality bad on Teams desktop but good on Team web
+  report_text_excerpt: Webcam quality bad on Teams desktop but good on Team web Hello,Has anyone noticed the webcam quality in Teams desktop is bad vs Teams web? I am not sure if I am doing something wrong, but this is happening to me on the same computer with the same webcam.
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2022-02-07'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ability-to-take-personal-notes-on-i
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ability-to-take-personal-notes-on-interactions-in-teams/2237979
+  parent_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_text_excerpt: Ability to take Personal Notes on Interactions in TEAMS I have a lot of situations where I would like to take and keep personal notes associated to a specific TEAMS interactions. I don&apos;t want to have to keep my notes in a separate place like OneNote or...
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2021-03-26'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-webcam-quality-bad-on-teams-desktop
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/webcam-quality-bad-on-teams-desktop-but-good-on-team-web/3130569
+  parent_title: Webcam quality bad on Teams desktop but good on Team web
+  report_title: Webcam quality bad on Teams desktop but good on Team web
+  report_text_excerpt: Webcam quality bad on Teams desktop but good on Team web Hello,Has anyone noticed the webcam quality in Teams desktop is bad vs Teams web? I am not sure if I am doing something wrong, but this is happening to me on the same computer with the same webcam.
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2022-02-07'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ability-to-take-personal-notes-on-i
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ability-to-take-personal-notes-on-interactions-in-teams/2237979
+  parent_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_text_excerpt: Ability to take Personal Notes on Interactions in TEAMS I have a lot of situations where I would like to take and keep personal notes associated to a specific TEAMS interactions. I don&apos;t want to have to keep my notes in a separate place like OneNote or...
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2021-03-26'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-webcam-quality-bad-on-teams-desktop
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/webcam-quality-bad-on-teams-desktop-but-good-on-team-web/3130569
+  parent_title: Webcam quality bad on Teams desktop but good on Team web
+  report_title: Webcam quality bad on Teams desktop but good on Team web
+  report_text_excerpt: Webcam quality bad on Teams desktop but good on Team web Hello,Has anyone noticed the webcam quality in Teams desktop is bad vs Teams web? I am not sure if I am doing something wrong, but this is happening to me on the same computer with the same webcam.
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2022-02-07'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ability-to-take-personal-notes-on-i
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ability-to-take-personal-notes-on-interactions-in-teams/2237979
+  parent_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_text_excerpt: Ability to take Personal Notes on Interactions in TEAMS I have a lot of situations where I would like to take and keep personal notes associated to a specific TEAMS interactions. I don&apos;t want to have to keep my notes in a separate place like OneNote or...
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2021-03-26'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-webcam-quality-bad-on-teams-desktop
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/webcam-quality-bad-on-teams-desktop-but-good-on-team-web/3130569
+  parent_title: Webcam quality bad on Teams desktop but good on Team web
+  report_title: Webcam quality bad on Teams desktop but good on Team web
+  report_text_excerpt: Webcam quality bad on Teams desktop but good on Team web Hello,Has anyone noticed the webcam quality in Teams desktop is bad vs Teams web? I am not sure if I am doing something wrong, but this is happening to me on the same computer with the same webcam.
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2022-02-07'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ability-to-take-personal-notes-on-i
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ability-to-take-personal-notes-on-interactions-in-teams/2237979
+  parent_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_text_excerpt: Ability to take Personal Notes on Interactions in TEAMS I have a lot of situations where I would like to take and keep personal notes associated to a specific TEAMS interactions. I don&apos;t want to have to keep my notes in a separate place like OneNote or...
+  captured_at: '2026-11-06T20:11:26Z'
+  source_date: '2021-03-26'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14165
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14165
+  parent_title: '[Linux] Video thread reports one skipped frame every 30.0 s on an idle session — `os_sleepto_ns()` uses a relative `nanosleep()`, so the video clock drifts by ~9 µs per frame'
+  report_title: '[Linux] Video thread reports one skipped frame every 30.0 s on an idle session — `os_sleepto_ns()` uses a relative `nanosleep()`, so the video clock drifts by ~9 µs per frame'
+  report_text_excerpt: 'ent on XWayland) ### Other OS Ubuntu 26.04, kernel 7.0.0 (2026-04) ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL ### OBS Studio Crash Log URL _No response_ ### Expected Behavior On an idle session (no stream, no recording, no re'
+  captured_at: '2026-11-06T20:45:50Z'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14163
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14163
+  parent_title: '[macOS Intel] ScreenCaptureKit preview black and throws video device access denied on macOS 26.6.2'
+  report_title: '[macOS Intel] ScreenCaptureKit preview black and throws video device access denied on macOS 26.6.2'
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS macOS 26.6.2 ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) 33.0.1 (Intel Build) ### OBS Studio Log URL https://obsproject.com/logs/pBlwtsIb7JwqDfBW ### OBS Studio Crash Log URL _No response_ ### Expected Behavio'
+  captured_at: '2026-11-06T20:46:42Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196836
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-nvenc-%E2%80%9Cinvalid-device%E2%80%9D-error-immediately-before-unexpected-windows-restart.196836/
+  parent_title: OBS NVENC “invalid device” error immediately before unexpected Windows restart
+  report_title: OBS NVENC “invalid device” error immediately before unexpected Windows restart
+  report_text_excerpt: Please help review this OBS log sequence. OBS 33.0.1 was running on Windows 11 Insider build 26300.9818 (26H2) with an NVIDIA GeForce RTX 4070 Ti SUPER and driver 32.0.16.2114. Battlefield 6 had reached its menu while OBS was open. At 2
+  captured_at: '2026-11-06T20:46:35Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196834
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-33-0-1-nvenc-%E2%80%9Cinvalid-device%E2%80%9D-error-during-battlefield-6-session.196834/
+  parent_title: OBS 33.0.1 NVENC “invalid device” error during Battlefield 6 session
+  report_title: OBS 33.0.1 NVENC “invalid device” error during Battlefield 6 session
+  report_text_excerpt: 'Subject: OBS 33.0.1 NVENC “invalid device” error during Battlefield 6 session Hello OBS Support, I’m reporting an OBS encoder failure that occurred during a Battlefield 6 session on November 6, 2026 (Eas'
+  captured_at: '2026-11-06T20:46:35Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196832
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-33-0-1-crashing-after-opening.196832/
+  parent_title: OBS 33.0.1 Crashing After Opening
+  report_title: OBS 33.0.1 Crashing After Opening
+  report_text_excerpt: 'Hi guys, I need help. I''ve done what I could but the latest OBS seems to crash on me on Startup. Here''s what I''ve done: - Uninstalled/Reinstalled Streamelements.live (main app to start OBS with) - Making new caches - reset docks by deleting the folders - Run in safe mode...'
+  captured_at: '2026-11-06T20:46:35Z'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1

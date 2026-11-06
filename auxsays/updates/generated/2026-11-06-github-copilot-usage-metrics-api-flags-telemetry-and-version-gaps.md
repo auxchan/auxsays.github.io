@@ -18,8 +18,8 @@ update_version: Usage metrics API flags telemetry and version gaps
 update_logo_text: GIT
 update_published_at: '2026-11-06T00:08:31Z'
 update_last_checked: '2026-11-06T09:21:50Z'
-source_last_checked: '2026-11-06T09:21:50Z'
-official_body_last_checked: '2026-11-06T09:21:50Z'
+source_last_checked: '2026-11-06T21:56:47Z'
+official_body_last_checked: '2026-11-06T21:56:47Z'
 record_last_updated: '2026-11-06T09:21:50Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -91,6 +91,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-11-06T09:21:50Z'
+  url: https://github.blog/changelog/2026-11-05-usage-metrics-api-flags-telemetry-and-version-gaps
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-06T21:56:47Z'
   url: https://github.blog/changelog/2026-11-05-usage-metrics-api-flags-telemetry-and-version-gaps
   status: captured-from-rss-feed
   body_captured: true
