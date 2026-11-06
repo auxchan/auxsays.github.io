@@ -82,7 +82,7 @@ evidence:
   report_title: Crash if service restrictions change resolution and the user rejects changes
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/crashes/0ivKCCEPMbyCs3IB ### OBS Studio Crash Log URL _No response_ ### Expected Behavi'
   captured_at: '2026-05-03T01:00:10Z'
-  source_date: null
+  source_date: '2026-04-28'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -106,7 +106,7 @@ evidence:
   report_title: Audio Mixer source name truncated too short in horizontal mode
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OZOMXweAd6RE4SBc ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I wou'
   captured_at: '2026-05-03T01:00:10Z'
-  source_date: null
+  source_date: '2026-05-02'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -130,7 +130,7 @@ evidence:
   report_title: Black square behind mouse cursor with Rec. 2100 colour spaces
   report_text_excerpt: 'ther ### Other OS Manjaro KDE ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.2 ### OBS Studio Log URL https://obsproject.com/logs/ML4ON1rbulbtj1M3 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The mouse cursor should not have a black square su'
   captured_at: '2026-05-03T01:00:10Z'
-  source_date: null
+  source_date: '2026-04-22'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -154,7 +154,7 @@ evidence:
   report_title: Rescale output can be set to bad values and then prevents outputs from stopping
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/a072h1wEtjso9peK ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Able'
   captured_at: '2026-05-03T01:00:10Z'
-  source_date: null
+  source_date: '2026-04-27'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -178,7 +178,7 @@ evidence:
   report_title: '[macOS 26 Tahoe] OBS crashes on quit when Elgato Camera Hub is running simultaneously'
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/jKP2slf660HgklAF ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/bMzRA'
   captured_at: '2026-05-03T01:00:10Z'
-  source_date: null
+  source_date: '2026-04-30'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -202,7 +202,7 @@ evidence:
   report_title: Hotkey using "Alt + C" or "Alt + O" is unable to be set in UI
   report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/SuXX4d1A7AHSIQxE ### OBS Studio Crash Log URL _No response_ ### Expected Behavior You s'
   captured_at: '2026-05-03T01:00:10Z'
-  source_date: null
+  source_date: '2026-05-01'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -250,7 +250,7 @@ evidence:
   report_title: 'Regression: Screen Capture completely broken on macOS Tahoe 26.4.1 (works on 32.0.4, broken on 32.1.0+)'
   report_text_excerpt: '### Operating System Info macOS 26 ### OBS Studio Version 32.1.0, 32.1.1, 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/bkXueL3wzHiPWPrw ### OBS Studio Crash Log URL ### Expected Behavior Screen content shou'
   captured_at: '2026-05-03T01:00:10Z'
-  source_date: null
+  source_date: '2026-04-27'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -298,7 +298,7 @@ evidence:
   report_title: PipeWire - "Remember this selection" always uses default "primary" monitor in Wayland
   report_text_excerpt: 'her ### Other OS Ubuntu 25.10 ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.2 (flatpak) ### OBS Studio Log URL https://obsproject.com/logs/iUBLOcxg5igVBxMo ### OBS Studio Crash Log URL _No response_ ### Expected Behavior - In the log above, I have set "Remember'
   captured_at: '2026-05-03T01:00:10Z'
-  source_date: null
+  source_date: '2026-04-23'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -322,7 +322,7 @@ evidence:
   report_title: v4l2 input sets incorrect framerate
   report_text_excerpt: 'ion Other ### OBS Studio Version (Other) 32.1.0 (latest distro package), {also present in 32.1.2 Flatpak}; v4l2 plugin latest from git (optionally w/ patch below) ### OBS Studio Log URL https://obsproject.com/logs/d9PdKsvIEWLOYDTt ### OBS Studio Crash Log URL _No response_ ### Ex'
   captured_at: '2026-05-03T01:32:12Z'
-  source_date: null
+  source_date: '2026-05-02'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -346,7 +346,7 @@ evidence:
   report_title: OBS crash when trying to project a source
   report_text_excerpt: '### Operating System Info Other ### Other OS Arch linux ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lY9QzCBO8dz7z0Bc ### OBS Studio Crash Log URL https://obsproject.com/logs/lY9QzCBO8dz7z'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-27'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -370,7 +370,7 @@ evidence:
   report_title: Severe frame pacing issues when recording screen.
   report_text_excerpt: '### Operating System Info Fedora Linux 43 ### OBS Studio Version 32.1.1 & 32.1.0 Flatpak ### Expected Behavior When recording a 60 Hz screen at 60 fps, the recorded video should have every frame that was shown on the screen. ### Current Behavior The recor'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-04'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -394,7 +394,7 @@ evidence:
   report_title: 'Crash after selecting input source  Cannot create EGLImage: Arguments are inconsistent'
   report_text_excerpt: '### Operating System Info Other ### Other OS NixOS ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/R9I4mVnxYYFpxqa0 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Captu'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-13'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -418,7 +418,7 @@ evidence:
   report_title: OBS Studio crash when selecting IPV6 and binding to IPV4 address
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/73aOOS68svJxzm1O ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/JzVbK'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-09'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -442,7 +442,7 @@ evidence:
   report_title: OBS Dock size issue
   report_text_excerpt: 'Operating System Info Other ### Other OS Arch Linux and Windows 10 ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/4ObGBvYPJcyxcWwS ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS r'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-01'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -466,7 +466,7 @@ evidence:
   report_title: Docks not saving correctly with Custom output Enabled
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/iQkGhltNEagedPGO ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-05'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -490,7 +490,7 @@ evidence:
   report_title: OBS crash when using a media source to play back a file OBS recorded
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/vdtRJEmAbVCt7w7N ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Not t'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-13'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -514,7 +514,7 @@ evidence:
   report_title: Audio does not fade in correctly on scene transition when using Game Capture with Capture Audio (BETA)
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/kHddVHNLXELQdUDo ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Audio'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-15'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -538,7 +538,7 @@ evidence:
   report_title: OBS crashes on startup (possibly browser source related)
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) 32.1.0/31.1.2/30.1 ### OBS Studio Log URL https://obsproject.com/logs/cQLBL0HVvgEocm3n ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-21'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -562,7 +562,7 @@ evidence:
   report_title: 32.1.1 crashes, I haven't updated because of it
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/moIUO6E4GAtQwyzf ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/5YeG3'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-19'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -586,7 +586,7 @@ evidence:
   report_title: 'OBS Settings: Output tab UI bug'
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/DsBQDrRHb574PneE ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-03'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -610,7 +610,7 @@ evidence:
   report_title: Audio Mixer preview doesn't show audio sources from groups or nested scenes
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/vRamE78edFwumr17 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Music'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-06'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -634,7 +634,7 @@ evidence:
   report_title: Can't capture DLSS FG frames
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LsUFhNVOqVOOZnHA ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-19'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -658,7 +658,7 @@ evidence:
   report_title: VAAPI crashes at recording on Ubuntu
   report_text_excerpt: '### Operating System Info Ubuntu 24.04 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/DHs0eyObzTUgI5Dx ### OBS Studio Crash Log URL _No response_ ### Expected Behavior GPU r'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-13'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -682,7 +682,7 @@ evidence:
   report_title: Great job on OBS, I just wasted a bunch of time recording into MP4 and all my audio was lost, please don't make the settings change on update thanks
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL idk ### OBS Studio Crash Log URL _No response_ ### Expected Behavior update doesn''t change settings ### Current Beh'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-25'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -706,7 +706,7 @@ evidence:
   report_title: 'Regression: Screen Capture completely broken on macOS Tahoe 26.4.1 (works on 32.0.4, broken on 32.1.0+)'
   report_text_excerpt: '### Operating System Info macOS 26 ### OBS Studio Version 32.1.0, 32.1.1, 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/bkXueL3wzHiPWPrw ### OBS Studio Crash Log URL ### Expected Behavior Screen cont'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-27'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -730,7 +730,7 @@ evidence:
   report_title: Filter values not visible
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/uz5fwHxJpYn6MC8B ### OBS Studio Crash Log URL _No response_ ### Expected Behavior <img'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-08'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -754,7 +754,7 @@ evidence:
   report_title: '[Bug] Wayland/EGL: eglSwapInterval(0) called every frame causes flickering on NVIDIA; adapter selection silently ignored'
   report_text_excerpt: 'y/display) + NVIDIA A2000 (secondary) - **Driver**: NVIDIA proprietary - **OBS Version**: 32.1.1 - **Installed via**: PPA (obsproject/obs-studio) ## Bug 1: `eglSwapInterval(0)` called on every frame presentation **File**: `libobs-opengl/gl-wayland-egl.c`, lines 331â€“341 ```c stati'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-11'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -778,7 +778,7 @@ evidence:
   report_title: starting OBS (flatpak) spawns numerous small windows
   report_text_excerpt: '### Operating System Info Other ### Other OS Ubuntu 22.04 ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) flatpak ### OBS Studio Log URL https://obsproject.com/logs/9yOG12btf0oCgSVg ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When I star'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-20'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -826,7 +826,7 @@ evidence:
   report_title: Twitch chat and twitch account login won't be saved after restart
   report_text_excerpt: '### Operating System Info macOS 15 ### Other OS 15.6.1 ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/n5UeOoYV7OWKrLTl ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-17'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -850,7 +850,7 @@ evidence:
   report_title: elgato 4k x capture modes other than mjpeg colors are incorrect
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Ad2PAPFHAXsuOhYv ### OBS Studio Crash Log URL _No response_ ### Expected Behavior elgat'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-27'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -874,7 +874,7 @@ evidence:
   report_title: Warning about "meterThickness" in Classic theme
   report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/SlowmWBgu9kZrcLE ### OBS Studio Crash Log URL _No response_ ### Expected Behavior No wa'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-03'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -898,7 +898,7 @@ evidence:
   report_title: mac-capture crashes OBS on macOS 26.0 beta â€” mach_vm_allocate_kernel failed in obs_get_source_properties
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/oWBUBhapSTtoVB7Q ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/0uRLD'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-23'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -922,7 +922,7 @@ evidence:
   report_title: Global System Audio Issue only while OBS Studio is open
   report_text_excerpt: '### Operating System Info Windows 11 ### OBS Studio Version 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/znJAYXCenrV9t1OM ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I expected my audio to remain the same when I open'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-20'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -946,7 +946,7 @@ evidence:
   report_title: OBS Camera black screen but works fine in Windows Camera app
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/nXdqqteOIXPliAv4 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior camer'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-07'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -970,7 +970,7 @@ evidence:
   report_title: Opus is not an option for streaming
   report_text_excerpt: '### Operating System Info Other ### Other OS Fedora 43 ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/KUxrzEjqvmtOmDwg ### OBS Studio Crash Log URL _No response_ ### Expected Behavior https'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-10'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -994,7 +994,7 @@ evidence:
   report_title: Plugin Load Error - AJA and Log upload failed
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS Windows 11 Pro ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) OBS Studio ### OBS Studio Log URL null ### OBS Studio Crash Log URL null ### Expected Behavior There is an issue related to plugin initialization and lo'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-15'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1018,7 +1018,7 @@ evidence:
   report_title: Monitors go black and computer freezes when editing source properties
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Bz4VhItEW3qM2BqQ ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-20'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1042,7 +1042,7 @@ evidence:
   report_title: Pause/Unpause hotkeys actually start/stop recording
   report_text_excerpt: 'r OS This is windows 10 pro, enrolled for extended support updates ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/oPspfNII7e490FNB ### OBS Studio Crash Log URL _No response_ ### Expected Behavior This'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-18'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1066,7 +1066,7 @@ evidence:
   report_title: Display Capture suddenly started showing a black screen
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Csejqh1Q87ddiv2D ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Recor'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-19'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1090,7 +1090,7 @@ evidence:
   report_title: Display Preview Not Matching Display Name
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/IkYJmb67LVilBTXA ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-16'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1114,7 +1114,7 @@ evidence:
   report_title: 'Question: What is the practical meaning of infinite nesting recursion when using Display Capture to capture the screen containing OBS itself?'
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/bL5o3HBwXe5h662s ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-04'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1138,7 +1138,7 @@ evidence:
   report_title: 'VLC Source: Shuffle/Random option does not re-randomize or update from disk on scene change'
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/P0oC6rpNSYNbamrI ### OBS Studio Crash Log URL _No response_ ### Expected Behavior i wan'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-26'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1162,7 +1162,7 @@ evidence:
   report_title: Scene list type-to-select is laggy since 32.1.0 and no longer matches multi-letter input correctly
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/mUSROvuyclO5F2hX ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-07'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1186,7 +1186,7 @@ evidence:
   report_title: 'VLC 4.0: error: â€˜libvlc_Endedâ€™ undeclared (first use in this function); did you mean â€˜libvlc_newâ€™?'
   report_text_excerpt: '### Operating System Info Other ### Other OS gentoo ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://paste.gentoo.zip/aXs7zX4l ### OBS Studio Crash Log URL _No response_ ### Expected Behavior It seems some fu'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-13'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1234,7 +1234,7 @@ evidence:
   report_title: 'Feature request: refresh API / hotkey for Custom Browser Docks (parity with browser sources)'
   report_text_excerpt: 'er sources, but no UI or API path exposes a reload. This was confirmed against OBS Studio 32.1.1 on macOS â€” issue persists in the current release. ## Use case Streamers using third-party web tools (Restream channels/titles/chat dock, StreamElements panels, custom dashboards, Twit'
   captured_at: '2026-05-03T02:44:22Z'
-  source_date: null
+  source_date: '2026-04-26'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1258,7 +1258,7 @@ evidence:
   report_title: external source shows back screen or frozen frame
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/FTIwg1abp3fWjiYn ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Exter'
   captured_at: '2026-05-03T15:08:07Z'
-  source_date: null
+  source_date: '2026-05-03'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1282,7 +1282,7 @@ evidence:
   report_title: Performance issue on macOS 26 with OBS 32.1.2
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/2cOAkWVPj1ZDpcGl ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Recor'
   captured_at: '2026-05-04T08:07:11Z'
-  source_date: null
+  source_date: '2026-05-04'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1306,7 +1306,7 @@ evidence:
   report_title: Upload crash report dialog gets stuck if trying to upload when there are no crash reports
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ylfIoBcnp1No2Gjp ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Dialo'
   captured_at: '2026-05-05T20:45:21Z'
-  source_date: null
+  source_date: '2026-05-05'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1330,7 +1330,7 @@ evidence:
   report_title: 'Plugin manager: Browse and Updates are both unavailable to click on'
   report_text_excerpt: '### Operating System Info Windows 10 Pro N ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/fMKkHLtu2z7GLAst ### Expected Behavior I just updated OBS, against my own instinct, and'
   captured_at: '2026-05-05T20:45:21Z'
-  source_date: null
+  source_date: '2026-05-05'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1354,7 +1354,7 @@ evidence:
   report_title: screen capture arch linux bug wayland
   report_text_excerpt: '### Operating System Info Other ### Other OS Arch linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Qq5NExBHs5kEiUyv ### OBS Studio Crash Log URL _No response_ ### Expected Behavior able'
   captured_at: '2026-05-06T09:14:42Z'
-  source_date: null
+  source_date: '2026-05-06'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1378,7 +1378,7 @@ evidence:
   report_title: Cannot bypass iCUE equalizer
   report_text_excerpt: '11 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/lE3rqEHFBs46G1HW ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The "Audio Capture (BETA)" feature should bypass a'
   captured_at: '2026-05-06T20:56:02Z'
-  source_date: null
+  source_date: '2026-05-06'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1402,7 +1402,7 @@ evidence:
   report_title: Audio monitor desync
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/AKe71TKFHy95Rl30 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Using'
   captured_at: '2026-05-07T09:47:21Z'
-  source_date: null
+  source_date: '2026-05-07'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1426,7 +1426,7 @@ evidence:
   report_title: Media File playing in background when OBS not in Studio Mode
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/8vVtN2dKFppJBBpH ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Media'
   captured_at: '2026-05-08T06:22:07Z'
-  source_date: null
+  source_date: '2026-05-08'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1450,7 +1450,7 @@ evidence:
   report_title: OBS unresponsive to mouse after docking or resizing panels on KDE Wayland.
   report_text_excerpt: 'E Plasma (Wayland), Qt: 6.8.2 ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.2 (Flatpak) ### OBS Studio Log URL https://obsproject.com/logs/OrzrVKg1fjPJ7N3j ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Upon resizing or docking/undocking a win'
   captured_at: '2026-05-09T00:14:39Z'
-  source_date: null
+  source_date: '2026-05-08'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1474,7 +1474,7 @@ evidence:
   report_title: OBS Studio fails to stream when connected to an Ethernet connection (Alienware m18 r2)
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/v1dCBZZ75adGQz1K ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS t'
   captured_at: '2026-05-11T00:08:04Z'
-  source_date: null
+  source_date: '2026-05-10'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -1498,7 +1498,7 @@ evidence:
   report_title: '[macOS] mac-avcapture aborts on camera hot-plug: uncaught NSException from -[AVCaptureSession startRunning]'
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/8S3wBZPQ2vtcOcmB ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/R51BD'
   captured_at: '2026-05-11T23:10:28Z'
-  source_date: null
+  source_date: '2026-05-11'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -2554,7 +2554,7 @@ evidence:
   report_title: Audio Filter window has no light or meter to show it is turned on
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/7hRgpHBvFwwRLd56 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior There'
   captured_at: '2026-05-14T10:33:30Z'
-  source_date: null
+  source_date: '2026-05-14'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -2578,7 +2578,7 @@ evidence:
   report_title: bug de telechargement
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://apps.microsoft.com/detail/XPFFH613W8V6LV?hl=fr-FR&gl=FR&ocid=pdpshare ### OBS Studio Crash Log URL https://'
   captured_at: '2026-05-14T18:08:40Z'
-  source_date: null
+  source_date: '2026-05-14'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -2602,7 +2602,7 @@ evidence:
   report_title: Audio missing from output when started programmatically (auto-start, websocket) - works correctly when started via dialog
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/pXIIBXADUdxGKA4t ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Audio'
   captured_at: '2026-05-14T20:02:59Z'
-  source_date: null
+  source_date: '2026-05-14'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -2674,7 +2674,7 @@ evidence:
   report_title: Mouse cursor **icon** becomes laggy when show cursor is on
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/WxGY6zUj4MtvkaG9 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The m'
   captured_at: '2026-05-16T06:35:08Z'
-  source_date: null
+  source_date: '2026-05-16'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -2698,7 +2698,7 @@ evidence:
   report_title: GIFs from EmoteLab freeze every second
   report_text_excerpt: lar, more similar issues will appear. Also issue is not limited to Linux, Windows version 32.1.2 has this behavior. <img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/54d6d954-002d-4adc-9a49-2e95ad82c928" />
   captured_at: '2026-05-16T15:17:09Z'
-  source_date: null
+  source_date: '2026-05-16'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -2818,7 +2818,7 @@ evidence:
   report_title: Virtual Camera not visible in Windows 11 22H2+ camera list due to missing EnableFrameServerMode registry key
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL not needed ### OBS Studio Crash Log URL _No response_ ### Expected Behavior After installing OBS Virtual Camera, it'
   captured_at: '2026-05-17T13:57:38Z'
-  source_date: null
+  source_date: '2026-05-17'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -2842,7 +2842,7 @@ evidence:
   report_title: YouTube Account Disconnects on Startup
   report_text_excerpt: '### Operating System Info macOS 15 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OTHWOdo590L4mlAD ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The Y'
   captured_at: '2026-05-17T17:14:41Z'
-  source_date: null
+  source_date: '2026-05-17'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -2866,7 +2866,7 @@ evidence:
   report_title: Segfault on startup
   report_text_excerpt: '### Operating System Info Other ### Other OS Manjaro Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) 32.1.2-2 ### OBS Studio Log URL na ### OBS Studio Crash Log URL na ### Expected Behavior Being able to start OBS ### Current Behavior Starting OBS from'
   captured_at: '2026-05-17T18:10:28Z'
-  source_date: null
+  source_date: '2026-05-17'
   target_release_date: null
   source_date_pass: null
   patch_version_matched: true
@@ -2914,6 +2914,7 @@ evidence:
   report_title: Starting and stopping recording leaks memory
   report_text_excerpt: 'perating System Info Other ### Other OS Arch Linux (6.18.31-1-lts) ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/eU7G4S4tAHWCY9e2 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-05-20T05:17:04Z'
+  source_date: '2026-05-20'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2994,6 +2995,7 @@ evidence:
   report_title: preview projector lags
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ph7JzamTkoQUzIO1 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior runs'
   captured_at: '2026-05-21T19:23:49Z'
+  source_date: '2026-05-21'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3063,6 +3065,7 @@ evidence:
   report_title: Possible Windows/NVIDIA Presentation Pipeline Issue Affecting OBS and Modern Capture Software
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL nolink ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Subject: Possible Windows/NVIDIA Presentati'
   captured_at: '2026-05-22T18:11:03Z'
+  source_date: '2026-05-22'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3156,6 +3159,7 @@ evidence:
   report_title: OBS Blocks KDEPlasma Shutdown/Logout When Replay Buffer Active
   report_text_excerpt: '### Operating System Info Other ### Other OS CachyOS ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/VAedyOFk28X1yJbJ ### OBS Studio Crash Log URL _No response_ ### Expected Behavior PC to'
   captured_at: '2026-05-24T15:30:49Z'
+  source_date: '2026-05-24'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3198,6 +3202,7 @@ evidence:
   report_title: Streaming with the SRT protocol via OBS Studio results in screen glitches/artifacts
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/crashes/ntn86szid1uwmGXP ### OBS Studio Crash Log URL _No response_ ### Expected Behavi'
   captured_at: '2026-05-25T09:16:39Z'
+  source_date: '2026-05-25'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3219,6 +3224,7 @@ evidence:
   report_title: Unable to install
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL 0x8A150006 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I am unable to download this software,'
   captured_at: '2026-05-25T21:35:59Z'
+  source_date: '2026-05-25'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3240,6 +3246,7 @@ evidence:
   report_title: Window Capture (XComposite) requires hardware acceleration (errors under software-only Mesa)
   report_text_excerpt: 'Other ### Other OS Fedora 44 ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/UbhbXfU4Ldn0b8cG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I expected to be able to select a window and have'
   captured_at: '2026-05-26T16:55:04Z'
+  source_date: '2026-05-26'
   patch_version_matched: true
   matched_version: 32.1.1
   match_basis: body
@@ -3285,6 +3292,7 @@ evidence:
   report_title: Sometimes incorrect rendering of source colorspace. (Compositing/transform issue?)
   report_text_excerpt: 'rating System Info Other ### Other OS NixOS 26.05.20260507.68a8af9 ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/eChzgWSRB9ah7BI5 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Corre'
   captured_at: '2026-05-27T12:33:49Z'
+  source_date: '2026-05-27'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3306,6 +3314,7 @@ evidence:
   report_title: 'macOS: Closing OBS via window close button removes Twitch docks and causes layout/auth state loss on next launch'
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/vAbZuifxBJIN50Bp ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS s'
   captured_at: '2026-05-27T19:35:20Z'
+  source_date: '2026-05-27'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3327,6 +3336,7 @@ evidence:
   report_title: Memory/CPU climb and crash after 20 mins
   report_text_excerpt: '### Operating System Info Other ### Other OS Debian Trixie ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/IlaUJFFSh25kMr3F ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I usu'
   captured_at: '2026-05-28T08:56:05Z'
+  source_date: '2026-05-28'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3348,6 +3358,7 @@ evidence:
   report_title: 'BUG: OBS Studio GPU Selection Issue After Removing Second Graphics Card'
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL / ### OBS Studio Crash Log URL _No response_ ### Expected Behavior / ### Current Behavior If a system has two GPUs'
   captured_at: '2026-05-28T17:05:40Z'
+  source_date: '2026-05-28'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3393,6 +3404,7 @@ evidence:
   report_title: Unable to exit OBS Studio via system tray, if window was never visible
   report_text_excerpt: '### Operating System Info Other ### Other OS Manjaro Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/HZdBWcGjRAOyr5Rp ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-05-28T22:12:09Z'
+  source_date: '2026-05-28'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3414,6 +3426,7 @@ evidence:
   report_title: Hang when renaming scene collection (no reproducer but stack trace present)
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LMpBKwuLnvmmUIph ### OBS Studio Crash Log URL _No response_ ### Expected Behavior It co'
   captured_at: '2026-05-29T04:43:32Z'
+  source_date: '2026-05-29'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3459,6 +3472,7 @@ evidence:
   report_title: Some Fonts Don't Show with Text Elements
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/SKLAbX4lBRnuOpPj ### OBS Studio Crash Log URL _No response_ ### Behavior Some fonts whe'
   captured_at: '2026-05-29T22:06:51Z'
+  source_date: '2026-05-29'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3480,6 +3494,7 @@ evidence:
   report_title: Window capture and game capture errors
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL portable: https://obsproject.com/logs/ciW1Exi8OJcm2ApM, simple: https://obsproject.com/logs/GfuT521kFPsu1kOb ### OB'
   captured_at: '2026-05-30T15:39:00Z'
+  source_date: '2026-05-30'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3525,6 +3540,7 @@ evidence:
   report_title: Various issues
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/MBWXALEfyk462hBO ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/5nhDK'
   captured_at: '2026-05-30T21:17:31Z'
+  source_date: '2026-05-30'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3546,6 +3562,7 @@ evidence:
   report_title: SRT Media Source (ffmpeg_source) cannot recreate listener socket on reconnect while recording or streaming is active
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/oWFDQTa6BvRLwM82 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior A Med'
   captured_at: '2026-05-31T16:37:22Z'
+  source_date: '2026-05-31'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3567,6 +3584,7 @@ evidence:
   report_title: '[macOS 26 Tahoe] OBS crashes with EXC_BAD_ACCESS in libqcocoa.dylib+515284 on every scene switch'
   report_text_excerpt: '## Bug Report **OBS Version:** 32.1.2 (also confirmed in 32.1.0) **macOS:** 26.5 (Build 25F71, Darwin 25.5.0) **Hardware:** Apple M5 Pro, MacBook Pro (Mac17,9), 64 GB RAM **Qt Version:** 6.8.3 (runtime and compiled) **Ros'
   captured_at: '2026-05-31T16:37:22Z'
+  source_date: '2026-05-31'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3588,6 +3606,7 @@ evidence:
   report_title: 疑似视频源导致的卡死崩溃
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/yXtkZAKxoaUUEVhA ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/CwAN9'
   captured_at: '2026-05-31T21:16:10Z'
+  source_date: '2026-05-31'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3633,6 +3652,7 @@ evidence:
   report_title: No panels or twitch log in when using Wayland (Debian 13 KDE)
   report_text_excerpt: '### Operating System Info Other ### Other OS Debian 13 (KDE) ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/2zccybN7ZqxwvjOC ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS b'
   captured_at: '2026-06-02T20:25:45Z'
+  source_date: '2026-06-02'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3702,6 +3722,7 @@ evidence:
   report_title: OBS does not remember capture card mapping after reboot on macOS.
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/KuvOK5PbJZOwwfSB ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-06-04T07:07:27Z'
+  source_date: '2026-06-04'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3747,6 +3768,7 @@ evidence:
   report_title: I hope this will work with Ubuntu 26.04
   report_text_excerpt: '### Operating System Info Other ### Other OS Ubuntu 26.04 ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL no ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I hope this (obs 32.1.2) will work with Ubuntu'
   captured_at: '2026-06-05T06:00:05Z'
+  source_date: '2026-06-05'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3768,6 +3790,7 @@ evidence:
   report_title: never had this issue
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/gFSOy605kZMTTiPS ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I use'
   captured_at: '2026-06-05T06:00:05Z'
+  source_date: '2026-06-05'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3789,6 +3812,7 @@ evidence:
   report_title: Audio and video output delay increases the longer OBS is open
   report_text_excerpt: '### Operating System Info Other ### Other OS CachyOS (Arch) ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/W2G7WWnOLWxO7XKo ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
   captured_at: '2026-06-05T06:00:05Z'
+  source_date: '2026-06-05'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3882,6 +3906,7 @@ evidence:
   report_title: Moving docks around breaks interactivity with the manu bar and moving other docks
   report_text_excerpt: 'Operating System Info Other ### Other OS Arch Linux 6.18.34-1-lts ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/xQMM1OmKyftxxdkN ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-06-07T08:39:54Z'
+  source_date: '2026-06-07'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3903,6 +3928,7 @@ evidence:
   report_title: There is no sound on live stream when using  Facebook Live
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Lh15JIbxqlV4RnRO ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Users'
   captured_at: '2026-06-07T08:39:54Z'
+  source_date: '2026-06-07'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3924,6 +3950,7 @@ evidence:
   report_title: Disable hardware decoding by default for Video Capture Devices.
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/aWU1awihptOobq8l ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Hardw'
   captured_at: '2026-06-08T09:57:48Z'
+  source_date: '2026-06-08'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -3993,6 +4020,7 @@ evidence:
   report_title: OBS Studio crashes when opening Multiview (View → Multiview) on Ubuntu 26.04
   report_text_excerpt: '### Operating System Info Other ### Other OS Ubuntu 26.04 LTS ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/9I7lrS2JP8pa4eO6 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Descr'
   captured_at: '2026-06-09T05:19:43Z'
+  source_date: '2026-06-09'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4182,6 +4210,7 @@ evidence:
   report_title: AMF HEVC encoding on Windows is locked to Level 5.1 — cannot set Level 6.2 or High Tier via FFmpeg options
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/DjrlcgkYocbp6DDK ### OBS Studio Crash Log URL _No response_ ### Expected Behavior **Exp'
   captured_at: '2026-06-12T19:29:59Z'
+  source_date: '2026-06-12'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4203,6 +4232,7 @@ evidence:
   report_title: Mac M2 Ultra Vertical Backtrack hotkey not working when OBS minimized
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/tOaT7O16kIBxic2a ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Expec'
   captured_at: '2026-06-12T19:29:59Z'
+  source_date: '2026-06-12'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4248,6 +4278,7 @@ evidence:
   report_title: Mouse element dragging issues on the video preview window when using Fractional Scaling
   report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/UlpsmzVzckZAkyk4 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The i'
   captured_at: '2026-06-13T08:35:02Z'
+  source_date: '2026-06-13'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4269,6 +4300,7 @@ evidence:
   report_title: YouTube video playback in Chrome/Brave randomly freezes during Window or Display Capture after resizing or focus change
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OZsZAifP2igbqLIX ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The b'
   captured_at: '2026-06-13T14:28:07Z'
+  source_date: '2026-06-13'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4290,6 +4322,7 @@ evidence:
   report_title: Advanced Audio Properties UI Bug
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS Windows 11 ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/mqZZsODq1YmMryNp ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Resiz'
   captured_at: '2026-06-13T20:43:53Z'
+  source_date: '2026-06-13'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4359,6 +4392,7 @@ evidence:
   report_title: YouTube Manage Broadcast dialog exceeds screen height on external monitors  - bottom buttons clipped
   report_text_excerpt: '### Operating System Info Other ### Other OS Windows ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/41PuM3prHyu1MHAp ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The "'
   captured_at: '2026-06-14T12:19:39Z'
+  source_date: '2026-06-14'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4404,6 +4438,7 @@ evidence:
   report_title: macOS OBS Virtual Camera reports max 1920x1080 to Chrome/WebRTC despite AVFoundation capture working at 2560x1440
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Jql0LLAUIxMV55ok ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
   captured_at: '2026-06-17T14:05:06Z'
+  source_date: '2026-06-17'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4425,6 +4460,7 @@ evidence:
   report_title: Virtual camera not starting on Arch Linux
   report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LxeDDvROIUt0bqrF ### OBS Studio Crash Log URL _No response_ ### Expected Behavior My vi'
   captured_at: '2026-06-17T22:55:19Z'
+  source_date: '2026-06-17'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4446,6 +4482,7 @@ evidence:
   report_title: OBS turns the whole screen black due to a specific DockState line contents in user.ini
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/dSwOiXh5O0vPP0g5 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
   captured_at: '2026-06-18T11:22:15Z'
+  source_date: '2026-06-18'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4539,6 +4576,7 @@ evidence:
   report_title: OBS Studio cannot capture Minecraft 26.2 using Vulkan
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/gF9fgCJ3X0J6MHIj ### OBS Studio Crash Log URL _No response_ ### Expected Behavior It sh'
   captured_at: '2026-06-19T12:22:56Z'
+  source_date: '2026-06-19'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4560,6 +4598,7 @@ evidence:
   report_title: Game Capture black screen with Tibia client.exe, but Streamlabs captures correctly.
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ieecrAKuVYyAgfun ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS G'
   captured_at: '2026-06-19T15:49:22Z'
+  source_date: '2026-06-19'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4581,6 +4620,7 @@ evidence:
   report_title: Chapter Makers are not saved in Replay Buffer file.
   report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/2I62I14gUdc3cLao ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Chapt'
   captured_at: '2026-06-19T15:49:22Z'
+  source_date: '2026-06-19'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4602,6 +4642,7 @@ evidence:
   report_title: 'Audio mixer: Shift down scrolling on mac breaks the scrolling direction)'
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) 32.1.2 ### OBS Studio Log URL https://obsproject.com/logs/WHJPem3W89LvLZta ### OBS Studio Crash Log URL What? ### Expected Behavior First thing I always'
   captured_at: '2026-06-19T20:10:04Z'
+  source_date: '2026-06-19'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4647,6 +4688,7 @@ evidence:
   report_title: OBS Fails to Properly Distribute Encoder Load on M3 Ultra (macOS)
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/u9mvWmyADlYSceFN ### OBS Studio Crash Log URL _No response_ ### Expected Behavior A Mac'
   captured_at: '2026-06-21T12:30:54Z'
+  source_date: '2026-06-21'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4764,6 +4806,7 @@ evidence:
   report_title: Consumes GPU watts , memory and processing power unnecessarily unless keeps changing process priority
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/CqKgLGpSmRszJmxG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior <img'
   captured_at: '2026-06-26T16:32:38Z'
+  source_date: '2026-06-26'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4881,6 +4924,7 @@ evidence:
   report_title: display capture preview and recording flickers and ghosting
   report_text_excerpt: 'from x11 and different settings with chatgpts assistance.,OBS Studio: 32.1.2 (also tested 32.1.1 with the same behavior) OS: Bazzite 44 (Fedora Kinoite) Desktop: KDE Plasma 6 (Wayland) Session: Wayland GPU: NVIDIA GeForce RTX 5070 NVIDIA Driver: 610.43.02 PipeWire: 1.6.6 Kernel:'
   captured_at: '2026-06-29T07:10:40Z'
+  source_date: '2026-06-29'
   patch_version_matched: true
   matched_version: 32.1.1
   match_basis: body
@@ -4902,6 +4946,7 @@ evidence:
   report_title: display capture preview and recording flickers and ghosting
   report_text_excerpt: 've tried everything from x11 and different settings with chatgpts assistance.,OBS Studio: 32.1.2 (also tested 32.1.1 with the same behavior) OS: Bazzite 44 (Fedora Kinoite) Desktop: KDE Plasma 6 (Wayland) Session: Wayland GPU: NVIDIA GeForce RTX 5070 NVIDIA Driver: 610.43.02 Pipe'
   captured_at: '2026-06-29T07:10:55Z'
+  source_date: '2026-06-29'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -4971,6 +5016,7 @@ evidence:
   report_title: Losing Additional Canvas with Enhanced Broadcasting after changing Output Resolution
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/A1WHch3fwQgpAENB ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Selec'
   captured_at: '2026-06-30T19:15:34Z'
+  source_date: '2026-06-30'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5160,6 +5206,7 @@ evidence:
   report_title: OBS does not survive DWM restart
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/JZs1OgFLe9ri2FO8 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior After'
   captured_at: '2026-07-03T22:35:00Z'
+  source_date: '2026-07-03'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5205,6 +5252,7 @@ evidence:
   report_title: 'macOS: Browser source (CEF) crash on CrBrowserMain — EXC_BAD_ACCESS / null write during autorelease pool drain (obs-browser 32.1.2, macOS 26.5.1, Apple Silicon)'
   report_text_excerpt: 's and the failing Objective-C selector being `release`. ### Environment - **OBS Studio:** 32.1.2 (24742303888), arm64 native - **macOS:** 26.5.1 (25F80) - **Hardware:** Apple Silicon (Mac16,10) - **Plugin loaded:** `com.obsproject.obs-browser (32.1.2)` — `/Applications/OBS.app/Co'
   captured_at: '2026-07-06T16:38:10Z'
+  source_date: '2026-07-06'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: title
@@ -5226,6 +5274,7 @@ evidence:
   report_title: OBS Not Detecting ANY Desktop and/or Source Audio
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ei8f2NkgPZSBYZZE ### OBS Studio Crash Log URL _No response_ ### Expected Behavior What'
   captured_at: '2026-07-06T22:45:25Z'
+  source_date: '2026-07-06'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5295,6 +5344,7 @@ evidence:
   report_title: '"Pause recording" and "Resume recording" keyword shortcut are not working'
   report_text_excerpt: 'tem Info Ubuntu 24.04 ### Other OS Linux Mint Cinammon 22.3 x86_64 ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Archivo > Ajustes > Atajos ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Pause recording functio'
   captured_at: '2026-07-11T14:03:23Z'
+  source_date: '2026-07-11'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5340,6 +5390,7 @@ evidence:
   report_title: The software crashes when video recording is complete.
   report_text_excerpt: '### Operating System Info Other ### Other OS KDE Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lWncKhYi1Lu6l47l ### OBS Studio Crash Log URL _No response_ ### Expected Behavior No. #'
   captured_at: '2026-07-12T04:11:30Z'
+  source_date: '2026-07-12'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5676,6 +5727,7 @@ evidence:
   report_title: Second simultaneous audio capture stream in one OBS process is choppy/starved (order-dependent, PipeWire)
   report_text_excerpt: 'Other ### Other OS CachyOS (Arch-based), kernel `7.1.3-2-cachyos` ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/T5AeXx1MknEXLIr8 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Two a'
   captured_at: '2026-07-14T18:26:53Z'
+  source_date: '2026-07-14'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5793,6 +5845,7 @@ evidence:
   report_title: OBS freezes when drag&drop any element on the software
   report_text_excerpt: '### Operating System Info Other ### Other OS CachyOS ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/rCFaEoPoRx3IcQCt ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The o'
   captured_at: '2026-07-16T09:40:02Z'
+  source_date: '2026-07-16'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5814,6 +5867,7 @@ evidence:
   report_title: Text (FreeType 2) renders blank with some TTF fonts although font preview works
   report_text_excerpt: 'dered text. ### Anything else we should know? Test environment: - Windows 11 - OBS Studio 32.1.2 (64-bit) - Official OBS installer from obsproject.com The issue has also been reproduced with a clean Portable installation. Additional testing performed: - Created completely new Tex'
   captured_at: '2026-07-16T14:36:21Z'
+  source_date: '2026-07-16'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5859,6 +5913,7 @@ evidence:
   report_title: OBS Studio unusable after customizing dock layout.
   report_text_excerpt: '### Operating System Info Other ### Other OS Fedora KDE 44 ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/F31uqLyY6b2cwKnb ### OBS Studio Crash Log URL _No response_ ### Expected Behavior All d'
   captured_at: '2026-07-17T00:23:22Z'
+  source_date: '2026-07-16'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5904,6 +5959,7 @@ evidence:
   report_title: PipeWire screen capture rejects xe (Intel Arc) dmabuf modifier, falls back to linear (0x0) causing CPU copy at full resolution
   report_text_excerpt: 'Other ### Other OS Fedora 44 ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/ejO0itOrXL3oIx1R ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS accepts the xe dmabuf modifier and imports fra'
   captured_at: '2026-07-19T06:58:56Z'
+  source_date: '2026-07-18'
   patch_version_matched: true
   matched_version: 32.1.1
   match_basis: body
@@ -5925,6 +5981,7 @@ evidence:
   report_title: Check for Updates button not working with update channel set to Beta
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/mXkHJP79fX6CVK0c ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The "'
   captured_at: '2026-07-19T06:59:12Z'
+  source_date: '2026-07-17'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5946,6 +6003,7 @@ evidence:
   report_title: AMD encoder overload cannot be recovered
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/UNesMqXQoYrNBmGV ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Playi'
   captured_at: '2026-07-19T12:18:53Z'
+  source_date: '2026-07-19'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5967,6 +6025,7 @@ evidence:
   report_title: Hardware decoding fails silently on high-core-count CPUs, sanitised log files attached
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Sanitised log files attached below ### OBS Studio Crash Log URL _No response_ ### Expected Behavior ### Environment'
   captured_at: '2026-07-19T12:18:53Z'
+  source_date: '2026-07-19'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -5988,6 +6047,7 @@ evidence:
   report_title: No indication when a configured audio device no longer exists, sanitised logs attached
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL I am attaching log files with sanitised paths and file names. ### OBS Studio Crash Log URL _No response_ ### Expect'
   captured_at: '2026-07-19T12:18:53Z'
+  source_date: '2026-07-19'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -6429,6 +6489,7 @@ evidence:
   report_title: macOS OBS Virtual Camera reports max 1920x1080 to Chrome/WebRTC despite AVFoundation capture working at 2560x1440
   report_text_excerpt: ensionsctl reports it as activated enabled. The issue was reproduced with both OBS Studio 32.0.2 Apple Silicon and OBS Studio 32.1.2 Apple Silicon.
   captured_at: '2026-07-21T17:14:57Z'
+  source_date: '2026-06-17'
   patch_version_matched: true
   matched_version: 32.0.2
   match_basis: body
@@ -7342,6 +7403,7 @@ evidence:
   report_title: OBS-Wayland-Hotkeys Plugin Stopped Working Since 32.2.0
   report_text_excerpt: '### Operating System Info Other ### Other OS Fedora 44 Kde Plasma ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lzBdc4qehCOwb5Ts ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Wayla'
   captured_at: '2026-07-22T10:41:25Z'
+  source_date: '2026-07-22'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: title
@@ -7723,6 +7785,7 @@ evidence:
   report_title: OBS recording results in a desynced media and 120s of missing frame
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/MZggB6XYebX9a6Tw ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Recor'
   captured_at: '2026-07-22T15:06:35Z'
+  source_date: '2026-07-22'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -8110,6 +8173,7 @@ evidence:
   report_title: Game Capture black screen with Tibia client.exe, but Streamlabs captures correctly.
   report_text_excerpt: 'VYyAgfun ### Steps to Reproduce What I tested: OBS Studio 32.1.2: black screen OBS Studio 31.0.4: black screen Reinstalled OBS: same issue Reinstalled Tibia: same issue Tested a new Windows user: same issue Windows Print Screen / Snipping Tool: black screen Streamlabs Desktop Gam'
   captured_at: '2026-07-22T21:17:26Z'
+  source_date: '2026-06-19'
   patch_version_matched: true
   matched_version: 31.0.4
   match_basis: body
@@ -8275,6 +8339,7 @@ evidence:
   report_title: Version 32.2 broke NVENC encoder for legacy graphics cards
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL N/a ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I expected to be able to use OBS the same as I'
   captured_at: '2026-07-22T23:19:38Z'
+  source_date: '2026-07-22'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: body
@@ -8704,6 +8769,7 @@ evidence:
   report_title: Game Capture failing to capture in some environments due to DLL load changes
   report_text_excerpt: '1 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) 32.1.2 ### OBS Studio Log URL https://obsproject.com/logs/JyX6lnOVLapTxHeG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Capturar os jogos sem tela preta ### Current Behav'
   captured_at: '2026-07-23T01:10:14Z'
+  source_date: '2026-07-22'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -8725,6 +8791,7 @@ evidence:
   report_title: Game Capture failing to capture in some environments due to DLL load changes
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) 32.1.2 ### OBS Studio Log URL https://obsproject.com/logs/JyX6lnOVLapTxHeG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Capturar os'
   captured_at: '2026-07-23T01:10:22Z'
+  source_date: '2026-07-22'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: body
@@ -8746,6 +8813,7 @@ evidence:
   report_title: Version 32.2 broke NVENC encoder for legacy graphics cards
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL N/A ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Expected NVENC Encoders to be working and they'
   captured_at: '2026-07-23T01:10:22Z'
+  source_date: '2026-07-23'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: body
@@ -8767,6 +8835,7 @@ evidence:
   report_title: Version 32.2 broke NVENC encoder for legacy graphics cards
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL N/A ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Expected to have the NVENC Encoders, but they'
   captured_at: '2026-07-23T01:10:22Z'
+  source_date: '2026-07-23'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: body
@@ -9044,6 +9113,7 @@ evidence:
   report_title: CoreAudio not loading on 32.2 when DLLs in PATH-referenced folder
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ecucaVwBKeEi4dRU ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Apple'
   captured_at: '2026-07-23T10:40:41Z'
+  source_date: '2026-07-23'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: body
@@ -9265,6 +9335,7 @@ evidence:
   report_title: Check for updates button not working
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/yT6uWbooFG8i0Wnt ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The p'
   captured_at: '2026-07-23T18:01:36Z'
+  source_date: '2026-07-23'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -9604,6 +9675,7 @@ evidence:
   report_title: OBS 32.2 terminates when a DroidCam source becomes unreachable on macOS
   report_text_excerpt: '32.2 terminates when a DroidCam source becomes unreachable on macOS ## Summary OBS Studio 32.2.0 terminates abruptly on macOS when switching to a scene containing saved DroidCam sources whose devices are offline/unreachable. This is likely triggered by the third-party DroidCam OB'
   captured_at: '2026-07-24T07:56:20Z'
+  source_date: '2026-07-24'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: body
@@ -11246,6 +11318,7 @@ evidence:
   report_title: Opening Image Source Properties or changing image file causes rendering lag and skipped rendering frames on macOS (Apple Silicon)
   report_text_excerpt: '(Apple Silicon) • MacBook Pro M3 Max • 36 GB RAM OBS versions tested: • 32.2.1 (64-bit) • 31.1.2 The issue occurs in both versions. Output settings: • Apple Hardware H.264 • 1920 × 1080 • 7500 kbps • Tested at both 59.94 FPS and 29.97 FPS Image information: • PNG or JPG • Approxi'
   captured_at: '2026-08-07T03:54:19Z'
+  source_date: '2026-07-28'
   patch_version_matched: true
   matched_version: 31.1.2
   match_basis: body
@@ -11267,6 +11340,7 @@ evidence:
   report_title: Still processing video, even with no video input and no video output
   report_text_excerpt: '10 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.0 ### OBS Studio Log URL https://obsproject.com/logs/LuEIVRnSawr5ON1x ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I''ve set it up so there''s no video input and no vi'
   captured_at: '2026-08-07T03:55:28Z'
+  source_date: '2026-07-29'
   patch_version_matched: true
   matched_version: 32.1.0
   match_basis: body
@@ -11288,6 +11362,7 @@ evidence:
   report_title: 'Regression: Automatic Display Capture now selects DXGI instead of Windows Graphics Capture on Windows 10'
   report_text_excerpt: '10 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/vfI3zzp5apHXIXGH ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When Display Capture is set to Automatic, OBS shou'
   captured_at: '2026-08-07T03:55:42Z'
+  source_date: '2026-07-30'
   patch_version_matched: true
   matched_version: 32.1.1
   match_basis: body
@@ -11309,6 +11384,7 @@ evidence:
   report_title: OBS crashes after starting an existing scheduled YouTube broadcast — YouTubeStreamCheckThread / Qt6Core.dll
   report_text_excerpt: Bo2BmF The issue also reproduced in Safe Mode, with a newly created clean profile, on OBS 32.1.2 and 32.2.1, after Windows and NVIDIA driver updates, and with all audio monitoring disabled.
   captured_at: '2026-08-07T03:56:02Z'
+  source_date: '2026-08-03'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -11330,6 +11406,7 @@ evidence:
   report_title: 'OBS UI Deceives Users: Silent Encoder Crash Faked a 5-Hour Recording with ZERO Warnings'
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://drive.google.com/drive/folders/15VviMyzWC3NHW_zTtJnWAcNX9JvbAavc?hl=ar ### OBS Studio Crash Log URL _No res'
   captured_at: '2026-08-07T03:56:02Z'
+  source_date: '2026-08-05'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -11351,6 +11428,7 @@ evidence:
   report_title: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
   report_text_excerpt: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
   captured_at: '2026-08-07T03:56:20Z'
+  source_date: '2026-07-28'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: title
@@ -11372,6 +11450,7 @@ evidence:
   report_title: OBS crashes after starting an existing scheduled YouTube broadcast — YouTubeStreamCheckThread / Qt6Core.dll
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) 32.2.1 64-bit ### OBS Studio Log URL https://obsproject.com/logs/V3hUBjeVxctBGSC3 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS s'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-08-03'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11393,6 +11472,7 @@ evidence:
   report_title: clicking menu bar icon crashes the app
   report_text_excerpt: '# Operating System Info Other ### Other OS macOS 27.0 beta 2 and 4 ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OrCFFpBvBpfhqR2j ### OBS Studio Crash Log URL link above + [problem details from macOS'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-08-01'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11414,6 +11494,7 @@ evidence:
   report_title: Opening Image Source Properties or changing image file causes rendering lag and skipped rendering frames on macOS (Apple Silicon)
   report_text_excerpt: '### Operating System Info Other ### Other OS Mac OS Tahoe 26.5.2 ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/VlQeIe0h9fsAPRJh ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Openi'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-28'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11435,6 +11516,7 @@ evidence:
   report_title: OBS Studio Freezes Up When Exiting Program When 1st Razer Kiyo Configure Video Screen Is Open
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/qAWX5EDe3TH2kxhc https://obsproject.com/logs/QstSyO3j1BdnABY3 ### OBS Studio Crash Log'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-31'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11456,6 +11538,7 @@ evidence:
   report_title: HDR live streaming does not support AV1 encoding
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/dSBxuvA2hO1doyOs ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Altho'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-25'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11477,6 +11560,7 @@ evidence:
   report_title: Crash (EXC_BAD_ACCESS in Qt event dispatch) after ScreenCaptureKit stream disconnect (-3805) during long-running session on macOS 26
   report_text_excerpt: 'ting System Info macOS 26 ### Other OS macOS 26.5.2 (25F84, Tahoe) ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL (Relevant log excerpt included below; session log available on request) ### OBS Studio Crash Log URL https://obspro'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-08-05'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11498,6 +11582,7 @@ evidence:
   report_title: Browser Source audio control causes excessive WindowServer CPU usage on Intel macOS Tahoe
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/rUnt628GBmlbGq83 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior ## Ex'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-08-02'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11519,6 +11604,7 @@ evidence:
   report_title: OBS 32.2.1 fails to run on MacOS X 12.7.6 and closes immediately
   report_text_excerpt: '### Operating System Info macOS 12 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL No log file because running doesn''t work ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS runs'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-30'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: title
@@ -11540,6 +11626,7 @@ evidence:
   report_title: 'Flatpak: Camera portal fails with ''no more input formats'' for I420-only V4L2 devices, but direct V4L2 source works'
   report_text_excerpt: 'Linux Mint 22.3 (XFCE), kernel 7.0.0-28-generic (Ubuntu 24.04 HWE) ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/543fa1XYpnsOONJm ### OBS Studio Crash Log URL _No response_ ### Expected Behavior A V4L'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-08-02'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11561,6 +11648,7 @@ evidence:
   report_title: Crash when duplicating/renaming a pre-29 profile
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/crashes/OY4t36xaKePG6phv ### OBS Studio Crash Log URL https://obsproject.com/logs/crash'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-31'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11582,6 +11670,7 @@ evidence:
   report_title: Crash when adding Display Capture on Snapdragon X (ARM64) - dxgi.dll exception c000001d
   report_text_excerpt: 'Operating System Info Windows 11 ### Other OS Snapdragon X (ARM64) ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) 32.2.1 ### OBS Studio Log URL https://ideas.obsproject.com/ ### OBS Studio Crash Log URL _No response_ ### Expected Behavior log file -------------- <de'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-26'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11603,6 +11692,7 @@ evidence:
   report_title: 'Audio Monitoring "Monitor Only" bug: Audio is still heard when the source is muted on Windows'
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL na ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Hi everyone! I am experiencing an issue with th'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-31'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11624,6 +11714,7 @@ evidence:
   report_title: Obs panic after enter libnvidia-eglcore
   report_text_excerpt: '### Operating System Info Other ### Other OS ArchLinux ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/YpMsvo4Jiu7uvB37 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I hop'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-08-04'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -11645,6 +11736,7 @@ evidence:
   report_title: Flatpak dumps core if ran in NixOS from desktop file, but works in command line exec
   report_text_excerpt: '### Operating System Info Other ### Other OS NixOS ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ioKIxndNQ8FnaxZe ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Well,'
   captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-31'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13248,6 +13340,7 @@ evidence:
   report_title: 'Problem with CBR not working properly on Video Encoder: Amd Hw H.264 in streaming'
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/crashes/YOZFCy4NKl5Y2x4B ### OBS Studio Crash Log URL _No response_ ### Expected Behavi'
   captured_at: '2026-08-10T03:45:25Z'
+  source_date: '2026-08-09'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13299,6 +13392,7 @@ evidence:
   report_title: FFmpeg VAAPI encoder fails to start when profile contains a stale vaapi_device path
   report_text_excerpt: ', x86_64, AMD Renoir (Radeon Vega) iGPU ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/WG8xbiO8m0utxiBB ### OBS Studio Crash Log URL _No response_ ### Expected Behavior If th'
   captured_at: '2026-08-10T20:28:50Z'
+  source_date: '2026-08-10'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -13349,6 +13443,7 @@ evidence:
   report_title: When resizing or fullscreening OBS it crashes my pc (hardlock)
   report_text_excerpt: '### Operating System Info Other ### Other OS Fedora 44 KDE ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/h8PEmp3vsgRsoD9W ### OBS Studio Crash Log URL _No response_ ### Expected Behavior when'
   captured_at: '2026-08-12T03:56:41Z'
+  source_date: '2026-08-12'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13370,6 +13465,7 @@ evidence:
   report_title: obs web browser not working
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OnJGVZFusYOgsw2D ### OBS Studio Crash Log URL _No response_ ### Expected Behavior i use'
   captured_at: '2026-08-12T03:56:41Z'
+  source_date: '2026-08-11'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13391,6 +13487,7 @@ evidence:
   report_title: 'Pipewire: video capture pipe disconnects when video format/framerate is changed'
   report_text_excerpt: 'Info Other ### Other OS Pop OS 24.04 (Ubuntu base, running Gnome) ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/r4HUFKIJJFhOB43z ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I can'
   captured_at: '2026-08-13T04:02:24Z'
+  source_date: '2026-08-13'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13412,6 +13509,7 @@ evidence:
   report_title: Selecting "Microsoft DV Camera and VCR" as a video capture device causes a crash
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LlUwrdQRF8BNbNf9 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Selec'
   captured_at: '2026-08-13T09:00:01Z'
+  source_date: '2026-08-13'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13520,6 +13618,7 @@ evidence:
   report_title: WebM-VP9 codec no longer loads with BGRA format
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/RjWarc0cQzcjYMtE ### OBS Studio Crash Log URL _No response_ ### Expected Behavior WebM-'
   captured_at: '2026-08-14T03:51:34Z'
+  source_date: '2026-08-14'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13541,6 +13640,7 @@ evidence:
   report_title: Sources Crashing Leaving Grayboxes
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/vWVIWF9y9ZKDOyuH ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/CCZH3'
   captured_at: '2026-08-14T14:50:30Z'
+  source_date: '2026-08-14'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13592,6 +13692,7 @@ evidence:
   report_title: Failed to initialize NVENC because of outdated driver for obs flatpak
   report_text_excerpt: '### Operating System Info Other ### Other OS Debian forky/sid ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) flatpak 32.2.1 ### OBS Studio Log URL https://obsproject.com/logs/Zr4a9mRjo4hkbkuF ### OBS Studio Crash Log URL _No response_ ### Expected Behavior NVEN'
   captured_at: '2026-08-16T14:07:23Z'
+  source_date: '2026-08-16'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13700,6 +13801,7 @@ evidence:
   report_title: The hotkey for muting audio monitoring no longer works.
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/toGNwbBlB5Zmc5NG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The h'
   captured_at: '2026-08-17T14:14:23Z'
+  source_date: '2026-08-17'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13750,6 +13852,7 @@ evidence:
   report_title: Memory leak after stopping recording with QSV encoder on Windows
   report_text_excerpt: '10 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 32.2.2 ### OBS Studio Log URL https://obsproject.com/logs/j7TtBzaQptsxLxFY ### OBS Studio Crash Log URL I didn''t generate a crash report because OBS didn''t crash; it''s just that memory usage'
   captured_at: '2026-08-19T02:59:22Z'
+  source_date: '2026-08-19'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -13800,6 +13903,7 @@ evidence:
   report_title: You said this bug didnt exist. I beg to differ
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL See the text wall ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The 32.1 and 32.2 series have tu'
   captured_at: '2026-08-19T14:16:20Z'
+  source_date: '2026-08-19'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -13821,6 +13925,7 @@ evidence:
   report_title: You said this bug didnt exist. I beg to differ
   report_text_excerpt: out is not saved** - Layout is forgotten after restart or update. - Happens repeatedly on 32.2.2. - "Lock Docks" does not reliably prevent this. - This is a basic expectation that worked for years and is now broken. 2. **Bitrate settings are ignored** - Set to CBR with a specific
   captured_at: '2026-08-19T14:17:43Z'
+  source_date: '2026-08-19'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -13842,6 +13947,7 @@ evidence:
   report_title: OBS 32.2.2 crashes when closing/removing YouTube Live Control Panel dock on Windows 11
   report_text_excerpt: '11 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 32.2.2 (64 bit) ### OBS Studio Log URL https://obsproject.com/logs/uj1igMSt8So8nWRx ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/SpBnGSDOhNMlBngV ### Expected Behavior Ao'
   captured_at: '2026-08-19T20:02:23Z'
+  source_date: '2026-08-19'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: title
@@ -13863,6 +13969,7 @@ evidence:
   report_title: Crash (NULL deref) in screencast-portal.c start() when a delayed portal SelectSources response arrives after the session is gone
   report_text_excerpt: 'op-portal-hyprland 1.4.1, glib2 2.88.3, NVIDIA RTX 4090 (610.57.04) ## OBS Studio version 32.2.1 (Arch `extra` 32.2.1-7). The unguarded call is still present in current master. ## Expected behavior If the ScreenCast portal responds to SelectSources after the capture''s session has'
   captured_at: '2026-08-20T08:14:13Z'
+  source_date: '2026-08-20'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -13997,6 +14104,7 @@ evidence:
   report_title: 'PipeWire camera source: out.linesize[i] never set for planes > 0 — NV12 renders green'
   report_text_excerpt: 'g System Info Other ### Other OS Linux Mint 22 (Ubuntu 24.04 base) ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/L9kCrW6cSQPcC08g ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The c'
   captured_at: '2026-08-25T19:48:25Z'
+  source_date: '2026-08-25'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -14018,6 +14126,7 @@ evidence:
   report_title: Separate Audio Input Capture of Blackmagic Device renders mute
   report_text_excerpt: '### Operating System Info macOS 15 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/1jKt6jL9nn3c7lLN ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Clean'
   captured_at: '2026-08-26T14:07:12Z'
+  source_date: '2026-08-26'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -14126,6 +14235,7 @@ evidence:
   report_title: Video Delay (Async) filter degrades recorded audio (broadband grain, +44 dB noise floor) at multi-second delays; Render Delay unaffected
   report_text_excerpt: '**Platform** Windows 11 build 26200 · OBS Studio 32.2.2 (obs-websocket 5.7.4) · NVIDIA GeForce RTX 4060 Ti (driver 610.88) · NVENC H.264 recording (also reproduced with x264 veryfast) · 1920×1080 @ 30 fps · 48 kHz stereo. **Summary** With'
   captured_at: '2026-08-27T10:54:36Z'
+  source_date: '2026-08-27'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -14147,6 +14257,7 @@ evidence:
   report_title: Window Capture Automatic selects BitBlt for Delta Force and produces a stale frame, while WGC works correctly
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/HdPtqv55l34OgUn6 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-08-27T10:54:36Z'
+  source_date: '2026-08-26'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -14255,6 +14366,7 @@ evidence:
   report_title: Multiple PipeWire screen capture sources cause severe render/compositor lag, even when disabled
   report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Logs are attached at the bottom because I have multiple after debugging ### OBS Studio Crash Log URL _No response_'
   captured_at: '2026-08-29T17:54:10Z'
+  source_date: '2026-08-29'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -14276,6 +14388,7 @@ evidence:
   report_title: Crash Stream
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/tmHubWfrKM3pb4a1 ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/nvATO'
   captured_at: '2026-08-29T22:04:55Z'
+  source_date: '2026-08-29'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -14482,6 +14595,7 @@ evidence:
   report_title: SVT-AV1 CBR parameters are not applied because OBS uses the wrong FFmpeg AVOption name
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/KO7Py5pfWXfrTwwf ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-08-31T23:59:25Z'
+  source_date: '2026-08-31'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -16121,6 +16235,7 @@ evidence:
   report_title: SRT reading via media source uses old / incorrect url or streamid in obs 32.2.2
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/vdkXedUtye0toWWU ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS s'
   captured_at: '2026-09-02T05:47:10Z'
+  source_date: '2026-09-02'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: title
@@ -16142,6 +16257,7 @@ evidence:
   report_title: Two confirmed bugs in the YouTube broadcast dialog (OAuth language not sent; Auto-stop setting not saved)
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/8ksOQVq06JvBJbce ### OBS Studio Crash Log URL _No response_ ### Expected Behavior (1) W'
   captured_at: '2026-09-02T12:31:02Z'
+  source_date: '2026-09-02'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -16215,6 +16331,7 @@ evidence:
   report_title: OBS initializing HDMI capture cards at 44.1Khz and causing havoc on the USB bus
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/CICmxeCpMAmlvztN ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The e'
   captured_at: '2026-09-03T05:39:32Z'
+  source_date: '2026-09-03'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -16392,6 +16509,7 @@ evidence:
   report_title: 'Profile import fails on macOS in 32.2.2: profile name parsed as empty, files copied to profiles root ("File exists" error)'
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/D9qeYx8O2TcQ1H8Y ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Impor'
   captured_at: '2026-09-04T05:46:23Z'
+  source_date: '2026-09-03'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: title
@@ -16413,6 +16531,7 @@ evidence:
   report_title: OBS 32.1.2 crashes when browsing file source with iPhone plugged in
   report_text_excerpt: 'fo Other ### Other OS Nobara Linux 44 (KDE Plasma Desktop Edition) ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/njaivLAk3UXQ014T ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
   captured_at: '2026-09-04T12:32:07Z'
+  source_date: '2026-09-04'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: title
@@ -16434,6 +16553,7 @@ evidence:
   report_title: Virtual Camera stutter
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/6taRvZ6Do3xaNAbb ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Seaml'
   captured_at: '2026-09-04T12:33:35Z'
+  source_date: '2026-09-04'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -28035,6 +28155,7 @@ evidence:
   report_title: obs crashes/freezes the whole computer
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL n/a ; I can''t do it cuz I deleted obs and can''t download again ### OBS Studio Crash Log URL _No response_ ### Expec'
   captured_at: '2026-09-07T22:53:48Z'
+  source_date: '2026-09-07'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -31267,6 +31388,7 @@ evidence:
   report_title: 'libobs-d3d11: gs_vertexbuffer_destroy leaves curVertexBuffer dangling; use-after-free crash in update_async_texrender when a plugin uses gs_render_start(true)'
   report_text_excerpt: 's driver independent, reproduced before and after a driver update) ### OBS Studio version 31.1.1 (also present in current master as far as we can tell from the source) ### Summary `gs_vertexbuffer_destroy` in libobs-d3d11 clears the device''s `lastVertexBuffer` cache but not `curV'
   captured_at: '2026-09-11T05:58:40Z'
+  source_date: '2026-09-10'
   patch_version_matched: true
   matched_version: 31.1.1
   match_basis: body
@@ -31553,6 +31675,7 @@ evidence:
   report_title: 'macOS: GPU clock and power gradually ramp to maximum while OBS window is visible, immediately drops when minimized'
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/hUVOtZNOzsPjBWrM ### OBS Studio Crash Log URL _No response_ ### Expected Behavior ### O'
   captured_at: '2026-09-13T06:18:20Z'
+  source_date: '2026-09-12'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -31574,6 +31697,7 @@ evidence:
   report_title: '[Windows 10] Poor frame pacing with WGC window capture'
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ZQNfTwhFQPAlz90C ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
   captured_at: '2026-09-13T06:18:20Z'
+  source_date: '2026-09-12'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -31702,6 +31826,7 @@ evidence:
   report_title: 'linux-v4l2: Adjusting camera controls (Zoom, Focus, etc.) triggers stream restarts on USB3 4k webcam (Elgato 4k facecam)'
   report_text_excerpt: '### Operating System Info Other ### Other OS CachyOS ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/VSSgX2ym6OQxeCBf ### OBS Studio Crash Log URL _No response_ ### Expected Behavior 1. Cl'
   captured_at: '2026-09-14T14:06:16Z'
+  source_date: '2026-09-14'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -31931,6 +32056,7 @@ evidence:
   report_title: 'macOS: OBS hangs indefinitely (beachball) starting an Audio Input Capture source when the device isn''t ready — no timeout on AudioOutputUnitStart'
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/KLSTSgZ3WWhlkj9D ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS s'
   captured_at: '2026-09-16T18:16:47Z'
+  source_date: '2026-09-16'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -32092,6 +32218,7 @@ evidence:
   report_title: 'macOS: GetInputPropertiesListPropertyItems on screen_capture''s display_uuid crashes OBS (strlen(NULL) on the placeholder list entry)'
   report_text_excerpt: 'ing System Info macOS 15 ### Other OS macOS 15.7.9 (24G830), Intel ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Inline below (the crash is deterministic from obs-websocket, no UI involved; happy to attach a full log on request)'
   captured_at: '2026-09-17T13:03:43Z'
+  source_date: '2026-09-17'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -32113,6 +32240,7 @@ evidence:
   report_title: AV1 (NVENC) freezes in browser software decoding
   report_text_excerpt: '### Operating System Info Windows 11 ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) 32.1 ### Summary Streams encoded with AV1 (NVENC) through OBS Studio 32.2 using **Simple Output mode** freeze in Chromium-based browsers (and Firefox) w'
   captured_at: '2026-09-17T13:03:43Z'
+  source_date: '2026-09-17'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -32374,6 +32502,7 @@ evidence:
   report_title: 'macOS: OBS intermittently never enters shutdown — quit request is silently dropped (no "==== Shutting down ====")'
   report_text_excerpt: 'hutdown path is never entered. Two `sample(1)` captures taken while in this state (one on 32.2.1 with all plugins, one on 32.2.2 with a plugin removed) show the same picture. The main thread is sitting in the normal Cocoa/Qt event loop: ``` Thread_xxxxx: CrBrowserMain + start (in'
   captured_at: '2026-09-18T06:01:39Z'
+  source_date: '2026-09-18'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -32395,6 +32524,7 @@ evidence:
   report_title: 'macOS: OBS intermittently never enters shutdown — quit request is silently dropped (no "==== Shutting down ====")'
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/qNpL9kbe893hOYaI ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Issui'
   captured_at: '2026-09-18T06:02:22Z'
+  source_date: '2026-09-18'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -32590,6 +32720,7 @@ evidence:
   report_title: 'macOS: every obs-websocket GetStats leaks ~200 autoreleased objects (os_get_free_space has no autorelease pool on the websocket thread) — ~2 MB/min at one poll per second'
   report_text_excerpt: 'macOS 15 ### Other OS macOS 15.7.9 (24G830), Intel (x86_64 build) ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Not needed for this one: nothing is logged; the reproduction is a websocket client and the process''s resident size.'
   captured_at: '2026-09-19T17:05:31Z'
+  source_date: '2026-09-19'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -33379,6 +33510,7 @@ evidence:
   report_title: 'Video Capture Device: XRGB picks RGB24 over native RGB32 when the device lists RGB24 first (black source, "failed to connect pins")'
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lTSA2w8WX55gBXeh ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Selec'
   captured_at: '2026-09-24T13:05:56Z'
+  source_date: '2026-09-24'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -33424,6 +33556,7 @@ evidence:
   report_title: Twitch enhanced Broadcast forced B-Frames lag, Sunshine+moonlight remote desktop
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL In extra body ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Have an option to disable B-Frames o'
   captured_at: '2026-09-25T18:30:03Z'
+  source_date: '2026-09-25'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -33637,6 +33770,7 @@ evidence:
   report_title: 'macOS (OpenGL): crash or hang in updateSwapchainFramebuffer — gl_update''s deferred block uses a display destroyed before it runs'
   report_text_excerpt: 'de on any Mac. The same crash site is reported on an M1 in #11929. ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) Built by us from the 32.2.2 tag, x86_64, with the Xcode 16 / macOS 15 SDK floor relaxed and `ENABLE_METAL=OFF`, so the renderer is OpenGL (which is also'
   captured_at: '2026-09-25T22:54:27Z'
+  source_date: '2026-09-25'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -33658,6 +33792,7 @@ evidence:
   report_title: macOS Apple VT Issue on Apple Silicon, current method resulting in Encoding Overloaded (fixing can allow M2 Max to do 2x 4K60 HEVC streams at once)
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/JfZ8VKFaREqhBxJz ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I hav'
   captured_at: '2026-09-26T06:17:39Z'
+  source_date: '2026-09-25'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -33738,6 +33873,7 @@ evidence:
   report_title: OBS is getting Crashed when clicked from the window bar in Mac OS 27
   report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/gK4MfpndKB4TnRZJ ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The C'
   captured_at: '2026-09-26T12:45:15Z'
+  source_date: '2026-09-26'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -33831,6 +33967,7 @@ evidence:
   report_title: restore_canvases() never restores canvas video mixes, so obs_reset_video() silently removes video from every non-main canvas
   report_text_excerpt: 'media set warning: [Vertical Canvas] stream stop error -4 ``` ## Steps to reproduce OBS **32.1.2** on Linux (Ubuntu 24.04, NVIDIA, headless with obs-websocket), with a plugin that creates a canvas (reproduced with Aitum Vertical 1.6.4, which creates its canvas in `LoadScenes()` a'
   captured_at: '2026-09-26T22:26:27Z'
+  source_date: '2026-09-26'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -44602,6 +44739,7 @@ evidence:
   report_title: 'Startup crash in camera portal: on_registry_global_cb reads connection->obs_pw before it is assigned'
   report_text_excerpt: ', PipeWire 1.6.6, NVIDIA 595.71.05 (open), RTX 5090, Ryzen 9 9950X ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) nixpkgs build of 32.1.2. The code below is unchanged on master (a8b04ac). ### OBS Studio Log URL https://obsproject.com/logs/5zka0J7GhCMwyOUv (a start t'
   captured_at: '2026-10-01T05:57:00Z'
+  source_date: '2026-10-01'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -44623,6 +44761,7 @@ evidence:
   report_title: 'PipeWire camera source: frames have no timestamp, so video falls further behind audio after every stall'
   report_text_excerpt: ', PipeWire 1.6.6, NVIDIA 595.71.05 (open), RTX 5090, Ryzen 9 9950X ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) nixpkgs build of 32.1.2. The code below is unchanged on master (a8b04ac). ### OBS Studio Log URL https://obsproject.com/logs/2tRR4rPOJP6siH7q ### OBS St'
   captured_at: '2026-10-01T05:57:00Z'
+  source_date: '2026-10-01'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -44644,6 +44783,7 @@ evidence:
   report_title: 'WHIP output: video RTP timestamps run ~66.6 ppm fast at 23.976 fps (rounded per-frame increments accumulate)'
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/UUMXfhFHlV1IB1gd ### OBS Studio Crash Log URL _No response_ ### Expected Behavior At 23'
   captured_at: '2026-10-01T05:59:08Z'
+  source_date: '2026-10-01'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -47440,6 +47580,7 @@ evidence:
   report_title: Video Capture Device fails with DirectShow Run failed (0x80004005) starting with OBS 30.2.0-beta1
   report_text_excerpt: ') works, ATEM does not. * OBS 30.2.0-beta1: neither device works. * OBS 30.2.0 / 30.2.3 / 31.1.2 / 32.1.2 / 32.2.2: neither device works. * OBS 32 works correctly with capture devices on another PC. * Clean portable installations were used for version testing. * Safe Mode, a new'
   captured_at: '2026-10-03T17:55:06Z'
+  source_date: '2026-10-03'
   patch_version_matched: true
   matched_version: 31.1.2
   match_basis: body
@@ -47461,6 +47602,7 @@ evidence:
   report_title: Video Capture Device fails with DirectShow Run failed (0x80004005) starting with OBS 30.2.0-beta1
   report_text_excerpt: 'ATEM does not. * OBS 30.2.0-beta1: neither device works. * OBS 30.2.0 / 30.2.3 / 31.1.2 / 32.1.2 / 32.2.2: neither device works. * OBS 32 works correctly with capture devices on another PC. * Clean portable installations were used for version testing. * Safe Mode, a new scene col'
   captured_at: '2026-10-03T18:00:13Z'
+  source_date: '2026-10-03'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -47482,6 +47624,7 @@ evidence:
   report_title: Video Capture Device fails with DirectShow Run failed (0x80004005) starting with OBS 30.2.0-beta1
   report_text_excerpt: 'esponse_ ### OBS Studio Version Other ### OBS Studio Version (Other) 30.2.0-beta1 through 32.2.2 (30.1.2 works with AV.io HD) ### OBS Studio Log URL https://obsproject.com/logs/UsYKkYsYmH5o8NcH ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Video Capture Device'
   captured_at: '2026-10-03T18:02:22Z'
+  source_date: '2026-10-03'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -48383,6 +48526,7 @@ evidence:
   report_title: 'Virtual camera fails on macOS 26.7: "code signature invalid" - amfid finds no provisioning profile for the camera extension'
   report_text_excerpt: '. Not a new OBS packaging regression: the signing and packaging logic is unchanged across 31.1.2, 32.1.2 and 32.2.2 (verified by diffing `cmake/macos/helpers.cmake`, `cmake/macos/xcode.cmake` and `plugins/mac-virtualcam/src/camera-extension/CMakeLists.txt` across the three tags;'
   captured_at: '2026-10-05T16:13:13Z'
+  source_date: '2026-10-05'
   patch_version_matched: true
   matched_version: 31.1.2
   match_basis: body
@@ -48425,6 +48569,7 @@ evidence:
   report_title: 'Virtual camera fails on macOS 26.7: "code signature invalid" - amfid finds no provisioning profile for the camera extension'
   report_text_excerpt: '**Problem: OBS 32.2.2''s camera extension ships without a provisioning profile covering its own bundle ID, and macOS 26.7 now refuses to activate it (`OSSystemExtensionErrorCode 8`, "code signature invalid"'
   captured_at: '2026-10-05T16:20:31Z'
+  source_date: '2026-10-05'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -48609,6 +48754,7 @@ evidence:
   report_title: Video Capture Device green flickering
   report_text_excerpt: '### Operating System Info macOS 15 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/uiMXKkdbiHB3EOHv ### OBS Studio Crash Log URL _No response_ ### Expected Behavior To us'
   captured_at: '2026-10-06T15:01:08Z'
+  source_date: '2026-10-06'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -48630,6 +48776,7 @@ evidence:
   report_title: Video Capture Device green flickering
   report_text_excerpt: 'g the pdf on the iPad. It was working well at first. ### Current Behavior I was using OBS 32.2.2 (64 bit) first. Initially, it was running well. Then it started to slow down so the scroll time lagged, and so did my movements on the camera device. Then a green screen started flick'
   captured_at: '2026-10-06T15:03:13Z'
+  source_date: '2026-10-06'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -49785,6 +49932,7 @@ evidence:
   report_title: 'Crash (SIGSEGV in free) when a dock is closed during drag on Wayland: OBSDock close warning runs exec() inside QDrag loop'
   report_text_excerpt: ', Hyprland 0.56.2 (Wayland session, `QT_QPA_PLATFORM=wayland;xcb`) ### OBS Studio Version 32.2.2 (Arch package `obs-studio 32.2.2-1`; Qt 6.11.2 runtime / 6.11.1 compiled; qt6-wayland 6.11.2; Mesa 26.2.2, Intel ADL GT2) ### OBS Studio Log URL _Not attached; can provide on request.'
   captured_at: '2026-10-08T00:59:08Z'
+  source_date: '2026-10-07'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -50901,6 +51049,7 @@ evidence:
   report_title: 'Windows: since 32.2.0, plugins whose dependencies are found via PATH no longer load'
   report_text_excerpt: 's through `PATH`, as in 32.1.x and in other host applications. ### Current Behavior Since 32.2.0, a plugin DLL fails to load if it imports a DLL that is only found through a `PATH` directory. The same plugins load fine in other hosts on the same machine. **Cause** 32.2.0 added th'
   captured_at: '2026-10-10T23:13:34Z'
+  source_date: '2026-10-10'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: title
@@ -50922,6 +51071,7 @@ evidence:
   report_title: 'Windows: since 32.2.0, plugins whose dependencies are found via PATH no longer load'
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/oCsDou2aOUeH0m7F ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Third'
   captured_at: '2026-10-10T23:15:08Z'
+  source_date: '2026-10-10'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -50967,6 +51117,7 @@ evidence:
   report_title: 'VAAPI H.264 crash at recording start: empty packet reaches obs_avc_keyframe (analysis + patch)'
   report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/BwcBipTHtc7Ag0T3 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Recor'
   captured_at: '2026-10-11T07:16:02Z'
+  source_date: '2026-10-11'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -51211,6 +51362,7 @@ evidence:
   report_title: Image Source causes rendering lag and dropped frames when opening Properties or changing images on macOS
   report_text_excerpt: 'Apple Silicon. Hardware: - MacBook Pro M3 Max - 36 GB RAM OBS versions tested: - 32.2.1 - 31.1.2 The issue occurs with both versions. When streaming at 1920×1080, 59.94 FPS, simply opening the Properties window of an Image Source causes a small rendering stutter. Changing the ima'
   captured_at: '2026-10-12T00:33:53Z'
+  source_date: '2026-08-31'
   patch_version_matched: true
   matched_version: 31.1.2
   match_basis: body
@@ -51232,6 +51384,7 @@ evidence:
   report_title: OBS Version 32.0.0 removed --disable-shutdown-check
   report_text_excerpt: breaks the automation and forces me to manually click it every reboot. After updating to 32.0.0, I found that --disable-shutdown-check has been removed. This essentially ruins the ability to have OBS auto-run in the background for anyone using it as a virtual mic with VB Cable o
   captured_at: '2026-10-12T00:34:36Z'
+  source_date: '2025-09-24'
   patch_version_matched: true
   matched_version: 32.0.0
   match_basis: title
@@ -51253,6 +51406,7 @@ evidence:
   report_title: Disable check panel
   report_text_excerpt: al mode and safe mode. I always want to start in normal mode. I'm currently using version 32.1.0. Thanks.
   captured_at: '2026-10-12T00:38:05Z'
+  source_date: '2026-05-29'
   patch_version_matched: true
   matched_version: 32.1.0
   match_basis: body
@@ -51277,8 +51431,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: camera/source regression
   workflow_area: camera source workflow
   platform: macos
@@ -51295,6 +51449,7 @@ evidence:
   report_title: OBS32.1.2 Cannot install on Ubuntu 26.04(wayland)
   report_text_excerpt: 'ENV: Ubuntu budgie 26.04(wayland) + OBS 32.1.2 OBS32.1.2 Cannot install on Ubuntu 26.04(wayland)'
   captured_at: '2026-10-12T00:39:32Z'
+  source_date: '2026-06-17'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: title
@@ -51316,6 +51471,7 @@ evidence:
   report_title: OBS gives error when trying video capture
   report_text_excerpt: I am trying to capture video in OBS 32.1.2 however it is producing this error in my dmesg when trying to utilize the video. [ 1563.673358] hws_vidioc_try_fmt_vid_cap.. format2 not support -1X-1 I am now just seeing a blue scre
   captured_at: '2026-10-12T00:39:32Z'
+  source_date: '2026-06-12'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -51358,6 +51514,7 @@ evidence:
   report_title: System audio crackling when OBS is launched (no recording/streaming required)
   report_text_excerpt: e obs-studio-tytan652 package from the aur but I also tried to use the obs-studio-browser 32.2.0-4 package, both have this issue. I also tried to switch to an older Hyprland version which didn't fix it. The only thing that "fixes" the issue is to launch it in xwayland mode using
   captured_at: '2026-10-12T00:40:20Z'
+  source_date: '2026-09-30'
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: body
@@ -51379,6 +51536,7 @@ evidence:
   report_title: Image Source causes rendering lag and dropped frames when opening Properties or changing images on macOS
   report_text_excerpt: 'cOS with Apple Silicon. Hardware: - MacBook Pro M3 Max - 36 GB RAM OBS versions tested: - 32.2.1 - 31.1.2 The issue occurs with both versions. When streaming at 1920×1080, 59.94 FPS, simply opening the Properties window of an Image Source causes a small rendering stutter. Changin'
   captured_at: '2026-10-12T00:41:05Z'
+  source_date: '2026-08-31'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -51400,6 +51558,7 @@ evidence:
   report_title: WebSocket server all the time give me 4009 error even if IP port and password is 100% corect... Nobara linux kde.
   report_text_excerpt: et to make it possible but i rly dont know what i do wrong. And yes i use flatpak version 32.2.1 x64 now. Any suggestion why this not work?? Thanks! Cheers from Poland.
   captured_at: '2026-10-12T00:41:05Z'
+  source_date: '2026-09-01'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -51421,6 +51580,7 @@ evidence:
   report_title: Flatpak dumps core if ran in NixOS from desktop file, but works in command line exec
   report_text_excerpt: 'OS: NixOS OBS Studio Version 32.2.1 https://obsproject.com/logs/ioKIxndNQ8FnaxZe Dumps core: ``` PID: 62280 (obs) TID: 62280 (obs) UID: 1000 (muntasir) GID: 100 (users) Signal: 6 (ABRT) si_code: SI_TKILL Timestamp: Fri'
   captured_at: '2026-10-12T00:41:05Z'
+  source_date: '2026-08-01'
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
@@ -51442,6 +51602,7 @@ evidence:
   report_title: Periodic 1-3 s "fps dips" (repeated frames) in recordings and preview, game frame pacing is even per CapFrameX
   report_text_excerpt: Setup Ryzen 7 7700, RTX 4060 8 GB (driver 32.0.16.1714), 32 GB RAM, Windows 11 25H2, OBS 32.2.2. OBS output 1920x1080 at 59.948 fps (also tested 60 and 120), NVENC H.264. Main monitor 165 Hz with G-Sync, second monitor 60 Hz. Game FPS capped to the same fractional value via NVID
   captured_at: '2026-10-12T00:41:50Z'
+  source_date: '2026-10-07'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -51463,6 +51624,7 @@ evidence:
   report_title: Invisible text in Youtube Live Control Panel
   report_text_excerpt: . I was wondering if anybody had a permanent fix or a simpler workaround. I'm running OBS 32.2.2 64-bit on Windows.
   captured_at: '2026-10-12T00:41:50Z'
+  source_date: '2026-10-08'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -51505,6 +51667,7 @@ evidence:
   report_title: macOS Screen Capture audio stops after ~10 minutes of recording
   report_text_excerpt: I'm using OBS Studio 32.2.2 on macOS Tahoe 26.5.1 on a 2019 Intel MacBook Pro. I'm recording a Zoom presentation using a macOS Screen Capture source. The screen capture audio initially works normally, and I can
   captured_at: '2026-10-12T00:41:50Z'
+  source_date: '2026-09-11'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -51526,6 +51689,7 @@ evidence:
   report_title: OBS 32.2.2 flatpak version today stoppt working on Debain 13.6, 6.18.48 latest updates
   report_text_excerpt: 'Yesterday OBS worked great as you can see here: https://www.youtube.com/watch?v=3-iH3oEyl9A&t=3152s Today I wanted to stream but all of a sudden it does not start anymore!?!? There is a huuuugggeegee bug going on. Please fix asap'
   captured_at: '2026-10-12T00:41:50Z'
+  source_date: '2026-09-29'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: title
@@ -51853,6 +52017,7 @@ evidence:
   report_title: 'Bug Report: Crash when clicking Menu Bar / System Tray icon on macOS 27.0.1 (Apple Silicon)'
   report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/uOB2n0YG6ucor5BE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/1wTiK'
   captured_at: '2026-10-13T02:03:22Z'
+  source_date: '2026-10-12'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -52152,6 +52317,7 @@ evidence:
   report_title: 'Elgato 4K Pro: XRGB fails to connect (ConnectPins 0x80040207), YUY2/NV12 work fine'
   report_text_excerpt: 'with the exact same setup. Log: https://obsproject.com/logs/hQkqqp4BGJ7wamNB System - OBS 32.2.2 (64-bit), Windows 11 Home build 26300 - HP Pavilion Gaming Desktop 790-00xx, Intel i5-9400F, NVIDIA RTX 2060 - Elgato 4K Pro (PCIe, links at Gen2 x4), driver 1.1.0.203.7, firmware 24.'
   captured_at: '2026-10-14T13:26:39Z'
+  source_date: '2026-10-14'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -52173,6 +52339,7 @@ evidence:
   report_title: YouTube API 403 Forbidden when creating livestreams, broadcast is created but thumbnail upload fails (OBS 32.2.2)
   report_text_excerpt: 'd October 12, 2026. Everything worked correctly before that date. Updating OBS to version 32.2.2 and completely revoking and renewing Google''s OAuth permissions did not resolve the issue. ### Steps to Reproduce 1. 2. 3. ... ### Anything else we should know? _No response_'
   captured_at: '2026-10-14T18:45:54Z'
+  source_date: '2026-10-14'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: title
@@ -52220,6 +52387,7 @@ evidence:
   report_title: 'linux-v4l2: frame rate list truncates packed value to 32-bit int, so selected frame rate is ignored (driver falls back to max fps)'
   report_text_excerpt: 'OS Linux (Bazzite / Fedora 44), kernel 7.2.9, KDE Plasma (Wayland) ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/WnFAT6SSKggJAjrQ ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Selec'
   captured_at: '2026-10-14T23:19:04Z'
+  source_date: '2026-10-14'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -53542,6 +53710,7 @@ evidence:
   report_title: NVENC Video Encoder has disappeared.
   report_text_excerpt: My OBS build was outdated, so figured maybe I should update that as well. Now I'm on OBS 32.1.1, and it's still not showing up. I figured, hey, I've updated my GPU drivers recently, but let's give em another update just in case. Now my GeForce Game Ready Driver is up-to-date wit
   captured_at: '2026-10-16T18:16:45Z'
+  source_date: '2026-04-03'
   patch_version_matched: true
   matched_version: 32.1.1
   match_basis: body
@@ -56218,6 +56387,7 @@ evidence:
   report_title: Can't open "What's New"
   report_text_excerpt: \bin\64bit\obs64.exe", and everything works fine. A few days ago I downloaded "OBS-Studio-32.2.2-Windows-x64.zip" from " https://github.com/obsproject/obs-studio/releases/tag/32.2.2 ", unzipped it to D:, deleted old OBS folder, and opened obs64.exe, but no new window popped up af
   captured_at: '2026-10-17T22:14:10Z'
+  source_date: '2026-10-17'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -56752,6 +56922,7 @@ evidence:
   report_title: 'Linux: `obs-ffmpeg-mux` inherits V4L2 device file descriptors, so Virtual Camera can''t restart while recording'
   report_text_excerpt: '### Operating System Info Ubuntu 26.04 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/eYGldi62H2Ufdxx0 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Stopp'
   captured_at: '2026-10-19T23:56:12Z'
+  source_date: '2026-10-19'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -57216,6 +57387,7 @@ evidence:
   report_title: Duplicate source not working
   report_text_excerpt: '### Operating System Info Windows 11 ### OBS Studio Version 32.2.2 ### OBS Studio Log URL https://obsproject.com/logs/ISgOVJBu8MHUgw5b ### Expected Behavior The browser source not move ### Current Behavior The browser source are moving ### Steps to R'
   captured_at: '2026-10-22T18:40:57Z'
+  source_date: '2026-10-22'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -57716,6 +57888,7 @@ evidence:
   report_title: 'macOS 27.2: OBS 32.2.2 crashes on every launch in QWidget::setCursor -> QImage::toCGImage (CGImageCreate, PAC trap)'
   report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lkQ2Xb5GL0BkwkNT ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS S'
   captured_at: '2026-10-23T13:06:22Z'
+  source_date: '2026-10-23'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: title
@@ -60081,6 +60254,7 @@ evidence:
   report_title: OBS virtual camera DLLs loaded by Chromium
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/iVnm6hRpLXN0oSbg ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The O'
   captured_at: '2026-10-24T12:36:03Z'
+  source_date: '2026-10-24'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -60414,6 +60588,7 @@ evidence:
   report_title: '[Solved] Brio picture blinks in OBS on macOS — uncompressed stream through a hub; hidden MJPEG format fixes it'
   report_text_excerpt: 'nd set 60 FPS . That entry is actually MJPEG. Setup MacBook Pro M1 Pro, macOS 27.0.1, OBS 32.2.2. A single Thunderbolt cable goes to a Lenovo ThinkVision P40w-20 monitor, which has a built-in USB hub. Two cameras are plugged into the monitor: Logitech BRIO 4K Stream Edition (rear'
   captured_at: '2026-10-24T17:35:14Z'
+  source_date: '2026-10-24'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -60435,6 +60610,7 @@ evidence:
   report_title: OBS only captures one audio source at a time despite having correct settings and seperate audio tracks.
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 33.0.0-rc3 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/M5XOSG62nRDa9KEP ### OBS Studio Crash Log URL _No response_ ### Expected Behavior B'
   captured_at: '2026-10-24T17:36:27Z'
+  source_date: '2026-10-24'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -60456,6 +60632,7 @@ evidence:
   report_title: Draw Plugin is not working
   report_text_excerpt: After updation of OBS to 33.0.0 Draw plug in is not working and showing Error. Is there any solution Please.
   captured_at: '2026-10-24T17:36:18Z'
+  source_date: '2026-10-24'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -61206,6 +61383,7 @@ evidence:
   report_title: 'macOS: UI thread deadlock on popup_whitelist_mutex when YouTube Live Control Panel reloads chat dock (33.0.0)'
   report_text_excerpt: 'comment: --- ### Operating System Info macOS 27.0.1 (Apple M1 Pro) ### OBS Studio Version 33.0.0 (macOS Apple Silicon, official release build) ### What happened After updating from 32.2.2 to 33.0.0, OBS hard-freezes (UI completely unresponsive, has to be force-quit), usually with'
   captured_at: '2026-10-25T06:22:26Z'
+  source_date: '2026-10-24'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: title
@@ -61227,6 +61405,7 @@ evidence:
   report_title: Controller inputs not being read in browser source after OBS loses focus
   report_text_excerpt: '26 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.0 ### OBS Studio Log URL https://obsproject.com/logs/vPDpg8eQx0eDXSEc ### OBS Studio Crash Log URL _No response_ ### Expected Behavior After loading up https://app.gpv.gg in the browser'
   captured_at: '2026-10-25T06:22:26Z'
+  source_date: '2026-10-24'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -61248,6 +61427,7 @@ evidence:
   report_title: Constant Crashing on Bazzite Linux 44 (Fedora Fork) After October 24 Flatpak Update
   report_text_excerpt: '16-Core Processor - Display: single 49" ultrawide via DisplayPort ### OBS Studio Version 33.0.0-rc3 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OYa0KSchcNCWzYqQ ### OBS Studio Crash Log URL _No response_ ### Expected Behavior O'
   captured_at: '2026-10-25T06:22:26Z'
+  source_date: '2026-10-25'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -61478,6 +61658,7 @@ evidence:
   report_title: Nvidia Renderer Error, OBS Crash
   report_text_excerpt: Suggestion was to run OBS as administrator.. actually I would really want to avoid that. 32.2.2 change log didnt show anything related to that imho.
   captured_at: '2026-10-25T22:15:09Z'
+  source_date: '2026-10-24'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -61499,6 +61680,7 @@ evidence:
   report_title: OBS Studio 33.0.0 crashes on startup with existing scene collection — libcef.dll
   report_text_excerpt: 'interaction with the scene collection during startup. ### Steps to Reproduce 1.Start OBS 33.0.0 with my existing scene collection selected. 2.OBS crashes during startup. 3. Start OBS in Safe Mode — the collection loads successfully. 4. Start OBS normally with an empty collection'
   captured_at: '2026-10-25T22:16:01Z'
+  source_date: '2026-10-25'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: title
@@ -61547,6 +61729,7 @@ evidence:
   report_title: I had browser docks, but now I can't get them back
   report_text_excerpt: Foolishly thought today's 33.0.0 update meant I could use Wayland again, so I went into Flatseal and set it to use Wayland instead of X11 again. Opened OBS (actually, had to set leave the X11 fallback enabled or it w
   captured_at: '2026-10-27T00:13:31Z'
+  source_date: '2026-10-26'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -61568,6 +61751,7 @@ evidence:
   report_title: OBS Not working with OS 26.7.2
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL N/A ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Keeps saying quit unexpectedly, gives option t'
   captured_at: '2026-10-27T06:43:05Z'
+  source_date: '2026-10-27'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -61691,6 +61875,7 @@ evidence:
   report_title: RGB->YCbCr convention and full range are not respected in virtual camera output
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL n/a ### OBS Studio Crash Log URL _No response_ ### Expected Behavior In Settings > Advanced > Video, the user can s'
   captured_at: '2026-10-27T13:52:33Z'
+  source_date: '2026-10-27'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -61712,6 +61897,7 @@ evidence:
   report_title: Obs Studio crashes on clicking settings
   report_text_excerpt: '### Operating System Info Other ### Other OS Debian 14 forky ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) flatpak setup ### OBS Studio Log URL https://obsproject.com/logs/nVO0TGdkeUvPMVuE ### OBS Studio Crash Log URL there is no log file of the error ### Exp'
   captured_at: '2026-10-27T13:53:39Z'
+  source_date: '2026-10-27'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -61785,6 +61971,7 @@ evidence:
   report_title: Crash when closing Audio properties
   report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/tMtE2dW8zGOfBuik ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/L3fkW'
   captured_at: '2026-10-27T23:55:15Z'
+  source_date: '2026-10-27'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -61830,6 +62017,7 @@ evidence:
   report_title: Problems with update to 33.0
   report_text_excerpt: Hello, I just recently updated my software to 33.0.0 and have noticed several problems. After updating, I am unable to use the Streamlabs plugin. It says there's a problem starting the dll. I tried uninstalling the plugin and re-install
   captured_at: '2026-10-28T07:13:24Z'
+  source_date: '2026-10-28'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -62228,6 +62416,7 @@ evidence:
   report_title: YouTube Account Linking to Brand Account with Manager permissions broken
   report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/5qITANJ92GtzVrWw ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
   captured_at: '2026-10-28T14:20:07Z'
+  source_date: '2026-10-28'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -62585,6 +62774,7 @@ evidence:
   report_title: OBS crashes on launch on new Steam OS update
   report_text_excerpt: 'System Info Other ### Other OS SteamOS (steamdeck, latest version) ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://www.dropbox.com/scl/fi/lehztsdn7ofjjriy9hok1/OBS-crashlog.txt?rlkey=vewvmk13k3l9vf4jbzk6zkdto&st=mvf53yhb&d'
   captured_at: '2026-10-29T07:24:41Z'
+  source_date: '2026-10-29'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -62862,6 +63052,7 @@ evidence:
   report_title: Restream Login Not Working in OBS on macOS – Cannot Authenticate or Access Chat
   report_text_excerpt: 'MacBook з Apple Silicon. Операційна система: macOS 26.6.2. OBS Studio: Оновлено до версії 32.1.2 (Apple Silicon) під час усунення несправностей. Сервіс потокового передавання: Restream. Місця для стрімінгу: YouTube та Facebook. Чат: Restream Chat, який я використовую для монітори'
   captured_at: '2026-10-30T00:16:36Z'
+  source_date: '2026-10-29'
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -62904,6 +63095,7 @@ evidence:
   report_title: Periodic, random white flash on an already-loaded, stable Browser Source, appeared with OBS 33.0.0 (not present in 32.x) — AMD APU (ROG Ally Z1 Extreme)  Setup
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/IGVpiW9nu10NafLC ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Setup'
   captured_at: '2026-10-30T00:19:46Z'
+  source_date: '2026-10-29'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: title
@@ -62925,6 +63117,7 @@ evidence:
   report_title: Moving the progress bar on the slider should update the position of the playback
   report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/6oR0iUZ3ezgiTOXP ### OBS Studio Crash Log URL _No response_ ### Expected Behavior * mov'
   captured_at: '2026-10-30T00:19:46Z'
+  source_date: '2026-10-29'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -62946,6 +63139,7 @@ evidence:
   report_title: Slow scene loading on boot and NVENC codec out of memory
   report_text_excerpt: 'System: OBS version: 33.0.0 Ubuntu Studio (kbuntu 26.04) Kernel Version: 7.0.0-42-generic Compositor: Wayland GPU: Nvidia 3060 12gb Cpu: AMD Ryzen 7 9700x Memory: 32gb Installed method: lp_ppa_obsproject_obs_stu'
   captured_at: '2026-10-30T00:19:34Z'
+  source_date: '2026-10-29'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -62967,6 +63161,7 @@ evidence:
   report_title: Local browser overlay unable to connect to port due preconnect
   report_text_excerpt: 'eproduce 1. 2. 3. ... ### Anything else we should know? I think that something changed in 33.0.0 version because i did not experienced this issue before'
   captured_at: '2026-10-30T07:32:21Z'
+  source_date: '2026-10-30'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -62988,6 +63183,7 @@ evidence:
   report_title: OBS Crashing on Latest CachyOS Kernel on AMD Radeon RX 580
   report_text_excerpt: '### Operating System Info Other ### Other OS CachyOS ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL No Log ### OBS Studio Crash Log URL No Log ### Expected Behavior Oct 30 02:13:15 vistacachy kernel: amdgpu 0000:01:'
   captured_at: '2026-10-30T07:33:18Z'
+  source_date: '2026-10-30'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -63009,6 +63205,7 @@ evidence:
   report_title: Local browser overlay unable to connect to port due preconnect
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LyVFEc0y9go43Z19 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Rocks'
   captured_at: '2026-10-30T07:33:18Z'
+  source_date: '2026-10-30'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -65183,6 +65380,7 @@ evidence:
   report_title: OBS Constant Crashing
   report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OYNPGjBNkGOOHBeE ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/B3MEa'
   captured_at: '2026-10-31T13:51:42Z'
+  source_date: '2026-10-31'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -65231,6 +65429,7 @@ evidence:
   report_title: OBS crashes when opening the settings menu
   report_text_excerpt: 'x Mint 22.3 - Cinnamon 64-bit ### OBS Studio Version Other ### OBS Studio Version (Other) 33.0.0 ### OBS Studio Log URL https://obsproject.com/logs/9vCingQ62xNyERQt ### OBS Studio Crash Log URL https://obsproject.com/logs/4xHJS1yHmjm7hA2V ### Expected Behavior OBS crashes when op'
   captured_at: '2026-10-31T23:02:29Z'
+  source_date: '2026-10-31'
   patch_version_matched: true
   matched_version: 33.0.0
   match_basis: body
@@ -65252,6 +65451,7 @@ evidence:
   report_title: Main window modal can appear behind always-on-top projector, blocking interaction with both
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/RRoZwZr9uSbz1KAT ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The m'
   captured_at: '2026-11-01T07:35:39Z'
+  source_date: '2026-11-01'
   patch_version_matched: true
   matched_version: 32.2.2
   match_basis: body
@@ -65386,6 +65586,7 @@ evidence:
   report_title: SE Vertical Plug ins "Not Responding"
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/0TbOw2auzqjgppIB ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/wo2zq'
   captured_at: '2026-11-02T17:33:53Z'
+  source_date: '2026-11-02'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -65575,6 +65776,7 @@ evidence:
   report_title: Controller input detection in browser on Windows when out of focus is unreliable
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/mnG5U0ZgHQ4ytv5d ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Gamep'
   captured_at: '2026-11-03T02:47:02Z'
+  source_date: '2026-11-03'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -65823,6 +66025,7 @@ evidence:
   report_title: URGENT – OBS Studio 33.0.1 – Audio Monitoring Device Failure – No Sound
   report_text_excerpt: 'Title: URGENT – OBS Studio 33.0.1 Audio Monitoring Device Failure – No Sound Hello OBS Support Team, I urgently need help resolving an audio problem with OBS Studio 33.0.1 on Windows 11. I use OBS Studio to broadcast'
   captured_at: '2026-11-03T15:57:17Z'
+  source_date: '2026-11-03'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: title
@@ -66234,6 +66437,7 @@ evidence:
   report_title: Intel Arc B580 4k + HDR encoding seems broken
   report_text_excerpt: 'Other ### Other OS Fedora 44 ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.1 (will be able to test 32.2 once I get to upgrade to F45) ### OBS Studio Log URL https://obsproject.com/logs/DM4w2ZLtFAwOXF63 ### OBS Studio Crash Log URL _No response_ ### Expected Be'
   captured_at: '2026-11-04T00:52:44Z'
+  source_date: '2026-11-03'
   patch_version_matched: true
   matched_version: 32.1.1
   match_basis: body
@@ -66255,6 +66459,7 @@ evidence:
   report_title: OBS Crashes if Text (GDI+) source font size is changed while websocket is changing the text input.
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/pKKki2mwo3znO7R2 ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/nxMr3'
   captured_at: '2026-11-04T07:50:22Z'
+  source_date: '2026-11-04'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -66498,6 +66703,7 @@ evidence:
   report_title: 'regression: #13589 breaks stinger monitor-only audio playback into external devices'
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/EZ2v9Hqm2hZwASf0 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS 3'
   captured_at: '2026-11-04T16:15:48Z'
+  source_date: '2026-11-04'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -66546,6 +66752,7 @@ evidence:
   report_title: 'macOS: Stream Deck-generated hotkeys ignored when OBS is unfocused; physical shortcuts work'
   report_text_excerpt: '### Operating System Info macOS 27 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/TKtyk4enB0xNwRJK ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Hotke'
   captured_at: '2026-11-05T01:11:59Z'
+  source_date: '2026-11-04'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -66567,6 +66774,7 @@ evidence:
   report_title: OBS doesn't working properly when a game is running from Everything program
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/KOL2DZ5KhAh7gMYD ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Shoul'
   captured_at: '2026-11-05T01:11:59Z'
+  source_date: '2026-11-04'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -66588,6 +66796,7 @@ evidence:
   report_title: Plug-in Manager errors break/prevent OBS from Updating correctly
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LCrYcb7bhqnw6ZIY ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS u'
   captured_at: '2026-11-05T01:11:59Z'
+  source_date: '2026-11-04'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -66609,6 +66818,7 @@ evidence:
   report_title: Error iniciate stream
   report_text_excerpt: 'but in streamlabs works OBS Plugin Version: 1.2.0 Stream deck Plugin version: 1.2.1 OBS: 33.0.1'
   captured_at: '2026-11-05T01:11:52Z'
+  source_date: '2026-11-04'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -66630,6 +66840,7 @@ evidence:
   report_title: Severe Blockiness and Pixelation During YouTube Livestreams, but Local Recordings Are Clean (RTX 3070 Laptop / NVENC H.264 / OBS 33.0.1)
   report_text_excerpt: 'appreciate any help identifying the cause. 1. PC and hardware specifications OBS Studio: 33.0.1 (64-bit) OS: Windows 11 (Build 26300, as reported in the log) CPU: Intel Core i7-12700H (12th Gen) GPU: NVIDIA GeForce RTX 3070 Laptop GPU Integrated GPU: Intel Iris Xe Graphics RAM:'
   captured_at: '2026-11-05T01:11:52Z'
+  source_date: '2026-11-03'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: title
@@ -67146,6 +67357,7 @@ evidence:
   report_title: 'OBS 33.0.1 crashes after upgrade from OBS 32 (Unhandled exception: 80000003, libcef.dll)'
   report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Gb0jfzcwBZo2RRT7 ### OBS Studio Crash Log URL https://obsproject.com/logs/FUCxyCzZ7M9EW'
   captured_at: '2026-11-06T08:08:50Z'
+  source_date: '2026-11-05'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: title
@@ -67167,6 +67379,7 @@ evidence:
   report_title: OBS 33.0.1 crashes with c0000005 in obs-browser.dll (QCefWidgetInternal::Init) when creating a browser widget
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/crashes/vpbNG0Y6A2GLlZ7M ### OBS Studio Crash Log URL _No response_ ### Expected Behavi'
   captured_at: '2026-11-06T08:08:50Z'
+  source_date: '2026-11-05'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: title
@@ -67188,6 +67401,7 @@ evidence:
   report_title: 'Custom Output (FFmpeg): a frame from the previous recording leaks into the next one, which then fails with "Error writing packet: Invalid argument"'
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Lko2Z0NoaupzOk9h ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Stopp'
   captured_at: '2026-11-06T08:08:50Z'
+  source_date: '2026-11-05'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -67209,6 +67423,7 @@ evidence:
   report_title: Cant find Camera
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS Tahoe 26.6.2 ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/W2aHreqr8rGjeX7M ### OBS Studio Crash Log URL _No response_ ### Expected Behavior <img'
   captured_at: '2026-11-06T08:08:50Z'
+  source_date: '2026-11-05'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -67230,6 +67445,7 @@ evidence:
   report_title: Frame timing problems when running on high refresh rate displays
   report_text_excerpt: '### Operating System Info Other ### Other OS Fedora 45 ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) Flatpak ### OBS Studio Log URL https://obsproject.com/logs/Mm9tSlDBvKOnQLUD ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS to rend'
   captured_at: '2026-11-06T08:08:50Z'
+  source_date: '2026-11-05'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: body
@@ -67251,6 +67467,7 @@ evidence:
   report_title: OBS Not Opening - 33.0.1
   report_text_excerpt: Hi, Just a run down of what has happened. - opened OBS (33.0.1), got stuck on the autostarter and kept crashing - went in and deleted the autostarter dll file from plugins folder (in case it was making it crash) - I go to open OBS - it tells me t
   captured_at: '2026-11-06T08:08:39Z'
+  source_date: '2026-11-05'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: title
@@ -67272,6 +67489,7 @@ evidence:
   report_title: 'Заголовок: OBS 33.0.1 падает с c0000005 в obs-browser.dll (QCefWidgetInternal::Init) при создании браузерного виджета; 32.x работает'
   report_text_excerpt: 'Здравствуйте. Сообщаю о воспроизводимом краше в OBS Studio 33.0.1. Краш происходит в штатном коде OBS (obs-browser) при создании браузерного виджета, а не в каком-либо стороннем плагине как таковом. Система: OBS Studio 33.0.1 (64-bit), чистый устано'
   captured_at: '2026-11-06T08:08:39Z'
+  source_date: '2026-11-05'
   patch_version_matched: true
   matched_version: 33.0.1
   match_basis: title
