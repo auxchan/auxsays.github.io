@@ -432,6 +432,14 @@ auxsays/scripts/tests/test_withdraw_live_citation_rows.py = 81
 # idempotent; and the v2 withdrawal manifest (one forum copy of a GitHub issue the same page counts). Bare
 # script on a synthetic store and synthetic source payloads; the live store is read only for the pins.
 auxsays/scripts/tests/test_fill_obs_report_dates.py = 47
+# AUX-092: the OBS producer now stores that same day on every NEW row. source_date = the UTC day of the
+# creation stamp the release-date gate already reads (an issue's created_at, the opening post's own <time>),
+# directly after captured_at, no key when the stamp gives no UTC day; equal to every AUX-090 pin. A frozen
+# corpus guard runs the old producer's recorded outputs (golden_base.json) against this one: identical
+# decisions, stored rows apart from the day, counts, maturity and live decisions. The gate is unchanged, the
+# collector's full rewrite leaves every stored row and every AUX-090 dated block as it was, and a rediscovered
+# report is not re-added. Offline; the live store is read only.
+auxsays/scripts/tests/test_obs_source_date_producer.py = 63
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
 # A counted row carries the evidence for its own version match. Excerpts are truncated (Reddit

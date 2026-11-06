@@ -96,6 +96,44 @@ def issue_source_date(issue: dict[str, Any]):
     return parse_date(issue.get("created_at"))
 
 
+# A served timestamp that names its own zone: GitHub's '2026-10-06T15:01:08Z', the forum's
+# '2026-10-12T20:41:00+0100'. A value without a zone has no knowable UTC day.
+_ZONED_STAMP_RE = re.compile(r"^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)(Z|[+-]\d{2}:?\d{2})$")
+
+
+def report_source_day(issue: dict[str, Any]) -> str | None:
+    """The day the report itself was posted, as the evidence row stores it in `source_date`.
+
+    It is read from the SAME value the release-date gate reads (`issue_source_date`): the GitHub
+    issue's own `created_at`, or, for a forum thread, the opening post's own <time>, which
+    `obs_forum_source.parse_opening_post` hands over under the same key. Never `updated_at` or
+    `closed_at`, never a later reply, never `captured_at`: each of those is last activity or
+    collection time, not when the report was written.
+
+    The format and meaning are the store's, as AUX-090 wrote them for the rows dated before this
+    existed: 'YYYY-MM-DD', the UTC day of that instant. The gate keeps reading the timestamp's own
+    calendar day, unchanged. The two can differ only for a post made just after local midnight (the
+    forum serves +0100 in summer); GitHub serves UTC, so for an issue they are always the same day.
+
+    None when the value is missing, is not a timestamp, or names no time zone: its UTC day is then
+    unknown, and a guessed day would be a date the source never stated. The row is then stored
+    without a date, exactly as before, and the gate has already decided on its own reading.
+    """
+    match = _ZONED_STAMP_RE.match(str(issue.get("created_at") or "").strip())
+    if not match:
+        return None
+    zone = match.group(2)
+    if zone == "Z":
+        zone = "+00:00"
+    elif ":" not in zone:
+        zone = zone[:3] + ":" + zone[3:]
+    try:
+        instant = datetime.fromisoformat(match.group(1) + zone)
+    except ValueError:
+        return None
+    return instant.astimezone(timezone.utc).strftime("%Y-%m-%d")
+
+
 def slug(value: str) -> str:
     value = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
     return value[:80].strip("-")
@@ -414,12 +452,18 @@ def evidence_row(issue: dict[str, Any], version: str, basis: str, captured_at: s
     point is that there is ONE set of OBS evidence semantics: a forum report and a GitHub
     issue differ in where they were found, not in what counting them means. Omitting
     `identity` reproduces the GitHub row byte for byte.
+
+    `source_date` is the day the report was posted (`report_source_day`), placed directly after
+    `captured_at` as in every OBS row AUX-090 dated. It is a display fact only: no acceptance or
+    count reads it, and `evaluate_issue` has decided before this row is built. A report whose
+    timestamp gives no UTC day gets no `source_date` key at all, so its row is what it always was.
     """
     number = issue.get("number")
     title = str(issue.get("title") or f"GitHub issue {number}").strip()
     body = str(issue.get("body") or "")
     theme, workflow_area, platform, severity, sentiment = classify(issue)
     ident = identity or {}
+    source_day = report_source_day(issue)
     return {
         "id": ident.get("row_id") or f"obs-studio-{slug(version)}-github-issue-{number}",
         "product_id": PRODUCT_ID,
@@ -432,6 +476,7 @@ def evidence_row(issue: dict[str, Any], version: str, basis: str, captured_at: s
         "report_title": title,
         "report_text_excerpt": excerpt(body or title, version),
         "captured_at": captured_at,
+        **({"source_date": source_day} if source_day else {}),
         "patch_version_matched": True,
         "matched_version": version,
         "match_basis": basis,
