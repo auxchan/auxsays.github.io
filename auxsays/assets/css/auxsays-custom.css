@@ -1411,20 +1411,7 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   background: currentColor;
 }
 
-.home-patch-dot--positive {
-  color: #6df05f;
-}
-
-.home-patch-dot--moderate {
-  color: #f0ca67;
-}
-
-.home-patch-dot--negative {
-  color: #ff524f;
-}
-
-.home-patch-dot--insufficient,
-.home-patch-dot--insufficient-data {
+.home-patch-dot--insufficient {
   color: #9aa8b2;
 }
 
@@ -5479,3 +5466,17 @@ h2.home-section-label { margin-top: 0; line-height: 1.3; font-family: inherit; }
 /* GROWTH-1A privacy notice: its links must read as links (the site resets `a` to inherit). */
 .privacy-page .methodology-card a { color: var(--cyan-1); text-decoration: underline; text-underline-offset: 3px; }
 .privacy-page .methodology-card a:focus-visible { outline: 2px solid var(--accent-1); outline-offset: 2px; }
+
+/* ==========================================================
+   GROWTH-1C homepage: a signal row shows its patch page's verdict and evidence
+   state (the dot takes the colour of that page's verdict-box border), and each
+   product tracker says where its updates come from.
+   ========================================================== */
+.home-patch-dot--live,
+.home-patch-dot--pilot { color: #f0ca67; }
+.home-patch-dot--official { color: #5fd4e5; }
+.home-patch-verdict { color: var(--text-0); font-weight: 700; }
+.home-tracker-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr)); gap: .45rem; }
+.home-tracker-item { display: grid; min-width: 0; }
+.home-tracker-item .home-tracker-link { display: grid; align-content: center; gap: .1rem; border-radius: 14px; padding: .4rem .78rem; }
+.home-tracker-desc { color: var(--text-2); font-size: .72rem; line-height: 1.25; }

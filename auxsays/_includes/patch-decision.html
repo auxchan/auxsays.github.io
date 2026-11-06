@@ -1,0 +1,82 @@
+{%- comment -%}
+  THE PATCH DECISION (GROWTH-1C). The ladder that decides the verdict a patch page prints under its
+  "AUXSAYS verdict" eyebrow, moved here unchanged so the homepage prints the same verdict for the
+  same record. It is not a second ladder: aux-update.html renders this file, and nothing else in
+  the site decides a patch page's verdict.
+
+  Input:   include.record, a patch page (page) or a site.pages item.
+  Reads, in scope, what the patch page has already computed for the same record:
+           evidence_state        from patch-evidence-state.html
+           report_count          the record's update_report_count as a number
+           report_bearing_count  update_report_count, or the confirmed patch-specific count when
+                                 that is 0
+  Outputs: decision_label        the published verdict: a word from _data/patch_verdicts.yml
+           decision_body, security_sensitive, official_only_zero_reports, show_test_first_context,
+           verdict_text, verdict_action, verdict_known, decision_label_key
+
+  WHITESPACE. The lines below keep the line structure they had inside aux-update.html, so the patch
+  page emits exactly the bytes it emitted before (proved over every patch page when this moved).
+  A caller that must print nothing wraps the include in a capture, as the homepage does.
+{%- endcomment -%}
+{%- assign pd_record = include.record -%}
+{% assign official_only_zero_reports = false %}
+{% if evidence_state == 'Official source only' and report_count == 0 %}{% assign official_only_zero_reports = true %}{% endif %}
+{% assign security_sensitive = false %}
+{% if pd_record.security_sensitive == true or pd_record.update_security_sensitive == true or pd_record.official_patch_notes_source_type == 'security_advisory' or pd_record.official_source_type == 'security_advisory' %}{% assign security_sensitive = true %}{% endif %}
+{% assign verdict_text = pd_record.quick_verdict %}
+{% assign decision_body = pd_record.update_decision_body %}
+{% assign decision_label = pd_record.update_decision_label %}
+{%- comment -%}
+  `x == blank` is a no-op in this stack -- it is ALWAYS false -- so none of these branches has ever
+  run. A record that carries reports but no `update_decision_label` therefore rendered no label at
+  all: 86 records corpus-wide, and the worst of them are the pages with the MOST evidence, because
+  the zero-report rescue below only covers records with a count of 0. On Acrobat the intended
+  verdict was sitting unused in `update_consensus_summary` the whole time. Normalise to '' first.
+{%- endcomment -%}
+{% assign decision_label = decision_label | default: '' | strip %}
+{% if decision_label == '' and pd_record.update_consensus_summary contains ':' %}
+  {% assign decision_label = pd_record.update_consensus_summary | split: ':' | first | strip %}
+{% elsif decision_label == '' and verdict_text contains ':' %}
+  {% assign decision_label = verdict_text | split: ':' | first | strip %}
+{% elsif decision_label == '' %}
+  {% assign decision_label = 'INSUFFICIENT DATA' %}
+{% endif %}
+{%- comment -%}
+  FAIL SAFE, the same refusal the listing row carries (AUX-029). The chain above ends in a
+  `split: ':' | first`, which promotes ANY pre-colon text to the published verdict -- and this box
+  is the verdict: aux-update.html renders it verbatim under the "AUXSAYS verdict" eyebrow.
+
+  Phase 1 first added this refusal to _includes/patch-table-row.html only, which left the two
+  surfaces disagreeing about the same record: fed a summary opening
+  "GitHub / Copilot Copilot code review:" the row said INSUFFICIENT DATA while THIS page published
+  the vendor's title as the verdict, and a stored label of "SHIP IT" published as-is. Rendered and
+  confirmed with the liquid gem before the fix.
+
+  Vocabulary and order come from _data/patch_verdicts.yml, which mirrors lib/patch_decision.py and
+  is pinned to it by test_patch_decision_authority. A legacy phrasing resolves to the action it
+  names; anything in neither list is not published as a decision.
+
+  LATENT when added: 0 of 1,270 records publish a non-vocabulary verdict here today, because the
+  official-source-only rule below rescues all 38 that derive a title-shaped label. That rescue is
+  one condition, and it is NOT the same condition the row uses -- the row reads the front-matter
+  evidence_state, the patch page rebuilds its own -- so the two could stop agreeing.
+{%- endcomment -%}
+{% assign verdict_vocab = site.data.patch_verdicts %}
+{% assign verdict_alias = verdict_vocab.legacy_aliases[decision_label] %}
+{% if verdict_alias %}{% assign verdict_action = verdict_alias %}{% else %}{% assign verdict_action = decision_label %}{% endif %}
+{% assign verdict_known = false %}
+{% for known in verdict_vocab.risk_order %}
+{% if known == verdict_action %}{% assign verdict_known = true %}{% break %}{% endif %}
+{% endfor %}
+{% unless verdict_known %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endunless %}
+{% assign decision_label_key = decision_label | downcase %}
+{% assign show_test_first_context = false %}
+{% if report_bearing_count > 0 and decision_label_key contains 'test first' %}{% assign show_test_first_context = true %}{% endif %}
+{% if official_only_zero_reports %}
+  {% assign decision_label = 'INSUFFICIENT DATA' %}
+  {% if security_sensitive %}
+    {% assign decision_body = 'Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.' %}
+  {% else %}
+    {% assign decision_body = 'Too few reports for a verdict yet.' %}
+  {% endif %}
+{% endif %}{%- comment -%} This file ends inside this tag, so it adds no final newline to the page. {%- endcomment -%}
