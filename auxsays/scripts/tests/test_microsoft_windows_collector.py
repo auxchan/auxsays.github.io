@@ -21,6 +21,7 @@ _REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
 
 from patch_collectors.base import PatchRecord, windows_identity_gate
+from lib.source_segments import learn_report_key
 import patch_collectors.microsoft_windows as win
 import lib.write_update_record as wur
 
@@ -66,11 +67,18 @@ REC_25H2 = PatchRecord("microsoft-windows-11", "25H2", Path("2026-06-23-windows-
 CAPTURED = "2026-07-01T00:00:00Z"
 
 
+# A distinct report is a distinct QUESTION. The title slug is not an identity -- two slugs of one
+# question id are one report (AUX-078) -- so each distinct q_slug gets its own question id, and the
+# same q_slug always the same one.
+_QIDS: dict[str, int] = {}
+
+
 def cand(title: str, body: str, date: str = "2026-06-30T00:00:00Z", q_slug: str = "q") -> dict:
+    qid = _QIDS.setdefault(q_slug, 2412345 + len(_QIDS))
     return {
         "source_type": "microsoft_learn_qna",
         "source_name": "Microsoft Learn Q&A",
-        "source_url": f"https://learn.microsoft.com/en-us/answers/questions/2412345/{q_slug}",
+        "source_url": f"https://learn.microsoft.com/en-us/answers/questions/{qid}/{q_slug}",
         "parent_title": title,
         "report_title": title,
         "report_text": body,
@@ -361,14 +369,15 @@ def run() -> int:
     check("exclusivity: ...and being uncounted is what keeps it out of the count",
           r24 and r24[0].get("counted") is False, str(r24[0].get("counted")))
     # ...and it holds ACROSS runs, because the map is seeded from stored evidence.
-    stored_claims = {shared_url.lower(): ("microsoft-windows-11", "25H2", "26200.9168")}
+    # Keyed exactly as `claimed_urls` keys stored evidence: the report identity (AUX-078).
+    stored_claims = {learn_report_key(shared_url): ("microsoft-windows-11", "25H2", "26200.9168")}
     c24, cr24 = win.evaluate_candidates(rec_24, tgt_24, [dict(shared)], CAPTURED, stored_claims)
     check("exclusivity: a URL already stored for another patch is refused on a later run",
           len(c24) == 0 and cr24 and cr24[0].get("exclusion_reason") == "cross_patch_duplicate",
           str([r.get("exclusion_reason") for r in cr24]))
     # The same patch re-discovering its OWN report is not a cross-patch duplicate; the append
     # guard deduplicates that, and turning it into a rejection would flip a real row to uncounted.
-    same_claims = {shared_url.lower(): ("microsoft-windows-11", "25H2", "26200.9168")}
+    same_claims = {learn_report_key(shared_url): ("microsoft-windows-11", "25H2", "26200.9168")}
     d25, _dr = win.evaluate_candidates(rec_25, tgt_25, [dict(shared)], CAPTURED, same_claims)
     check("exclusivity: a patch re-finding its OWN report still accepts it",
           len(d25) == 1, str(len(d25)))

@@ -146,6 +146,13 @@ auxsays/scripts/tests/test_acrobat_retired_method_health.py = 50
 # AST, because the module docstring legitimately names the things it must not do.
 auxsays/scripts/tests/test_acrobat_edition_and_health_migration.py = 59
 auxsays/scripts/tests/test_update_linked_tier2.py = 243
+# AUX-078: ONE canonical Microsoft Learn Q&A report identity (question id + anchored segment, never the
+# title slug) at every dedup site -- the durable append guard and its write-authority twin, the RSS run
+# dedup, Windows ids and cross-patch claims, Teams fetch/candidate dedup, PowerPoint seen/exclusivity,
+# the orchestrator's checkpointed seen-set, reply harvest and higher-level exclusion, Tier 2 / Level 3
+# merges, live exclusivity and QA distinctness. Every non-Learn host keeps its key byte for byte.
+# Frozen synthetic fixtures; bare-script entry points run as network-fenced subprocesses.
+auxsays/scripts/tests/test_learn_report_identity.py = 99
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26

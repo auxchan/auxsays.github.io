@@ -65,6 +65,7 @@ from .base import (
     windows_identity_gate,
 )
 from lib.patch_identity import patch_key
+from lib.source_segments import learn_report_key
 from . import elevenforum_source as elevenforum
 from . import microsoft_learn_qna_source as learn_qna
 from . import runtime_budget as rb
@@ -745,7 +746,12 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
         platform=platform,
         severity=severity,
         sentiment=sentiment,
-        row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(SOURCE_TYPE)}-{slug(str(candidate.get('source_url') or ''))}",
+        # A Learn Q&A row's id is minted from its canonical report identity, not from the title slug
+        # in its URL, so a slug rename cannot mint a second id for one report (AUX-078). Strictly
+        # coarser than the slug form: Windows Learn rows are question URLs, and the slug id already
+        # began with the question id. Every other host keeps its URL-derived id; stored ids are never
+        # rewritten.
+        row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(SOURCE_TYPE)}-{slug(learn_report_key(str(candidate.get('source_url') or '')) or str(candidate.get('source_url') or ''))}",
     )
 
     reason = windows_learn_qna_reason(target, str(candidate.get("source_url") or ""), source_date, report_text, str(candidate.get("report_title") or ""), matched_kb, matched_os_build, matched_feature)
@@ -768,9 +774,11 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
 
 
 def claimed_urls() -> dict[str, tuple[str, str, str]]:
-    """canonical URL -> the Windows patch that already holds it, from stored evidence.
+    """report identity -> the Windows patch that already holds it, from stored evidence.
 
-    See ``evaluate_candidates``: this is the CROSS-RUN half of one-report-one-patch."""
+    See ``evaluate_candidates``: this is the CROSS-RUN half of one-report-one-patch. The key is the
+    canonical Learn report identity for a Learn Q&A URL (a later title slug is the same report) and
+    the lowercased canonical URL for every other host, exactly as before (AUX-078)."""
     claims: dict[str, tuple[str, str, str]] = {}
     for row in load_evidence():
         if str(row.get("product_id") or "").strip() != PRODUCT_ID:
@@ -779,7 +787,7 @@ def claimed_urls() -> dict[str, tuple[str, str, str]]:
             continue
         url = learn_qna.canonical_learn_qna_url(str(row.get("source_url") or ""))
         if url:
-            claims.setdefault(url.lower(),
+            claims.setdefault(learn_report_key(url) or url.lower(),
                               patch_key(PRODUCT_ID, row.get("update_version"), row.get("target_build")))
     return claims
 
@@ -810,9 +818,10 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
     mine = patch_key(PRODUCT_ID, record.update_version, record.target_build)
     for candidate in candidates:
         url = learn_qna.canonical_learn_qna_url(str(candidate.get("source_url") or ""))
-        key = url.lower()
+        # One key for the run-level dedup AND the claims lookup, the same one `claimed_urls` stores.
+        key = learn_report_key(url) or url.lower()
         if not url or key in seen:
-            continue  # run-level duplicate URL dedup
+            continue  # run-level duplicate report dedup
         seen.add(key)
         row = row_from_candidate(record, target, {**candidate, "source_url": url}, captured_at)
         if row.get("counted") is True and claims is not None:

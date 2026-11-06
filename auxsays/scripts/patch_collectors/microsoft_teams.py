@@ -541,9 +541,12 @@ def discover_learn_qna(record: base.PatchRecord, context: Any, errors: list[dict
             break
         url = str(cand.get("source_url") or "")
         canonical = qna_source.canonical_learn_qna_url(url) or url
-        if not canonical or canonical in seen_threads:
+        # One fetch per QUESTION, not per spelling: a thread re-surfaced under a new title slug is
+        # the same thread (AUX-078). The first spelling seen is the one fetched and cited.
+        thread_key = source_segments.learn_report_key(canonical) or canonical
+        if not canonical or thread_key in seen_threads:
             continue
-        seen_threads.add(canonical)
+        seen_threads.add(thread_key)
         try:
             page = fetcher(canonical if canonical.endswith("/") else canonical + "/")
         except Exception as exc:                                  # noqa: BLE001
@@ -609,17 +612,28 @@ def discover_tech_community(context: Any, errors: list[dict[str, Any]],
 
 # --- de-duplication -------------------------------------------------------------------------------
 
+def candidate_key(cand: dict[str, Any]) -> str:
+    """The report identity a candidate is deduplicated and attributed under.
+
+    ``base.report_url_key``: the canonical Learn report identity (question id + anchored segment)
+    for a Learn Q&A URL, the normalised URL for Tech Community and every other host (AUX-078).
+    ``dedupe_candidates`` and the per-method accounting in ``collect`` must read the SAME key, or a
+    provenance lookup silently misses."""
+    return base.report_url_key(str(cand.get("source_url") or ""))
+
+
 def dedupe_candidates(candidates: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, list[str]]]:
     """One real report is one row, however many methods found it.
 
-    Keyed on the canonical URL, which carries the segment anchor -- so two segments of one thread
-    stay distinct while one segment found twice collapses. Discovery provenance is retained for
-    auditability; the consensus count is unaffected because the extra method adds no row.
+    Keyed on the report identity (``candidate_key``), which carries the segment anchor -- so two
+    segments of one thread stay distinct while one segment found twice, or under two title slugs,
+    collapses. Discovery provenance is retained for auditability; the consensus count is unaffected
+    because the extra method adds no row.
     """
     kept: dict[str, dict[str, Any]] = {}
     provenance: dict[str, list[str]] = {}
     for cand in candidates:
-        key = base.normalize_url(str(cand.get("source_url") or ""))
+        key = candidate_key(cand)
         if not key:
             continue
         method = str(cand.get("discovery_method") or "")
@@ -746,7 +760,7 @@ class TeamsCommunityCollector(base.ProductCollector):
                 row = evaluate_candidate(record, cand, captured_at)
                 counted = bool(row.get("counted"))
                 (accepted if counted else rejected).append(row)
-                key = base.normalize_url(str(cand.get("source_url") or ""))
+                key = candidate_key(cand)
                 for method in provenance.get(key, [str(cand.get("discovery_method") or "")]):
                     if method in by_method:
                         by_method[method][0 if counted else 1] += 1

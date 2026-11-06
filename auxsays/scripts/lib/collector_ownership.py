@@ -406,7 +406,9 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
     permitted_sources = allowed_source_types(product_id)
     # Dedup universe = existing ids/urls; each added row must be unique and owned. The duplicate-URL
     # identity is the SAME key the append/dedup authority uses (base.evidence_key): the triple
-    # (product_id, exact update_version, normalize_url(source_url)) -- NOT the url alone. A url-alone
+    # (product_id, exact update_version, report_url_key(source_url)) -- NOT the url alone; for a
+    # Learn Q&A URL that slot is the question id + anchor, so a title-slug variant of a held report
+    # is a duplicate here exactly as it is refused there (AUX-078). A url-alone
     # key over-rejected legitimately shared source URLs across distinct (product, version) rows
     # (run 31015586517 false positive on obs/acrobat-pro/acrobat-reader). Embedded listing report cards
     # are exempt from the url set exactly as append_evidence_rows exempts them.
