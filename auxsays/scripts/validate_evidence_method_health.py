@@ -47,6 +47,9 @@ COUNTER_FIELDS = (
     "public_counted_reports",
     "accepted_reports",
     "rejected_reports",
+    # Optional (written only when non-zero): rows refused because their id was taken by a
+    # different report. Checked like every counter when present (AUX-083).
+    "id_collision_refused",
 )
 
 ALLOWED_STATUSES = {

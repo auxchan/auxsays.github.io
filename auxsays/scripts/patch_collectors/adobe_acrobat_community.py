@@ -1186,9 +1186,11 @@ class AdobeAcrobatCollector(ProductCollector):
             if context.write:
                 persisted: list[dict[str, Any]] = []
                 already_held: list[dict[str, Any]] = []
+                collided: list[dict[str, Any]] = []
                 added, total, rows = append_evidence_rows(
-                    accepted, out_added=persisted, out_already_held=already_held)
-                finalize_method_health_delta(method_health, persisted, already_held)
+                    accepted, out_added=persisted, out_already_held=already_held,
+                    out_id_collision=collided)
+                finalize_method_health_delta(method_health, persisted, already_held, collided)
                 structured = len(counted_rows(rows, self.product_id, record.update_version))
                 record_updated = apply_consensus_writeback(self.product_id, record.update_version) if accepted else False
                 result.update({

@@ -800,11 +800,13 @@ class TeamsCommunityCollector(base.ProductCollector):
             if context.write:
                 persisted: list[dict[str, Any]] = []
                 already_held: list[dict[str, Any]] = []
+                collided: list[dict[str, Any]] = []
                 added, total, _rows = base.append_evidence_rows(
-                    accepted + rejected, out_added=persisted, out_already_held=already_held)
+                    accepted + rejected, out_added=persisted, out_already_held=already_held,
+                    out_id_collision=collided)
                 # evidence_rows_added must state what actually REACHED the store, not what was
                 # accepted this run -- a collector re-finds the same threads every run.
-                base.finalize_method_health_delta(method_health, persisted, already_held)
+                base.finalize_method_health_delta(method_health, persisted, already_held, collided)
                 result["evidence_rows_added"] = added
                 result["record_updated"] = (
                     apply_consensus_writeback(str(record.update_version or "")) if accepted else False)

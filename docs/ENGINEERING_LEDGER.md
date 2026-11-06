@@ -87,6 +87,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-077 | Resolved | Evidence integrity | Medium | Learn Q&A fetchers followed a redirect to any host and would have parsed that page as the Learn thread |
+| AUX-083 | Resolved | Evidence integrity | Medium | A Microsoft Q&A reply to a PowerPoint question took the question's row id and was refused as "already held" (Teams half deferred) |
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
 | AUX-078 | Resolved | Evidence integrity | Medium | A Microsoft Q&A question re-found under an edited title was counted twice on one patch |
@@ -4371,6 +4372,49 @@ slugs; they now use distinct ids.
 **Reopen only if** the diagnostic reports a class (a) group whose later row was captured after this change; a
 non-Learn URL's dedup key differs from `normalize_url`; or a new Learn dedup site keys on the URL rather than
 `report_url_key`.
+
+---
+
+### AUX-083 — A Microsoft Q&A reply to a PowerPoint question took the question's row id and was refused as "already held"
+
+- **Status** Resolved for PowerPoint; the Teams half is deferred · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-06 (measured read-only the same day) · **Resolved** 2026-11-06 (producer fix; the merge
+  waits until production recovery is shown)
+
+**Symptom** On PowerPoint 2406 (build 17726.20126) two independently written replies in one Microsoft Q&A thread
+were accepted on every run from 2026-08-31 and never stored, so the patch kept one counted report. Telemetry
+called them stored (45 runs, the old derivation) and then "already held" (225 runs). Teams loses its uncounted
+audit replies the same way: at least 306 rows in its latest run.
+
+**Root cause** `base.slug` keeps 96 characters. A Learn question URL with a long title already slugs to about
+that, so a reply's `#answer-<id>` anchor was cut off and its row id equalled its question's id, or a sibling
+reply's. The append guard refused it on id equality and filed every such refusal under "already held", although
+the store never had that report. The fixtures used short titles, so nothing caught it.
+
+**Fix** `base.report_id_slot(url)` returns `slug(learn_report_key(url))` (`learn-<qid>-reply-<id>`) for a Learn
+reply or comment, and `slug(url)` byte for byte for everything else. PowerPoint's row id uses it, including every
+independent reply the orchestrator harvests from a thread. The append guard now names an id-only collision
+(`out_id_collision`; the method-health field `id_collision_refused`, written only when non-zero) instead of
+calling it "already held", for every caller. What it refuses is unchanged. Stored ids are never rewritten: a
+legacy reply re-found under its new id is still held by its URL key.
+
+**Deferred: Teams** The base default id, which only Teams reaches, is deliberately unchanged, so Teams stores no
+new rows. Storing its uncounted replies is pending a metadata-minimal storage design. Until then its refusals are
+visible as `id_collision_refused` on its Q&A health rows instead of being published as archive depth.
+
+**Measured** Offline, on a copy of the store, shipped `main` against this change:
+- 0 existing ids change, and re-finding every stored PowerPoint and Teams row adds nothing;
+- 0 new reply ids collide with a stored id (on `main`, 10 of 10 synthetic replies did);
+- Teams stores the same 79 of 542 synthetic replies on both (0 new Teams rows); the 463 it refuses are reported
+  as id collisions instead of 436 "already held" and 27 unreported;
+- two synthetic independents on 2406 are stored and its count goes 1 → 3; its decision changes only in its
+  reasons and it stays not live; the live set stays at 6.
+
+`test_learn_reply_row_id.py` (69 checks, `[blocking]`) pins it, and 13 one-change mutants are each killed by a
+named check.
+
+**Reopen only if** a PowerPoint run after the merge reports `id_collision_refused` on its Learn family; a question
+or non-Learn row id differs from `slug(url)`; or a Teams row id changes before the storage decision is made.
 
 ---
 

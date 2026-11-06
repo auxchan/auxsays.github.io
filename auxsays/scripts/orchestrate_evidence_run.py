@@ -872,12 +872,14 @@ class Pipeline:
             require_owned_methods(health)
             persisted: list[dict[str, Any]] = []
             already_held: list[dict[str, Any]] = []
+            collided: list[dict[str, Any]] = []
             added, dupes, _ = append_evidence_rows(
-                counted, self.evidence_path, out_added=persisted, out_already_held=already_held) if counted \
+                counted, self.evidence_path, out_added=persisted, out_already_held=already_held,
+                out_id_collision=collided) if counted \
                 else (0, 0, load_evidence(self.evidence_path) if self.evidence_path.exists() else [])
             # Between the append and the upsert is the only moment the real delta is known and the
             # health rows are still mutable. See base.finalize_method_health_delta.
-            finalize_method_health_delta(health, persisted, already_held)
+            finalize_method_health_delta(health, persisted, already_held, collided)
             changed, total, _ = upsert_method_health(health, self.health_path)
             state.evidence_changes = {"mode": "write", "added": added, "duplicates": dupes}
             state.health_changes = {"mode": "write", "changed": changed, "total": total}

@@ -57,6 +57,7 @@ from .base import (
     load_front_matter_and_body,
     make_evidence_row,
     method_health_row,
+    report_id_slot,
     slug,
     source_date_passes,
     source_url_is_specific,
@@ -756,7 +757,10 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
         platform=platform,
         severity=severity,
         sentiment=sentiment,
-        row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(str(candidate.get('source_type') or LEARN_QNA_SOURCE_TYPE))}-{slug(source_url)}",
+        # A Microsoft Q&A reply gets its own short id slot; `slug(url)` cut its anchor off, so it
+        # took its question's id and was refused as "already held" (AUX-083). Every other URL,
+        # questions included, keeps `slug(url)` byte for byte.
+        row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(str(candidate.get('source_type') or LEARN_QNA_SOURCE_TYPE))}-{report_id_slot(source_url)}",
     )
     row["counted"] = reason is None
     row["exclusion_reason"] = reason
@@ -1641,9 +1645,11 @@ class PowerPointLearnQnaCollector(ProductCollector):
                 # record's verdict / consensus fields here (activation is a separate step).
                 persisted: list[dict[str, Any]] = []
                 already_held: list[dict[str, Any]] = []
+                collided: list[dict[str, Any]] = []
                 added, total, _rows = append_evidence_rows(
-                    accepted, out_added=persisted, out_already_held=already_held)
-                finalize_method_health_delta(health, persisted, already_held)
+                    accepted, out_added=persisted, out_already_held=already_held,
+                    out_id_collision=collided)
+                finalize_method_health_delta(health, persisted, already_held, collided)
                 result.update({"evidence_rows_added": added, "evidence_rows_total": total})
             results.append(result)
         return results

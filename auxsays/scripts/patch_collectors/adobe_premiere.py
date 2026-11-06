@@ -156,9 +156,11 @@ class AdobePremiereCollector(ProductCollector):
             if context.write:
                 persisted: list[dict[str, Any]] = []
                 already_held: list[dict[str, Any]] = []
+                collided: list[dict[str, Any]] = []
                 added, total, rows = append_evidence_rows(
-                    accepted, out_added=persisted, out_already_held=already_held)
-                finalize_method_health_delta(method_health, persisted, already_held)
+                    accepted, out_added=persisted, out_already_held=already_held,
+                    out_id_collision=collided)
+                finalize_method_health_delta(method_health, persisted, already_held, collided)
                 structured_count = len(counted_rows(rows, PRODUCT_ID, record.update_version))
                 record_updated = False
                 if accepted:

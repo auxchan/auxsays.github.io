@@ -16,7 +16,8 @@ from pathlib import Path
 
 from lib.patch_identity import key_from as patch_key_from, require_build
 from lib.reddit_access_policy import is_policy_disabled_row
-from lib.source_segments import report_url_key
+from lib.source_segments import (SEGMENT_COMMENT, SEGMENT_REPLY_ANCHOR, learn_report_key,
+                                 report_url_key)
 from typing import Any, Iterable
 from urllib.parse import parse_qs, urlparse
 
@@ -132,6 +133,12 @@ METHOD_HEALTH_FIELDS = (
     "notes",
 )
 
+# Rows the append guard refused ONLY because their row id equalled an id already taken by a
+# DIFFERENT report (its URL key was neither held nor earlier in the batch). Not "already held": the
+# store never had that report. OPTIONAL and written LAST, only when non-zero, so a health row with
+# no such refusal keeps its exact bytes and key order (see normalize_method_health_row).
+ID_COLLISION_FIELD = "id_collision_refused"
+
 VALID_METHOD_HEALTH_STATUSES = {
     "success",
     "partial",
@@ -229,6 +236,31 @@ def utc_now() -> str:
 def slug(value: str) -> str:
     value = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
     return value[:96].strip("-")
+
+
+# The `learn_report_key` segment slots that name ONE reply or comment of a Learn Q&A thread.
+_REPLY_ID_SLOTS = frozenset({SEGMENT_REPLY_ANCHOR, SEGMENT_COMMENT})
+
+
+def report_id_slot(url: str) -> str:
+    """The source-URL slot of a row id: ``slug(url)``, except for one Microsoft Learn Q&A REPLY.
+
+    ``slug`` keeps 96 characters. A Learn question URL already slugs to about that, because its
+    title slug is long, so the ``#answer-<id>`` anchor that tells a reply apart was cut off: the
+    reply's id equalled its question's id (or a sibling reply's), and the append guard refused a
+    report the store had never held. For a URL whose ``learn_report_key`` names a reply or a comment
+    the slot is ``slug(learn_report_key(url))`` -- ``learn-<qid>-reply-<id>`` -- which is short
+    and keeps the anchor. A question, and every URL that is not a Learn Q&A segment, keeps
+    ``slug(url)`` byte for byte, so no question id and no other host's id moves.
+
+    Stored ids are labels and are never rewritten: a reply stored under a truncated id before this
+    existed is still the same report to the append guard, whose URL slot (``report_url_key``)
+    already separates anchors, so re-finding it is "already held", never a second row."""
+    key = learn_report_key(url)
+    parts = key.split(":") if key else []
+    if len(parts) == 4 and parts[2] in _REPLY_ID_SLOTS:
+        return slug(key)
+    return slug(url)
 
 
 def excerpt(text: str, width: int = 280) -> str:
@@ -419,6 +451,9 @@ def normalize_method_health_row(row: dict[str, Any]) -> dict[str, Any]:
             normalized[field] = str(normalized[field])
     if normalized["status"] not in VALID_METHOD_HEALTH_STATUSES:
         normalized["status"] = "broken"
+    collided = int(row.get(ID_COLLISION_FIELD) or 0)
+    if collided > 0:
+        normalized[ID_COLLISION_FIELD] = collided
     return normalized
 
 
@@ -446,8 +481,9 @@ def _family_key(row: dict[str, Any]) -> tuple[str, str, str, str]:
     return (product_id, version, build, str(row.get("source_type") or "").strip())
 
 
-def _distribute_capped(rows: list[dict[str, Any]], total: int) -> list[int]:
-    """Share `total` across `rows`, giving no row more than it accepted.
+def _distribute_capped(rows: list[dict[str, Any]], total: int,
+                       caps: list[int] | None = None) -> list[int]:
+    """Share `total` across `rows`, giving no row more than it accepted (or its entry in `caps`).
 
     An evidence row records the COMMUNITY it came from, not the route that found it, so a family
     delta cannot be split by method with certainty when several methods read one community
@@ -468,7 +504,7 @@ def _distribute_capped(rows: list[dict[str, Any]], total: int) -> list[int]:
     for index, row in enumerate(rows):
         if remaining <= 0:
             break
-        room = int(row.get("accepted_candidates") or 0)
+        room = int(row.get("accepted_candidates") or 0) if caps is None else int(caps[index])
         take = min(remaining, max(0, room))
         shares[index] = take
         remaining -= take
@@ -477,7 +513,8 @@ def _distribute_capped(rows: list[dict[str, Any]], total: int) -> list[int]:
 
 def finalize_method_health_delta(health_rows: Iterable[dict[str, Any]],
                                  added_rows: Iterable[dict[str, Any]],
-                                 already_held_rows: Iterable[dict[str, Any]] = ()) -> list[dict[str, Any]]:
+                                 already_held_rows: Iterable[dict[str, Any]] = (),
+                                 id_collision_rows: Iterable[dict[str, Any]] = ()) -> list[dict[str, Any]]:
     """Stamp the MEASURED append outcome onto health rows, after the append has happened.
 
     Both numbers come from the append itself -- `added_rows` from ``out_added`` and
@@ -493,6 +530,12 @@ def finalize_method_health_delta(health_rows: Iterable[dict[str, Any]],
     methods is therefore approximate; the family total, and the invariant that no row claims more
     than it accepted, are exact.
 
+    `id_collision_rows` (from ``out_id_collision``) is the third outcome: a report the store did NOT
+    hold, refused only because its row id equalled one a different report had taken. It is stamped as
+    ``ID_COLLISION_FIELD`` and never folded into `duplicate_existing_evidence`. Its share goes first
+    to each row's remaining accepted room, then to its rejected count, because one collector (Teams)
+    also appends the uncounted rows it rejected; the field is written only when non-zero.
+
     Mutates and returns the rows, so a caller can finalize the list it is about to hand back.
     """
     finalized = list(health_rows or ())
@@ -504,6 +547,10 @@ def finalize_method_health_delta(health_rows: Iterable[dict[str, Any]],
     for row in already_held_rows or ():
         key = _family_key(row)
         held_by_family[key] = held_by_family.get(key, 0) + 1
+    collided_by_family: dict[tuple[str, str, str, str], int] = {}
+    for row in id_collision_rows or ():
+        key = _family_key(row)
+        collided_by_family[key] = collided_by_family.get(key, 0) + 1
 
     families: dict[tuple[str, str, str, str], list[dict[str, Any]]] = {}
     for row in finalized:
@@ -515,6 +562,17 @@ def finalize_method_health_delta(health_rows: Iterable[dict[str, Any]],
             # A row cannot have both stored and already-held more than it accepted in total.
             room = max(0, int(row.get("accepted_candidates") or 0) - int(row.get("evidence_rows_added") or 0))
             row["duplicate_existing_evidence"] = min(held, room)
+        collided = collided_by_family.get(key, 0)
+        first = _distribute_capped(rows, collided, [
+            int(row.get("accepted_candidates") or 0) - int(row.get("evidence_rows_added") or 0)
+            - int(row.get("duplicate_existing_evidence") or 0) for row in rows])
+        second = _distribute_capped(rows, collided - sum(first),
+                                    [int(row.get("rejected_reports") or 0) for row in rows])
+        for row, counted_share, rejected_share in zip(rows, first, second):
+            if counted_share + rejected_share:
+                row[ID_COLLISION_FIELD] = counted_share + rejected_share
+            else:
+                row.pop(ID_COLLISION_FIELD, None)
     return finalized
 
 
@@ -659,7 +717,9 @@ def evidence_key(row: dict[str, Any], key_field: str) -> tuple[str, str, str, st
 
 def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
                          *, out_added: list[dict[str, Any]] | None = None,
-                         out_already_held: list[dict[str, Any]] | None = None) -> tuple[int, int, list[dict[str, Any]]]:
+                         out_already_held: list[dict[str, Any]] | None = None,
+                         out_id_collision: list[dict[str, Any]] | None = None,
+                         ) -> tuple[int, int, list[dict[str, Any]]]:
     """Append rows the store does not already hold. Returns (added, total, all rows).
 
     ``out_added`` is an OPTIONAL sink for the rows actually persisted. It exists because the count
@@ -678,6 +738,11 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
     Both guard sets are ``evidence_key``, so a Microsoft Learn Q&A report re-found under a new title
     slug is "already held" (and counted in ``out_already_held``), never a second row. The row the
     store holds wins: its id and source_url are never rewritten, and the new spelling is not stored.
+
+    ``out_id_collision`` is the third, separately named refusal: the row's id was already taken (in
+    the store or earlier in this batch) by a DIFFERENT report -- its URL key was held by nobody. It
+    is still refused, exactly as before; it is no longer published as "already held", because the
+    store never had it. A truncated id did this to Microsoft Q&A replies for months (AUX-083).
     """
     existing = load_evidence(path)
     # The keys the store held BEFORE this batch. `seen_ids` / `seen_urls` grow as the loop accepts,
@@ -709,7 +774,18 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
             and url_key in seen_urls
         )
         if id_key in seen_ids or url_duplicate:
-            # Refused. Report it as "the store already held this" ONLY when the key was present
+            # Refused either way -- what is refused does not change. What changes is what the
+            # refusal is CALLED. An id-only collision -- the row id is taken, but this report's URL
+            # key is held by nobody, before or in this batch -- is a report the store never had, so
+            # it is not "already held" (AUX-083). A listing card shares its page URL by design and
+            # is identified by its id alone, and a row with no URL has no report identity to compare,
+            # so both keep the historical reading.
+            if (not url_duplicate and normalized.get("source_url")
+                    and normalized.get("match_basis") != "embedded_listing_report_card"):
+                if out_id_collision is not None:
+                    out_id_collision.append(normalized)
+                continue
+            # Report it as "the store already held this" ONLY when the key was present
             # before this batch began; a collision with an earlier row of this same batch is a
             # different event and must not be published as archive depth.
             if out_already_held is not None and (
@@ -948,6 +1024,9 @@ def make_evidence_row(
     matched_context: str = "",
 ) -> dict[str, Any]:
     return normalize_evidence_row({
+        # Deliberately `slug(source_url)`, NOT `report_id_slot`: only Teams reaches this default,
+        # and its truncated reply ids stay as they are until a metadata-minimal storage design for
+        # uncounted reply rows is decided (AUX-083, deferred). Callers that pass `row_id` choose.
         "id": row_id or f"{product_id}-{slug(update_version)}-{slug(source_type)}-{slug(source_url)}",
         "product_id": product_id,
         "update_version": update_version,

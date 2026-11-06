@@ -153,6 +153,12 @@ auxsays/scripts/tests/test_update_linked_tier2.py = 243
 # merges, live exclusivity and QA distinctness. Every non-Learn host keeps its key byte for byte.
 # Frozen synthetic fixtures; bare-script entry points run as network-fenced subprocesses.
 auxsays/scripts/tests/test_learn_report_identity.py = 99
+# AUX-083: a Microsoft Q&A reply to a PowerPoint question gets its own row id (the 96-character slug
+# cut its anchor off, so it took its question's id and was refused as "already held"); questions, every
+# non-Learn host and every Teams id stay byte for byte. The append guard names an id-only collision
+# instead of calling it held, in its result and in method-health telemetry. Frozen synthetic fixtures;
+# the real Teams collector and orchestrator nodes run on temporary stores; bare scripts network-fenced.
+auxsays/scripts/tests/test_learn_reply_row_id.py = 69
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
