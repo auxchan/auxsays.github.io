@@ -40,7 +40,9 @@ Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_learn_reply_row
 """
 from __future__ import annotations
 
+import contextlib
 import hashlib
+import io
 import os
 import socket
 import subprocess
@@ -454,12 +456,22 @@ def part_f(tmp: Path) -> None:
     check("F4 the field survives the writer's normalisation and a reload, LAST in key order",
           loaded[0].get(base.ID_COLLISION_FIELD) == 2 and list(loaded[0])[-1] == base.ID_COLLISION_FIELD
           and base.ID_COLLISION_FIELD not in loaded[1], str(list(loaded[0])[-2:]))
-    check("F5 the method-health validator accepts the file", vmh.validate(path) == 0)
+    # The validator prints its own "FAIL row ..." lines; they are captured, never echoed, because the
+    # CI runner reads every printed FAIL line as one of this suite's checks.
+    said = io.StringIO()
+    with contextlib.redirect_stdout(said):
+        accepted = vmh.validate(path)
+    check("F5 the method-health validator accepts the file", accepted == 0, said.getvalue()[-200:])
     bad = tmp / "f_bad.yml"
     payload = yaml.safe_load(path.read_text(encoding="utf-8"))
     payload["methods"][0][base.ID_COLLISION_FIELD] = -1
     bad.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
-    check("F6 ...and refuses a negative value (the field is really checked)", vmh.validate(bad) == 1)
+    said = io.StringIO()
+    with contextlib.redirect_stdout(said):
+        refused = vmh.validate(bad)
+    check("F6 ...and refuses a negative value, naming the field (it is really checked)",
+          refused == 1 and f"field {base.ID_COLLISION_FIELD}: must be a nonnegative integer" in said.getvalue(),
+          said.getvalue()[-200:])
 
     # Attribution inside one family: counted room first, then the rows a collector also appends
     # uncounted. A method that only REJECTED must not be credited with a counted row's collision.
