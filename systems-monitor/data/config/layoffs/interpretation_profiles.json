@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "layoffs-interpretation-profiles-1.0.0",
+  "authority": "DETERMINISTIC_FACTUAL_TEMPLATE_ONLY",
+  "reviewedAt": "2026-09-09",
+  "templateVersion": "1.0.0",
+  "sections": [
+    "WHAT_CHANGED",
+    "HOW_MUCH",
+    "COMPARED_WITH_WHAT",
+    "WHAT_THE_SOURCE_MEASURES",
+    "WHY_RELEVANT",
+    "WHAT_AUXSAYS_CANNOT_CLAIM"
+  ],
+  "guardrails": [
+    "Never infer causality from hierarchy or temporal movement.",
+    "Never emit supportive or adverse destination interpretation without a governed rule.",
+    "Never describe source health as economic direction.",
+    "Never invent direction when no comparable accepted observation exists."
+  ]
+}

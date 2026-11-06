@@ -1,1 +1,4 @@
 * text=auto eol=lf
+
+# Content-addressed source evidence must retain the publisher's exact bytes.
+systems-monitor/data/production/raw/objects/** binary

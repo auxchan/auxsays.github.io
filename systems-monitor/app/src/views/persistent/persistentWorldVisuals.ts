@@ -6,8 +6,8 @@ export interface PersistentCameraPose { x: number; y: number; z: number; scale: 
 export interface PersistentCameraVelocity { x: number; y: number; z: number; logScale: number; rotation: number; pitch: number; yaw: number }
 export interface PersistentCameraTransition { from: PersistentCameraPose; to: PersistentCameraPose; startedAt: number; durationMs: number; arc: number; orbit: number; velocity: PersistentCameraVelocity }
 export type PremiumLabelSide = "left" | "right" | "top" | "bottom";
-export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number; required?: boolean; side?: PremiumLabelSide; opacity?: number }
-export interface ResolvedLabel extends LabelCandidate { left: number; top: number }
+export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number; required?: boolean; side?: PremiumLabelSide; opacity?: number; preferredShift?: number }
+export interface ResolvedLabel extends LabelCandidate { left: number; top: number; shift?: number }
 
 export const PERSISTENT_GLINT_PERIOD_MS = 2500;
 export const PERSISTENT_GLINT_TRAIL = 0.085;
@@ -208,15 +208,29 @@ export function compactPersistentValue(value?: string) {
   return value.replace(/\s+percent\b/gi, "%");
 }
 
+/** Keeps a title physically attached to its node while placing it away from the parent. */
+export function premiumNodeLabelPoint(node: Point, parent: Point | undefined, radius: number, order: number): Point {
+  if (!parent) return { x: node.x, y: node.y + radius + 17 };
+  const dx = node.x - parent.x;
+  const dy = node.y - parent.y;
+  const distance = Math.max(1, Math.hypot(dx, dy));
+  const tangent = order % 2 ? -6 : 6;
+  return {
+    x: node.x + (dx / distance) * (radius + 15) + (-dy / distance) * tangent,
+    y: node.y + (dy / distance) * (radius + 15) + (dx / distance) * tangent,
+  };
+}
+
 export function resolvePremiumLabels(candidates: readonly LabelCandidate[], width: number, height: number) {
   const accepted: ResolvedLabel[] = [];
   const ordered = [...candidates].sort((left, right) => right.priority - left.priority || left.id.localeCompare(right.id));
-  const collides = (resolved: ResolvedLabel) => accepted.some((item) => resolved.left < item.left + item.width + 8 && resolved.left + resolved.width + 8 > item.left && resolved.top < item.top + item.height + 6 && resolved.top + resolved.height + 6 > item.top);
-  for (const candidate of ordered.filter((item) => !item.required)) {
-    const resolved = { ...candidate, left: candidate.x - candidate.width / 2, top: candidate.y - candidate.height / 2 };
-    if (resolved.left < 8 || resolved.top < 8 || resolved.left + resolved.width > width - 8 || resolved.top + resolved.height > height - 8 || collides(resolved)) continue;
-    accepted.push(resolved);
-  }
+  const collides = (resolved: ResolvedLabel, horizontalGap = 8, verticalGap = 6) => accepted.some((item) => resolved.left < item.left + item.width + horizontalGap && resolved.left + resolved.width + horizontalGap > item.left && resolved.top < item.top + item.height + verticalGap && resolved.top + resolved.height + verticalGap > item.top);
+  const clampX = (candidate: LabelCandidate, x: number) => Math.max(8 + candidate.width / 2, Math.min(width - 8 - candidate.width / 2, x));
+  const clampY = (candidate: LabelCandidate, y: number) => Math.max(8 + candidate.height / 2, Math.min(height - 8 - candidate.height / 2, y));
+  const resolvedAt = (candidate: LabelCandidate, x: number, y: number): ResolvedLabel => ({ ...candidate, x, y, left: x - candidate.width / 2, top: y - candidate.height / 2 });
+
+  // Explicit guide-rail labels retain deterministic ordering, but no longer
+  // compete with incidental labels for their reserved lane.
   for (const side of ["left", "right", "top", "bottom"] as const) {
     const verticalLane = side === "left" || side === "right";
     const lane = ordered.filter((item) => item.required && item.side === side).sort((left, right) => verticalLane ? left.y - right.y || left.id.localeCompare(right.id) : left.x - right.x || left.id.localeCompare(right.id));
@@ -244,13 +258,34 @@ export function resolvePremiumLabels(candidates: readonly LabelCandidate[], widt
       if (!collides(resolved)) accepted.push(resolved);
     });
   }
-  // Orbiting overview labels are required but intentionally have no guide-rail
-  // side. Clamp them continuously at the viewport edge instead of dropping
-  // them when the orbit carries their natural anchor beyond the mobile frame.
+
+  // Node-attached labels stay near their current animated anchor. If two
+  // titles meet, move the lower-priority one along the local tangent in fixed
+  // steps; never create a detached vertical title stack.
   for (const candidate of ordered.filter((item) => item.required && !item.side)) {
-    const x = Math.max(8 + candidate.width / 2, Math.min(width - 8 - candidate.width / 2, candidate.x));
-    const y = Math.max(8 + candidate.height / 2, Math.min(height - 8 - candidate.height / 2, candidate.y));
-    accepted.push({ ...candidate, x, y, left: x - candidate.width / 2, top: y - candidate.height / 2 });
+    const baseX = clampX(candidate, candidate.x);
+    const baseY = clampY(candidate, candidate.y);
+    const radialX = baseX - (candidate.anchorX ?? baseX);
+    const radialY = baseY - (candidate.anchorY ?? baseY);
+    const distance = Math.max(1, Math.hypot(radialX, radialY));
+    const tangentX = distance === 1 && radialX === 0 && radialY === 0 ? 1 : -radialY / distance;
+    const tangentY = distance === 1 && radialX === 0 && radialY === 0 ? 0 : radialX / distance;
+    const step = candidate.height + 8;
+    const shifts = [0, -1, 1, -2, 2, -3, 3, -4, 4];
+    const preferredShift = shifts.includes(candidate.preferredShift ?? Number.NaN) ? candidate.preferredShift : undefined;
+    const orderedShifts = preferredShift === undefined ? shifts : [preferredShift, ...shifts.filter((shift) => shift !== preferredShift)];
+    const resolved = orderedShifts
+      .map((shift) => ({ ...resolvedAt(candidate, clampX(candidate, baseX + tangentX * step * shift), clampY(candidate, baseY + tangentY * step * shift)), shift }))
+      .find((item) => !collides(item, item.shift === preferredShift ? 2 : 8, item.shift === preferredShift ? 2 : 6));
+    if (resolved) accepted.push(resolved);
+  }
+
+  // Optional labels never displace a required title. They stay at their node
+  // and disappear when there is not enough collision-free room.
+  for (const candidate of ordered.filter((item) => !item.required)) {
+    const resolved = resolvedAt(candidate, candidate.x, candidate.y);
+    if (resolved.left < 8 || resolved.top < 8 || resolved.left + resolved.width > width - 8 || resolved.top + resolved.height > height - 8 || collides(resolved)) continue;
+    accepted.push(resolved);
   }
   return accepted;
 }

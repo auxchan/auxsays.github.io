@@ -6,13 +6,22 @@
     "Results": {
       "Data": [
         {
-          "TableName": "T-REVIEWED",
+          "TableName": "T10101",
           "LineNumber": "1",
-          "LineDescription": "Reviewed test-only NIPA concept",
+          "LineDescription": "Gross domestic product",
           "TimePeriod": "2026Q2",
-          "DataValue": "12,345.6",
+          "DataValue": "3.8",
           "UNIT_MULT": "0",
-          "CL_UNIT": "Test unit"
+          "CL_UNIT": "Percent change from preceding period"
+        },
+        {
+          "TableName": "T10101",
+          "LineNumber": "2",
+          "LineDescription": "Personal consumption expenditures",
+          "TimePeriod": "2026Q2",
+          "DataValue": "2.5",
+          "UNIT_MULT": "0",
+          "CL_UNIT": "Percent change from preceding period"
         },
         {
           "TableName": "T-OTHER",

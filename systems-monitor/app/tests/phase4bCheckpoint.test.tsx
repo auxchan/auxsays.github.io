@@ -1,10 +1,13 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import phase4bCandidate from "../../state/review/phase4b-read-model-candidate.json";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { validatePhase4bReadModel } from "../src/data/phase4bReadModel";
 import { candidate } from "./factualCandidate.test";
+
+// Compile the lazy view before assertions; cold module transforms are not UI latency.
+beforeAll(async () => { await import("../src/views/summary/SummaryView"); });
 
 describe("Phase-4B local factual checkpoint", () => {
   beforeEach(() => {

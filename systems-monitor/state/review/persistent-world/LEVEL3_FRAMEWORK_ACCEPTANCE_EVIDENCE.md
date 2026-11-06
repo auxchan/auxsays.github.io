@@ -4,9 +4,11 @@ Date: 2026-08-31
 
 Machine gate: **PASS**
 
-Human gate: **PENDING**
+Human gate: **PASS**
 
-Framework status: `LEVEL3_FRAMEWORK_READY = PENDING_HUMAN_QA`
+Framework status: `FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS`
+
+Human approval recorded: 2026-09-27 by Taylor
 
 This is a certification record for the existing persistent-world parent framework. It does not approve additional Level-4 economic content, structural relationships, forecasting, or deployment of fixture claims.
 
@@ -113,4 +115,17 @@ Two judgments deliberately remain for Human QA:
 
 `LEVEL3_FIXTURE_BOUNDARY = PASS`
 
-The machine gate is complete. The framework is not frozen until Taylor records `HUMAN_LEVEL3_FRAMEWORK_QA = PASS`.
+The machine and Human-QA gates are complete. Taylor recorded
+`HUMAN_LEVEL3_FRAMEWORK_QA = PASS` on 2026-09-27. The framework state is
+`FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS`.
+
+This freeze covers persistent-world navigation, camera behavior, minimap,
+breadcrumbs, Back/Forward, Up, Search, the five-second briefing, What Changed
+scope behavior, desktop inspector architecture, mobile toolbar, mobile
+full-screen inspector, and hierarchy presentation. A reproducible verified
+defect may reopen the affected component.
+
+The freeze does not approve Level-4 economic content, renderer fixture
+replacement, structural relationships, causal interpretation, materiality,
+forecasting, Phase 5, public activation, or deployment. Gate B remains open;
+accepted structural relationships and forecast-vintage observations remain 0.
