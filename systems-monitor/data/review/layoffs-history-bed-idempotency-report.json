@@ -1,0 +1,92 @@
+{
+  "acceptanceAuthority": "TAYLOR_LAYOFFS_LEVEL4_ACCEPTANCE_2026_09_14",
+  "acceptedAt": "2026-09-15T00:30:00Z",
+  "acceptedBySource": {
+    "bls-bed": 13,
+    "bls-ces": 40,
+    "bls-cps": 38,
+    "bls-jolts": 76,
+    "dol-ui-claims": 36
+  },
+  "acceptedComparableFactorCount": 11,
+  "acceptedComparableSeriesCount": 12,
+  "acceptedObservationCount": 203,
+  "acceptedStructuralRelationshipCount": 0,
+  "bedRights": {
+    "acceptedObservationCount": 13,
+    "exactPolicyPresent": true,
+    "modelFeatureUse": "UNKNOWN",
+    "modelTrainingUse": "UNKNOWN",
+    "remainingBlocker": null
+  },
+  "candidateCount": 13,
+  "currentRevisedHistoryCount": 202,
+  "dolRepair": {
+    "currentObservationAvailable": true,
+    "freshness": {
+      "newestObservationPeriod": "2026-09-05",
+      "observationAgeHours": 240.389,
+      "retrievedTime": "2026-09-15T00:23:21.974814Z",
+      "staleAfterHours": 336,
+      "status": "CURRENT"
+    },
+    "methods": {
+      "officialArchive": {
+        "status": "NOT_NEEDED"
+      },
+      "officialReleaseFallback": {
+        "newestObservationPeriod": "2026-09-05",
+        "parserVersion": "layoffs-dol-official-release-html-v1",
+        "publicationTime": "2026-09-10T12:00:00Z",
+        "rawSha256": "102cc80787e6414234050575a419796c4274c0da02f032588d7cc4a409d64c72",
+        "releaseIdentity": "DOL-UI-official-release-2026-09-10-7314993617bd531c",
+        "retrievedTime": "2026-09-15T00:23:21.974814Z",
+        "status": "CURRENT",
+        "url": "https://content.govdelivery.com/accounts/USDOL/bulletins/4299777"
+      },
+      "primaryXml": {
+        "newestObservationPeriod": "2026-08-15",
+        "parserVersion": "layoffs-dol-national-xml-v1",
+        "rawSha256": "1b625041f0d0fd8397a231e50dd67827f579965a4015d5ada362412f82aaf178",
+        "releaseIdentity": "DOL-UI-r539cyNational-data-through-2026-08-15-570af63c965d17a2",
+        "retrievedTime": "2026-09-15T00:23:21.831622Z",
+        "status": "STALE",
+        "url": "https://oui.doleta.gov/unemploy/wkclaims/report.asp"
+      }
+    },
+    "overallStatus": "SUCCESS_WITH_PRIMARY_STALE",
+    "primaryFreshness": {
+      "newestObservationPeriod": "2026-08-15",
+      "observationAgeHours": 744.389,
+      "retrievedTime": "2026-09-15T00:23:21.831622Z",
+      "staleAfterHours": 336,
+      "status": "STALE"
+    },
+    "primaryStaleWarningActive": true,
+    "revisedValue": "212000",
+    "routineRuleActive": true,
+    "seedValue": "209000",
+    "sourceReleaseMarker": "DOL-UI-official-release-2026-09-10-7314993617bd531c"
+  },
+  "factualDirectionFactorCount": 11,
+  "gateBStatus": "OPEN; descriptive history activated, structural acceptance unchanged",
+  "historyWritten": false,
+  "humanQaRequired": true,
+  "materialityState": "UNKNOWN",
+  "newlyAcceptedObservationCount": 0,
+  "newlyPromotedCandidateCount": 0,
+  "revisionChainCount": 1,
+  "revisionChains": [
+    {
+      "revisionNumber": 1,
+      "sourceSeriesId": "DOL-UI-SA-INITIAL",
+      "supersedesObservationId": "e93a7df7af10302a9df6d66965680b8a69bed24ba18d80d208396fe2b9a94d8e",
+      "validTime": "2026-08-08",
+      "value": "212000"
+    }
+  ],
+  "schemaVersion": "layoffs-history-activation-report-1.0.0",
+  "seedMigrated": false,
+  "status": "ACTIVATED",
+  "vintageQualifiedObservationCount": 0
+}

@@ -1,0 +1,196 @@
+{
+  "schemaVersion": "layoffs-vintage-capability-1.0.0",
+  "reviewedAt": "2026-09-10",
+  "authority": "RESEARCH_EVIDENCE_ONLY",
+  "activationEffect": "NONE",
+  "capabilityLevels": {
+    "LEVEL_0": "Current published series snapshot only; historical release/publication identity is not recoverable from the collector payload.",
+    "LEVEL_1": "Official publication dates are known, but the exact value-as-published artifact is unavailable.",
+    "LEVEL_2": "Official archived release artifacts can support row-by-row value-as-published reconstruction after exact parsing, hashing, and timestamp validation.",
+    "LEVEL_3": "Machine-readable official vintage series supports reproducible point-in-time reconstruction for the exact series."
+  },
+  "globalFinding": {
+    "currentCollectorCapability": "LEVEL_0",
+    "maximumVerifiedOfficialCapability": "LEVEL_2",
+    "exactSeriesWithVerifiedLevel3": 0,
+    "currentCandidateRowsForecastVintageEligible": 0,
+    "reason": "The current BLS API and DOL XML batch contains latest/current-revised values with conservative retrieval-time bounds, not value-as-published release artifacts."
+  },
+  "publicationReconstructionPolicy": {
+    "required": [
+      "official archived release artifact",
+      "immutable artifact SHA-256",
+      "official release-header timestamp",
+      "America/New_York daylight-saving-aware conversion",
+      "exact table and row selector",
+      "published value and published precision",
+      "preliminary or revision state",
+      "valid time, public time, retrieval time, and acceptance time",
+      "definition/methodology version",
+      "supersession link for revisions"
+    ],
+    "forbiddenSubstitutes": [
+      "reference period as publication time",
+      "generic release cadence arithmetic",
+      "page last-modified time",
+      "crawler or HTTP retrieval time as an official timestamp",
+      "current API value substituted for a rounded archived-release value"
+    ]
+  },
+  "series": [
+    {
+      "sourceId": "bls-jolts",
+      "sourceSeriesId": "JTS000000000000000LDL",
+      "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/jolts.htm",
+      "archiveSelector": "JOLTS archived release tables: total nonfarm layoffs and discharges level",
+      "publicationTimeSource": "release header; normally 10:00 America/New_York",
+      "revisionRisk": "Previous month revision plus annual revisions that can republish five years; preserve NAICS/methodology breaks and published precision."
+    },
+    {
+      "sourceId": "bls-jolts",
+      "sourceSeriesId": "JTS000000000000000LDR",
+      "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/jolts.htm",
+      "archiveSelector": "JOLTS archived release tables: total nonfarm layoffs and discharges rate",
+      "publicationTimeSource": "release header; normally 10:00 America/New_York",
+      "revisionRisk": "Keep rate distinct from level; previous month and annual revisions apply."
+    },
+    {
+      "sourceId": "bls-jolts",
+      "sourceSeriesId": "JTS000000000000000JOR",
+      "canonicalFactorId": "factor:canonical:job-openings-rate",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/jolts.htm",
+      "archiveSelector": "JOLTS archived release tables: total nonfarm job openings rate",
+      "publicationTimeSource": "release header; normally 10:00 America/New_York",
+      "revisionRisk": "Job openings are a last-business-day stock and must not be mixed with monthly flows; previous month and annual revisions apply."
+    },
+    {
+      "sourceId": "bls-jolts",
+      "sourceSeriesId": "JTS000000000000000HIR",
+      "canonicalFactorId": "factor:canonical:hires-rate",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/jolts.htm",
+      "archiveSelector": "JOLTS archived release tables: total nonfarm hires rate",
+      "publicationTimeSource": "release header; normally 10:00 America/New_York",
+      "revisionRisk": "Previous month and annual revisions apply; preserve flow definition and published precision."
+    },
+    {
+      "sourceId": "bls-cps",
+      "sourceSeriesId": "LNS13026638",
+      "canonicalFactorId": "factor:canonical:permanent-job-losers",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/empsit.htm",
+      "archiveSelector": "Employment Situation archived Table A-11: permanent job losers",
+      "publicationTimeSource": "release header; normally 08:30 America/New_York",
+      "revisionRisk": "Annual seasonal re-estimation can revise five years; population-control and method breaks must be versioned."
+    },
+    {
+      "sourceId": "bls-cps",
+      "sourceSeriesId": "LNS13023653",
+      "canonicalFactorId": "factor:canonical:temporary-layoffs",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/empsit.htm",
+      "archiveSelector": "Employment Situation archived Table A-11: job losers on temporary layoff",
+      "publicationTimeSource": "release header; normally 08:30 America/New_York",
+      "revisionRisk": "Keep the temporary-layoff concept distinct; annual seasonal and population-control revisions apply."
+    },
+    {
+      "sourceId": "bls-ces",
+      "sourceSeriesId": "CES0500000002",
+      "canonicalFactorId": "factor:canonical:average-weekly-hours",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/empsit.htm",
+      "archiveSelector": "Employment Situation archived Table B-2: total private average weekly hours",
+      "publicationTimeSource": "release header; normally 08:30 America/New_York",
+      "revisionRisk": "Two monthly revisions plus annual benchmark and seasonal revisions.",
+      "level3Blocker": "The official CES machine-readable vintage product covers employment values, not hours or earnings."
+    },
+    {
+      "sourceId": "bls-ces",
+      "sourceSeriesId": "CES6056132001",
+      "canonicalFactorId": "factor:canonical:temporary-help-employment",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/empsit.htm",
+      "archiveSelector": "Employment Situation archived Table B-1: temporary help services employment",
+      "publicationTimeSource": "release header; normally 08:30 America/New_York",
+      "revisionRisk": "Two monthly revisions plus annual benchmark and seasonal revisions.",
+      "level3Blocker": "The official CES vintage CSV coverage stops at three-digit industry detail and does not cover this exact detailed series."
+    },
+    {
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110004LQ5",
+      "canonicalFactorId": "factor:canonical:gross-job-losses",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/cewbd.htm",
+      "archiveSelector": "Business Employment Dynamics archived release Table 1: gross job losses",
+      "publicationTimeSource": "release header; normally 10:00 America/New_York",
+      "revisionRisk": "Annual revisions cover recent not-seasonally-adjusted quarters and five years of seasonally adjusted history."
+    },
+    {
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110005LQ5",
+      "canonicalFactorId": "factor:canonical:establishment-contractions",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/cewbd.htm",
+      "archiveSelector": "Business Employment Dynamics archived release component table: contracting establishments",
+      "publicationTimeSource": "release header; normally 10:00 America/New_York",
+      "revisionRisk": "Annual revisions apply; preserve the component identity separately from aggregate gross losses."
+    },
+    {
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110006LQ5",
+      "canonicalFactorId": "factor:canonical:establishment-closures",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/cewbd.htm",
+      "archiveSelector": "Business Employment Dynamics archived release component table: closing establishments",
+      "publicationTimeSource": "release header; normally 10:00 America/New_York",
+      "revisionRisk": "Annual revisions apply; closings must remain distinct from confirmed establishment deaths."
+    },
+    {
+      "sourceId": "bls-bed",
+      "sourceSeriesId": "BDS0000000000000000110008LQ5",
+      "canonicalFactorId": "factor:canonical:establishment-deaths",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2_PARTIAL",
+      "archiveUrl": "https://www.bls.gov/bls/news-release/cewbd.htm",
+      "archiveSelector": "Business Employment Dynamics archived release Table 8: establishment deaths",
+      "publicationTimeSource": "release header; normally 10:00 America/New_York",
+      "revisionRisk": "Deaths publish with a three-quarter confirmation lag; an archived 2025-Q3 release was reissued in place, so displaced bytes may be unrecoverable and must never be reconstructed."
+    },
+    {
+      "sourceId": "dol-ui-claims",
+      "sourceSeriesId": "DOL-UI-SA-INITIAL",
+      "canonicalFactorId": "factor:canonical:initial-claims",
+      "currentLevel": "LEVEL_0",
+      "officialCeiling": "LEVEL_2",
+      "archiveUrl": "https://oui.doleta.gov/unemploy/archive.asp",
+      "archiveSelector": "Weekly Claims archived release: seasonally adjusted initial claims",
+      "publicationTimeSource": "release header; normally Thursday 08:30 America/New_York with governed holiday exceptions",
+      "revisionRisk": "Distinguish advance, prior-week revised, and annual seasonal-factor revisions; preserve no-release gaps such as the 2025 appropriations lapse."
+    }
+  ],
+  "officialEvidence": [
+    "https://www.bls.gov/developers/api_signature_v2.htm",
+    "https://www.bls.gov/web/empsit/cesvininfo.htm",
+    "https://www.bls.gov/web/empsit/cesvindata.htm",
+    "https://www.bls.gov/bls/news-release/empsit.htm",
+    "https://www.bls.gov/bls/news-release/jolts.htm",
+    "https://www.bls.gov/bls/news-release/cewbd.htm",
+    "https://oui.doleta.gov/unemploy/archive.asp"
+  ]
+}

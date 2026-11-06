@@ -15,6 +15,14 @@ class SecurityRetrievalTests(unittest.TestCase):
     def test_https_allowlist(self):
         self.assertEqual("https://api.bls.gov/path", validate_url("https://api.bls.gov/path", resolver=resolver_for("23.1.1.1")))
 
+    def test_official_dol_distribution_host_is_allowlisted(self):
+        url = "https://content.govdelivery.com/accounts/USDOL/bulletins/official"
+        self.assertEqual(url, validate_url(url, resolver=resolver_for("23.1.1.1")))
+
+    def test_dol_distribution_allowlist_is_path_scoped_to_usdol_bulletins(self):
+        with self.assertRaisesRegex(ValueError, "path"):
+            validate_url("https://content.govdelivery.com/accounts/OTHER/bulletins/x", resolver=resolver_for("23.1.1.1"))
+
     def test_http_rejected(self):
         with self.assertRaises(ValueError):
             validate_url("http://api.bls.gov/path", resolver=resolver_for("23.1.1.1"))
@@ -51,7 +59,7 @@ class SecurityRetrievalTests(unittest.TestCase):
 
     def test_retry_is_bounded(self):
         retriever = BoundedRetriever(max_attempts=2, sleeper=lambda _: None)
-        with patch.object(retriever, "_request", side_effect=TimeoutError("x")) as mocked, self.assertRaises(RuntimeError):
+        with patch("systems_monitor_data.retrieval.validate_url", side_effect=lambda url: validate_url(url, resolver=resolver_for("23.1.1.1"))), patch.object(retriever, "_request", side_effect=TimeoutError("x")) as mocked, self.assertRaises(RuntimeError):
             retriever.fetch("https://api.bls.gov/x", expected_types=("application/json",))
         self.assertEqual(2, mocked.call_count)
 

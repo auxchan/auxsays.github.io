@@ -30,6 +30,13 @@ class LayoffsCensusTests(unittest.TestCase):
         self.assertEqual("AUXSAYS_CENSUS_API_KEY", self.registry["credential_environment_variable"])
         self.assertEqual(7, len(sources["census-bds"]["series"]))
         self.assertEqual("BF_BF4Q", sources["census-bfs"]["series"][0]["selector"]["category_code"])
+        semantics = sources["census-bfs"]["selector_semantics"]
+        self.assertEqual("Business Formations Within 4 Quarters", semantics["BF_BF4Q"])
+        self.assertEqual("Projected Business Formations Within 4 Quarters", semantics["BF_PBF4Q"])
+        self.assertIn("Spliced actual/projected", semantics["BF_SBF4Q"])
+        self.assertNotIn("Projected", semantics["BF_BF4Q"])
+        self.assertNotIn("BF_PBF4Q", {row["selector"]["category_code"] for row in sources["census-bfs"]["series"]})
+        self.assertNotIn("BF_SBF4Q", {row["selector"]["category_code"] for row in sources["census-bfs"]["series"]})
         self.assertEqual("IMP", sources["census-ftd"]["series"][0]["selector"]["data_type_code"])
         for source_id in ("census-marts", "census-m3", "census-mtis"):
             self.assertEqual("UNRESOLVED_OFFICIAL_METADATA_JOIN", sources[source_id]["selector_status"])
@@ -129,7 +136,7 @@ class LayoffsCensusTests(unittest.TestCase):
         )
         self.assertEqual(1, len(bfs))
         self.assertEqual("BFS:T:BF_BF4Q:SA", bfs[0].source_series_id)
-        self.assertEqual("factor:business-formations-four-quarters", bfs[0].canonical_factor)
+        self.assertEqual("factor:business-formations-within-4-quarters", bfs[0].canonical_factor)
         self.assertEqual(Decimal("31500"), bfs[0].value)
 
         ftd = parse_census_payload(

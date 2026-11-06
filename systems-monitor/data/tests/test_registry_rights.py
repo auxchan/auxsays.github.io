@@ -40,6 +40,14 @@ class RegistryRightsTests(unittest.TestCase):
     def test_dimensions_independent(self):
         self.assertEqual("UNKNOWN", self.engine.decide("bls-ces", "model_feature_use").decision)
 
+    def test_bed_has_an_exact_non_inherited_rights_policy(self):
+        for operation in ("ingestion", "raw_retention", "derived_retention", "transformation", "internal_analytical_use"):
+            self.assertEqual("ALLOW", self.engine.require("bls-bed", operation).decision)
+        self.assertEqual("UNKNOWN", self.engine.decide("bls-bed", "model_feature_use").decision)
+        self.assertEqual("UNKNOWN", self.engine.decide("bls-bed", "model_training_ml_use").decision)
+        with self.assertRaises(RightsDenied):
+            self.engine.require("bls-made-up", "ingestion")
+
     def test_unknown_fails_closed(self):
         with self.assertRaises(RightsDenied):
             self.engine.require("bls-ces", "model_training_ml_use")
@@ -55,4 +63,3 @@ class RegistryRightsTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

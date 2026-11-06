@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "layoffs-level4-claim-classes-1.0.0",
+  "schemaVersion": "layoffs-level4-claim-classes-2.0.0",
   "scope": "Layoffs & Job Destruction Level-4 canonical factors",
-  "reviewedAt": "2026-09-02",
+  "reviewedAt": "2026-09-09",
   "authority": "GOVERNED_FACTOR_CLASSIFICATION",
   "observationPromotionAuthority": "NONE",
   "relationshipPromotionAuthority": "NONE",
@@ -9,7 +9,7 @@
     "A_DIRECT_OBS": "An official agency publishes the measurement directly.",
     "B_CALC": "A deterministic AUXSAYS calculation from accepted official observations.",
     "C_EVENT_OR_STRUCTURAL": "A legitimate factor represented through official events, structural tables, or another non-conventional series.",
-    "D_TAXONOMY_OR_SOURCE_PROBLEM": "The concept is too broad, duplicative, misleading, or unsupported and must not be forced into production."
+    "D_TAXONOMY_OR_SOURCE_PROBLEM": "The concept is too broad, duplicative, misleading, or unsupported and must not be forced into production. Classification never promotes an observation or relationship."
   },
   "factors": [
     {
@@ -83,6 +83,422 @@
       "claimClass": "A_DIRECT_OBS",
       "rationale": "BLS CPS publishes the job-losers-on-temporary-layoff estimate directly.",
       "sourceRefs": ["bls-cps:LNS13023653"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:borrowing-costs",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Federal Reserve H.15 publishes official borrowing-rate observations directly once the intended instrument and maturity are selected.",
+      "sourceRefs": ["fed-h15"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact H.15 instrument and maturity are not selected."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "U.S. Courts F-2 directly publishes the national business-filings total for the rolling 12-month period.",
+      "sourceRefs": ["uscourts-f2:F2:US:BUSINESS:ALL"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Official workbook schema and rights acceptance remain pending; no stress interpretation is permitted."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-failure-stress",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "rationale": "The label ambiguously mixes legal filings, firm deaths, closures, and financial distress, which are not interchangeable official measurements.",
+      "sourceRefs": ["uscourts-f2", "census-bds"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Narrow or replace the concept before source selection."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-formations-within-4-quarters",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Census Business Formation Statistics directly publishes Business Formations Within 4 Quarters as BF_BF4Q; it is not the projected BF_PBF4Q series or the spliced BF_SBF4Q series.",
+      "sourceRefs": ["census-bfs:BFS:T:BF_BF4Q:SA"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Credential, rights, retrieval, and observation acceptance are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-formation-dynamism",
+      "claimClass": "B_CALC",
+      "rationale": "Dynamism combines official entry, exit, or formation components and must disclose its formula and scope.",
+      "sourceRefs": ["census-bfs", "census-bds"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "No accepted component set or calculation contract."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:candi-credit-conditions",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "rationale": "The concept duplicates or ambiguously combines C&I lending standards, loan demand, rates, and terms.",
+      "sourceRefs": ["fed-sloos"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Canonicalize to a specific SLOOS question or separately governed calculation."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:candi-lending-standards",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "The Federal Reserve SLOOS publishes respondent-weighted lending-standard results directly for specified borrower classes.",
+      "sourceRefs": ["fed-sloos"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact borrower class, question wording, and vintage selector are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:candi-loan-demand",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "The Federal Reserve SLOOS publishes respondent-weighted C&I loan-demand results directly for specified borrower classes.",
+      "sourceRefs": ["fed-sloos"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact borrower class, question wording, and vintage selector are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:capacity-utilization",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Federal Reserve G.17 publishes capacity-utilization rates directly for defined aggregates and industries.",
+      "sourceRefs": ["fed-g17"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact aggregate and G.17 series selector are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BEA NIPA table 1.1.1 line 2 directly publishes real personal consumption expenditures growth at a quarterly seasonally adjusted annual rate.",
+      "sourceRefs": ["bea-nipa:BEA:NIPA:T10101:2:Q"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Live API acquisition is blocked until AUXSAYS_BEA_USER_ID is configured and accepted history is built."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:consumer-spending",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BEA publishes personal consumption expenditures directly under defined NIPA concepts.",
+      "sourceRefs": ["bea-nipa"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact NIPA table, line, price basis, units, and vintage are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:corporate-profitability",
+      "claimClass": "B_CALC",
+      "rationale": "Profitability is a ratio rather than the same measurement as corporate profits.",
+      "sourceRefs": ["bea-nipa"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Numerator, denominator, sector scope, and formula are not accepted."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:corporate-profits",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BEA publishes corporate-profits estimates directly.",
+      "sourceRefs": ["bea-nipa"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact NIPA table, line, adjustment, and vintage are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:disaster-external-shock",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "rationale": "FEMA and NOAA publish event and declaration records rather than a single economic observation.",
+      "sourceRefs": ["fema-openfema", "noaa-storm-events"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Event-to-economic-scope rules and rights acceptance are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:fema-disaster-declaration",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "rationale": "OpenFEMA directly publishes official disaster declaration events with source-native identity, dates, incident type, and designated geography; the event is not a scalar economic observation.",
+      "sourceRefs": ["fema-openfema:DisasterDeclarationsSummaries-v2"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Event-source acceptance remains pending; no claims impact, materiality, or causality may be inferred."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:disaster-weather-shock",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "rationale": "NOAA publishes weather-event records, not an economy-wide shock index.",
+      "sourceRefs": ["noaa-storm-events", "fema-openfema"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Event definition, geographic join, and materiality rules are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:energy-input-shock",
+      "claimClass": "B_CALC",
+      "rationale": "Shock status must be calculated from an accepted underlying energy-price or availability series.",
+      "sourceRefs": ["eia-energy", "bls-ppi"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact product, route, rights scope, baseline, and threshold are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:establishment-closures",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS BED publishes jobs lost at closing establishments directly.",
+      "sourceRefs": ["bls-bed:BDS0000000000000000110006LQ5"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Historical observations and release vintages are not accepted."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS BED directly publishes jobs lost at establishment deaths; this factor does not count establishment exits.",
+      "sourceRefs": ["bls-bed:BDS0000000000000000110008LQ5"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "NONE_EXISTING_ACCEPTED_REUSE"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:firm-age-size",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "rationale": "Firm age and size are structural classification dimensions rather than one scalar state.",
+      "sourceRefs": ["census-bds"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Dimension buckets and downstream use are not accepted."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:firm-age-size-vulnerability",
+      "claimClass": "B_CALC",
+      "rationale": "Vulnerability requires a deterministic comparison of accepted BDS cohort observations.",
+      "sourceRefs": ["census-bds:FIRMDEATH_ESTABS"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Cohort denominator, comparison window, and threshold are not accepted."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:import-exposure",
+      "claimClass": "B_CALC",
+      "rationale": "Industry import exposure must be calculated from trade observations and an authoritative trade-to-industry allocation.",
+      "sourceRefs": ["census-ftd"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "No accepted product/industry crosswalk, denominator, or calculation."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industrial-production",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Federal Reserve G.17 publishes industrial-production indexes directly.",
+      "sourceRefs": ["fed-g17"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact G.17 aggregate and series selector are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-capacity-utilization",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Federal Reserve G.17 publishes industry utilization rates directly.",
+      "sourceRefs": ["fed-g17"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Industry code and exact series selector are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-credit-conditions",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "rationale": "SLOOS is not an industry-granular official measure and cannot support this title directly.",
+      "sourceRefs": ["fed-sloos"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Narrow to aggregate C&I context or identify a valid industry source."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-gross-job-losses",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS BED publishes industry gross-job-loss observations once exact series metadata is joined.",
+      "sourceRefs": ["bls-bed"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact industry series ID and metadata join are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-input-prices",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS PPI publishes scoped industry/input price indexes directly.",
+      "sourceRefs": ["bls-ppi"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact PPI series and input scope are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-layoffs-and-discharges",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS JOLTS publishes industry layoffs-and-discharges observations directly.",
+      "sourceRefs": ["bls-jolts"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact industry series ID and level/rate choice are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-new-orders",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Census M3 publishes scoped new-order estimates directly.",
+      "sourceRefs": ["census-m3"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact table/series, industry scope, credential, and rights are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-output",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BEA GDP-by-Industry and Federal Reserve G.17 publish scoped output measures directly.",
+      "sourceRefs": ["bea-gdp-industry", "fed-g17"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Industry, measure, units, and vintage selector are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
+      "claimClass": "B_CALC",
+      "rationale": "Pending governed calculation of the percentage of a versioned, mutually exclusive national CES industry universe whose accepted seasonally adjusted payroll employment is below the previous compatible month.",
+      "sourceRefs": ["bls-ces"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Taylor has not yet authorized the final CES universe, member selectors, or minimum publishable coverage threshold."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-sales-shipments",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Census M3 publishes scoped shipment observations directly.",
+      "sourceRefs": ["census-m3"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact table/series, industry scope, credential, and rights are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:industry-unit-labor-costs",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS Productivity and Costs publishes industry measures directly for supported industries.",
+      "sourceRefs": ["bls-productivity"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact industry series and measure are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:input-costs",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "rationale": "No single PPI measures all input costs; the industry, input basket, price concept, and weights are missing.",
+      "sourceRefs": ["bls-ppi"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Specify scope and weighting before source selection."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:interest-rates",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Federal Reserve H.15 publishes official market interest rates directly.",
+      "sourceRefs": ["fed-h15"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact instrument, maturity, and aggregation are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:inventory-sales-balance",
+      "claimClass": "B_CALC",
+      "rationale": "The balance is a governed comparison between accepted inventory and sales observations.",
+      "sourceRefs": ["census-mtis", "census-m3"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Component series and calculation are not accepted."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:inventory-sales-imbalance",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "rationale": "The label duplicates inventory/sales balance while embedding an unsupported adverse conclusion.",
+      "sourceRefs": ["census-mtis", "census-m3"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Canonicalize to the neutral ratio or define a governed threshold."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:inventory-sales-ratio",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Census MTIS publishes the inventories-to-sales ratio directly.",
+      "sourceRefs": ["census-mtis"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact series/table, credential, rights, and vintage are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:manufacturing-output",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Federal Reserve G.17 publishes manufacturing production indexes directly.",
+      "sourceRefs": ["fed-g17"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact manufacturing aggregate and series selector are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:new-orders",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Census M3 publishes new-order estimates directly for defined scopes.",
+      "sourceRefs": ["census-m3"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact series/table, credential, rights, and vintage are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:total-nonfarm-payroll-change",
+      "claimClass": "B_CALC",
+      "rationale": "Monthly change is deterministically calculated as E_t minus E_t-1 from accepted seasonally adjusted CES total-nonfarm payroll-employment levels.",
+      "sourceRefs": ["bls-ces:CES0000000001", "PAYROLL_CHANGE_V1"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "PAYROLL_CHANGE_V1 is approved, but accepted compatible CES0000000001 input history for t and t-1 is pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:producer-input-costs",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "rationale": "The label conflates input prices with firms' realized costs and duplicates producer input prices.",
+      "sourceRefs": ["bls-ppi"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Canonicalize to a selected price index or define a weighted cost calculation."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:producer-input-prices",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS PPI publishes producer-price indexes directly for selected inputs and commodities.",
+      "sourceRefs": ["bls-ppi"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact PPI series and input scope are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:productivity-automation",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "rationale": "BLS productivity does not directly measure automation; the current identity conflates two different concepts.",
+      "sourceRefs": ["bls-productivity"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Split productivity from automation and source each independently."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BEA NIPA table 1.1.1 line 1 directly publishes real GDP growth at a quarterly seasonally adjusted annual rate.",
+      "sourceRefs": ["bea-nipa:BEA:NIPA:T10101:1:Q"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "Live API acquisition is blocked until AUXSAYS_BEA_USER_ID is configured and accepted history is built."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:state-level-payroll-growth-breadth",
+      "claimClass": "B_CALC",
+      "rationale": "Breadth is the percentage of the fixed 50-state-plus-DC statewide CES total-nonfarm universe whose accepted seasonally adjusted payroll level exceeds its previous compatible month.",
+      "sourceRefs": ["bls-ces-state-and-metro:CES_STATE_TOTAL_NONFARM_V1", "STATE_PAYROLL_GROWTH_BREADTH_V1"],
+      "exactSourceDefensible": true,
+      "promotionBlocker": "The method and exact 51-series universe are approved and calibrated, but accepted 51-of-51 production input history is pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:retail-sales",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Census MARTS publishes retail and food-services sales estimates directly.",
+      "sourceRefs": ["census-marts"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact variable, adjustment, credential, rights, and vintage are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:sales-revenue",
+      "claimClass": "D_TAXONOMY_OR_SOURCE_PROBLEM",
+      "rationale": "No universal official series measures this title; sales, shipments, and revenue across Census programs have incompatible scopes.",
+      "sourceRefs": ["census-m3", "census-marts"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Narrow to a defined program, industry, and measure."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:sales-revenue-growth",
+      "claimClass": "B_CALC",
+      "rationale": "Growth must be calculated after a scope-compatible official sales or shipments observation is selected.",
+      "sourceRefs": ["census-m3", "census-marts"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Underlying series, scope, interval, and formula are not accepted."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:trade-external-shock",
+      "claimClass": "C_EVENT_OR_STRUCTURAL",
+      "rationale": "The concept is event or structural evidence with bounded scope, not a single continuous official series.",
+      "sourceRefs": ["census-ftd", "fema-openfema"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Event taxonomy, affected scope, and structural join are not accepted."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:trade-import-pressure",
+      "claimClass": "B_CALC",
+      "rationale": "Pressure is calculated from accepted trade observations and a defined domestic-market denominator.",
+      "sourceRefs": ["census-ftd"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Product scope, denominator, crosswalk, interval, and threshold are pending."
+    },
+    {
+      "canonicalFactorId": "factor:canonical:unit-labor-costs",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS Productivity and Costs publishes unit-labor-cost measures directly for specified sectors.",
+      "sourceRefs": ["bls-productivity"],
+      "exactSourceDefensible": false,
+      "promotionBlocker": "Exact sector and series ID are pending."
     }
   ]
 }

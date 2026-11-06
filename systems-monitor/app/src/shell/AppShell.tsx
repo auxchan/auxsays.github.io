@@ -6,6 +6,7 @@ import { breadcrumbNodes, type RouteState } from "../state/routeSchema";
 import { FactualCandidateNotice, FixtureNotice, FreshnessLabel } from "../shared/Semantic";
 import { SystemIcon } from "../shared/SystemIcon";
 import { ThirdPartyNoticesLink } from "../shared/ThirdPartyNoticesLink";
+import { initialUiClaimsProductionPlacements } from "../data/initialUiClaimsReadModel";
 
 export function PrimaryViewSwitcher({ view, onChange }: { view: PrimaryView; onChange: (view: PrimaryView) => void }) {
   const views: Array<[PrimaryView, string]> = [
@@ -76,11 +77,12 @@ export function SystemHealthSummary({ snapshot, phase4b, variant, setVariant }: 
   </section>;
 }
 
-export function AppShell({ children, snapshot, phase4b, motionQa, persistentWorld = false, route, navigate, variant, setVariant }: {
+export function AppShell({ children, snapshot, phase4b, motionQa, layoffsQa = false, persistentWorld = false, route, navigate, variant, setVariant }: {
   children: React.ReactNode;
   snapshot: SnapshotViewModel;
   phase4b?: Phase4bReadModel;
   motionQa?: MotionQaReadModel;
+  layoffsQa?: boolean;
   persistentWorld?: boolean;
   route: RouteState;
   navigate: (next: RouteState | ((current: RouteState) => RouteState), replace?: boolean) => void;
@@ -88,6 +90,15 @@ export function AppShell({ children, snapshot, phase4b, motionQa, persistentWorl
   setVariant: (variant: FixtureVariant) => void;
 }) {
   const factual = snapshot.snapshot.publicationClass === "factual";
+  if (layoffsQa) {
+    return <div className="sm-app-shell sm-app-shell--immersive sm-app-shell--layoffs-qa">
+      <a className="sm-skip" href="#systems-monitor-content">Skip to Layoffs Level-4 QA</a>
+      <div className="sm-motion-warning" role="status"><SystemIcon name="database" size={18} /><strong>LOCAL HUMAN QA — PENDING</strong><span>Accepted descriptive history · factual evidence only</span></div>
+      <header className="sm-immersive-header"><a className="sm-parent-brand" href="/">AUXSAYS <span>/ U.S. Systems Monitor</span></a><div className="sm-review-status" aria-label="Layoffs Level-4 review status"><span>{initialUiClaimsProductionPlacements.length} placements</span><span>Human QA pending</span></div></header>
+      <main id="systems-monitor-content" className="sm-immersive-main" tabIndex={-1}>{children}</main>
+      <footer className="sm-immersive-footer"><span>Local review only · accepted evidence is immutable</span><span>Gate B open · Human QA pending</span></footer>
+    </div>;
+  }
   if (persistentWorld) {
     return <div className="sm-app-shell sm-app-shell--immersive sm-app-shell--persistent-world">
       <a className="sm-skip" href="#systems-monitor-content">Skip to persistent world</a>

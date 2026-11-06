@@ -30,12 +30,15 @@ class LayoffsBeaFedCourtsTests(unittest.TestCase):
         self.assertEqual(6, len(self.registry["sources"]))
         self.assertEqual("NOT_ACCEPTED_NOT_PUBLISHABLE", self.registry["publication_status"])
         courts = official_source(self.registry, "uscourts-f2")
-        self.assertEqual(5, len(courts["series"]))
+        self.assertEqual(1, len(courts["series"]))
         self.assertEqual(
             "CONTEXT_ONLY_NOT_FIRM_DEATH_NOT_CLOSURE_NOT_LAYOFFS",
             courts["relationship_boundary"],
         )
-        for source_id in ("bea-nipa", "bea-gdp-industry", "fed-h15", "fed-sloos"):
+        nipa = official_source(self.registry, "bea-nipa")
+        self.assertEqual("VERIFIED_EXACT_TABLE_LINES_WITH_OTHER_SELECTORS_PENDING", nipa["selector_status"])
+        self.assertEqual(2, len(nipa["series"]))
+        for source_id in ("bea-gdp-industry", "fed-h15", "fed-sloos"):
             source = official_source(self.registry, source_id)
             self.assertEqual([], source["series"])
             self.assertIn("blocked_reason", source)
@@ -48,20 +51,8 @@ class LayoffsBeaFedCourtsTests(unittest.TestCase):
         self.assertEqual("credential_missing:AUXSAYS_BEA_USER_ID", missing.reason)
         self.assertIsNone(missing.request)
 
-        unresolved = plan_official_intake(
-            self.registry,
-            "bea-nipa",
-            environment={"AUXSAYS_BEA_USER_ID": "sensitive-review-id"},
-        )
-        self.assertEqual("exact_table_line_or_crosswalk_unresolved", unresolved.reason)
-        self.assertIsNone(unresolved.request)
-
-        amended = copy.deepcopy(self.registry)
-        source = official_source(amended, "bea-nipa")
-        source["selector_status"] = "VERIFIED_EXACT_TABLE_LINE"
-        source["series"] = [self._bea_spec()]
         plan = plan_official_intake(
-            amended,
+            self.registry,
             "bea-nipa",
             environment={"AUXSAYS_BEA_USER_ID": "sensitive-review-id"},
         )
@@ -71,7 +62,7 @@ class LayoffsBeaFedCourtsTests(unittest.TestCase):
         self.assertNotIn("UserID", plan.request.public_identity)
         self.assertIn("UserID=sensitive-review-id", plan.request.transport_url())
 
-    def test_bea_parser_refuses_unapproved_selectors_then_emits_nonpublishable_candidate(self):
+    def test_bea_parser_uses_exact_nipa_lines_and_emits_nonpublishable_candidates(self):
         source = official_source(self.registry, "bea-nipa")
         kwargs = dict(
             release_id="bea-review-2026-08-27",
@@ -79,30 +70,22 @@ class LayoffsBeaFedCourtsTests(unittest.TestCase):
             retrieved_time="2026-08-27T18:00:00Z",
             provenance_url=source["endpoint"],
         )
-        with self.assertRaisesRegex(ValueError, "not verified"):
-            parse_bea_api_response(
-                (FIXTURES / "layoffs_bea_response_minimized.json").read_bytes(),
-                source,
-                **kwargs,
-            )
-
-        amended = copy.deepcopy(source)
-        amended["selector_status"] = "VERIFIED_EXACT_TABLE_LINE"
-        amended["series"] = [self._bea_spec()]
-        candidate = parse_bea_api_response(
+        candidates = parse_bea_api_response(
             (FIXTURES / "layoffs_bea_response_minimized.json").read_bytes(),
-            amended,
+            source,
             **kwargs,
-        )[0]
-        self.assertEqual(Decimal("12345.6"), candidate.value)
-        self.assertEqual("2026Q2", candidate.observation_period)
-        self.assertIsNone(candidate.accepted_time)
-        self.assertFalse(candidate.publication_eligible)
+        )
+        self.assertEqual(2, len(candidates))
+        by_id = {candidate.source_series_id: candidate for candidate in candidates}
+        self.assertEqual(Decimal("3.8"), by_id["BEA:NIPA:T10101:1:Q"].value)
+        self.assertEqual(Decimal("2.5"), by_id["BEA:NIPA:T10101:2:Q"].value)
+        self.assertTrue(all(candidate.observation_period == "2026Q2" for candidate in candidates))
+        self.assertTrue(all(candidate.accepted_time is None and not candidate.publication_eligible for candidate in candidates))
 
         with self.assertRaisesRegex(ValueError, "cannot contain credential"):
             parse_bea_api_response(
                 (FIXTURES / "layoffs_bea_response_minimized.json").read_bytes(),
-                amended,
+                source,
                 **{**kwargs, "provenance_url": source["endpoint"] + "?UserID=must-not-persist"},
             )
 
@@ -189,10 +172,9 @@ class LayoffsBeaFedCourtsTests(unittest.TestCase):
             retrieved_time="2026-08-27T21:00:00Z",
             dated_page_url=source["endpoint"],
         )
-        self.assertEqual(5, len(candidates))
+        self.assertEqual(1, len(candidates))
         by_id = {candidate.source_series_id: candidate for candidate in candidates}
         self.assertEqual(Decimal("22999"), by_id["F2:US:BUSINESS:ALL"].value)
-        self.assertEqual(Decimal("10000"), by_id["F2:US:BUSINESS:CH11"].value)
         self.assertNotIn(Decimal("400000"), {candidate.value for candidate in candidates})
         self.assertTrue(all(candidate.observation_period == "2026-06-30" for candidate in candidates))
         self.assertTrue(all(candidate.accepted_time is None for candidate in candidates))
@@ -212,6 +194,9 @@ class LayoffsBeaFedCourtsTests(unittest.TestCase):
             "frequency_code": "Q",
             "frequency": "quarterly",
             "seasonal_adjustment": "table-defined; fixture only",
+            "line_description": "Reviewed test-only NIPA concept",
+            "cl_unit": "Test unit",
+            "unit_multiplier": "0",
         }
 
     @staticmethod
@@ -224,37 +209,36 @@ class LayoffsBeaFedCourtsTests(unittest.TestCase):
 <row r="1">{}</row>
 <row r="2">{}</row>
 <row r="3">{}</row>
+<row r="4">{}</row>
+<row r="5">{}</row>
 </sheetData></worksheet>""".format(
+            cell("A1", "Table F-2. During the 12-Month Period Ending June 30, 2026"),
             "".join(
-                [cell("A1", "Court"), cell("B1", "Business"), cell("G1", "Nonbusiness")]
+                [cell("A2", "Circuit and District"), cell("B2", "Total All Chapters"), cell("G2", "Predominant Nature of Debt")]
+            ),
+            "".join(
+                [cell("G3", "Business"), cell("L3", "Nonbusiness")]
             ),
             "".join(
                 [
-                    cell("B2", "All Chapters"),
-                    cell("C2", "Chapter 7"),
-                    cell("D2", "Chapter 11"),
-                    cell("E2", "Chapter 12"),
-                    cell("F2", "Chapter 13"),
-                    cell("G2", "All Chapters"),
-                    cell("H2", "Chapter 7"),
-                    cell("I2", "Chapter 11"),
-                    cell("J2", "Chapter 12"),
-                    cell("K2", "Chapter 13"),
+                    cell("G4", "All Chapters"),
+                    cell("H4", "Chapter 7"),
+                    cell("I4", "Chapter 11"),
+                    cell("J4", "Chapter 13"),
+                    cell("K4", "Other Chapters"),
+                    cell("L4", "All Chapters"),
                 ]
             ),
             "".join(
                 [
-                    cell("A3", "United States"),
-                    cell("B3", "22999"),
-                    cell("C3", "10000"),
-                    cell("D3", "10000"),
-                    cell("E3", "600"),
-                    cell("F3", "2399"),
-                    cell("G3", "400000"),
-                    cell("H3", "300000"),
-                    cell("I3", "50000"),
-                    cell("J3", "50"),
-                    cell("K3", "49950"),
+                    cell("A5", "Total"),
+                    cell("B5", "422999"),
+                    cell("G5", "22999"),
+                    cell("H5", "10000"),
+                    cell("I5", "10000"),
+                    cell("J5", "2399"),
+                    cell("K5", "600"),
+                    cell("L5", "400000"),
                 ]
             ),
         )

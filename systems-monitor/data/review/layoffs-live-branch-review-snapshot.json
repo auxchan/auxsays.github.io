@@ -1,15 +1,20 @@
 {
   "schemaVersion": "layoffs-live-branch-review-1.0.0",
-  "snapshotId": "layoffs-review-c14664159537f203",
+  "snapshotId": "layoffs-review-5d1a46f9d69c7a5a",
   "publicationClass": "fixture",
   "activationStatus": "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED",
-  "generatedAt": "2026-08-28T12:00:00Z",
-  "payloadSha256": "C14664159537F2030F1616A2EE35CD13652B614952C66F524AA68D317E38C99B",
+  "generatedAt": "2026-10-13T21:00:02Z",
+  "payloadSha256": "CE76921E6D591AFF437AEDEBEABB8F34895F0C0BBC136835E3C69C6B6982161E",
   "factors": [
     {
       "canonicalFactorId": "factor:canonical:average-weekly-hours",
       "label": "Average Weekly Hours",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "SOURCE_IDENTIFIED",
+      "sourceId": "bls-ces",
+      "health": "disabled",
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
+      "candidateSeriesId": "CES0500000002",
+      "evidenceUrl": "https://data.bls.gov/timeseries/CES0500000002"
     },
     {
       "canonicalFactorId": "factor:canonical:borrowing-costs",
@@ -23,17 +28,17 @@
     {
       "canonicalFactorId": "factor:canonical:business-bankruptcy-filings",
       "label": "Business Bankruptcy Filings",
+      "activationState": "SOURCE_IDENTIFIED"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
+      "label": "Business Bankruptcy Filings, 12-Month Total",
       "activationState": "SOURCE_IDENTIFIED",
       "sourceId": "uscourts-f2",
       "health": "disabled",
       "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
       "candidateSeriesId": "F2:US:BUSINESS:ALL",
       "evidenceUrl": "https://www.uscourts.gov/data-news/reports/statistical-reports/bankruptcy-filings-statistics"
-    },
-    {
-      "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
-      "label": "Business Bankruptcy Stress",
-      "activationState": "SOURCE_IDENTIFIED"
     },
     {
       "canonicalFactorId": "factor:canonical:business-failure-bankruptcy-stress",
@@ -46,13 +51,18 @@
       "activationState": "SOURCE_IDENTIFIED"
     },
     {
-      "canonicalFactorId": "factor:canonical:business-formation",
-      "label": "Business Formations",
-      "activationState": "SOURCE_IDENTIFIED"
-    },
-    {
       "canonicalFactorId": "factor:canonical:business-formation-dynamism",
       "label": "Business Formation / Dynamism",
+      "activationState": "BLOCKED",
+      "sourceId": "census-bfs",
+      "health": "blocked",
+      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY",
+      "candidateSeriesId": "BFS:T:BF_BF4Q:SA",
+      "evidenceUrl": "https://www.census.gov/econ/bfs/current/index.html"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-formations-within-4-quarters",
+      "label": "Business Formations Within 4 Quarters",
       "activationState": "BLOCKED",
       "sourceId": "census-bfs",
       "health": "blocked",
@@ -93,23 +103,23 @@
       "evidenceUrl": "https://www.federalreserve.gov/releases/g17/current/"
     },
     {
-      "canonicalFactorId": "factor:canonical:consumer-demand",
-      "label": "Consumer Demand",
-      "activationState": "SOURCE_IDENTIFIED"
-    },
-    {
       "canonicalFactorId": "factor:canonical:consumer-spending",
       "label": "Consumer Spending",
       "activationState": "BLOCKED",
       "sourceId": "bea-nipa",
       "health": "blocked",
-      "reasonCode": "UNRESOLVED_EXACT_TABLE_LINE",
+      "reasonCode": "VERIFIED_EXACT_TABLE_LINES_WITH_OTHER_SELECTORS_PENDING",
       "evidenceUrl": "https://www.bea.gov/data/gdp/gross-domestic-product"
     },
     {
       "canonicalFactorId": "factor:canonical:continued-claims-insured-unemployment",
       "label": "Continued Claims / Insured Unemployment",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "sourceId": "dol-ui-claims",
+      "health": "disabled",
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD",
+      "candidateSeriesId": "DOL-UI-SA-CONTINUED",
+      "evidenceUrl": "https://www.dol.gov/ui/data.pdf"
     },
     {
       "canonicalFactorId": "factor:canonical:corporate-profitability",
@@ -122,17 +132,12 @@
       "activationState": "BLOCKED",
       "sourceId": "bea-nipa",
       "health": "blocked",
-      "reasonCode": "UNRESOLVED_EXACT_TABLE_LINE",
+      "reasonCode": "VERIFIED_EXACT_TABLE_LINES_WITH_OTHER_SELECTORS_PENDING",
       "evidenceUrl": "https://www.bea.gov/data/gdp/gross-domestic-product"
     },
     {
       "canonicalFactorId": "factor:canonical:disaster-external-shock",
       "label": "Disaster / External Shock",
-      "activationState": "SOURCE_IDENTIFIED"
-    },
-    {
-      "canonicalFactorId": "factor:canonical:disaster-operational-shock",
-      "label": "Disaster / Operational Shock",
       "activationState": "SOURCE_IDENTIFIED"
     },
     {
@@ -148,17 +153,38 @@
     {
       "canonicalFactorId": "factor:canonical:establishment-closures",
       "label": "Establishment Closures",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "ACCEPTED",
+      "sourceId": "bls-bed",
+      "health": "disabled",
+      "reasonCode": "EXISTING_ACCEPTED_HISTORY_REUSED",
+      "candidateSeriesId": "BDS0000000000000000110006LQ5",
+      "evidenceUrl": "https://data.bls.gov/timeseries/BDS0000000000000000110006LQ5",
+      "displayValue": "1433",
+      "unit": "thousands of jobs",
+      "period": "2025-Q4",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "dataset": "Business Employment Dynamics",
+      "seriesId": "BDS0000000000000000110006LQ5",
+      "acceptedAt": "2026-09-14T23:59:00Z",
+      "snapshotId": "layoffs-review-5d1a46f9d69c7a5a"
     },
     {
       "canonicalFactorId": "factor:canonical:establishment-contractions",
       "label": "Establishment Contractions",
-      "activationState": "BLOCKED",
-      "sourceId": "census-bds",
-      "health": "blocked",
-      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY",
-      "candidateSeriesId": "JOB_DESTRUCTION_CONTINUERS",
-      "evidenceUrl": "https://www.census.gov/data/developers/data-sets/business-dynamics.html"
+      "activationState": "ACCEPTED",
+      "sourceId": "bls-bed",
+      "health": "disabled",
+      "reasonCode": "EXISTING_ACCEPTED_HISTORY_REUSED",
+      "candidateSeriesId": "BDS0000000000000000110005LQ5",
+      "evidenceUrl": "https://data.bls.gov/timeseries/BDS0000000000000000110005LQ5",
+      "displayValue": "5812",
+      "unit": "thousands of jobs",
+      "period": "2025-Q4",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "dataset": "Business Employment Dynamics",
+      "seriesId": "BDS0000000000000000110005LQ5",
+      "acceptedAt": "2026-09-14T23:59:00Z",
+      "snapshotId": "layoffs-review-5d1a46f9d69c7a5a"
     },
     {
       "canonicalFactorId": "factor:canonical:establishment-death-closure-losses",
@@ -166,14 +192,14 @@
       "activationState": "SOURCE_IDENTIFIED"
     },
     {
-      "canonicalFactorId": "factor:canonical:establishment-deaths",
-      "label": "Establishment Deaths",
-      "activationState": "BLOCKED",
-      "sourceId": "census-bds",
-      "health": "blocked",
-      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY",
-      "candidateSeriesId": "ESTABS_EXIT",
-      "evidenceUrl": "https://www.census.gov/data/developers/data-sets/business-dynamics.html"
+      "canonicalFactorId": "factor:canonical:fema-disaster-declaration",
+      "label": "FEMA Disaster Declaration",
+      "activationState": "SOURCE_IDENTIFIED",
+      "sourceId": "fema-openfema",
+      "health": "disabled",
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
+      "candidateSeriesId": "DisasterDeclarationsSummaries-v2",
+      "evidenceUrl": "https://www.fema.gov/about/openfema/data-sets#disaster-declarations-summaries-v2"
     },
     {
       "canonicalFactorId": "factor:canonical:firm-age-size",
@@ -213,17 +239,30 @@
     {
       "canonicalFactorId": "factor:canonical:gross-job-losses",
       "label": "Gross Job Losses",
-      "activationState": "BLOCKED",
-      "sourceId": "census-bds",
-      "health": "blocked",
-      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY",
-      "candidateSeriesId": "JOB_DESTRUCTION",
-      "evidenceUrl": "https://www.census.gov/data/developers/data-sets/business-dynamics.html"
+      "activationState": "ACCEPTED",
+      "sourceId": "bls-bed",
+      "health": "disabled",
+      "reasonCode": "EXISTING_ACCEPTED_HISTORY_REUSED",
+      "candidateSeriesId": "BDS0000000000000000110004LQ5",
+      "evidenceUrl": "https://data.bls.gov/timeseries/BDS0000000000000000110004LQ5",
+      "displayValue": "7245",
+      "unit": "thousands of jobs",
+      "period": "2025-Q4",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "dataset": "Business Employment Dynamics",
+      "seriesId": "BDS0000000000000000110004LQ5",
+      "acceptedAt": "2026-09-14T23:59:00Z",
+      "snapshotId": "layoffs-review-5d1a46f9d69c7a5a"
     },
     {
       "canonicalFactorId": "factor:canonical:hires-rate",
       "label": "Hires Rate",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "sourceId": "bls-jolts",
+      "health": "disabled",
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD",
+      "candidateSeriesId": "JTS000000000000000HIR",
+      "evidenceUrl": "https://data.bls.gov/timeseries/JTS000000000000000HIR"
     },
     {
       "canonicalFactorId": "factor:canonical:import-exposure",
@@ -287,11 +326,6 @@
       "evidenceUrl": "https://www.bea.gov/data/gdp/gdp-industry"
     },
     {
-      "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
-      "label": "Industry Payroll Contraction",
-      "activationState": "SOURCE_IDENTIFIED"
-    },
-    {
       "canonicalFactorId": "factor:canonical:industry-sales-shipments",
       "label": "Industry Sales / Shipments",
       "activationState": "SOURCE_IDENTIFIED"
@@ -304,7 +338,20 @@
     {
       "canonicalFactorId": "factor:canonical:initial-claims",
       "label": "Initial UI Claims",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "ACCEPTED",
+      "sourceId": "dol-ui-claims",
+      "health": "disabled",
+      "reasonCode": "EXISTING_ACCEPTED_HISTORY_REUSED",
+      "candidateSeriesId": "DOL-UI-SA-INITIAL",
+      "evidenceUrl": "https://www.dol.gov/ui/data.pdf",
+      "displayValue": "206000",
+      "unit": "claims",
+      "period": "2026-09-05",
+      "publisher": "U.S. Department of Labor, Employment and Training Administration",
+      "dataset": "Unemployment Insurance Weekly Claims",
+      "seriesId": "DOL-UI-SA-INITIAL",
+      "acceptedAt": "2026-09-15T00:25:00Z",
+      "snapshotId": "layoffs-review-5d1a46f9d69c7a5a"
     },
     {
       "canonicalFactorId": "factor:canonical:input-costs",
@@ -338,12 +385,48 @@
     {
       "canonicalFactorId": "factor:canonical:job-openings-rate",
       "label": "Job Openings Rate",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "SOURCE_ENABLED_PENDING_ACCEPTANCE",
+      "sourceId": "bls-jolts",
+      "health": "disabled",
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD",
+      "candidateSeriesId": "JTS000000000000000JOR",
+      "evidenceUrl": "https://data.bls.gov/timeseries/JTS000000000000000JOR"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
+      "label": "Jobs Lost at Establishment Deaths",
+      "activationState": "ACCEPTED",
+      "sourceId": "bls-bed",
+      "health": "disabled",
+      "reasonCode": "EXISTING_ACCEPTED_HISTORY_REUSED",
+      "candidateSeriesId": "BDS0000000000000000110008LQ5",
+      "evidenceUrl": "https://data.bls.gov/timeseries/BDS0000000000000000110008LQ5",
+      "displayValue": "809",
+      "unit": "thousands of jobs",
+      "period": "2025-Q1",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "dataset": "Business Employment Dynamics",
+      "seriesId": "BDS0000000000000000110008LQ5",
+      "acceptedAt": "2026-09-14T23:59:00Z",
+      "snapshotId": "layoffs-review-5d1a46f9d69c7a5a"
     },
     {
       "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
       "label": "Layoffs & Discharges",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "ACCEPTED",
+      "sourceId": "bls-jolts",
+      "health": "disabled",
+      "reasonCode": "EXISTING_ACCEPTED_HISTORY_REUSED",
+      "candidateSeriesId": "JTS000000000000000LDL",
+      "evidenceUrl": "https://data.bls.gov/timeseries/JTS000000000000000LDL",
+      "displayValue": "1666",
+      "unit": "thousands of persons",
+      "period": "2026-07",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "dataset": "Job Openings and Labor Turnover Survey",
+      "seriesId": "JTS000000000000000LDL",
+      "acceptedAt": "2026-09-11T21:25:00Z",
+      "snapshotId": "layoffs-review-5d1a46f9d69c7a5a"
     },
     {
       "canonicalFactorId": "factor:canonical:manufacturing-output",
@@ -360,14 +443,27 @@
       "activationState": "SOURCE_IDENTIFIED"
     },
     {
-      "canonicalFactorId": "factor:canonical:payroll-growth",
-      "label": "Payroll Growth",
+      "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
+      "label": "Payroll Contraction Breadth",
       "activationState": "SOURCE_IDENTIFIED"
     },
     {
       "canonicalFactorId": "factor:canonical:permanent-job-losers",
       "label": "Permanent Job Losers",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "ACCEPTED",
+      "sourceId": "bls-cps",
+      "health": "disabled",
+      "reasonCode": "EXISTING_ACCEPTED_HISTORY_REUSED",
+      "candidateSeriesId": "LNS13026638",
+      "evidenceUrl": "https://data.bls.gov/timeseries/LNS13026638",
+      "displayValue": "1777",
+      "unit": "thousands of persons",
+      "period": "2026-08",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "dataset": "Current Population Survey",
+      "seriesId": "LNS13026638",
+      "acceptedAt": "2026-09-11T21:25:00Z",
+      "snapshotId": "layoffs-review-5d1a46f9d69c7a5a"
     },
     {
       "canonicalFactorId": "factor:canonical:producer-input-costs",
@@ -385,18 +481,24 @@
       "activationState": "SOURCE_IDENTIFIED"
     },
     {
-      "canonicalFactorId": "factor:canonical:real-output-growth",
-      "label": "Real Output Growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
+      "label": "Real GDP Growth",
       "activationState": "BLOCKED",
       "sourceId": "bea-nipa",
       "health": "blocked",
-      "reasonCode": "UNRESOLVED_EXACT_TABLE_LINE",
+      "reasonCode": "MISSING_AUXSAYS_BEA_USER_ID",
+      "candidateSeriesId": "BEA:NIPA:T10101:1:Q",
       "evidenceUrl": "https://www.bea.gov/data/gdp/gross-domestic-product"
     },
     {
-      "canonicalFactorId": "factor:canonical:regional-employment-growth",
-      "label": "Regional Employment Growth",
-      "activationState": "SOURCE_IDENTIFIED"
+      "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
+      "label": "Real Personal Consumption Expenditures Growth",
+      "activationState": "BLOCKED",
+      "sourceId": "bea-nipa",
+      "health": "blocked",
+      "reasonCode": "MISSING_AUXSAYS_BEA_USER_ID",
+      "candidateSeriesId": "BEA:NIPA:T10101:2:Q",
+      "evidenceUrl": "https://www.bea.gov/data/gdp/gross-domestic-product"
     },
     {
       "canonicalFactorId": "factor:canonical:retail-sales",
@@ -414,14 +516,47 @@
       "activationState": "SOURCE_IDENTIFIED"
     },
     {
+      "canonicalFactorId": "factor:canonical:state-level-payroll-growth-breadth",
+      "label": "State-Level Payroll Growth Breadth",
+      "activationState": "SOURCE_IDENTIFIED"
+    },
+    {
       "canonicalFactorId": "factor:canonical:temporary-help-employment",
       "label": "Temporary Help Employment",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "SOURCE_IDENTIFIED",
+      "sourceId": "bls-ces",
+      "health": "disabled",
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
+      "candidateSeriesId": "CES6056132001",
+      "evidenceUrl": "https://data.bls.gov/timeseries/CES6056132001"
     },
     {
       "canonicalFactorId": "factor:canonical:temporary-layoffs",
       "label": "Temporary Layoffs",
-      "activationState": "SOURCE_IDENTIFIED"
+      "activationState": "ACCEPTED",
+      "sourceId": "bls-cps",
+      "health": "disabled",
+      "reasonCode": "EXISTING_ACCEPTED_HISTORY_REUSED",
+      "candidateSeriesId": "LNS13023653",
+      "evidenceUrl": "https://data.bls.gov/timeseries/LNS13023653",
+      "displayValue": "839",
+      "unit": "thousands of persons",
+      "period": "2026-08",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "dataset": "Current Population Survey",
+      "seriesId": "LNS13023653",
+      "acceptedAt": "2026-09-11T21:25:00Z",
+      "snapshotId": "layoffs-review-5d1a46f9d69c7a5a"
+    },
+    {
+      "canonicalFactorId": "factor:canonical:total-nonfarm-payroll-change",
+      "label": "Total Nonfarm Payroll Change",
+      "activationState": "SOURCE_IDENTIFIED",
+      "sourceId": "bls-ces",
+      "health": "disabled",
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
+      "candidateSeriesId": "CES0000000001",
+      "evidenceUrl": "https://data.bls.gov/timeseries/CES0000000001"
     },
     {
       "canonicalFactorId": "factor:canonical:trade-external-shock",
@@ -452,7 +587,7 @@
   "placements": [
     {
       "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:real-output-growth",
-      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
       "parentPlacementId": "placement:layoffs-job-destruction:layoffs-and-discharges",
       "order": 1
     },
@@ -530,7 +665,7 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:initial-ui-claims:industry-payroll-contraction",
-      "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+      "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
       "parentPlacementId": "placement:layoffs-job-destruction:initial-ui-claims",
       "order": 4
     },
@@ -542,31 +677,31 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:initial-ui-claims:establishment-deaths",
-      "canonicalFactorId": "factor:canonical:establishment-deaths",
+      "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
       "parentPlacementId": "placement:layoffs-job-destruction:initial-ui-claims",
       "order": 6
     },
     {
       "placementId": "placement:layoffs-job-destruction:initial-ui-claims:business-bankruptcy-stress",
-      "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
       "parentPlacementId": "placement:layoffs-job-destruction:initial-ui-claims",
       "order": 7
     },
     {
       "placementId": "placement:layoffs-job-destruction:initial-ui-claims:real-output-growth",
-      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
       "parentPlacementId": "placement:layoffs-job-destruction:initial-ui-claims",
       "order": 8
     },
     {
       "placementId": "placement:layoffs-job-destruction:initial-ui-claims:consumer-demand",
-      "canonicalFactorId": "factor:canonical:consumer-demand",
+      "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
       "parentPlacementId": "placement:layoffs-job-destruction:initial-ui-claims",
       "order": 9
     },
     {
       "placementId": "placement:layoffs-job-destruction:initial-ui-claims:disaster-operational-shock",
-      "canonicalFactorId": "factor:canonical:disaster-operational-shock",
+      "canonicalFactorId": "factor:canonical:fema-disaster-declaration",
       "parentPlacementId": "placement:layoffs-job-destruction:initial-ui-claims",
       "order": 10
     },
@@ -590,7 +725,7 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:payroll-growth",
-      "canonicalFactorId": "factor:canonical:payroll-growth",
+      "canonicalFactorId": "factor:canonical:total-nonfarm-payroll-change",
       "parentPlacementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment",
       "order": 4
     },
@@ -608,31 +743,31 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:business-formations",
-      "canonicalFactorId": "factor:canonical:business-formation",
+      "canonicalFactorId": "factor:canonical:business-formations-within-4-quarters",
       "parentPlacementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment",
       "order": 7
     },
     {
       "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:real-output-growth",
-      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
       "parentPlacementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment",
       "order": 8
     },
     {
       "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:consumer-demand",
-      "canonicalFactorId": "factor:canonical:consumer-demand",
+      "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
       "parentPlacementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment",
       "order": 9
     },
     {
       "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:regional-employment-growth",
-      "canonicalFactorId": "factor:canonical:regional-employment-growth",
+      "canonicalFactorId": "factor:canonical:state-level-payroll-growth-breadth",
       "parentPlacementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment",
       "order": 10
     },
     {
       "placementId": "placement:layoffs-job-destruction:permanent-job-losers:establishment-deaths",
-      "canonicalFactorId": "factor:canonical:establishment-deaths",
+      "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
       "parentPlacementId": "placement:layoffs-job-destruction:permanent-job-losers",
       "order": 1
     },
@@ -644,13 +779,13 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:permanent-job-losers:business-bankruptcy-stress",
-      "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
       "parentPlacementId": "placement:layoffs-job-destruction:permanent-job-losers",
       "order": 3
     },
     {
       "placementId": "placement:layoffs-job-destruction:permanent-job-losers:industry-payroll-contraction",
-      "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+      "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
       "parentPlacementId": "placement:layoffs-job-destruction:permanent-job-losers",
       "order": 4
     },
@@ -686,7 +821,7 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:permanent-job-losers:real-output-growth",
-      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
       "parentPlacementId": "placement:layoffs-job-destruction:permanent-job-losers",
       "order": 10
     },
@@ -722,7 +857,7 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:temporary-layoffs:consumer-demand",
-      "canonicalFactorId": "factor:canonical:consumer-demand",
+      "canonicalFactorId": "factor:canonical:real-personal-consumption-expenditures-growth",
       "parentPlacementId": "placement:layoffs-job-destruction:temporary-layoffs",
       "order": 6
     },
@@ -746,7 +881,7 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:temporary-layoffs:industry-payroll-contraction",
-      "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+      "canonicalFactorId": "factor:canonical:payroll-contraction-breadth",
       "parentPlacementId": "placement:layoffs-job-destruction:temporary-layoffs",
       "order": 10
     },
@@ -764,7 +899,7 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:gross-job-losses:real-output-growth",
-      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
       "parentPlacementId": "placement:layoffs-job-destruction:gross-job-losses",
       "order": 3
     },
@@ -818,7 +953,7 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:business-bankruptcy-stress",
-      "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings-12-month-total",
       "parentPlacementId": "placement:layoffs-job-destruction:establishment-death-closure-losses",
       "order": 2
     },
@@ -872,7 +1007,7 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:establishment-deaths",
-      "canonicalFactorId": "factor:canonical:establishment-deaths",
+      "canonicalFactorId": "factor:canonical:jobs-lost-at-establishment-deaths",
       "parentPlacementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress",
       "order": 1
     },
@@ -1040,13 +1175,13 @@
     },
     {
       "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:business-formation",
-      "canonicalFactorId": "factor:canonical:business-formation",
+      "canonicalFactorId": "factor:canonical:business-formations-within-4-quarters",
       "parentPlacementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress",
       "order": 9
     },
     {
       "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:real-output-growth",
-      "canonicalFactorId": "factor:canonical:real-output-growth",
+      "canonicalFactorId": "factor:canonical:real-gdp-growth",
       "parentPlacementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress",
       "order": 10
     }
@@ -1241,21 +1376,21 @@
   ],
   "sourceHealth": {
     "dol-ui-claims": {
-      "activationState": "SOURCE_IDENTIFIED",
+      "activationState": "ACCEPTED",
       "health": "disabled",
-      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD",
       "lastAttemptAt": null
     },
     "bls-jolts": {
-      "activationState": "SOURCE_IDENTIFIED",
+      "activationState": "ACCEPTED",
       "health": "disabled",
-      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD",
       "lastAttemptAt": null
     },
     "bls-cps": {
-      "activationState": "SOURCE_IDENTIFIED",
+      "activationState": "ACCEPTED",
       "health": "disabled",
-      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD",
       "lastAttemptAt": null
     },
     "bls-ces": {
@@ -1265,9 +1400,9 @@
       "lastAttemptAt": null
     },
     "bls-bed": {
-      "activationState": "SOURCE_IDENTIFIED",
+      "activationState": "ACCEPTED",
       "health": "disabled",
-      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
+      "reasonCode": "ACCEPTED_HISTORY_AVAILABLE_NETWORK_DISABLED_REVIEW_BUILD",
       "lastAttemptAt": null
     },
     "census-bds": {
@@ -1341,6 +1476,12 @@
       "health": "disabled",
       "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
       "lastAttemptAt": null
+    },
+    "fema-openfema": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD",
+      "lastAttemptAt": null
     }
   },
   "acceptedObservationRefs": [
@@ -1350,6 +1491,6 @@
     "level2": 10,
     "level3Placements": 100,
     "canonicalFactors": 68,
-    "acceptedFactorCount": 0
+    "acceptedFactorCount": 8
   }
 }

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "layoffs-materiality-profiles-1.0.0",
+  "authority": "NONE",
+  "reviewedAt": "2026-09-09",
+  "defaultState": "UNAVAILABLE_PENDING_GOVERNANCE",
+  "profiles": [],
+  "policy": {
+    "directionWithoutMateriality": "Allowed only for two accepted definition-compatible native-cadence observations.",
+    "materialityWithoutProfile": "UNKNOWN",
+    "crossFrequencyComparison": "FORBIDDEN",
+    "crossUnitComparison": "FORBIDDEN",
+    "crossAdjustmentComparison": "FORBIDDEN",
+    "crossGeographyComparison": "FORBIDDEN"
+  }
+}
