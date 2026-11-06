@@ -79,6 +79,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-073 | Deferred | Coverage | Low | Windows Learn opening-post hydration (L1) shelved by owner decision O1; never merged |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
+| AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
@@ -4558,6 +4559,45 @@ release) are unchanged. Same 16 governed checks.
 request is green. The archive pull request ran its integrity suites before any record was archived.
 A policy that rewrites the corpus at run time should also run the integrity suites over the converged
 tree.
+
+---
+
+### AUX-081 — A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product
+
+- **Status** Resolved · **Area** Collector telemetry · **Severity** High
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom** The scheduled evidence collection run of 2026-11-05 collected normally and then refused its
+writeback before committing: `validate_evidence_method_health.py` reported `last_run: is required` on one
+row. Nothing was pushed and no page was rebuilt, and every later run would fail the same way, for every
+product, because all evidence lanes validate the same file.
+
+**Root cause** DaVinci Resolve 21.2 was the first new patch since the Reddit access policy (AUX-064). Its
+collector emitted the policy's `reddit_search` row: status `disabled`, reason
+`reddit_access_policy_unauthorised`, and an empty `last_run`, because no attempt was made. The writer keeps
+the prior row's real last attempt for a key that already exists, but a new key has no prior row, so the
+row was stored empty. The validator required `last_run` on every row. The writer's suite had pinned the
+empty value (F.5) without running the validator over it.
+
+**Fix** In `validate_evidence_method_health.py` only, `last_run` may be empty on a policy-disabled row,
+using the policy's own predicate (`is_policy_disabled_row`: status `disabled` and that reason). Every other
+row still needs it, and a non-empty value on a policy row must still look like a timestamp. Nothing stamps
+a time on a row that made no attempt, and the writer's carry-over for existing keys is unchanged. Every
+reader of `last_run` was checked: the monitoring card and the H0-H7 certifier both skip disabled rows before
+they read it, and the card prints no "last checked" date for an empty value. The only other reader is a
+one-time Acrobat migration tool that no lane runs, and it is safe with an empty value.
+
+**Measured** Replaying the failed run's five 21.2 rows through the real writer onto the stored file at
+`main`: the validator now passes, 5 rows are appended and the 1,861 rows already stored are unchanged.
+`test_policy_row_last_run.py` (31 checks, `[blocking]`) uses those rows as frozen fixtures. It drives the
+writer and the validator in process and as bare-script child processes, and covers each row shape that
+must still be refused, including reasons that only resemble the policy reason or contain it. Removing the
+exemption, narrowing it to status or to reason alone, widening it to every row, and matching the reason
+loosely (as a substring, by its `reddit` prefix, or ignoring case) each fail a named check.
+
+**Reopen only if** `test_policy_row_last_run.py` reports anything but its governed 31, the validator
+accepts an empty `last_run` on any row other than a policy-disabled one, or a writer stamps a run time
+on a policy row that made no attempt.
 
 ---
 
