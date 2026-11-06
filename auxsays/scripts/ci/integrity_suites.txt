@@ -532,8 +532,10 @@ auxsays/scripts/tests/test_product_page_layout.py = 54
 # HTML at 2 MB, so no signal link was ever seen. Renders the shipped selection beside the old nested
 # loop (frozen verbatim as a reference fixture) over synthetic corpora that reach every ranking
 # branch, holds the real corpus to the same oracle, and caps the full page at the real corpus size.
+# [D] pins the patch-first entrance: the question h1, the heading outline, one link per product
+# tracker with records (derived), and the signals ahead of everything else.
 # Needs ruby + liquid; without them the render checks fail rather than skip.
-auxsays/scripts/tests/test_homepage_signals.py = 46
+auxsays/scripts/tests/test_homepage_signals.py = 58
 auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
 # The public projection of how evidence was gathered. The methodology page rendered the whole
 # method-health store (1,554,238 bytes; reddit_search 1,064 times) and the per-patch card

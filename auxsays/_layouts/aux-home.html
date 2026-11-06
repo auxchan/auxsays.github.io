@@ -1,8 +1,21 @@
 ---
 layout: aux-base
 ---
-<section class="home-hero reveal-up">
-  <article class="panel hero-panel hero-panel--dashboard">
+{%- comment -%}
+  DIRECTION A (GROWTH-1A): the umbrella AUXSAYS identity, with patch decisions as the first thing a
+  visitor and a crawler reach. In document order: the proposition and its three entrances (the
+  Patch Feed, My Patch Stack, the methodology), then every product tracker that has records, then
+  the latest Patch Signals, then everything else AUXSAYS publishes (Systems Monitor, the coverage
+  cards, recent articles). The hero says nothing the patch pages do not: the only calls the site
+  publishes today are wait, test first and not enough data yet.
+
+  The tracker list is derived, never typed: a product appears when at least one patch record
+  carries its product_id, grouped once with group_by (no loop over the records inside another
+  loop). The lead order below only sorts the products the hero names first; every other product
+  with records follows in _data/patch_products.yml order.
+{%- endcomment -%}
+<section class="home-hero home-hero--patch reveal-up">
+  <article class="panel hero-panel hero-panel--dashboard hero-panel--patch">
     <div class="hero-panel-backdrop" aria-hidden="true"></div>
     <div class="hero-telemetry" aria-hidden="true">
       <span class="hero-signal hero-signal--flow"></span>
@@ -10,122 +23,48 @@ layout: aux-base
       <span class="hero-signal hero-signal--radar"></span>
     </div>
     <div class="hero-panel-content">
-      <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
-      <h1 class="hero-title hero-title--split">
-        <span><span class="hero-title-accent">Tactical</span> Knowledge</span>
-        <span><span class="hero-title-accent">Creator</span> Control</span>
-      </h1>
-      <p class="hero-intro">{{ site.data.home.intro }}</p>
+      <div class="eyebrow">AUXSAYS Patch Intelligence</div>
+      <h1 class="hero-title hero-title--question">Should you install this update?</h1>
+      <p class="hero-intro">AUXSAYS follows updates for Windows 11, OBS Studio, Premiere Pro, Acrobat, Teams, PowerPoint and DaVinci Resolve. For each exact build you get the official release notes, the user reports we matched to it, and a call: wait, test first, or not enough data yet.</p>
       <div class="cta-row cta-row--home">
-        <a class="btn btn-home" href="{{ '/articles/' | relative_url }}">Browse Articles →</a>
-        <a class="btn btn-home" href="{{ '/about/' | relative_url }}">About Aux</a>
-        <a class="btn btn-home" href="{{ '/updates/' | relative_url }}">Patch Feed</a>
+        <a class="btn btn-home" href="{{ '/updates/' | relative_url }}">Check your software</a>
+        <a class="btn btn-home" href="{{ '/updates/my-stack/' | relative_url }}">Watch your apps</a>
+        <a class="home-hero-link" href="{{ '/updates/methodology/' | relative_url }}">How we decide →</a>
       </div>
     </div>
   </article>
 </section>
 
-<section class="home-dashboard reveal-up reveal-delay-1">
-  <div class="home-main-column">
-    <section class="coverage-section coverage-section--dashboard">
-      <div class="home-section-label">
-        <span>Core Coverage</span>
-      </div>
+<section class="home-dashboard home-dashboard--patch reveal-up reveal-delay-1">
+  <nav class="panel home-tracker-nav" aria-labelledby="home-trackers-title">
+    <h2 class="home-section-label home-section-label--inline" id="home-trackers-title"><span>Tracked software</span></h2>
+    <p>Each product page lists the updates AUXSAYS tracks for it.</p>
+    {%- assign home_tracker_ids = site.pages | where: "update_entry", true | group_by: "product_id" | map: "name" -%}
+    {%- assign home_tracker_lead = "microsoft-windows-11|obs-studio|adobe-premiere-pro|adobe-acrobat-pro|adobe-acrobat-reader|microsoft-teams|microsoft-powerpoint|blackmagic-davinci" | split: "|" %}
+    <ul class="home-tracker-list" data-home-tracker-list>
+      {%- for tracker_id in home_tracker_lead -%}
+        {%- if home_tracker_ids contains tracker_id -%}
+          {%- assign tracker = site.data.patch_products | where: "id", tracker_id | first -%}
+          {%- if tracker %}
+      <li><a class="home-tracker-link" href="{{ tracker.product_url | relative_url }}" data-home-tracker>{{ tracker.product_name }}</a></li>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- for tracker in site.data.patch_products -%}
+        {%- if home_tracker_ids contains tracker.id -%}
+          {%- unless home_tracker_lead contains tracker.id %}
+      <li><a class="home-tracker-link" href="{{ tracker.product_url | relative_url }}" data-home-tracker>{{ tracker.product_name }}</a></li>
+          {%- endunless -%}
+        {%- endif -%}
+      {%- endfor %}
+    </ul>
+  </nav>
 
-      <div class="coverage-grid coverage-grid--dashboard" id="coverage-grid">
-        {% for card in site.data.home.cards %}
-        <article class="coverage-card coverage-card--dashboard coverage-card--{{ card.icon }}" data-card>
-          <button class="coverage-hit" type="button" aria-expanded="false">
-            <span class="coverage-topline">
-              <span class="coverage-index">{{ card.fallback }}</span>
-              <span class="coverage-kicker">{{ card.kicker }}</span>
-              <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true">
-                {% case card.icon %}
-                {% when "free-ai" %}
-                <svg viewBox="0 0 24 24"><rect class="screen-fill" x="5" y="5" width="14" height="14" rx="3"/><path class="accent-line" d="M9 12h6M12 9v6"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19"/></svg>
-                {% when "workflow" %}
-                <svg viewBox="0 0 24 24"><rect class="flow-node" x="3" y="4" width="6" height="6" rx="1.5"/><rect class="flow-node" x="15" y="4" width="6" height="6" rx="1.5"/><rect class="flow-node flow-end" x="9" y="15" width="6" height="6" rx="1.5"/><path d="M9 7h6M6 10v3.5c0 1 .5 1.5 1.5 1.5H12M18 10v3.5c0 1-.5 1.5-1.5 1.5H12"/></svg>
-                {% when "automation" %}
-                <svg viewBox="0 0 24 24"><path d="M13 2 5 13h6l-1 9 8-12h-6l1-8Z"/><path d="M19.5 4.5 21 3M4.5 19.5 3 21" opacity=".65"/></svg>
-                {% when "lms" %}
-                <svg viewBox="0 0 24 24"><rect class="screen-fill" x="4" y="5" width="16" height="11" rx="2"/><path class="accent-line" d="M8 19h8M12 16v3"/><path d="M8 9h8M8 12h5"/></svg>
-                {% else %}
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 8v8M8 12h8"/></svg>
-                {% endcase %}
-              </span>
-            </span>
-            <h3>{{ card.title }}</h3>
-            <div class="coverage-body coverage-body--inline">
-              <p>{{ card.summary }}</p>
-            </div>
-            <span class="coverage-card-arrow" aria-hidden="true">→</span>
-          </button>
-        </article>
-        {% endfor %}
-      </div>
-    </section>
-
-    <section class="featured-section featured-section--dashboard reveal-up reveal-delay-2">
-      <div class="home-section-label">
-        <span>Recent Articles</span>
-      </div>
-
-      <div class="featured-list">
-        {% for post in site.posts limit:2 %}
-        {%- comment -%}
-          Article thumbnail resolution. The `!= blank` form this block used is inert here (see the
-          NORMALIZED PRESENCE note in aux-update.html), which broke it twice over: the first guard
-          assigned `post.image` even when absent, so the thumbnail/cover/hero fallbacks could never
-          fire, and then the three unwrap guards ran unconditionally -- a String has no `.path`, so
-          `article_image_src` was reduced to nil on EVERY post. nil is not '', so the render guard
-          below still passed and both cards emitted `<img src="">` on the live homepage instead of
-          the `featured-visual` placeholder they were supposed to fall back to.
-
-          `default:` already implements the cascade (it skips nil AND ''), and testing the member
-          directly is the correct object test: on a String the member is nil and falsy, on a
-          front-matter hash it is the value. No `blank` needed.
-          NB: do not write a Liquid tag inside a comment block -- comment still PARSES tags,
-          so a literal if-tag in this prose is a SyntaxError that kills the whole template.
-        {%- endcomment -%}
-        {% assign image_candidate = post.image | default: post.thumbnail | default: post.thumb | default: post.cover | default: post.hero_image | default: post.featured_image %}
-        {% if image_candidate.path %}{% assign image_candidate = image_candidate.path %}
-        {% elsif image_candidate.url %}{% assign image_candidate = image_candidate.url %}
-        {% elsif image_candidate.src %}{% assign image_candidate = image_candidate.src %}{% endif %}
-        {% assign article_image_src = image_candidate | default: '' | strip %}
-        <article class="featured-card featured-card--wide">
-          <a class="featured-card-visual" href="{{ post.url | relative_url }}" aria-hidden="true">
-            {% if article_image_src != '' %}
-              {% if article_image_src contains '://' %}
-                <img class="featured-card-image" src="{{ article_image_src }}" alt="" loading="lazy" decoding="async">
-              {% else %}
-                <img class="featured-card-image" src="{{ article_image_src | relative_url }}" alt="" loading="lazy" decoding="async">
-              {% endif %}
-            {% else %}
-              <span class="featured-visual featured-visual--{{ forloop.index }}"></span>
-            {% endif %}
-          </a>
-          <div class="featured-card-copy">
-            <div class="card-topline">
-              <span>{{ post.date | date: '%b %d, %Y' }}</span>
-              {% if post.categories and post.categories.first %}<span>{{ post.categories.first }}</span>{% endif %}
-            </div>
-            <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-            <p>{{ post.description | default: post.excerpt | strip_html | truncate: 170 }}</p>
-          </div>
-          <a class="featured-card-arrow" href="{{ post.url | relative_url }}" aria-label="Read {{ post.title }}">→</a>
-        </article>
-        {% endfor %}
-      </div>
-    </section>
-  </div>
-
-    <aside class="home-patch-column reveal-up reveal-delay-2">
-    <section class="panel home-patch-feed home-patch-feed--signals">
+  <div class="home-signals-column">
+    <section class="panel home-patch-feed home-patch-feed--signals" aria-labelledby="home-signals-title">
       <div class="home-patch-head">
         <div>
-          <div class="home-section-label home-section-label--inline">
-            <span>Patch Signals</span>
-          </div>
+          <h2 class="home-section-label home-section-label--inline" id="home-signals-title"><span>Latest patch signals</span></h2>
           <p>Showing the latest actionable signal per product. See Patch Feed for the full archive.</p>
         </div>
       </div>
@@ -318,6 +257,109 @@ layout: aux-base
 
       <a class="home-patch-link" href="{{ '/updates/' | relative_url }}">View full Patch Feed →</a>
     </section>
-  </aside>
+  </div>
+</section>
 
+<section class="home-also reveal-up reveal-delay-1" aria-labelledby="home-also-title">
+  <div class="eyebrow" id="home-also-title">Also from AUXSAYS</div>
+  <div class="home-dashboard home-also-grid">
+  <section class="panel home-also-card" aria-labelledby="home-monitor-title">
+    <h2 class="home-also-card__title" id="home-monitor-title">U.S. Systems Monitor</h2>
+    <p>A public beta of U.S. labor readings and system-factor coverage.</p>
+    <a class="home-hero-link" href="{{ '/systems-monitor/' | relative_url }}">Open the Systems Monitor →</a>
+  </section>
+
+  <div class="home-main-column">
+    <section class="coverage-section coverage-section--dashboard" aria-labelledby="home-coverage-title">
+      <h2 id="home-coverage-title" class="home-section-label">
+        <span>Core Coverage</span>
+      </h2>
+
+      <div class="coverage-grid coverage-grid--dashboard" id="coverage-grid">
+        {% for card in site.data.home.cards %}
+        <article class="coverage-card coverage-card--dashboard coverage-card--{{ card.icon }}" data-card>
+          <button class="coverage-hit" type="button" aria-expanded="false">
+            <span class="coverage-topline">
+              <span class="coverage-index">{{ card.fallback }}</span>
+              <span class="coverage-kicker">{{ card.kicker }}</span>
+              <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true">
+                {% case card.icon %}
+                {% when "free-ai" %}
+                <svg viewBox="0 0 24 24"><rect class="screen-fill" x="5" y="5" width="14" height="14" rx="3"/><path class="accent-line" d="M9 12h6M12 9v6"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19"/></svg>
+                {% when "workflow" %}
+                <svg viewBox="0 0 24 24"><rect class="flow-node" x="3" y="4" width="6" height="6" rx="1.5"/><rect class="flow-node" x="15" y="4" width="6" height="6" rx="1.5"/><rect class="flow-node flow-end" x="9" y="15" width="6" height="6" rx="1.5"/><path d="M9 7h6M6 10v3.5c0 1 .5 1.5 1.5 1.5H12M18 10v3.5c0 1-.5 1.5-1.5 1.5H12"/></svg>
+                {% when "automation" %}
+                <svg viewBox="0 0 24 24"><path d="M13 2 5 13h6l-1 9 8-12h-6l1-8Z"/><path d="M19.5 4.5 21 3M4.5 19.5 3 21" opacity=".65"/></svg>
+                {% when "lms" %}
+                <svg viewBox="0 0 24 24"><rect class="screen-fill" x="4" y="5" width="16" height="11" rx="2"/><path class="accent-line" d="M8 19h8M12 16v3"/><path d="M8 9h8M8 12h5"/></svg>
+                {% else %}
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 8v8M8 12h8"/></svg>
+                {% endcase %}
+              </span>
+            </span>
+            <h3>{{ card.title }}</h3>
+            <div class="coverage-body coverage-body--inline">
+              <p>{{ card.summary }}</p>
+            </div>
+            <span class="coverage-card-arrow" aria-hidden="true">→</span>
+          </button>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="featured-section featured-section--dashboard reveal-up reveal-delay-2" aria-labelledby="home-articles-title">
+      <h2 id="home-articles-title" class="home-section-label">
+        <span>Recent Articles</span>
+      </h2>
+
+      <div class="featured-list">
+        {% for post in site.posts limit:2 %}
+        {%- comment -%}
+          Article thumbnail resolution. The `!= blank` form this block used is inert here (see the
+          NORMALIZED PRESENCE note in aux-update.html), which broke it twice over: the first guard
+          assigned `post.image` even when absent, so the thumbnail/cover/hero fallbacks could never
+          fire, and then the three unwrap guards ran unconditionally -- a String has no `.path`, so
+          `article_image_src` was reduced to nil on EVERY post. nil is not '', so the render guard
+          below still passed and both cards emitted `<img src="">` on the live homepage instead of
+          the `featured-visual` placeholder they were supposed to fall back to.
+
+          `default:` already implements the cascade (it skips nil AND ''), and testing the member
+          directly is the correct object test: on a String the member is nil and falsy, on a
+          front-matter hash it is the value. No `blank` needed.
+          NB: do not write a Liquid tag inside a comment block -- comment still PARSES tags,
+          so a literal if-tag in this prose is a SyntaxError that kills the whole template.
+        {%- endcomment -%}
+        {% assign image_candidate = post.image | default: post.thumbnail | default: post.thumb | default: post.cover | default: post.hero_image | default: post.featured_image %}
+        {% if image_candidate.path %}{% assign image_candidate = image_candidate.path %}
+        {% elsif image_candidate.url %}{% assign image_candidate = image_candidate.url %}
+        {% elsif image_candidate.src %}{% assign image_candidate = image_candidate.src %}{% endif %}
+        {% assign article_image_src = image_candidate | default: '' | strip %}
+        <article class="featured-card featured-card--wide">
+          <a class="featured-card-visual" href="{{ post.url | relative_url }}" aria-hidden="true">
+            {% if article_image_src != '' %}
+              {% if article_image_src contains '://' %}
+                <img class="featured-card-image" src="{{ article_image_src }}" alt="" loading="lazy" decoding="async">
+              {% else %}
+                <img class="featured-card-image" src="{{ article_image_src | relative_url }}" alt="" loading="lazy" decoding="async">
+              {% endif %}
+            {% else %}
+              <span class="featured-visual featured-visual--{{ forloop.index }}"></span>
+            {% endif %}
+          </a>
+          <div class="featured-card-copy">
+            <div class="card-topline">
+              <span>{{ post.date | date: '%b %d, %Y' }}</span>
+              {% if post.categories and post.categories.first %}<span>{{ post.categories.first }}</span>{% endif %}
+            </div>
+            <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+            <p>{{ post.description | default: post.excerpt | strip_html | truncate: 170 }}</p>
+          </div>
+          <a class="featured-card-arrow" href="{{ post.url | relative_url }}" aria-label="Read {{ post.title }}">→</a>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+  </div>
 </section>

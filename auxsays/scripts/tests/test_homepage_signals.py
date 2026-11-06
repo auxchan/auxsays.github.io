@@ -23,6 +23,10 @@ WHAT IS PINNED HERE.
       renders under HOME_BYTE_CEILING with the first signal inside the first 50 KB, and the
       layout keeps no loop over the patch list nested inside another.
   [I] the product identity is written twice (grouping and display) and the two are identical.
+  [D] Direction A: one h1 asking the patch question, a heading outline that never skips a level,
+      the hero's entrances, one link to every product tracker that has records (derived from the
+      records, not typed), the signals in the main column ahead of everything else, the primary
+      nav keeping every route, and no certainty word in the copy written around the signal rows.
 
 Needs ruby + the liquid gem (CI installs liquid 4.0.4); without them the render checks FAIL.
 
@@ -129,6 +133,14 @@ module JekyllPorts
       groups.each_with_object([]) do |item, array|
         array << { "name" => item.first, "items" => item.last, "size" => item.last.size }
       end
+    end
+  end
+
+  def group_by(input, property)
+    return input unless input.respond_to?(:group_by)
+    groups = input.group_by { |item| jk_prop(item, property).to_s }
+    groups.each_with_object([]) do |item, array|
+      array << { "name" => item.first, "items" => item.last, "size" => item.last.size }
     end
   end
 
@@ -665,6 +677,127 @@ def section_i() -> None:
                                                                      src) is not None)
 
 
+# ------------------------------------------------------------------------------- [D] Direction A
+QUESTION = "Should you install this update?"
+NO_CERTAINTY = re.compile(r"\b(verified|certified|confirmed|guarantee[ds]?|safe to install|proven)\b", re.I)
+PRIMARY_NAV = [("/", "Home"), ("/updates/", "Patch Feed"), ("/systems-monitor/", "Systems Monitor"),
+               ("/articles/", "Articles"), ("/about/", "About Aux")]
+
+
+class Outline(HTMLParser):
+    """Headings (level, text) and links (href, text, attrs, inside <nav aria-label=Primary>)."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.headings: list[list] = []
+        self.links: list[list] = []
+        self._h = None
+        self._a: list[int] = []
+        self._primary = 0
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag == "nav" and a.get("aria-label") == "Primary":
+            self._primary = 1
+        if re.fullmatch(r"h[1-6]", tag):
+            self.headings.append([int(tag[1]), []])
+            self._h = self.headings[-1]
+        if tag == "a":
+            self.links.append([a.get("href"), [], a, bool(self._primary)])
+            self._a.append(len(self.links) - 1)
+
+    def handle_endtag(self, tag):
+        if tag == "nav" and self._primary:
+            self._primary = 0
+        if re.fullmatch(r"h[1-6]", tag):
+            self._h = None
+        if tag == "a" and self._a:
+            self._a.pop()
+
+    def handle_data(self, data):
+        if self._h is not None:
+            self._h[1].append(data)
+        for i in self._a:
+            self.links[i][1].append(data)
+
+
+def product_pages() -> set[str]:
+    out = set()
+    for path in sorted(_AUX.joinpath("updates").rglob("index.md")):
+        fm = load_front_matter(path) or {}
+        if fm.get("layout") == "aux-patch-product" and fm.get("permalink"):
+            out.add(fm["permalink"])
+    return out
+
+
+def expected_trackers(real: list[dict]) -> list[str]:
+    """Product tracker urls the homepage must link: every product with at least one record."""
+    products = yaml.safe_load((_AUX / "_data" / "patch_products.yml").read_text(encoding="utf-8"))
+    with_records = {str(p.get("product_id")) for p in real}
+    return [p["product_url"] for p in products if p.get("id") in with_records]
+
+
+def section_d(out: dict, real: list[dict]) -> None:
+    print("\n[D] Direction A: patch decisions first, every product tracker one click away")
+    html = out.get("page:real", {}).get("html", "")
+    o = Outline()
+    o.feed(html)
+    norm = lambda parts: re.sub(r"\s+", " ", "".join(parts)).strip()  # noqa: E731
+    h1 = [norm(t) for lvl, t in o.headings if lvl == 1]
+    check("D1 exactly one h1, and it asks the patch question", h1 == [QUESTION], str(h1))
+    levels = [lvl for lvl, _t in o.headings]
+    jumps = [(a, b) for a, b in zip(levels, levels[1:]) if b > a + 1]
+    check(f"D2 the heading outline never skips a level ({len(levels)} headings)", levels[:1] == [1] and not jumps,
+          f"levels={levels}")
+    h2 = [norm(t) for lvl, t in o.headings if lvl == 2]
+    want_h2 = ["Tracked software", "Latest patch signals", "U.S. Systems Monitor", "Core Coverage", "Recent Articles"]
+    check("D3 the sections are real headings: trackers, signals, then everything else", h2 == want_h2, str(h2))
+
+    links = [(h, norm(t), a, primary) for h, t, a, primary in o.links]
+    pos = {m: html.find(m) for m in ("<h1", 'data-home-tracker>', "data-home-patch-signal", 'id="home-also-title"',
+                                     'id="home-monitor-title"', 'id="home-coverage-title"', 'id="home-articles-title"')}
+    order = list(pos.values())
+    check("D4 document order: question, trackers, signals, then Systems Monitor, coverage and articles",
+          all(v >= 0 for v in order) and order == sorted(order), str(pos))
+    hero = html[pos["<h1"]:pos['data-home-tracker>']] if min(order) >= 0 else ""
+    check("D5 the hero's entrances lead to the Patch Feed, My Patch Stack and the methodology",
+          all(f'href="{u}"' in hero for u in ("/updates/", "/updates/my-stack/", "/updates/methodology/")), hero[-600:])
+
+    trackers = [h for h, _t, a, _p in links if "data-home-tracker" in a]
+    want = expected_trackers(real)
+    check(f"D6 one link per product with records ({len(trackers)} links, {len(want)} products with records)",
+          sorted(trackers) == sorted(want) and len(set(trackers)) == len(trackers) and len(want) >= 1,
+          f"missing={sorted(set(want) - set(trackers))} extra={sorted(set(trackers) - set(want))}")
+    pages = product_pages()
+    check("D7 every tracker link is a product page that exists", bool(trackers) and set(trackers) <= pages,
+          str(sorted(set(trackers) - pages)))
+    lead = ["/updates/microsoft/microsoft-windows-11/", "/updates/obs-project/obs-studio/",
+            "/updates/adobe/adobe-premiere-pro/", "/updates/adobe/adobe-acrobat-pro/",
+            "/updates/adobe/adobe-acrobat-reader/", "/updates/microsoft/microsoft-teams/",
+            "/updates/microsoft/microsoft-powerpoint/", "/updates/blackmagic-design/blackmagic-davinci/"]
+    lead_present = [u for u in lead if u in want]
+    rest = [u for u in want if u not in lead]
+    check("D8 the products the hero names come first, the rest follow in data order",
+          trackers == lead_present + rest, str(trackers))
+
+    primary = [(h, t) for h, t, _a, p in links if p]
+    check("D9 the primary nav keeps every route, patch work right after Home", primary == PRIMARY_NAV, str(primary))
+    check("D10 Systems Monitor and Articles stay reachable from the page body too",
+          any(h == "/systems-monitor/" and not p for h, _t, _a, p in links)
+          and any(h.startswith("/articles/") and not p for h, _t, _a, p in links))
+    # The signal rows keep their existing wording (GROWTH-1A does not touch evidence language); the copy
+    # this change wrote around them claims no certainty.
+    written = re.sub(r"<a [^>]*data-home-patch-signal.*?</a>", "", html, flags=re.S)
+    visible = re.sub(r"<[^>]+>", " ", re.sub(r"<(script|style)\b.*?</\1>", "", written, flags=re.S))
+    hits = sorted(set(m.group(0).lower() for m in NO_CERTAINTY.finditer(visible)))
+    check("D11 the homepage copy outside the signal rows claims no certainty (verified, confirmed, ...)",
+          not hits, str(hits))
+    signals_at = html.find("data-home-signal-list")
+    column_at = html.find('class="home-signals-column"')
+    check("D12 the signal list sits in the main column of the first dashboard, not an aside",
+          0 <= column_at < signals_at < pos['id="home-also-title"'], f"column={column_at} list={signals_at}")
+
+
 PROBE = ("{% assign g = list | group_by_exp: \"x\", \"x.k | downcase | replace: ' ', '-'\" %}"
          "[{% for e in g %}{{ e.name }}:{{ e.size }}{% unless forloop.last %}|{% endunless %}{% endfor %}]"
          "{% assign one = 'x' | split: ',' %}{% assign two = one | push: 'y' %}"
@@ -703,6 +836,7 @@ def main() -> int:
     section_p(out, len(real))
     section_b(out)
     section_i()
+    section_d(out, real)
     print("\n  (render seconds: " + ", ".join(f"{k}={v.get('seconds', 0):.1f}" for k, v in out.items())
           + f"; total {time.time() - started:.1f}s)")
     print()
