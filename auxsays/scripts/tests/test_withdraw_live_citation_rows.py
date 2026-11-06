@@ -22,6 +22,10 @@ pinned here:
      and reported
   G  the committed store holds the twenty as withdrawn with their reasons, the two kept rows and every row the
      reviews disagree on still count, and this suite changed nothing real
+  H  a later audited change to a pinned row (AUX-090's posting dates) is accepted only through the versioned
+     supplemental baseline: the pin is never rewritten, a successor counts only against the exact pinned hash
+     it was recorded for, never for a row still to withdraw, and the original manifest and run audit stay
+     byte-identical
 
 The tool runs as a BARE script, so B-D run it as a subprocess exactly as an operator would. Offline: frozen
 fixtures (tests/fixtures/live_citation/withdrawal_store.yml holds the 32 stored rows involved, serialised as
@@ -231,6 +235,40 @@ def entry_of(doc: dict, version: str, rid: str) -> dict:
     return hits[0]
 
 
+def own_date_edit(block: str, day: str) -> str:
+    """The suite's own AUX-090 date edit: a null source_date becomes the day, else the day goes after captured_at."""
+    lines = block.split(NL)
+    new = "  source_date: '" + day + "'"
+    present = [i for i, line in enumerate(lines) if line.startswith("  source_date:")]
+    if present:
+        assert len(present) == 1 and lines[present[0]] == "  source_date: null"
+        lines[present[0]] = new
+    else:
+        at = [i for i, line in enumerate(lines) if line.startswith("  captured_at: ")]
+        assert len(at) == 1
+        lines.insert(at[0] + 1, new)
+    return NL.join(lines)
+
+
+def plan_with(store_text: str, doc: dict, baseline: dict) -> tuple[str, dict | None]:
+    """plan() in-process with a supplemental baseline: ('', result) or (refusal message, None)."""
+    with tempfile.TemporaryDirectory(prefix="aux088-h-") as tmp:
+        _store, generated, _man = make_tree(Path(tmp), store_text)
+        records = wd.patch_records(generated)
+    try:
+        return "", wd.plan(store_text, wd.manifest_entries(doc), records, baseline)
+    except wd.Refusal as exc:
+        return str(exc), None
+
+
+# The AUX-088 audit files as that change committed them. They are immutable: a later change to a pinned row
+# goes into the supplemental baseline, never into these.
+AUX088_FILES = {
+    "live_citation_withdrawal.json": "e7fda1cf2cdf42a1dc88a8ab962c2ef3fbaec9599bff26077a6880f0247d9d24",
+    "live_citation_withdrawal_2026-11-06.json": "e0228bcb49390939ee91d044097ad5ec1d31153c3315637aac9947c7bb318693",
+}
+
+
 def run() -> int:  # noqa: PLR0915
     print("=" * 78)
     print("Audited withdrawal of live-page citations credited to the wrong update (AUX-088)")
@@ -256,7 +294,7 @@ def run() -> int:  # noqa: PLR0915
           {short(e) for e in withdraw} == set(WITHDRAW) and {short(e) for e in retain} == KEPT,
           str(sorted({short(e) for e in withdraw} ^ set(WITHDRAW))))
     per_page = collections.Counter((e["update_version"], e["target_build"]) for e in withdraw)
-    check("A4 one row each on 25H2 7623 and 7840; OBS 32.1.1: 2, 32.1.2: 10, 32.2.2: 6 (seven placements, one row cited twice)",
+    check("A4 one row each on 25H2 7623 and 7840; OBS 32.1.1: 2, 32.1.2: 10, 32.2.2: 6 (seven blind cases: one row was presented twice to the blind reviewer)",
           per_page == {("25H2", "26200.7623"): 1, ("25H2", "26200.7840"): 1, ("32.1.1", ""): 2,
                        ("32.1.2", ""): 10, ("32.2.2", ""): 6}, str(per_page))
     check("A5 every row carries its own reason, as both reviews support it",
@@ -670,8 +708,10 @@ def run() -> int:  # noqa: PLR0915
               and live_parsed[ident(e)].get("exclusion_reason") == e["exclusion_reason"]
               and sha(live_rows[ident(e)][0]) == e["block_sha256_after"] for e in withdraw),
           str([e["id"][-24:] for e in withdraw if live_parsed.get(ident(e), {}).get("counted") is not False]))
-    check("G2 the two kept rows are stored once, unchanged and counted",
-          all(len(live_rows.get(ident(e), [])) == 1 and sha(live_rows[ident(e)][0]) == e["block_sha256_before"]
+    live_baseline = wd.load_baseline(wd.BASELINE)
+    check("G2 the two kept rows are stored once and counted, unchanged but for a recorded later audited change",
+          all(len(live_rows.get(ident(e), [])) == 1
+              and wd._pin_holds(e, "block_sha256_before", sha(live_rows[ident(e)][0]), live_baseline)  # noqa: SLF001
               and live_parsed[ident(e)].get("counted") is True for e in retain))
     stay = collections.Counter(short(r) for r in live_parsed.values()
                                if short(r) in STAY_COUNTED and r.get("product_id") in (WIN, OBS))
@@ -679,9 +719,114 @@ def run() -> int:  # noqa: PLR0915
     check("G3 every row the reviews disagree on is still stored once and still counts",
           set(stay) == STAY_COUNTED and set(stay.values()) == {1} and stay_counted == STAY_COUNTED,
           str(sorted(STAY_COUNTED - stay_counted)))
+    successors_hold = []
+    for b in json.loads(wd.BASELINE.read_text(encoding="utf-8"))["entries"]:
+        hits = live_rows.get(ident(b), [])
+        line = "  source_date: '" + b["change"]["source_date"] + "'" + NL
+        undone = {hits[0].replace(line, "", 1), hits[0].replace(line, "  source_date: null" + NL, 1)} if hits else set()
+        successors_hold.append(len(hits) == 1 and sha(hits[0]) == b["block_sha256_now"] and hits[0].count(line) == 1
+                               and b["block_sha256_pinned"] in {sha(u) for u in undone})
+    check("G5 every recorded successor is stored, byte for byte, as its pinned block plus exactly its one date line",
+          len(successors_hold) == 3 and all(successors_hold), str(successors_hold))
     live_after = {str(p): sha(p.read_bytes()) for p in live_files if p.exists()}
     check("G4 the live store and the five records are byte-identical after the suite",
           live_after == live_before and len(live_before) == 6, f"{len(live_before)} files")
+
+    print("H  later audited changes to pinned rows: the versioned supplemental baseline (AUX-090)")
+    base_doc = json.loads(wd.BASELINE.read_text(encoding="utf-8"))
+    dates = {ident(e): e for e in
+             json.loads((SCRIPTS / "audit" / "obs_report_dates.json").read_text(encoding="utf-8"))["entries"]}
+    v2doc = json.loads((SCRIPTS / "audit" / "live_citation_withdrawal_v2.json").read_text(encoding="utf-8"))
+    pins = {}
+    for path, d in (("auxsays/scripts/audit/live_citation_withdrawal.json", manifest),
+                    ("auxsays/scripts/audit/live_citation_withdrawal_v2.json", v2doc)):
+        for e in d["entries"]:
+            pins[(path, ident(e))] = e
+
+    def recorded(b: dict) -> bool:
+        pin = pins.get((b.get("pinned_by"), ident(b)))
+        date = dates.get(ident(b))
+        if not pin or not date:
+            return False
+        key = "block_sha256_before" if pin["role"] == "retain" else "block_sha256_after"
+        return (pin[key] == b["block_sha256_pinned"] == date["block_sha256_before"]
+                and b["block_sha256_now"] == date["block_sha256_after"]
+                and b["change"] == {"source_date": date["source_date"]} and "AUX-090" in b["changed_by"])
+    check("H1 the baseline is version 2 of the five-field selector, and each entry is a pin of AUX-088's or v2's "
+          "manifest moved by exactly its AUX-090 date",
+          base_doc.get("version") == 2 and tuple(base_doc.get("selector") or ()) == SEL and len(base_doc["entries"]) == 3
+          and all(recorded(b) for b in base_doc["entries"])
+          and {(b["update_version"], report_id(b["source_url"])) for b in base_doc["entries"]}
+          == {("32.1.2", "13506"), ("32.2.2", "13997"), ("32.1.2", "13997")})
+    check("H2 the AUX-088 manifest and its run audit are byte-identical to the files AUX-088 committed",
+          all(sha((SCRIPTS / "audit" / name).read_bytes()) == digest for name, digest in AUX088_FILES.items()))
+    kept_entry = entry_of(fixture_manifest(), "32.1.2", "13506")
+    dated_kept = own_date_edit(kept13506, "2026-05-20")
+    dated_text = text.replace(kept13506, dated_kept, 1)
+    ok, result = plan_with(dated_text, fixture_manifest(), {ident(kept_entry): {sha(kept13506): sha(dated_kept)}})
+    without, _ = plan_with(dated_text, fixture_manifest(), {})
+    check("H3 a kept row moved by exactly a recorded change stays kept; without the baseline the same change refuses",
+          ok == "" and result is not None
+          and [e["action"] for e in result["entries"] if short(e) == ("32.1.2", "", "13506")] == ["kept"]
+          and "kept row changed" in without, ok[:200] + without[:200])
+    message, _ = plan_with(dated_text, fixture_manifest(), {ident(kept_entry): {"f" * 64: sha(dated_kept)}})
+    check("H4 a successor recorded against another pinned hash does not excuse the change",
+          "kept row changed" in message, message[:200])
+    w_entry = entry_of(fixture_manifest(), "32.1.2", "195407")
+    dated_w = own_date_edit(w195407, "2026-05-21")
+    message, _ = plan_with(text.replace(w195407, dated_w, 1), fixture_manifest(),
+                           {ident(w_entry): {sha(w195407): sha(dated_w)}})
+    check("H5 a recorded successor never excuses a row still to withdraw: its edit must start from the pinned bytes",
+          "block changed since the manifest was pinned" in message, message[:200])
+    withdrawn_w = own_edit(w195407, OBS, DUP)
+    moved_w = own_date_edit(withdrawn_w, "2026-05-21")
+    moved_text = text.replace(w195407, moved_w, 1)
+    ok, result = plan_with(moved_text, fixture_manifest(), {ident(w_entry): {sha(withdrawn_w): sha(moved_w)}})
+    without, _ = plan_with(moved_text, fixture_manifest(), {})
+    check("H6 an already withdrawn row moved by a recorded change reads as already withdrawn; unrecorded, it refuses",
+          ok == "" and result is not None
+          and [e["action"] for e in result["entries"] if short(e) == ("32.1.2", "", "195407")] == ["already_withdrawn"]
+          and "block changed since the manifest was pinned" in without, ok[:200] + without[:200])
+    good = dict({k: kept_entry[k] for k in SEL}, block_sha256_pinned="a" * 64, block_sha256_now="b" * 64,
+                change={"source_date": "2026-05-20"}, changed_by="AUX-090")
+    bad_docs = {
+        "unversioned": {"selector": list(SEL), "entries": [good]},
+        "same hash": {"selector": list(SEL), "version": 2, "entries": [dict(good, block_sha256_now="a" * 64)]},
+        "no change": {"selector": list(SEL), "version": 2, "entries": [dict(good, change={})]},
+        "unaudited": {"selector": list(SEL), "version": 2, "entries": [dict(good, changed_by=" ")]},
+        "twice": {"selector": list(SEL), "version": 2, "entries": [good, dict(good, block_sha256_now="c" * 64)]},
+    }
+    outcomes = {}
+    with tempfile.TemporaryDirectory(prefix="aux088-h7-") as tmp:
+        for name, bad in bad_docs.items():
+            path = Path(tmp) / (name.replace(" ", "_") + ".json")
+            path.write_text(json.dumps(bad), encoding="utf-8")
+            try:
+                wd.load_baseline(path)
+                outcomes[name] = "loaded"
+            except wd.Refusal as exc:
+                outcomes[name] = str(exc)
+        good_path = Path(tmp) / "good.json"
+        good_path.write_text(json.dumps({"selector": list(SEL), "version": 2, "entries": [good]}), encoding="utf-8")
+        loaded = wd.load_baseline(good_path)
+        empty = wd.load_baseline(Path(tmp) / "absent.json")
+    check("H7 a malformed baseline refuses (unversioned, unchanged hash, no change, no audit, a pin twice); "
+          "a well-formed one loads; an absent one is empty",
+          all(v.startswith("baseline:") for v in outcomes.values()) and empty == {}
+          and loaded == {ident(good): {"a" * 64: "b" * 64}}, json.dumps(outcomes)[:300])
+    with tempfile.TemporaryDirectory(prefix="aux088-h8-") as tmp:
+        store, generated, man = make_tree(Path(tmp), dated_text)
+        bl_path = Path(tmp) / "baseline.json"
+        bl_path.write_text(json.dumps({"selector": list(SEL), "version": 2, "entries": [dict(
+            {k: kept_entry[k] for k in SEL}, block_sha256_pinned=sha(kept13506), block_sha256_now=sha(dated_kept),
+            change={"source_date": "2026-05-20"}, changed_by="AUX-090")]}), encoding="utf-8")
+        with_bl = run_tool(store, generated, man, "--baseline", str(bl_path))
+        without_bl = run_tool(store, generated, man, "--baseline", str(Path(tmp) / "absent.json"))
+        unchanged = store.read_bytes() == dated_text.encode("utf-8")
+    check("H8 the bare script reads --baseline: with the recorded change the dry run plans; without it, it refuses",
+          with_bl.returncode == 0 and "[kept             ] obs-studio 32.1.2" in with_bl.stdout
+          and without_bl.returncode == 1 and "kept row changed" in without_bl.stdout and unchanged,
+          with_bl.stdout[-300:] + without_bl.stdout[-300:])
 
     print()
     for label in FAILURES:
