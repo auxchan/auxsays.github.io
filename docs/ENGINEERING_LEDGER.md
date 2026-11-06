@@ -4410,7 +4410,7 @@ visible as `id_collision_refused` on its Q&A health rows instead of being publis
 - two synthetic independents on 2406 are stored and its count goes 1 → 3; its decision changes only in its
   reasons and it stays not live; the live set stays at 6.
 
-`test_learn_reply_row_id.py` (69 checks, `[blocking]`) pins it, and 13 one-change mutants are each killed by a
+`test_learn_reply_row_id.py` (69 checks, `[blocking]`) pins it, and 17 one-change mutants are each killed by a
 named check.
 
 **Reopen only if** a PowerPoint run after the merge reports `id_collision_refused` on its Learn family; a question
