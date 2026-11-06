@@ -45,6 +45,8 @@ auxsays/tools/local-playwright-capture/*.exe
 # Systems Monitor — deterministic local/CI build products
 systems-monitor/.build/
 auxsays/systems-monitor/assets/
+# Copied by compose-jekyll.mjs from the committed systems-monitor/app/THIRD_PARTY_NOTICES.txt.
+auxsays/systems-monitor/THIRD_PARTY_NOTICES.txt
 auxsays/_includes/generated/systems-monitor-assets.html
 # Systems Monitor Phase-3 local data runtime (never source-controlled)
 systems-monitor/data/local/
