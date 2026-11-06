@@ -46,6 +46,9 @@ work, K1-K3 fail loudly and the ban can be revisited on evidence.
 [GA] (GROWTH-1A) is the base layout's other guard: Google Analytics loads only on the production
 host and never in an automated browser. The inline guard is executed under node once per host
 against a stub DOM; without node GA1 fails rather than skipping.
+[PV] pins the /privacy/ notice those analytics need: one page on the route, linked from the
+footer of every page, saying what is collected, why, that it is not sold and how to opt out,
+and claiming no compliance (its wording awaits the owner's review).
 
 Needs ruby + the liquid gem for the render half, like the hierarchy suite. Without them L1
 fails and every render check fails with it, rather than skipping silently.
@@ -519,6 +522,7 @@ def run() -> int:
           "a missed callback must not be able to leave content hidden permanently")
 
     section_ga()
+    section_pv()
 
     print()
     print("=" * 78)
@@ -637,6 +641,68 @@ def section_ga() -> None:
     automated = {k: v for k, v in res.items() if k.startswith("automated:")}
     check("GA8 a browser that declares navigator.webdriver requests nothing, even on auxsays.com",
           len(automated) == 2 and all(silent(v) for v in automated.values()), json.dumps(automated)[:300])
+
+
+# ------------------------------------------------------------------------- [PV] privacy notice
+# GROWTH-1A. /privacy/ returned 404 while every page ran Google Analytics. The notice is factual and
+# awaits the owner's review of its wording; it must never claim that a consent or privacy-law
+# requirement is met just because the page exists (EEA/UK consent is an open owner decision).
+PRIVACY_PAGE = _AUX / "privacy" / "index.md"
+GA_OPTOUT = "https://tools.google.com/dlpage/gaoptout"
+
+
+def section_pv() -> None:
+    import fnmatch
+
+    import yaml
+
+    print("\n[PV] a factual privacy notice, linked from every page's footer")
+    text = PRIVACY_PAGE.read_text(encoding="utf-8") if PRIVACY_PAGE.exists() else ""
+    fm = FRONT_MATTER_RE.match(text)
+    meta = yaml.safe_load(fm.group(0).strip("-\n")) if fm else {}
+    check("PV1 privacy/index.md is a page on the site frame with the /privacy/ route",
+          isinstance(meta, dict) and meta.get("permalink") == "/privacy/" and meta.get("layout") == "aux-base"
+          and bool(meta.get("title")), str(meta)[:200])
+    claimants = [p.relative_to(_AUX).as_posix() for p in _AUX.rglob("*.md")
+                 if "_site" not in p.parts and re.search(r"^permalink:\s*/privacy/\s*$",
+                                                          p.read_text(encoding="utf-8", errors="replace"), re.M)]
+    check("PV2 exactly one page claims /privacy/", claimants == ["privacy/index.md"], str(claimants))
+
+    base = COMMENT_RE.sub("", BASE_LAYOUT_PATH.read_text(encoding="utf-8"))
+    footer = re.search(r"<footer\b.*?</footer>", base, re.S)
+    check("PV3 the site footer links the notice on every page",
+          footer is not None and re.search(r"href=\"\{\{ '/privacy/' \| relative_url \}\}\"", footer.group(0)) is not None,
+          footer.group(0)[-300:] if footer else "no footer")
+
+    visible = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", re.sub(r"<!--.*?-->", " ", text[fm.end():] if fm else "",
+                                                                    flags=re.S)))
+    low = visible.lower()
+    says = {
+        "names Google Analytics": "google analytics" in low,
+        "names its cookies": "_ga" in visible and "cookie" in low,
+        "says why": "which pages" in low,
+        "says the data is not sold": "does not sell" in low,
+        "says where it runs and where it does not": "only on auxsays.com" in low and "automated" in low,
+        "says what stays in the browser": "local storage" in low and "my patch stack" in low,
+    }
+    check("PV4 the notice says what Google Analytics collects, why, that it is not sold, and where it runs",
+          all(says.values()), str([k for k, v in says.items() if not v]))
+    check("PV5 the notice says how to opt out: browser controls and Google's opt-out add-on",
+          "browser" in low and f'href="{GA_OPTOUT}"' in text, GA_OPTOUT)
+    claims = sorted(set(re.findall(r"complian\w*|\bgdpr\b|\bccpa\b|\bconsent\w*|\blawful\w*", low)))
+    check("PV6 the notice claims no compliance and asks for no consent it does not collect", not claims, str(claims))
+    check("PV7 an HTML comment marks the wording as awaiting owner review and settles nothing about consent",
+          re.search(r"<!--[^>]*OWNER REVIEW.*?not settled by this page.*?-->", text, re.S | re.I) is not None)
+
+    config = yaml.safe_load((_AUX / "_config.yml").read_text(encoding="utf-8"))
+    rel = "privacy/index.md"
+    excluded = [pat for pat in (config.get("exclude") or [])
+                if fnmatch.fnmatchcase(rel, pat) or rel.startswith(pat)]
+    check("PV8 Jekyll publishes the page: no exclude pattern in _config.yml matches it", not excluded, str(excluded))
+    js = JS_PATH.read_text(encoding="utf-8")
+    sends = [w for w in ("fetch(", "XMLHttpRequest", "sendBeacon", "gtag(", "dataLayer") if w in js]
+    check("PV9 what the notice says stays in the browser does: the site script sends nothing anywhere",
+          "localStorage" in js and not sends, str(sends))
 
 
 if __name__ == "__main__":

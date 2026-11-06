@@ -525,7 +525,8 @@ auxsays/scripts/tests/test_zendesk_help_center_adapter.py = 60
 # history stayed invisible on desktop permanently. [GA] (GROWTH-1A) executes the base layout's
 # analytics guard under node per host: gtag.js loads on auxsays.com and www only, never on
 # localhost, 127.0.0.1, file://, preview or look-alike hosts, and never when navigator.webdriver.
-auxsays/scripts/tests/test_template_presence_guards.py = 57
+# [PV] the /privacy/ notice: linked from the footer, factual, no compliance claim, published.
+auxsays/scripts/tests/test_template_presence_guards.py = 66
 auxsays/scripts/tests/test_patch_ingest_record_limit.py = 79
 auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
 auxsays/scripts/tests/test_product_page_layout.py = 54
