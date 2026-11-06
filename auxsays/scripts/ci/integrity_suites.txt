@@ -320,6 +320,16 @@ auxsays/scripts/tests/test_premiere_algolia_discovery.py = 107
 # filtered, so today's pages are byte-identical; Part B pins that.
 auxsays/scripts/tests/test_public_projection_earned_fields.py = 9
 
+# Patch pages link community reports by source, date and issue, never by the reporter's own title
+# (publication minimisation, D1). Renders the SHIPPED patch layout with the liquid gem over frozen
+# synthetic fixtures: all three report lists keep every URL, count and not-counted framing, and no
+# stored title of 20+ characters reaches the page as text or as an attribute. A confirmed source with
+# no issue label reads "issue not classified" even when workflow_area, theme, outcome and
+# classification are set (one named check per field, plus a control that must expose all four). A
+# control puts the old link text back and must expose the titles on all three lists. The real-record
+# pass at the end is WARN-only and adds no check, so evidence growth cannot change this count.
+auxsays/scripts/tests/test_publication_title_minimisation.py = 36
+
 # Premiere discovery ROUTING, and the health semantics that keep it honest. The nine-method flat
 # loop cost 546.8s over 219 HTTP requests for two records; wayback alone was 408.5s and reddit
 # 92.3s, both returning zero candidates, while Algolia produced every accepted row in 6.2s.

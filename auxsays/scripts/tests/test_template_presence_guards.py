@@ -251,10 +251,13 @@ def run() -> int:
         r"Download page[^<]*</a>\{% endif %\}",
         "the feed download link")
 
+    # D1 (publication minimisation): the citation no longer prints the source's own title. Its link
+    # text is a descriptor AUXSAYS composes from source name, date and issue label, so the fragment
+    # now starts at the first field the descriptor reads rather than at the old title ladder.
     cite = extract(
         update_src,
-        r"\{% assign source_title = source\.source_title.*?"
-        r"<cite>\{% if source_name_clean != '' %\}.*?</cite>",
+        r"\{% assign source_type_label = source\.source_type.*?"
+        r"<cite>\{% if source_url_clean != '' %\}.*?</cite>",
         "the accepted-source citation")
     # drive the citation without the surrounding for-loop
     cite_probe = cite.replace("source.", "src_fixture.")
@@ -436,11 +439,12 @@ def run() -> int:
           not re.search(r"<cite>\s*\.", no_name) and not no_name.startswith("<<ERR"),
           repr(no_name[:160]))
     no_url = rendered.get("cite::no url", "")
-    check("C6 a source with no URL renders plain text, never an empty href",
-          'href=""' not in no_url and "Crash on launch" in no_url
-          and not no_url.startswith("<<ERR"),
-          "an empty href resolves to the current page, so the citation would self-link: "
-          f"{no_url[:160]!r}")
+    check("C6 a source with no URL renders its descriptor as plain text, never an empty href or the title",
+          'href=""' not in no_url
+          and "obsproject/obs-studio report, March 4, 2026: issue not classified" in no_url
+          and "Crash on launch" not in no_url and not no_url.startswith("<<ERR"),
+          "an empty href resolves to the current page, so the citation would self-link; and the "
+          f"link text is AUXSAYS's descriptor, not the source's title (D1): {no_url[:160]!r}")
     check("C5 the citation always keeps its link",
           all('href="https://e.test/1"' in r
               for r in (no_date, empty_date, real_date, no_name)),

@@ -75,6 +75,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
+| AUX-080 | Resolved | Publication | Medium | Patch pages reprinted community thread titles as link text, and the forum test fixtures held recorded post text |
 | AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
@@ -4820,6 +4821,51 @@ host. These are vendor documentation pages, not Q&A threads, and they are unchan
 Learn Q&A fetch path does not go through `learn_fetch_policy.open_url`, a health row names a refusal
 for a redirect that stayed on Learn's own question, tag or search pages, or the official documentation
 residual is taken up (it needs its own item and its own per-source path list).
+
+---
+
+### AUX-080 — Patch pages reprinted community thread titles as link text, and the forum test fixtures held recorded post text
+
+- **Status** Resolved · **Area** Publication · **Severity** Medium
+- **First seen** 2026-11-05 · **Resolved** 2026-11-05
+
+**Symptom / gap** The three community-report lists on a patch page (the confirmed "User Reports / Sources"
+list with its evidence-samples fallback, the Level 2 "Update-linked user reports" card and the Level 3
+"Recent reports" card) used each source's own thread title as the link text. Rendered through the
+pre-change layout, 270 of 1,525 record pages carried 1,566 stored titles of 20+ characters (1,456 in the
+confirmed lists, 14 in Level 2, 96 in Level 3). Separately, the 24 Windows 11 Forum test fixtures added
+for the disabled adapter (#207) held recorded listing titles and opening-post text.
+
+**Fix** Display only. Each link's text is now a descriptor AUXSAYS composes from its own stored fields:
+"<source> report, <date>: <AUXSAYS issue label>", reading "date not recorded" or "issue not classified"
+instead of inventing either. The descriptor is the link's whole accessible name. Source URLs, counts,
+report dates, the Level 2/3 source line, the counted / not-counted framing, verdicts, maturity and
+monitoring are unchanged, and no evidence, record or `_data` file changed (P0 counts, evidence states,
+verdicts and live-eligibility reasons identical before and after). The 24 fixtures are rewritten in
+AUXSAYS's own words: each keeps its page's scenario, thread id, pinned flag, activity and post dates,
+version identifiers, error codes and commands, and apart from those identifiers no run of five or more
+consecutive words of any recorded page remains (each file measured against all 24). Every outcome the
+suites derive from them, compared offline before and after (520 per-thread verdicts, listings, claim
+sequences and three replays), is unchanged. This does not remove the recorded text from git history.
+
+`test_publication_title_minimisation.py` (36 checks, blocking) renders the shipped layout with the liquid
+gem over frozen synthetic fixtures: every link keeps its URL, no stored title reaches the page as text or
+attribute, a confirmed source with no issue label reads "issue not classified" even when its workflow
+area, theme, outcome and classification are set (one named check per field, and a control that must expose
+all four), and a control that puts the old link text back exposes the titles on all three lists. Its
+real-record pass is WARN-only (0 titles on the 270 pages after the change). The presence-guard citation
+ladder is amended (C6 now requires the descriptor and the title's absence); the forum suites keep their
+counts, and K4 also requires every fixture to carry the synthetic marker.
+
+**Residual (owner decisions, not closed here)** Stored third-party text is still in the public
+repository: the Tier 1, Level 2 and Level 3 data files, generated records' `source_title`, other test
+fixtures and audit JSON (for example `windows_c1b/c1b_rows.json`), the AUX-063 entry above, and git
+history, including the replaced fixtures. The record writer can still fall back to a truncated title as
+a sample's issue label; none reaches a rendered report list today.
+
+**Reopen only if** the suite reports anything but its governed 36, its WARN pass reports a stored title on
+a rendered page, a layout or include prints `report_title`, `source_title` or `parent_title` again, or a
+file under `tests/fixtures/elevenforum/` lacks the synthetic marker.
 
 ---
 
