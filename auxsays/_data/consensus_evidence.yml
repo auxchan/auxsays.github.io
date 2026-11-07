@@ -69917,3 +69917,299 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044896-ios-authenticator-app
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044896/ios-authenticator-app
+  parent_title: IOS Authenticator App - Microsoft Q&A
+  report_title: IOS Authenticator App - Microsoft Q&A
+  report_text_excerpt: IOS Authenticator App Hello, I am having issues with the authenticator app. I try and sign in on Microsoft Teams & Outlook, but it sends me to the authenticator app to get a code and enter, however the code is then shown on the screen with nowhere to submit. I have opted for...
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-10-21'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6044896-ios-authenticator-app-answer-13012416
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6044896/ios-authenticator-app#answer-13012416
+  parent_title: IOS Authenticator App - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: 'Dear Connor Cairaschi (NSD6 R) , I understand you’re being redirected between apps without being able to complete sign-in. The code displayed in Authenticator does not need to be submitted inside Authenticator itself. I recommend trying these steps: Start a fresh sign-in in...'
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-10-22T02:52:17.3766667+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-co-organizers-can-e2-80-99t-a
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-co-organizers-can%e2%80%99t-access-meeting-engagement-data-a-gap-for-centrally-man/4571110
+  parent_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_text_excerpt: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings Hi everyone,We’ve run into what seems to be a gap in the Microsoft Teams co-organizer model while working on moving our enterprise virtual learning delivery from a dedicated virtual-...'
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-webcam-quality-bad-on-teams-desktop
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/webcam-quality-bad-on-teams-desktop-but-good-on-team-web/3130569
+  parent_title: Webcam quality bad on Teams desktop but good on Team web
+  report_title: Webcam quality bad on Teams desktop but good on Team web
+  report_text_excerpt: Webcam quality bad on Teams desktop but good on Team web Hello,Has anyone noticed the webcam quality in Teams desktop is bad vs Teams web? I am not sure if I am doing something wrong, but this is happening to me on the same computer with the same webcam.
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2022-02-07'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ability-to-take-personal-notes-on-i
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ability-to-take-personal-notes-on-interactions-in-teams/2237979
+  parent_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_title: Ability to take Personal Notes on Interactions in TEAMS
+  report_text_excerpt: Ability to take Personal Notes on Interactions in TEAMS I have a lot of situations where I would like to take and keep personal notes associated to a specific TEAMS interactions. I don&apos;t want to have to keep my notes in a separate place like OneNote or...
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2021-03-26'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-co-organizers-can-e2-80-99t-a
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-co-organizers-can%e2%80%99t-access-meeting-engagement-data-a-gap-for-centrally-man/4571110
+  parent_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_text_excerpt: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings Hi everyone,We’ve run into what seems to be a gap in the Microsoft Teams co-organizer model while working on moving our enterprise virtual learning delivery from a dedicated virtual-...'
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-co-organizers-can-e2-80-99t-a
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-co-organizers-can%e2%80%99t-access-meeting-engagement-data-a-gap-for-centrally-man/4571110
+  parent_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_text_excerpt: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings Hi everyone,We’ve run into what seems to be a gap in the Microsoft Teams co-organizer model while working on moving our enterprise virtual learning delivery from a dedicated virtual-...'
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-co-organizers-can-e2-80-99t-a
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-co-organizers-can%e2%80%99t-access-meeting-engagement-data-a-gap-for-centrally-man/4571110
+  parent_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_text_excerpt: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings Hi everyone,We’ve run into what seems to be a gap in the Microsoft Teams co-organizer model while working on moving our enterprise virtual learning delivery from a dedicated virtual-...'
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-co-organizers-can-e2-80-99t-a
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-co-organizers-can%e2%80%99t-access-meeting-engagement-data-a-gap-for-centrally-man/4571110
+  parent_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_text_excerpt: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings Hi everyone,We’ve run into what seems to be a gap in the Microsoft Teams co-organizer model while working on moving our enterprise virtual learning delivery from a dedicated virtual-...'
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-co-organizers-can-e2-80-99t-a
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-co-organizers-can%e2%80%99t-access-meeting-engagement-data-a-gap-for-centrally-man/4571110
+  parent_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_text_excerpt: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings Hi everyone,We’ve run into what seems to be a gap in the Microsoft Teams co-organizer model while working on moving our enterprise virtual learning delivery from a dedicated virtual-...'
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-co-organizers-can-e2-80-99t-a
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-co-organizers-can%e2%80%99t-access-meeting-engagement-data-a-gap-for-centrally-man/4571110
+  parent_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_text_excerpt: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings Hi everyone,We’ve run into what seems to be a gap in the Microsoft Teams co-organizer model while working on moving our enterprise virtual learning delivery from a dedicated virtual-...'
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-co-organizers-can-e2-80-99t-a
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-co-organizers-can%e2%80%99t-access-meeting-engagement-data-a-gap-for-centrally-man/4571110
+  parent_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_title: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings'
+  report_text_excerpt: 'Teams co-organizers can’t access meeting engagement data: a gap for centrally managed meetings Hi everyone,We’ve run into what seems to be a gap in the Microsoft Teams co-organizer model while working on moving our enterprise virtual learning delivery from a dedicated virtual-...'
+  captured_at: '2026-11-07T22:33:34Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
