@@ -68180,3 +68180,1740 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6059545-missing-release-notes-for-microsoft-te
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6059545/missing-release-notes-for-microsoft-teams
+  parent_title: Missing Release Notes for Microsoft Teams - Microsoft Q&A
+  report_title: Missing Release Notes for Microsoft Teams - Microsoft Q&A
+  report_text_excerpt: 'Missing Release Notes for Microsoft Teams Hello, as a Teams Administrator, I am currently facing an issue where many of my users can no longer end calls using their headset buttons. In the log files, I identified the following error blocking the routine:hidService: Error:...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: true
+  matched_version: 26288.2004.5269.3420
+  match_basis: 26288.2004.5269.3420
+  counted: false
+  exclusion_reason: source_date_before_or_unverified_against_release
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6050662-microsoft-places-desk-booking-is-decli
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6050662/microsoft-places-desk-booking-is-declined-in-teams
+  parent_title: 'Microsoft Places: Desk booking is declined in Teams Mobile but succeeds in Teams Desktop - Microsoft Q&A'
+  report_title: 'Microsoft Places: Desk booking is declined in Teams Mobile but succeeds in Teams Desktop - Microsoft Q&A'
+  report_text_excerpt: 'Microsoft Places: Desk booking is declined in Teams Mobile but succeeds in Teams Desktop We are experiencing a reproducible issue with desk booking in Microsoft Places. When a user books a desk through the Microsoft Places app in Microsoft Teams on a smartphone , the booking...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-26'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054147-teams-for-ios-8-19-1-crashes-on-launch
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054147/teams-for-ios-8-19-1-crashes-on-launch-sigabrt-abo
+  parent_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_title: Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 - Microsoft Q&A
+  report_text_excerpt: 'Teams for iOS 8.19.1 crashes on launch (SIGABRT abort()), reproduced on iOS 26.6 and 27.2 Microsoft Teams for iOS (bundle com.microsoft.skype.teams , version 8.19.1, build 100772026192401) crashes within about one second of launching. Symptoms Crash type: EXC_CRASH (SIGABRT) ,...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: Teams Meeting quality - Microsoft Q&A
+  report_text_excerpt: Teams Meeting quality becomes unstable sound quality and vision after 30 minutes
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-13023575
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-13023575
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Dear Ken Knox , From your description, it appears that your Teams meetings start normally, but after about 30 minutes the audio becomes unstable, and the video quality drops. For better assist, could you please confirm the following? Which Teams client are you using (Windows,...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-29T04:02:05.1966667+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: macos
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6054114-teams-meeting-quality-answer-2867901
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6054114/teams-meeting-quality#answer-2867901
+  parent_title: Teams Meeting quality - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: data="0" class="margin-top-xxs is-unstyled padding-block-xxs " > Jade Ng • Follow 16,620 Reputation points • Microsoft External Staff • Moderator 2026-10-30T02:06:58.96+00:00 Dear Ken Knox , I hope you’re doing well. I wanted to follow up and see if you’ve had a chance to try...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-30T02:06:58.96'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6035116-teams-meeting-wont-schedule-a-meeting
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6035116/teams-meeting-wont-schedule-a-meeting
+  parent_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_title: teams meeting won't schedule a meeting - Microsoft Q&A
+  report_text_excerpt: teams meeting won't schedule a meeting Attempting to book a meeting however teams meeting won't schedule a meeting and states try again later.
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: Teams meeting transcript? - Microsoft Q&A
+  report_text_excerpt: Teams meeting transcript? I have Teams for personal use. Can I get a written transcript following a Teams meeting? If so, how?
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-03'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129862
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986217
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi @Fran Phillips Not directly, I'm afraid. Meeting recording and transcription are only included with the business Microsoft 365 plans. Teams for personal use gives you live captions during the meeting (More > Language and speech > Turn on live captions), but nothing is saved...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-04T05:02:09.47+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6024480-teams-meeting-transcript-answer-129868
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6024480/teams-meeting-transcript#answer-12986818
+  parent_title: Teams meeting transcript? - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: To correct the answer given to you by the other contributor, meeting recording IS available for personal account with paid subscriptions like Msft 365 personal, family or premium. However, transcripts for the meeting recording is only for business accounts with paid licenses.
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-04T21:54:19.2033333+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6052192-microphone-and-speaker-not-working-on
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6052192/microphone-and-speaker-not-working-on-teams
+  parent_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_title: Microphone and speaker not working on Teams - Microsoft Q&A
+  report_text_excerpt: Microphone and speaker not working on Teams My microphone and speaker are not working on test in Teams. They work fine for everything else, but when I run the test on teams, I don't hear anything. My camera is working.
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6012465-issue-with-screen-sharing-teams-applic
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6012465/issue-with-screen-sharing-teams-application-client
+  parent_title: Issue with screen sharing Teams application client inside the AVD - Microsoft Q&A
+  report_title: Issue with screen sharing Teams application client inside the AVD - Microsoft Q&A
+  report_text_excerpt: Issue with screen sharing Teams application client inside the AVD while sharing the screen of Teams application inside the AVD - i am getting the pop of "you are sharing" in the small window I cannot able to view the screen shared content and the other person in the call also...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-23'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037959-azure-ai-foundry-agent-works-in-studio
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037959/azure-ai-foundry-agent-works-in-studio-but-fails-w
+  parent_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_title: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams - Microsoft Q&A
+  report_text_excerpt: Azure AI Foundry Agent Works in Studio but Fails When Deployed to Microsoft Teams I developed an agent in Microsoft Foundry that uses Logic Apps MCP tools to query and update data in a database. The agent works correctly in Foundry Studio, but after publishing to Microsoft...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6056354-teams-claims-it-cannot-get-access-to-t
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6056354/teams-claims-it-cannot-get-access-to-the-internet
+  parent_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_title: Teams claims it cannot get access to the internet - not true - Microsoft Q&A
+  report_text_excerpt: Teams claims it cannot get access to the internet - not true I'm using a Mac and my Teams all of a sudden doest not work. It claims that it does not have access to the internet. I have cleared the cashes and signed out and in. What's going on?
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: macos
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6027725-microsoft-teams-repeatedly-asks-you-to
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6027725/microsoft-teams-repeatedly-asks-you-to-sign-in
+  parent_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_title: Microsoft Teams repeatedly asks you to sign in. - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams repeatedly asks you to sign in. Dear All, The following is happening to us; After I successfully authenticate on Teams, it asks me to log in again. Everything works correctly for a few moments and then it asks me to log in again. Is there anything I can check...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-06'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_text_excerpt: Teams Accounts and Orgs In teams under Accounts and Orgs there is a foreign ministry listed, how do I get rid of it?
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047812-teams-accounts-and-orgs-answer-1301499
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047812/teams-accounts-and-orgs#answer-13014993
+  parent_title: Teams Accounts and Orgs - Microsoft Q&A
+  report_title: ''
+  report_text_excerpt: Hi P De Young, Good day. If the foreign ministry still appears under Teams > Accounts and orgs, even after trying to leave it, there are a few other things you can check. The key is to determine whether it's an organization linked to your Microsoft account or just an old...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-23T15:39:52.08+00:00'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: reply_segment_not_counted_v1
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6047593-not-able-to-create-teams-profiles
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6047593/not-able-to-create-teams-profiles
+  parent_title: not able to create teams profiles - Microsoft Q&A
+  report_title: not able to create teams profiles - Microsoft Q&A
+  report_text_excerpt: not able to create teams profiles I wanted to create a new account on my personal PC, as a login is required for the Teams app. I either misunderstood the "prove you're not a robot" verification (the "press and hold" step), or it didn't work correctly on my PC
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981595-microsoft-teams-drag-and-drop-file-sha
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5981595/microsoft-teams-drag-and-drop-file-sharing-fails-i
+  parent_title: Microsoft Teams – Drag and Drop File Sharing Fails in External Chats - Microsoft Q&A
+  report_title: Microsoft Teams – Drag and Drop File Sharing Fails in External Chats - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams – Drag and Drop File Sharing Fails in External Chats Dear Microsoft Support, We are experiencing an issue with file sharing in Microsoft Teams external (federated) chats . File sharing with external users is enabled and works correctly when using the Attach...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-08-21'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6020040-unable-to-send-microsoft-team-invite-f
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6020040/unable-to-send-microsoft-team-invite-for-a-schedul
+  parent_title: Unable to Send Microsoft Team Invite for a scheduled to several individuals. - Microsoft Q&A
+  report_title: Unable to Send Microsoft Team Invite for a scheduled to several individuals. - Microsoft Q&A
+  report_text_excerpt: Unable to Send Microsoft Team Invite for a scheduled to several individuals. I created a Team Meeting but was unable to send the invite to individuals. What is the problem?
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-29'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-best-external-access-configuration
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/best-external-access-configuration/4498850
+  parent_title: Best External Access configuration
+  report_title: Best External Access configuration
+  report_text_excerpt: Best External Access configuration I’m looking for guidance on the best Microsoft Teams configuration for the following goal:&amp;nbsp;ObjectivePrevent random external domains from:Looking up users in TeamsSending 1:1 chatsMaking direct audio/video callsAt the same...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-03-02'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-remove-background-noise-on-a
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-remove-background-noise-on-a-group-call/1254409
+  parent_title: How to remove background noise on a group call?
+  report_title: How to remove background noise on a group call?
+  report_text_excerpt: 'How to remove background noise on a group call? We have a chat and group call in it.Problem: When everyone is muted, we able to hear background noise, like radio.This noise goes from the Teams app, not from the mic or so. After disabling Teams in the Volume Mixer, the noise is...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2020-03-25'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-set-chat-tab-as-default-when
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-set-chat-tab-as-default-when-starting-teams/3973871
+  parent_title: How to set Chat tab as default when starting teams
+  report_title: How to set Chat tab as default when starting teams
+  report_text_excerpt: How to set Chat tab as default when starting teams Good morning.&amp;nbsp; I&apos;m an IT contractor with M365 admin access at all of my clients who use it.&amp;nbsp; I started using the new MS Teams because I am able to log into multiple accounts at once, but when I switch...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2023-11-06'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-teams-meeting-in-outlook-with-m
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-teams-meeting-in-outlook-with-multiple-accounts/1241309
+  parent_title: New Teams Meeting in Outlook with multiple accounts
+  report_title: New Teams Meeting in Outlook with multiple accounts
+  report_text_excerpt: New Teams Meeting in Outlook with multiple accounts Hello,I don&apos;t know if this problem is related to Teams or Outlook/Exchange so if is not appropriate here could be ignored or deleted.&amp;nbsp;I have to manage Teams meetings for two accounts. Because in the MS Teams app...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2020-03-20'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-updates-two-present
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-updates--two-presenters-can-share-their-screens/4568517
+  parent_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_title: 'Microsoft Teams updates : Two presenters can share their screens'
+  report_text_excerpt: 'Microsoft Teams updates : Two presenters can share their screens SummaryStarting in late November 2026, Microsoft Teams will support simultaneous screen sharing by two Microsoft Teams will allow two presenters to share screens simultaneously in meetings starting late November...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-remove-old-account-sing-u
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-remove-old-account-sing-up-form-teams-on-mac-os/3715962
+  parent_title: Unable to remove old account sing up form Teams on Mac OS
+  report_title: Unable to remove old account sing up form Teams on Mac OS
+  report_text_excerpt: Unable to remove old account sing up form Teams on Mac OS I cannot remove an old sing account from Teams on Mac OS. I have to delete the keychain, I delete the temp folder, and remove and reinstall Teams, and the old account is still there. I have a case open with the...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2023-01-13'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: macos
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-insider-community-is-gone-456
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-insider-community-is-gone/4568205
+  parent_title: teams insider community is gone?
+  report_title: teams insider community is gone?
+  report_text_excerpt: teams insider community is gone? I am a teams insider and the community has been removed from my app without any notification at all.&amp;nbsp;I am on a paid 365 subscription so I am not sure what is going on.Sure would of been nice to get some kind of notification about...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-27'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-mtr-microphone-drops-during-calls-s
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/mtr---microphone-drops-during-calls-speaker-works-/4558436
+  parent_title: MTR - Microphone drops during calls. Speaker works.
+  report_title: MTR - Microphone drops during calls. Speaker works.
+  report_text_excerpt: 'MTR - Microphone drops during calls. Speaker works. Dear experts,&amp;nbsp;I&apos;m using Microsoft Teams Rooms (Rally/Rally Plus + Logitech tap cat5e) with the latest version on Windows 11 25H2, and I&apos;m experiencing the following issue:&amp;nbsp;Problem: microphone drops...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-20'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-update-you-can-now-control-teams-me
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/update-you-can-now-control-teams-meeting-recording-expiration-notification-email/4526017
+  parent_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_title: 'Update: You can now control Teams Meeting Recording expiration notification emails'
+  report_text_excerpt: 'Update: You can now control Teams Meeting Recording expiration notification emails Hey Teams community, &amp;nbsp; We&apos;ve heard the feedback. For admins and users managing a high volume of meetings, TMR expiration emails can pile up fast. We&apos;ve been working on giving...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-06-05'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-use-forms-inside-teams-to-aut
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-use-forms-inside-teams-to-automate-surveys-at-intervals/4567227
+  parent_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_title: Can I use forms inside Teams to automate surveys at intervals?
+  report_text_excerpt: Can I use forms inside Teams to automate surveys at intervals? I’m trying to set up a few recurring surveys for things like monthly pulse checks and occasional employee feedback, ideally without someone from HR having to remember to send them out every time. I know Forms works...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-people-keeping-manager-note
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-people-keeping-manager-notes-private-in-teams-without-creating-a-mess-of/4567222
+  parent_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_title: How are people keeping manager notes private in Teams without creating a mess of separate files?
+  report_text_excerpt: How are people keeping manager notes private in Teams without creating a mess of separate files? We’re trying to get managers to keep better notes from 1:1s, performance conversations, development discussions, etc., but the privacy side gets messy pretty quickly.If everything...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-transcription-langu
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-transcription-language-settings/4564414
+  parent_title: Microsoft Teams transcription language settings
+  report_title: Microsoft Teams transcription language settings
+  report_text_excerpt: Microsoft Teams transcription language settings Hi!&amp;nbsp;With a Microsoft 365 Business Premium license and a Copilot license, I can use transcription during a Teams meeting by setting the spoken language to Auto Detect. However, the transcription is sometimes inaccurate....
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-stopping-notifications-for-specific
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/stopping-notifications-for-specific-chats/4564806
+  parent_title: Stopping notifications for specific chats
+  report_title: Stopping notifications for specific chats
+  report_text_excerpt: Stopping notifications for specific chats When will you bring back the stop notifications for a specific post that was removed in the new Teams?This generate a lot of noise/notifications when there&apos;s a lot of replied in the post.
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-desperate-for-real-support-two-acoc
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/desperate-for-real-support-two-acocunts/1389836
+  parent_title: Desperate for real support.  Two acocunts,
+  report_title: Desperate for real support.  Two acocunts,
+  report_text_excerpt: 'Desperate for real support. Two acocunts, First, I get a message from Microsoft that&apos;s says:&amp;nbsp;&quot;It looks like this email is used with ore than one account from Microsoft.&amp;nbsp; Which one do you want to use?&amp;nbsp; Options: (1) Work or school account...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2020-05-14'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-redesigned-meeting-controls-4566208
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/redesigned-meeting-controls/4566208
+  parent_title: Redesigned meeting controls
+  report_title: Redesigned meeting controls
+  report_text_excerpt: Redesigned meeting controls I do not currently see the redesigned meeting controls in my Teams meetings. Are these scheduled for rollout on a certain date? Is there a beta for the rollout? Is an update required to see them?
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-json-formatting-4564828
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/json-formatting/4564828
+  parent_title: JSON Formatting
+  report_title: JSON Formatting
+  report_text_excerpt: JSON Formatting I created a JSON that counts the days after a certain start date &quot;A&quot; and stops after a date &quot;B&quot; if there is no date in B it keeps counting. Further the days count&amp;lt;90 turn green, 90-120, turn yellow, &amp;gt;120 turn red. The problem I...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-external-access-vs-b2b-direct
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-external-access-vs-b2b-direct-connect-vs-b2b-collab/4565309
+  parent_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_title: Teams External Access vs. B2B Direct Connect vs. B2B Collab
+  report_text_excerpt: Teams External Access vs. B2B Direct Connect vs. B2B Collab I&apos;ve received conflicting info regarding whether B2B Direct Connect and Teams External Access are the same thing.&amp;nbsp;Last time I looked into this, they both seemed to rely on the &apos;Default External...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-stuck-in-loading-latest-updat
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-stuck-in-loading-latest-updates--error/4118133
+  parent_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_title: Teams stuck in &quot;Loading latest updates...&quot; error
+  report_text_excerpt: Teams stuck in &quot;Loading latest updates...&quot; error I have been having the same error with Teams for the past few months, across two different computers, and with me having uninstalled and reinstalled Teams several times.&amp;nbsp; Effectively, Teams works fine the...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2024-04-18'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-planner-task-comments-no-longer-sen
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/planner-task-comments-no-longer-send-email-notifications-%e2%80%93-critical-regression/4511601
+  parent_title: Planner task comments no longer send email notifications – critical regression
+  report_title: Planner task comments no longer send email notifications – critical regression
+  report_text_excerpt: Planner task comments no longer send email notifications – critical regression This change removed a previously existing core functionality without providing an adequate replacement.With the new Planner experience, task comments no longer trigger automatic email notifications...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-are-organisations-monitoring-at
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-are-organisations-monitoring-attendance-and-participation-during-live-micros/4564487
+  parent_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_title: How are organisations monitoring attendance and participation during live Microsoft Teams meetings?
+  report_text_excerpt: How are organisations monitoring attendance and participation during live Microsoft Teams meetings? Hi everyone,I’m interested in how organisations are monitoring and verifying attendance and participation during live Microsoft Teams meetings, particularly where accurate...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-chat-messages-disappears-4564
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-chat-messages-disappears/4564805
+  parent_title: Teams Chat messages disappears
+  report_title: Teams Chat messages disappears
+  report_text_excerpt: Teams Chat messages disappears Problem with Teams Windows client.When you hover the mouse over the chat column, all the contacts disappear.If you click on the Chat icon to the left or press CRTL+2 you get the error message &quot;We ran into a problem getting your chats and...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: chat or notification problem
+  workflow_area: chat and notifications
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-lists-json-3459899
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-lists-json/3459899
+  parent_title: Microsoft Teams/ Lists JSON
+  report_title: Microsoft Teams/ Lists JSON
+  report_text_excerpt: Microsoft Teams/ Lists JSON Hello,&amp;nbsp;&amp;nbsp;I&apos;m currently using Teams and Lists to track our universities certifications. I found a JSON&apos;s that allowed me to make the numbers of the dates red when expired, yellow within 30 days, and green if futher than 30...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2022-06-02'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-where-do-i-report-bug-for-ms-teams
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/where-do-i-report-bug-for-ms-teams-/2371087
+  parent_title: Where do I report bug for Ms TEams ?
+  report_title: Where do I report bug for Ms TEams ?
+  report_text_excerpt: Where do I report bug for Ms TEams ? I have encountered bug in MS TEams. Where to report ?&amp;nbsp;
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2021-05-20'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-shared-channels-channel-mentions-fa
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/shared-channels-channel-mentions-fail-to-trigger-activity-notifications-for-team/4562911
+  parent_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_title: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members'
+  report_text_excerpt: 'Shared Channels: @Channel mentions fail to trigger activity notifications for team-shared members Hello everyone,&amp;nbsp;I am facing a persistent issue regarding notification behavior in Microsoft Teams Shared Channels that I hope someone can clarify or help...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-08'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: chat or notification problem
+  workflow_area: chat and notifications
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-places-bug-room-images-ar
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-places-bug-room-images-are-too-big-hiding-info-need-a-compactresize-op/4562556
+  parent_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_title: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option'
+  report_text_excerpt: 'Microsoft Places bug: Room images are too big, hiding info. Need a compact/resize option Hi everyone,We are currently deploying Microsoft Places and configuring our Resource Mailboxes. We are facing a major UI/UX issue regarding the Room Cards (Space Profiles).No matter what...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-integration-with-exchange-on
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-integration-with-exchange-on-prem/1549578
+  parent_title: Teams integration with exchange on prem
+  report_title: Teams integration with exchange on prem
+  report_text_excerpt: Teams integration with exchange on prem Hello,I would like the possibility to schedule meetings in microsoft teams.Currently I have already created the domain on o365 and synchronized AD users.In fact, I am able to use domain credentials on Microsoft teams.Now I would like to...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2020-07-28'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-setup-in-teams-channel-is-n
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-setup-in-teams-channel-is-not-allowing-me-to-update-the-agenda-and-send-/4563340
+  parent_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_title: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates
+  report_text_excerpt: Meeting setup in teams Channel is not allowing me to update the Agenda and send updates I am interested to understand why when I have setup a meeting from A channel I am not able to change the invitation to all the team members. When I go into teams Calendar ,. I update the...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-management-of-unsupported-wfh-teams
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/management-of-unsupported-wfh-teams-certified-desk-phones/4563336
+  parent_title: Management of unsupported WFH Teams-certified desk phones
+  report_title: Management of unsupported WFH Teams-certified desk phones
+  report_text_excerpt: Management of unsupported WFH Teams-certified desk phones Hello, I&apos;m looking for best practice or suggestions on management of unsupported WFH Teams-certified desk phones for company with Microsoft enterprise E3 and E5 licensed users. We&apos;re a Microsoft shop with...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-seperate-retention-times-for-meetin
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/seperate-retention-times-for-meeting-recording-and-transcript/4279286
+  parent_title: Seperate retention times for meeting recording and transcript?
+  report_title: Seperate retention times for meeting recording and transcript?
+  report_text_excerpt: Seperate retention times for meeting recording and transcript? Dear all,as a user (not an admin) I was told from IT, that the global data retention time for recordings and transcripts is set to 60 days and that they cannot change it separately.&amp;nbsp;&amp;nbsp;I&apos;m...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2024-10-25'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-calls-reporting-as-potentiall
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-calls-reporting-as-potentially-scams-incorrectly/4551363
+  parent_title: Teams calls reporting as potentially scams incorrectly
+  report_title: Teams calls reporting as potentially scams incorrectly
+  report_text_excerpt: Teams calls reporting as potentially scams incorrectly Hey Teams Community,In the past 5 days I am seeing callers from external tenants that are trusted and in mto showing as suspected scam callers when they call me. They see.me as a suspected scam also when I call. These...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-08-28'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-powershell-no-longer-works-on
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-powershell-no-longer-works-on-macos---windows-only-dependency-after-7-9-0/4561845
+  parent_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_title: Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0
+  report_text_excerpt: 'Teams PowerShell no longer works on MacOS - Windows only dependency after 7.9.0 Since MicrosoftTeams 7.9.0, Connect-MicrosoftTeams with the default interactive sign-in fails on macOS before any sign-in prompt appears. It throws System.DllNotFoundException: Unable to load...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-02'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-unable-to-access-teams-from-a-pc-on
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/unable-to-access-teams-from-a-pc-only-mobile-access/4561047
+  parent_title: Unable to access Teams from a PC (only mobile access)
+  report_title: Unable to access Teams from a PC (only mobile access)
+  report_text_excerpt: Unable to access Teams from a PC (only mobile access) We have a user who can&apos;t access Teams on PC, but it works as usual on mobile (however, no connections to Outlook for Teams or the ability to create Teams meetings). Have tested several different PC’s as well as app and...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-can-i-see-who-is-removing-users-in
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/can-i-see-who-is-removing-users-in-a-meeting/1269490
+  parent_title: Can i see who is removing users in a meeting?
+  report_title: Can i see who is removing users in a meeting?
+  report_text_excerpt: Can i see who is removing users in a meeting? I need to know if I can see which participant of the meeting is expelling others, since this happens very often in my classes and I don&apos;t know how to detect who is specific.&amp;nbsp;Thanks.
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2020-03-31'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-automatically-record-all-tea
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-automatically-record-all-teams-meetings/3901450
+  parent_title: How to automatically record all Teams meetings?
+  report_title: How to automatically record all Teams meetings?
+  report_text_excerpt: How to automatically record all Teams meetings? I have subscribed to a Teams Premium trial and added the license to a user&apos;s account. As global admin, I&apos;m trying to enable automatic recording on ALL Teams meetings for that user. I don&apos;t want the user to need to...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2023-08-16'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-security-loophole-in-private-channe
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/security-loophole-in-private-channels/4559080
+  parent_title: Security loophole in Private Channels?
+  report_title: Security loophole in Private Channels?
+  report_text_excerpt: Security loophole in Private Channels? We came across an interesting use case in our organization today.&amp;nbsp;&amp;nbsp;&amp;nbsp;We have a Team and a private channel within that Teams team. Within the private channel a subsite was created.&amp;nbsp; I am not an owner or...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-22'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-transfer-an-external-sip-cal
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-transfer-an-external-sip-call-directly-to-a-teams-users-voicemail/4561360
+  parent_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_title: How to transfer an external SIP call directly to a Teams user&apos;s voicemail?
+  report_text_excerpt: How to transfer an external SIP call directly to a Teams user&apos;s voicemail? Hi,I am working on an external SIP-based reception platform that connects to Microsoft Teams through Direct Routing.My requirement is to transfer an external call directly to a Teams user&apos;s...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-10-01'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-add-outlook-as-an-app-in-teams-4561
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/add-outlook-as-an-app-in-teams/4561084
+  parent_title: Add Outlook as an App in Teams?
+  report_title: Add Outlook as an App in Teams?
+  report_text_excerpt: Add Outlook as an App in Teams? Any news on this ?I&apos;d ask at Add Outlook as an App in Teams? | Microsoft Community Hub but &quot;Replies have been turned off&quot;.Thanks
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-and-bulk-adding-of-members-15
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-and-bulk-adding-of-members/1587997
+  parent_title: teams and bulk adding of members
+  report_title: teams and bulk adding of members
+  report_text_excerpt: teams and bulk adding of members When I set up a new team or a channel under a team, I noticed that I have to add each name one at a time. It&apos;s really tedious, and it seems like an easy add just to cut and paste a bunch of emails from a spreadsheet into this (you can do...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2020-08-13'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-new-mtr-devices-unable-to-connect-w
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/new-mtr-devices-unable-to-connect-workplace/4514790
+  parent_title: New MTR devices unable to connect workplace
+  report_title: New MTR devices unable to connect workplace
+  report_text_excerpt: 'New MTR devices unable to connect workplace Hello collective im facing an issue with new Poly devices&amp;nbsp;Poly X52 + Poly TC10 + Poly Trio 60Poly X52 + Poly TC10Both devices can not connect to M365.Error message: &quot;Couldn&apos;t connect to Workplace Join. try again,...'
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-04-26'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-start-a-meeting-without-noti
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-start-a-meeting-without-notifying-everyone/1618223
+  parent_title: How to start a meeting without notifying everyone?
+  report_title: How to start a meeting without notifying everyone?
+  report_text_excerpt: How to start a meeting without notifying everyone? I want to test Microsoft team meeting links that have been copied and pasted into meeting invites to check they work. I want to do this without notifying all the invitees. Is there a way to do this?
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2020-08-28'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-not-receiving-any-notifications-in
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/not-receiving-any-notifications-in-my-samsung-s26-ultra/4553813
+  parent_title: Not receiving any notifications in my Samsung S26 Ultra
+  report_title: Not receiving any notifications in my Samsung S26 Ultra
+  report_text_excerpt: Not receiving any notifications in my Samsung S26 Ultra Hello,&amp;nbsp;Since I moved to Samsung S26 Ultra, I am not getting any notifications. Following are my settings. Please help to fix the issue.&amp;nbsp;Following are settings in Samsung phone&amp;nbsp;Following are...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-06'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: chat or notification problem
+  workflow_area: chat and notifications
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-cannot-deploy-custom-backgrounds-fo
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/cannot-deploy-custom-backgrounds-for-teams-in-vdi-environment/4557188
+  parent_title: Cannot deploy Custom backgrounds for Teams in VDI environment
+  report_title: Cannot deploy Custom backgrounds for Teams in VDI environment
+  report_text_excerpt: Cannot deploy Custom backgrounds for Teams in VDI environment We have detected (or so we think) a malfunction in Teams on VDI when attempting to deploy Teams backgrounds that should be available to users for their video calls.The only article that documents how to do this is...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-16'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ms-teams-on-mobile-browser-1719111
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ms-teams-on-mobile-browser/1719111
+  parent_title: MS TEAMS ON MOBILE BROWSER
+  report_title: MS TEAMS ON MOBILE BROWSER
+  report_text_excerpt: MS TEAMS ON MOBILE BROWSER Hi,&amp;nbsp;So I want to be able to access MS Teams meetings on the mobile browser itself, i.e on the mobile web app.I don&apos;t want our customers to be asked to download the MS Teams mobile app. They should be able to join meetings directly from...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2020-09-28'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-fillable-pdfs-4559877
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/fillable-pdfs/4559877
+  parent_title: Fillable PDFs
+  report_title: Fillable PDFs
+  report_text_excerpt: Fillable PDFs I created a fillable PDF a few months ago assuming our team would be able to edit it directly in Teams. At that time, it turned out this wasn’t supported. Has anything changed recently? Is fillable‑PDF editing now possible within Teams?
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-25'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-to-receive-app-mentions-only-fr
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-to-receive-app-mentions-only-from-a-channel-while-having-the-consent-to-read/4559237
+  parent_title: How to receive app mentions only from a channel, while having the consent to read user messages?
+  report_title: How to receive app mentions only from a channel, while having the consent to read user messages?
+  report_text_excerpt: How to receive app mentions only from a channel, while having the consent to read user messages? We&apos;re building a Teams bot (Azure Bot + Entra app) that a customer adds into a standard Teams channel. Members @mention the bot and it replies in the same thread. To make...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-23'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-improve-teams-groupingcontacts-orga
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/improve-teams-groupingcontacts-organizing-adding-more-tags-and-key-bindings/4559903
+  parent_title: Improve Teams grouping/contacts organizing adding more tags and key bindings
+  report_title: Improve Teams grouping/contacts organizing adding more tags and key bindings
+  report_text_excerpt: Improve Teams grouping/contacts organizing adding more tags and key bindings &amp;nbsp;
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2026-09-25'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-random-list-of-team-meeting-partici
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/random-list-of-team-meeting-participants/3926226
+  parent_title: Random list of team meeting participants
+  report_title: Random list of team meeting participants
+  report_text_excerpt: Random list of team meeting participants Hi, during a daily meeting I want to prepare the list of all members and each day before a meeting I want to send to all list with the order of speaking. How I can do this. ;/ I know that this is possible but I don&apos;t have idea how....
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2023-09-13'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-and-other-contacts-phone
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-and-other-contacts-phone-numbers/2542507
+  parent_title: Speed dial and other contacts phone numbers
+  report_title: Speed dial and other contacts phone numbers
+  report_text_excerpt: Speed dial and other contacts phone numbers In teams desktop, if I saved a contact to the speed dial or other contacts list, I can&apos;t find a way to see, edit or add the phone number. Is there a way?
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2021-07-13'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-meeting-recording-does-not-in
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-meeting-recording-does-not-include-embedded-video-from-powerpoint-presenta/3899382
+  parent_title: Teams Meeting Recording does not include Embedded Video from PowerPoint presentation
+  report_title: Teams Meeting Recording does not include Embedded Video from PowerPoint presentation
+  report_text_excerpt: Teams Meeting Recording does not include Embedded Video from PowerPoint presentation One of my customers ran into an interesting issue recently that I have been able to replicate. I&apos;m curious if others are also experiencing this, and if there&apos;s a way to make it work...
+  captured_at: '2026-11-07T13:41:49Z'
+  source_date: '2023-08-14'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6063511-question-6063511
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063511/kb5127936-26300-9818-6-laptops-fail-to-boot-days-a
+  parent_title: KB5127936 (26300.9818) – 6 laptops fail to boot days after install (“A recently serviced boot binary is corrupt”) - Microsoft Q&A
+  report_title: KB5127936 (26300.9818) – 6 laptops fail to boot days after install (“A recently serviced boot binary is corrupt”) - Microsoft Q&A
+  report_text_excerpt: KB5127936 (26300.9818) – 6 laptops fail to boot days after install (“A recently serviced boot binary is corrupt”) - Microsoft Q&A Hello, Five Lenovo ThinkPad E15 Gen 4 laptops (Windows 11 26H2) stopped booting after the optional preview update KB5127936 installed...
+  captured_at: '2026-11-07T13:48:57Z'
+  source_date: '2026-11-07'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6063904-question-6063904
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6063904/0x800f081f-install-error-2026-10-preview-update-kb
+  parent_title: 0x800f081f install error 2026-10 Preview Update (KB5127936) (26300.9818) - Microsoft Q&A
+  report_title: 0x800f081f install error 2026-10 Preview Update (KB5127936) (26300.9818) - Microsoft Q&A
+  report_text_excerpt: 0x800f081f install error 2026-10 Preview Update (KB5127936) (26300.9818) - Microsoft Q&A 0x800f081f install error 2026-10 Preview Update (KB5127936) (26300.9818)tried 3x performed DISM and scan fix. Reboot and still same error
+  captured_at: '2026-11-07T13:48:57Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: obs-studio-33-0-0-obs-forum-thread-196848
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/skipped-frames-increasing-by-exactly-1-every-30-s-on-an-idle-session-%E2%80%94-trying-to-understand-why-my-report-was-rejected.196848/
+  parent_title: Skipped frames increasing by exactly 1 every 30 s on an idle session — trying to understand why my report was rejected
+  report_title: Skipped frames increasing by exactly 1 every 30 s on an idle session — trying to understand why my report was rejected
+  report_text_excerpt: d by measurements was rejected, because that's the only part I couldn't get answered. OBS 33.0.0, Linux, 60 fps, no stream, no recording, no replay buffer. "Skipped frames" increases by exactly 1 every 30.0 s, indefinitely, with a stable phase. I spent about four hours measuring
+  captured_at: '2026-11-07T14:09:22Z'
+  source_date: '2026-11-07'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
