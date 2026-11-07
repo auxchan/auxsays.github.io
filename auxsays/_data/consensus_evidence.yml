@@ -67942,3 +67942,241 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: acrobat-26-002-22031-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-002-22031-crashes-font-capture-errors-and-print
+  product_id: adobe-acrobat-pro
+  update_version: 26.002.22031
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-26-002-22031-crashes-font-capture-errors-and-print-failures-freezing-our-office-pc-case-adb-47873605-q7l7-closed-without-a-fix-1654689
+  parent_title: Acrobat 26.002.22031 crashes, "Font Capture" errors and print failures freezing our office PC - case ADB-47873605-Q7L7 closed without a fix
+  report_title: Acrobat 26.002.22031 crashes, "Font Capture" errors and print failures freezing our office PC - case ADB-47873605-Q7L7 closed without a fix
+  report_text_excerpt: Acrobat 26.002.22031 crashes, "Font Capture" errors and print failures freezing our office PC - case ADB-47873605-Q7L7 closed without a fix For about two months, Acrobat Pro (64-bit) 26.002.22031 on Windows 11 has been crashing and freezing our office computer while we work...
+  captured_at: '2026-11-07T05:54:25Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.002.22031
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6061244-toggling-between-2-screens-in-ms-teams
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061244/toggling-between-2-screens-in-ms-teams
+  parent_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_text_excerpt: Toggling between 2 screens in MS Teams With the amount of online meetings being held, is MS going to release an update for Teams to be able to toggle between 2 screens when sharing screens?
+  captured_at: '2026-11-07T06:41:07Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6061244-toggling-between-2-screens-in-ms-teams
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061244/toggling-between-2-screens-in-ms-teams
+  parent_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_text_excerpt: Toggling between 2 screens in MS Teams With the amount of online meetings being held, is MS going to release an update for Teams to be able to toggle between 2 screens when sharing screens?
+  captured_at: '2026-11-07T06:41:07Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6061244-toggling-between-2-screens-in-ms-teams
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061244/toggling-between-2-screens-in-ms-teams
+  parent_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_text_excerpt: Toggling between 2 screens in MS Teams With the amount of online meetings being held, is MS going to release an update for Teams to be able to toggle between 2 screens when sharing screens?
+  captured_at: '2026-11-07T06:41:07Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6061244-toggling-between-2-screens-in-ms-teams
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061244/toggling-between-2-screens-in-ms-teams
+  parent_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_text_excerpt: Toggling between 2 screens in MS Teams With the amount of online meetings being held, is MS going to release an update for Teams to be able to toggle between 2 screens when sharing screens?
+  captured_at: '2026-11-07T06:41:07Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6061244-toggling-between-2-screens-in-ms-teams
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061244/toggling-between-2-screens-in-ms-teams
+  parent_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_text_excerpt: Toggling between 2 screens in MS Teams With the amount of online meetings being held, is MS going to release an update for Teams to be able to toggle between 2 screens when sharing screens?
+  captured_at: '2026-11-07T06:41:07Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6061244-toggling-between-2-screens-in-ms-teams
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061244/toggling-between-2-screens-in-ms-teams
+  parent_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_text_excerpt: Toggling between 2 screens in MS Teams With the amount of online meetings being held, is MS going to release an update for Teams to be able to toggle between 2 screens when sharing screens?
+  captured_at: '2026-11-07T06:41:07Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6061244-toggling-between-2-screens-in-ms-teams
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6061244/toggling-between-2-screens-in-ms-teams
+  parent_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_title: Toggling between 2 screens in MS Teams - Microsoft Q&A
+  report_text_excerpt: Toggling between 2 screens in MS Teams With the amount of online meetings being held, is MS going to release an update for Teams to be able to toggle between 2 screens when sharing screens?
+  captured_at: '2026-11-07T06:41:07Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14169
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14169
+  parent_title: Recording stalls at 0 kbps and Stop never completes after applying Output settings twice during one recording (QSV, Hybrid MP4)
+  report_title: Recording stalls at 0 kbps and Stop never completes after applying Output settings twice during one recording (QSV, Hybrid MP4)
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Ka1QGusIFdR3oMuz ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Stop'
+  captured_at: '2026-11-07T07:08:11Z'
+  source_date: '2026-11-07'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196839
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-crashes-when-logging-into-the-youtube-control-panel-dock.196839/
+  parent_title: OBS Crashes when logging into the YouTube Control Panel dock
+  report_title: OBS Crashes when logging into the YouTube Control Panel dock
+  report_text_excerpt: I've attached the crash report. I'm on Golden Gate 27.2 MacOS I'm running OBS 33.0.1 let me know if you need anything else thanks in advance.
+  captured_at: '2026-11-07T07:08:02Z'
+  source_date: '2026-11-07'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
