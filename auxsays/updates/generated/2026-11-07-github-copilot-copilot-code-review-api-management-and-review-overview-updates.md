@@ -18,8 +18,8 @@ update_version: 'Copilot code review: API management and review overview updates
 update_logo_text: GIT
 update_published_at: '2026-11-07T00:27:19Z'
 update_last_checked: '2026-11-07T08:11:38Z'
-source_last_checked: '2026-11-08T00:15:49Z'
-official_body_last_checked: '2026-11-08T00:15:49Z'
+source_last_checked: '2026-11-08T08:45:04Z'
+official_body_last_checked: '2026-11-08T08:45:04Z'
 record_last_updated: '2026-11-07T08:11:38Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -115,6 +115,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-08T00:15:49Z'
+  url: https://github.blog/changelog/2026-11-06-copilot-code-review-api-management-and-review-overview-updates
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-08T08:45:04Z'
   url: https://github.blog/changelog/2026-11-06-copilot-code-review-api-management-and-review-overview-updates
   status: captured-from-rss-feed
   body_captured: true
