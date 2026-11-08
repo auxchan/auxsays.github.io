@@ -70345,3 +70345,57 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-1212451-microsoft-teams-teams-exploratory-expi
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/1212451/microsoft-teams-teams-exploratory-expiring
+  parent_title: Microsoft Teams Teams Exploratory Expiring - Microsoft Q&A
+  report_title: Microsoft Teams Teams Exploratory Expiring - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams Teams Exploratory Expiring Hi, I would like to know if i could use Microsoft teams free after the Microsoft teams exploratory has been expired.
+  captured_at: '2026-11-08T14:05:10Z'
+  source_date: '2023-04-10'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6064439-question-6064439
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064439/windows-update-failure
+  parent_title: Windows Update Failure - Microsoft Q&A
+  report_title: Windows Update Failure - Microsoft Q&A
+  report_text_excerpt: Windows Update Failure - Microsoft Q&A Hi everyone, I have been running my Windows 11 Home laptop and facing an issue where Windows Update fails to install the latest updates for about a month . I tried to reinstall Windows while keeping my personal files. However, even after...
+  captured_at: '2026-11-08T14:12:42Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9818'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9818'
