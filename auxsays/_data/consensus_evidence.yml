@@ -70345,7 +70345,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-1212451-microsoft-teams-teams-exploratory-expi
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -70370,7 +70369,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6064439-question-6064439
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -70399,3 +70397,841 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9818'
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6037373-after-joing-team-meeting-can-not-scree
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6037373/after-joing-team-meeting-can-not-screen-sharing
+  parent_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_title: after joing team meeting can not screen sharing - Microsoft Q&A
+  report_text_excerpt: after joing team meeting can not screen sharing Hi, When join team meeting, I can not share screen sharing to another people, how to check whether I can have permission or not? Thanks.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: screen sharing failure
+  workflow_area: screen sharing
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6064829-microsoft-sign-in-fails-inside-outlook
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064829/microsoft-sign-in-fails-inside-outlook-teams-and-g
+  parent_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_text_excerpt: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) Hello Microsoft Support, I recently bought a Samsung Galaxy S26 Ultra (One UI 9) and I cannot sign in with my Microsoft account in any app. I would like to know if this is...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-do-you-track-file-approvals-in
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-do-you-track-file-approvals-in-teams-chats/4571620
+  parent_title: How do you track file approvals in Teams chats?
+  report_title: How do you track file approvals in Teams chats?
+  report_text_excerpt: How do you track file approvals in Teams chats? When someone shares a document in a Teams group chat, feedback like “looks good” can get buried under later messages. If a revised version is shared, it also becomes unclear which version was approved.How does your team record...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ice-breaker-session-for-my-teams-wo
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ice-breaker-session-for-my-teams-working-in-a-hybrid-mode/3821482
+  parent_title: Ice breaker session for my teams working in a hybrid mode
+  report_title: Ice breaker session for my teams working in a hybrid mode
+  report_text_excerpt: Ice breaker session for my teams working in a hybrid mode Hello,&amp;nbsp;I am planning to deliver a session on communication gap.&amp;nbsp;To begin I need to start the session with a ice breaker session.I will use Microsoft teams meeting where people will join...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2023-05-15'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-pictionary-on-microsoft-teams-41187
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/pictionary-on-microsoft-teams/4118752
+  parent_title: Pictionary on Microsoft Teams
+  report_title: Pictionary on Microsoft Teams
+  report_text_excerpt: Pictionary on Microsoft Teams We want to play Pictionary on Microsoft Teams. I want to know, is there a built-in feature for this game in the Teams desktop version?Thank you.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2024-04-19'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6064829-microsoft-sign-in-fails-inside-outlook
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064829/microsoft-sign-in-fails-inside-outlook-teams-and-g
+  parent_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_text_excerpt: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) Hello Microsoft Support, I recently bought a Samsung Galaxy S26 Ultra (One UI 9) and I cannot sign in with my Microsoft account in any app. I would like to know if this is...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-do-you-track-file-approvals-in
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-do-you-track-file-approvals-in-teams-chats/4571620
+  parent_title: How do you track file approvals in Teams chats?
+  report_title: How do you track file approvals in Teams chats?
+  report_text_excerpt: How do you track file approvals in Teams chats? When someone shares a document in a Teams group chat, feedback like “looks good” can get buried under later messages. If a revised version is shared, it also becomes unclear which version was approved.How does your team record...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ice-breaker-session-for-my-teams-wo
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ice-breaker-session-for-my-teams-working-in-a-hybrid-mode/3821482
+  parent_title: Ice breaker session for my teams working in a hybrid mode
+  report_title: Ice breaker session for my teams working in a hybrid mode
+  report_text_excerpt: Ice breaker session for my teams working in a hybrid mode Hello,&amp;nbsp;I am planning to deliver a session on communication gap.&amp;nbsp;To begin I need to start the session with a ice breaker session.I will use Microsoft teams meeting where people will join...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2023-05-15'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-pictionary-on-microsoft-teams-41187
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/pictionary-on-microsoft-teams/4118752
+  parent_title: Pictionary on Microsoft Teams
+  report_title: Pictionary on Microsoft Teams
+  report_text_excerpt: Pictionary on Microsoft Teams We want to play Pictionary on Microsoft Teams. I want to know, is there a built-in feature for this game in the Teams desktop version?Thank you.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2024-04-19'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-1212451-microsoft-teams-teams-exploratory-expi
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/1212451/microsoft-teams-teams-exploratory-expiring
+  parent_title: Microsoft Teams Teams Exploratory Expiring - Microsoft Q&A
+  report_title: Microsoft Teams Teams Exploratory Expiring - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams Teams Exploratory Expiring Hi, I would like to know if i could use Microsoft teams free after the Microsoft teams exploratory has been expired.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2023-04-10'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6064829-microsoft-sign-in-fails-inside-outlook
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064829/microsoft-sign-in-fails-inside-outlook-teams-and-g
+  parent_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_text_excerpt: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) Hello Microsoft Support, I recently bought a Samsung Galaxy S26 Ultra (One UI 9) and I cannot sign in with my Microsoft account in any app. I would like to know if this is...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-do-you-track-file-approvals-in
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-do-you-track-file-approvals-in-teams-chats/4571620
+  parent_title: How do you track file approvals in Teams chats?
+  report_title: How do you track file approvals in Teams chats?
+  report_text_excerpt: How do you track file approvals in Teams chats? When someone shares a document in a Teams group chat, feedback like “looks good” can get buried under later messages. If a revised version is shared, it also becomes unclear which version was approved.How does your team record...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ice-breaker-session-for-my-teams-wo
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ice-breaker-session-for-my-teams-working-in-a-hybrid-mode/3821482
+  parent_title: Ice breaker session for my teams working in a hybrid mode
+  report_title: Ice breaker session for my teams working in a hybrid mode
+  report_text_excerpt: Ice breaker session for my teams working in a hybrid mode Hello,&amp;nbsp;I am planning to deliver a session on communication gap.&amp;nbsp;To begin I need to start the session with a ice breaker session.I will use Microsoft teams meeting where people will join...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2023-05-15'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-pictionary-on-microsoft-teams-41187
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/pictionary-on-microsoft-teams/4118752
+  parent_title: Pictionary on Microsoft Teams
+  report_title: Pictionary on Microsoft Teams
+  report_text_excerpt: Pictionary on Microsoft Teams We want to play Pictionary on Microsoft Teams. I want to know, is there a built-in feature for this game in the Teams desktop version?Thank you.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2024-04-19'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6064829-microsoft-sign-in-fails-inside-outlook
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064829/microsoft-sign-in-fails-inside-outlook-teams-and-g
+  parent_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_text_excerpt: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) Hello Microsoft Support, I recently bought a Samsung Galaxy S26 Ultra (One UI 9) and I cannot sign in with my Microsoft account in any app. I would like to know if this is...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-do-you-track-file-approvals-in
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-do-you-track-file-approvals-in-teams-chats/4571620
+  parent_title: How do you track file approvals in Teams chats?
+  report_title: How do you track file approvals in Teams chats?
+  report_text_excerpt: How do you track file approvals in Teams chats? When someone shares a document in a Teams group chat, feedback like “looks good” can get buried under later messages. If a revised version is shared, it also becomes unclear which version was approved.How does your team record...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ice-breaker-session-for-my-teams-wo
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ice-breaker-session-for-my-teams-working-in-a-hybrid-mode/3821482
+  parent_title: Ice breaker session for my teams working in a hybrid mode
+  report_title: Ice breaker session for my teams working in a hybrid mode
+  report_text_excerpt: Ice breaker session for my teams working in a hybrid mode Hello,&amp;nbsp;I am planning to deliver a session on communication gap.&amp;nbsp;To begin I need to start the session with a ice breaker session.I will use Microsoft teams meeting where people will join...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2023-05-15'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-pictionary-on-microsoft-teams-41187
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/pictionary-on-microsoft-teams/4118752
+  parent_title: Pictionary on Microsoft Teams
+  report_title: Pictionary on Microsoft Teams
+  report_text_excerpt: Pictionary on Microsoft Teams We want to play Pictionary on Microsoft Teams. I want to know, is there a built-in feature for this game in the Teams desktop version?Thank you.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2024-04-19'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6064829-microsoft-sign-in-fails-inside-outlook
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064829/microsoft-sign-in-fails-inside-outlook-teams-and-g
+  parent_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_text_excerpt: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) Hello Microsoft Support, I recently bought a Samsung Galaxy S26 Ultra (One UI 9) and I cannot sign in with my Microsoft account in any app. I would like to know if this is...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-do-you-track-file-approvals-in
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-do-you-track-file-approvals-in-teams-chats/4571620
+  parent_title: How do you track file approvals in Teams chats?
+  report_title: How do you track file approvals in Teams chats?
+  report_text_excerpt: How do you track file approvals in Teams chats? When someone shares a document in a Teams group chat, feedback like “looks good” can get buried under later messages. If a revised version is shared, it also becomes unclear which version was approved.How does your team record...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ice-breaker-session-for-my-teams-wo
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ice-breaker-session-for-my-teams-working-in-a-hybrid-mode/3821482
+  parent_title: Ice breaker session for my teams working in a hybrid mode
+  report_title: Ice breaker session for my teams working in a hybrid mode
+  report_text_excerpt: Ice breaker session for my teams working in a hybrid mode Hello,&amp;nbsp;I am planning to deliver a session on communication gap.&amp;nbsp;To begin I need to start the session with a ice breaker session.I will use Microsoft teams meeting where people will join...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2023-05-15'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-pictionary-on-microsoft-teams-41187
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/pictionary-on-microsoft-teams/4118752
+  parent_title: Pictionary on Microsoft Teams
+  report_title: Pictionary on Microsoft Teams
+  report_text_excerpt: Pictionary on Microsoft Teams We want to play Pictionary on Microsoft Teams. I want to know, is there a built-in feature for this game in the Teams desktop version?Thank you.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2024-04-19'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6064829-microsoft-sign-in-fails-inside-outlook
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064829/microsoft-sign-in-fails-inside-outlook-teams-and-g
+  parent_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_text_excerpt: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) Hello Microsoft Support, I recently bought a Samsung Galaxy S26 Ultra (One UI 9) and I cannot sign in with my Microsoft account in any app. I would like to know if this is...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-do-you-track-file-approvals-in
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-do-you-track-file-approvals-in-teams-chats/4571620
+  parent_title: How do you track file approvals in Teams chats?
+  report_title: How do you track file approvals in Teams chats?
+  report_text_excerpt: How do you track file approvals in Teams chats? When someone shares a document in a Teams group chat, feedback like “looks good” can get buried under later messages. If a revised version is shared, it also becomes unclear which version was approved.How does your team record...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ice-breaker-session-for-my-teams-wo
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ice-breaker-session-for-my-teams-working-in-a-hybrid-mode/3821482
+  parent_title: Ice breaker session for my teams working in a hybrid mode
+  report_title: Ice breaker session for my teams working in a hybrid mode
+  report_text_excerpt: Ice breaker session for my teams working in a hybrid mode Hello,&amp;nbsp;I am planning to deliver a session on communication gap.&amp;nbsp;To begin I need to start the session with a ice breaker session.I will use Microsoft teams meeting where people will join...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2023-05-15'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-pictionary-on-microsoft-teams-41187
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/pictionary-on-microsoft-teams/4118752
+  parent_title: Pictionary on Microsoft Teams
+  report_title: Pictionary on Microsoft Teams
+  report_text_excerpt: Pictionary on Microsoft Teams We want to play Pictionary on Microsoft Teams. I want to know, is there a built-in feature for this game in the Teams desktop version?Thank you.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2024-04-19'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6064829-microsoft-sign-in-fails-inside-outlook
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064829/microsoft-sign-in-fails-inside-outlook-teams-and-g
+  parent_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_text_excerpt: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) Hello Microsoft Support, I recently bought a Samsung Galaxy S26 Ultra (One UI 9) and I cannot sign in with my Microsoft account in any app. I would like to know if this is...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-do-you-track-file-approvals-in
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-do-you-track-file-approvals-in-teams-chats/4571620
+  parent_title: How do you track file approvals in Teams chats?
+  report_title: How do you track file approvals in Teams chats?
+  report_text_excerpt: How do you track file approvals in Teams chats? When someone shares a document in a Teams group chat, feedback like “looks good” can get buried under later messages. If a revised version is shared, it also becomes unclear which version was approved.How does your team record...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ice-breaker-session-for-my-teams-wo
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ice-breaker-session-for-my-teams-working-in-a-hybrid-mode/3821482
+  parent_title: Ice breaker session for my teams working in a hybrid mode
+  report_title: Ice breaker session for my teams working in a hybrid mode
+  report_text_excerpt: Ice breaker session for my teams working in a hybrid mode Hello,&amp;nbsp;I am planning to deliver a session on communication gap.&amp;nbsp;To begin I need to start the session with a ice breaker session.I will use Microsoft teams meeting where people will join...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2023-05-15'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-pictionary-on-microsoft-teams-41187
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/pictionary-on-microsoft-teams/4118752
+  parent_title: Pictionary on Microsoft Teams
+  report_title: Pictionary on Microsoft Teams
+  report_text_excerpt: Pictionary on Microsoft Teams We want to play Pictionary on Microsoft Teams. I want to know, is there a built-in feature for this game in the Teams desktop version?Thank you.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2024-04-19'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6064829-microsoft-sign-in-fails-inside-outlook
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6064829/microsoft-sign-in-fails-inside-outlook-teams-and-g
+  parent_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_title: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) - Microsoft Q&A
+  report_text_excerpt: Microsoft sign-in fails inside Outlook, Teams and Gmail on new Samsung Galaxy S26 Ultra (works in Chrome) Hello Microsoft Support, I recently bought a Samsung Galaxy S26 Ultra (One UI 9) and I cannot sign in with my Microsoft account in any app. I would like to know if this is...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-how-do-you-track-file-approvals-in
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/how-do-you-track-file-approvals-in-teams-chats/4571620
+  parent_title: How do you track file approvals in Teams chats?
+  report_title: How do you track file approvals in Teams chats?
+  report_text_excerpt: How do you track file approvals in Teams chats? When someone shares a document in a Teams group chat, feedback like “looks good” can get buried under later messages. If a revised version is shared, it also becomes unclear which version was approved.How does your team record...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-ice-breaker-session-for-my-teams-wo
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/ice-breaker-session-for-my-teams-working-in-a-hybrid-mode/3821482
+  parent_title: Ice breaker session for my teams working in a hybrid mode
+  report_title: Ice breaker session for my teams working in a hybrid mode
+  report_text_excerpt: Ice breaker session for my teams working in a hybrid mode Hello,&amp;nbsp;I am planning to deliver a session on communication gap.&amp;nbsp;To begin I need to start the session with a ice breaker session.I will use Microsoft teams meeting where people will join...
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2023-05-15'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-pictionary-on-microsoft-teams-41187
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/pictionary-on-microsoft-teams/4118752
+  parent_title: Pictionary on Microsoft Teams
+  report_title: Pictionary on Microsoft Teams
+  report_text_excerpt: Pictionary on Microsoft Teams We want to play Pictionary on Microsoft Teams. I want to know, is there a built-in feature for this game in the Teams desktop version?Thank you.
+  captured_at: '2026-11-09T23:06:26Z'
+  source_date: '2024-04-19'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14182
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14182
+  parent_title: Flatpak version totally broken.
+  report_title: Flatpak version totally broken.
+  report_text_excerpt: '### Operating System Info Other ### Other OS Debian 13 + Flatpak ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/BhqcxOpRuYVmVA9e ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Not c'
+  captured_at: '2026-11-09T23:42:22Z'
+  source_date: '2026-11-09'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
