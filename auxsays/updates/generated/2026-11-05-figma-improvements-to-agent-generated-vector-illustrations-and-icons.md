@@ -18,8 +18,8 @@ update_version: Improvements to agent-generated vector illustrations and icons
 update_logo_text: FIG
 update_published_at: '2026-11-05T00:00:00.000Z'
 update_last_checked: '2026-11-05T22:27:07Z'
-source_last_checked: '2026-11-08T15:39:26Z'
-official_body_last_checked: '2026-11-08T15:39:26Z'
+source_last_checked: '2026-11-09T00:34:48Z'
+official_body_last_checked: '2026-11-09T00:34:48Z'
 record_last_updated: '2026-11-05T22:27:07Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,11 +71,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-11-07T08:11:34Z'
-  url: https://www.figma.com/release-notes/?title=improvements-agent-generated-vector
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-07T15:15:57Z'
   url: https://www.figma.com/release-notes/?title=improvements-agent-generated-vector
   status: captured-from-rss-feed
@@ -92,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-08T15:39:26Z'
+  url: https://www.figma.com/release-notes/?title=improvements-agent-generated-vector
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-09T00:34:48Z'
   url: https://www.figma.com/release-notes/?title=improvements-agent-generated-vector
   status: captured-from-rss-feed
   body_captured: true
