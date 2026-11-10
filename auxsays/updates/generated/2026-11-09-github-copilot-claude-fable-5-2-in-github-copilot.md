@@ -17,8 +17,8 @@ update_version: Claude Fable 5.2 in GitHub Copilot
 update_logo_text: GIT
 update_published_at: '2026-11-09T16:46:43Z'
 update_last_checked: '2026-11-10T00:51:41Z'
-source_last_checked: '2026-11-10T00:51:41Z'
-official_body_last_checked: '2026-11-10T00:51:41Z'
+source_last_checked: '2026-11-10T10:04:38Z'
+official_body_last_checked: '2026-11-10T10:04:38Z'
 record_last_updated: '2026-11-10T00:51:41Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -98,6 +98,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-11-10T00:51:41Z'
+  url: https://github.blog/changelog/2026-11-09-claude-fable-5-2-in-github-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-10T10:04:38Z'
   url: https://github.blog/changelog/2026-11-09-claude-fable-5-2-in-github-copilot
   status: captured-from-rss-feed
   body_captured: true
