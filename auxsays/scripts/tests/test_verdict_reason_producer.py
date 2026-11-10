@@ -148,6 +148,9 @@ HEADER_25H2 = HEADER_24H2.replace("24H2", "25H2")
 SMALL_NUMBER_25H2 = (f"- Active: Devices might fail to start after installing this update This issue affects a small "
                      f"number of devices. {EM} status Confirmed; originating OS Build 26200.8524 KB5089573; last updated "
                      "2026-10-30 10:00 PT.")
+# The same generic description under a SPECIFIC subject: Microsoft's title names the setup, so it is used.
+FALLBACK_25H2 = (f"- Active: USB audio devices might fail to start This issue affects a small number of devices. {EM} "
+                 "status Confirmed; originating OS Build 26200.8524 KB5089573; last updated 2026-10-30 10:00 PT.")
 LAG_25H2 = (f"- Active: Network shares might be unable to open without a long delay This issue affects devices "
             f"connecting to SMB shares over VPN. {EM} status Confirmed; originating OS Build 26200.8524 KB5089573; last "
             "updated 2026-10-30 10:00 PT.")
@@ -306,7 +309,7 @@ def probe_fixture() -> list[dict]:
         obs("32.1.1", "2026-04-02T00:00:00Z", OBS_32_1_1_PROBE_NOTES),
         win("25H2", "26200.8524", "KB5089573", "2026-05-27T00:00:00Z"),
         win("25H2", "26200.9818", "KB5134140", "2026-10-28T00:00:00Z", "Base text.\n\n" + "\n".join(
-            [HEADER_25H2, SMALL_NUMBER_25H2, LAG_25H2])),
+            [HEADER_25H2, SMALL_NUMBER_25H2, FALLBACK_25H2, LAG_25H2])),
     ]
 
 
@@ -327,17 +330,20 @@ def check_vendor_scope() -> None:
               dict(install, severity_basis="crash_in_core_flow"))),
           f"let through={let_through} refused={refused}")
     res = vrp.produce(probe_fixture(), {})
+    fallback = [(c["verdict"], c["scope"]) for c in res.candidates if "USB audio devices might" in c["failure"]]
+    res.candidates = [c for c in res.candidates if "USB audio devices might" not in c["failure"]]
     by_page = {(c["update_version"], c.get("target_build", "")) for c in res.candidates}
-    small = [e for e in res.excluded if "a small number of" in e["source"].get("statement", "")]
+    small = [e for e in res.excluded if "Devices might fail to start after" in e["source"].get("statement", "")]
     lag = [e for e in res.excluded if "without a long delay" in e["source"].get("statement", "")]
     itself = [e for e in res.excluded if "where OBS would not start" in e["source"].get("statement", "")]
     created = [e for e in res.excluded if "created in 31.0.4" in e["source"].get("statement", "")]
     queued = sorted((q.get("update_version", ""), q.get("target_build", "")) for q in res.review_queue)
     check("VRP-V9 review 1's probes give NO candidate: Microsoft's 'This issue affects a small number of "
-          "devices' and an OBS fix whose subject is OBS itself are ambiguous scopes, sent to the TEMPORARY review "
-          "queue; 'scene collections created in 31.0.4' does not name 31.0.4 as defective (no exact version); a "
-          "Windows issue that is a delay is a minor lag",
-          not res.candidates and not by_page
+          "devices' under a generic subject and an OBS fix whose subject is OBS itself are ambiguous scopes, sent "
+          "to the TEMPORARY review queue; 'scene collections created in 31.0.4' does not name 31.0.4 as defective "
+          "(no exact version); a Windows issue that is a delay is a minor lag. The same generic description under "
+          "a specific title subject takes the subject's setup",
+          not res.candidates and not by_page and fallback == [("WAIT", "if you use USB audio devices")]
           and [e["excluded"] for e in small] == ["ambiguous_scope"] and [e["excluded"] for e in itself] == ["ambiguous_scope"]
           and [e["excluded"] for e in created] == ["no_exact_version"] and [e["excluded"] for e in lag] == ["minor_lag"]
           and queued == [("25H2", "26200.8524"), ("32.1.0", "")],
