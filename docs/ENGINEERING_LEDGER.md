@@ -4782,7 +4782,8 @@ file but `verdict_reasons.yml` (the one reason line), hash-identical.
 
 **Tests** `test_growth3_verdict_policy.py` 86 -> 112 (G3-L4/L5, Q7-Q9, R6/R7, P8/P9, S6-S8, W4; R4j, R5, P1
 restated; 13 new mutants X25-X37, one fix half each, all caught); `test_patch_decision_authority.py` 209 -> 211
-(S26 and mutant X8; S5-S8, S12-S16, S19 restated); `test_homepage_signals.py` builds its security case's row.
+(S26 and mutant X8; S5-S8, S12-S16, S19 restated); `test_homepage_signals.py` builds its security case's row;
+`test_patch_page_hierarchy.py` R1/R8 pin the list by `rec_list` (262 unchanged).
 
 **Reopen only if** any surface prints a verdict, scope, line or recommendation that is not the projection row of
 its page, the gate reads a lifecycle file, release type or KB again, a lifecycle value Python would have to coerce
