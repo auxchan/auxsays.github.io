@@ -6,7 +6,7 @@ layout: aux-base
 {% assign patch_sources = site.data.patch_sources %}
 {% assign patch_companies = site.data.patch_companies | sort: "company_name" %}
 {% assign patch_products = site.data.patch_products | sort: "product_name" %}
-{% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
+{% assign update_pages = site.pages | where: "update_entry", true | sort: "feed_rank" %}
 {% assign current_pages = update_pages | where_exp: "item", "item.update_status != 'archived' and item.feed_hidden != true" %}
 {% assign archived_pages = update_pages | where: "update_status", "archived" %}
 {%- comment -%}
@@ -17,6 +17,9 @@ layout: aux-base
   the 2 MB Googlebot reads. Every page links every other one with a plain anchor below, and the
   feed controls bring the other pages' cards in when a visitor searches, filters or sorts
   (assets/js/auxsays.js, Patch Feed controls), so no record is reachable only through script.
+  The order is the generator's `feed_rank`: newest first, records published at the same moment by
+  permalink. Sorting on the date alone left tied records in the order the files were read, so two
+  builds of the same records could put a tied record on different pages.
 {%- endcomment -%}
 {%- assign feed_archived_listed = archived_pages | where_exp: "item", "item.feed_hidden != true" -%}
 {%- assign feed_page_size = page.feed_page_size | default: 100 | plus: 0 -%}
@@ -462,9 +465,13 @@ layout: aux-base
   {%- comment -%}
     Plain anchors, server-rendered on every page: this list is how a crawler (or a reader without
     script) reaches every page of the feed, and how the feed controls find the pages to search.
+    data-feed-build is the feed's stamp (the generator's `feed_build`): a digest of every card's link
+    and page, the same on every page of one build, and the same again for a rebuild of the same
+    records. The controls use the other pages only when their stamp matches this one's: pages are
+    cut by position, so pages of two different feeds disagree on where each page starts.
   {%- endcomment -%}
   {% if feed_pages > 1 %}
-  <nav class="panel patch-pagination" id="patch-pagination" aria-label="Patch Feed pages" data-feed-pages data-feed-total="{{ feed_total }}">
+  <nav class="panel patch-pagination" id="patch-pagination" aria-label="Patch Feed pages" data-feed-pages data-feed-total="{{ feed_total }}" data-feed-build="{{ page.feed_build }}">
     <p class="patch-pagination-summary">Page {{ feed_page }} of {{ feed_pages }}: patches {{ feed_start | plus: 1 }}–{{ feed_end }} of {{ feed_total }}, newest first, then the archive.</p>
     <ol class="patch-chips patch-pagination-list">
       {%- for feed_n in (1..feed_pages) -%}

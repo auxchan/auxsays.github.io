@@ -4578,6 +4578,43 @@ reached from / within 3 crawlable hops, or the feed controls answer from fewer t
 the next heaviest pages; which low-value vendor-note pages deserve indexing is an owner decision; GSC is still the
 only authoritative indexing read.
 
+**Follow-up (2026-11-10, review LOW-1..3)** From page 2 onward a cross-page sort broke ties differently than from
+/updates/: the loader held the other pages' cards after the page's own, and the stable sorts kept that order
+(Company sort from page 8 listed page 8's April Adobe records ahead of the November ones). `assets/js/auxsays.js`
+now assembles the catalogue, and the DOM, in the build's one order (earlier pages, this page, later pages); holds
+each patch once by its card's patch link, the page's own card winning; and compares each fetched page's build
+stamp (`data-feed-build` on the pager, from `site.time`) with its own: a page of another build is fetched once
+more with `cache: 'no-cache'`, and if it still differs the controls stay on this page's cards with a visible note.
+The gate adds STAMP (every feed page stamped, by one build); it fails the #239 build on all 16 pages. Measured on a
+deploy-order build: the 1,535 cards byte-identical and in the same order, each feed page identical apart from the
+53-byte stamp; in the in-app browser, Company sort over 1,535 and Windows 11 + risk sort (97) give the same
+card-order SHA-256 from pages 1, 8 and 16 (0eca3c751a1db8ff, e6947f75202b45eb; page 8 on #239 gave
+f72001b1a05a5db3), a page served stale once is retried once and the result is complete, a page stale twice falls
+back to this page with the note, and an injected duplicate is held once. `test_feed_discovery.py` 45 -> 59: [J]
+runs the shipped catalogue functions under node; V11b (`feed_hidden: false` or `"true"` and unlinked fails
+COVERAGE; the review's surviving mutant C11 now fails it); V18/V19 STAMP; W9/W10. PV9 pins the one fetch call in
+its new shape (66 unchanged). 13 one-change mutants, each caught by its named check.
+
+**Follow-up, round 2 (2026-11-10, review LOW-1..3 and live critic C1)** The stamp was the build time, so every
+rebuild (the daily cron, any push) changed it even when the feed had not: an open feed tab's next search fell back
+to its own page and said the feed had been updated, which was false. And records published at the same moment kept
+whatever order the sort met them in, which follows the order the files were read: the CI build and a local build
+put tied records in different orders, and the 100-card cut moved some of them to another page (C1; the
+array-position rule of AUX-021). `_plugins/patch_feed_pages.rb` now ranks the records once (`feed_rank`: newest
+first, ties by permalink) and the layout sorts by that rank; it stamps every feed page with `feed_build`, the
+SHA-256 of one "<page> <link>" line per card, and the gate's STAMP recomputes that digest from the built pages.
+The page list and position (`feedPagePlan`), the catalogue's outcome (`loadFeedCatalog`) and what each outcome
+shows (`feedCatalogView`) are pure functions the suite runs under node. Measured on deploy-order builds: two
+builds of the same tree, and one with `site.pages` shuffled before any generator ran, give byte-identical feed
+pages and one stamp; one added record changes it; against #239 every card is byte-identical, the (kind, date)
+sequence is identical position by position, and only tied cards moved (286 positions, 6 across a page boundary);
+every feed verdict still equals decide (236 lines, 0 mismatches). In the in-app browser the two review scenarios
+give one card-order SHA-256 each from pages 1, 8 and 16, and a page from another feed after its retry leaves the
+pager and the mixed note. `test_feed_discovery.py` 59 -> 67 (V20, G10, G11, J8, J8b, J9, J10, W11); the review's
+surviving mutants O1, O2, O3, S4 and S5 now each fail a named check. Still open, outside this change: the home
+page's latest patches and the company and product hubs sort on the date alone, so their tie order still follows
+the read order, and the home list's 10-card cut can pick between tied records.
+
 ---
 
 ### AUX-088 — Twenty community reports cited on the live pages were credited to an update they were not about
