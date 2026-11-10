@@ -1,14 +1,16 @@
 # REVIEWED VERDICT REASONS (GROWTH-3). The only way a patch page can say TEST FIRST or WAIT.
 #
-# Read by lib/patch_decision.decide (through lib/verdict_reasons) and by
-# _includes/patch-verdict-gate.html. Written ONLY by a reviewed pull request: never by a collector,
-# a lane or a phrase rule.
+# Read by lib/patch_decision.decide (through lib/verdict_reasons). The page does not read this file:
+# build_verdict_projection.py writes decide's answer to _data/verdict_projection.yml at deploy and
+# _includes/patch-verdict-gate.html prints that, so only Python judges an entry. Written ONLY by a
+# reviewed pull request: never by a collector, a lane or a phrase rule.
 #
 # Each entry names the exact page (product_id, update_version, target_build), the verdict and its
 # scope ("WAIT if ..."), the reason class, a one-line public reason in AUXSAYS's own words, and the
 # COUNTED evidence rows it rests on (id + source_url). It supports a verdict only while:
 #   - every cited row is still counted on that page (an audited withdrawal makes the entry
-#     unsupported: the page falls back to INSUFFICIENT DATA and QA warns);
+#     unsupported: at the next deploy the page falls back -- to INSUFFICIENT DATA, or to another
+#     supported entry -- and QA warns, naming what the page renders);
 #   - at least two distinct reporters are cited, or an official confirmation is named and found
 #     verbatim in that record's captured official notes;
 #   - a WAIT is a regression: the version transition, a written material impact, and new in this
@@ -50,7 +52,7 @@ entries:
     verdict: TEST FIRST
     reason_class: corroborated_issue
     scope: if you use the menu-bar icon on macOS 27
-    reason: Two users independently report that clicking OBS's menu-bar icon crashes it on macOS 27; it is also reported on later versions, so it is not new in this version.
+    reason: Two users independently report that clicking OBS's menu-bar icon crashes it on macOS 27; the same OBS 32.2.2 works on macOS 26.3.1, so the crash comes with macOS 27 and is not new in this OBS version.
     evidence:
       - id: obs-studio-32-2-2-github-issue-13938
         source_url: https://github.com/obsproject/obs-studio/issues/13938
@@ -58,7 +60,7 @@ entries:
         source_url: https://github.com/obsproject/obs-studio/issues/14026
     new_in_this_version: false
     reviewed_at: "2026-11-06"
-    basis: GROWTH-3 spec v3 section 7 (OBS 32.2.2, other corroborated issues)
+    basis: GROWTH-3 spec v3 section 7 (OBS 32.2.2, other corroborated issues; OS-triggered, the same 32.2.2 works on macOS 26.3.1)
 
   - id: obs-studio:32.1.2:macos-accounts-and-docks-lost
     product_id: obs-studio

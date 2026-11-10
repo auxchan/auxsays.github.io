@@ -20,9 +20,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21 has 75 user reports found. No verdict yet: 75 user
-  reports are matched to this exact update, but no problem in them is confirmed as reported independently by two
-  or more users. If one matches your setup, test before relying on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: 75 user reports are matched to this exact update, but no problem in
+  them is confirmed as reported independently by two or more users. If one matches your setup, test before relying
+  on this update.'
 update_report_count: 75
 update_consensus_confidence: High
 status_change_type: new

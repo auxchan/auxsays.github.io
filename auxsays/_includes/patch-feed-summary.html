@@ -1,0 +1,37 @@
+{%- comment -%}
+  THE /updates/ FEED CARD'S EVIDENCE LINE (GROWTH-3 review 1, D1).
+
+  The card used to print the record's stored update_consensus_summary as is, and that field opened
+  "WAIT: OBS Studio 32.2.2 has 53 user reports found." -- a verdict without the setup it applies to,
+  sitting beside a count, so it read as "53 reports, so wait". It now leads with the verdict AND its
+  scope, from the same gate every other surface renders, followed by the page's own recommendation
+  line: "WAIT if you use macOS 27.2: <the line the patch page prints>". A stored summary that lags
+  the policy (it catches up at the product's next promotion) can therefore never put a different
+  verdict on the feed than on the page.
+
+  This is lib/patch_decision.summary_line, which the writer stores in update_consensus_summary; the
+  two are the same string on every report-bearing record (test_growth3_verdict_policy, G3-S2).
+
+  Input:   include.item     the feed item (a site.pages patch record)
+           include.summary  the card's stored evidence summary, already cleaned; '' when none
+  Output:  feed_summary_line  the line to print, or '' (no evidence block)
+  A record with no stored summary (no reports) keeps no evidence block, as before. One with a
+  summary but no gate line (a non-official page with no reports) keeps its stored text.
+
+  No literal Liquid tag appears in this comment on purpose: a comment block still parses tags.
+{%- endcomment -%}
+{%- assign pfs_item = include.item -%}
+{%- assign pfs_count = pfs_item.update_report_count | default: 0 | plus: 0 -%}
+{%- assign feed_summary_line = include.summary | default: '' | strip -%}
+{%- include patch-verdict-gate.html record=pfs_item count=pfs_count -%}
+{%- if feed_summary_line != '' and gate_body != '' -%}
+  {%- assign pfs_body = gate_body -%}
+  {%- assign pfs_lead = pfs_body | slice: 0, 16 -%}
+  {%- if pfs_lead == 'No verdict yet: ' -%}
+    {%- assign pfs_rest = pfs_body | slice: 16, 100000 -%}
+    {%- assign pfs_first = pfs_rest | slice: 0 | upcase -%}
+    {%- assign pfs_tail = pfs_rest | slice: 1, 100000 -%}
+    {%- assign pfs_body = pfs_first | append: pfs_tail -%}
+  {%- endif -%}
+  {%- capture feed_summary_line -%}{{ gate_label }}{% if gate_scope != '' %} {{ gate_scope }}{% endif %}: {{ pfs_body }}{%- endcapture -%}
+{%- endif -%}

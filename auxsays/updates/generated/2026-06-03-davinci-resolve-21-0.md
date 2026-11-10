@@ -144,9 +144,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21.0 has 4 user reports found. No verdict yet: 4 user
-  reports are matched to this exact update, but no problem in them is confirmed as reported independently by two
-  or more users. If one matches your setup, test before relying on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: 4 user reports are matched to this exact update, but no problem in
+  them is confirmed as reported independently by two or more users. If one matches your setup, test before relying
+  on this update.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u41597/using_the_tracker_node_crashes_resolve_studio/

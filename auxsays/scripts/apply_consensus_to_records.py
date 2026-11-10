@@ -798,6 +798,8 @@ def _public_summary(
     themes: Counter,
     decision: str,
     body: str | None = None,
+    policy: Any = None,
+    facts: dict[str, Any] | None = None,
 ) -> str:
     count = len(rows)
     version_label = ver
@@ -823,13 +825,19 @@ def _public_summary(
     # string the patch page prints under its verdict -- rather than sentiment-flavoured advice of
     # its own. "Users with fragile production workflows should wait" under an INSUFFICIENT DATA
     # verdict was a second recommendation, which is the defect this module's authority exists to end.
+    #
+    # GROWTH-3 review 1 (D1): the summary LEADS with the verdict and its scope -- "WAIT if you use
+    # macOS 27.2: <line>" -- because the /updates/ feed prints it. "WAIT: OBS Studio 32.2.2 has 53
+    # user reports found." put a verdict that applies to one setup beside a count, which reads as
+    # "53 reports, so wait". lib/patch_decision.summary_line is the one composition; the feed
+    # include builds the same string from the gate.
     verdict = decision
     report_word = "report" if count == 1 else "reports"
+    fact = f"{product_label} {version_label} has {count} user {report_word} found."
+    if policy is not None:
+        return patch_decision.summary_line(policy, facts or {}, count, fallback=fact)
     line = body if body is not None else ""
-    return " ".join(part for part in [
-        f"{verdict}: {product_label} {version_label} has {count} user {report_word} found.",
-        line,
-    ] if part)
+    return " ".join(part for part in [f"{verdict}: {fact}", line] if part)
 
 
 def _public_consensus_report(
@@ -959,6 +967,8 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         themes=themes,
         decision=decision,
         body=body,
+        policy=policy,
+        facts=facts,
     )
     report = _public_consensus_report(
         pid=pid,
@@ -1088,13 +1098,15 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
     # keep only what is product-specific and verdict-neutral: recommendations and DaVinci 21's
     # release framing.
     body = patch_decision.public_body(policy, facts, count)
+    # The verdict as printed: its scope travels with it in every stored verdict sentence (D1).
+    phrase = patch_decision.verdict_phrase(policy)
     product_label = str(record.get("update_product") or pid).strip()
 
     if pid == "blackmagic-davinci":
         if _davinci_version_is_beta(ver):
             return {
                 "quick_verdict": (
-                    f"{decision}: {product_label} {ver} is a beta build with {count} user reports found."
+                    f"{phrase}: {product_label} {ver} is a beta build with {count} user reports found."
                 ),
                 "update_decision_label": decision,
                 "update_decision_body": body,
@@ -1107,7 +1119,7 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
 
         fields = {
             "quick_verdict": (
-                f"{decision}: {product_label} {ver} has {count} user reports found."
+                f"{phrase}: {product_label} {ver} has {count} user reports found."
             ),
             "update_decision_label": decision,
             "update_decision_body": body,
@@ -1174,7 +1186,7 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
                 "Keep a backup of your scene collection and profile before updating.",
             ]
         return {
-            "quick_verdict": f"{decision}: {product_label} {ver} has {count} user reports found.",
+            "quick_verdict": f"{phrase}: {product_label} {ver} has {count} user reports found.",
             "update_decision_label": decision,
             "update_decision_body": body,
             "practical_recommendations": steps,
@@ -1193,7 +1205,7 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         # Name the exact cumulative update, never the train: 28 records share "25H2".
         patch_label = patch_display_label(ver, build, pid)
         return {
-            "quick_verdict": f"{decision}: {product_label} {patch_label} has {count} user {report_word} found.",
+            "quick_verdict": f"{phrase}: {product_label} {patch_label} has {count} user {report_word} found.",
             "update_decision_label": decision,
             "update_decision_body": body,
             # GROWTH-3 (owner decision 3): no advice to pause or disable Windows Update, on any page.
@@ -1212,7 +1224,7 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
     if pid == "adobe-premiere-pro":
         report_word = "report" if count == 1 else "reports"
         return {
-            "quick_verdict": f"{decision}: {product_label} {ver} has {count} user {report_word} found.",
+            "quick_verdict": f"{phrase}: {product_label} {ver} has {count} user {report_word} found.",
             "update_decision_label": decision,
             "update_decision_body": body,
             "practical_recommendations": [

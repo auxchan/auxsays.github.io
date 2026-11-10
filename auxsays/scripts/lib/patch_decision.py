@@ -193,15 +193,28 @@ def risk_rank(decision: str) -> int:
         return UNKNOWN_RANK
 
 
+_SCOPE_PREFIX_RE = re.compile(r"^(?:if|when|for) [^\s:][^:]*$")
+
+
 def leading_decision(text: str) -> str:
     """The decision a field opens with, as a reader sees it: `PHRASE:` at the start, else "".
 
     Longest match first, so "WAIT for production systems:" is never read as "WAIT".
+
+    A SCOPED lead is the same decision: GROWTH-3 stores "WAIT if you use macOS 27.2: ..." so the
+    feed never prints a verdict without the setup it applies to, and that field still opens with
+    WAIT. The scope must read the way a reason entry's scope reads ("if/when/for ...", no colon),
+    so a vendor title that merely begins with a decision word is not mistaken for one.
     """
     body = str(text or "")
     for phrase in _LONGEST_FIRST:
         if body.startswith(phrase + ":"):
             return phrase
+    for phrase in _LONGEST_FIRST:
+        if body.startswith(phrase + " ") and ":" in body:
+            head = body.split(":", 1)[0]
+            if _SCOPE_PREFIX_RE.match(head[len(phrase) + 1:]):
+                return phrase
     return ""
 
 
@@ -227,11 +240,18 @@ def leading_decision(text: str) -> str:
 # OFFICIAL ONLY and MANUAL WATCH stay canonical (recognised, ranked) but this policy produces none
 # of them: no positive evidence is collected.
 #
-# THE TEMPLATES MIRROR THIS, they do not decide. `_includes/patch-verdict-gate.html` applies the
-# same precedence to the same facts at render time, so a record whose stored verdict is stale (or
-# hand-written) still publishes the policy's answer, and a zero-report security update -- which no
-# writer touches -- still reads SECURITY UPDATE. test_growth3_verdict_policy pins the two against
-# each other over the whole corpus.
+# THE TEMPLATES DO NOT DECIDE A REASONED VERDICT. WAIT, TEST FIRST and a security page's warning
+# panel rest on reason entries that only Python can validate (counted rows, distinct reporters, a
+# verbatim official confirmation). `build_verdict_projection.py` runs `decide` for every page at
+# deploy, before QA and before Jekyll, and writes the result -- verdict, scope, line, panel -- to
+# `_data/verdict_projection.yml` (lib/verdict_projection). `_includes/patch-verdict-gate.html` READS
+# that row and prints it; it never evaluates an entry. No row, or no projection: no WAIT, no TEST
+# FIRST, no panel. The gate derives only the two OFFICIAL facts itself (the lifecycle record, the
+# stored release type), so a zero-report security update -- which no writer touches -- still reads
+# SECURITY UPDATE. `qa_patch_records --publish-strict` errors when the projection a deploy built
+# disagrees with `decide`, and test_growth3_verdict_policy pins the gate against Python over the
+# whole corpus. (Round 0 mirrored the support rule in Liquid with a URL-only check, which published
+# a WAIT that `decide` refused: GROWTH-3 review 1, D2.)
 # ---------------------------------------------------------------------------------------------
 SECURITY_UPDATE = "SECURITY UPDATE"
 AVOID = "AVOID"
@@ -418,6 +438,37 @@ def panel_text(decision: Decision) -> str:
     head = decision.reasons[0]
     scope = _text(head.get("scope"))
     return f"{scope[:1].upper()}{scope[1:]}: {_text(head.get('reason'))}"
+
+
+def verdict_phrase(decision: Decision) -> str:
+    """The verdict as every surface prints it: the word and its scope, never one without the other.
+
+    "WAIT if you use macOS 27.2", "TEST FIRST when installing it", "AVOID for new installations";
+    an unscoped verdict (SECURITY UPDATE, INSUFFICIENT DATA) is the word alone. GROWTH-3 review 1
+    (D1) found three surfaces printing the word without its scope -- a WAIT that applies to one
+    setup read as a WAIT for everyone."""
+    return f"{decision.verdict} {decision.scope}".strip()
+
+
+_NO_VERDICT_LEAD = "No verdict yet: "
+
+
+def summary_line(decision: Decision, record: dict[str, Any] | None, report_count: int,
+                 fallback: str = "") -> str:
+    """The stored `update_consensus_summary`, which the /updates/ feed card prints: the verdict and
+    its scope FIRST, then the page's own recommendation line.
+
+    Not "WAIT: OBS Studio 32.2.2 has 53 user reports found." -- an unscoped verdict beside a count
+    reads as "53 reports, so wait", which is the inference the policy forbids (counts never decide).
+    The line already states the count where it matters (no verdict yet / security update), and the
+    card prints the confirmed count beside it. `fallback` is used only when the policy has no line
+    (a zero-report page, which no writer stores a summary for). The feed include composes the same
+    string from the gate, so feed, page and stored field read alike."""
+    body = public_body(decision, record, report_count)
+    if body.startswith(_NO_VERDICT_LEAD):
+        body = body[len(_NO_VERDICT_LEAD):]
+        body = body[:1].upper() + body[1:]
+    return f"{verdict_phrase(decision)}: {body or fallback}".strip()
 
 
 def decision_label(product_id: str, version: str, consensus_label: str = "", count: int = 0,

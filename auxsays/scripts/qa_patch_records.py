@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 
 import yaml
 
-from lib import maturity, patch_decision, verdict_reasons
+from lib import maturity, patch_decision, verdict_projection, verdict_reasons
 from lib.patch_identity import patch_key
 # The dedup identity the append path itself applies (base.evidence_key uses it), imported rather
 # than re-derived. A hand-rolled canonicaliser was measured against the corpus first and was WRONG:
@@ -37,6 +37,9 @@ EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 UPDATE_LAYOUT_PATH = ROOT / "_layouts" / "aux-update.html"
 REASONS_PATH = ROOT / "_data" / "verdict_reasons.yml"
 LIFECYCLE_PATH = ROOT / "_data" / "patch_lifecycle.yml"
+# Built at deploy by build_verdict_projection.py, never committed: the only source the verdict gate
+# publishes a WAIT / TEST FIRST from. Present, it must equal the authority over this tree.
+PROJECTION_PATH = ROOT / "_data" / verdict_projection.PROJECTION_NAME
 # The patch page's maturity rung and decision ladder live in these two includes, which aux-update.html
 # renders (and the homepage renders too). Their text is the layout's text for the public-copy scan:
 # a phrase moved into one of them is still on every patch page.
@@ -311,20 +314,31 @@ def load_counted_accepted_urls(
 
 
 def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
-    """GROWTH-3: the two reviewed fact files, and each report-bearing record's stored verdict
-    against the policy.
+    """GROWTH-3: the two reviewed fact files, what each page RENDERS against what the authority
+    decides, and each report-bearing record's stored verdict against the policy.
 
-    ERRORS (both modes): a malformed `verdict_reasons.yml` or `patch_lifecycle.yml`. They change only
-    by reviewed pull request, so a structural problem is a defect in that PR, never lane drift.
+    ERRORS (both modes):
+      * verdict_reasons_invalid / patch_lifecycle_invalid -- a malformed fact file. They change only
+        by reviewed pull request, so a structural problem is a defect in that PR, never lane drift.
+      * verdict_render_disagrees -- a page whose rendered verdict, scope, line or panel would differ
+        from lib/patch_decision.decide over this tree. The gate publishes WAIT / TEST FIRST only from
+        the deploy-time verdict projection (_data/verdict_projection.yml), so this compares what the
+        gate will READ for every page with what Python decides: a stale, forged or failed projection
+        is caught here, before Jekyll builds anything (review 1, D2). With no projection on disk (a
+        writer lane, PR-time CI) the deploy builds it from this same tree, so the gate will read
+        exactly the authority's rows.
+      * verdict_projection_invalid / verdict_projection_failed -- the projection a deploy built is
+        unreadable, or its builder could not decide: pages would fall back where the authority
+        gives a verdict.
 
     WARNINGS, never writer-blocking and never promoted for publication:
       * verdict_reason_unsupported -- an entry whose cited rows no longer all count on its page (an
-        audited withdrawal, a re-attribution) or that lost its second reporter. The page already
-        falls back to INSUFFICIENT DATA at render time and the next promotion rewrites the stored
-        prose; this tells a reviewer the entry needs re-reading or removing.
-      * verdict_policy_drift -- a report-bearing record whose stored verdict differs from what the
-        policy decides now. The rendered page is already right (the gate decides it); the stored
-        summary the feed prints catches up at the product's next promotion.
+        audited withdrawal, a re-attribution), that lost its second reporter, or whose official
+        confirmation is no longer in the named record's notes. The page has already fallen back --
+        the projection is decided from the same evidence -- and the message names what it renders.
+      * verdict_policy_drift -- a report-bearing record whose stored verdict or stored summary lead
+        differs from what the policy decides now. Every surface prints the gate's verdict, so the
+        page and the feed are already right; the stored prose catches up at the next promotion.
       * patch_lifecycle_unmatched -- a lifecycle entry no record carries.
     """
     errors: list[dict[str, str]] = []
@@ -350,33 +364,85 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
     if lifecycle_problems:
         lifecycle = []
     records = [(path, front_matter(path)) for path in files]
-    fronts = [data for _path, data in records if data.get("update_entry") is True]
+    entries = [(path, data) for path, data in records if data.get("update_entry") is True]
+    fronts = [data for _path, data in entries]
     groups = counted_evidence_rows(load_evidence_rows(),
                                    windows_targets=windows_targets_from_front_matter(fronts))
     by_identity = {verdict_reasons.record_identity(data): data for data in fronts}
     valid, unsupported = verdict_reasons.valid_reasons_by_identity(reasons, groups, by_identity)
+    expected, _unsupported = verdict_projection.project(fronts, groups, reasons, lifecycle)
+    want_rows = expected["pages"]
+
+    # What the gate will READ. Absent: the deploy builds it from this tree, i.e. the authority's rows.
+    try:
+        disk = verdict_projection.load(PROJECTION_PATH)
+    except verdict_projection.ProjectionError as exc:
+        add(errors, PROJECTION_PATH, "verdict_projection_invalid",
+            f"{exc}. The verdict gate cannot read it, so every page the authority gives a WAIT or "
+            "TEST FIRST would render INSUFFICIENT DATA.")
+        disk = {"schema_version": verdict_projection.SCHEMA_VERSION, "pages": {}}
+    if disk is not None and disk.get("error"):
+        add(errors, PROJECTION_PATH, "verdict_projection_failed",
+            f"the verdict projection builder could not decide ({disk.get('error')}); pages render "
+            "no WAIT or TEST FIRST where the authority gives one.")
+    rows = want_rows if disk is None else dict(disk.get("pages") or {})
+    source = "the deploy's verdict projection" if disk is not None else "this tree's verdict projection"
+
+    record_keys = set()
+    for path, data in entries:
+        key = verdict_projection.page_key(data)
+        record_keys.add(key)
+        want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
+                                     lifecycle=lifecycle)
+        got_verdict, got_scope = verdict_projection.rendered_verdict(data, rows, lifecycle)
+        got_row, want_row = rows.get(key), want_rows.get(key)
+        if (got_verdict, got_scope) != (want.verdict, want.scope):
+            add(errors, path, "verdict_render_disagrees",
+                f"the page renders {verdict_projection.phrase(got_verdict, got_scope)!r} from {source}, "
+                f"but lib/patch_decision.decide gives {patch_decision.verdict_phrase(want)!r} for this tree.")
+        elif got_row != want_row:
+            differs = sorted(k for k in verdict_projection.ROW_KEYS
+                             if (got_row or {}).get(k) != (want_row or {}).get(k))
+            add(errors, path, "verdict_render_disagrees",
+                f"{source} differs from lib/patch_decision.decide in {differs}; the page would print "
+                "a line or panel the authority did not write.")
+    for key in sorted(set(rows) - record_keys):
+        add(errors, PROJECTION_PATH, "verdict_render_disagrees",
+            f"{source} holds a row for {key!r}, which no record carries and the authority did not decide.")
+
+    pages_by_identity: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+    for data in fronts:
+        pages_by_identity.setdefault(verdict_reasons.record_identity(data), []).append(data)
+    entry_identity = {str(e.get("id") or ""): verdict_reasons.reason_identity(e) for e in reasons}
     for reason_id, problems in sorted(unsupported.items()):
+        pages = pages_by_identity.get(entry_identity.get(reason_id, ("", "", "")), [])
+        if pages:
+            shown = sorted({verdict_projection.phrase(*verdict_projection.rendered_verdict(d, rows, lifecycle))
+                            for d in pages})
+            renders = f"The page no longer rests on it and renders {' / '.join(repr(s) for s in shown)}"
+        else:
+            renders = "No record carries this page identity, so it supports nothing"
         add(warnings, REASONS_PATH, "verdict_reason_unsupported",
-            f"{reason_id}: {'; '.join(problems)}. The page falls back to INSUFFICIENT DATA until the "
-            "entry is re-read and corrected or removed.")
+            f"{reason_id}: {'; '.join(problems)}. {renders}; re-read the entry and correct or remove it.")
     for entry in lifecycle:
         if not any(patch_decision.lifecycle_for(data, [entry]) for data in fronts):
             add(warnings, LIFECYCLE_PATH, "patch_lifecycle_unmatched",
                 f"{entry.get('id')}: no record carries this KB and build.")
-    for path, data in records:
-        if data.get("update_entry") is not True:
-            continue
+    for path, data in entries:
         if int(data.get("update_report_count") or 0) <= 0:
             continue
-        expected = patch_decision.decide(
-            data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
-            lifecycle=lifecycle).verdict
+        decision = patch_decision.decide(
+            data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []), lifecycle=lifecycle)
+        expected_phrase = patch_decision.verdict_phrase(decision)
         stored = (patch_decision.action_of(data.get("update_decision_label"))
                   or patch_decision.action_of(patch_decision.leading_decision(data.get("update_consensus_summary"))))
-        if stored and stored != expected:
+        summary = str(data.get("update_consensus_summary") or "")
+        stored_lead = summary.split(":", 1)[0].strip() if patch_decision.leading_decision(summary) else ""
+        if (stored and stored != decision.verdict) or (stored_lead and stored_lead != expected_phrase):
             add(warnings, path, "verdict_policy_drift",
-                f"stored verdict {stored!r} but the verdict policy decides {expected!r}; the page renders "
-                f"{expected!r}, and the stored prose catches up at the next promotion.")
+                f"stored verdict {stored!r} (summary opens {stored_lead or '(none)'!r}) but the verdict "
+                f"policy decides {expected_phrase!r}; every surface renders {expected_phrase!r}, and the "
+                "stored prose catches up at the next promotion.")
     return errors, warnings
 
 

@@ -112,9 +112,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 19.1.3 has 2 user reports found. No verdict yet: 2
-  user reports are matched to this exact update, but no problem in them is confirmed as reported independently by
-  two or more users. If one matches your setup, test before relying on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: 2 user reports are matched to this exact update, but no problem in
+  them is confirmed as reported independently by two or more users. If one matches your setup, test before relying
+  on this update.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1s0zyt3/way_to_retime_without_adding_frames/

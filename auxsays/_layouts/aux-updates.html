@@ -309,10 +309,11 @@ layout: aux-base
         {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
         {% if consensus_summary %}
         {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | strip %}
-        {% if evidence_summary != '' %}
+        {% include patch-feed-summary.html item=item summary=evidence_summary %}
+        {% if feed_summary_line != '' %}
         <div class="patch-consensus-block">
           <span class="patch-consensus-label">Evidence summary</span>
-          <p class="patch-consensus-line">{{ evidence_summary }}</p>
+          <p class="patch-consensus-line">{{ feed_summary_line }}</p>
           <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
         </div>
         {% endif %}
@@ -406,10 +407,11 @@ layout: aux-base
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
           {% if consensus_summary %}
           {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | strip %}
-          {% if evidence_summary != '' %}
+          {% include patch-feed-summary.html item=item summary=evidence_summary %}
+          {% if feed_summary_line != '' %}
           <div class="patch-consensus-block">
             <span class="patch-consensus-label">Evidence summary</span>
-            <p class="patch-consensus-line">{{ evidence_summary }}</p>
+            <p class="patch-consensus-line">{{ feed_summary_line }}</p>
             <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
           </div>
           {% endif %}

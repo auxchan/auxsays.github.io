@@ -5495,3 +5495,9 @@ h2.home-section-label { margin-top: 0; line-height: 1.3; font-family: inherit; }
   line-height: 1.5;
 }
 .update-decision-panel__heading { display: block; margin-bottom: .2rem; font-weight: 750; }
+
+/* GROWTH-3 review 1 (D1): wherever a verdict is printed its scope prints with it -- table rows, My
+   Patch Stack cards and upgrade-path steps, the /updates/ feed -- so "WAIT" for one setup never reads
+   as WAIT for everyone. Plain text beside the pill, so it wraps instead of widening the column. */
+.patch-verdict-scope { color: var(--text-1); font-size: .82rem; line-height: 1.35; }
+.patch-stack-card__verdict { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .3rem; justify-content: flex-end; }

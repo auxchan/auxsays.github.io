@@ -112,9 +112,8 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 17.4 has 1 user report found. No verdict yet: one
-  user report is matched to this exact update, and one report does not show a pattern. If it matches your setup,
-  test before relying on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: One user report is matched to this exact update, and one report does
+  not show a pattern. If it matches your setup, test before relying on this update.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1se7o7g/use_tracker_data_independently/

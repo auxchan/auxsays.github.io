@@ -14,6 +14,9 @@ auxsays/_data/consensus_status.json
 # Generated at deploy by build_live_eligibility_projection.py: which live claims still certify NOW.
 # Absent, every live claim renders as Verified reports (fail closed).
 auxsays/_data/live_eligibility.yml
+# Generated at deploy by build_verdict_projection.py: lib/patch_decision.decide's WAIT / TEST FIRST
+# per page, the only source the verdict gate publishes them from. Absent, no page shows one.
+auxsays/_data/verdict_projection.yml
 # Generated at deploy by build_monitoring_projection.py, never committed: the state is a function
 # of the current time and of ingest state that every scheduled lane moves, so any committed copy
 # went stale between push and CI. The layouts fail closed to 'unverified' when it is absent.

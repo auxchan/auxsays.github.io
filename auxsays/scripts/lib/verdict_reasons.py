@@ -47,7 +47,9 @@ LIFECYCLE_PATH = ROOT / "_data" / "patch_lifecycle.yml"
 SCHEMA_VERSION = 1
 REASON_VERDICTS = ("WAIT", "TEST FIRST")
 REASON_CLASSES = ("regression", "corroborated_issue", "corroborated_install_problem")
-SCOPE_RE = re.compile(r"^(?:if|when|for) \S.*[^.\s]$")
+# No colon: the stored summary and the feed card print "WAIT <scope>: <line>", and a reader (or
+# lib.patch_decision.leading_decision) finds the end of the verdict at the first colon.
+SCOPE_RE = re.compile(r"^(?:if|when|for) [^\s:][^:\n]*[^.\s:]$")
 LIFECYCLE_RELATIONSHIPS = ("withdrawn_for_new_installs",)
 KB_RE = re.compile(r"^KB\d{7}$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -129,7 +131,7 @@ def schema_errors(entries: Iterable[Mapping[str, Any]]) -> list[str]:
         if rclass not in REASON_CLASSES:
             errors.append(f"{label}: reason_class {rclass!r} is not one of {REASON_CLASSES}")
         if not SCOPE_RE.match(_s(entry.get("scope"))):
-            errors.append(f"{label}: scope must read 'if ...', 'when ...' or 'for ...' without a final period")
+            errors.append(f"{label}: scope must read 'if ...', 'when ...' or 'for ...' without a colon or a final period")
         reason = _s(entry.get("reason"))
         if not reason or "\n" in reason or len(reason) > 320:
             errors.append(f"{label}: reason must be one public line (1-320 characters)")
