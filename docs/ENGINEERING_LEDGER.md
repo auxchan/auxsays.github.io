@@ -70,6 +70,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-060 | Resolved | Published claims | Medium | The OBS public issue bucket still read "hang" inside "changing" and "window" inside "Windows" |
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
 | AUX-086 | Resolved | Publication | High | The homepage was 124 MB of HTML, so search crawlers never reached a patch signal |
+| AUX-096 | Resolved | Publication | High | The Patch Feed was one 4.3 MB page, and more than half of it was past what Googlebot reads |
 | AUX-091 | Resolved | Publication | Medium | The homepage rows printed a sentiment word while the pages they open printed a verdict |
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
@@ -4519,6 +4520,63 @@ footer link removed (PV3).
 50,000; the shipped selection and the frozen reference loop give different rows on any corpus; a homepage
 loop over the patch records is nested inside another; gtag.js is requested on any other host or when
 `navigator.webdriver` is set; or /privacy/ loses its footer link or claims compliance.
+
+---
+
+### AUX-096 — The Patch Feed was one 4.3 MB page, and more than half of it was past what Googlebot reads
+
+- **Status** Resolved · **Area** Publication · **Severity** High
+- **First seen** 2026-11-10 (G35-03 growth baseline; measured read-only in G36-02) · **Resolved** 2026-11-10
+  (G36-02; production size to be confirmed after the deploy)
+
+**Symptom** /updates/ printed every tracked patch as a full card on one page: 1,535 cards, 4,296,198 bytes live
+(201,160 gzipped), growing by a few hundred records a month (266 since 2026-10-10). Googlebot reads the first 2 MB
+of an HTML response. The first patch link sat at byte 106,617 and the last at 4,294,520; 716 of the feed's 1,535
+patch URLs were inside 2 MB and 819 only past it, along with the whole archive section (from byte 4,002,868).
+Every patch page was still reachable within 2 hops of the homepage through the 16 product trackers, so this cut
+the feed's own catalogue and weight, not patch-page discovery.
+
+**Cause** The layout looped over every record with no paging, and the search, filters, sort and My Watchlist
+worked only on the cards present in the page's DOM, so the page had to carry all of them.
+
+**Fix** The feed is paged at `feed_page_size: 100` (updates/index.md, set once). `_plugins/patch_feed_pages.rb`
+adds /updates/page/2/ onward from the same predicate the layout lists (`update_entry` true, not `feed_hidden`),
+before jekyll-sitemap runs, so each page has a self-canonical and a sitemap entry. `_layouts/aux-updates.html`
+cuts its one ordered list (current newest first, then the archive) into that page's slice, links every page with
+plain `<a href>` anchors plus prev/next, shows the Company Radar and status alerts on page 1 only, and hides the
+archive heading on pages with no archived record. In `assets/js/auxsays.js` the first search, filter, sort or
+My Watchlist toggle fetches the other feed pages once (same origin, path only, no cookies) and adopts their
+server-rendered cards, so every control still answers over the whole catalogue with the exact cards the build
+rendered; with nothing engaged only the page's own cards show. A deploy step,
+`scripts/ci/verify_feed_discovery.py`, runs on the built site before upload.
+
+**Measured** Deploy-order builds (projections, QA `--publish-strict` 0/0, Jekyll) of 72a73128 and the head.
+- /updates/ 4,295,549 -> 391,532 bytes; 16 feed pages, largest 391,532 (budget 1,000,000), the rest 119,457 to
+  307,550. Patch URLs linked by the feed within Googlebot's 2 MB: 716 -> 1,535. Site-wide crawl from / (each page
+  cut at 2 MB): 1,535 of 1,535 within 2 hops before and after, and still 1,535 with every feed page removed.
+- The 1,535 cards are byte-identical and in the same order across the 16 pages; every feed verdict line equals
+  `decide` (all surfaces agree; authority JSON identical before and after). Sitemap 1,671 -> 1,686 URLs (+15 feed
+  pages); page 2 and 16 self-canonical; titles "Patch Feed, page N | AUXSAYS".
+- In-app browser on a local serve of both builds: 15 search / company / software / category / type / sort /
+  My Watchlist scenarios give the same visible cards in the same order and the same verdict lines (SHA-256 of
+  each list); page 2's search finds a page-1 record; the loader makes one GET per other page. At 375 px
+  `scrollWidth` 375 and the pager fits.
+- The gate fails the old feed (BUDGET 4,295,549 B, COVERAGE 819 unlinked) and passes the head.
+
+**Tests** `test_feed_discovery.py` (new, 45): the gate over synthetic built sites (one failing case per way to
+lose the catalogue), the SHIPPED paging block rendered with Liquid over eight record mixes, the SHIPPED generator
+under stub Jekyll classes, and the wiring. `test_template_presence_guards.py` PV9 now allows exactly the
+cookie-less same-origin feed-page fetch (66 unchanged). 33 suite mutants, one change each, every one caught by
+its named check; real-build mutants (page size 2000, one page short, slice offset dropped, script-only pager)
+and built-site mutants (a patch unlinked everywhere, only in the feed, only outside it) each fail the gate on
+BUDGET, PAGER, COVERAGE or REACH as named, and the last passes through the feed.
+
+**Reopen only if** any feed page exceeds 1,000,000 bytes, a patch page the feed lists is linked from no feed page
+(or from two), the pager stops being plain anchors, a feed page is built that no pager links, a patch page is not
+reached from / within 3 crawlable hops, or the feed controls answer from fewer than every feed page. Follow-ups
+(not this entry): /updates/github/ (578 KB), /updates/github/github/ (574 KB) and /updates/adobe/ (573 KB) are
+the next heaviest pages; which low-value vendor-note pages deserve indexing is an owner decision; GSC is still the
+only authoritative indexing read.
 
 ---
 
