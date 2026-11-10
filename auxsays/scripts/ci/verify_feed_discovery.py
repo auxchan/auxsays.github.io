@@ -12,10 +12,12 @@ WHAT IT CHECKS, on the built site:
            FEED_PAGE_BUDGET_BYTES. Half the 2 MB window, so a page can double before it nears it.
   PAGER    every feed page is reached from /updates/ by plain <a href> links, every pager link
            resolves to a built page, and no built /updates/page/N/ is left out (an orphan page).
-  STAMP    every feed page's pager carries the same build stamp (data-feed-build). The feed
-           controls search another page only when its stamp matches their own page's
-           (assets/js/auxsays.js, loadFeedPages), so a page with none, or with another build's,
-           would leave every search from it on that one page.
+  STAMP    every feed page's pager carries the same stamp (data-feed-build), and it is the feed's
+           own: feed_stamp() of the cards the pages print. The feed controls search another page
+           only when its stamp matches their own page's (assets/js/auxsays.js, loadFeedPages), so a
+           page with none, or with another feed's, would leave every search from it on that one
+           page, and a stamp that is not derived from the cards (a build time) would do the same
+           after every rebuild that changed nothing.
   COVERAGE every patch page the feed lists is linked from exactly one feed page's cards, and every
            feed card links a real patch page. "Listed" = every patch page except a record whose
            front matter says `feed_hidden: true`, which the feed deliberately omits.
@@ -37,6 +39,7 @@ Exit: 0 clean, 1 a budget, pager, stamp, coverage or reach failure, 2 the site d
 from __future__ import annotations
 
 import argparse
+import hashlib
 import re
 import sys
 from collections import deque
@@ -141,6 +144,18 @@ class Site:
         return found
 
 
+def feed_stamp(pages: list[list[str]]) -> str:
+    """The feed's stamp, as _plugins/patch_feed_pages.rb computes it: the SHA-256 of one line per card,
+    "<page> <link>", in feed order (page 1's cards first)."""
+    text = "".join(f"{n} {href}\n" for n, hrefs in enumerate(pages, start=1) for href in hrefs)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def feed_page_number(url: str) -> int:
+    m = FEED_PAGE_RE.fullmatch(url)
+    return int(m.group(1)) if m else 1
+
+
 def feed_hidden_urls(source: Path | None) -> set[str]:
     """Permalinks of records the feed omits on purpose (`feed_hidden: true` in front matter)."""
     hidden: set[str] = set()
@@ -194,6 +209,10 @@ def verify(site_dir: Path, source: Path | None) -> tuple[list[str], dict]:
                                 f"controls would search it alone")
             elif first and stamp != first:
                 problems.append(f"STAMP {p} is stamped {stamp!r} but {FEED_URL} {first!r}: feed pages of two builds")
+        digest = feed_stamp([site.anchors(p).card_hrefs for p in sorted(feed_pages, key=feed_page_number)])
+        if first and first != digest:
+            problems.append(f"STAMP {FEED_URL} is stamped {first!r} but its feed's cards give {digest!r}: the stamp "
+                            f"must follow the feed's cards, not the build")
 
     # BUDGET
     sizes = {p: site.file_of(p).stat().st_size for p in feed_pages}
