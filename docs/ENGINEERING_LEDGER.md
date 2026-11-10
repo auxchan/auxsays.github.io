@@ -4682,7 +4682,7 @@ collection date), the gate's decision changes, or a run rewrites a stored OBS ro
 **Symptom** Every page with a counted user report published WAIT (234) or TEST FIRST (2). The verdict came from
 the product (DaVinci, Windows, Premiere: always WAIT) or from the sample's sentiment (negative: WAIT), so one
 uncorroborated report and 101 unrelated ones read the same, monthly security updates told readers to wait, and
-52 Windows pages advised "Pause updates".
+53 Windows pages advised "Pause updates".
 
 **Cause** `lib/patch_decision.decision_label` decided from product and sentiment. Nothing stored says whether two
 reports describe the same problem or a regression; `issue_theme` is a classifier label, not a finding.
