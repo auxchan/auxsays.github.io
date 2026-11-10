@@ -71235,3 +71235,1032 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066202/ms-teams-responding-with-a-message-that-i-have-an
+  parent_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_text_excerpt: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version MS Team message stating that I have an outdated version of the program/app even after I uninstalled the program and reinstalled the latest version....
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-noticed-a-recent-change
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-noticed-a-recent-change-in-outbound-pstn-ringing-behavior-in-microsof/4572051
+  parent_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_text_excerpt: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams? Previously, when dialing an E.164 number, Teams would play its internal ringing tone and then switch to the PSTN ringback tone once the call reached the carrier.&amp;nbsp;Recently, the...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-chats-visible-for-only-one
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-chats-visible-for-only-one-month-in-microsoft-teams/4572073
+  parent_title: Meeting chats visible for only one month in Microsoft Teams
+  report_title: Meeting chats visible for only one month in Microsoft Teams
+  report_text_excerpt: Meeting chats visible for only one month in Microsoft Teams Hi Community,In Microsoft Teams, under Chat &amp;gt; Meeting chats, I am currently able to see meeting chats from only the last one month.Is there any way or setting to extend this so that I can see meeting chats from...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-and-saved-contacts-disap
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-and-saved-contacts-disappearing-in-teams-calls-section/2115156
+  parent_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_text_excerpt: Speed dial and saved contacts disappearing in Teams calls section Hello,&amp;nbsp;I have a bit of a complicated problem where my speed dials and saved contacts are disappearing from Teams &quot;calls&quot; section.&amp;nbsp;The contacts and speed dials mentioned appear again...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-02-05'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-in-new-teams-call-histor
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-in-new-teams-call-history-layout/2365143
+  parent_title: Speed dial in new Teams call history layout
+  report_title: Speed dial in new Teams call history layout
+  report_text_excerpt: Speed dial in new Teams call history layout Hello all,I have a query which I am hoping someone can help me out with.The new Teams desktop client layout has launched, but I am experiencing an issue with the layout of the call history section.Previously, speed dials that I add...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-05-18'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066202/ms-teams-responding-with-a-message-that-i-have-an
+  parent_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_text_excerpt: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version MS Team message stating that I have an outdated version of the program/app even after I uninstalled the program and reinstalled the latest version....
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-noticed-a-recent-change
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-noticed-a-recent-change-in-outbound-pstn-ringing-behavior-in-microsof/4572051
+  parent_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_text_excerpt: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams? Previously, when dialing an E.164 number, Teams would play its internal ringing tone and then switch to the PSTN ringback tone once the call reached the carrier.&amp;nbsp;Recently, the...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-chats-visible-for-only-one
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-chats-visible-for-only-one-month-in-microsoft-teams/4572073
+  parent_title: Meeting chats visible for only one month in Microsoft Teams
+  report_title: Meeting chats visible for only one month in Microsoft Teams
+  report_text_excerpt: Meeting chats visible for only one month in Microsoft Teams Hi Community,In Microsoft Teams, under Chat &amp;gt; Meeting chats, I am currently able to see meeting chats from only the last one month.Is there any way or setting to extend this so that I can see meeting chats from...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-and-saved-contacts-disap
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-and-saved-contacts-disappearing-in-teams-calls-section/2115156
+  parent_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_text_excerpt: Speed dial and saved contacts disappearing in Teams calls section Hello,&amp;nbsp;I have a bit of a complicated problem where my speed dials and saved contacts are disappearing from Teams &quot;calls&quot; section.&amp;nbsp;The contacts and speed dials mentioned appear again...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-02-05'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-in-new-teams-call-histor
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-in-new-teams-call-history-layout/2365143
+  parent_title: Speed dial in new Teams call history layout
+  report_title: Speed dial in new Teams call history layout
+  report_text_excerpt: Speed dial in new Teams call history layout Hello all,I have a query which I am hoping someone can help me out with.The new Teams desktop client layout has launched, but I am experiencing an issue with the layout of the call history section.Previously, speed dials that I add...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-05-18'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066202/ms-teams-responding-with-a-message-that-i-have-an
+  parent_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_text_excerpt: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version MS Team message stating that I have an outdated version of the program/app even after I uninstalled the program and reinstalled the latest version....
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-noticed-a-recent-change
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-noticed-a-recent-change-in-outbound-pstn-ringing-behavior-in-microsof/4572051
+  parent_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_text_excerpt: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams? Previously, when dialing an E.164 number, Teams would play its internal ringing tone and then switch to the PSTN ringback tone once the call reached the carrier.&amp;nbsp;Recently, the...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-chats-visible-for-only-one
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-chats-visible-for-only-one-month-in-microsoft-teams/4572073
+  parent_title: Meeting chats visible for only one month in Microsoft Teams
+  report_title: Meeting chats visible for only one month in Microsoft Teams
+  report_text_excerpt: Meeting chats visible for only one month in Microsoft Teams Hi Community,In Microsoft Teams, under Chat &amp;gt; Meeting chats, I am currently able to see meeting chats from only the last one month.Is there any way or setting to extend this so that I can see meeting chats from...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-and-saved-contacts-disap
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-and-saved-contacts-disappearing-in-teams-calls-section/2115156
+  parent_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_text_excerpt: Speed dial and saved contacts disappearing in Teams calls section Hello,&amp;nbsp;I have a bit of a complicated problem where my speed dials and saved contacts are disappearing from Teams &quot;calls&quot; section.&amp;nbsp;The contacts and speed dials mentioned appear again...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-02-05'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-in-new-teams-call-histor
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-in-new-teams-call-history-layout/2365143
+  parent_title: Speed dial in new Teams call history layout
+  report_title: Speed dial in new Teams call history layout
+  report_text_excerpt: Speed dial in new Teams call history layout Hello all,I have a query which I am hoping someone can help me out with.The new Teams desktop client layout has launched, but I am experiencing an issue with the layout of the call history section.Previously, speed dials that I add...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-05-18'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066202/ms-teams-responding-with-a-message-that-i-have-an
+  parent_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_text_excerpt: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version MS Team message stating that I have an outdated version of the program/app even after I uninstalled the program and reinstalled the latest version....
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-noticed-a-recent-change
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-noticed-a-recent-change-in-outbound-pstn-ringing-behavior-in-microsof/4572051
+  parent_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_text_excerpt: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams? Previously, when dialing an E.164 number, Teams would play its internal ringing tone and then switch to the PSTN ringback tone once the call reached the carrier.&amp;nbsp;Recently, the...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-chats-visible-for-only-one
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-chats-visible-for-only-one-month-in-microsoft-teams/4572073
+  parent_title: Meeting chats visible for only one month in Microsoft Teams
+  report_title: Meeting chats visible for only one month in Microsoft Teams
+  report_text_excerpt: Meeting chats visible for only one month in Microsoft Teams Hi Community,In Microsoft Teams, under Chat &amp;gt; Meeting chats, I am currently able to see meeting chats from only the last one month.Is there any way or setting to extend this so that I can see meeting chats from...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-and-saved-contacts-disap
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-and-saved-contacts-disappearing-in-teams-calls-section/2115156
+  parent_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_text_excerpt: Speed dial and saved contacts disappearing in Teams calls section Hello,&amp;nbsp;I have a bit of a complicated problem where my speed dials and saved contacts are disappearing from Teams &quot;calls&quot; section.&amp;nbsp;The contacts and speed dials mentioned appear again...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-02-05'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-in-new-teams-call-histor
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-in-new-teams-call-history-layout/2365143
+  parent_title: Speed dial in new Teams call history layout
+  report_title: Speed dial in new Teams call history layout
+  report_text_excerpt: Speed dial in new Teams call history layout Hello all,I have a query which I am hoping someone can help me out with.The new Teams desktop client layout has launched, but I am experiencing an issue with the layout of the call history section.Previously, speed dials that I add...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-05-18'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066202/ms-teams-responding-with-a-message-that-i-have-an
+  parent_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_text_excerpt: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version MS Team message stating that I have an outdated version of the program/app even after I uninstalled the program and reinstalled the latest version....
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-noticed-a-recent-change
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-noticed-a-recent-change-in-outbound-pstn-ringing-behavior-in-microsof/4572051
+  parent_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_text_excerpt: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams? Previously, when dialing an E.164 number, Teams would play its internal ringing tone and then switch to the PSTN ringback tone once the call reached the carrier.&amp;nbsp;Recently, the...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-chats-visible-for-only-one
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-chats-visible-for-only-one-month-in-microsoft-teams/4572073
+  parent_title: Meeting chats visible for only one month in Microsoft Teams
+  report_title: Meeting chats visible for only one month in Microsoft Teams
+  report_text_excerpt: Meeting chats visible for only one month in Microsoft Teams Hi Community,In Microsoft Teams, under Chat &amp;gt; Meeting chats, I am currently able to see meeting chats from only the last one month.Is there any way or setting to extend this so that I can see meeting chats from...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-and-saved-contacts-disap
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-and-saved-contacts-disappearing-in-teams-calls-section/2115156
+  parent_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_text_excerpt: Speed dial and saved contacts disappearing in Teams calls section Hello,&amp;nbsp;I have a bit of a complicated problem where my speed dials and saved contacts are disappearing from Teams &quot;calls&quot; section.&amp;nbsp;The contacts and speed dials mentioned appear again...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-02-05'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-in-new-teams-call-histor
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-in-new-teams-call-history-layout/2365143
+  parent_title: Speed dial in new Teams call history layout
+  report_title: Speed dial in new Teams call history layout
+  report_text_excerpt: Speed dial in new Teams call history layout Hello all,I have a query which I am hoping someone can help me out with.The new Teams desktop client layout has launched, but I am experiencing an issue with the layout of the call history section.Previously, speed dials that I add...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-05-18'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066202/ms-teams-responding-with-a-message-that-i-have-an
+  parent_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_text_excerpt: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version MS Team message stating that I have an outdated version of the program/app even after I uninstalled the program and reinstalled the latest version....
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-noticed-a-recent-change
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-noticed-a-recent-change-in-outbound-pstn-ringing-behavior-in-microsof/4572051
+  parent_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_text_excerpt: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams? Previously, when dialing an E.164 number, Teams would play its internal ringing tone and then switch to the PSTN ringback tone once the call reached the carrier.&amp;nbsp;Recently, the...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-chats-visible-for-only-one
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-chats-visible-for-only-one-month-in-microsoft-teams/4572073
+  parent_title: Meeting chats visible for only one month in Microsoft Teams
+  report_title: Meeting chats visible for only one month in Microsoft Teams
+  report_text_excerpt: Meeting chats visible for only one month in Microsoft Teams Hi Community,In Microsoft Teams, under Chat &amp;gt; Meeting chats, I am currently able to see meeting chats from only the last one month.Is there any way or setting to extend this so that I can see meeting chats from...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-and-saved-contacts-disap
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-and-saved-contacts-disappearing-in-teams-calls-section/2115156
+  parent_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_text_excerpt: Speed dial and saved contacts disappearing in Teams calls section Hello,&amp;nbsp;I have a bit of a complicated problem where my speed dials and saved contacts are disappearing from Teams &quot;calls&quot; section.&amp;nbsp;The contacts and speed dials mentioned appear again...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-02-05'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-in-new-teams-call-histor
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-in-new-teams-call-history-layout/2365143
+  parent_title: Speed dial in new Teams call history layout
+  report_title: Speed dial in new Teams call history layout
+  report_text_excerpt: Speed dial in new Teams call history layout Hello all,I have a query which I am hoping someone can help me out with.The new Teams desktop client layout has launched, but I am experiencing an issue with the layout of the call history section.Previously, speed dials that I add...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-05-18'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066202/ms-teams-responding-with-a-message-that-i-have-an
+  parent_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_text_excerpt: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version MS Team message stating that I have an outdated version of the program/app even after I uninstalled the program and reinstalled the latest version....
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-noticed-a-recent-change
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-noticed-a-recent-change-in-outbound-pstn-ringing-behavior-in-microsof/4572051
+  parent_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_text_excerpt: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams? Previously, when dialing an E.164 number, Teams would play its internal ringing tone and then switch to the PSTN ringback tone once the call reached the carrier.&amp;nbsp;Recently, the...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-chats-visible-for-only-one
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-chats-visible-for-only-one-month-in-microsoft-teams/4572073
+  parent_title: Meeting chats visible for only one month in Microsoft Teams
+  report_title: Meeting chats visible for only one month in Microsoft Teams
+  report_text_excerpt: Meeting chats visible for only one month in Microsoft Teams Hi Community,In Microsoft Teams, under Chat &amp;gt; Meeting chats, I am currently able to see meeting chats from only the last one month.Is there any way or setting to extend this so that I can see meeting chats from...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-and-saved-contacts-disap
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-and-saved-contacts-disappearing-in-teams-calls-section/2115156
+  parent_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_text_excerpt: Speed dial and saved contacts disappearing in Teams calls section Hello,&amp;nbsp;I have a bit of a complicated problem where my speed dials and saved contacts are disappearing from Teams &quot;calls&quot; section.&amp;nbsp;The contacts and speed dials mentioned appear again...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-02-05'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-in-new-teams-call-histor
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-in-new-teams-call-history-layout/2365143
+  parent_title: Speed dial in new Teams call history layout
+  report_title: Speed dial in new Teams call history layout
+  report_text_excerpt: Speed dial in new Teams call history layout Hello all,I have a query which I am hoping someone can help me out with.The new Teams desktop client layout has launched, but I am experiencing an issue with the layout of the call history section.Previously, speed dials that I add...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-05-18'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066202/ms-teams-responding-with-a-message-that-i-have-an
+  parent_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_title: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version - Microsoft Q&A
+  report_text_excerpt: MS Teams responding with a message that I have an outdated version even after uninstalling and reinstalling the latest version MS Team message stating that I have an outdated version of the program/app even after I uninstalled the program and reinstalled the latest version....
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-anyone-noticed-a-recent-change
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-anyone-noticed-a-recent-change-in-outbound-pstn-ringing-behavior-in-microsof/4572051
+  parent_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_title: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams?
+  report_text_excerpt: Has anyone noticed a recent change in outbound PSTN ringing behavior in Microsoft Teams? Previously, when dialing an E.164 number, Teams would play its internal ringing tone and then switch to the PSTN ringback tone once the call reached the carrier.&amp;nbsp;Recently, the...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-meeting-chats-visible-for-only-one
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/meeting-chats-visible-for-only-one-month-in-microsoft-teams/4572073
+  parent_title: Meeting chats visible for only one month in Microsoft Teams
+  report_title: Meeting chats visible for only one month in Microsoft Teams
+  report_text_excerpt: Meeting chats visible for only one month in Microsoft Teams Hi Community,In Microsoft Teams, under Chat &amp;gt; Meeting chats, I am currently able to see meeting chats from only the last one month.Is there any way or setting to extend this so that I can see meeting chats from...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-and-saved-contacts-disap
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-and-saved-contacts-disappearing-in-teams-calls-section/2115156
+  parent_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_title: Speed dial and saved contacts disappearing in Teams calls section
+  report_text_excerpt: Speed dial and saved contacts disappearing in Teams calls section Hello,&amp;nbsp;I have a bit of a complicated problem where my speed dials and saved contacts are disappearing from Teams &quot;calls&quot; section.&amp;nbsp;The contacts and speed dials mentioned appear again...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-02-05'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-speed-dial-in-new-teams-call-histor
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/speed-dial-in-new-teams-call-history-layout/2365143
+  parent_title: Speed dial in new Teams call history layout
+  report_title: Speed dial in new Teams call history layout
+  report_text_excerpt: Speed dial in new Teams call history layout Hello all,I have a query which I am hoping someone can help me out with.The new Teams desktop client layout has launched, but I am experiencing an issue with the layout of the call history section.Previously, speed dials that I add...
+  captured_at: '2026-11-10T20:34:01Z'
+  source_date: '2021-05-18'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6065914-question-6065914
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6065914/windows-11-26h2-bootloop-nach-installation-von-kb5
+  parent_title: Windows 11 26H2 – Bootloop nach Installation von KB5127936 (Build 26300.9818) mit AMD Radeon RX 6800 XT - Microsoft Q&A
+  report_title: Windows 11 26H2 – Bootloop nach Installation von KB5127936 (Build 26300.9818) mit AMD Radeon RX 6800 XT - Microsoft Q&A
+  report_text_excerpt: 'Windows 11 26H2 – Bootloop nach Installation von KB5127936 (Build 26300.9818) mit AMD Radeon RX 6800 XT - Microsoft Q&A Hallo zusammen, ich möchte einen schwerwiegenden Fehler nach Installation des optionalen Vorschauupdates KB5127936 melden. Systemkonfiguration: Windows 11...'
+  captured_at: '2026-11-10T20:43:51Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6065278-question-6065278
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6065278/cant-update-windows-11-to-the-2026-10-security-upd
+  parent_title: Can't update Windows 11 to the 2026-10 Security Update (KB5127648) due to install error 0x80070002. - Microsoft Q&A
+  report_title: Can't update Windows 11 to the 2026-10 Security Update (KB5127648) due to install error 0x80070002. - Microsoft Q&A
+  report_text_excerpt: 'Can''t update Windows 11 to the 2026-10 Security Update (KB5127648) due to install error 0x80070002. - Microsoft Q&A Current OS Version: Windows 11 Pro, x64, version 26200.9457. I''ve already tried to: Run but it completed successfuly. Run but it reported no integrity...'
+  captured_at: '2026-11-10T20:45:05Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
