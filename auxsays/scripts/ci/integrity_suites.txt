@@ -273,7 +273,23 @@ auxsays/scripts/tests/test_davinci_archive_check.py = 76
 # the exact Windows KB; "no verdict yet" for INSUFFICIENT DATA; live wording only with the page's
 # live box AND the render-time projection certificate; no supersession or safety claim; one title,
 # description and canonical; every other page keeps the site-wide SEO tag. Needs ruby + liquid.
-auxsays/scripts/tests/test_patch_decision_authority.py = 205
+auxsays/scripts/tests/test_patch_decision_authority.py = 209
+# GROWTH-3 (owner decisions 1-3, 2026-11-06) moved the verdict policy into lib/patch_decision.decide:
+# an official withdrawal (AVOID), Microsoft's monthly security classification (SECURITY UPDATE), or a
+# reviewed reason entry the page's counted rows still support (WAIT / TEST FIRST); else INSUFFICIENT
+# DATA. Count, sentiment, theme, severity, maturity and the clock decide nothing (G3-D1..D12). The
+# reason file's audits (G3-F*), the single KB5079391 lifecycle exception (G3-L*), wording (no pause
+# advice, G3-W*), QA severities (G3-Q*), and the Liquid gate rendering exactly what Python decides on
+# a matrix and over the whole corpus (G3-R*). The decision authority suite above grew 205 -> 209: the
+# body-follows-decision section now asserts the no-invitation check for all three caller-supplied
+# decisions (B2 x 6, was x 2), because none of them selects the body.
+# 52 -> 86 (review 1): the gate reads Python's deploy-time verdict projection and decides no WAIT /
+# TEST FIRST itself (G3-P0..P7: the projection IS decide, probes A1 and A2 fail closed on the rendered
+# page, the builder fails closed and runs before QA and Jekyll); one matrix case per support rule and
+# no-projection fail-closed (G3-R4a..j, R5); QA errors on a rendered/authority disagreement and its
+# warning names what renders (G3-Q4..Q6); the scope prints with the verdict on tables, the feed, the
+# stored summary and the page (G3-S1..S5). 24 mutants (was 17), each caught by a named check.
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 86
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
@@ -298,7 +314,9 @@ auxsays/scripts/tests/test_patch_watchlist.py = 35
 # dated non-archived record per product, and a verdict derived exactly as patch-table-row does.
 # The client rendering is verified live; the storage contract it reuses is the Node suite's. [CL]
 # runs the real card renderer: the date is "Newest accepted report captured", shown only with a report.
-auxsays/scripts/tests/test_patch_stack_dashboard.py = 113
+# 113 -> 116 (GROWTH-3 review 1): the card, every upgrade-path release (rec[12]) and the attention
+# reason carry the verdict's scope (UP2b, PS-21, PS-22), against the authority's projection.
+auxsays/scripts/tests/test_patch_stack_dashboard.py = 116
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over

@@ -32,9 +32,17 @@ _AUX = _REPO / "auxsays"
 PAGE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=([\w.]+)\s*-?%\}")
 
 
+# GROWTH-3: patch-decision.html renders the verdict gate, the page's own code too. It takes a record
+# and a count, so it is inlined bound to both, after the page includes (it lives inside one).
+GATE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+patch-verdict-gate\.html\s+record=([\w.]+)\s+count=([\w.]+)\s*-?%\}")
+
+
 def expand_page_includes(text: str) -> str:
-    return PAGE_INCLUDE_TAG.sub(lambda m: (_AUX / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
+    text = PAGE_INCLUDE_TAG.sub(lambda m: (_AUX / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
                                 .replace("include.record", m.group(2)), text)
+    gate = (_AUX / "_includes" / "patch-verdict-gate.html").read_text(encoding="utf-8")
+    return GATE_INCLUDE_TAG.sub(lambda m: gate.replace("include.record", m.group(1))
+                                .replace("include.count", m.group(2)), text)
 
 
 LAYOUT = expand_page_includes((_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8"))
@@ -204,17 +212,21 @@ def run() -> int:
     r = reasoning(page(count=2))
     check("reports but no labels: fallback message", r is not None and FALLBACK_MSG in r and "Current reports mention" not in r, r or "")
 
-    print("[H] decision-body de-duplication is unchanged")
+    print("[H] decision-body de-duplication (GROWTH-3: the body is now the policy's line)")
+    # On a report-bearing page the recommendation line is the verdict policy's own ("No verdict yet:
+    # ..."), never a stored body, so it names no subject; the issue sentence is the one place the
+    # subjects appear and is no longer dropped as a repeat. These two checks used to prove the drop.
     body = "Current reports mention capture-source issues."
     r = reasoning(page(samples=["capture-source issues in camera source workflow"], body=body))
-    check("specific subject already in body: sentence not repeated",
-          r is not None and "Current reports mention capture-source issues in camera" not in r, r or "")
+    check("specific subject in a stored body: the stored body no longer reaches the page, the sentence carries it",
+          r is not None and issue_line(r) == "capture-source issues in camera source workflow", r or "")
     r = reasoning(page(samples=["capture-source issues in camera source workflow", "audio mixer or routing issues"], body=body))
     check("a subject the body omits keeps the sentence",
           r is not None and issue_line(r) == "capture-source issues in camera source workflow, audio mixer or routing issues", r or "")
     r = reasoning(page(samples=[GENERIC, "capture-source issues in camera source workflow"], body=body))
-    check("generic does not count as a 'missing subject' that would keep a redundant sentence",
-          r is not None and GENERIC not in r.lower() and "Current reports mention capture-source issues in camera" not in r, r or "")
+    check("generic is still never listed as a subject beside a real one",
+          r is not None and GENERIC not in r.lower()
+          and issue_line(r) == "capture-source issues in camera source workflow", r or "")
 
     print("[I] well-formedness across all cases")
     cases = [page(samples=[GENERIC]), page(themes=[GENERIC]), page(samples=[GENERIC, "a problems", GENERIC, "b problems"]),

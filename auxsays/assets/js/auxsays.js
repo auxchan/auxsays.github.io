@@ -751,7 +751,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // to be short. Collection that has stopped or is blocked does qualify.
     const attentionOf = (entry) => {
       if (!entry || !entry.href) return '';
-      if (entry.rank === 0 || entry.rank === 1 || entry.rank === 2) return entry.verdict;
+      if (entry.rank === 0 || entry.rank === 1 || entry.rank === 2) return scopedVerdict(entry.verdict, entry.scope);
       if ((entry.oa || 0) > 0) return `${entry.oa} active vendor issue${entry.oa === 1 ? '' : 's'}`;
       if ((entry.os || 0) > 0) return `${entry.os} safeguard hold${entry.os === 1 ? '' : 's'}`;
       if (entry.mon === 'COLLECTION BLOCKED') return 'Collection blocked';
@@ -761,6 +761,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const esc = (value) => String(value == null ? '' : value)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    // A verdict and its scope are one statement ("WAIT if you use macOS 27.2"): printing the word
+    // alone tells every reader what the page tells only one setup (GROWTH-3 review 1, D1).
+    const scopedVerdict = (verdict, scope) => {
+      const word = String(verdict == null ? '' : verdict);
+      const where = String(scope == null ? '' : scope).trim();
+      return where ? `${word} ${where}` : word;
+    };
+    const verdictHtml = (verdict, scope, rank) => {
+      const where = String(scope == null ? '' : scope).trim();
+      return `<span class="patch-verdict patch-verdict--rank${Number(rank)}">${esc(verdict)}</span>`
+        + (where ? ` <span class="patch-verdict-scope">${esc(where)}</span>` : '');
+    };
 
     // `esc` handles quoting, not schemes. Every href here is a site path, so anything that is not
     // one is dropped rather than rendered as a link.
@@ -777,7 +790,7 @@ document.addEventListener('DOMContentLoaded', () => {
       parts.push('<div class="patch-stack-card__head">');
       parts.push(`<h3 class="patch-stack-card__name">${hist ? `<a href="${hist}">${name}</a>` : name}</h3>`);
       if (entry.href) {
-        parts.push(`<span class="patch-verdict patch-verdict--rank${Number(entry.rank)}">${esc(entry.verdict)}</span>`);
+        parts.push(`<span class="patch-stack-card__verdict">${verdictHtml(entry.verdict, entry.scope, entry.rank)}</span>`);
       }
       parts.push('</div>');
       if (entry.href) {
@@ -873,8 +886,7 @@ document.addEventListener('DOMContentLoaded', () => {
       out.push(href ? `<a href="${href}">${recLabel(rec)}</a>` : recLabel(rec));
       out.push('</p>');
       if (rec[5]) {
-        out.push(`<p class="patch-iv-step__verdict"><span class="patch-verdict patch-verdict--rank${Number(rec[6])}">`
-          + `${esc(rec[5])}</span></p>`);
+        out.push(`<p class="patch-iv-step__verdict">${verdictHtml(rec[5], rec[12], rec[6])}</p>`);
       }
       const meta = recMeta(rec);
       if (meta.length) out.push(`<ul class="patch-iv-step__meta"><li>${meta.join('</li><li>')}</li></ul>`);

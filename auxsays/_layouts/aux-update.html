@@ -648,8 +648,11 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
         <div class="update-decision-box__header">
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>
-          <strong>{{ decision_label }}</strong>
+          <strong>{{ decision_label }}</strong>{% if decision_scope != '' %} <span class="update-decision-scope">{{ decision_scope }}</span>{% endif %}
           <p class="update-decision-recommendation">{{ decision_body }}</p>
+          {%- if decision_panel_text != '' %}
+          <div class="update-decision-panel update-decision-panel--warning" role="note"><span class="update-decision-panel__heading">{{ decision_panel_heading }}</span> {{ decision_panel_text }}</div>
+          {%- endif %}
           {%- if rec_rendered > 0 %}
           <div class="update-decision-actions">
             {%- comment -%}
@@ -680,7 +683,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             carries honest framing, worded by the canonical strength ladder rather than a hard
             count, so nothing changes discontinuously at exactly n=3.
           {%- endcomment -%}
-          {% if consensus_established == false and evidence_strength == 'Low' %}<p>Too few reports for a firm verdict yet &mdash; treat this as early evidence.</p>{% endif %}
+          {% if consensus_established == false and evidence_strength == 'Low' and decision_official == false %}<p>Too few reports for a firm verdict yet &mdash; treat this as early evidence.</p>{% endif %}
           {% if record_note_text != '' %}<p>{{ record_note_text }}</p>{% endif %}
         </div>
       </div>

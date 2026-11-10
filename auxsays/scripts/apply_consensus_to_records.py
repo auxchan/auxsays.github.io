@@ -31,7 +31,7 @@ from patch_collectors.base import (
     split_front_matter,
     atomic_write_text,
 )
-from lib import live_eligibility, maturity, monitoring_health
+from lib import live_eligibility, maturity, monitoring_health, verdict_reasons
 from lib.report_counts import EvidenceStoreError, load_evidence_store
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -250,6 +250,10 @@ def _scan_generated_records() -> tuple[dict[tuple[str, str, str], dict[str, Any]
                 "target_kb": str(data.get("target_kb") or "").strip(),
                 "target_os_build": str(data.get("target_os_build") or "").strip(),
                 "target_release_date": str(data.get("target_release_date") or "").strip(),
+                # GROWTH-3 policy facts: Microsoft's release type (security classification) and the
+                # exact build (the one lifecycle exception is keyed on KB + build).
+                "update_type": str(data.get("update_type") or "").strip(),
+                "target_build": str(data.get("target_build") or "").strip(),
             }
     return index, fronts
 
@@ -793,6 +797,9 @@ def _public_summary(
     confidence: str,
     themes: Counter,
     decision: str,
+    body: str | None = None,
+    policy: Any = None,
+    facts: dict[str, Any] | None = None,
 ) -> str:
     count = len(rows)
     version_label = ver
@@ -813,15 +820,26 @@ def _public_summary(
     # summary on the feed. The caller now computes the decision ONCE for the record and gives the
     # same string to every field, so the two cannot disagree about anything, including which version
     # string they judged.
+    #
+    # GROWTH-3: after the one-sentence fact, the summary carries the policy's own line -- the same
+    # string the patch page prints under its verdict -- rather than sentiment-flavoured advice of
+    # its own. "Users with fragile production workflows should wait" under an INSUFFICIENT DATA
+    # verdict was a second recommendation, which is the defect this module's authority exists to end.
+    #
+    # GROWTH-3 review 1 (D1): the summary LEADS with the verdict and its scope -- "WAIT if you use
+    # macOS 27.2: OBS Studio 32.2.2. <line>" -- because the /updates/ feed prints it. "WAIT: OBS
+    # Studio 32.2.2 has 53 user reports found." put a verdict that applies to one setup beside a
+    # count, which reads as "53 reports, so wait". It still names the EXACT patch (the build-aware
+    # label: 28 Windows records share "25H2"). lib/patch_decision.summary_line is the one
+    # composition; the feed prints it, or the gate's own lead when the two disagree.
     verdict = decision
     report_word = "report" if count == 1 else "reports"
-    sample_sentence = "Small sample size." if count < 8 else "User reports show a repeat pattern."
-    return " ".join([
-        f"{verdict}: {product_label} {version_label} has {count} user {report_word} found.",
-        sample_sentence,
-        _issue_cluster_sentence(themes),
-        f"{_affected_workflow_sentence(pid, ver, consensus_label, themes, decision)} {_source_limitation_sentence(rows, confidence)}",
-    ])
+    fact = f"{product_label} {version_label} has {count} user {report_word} found."
+    if policy is not None:
+        return patch_decision.summary_line(policy, facts or {}, count, fallback=fact,
+                                           identity=f"{product_label} {version_label}")
+    line = body if body is not None else ""
+    return " ".join(part for part in [f"{verdict}: {fact}", line] if part)
 
 
 def _public_consensus_report(
@@ -934,7 +952,13 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
     # ONE decision for this record, computed once, from the RAW version the verdict path has always
     # judged. Computing it separately in the two writers would let them judge different version
     # strings -- `ver` against `version_label` -- and quietly reacquire the ability to disagree.
-    decision = patch_decision.decision_label(pid, ver, consensus_label, count, record=record)
+    #
+    # GROWTH-3: the policy reads facts, never the sentiment label or the count: an official withdrawal
+    # (AVOID), Microsoft's monthly security classification (SECURITY UPDATE), or a reviewed reason
+    # entry that THIS group's counted rows still support (WAIT / TEST FIRST); else INSUFFICIENT DATA.
+    policy, facts = _policy_decision(pid, ver, build, rows, record)
+    decision = policy.verdict
+    body = patch_decision.public_body(policy, facts, count)
     summary = _public_summary(
         pid=pid,
         ver=version_label,
@@ -944,6 +968,9 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         confidence=confidence,
         themes=themes,
         decision=decision,
+        body=body,
+        policy=policy,
+        facts=facts,
     )
     report = _public_consensus_report(
         pid=pid,
@@ -994,11 +1021,59 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         },
     }
     fields.update(_record_coherence_fields(pid, ver, count, record, themes, build=build,
-                                           decision=decision))
+                                           decision=decision, policy=policy, facts=facts))
     return fields
 
 
-def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "", decision: str | None = None) -> dict[str, Any]:
+def _policy_decision(pid: str, ver: str, build: str, rows: list[dict[str, Any]],
+                     record: dict[str, Any] | None) -> tuple[Any, dict[str, Any]]:
+    """`patch_decision.decide` for one group, with the reason entries THIS group's counted rows
+    support. Returns (decision, the facts it was decided on).
+
+    FAIL CLOSED, never wedge. The two fact files change only by reviewed pull request and QA
+    reports a malformed one as an error; here a malformed file contributes nothing (no reason, no
+    lifecycle) rather than raising, so a lane is never discarded over it and no page gains a verdict
+    the file cannot support. A reason whose rows stopped counting is simply not supported."""
+    facts = dict(record or {})
+    facts.setdefault("product_id", pid)
+    facts.setdefault("update_version", ver)
+    if build:
+        facts["target_build"] = build
+    try:
+        reasons = verdict_reasons.load_reasons(ROOT / "_data" / "verdict_reasons.yml")
+        lifecycle = verdict_reasons.load_lifecycle(ROOT / "_data" / "patch_lifecycle.yml")
+    except verdict_reasons.FactFileError as exc:
+        print(f"::warning::verdict fact file unreadable, no reasoned verdicts this run: {exc}")
+        reasons, lifecycle = [], []
+    if verdict_reasons.schema_errors(reasons):
+        reasons = []
+    if verdict_reasons.lifecycle_errors(lifecycle):
+        lifecycle = []
+    ident = verdict_reasons.record_identity(facts)
+    mine = [e for e in reasons if verdict_reasons.reason_identity(e) == ident]
+    confirmations = _confirmation_records(mine)
+    valid = [e for e in mine if not verdict_reasons.support_problems(e, rows, confirmations)]
+    return patch_decision.decide(facts, valid_reasons=valid, lifecycle=lifecycle), facts
+
+
+def _confirmation_records(entries: list[dict[str, Any]]) -> dict[tuple[str, str, str], dict[str, Any]]:
+    """Front matter of the records an entry's official confirmation names -- read only when this
+    page has such an entry (two pages today), never a scan per group."""
+    wanted = {(str((e.get("official_confirmation") or {}).get("product_id") or "").strip(),
+               str((e.get("official_confirmation") or {}).get("update_version") or "").strip(), "")
+              for e in entries if e.get("official_confirmation")}
+    found: dict[tuple[str, str, str], dict[str, Any]] = {}
+    if not wanted:
+        return found
+    for path in sorted(GENERATED_DIR.glob("*.md")):
+        data = _load_front_matter(path)
+        ident = verdict_reasons.record_identity(data)
+        if data.get("update_entry") and ident in wanted:
+            found[ident] = data
+    return found
+
+
+def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter, *, build: str = "", decision: str | None = None, policy: Any = None, facts: dict[str, Any] | None = None) -> dict[str, Any]:
     """The verdict fields. `decision` arrives from the caller; this function does not choose one.
 
     Each branch used to name its own action ("WAIT for production systems" here, "TEST FIRST" for
@@ -1014,40 +1089,45 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
     if not record:
         return {}
 
-    if decision is None:
-        decision = patch_decision.decision_label(pid, ver, "", count, record=record)
+    if policy is None:
+        # No counted rows in hand, so no reason entry can be shown to be supported: the policy
+        # answers from the official facts alone (AVOID / SECURITY UPDATE) or INSUFFICIENT DATA.
+        policy, facts = _policy_decision(pid, ver, build, [], record)
+    decision = policy.verdict
+    facts = facts if facts is not None else dict(record)
+    # GROWTH-3: the body IS the policy's line, the same string the patch page renders under the
+    # verdict (test_growth3_verdict_policy compares them over the corpus). Product branches below
+    # keep only what is product-specific and verdict-neutral: recommendations and DaVinci 21's
+    # release framing.
+    body = patch_decision.public_body(policy, facts, count)
+    # The verdict as printed: its scope travels with it in every stored verdict sentence (D1).
+    phrase = patch_decision.verdict_phrase(policy)
     product_label = str(record.get("update_product") or pid).strip()
 
     if pid == "blackmagic-davinci":
         if _davinci_version_is_beta(ver):
             return {
                 "quick_verdict": (
-                    f"{decision}: {product_label} {ver} is a beta build with {count} user reports found."
+                    f"{phrase}: {product_label} {ver} is a beta build with {count} user reports found."
                 ),
                 "update_decision_label": decision,
-                "update_decision_body": (
-                    "Use this beta only for non-critical testing. Active client projects should stay on a known-good stable build unless a Resolve 21 beta feature is worth the risk."
-                ),
+                "update_decision_body": body,
                 "practical_recommendations": [
-                    "Wait for production systems unless you have a specific Resolve 21 beta feature to test.",
-                    "Test beta projects separately from active client work and keep a known-good Resolve version available.",
-                    "Review the user report sample before using this build on deadline-sensitive work.",
+                    "This is a beta build: keep it off active client projects and test it in disposable projects.",
+                    "Keep a known-good stable Resolve version available.",
                 ],
                 "source_freshness_note": "",
             }
 
         fields = {
             "quick_verdict": (
-                f"{decision}: {product_label} {ver} has {count} user reports found."
+                f"{phrase}: {product_label} {ver} has {count} user reports found."
             ),
             "update_decision_label": decision,
-            "update_decision_body": (
-                f"{_issue_cluster_sentence(themes)} Production editors with active delivery deadlines should wait or test on copied projects."
-            ),
+            "update_decision_body": body,
             "practical_recommendations": [
-                "Wait if you have active render/export deadlines.",
                 "Test on copied projects before moving client work to this version.",
-                "Review the sample reports before updating a production workstation.",
+                "Keep a known-good Resolve version available.",
             ],
             "source_freshness_note": "",
         }
@@ -1090,31 +1170,25 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         #
         # `update_status` stays DESCRIPTIVE: it appends a qualification, never selects the
         # instruction.
-        archived = str(record.get("update_status") or "").strip().lower() == "archived"
-        if patch_decision.permits_testing(decision):
-            body = (
-                "Test on a backup profile before using this OBS build for live streams or important recordings, especially if your setup depends on plugins, capture devices, audio routing, or large scene collections."
-            )
+        # GROWTH-3: the body is the policy's line (above); `update_status` stays descriptive and the
+        # archived notice is rendered by its own include, so it no longer appends to the verdict.
+        if decision == patch_decision.WAIT:
+            steps = [
+                "If your setup matches, keep your current OBS version until a release fixes it.",
+                "Keep a backup of your scene collection and profile before updating.",
+            ]
+        elif decision == patch_decision.TEST_FIRST:
             steps = [
                 "Test with a backup scene collection and profile before production use.",
-                "Check plugin, capture-device, and audio-routing behavior before a live stream or paid recording.",
                 "Keep a rollback installer available if your setup is already stable.",
             ]
         else:
-            body = (
-                "Hold this OBS build off live streams and important recordings while these reports settle, especially if your setup depends on plugins, capture devices, audio routing, or large scene collections."
-            )
             steps = [
-                "Stay on your current working OBS build until the reported problems are resolved.",
-                "If you have already updated, keep a rollback installer available and avoid paid or unrepeatable recordings.",
-                "Check whether the reported problems involve the plugins, capture devices, or audio routing your setup depends on.",
+                "Check whether one of the listed reports matches your scenes, plugins, capture devices or audio routing.",
+                "Keep a backup of your scene collection and profile before updating.",
             ]
-        if archived:
-            body += (
-                f" {product_label} {ver} is also an older archived build: prefer a newer maintained OBS release unless you need this version for rollback testing or reproduction."
-            )
         return {
-            "quick_verdict": f"{decision}: {product_label} {ver} has {count} user reports found.",
+            "quick_verdict": f"{phrase}: {product_label} {ver} has {count} user reports found.",
             "update_decision_label": decision,
             "update_decision_body": body,
             "practical_recommendations": steps,
@@ -1133,32 +1207,29 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         # Name the exact cumulative update, never the train: 28 records share "25H2".
         patch_label = patch_display_label(ver, build, pid)
         return {
-            "quick_verdict": f"{decision}: {product_label} {patch_label} has {count} user {report_word} found.",
+            "quick_verdict": f"{phrase}: {product_label} {patch_label} has {count} user {report_word} found.",
             "update_decision_label": decision,
-            "update_decision_body": (
-                f"{_issue_cluster_sentence(themes)} This page covers one cumulative update, not the "
-                f"whole {ver} servicing train; reports about a later update are counted on that "
-                "update's own page."
-            ),
-            "practical_recommendations": [
-                "Pause updates if this machine is doing deadline-sensitive or production work.",
-                "Check Microsoft's known-issue and safeguard-hold list for this KB before installing.",
-                "Keep the uninstall path in mind: a cumulative update can be removed from Settings "
-                "> Windows Update > Update history for a limited window after installation.",
-            ],
+            "update_decision_body": body,
+            # GROWTH-3 (owner decision 3): no advice to pause or disable Windows Update, on any page.
+            "practical_recommendations": (
+                [
+                    "If this device does not have this update yet, install the replacement update instead.",
+                    "Check Microsoft's known-issue and safeguard-hold list for the replacement before installing it.",
+                ] if decision == patch_decision.AVOID else [
+                    "Check Microsoft's known-issue and safeguard-hold list for this KB before installing.",
+                    "Keep the uninstall path in mind: a cumulative update can be removed from Settings "
+                    "> Windows Update > Update history for a limited window after installation.",
+                ]),
             "source_freshness_note": "",
         }
 
     if pid == "adobe-premiere-pro":
         report_word = "report" if count == 1 else "reports"
         return {
-            "quick_verdict": f"{decision}: {product_label} {ver} has {count} user {report_word} found.",
+            "quick_verdict": f"{phrase}: {product_label} {ver} has {count} user {report_word} found.",
             "update_decision_label": decision,
-            "update_decision_body": (
-                f"{_issue_cluster_sentence(themes)} Editors with active deadlines should wait or test on copied projects before moving production work to this build."
-            ),
+            "update_decision_body": body,
             "practical_recommendations": [
-                "Wait if you are in the middle of deadline-sensitive editing work.",
                 "Test on copied projects before moving active client timelines to this version.",
                 "Keep a rollback path available if your current Premiere Pro build is stable.",
             ],

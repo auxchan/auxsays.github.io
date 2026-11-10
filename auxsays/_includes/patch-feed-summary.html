@@ -1,0 +1,46 @@
+{%- comment -%}
+  THE /updates/ FEED CARD'S EVIDENCE LINE (GROWTH-3 review 1, D1).
+
+  The card used to print the record's stored update_consensus_summary as is, and that field opened
+  "WAIT: OBS Studio 32.2.2 has 53 user reports found." -- a verdict without the setup it applies to,
+  sitting beside a count, so it read as "53 reports, so wait". The writer now stores
+  lib/patch_decision.summary_line: the verdict AND its scope first, then the exact patch, then the
+  page's own recommendation line ("WAIT if you use macOS 27.2: OBS Studio 32.2.2. A user reports, and
+  OBS confirms, ...").
+
+  The card prints that stored line only while it opens with exactly the verdict and scope this page
+  renders (the same gate every other surface renders) AND ends with exactly this page's line. A
+  stored line that lags the policy -- it catches up at the product's next promotion -- is not
+  printed: the card then shows the gate's verdict, scope and line, so the feed can never show a
+  verdict, or a reason, that the page does not. Only the patch name between them is the stored text.
+
+  Input:   include.item     the feed item (a site.pages patch record)
+           include.summary  the card's stored evidence summary, already cleaned; '' when none
+  Output:  feed_summary_line  the line to print, or '' (no evidence block)
+  A record with no stored summary (no reports) keeps no evidence block, as before. One with a
+  summary but no gate line (a non-official page with no reports) keeps its stored text.
+
+  No literal Liquid tag appears in this comment on purpose: a comment block still parses tags.
+{%- endcomment -%}
+{%- assign pfs_item = include.item -%}
+{%- assign pfs_count = pfs_item.update_report_count | default: 0 | plus: 0 -%}
+{%- assign feed_summary_line = include.summary | default: '' | strip -%}
+{%- include patch-verdict-gate.html record=pfs_item count=pfs_count -%}
+{%- if feed_summary_line != '' and gate_body != '' -%}
+  {%- capture pfs_phrase -%}{{ gate_label }}{% if gate_scope != '' %} {{ gate_scope }}{% endif %}{%- endcapture -%}
+  {%- assign pfs_body = gate_body -%}
+  {%- assign pfs_head = pfs_body | slice: 0, 16 -%}
+  {%- if pfs_head == 'No verdict yet: ' -%}
+    {%- assign pfs_rest = pfs_body | slice: 16, 100000 -%}
+    {%- assign pfs_first = pfs_rest | slice: 0 | upcase -%}
+    {%- assign pfs_tail = pfs_rest | slice: 1, 100000 -%}
+    {%- assign pfs_body = pfs_first | append: pfs_tail -%}
+  {%- endif -%}
+  {%- assign pfs_lead = feed_summary_line | split: ':' | first | strip -%}
+  {%- assign pfs_len = pfs_body.size -%}
+  {%- assign pfs_from = 0 | minus: pfs_len -%}
+  {%- assign pfs_stored_tail = feed_summary_line | slice: pfs_from, pfs_len -%}
+  {%- unless pfs_lead == pfs_phrase and pfs_stored_tail == pfs_body -%}
+    {%- capture feed_summary_line -%}{{ pfs_phrase }}: {{ pfs_body }}{%- endcapture -%}
+  {%- endunless -%}
+{%- endif -%}

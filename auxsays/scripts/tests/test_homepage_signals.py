@@ -855,19 +855,59 @@ PILOT = {"evidence_state": "pilot_sample", "intelligence_stage": "pilot"}
 # name: (record fields, verdict the patch page prints, its evidence state, its box class).
 # Every record is featured and is its own product, so each one is a homepage row. The expected words
 # are written out so the page and the row cannot be wrong together.
+# GROWTH-3: a STORED label no longer decides the verdict anywhere -- the shared gate decides it from
+# the record's facts and the two reviewed fact files -- so every case whose only input is a stored
+# WAIT / TEST FIRST now prints INSUFFICIENT DATA on the page AND on the row. Three cases carry the
+# facts that do decide: Microsoft's security classification, a supported reason entry (the deploy's
+# verdict projection gives it a row), and the same entry with one cited report no longer counted (the
+# authority gives no row, so it must fail closed).
+REASON_URLS = ["https://reports.test/r1", "https://reports.test/r2"]
+VERDICT_FACTS = {
+    "verdict_reasons": {"schema_version": 1, "entries": [{
+        "id": "v-reasoned:1.0:install", "product_id": "v-reasoned", "update_version": "1.0",
+        "verdict": "TEST FIRST", "reason_class": "corroborated_install_problem", "scope": "when installing it",
+        "reason": "Two users independently report that installing it fails.",
+        "evidence": [{"id": "r1", "source_url": REASON_URLS[0]}, {"id": "r2", "source_url": REASON_URLS[1]}],
+        "new_in_this_version": False, "reviewed_at": "2026-11-10", "basis": "test"}, {
+        "id": "v-reason-withdrawn:1.0:install", "product_id": "v-reason-withdrawn", "update_version": "1.0",
+        "verdict": "TEST FIRST", "reason_class": "corroborated_install_problem", "scope": "when installing it",
+        "reason": "Two users independently report that installing it fails.",
+        "evidence": [{"id": "r1", "source_url": REASON_URLS[0]}, {"id": "r2", "source_url": REASON_URLS[1]}],
+        "new_in_this_version": False, "reviewed_at": "2026-11-10", "basis": "test"}]},
+    "patch_lifecycle": {"schema_version": 1, "entries": []},
+}
+
+
+def _verdict_projection() -> dict:
+    """The projection a deploy would build for these cases: lib/verdict_projection over the cases'
+    COUNTED rows. The gate prints only this; it never reads the reason file (review 1, D2). The
+    withdrawn case has one of its two cited rows counted, so the authority gives it no row."""
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from lib import verdict_projection  # noqa: PLC0415
+    rows = [{"id": "r1", "source_url": REASON_URLS[0], "report_text_excerpt": "Installing it fails at 40%."},
+            {"id": "r2", "source_url": REASON_URLS[1], "report_text_excerpt": "The installer stops with an error."}]
+    pages = [{"product_id": f"v-{n}", "update_version": "1.0", "update_report_count": c,
+              "permalink": f"/updates/t/v-{n}/"} for n, c in (("reasoned", 2), ("reason-withdrawn", 1))]
+    counted = {("v-reasoned", "1.0", ""): rows, ("v-reason-withdrawn", "1.0", ""): rows[:1]}
+    return verdict_projection.project(pages, counted, VERDICT_FACTS["verdict_reasons"]["entries"], [])[0]
+
+
+VERDICT_FACTS["verdict_projection"] = _verdict_projection()
+ROW_SCOPE = {"reasoned": "when installing it"}
 VERDICT_CASES = {
     "stored-wait": (dict(update_decision_label="WAIT", update_report_count=5, **PILOT, **SENTIMENT),
-                    "WAIT", "Verified reports", "pilot"),
+                    "INSUFFICIENT DATA", "Verified reports", "pilot"),
     "test-first": (dict(update_decision_label="TEST FIRST", update_report_count=1, **PILOT),
-                   "TEST FIRST", "Verified reports", "pilot"),
+                   "INSUFFICIENT DATA", "Verified reports", "pilot"),
     "legacy-phrase": (dict(update_decision_label="WAIT for production systems", update_report_count=4, **PILOT),
-                      "WAIT for production systems", "Verified reports", "pilot"),
+                      "INSUFFICIENT DATA", "Verified reports", "pilot"),
     "refused-label": (dict(update_decision_label="SHIP IT", update_report_count=4, **PILOT),
                       "INSUFFICIENT DATA", "Verified reports", "pilot"),
     "from-summary": (dict(update_decision_label="", update_consensus_summary="TEST FIRST: early reports",
-                          update_report_count=2, **PILOT), "TEST FIRST", "Verified reports", "pilot"),
+                          update_report_count=2, **PILOT), "INSUFFICIENT DATA", "Verified reports", "pilot"),
     "from-quick-verdict": (dict(update_decision_label="", update_consensus_summary="", quick_verdict="WAIT: hold off",
-                                update_report_count=2, **PILOT), "WAIT", "Verified reports", "pilot"),
+                                update_report_count=2, **PILOT), "INSUFFICIENT DATA", "Verified reports", "pilot"),
     "official-rescue": (dict(update_decision_label="WAIT", update_source_url=NOTES, official_active_issue_count=1,
                              **SENTIMENT), "INSUFFICIENT DATA", "Official source only", "official"),
     "security-rescue": (dict(update_decision_label="", update_security_sensitive=True,
@@ -876,20 +916,28 @@ VERDICT_CASES = {
     # Nothing official was captured, so the page's own rung says Insufficient data -- not the stored
     # official_only the maturity contract alone would print -- and the stored WAIT is not rescued.
     "nothing-captured": (dict(update_decision_label="WAIT", known_issues_present=True),
-                         "WAIT", "Insufficient data", "insufficient"),
+                         "INSUFFICIENT DATA", "Insufficient data", "insufficient"),
     "certified-live": (dict(update_decision_label="WAIT", update_report_count=9, evidence_state="consensus_live",
-                            intelligence_stage="consensus_live"), "WAIT", "Live consensus", "live"),
+                            intelligence_stage="consensus_live"), "INSUFFICIENT DATA", "Live consensus", "live"),
     "uncertified-live": (dict(update_decision_label="TEST FIRST", update_report_count=6,
-                              consensus_collection_status="consensus_live"), "TEST FIRST", "Verified reports", "pilot"),
+                              consensus_collection_status="consensus_live"), "INSUFFICIENT DATA", "Verified reports", "pilot"),
+    "reasoned": (dict(update_decision_label="", update_version="1.0", update_report_count=2, **PILOT,
+                      accepted_report_sources=[{"source_url": u} for u in REASON_URLS]),
+                 "TEST FIRST", "Verified reports", "pilot"),
+    "reason-withdrawn": (dict(update_decision_label="TEST FIRST", update_version="1.0", update_report_count=1, **PILOT,
+                              accepted_report_sources=[{"source_url": REASON_URLS[0]}]),
+                         "INSUFFICIENT DATA", "Verified reports", "pilot"),
+    "security": (dict(update_decision_label="WAIT", update_type="2026-01 B", update_report_count=3, **PILOT,
+                      product_id="microsoft-windows-11"), "SECURITY UPDATE", "Verified reports", "pilot"),
 }
 VERDICT_LIVE = {"urls": ["/updates/t/v-certified-live/"]}
 
 
 def verdict_records() -> list[list[dict]]:
     """The cases as homepage corpora of at most 10 products each (the row limit)."""
-    recs = [rec(f"v-{name}", BASE_T - i * DAY, product_id=f"v-{name}", homepage_featured=True, **fields)
+    recs = [rec(f"v-{name}", BASE_T - i * DAY, **{"product_id": f"v-{name}", "homepage_featured": True, **fields})
             for i, (name, (fields, _v, _s, _c)) in enumerate(VERDICT_CASES.items())]
-    return [recs[:6], recs[6:]]
+    return [recs[:7], recs[7:]]
 
 
 def page_head() -> str:
@@ -920,7 +968,8 @@ def section_v(out: dict) -> None:
         if got != (verdict, state, cls):
             wrong_page.append((name, got))
         row = rows.get(f"/updates/t/v-{name}/")
-        if not row or row["verdict"] != f"Verdict: {verdict}":
+        scope = ROW_SCOPE.get(name, "")
+        if not row or row["verdict"] != f"Verdict: {verdict}" + (f" {scope}" if scope else ""):
             wrong_row.append((name, row and row["verdict"]))
         if not row or row["state"] != state or (row["dot"] or "").split()[-1:] != [f"home-patch-dot--{cls}"]:
             wrong_state.append((name, row and (row["state"], row["dot"])))
@@ -1019,7 +1068,8 @@ def section_t(out: dict, real: list[dict]) -> None:
 
 def verdict_jobs() -> tuple[dict, dict]:
     """Render jobs and corpora for [V] and [T]."""
-    site = {"data": {"patch_verdicts": VERDICTS, "live_eligibility": VERDICT_LIVE}, "time": FIXED_TIME}
+    site = {"data": {"patch_verdicts": VERDICTS, "live_eligibility": VERDICT_LIVE, **VERDICT_FACTS},
+            "time": FIXED_TIME}
     jobs, corpora = {}, {}
     block = shipped_block() + TRAILER
     for i, recs in enumerate(verdict_records()):

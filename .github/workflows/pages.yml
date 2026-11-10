@@ -109,6 +109,12 @@ jobs:
       - name: Build the live-consensus eligibility projection
         run: python auxsays/scripts/build_live_eligibility_projection.py
 
+      # Also BEFORE QA and `jekyll build`: `_includes/patch-verdict-gate.html` publishes WAIT and
+      # TEST FIRST only from this file -- lib/patch_decision.decide's answer for this very tree -- and
+      # decides none itself. QA below errors if the file and the authority disagree on any page.
+      - name: Build the verdict projection
+        run: python auxsays/scripts/build_verdict_projection.py
+
       - name: Validate logo assets
         run: python auxsays/scripts/validate_logo_assets.py
 

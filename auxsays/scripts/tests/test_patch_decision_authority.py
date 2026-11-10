@@ -274,8 +274,10 @@ def check_wiring() -> None:
     appears somewhere in the file.
     """
     sentinel = "MANUAL WATCH"          # a real decision, so nothing downstream rejects it as junk
-    original = patch_decision.decision_label
-    patch_decision.decision_label = lambda *a, **k: sentinel
+    # GROWTH-3: the authority's entry point is `decide`; `decision_label` is now its thin wrapper.
+    # Substituting `decide` therefore reaches every caller, the wrapper's included.
+    original = patch_decision.decide
+    patch_decision.decide = lambda *a, **k: patch_decision.Decision(sentinel, "RX")
     try:
         fields = proposed(DAV, "21 Public Beta 1")
         check("W1 the summary prefix follows the substituted authority",
@@ -296,7 +298,7 @@ def check_wiring() -> None:
                   [evidence_row(DAV, "21 Public Beta 1", i) for i in range(15)],
                   bce.Counter({"negative": 15}), bce.Counter({"playback_stutter": 15}))) == sentinel)
     finally:
-        patch_decision.decision_label = original
+        patch_decision.decide = original
 
     # And the beta rule itself is single-sourced: both former copies now answer from one definition.
     beta_re_original = patch_decision._BETA_RE
@@ -328,18 +330,18 @@ def check_wiring() -> None:
     # what pins that: two calls could judge different version strings -- the summary path used to
     # read `patch_display_label(...)` while the verdict read the raw version -- and a suite whose
     # fixtures all have an empty build would never see the difference in the output.
-    original = patch_decision.decision_label
+    original = patch_decision.decide
     calls = []
 
     def counting(*a, **k):
-        calls.append((a, tuple(sorted(k))))
+        calls.append((tuple(sorted((a[0] or {}).items())) if a else (), tuple(sorted(k))))
         return original(*a, **k)
 
-    patch_decision.decision_label = counting
+    patch_decision.decide = counting
     try:
         proposed(WIN, "25H2", build="26200.1234")
     finally:
-        patch_decision.decision_label = original
+        patch_decision.decide = original
     check("W8 one record asks the authority exactly once",
           len(calls) == 1, f"{len(calls)} calls: {calls}")
 
@@ -349,17 +351,18 @@ def check_wiring() -> None:
     # build (32.1.1, 43 reports) while the record said WAIT.
     #
     # AUX-007 removed the record-state input, so this now pins something STRONGER: the two writers
-    # agree AND both answer the same whichever way `update_status` is set. The sentiment is
-    # negative, so the evidence-driven answer is WAIT for both.
+    # agree AND both answer the same whichever way `update_status` is set. GROWTH-3: with no
+    # reviewed reason and no official fact, the answer is INSUFFICIENT DATA for both, whatever the
+    # (negative) sentiment says.
     pairs = []
     answers = set()
     for status in ("archived", "current"):
         writer = proposed(OBS, "32.1.1", sentiment="negative", count=43, status=status)
         aggregate = bce.recommendation_prefix(OBS, "32.1.1", "negative", 43, update_status=status)
         answers |= decisions_named(writer) | {aggregate}
-        if not (decisions_named(writer) == {"WAIT"} and aggregate == "WAIT"):
+        if not (decisions_named(writer) == {"INSUFFICIENT DATA"} and aggregate == "INSUFFICIENT DATA"):
             pairs.append(f"{status}: record={sorted(decisions_named(writer))} "
-                         f"aggregate={aggregate!r} expected='WAIT'")
+                         f"aggregate={aggregate!r} expected='INSUFFICIENT DATA'")
     if len(answers) != 1:
         pairs.append(f"update_status changed the decision: {sorted(answers)}")
     check("W10 both writers agree, and update_status does not change the decision",
@@ -432,38 +435,41 @@ def check_matrix() -> None:
 # "make the two fields agree" can never drift into "make the recommendation friendlier". Every
 # entry here is the word the READER-FACING VERDICT published before this change; the summary is what
 # moved to meet it.
+# GROWTH-3 (owner decisions 1-3, 2026-11-06). The product branches and the sentiment fallback are
+# gone: with no reviewed reason entry and no official fact, EVERY row below decides INSUFFICIENT
+# DATA -- whatever the product, the sentiment, the beta string or `update_status`. The rows are kept
+# because each one used to decide something else; they now prove that none of those inputs decides
+# anything (G3-D3 sentiment, product, status), not that a preferred word survived.
+_ID = "INSUFFICIENT DATA"
 POLICY = [
-    # DaVinci: the beta and the stable build name the same ACTION. The label was
-    # "WAIT for production systems" until AUX-029; that phrasing is a legacy alias now, and the
-    # production-systems half is a qualification the prose still states.
-    (DAV, "21 Public Beta 1", "negative", "current", "WAIT"),
-    (DAV, "21 Public Beta 1", "positive", "current", "WAIT"),
-    (DAV, "21", "negative", "current", "WAIT"),
-    (DAV, "20.2", "positive", "current", "WAIT"),
+    (DAV, "21 Public Beta 1", "negative", "current", _ID),
+    (DAV, "21 Public Beta 1", "positive", "current", _ID),
+    (DAV, "21", "negative", "current", _ID),
+    (DAV, "20.2", "positive", "current", _ID),
     # OBS IS EVIDENCE-DRIVEN (AUX-007). It used to read `update_status`: maintained -> TEST FIRST,
     # archived -> WAIT, which let a positional metadata field outrank the community consensus. The
     # archived row below is UNCHANGED in outcome and that is the point -- the old rule happened to
     # agree with the evidence there, which is how it passed for as long as it did.
-    (OBS, "31.2.1", "negative", "current", "WAIT"),
-    (OBS, "30.0.0", "negative", "archived", "WAIT"),
-    (OBS, "31.2.1", "positive", "current", "SAFE ENOUGH"),
-    (OBS, "31.2.1", "moderate", "current", "TEST FIRST"),
+    (OBS, "31.2.1", "negative", "current", _ID),
+    (OBS, "30.0.0", "negative", "archived", _ID),
+    (OBS, "31.2.1", "positive", "current", _ID),
+    (OBS, "31.2.1", "moderate", "current", _ID),
     # The same three sentiments with the status flipped. These are the rows that FAIL if
     # `update_status` is ever wired back into the decision.
-    (OBS, "31.2.1", "negative", "archived", "WAIT"),
-    (OBS, "31.2.1", "positive", "archived", "SAFE ENOUGH"),
-    (OBS, "31.2.1", "moderate", "archived", "TEST FIRST"),
-    (WIN, "25H2", "negative", "current", "WAIT"),
+    (OBS, "31.2.1", "negative", "archived", _ID),
+    (OBS, "31.2.1", "positive", "archived", _ID),
+    (OBS, "31.2.1", "moderate", "archived", _ID),
+    (WIN, "25H2", "negative", "current", _ID),
     # The positive rows are the ones that prove these branches EXIST. On negative sentiment the
     # Windows and Premiere branches and the sentiment fallback both answer "WAIT", so deleting
     # either branch was previously caught by nothing.
-    (WIN, "25H2", "positive", "current", "WAIT"),
-    (PREM, "26.2", "negative", "current", "WAIT"),
-    (PREM, "26.2", "positive", "current", "WAIT"),
-    (PREM, "26.2", "moderate", "current", "WAIT"),
-    (ACRO, "25.001.20800", "negative", "current", "WAIT"),
-    (ACRO, "25.001.20800", "positive", "current", "SAFE ENOUGH"),
-    (ACRO, "25.001.20800", "moderate", "current", "TEST FIRST"),
+    (WIN, "25H2", "positive", "current", _ID),
+    (PREM, "26.2", "negative", "current", _ID),
+    (PREM, "26.2", "positive", "current", _ID),
+    (PREM, "26.2", "moderate", "current", _ID),
+    (ACRO, "25.001.20800", "negative", "current", _ID),
+    (ACRO, "25.001.20800", "positive", "current", _ID),
+    (ACRO, "25.001.20800", "moderate", "current", _ID),
 ]
 
 
@@ -483,10 +489,10 @@ def check_policy() -> None:
           leading_decision(beta.get("update_consensus_summary")) != "AVOID for production",
           repr(str(beta.get("update_consensus_summary"))[:110]))
     check("P3 the public beta decides one canonical action, everywhere",
-          decisions_named(beta) == {"WAIT"},
+          decisions_named(beta) == {_ID},
           repr(sorted(decisions_named(beta))))
     check("P3b and that action is canonical, not the legacy phrasing",
-          patch_decision.is_canonical("WAIT")
+          patch_decision.is_canonical(_ID)
           and "WAIT for production systems" not in decisions_named(beta),
           repr(sorted(decisions_named(beta))))
 
@@ -498,10 +504,12 @@ def check_policy() -> None:
     # rule says WAIT. So if that rule ever leaked into OBS, this fails.
     obs_beta = proposed(OBS, "31.2.1 beta", sentiment="positive")
     dav_beta = proposed(DAV, "21 Public Beta 1", sentiment="positive")
-    check("P4 a beta version of another product keeps that product's own decision",
-          decisions_named(obs_beta) == {"SAFE ENOUGH"}, repr(sorted(decisions_named(obs_beta))))
-    check("P4b and the case discriminates: the two products answer differently here",
-          decisions_named(obs_beta) != decisions_named(dav_beta),
+    # GROWTH-3: a positive OBS beta used to read SAFE ENOUGH and the DaVinci beta WAIT. Neither
+    # positive sentiment nor a beta string decides anything now, and SAFE ENOUGH is unreachable.
+    check("P4 a positive beta of another product gains no verdict (SAFE ENOUGH stays unreachable)",
+          decisions_named(obs_beta) == {_ID}, repr(sorted(decisions_named(obs_beta))))
+    check("P4b and the two products answer the same: product and beta string decide nothing",
+          decisions_named(obs_beta) == decisions_named(dav_beta) == {_ID},
           f"obs={sorted(decisions_named(obs_beta))} davinci={sorted(decisions_named(dav_beta))}")
 
     # ZERO EVIDENCE. An official-source-only record must not drift into an invitation to
@@ -547,7 +555,10 @@ def check_body_follows_decision() -> None:
     every one of them is a maintained build.
     """
     from collections import Counter as _C
-    for decision, invites in (("WAIT", False), ("TEST FIRST", True), ("SAFE ENOUGH", True)):
+    # GROWTH-3: the `decision` a caller passes no longer selects the body. The writer decides from
+    # facts and the body is the policy's line, so no caller string -- TEST FIRST or SAFE ENOUGH
+    # included -- can put an invitation to install on a record the policy gives no reason for.
+    for decision, invites in (("WAIT", False), ("TEST FIRST", False), ("SAFE ENOUGH", False)):
         for status in ("current", "archived"):
             fields = acr._record_coherence_fields(
                 "obs-studio", "32.2.2", 42,
@@ -557,13 +568,13 @@ def check_body_follows_decision() -> None:
             steps = " ".join(fields.get("practical_recommendations") or [])
             offers = "Test on a backup profile" in body
             check(f"B1 {decision}/{status}: the body offers testing == {invites}",
-                  offers is invites, repr(body[:90]))
+                  offers is invites and body.startswith("No verdict yet:"), repr(body[:90]))
             if not invites:
                 check(f"B2 {decision}/{status}: the recommendations do not open with an invitation",
                       not steps.startswith("Test with a backup"), repr(steps[:90]))
             # The authority decides whether prose may invite installation; the branch must agree.
-            check(f"B3 {decision}/{status}: the body agrees with permits_testing",
-                  offers is patch_decision.permits_testing(decision))
+            check(f"B3 {decision}/{status}: the body agrees with permits_testing of the POLICY's verdict",
+                  offers is patch_decision.permits_testing(str(fields.get("update_decision_label"))))
     # `update_status` may QUALIFY and may not DECIDE: same decision, same instruction, one extra
     # sentence for the archived build.
     from collections import Counter as _C2
@@ -574,12 +585,13 @@ def check_body_follows_decision() -> None:
                                        {"update_product": "OBS Studio", "update_status": "archived"},
                                        _C2(), decision="WAIT")
     check("B4 archived does not change the decision label",
-          cur["update_decision_label"] == arc["update_decision_label"] == "WAIT")
+          cur["update_decision_label"] == arc["update_decision_label"] == _ID)
     check("B5 archived does not change the quick verdict",
           cur["quick_verdict"] == arc["quick_verdict"])
-    check("B6 archived adds a qualification and nothing else",
-          arc["update_decision_body"].startswith(cur["update_decision_body"])
-          and "archived build" in arc["update_decision_body"],
+    # GROWTH-3: the archived notice is rendered by its own include; it no longer rides on the
+    # verdict line, which is the policy's alone.
+    check("B6 archived changes nothing in the verdict line",
+          arc["update_decision_body"] == cur["update_decision_body"],
           repr(arc["update_decision_body"][-110:]))
     check("B7 and the maintained build carries no archived sentence",
           "archived" not in cur["update_decision_body"])
@@ -615,9 +627,11 @@ def check_detail_page_failsafe() -> None:
           "install liquid 4.0.4; CI does this explicitly and must not skip these silently")
     if not liquid_ok:
         return
+    # GROWTH-3: a STORED label publishes nothing by itself any more. WAIT needs a supported reason
+    # entry, SAFE ENOUGH is unreachable, so all five records publish INSUFFICIENT DATA.
     for name, expected in (("prose", "INSUFFICIENT DATA"), ("garbage", "INSUFFICIENT DATA"),
-                           ("wait", "WAIT"), ("legacy", "WAIT for production systems"),
-                           ("safe", "SAFE ENOUGH")):
+                           ("wait", "INSUFFICIENT DATA"), ("legacy", "INSUFFICIENT DATA"),
+                           ("safe", "INSUFFICIENT DATA")):
         got = rendered_verdict(html[name])
         check(f"B10 detail page publishes {expected!r} for the {name} record",
               got == expected, repr(got))
@@ -892,22 +906,22 @@ def check_qualification() -> None:
     beta = proposed(DAV, "21 Public Beta 1")
     blob = prose_blob(beta)
     check("Q1 the beta still warns production editors off active projects",
-          "avoid it on active projects" in blob.lower(), repr(blob[:160]))
+          "keep it off active client projects" in blob.lower(), repr(blob[:160]))
     check("Q2 that warning is prose, not a second verdict",
           not embedded_decisions(blob), repr(sorted(embedded_decisions(blob))))
 
     obs = proposed(OBS, "31.2.1", sentiment="negative")
     obs_blob = prose_blob(obs)
-    check("Q3 a TEST FIRST record may still counsel caution in prose",
-          "test on a backup profile" in obs_blob.lower(), repr(obs_blob[:160]))
+    check("Q3 an OBS record may still counsel caution in prose",
+          "keep a backup of your scene collection and profile" in obs_blob.lower(), repr(obs_blob[:160]))
     check("Q4 that caution names no competing action",
           not embedded_decisions(obs_blob), repr(sorted(embedded_decisions(obs_blob))))
 
     # A qualification may soften the decision; it may not reverse it. The positive-sentiment
     # sentence offers testing, and for the four policy products a positive record can carry a WAIT.
     pos_wait = proposed(WIN, "25H2", sentiment="positive")
-    check("Q6 prose does not invite testing under a WAIT decision",
-          decisions_named(pos_wait) == {"WAIT"}
+    check("Q6 positive sentiment gains no verdict and no invitation to install",
+          decisions_named(pos_wait) == {_ID}
           and "most users can test the update" not in prose_blob(pos_wait).lower(),
           repr(prose_blob(pos_wait)[:200]))
 
@@ -993,13 +1007,20 @@ DETAIL_LAYOUT = _REPO / "auxsays" / "_layouts" / "aux-update.html"
 PAGE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=([\w.]+)\s*-?%\}")
 
 
+GATE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+patch-verdict-gate\.html\s+record=([\w.]+)\s+count=([\w.]+)\s*-?%\}")
+
+
 def detail_layout_text() -> str:
     """The patch-detail layout with its maturity rung and decision ladder inlined. GROWTH-1C moved
     both into _includes/patch-evidence-state.html and patch-decision.html, which the layout renders
-    (and the homepage too); they are the page's own code, bound here to their record= argument."""
-    return PAGE_INCLUDE_TAG.sub(
+    (and the homepage too); they are the page's own code, bound here to their record= argument.
+    GROWTH-3: patch-decision renders the verdict gate, inlined the same way (record= and count=)."""
+    text = PAGE_INCLUDE_TAG.sub(
         lambda m: (_REPO / "auxsays" / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
         .replace("include.record", m.group(2)), DETAIL_LAYOUT.read_text(encoding="utf-8"))
+    gate = (_REPO / "auxsays" / "_includes" / "patch-verdict-gate.html").read_text(encoding="utf-8")
+    return GATE_INCLUDE_TAG.sub(lambda m: gate.replace("include.record", m.group(1))
+                                .replace("include.count", m.group(2)), text)
 
 # render! rather than render, so a Liquid error RAISES instead of landing in the output where an
 # extraction that finds no verdict would read as "no contradiction".
@@ -1048,6 +1069,10 @@ def render_detail(cases: dict[str, dict], vocab: dict | None = None) -> tuple[bo
                 "evidence_method_health": {},
                 "patch_verdicts": vocab if vocab is not None else yaml.safe_load(
                     (_REPO / "auxsays" / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8")),
+                "verdict_reasons": yaml.safe_load(
+                    (_REPO / "auxsays" / "_data" / "verdict_reasons.yml").read_text(encoding="utf-8")),
+                "patch_lifecycle": yaml.safe_load(
+                    (_REPO / "auxsays" / "_data" / "patch_lifecycle.yml").read_text(encoding="utf-8")),
             }},
             "cases": cases,
         }), encoding="utf-8")
@@ -1207,12 +1232,41 @@ UNEARNED_CLAIMS = ("safe to install", "safe to update", "no problems", "no issue
                    "is safe", "pause updates", "pause windows", "supersed", "replaced by")
 PATCH_URL = "/updates/obs-project/obs-studio/99-0-0/"
 WIN_URL = "/updates/microsoft/microsoft-windows-11/25h2/26200.7840/"
+# GROWTH-3: a stored label no longer publishes a verdict, so the search fixtures carry the facts that
+# do -- reviewed reason entries for the synthetic pages, cited by the reports the pages count.
+U = [f"https://reports.test/{i}" for i in range(1, 5)]
+
+
+def _reason(rid, pid, version, verdict, rclass, scope, reason, urls, build=""):
+    entry = {"id": rid, "product_id": pid, "update_version": version, "verdict": verdict,
+             "reason_class": rclass, "scope": scope, "reason": reason,
+             "evidence": [{"id": f"{rid}-{i}", "source_url": u} for i, u in enumerate(urls)],
+             "new_in_this_version": rclass == "regression", "reviewed_at": "2026-11-10", "basis": "test"}
+    if build:
+        entry["target_build"] = build
+    if rclass == "regression":
+        entry.update(transition={"working": "98.0.0", "failing": version}, material="it stops working")
+    return entry
+
+
+SEARCH_REASONS = {"schema_version": 1, "entries": [
+    _reason("obs:99:wait", OBS, "99.0.0", "WAIT", "regression", "if you use the test setup",
+            "Users report that the test setup stops working after updating. A second sentence stays on the page.",
+            U[:2]),
+    _reason("obs:99:tf", OBS, "99.0.0", "TEST FIRST", "corroborated_issue", "if you use the test dock",
+            "Two users report that the test dock disappears.", U[2:]),
+    _reason("win:7840:wait", WIN, "25H2", "WAIT", "regression", "if you use the test driver",
+            "Users report that the test driver stops working after updating. This page covers one cumulative update.",
+            U[:2], build="26200.7840"),
+]}
+SOURCES_WAIT = [{"source_url": u} for u in U[:2]]
 
 
 def search_site(listed=(), *, projection: bool = True, pages=None) -> dict:
     data = {"evidence_method_health": {},
             "patch_verdicts": yaml.safe_load(
-                (_REPO / "auxsays" / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8"))}
+                (_REPO / "auxsays" / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8")),
+            "verdict_reasons": SEARCH_REASONS, "patch_lifecycle": {"schema_version": 1, "entries": []}}
     if projection:
         data["live_eligibility"] = {"urls": list(listed)}
     site = {"time": "2026-11-06T00:00:00Z", "title": "AUXSAYS", "lang": "en", "url": SITE_URL,
@@ -1236,7 +1290,7 @@ def search_page(**over) -> dict:
         "evidence_state": "pilot_sample", "consensus_collection_status": "pilot_initial_sample",
         "intelligence_stage": "pilot",
         "update_report_count": 12, "confirmed_patch_specific_report_count": 12,
-        "accepted_report_sources": [{"source_type": "forum_thread"}],
+        "accepted_report_sources": SOURCES_WAIT,
         "evidence_last_checked": "2026-10-20T00:00:00Z",
         "update_decision_label": "WAIT",
         "update_decision_body": "Current reports mention startup crashes. A second sentence stays on the page.",
@@ -1274,17 +1328,40 @@ def official_zero(**over) -> dict:
     return page
 
 
-def synthetic_content(box: str, *, verdicts: int = 1) -> str:
+def synthetic_content(box: str, *, verdicts: int = 1, label: str = "WAIT") -> str:
     """Patch-page markup written by hand, to reach states the real layout never produces."""
     verdict = ('<span class="update-decision-eyebrow">AUXSAYS verdict</span>\n'
-               "          <strong>WAIT</strong>\n")
+               f"          <strong>{label}</strong>\n")
     return ('<h1 class="update-title">OBS Studio 99.0.0</h1>\n'
             f'<div id="verdict" class="update-decision-box update-decision-box--{box}">\n'
             + verdict * verdicts
             + '<p class="update-decision-recommendation">Hold this build for now.</p></div>')
 
 
+def with_projection(cases: dict) -> dict:
+    """Give each case's site the verdict projection a deploy would build for its page: the gate
+    prints WAIT / TEST FIRST only from that (GROWTH-3 review 1, D2). The page's accepted sources
+    stand for its COUNTED rows, one row per cited source, so the authority -- not a template rule --
+    decides which entry the page's evidence supports."""
+    from lib import verdict_projection, verdict_reasons  # noqa: PLC0415
+    for case in cases.values():
+        page = case["page"]
+        if page.get("update_entry") is not True:
+            continue
+        urls = {str(s.get("source_url") or "") for s in page.get("accepted_report_sources") or []}
+        rows = [{"id": item["id"], "source_url": item["source_url"],
+                 "report_text_excerpt": f"Report at {item['source_url']}"}
+                for e in SEARCH_REASONS["entries"] for item in e["evidence"] if item["source_url"] in urls]
+        case["site"]["data"]["verdict_projection"] = verdict_projection.project(
+            [page], {verdict_reasons.record_identity(page): rows}, SEARCH_REASONS["entries"], [])[0]
+    return cases
+
+
 def search_cases() -> dict:
+    return with_projection(_search_cases())
+
+
+def _search_cases() -> dict:
     live = dict(live_axes(), update_report_count=40, confirmed_patch_specific_report_count=40)
     newer_b = windows_page(url="/updates/microsoft/microsoft-windows-11/25h2/26200.7999/",
                            target_build="26200.7999", target_kb="KB5199999", update_type="2026-03 B",
@@ -1293,20 +1370,25 @@ def search_cases() -> dict:
         "win_wait": {"page": windows_page(), "site": search_site()},
         "win_no_kb": {"page": windows_page(target_kb=""), "site": search_site()},
         "early": {"page": search_page(update_decision_label="TEST FIRST", update_report_count=3,
-                                      confirmed_patch_specific_report_count=3), "site": search_site()},
+                                      confirmed_patch_specific_report_count=3,
+                                      accepted_report_sources=[{"source_url": u} for u in U[2:]]),
+                  "site": search_site()},
         "official_zero": {"page": official_zero(), "site": search_site()},
         "nothing_zero": {"page": official_zero(update_source_url=""), "site": search_site()},
         "refused_label": {"page": search_page(update_decision_label="SHIP IT", update_report_count=4,
-                                              confirmed_patch_specific_report_count=4),
+                                              confirmed_patch_specific_report_count=4,
+                                              accepted_report_sources=[]),
                           "site": search_site()},
         "live_certified": {"page": search_page(**live), "site": search_site([PATCH_URL])},
         "live_uncertified": {"page": search_page(**live), "site": search_site([])},
         "live_absent": {"page": search_page(**live), "site": search_site(projection=False)},
+        # GROWTH-3: the real layout never prints a legacy phrasing now, so the read-back of one is
+        # reached with hand-written markup, as the box_* cases reach theirs.
         "legacy": {"page": search_page(update_decision_label="WAIT for production systems"),
-                   "site": search_site()},
+                   "site": search_site(), "content": synthetic_content("pilot", label="WAIT for production systems")},
         "safe": {"page": search_page(update_decision_label="SAFE ENOUGH", update_report_count=10,
                                      confirmed_patch_specific_report_count=10,
-                                     update_consensus_label="Positive",
+                                     update_consensus_label="Positive", accepted_report_sources=[],
                                      update_decision_body="Reports so far concern interface changes."),
                  "site": search_site()},
         "newer_b_exists": {"page": windows_page(update_type="2026-02 B",
@@ -1425,20 +1507,22 @@ def check_search_snippets() -> None:
 
     win = heads["win_wait"]
     check("S5 a Windows title leads with the exact KB, feature version and build",
-          win["titles"] == ["Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT, 12 user reports | AUXSAYS"],
+          win["titles"] == ["Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT if you use the test driver, "
+                            "12 user reports | AUXSAYS"],
           str(win["titles"]))
     check("S6 its description states the verdict and count, then the page's first recommendation "
           "sentence only",
           win["descriptions"] == [
-              "AUXSAYS verdict for Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT, from 12 user "
-              "reports matched to this update. Current reports mention update/install failure and "
-              "bsod / stop error."], str(win["descriptions"]))
+              "AUXSAYS verdict for Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT if you use the "
+              "test driver, from 12 user reports matched to this update. Users report that the test "
+              "driver stops working after updating."], str(win["descriptions"]))
     nokb = heads["win_no_kb"]
     check("S7 a record with no KB keeps the page's own heading and invents none",
-          nokb["titles"] == ["Windows 11 25H2 (Build 26200.7840): WAIT, 12 user reports | AUXSAYS"]
+          nokb["titles"] == ["Windows 11 25H2 (Build 26200.7840): WAIT if you use the test driver, 12 user reports | AUXSAYS"]
           and "KB" not in " ".join(nokb["titles"] + nokb["descriptions"]), str(nokb["titles"]))
     check("S8 a low-evidence verdict carries the page's own early-evidence qualifier",
-          heads["early"]["titles"] == ["OBS Studio 99.0.0: TEST FIRST on early evidence, 3 user reports | AUXSAYS"]
+          heads["early"]["titles"] == ["OBS Studio 99.0.0: TEST FIRST if you use the test dock on early evidence, "
+                                       "3 user reports | AUXSAYS"]
           and "early evidence" in (heads["early"]["descriptions"] or [""])[0], str(heads["early"]["titles"]))
     oz = heads["official_zero"]
     check("S9 an official-only page with no reports says there is no verdict, and claims none",
@@ -1457,10 +1541,10 @@ def check_search_snippets() -> None:
           and "SHIP IT" not in rl["raw_head"], str(rl["titles"]))
     check("S12 a claim the deploy projection certifies reads as live consensus",
           heads["live_certified"]["titles"]
-          == ["OBS Studio 99.0.0: WAIT, live consensus of 40 user reports | AUXSAYS"],
+          == ["OBS Studio 99.0.0: WAIT if you use the test setup, live consensus of 40 user reports | AUXSAYS"],
           str(heads["live_certified"]["titles"]))
     lv = [n for n in ("live_uncertified", "live_absent")
-          if heads[n]["titles"] != ["OBS Studio 99.0.0: WAIT, 40 user reports | AUXSAYS"]
+          if heads[n]["titles"] != ["OBS Studio 99.0.0: WAIT if you use the test setup, 40 user reports | AUXSAYS"]
           or "live" in " ".join(heads[n]["titles"] + heads[n]["descriptions"]).lower()]
     check("S13 the same stored claim, uncertified or with no projection, carries no live wording",
           not lv, str([(n, heads[n]["titles"]) for n in lv]))
@@ -1477,18 +1561,21 @@ def check_search_snippets() -> None:
           and page_action(out["legacy"]["content"]) == "WAIT", str(heads["legacy"]["titles"]))
     unearned = [(n, c) for n in patch_cases for c in UNEARNED_CLAIMS
                 if c in " ".join(heads[n]["titles"] + heads[n]["descriptions"]).lower()]
-    check("S17 no title or description adds a safety, pause or supersession claim (SAFE ENOUGH included)",
+    check("S17 no title or description adds a safety, pause or supersession claim (a stored SAFE ENOUGH publishes none)",
           not unearned and heads["safe"]["titles"]
-          == ["OBS Studio 99.0.0: SAFE ENOUGH, 10 user reports | AUXSAYS"],
+          == ["OBS Studio 99.0.0: no verdict yet, 10 user reports so far | AUXSAYS"],
           f"{unearned[:4]} {heads['safe']['titles']}")
     nb = heads["newer_b_exists"]
+    # GROWTH-3: this record is itself a monthly ("B") release, so it reads SECURITY UPDATE -- from
+    # Microsoft's classification, not from the later record -- and still names no newer update.
     check("S18 a later Patch Tuesday record is never read as supersession",
-          nb["titles"] == win["titles"] and "KB5199999" not in nb["raw_head"], str(nb["titles"]))
+          nb["titles"] == ["Windows 11 KB5127648 (25H2, Build 26200.7840): SECURITY UPDATE | AUXSAYS"]
+          and "KB5199999" not in nb["raw_head"], str(nb["titles"]))
     esc = heads["escaping"]
     check("S19 identity text is escaped once and the JSON-LD parses",
           '<title>Copilot &quot;agent&quot; &amp; tools 1.0: WAIT' in esc["raw_head"]
           and "&amp;amp;" not in esc["raw_head"] and bool(esc["jsonld"])
-          and esc["titles"] == ['Copilot "agent" & tools 1.0: WAIT, 12 user reports | AUXSAYS'],
+          and esc["titles"] == ['Copilot "agent" & tools 1.0: WAIT if you use the test setup, 12 user reports | AUXSAYS'],
           esc["raw_head"][:400])
     incoherent = [n for n in patch_cases
                   if not heads[n]["jsonld"]
@@ -1576,7 +1663,7 @@ def check_regeneration(tmp: Path) -> None:
 
     after_beta = front_matter(paths["beta"])
     check("R2 regeneration repaired the stale contradictory summary with no hand edit",
-          decisions_named(after_beta) == {"WAIT"},
+          decisions_named(after_beta) == {_ID},
           repr(sorted(decisions_named(after_beta))))
     check("R2b and it wrote the CANONICAL label, not the legacy phrasing",
           patch_decision.is_canonical(str(after_beta.get("update_decision_label") or "")),
@@ -1591,20 +1678,23 @@ def check_regeneration(tmp: Path) -> None:
     # that regeneration collapses the two decision-shaped fields onto one action with no hand edit
     # -- is unchanged; only the action it lands on moved, and it moved because the policy did.
     check("R4 the OBS half of the class is repaired by the same path",
-          decisions_named(after_obs) == {"WAIT"}, repr(sorted(decisions_named(after_obs))))
+          decisions_named(after_obs) == {_ID}, repr(sorted(decisions_named(after_obs))))
 
     after_stable = front_matter(paths["stable"])
-    check("R5 the stable sibling still decides WAIT",
-          decisions_named(after_stable) == {"WAIT"}, repr(sorted(decisions_named(after_stable))))
-    check("R6 the stable sibling's decision text did not move",
-          leading_decision(after_stable.get("quick_verdict")) == "WAIT"
-          and leading_decision(after_stable.get("update_consensus_summary")) == "WAIT")
+    # GROWTH-3: the stable sibling's stored WAIT had no reviewed reason behind it, so regeneration
+    # moves it to the policy's answer -- and to that answer only, in every field.
+    check("R5 the stable sibling decides what the policy decides (no reviewed reason: INSUFFICIENT DATA)",
+          decisions_named(after_stable) == {_ID}, repr(sorted(decisions_named(after_stable))))
+    check("R6 the stable sibling's quick verdict and summary carry that same action",
+          leading_decision(after_stable.get("quick_verdict")) == _ID
+          and leading_decision(after_stable.get("update_consensus_summary")) == _ID)
     # Compare AFTER against BEFORE. The old version of this check asserted that the fixture's own
     # literal was in the fixture and that one particular word was absent, so a promotion that
     # churned the stable sibling from WAIT to TEST FIRST passed it.
-    check("R7 a record that was already coherent is not churned into a new decision",
-          decisions_named(after_stable) == stable_before,
-          f"{sorted(stable_before)} -> {sorted(decisions_named(after_stable))}")
+    check("R7 the regenerated body is the policy's line, not the old product prose",
+          str(after_stable.get("update_decision_body") or "").startswith("No verdict yet: 12 user reports")
+          and stable_before == {"WAIT"},
+          f"{sorted(stable_before)} -> {after_stable.get('update_decision_body')!r}")
 
     snapshot = {k: p.read_bytes() for k, p in paths.items()}
     promote(tree, evidence, DAV)
@@ -1725,13 +1815,14 @@ def check_mutations(tmp: Path) -> None:
               lambda pid, ver, label, total, **k: (
                   "AVOID for production" if pid == DAV and bce.version_is_beta(ver) else "WAIT"))),
         # X4 -- "coherence" achieved by deleting the nuance instead of subordinating it.
-        ("X4 the beta's avoid-on-active-projects nuance is deleted",
+        ("X4 the beta's keep-off-active-projects qualification is lost",
          check_qualification,
-         swap(acr, "_affected_workflow_sentence", lambda *a, **k: "")),
-        # X5 -- prose may invite testing again regardless of the decision.
-        ("X5 supporting prose offers testing under a WAIT decision",
-         check_qualification,
-         swap(patch_decision, "permits_testing", lambda decision: True)),
+         swap(acr, "_davinci_version_is_beta", lambda version: False)),
+        # X5 -- prose invites testing again with no policy reason behind it.
+        ("X5 supporting prose offers testing without a policy reason",
+         check_body_follows_decision,
+         swap(patch_decision, "public_body",
+              lambda *a, **k: "Test on a backup profile before using this OBS build.")),
         # X6 -- regeneration stops refreshing the summary, so stale contradictory prose survives.
         ("X6 stale contradictory prose survives regeneration",
          lambda: check_regeneration(tmp / f"x-{next(regen_runs)}"),

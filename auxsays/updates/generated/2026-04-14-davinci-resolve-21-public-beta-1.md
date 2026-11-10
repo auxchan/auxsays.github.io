@@ -19,10 +19,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'WAIT: DaVinci Resolve 21 Public Beta 1 has 15 user reports found. User reports show a repeat pattern.
-  Current reports mention startup or application crashes, Magic Mask crashes, and performance slowdowns. Production editors
-  should avoid it on active projects; test only in disposable or non-critical projects. Current reports are Reddit-heavy,
-  so production users should test before updating.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21 Public Beta 1. 15 user reports are matched to this
+  exact update, but no problem in them is confirmed as reported independently by two or more users. If one matches
+  your setup, test before relying on this update.'
 update_report_count: 15
 update_consensus_confidence: Low-Medium
 status_change_type: new
@@ -36,10 +35,11 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
-quick_verdict: 'WAIT: DaVinci Resolve 21 Public Beta 1 is a beta build with 15 user reports found.'
-update_decision_label: WAIT
-update_decision_body: Use this beta only for non-critical testing. Active client projects should stay on a known-good stable
-  build unless a Resolve 21 beta feature is worth the risk.
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21 Public Beta 1 is a beta build with 15 user reports found.'
+update_decision_label: INSUFFICIENT DATA
+update_decision_body: 'No verdict yet: 15 user reports are matched to this exact update, but no problem in them
+  is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
+  this update.'
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21 Public Beta 1. Stable/Studio reports are excluded and tracked on the separate
   stable page.
@@ -145,9 +145,8 @@ release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and s
   set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
   on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
 practical_recommendations:
-- Wait for production systems unless you have a specific Resolve 21 beta feature to test.
-- Test beta projects separately from active client work and keep a known-good Resolve version available.
-- Review the user report sample before using this build on deadline-sensitive work.
+- 'This is a beta build: keep it off active client projects and test it in disposable projects.'
+- Keep a known-good stable Resolve version available.
 consensus_match_policy: confirmed_patch_specific_reports_v1
 consensus_match_policy_label: Confirmed patch-specific reports only
 consensus_report_count_label: user reports found

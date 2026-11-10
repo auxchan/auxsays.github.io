@@ -67,6 +67,11 @@ permalink: /updates/my-stack/
       {%- assign is_official_only = false -%}
       {%- if chosen.evidence_state == 'official_only' or chosen.evidence_state_label == 'Official source only' -%}{%- assign is_official_only = true -%}{%- endif -%}
       {%- if is_official_only and report_count_num == 0 -%}{%- assign decision_label = 'INSUFFICIENT DATA' -%}{%- endif -%}
+      {%- comment -%} GROWTH-3: the published verdict is the gate's, as on the patch page and in every table. {%- endcomment -%}
+      {%- include patch-verdict-gate.html record=chosen count=report_count_num -%}
+      {%- assign decision_label = gate_label -%}
+      {%- comment -%} Its scope travels with it, and the card prints both (review 1, D1). {%- endcomment -%}
+      {%- assign decision_scope = gate_scope -%}
       {%- assign vkey = decision_label | upcase -%}
       {%- assign verdict_rank = 99 -%}
       {%- if vkey contains 'AVOID' -%}{%- assign verdict_rank = 0 -%}
@@ -87,6 +92,7 @@ permalink: /updates/my-stack/
       ,"plat": {{ chosen.official_notes_platform | default: '' | jsonify }}
       ,"date": {{ chosen.update_published_at | date: "%b %d, %Y" | jsonify }}
       ,"verdict": {{ decision_label | jsonify }}
+      ,"scope": {{ decision_scope | jsonify }}
       ,"rank": {{ verdict_rank }}
       ,"ev": {{ ev_label | jsonify }}
       ,"n": {{ report_count_num }}
@@ -109,12 +115,13 @@ permalink: /updates/my-stack/
       label, so the version string is it -- the same textual signal lib/patch_decision.version_is_beta
       uses. It exists so a stable reader is never told a newer BETA is an update.
 
-      Tuple shape, fixed at 12 and pinned exactly by the suite:
+      Tuple shape, fixed at 13 and pinned exactly by the suite:
         [0] version  [1] build  [2] date  [3] url  [4] beta
         [5] verdict  [6] rank   [7] reports  [8] evidence label
         [9] official active issue count      [10] official notes captured (0/1)
         [11] whose release notes the record holds (see below)
-      0-4 drive the version picker; 5-10 exist so an upgrade path can show what AUXSAYS already
+        [12] the verdict's scope, printed with [5] (see below)
+      0-4 drive the version picker; 5-10 and 12 exist so an upgrade path can show what AUXSAYS already
       says about each release it lists, WITHOUT a second verdict computation on the client.
     {%- endcomment -%}
     {%- assign p_count = 0 -%}
@@ -167,6 +174,10 @@ permalink: /updates/my-stack/
             {%- assign rec_official_only = false -%}
             {%- if rec.evidence_state == 'official_only' or rec.evidence_state_label == 'Official source only' -%}{%- assign rec_official_only = true -%}{%- endif -%}
             {%- if rec_official_only and rec_n == 0 -%}{%- assign rec_verdict = 'INSUFFICIENT DATA' -%}{%- endif -%}
+            {%- comment -%} GROWTH-3: every release's verdict is the gate's, exactly as on its own patch page. {%- endcomment -%}
+            {%- include patch-verdict-gate.html record=rec count=rec_n -%}
+            {%- assign rec_verdict = gate_label -%}
+            {%- assign rec_scope = gate_scope -%}
             {%- assign rec_vkey = rec_verdict | upcase -%}
             {%- assign rec_rank = 99 -%}
             {%- if rec_vkey contains 'AVOID' -%}{%- assign rec_rank = 0 -%}
@@ -207,8 +218,10 @@ permalink: /updates/my-stack/
             {%- endif -%}
             {%- comment -%} rec[11]: whose release notes the record holds ('windows' / 'macos'),
               or '' for platform-neutral notes. The update comparison uses it so a release
-              documented for another platform is never offered as an update. {%- endcomment -%}
-            [{{ rec.update_version | default: '' | jsonify }},{{ rec.target_build | default: '' | jsonify }},{{ rec.update_published_at | date: "%Y-%m-%d" | jsonify }},{{ rec.url | jsonify }},{{ rec_is_beta }},{{ rec_verdict | jsonify }},{{ rec_rank }},{{ rec_n }},{{ rec_ev | jsonify }},{{ rec.official_active_issue_count | default: 0 | plus: 0 }},{{ rec_notes }},{{ rec.official_notes_platform | default: '' | jsonify }}]
+              documented for another platform is never offered as an update.
+              rec[12]: the verdict's scope ('if you use macOS 27.2'), or '' -- printed beside
+              rec[5] in every upgrade-path step (review 1, D1). {%- endcomment -%}
+            [{{ rec.update_version | default: '' | jsonify }},{{ rec.target_build | default: '' | jsonify }},{{ rec.update_published_at | date: "%Y-%m-%d" | jsonify }},{{ rec.url | jsonify }},{{ rec_is_beta }},{{ rec_verdict | jsonify }},{{ rec_rank }},{{ rec_n }},{{ rec_ev | jsonify }},{{ rec.official_active_issue_count | default: 0 | plus: 0 }},{{ rec_notes }},{{ rec.official_notes_platform | default: '' | jsonify }},{{ rec_scope | jsonify }}]
           {%- endif -%}
         {%- endif -%}
       {%- endfor -%}

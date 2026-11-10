@@ -31,6 +31,13 @@
 {% assign is_official_only = false %}
 {% if item.evidence_state == 'official_only' or item.evidence_state_label == 'Official source only' %}{% assign is_official_only = true %}{% endif %}
 {% if is_official_only and report_count_num == 0 %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endif %}
+{%- comment -%} GROWTH-3: the published verdict is the gate's, decided from the record's facts and the two
+  reviewed fact files exactly as on the patch page; the stored label above no longer decides it. {%- endcomment -%}
+{%- include patch-verdict-gate.html record=item count=report_count_num -%}
+{% assign decision_label = gate_label %}
+{%- comment -%} The scope prints WITH the label (review 1, D1): a row that said only "WAIT" for a WAIT
+  that applies to macOS 27.2 told every reader to wait. {%- endcomment -%}
+{% assign row_verdict_scope = gate_scope %}
 {%- comment -%} Verdict risk order (leading category); unknown -> 99 so it sorts last but stays visible. {%- endcomment -%}
 {%- comment -%}
   Vocabulary and risk order come from _data/patch_verdicts.yml, which mirrors
@@ -56,7 +63,7 @@
   -- but the split itself admits any pre-colon text, and the next record that is not official-only
   would publish it.
 {%- endcomment -%}
-{% if verdict_rank == verdict_vocab.unknown_rank %}{% assign decision_label = 'INSUFFICIENT DATA' %}
+{% if verdict_rank == verdict_vocab.unknown_rank %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% assign row_verdict_scope = '' %}
 {% for known in verdict_vocab.risk_order %}
 {% if known == decision_label %}{% assign verdict_rank = forloop.index0 %}{% break %}{% endif %}
 {% endfor %}
@@ -87,7 +94,7 @@
 <td data-label="Date"><time datetime="{{ item.update_published_at }}">{{ item.update_published_at | date: "%b %-d, %Y" }}</time></td>
 {% if include.show_product %}{% capture product_page_url %}/updates/{{ item.company_id }}/{{ item.product_id }}/{% endcapture %}<td data-label="Product" class="patch-cell-product"><a href="{{ product_page_url | relative_url }}">{{ product_name }}</a></td>{% endif %}
 <td data-label="Version" class="patch-cell-version">{{ item.update_version }}{% if row_build != '' %} <span class="patch-cell-version__build">Build {{ row_build }}</span>{% endif %}</td>
-<td data-label="Verdict"><span class="patch-verdict patch-verdict--rank{{ verdict_rank }}">{{ decision_label }}</span></td>
+<td data-label="Verdict"><span class="patch-verdict patch-verdict--rank{{ verdict_rank }}">{{ decision_label }}</span>{% if row_verdict_scope != '' %} <span class="patch-verdict-scope">{{ row_verdict_scope }}</span>{% endif %}</td>
 <td data-label="Monitoring" class="patch-cell-monitoring">{% include monitoring-status.html mode='cell' product_id=item.product_id version=item.update_version target_build=item.target_build published_at=item.update_published_at report_count=item.update_report_count %}</td>
 {%- comment -%}
   A row that says only "0" hides the fact that real update-linked reports exist for this patch.
