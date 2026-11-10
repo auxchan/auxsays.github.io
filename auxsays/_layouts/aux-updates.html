@@ -462,9 +462,12 @@ layout: aux-base
   {%- comment -%}
     Plain anchors, server-rendered on every page: this list is how a crawler (or a reader without
     script) reaches every page of the feed, and how the feed controls find the pages to search.
+    data-feed-build is this build's stamp, the same on every page of one build. The controls use the
+    other pages only when their stamp matches this one's: pages are cut by position, so two builds'
+    pages disagree on where each page starts.
   {%- endcomment -%}
   {% if feed_pages > 1 %}
-  <nav class="panel patch-pagination" id="patch-pagination" aria-label="Patch Feed pages" data-feed-pages data-feed-total="{{ feed_total }}">
+  <nav class="panel patch-pagination" id="patch-pagination" aria-label="Patch Feed pages" data-feed-pages data-feed-total="{{ feed_total }}" data-feed-build="{{ site.time | date: '%Y-%m-%dT%H:%M:%S.%N%z' }}">
     <p class="patch-pagination-summary">Page {{ feed_page }} of {{ feed_pages }}: patches {{ feed_start | plus: 1 }}–{{ feed_end }} of {{ feed_total }}, newest first, then the archive.</p>
     <ol class="patch-chips patch-pagination-list">
       {%- for feed_n in (1..feed_pages) -%}

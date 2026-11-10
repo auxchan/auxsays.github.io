@@ -704,8 +704,10 @@ def section_pv() -> None:
     # script makes exactly one kind of request: a GET of this site's public feed pages, built only from
     # the pager's same-origin links (origin + path, no query), without cookies. It carries nothing of
     # the visitor's, so "kept only in your browser" still holds. Any other request is a send.
+    # The one call site takes its URL by index from that list; `cache` only picks the browser-cache
+    # mode ('no-cache' for one retry of a page from another build), it carries nothing.
     sends = [w for w in ("XMLHttpRequest", "sendBeacon", "gtag(", "dataLayer") if w in js]
-    loader_call = "otherPageUrls.map((url) => fetch(url, { credentials: 'omit' })"
+    loader_call = "fetch(otherPageUrls[at], { credentials: 'omit', cache })"
     urls_stmt = js.split("const otherPageUrls = ", 1)[1].split(";", 1)[0] if "const otherPageUrls = " in js else ""
     feed_fetch_only = (js.count("fetch(") == 1 and loader_call in js
                        and "a[data-feed-page-link]" in urls_stmt

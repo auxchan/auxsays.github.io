@@ -19,11 +19,16 @@ refuses a deploy whose feed is over budget or whose patch pages a crawler cannot
   [G] the SHIPPED generator, run under stub Jekyll classes: it makes exactly the pages the layout
       expects, from the same predicate, with self permalinks and distinct titles, and refuses a
       missing or non-positive page size.
+  [J] the SHIPPED catalogue functions of assets/js/auxsays.js, run under node: from every page the
+      catalogue is held in the build's one order (so a stable sort breaks ties the same way from
+      page 8 as from page 1), each patch is held once with this page's own card winning, and a page
+      from another build is fetched once more past the cache and otherwise refused.
   [W] the wiring: the deploy runs the gate between the build and the upload; the generator runs
-      before jekyll-sitemap; the pager is anchors; the loader adopts only the feed's own cards.
+      before jekyll-sitemap; the pager is anchors and carries the build stamp; the loader adopts only
+      the feed's own cards, in feed order, and stays on this page when the builds differ.
 
-Needs ruby + the liquid gem for [L] and [G] (the CI job installs it); without them those checks do
-not run and the governed count fails the build. Offline; writes only inside a temp dir.
+Needs ruby + the liquid gem for [L] and [G] (the CI job installs it) and node for [J]; without them
+those checks do not run and the governed count fails the build. Offline; writes only inside a temp dir.
 
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_feed_discovery.py
 """
@@ -81,18 +86,20 @@ def card(url: str, kind: str = "current") -> str:
             f'<h2><a href="{url}">x</a></h2></article>')
 
 
-def pager(n: int, current: int) -> str:
+def pager(n: int, current: int, build: str | None = "b1") -> str:
     items = []
     for i in range(1, n + 1):
         href = "/updates/" if i == 1 else f"/updates/page/{i}/"
         cur = ' aria-current="page"' if i == current else ""
         items.append(f'<li><a class="patch-chip" href="{href}" data-feed-page-link="{i}"{cur}>{i}</a></li>')
-    return f'<nav data-feed-pages data-feed-total="0"><ol>{"".join(items)}</ol></nav>'
+    stamp = "" if build is None else f' data-feed-build="{build}"'
+    return f'<nav data-feed-pages data-feed-total="0"{stamp}><ol>{"".join(items)}</ol></nav>'
 
 
 def build_site(root: Path, *, patches: list[str], feed: list[list[str]], hubs: dict | None = None,
                home_links: list[str] | None = None, pager_html=None, extra: dict | None = None,
-               hidden: list[str] | None = None, pad: dict | None = None) -> Path:
+               hidden: list[str] | None = None, pad: dict | None = None,
+               fronts: dict[str, str] | None = None) -> Path:
     """A minimal built site: / , /updates/ (+ /updates/page/N/), hub pages and patch pages."""
     site = root / "_site"
     src = root / "src"
@@ -126,6 +133,10 @@ def build_site(root: Path, *, patches: list[str], feed: list[list[str]], hubs: d
     for i, u in enumerate(hidden or []):
         (src / "updates" / "generated" / f"h{i}.md").write_text(
             f"---\nlayout: aux-update\npermalink: {u}\nupdate_entry: true\nfeed_hidden: true\n---\n", encoding="utf-8")
+    # A record whose feed_hidden is written some other way (false, a quoted "true"): the YAML literal.
+    for i, (u, literal) in enumerate((fronts or {}).items()):
+        (src / "updates" / "generated" / f"f{i}.md").write_text(
+            f"---\nlayout: aux-update\npermalink: {u}\nupdate_entry: true\nfeed_hidden: {literal}\n---\n", encoding="utf-8")
     return site
 
 
@@ -199,6 +210,17 @@ def check_gate(tmp: Path) -> None:
     check("V11 a feed_hidden record is not required on the feed (and still reached through its tracker)",
           rc == 0 and "feed-hidden 1;" in out, out[-300:])
 
+    # Only `feed_hidden: true` exempts a record. The layout lists `false` and the quoted string "true"
+    # (its where_exp is `!= true`), and so does the generator, so either one left unlinked is lost.
+    off, quoted = "/updates/v/p/off/", "/updates/v/p/quoted/"
+    rc, out = run_gate(build_site(tmp / "v11b", patches=P + [off, quoted], feed=[P[:3], P[3:6], P[6:]],
+                                  hubs={"/updates/v/p/": P + [off, quoted]},
+                                  fronts={off: "false", quoted: '"true"'}))
+    check('V11b a record with feed_hidden: false, or the string "true", that no feed page links fails COVERAGE',
+          rc == 1 and f"COVERAGE {off} is listed by the feed but no feed page links it" in out
+          and f"COVERAGE {quoted} is listed by the feed but no feed page links it" in out
+          and "feed-hidden 0;" in out, out[-400:])
+
     rc, out = run_gate(build_site(tmp / "v12", patches=P + [hid], feed=[P[:3], P[3:6], P[6:]], hidden=[hid],
                                   hubs={"/updates/v/p/": P}))
     check("V12 a patch page no crawlable link reaches fails REACH, even when the feed may omit it",
@@ -230,6 +252,15 @@ def check_gate(tmp: Path) -> None:
     one = build_site(tmp / "v17", patches=P, feed=[P])
     rc, out = run_gate(one)
     check("V17 a single-page feed (no pager) under budget is clean", rc == 0 and "feed pages 1;" in out, out[-200:])
+
+    rc, out = run_gate(build_site(tmp / "v18", **base, pager_html=lambda n, cur: pager(n, cur, None if cur == 2 else "b1")))
+    check("V18 a feed page whose pager carries no build stamp fails STAMP (the controls would search it alone)",
+          rc == 1 and "STAMP /updates/page/2/ has no build stamp on its pager" in out
+          and "STAMP /updates/ " not in out and "STAMP /updates/page/3/" not in out, out[-300:])
+    rc, out = run_gate(build_site(tmp / "v19", **base, pager_html=lambda n, cur: pager(n, cur, "b0" if cur == 3 else "b1")))
+    check("V19 feed pages stamped by two builds fail STAMP",
+          rc == 1 and "STAMP /updates/page/3/ is stamped 'b0' but /updates/ 'b1'" in out
+          and "STAMP /updates/page/2/" not in out, out[-300:])
 
 
 # ---------------------------------------------------------------- [L] the shipped paging block, in Liquid
@@ -492,6 +523,140 @@ def check_generator() -> None:
           out["priority"])
 
 
+# ---------------------------------------------------------------- [J] the shipped catalogue functions, under node
+
+# Cards are stubs that answer the one query the shipped code asks of them (the headline link);
+# `adopt` marks a copy, so "this page's own card wins" is checked on identity, not on the link.
+_CATALOG_PROBE = r"""
+const C = JSON.parse(require('fs').readFileSync(process.argv[2], 'utf8'));
+const mk = (spec) => ({ ...spec, querySelector: (sel) => (sel === 'a.patch-identity' && spec.href != null
+  ? { getAttribute: (name) => (name === 'href' ? spec.href : null) } : null) });
+const adopt = (card) => ({ ...card, adopted: true });
+const ids = (cards) => cards.map((c) => c.id + (c.adopted ? '' : '*'));
+const assembleFrom = (pages, k) => {
+  const built = pages.map((pg) => pg.map(mk));
+  return assembleFeedCatalog(built[k], built.filter((_, i) => i !== k), k, adopt);
+};
+const out = {};
+// The shipped company sort's comparator: stable, equal companies keep the held order.
+const byCompany = (a, b) => (a.company || '').localeCompare(b.company || '');
+out.order = C.order.map((_, k) => {
+  const cat = assembleFrom(C.order, k);
+  return { cards: cat.cards.map((c) => c.id), ahead: cat.ahead.map((c) => c.id), behind: cat.behind.map((c) => c.id),
+           sorted: cat.cards.slice().sort(byCompany).map((c) => c.id) };
+});
+out.dupes = ids(assembleFrom(C.dupes.pages, C.dupes.own).cards);
+out.stamps = C.stamps.map(([own, builds]) => feedPagesFromOtherBuilds(own, builds));
+const runLoader = async (spec) => {
+  const calls = [];
+  const fetchPage = (at, cache) => {
+    calls.push([at, cache]);
+    const n = calls.filter(([a]) => a === at).length;
+    const build = spec.builds[at][Math.min(n - 1, spec.builds[at].length - 1)];
+    if (build === 'ERR') return Promise.reject(new Error('HTTP 503'));
+    return Promise.resolve({ build, cards: [`p${at}#${n}`] });
+  };
+  try {
+    const pages = await loadFeedPages(spec.builds.length, spec.own, fetchPage);
+    return { calls, result: pages && pages.map((p) => p.cards[0]) };
+  } catch (e) {
+    return { calls, error: e.message };
+  }
+};
+(async () => {
+  out.loader = {};
+  for (const [name, spec] of Object.entries(C.loader)) out.loader[name] = await runLoader(spec);
+  console.log(JSON.stringify(out));
+})();
+"""
+
+
+def catalog_block(js: str) -> str:
+    """The shipped catalogue functions, exactly as auxsays.js defines them."""
+    start = js.index("const feedCardHref = ")
+    end = js.index("// Patch Feed controls:")
+    return js[start:end]
+
+
+def run_catalog(cases: dict) -> dict | None:
+    node = shutil.which("node")
+    if not node:
+        return None
+    with tempfile.TemporaryDirectory() as td:
+        script, payload = Path(td) / "c.js", Path(td) / "p.json"
+        script.write_text(catalog_block(JS.read_text(encoding="utf-8")) + _CATALOG_PROBE, encoding="utf-8")
+        payload.write_text(json.dumps(cases), encoding="utf-8")
+        proc = subprocess.run([node, str(script), str(payload)], capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=120)
+        if proc.returncode != 0 or not proc.stdout.strip():
+            return {"__error__": (proc.stderr or "")[-400:]}
+        return json.loads(proc.stdout.strip().splitlines()[-1])
+
+
+def check_catalog() -> None:
+    print("\n[J] the shipped catalogue functions, under node")
+    # Four pages of the one build order. Companies tie ACROSS pages (adobe on 1, 2 and 4; obs on 1 and 3),
+    # which is what a stable sort from a later page used to break the other way.
+    co = ["adobe", "obs", "msft", "adobe", "msft", "msft", "obs", "adobe", "adobe", "msft", "obs", "adobe"]
+    order = [[{"id": f"r{i}", "href": f"/u/r{i}/", "company": co[i]} for i in range(p * 3, p * 3 + 3)] for p in range(4)]
+    build_order = [c["id"] for pg in order for c in pg]
+    card = lambda i, h: {"id": i, "href": h}  # noqa: E731
+    dupes = {"own": 1, "pages": [
+        [card("A", "/u/a/"), card("X@1", "/u/x/"), card("B", "/u/b/")],
+        [card("X@2", "/u/x/"), card("C", "/u/c/")],
+        [card("Y@3", "/u/y/"), card("X@3", "/u/x/"), card("D", "/u/d/")],
+        [card("Y@4", "/u/y/"), {"id": "N", "href": None}, card("E", "/u/e/")],
+    ]}
+    stamps = [["b2", ["b2", "b1", "", "b2"]], ["", ["", "b2"]], ["b2", ["b2", "b2"]]]
+    loader = {
+        "same": {"own": "b2", "builds": [["b2"], ["b2"], ["b2"]]},
+        "stale-then-fresh": {"own": "b2", "builds": [["b2"], ["b1", "b2"], ["b2"]]},
+        "stale-twice": {"own": "b2", "builds": [["b2"], ["b1", "b1"], ["b2"]]},
+        "unstamped-page": {"own": "b2", "builds": [[""], ["b2"]]},
+        "unstamped-self": {"own": "", "builds": [["b2"], ["b2"]]},
+        "network": {"own": "b2", "builds": [["b2"], ["ERR"]]},
+    }
+    try:
+        out = run_catalog({"order": order, "dupes": dupes, "stamps": stamps, "loader": loader})
+    except ValueError as exc:
+        out = {"__error__": f"catalogue block not found: {exc}"}
+    check("J0 node runs the shipped catalogue block (feedCardHref .. loadFeedPages)",
+          out is not None and "__error__" not in out, str(out)[:300] if out else "node not on PATH")
+    if out is None or "__error__" in out:
+        return
+    o = out["order"]
+    check("J1 from each of the four pages the catalogue is held in the build's order: the earlier pages' cards "
+          "ahead of this page's own, the later pages' after them",
+          all(r["cards"] == build_order for r in o)
+          and all(r["ahead"] == build_order[:3 * k] and r["behind"] == build_order[3 * k + 3:] for k, r in enumerate(o)),
+          json.dumps([r["cards"] for r in o])[:300])
+    check("J1b so a stable sort with ties across pages (Company) gives the same order from pages 2, 3 and 4 as from page 1",
+          len({tuple(r["sorted"]) for r in o}) == 1 and o[0]["sorted"][:5] == ["r0", "r3", "r7", "r8", "r11"],
+          json.dumps([r["sorted"][:6] for r in o]))
+    check("J2 each patch is held once, by its link: this page's own card wins, then the first in feed order; "
+          "a card with no link is kept",
+          out["dupes"] == ["A", "B", "X@2*", "C*", "Y@3", "D", "N", "E"], json.dumps(out["dupes"]))
+    check("J3 a fetched page counts as another build when its stamp differs from this page's, or either has none",
+          out["stamps"] == [[1, 2], [0, 1], []], json.dumps(out["stamps"]))
+    L = out["loader"]
+    check("J4 pages of this page's build are each fetched once, through the browser cache, and used",
+          L["same"].get("result") == ["p0#1", "p1#1", "p2#1"]
+          and L["same"]["calls"] == [[0, "default"], [1, "default"], [2, "default"]], json.dumps(L["same"]))
+    check("J5 a page from another build is fetched once more, past the cache (no-cache), and only that page; "
+          "its fresh copy is used",
+          L["stale-then-fresh"].get("result") == ["p0#1", "p1#2", "p2#1"]
+          and L["stale-then-fresh"]["calls"][3:] == [[1, "no-cache"]], json.dumps(L["stale-then-fresh"]))
+    check("J6 a page that still differs after that one retry, or a missing stamp on either side, leaves the controls "
+          "on this page (null), never retried again",
+          L["stale-twice"].get("result", "x") is None and L["stale-twice"]["calls"][3:] == [[1, "no-cache"]]
+          and L["unstamped-page"].get("result", "x") is None and L["unstamped-page"]["calls"][2:] == [[0, "no-cache"]]
+          and L["unstamped-self"].get("result", "x") is None
+          and L["unstamped-self"]["calls"][2:] == [[0, "no-cache"], [1, "no-cache"]],
+          json.dumps({k: L[k] for k in ("stale-twice", "unstamped-page", "unstamped-self")})[:400])
+    check("J7 a page that fails to load rejects the load (the controls say the other pages could not be loaded)",
+          L["network"].get("error") == "HTTP 503", json.dumps(L["network"]))
+
+
 # ---------------------------------------------------------------- [W] wiring, scoped to the statement
 
 def check_wiring() -> None:
@@ -529,6 +694,26 @@ def check_wiring() -> None:
     check("W8 every control counts as engaged: search, category, type, company, software, My Watchlist and sort",
           all(t in default for t in ("!query", "currentFilter === 'all'", "currentLane === 'all'", "currentCompany === 'all'",
                                       "currentSoftware === 'all'", "!watchlistOnly", "currentSort === 'latest'")), default)
+    stamp_attr = "data-feed-build=\"{{ site.time | date: '%Y-%m-%dT%H:%M:%S.%N%z' }}\""
+    own_build = js.split("const ownBuild = ", 1)[1].split(";", 1)[0] if "const ownBuild = " in js else ""
+    fetched = js.split("const fetchFeedPage = ", 1)[1].split("\n    });", 1)[0] if "const fetchFeedPage = " in js else ""
+    check("W9 the pager carries this build's stamp, and the loader compares this page's with each fetched page's",
+          stamp_attr in nav and own_build == "feedPager?.dataset.feedBuild || ''"
+          and "build: doc.querySelector('[data-feed-pages]')?.dataset.feedBuild || ''," in fetched,
+          f"{stamp_attr in nav} {own_build!r} {fetched[-200:]!r}")
+    load = js.split("const loadCatalog = () => {", 1)[1].split("\n    };", 1)[0] if "const loadCatalog = () => {" in js else ""
+    before = js.split("const pagesBefore = ", 1)[1].split(";", 1)[0] if "const pagesBefore = " in js else ""
+    check("W10 the loader holds the catalogue it assembled in feed order (DOM too), and stays on this page's cards "
+          "when the builds differ",
+          "loadFeedPages(otherPageUrls.length, ownBuild, fetchFeedPage).then((pages) => {" in load
+          and "if (!pages) {\n          catalogState = 'mixed';" in load
+          and "const catalog = assembleFeedCatalog(allCards, pages.map((page) => page.cards), pagesBefore, adoptFeedCard);" in load
+          and "home.insertBefore(lead, home.firstChild);" in load and "allCards = catalog.cards;" in load
+          and "allCards.concat(" not in js
+          and ".filter((link) => link.origin === window.location.origin)" in before
+          and ".findIndex((link) => link.getAttribute('aria-current') === 'page')" in before
+          and "const pageOnly = catalogState === 'failed' || catalogState === 'mixed';" in js
+          and "else if (catalogWide && catalogState === 'mixed') message = " in js, load[:300])
 
 
 def run() -> int:
@@ -537,6 +722,7 @@ def run() -> int:
         check_gate(tmp)
         check_liquid()
         check_generator()
+        check_catalog()
         check_wiring()
     print()
     print("=" * 78)

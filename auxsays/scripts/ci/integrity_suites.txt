@@ -335,7 +335,11 @@ auxsays/scripts/tests/test_patch_stack_dashboard.py = 116
 # over eight record mixes (every record once, in order); runs the SHIPPED generator under stub Jekyll
 # classes (it counts what the layout lists); and pins the wiring statement by statement. Needs ruby
 # + liquid for [L]/[G]; without them the count drops and this fails.
-auxsays/scripts/tests/test_feed_discovery.py = 45
+# 45 -> 59 (G36-02 follow-up): [J] runs the SHIPPED catalogue functions under node (node required):
+# the catalogue is held in feed order from every page, each patch once with the page's own card
+# winning, a page of another build retried once past the cache and otherwise refused; V11b (only
+# `feed_hidden: true` exempts), V18/V19 (STAMP), W9/W10.
+auxsays/scripts/tests/test_feed_discovery.py = 59
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over
