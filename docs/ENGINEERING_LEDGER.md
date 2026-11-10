@@ -79,6 +79,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
+| AUX-095 | Deferred | Verdict policy | Medium | A vendor-confirmed serious defect or a corroborated install failure gave no caution unless someone hand-wrote a reason (producer built; public activation OFF, temporary) |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -4788,6 +4789,63 @@ restated; 13 new mutants X25-X37, one fix half each, all caught); `test_patch_de
 **Reopen only if** any surface prints a verdict, scope, line or recommendation that is not the projection row of
 its page, the gate reads a lifecycle file, release type or KB again, a lifecycle value Python would have to coerce
 is accepted, or a WAIT / TEST FIRST title or description attributes the verdict to the report count or maturity.
+
+### AUX-095 — A vendor-confirmed serious defect or a corroborated install failure gave no caution unless someone hand-wrote a reason
+
+- **Status** Deferred (public activation) · **Area** Verdict policy · **Severity** Medium
+- **First seen** 2026-11-10 (GROWTH-3 PR-A, spec v3 s9; G35-05 calibration) · **Built** 2026-11-10 (G35-04,
+  branch feat/verdict-reason-producer); the activation switch is OFF and that state is TEMPORARY
+
+**Symptom** Every WAIT and TEST FIRST rested on a reviewed entry in `_data/verdict_reasons.yml`. Five zero-report
+pages whose vendor confirms a serious defect in that exact version (Windows 24H2 26100.9550, 26H1 28000.2804 and
+28000.3086; OBS 31.1.0 and 32.0.3) read INSUFFICIENT DATA, as did pages where two or more independent users report
+that the update fails to install (the calibration found 9 in the 66 unread pool pages).
+
+**Cause** No deterministic route from stored evidence to a reason: the owner allows vendor-only caution for a
+SERIOUS defect (decision 1, safeguard 1; AUTH_V2_35 D-B) and the calibration measured an install-failure rule
+(G35-05 s5), but nothing produced either.
+
+**Fix** `lib/verdict_reason_producer` is a pure function of the records and their counted rows (no network, file,
+clock or collector import). `vendor_confirmed_serious` reads OBS "Fixed ... in V" bullets and the stored
+release-health known-issue rows: exact version or originating build, the statement re-checked at its stored line, a
+closed severity vocabulary (data loss, critical install failure, substantial workflow breakage, crash), the affected
+setup; lag, cosmetic issues, preference or profile resets, no exact version and an unstated setup fail closed. WAIT
+where the vendor names this version as the start, TEST FIRST for a carried-over defect. The install class (A1)
+takes Windows rows naming the page's KB with install wording or Acrobat installer Exit Code 7 with a product check,
+runs the I11 independence gate first, and needs `MIN_INDEPENDENT_REPORTERS` (2): TEST FIRST "when installing it",
+never WAIT. Non-install corroboration is a fail-closed placeholder (different URLs never prove different users);
+pages needing a person go to a TEMPORARY review queue. `PUBLIC_AUTO_ACTIVATION` is the one switch. OFF,
+`verdict_projection.supported_reasons` returns the reviewed entries only; ON, it merges the candidates for the
+projection and QA alike. `build_verdict_projection.py` runs the producer at deploy and writes the git-ignored
+`_data/verdict_reason_candidates.yml`, so it is never a second writer of tracked data. Also closes the PR-A2 review's
+LOW-1..3 (AUX-094): the page key strips only what Liquid strips and a Unicode-padded identity is a publication
+error, release types, KB numbers and dates are ASCII-only, and a lifecycle build no record carries is an error.
+
+**Measured** Over the corpus: 48 candidates on 36 pages (24 install TEST FIRST, 21 vendor WAIT, 3 vendor TEST FIRST).
+Calibration: 9 of 9 install verdicts in the 66 with 0 false fires; 3 of 4 reviewed install entries reproduced
+(KB5086672 missed: one row says "error installing", one is German); no fire on the other 18 sampled pages. Of the
+six named pages, 24H2 26100.9550, 26H1 28000.2804, 26H1 28000.3086 and OBS 31.1.0 qualify; OBS 32.0.3 (a lag and a
+stale mixer entry) and OBS 32.2.2's #13862 (no version named; a recoverable profile problem) do not. Switch OFF: a
+deploy-order build equals main's on every page. Switch ON (test-only, staged copy): 33 projection rows change, QA
+`--publish-strict` has 0 errors, and every surface prints the candidate's scoped verdict, equal to `decide`.
+
+**Tests** `test_verdict_reason_producer.py` (34: VRP-V1..V7, I1..I6, P1, N1/N2, S0..S5, C1/C2; mutants VX1..VX10:
+severity gate, exact version, scope, switch default, network call, independence gate, threshold, Acrobat product
+check, install WAIT, placeholder URLs); `test_growth3_verdict_policy.py` 112 -> 124 (G3-L6, Q10, Q11, R8; R4j pins
+MB1/MB2; X38..X45).
+
+**Why deferred** Public automatic activation needs the owner's approval of that transition (AUTH_V2_35 D-A). The
+in-sample precision is partly circular: the install rules were written after reading the 66 and the labels apply
+the seeded standard.
+
+**Current impact** None published: with the switch OFF every page renders exactly as before; the candidates are
+visible only in the deploy artifact.
+
+**Revisit trigger** The owner approves public auto-activation, or an out-of-sample reading of new candidates.
+
+**Work that this item must not block** Reviewed reason entries, the lifecycle exception, collection and evidence
+work. On activation the stored summaries of candidate pages lag the page (a `verdict_policy_drift` warning until
+the next promotion); every surface already prints the gate.
 
 ---
 
