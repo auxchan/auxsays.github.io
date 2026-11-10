@@ -329,6 +329,13 @@ auxsays/scripts/tests/test_patch_watchlist.py = 35
 # 113 -> 116 (GROWTH-3 review 1): the card, every upgrade-path release (rec[12]) and the attention
 # reason carry the verdict's scope (UP2b, PS-21, PS-22), against the authority's projection.
 auxsays/scripts/tests/test_patch_stack_dashboard.py = 116
+# The paged Patch Feed (G36-02). /updates/ was one 4.3 MB page with 819 of its patch links past the
+# 2 MB Googlebot reads. Runs the deploy gate (verify_feed_discovery.py) over synthetic built sites,
+# one failing case per way the catalogue can be lost; renders the SHIPPED paging block with Liquid
+# over eight record mixes (every record once, in order); runs the SHIPPED generator under stub Jekyll
+# classes (it counts what the layout lists); and pins the wiring statement by statement. Needs ruby
+# + liquid for [L]/[G]; without them the count drops and this fails.
+auxsays/scripts/tests/test_feed_discovery.py = 45
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over

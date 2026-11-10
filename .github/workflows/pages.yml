@@ -153,6 +153,14 @@ jobs:
       - name: Verify published payload carries no internal implementation
         run: python auxsays/scripts/ci/verify_published_payload.py --site auxsays/_site
 
+      # Also on the exact bytes about to be served (G36-02). The Patch Feed is paged so that no
+      # feed page passes its byte budget (half Googlebot's 2 MB read), every patch page the feed
+      # lists is linked from exactly one feed page by a plain <a href>, and every patch page is
+      # reached from the homepage by crawlable links within three hops. Proven on real builds:
+      # the one-page feed it replaces fails (4,295,549 bytes, 819 patch links past 2 MB).
+      - name: Verify the Patch Feed stays within budget and every patch page stays reachable
+        run: python auxsays/scripts/ci/verify_feed_discovery.py --site auxsays/_site
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
