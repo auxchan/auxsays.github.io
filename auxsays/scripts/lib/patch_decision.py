@@ -454,21 +454,27 @@ _NO_VERDICT_LEAD = "No verdict yet: "
 
 
 def summary_line(decision: Decision, record: dict[str, Any] | None, report_count: int,
-                 fallback: str = "") -> str:
+                 fallback: str = "", identity: str = "") -> str:
     """The stored `update_consensus_summary`, which the /updates/ feed card prints: the verdict and
-    its scope FIRST, then the page's own recommendation line.
+    its scope FIRST, then the exact patch it is about, then the page's own recommendation line.
 
-    Not "WAIT: OBS Studio 32.2.2 has 53 user reports found." -- an unscoped verdict beside a count
-    reads as "53 reports, so wait", which is the inference the policy forbids (counts never decide).
-    The line already states the count where it matters (no verdict yet / security update), and the
-    card prints the confirmed count beside it. `fallback` is used only when the policy has no line
-    (a zero-report page, which no writer stores a summary for). The feed include composes the same
-    string from the gate, so feed, page and stored field read alike."""
+    "WAIT if you use macOS 27.2: OBS Studio 32.2.2. A user reports, and OBS confirms, ..." -- not
+    "WAIT: OBS Studio 32.2.2 has 53 user reports found.", where an unscoped verdict beside a count
+    reads as "53 reports, so wait", the inference the policy forbids (counts never decide). The line
+    states the count where it is the point (no verdict yet, a security update) and the card prints
+    the confirmed count beside it. `identity` names the exact patch (a Windows build, not just its
+    train: 28 records share "25H2"). `fallback` is used only when the policy has no line (a
+    zero-report page, which no writer stores a summary for). The feed prints this string while its
+    lead equals the page's verdict and scope, and composes the same lead from the gate when it does
+    not, so the feed never shows a verdict the page does not."""
     body = public_body(decision, record, report_count)
     if body.startswith(_NO_VERDICT_LEAD):
         body = body[len(_NO_VERDICT_LEAD):]
         body = body[:1].upper() + body[1:]
-    return f"{verdict_phrase(decision)}: {body or fallback}".strip()
+    text = body or fallback
+    if identity and body:
+        text = f"{identity.strip().rstrip('.')}. {body}"
+    return f"{verdict_phrase(decision)}: {text}".strip()
 
 
 def decision_label(product_id: str, version: str, consensus_label: str = "", count: int = 0,

@@ -827,15 +827,17 @@ def _public_summary(
     # verdict was a second recommendation, which is the defect this module's authority exists to end.
     #
     # GROWTH-3 review 1 (D1): the summary LEADS with the verdict and its scope -- "WAIT if you use
-    # macOS 27.2: <line>" -- because the /updates/ feed prints it. "WAIT: OBS Studio 32.2.2 has 53
-    # user reports found." put a verdict that applies to one setup beside a count, which reads as
-    # "53 reports, so wait". lib/patch_decision.summary_line is the one composition; the feed
-    # include builds the same string from the gate.
+    # macOS 27.2: OBS Studio 32.2.2. <line>" -- because the /updates/ feed prints it. "WAIT: OBS
+    # Studio 32.2.2 has 53 user reports found." put a verdict that applies to one setup beside a
+    # count, which reads as "53 reports, so wait". It still names the EXACT patch (the build-aware
+    # label: 28 Windows records share "25H2"). lib/patch_decision.summary_line is the one
+    # composition; the feed prints it, or the gate's own lead when the two disagree.
     verdict = decision
     report_word = "report" if count == 1 else "reports"
     fact = f"{product_label} {version_label} has {count} user {report_word} found."
     if policy is not None:
-        return patch_decision.summary_line(policy, facts or {}, count, fallback=fact)
+        return patch_decision.summary_line(policy, facts or {}, count, fallback=fact,
+                                           identity=f"{product_label} {version_label}")
     line = body if body is not None else ""
     return " ".join(part for part in [f"{verdict}: {fact}", line] if part)
 

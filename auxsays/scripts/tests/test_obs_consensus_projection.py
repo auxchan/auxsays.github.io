@@ -30,6 +30,7 @@ Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_obs_consensus_p
 """
 from __future__ import annotations
 
+import re
 import sys
 import tempfile
 import traceback
@@ -157,10 +158,16 @@ def run() -> int:
     check("O2 evidence_samples is a SAMPLE, and the writer's cap matches the published limit",
           limit > 0 and len(fields["evidence_samples"]) == min(limit, 7),
           f"limit={limit} samples={len(fields['evidence_samples'])}")
+    # GROWTH-3 review 1 (D1): the summary no longer opens "VERDICT: ... has N user reports found." --
+    # it leads with the verdict and its scope, then the page's own line, which states a count only
+    # where the count is the point (no verdict yet, a security update). So every count it DOES state
+    # must be the counted total, and the two count-derived sentences still state it.
+    summary_counts = set(re.findall(r"(\d+)\s+user report", fields["update_consensus_summary"]))
     check("O2 the count-derived sentences state the counted total",
           "7 user report" in fields["consensus_report"]
-          and "has 7 user report" in fields["update_consensus_summary"],
-          f"{fields['consensus_report'][:60]!r} / {fields['update_consensus_summary'][:60]!r}")
+          and "has 7 user report" in str(fields.get("quick_verdict"))
+          and summary_counts <= {"7"},
+          f"{fields['consensus_report'][:60]!r} / {fields.get('quick_verdict')!r} / summary counts {summary_counts}")
     check("O2 the numeric fields state the counted total",
           fields["update_report_count"] == 7
           and fields["confirmed_patch_specific_report_count"] == 7)

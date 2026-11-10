@@ -360,10 +360,12 @@ def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]]
     policy, facts = policy_decision(product_id, raw_version, target_build, items,
                                     record if record is not None else {"update_status": update_status},
                                     records)
-    # Review 1 (D1): verdict and scope first, then the page's line -- the string the record writer
-    # stores and the feed prints (lib/patch_decision.summary_line), never a bare verdict by a count.
+    # Review 1 (D1): verdict and scope first, then the exact patch, then the page's line -- the string
+    # the record writer stores and the feed prints (lib/patch_decision.summary_line), never a bare
+    # verdict by a count.
     return patch_decision.summary_line(
-        policy, facts, total, fallback=f"{label_name} {version} has {total} user {report_word} found.")
+        policy, facts, total, fallback=f"{label_name} {version} has {total} user {report_word} found.",
+        identity=f"{label_name} {version}")
 
 
 def latest_captured_at(items: list[dict[str, Any]]) -> str:

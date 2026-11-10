@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 import yaml
 
 from lib import maturity, patch_decision, verdict_projection, verdict_reasons
-from lib.patch_identity import patch_key
+from lib.patch_identity import patch_display_label, patch_key
 # The dedup identity the append path itself applies (base.evidence_key uses it), imported rather
 # than re-derived. A hand-rolled canonicaliser was measured against the corpus first and was WRONG:
 # stripping query strings collapsed six genuinely distinct Blackmagic forum threads
@@ -438,11 +438,20 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
                   or patch_decision.action_of(patch_decision.leading_decision(data.get("update_consensus_summary"))))
         summary = str(data.get("update_consensus_summary") or "")
         stored_lead = summary.split(":", 1)[0].strip() if patch_decision.leading_decision(summary) else ""
+        count = int(data.get("update_report_count") or 0)
+        identity = (f"{str(data.get('update_product') or data.get('product_id') or '').strip()} "
+                    f"{patch_display_label(data.get('update_version'), data.get('target_build'), data.get('product_id'))}")
+        expected_summary = patch_decision.summary_line(decision, data, count, identity=identity)
         if (stored and stored != decision.verdict) or (stored_lead and stored_lead != expected_phrase):
             add(warnings, path, "verdict_policy_drift",
                 f"stored verdict {stored!r} (summary opens {stored_lead or '(none)'!r}) but the verdict "
                 f"policy decides {expected_phrase!r}; every surface renders {expected_phrase!r}, and the "
                 "stored prose catches up at the next promotion.")
+        elif summary and summary != expected_summary:
+            add(warnings, path, "verdict_policy_drift",
+                "the stored summary is not the policy's line (lib/patch_decision.summary_line); the feed "
+                f"card still leads with {expected_phrase!r} and the page's own line (it prints stored text "
+                "only where it matches them), and the stored prose catches up at the next promotion.")
     return errors, warnings
 
 

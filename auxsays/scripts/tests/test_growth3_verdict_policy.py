@@ -917,6 +917,13 @@ def render_includes(cases: dict, site: dict) -> dict | None:
         return json.loads(out.read_text(encoding="utf-8"))
 
 
+def identity_of(r: dict) -> str:
+    """The exact patch name the writer puts in the summary: product + build-aware display label."""
+    from lib.patch_identity import patch_display_label  # noqa: PLC0415
+    return (f"{str(r.get('update_product') or r.get('product_id') or '').strip()} "
+            f"{patch_display_label(r.get('update_version'), r.get('target_build'), r.get('product_id'))}")
+
+
 def _text(html: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html or "")).strip()
 
@@ -943,11 +950,16 @@ def check_surfaces() -> None:
     drift_v, drift_s = vp.rendered_verdict(drift, rows, LIFECYCLE["entries"]) if drift else ("", "")
     cases["feed:drift"] = {"template": FEED_T, "item": dict(drift, url=drift.get("permalink")),
                            "summary": f"{drift_v}: {drift.get('update_product')} has 53 user reports found."}
+    # ...and one that opens with the right verdict and scope but carries a reason the page no longer gives.
+    cases["feed:stale-line"] = {"template": FEED_T, "item": dict(drift, url=drift.get("permalink")),
+                                "summary": f"{vp.phrase(drift_v, drift_s)}: {identity_of(drift)}. An old reason."}
     out = render_includes(cases, site) or {}
     bad_rows, bad_feed, bad_store = [], [], []
-    drift_line = re.search(r"@@(.*?)@@", out.get("feed:drift", ""), re.S)
-    if not drift_line or not drift_line.group(1).startswith(f"{drift_v} {drift_s}: "):
-        bad_feed.append(("lagging stored summary", drift_line and drift_line.group(1)[:80]))
+    for case in ("feed:drift", "feed:stale-line"):
+        drift_line = re.search(r"@@(.*?)@@", out.get(case, ""), re.S)
+        if not drift_line or not drift_line.group(1).startswith(f"{vp.phrase(drift_v, drift_s)}: ") \
+                or "An old reason" in drift_line.group(1) or "53 user reports found" in drift_line.group(1):
+            bad_feed.append((f"lagging stored summary ({case})", drift_line and drift_line.group(1)[:80]))
     for i, r in enumerate(scoped):
         verdict, scope = vp.rendered_verdict(r, rows, LIFECYCLE["entries"])
         cell = re.search(r'<td data-label="Verdict">(.*?)</td>', out.get(f"row:{i}", ""), re.S)
@@ -963,7 +975,7 @@ def check_surfaces() -> None:
         d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"])
         stored = str(r.get("update_consensus_summary") or "")
         if int(r.get("update_report_count") or 0) > 0 and \
-                (stored != pd.summary_line(d, r, int(r.get("update_report_count") or 0))
+                (stored != pd.summary_line(d, r, int(r.get("update_report_count") or 0), identity=identity_of(r))
                  or (line and line.group(1) != stored)):
             bad_store.append((r.get("permalink"), stored[:60], line and line.group(1)[:60]))
     check(f"G3-S1 every product/vendor table row prints its verdict WITH its scope ({len(scoped)} scoped pages: "
@@ -1146,8 +1158,8 @@ def check_mutations(tmp: Path) -> None:
          check_surfaces, inc("patch-feed-summary.html", "{%- if feed_summary_line != '' and gate_body != '' -%}",
                              "{%- if false -%}")),
         ("X24 the writer's summary goes back to a bare verdict beside a count", check_surfaces,
-         swap(pd, "summary_line", lambda d, r, n, fallback="": real_summary(d, r, n, fallback).replace(
-             pd.verdict_phrase(d) + ":", d.verdict + ":", 1))),
+         swap(pd, "summary_line", lambda d, r, n, fallback="", identity="": real_summary(
+             d, r, n, fallback, identity).replace(pd.verdict_phrase(d) + ":", d.verdict + ":", 1))),
     ]
     for label, body, (mutate, restore) in cases:
         run_mutant(label, body, mutants, mutate=mutate, restore=restore)

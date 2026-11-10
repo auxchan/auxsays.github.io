@@ -19,9 +19,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'INSUFFICIENT DATA: 15 user reports are matched to this exact update, but no problem in
-  them is confirmed as reported independently by two or more users. If one matches your setup, test before relying
-  on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21 Public Beta 1. 15 user reports are matched to this
+  exact update, but no problem in them is confirmed as reported independently by two or more users. If one matches
+  your setup, test before relying on this update.'
 update_report_count: 15
 update_consensus_confidence: Low-Medium
 status_change_type: new

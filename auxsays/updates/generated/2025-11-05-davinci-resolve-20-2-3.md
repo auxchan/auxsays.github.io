@@ -136,9 +136,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: 17 user reports are matched to this exact update, but no problem in
-  them is confirmed as reported independently by two or more users. If one matches your setup, test before relying
-  on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20.2.3. 17 user reports are matched to this exact
+  update, but no problem in them is confirmed as reported independently by two or more users. If one matches your
+  setup, test before relying on this update.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1opemam/davinci_resolve_studio_2023_mkv_files_audio_bug/
