@@ -1211,11 +1211,10 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
             "update_decision_label": decision,
             "update_decision_body": body,
             # GROWTH-3 (owner decision 3): no advice to pause or disable Windows Update, on any page.
+            # The AVOID list is the authority's one copy: the verdict projection carries the same
+            # list to the zero-report sibling page no writer reaches (review 2, LOW-4).
             "practical_recommendations": (
-                [
-                    "If this device does not have this update yet, install the replacement update instead.",
-                    "Check Microsoft's known-issue and safeguard-hold list for the replacement before installing it.",
-                ] if decision == patch_decision.AVOID else [
+                list(patch_decision.AVOID_RECOMMENDATIONS) if decision == patch_decision.AVOID else [
                     "Check Microsoft's known-issue and safeguard-hold list for this KB before installing.",
                     "Keep the uninstall path in mind: a cumulative update can be removed from Settings "
                     "> Windows Update > Update history for a limited window after installation.",

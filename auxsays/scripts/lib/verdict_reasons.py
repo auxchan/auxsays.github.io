@@ -27,8 +27,9 @@ WHAT AN ENTRY MUST SATISFY (checked here, named in the tests):
 THE LIFECYCLE FILE holds exactly ONE entry today: KB5079391, which Microsoft withdrew for new
 installations, replaced by KB5086672. It is a single verified exception, NOT the lifecycle
 mechanism: the general "newer update available" links wait for the Microsoft KB source assessment
-and a deterministic source-to-record writer. `validate_lifecycle` refuses a second entry so this
-file cannot quietly become a hand-maintained list.
+and a deterministic source-to-record writer. `lifecycle_errors` refuses a second entry so this
+file cannot quietly become a hand-maintained list, and refuses a matching field (product_id, kb,
+relationship, a build) that is not a plain unpadded string (GROWTH-3 review 2, LOW-1).
 
 This module reads YAML and nothing else: no collector import, no network.
 """
@@ -213,6 +214,27 @@ def support_problems(entry: Mapping[str, Any], counted_rows: Iterable[Mapping[st
     return problems
 
 
+# The fields that decide WHICH page a withdrawal applies to. Each must be a plain string exactly as
+# a record carries it: not a YAML number, not padded. GROWTH-3 review 2 (LOW-1, probe N1) wrote the
+# builds as YAML numbers -- `builds: [26100.8116, 26200.8116]` -- and the file still passed: Python
+# compared str(26100.8116) and decided AVOID, while the Liquid gate compared a number with the page's
+# string build and printed INSUFFICIENT DATA, and QA saw no difference. A float is also lossy
+# (26200.8110 reads back as "26200.811"). A value Python would have to coerce or trim is refused, so
+# the file supports nothing until it is fixed (fail closed) and QA reports it as an error.
+STRICT_LIFECYCLE_STRINGS = ("product_id", "kb", "relationship")
+
+
+def _strict_string_problem(value: Any) -> str:
+    """Why `value` is not a plain, unpadded, non-empty string, or ''."""
+    if not isinstance(value, str):
+        return f"is a {type(value).__name__}, not a string (quote it)"
+    if not value.strip():
+        return "is empty"
+    if value != value.strip():
+        return "has leading or trailing whitespace"
+    return ""
+
+
 def lifecycle_errors(entries: list[Mapping[str, Any]]) -> list[str]:
     errors: list[str] = []
     if len(entries) > MAX_LIFECYCLE_ENTRIES:
@@ -227,6 +249,14 @@ def lifecycle_errors(entries: list[Mapping[str, Any]]) -> list[str]:
         unknown = sorted(set(entry) - ALLOWED_LIFECYCLE_KEYS)
         if unknown:
             errors.append(f"{label}: unknown keys {unknown} (store only KB ids, builds, dates, the URL and the relationship)")
+        for field in STRICT_LIFECYCLE_STRINGS:
+            problem = _strict_string_problem(entry.get(field))
+            if problem:
+                errors.append(f"{label}: {field} {problem}")
+        for position, build in enumerate(entry.get("builds") if isinstance(entry.get("builds"), list) else []):
+            problem = _strict_string_problem(build)
+            if problem:
+                errors.append(f"{label}: builds[{position}] {problem}")
         if _s(entry.get("relationship")) not in LIFECYCLE_RELATIONSHIPS:
             errors.append(f"{label}: relationship must be one of {LIFECYCLE_RELATIONSHIPS}")
         for field in ("kb", "replacement_kb"):

@@ -82,16 +82,17 @@
 {% endif %}
 {%- comment -%}
   GROWTH-3 VERDICT POLICY. Everything above is kept for the zero-report body it still words, but
-  the published verdict is now the gate's (patch-verdict-gate.html): the two official facts, and
-  for WAIT / TEST FIRST lib/patch_decision.decide's own answer, projected at deploy. A stored label
-  -- stale, sentiment-derived or hand-written -- can no longer publish a WAIT or TEST FIRST the
-  policy does not support, and a zero-report security update or withdrawal is no longer folded
-  into INSUFFICIENT DATA by the official-only rule above.
-  Extra outputs: decision_scope (the 'if ...' qualifier), decision_official, and the security
-  page's panel (decision_panel_heading, decision_panel_text).
+  the published verdict is now the gate's (patch-verdict-gate.html): lib/patch_decision.decide's
+  own answer, official verdicts included, projected at deploy. A stored label -- stale,
+  sentiment-derived or hand-written -- can no longer publish a verdict the policy does not give,
+  and a zero-report security update or withdrawal is no longer folded into INSUFFICIENT DATA by the
+  official-only rule above.
+  Extra outputs: decision_scope (the 'if ...' qualifier), decision_official, the security page's
+  panel (decision_panel_heading, decision_panel_text), and decision_recommendations, the list an
+  official verdict carries on every page it decides (AVOID), else empty.
 {%- endcomment -%}
 {%- include patch-verdict-gate.html record=pd_record count=report_count -%}
-{% assign decision_label = gate_label %}{% assign decision_scope = gate_scope %}{% assign decision_official = gate_official %}{% assign decision_panel_heading = gate_panel_heading %}{% assign decision_panel_text = gate_panel_text %}
+{% assign decision_label = gate_label %}{% assign decision_scope = gate_scope %}{% assign decision_official = gate_official %}{% assign decision_panel_heading = gate_panel_heading %}{% assign decision_panel_text = gate_panel_text %}{% assign decision_recommendations = gate_recommendations %}
 {% if gate_body != '' %}{% assign decision_body = gate_body %}{% endif %}
 {% assign verdict_action = decision_label %}{% assign verdict_known = true %}{% assign decision_label_key = decision_label | downcase %}
 {% assign show_test_first_context = false %}

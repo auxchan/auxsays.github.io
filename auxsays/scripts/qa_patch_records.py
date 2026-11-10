@@ -320,16 +320,26 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
     ERRORS (both modes):
       * verdict_reasons_invalid / patch_lifecycle_invalid -- a malformed fact file. They change only
         by reviewed pull request, so a structural problem is a defect in that PR, never lane drift.
-      * verdict_render_disagrees -- a page whose rendered verdict, scope, line or panel would differ
-        from lib/patch_decision.decide over this tree. The gate publishes WAIT / TEST FIRST only from
-        the deploy-time verdict projection (_data/verdict_projection.yml), so this compares what the
-        gate will READ for every page with what Python decides: a stale, forged or failed projection
-        is caught here, before Jekyll builds anything (review 1, D2). With no projection on disk (a
-        writer lane, PR-time CI) the deploy builds it from this same tree, so the gate will read
-        exactly the authority's rows.
+      * verdict_render_disagrees -- a page whose rendered verdict, scope, line, panel or
+        recommendations would differ from lib/patch_decision.decide over this tree. The gate
+        publishes EVERY verdict -- AVOID and SECURITY UPDATE included (review 2, LOW-1) -- only from
+        the deploy-time verdict projection (_data/verdict_projection.yml), and every surface (patch
+        page, homepage, tables, feed, My Patch Stack, search title) prints the gate, so this compares
+        what the gate will READ for every page with what Python decides: a stale, forged, partial or
+        failed projection is caught here, before Jekyll builds anything (review 1, D2). With no
+        projection on disk (a writer lane, PR-time CI) the deploy builds it from this same tree, so
+        the gate will read exactly the authority's rows.
       * verdict_projection_invalid / verdict_projection_failed -- the projection a deploy built is
         unreadable, or its builder could not decide: pages would fall back where the authority
         gives a verdict.
+
+    PUBLICATION ERROR (a warning for the writeback lane, an ERROR under --publish-strict):
+      * windows_update_type_malformed -- a Windows record whose stored release type is shaped like
+        "YYYY-MM B / D / OOB" but is not one (review 2's "2026-3x B", "2026-+3 B", "2026-1  B").
+        `decide` cannot classify it, so the page fails closed to INSUFFICIENT DATA and a security
+        classification would vanish without a word; this says so. The value is collector-written,
+        so, like record_names_conflicting_actions (AUX-009), one bad row must not discard a whole
+        evidence run, and the deploy must not publish the page silently without its classification.
 
     WARNINGS, never writer-blocking and never promoted for publication:
       * verdict_reason_unsupported -- an entry whose cited rows no longer all count on its page (an
@@ -378,13 +388,13 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         disk = verdict_projection.load(PROJECTION_PATH)
     except verdict_projection.ProjectionError as exc:
         add(errors, PROJECTION_PATH, "verdict_projection_invalid",
-            f"{exc}. The verdict gate cannot read it, so every page the authority gives a WAIT or "
-            "TEST FIRST would render INSUFFICIENT DATA.")
+            f"{exc}. The verdict gate cannot read it, so every page the authority gives a verdict "
+            "would render INSUFFICIENT DATA.")
         disk = {"schema_version": verdict_projection.SCHEMA_VERSION, "pages": {}}
     if disk is not None and disk.get("error"):
         add(errors, PROJECTION_PATH, "verdict_projection_failed",
             f"the verdict projection builder could not decide ({disk.get('error')}); pages render "
-            "no WAIT or TEST FIRST where the authority gives one.")
+            "INSUFFICIENT DATA where the authority gives a verdict.")
     rows = want_rows if disk is None else dict(disk.get("pages") or {})
     source = "the deploy's verdict projection" if disk is not None else "this tree's verdict projection"
 
@@ -392,6 +402,11 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
     for path, data in entries:
         key = verdict_projection.page_key(data)
         record_keys.add(key)
+        release_problem = patch_decision.release_type_problem(data)
+        if release_problem:
+            add(warnings, path, "windows_update_type_malformed",
+                f"{release_problem}. lib/patch_decision.decide cannot read Microsoft's classification from "
+                "it, so this page renders no SECURITY UPDATE; correct the stored value.")
         want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
                                      lifecycle=lifecycle)
         got_verdict, got_scope = verdict_projection.rendered_verdict(data, rows, lifecycle)
@@ -405,7 +420,7 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
                              if (got_row or {}).get(k) != (want_row or {}).get(k))
             add(errors, path, "verdict_render_disagrees",
                 f"{source} differs from lib/patch_decision.decide in {differs}; the page would print "
-                "a line or panel the authority did not write.")
+                "a line, panel or recommendation the authority did not write.")
     for key in sorted(set(rows) - record_keys):
         add(errors, PROJECTION_PATH, "verdict_render_disagrees",
             f"{source} holds a row for {key!r}, which no record carries and the authority did not decide.")
@@ -1403,7 +1418,9 @@ def scan_route_integrity(
 # variables: an implicit rule is one nobody can exercise from a command line, which is how a
 # publication gate quietly stops gating.
 PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
-                                        "record_names_unknown_verdict"})
+                                        "record_names_unknown_verdict",
+                                        # GROWTH-3 review 2 (LOW-1): a release type decide cannot read.
+                                        "windows_update_type_malformed"})
 
 
 def promote_for_publication(

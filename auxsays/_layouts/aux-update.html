@@ -407,10 +407,10 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% endif %}
 {% assign issue_cluster_text = issue_cluster_text | replace: ' ,', ',' | replace: ', ,', ', ' | replace: '  ', ' ' | strip %}
 {% assign has_practical_recommendations = false %}
-{% if page.practical_recommendations and page.practical_recommendations.size > 0 %}{% assign has_practical_recommendations = true %}{% endif %}
+{% assign rec_list = page.practical_recommendations %}{% if decision_recommendations and decision_recommendations.size > 0 %}{% assign rec_list = decision_recommendations %}{% endif %}{% if rec_list and rec_list.size > 0 %}{% assign has_practical_recommendations = true %}{% endif %}
 {% assign decision_body = decision_body | default: '' | strip %}
 {% if decision_body == '' and has_practical_recommendations %}
-  {% assign decision_body = page.practical_recommendations | first %}
+  {% assign decision_body = rec_list | first %}
 {% endif %}
 {%- comment -%}
   ISSUE SENTENCE vs DECISION BODY. The reasoning block prints "Current reports mention X." under a
@@ -471,6 +471,11 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
   item one BECAME the body, the body now contains it and the list skips it, so it cannot appear
   twice. `rec_rendered` is what the block gates on -- an empty survivor set renders nothing at all,
   rather than an empty heading on the 1050 records that carry no recommendations.
+
+  WHERE AN OFFICIAL VERDICT CARRIES ITS OWN LIST (GROWTH-3 review 2, LOW-4), `rec_list` is that
+  list (decision_recommendations, from the verdict projection), not the stored field: the zero-count
+  retraction above leaves a page with no reports without one, so the 24H2 KB5079391 AVOID page told
+  readers to avoid the update without the replacement step its 25H2 sibling printed.
 {%- endcomment -%}
 {% assign rec_rendered = 0 %}
 {% assign rec_seen = '' %}
@@ -494,7 +499,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% assign rec_body_probe = decision_body | strip | downcase | replace: '’', "'" | replace: '.', '' | replace: '  ', ' ' | replace: '  ', ' ' %}
 {% capture rec_items %}
   {%- if has_practical_recommendations -%}
-    {%- for rec in page.practical_recommendations -%}
+    {%- for rec in rec_list -%}
       {%- assign rec_text = rec | strip -%}
       {%- assign rec_probe = rec_text | downcase | replace: '’', "'" | replace: '.', '' | replace: '  ', ' ' | replace: '  ', ' ' -%}
       {%- assign rec_key = '|' | append: rec_probe | append: '|' -%}
