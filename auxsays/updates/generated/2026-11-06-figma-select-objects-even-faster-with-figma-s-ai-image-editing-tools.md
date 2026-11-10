@@ -18,8 +18,8 @@ update_version: Select objects even faster with Figma’s AI image editing tools
 update_logo_text: FIG
 update_published_at: '2026-11-06T00:00:00.000Z'
 update_last_checked: '2026-11-06T21:56:35Z'
-source_last_checked: '2026-11-09T09:09:15Z'
-official_body_last_checked: '2026-11-09T09:09:15Z'
+source_last_checked: '2026-11-10T00:51:37Z'
+official_body_last_checked: '2026-11-10T00:51:37Z'
 record_last_updated: '2026-11-06T21:56:35Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-11-08T00:15:46Z'
-  url: https://www.figma.com/release-notes/?title=select-objects-even-faster-with-figmas-ai-image-editing-tools
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-11-08T08:45:00Z'
   url: https://www.figma.com/release-notes/?title=select-objects-even-faster-with-figmas-ai-image-editing-tools
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-09T09:09:15Z'
+  url: https://www.figma.com/release-notes/?title=select-objects-even-faster-with-figmas-ai-image-editing-tools
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-10T00:51:37Z'
   url: https://www.figma.com/release-notes/?title=select-objects-even-faster-with-figmas-ai-image-editing-tools
   status: captured-from-rss-feed
   body_captured: true

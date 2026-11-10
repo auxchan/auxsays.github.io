@@ -17,8 +17,8 @@ update_version: Workspace-level sharing for Enterprise
 update_logo_text: FIG
 update_published_at: '2026-02-23T00:00:00.000Z'
 update_last_checked: '2026-07-28T09:07:45Z'
-source_last_checked: '2026-10-05T17:20:43Z'
-official_body_last_checked: '2026-10-05T17:20:43Z'
+source_last_checked: '2026-11-10T00:51:37Z'
+official_body_last_checked: '2026-11-10T00:51:37Z'
 record_last_updated: '2026-07-28T09:07:45Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-05T17:20:43Z'
+  url: https://www.figma.com/release-notes/?title=workspace-level-sharing-for-enterprise
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-10T00:51:37Z'
   url: https://www.figma.com/release-notes/?title=workspace-level-sharing-for-enterprise
   status: captured-from-rss-feed
   body_captured: true
