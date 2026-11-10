@@ -18,7 +18,8 @@ WHAT IT IS. A pure function of stored data -- the generated records and their co
     cosmetic issue, no exact version, no stored official text, an ambiguous scope. A scope is
     ambiguous unless it names a SETUP (`scope_problem`): "for a small number of devices", "for all
     editions of Windows 11", "if you use the update" or "if you use OBS" name nobody in particular,
-    so they go to the review queue, never to a page. An OBS version counts only where the vendor
+    and "for some consumer devices" or "for devices in some regions" name one only vaguely, so they
+    go to the review queue, never to a page. An OBS version counts only where the vendor
     names it as the defective one ("Fixed a crash in V", "present in V"), never as where an input
     file was made ("created in V").
     Recommendation: WAIT scoped to the setup when the vendor names this version as where the defect
@@ -71,7 +72,7 @@ from typing import Any, Iterable, Mapping
 
 from . import verdict_reasons
 
-PRODUCER_VERSION = "2"
+PRODUCER_VERSION = "3"
 # THE ONE ACTIVATION SWITCH. TEMPORARY: OFF until the owner approves public auto-activation
 # (AUTH_V2_35 D-A). Flipping it is a reviewed one-line change, never an environment variable or a
 # workflow input, so no deploy can turn it on by itself.
@@ -737,6 +738,45 @@ _PRODUCT_WORDS = {
     OBS: frozenset({"obs", "studio", "obs-studio"}),
 }
 _VERSION_TOKEN_RE = re.compile(r"^(?:v?[0-9]+(?:\.[0-9]+)*|[0-9]{2}h[12]|kb[0-9]{7})$")
+# HEDGES (review 2, MAJOR-1). The list above is a deny-list, so the next unlisted word was always a
+# "setup": "for a small number of devices in some environments" passed on "environments", "for some
+# consumer devices" on "consumer". A scope that says WHO is affected only vaguely now fails closed to
+# the review queue (ambiguous_scope), whatever else it names: a hedge word anywhere, a "small /
+# limited number" phrase anywhere, or "environment(s)" without a named environment TYPE right before
+# it ("virtual desktop environments" names one; "some", "these", "such" or "enterprise environments"
+# do not).
+_SCOPE_HEDGE_WORDS = frozenset("""
+some certain specific specified particular subset subsets various worldwide
+region regions condition conditions circumstance circumstances scenario scenarios situation situations cases
+""".split())
+_SCOPE_HEDGE_PHRASE_RE = re.compile(
+    r"\b(?:small|smaller|limited|low|tiny|reduced)\s+(?:number|numbers|subset|subsets|portion|percentage|fraction|"
+    r"share|group|groups|amount|count|set)\b|\ba\s+(?:few|handful|minority|fraction|portion)\b", re.ASCII)
+_SCOPE_ENVIRONMENT_WORDS = frozenset({"environment", "environments"})
+# Words that never name an environment type when they stand right before "environment(s)", beyond
+# the generic words, the hedges and the product's own name.
+_SCOPE_NOT_AN_ENVIRONMENT_TYPE = frozenset(
+    "such other different diverse mixed varied unusual uncommon atypical rare".split())
+
+
+def _names_environment_type(word: str, generic: frozenset) -> bool:
+    """Whether `word`, standing right before "environment(s)", names a type of environment."""
+    return bool(word) and not (word in generic or word in _SCOPE_HEDGE_WORDS
+                               or word in _SCOPE_NOT_AN_ENVIRONMENT_TYPE or _VERSION_TOKEN_RE.match(word))
+
+
+def _scope_hedge(body: str, words: list[str], generic: frozenset) -> str:
+    """The vague part of a scope's body ("some", "a small number", "some environments"), or ""."""
+    hedge = next((w for w in words if w in _SCOPE_HEDGE_WORDS), "")
+    if hedge:
+        return hedge
+    phrase = _SCOPE_HEDGE_PHRASE_RE.search(body)
+    if phrase:
+        return phrase.group(0)
+    for i, word in enumerate(words):
+        if word in _SCOPE_ENVIRONMENT_WORDS and not _names_environment_type(words[i - 1] if i else "", generic):
+            return " ".join(words[max(i - 1, 0):i + 1])
+    return ""
 
 
 def scope_problem(scope: Any, product_id: str = "") -> str:
@@ -746,7 +786,10 @@ def scope_problem(scope: Any, product_id: str = "") -> str:
     at least one word outside _SCOPE_GENERIC_WORDS and the product's own name. "for a small number
     of devices", "for all editions of Windows 11", "for devices that have installed this update",
     "if you use the update", "if you use application" and "if you use OBS" all read like a scope
-    and name nobody in particular, so a candidate carrying one would cover everyone. The install
+    and name nobody in particular, so a candidate carrying one would cover everyone. A scope that
+    names a setup only vaguely -- "for some consumer devices", "for devices that meet certain
+    conditions", "for a small number of devices in some environments" -- is ambiguous too
+    (`_scope_hedge`, review 2): it says that SOME of a setup is affected, not which. The install
     class's fixed scope ("when installing it") is the one exception: there the setup IS the act of
     installing (A1), and `candidate_problems` keeps it to installation failures."""
     text = _s(scope)
@@ -754,12 +797,15 @@ def scope_problem(scope: Any, product_id: str = "") -> str:
         return "the scope is not worded 'if / when / for ...'"
     if text == INSTALL_SCOPE:
         return ""
-    body = re.sub(r"^(?:if you use|if|when|for)\s+", "", text, flags=re.I)
+    body = re.sub(r"^(?:if you use|if|when|for)\s+", "", text, flags=re.I).lower()
     generic = _SCOPE_GENERIC_WORDS | _PRODUCT_WORDS.get(_s(product_id), frozenset())
-    words = re.findall(r"[a-z0-9](?:[a-z0-9'+.-]*[a-z0-9])?", body.lower())
+    words = re.findall(r"[a-z0-9](?:[a-z0-9'+.-]*[a-z0-9])?", body)
     if not [w for w in words if w not in generic and not _VERSION_TOKEN_RE.match(w)]:
         return ("the scope names no setup: only a quantifier, a population, an edition, the update, a generic "
                 "application or the product")
+    hedge = _scope_hedge(body, words, generic)
+    if hedge:
+        return f"the scope is vague ({hedge!r}): it says some of a setup is affected, not which"
     return ""
 
 

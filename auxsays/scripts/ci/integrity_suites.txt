@@ -319,7 +319,9 @@ auxsays/scripts/tests/test_growth3_verdict_policy.py = 128
 # setup and an OBS version counts only as the defective one (V8, V9), the vendor "other setups" line
 # (V10), six frozen real rows that do not report this update failing to install (I7), codes from this
 # update only (I8), the L1/N2 duplicate pairs (I9). 21 mutants (was 10), VX11..VX21 one fix half each.
-auxsays/scripts/tests/test_verdict_reason_producer.py = 51
+# Review 2 (51 -> 56): a hedged scope is ambiguous -- the Q4 row and the review's unit phrasings
+# (V8b). 25 mutants, VX22..VX25 one fix half each.
+auxsays/scripts/tests/test_verdict_reason_producer.py = 56
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93

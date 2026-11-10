@@ -14,7 +14,8 @@ the decision authority.
 
 SECTIONS. [V] the vendor class on frozen copies of the stored statements -- the 6 named pages
 (VRP-V1..V7); review 1's probes: a scope must name a SETUP (V8, V9: "a small number of devices",
-"if you use OBS" ... go to the review queue), an OBS version counts only where the vendor names it as
+"if you use OBS" ... go to the review queue), review 2's hedged scopes are ambiguous too (V8b: "some
+consumer devices", "certain conditions", the Q4 row), an OBS version counts only where the vendor names it as
 the defective one (V9), the Windows minor-lag exclusion (V9), the vendor "other setups" line only on a
 page with nothing else (V10). [I] the install class and its independence gate (VRP-I1..I6); review 1's
 frozen negatives -- rows that deny an install failure, name only a build, report the update scan, a
@@ -175,6 +176,28 @@ SCOPES_NAMING_A_SETUP = [
     ("when using PipeWire capture with explicit sync on Linux", OBS), ("when opening source properties on Windows", OBS),
     ("if you use browser sources", OBS), ("if you use macOS 27.2", OBS),
 ]
+# Review 2 (MAJOR-1, tools/mut/mine2.py Q4 and out/unit_probes.txt): scopes that name a setup only
+# vaguely, each accepted by review 1's grammar. The first eight are the Q4 row's scope and the
+# review's seven unit phrasings; the next three are the review's other accepted unit probes; the last
+# four an "environment(s)" with no named type before it.
+Q4_25H2 = (f"- Active: Devices might fail to start after installing this update This issue affects a small number of "
+           f"devices in some environments. {EM} status Confirmed; originating OS Build 26200.8894 KB5121767; last "
+           "updated 2026-10-30 10:00 PT.")
+Q4_SCOPE = "for a small number of devices in some environments"
+SCOPES_HEDGED = [
+    (Q4_SCOPE, WIN), ("for some consumer devices", WIN), ("for devices that meet certain conditions", WIN),
+    ("for some devices worldwide", WIN), ("for devices in some regions", WIN),
+    ("for some customers in specific scenarios", WIN), ("for some devices under specific circumstances", WIN),
+    ("for a limited number of commercial devices", WIN), ("for a small number of devices after restart", WIN),
+    ("if you use some environments", WIN),
+    ("for devices in these environments", WIN), ("for devices in enterprise environments", WIN),
+    ("if you use such environments", WIN), ("when streaming in Windows environments", WIN),
+]
+# The corpus's two scopes taken from Microsoft's description text (not from a title subject).
+CORPUS_DESCRIPTION_SCOPES = [
+    ("for non-admin users connecting through Remote Desktop with Administrator protection enabled", WIN),
+    ("if you use virtual desktop environments", WIN),
+]
 
 
 def obs(version, published, notes="", count=0, **over):
@@ -329,6 +352,26 @@ def check_vendor_scope() -> None:
           and any("installation failure only" in p for p in vrp.candidate_problems(
               dict(install, severity_basis="crash_in_core_flow"))),
           f"let through={let_through} refused={refused}")
+    hedged_through = [s for s, p in SCOPES_HEDGED if not vrp.scope_problem(s, p)]
+    corpus_refused = [s for s, p in CORPUS_DESCRIPTION_SCOPES if vrp.scope_problem(s, p)]
+    q4 = vrp.produce([win("25H2", "26200.8894", "KB5121767", "2026-09-23T00:00:00Z"),
+                      win("25H2", "26200.9818", "KB5134140", "2026-10-28T00:00:00Z", "Base text.\n\n" + "\n".join(
+                          [HEADER_25H2, Q4_25H2]))], {})
+    q4_ex = [(e["excluded"], e.get("target_build")) for e in q4.excluded]
+    q4_queue = [(q.get("update_version"), q.get("target_build")) for q in q4.review_queue]
+    q4_info = vrp.classify_windows_issue(Q4_25H2[len("- Active: "):Q4_25H2.index(f" {EM} status")])
+    check("VRP-V8b review 2's hedged scopes are AMBIGUOUS and go to the review queue: the Q4 row ('This issue "
+          "affects a small number of devices in some environments', 25H2 26200.8894) gives no candidate, and its "
+          "scope and the review's other unit phrasings ('some consumer devices', 'certain conditions', 'some "
+          "devices worldwide', 'some regions', 'specific scenarios', 'specific circumstances', 'a limited number "
+          "of commercial devices') and an 'environments' with no named type before it are all refused; the "
+          "corpus's two scopes from Microsoft's description text still pass",
+          not hedged_through and not corpus_refused and not q4.candidates
+          and q4_ex == [("ambiguous_scope", "26200.8894")] and q4_queue == [("25H2", "26200.8894")]
+          and q4_info.get("scope") == "" and q4_info.get("severity") == "substantial_workflow_breakage"
+          and "vague" in vrp.scope_problem(Q4_SCOPE, WIN),
+          f"let through={hedged_through} corpus refused={corpus_refused} q4 candidates="
+          f"{[(c['verdict'], c['scope']) for c in q4.candidates]} excluded={q4_ex} queue={q4_queue} info={q4_info}")
     res = vrp.produce(probe_fixture(), {})
     fallback = [(c["verdict"], c["scope"]) for c in res.candidates if "USB audio devices might" in c["failure"]]
     res.candidates = [c for c in res.candidates if "USB audio devices might" not in c["failure"]]
@@ -1026,6 +1069,15 @@ def check_mutations(tmp: Path) -> None:
          [swap(vrp, "windows_install_row", all_codes(vrp.windows_install_row))]),
         ("VX21 the near-identical-text cue (I10) disabled", check_install_rows,
          [swap(vrp, "INDEPENDENCE_JACCARD", 0.99)]),
+        # Review 2 (MAJOR-1): one mutant per half of the hedge rule.
+        ("VX22 a hedge word ('some', 'certain', 'specific', 'regions' ...) no longer makes a scope vague",
+         check_vendor_scope, [swap(vrp, "_SCOPE_HEDGE_WORDS", frozenset())]),
+        ("VX23 'a small / limited number of ...' no longer makes a scope vague", check_vendor_scope,
+         [swap(vrp, "_SCOPE_HEDGE_PHRASE_RE", NEVER)]),
+        ("VX24 'environments' counts as a setup whatever stands before it", check_vendor_scope,
+         [swap(vrp, "_names_environment_type", lambda word, generic: True)]),
+        ("VX25 'environments' is vague even after a named type ('virtual desktop environments')", check_vendor_scope,
+         [swap(vrp, "_names_environment_type", lambda word, generic: False)]),
     ]
     del real_indep, real_acrobat
     mutants: list = []
