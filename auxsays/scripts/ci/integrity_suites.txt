@@ -312,8 +312,11 @@ auxsays/scripts/tests/test_growth3_verdict_policy.py = 124
 # the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the
 # corroboration placeholder fails closed (VRP-P1); purity, no network (VRP-N1, N2); the activation
 # switch ships OFF and changes nothing, and ON the projection, QA and the real gate carry the
-# candidates (VRP-S0..S5); the shipped corpus (VRP-C1, C2). 10 mutants, each caught by a named check.
-auxsays/scripts/tests/test_verdict_reason_producer.py = 34
+# candidates (VRP-S0..S5); the shipped corpus (VRP-C1, C2). Review 1 (34 -> 51): a scope must name a
+# setup and an OBS version counts only as the defective one (V8, V9), the vendor "other setups" line
+# (V10), six frozen real rows that do not report this update failing to install (I7), codes from this
+# update only (I8), the L1/N2 duplicate pairs (I9). 21 mutants (was 10), VX11..VX21 one fix half each.
+auxsays/scripts/tests/test_verdict_reason_producer.py = 51
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93

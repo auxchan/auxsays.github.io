@@ -15,7 +15,12 @@ WHAT IT IS. A pure function of stored data -- the generated records and their co
     concrete failure with a severity basis from a CLOSED vocabulary (data loss, critical install
     failure, substantial workflow breakage, crash on launch or in a core flow), and the affected setup.
     It FAILS CLOSED to no candidate on: a minor lag, a recoverable preference/profile reset, a narrow
-    cosmetic issue, no exact version, no stored official text, an ambiguous scope.
+    cosmetic issue, no exact version, no stored official text, an ambiguous scope. A scope is
+    ambiguous unless it names a SETUP (`scope_problem`): "for a small number of devices", "for all
+    editions of Windows 11", "if you use the update" or "if you use OBS" name nobody in particular,
+    so they go to the review queue, never to a page. An OBS version counts only where the vendor
+    names it as the defective one ("Fixed a crash in V", "present in V"), never as where an input
+    file was made ("created in V").
     Recommendation: WAIT scoped to the setup when the vendor names this version as where the defect
     starts (the earliest version it names, or the originating build); TEST FIRST when the defect is
     carried over from an earlier version (a persistent problem is never called new) or is an
@@ -23,14 +28,21 @@ WHAT IT IS. A pure function of stored data -- the generated records and their co
 
   * user_corroborated_install_failure (G35-04 Amendment A1; calibration G35-05 section 5). The
     update fails to install, reported by at least MIN_INDEPENDENT_REPORTERS independent users on
-    the page's own counted rows: Windows rows that name the page's KB or exact build with install
-    wording, Acrobat rows that show installer "Exit Code 7" (a row shared between Pro and Reader must
+    the page's own counted rows. A Windows row counts only when it reports THIS update failing to
+    install (`windows_install_row`): it names the page's KB (a build alone is a device's current
+    build or a rollback target, not the update, unless the row says "update/upgrade to <build>"); its
+    install wording is not negated ("not that the update fails to install"), not about the update
+    scan ("failed to check for updates") and not about another update (the nearest update the row
+    names to that wording is this page's); and only the error codes attributed to this page's update
+    are listed. Acrobat rows show installer "Exit Code 7" (a row shared between Pro and Reader must
     name this page's product). The MANDATORY independence gate (I11) runs before reporters are
     counted: a declared cross-post never counts, and a row that repeats a kept row (template-stripped
     token overlap, a shared log URL, the same set of two or more KB numbers) is the same reporter.
-    Different URLs alone prove nothing (AUTH_V2_35 D-A). Owner wording: "the update fails to install
-    counts as one concrete problem", so any error codes count. Recommendation: TEST FIRST "when
-    installing it" -- never WAIT.
+    Different URLs alone prove nothing (AUTH_V2_35 D-A). Different error codes are grouped as one
+    problem here (A1's reading). That reading was a coordinator interpretation, NOT owner wording
+    (Amendment A3: the owner's text is "the same concrete issue"); A3's strict grouping (a shared
+    code or a shared stage) is not built in this increment -- a recorded follow-up, and one more
+    reason the switch stays OFF. Recommendation: TEST FIRST "when installing it" -- never WAIT.
 
 Everything else -- non-install user corroboration -- is NOT produced: `corroboration_candidates` is
 the placeholder interface for that later work, and it fails closed. Pages that need a person go to
@@ -59,7 +71,7 @@ from typing import Any, Iterable, Mapping
 
 from . import verdict_reasons
 
-PRODUCER_VERSION = "1"
+PRODUCER_VERSION = "2"
 # THE ONE ACTIVATION SWITCH. TEMPORARY: OFF until the owner approves public auto-activation
 # (AUTH_V2_35 D-A). Flipping it is a reviewed one-line change, never an environment variable or a
 # workflow input, so no deploy can turn it on by itself.
@@ -101,10 +113,15 @@ def _version_key(version: str) -> tuple:
 
 # A bullet ends with its author ("[name]") and, in newer notes, a pull-request link ("([#13863](url))").
 _OBS_BULLET_RE = re.compile(r"^\s*[*-]\s*(Fixed\b.*?)\s*(?:\[[^\]\n]*\]\s*(?:\(\[#[0-9]+\]\([^)\n]*\)\))?)?\s*$", re.M)
-# The versions a fix bullet names: "in 32.0.0", "in OBS Studio 31.1.0 and 31.1.1", "present in 32.1.0
-# and 32.1.1". Only an explicit "in V" list counts: a bare number elsewhere (macOS 27.2) is not one.
-_OBS_NAMED_RE = re.compile(r"\b(?:in|present in) (?:OBS Studio )?(\d+\.\d+\.\d+)((?:(?:,|,? and) (?:OBS Studio )?\d+\.\d+\.\d+)*)",
-                           re.ASCII)
+# The versions a fix bullet names AS DEFECTIVE: right after the defect head ("Fixed a possible crash in
+# 32.0.0", "Fixed an issue in OBS Studio 31.1.0 and 31.1.1") or after "present in" / "introduced in"
+# ("regression present in 32.1.0 and 32.1.1"). A version anywhere else is not one: "Fixed a crash when
+# loading scene collections created in 31.0.4" names where an input file was made, and the defect is in
+# the newer release (review 1, LOW-3). A bare number (macOS 27.2) is never one either.
+_OBS_VERSION_LIST = r"(?:OBS Studio )?(\d+\.\d+\.\d+)((?:(?:,|,? and) (?:OBS Studio )?\d+\.\d+\.\d+)*)"
+_OBS_NAMED_RE = re.compile(
+    r"^Fixed (?:a |an )?(?:possible |potential |rare |random )?(?:crash|freeze|hang|issue|bug|regression|problem)e?s? "
+    r"in " + _OBS_VERSION_LIST + r"|\b(?:present|introduced) in " + _OBS_VERSION_LIST, re.ASCII)
 _OBS_HEAD_RE = re.compile(r"^Fixed (?:a |an )?(?:possible |potential |rare |random )?(crash|freeze|hang)\b", re.I)
 _OS_RE = re.compile(r"\bon (Windows|macOS(?: [0-9]+(?:\.[0-9]+)*)?|Linux)\b", re.ASCII)
 _WHEN_RE = re.compile(r"\bwhen ([a-z][^;]*?)\s*\.?$")
@@ -127,8 +144,9 @@ _PREFERENCE_RE = re.compile(r"\b(?:preferences?|settings?|profiles?|default valu
 def _obs_versions(statement: str) -> list[str]:
     named: list[str] = []
     for m in _OBS_NAMED_RE.finditer(statement):
-        named.append(m.group(1))
-        named.extend(re.findall(r"\d+\.\d+\.\d+", m.group(2) or "", re.ASCII))
+        first, rest = (m.group(1), m.group(2)) if m.group(1) else (m.group(3), m.group(4))
+        named.append(first)
+        named.extend(re.findall(r"\d+\.\d+\.\d+", rest or "", re.ASCII))
     return list(dict.fromkeys(named))
 
 
@@ -277,9 +295,6 @@ _WIN_DESC_START_RE = re.compile(r" (?=(?:This issue|Microsoft has|Microsoft is|S
                                 r"You might|Users might|Affected )\b)")
 _WIN_AFFECTS_RE = re.compile(r"\bThis issue affects (?P<np>[^.]+?)\.")
 _WIN_OCCURS_IN_RE = re.compile(r"\bthis issue occurring in (?:some )?(?P<np>[^.]+?)\.", re.I)
-_WIN_GENERIC_SUBJECTS = {"devices", "some devices", "windows devices", "your device", "affected devices", "users",
-                         "some users", "you", "pcs", "computers", "windows", "windows 11", "the device", "your pc",
-                         "devices running windows 11", "windows 11 devices"}
 _WIN_CRASH_RE = re.compile(r"\b(?:close unexpectedly|closes unexpectedly|stop responding|stops responding|crash\w*)\b", re.I)
 _WIN_BREAK_RE = re.compile(r"\b(?:might fail\b|fail to (?:start|connect|open|load|boot)|might not (?:start|work|connect|"
                            r"open|load|boot)|black screen|blue screen|no sound|unable to sign in|be unable to|cannot sign in|"
@@ -292,7 +307,7 @@ _WIN_COSMETIC_RE = re.compile(r"\b(?:display incorrectly|appear incorrectly|cosm
 
 def _win_subject_scope(subject: str) -> str:
     words = subject.split()
-    if not words or subject.lower() in _WIN_GENERIC_SUBJECTS or len(words) > 10:
+    if not words or len(words) > 10:
         return ""
     first = words[0]
     keep = first.isupper() or (len(words) > 1 and words[1][:1].isupper())
@@ -324,14 +339,17 @@ def classify_windows_issue(summary: str) -> dict[str, str]:
         return {"excluded": "narrow_cosmetic", "title": title}
     if not severity:
         return {"excluded": "no_severity_basis", "title": title}
+    # The affected setup, from Microsoft's own words, in this order: "This issue affects <setup>",
+    # "this issue occurring in <setup>", the title's subject. The FIRST that names a setup wins
+    # (`scope_problem`); "This issue affects a small number of devices" names none, so the subject is
+    # tried next, and with a generic subject too ("Devices might ...") the scope stays "" -- refused as
+    # an ambiguous scope when proposed, and queued for a person (review 1, MAJOR-1).
     affects = _WIN_AFFECTS_RE.search(desc)
     occurs = _WIN_OCCURS_IN_RE.search(desc)
-    if affects:
-        scope = f"for {affects.group('np').strip()}"
-    elif occurs:
-        scope = f"if you use {occurs.group('np').strip()}"
-    else:
-        scope = _win_subject_scope(subject.strip())  # "" for a generic subject: refused when proposed
+    options = ([f"for {affects.group('np').strip()}"] if affects else []) \
+        + ([f"if you use {occurs.group('np').strip()}"] if occurs else []) \
+        + [_win_subject_scope(subject.strip())]
+    scope = next((s for s in options if s and not scope_problem(s, WINDOWS)), "")
     return {"severity": severity, "title": title, "scope": scope}
 
 
@@ -468,11 +486,93 @@ def independent_reporters(rows: list[Mapping[str, Any]]) -> tuple[list[Mapping[s
     return kept, dropped
 
 
-def _names_exact_windows_patch(row: Mapping[str, Any], page: Mapping[str, Any]) -> bool:
-    text = _txt(row)
-    kb = _s(page.get("target_kb")).lower()
+# Review 1, MAJOR-2: a row "about" this update is not a row reporting that THIS update fails to install.
+# Install wording that is denied ("The issue is not that the update fails to install but that it does
+# install and then ..."; "it did not fail to install, it installed fine") never counts: the whole row
+# is refused.
+_INSTALL_NEGATION_RX = re.compile(
+    r"\b(?:did|does|do|has|have|had|was|is)(?: not|n't) fail(?:ed|s|ing)? to (?:install|download)|"
+    r"\bnever fail(?:ed|s)? to install|"
+    r"\bnot that (?:the |this |it |my )?(?:[a-z0-9-]+ ){0,2}(?:fails?|failed|failing|won'?t|will not|"
+    r"doesn'?t|does not|didn'?t|did not|can'?t|cannot) (?:to )?install|"
+    r"\b(?:does|did) install\b|"
+    r"\b(?:it|this|the update|this update|the patch) (?:has |had |was )?install(?:ed|s) (?:fine|ok|okay|correctly|"
+    r"successfully|normally|without (?:any )?(?:issues?|problems?|errors?))\b|"
+    r"\b(?:it|this update|the update) (?:has |had |was )?(?:successfully|correctly|properly) installed\b")
+# Spans that name an update or a build without reporting that it fails to install: the update SCAN
+# ("Windows Update failed to check for updates with error 0x80240438"), and the build a device returns
+# to after ANOTHER update failed ("Insider Build 26220.9022 keeps failing to install and rolls back to
+# 26200.9168"). Blanked (positions kept) before install wording, update names and codes are read.
+_NOT_AN_INSTALL_RX = re.compile(
+    r"(?:fail(?:s|ed|ing|ure)?|errors?|unable|can'?t|cannot|could not|couldn'?t)(?: to| when| while)? "
+    r"check(?:ing)? for (?:new )?updates?(?: with (?:the )?(?:error|code)(?: code)?:? ?\(?0x[0-9a-f]+\)?)?|"
+    r"\broll(?:s|ed|ing)? ?back to (?:os )?(?:build )?[0-9]{5}\.[0-9]{1,5}")
+_KB_MENTION_RX = re.compile(r"\bkb ?([0-9]{7})\b")
+
+
+def _blank(text: str, rx: re.Pattern) -> str:
+    return rx.sub(lambda m: " " * len(m.group(0)), text)
+
+
+def _page_mentions(text: str, page: Mapping[str, Any]) -> list[tuple[int, int]]:
+    """Where the row names THIS update: its KB, or its build as the update being installed ("upgrade
+    to build 26100.8457"). A build on its own is not the update: it is how a row states the device's
+    current build ("OS build 26200.8246", "Windows 11 Pro 25H2 26200.9457") or a rollback target, and
+    4 of the 5 build-only rows the first increment cited were about something else (A1 and AUX-095
+    both say "the page's KB")."""
+    kb = re.sub(r"[^0-9]", "", _s(page.get("target_kb")))
     build = _s(page.get("target_build"))
-    return bool((kb and kb in text.replace(" ", "")) or (build and build in text))
+    spans = [(m.start(), m.end()) for m in _KB_MENTION_RX.finditer(text) if kb and m.group(1) == kb]
+    if build:
+        spans += [(m.start(), m.end()) for m in re.finditer(
+            r"\b(?:update|upgrade|updating|upgrading) to (?:the )?(?:os )?(?:build )?" + re.escape(build) + r"\b", text)]
+    return sorted(spans)
+
+
+def _owner_is_page(span: tuple[int, int], page_spans: list[tuple[int, int]],
+                   other_spans: list[tuple[int, int]]) -> bool:
+    """Whether `span` (install wording, an error code) is about THIS page's update, in a row that names
+    several. The row is read as a list, the way Windows Update prints one ("<name> (KB1) (build) Install
+    error - 0x... <name> (KB2) Install error - 0x..."): what follows an update's name, up to the next
+    name, is about that update; what comes before the first name is about the first one named."""
+    names = sorted([(s[0], True) for s in page_spans] + [(s[0], False) for s in other_spans])
+    if not names:
+        return False
+    owner = names[0][1]
+    for start, is_page in names:
+        if start > span[0]:
+            break
+        owner = is_page
+    return owner
+
+
+def windows_install_row(row: Mapping[str, Any], page: Mapping[str, Any]) -> dict[str, Any]:
+    """{ok, why, codes}: whether this counted row reports that THIS page's update fails to install,
+    and the error codes it attributes to this update. Fails closed:
+      * the row must name this update (`_page_mentions`: the KB, never the build alone);
+      * denied install wording refuses the whole row (`_INSTALL_NEGATION_RX`);
+      * "check for updates" and "rolls back to <build>" are not install failures (`_NOT_AN_INSTALL_RX`);
+      * where the row names other updates too, some install wording must sit nearest to this one
+        (a .NET update failing beside this one is not this one failing);
+      * error codes: only those nearest to this update (all of them when it is the only one named)."""
+    text = _txt(row)
+    if _INSTALL_NEGATION_RX.search(text):
+        return {"ok": False, "why": "the row denies an install failure", "codes": []}
+    text = _blank(text, _NOT_AN_INSTALL_RX)
+    page_spans = _page_mentions(text, page)
+    if not page_spans:
+        return {"ok": False, "why": "the row does not name this update (its KB)", "codes": []}
+    kb = re.sub(r"[^0-9]", "", _s(page.get("target_kb")))
+    other_spans = [(m.start(), m.end()) for m in _KB_MENTION_RX.finditer(text) if m.group(1) != kb]
+    wording = [(m.start(), m.end()) for m in _INSTALL_RX.finditer(text)]
+    if not wording:
+        return {"ok": False, "why": "no install-failure wording", "codes": []}
+    if other_spans and not any(_owner_is_page(w, page_spans, other_spans) for w in wording):
+        return {"ok": False, "why": "the install failure it reports is another update's", "codes": []}
+    codes = [m.group(0) for m in _CODE_RX.finditer(text)
+             if m.group(0)[2:].lstrip("0") and (not other_spans
+                                                or _owner_is_page((m.start(), m.end()), page_spans, other_spans))]
+    return {"ok": True, "why": "", "codes": sorted(set(codes))}
 
 
 def _acrobat_row_matches(row: Mapping[str, Any], product_id: str) -> bool:
@@ -501,10 +601,16 @@ def _install_candidates(records: list[Mapping[str, Any]],
         rows = list(counted_by_identity.get(verdict_reasons.record_identity(page), []) or [])
         if len(rows) < MIN_INDEPENDENT_REPORTERS:
             continue
+        codes_by_row: dict[str, list[str]] = {}
         if pid == WINDOWS:
             if not _s(page.get("target_kb")) or not _s(page.get("target_build")):
                 continue
-            matching = [r for r in rows if _INSTALL_RX.search(_txt(r)) and _names_exact_windows_patch(r, page)]
+            matching = []
+            for r in rows:
+                verdict = windows_install_row(r, page)
+                if verdict["ok"]:
+                    matching.append(r)
+                    codes_by_row[_s(r.get("id"))] = verdict["codes"]
         else:
             matching = [r for r in rows if _acrobat_row_matches(r, pid)]
         if len(matching) < MIN_INDEPENDENT_REPORTERS:
@@ -522,7 +628,7 @@ def _install_candidates(records: list[Mapping[str, Any]],
         n = len(kept)
         count = _NUMBER_WORDS.get(n, str(n))
         if pid == WINDOWS:
-            codes = sorted({c for r in kept for c in _CODE_RX.findall(_txt(r)) if c[2:].lstrip("0")})
+            codes = sorted({c for r in kept for c in codes_by_row.get(_s(r.get("id")), [])})
             errors = f" (errors {', '.join(codes)})" if codes else ""
             reason = f"{count} users independently report that this update fails to install{errors}."
         else:
@@ -597,11 +703,70 @@ def _candidate(cls: str, page: Mapping[str, Any], *, verdict: str, scope: str, r
     return entry
 
 
-def _scope_ok(scope: Any) -> bool:
-    """THE scope requirement, in one place: the affected setup, worded 'if / when / for ...' (the
-    reviewed entries' SCOPE_RE). A statement whose setup the grammar cannot state has scope '' and is
-    refused here as an ambiguous scope (and queued for a person), never published unscoped."""
-    return bool(verdict_reasons.SCOPE_RE.match(_s(scope)))
+# Words that name nobody in particular (review 1, MAJOR-1). A scope must carry at least one word
+# outside this list -- a SETUP word: a feature, a device class, a configuration, a platform. Listed:
+# function words; quantifiers ("a small number of", "some", "most", "all", "only", "a subset of");
+# population nouns (devices, users, PCs, systems, customers); editions and versions; the update
+# itself and its verbs ("devices that have installed this update"); a generic "application" or
+# "program"; generic activities ("when starting ..."). The product's own name is added per product
+# (`_PRODUCT_WORDS`): "if you use OBS" names every OBS user. Version numbers never name a setup.
+_SCOPE_GENERIC_WORDS = frozenset("""
+a an the this that these those it its they them their there your you my our we us i me
+of to in on at by with without from into onto for and or nor but as than then also both either
+if when where whenever while who whom whose which what
+is are was were be been being am has have had having do does did done can could may might will would should
+some most many all any only several certain various multiple every each few fewer other others more less much
+very just even especially particularly typically usually mostly mainly generally potentially possibly
+small large limited growing increasing significant number numbers subset subsets portion portions
+percentage fraction minority majority handful set group groups range variety kind kinds type types
+affected impacted unaffected specific particular
+device devices user users pc pcs computer computers machine machines system systems customer customers
+people person persons someone anyone everyone everybody organization organizations client clients
+endpoint endpoints hardware configuration configurations setup setups
+edition editions version versions release releases build builds channel channels sku skus
+home pro professional enterprise education business iot ltsc ltsb se
+update updates updated updating patch patches patched install installs installed installing installation
+installations upgrade upgrades upgraded upgrading apply applied applying download downloaded downloading
+application applications app apps program programs software tool tools feature features product products
+use uses used using run runs running ran start starts started starting launch launches launched launching
+open opens opened opening load loads loaded loading close closes closed closing exit exits exited exiting
+""".split())
+_PRODUCT_WORDS = {
+    WINDOWS: frozenset({"windows", "microsoft", "11", "os"}),
+    OBS: frozenset({"obs", "studio", "obs-studio"}),
+}
+_VERSION_TOKEN_RE = re.compile(r"^(?:v?[0-9]+(?:\.[0-9]+)*|[0-9]{2}h[12]|kb[0-9]{7})$")
+
+
+def scope_problem(scope: Any, product_id: str = "") -> str:
+    """Why `scope` is not an affected setup, or "" when it is. THE scope rule, in one place.
+
+    The scope is worded 'if / when / for ...' (the reviewed entries' SCOPE_RE) AND names a setup:
+    at least one word outside _SCOPE_GENERIC_WORDS and the product's own name. "for a small number
+    of devices", "for all editions of Windows 11", "for devices that have installed this update",
+    "if you use the update", "if you use application" and "if you use OBS" all read like a scope
+    and name nobody in particular, so a candidate carrying one would cover everyone. The install
+    class's fixed scope ("when installing it") is the one exception: there the setup IS the act of
+    installing (A1), and `candidate_problems` keeps it to installation failures."""
+    text = _s(scope)
+    if not verdict_reasons.SCOPE_RE.match(text):
+        return "the scope is not worded 'if / when / for ...'"
+    if text == INSTALL_SCOPE:
+        return ""
+    body = re.sub(r"^(?:if you use|if|when|for)\s+", "", text, flags=re.I)
+    generic = _SCOPE_GENERIC_WORDS | _PRODUCT_WORDS.get(_s(product_id), frozenset())
+    words = re.findall(r"[a-z0-9](?:[a-z0-9'+.-]*[a-z0-9])?", body.lower())
+    if not [w for w in words if w not in generic and not _VERSION_TOKEN_RE.match(w)]:
+        return ("the scope names no setup: only a quantifier, a population, an edition, the update, a generic "
+                "application or the product")
+    return ""
+
+
+def _scope_ok(scope: Any, product_id: str = "") -> bool:
+    """The scope requirement: `scope_problem` finds nothing. A statement whose setup the grammar cannot
+    state has scope '' -- or one that names nobody in particular -- and is refused here as an
+    ambiguous scope (and queued for a person), never published unscoped or scoped to everyone."""
+    return not scope_problem(scope, product_id)
 
 
 def candidate_problems(entry: Mapping[str, Any]) -> list[str]:
@@ -609,8 +774,10 @@ def candidate_problems(entry: Mapping[str, Any]) -> list[str]:
     problems = []
     if entry.get("verdict") not in ("WAIT", "TEST FIRST"):
         problems.append("verdict is not WAIT or TEST FIRST")
-    if not _scope_ok(entry.get("scope")):
-        problems.append("scope is not 'if/when/for ...'")
+    if not _scope_ok(entry.get("scope"), _s(entry.get("product_id"))):
+        problems.append("scope is not 'if/when/for <a setup>'")
+    if _s(entry.get("scope")) == INSTALL_SCOPE and entry.get("severity_basis") != "critical_install_failure":
+        problems.append("'when installing it' is the scope of an installation failure only")
     reason = _s(entry.get("reason"))
     if not reason or "\n" in reason or len(reason) > 320:
         problems.append("reason is not one public line of 1-320 characters")
@@ -641,9 +808,11 @@ class ProducerResult:
         cls = (entry.get("producer") or {}).get("class", "")
         identity = {"product_id": entry.get("product_id", ""), "update_version": entry.get("update_version", ""),
                     "target_build": entry.get("target_build", "")}
-        if not _scope_ok(entry.get("scope")):
+        if not _scope_ok(entry.get("scope"), _s(entry.get("product_id"))):
             self.exclude(cls, "ambiguous_scope", entry.get("citation") or {}, **identity,
-                         severity=entry.get("severity_basis", ""))
+                         severity=entry.get("severity_basis", ""),
+                         note=f"proposed scope {_s(entry.get('scope'))!r}: "
+                              f"{scope_problem(entry.get('scope'), _s(entry.get('product_id')))}")
             return
         problems = candidate_problems(entry)
         if problems:

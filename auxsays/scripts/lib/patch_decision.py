@@ -306,7 +306,8 @@ PANEL_KIND = {"corroborated_install_problem": "affected_configuration",
               "regression": "deployment_caution",
               "vendor_confirmed_serious": "deployment_caution"}
 # A vendor-confirmed reason may stand on a page with no user report, so its "other setups" line
-# cannot point at reports listed below.
+# cannot point at reports listed below. Used only when every reason on the page is of that class and
+# the page has no report (public_body).
 OTHER_SETUPS_BY_CLASS = {
     "vendor_confirmed_serious": "Other setups: no problem is confirmed for them yet.",
 }
@@ -491,7 +492,12 @@ def public_body(decision: Decision, record: dict[str, Any] | None, report_count:
             parts.append(f"Also {_text(other.get('verdict'))} {_text(other.get('scope'))}: "
                          f"{_text(other.get('reason'))}")
         if not install:
-            parts.append(OTHER_SETUPS_BY_CLASS.get(_text(head.get("reason_class")), OTHER_SETUPS))
+            # The vendor line only where nothing else stands: no user-report reason and no report.
+            # Beside reports (or an "Also ... users independently report" reason) the usual line is
+            # the true one (G35-04 review 1, LOW-5).
+            alone = n == 0 and len({_text(e.get("reason_class")) for e in decision.reasons}) == 1
+            parts.append(OTHER_SETUPS_BY_CLASS.get(_text(head.get("reason_class")), OTHER_SETUPS) if alone
+                         else OTHER_SETUPS)
         return " ".join(parts)
     if n == 0:
         return ""

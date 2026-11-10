@@ -313,6 +313,14 @@ def load_counted_accepted_urls(
             for key, group in groups.items()}
 
 
+# verdict_policy_drift's last sentence, ONE copy (G35-04 review 1, LOW-4). The record writers
+# (apply_consensus_to_records.py, build_consensus_from_evidence.py) read REVIEWED reasons only, so a
+# difference that comes from a reason-producer candidate never reaches the stored prose: said so.
+DRIFT_CATCH_UP = ("The stored prose catches up when a record writer next promotes this page, unless the "
+                  "difference comes from a reason-producer candidate: the writers read reviewed reasons only, "
+                  "so that drift stays until they read the producer's reasons too.")
+
+
 def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     """GROWTH-3: the two reviewed fact files, what each page RENDERS against what the authority
     decides, and each report-bearing record's stored verdict against the policy.
@@ -355,7 +363,10 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         the projection is decided from the same evidence -- and the message names what it renders.
       * verdict_policy_drift -- a report-bearing record whose stored verdict or stored summary lead
         differs from what the policy decides now. Every surface prints the gate's verdict, so the
-        page and the feed are already right; the stored prose catches up at the next promotion.
+        page and the feed are already right. The stored prose catches up when a record writer next
+        promotes the page -- EXCEPT where the difference comes from a reason-producer candidate
+        (lib/verdict_reason_producer, only while its switch is on): the writers read reviewed reasons
+        only, so that drift does not clear (G35-04 review 1, LOW-4; a recorded follow-up).
       * patch_lifecycle_unmatched -- a lifecycle entry no record carries.
     """
     errors: list[dict[str, str]] = []
@@ -472,13 +483,13 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         if (stored and stored != decision.verdict) or (stored_lead and stored_lead != expected_phrase):
             add(warnings, path, "verdict_policy_drift",
                 f"stored verdict {stored!r} (summary opens {stored_lead or '(none)'!r}) but the verdict "
-                f"policy decides {expected_phrase!r}; every surface renders {expected_phrase!r}, and the "
-                "stored prose catches up at the next promotion.")
+                f"policy decides {expected_phrase!r}; every surface renders {expected_phrase!r}. "
+                + DRIFT_CATCH_UP)
         elif summary and summary != expected_summary:
             add(warnings, path, "verdict_policy_drift",
                 "the stored summary is not the policy's line (lib/patch_decision.summary_line); the feed "
                 f"card still leads with {expected_phrase!r} and the page's own line (it prints stored text "
-                "only where it matches them), and the stored prose catches up at the next promotion.")
+                "only where it matches them). " + DRIFT_CATCH_UP)
     return errors, warnings
 
 

@@ -13,7 +13,13 @@ PUBLIC_AUTO_ACTIVATION (TEMPORARY: OFF, owner approval pending) is the only way 
 the decision authority.
 
 SECTIONS. [V] the vendor class on frozen copies of the stored statements -- the 6 named pages
-(VRP-V1..V7). [I] the install class and its independence gate (VRP-I1..I6). [P] the corroboration
+(VRP-V1..V7); review 1's probes: a scope must name a SETUP (V8, V9: "a small number of devices",
+"if you use OBS" ... go to the review queue), an OBS version counts only where the vendor names it as
+the defective one (V9), the Windows minor-lag exclusion (V9), the vendor "other setups" line only on a
+page with nothing else (V10). [I] the install class and its independence gate (VRP-I1..I6); review 1's
+frozen negatives -- rows that deny an install failure, name only a build, report the update scan, a
+rollback or another update's failure (I7) -- error codes from this update only (I8), and the two
+DUPLICATES.md pairs the near-identical-text cue must collapse (I9). [P] the corroboration
 placeholder fails closed (VRP-P1). [N] purity: no network, no file, no clock, deterministic (VRP-N1,
 N2). [S] the switch: ships OFF and changes nothing; ON, the projection, QA and the real gate carry the
 candidates; the builder writes the git-ignored artifact (VRP-S0..S5). [C] the shipped corpus
@@ -137,6 +143,35 @@ NA_26H1 = (f"- Resolved: Domain-joined devices might lose their secure trust rel
            "Resolved KB5124010; originating N/A; last updated 2026-10-08 17:44 PT; resolved by KB5124010.")
 COSMETIC_26H1 = (f"- Active: Taskbar icons might display incorrectly after sign-in {EM} status Confirmed; originating "
                  "OS Build 28000.2804 KB5120996; last updated 2026-10-14 10:13 PT.")
+# Review 1's probes (tools/mut/mine.py R2..R4), verbatim, plus a Windows lag statement (LOW-1 / PM1d).
+HEADER_25H2 = HEADER_24H2.replace("24H2", "25H2")
+SMALL_NUMBER_25H2 = (f"- Active: Devices might fail to start after installing this update This issue affects a small "
+                     f"number of devices. {EM} status Confirmed; originating OS Build 26200.8524 KB5089573; last updated "
+                     "2026-10-30 10:00 PT.")
+LAG_25H2 = (f"- Active: Network shares might be unable to open without a long delay This issue affects devices "
+            f"connecting to SMB shares over VPN. {EM} status Confirmed; originating OS Build 26200.8524 KB5089573; last "
+            "updated 2026-10-30 10:00 PT.")
+OBS_32_1_1_PROBE_NOTES = "\r\n".join([
+    "## OBS Studio 32.1.1 Hotfix Changes",
+    "* Fixed an issue in 32.1.0 where OBS would not start on some systems [probe]",
+    "* Fixed a crash when loading scene collections created in 31.0.4 [probe]",
+])
+# The phrasings review 1 got through the first increment's grammar, each read as a scope.
+SCOPES_NAMING_NOBODY = [
+    ("if you use A small number of devices", WIN), ("for a limited number of devices", WIN),
+    ("for devices that have installed this update", WIN), ("for all editions of Windows 11", WIN),
+    ("if you use most devices", WIN), ("for only some users", WIN), ("if you use the update", WIN),
+    ("if you use application", WIN), ("if you use program", WIN), ("if you use OBS", OBS),
+    ("when starting OBS Studio", OBS), ("for a subset of Windows 11 devices", WIN), ("", WIN),
+]
+SCOPES_NAMING_A_SETUP = [
+    ("if you use virtual desktop environments", WIN), ("if you use USB audio devices", WIN),
+    ("if you use domain-joined devices", WIN), ("if you use applications which require AC-3 audio decoding", WIN),
+    ("for non-admin users connecting through Remote Desktop with Administrator protection enabled", WIN),
+    ("if you use Decklink Output", OBS), ("if you use Browser Source hardware acceleration in the Flatpak version", OBS),
+    ("when using PipeWire capture with explicit sync on Linux", OBS), ("when opening source properties on Windows", OBS),
+    ("if you use browser sources", OBS), ("if you use macOS 27.2", OBS),
+]
 
 
 def obs(version, published, notes="", count=0, **over):
@@ -264,6 +299,73 @@ def check_vendor() -> None:
           len(res.candidates) == 10 and not bad, str(bad))
 
 
+def probe_fixture() -> list[dict]:
+    """Review 1's probe shapes on records of their own (tools/mut/mine.py R2..R4) + a lag statement."""
+    return [
+        obs("31.0.4", "2025-04-01T00:00:00Z"), obs("32.1.0", "2026-03-20T00:00:00Z"),
+        obs("32.1.1", "2026-04-02T00:00:00Z", OBS_32_1_1_PROBE_NOTES),
+        win("25H2", "26200.8524", "KB5089573", "2026-05-27T00:00:00Z"),
+        win("25H2", "26200.9818", "KB5134140", "2026-10-28T00:00:00Z", "Base text.\n\n" + "\n".join(
+            [HEADER_25H2, SMALL_NUMBER_25H2, LAG_25H2])),
+    ]
+
+
+def check_vendor_scope() -> None:
+    let_through = [s for s, p in SCOPES_NAMING_NOBODY if not vrp.scope_problem(s, p)]
+    refused = [s for s, p in SCOPES_NAMING_A_SETUP if vrp.scope_problem(s, p)]
+    install = {"verdict": "TEST FIRST", "scope": vrp.INSTALL_SCOPE, "reason": "x.", "product_id": OBS,
+               "update_version": "9.0.0", "evidence": [], "citation": {"statement": "s", "record": "r"},
+               "producer": {"class": vrp.VENDOR_CLASS}}
+    check("VRP-V8 a scope must NAME A SETUP, not just read 'if / when / for ...': quantifier and population "
+          "phrasings ('a small number of devices', 'all editions of Windows 11', 'only some users', 'devices that "
+          "have installed this update'), the update itself, a bare 'application' / 'program' and the product "
+          "('if you use OBS') are all refused; every scope the shipped corpus proposes still passes; 'when "
+          "installing it' stands only for an installation failure",
+          not let_through and not refused
+          and not vrp.candidate_problems(dict(install, severity_basis="critical_install_failure"))
+          and any("installation failure only" in p for p in vrp.candidate_problems(
+              dict(install, severity_basis="crash_in_core_flow"))),
+          f"let through={let_through} refused={refused}")
+    res = vrp.produce(probe_fixture(), {})
+    by_page = {(c["update_version"], c.get("target_build", "")) for c in res.candidates}
+    small = [e for e in res.excluded if "a small number of" in e["source"].get("statement", "")]
+    lag = [e for e in res.excluded if "without a long delay" in e["source"].get("statement", "")]
+    itself = [e for e in res.excluded if "where OBS would not start" in e["source"].get("statement", "")]
+    created = [e for e in res.excluded if "created in 31.0.4" in e["source"].get("statement", "")]
+    queued = sorted((q.get("update_version", ""), q.get("target_build", "")) for q in res.review_queue)
+    check("VRP-V9 review 1's probes give NO candidate: Microsoft's 'This issue affects a small number of "
+          "devices' and an OBS fix whose subject is OBS itself are ambiguous scopes, sent to the TEMPORARY review "
+          "queue; 'scene collections created in 31.0.4' does not name 31.0.4 as defective (no exact version); a "
+          "Windows issue that is a delay is a minor lag",
+          not res.candidates and not by_page
+          and [e["excluded"] for e in small] == ["ambiguous_scope"] and [e["excluded"] for e in itself] == ["ambiguous_scope"]
+          and [e["excluded"] for e in created] == ["no_exact_version"] and [e["excluded"] for e in lag] == ["minor_lag"]
+          and queued == [("25H2", "26200.8524"), ("32.1.0", "")],
+          f"candidates={sorted(by_page)} small={small[:1]} itself={itself[:1]} created={created[:1]} lag={lag[:1]} "
+          f"queued={queued}")
+
+
+def check_vendor_body() -> None:
+    recs = named_fixture()
+    res = vrp.produce(recs, {})
+    page = dict(recs[7])  # 24H2 26100.9550: two vendor WAITs, no user report
+    vendor = vrp.merge({}, res.candidates).get(vr.record_identity(page), [])
+    install = {"id": "x:install", "verdict": "TEST FIRST", "scope": "when installing it", "reason_class":
+               "corroborated_install_problem", "reason": "Two users independently report that this update fails "
+               "to install."}
+    alone = pd.public_body(pd.decide(page, valid_reasons=vendor), page, 0)
+    with_reports = pd.public_body(pd.decide(dict(page, update_report_count=12), valid_reasons=vendor), page, 12)
+    beside = pd.public_body(pd.decide(dict(page, update_report_count=2), valid_reasons=vendor + [install]), page, 2)
+    vendor_line = pd.OTHER_SETUPS_BY_CLASS[vrp.VENDOR_CLASS]
+    check("VRP-V10 the vendor 'Other setups: no problem is confirmed for them yet.' line prints only where the "
+          "vendor reason stands alone on a page with no report; beside user reports, or beside an 'Also ... users "
+          "independently report' reason, the page keeps the usual line that points at the reports",
+          len(vendor) == 2 and alone.endswith(vendor_line) and with_reports.endswith(pd.OTHER_SETUPS)
+          and beside.endswith(pd.OTHER_SETUPS) and "Also TEST FIRST when installing it" in beside
+          and vendor_line not in with_reports + beside,
+          f"alone={alone[-60:]!r} reports={with_reports[-60:]!r} beside={beside[-60:]!r}")
+
+
 # ------------------------------------------------------------------------ [I] install failures
 
 def wrow(i, title, excerpt, date="2026-05-01", url=None, **over):
@@ -351,6 +453,118 @@ def check_install() -> None:
           d.verdict == "SECURITY UPDATE" and pd.PANEL_HEADING.get(d.panel_kind) == "Affected configuration"
           and pd.public_body(d, sec, 2).startswith("Security update - installation issues reported."),
           f"{d} {d.panel_kind}")
+
+
+# Review 1, MAJOR-2: six REAL counted rows the first increment cited as "this update fails to install",
+# frozen verbatim (stored title + excerpt), each with the page it was counted on.
+LEARN = "https://learn.microsoft.com/en-us/answers/questions/"
+FROZEN_NOT_INSTALL = [
+    ("negated", win("25H2", "26200.7623", "KB5074109", "2026-01-13T00:00:00Z"), wrow(
+        "q5754132", "2026-01 Security Update (KB5074109) (26200.7623) - Microsoft Q&A",
+        "2026-01 Security Update (KB5074109) (26200.7623) - Microsoft Q&A The issue with the Security Update in "
+        "December and now in January keeps coming up and eliciting responses that are not helpful. The issue is not "
+        "that the update fails to install but that it does install and then...", "2026-02-02",
+        url=LEARN + "5754132/2026-01-security-update-(kb5074109)-(26200-7623)"), "the row denies an install failure"),
+    ("rollback target", win("25H2", "26200.9168", "KB5121003", "2026-08-12T00:00:00Z"), wrow(
+        "q5976649", "Windows Insider Build 26220.9022 Keeps Failing to Install and Rolls Back to 26200.9168 - Microsoft Q&A",
+        "Windows Insider Build 26220.9022 Keeps Failing to Install and Rolls Back to 26200.9168 - Microsoft Q&A Hello "
+        "Windows Insider Team, I need help with a serious installation problem affecting my Windows 11 Pro Insider "
+        "device. My current installed OS build is: Windows 11 Pro —...", "2026-08-16",
+        url=LEARN + "5976649/windows-insider-build-26220-9022-keeps-failing-to"), "the row does not name this update"),
+    ("update scan", win("25H2", "26200.8246", "KB5083769", "2026-04-14T00:00:00Z"), wrow(
+        "q5864200", "Windows Update failed to check for updates with error 0x80240438. - Microsoft Q&A",
+        "Windows Update failed to check for updates with error 0x80240438. - Microsoft Q&A This error code keeps coming "
+        "up when checking for updates. Edition Windows 11 Home Version 25H2 Installed on ‎3/‎25/‎26 OS build "
+        "26200.8246 Experience Windows Feature Experience Pack...", "2026-04-20",
+        url=LEARN + "5864200/windows-update-failed-to-check-for-updates-with-er"), "the row does not name this update"),
+    ("device build: programs", win("25H2", "26200.9457", "KB5129195", "2026-09-08T00:00:00Z"), wrow(
+        "q6011494", "I'm having problems with Windows 11Pro 25H2 26200.9457/Pack 1000.26100.360.0 - Microsoft Q&A",
+        "I'm having problems with Windows 11Pro 25H2 26200.9457/Pack 1000.26100.360.0 - Microsoft Q&A I'm having "
+        "problems with Windows 11. Sometimes it won't install my programs, sometimes updates don't work, and now my "
+        "laptop, which has Windows 11 installed, was showing my account...", "2026-09-22",
+        url=LEARN + "6011494/im-having-problems-with-windows-11pro-25h2-26200-9"), "the row does not name this update"),
+    ("device build: Settings", win("25H2", "26200.9457", "KB5129195", "2026-09-08T00:00:00Z"), wrow(
+        "q6015696", "Windows Update fails with \"Something went wrong\" — UpdateOrchestrator event log missing even after "
+        "in-place repair - Microsoft Q&A",
+        "Windows Update fails with \"Something went wrong\" — UpdateOrchestrator event log missing even after in-place "
+        "repair - Microsoft Q&A Windows 11 25H2 (build 26200.9457), originally upgraded from 21H2. Problem: Windows "
+        "Update page in Settings shows \"Something went wrong. Try to...", "2026-09-27",
+        url=LEARN + "6015696/windows-update-fails-with-something-went-wrong-upd"), "the row does not name this update"),
+    ("another update's failure", win("24H2", "26100.7462", "KB5072033", "2025-12-09T00:00:00Z"), wrow(
+        "q5680348", "windows update failed always since 3 months. - Microsoft Q&A",
+        "windows update failed always since 3 months. - Microsoft Q&A Can not update the following : Cumulative Update "
+        "for .NET Framework 3.5 and 4.8.1 for Windows 11, version 24H2 for x64 (KB5066131) (Install error - 0x800703f1) "
+        "2.2025-12 Security Update (KB5072033) (26100.7462)", "2025-12-25",
+        url=LEARN + "5680348/windows-update-failed-always-since-3-months"), "the install failure it reports is another update's"),
+]
+# DUPLICATES.md L1 (26200.7623, live) and N2 (26200.7922): one reporter each, kept apart by nothing but the URL.
+L1 = [wrow("q5708079", "security updates are not installing - Microsoft Q&A",
+           "security updates are not installing - Microsoft Q&A 2026-01 Security Update (KB5074109) (26200.7623) Install "
+           "error - 0x80070306. I install this many times after successfully installation. this show an error and say "
+           "retry", "2026-02-04", url=LEARN + "5708079/security-updates-are-not-installing"),
+      wrow("q5769728", "Security Update (KB5074109) (26200.7623) Install error - Microsoft Q&A",
+           "Security Update (KB5074109) (26200.7623) Install error - Microsoft Q&A 2026-01 Security Update (KB5074109) "
+           "(26200.7623) Install error - 0x80070306. I install this many times after successful installation. this show "
+           "an error and say retry", "2026-02-10", url=LEARN + "5769728/security-update-(kb5074109)-(26200-7623)-install-e")]
+N2 = [wrow("q5794016", "2026 Preview update (KB5077241) (26200.7922) couldn't install - Microsoft Q&A",
+           "2026 Preview update (KB5077241) (26200.7922) couldn't install - Microsoft Q&A I have an update that needs to be "
+           "installed, and I have tried numerous times to complete it, but it keeps giving me the message to try again. "
+           "It is 2026.02 Preview Update KB5077241 (26200.7922)", "2026-03-02",
+           url=LEARN + "5794016/2026-preview-update-(kb5077241)-(26200-7922)-could"),
+      wrow("q5791250", "How to fix an Windows update that will not install - Microsoft Q&A",
+           "How to fix an Windows update that will not install - Microsoft Q&A I have an update that needs to be installed "
+           "and I have tried numerous times to complete it and it keeps giving me the message to try again. It is "
+           "2026.02 Preview Update KB5077241 (26200.7922) Does anyone have...", "2026-03-11",
+           url=LEARN + "5791250/how-to-fix-an-windows-update-that-will-not-install")]
+
+
+def check_install_rows() -> None:
+    wrong = []
+    for name, page, row, why in FROZEN_NOT_INSTALL:
+        got = vrp.windows_install_row(row, page)
+        if got["ok"] or not got["why"].startswith(why):
+            wrong.append((name, got))
+    probes = {  # review 1's probe R1 (two rows that deny it), a KB row about the update SCAN, and positives
+        "did not fail": wrow(21, "KB5099999 Explorer no longer shows PDF previews", "After KB5099999 was installed on "
+                             "January 24, 2026 (it did not fail to install, it installed fine), Windows Explorer no longer "
+                             "displays PDF files."),
+        "scan after the KB": wrow(22, "Windows Update failed to check for updates after KB5099999 - Microsoft Q&A",
+                                  "Since the 2026-05 update KB5099999 Windows Update failed to check for updates with error "
+                                  "0x80240438."),
+    }
+    refused = {n: vrp.windows_install_row(r, KBP) for n, r in probes.items()}
+    upgrade = vrp.windows_install_row(wrow(23, "Why was the upgrade to 26200.5000 so massive?", "The upgrade to build "
+                                           "26200.5000 has failed to install through Windows Update."), KBP)
+    kept = [vrp.windows_install_row(r, KBP)["ok"] for r in (R1, R2)]
+    denial = FROZEN_NOT_INSTALL[0][2]
+    fires = install_run(KBP, [probes["did not fail"], dict(  # probe R1: two users who both say it INSTALLED
+        denial, report_title=denial["report_title"].replace("KB5074109", "KB5099999"),
+        report_text_excerpt=denial["report_text_excerpt"].replace("KB5074109", "KB5099999"))]).candidates
+    check("VRP-I7 a row counts only when it reports THIS update failing to install: review 1's six real cited rows "
+          "are refused -- one denies it ('not that the update fails to install'), four name only a build (a "
+          "rollback target, the update scan, a device's current build twice), one reports the .NET update beside "
+          "it failing -- and so are the probe's denials and a KB row about the update scan; the KB rows and an "
+          "'upgrade to build <b> has failed to install' row still count",
+          not wrong and not any(v["ok"] for v in refused.values()) and upgrade["ok"] and kept == [True, True]
+          and not fires,
+          f"wrong={wrong} refused={ {n: v['why'] for n, v in refused.items()} } upgrade={upgrade} kept={kept} "
+          f"fires={[c['reason'] for c in fires]}")
+    listing = wrow(24, "Updates fail - Microsoft Q&A", "2026-05 Security Update (KB5099999) (26200.5000) Install error - "
+                   "0x800f0991 2026-05 .NET Framework Update (KB5088888) Install error - 0x800703f1")
+    alone = wrow(25, "KB5099999 will not install", "KB5099999 will not install, error 0x80073712 every time.", "2026-05-03")
+    codes = vrp.windows_install_row(listing, KBP)["codes"]
+    reason = [c["reason"] for c in install_run(KBP, [listing, alone]).candidates]
+    check("VRP-I8 error codes come only from THIS update: in a Windows Update listing the .NET update's "
+          "0x800703f1 is not listed for this KB, so the reason names the page's own codes",
+          codes == ["0x800f0991"] and reason == ["Two users independently report that this update fails to install "
+                                                 "(errors 0x80073712, 0x800f0991)."], f"{codes} {reason}")
+    pairs = {"L1": L1, "N2": N2}
+    why = {n: vrp.same_reporter(*rows) for n, rows in pairs.items()}
+    gate = {n: len(vrp.independent_reporters(rows)[0]) for n, rows in pairs.items()}
+    check("VRP-I9 the independence gate collapses DUPLICATES.md's L1 (26200.7623, live) and N2 (26200.7922) -- the "
+          "same misspelt sentences at two URLs -- to one reporter each, on the near-identical-text cue (I10)",
+          all(w == "near-identical text once templates are stripped" for w in why.values())
+          and gate == {"L1": 1, "N2": 1}, f"{why} {gate}")
 
 
 # ------------------------------------------------------------------------ [P] placeholder
@@ -690,6 +904,40 @@ def swap(owner, name, replacement):
     return (lambda: setattr(owner, name, replacement)), (lambda: setattr(owner, name, original))
 
 
+NEVER = re.compile(r"(?!x)x")  # a pattern that matches nothing: a check switched off
+
+
+def head_class_other_setups(real):
+    """The first increment's rule: the vendor line whenever the HEAD reason is a vendor one."""
+    def mutated(decision, record, report_count):
+        body = real(decision, record, report_count)
+        head = decision.reasons[0] if decision.reasons else {}
+        vendor_line = pd.OTHER_SETUPS_BY_CLASS.get(str(head.get("reason_class") or ""))
+        if vendor_line and body.endswith(pd.OTHER_SETUPS):
+            body = body[: -len(pd.OTHER_SETUPS)] + vendor_line
+        return body
+    return mutated
+
+
+def build_alone_mentions(real):
+    """The first increment's rule: the page's build anywhere in the row names the update."""
+    def mutated(text, page):
+        build = str(page.get("target_build") or "")
+        extra = [(m.start(), m.end()) for m in re.finditer(re.escape(build), text)] if build else []
+        return sorted(set(real(text, page)) | set(extra))
+    return mutated
+
+
+def all_codes(real):
+    """The first increment's rule: every 0x code in a qualifying row is this update's."""
+    def mutated(row, page):
+        got = real(row, page)
+        if got["ok"]:
+            got = dict(got, codes=sorted({c for c in vrp._CODE_RX.findall(vrp._txt(row)) if c[2:].lstrip("0")}))
+        return got
+    return mutated
+
+
 def check_mutations(tmp: Path) -> None:
     real_obs, real_win = vrp.classify_obs_statement, vrp.classify_windows_issue
     real_statements, real_produce, real_indep = vrp._obs_statements, vrp.produce, vrp.independent_reporters
@@ -701,7 +949,7 @@ def check_mutations(tmp: Path) -> None:
             r = fn(text)
             if r.get("excluded") in gated:
                 return {"severity": "substantial_workflow_breakage", "failure_kind": "x", "title": r.get("title", text),
-                        "scope": "if you use the affected feature"}
+                        "scope": "if you use the Audio Mixer"}
             return r
         return mutated
 
@@ -733,7 +981,7 @@ def check_mutations(tmp: Path) -> None:
         ("VX2 the exact-version check removed (a version-less bullet is attributed to the release before)",
          check_vendor, [swap(vrp, "_obs_statements", version_inferred)]),
         ("VX3 the scope requirement dropped (an unscoped candidate is proposed)", check_vendor,
-         [swap(vrp, "_scope_ok", lambda scope: True)]),
+         [swap(vrp, "_scope_ok", lambda scope, product_id="": True)]),
         ("VX4 the activation switch default flipped to ON", lambda: check_switch(tmp / f"x4"),
          [swap(vrp, "PUBLIC_AUTO_ACTIVATION", True)]),
         ("VX5 a network call added to the producer", check_purity, [swap(vrp, "produce", with_network)]),
@@ -747,6 +995,30 @@ def check_mutations(tmp: Path) -> None:
         ("VX10 the placeholder counts two different URLs as independent", check_placeholder,
          [swap(vrp, "rows_are_independent", lambda a, b, incident_independence=None:
                a.get("source_url") != b.get("source_url"))]),
+        # Review 1: one mutant per fix half.
+        ("VX11 the setup-word requirement removed (any 'if / when / for ...' phrase is a setup)", check_vendor_scope,
+         [swap(vrp, "_SCOPE_GENERIC_WORDS", frozenset())]),
+        ("VX12 the product's own name counts as a setup ('if you use OBS')", check_vendor_scope,
+         [swap(vrp, "_PRODUCT_WORDS", {})]),
+        ("VX13 an OBS version anywhere in a fix note names the defective version ('created in V')", check_vendor_scope,
+         [swap(vrp, "_OBS_NAMED_RE", re.compile(
+             r"\b(?:in|present in) (?:OBS Studio )?(\d+\.\d+\.\d+)((?:(?:,|,? and) (?:OBS Studio )?\d+\.\d+\.\d+)*)"
+             r"|(?!x)x(\d)(\d)", re.ASCII))]),
+        ("VX14 the Windows minor-lag exclusion removed", check_vendor_scope,
+         [swap(vrp, "_WIN_LAG_RE", NEVER)]),
+        ("VX15 the vendor 'other setups' line beside user reports (the first increment's head-class rule)",
+         check_vendor_body, [swap(pd, "public_body", head_class_other_setups(pd.public_body))]),
+        ("VX16 the install-denial guard removed", check_install_rows, [swap(vrp, "_INSTALL_NEGATION_RX", NEVER)]),
+        ("VX17 a build alone names the update again", check_install_rows,
+         [swap(vrp, "_page_mentions", build_alone_mentions(vrp._page_mentions))]),
+        ("VX18 'check for updates' / 'rolls back to' read as install failures again", check_install_rows,
+         [swap(vrp, "_NOT_AN_INSTALL_RX", NEVER)]),
+        ("VX19 install wording beside ANOTHER update counts for this one", check_install_rows,
+         [swap(vrp, "_owner_is_page", lambda span, page_spans, other_spans: True)]),
+        ("VX20 every error code in the row is listed for this update", check_install_rows,
+         [swap(vrp, "windows_install_row", all_codes(vrp.windows_install_row))]),
+        ("VX21 the near-identical-text cue (I10) disabled", check_install_rows,
+         [swap(vrp, "INDEPENDENCE_JACCARD", 0.99)]),
     ]
     del real_indep, real_acrobat
     mutants: list = []
@@ -770,8 +1042,11 @@ def run() -> int:
         tmp = Path(td)
         print("\n[V] vendor_confirmed_serious, on frozen copies of the stored statements")
         check_vendor()
+        check_vendor_scope()
+        check_vendor_body()
         print("\n[I] user-corroborated install failures and the independence gate")
         check_install()
+        check_install_rows()
         print("\n[P] the corroboration placeholder")
         check_placeholder()
         print("\n[N] purity")
