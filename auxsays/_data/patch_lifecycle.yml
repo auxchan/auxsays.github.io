@@ -1,0 +1,29 @@
+# OFFICIAL UPDATE LIFECYCLE: ONE VERIFIED EXCEPTION, NOT THE LIFECYCLE MECHANISM (GROWTH-3).
+#
+# This file holds exactly one record: Microsoft withdrew KB5079391 for new installations and named
+# KB5086672 as its replacement. The owner approved showing "AVOID - Microsoft withdrew this update
+# for new installations. Replacement: KB5086672" on its pages (decision 2, 2026-11-06). It applies
+# to INSTALLING the withdrawn update, not to devices that already installed it.
+#
+# It is NOT how lifecycle facts will be maintained. The general "newer update available" links (74
+# Windows pages) are not built: they wait for the Microsoft KB source assessment (rights and
+# production reachability), exact KB/build applicability checks and a deterministic
+# source-to-record writer. lib/verdict_reasons.lifecycle_errors refuses a second entry here, so this file
+# cannot grow into a hand-maintained list.
+#
+# Stored: KB ids, the exact OS builds, dates, the official article URL and the relationship type.
+# No Microsoft text. Verified 2026-11-06 from the article's own withdrawal note (GROWTH-3 spec v1
+# KB read, measure/kbdata/kb5079391.html, template `withdrawn_replaced_by`).
+schema_version: 1
+entries:
+  - id: microsoft-windows-11:KB5079391:withdrawn-for-new-installs
+    product_id: microsoft-windows-11
+    kb: KB5079391
+    builds: ["26100.8116", "26200.8116"]
+    relationship: withdrawn_for_new_installs
+    replacement_kb: KB5086672
+    replacement_builds: ["26100.8117", "26200.8117"]
+    released: "2026-03-26"
+    replacement_released: "2026-03-31"
+    official_url: https://support.microsoft.com/en-us/servicing/os/windows-11/2026/03/march-26-2026-kb5079391-os-builds-26200-8116-and-26100-8116-preview
+    verified_at: "2026-11-06"

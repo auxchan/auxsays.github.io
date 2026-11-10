@@ -5480,3 +5480,18 @@ h2.home-section-label { margin-top: 0; line-height: 1.3; font-family: inherit; }
 .home-tracker-item { display: grid; min-width: 0; }
 .home-tracker-item .home-tracker-link { display: grid; align-content: center; gap: .1rem; border-radius: 14px; padding: .4rem .78rem; }
 .home-tracker-desc { color: var(--text-2); font-size: .72rem; line-height: 1.25; }
+
+/* GROWTH-3 verdict policy: the verdict's scope ("WAIT if you use macOS 27.2") sits beside the word,
+   and a security update's affected-configuration / deployment-caution panel is its own box so the
+   SECURITY UPDATE verdict is never replaced by it. Meaning is carried by the words, not the colour. */
+.update-decision-scope { margin-left: .35rem; color: var(--text-0); font-weight: 650; font-size: clamp(1rem, 1.6vw, 1.2rem); }
+.update-decision-panel {
+  margin: .6rem 0 0;
+  padding: .65rem .8rem;
+  border: 1px solid rgba(240,202,103,.55);
+  border-radius: 10px;
+  background: rgba(240,202,103,.08);
+  color: var(--text-0);
+  line-height: 1.5;
+}
+.update-decision-panel__heading { display: block; margin-bottom: .2rem; font-weight: 750; }

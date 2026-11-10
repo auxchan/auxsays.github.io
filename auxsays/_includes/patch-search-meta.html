@@ -60,6 +60,14 @@
   {%- for psm_known_action in psm_vocab.risk_order -%}
     {%- if psm_known_action == psm_action -%}{%- assign psm_known = true -%}{%- break -%}{%- endif -%}
   {%- endfor -%}
+  {%- comment -%} GROWTH-3: the verdict's scope ("if you use macOS 27.2") is read back from the page too. {%- endcomment -%}
+  {%- assign psm_scope = '' -%}
+  {%- assign psm_scope_parts = psm_verdict_parts[1] | split: '<p class="update-decision-recommendation">' | first | split: '<span class="update-decision-scope">' -%}
+  {%- if psm_scope_parts.size == 2 -%}{%- assign psm_scope = psm_scope_parts[1] | split: '</span>' | first | strip_html | strip_newlines | strip -%}{%- endif -%}
+  {%- assign psm_phrase = psm_action -%}
+  {%- if psm_scope != '' -%}{%- assign psm_phrase = psm_action | append: ' ' | append: psm_scope -%}{%- endif -%}
+  {%- assign psm_official = false -%}
+  {%- if psm_action == 'AVOID' or psm_action == 'SECURITY UPDATE' -%}{%- assign psm_official = true -%}{%- endif -%}
   {%- if psm_known and psm_h1 != '' -%}
     {%- include maturity-state.html record=psm_record -%}
     {%- assign psm_live = false -%}
@@ -96,7 +104,7 @@
     {%- if psm_action == 'INSUFFICIENT DATA' -%}
       {%- if psm_count > 0 -%}
         {%- capture psm_title -%}{{ psm_identity }}: no verdict yet, {{ psm_reports }} so far{%- endcapture -%}
-        {%- capture psm_description -%}{{ psm_reports }} matched to {{ psm_identity }} so far, too few for an AUXSAYS verdict yet.{% if psm_released != '' %} Released {{ psm_released }}.{% endif %}{%- endcapture -%}
+        {%- capture psm_description -%}{{ psm_reports }} matched to {{ psm_identity }} so far, not yet enough for an AUXSAYS verdict.{% if psm_released != '' %} Released {{ psm_released }}.{% endif %}{%- endcapture -%}
       {%- elsif psm_box == 'official' -%}
         {%- capture psm_title -%}{{ psm_identity }}: official notes, no verdict yet{%- endcapture -%}
         {%- capture psm_description -%}Official release notes for {{ psm_identity }}{% if psm_released != '' %}, released {{ psm_released }}{% endif %}. No user reports have been counted for this update yet, so there is no AUXSAYS verdict.{%- endcapture -%}
@@ -104,19 +112,24 @@
         {%- capture psm_title -%}{{ psm_identity }}: no verdict yet{%- endcapture -%}
         {%- capture psm_description -%}{{ psm_identity }}{% if psm_released != '' %}, released {{ psm_released }}{% endif %}. No user reports have been counted for this update yet, so there is no AUXSAYS verdict.{%- endcapture -%}
       {%- endif -%}
+    {%- elsif psm_official -%}
+      {%- comment -%} AVOID and SECURITY UPDATE come from an official fact, not from the reports, so the
+        title names the fact and the description never says the verdict is "from" N reports. {%- endcomment -%}
+      {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}{%- endcapture -%}
+      {%- capture psm_description -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}.{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{% if psm_count > 0 %} {{ psm_reports }} matched so far.{% endif %}{%- endcapture -%}
     {%- else -%}
       {%- if psm_count == 0 -%}
-        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_action }}, no user reports counted{%- endcapture -%}
-        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_action }}. No user reports have been counted for this update yet.{%- endcapture -%}
+        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}, no user reports counted{%- endcapture -%}
+        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}. No user reports have been counted for this update yet.{%- endcapture -%}
       {%- elsif psm_live -%}
-        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_action }}, live consensus of {{ psm_reports }}{%- endcapture -%}
-        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_action }}, live consensus of {{ psm_reports }} matched to this update.{%- endcapture -%}
+        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}, live consensus of {{ psm_reports }}{%- endcapture -%}
+        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}, live consensus of {{ psm_reports }} matched to this update.{%- endcapture -%}
       {%- elsif psm_early -%}
-        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_action }} on early evidence, {{ psm_reports }}{%- endcapture -%}
-        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_action }} on early evidence, {{ psm_reports }} matched to this update.{%- endcapture -%}
+        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }} on early evidence, {{ psm_reports }}{%- endcapture -%}
+        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }} on early evidence, {{ psm_reports }} matched to this update.{%- endcapture -%}
       {%- else -%}
-        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_action }}, {{ psm_reports }}{%- endcapture -%}
-        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_action }}, from {{ psm_reports }} matched to this update.{%- endcapture -%}
+        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}, {{ psm_reports }}{%- endcapture -%}
+        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}, from {{ psm_reports }} matched to this update.{%- endcapture -%}
       {%- endif -%}
       {%- capture psm_description -%}{{ psm_lead }}{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{%- endcapture -%}
     {%- endif -%}

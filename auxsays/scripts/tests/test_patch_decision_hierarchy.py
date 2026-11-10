@@ -368,8 +368,15 @@ def run() -> int:
     def iss(name):
         return issue_sentence(out.get(name, "")) if ok else "<unrendered>"
 
-    check("A11 CASE A: every subject already in the body suppresses the sentence",
-          iss("A_exact") is None, repr(iss("A_exact")))
+    # GROWTH-3: on a report-bearing page the recommendation line is now the verdict policy's own
+    # line ("No verdict yet: ..."), never the stored body, so it names no subject and the issue
+    # sentence is the ONE place the subjects appear. A11/A13b/A13d used to prove the sentence was
+    # dropped when a stored body already listed every subject; they now prove the stored body cannot
+    # reach the page, so the subjects are shown once rather than lost.
+    check("A11 CASE A: a stored body listing every subject no longer reaches the page; the issue sentence carries them",
+          (iss("A_exact") or "").find("audio routing") >= 0
+          and BODY_EXACT not in visible(out.get("A_exact", "")) if ok else False,
+          repr(iss("A_exact")))
     check("A12 CASE B: a generic body keeps the issue sentence",
           (iss("B_generic") or "").find("audio routing") >= 0, repr(iss("B_generic")))
     check("A12b CASE C: a body naming ONE of two subjects keeps the sentence",
@@ -378,14 +385,16 @@ def run() -> int:
           + repr(iss("C_partial")))
     check("A13 CASE D: a body naming two of three subjects keeps the sentence",
           (iss("D_three") or "").find("render/export failures") >= 0, repr(iss("D_three")))
-    check("A13b CASE E: the same subjects in a different order still suppress",
-          iss("E_order") is None, "order is not information: " + repr(iss("E_order")))
+    check("A13b CASE E: in any order, the stored body stays off the page and the issue sentence carries the subjects",
+          (iss("E_order") or "").find("capture-source failures") >= 0
+          and BODY_EXACT not in visible(out.get("E_order", "")) if ok else False,
+          repr(iss("E_order")))
     check("A13c CASE F: an empty cluster renders no issue sentence at all",
           iss("F_empty") is None, repr(iss("F_empty")))
-    check("A13d the producer's theme suffix is not mistaken for an added subject",
-          iss("G_theme") is None,
-          "'audio routing in audio' names the same subject as 'audio routing': "
-          + repr(iss("G_theme")))
+    check("A13d the recommendation line is the policy's, so the theme-suffixed subjects show once",
+          "No verdict yet: 4 user reports are matched to this exact update" in visible(out.get("G_theme", ""))
+          and (iss("G_theme") or "").find("audio routing") >= 0 if ok else False,
+          repr(iss("G_theme")))
 
     # A4/A5/A6/A7 -- the graph and the honesty statement
     check("A4 a zero-report page renders no sentiment-position graph",

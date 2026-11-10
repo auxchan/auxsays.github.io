@@ -47,13 +47,25 @@ LAYOUT_PATH = _AUX / "_layouts" / "aux-update.html"
 PAGE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+(patch-evidence-state|patch-decision)\.html\s+record=([\w.]+)\s*-?%\}")
 
 
+# GROWTH-3: patch-decision.html renders the verdict gate, the patch page's own code too. It takes a
+# record and a count, so it is inlined bound to both, AFTER the page includes are (it lives inside one).
+GATE_INCLUDE_TAG = re.compile(r"\{%-?\s*include\s+patch-verdict-gate\.html\s+record=([\w.]+)\s+count=([\w.]+)\s*-?%\}")
+
+
+def expand_gate(text: str) -> str:
+    gate = (_AUX / "_includes" / "patch-verdict-gate.html").read_text(encoding="utf-8")
+    return GATE_INCLUDE_TAG.sub(lambda m: gate.replace("include.record", m.group(1))
+                                .replace("include.count", m.group(2)), text)
+
+
 def expand_page_includes(text: str) -> str:
-    return PAGE_INCLUDE_TAG.sub(lambda m: (_AUX / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
-                                .replace("include.record", m.group(2)), text)
+    return expand_gate(PAGE_INCLUDE_TAG.sub(
+        lambda m: (_AUX / "_includes" / f"{m.group(1)}.html").read_text(encoding="utf-8")
+        .replace("include.record", m.group(2)), text))
 
 
 LAYOUT = expand_page_includes(LAYOUT_PATH.read_text(encoding="utf-8"))
-ROW = (_AUX / "_includes" / "patch-table-row.html").read_text(encoding="utf-8")
+ROW = expand_gate((_AUX / "_includes" / "patch-table-row.html").read_text(encoding="utf-8"))
 
 _PASS = 0
 _FAIL = 0
@@ -198,7 +210,7 @@ def pre_fix_template() -> str:
         "", text, flags=re.S)
     # the early-evidence line in the verdict box
     text = re.sub(
-        r"\{% if consensus_established == false and evidence_strength == 'Low' %\}"
+        r"\{% if consensus_established == false and evidence_strength == 'Low'(?: and decision_official == false)? %\}"
         r".*?\{% endif %\}",
         "", text, flags=re.S)
     if "consensus-sample-note" in text or EARLY_EVIDENCE in text:
@@ -396,8 +408,10 @@ def run() -> int:
                    "low confidence", "broad consensus"):
         check(f"C5.7 the layout carries no internal phrase {banned!r}",
               banned not in LAYOUT, "qa_patch_records forbids this in public patch copy")
-    check("C5.6 the verdict box hedges only at Low strength",
-          "{% if consensus_established == false and evidence_strength == 'Low' %}" in LAYOUT
+    # GROWTH-3 adds one condition: an OFFICIAL verdict (AVOID, SECURITY UPDATE) is a vendor fact,
+    # not report evidence, so "treat this as early evidence" would misdescribe it.
+    check("C5.6 the verdict box hedges only at Low strength, and never on an official verdict",
+          "{% if consensus_established == false and evidence_strength == 'Low' and decision_official == false %}" in LAYOUT
           and "community consensus is not established for this build" not in LAYOUT)
     check("C5.5 the qualifier is gated on the contract AND on having reports",
           "{% if consensus_established == false and report_count > 0 %}" in LAYOUT)
@@ -451,10 +465,12 @@ def run() -> int:
               "skipped")
     else:
         text = " ".join(re.sub(r"<[^>]+>", " ", no_label).split())
-        check("D.1 a report-bearing record with no decision label still renders one",
-              "WAIT" in text, text[:160])
+        # GROWTH-3: the label is still always rendered, but it is the verdict gate's, decided from
+        # facts -- the summary's stored "WAIT:" no longer publishes a WAIT nothing supports.
+        check("D.1 a report-bearing record with no decision label still renders one (the policy's)",
+              "AUXSAYS verdict INSUFFICIENT DATA" in text and "verdict WAIT" not in text, text[:160])
         check("D.2 and it renders a recommendation body, never an empty one",
-              "Review the report sources" in text or "test before updating" in text, text[:160])
+              "No verdict yet: 2 user reports are matched to this exact update" in text, text[:220])
         missing = rendered({"update_decision_label": "", "update_consensus_summary": "",
                             "quick_verdict": ""})
         mtext = " ".join(re.sub(r"<[^>]+>", " ", missing or "").split())
@@ -495,8 +511,8 @@ def run() -> int:
         check("D.5a a missing shared vocabulary fails LOUD, not silently permissive",
               bare is None or "LABEL=[INSUFFICIENT DATA]" in bare,
               (bare or "")[-120:])
-        check("D.5 the listing row derives a label the same way",
-              row_out is not None and "LABEL=[WAIT]" in row_out,
+        check("D.5 the listing row derives the label the same way (the gate's, not the summary's WAIT)",
+              row_out is not None and "LABEL=[INSUFFICIENT DATA]" in row_out,
               (row_out or "render failed")[-90:])
 
     # Static locks: the broken operand must not come back in the sites that decide a verdict.

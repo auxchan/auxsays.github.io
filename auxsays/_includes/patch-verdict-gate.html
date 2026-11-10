@@ -1,0 +1,156 @@
+{%- comment -%}
+  THE VERDICT GATE (GROWTH-3). The render-time mirror of lib/patch_decision.decide: it applies the
+  owner's verdict policy to the record's stored FACTS, and the stored verdict label plays no part.
+  Every surface that prints a verdict renders this file (patch-decision.html for the patch page and
+  the homepage, patch-table-row.html for product and vendor tables, updates/my-stack.md), so they
+  cannot disagree, and a stale or hand-written label can never publish a verdict the policy does
+  not support.
+
+  Precedence, first match wins, exactly as decide():
+    R1 AVOID            an official withdrawal for new installations in _data/patch_lifecycle.yml
+                        for this exact KB and OS build (one verified exception today)
+    R2 SECURITY UPDATE  Microsoft's stored release-health type "YYYY-MM B" on a Windows record;
+                        reports never override it, a supported reason only adds a warning panel
+    R3/R4 WAIT / TEST FIRST
+                        a reviewed entry in _data/verdict_reasons.yml for this exact page whose
+                        cited rows are ALL still among the page's counted sources
+                        (accepted_report_sources). A withdrawn row drops the entry: fail closed
+    R5/R6 INSUFFICIENT DATA
+  Report count, sentiment, theme, severity, maturity and dates are not read here.
+
+  Input:   include.record  a patch page (page) or a site.pages item
+           include.count   that record's report count, as a number
+  Outputs: gate_label      the published verdict
+           gate_scope      "if ..." / "when ..." qualifier for WAIT / TEST FIRST, else ''
+           gate_body       the recommendation line; '' only for a non-official zero-report page,
+                           whose existing line stays
+           gate_official   true for AVOID and SECURITY UPDATE (facts, not report evidence)
+           gate_panel_heading, gate_panel_text  the security page's warning box, else ''
+  The wording is lib/patch_decision.public_body's, character for character;
+  test_growth3_verdict_policy compares the two over every page.
+
+  No literal Liquid tag appears in this comment on purpose: a comment block still parses tags.
+{%- endcomment -%}
+{%- assign pvg_record = include.record -%}
+{%- assign pvg_count = include.count | default: 0 | plus: 0 -%}
+{%- assign pvg_pid = pvg_record.product_id | default: '' | strip -%}
+{%- assign pvg_version = pvg_record.update_version | append: '' | strip -%}
+{%- assign pvg_build = pvg_record.target_build | append: '' | strip -%}
+{%- assign pvg_kb = pvg_record.target_kb | default: '' | strip -%}
+{%- assign pvg_type = pvg_record.update_type | default: '' | strip -%}
+{%- assign gate_label = 'INSUFFICIENT DATA' -%}
+{%- assign gate_scope = '' -%}
+{%- assign gate_body = '' -%}
+{%- assign gate_official = false -%}
+{%- assign gate_panel_heading = '' -%}
+{%- assign gate_panel_text = '' -%}
+{%- assign pvg_security = false -%}
+{%- assign pvg_preview = false -%}
+{%- if pvg_pid == 'microsoft-windows-11' and pvg_type.size == 9 -%}
+  {%- assign pvg_year = pvg_type | slice: 0, 4 | plus: 0 -%}
+  {%- assign pvg_dash = pvg_type | slice: 4, 1 -%}
+  {%- assign pvg_month = pvg_type | slice: 5, 2 | plus: 0 -%}
+  {%- assign pvg_tail = pvg_type | slice: 7, 2 -%}
+  {%- if pvg_year >= 2000 and pvg_dash == '-' and pvg_month >= 1 and pvg_month <= 12 -%}
+    {%- if pvg_tail == ' B' -%}{%- assign pvg_security = true -%}{%- endif -%}
+    {%- if pvg_tail == ' D' -%}{%- assign pvg_preview = true -%}{%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+{%- assign pvg_life = nil -%}
+{%- if pvg_kb != '' and pvg_build != '' -%}
+  {%- for pvg_entry in site.data.patch_lifecycle.entries -%}
+    {%- if pvg_entry.product_id == pvg_pid and pvg_entry.kb == pvg_kb and pvg_entry.relationship == 'withdrawn_for_new_installs' and pvg_entry.builds contains pvg_build -%}
+      {%- assign pvg_life = pvg_entry -%}{%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- comment -%} Supported reason entries for this exact page, most cautionary first. {%- endcomment -%}
+{%- assign pvg_urls = nil -%}
+{%- assign pvg_head = nil -%}
+{%- assign pvg_head_rank = 99 -%}
+{%- for pvg_entry in site.data.verdict_reasons.entries -%}
+  {%- assign pvg_e_version = pvg_entry.update_version | append: '' | strip -%}
+  {%- assign pvg_e_build = pvg_entry.target_build | append: '' | strip -%}
+  {%- if pvg_entry.product_id == pvg_pid and pvg_e_version == pvg_version and pvg_e_build == pvg_build -%}
+    {%- if pvg_urls == nil -%}
+      {%- capture pvg_urls -%}|{%- for pvg_src in pvg_record.accepted_report_sources -%}{{ pvg_src.source_url }}|{%- endfor -%}{%- endcapture -%}
+    {%- endif -%}
+    {%- assign pvg_ok = true -%}{%- assign pvg_n = 0 -%}
+    {%- for pvg_ev in pvg_entry.evidence -%}
+      {%- assign pvg_key = '|' | append: pvg_ev.source_url | append: '|' -%}
+      {%- unless pvg_urls contains pvg_key -%}{%- assign pvg_ok = false -%}{%- endunless -%}
+      {%- assign pvg_n = pvg_n | plus: 1 -%}
+    {%- endfor -%}
+    {%- if pvg_n == 0 -%}{%- assign pvg_ok = false -%}{%- endif -%}
+    {%- if pvg_ok -%}
+      {%- if pvg_entry.verdict == 'WAIT' -%}{%- assign pvg_rank = 1 -%}{%- elsif pvg_entry.verdict == 'TEST FIRST' -%}{%- assign pvg_rank = 2 -%}{%- else -%}{%- assign pvg_rank = 99 -%}{%- endif -%}
+      {%- if pvg_rank < pvg_head_rank -%}{%- assign pvg_head = pvg_entry -%}{%- assign pvg_head_rank = pvg_rank -%}{%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign pvg_lead = 'Microsoft classifies this as a monthly security update and recommends keeping supported systems updated.' -%}
+{%- if pvg_life -%}
+  {%- assign gate_label = 'AVOID' -%}
+  {%- assign gate_official = true -%}
+  {%- capture gate_body -%}Microsoft withdrew this update for new installations. Replacement: {{ pvg_life.replacement_kb }}.{% if pvg_security %} It was a monthly security update.{% elsif pvg_preview %} It was an optional non-security preview update.{% endif %} This applies to installing it, not to devices that already installed it.{%- endcapture -%}
+{%- elsif pvg_security -%}
+  {%- assign gate_label = 'SECURITY UPDATE' -%}
+  {%- assign gate_official = true -%}
+  {%- if pvg_head -%}
+    {%- if pvg_head.reason_class == 'corroborated_install_problem' -%}
+      {%- assign gate_body = 'Security update - installation issues reported. Microsoft recommends keeping supported systems updated. Some users have reported installation failures on this build. Review the affected configurations and available fixes before deploying to critical systems.' -%}
+      {%- assign gate_panel_heading = 'Affected configuration' -%}
+    {%- elsif pvg_head.reason_class == 'regression' -%}
+      {%- assign gate_body = 'Security update - a confirmed problem affects some setups. Microsoft recommends keeping supported systems updated. Hold deployment only on the affected systems until a fix is available.' -%}
+      {%- assign gate_panel_heading = 'Deployment caution' -%}
+    {%- else -%}
+      {%- assign gate_body = 'Security update - a problem is reported on some setups. Microsoft recommends keeping supported systems updated. Review the affected configuration before deploying to critical systems.' -%}
+      {%- assign gate_panel_heading = 'Affected configuration' -%}
+    {%- endif -%}
+    {%- assign pvg_scope_first = pvg_head.scope | slice: 0 | upcase -%}
+    {%- assign pvg_scope_rest = pvg_head.scope | slice: 1, 400 -%}
+    {%- capture gate_panel_text -%}{{ pvg_scope_first }}{{ pvg_scope_rest }}: {{ pvg_head.reason }}{%- endcapture -%}
+  {%- elsif pvg_count == 0 -%}
+    {%- capture gate_body -%}{{ pvg_lead }} No user reports are matched to this update yet.{%- endcapture -%}
+  {%- elsif pvg_count == 1 -%}
+    {%- capture gate_body -%}{{ pvg_lead }} One user report is matched to this update, and one report does not show a pattern; it is listed below.{%- endcapture -%}
+  {%- else -%}
+    {%- capture gate_body -%}{{ pvg_lead }} {{ pvg_count }} user reports are matched to this update, and no problem in them is confirmed as reported independently by two or more users; they are listed below.{%- endcapture -%}
+  {%- endif -%}
+{%- elsif pvg_head -%}
+  {%- assign gate_label = pvg_head.verdict -%}
+  {%- assign gate_scope = pvg_head.scope -%}
+  {%- assign pvg_install = false -%}
+  {%- if pvg_head.reason_class == 'corroborated_install_problem' -%}{%- assign pvg_install = true -%}{%- endif -%}
+  {%- capture pvg_also -%}
+    {%- for pvg_entry in site.data.verdict_reasons.entries -%}
+      {%- assign pvg_e_version = pvg_entry.update_version | append: '' | strip -%}
+      {%- assign pvg_e_build = pvg_entry.target_build | append: '' | strip -%}
+      {%- if pvg_entry.id != pvg_head.id and pvg_entry.product_id == pvg_pid and pvg_e_version == pvg_version and pvg_e_build == pvg_build -%}
+        {%- assign pvg_ok = true -%}
+        {%- for pvg_ev in pvg_entry.evidence -%}
+          {%- assign pvg_key = '|' | append: pvg_ev.source_url | append: '|' -%}
+          {%- unless pvg_urls contains pvg_key -%}{%- assign pvg_ok = false -%}{%- endunless -%}
+        {%- endfor -%}
+        {%- if pvg_ok and pvg_entry.verdict == 'WAIT' %} Also {{ pvg_entry.verdict }} {{ pvg_entry.scope }}: {{ pvg_entry.reason }}{%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- for pvg_entry in site.data.verdict_reasons.entries -%}
+      {%- assign pvg_e_version = pvg_entry.update_version | append: '' | strip -%}
+      {%- assign pvg_e_build = pvg_entry.target_build | append: '' | strip -%}
+      {%- if pvg_entry.id != pvg_head.id and pvg_entry.product_id == pvg_pid and pvg_e_version == pvg_version and pvg_e_build == pvg_build -%}
+        {%- assign pvg_ok = true -%}
+        {%- for pvg_ev in pvg_entry.evidence -%}
+          {%- assign pvg_key = '|' | append: pvg_ev.source_url | append: '|' -%}
+          {%- unless pvg_urls contains pvg_key -%}{%- assign pvg_ok = false -%}{%- endunless -%}
+        {%- endfor -%}
+        {%- if pvg_ok and pvg_entry.verdict == 'TEST FIRST' %} Also {{ pvg_entry.verdict }} {{ pvg_entry.scope }}: {{ pvg_entry.reason }}{%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- capture gate_body -%}{{ pvg_head.reason }}{% if gate_label == 'TEST FIRST' %}{% if pvg_install %} Install it on one machine first before rolling it out more widely.{% else %} Try it on a non-critical machine or a copy of your work first.{% endif %}{% endif %}{{ pvg_also }}{% unless pvg_install %} Other setups: no problem is independently reported yet; the individual reports are listed below.{% endunless %}{%- endcapture -%}
+{%- elsif pvg_count == 1 -%}
+  {%- assign gate_body = 'No verdict yet: one user report is matched to this exact update, and one report does not show a pattern. If it matches your setup, test before relying on this update.' -%}
+{%- elsif pvg_count > 1 -%}
+  {%- capture gate_body -%}No verdict yet: {{ pvg_count }} user reports are matched to this exact update, but no problem in them is confirmed as reported independently by two or more users. If one matches your setup, test before relying on this update.{%- endcapture -%}
+{%- endif -%}

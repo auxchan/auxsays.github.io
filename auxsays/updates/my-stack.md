@@ -67,6 +67,9 @@ permalink: /updates/my-stack/
       {%- assign is_official_only = false -%}
       {%- if chosen.evidence_state == 'official_only' or chosen.evidence_state_label == 'Official source only' -%}{%- assign is_official_only = true -%}{%- endif -%}
       {%- if is_official_only and report_count_num == 0 -%}{%- assign decision_label = 'INSUFFICIENT DATA' -%}{%- endif -%}
+      {%- comment -%} GROWTH-3: the published verdict is the gate's, as on the patch page and in every table. {%- endcomment -%}
+      {%- include patch-verdict-gate.html record=chosen count=report_count_num -%}
+      {%- assign decision_label = gate_label -%}
       {%- assign vkey = decision_label | upcase -%}
       {%- assign verdict_rank = 99 -%}
       {%- if vkey contains 'AVOID' -%}{%- assign verdict_rank = 0 -%}
@@ -167,6 +170,9 @@ permalink: /updates/my-stack/
             {%- assign rec_official_only = false -%}
             {%- if rec.evidence_state == 'official_only' or rec.evidence_state_label == 'Official source only' -%}{%- assign rec_official_only = true -%}{%- endif -%}
             {%- if rec_official_only and rec_n == 0 -%}{%- assign rec_verdict = 'INSUFFICIENT DATA' -%}{%- endif -%}
+            {%- comment -%} GROWTH-3: every release's verdict is the gate's, exactly as on its own patch page. {%- endcomment -%}
+            {%- include patch-verdict-gate.html record=rec count=rec_n -%}
+            {%- assign rec_verdict = gate_label -%}
             {%- assign rec_vkey = rec_verdict | upcase -%}
             {%- assign rec_rank = 99 -%}
             {%- if rec_vkey contains 'AVOID' -%}{%- assign rec_rank = 0 -%}

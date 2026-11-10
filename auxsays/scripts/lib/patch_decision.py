@@ -53,11 +53,13 @@ responds to evidence sentiment at all, because the verdict never did. Sentiment 
 `update_consensus_label`, the feed pill, the feed ordering and the home-page dot -- none of which
 this module touches.
 
-THE AVOID RUNG IS GONE, not merely re-scoped. No input to `decision_label` returns "AVOID" or
-"AVOID for production": the only rule that produced them was the summary's own beta clause. That is
-deliberate -- no record has ever STORED an AVOID as its decision label, and the verdict path has
-never had an AVOID branch -- but it means the site can no longer publish that word as a decision.
-Restoring it is a policy change, to be made here, once.
+THE AVOID RUNG, AND THE POLICY ITSELF, CHANGED IN GROWTH-3. The product and sentiment branches
+described above are gone: they made 233 of 235 report-bearing pages WAIT on 2026-11-06, which the
+owner's verdict policy (decisions 1-3, 2026-11-06) retired. The policy now lives in `decide` at the
+end of this module -- an official withdrawal (AVOID), Microsoft's monthly security classification
+(SECURITY UPDATE), a reviewed and still-supported reason entry (WAIT / TEST FIRST), else
+INSUFFICIENT DATA -- and AVOID is reachable again, but only from the one verified lifecycle record.
+The history above is kept because it explains why one function, not three, decides.
 """
 from __future__ import annotations
 
@@ -203,67 +205,230 @@ def leading_decision(text: str) -> str:
     return ""
 
 
-def decision_label(product_id: str, version: str, consensus_label: str, count: int,
-                   *, record: dict[str, Any] | None = None) -> str:
-    """The canonical decision for this patch, from the deterministic policy already in force.
+# ---------------------------------------------------------------------------------------------
+# GROWTH-3: THE VERDICT POLICY (owner decisions 1-3, 2026-11-06).
+#
+# A verdict is a pure function of STORED FACTS, decided here and nowhere else:
+#
+#   R1  AVOID            an applicable official withdrawal for new installations (the lifecycle
+#                        file; today ONE verified exception, KB5079391)
+#   R2  SECURITY UPDATE  Microsoft's own classification of the exact update as a monthly security
+#                        release (release-health update type "YYYY-MM B", stored on the record).
+#                        User reports never override it; reviewed reasons only add a warning panel
+#   R3  WAIT             a reviewed `regression` reason entry that is supported by counted rows
+#   R4  TEST FIRST       a reviewed corroboration reason entry that is supported by counted rows
+#   R5  INSUFFICIENT DATA, the reported problems disclosed (reports, no supported reason)
+#   R6  INSUFFICIENT DATA (no reports, no official fact)
+#
+# WHAT IS NEVER AN INPUT. Report count, sentiment (`update_consensus_label`), `issue_theme`,
+# `severity`, maturity, `update_status` and the clock. `decide` does not accept them, so no count
+# can make a WAIT (G3-D4), no negative tone can (G3-D3), no theme-derived severity can (G3-D12), and
+# nothing becomes SAFE ENOUGH because time passed or complaints stopped (G3-D2). SAFE ENOUGH,
+# OFFICIAL ONLY and MANUAL WATCH stay canonical (recognised, ranked) but this policy produces none
+# of them: no positive evidence is collected.
+#
+# THE TEMPLATES MIRROR THIS, they do not decide. `_includes/patch-verdict-gate.html` applies the
+# same precedence to the same facts at render time, so a record whose stored verdict is stale (or
+# hand-written) still publishes the policy's answer, and a zero-report security update -- which no
+# writer touches -- still reads SECURITY UPDATE. test_growth3_verdict_policy pins the two against
+# each other over the whole corpus.
+# ---------------------------------------------------------------------------------------------
+SECURITY_UPDATE = "SECURITY UPDATE"
+AVOID = "AVOID"
+WAIT = "WAIT"
+TEST_FIRST = "TEST FIRST"
 
-    Product policy first, because that is the policy the reader-facing verdict has always used;
-    sentiment supplies the default for products that state no policy of their own. Returning the
-    SAME string to the verdict and to the summary prefix is what makes a contradiction
-    unrepresentable rather than merely unlikely.
+_MONTHLY_SECURITY_RE = re.compile(r"^(\d{4})-(\d{2}) B$")
+_PREVIEW_RE = re.compile(r"^(\d{4})-(\d{2}) D$")
 
-    ONE DELIBERATE NARROWING. The deleted `_recommendation_prefix` tested the beta rule with no
-    product check, so any negative beta of ANY product got "AVOID for production" in its summary,
-    while the verdict path applied beta logic to DaVinci alone. The verdict is the canonical
-    surface, so the beta rule is scoped to DaVinci here. Measured over the whole corpus at
-    fef76436 -- 212 evidence groups, 1166 records -- no non-DaVinci record's decision moves because
-    of this: the 9 non-DaVinci records whose version string matches the beta pattern are all Figma
-    RELEASE-NOTE TITLES ("Slots is available in open beta"), all at zero reports, and Figma has no
-    evidence rows, no collector and no promotion step. The old rule was matching prose.
+# Public wording, ONE copy. The gate include renders these exact strings; the corpus test compares
+# every rendered page body with what the writer stored.
+OTHER_SETUPS = "Other setups: no problem is independently reported yet; the individual reports are listed below."
+TEST_FIRST_TRY = "Try it on a non-critical machine or a copy of your work first."
+TEST_FIRST_INSTALL = "Install it on one machine first before rolling it out more widely."
+SECURITY_LEAD = ("Microsoft classifies this as a monthly security update and recommends keeping "
+                 "supported systems updated.")
+SECURITY_PANEL_LEAD = {
+    "corroborated_install_problem": (
+        "Security update - installation issues reported. Microsoft recommends keeping supported "
+        "systems updated. Some users have reported installation failures on this build. Review the "
+        "affected configurations and available fixes before deploying to critical systems."),
+    "corroborated_issue": (
+        "Security update - a problem is reported on some setups. Microsoft recommends keeping "
+        "supported systems updated. Review the affected configuration before deploying to critical "
+        "systems."),
+    "regression": (
+        "Security update - a confirmed problem affects some setups. Microsoft recommends keeping "
+        "supported systems updated. Hold deployment only on the affected systems until a fix is "
+        "available."),
+}
+PANEL_KIND = {"corroborated_install_problem": "affected_configuration",
+              "corroborated_issue": "affected_configuration",
+              "regression": "deployment_caution"}
+PANEL_HEADING = {"affected_configuration": "Affected configuration",
+                 "deployment_caution": "Deployment caution"}
 
-    The `count <= 0` branch is defensive. Both callers short-circuit at zero before asking --
-    `_public_summary` and `consensus_summary` each return their own INSUFFICIENT DATA sentence --
-    so nothing reaches it today. It stays because the alternative is a policy that answers "TEST
-    FIRST" for a patch with no evidence at all.
-    """
-    if int(count or 0) <= 0:
-        return INSUFFICIENT_DATA
 
-    pid = str(product_id or "").strip()
-    label = str(consensus_label or "").strip().lower()
+def _text(value: Any) -> str:
+    return str(value if value is not None else "").strip()
 
-    if pid == DAVINCI:
-        # A beta is not a harsher sentiment, it is a different install decision: wait before
-        # installing, and keep it off active projects. Both halves used to live in the LABEL
-        # ("WAIT for production systems"); the action is WAIT either way, and the production-systems
-        # half is a qualification, which belongs in the prose where `_affected_workflow_sentence`
-        # already states it verbatim. The label is now canonical; `version_is_beta` stays because
-        # the prose still asks it.
-        return "WAIT"
-    if pid == OBS:
-        # EVIDENCE-DRIVEN (AUX-007). This branch used to read `update_status`: an "archived" record
-        # got WAIT and everything else got TEST FIRST. That made a positional metadata field the
-        # install recommendation, and the field is no longer meaningfully maintained -- 15 of 16 OBS
-        # records say "current". The effect was that eight records whose community consensus is
-        # NEGATIVE published TEST FIRST, including 32.1.2 with 107 negative reports. The one
-        # "archived" record happened to agree with the evidence, so the field looked like it was
-        # working.
-        #
-        # `update_status` remains descriptive metadata and may still shape prose ("an older
-        # archived build"). It MUST NOT reach this decision, which is why `record` is no longer
-        # consulted here.
-        if label == "negative":
-            return "WAIT"
-        if label == "positive":
-            return "SAFE ENOUGH"
-        return "TEST FIRST"
-    if pid == WINDOWS:
-        return "WAIT"
-    if pid == PREMIERE:
-        return "WAIT"
 
-    if label == "negative":
-        return "WAIT"
-    if label == "positive":
-        return "SAFE ENOUGH"
-    return "TEST FIRST"
+def is_monthly_security_update(record: dict[str, Any] | None) -> bool:
+    """Microsoft's own classification, read from the stored release-health update type.
+
+    "YYYY-MM B" is the monthly security release. Previews ("D") and out-of-band updates ("OOB")
+    never inherit it: an OOB's security status is not in the stored data, and guessing it would be
+    the inference the owner ruled out. Only Windows stores this field."""
+    rec = record or {}
+    if _text(rec.get("product_id")) != WINDOWS:
+        return False
+    match = _MONTHLY_SECURITY_RE.match(_text(rec.get("update_type")))
+    return bool(match) and int(match.group(1)) >= 2000 and 1 <= int(match.group(2)) <= 12
+
+
+def _release_context(record: dict[str, Any]) -> str:
+    if is_monthly_security_update(record):
+        return "It was a monthly security update."
+    match = _PREVIEW_RE.match(_text(record.get("update_type")))
+    if (_text(record.get("product_id")) == WINDOWS and match and int(match.group(1)) >= 2000
+            and 1 <= int(match.group(2)) <= 12):
+        return "It was an optional non-security preview update."
+    return ""
+
+
+def lifecycle_for(record: dict[str, Any] | None, lifecycle: Any = ()) -> dict[str, Any] | None:
+    """The applicable official withdrawal for this exact record, or None. Exact identity only: same
+    product, same KB, and this record's own OS build listed. Never inferred from a newer number."""
+    rec = record or {}
+    kb = _text(rec.get("target_kb"))
+    build = _text(rec.get("target_build"))
+    if not kb or not build:
+        return None
+    for entry in lifecycle or ():
+        if (_text(entry.get("product_id")) == _text(rec.get("product_id"))
+                and _text(entry.get("kb")) == kb
+                and _text(entry.get("relationship")) == "withdrawn_for_new_installs"
+                and build in [_text(b) for b in entry.get("builds") or []]):
+            return dict(entry)
+    return None
+
+
+class Decision:
+    """What `decide` returns. `reasons` are the SUPPORTED reason entries for the page, most
+    cautionary first (file order breaks ties, exactly as the template iterates)."""
+
+    __slots__ = ("verdict", "rule", "scope", "reasons", "lifecycle", "security")
+
+    def __init__(self, verdict: str, rule: str, *, scope: str = "", reasons: tuple = (),
+                 lifecycle: dict[str, Any] | None = None, security: bool = False) -> None:
+        self.verdict = verdict
+        self.rule = rule
+        self.scope = scope
+        self.reasons = reasons
+        self.lifecycle = lifecycle
+        self.security = security
+
+    def __repr__(self) -> str:
+        return f"Decision({self.verdict!r}, {self.rule!r}, scope={self.scope!r})"
+
+    @property
+    def panel_kind(self) -> str:
+        if self.verdict == SECURITY_UPDATE and self.reasons:
+            return PANEL_KIND.get(_text(self.reasons[0].get("reason_class")), "")
+        return ""
+
+
+def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle: Any = ()) -> Decision:
+    """THE decision for one patch. `valid_reasons` must already be the entries SUPPORTED by the
+    page's counted rows (lib.verdict_reasons.valid_reasons_by_identity); `lifecycle` the validated
+    lifecycle entries. No count, sentiment, theme, severity, maturity or clock is accepted."""
+    rec = record or {}
+    ordered = tuple(sorted((dict(e) for e in valid_reasons or ()),
+                           key=lambda e: risk_rank(_text(e.get("verdict")))))
+    security = is_monthly_security_update(rec)
+    life = lifecycle_for(rec, lifecycle)
+    if life:
+        return Decision(AVOID, "R1", lifecycle=life, reasons=ordered, security=security)
+    if security:
+        return Decision(SECURITY_UPDATE, "R2", reasons=ordered, security=True)
+    if ordered:
+        head = ordered[0]
+        verdict = _text(head.get("verdict"))
+        return Decision(verdict, "R3" if verdict == WAIT else "R4", scope=_text(head.get("scope")),
+                        reasons=ordered)
+    return Decision(INSUFFICIENT_DATA, "R5")
+
+
+def _reports_phrase(count: int) -> str:
+    return "one user report is" if count == 1 else f"{count} user reports are"
+
+
+def public_body(decision: Decision, record: dict[str, Any] | None, report_count: int) -> str:
+    """The verdict box's recommendation line. "" means: keep the zero-report page's existing line
+    (a non-official page with no reports, which this policy does not reword)."""
+    rec = record or {}
+    n = max(int(report_count or 0), 0)
+    if decision.verdict == AVOID and decision.lifecycle:
+        parts = [f"Microsoft withdrew this update for new installations. Replacement: "
+                 f"{_text(decision.lifecycle.get('replacement_kb'))}."]
+        context = _release_context(rec)
+        if context:
+            parts.append(context)
+        parts.append("This applies to installing it, not to devices that already installed it.")
+        return " ".join(parts)
+    if decision.verdict == SECURITY_UPDATE:
+        if decision.reasons:
+            return SECURITY_PANEL_LEAD[_text(decision.reasons[0].get("reason_class"))]
+        if n == 0:
+            return f"{SECURITY_LEAD} No user reports are matched to this update yet."
+        if n == 1:
+            return (f"{SECURITY_LEAD} One user report is matched to this update, and one report does "
+                    "not show a pattern; it is listed below.")
+        return (f"{SECURITY_LEAD} {n} user reports are matched to this update, and no problem in them "
+                "is confirmed as reported independently by two or more users; they are listed below.")
+    if decision.verdict in (WAIT, TEST_FIRST) and decision.reasons:
+        head = decision.reasons[0]
+        install = _text(head.get("reason_class")) == "corroborated_install_problem"
+        parts = [_text(head.get("reason"))]
+        if decision.verdict == TEST_FIRST:
+            parts.append(TEST_FIRST_INSTALL if install else TEST_FIRST_TRY)
+        for other in decision.reasons[1:]:
+            parts.append(f"Also {_text(other.get('verdict'))} {_text(other.get('scope'))}: "
+                         f"{_text(other.get('reason'))}")
+        if not install:
+            parts.append(OTHER_SETUPS)
+        return " ".join(parts)
+    if n == 0:
+        return ""
+    if n == 1:
+        return ("No verdict yet: one user report is matched to this exact update, and one report does "
+                "not show a pattern. If it matches your setup, test before relying on this update.")
+    return (f"No verdict yet: {n} user reports are matched to this exact update, but no problem in "
+            "them is confirmed as reported independently by two or more users. If one matches your "
+            "setup, test before relying on this update.")
+
+
+def panel_text(decision: Decision) -> str:
+    """The security page's affected-configuration / deployment-caution box, or ""."""
+    if not decision.panel_kind:
+        return ""
+    head = decision.reasons[0]
+    scope = _text(head.get("scope"))
+    return f"{scope[:1].upper()}{scope[1:]}: {_text(head.get('reason'))}"
+
+
+def decision_label(product_id: str, version: str, consensus_label: str = "", count: int = 0,
+                   *, record: dict[str, Any] | None = None, valid_reasons: Any = (),
+                   lifecycle: Any = ()) -> str:
+    """The canonical verdict word -- `decide(...).verdict`, kept under its historical name.
+
+    `consensus_label` and `count` are ACCEPTED AND IGNORED. They are the two inputs the old policy
+    read -- a negative sentiment made OBS, Acrobat and every branchless product WAIT, and the
+    product branches made every DaVinci, Windows and Premiere record WAIT with any count at all
+    (233 of 235 report-bearing pages on 2026-11-06). The owner's rule is that neither decides a
+    verdict; the parameters stay only so existing callers keep their shape, and G3-D3/G3-D4 prove
+    that changing them changes nothing."""
+    rec = dict(record or {})
+    rec.setdefault("product_id", product_id)
+    rec.setdefault("update_version", version)
+    return decide(rec, valid_reasons=valid_reasons, lifecycle=lifecycle).verdict

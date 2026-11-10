@@ -29,7 +29,7 @@ update_detail_title: DaVinci Resolve 21.0.2
 update_consensus_label: Negative
 update_report_count: 13
 update_consensus_confidence: Low-Medium
-quick_verdict: 'WAIT: DaVinci Resolve 21.0.2 has 13 user reports found.'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21.0.2 has 13 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.2 Update in its official support downloads
   feed.
 release_summary: This software update adds faster image bypass switching, improved H.265 playback performance on
@@ -162,10 +162,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 21.0.2 has 13 user reports found. User reports show a repeat pattern.
-  Current reports mention startup or application crashes, render/export failures, and performance slowdowns. Production
-  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
-  so production users should test before updating.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21.0.2 has 13 user reports found. No verdict yet:
+  13 user reports are matched to this exact update, but no problem in them is confirmed as reported independently
+  by two or more users. If one matches your setup, test before relying on this update.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1umjhgo/should_i_upgrade_to_davinci_resolve_2102/
@@ -330,12 +329,12 @@ accepted_report_sources:
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
-update_decision_label: WAIT
-update_decision_body: Current reports mention startup or application crashes, render/export failures, and performance
-  slowdowns. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_label: INSUFFICIENT DATA
+update_decision_body: 'No verdict yet: 13 user reports are matched to this exact update, but no problem in them
+  is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
+  this update.'
 practical_recommendations:
-- Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
-- Review the sample reports before updating a production workstation.
+- Keep a known-good Resolve version available.
 source_freshness_note: ''
 ---

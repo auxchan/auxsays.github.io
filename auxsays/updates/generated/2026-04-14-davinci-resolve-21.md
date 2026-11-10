@@ -20,10 +20,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 75 user reports found. User reports show a repeat pattern.
-  Current reports mention render/export failures, startup or application crashes, and performance slowdowns. Production
-  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
-  so production users should test before updating.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21 has 75 user reports found. No verdict yet: 75 user
+  reports are matched to this exact update, but no problem in them is confirmed as reported independently by two
+  or more users. If one matches your setup, test before relying on this update.'
 update_report_count: 75
 update_consensus_confidence: High
 status_change_type: new
@@ -37,10 +36,11 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
-quick_verdict: 'WAIT: DaVinci Resolve 21 has 75 user reports found.'
-update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures, startup or application crashes, and performance
-  slowdowns. Production editors with active delivery deadlines should wait or test on copied projects.
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21 has 75 user reports found.'
+update_decision_label: INSUFFICIENT DATA
+update_decision_body: 'No verdict yet: 75 user reports are matched to this exact update, but no problem in them
+  is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
+  this update.'
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
@@ -1019,7 +1019,6 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 practical_recommendations:
-- Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
-- Review the sample reports before updating a production workstation.
+- Keep a known-good Resolve version available.
 ---

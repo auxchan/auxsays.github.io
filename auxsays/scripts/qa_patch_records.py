@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 
 import yaml
 
-from lib import maturity, patch_decision
+from lib import maturity, patch_decision, verdict_reasons
 from lib.patch_identity import patch_key
 # The dedup identity the append path itself applies (base.evidence_key uses it), imported rather
 # than re-derived. A hand-rolled canonicaliser was measured against the corpus first and was WRONG:
@@ -35,6 +35,8 @@ PRODUCTS_PATH = ROOT / "_data" / "patch_products.yml"
 SOURCES_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 UPDATE_LAYOUT_PATH = ROOT / "_layouts" / "aux-update.html"
+REASONS_PATH = ROOT / "_data" / "verdict_reasons.yml"
+LIFECYCLE_PATH = ROOT / "_data" / "patch_lifecycle.yml"
 # The patch page's maturity rung and decision ladder live in these two includes, which aux-update.html
 # renders (and the homepage renders too). Their text is the layout's text for the public-copy scan:
 # a phrase moved into one of them is still on every patch page.
@@ -306,6 +308,76 @@ def load_counted_accepted_urls(
         rows, windows_targets=windows_targets_from_front_matter(records or []))
     return {key: {normalize_url(str(row.get("source_url") or "")) for row in group}
             for key, group in groups.items()}
+
+
+def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """GROWTH-3: the two reviewed fact files, and each report-bearing record's stored verdict
+    against the policy.
+
+    ERRORS (both modes): a malformed `verdict_reasons.yml` or `patch_lifecycle.yml`. They change only
+    by reviewed pull request, so a structural problem is a defect in that PR, never lane drift.
+
+    WARNINGS, never writer-blocking and never promoted for publication:
+      * verdict_reason_unsupported -- an entry whose cited rows no longer all count on its page (an
+        audited withdrawal, a re-attribution) or that lost its second reporter. The page already
+        falls back to INSUFFICIENT DATA at render time and the next promotion rewrites the stored
+        prose; this tells a reviewer the entry needs re-reading or removing.
+      * verdict_policy_drift -- a report-bearing record whose stored verdict differs from what the
+        policy decides now. The rendered page is already right (the gate decides it); the stored
+        summary the feed prints catches up at the product's next promotion.
+      * patch_lifecycle_unmatched -- a lifecycle entry no record carries.
+    """
+    errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
+    try:
+        reasons = verdict_reasons.load_reasons(REASONS_PATH)
+    except verdict_reasons.FactFileError as exc:
+        add(errors, REASONS_PATH, "verdict_reasons_invalid", str(exc))
+        reasons = []
+    try:
+        lifecycle = verdict_reasons.load_lifecycle(LIFECYCLE_PATH)
+    except verdict_reasons.FactFileError as exc:
+        add(errors, LIFECYCLE_PATH, "patch_lifecycle_invalid", str(exc))
+        lifecycle = []
+    reason_problems = verdict_reasons.schema_errors(reasons)
+    for message in reason_problems:
+        add(errors, REASONS_PATH, "verdict_reasons_invalid", message)
+    lifecycle_problems = verdict_reasons.lifecycle_errors(lifecycle)
+    for message in lifecycle_problems:
+        add(errors, LIFECYCLE_PATH, "patch_lifecycle_invalid", message)
+    if reason_problems:
+        reasons = []
+    if lifecycle_problems:
+        lifecycle = []
+    records = [(path, front_matter(path)) for path in files]
+    fronts = [data for _path, data in records if data.get("update_entry") is True]
+    groups = counted_evidence_rows(load_evidence_rows(),
+                                   windows_targets=windows_targets_from_front_matter(fronts))
+    by_identity = {verdict_reasons.record_identity(data): data for data in fronts}
+    valid, unsupported = verdict_reasons.valid_reasons_by_identity(reasons, groups, by_identity)
+    for reason_id, problems in sorted(unsupported.items()):
+        add(warnings, REASONS_PATH, "verdict_reason_unsupported",
+            f"{reason_id}: {'; '.join(problems)}. The page falls back to INSUFFICIENT DATA until the "
+            "entry is re-read and corrected or removed.")
+    for entry in lifecycle:
+        if not any(patch_decision.lifecycle_for(data, [entry]) for data in fronts):
+            add(warnings, LIFECYCLE_PATH, "patch_lifecycle_unmatched",
+                f"{entry.get('id')}: no record carries this KB and build.")
+    for path, data in records:
+        if data.get("update_entry") is not True:
+            continue
+        if int(data.get("update_report_count") or 0) <= 0:
+            continue
+        expected = patch_decision.decide(
+            data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
+            lifecycle=lifecycle).verdict
+        stored = (patch_decision.action_of(data.get("update_decision_label"))
+                  or patch_decision.action_of(patch_decision.leading_decision(data.get("update_consensus_summary"))))
+        if stored and stored != expected:
+            add(warnings, path, "verdict_policy_drift",
+                f"stored verdict {stored!r} but the verdict policy decides {expected!r}; the page renders "
+                f"{expected!r}, and the stored prose catches up at the next promotion.")
+    return errors, warnings
 
 
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -1313,6 +1385,9 @@ def main(argv: list[str] | None = None) -> int:
     errors.extend(e)
     warnings.extend(w)
     warnings.extend(scan_counted_row_classification(load_evidence_rows()))
+    e, w = scan_verdict_policy(files)
+    errors.extend(e)
+    warnings.extend(w)
     e, w = scan_unconfigured_platform_split(files)
     errors.extend(e)
     warnings.extend(w)

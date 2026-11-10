@@ -31,6 +31,10 @@
 {% assign is_official_only = false %}
 {% if item.evidence_state == 'official_only' or item.evidence_state_label == 'Official source only' %}{% assign is_official_only = true %}{% endif %}
 {% if is_official_only and report_count_num == 0 %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endif %}
+{%- comment -%} GROWTH-3: the published verdict is the gate's, decided from the record's facts and the two
+  reviewed fact files exactly as on the patch page; the stored label above no longer decides it. {%- endcomment -%}
+{%- include patch-verdict-gate.html record=item count=report_count_num -%}
+{% assign decision_label = gate_label %}
 {%- comment -%} Verdict risk order (leading category); unknown -> 99 so it sorts last but stays visible. {%- endcomment -%}
 {%- comment -%}
   Vocabulary and risk order come from _data/patch_verdicts.yml, which mirrors

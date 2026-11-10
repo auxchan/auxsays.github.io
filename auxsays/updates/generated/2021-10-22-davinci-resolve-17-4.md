@@ -29,7 +29,7 @@ update_detail_title: DaVinci Resolve 17.4
 update_consensus_label: Negative
 update_report_count: 1
 update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 17.4 has 1 user reports found.'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 17.4 has 1 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 17.4 Update in its official support downloads feed.
 release_summary: In addition to the features in the free version, the Studio update adds Dropbox Replay integration,
   switching capability for multicam angles with DaVinci Resolve Speed Editor, and support for ACES 1.3 including
@@ -112,9 +112,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 17.4 has 1 user report found. Small sample size. Current reports
-  mention render/export failures. Production editors with active export deadlines should wait unless they need a
-  specific fix. Too few reports for a firm verdict yet.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 17.4 has 1 user report found. No verdict yet: one
+  user report is matched to this exact update, and one report does not show a pattern. If it matches your setup,
+  test before relying on this update.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1se7o7g/use_tracker_data_independently/
@@ -138,12 +138,11 @@ accepted_report_sources:
 evidence_source_limitations:
 - Too few reports for a firm verdict yet.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
-update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures. Production editors with active delivery deadlines
-  should wait or test on copied projects.
+update_decision_label: INSUFFICIENT DATA
+update_decision_body: 'No verdict yet: one user report is matched to this exact update, and one report does not
+  show a pattern. If it matches your setup, test before relying on this update.'
 practical_recommendations:
-- Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
-- Review the sample reports before updating a production workstation.
+- Keep a known-good Resolve version available.
 source_freshness_note: ''
 ---

@@ -1,0 +1,154 @@
+# REVIEWED VERDICT REASONS (GROWTH-3). The only way a patch page can say TEST FIRST or WAIT.
+#
+# Read by lib/patch_decision.decide (through lib/verdict_reasons) and by
+# _includes/patch-verdict-gate.html. Written ONLY by a reviewed pull request: never by a collector,
+# a lane or a phrase rule.
+#
+# Each entry names the exact page (product_id, update_version, target_build), the verdict and its
+# scope ("WAIT if ..."), the reason class, a one-line public reason in AUXSAYS's own words, and the
+# COUNTED evidence rows it rests on (id + source_url). It supports a verdict only while:
+#   - every cited row is still counted on that page (an audited withdrawal makes the entry
+#     unsupported: the page falls back to INSUFFICIENT DATA and QA warns);
+#   - at least two distinct reporters are cited, or an official confirmation is named and found
+#     verbatim in that record's captured official notes;
+#   - a WAIT is a regression: the version transition, a written material impact, and new in this
+#     version (a persistent problem is never called new).
+#
+# Counts, sentiment and theme-derived severity never decide a verdict. A new TEST FIRST or WAIT
+# currently needs a new reviewed entry here; a deterministic corroboration signal is follow-up work.
+#
+# Seeded 2026-11-10 from the GROWTH-3 spec v3 calibration (sections 7 and 9), kept only where the
+# counted rows on the page support it today.
+schema_version: 1
+entries:
+  - id: obs-studio:32.2.2:macos-27-2-launch-crash
+    product_id: obs-studio
+    update_version: "32.2.2"
+    verdict: WAIT
+    reason_class: regression
+    scope: if you use macOS 27.2
+    reason: A user reports, and OBS confirms, that OBS 32.2.2 crashes on every launch on macOS 27.2 after updating from 32.1.2; OBS fixed this crash in 33.0.0.
+    evidence:
+      - id: obs-studio-32-2-2-github-issue-14069
+        source_url: https://github.com/obsproject/obs-studio/issues/14069
+    official_confirmation:
+      product_id: obs-studio
+      update_version: "33.0.0"
+      statement: Fixed a crash on macOS 27.2 when starting OBS Studio
+    transition:
+      working: "32.1.2"
+      failing: "32.2.2"
+    material: OBS does not start at all on the affected system.
+    new_in_this_version: true
+    fixed_in: "33.0.0"
+    reviewed_at: "2026-11-06"
+    basis: GROWTH-3 spec v3 section 7 (OBS 32.2.2 calibration)
+
+  - id: obs-studio:32.2.2:macos-27-menu-bar-icon-crash
+    product_id: obs-studio
+    update_version: "32.2.2"
+    verdict: TEST FIRST
+    reason_class: corroborated_issue
+    scope: if you use the menu-bar icon on macOS 27
+    reason: Two users independently report that clicking OBS's menu-bar icon crashes it on macOS 27; it is also reported on later versions, so it is not new in this version.
+    evidence:
+      - id: obs-studio-32-2-2-github-issue-13938
+        source_url: https://github.com/obsproject/obs-studio/issues/13938
+      - id: obs-studio-32-2-2-github-issue-14026
+        source_url: https://github.com/obsproject/obs-studio/issues/14026
+    new_in_this_version: false
+    reviewed_at: "2026-11-06"
+    basis: GROWTH-3 spec v3 section 7 (OBS 32.2.2, other corroborated issues)
+
+  - id: obs-studio:32.1.2:macos-accounts-and-docks-lost
+    product_id: obs-studio
+    update_version: "32.1.2"
+    verdict: TEST FIRST
+    reason_class: corroborated_issue
+    scope: if you use connected accounts or service docks on macOS
+    reason: Two users independently report that on macOS OBS loses its connected streaming accounts and their docks when it is reopened; it began in 32.1, and OBS confirms it fixed it in 32.2.0.
+    evidence:
+      - id: obs-studio-32-1-2-github-issue-13440
+        source_url: https://github.com/obsproject/obs-studio/issues/13440
+      - id: obs-studio-32-1-2-github-issue-13486
+        source_url: https://github.com/obsproject/obs-studio/issues/13486
+    official_confirmation:
+      product_id: obs-studio
+      update_version: "32.2.0"
+      statement: Fixed OAuth and dock state save corruption
+    new_in_this_version: false
+    fixed_in: "32.2.0"
+    reviewed_at: "2026-11-06"
+    basis: GROWTH-3 spec v3 section 7 (OBS 32.1.2 calibration)
+
+  - id: adobe-acrobat-pro:15.010.20056:installer-exit-code-7
+    product_id: adobe-acrobat-pro
+    update_version: "15.010.20056"
+    verdict: TEST FIRST
+    reason_class: corroborated_install_problem
+    scope: when installing it
+    reason: Three users independently report that installing this version fails with installer Exit Code 7.
+    evidence:
+      - id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-617-cannot-install-adobe-acrobat-dc-for-mac-467906
+        source_url: https://community.adobe.com/questions-617/cannot-install-adobe-acrobat-dc-for-mac-467906
+      - id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-installation-acrobat-dc-failed-on-el-capitan-10-11-3-5943
+        source_url: https://community.adobe.com/questions-18/installation-acrobat-dc-failed-on-el-capitan-10-11-3-594365
+      - id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-acrobat-fails-to-install-from-both-the-cloud-app-and-dire
+        source_url: https://community.adobe.com/questions-18/acrobat-fails-to-install-from-both-the-cloud-app-and-direct-download-from-adobe-com-604847
+    new_in_this_version: false
+    reviewed_at: "2026-11-06"
+    basis: GROWTH-3 spec v3 section 9 reading sample (SAME)
+
+  - id: adobe-acrobat-pro:15.023.20053:installer-exit-code-7
+    product_id: adobe-acrobat-pro
+    update_version: "15.023.20053"
+    verdict: TEST FIRST
+    reason_class: corroborated_install_problem
+    scope: when installing it
+    reason: Two users independently report that installing this version fails with installer Exit Code 7, on macOS and on Windows 10.
+    evidence:
+      - id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-9-i-am-installing-acrobat-pro-dc-on-my-mac-and-when-extracti
+        source_url: https://community.adobe.com/questions-9/i-am-installing-acrobat-pro-dc-on-my-mac-and-when-extracting-the-installation-fails-1266104
+      - id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-617-cannot-install-acrobat-pro-dc-windows-10-545456
+        source_url: https://community.adobe.com/questions-617/cannot-install-acrobat-pro-dc-windows-10-545456
+    new_in_this_version: false
+    reviewed_at: "2026-11-06"
+    basis: GROWTH-3 spec v3 section 9 reading sample (SAME)
+
+  - id: microsoft-windows-11:25H2:26200.8117:install-failures
+    product_id: microsoft-windows-11
+    update_version: "25H2"
+    target_build: "26200.8117"
+    verdict: TEST FIRST
+    reason_class: corroborated_install_problem
+    scope: when installing it
+    reason: Three users independently report that this update fails to install (errors 0x80070032 and 0x800f0845, or a failed update that needed a system restore).
+    evidence:
+      - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5848282-how-to-fix-error-installing-kb-5086672
+        source_url: https://learn.microsoft.com/en-us/answers/questions/5848282/how-to-fix-error-installing-kb-5086672-(windows-11
+      - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5847423-installed-windows-11-25h2-update-kb508
+        source_url: https://learn.microsoft.com/en-us/answers/questions/5847423/installed-windows-11-25h2-update-kb5086672-caused
+      - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5848291-windows-update-kb5086672-26200-8117-br
+        source_url: https://learn.microsoft.com/en-us/answers/questions/5848291/windows-update-(kb5086672)-(26200-8117)-bricht-mit
+    new_in_this_version: false
+    reviewed_at: "2026-11-06"
+    basis: GROWTH-3 spec v3 section 9 reading sample (SAME)
+
+  - id: microsoft-windows-11:25H2:26200.7309:install-failures
+    product_id: microsoft-windows-11
+    update_version: "25H2"
+    target_build: "26200.7309"
+    verdict: TEST FIRST
+    reason_class: corroborated_install_problem
+    scope: when installing it
+    reason: Three users independently report that this update fails to install (errors 0x800f0991 and 0x80070306, or repeated failed attempts).
+    evidence:
+      - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5645879-how-to-fix-2025-11-update-error-kb5070
+        source_url: https://learn.microsoft.com/en-us/answers/questions/5645879/how-to-fix-2025-11-update-error-(kb5070311)-(26200
+      - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5645459-windows-update-error-install-error-0x8
+        source_url: https://learn.microsoft.com/en-us/answers/questions/5645459/windows-update-error-install-error-0x800f0991
+      - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5645362-why-doesnt-the-recent-windows-update-i
+        source_url: https://learn.microsoft.com/en-us/answers/questions/5645362/why-doesnt-the-recent-windows-update-install-i-kee
+    new_in_this_version: false
+    reviewed_at: "2026-11-06"
+    basis: GROWTH-3 spec v3 section 9 reading sample (SAME)

@@ -29,7 +29,7 @@ update_detail_title: DaVinci Resolve 21.1
 update_consensus_label: Negative
 update_report_count: 14
 update_consensus_confidence: Low-Medium
-quick_verdict: 'WAIT: DaVinci Resolve 21.1 has 14 user reports found.'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21.1 has 14 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.1 Update in its official support downloads feed.
 release_summary: This software update expands still photography and camera support on the Photo page, as well as
   adding enhanced multicam controls and an updated trim editor. In addition, there are over 25 new Krokodove shape
@@ -148,10 +148,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 21.1 has 14 user reports found. User reports show a repeat pattern.
-  Current reports mention startup or application crashes, installation problems, and render/export failures. Production
-  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
-  so production users should test before updating.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21.1 has 14 user reports found. No verdict yet: 14
+  user reports are matched to this exact update, but no problem in them is confirmed as reported independently by
+  two or more users. If one matches your setup, test before relying on this update.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1wgob5a/resolve_211_preset_bug_help/
@@ -324,12 +323,12 @@ accepted_report_sources:
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
-update_decision_label: WAIT
-update_decision_body: Current reports mention startup or application crashes, installation problems, and render/export
-  failures. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_label: INSUFFICIENT DATA
+update_decision_body: 'No verdict yet: 14 user reports are matched to this exact update, but no problem in them
+  is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
+  this update.'
 practical_recommendations:
-- Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
-- Review the sample reports before updating a production workstation.
+- Keep a known-good Resolve version available.
 source_freshness_note: ''
 ---

@@ -29,7 +29,7 @@ update_detail_title: DaVinci Resolve 20.0.1
 update_consensus_label: Negative
 update_report_count: 3
 update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 20.0.1 has 3 user reports found.'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 20.0.1 has 3 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.0.1 in its official support downloads feed.
 release_summary: This software update adds support for more consistent drag and drop behavior of media pool clips,
   better beat marker detection when resizing music track lengths with AI Music Editor, and improved OpenColorIO
@@ -119,10 +119,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20.0.1 has 3 user reports found. Small sample size. Current reports
-  mention Magic Mask crashes, render/export failures, and startup or application crashes. Production editors with
-  active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production
-  users should test before updating.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20.0.1 has 3 user reports found. No verdict yet: 3
+  user reports are matched to this exact update, but no problem in them is confirmed as reported independently by
+  two or more users. If one matches your setup, test before relying on this update.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1mclp35/resolve_2001_magic_mask_update_still_breaks_on/
@@ -180,12 +179,12 @@ accepted_report_sources:
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
-update_decision_label: WAIT
-update_decision_body: Current reports mention Magic Mask crashes, render/export failures, and startup or application
-  crashes. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_label: INSUFFICIENT DATA
+update_decision_body: 'No verdict yet: 3 user reports are matched to this exact update, but no problem in them is
+  confirmed as reported independently by two or more users. If one matches your setup, test before relying on this
+  update.'
 practical_recommendations:
-- Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
-- Review the sample reports before updating a production workstation.
+- Keep a known-good Resolve version available.
 source_freshness_note: ''
 ---

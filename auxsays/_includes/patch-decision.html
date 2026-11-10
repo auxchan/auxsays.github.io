@@ -79,4 +79,20 @@
   {% else %}
     {% assign decision_body = 'Too few reports for a verdict yet.' %}
   {% endif %}
-{% endif %}{%- comment -%} This file ends inside this tag, so it adds no final newline to the page. {%- endcomment -%}
+{% endif %}
+{%- comment -%}
+  GROWTH-3 VERDICT POLICY. Everything above is kept for the zero-report body it still words, but
+  the published verdict is now the gate's: decided from the record's facts and the two reviewed
+  fact files (patch-verdict-gate.html, the mirror of lib/patch_decision.decide). A stored label
+  -- stale, sentiment-derived or hand-written -- can no longer publish a WAIT or TEST FIRST the
+  policy does not support, and a zero-report security update or withdrawal is no longer folded
+  into INSUFFICIENT DATA by the official-only rule above.
+  Extra outputs: decision_scope (the 'if ...' qualifier), decision_official, and the security
+  page's panel (decision_panel_heading, decision_panel_text).
+{%- endcomment -%}
+{%- include patch-verdict-gate.html record=pd_record count=report_count -%}
+{% assign decision_label = gate_label %}{% assign decision_scope = gate_scope %}{% assign decision_official = gate_official %}{% assign decision_panel_heading = gate_panel_heading %}{% assign decision_panel_text = gate_panel_text %}
+{% if gate_body != '' %}{% assign decision_body = gate_body %}{% endif %}
+{% assign verdict_action = decision_label %}{% assign verdict_known = true %}{% assign decision_label_key = decision_label | downcase %}
+{% assign show_test_first_context = false %}
+{% if report_bearing_count > 0 and decision_label_key contains 'test first' %}{% assign show_test_first_context = true %}{% endif %}{%- comment -%} This file ends inside this tag, so it adds no final newline to the page. {%- endcomment -%}

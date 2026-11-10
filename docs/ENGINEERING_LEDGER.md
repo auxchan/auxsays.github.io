@@ -77,6 +77,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
 | AUX-090 | Resolved | Publication | Medium | Every OBS report on a patch page read "date not recorded", though each source states when it was posted |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
+| AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -4669,6 +4670,53 @@ mutants each killed by a named check.
 
 **Reopen only if** a new OBS row stores a date other than its own creation day (a last-activity, reply or
 collection date), the gate's decision changes, or a run rewrites a stored OBS row.
+
+---
+
+### AUX-093 — 234 of 236 pages with user reports said WAIT because of their product or a negative tone
+
+- **Status** Resolved · **Area** Verdict policy · **Severity** High
+- **First seen** 2026-11-06 (GROWTH-3 spec v3) · **Resolved** 2026-11-10 (owner decisions 1-3 of 2026-11-06;
+  live verification after deploy)
+
+**Symptom** Every page with a counted user report published WAIT (234) or TEST FIRST (2). The verdict came from
+the product (DaVinci, Windows, Premiere: always WAIT) or from the sample's sentiment (negative: WAIT), so one
+uncorroborated report and 101 unrelated ones read the same, monthly security updates told readers to wait, and
+52 Windows pages advised "Pause updates".
+
+**Cause** `lib/patch_decision.decision_label` decided from product and sentiment. Nothing stored says whether two
+reports describe the same problem or a regression; `issue_theme` is a classifier label, not a finding.
+
+**Fix** One policy, decided once by `patch_decision.decide` from stored facts: an official withdrawal for new
+installations (AVOID), Microsoft's own monthly-security classification (release type "YYYY-MM B": SECURITY
+UPDATE; reports never override it, a supported reason only adds a warning panel), a reviewed reason entry whose
+cited counted rows still count (WAIT, regression only, always scoped; TEST FIRST, scoped), else INSUFFICIENT DATA
+with the reports disclosed. Count, sentiment, theme, severity, maturity and the clock are not inputs; SAFE ENOUGH
+stays unreachable. `_includes/patch-verdict-gate.html` applies the same rules at render time and is what the
+patch page, homepage rows, product/vendor tables and My Patch Stack print, so a stored label can no longer publish
+a verdict. The reasons live in `_data/verdict_reasons.yml` (7 entries, seeded from the spec v3 calibration where
+the counted rows support them); `_data/patch_lifecycle.yml` holds ONE verified exception, KB5079391 (withdrawn
+for new installations, replacement KB5086672), not the lifecycle mechanism. Writers store the same line; QA errors
+on a malformed fact file and warns (never blocks) when an entry stops being supported or a stored verdict lags.
+
+**Measured** Full local builds before and after, every one of 1,535 patch pages read back: rendered verdict, scope,
+line and panel equal `decide` on 1,535/1,535; table rows equal pages; "Pause updates" 53 pages -> 0; SECURITY
+UPDATE on all 43 monthly releases; the 6 live pages keep their live box. The 236 report-bearing pages: AVOID 1,
+SECURITY UPDATE 26, WAIT 1, TEST FIRST 5, INSUFFICIENT DATA 203. Records' non-verdict fields, evidence fields and
+bodies, and every `_data` file but the two new ones, hash-identical before and after.
+
+**Not done here** A new TEST FIRST or WAIT needs a new reviewed entry: a deterministic corroboration signal is
+follow-up work. The 74 "newer update" links wait for the Microsoft KB source assessment and a deterministic
+writer. Four Windows vendor-confirmed issues (KB5120998, KB5124010) and OBS 31.1.1 / 32.0.0 / 32.1.0 / 32.1.1 have
+no counted report describing the confirmed problem, so they carry no reasoned verdict yet.
+
+**Tests** `test_growth3_verdict_policy.py` (52 checks, 17 mutants each caught by a named check: G3-D1..D12
+including G3-D4 "changing the count never changes the verdict", G3-F*, G3-L*, G3-W*, G3-Q*, G3-R1..R3 the gate
+equals Python on a matrix and over the corpus); five existing suites updated to the policy.
+
+**Reopen only if** a page prints WAIT or TEST FIRST without a supported reason entry, a monthly security update
+prints anything but SECURITY UPDATE (or the one AVOID), a report count, sentiment or theme moves a verdict, or any
+page advises pausing Windows Update.
 
 ---
 

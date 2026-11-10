@@ -128,13 +128,19 @@ def render_page(records: list[dict], products: list[dict]) -> tuple[bool, str]:
     maturity = (AUX / "_includes" / "maturity-state.html").read_text(encoding="utf-8")
     src = re.sub(r"\{%-?\s*include\s+maturity-state\.html\s+record=([\w.]+)\s*-?%\}",
                  lambda m: maturity.replace("include.record", m.group(1)), src)
+    # GROWTH-3: the verdict gate is inlined the same way, bound to its record= and count=
+    # arguments. It cannot be stripped either: `decision_label` is its output.
+    gate = (AUX / "_includes" / "patch-verdict-gate.html").read_text(encoding="utf-8")
+    src = re.sub(r"\{%-?\s*include\s+patch-verdict-gate\.html\s+record=([\w.]+)\s+count=([\w.]+)\s*-?%\}",
+                 lambda m: gate.replace("include.record", m.group(1)).replace("include.count", m.group(2)),
+                 src)
     # The monitoring status arrives from a Jekyll include, whose parameterised syntax core Liquid
     # cannot parse. Stripping it leaves `mon` empty here; that field is the include's to own.
     src = re.sub(r"\{%-?\s*include\s.*?-?%\}", "", src, flags=re.S)
     ruby = shutil.which("ruby")
     if not ruby:
         return False, "<<RENDER FAILED: ruby is not on PATH>>"
-    site = {"data": {"patch_products": products}, "pages": records}
+    site = {"data": {"patch_products": products, **VERDICT_FACTS}, "pages": records}
     with tempfile.TemporaryDirectory() as td:
         script = Path(td) / "render.rb"
         script.write_text(_RENDER_RB, encoding="utf-8")
@@ -176,23 +182,29 @@ def expected_choices(ordered: list[dict], product_id: str) -> list[dict]:
     return [r for r in candidates if str(r.get("update_published_at") or "") == newest]
 
 
+# GROWTH-3: the verdict is the policy's (lib/patch_decision.decide), which every surface renders
+# through _includes/patch-verdict-gate.html. The expectation is computed in Python from the same two
+# committed fact files, with the gate's render-time support rule (every cited report still among the
+# record's accepted sources), so this check pins the template to the authority.
+import yaml  # noqa: E402
+
+VERDICT_FACTS = {
+    "verdict_reasons": yaml.safe_load((AUX / "_data" / "verdict_reasons.yml").read_text(encoding="utf-8")),
+    "patch_lifecycle": yaml.safe_load((AUX / "_data" / "patch_lifecycle.yml").read_text(encoding="utf-8")),
+}
+
+
 def expected_verdict(rec: dict) -> str:
-    """The shared derivation from `_includes/patch-table-row.html`, in the same order."""
-    label = str(rec.get("update_decision_label") or "").strip()
-    summary = str(rec.get("update_consensus_summary") or "")
-    quick = str(rec.get("quick_verdict") or "")
-    if not label and ":" in summary:
-        label = summary.split(":", 1)[0].strip()
-    elif not label and ":" in quick:
-        label = quick.split(":", 1)[0].strip()
-    elif not label:
-        label = "INSUFFICIENT DATA"
-    count = int(rec.get("update_report_count") or 0)
-    official_only = (rec.get("evidence_state") == "official_only"
-                     or rec.get("evidence_state_label") == "Official source only")
-    if official_only and count == 0:
-        label = "INSUFFICIENT DATA"
-    return label
+    """The policy's verdict for this record, from the authority itself."""
+    sys.path.insert(0, str(AUX / "scripts"))
+    from lib import patch_decision, verdict_reasons  # noqa: PLC0415
+    urls = {str(s.get("source_url") or "") for s in rec.get("accepted_report_sources") or []}
+    ident = verdict_reasons.record_identity(rec)
+    valid = [e for e in VERDICT_FACTS["verdict_reasons"]["entries"]
+             if verdict_reasons.reason_identity(e) == ident and e.get("evidence")
+             and all(str(ev.get("source_url")) in urls for ev in e["evidence"])]
+    return patch_decision.decide(rec, valid_reasons=valid,
+                                 lifecycle=VERDICT_FACTS["patch_lifecycle"]["entries"]).verdict
 
 
 class TagCollector(HTMLParser):

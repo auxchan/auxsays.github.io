@@ -273,7 +273,17 @@ auxsays/scripts/tests/test_davinci_archive_check.py = 76
 # the exact Windows KB; "no verdict yet" for INSUFFICIENT DATA; live wording only with the page's
 # live box AND the render-time projection certificate; no supersession or safety claim; one title,
 # description and canonical; every other page keeps the site-wide SEO tag. Needs ruby + liquid.
-auxsays/scripts/tests/test_patch_decision_authority.py = 205
+auxsays/scripts/tests/test_patch_decision_authority.py = 209
+# GROWTH-3 (owner decisions 1-3, 2026-11-06) moved the verdict policy into lib/patch_decision.decide:
+# an official withdrawal (AVOID), Microsoft's monthly security classification (SECURITY UPDATE), or a
+# reviewed reason entry the page's counted rows still support (WAIT / TEST FIRST); else INSUFFICIENT
+# DATA. Count, sentiment, theme, severity, maturity and the clock decide nothing (G3-D1..D12). The
+# reason file's audits (G3-F*), the single KB5079391 lifecycle exception (G3-L*), wording (no pause
+# advice, G3-W*), QA severities (G3-Q*), and the Liquid gate rendering exactly what Python decides on
+# a matrix and over the whole corpus (G3-R*). 17 mutants, each caught by a named check. The decision
+# authority suite above grew 205 -> 209: the body-follows-decision section now asserts the no-invitation
+# check for all three caller-supplied decisions (B2 x 6, was x 2), because none of them selects the body.
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 52
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
