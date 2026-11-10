@@ -881,7 +881,9 @@ VERDICT_FACTS = {
 def _verdict_projection() -> dict:
     """The projection a deploy would build for these cases: lib/verdict_projection over the cases'
     COUNTED rows. The gate prints only this; it never reads the reason file (review 1, D2). The
-    withdrawn case has one of its two cited rows counted, so the authority gives it no row."""
+    withdrawn case has one of its two cited rows counted, so the authority gives it no row. The
+    security case gets its SECURITY UPDATE row the same way: the gate derives no official verdict
+    either (review 2, LOW-1)."""
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from lib import verdict_projection  # noqa: PLC0415
@@ -889,6 +891,8 @@ def _verdict_projection() -> dict:
             {"id": "r2", "source_url": REASON_URLS[1], "report_text_excerpt": "The installer stops with an error."}]
     pages = [{"product_id": f"v-{n}", "update_version": "1.0", "update_report_count": c,
               "permalink": f"/updates/t/v-{n}/"} for n, c in (("reasoned", 2), ("reason-withdrawn", 1))]
+    pages.append({"product_id": "microsoft-windows-11", "update_type": "2026-01 B", "update_report_count": 3,
+                  "permalink": "/updates/t/v-security/"})
     counted = {("v-reasoned", "1.0", ""): rows, ("v-reason-withdrawn", "1.0", ""): rows[:1]}
     return verdict_projection.project(pages, counted, VERDICT_FACTS["verdict_reasons"]["entries"], [])[0]
 

@@ -12,19 +12,23 @@ THE POLICY (owner decisions 1-3, 2026-11-06), implemented in lib/patch_decision.
 Report count, sentiment, theme, severity, maturity and the clock decide nothing; SAFE ENOUGH stays
 unreachable.
 
-ONE AUTHORITY (fix round 1, review 1 D2). The Liquid gate (_includes/patch-verdict-gate.html) no
-longer decides a reasoned verdict: lib/verdict_projection writes decide's answer per page at deploy
-(build_verdict_projection.py, before QA and Jekyll) and the gate prints it. It derives only the two
-official facts itself.
+ONE AUTHORITY (fix round 1, review 1 D2; review 2 LOW-1). The Liquid gate
+(_includes/patch-verdict-gate.html) decides no verdict: lib/verdict_projection writes decide's answer
+per page at deploy (build_verdict_projection.py, before QA and Jekyll) -- AVOID and SECURITY UPDATE
+included -- and the gate prints it. It re-derives no official fact: its own reading of the lifecycle
+file and of the release type ("YYYY-MM B" via slice + plus: 0) parted from Python's where QA could
+not see it (review 2: probe N1, "2026-3x B").
 
 SECTIONS. [D] the decision procedure and its invariants (G3-D1..D12). [F] the reason file's audits
-(G3-F0..F7, G3-OC). [L] the lifecycle exception (G3-L1..L3, G3-W0). [W] public wording (G3-W1..W3).
-[Q] QA: severities, and the rendered/authority comparison (G3-Q1..Q6). [R] the gate renders exactly
-what Python decides: a synthetic matrix with one case per support rule, no-projection fail-closed,
-and the whole corpus (G3-R0..R5). [P] the projection IS the authority, review 1's probes A1 and A2
-on the rendered page, the builder and its position in the deploy (G3-P0..P7). [S] the scope prints
-with the verdict on every surface (G3-S1..S5, review 1 D1). [X] mutants: each restores ONE thing the
-policy forbids, and must be caught by a named check that was passing before it.
+(G3-F0..F7, G3-OC). [L] the lifecycle exception and its strict typing (G3-L1..L5, G3-W0). [W] public
+wording (G3-W1..W4). [Q] QA: severities, the rendered/authority comparison, the malformed lifecycle
+and release type (G3-Q1..Q9). [R] the gate renders exactly what Python decides: a synthetic matrix
+with one case per support rule, no-projection fail-closed, the whole corpus, and review 2's gate2
+and refused-lifecycle cases (G3-R0..R7). [P] the projection IS the authority, official verdicts
+included, review 1's probes A1 and A2 on the rendered page, the builder and its position in the
+deploy (G3-P0..P9). [S] the scope prints with the verdict on every surface, and the feed card's
+wording (G3-S1..S8, review 1 D1, review 2 LOW-4). [X] mutants: each restores ONE thing the policy
+forbids, and must be caught by a named check that was passing before it.
 
 Needs ruby + the liquid gem for [R], [P], [S] and the template mutants. Offline; writes only in a
 temp dir.
@@ -57,7 +61,12 @@ from lib import verdict_reasons as vr  # noqa: E402
 
 GATE_PATH = _AUX / "_includes" / "patch-verdict-gate.html"
 REASONS = yaml.safe_load((_AUX / "_data" / "verdict_reasons.yml").read_text(encoding="utf-8"))
-LIFECYCLE = yaml.safe_load((_AUX / "_data" / "patch_lifecycle.yml").read_text(encoding="utf-8"))
+LIFECYCLE_TEXT = (_AUX / "_data" / "patch_lifecycle.yml").read_text(encoding="utf-8")
+LIFECYCLE = yaml.safe_load(LIFECYCLE_TEXT)
+# Review 2's probe N1, exactly as it was written: the builds as YAML numbers.
+N1_LIFECYCLE_TEXT = LIFECYCLE_TEXT.replace('builds: ["26100.8116", "26200.8116"]', "builds: [26100.8116, 26200.8116]")
+# Review 2's gate2 cases: Liquid's `plus: 0` read each as a month number; Python's pattern does not.
+GATE2_MALFORMED = ("2026-3x B", "2026-+3 B", "2026-1  B", "2026-13 B")
 WIN, OBS = "microsoft-windows-11", "obs-studio"
 
 _PASS = 0
@@ -337,6 +346,44 @@ def check_lifecycle() -> None:
           body.startswith("Microsoft withdrew this update for new installations. Replacement: KB5000003.")
           and "not to devices that already installed it" in body, body)
 
+    # Review 2, LOW-1. Probe N1 through the deploy's own loader: the file is refused, not coerced.
+    assert N1_LIFECYCLE_TEXT != LIFECYCLE_TEXT, "the N1 anchor is no longer in patch_lifecycle.yml"
+    n1_entries = yaml.safe_load(N1_LIFECYCLE_TEXT)["entries"]
+    n1_errors = vr.lifecycle_errors(n1_entries)
+    _r, n1_loaded, n1_problems = fact_files(N1_LIFECYCLE_TEXT)
+    kb_pages = [win_record(update_type="2026-03 D", kb="KB5079391", build=b) for b in ("26100.8116", "26200.8116")]
+    typed = [vr.lifecycle_errors([dict(entries[0], **{f: v})])
+             for f, v in (("product_id", 11), ("kb", 5079391), ("relationship", True))]
+    check("G3-L4 probe N1: lifecycle builds written as YAML numbers are refused, not coerced -- the file "
+          "supports nothing, so neither KB5079391 page is AVOID -- and a non-string product_id, kb or "
+          "relationship is refused too",
+          any("builds[0]" in e and "not a string" in e for e in n1_errors)
+          and any("builds[1]" in e for e in n1_errors) and all(typed)
+          and n1_loaded == [] and any("patch_lifecycle" in m for m in n1_problems)
+          and all(decide(r, (), n1_loaded).verdict != "AVOID" for r in kb_pages)
+          and all(decide(r, (), LIFECYCLE["entries"]).verdict == "AVOID" for r in kb_pages),
+          f"{n1_errors} {typed} {n1_problems}")
+    padded = {f: vr.lifecycle_errors([dict(entries[0], **{f: v})])
+              for f, v in (("product_id", " microsoft-windows-11"), ("kb", "KB5079391 "),
+                           ("relationship", "withdrawn_for_new_installs "),
+                           ("builds", ["26100.8116", " 26200.8116"]))}
+    check("G3-L5 a padded product_id, kb, relationship or build is refused (Python must never trim a "
+          "value into a match), and the shipped file passes",
+          all(any("whitespace" in e for e in errs) for errs in padded.values())
+          and not vr.lifecycle_errors(entries), str({k: v[:1] for k, v in padded.items()}))
+
+
+def fact_files(lifecycle_text: str, reasons: list | None = None) -> tuple[list, list, list]:
+    """lib/verdict_projection.load_fact_files over a temp tree holding these two files: exactly what a
+    deploy hands decide (a refused file contributes nothing)."""
+    with tempfile.TemporaryDirectory() as td:
+        data = Path(td) / "_data"
+        data.mkdir()
+        (data / "patch_lifecycle.yml").write_text(lifecycle_text, encoding="utf-8")
+        (data / "verdict_reasons.yml").write_text(
+            yaml.safe_dump({"schema_version": 1, "entries": list(reasons or [])}), encoding="utf-8")
+        return vp.load_fact_files(Path(td))
+
 
 # ------------------------------------------------------------------------ [W] wording
 
@@ -354,6 +401,22 @@ def check_wording() -> None:
               for n in (1, 2, 40)]
     check("G3-W2 no causal word appears in a line no reviewed reason supports",
           not any(causal.search(b) for b in bodies), str([b for b in bodies if causal.search(b)][:1]))
+    check_menu_bar_reason()
+
+
+MENU_BAR_ENTRY = "obs-studio:32.2.2:macos-27-menu-bar-icon-crash"
+
+
+def check_menu_bar_reason() -> None:
+    """G3-W4 (review 2, LOW-3): working on macOS 26.3.1 shows the crash depends on the OS; it does not
+    show that earlier OBS versions also crash on macOS 27, so the line may not say it is not new."""
+    reason = next((str(e.get("reason") or "") for e in REASONS["entries"] if e.get("id") == MENU_BAR_ENTRY), "")
+    overclaims = [p for p in ("not new in this OBS version", "comes with macOS 27", "is not new")
+                  if p in reason]
+    check("G3-W4 the OBS 32.2.2 menu-bar reason is non-causal: triggered by macOS 27, and no report shows "
+          "this OBS update caused it -- never that it is not new in this OBS version",
+          "so it is triggered by macOS 27; no report shows it was caused by this OBS update." in reason
+          and not overclaims, reason or "entry missing")
 
 
 # ------------------------------------------------------------------------ [Q] QA severities
@@ -458,6 +521,67 @@ def check_qa(tmp: Path) -> None:
           "TEST FIRST in A1's shape, INSUFFICIENT DATA in A2's -- never a fall-back it does not make",
           "renders 'TEST FIRST if you use the test setup'" in msg1 and "INSUFFICIENT DATA" not in msg1
           and "renders 'INSUFFICIENT DATA'" in msg2, f"A1: {msg1[-160:]} | A2: {msg2[-120:]}")
+    check_qa_official(qa, tmp / "official")
+
+
+def _qa_win_tree(tmp: Path, update_type: str, *, life_text: str | None = None,
+                 kb: str = "KB5000001", build: str = "26200.1000"):
+    """A one-page Windows QA fixture (no reports) with its own lifecycle file."""
+    tree = _qa_tree(tmp, [], [], rec_over={"product_id": WIN, "update_version": "25H2", "target_kb": kb,
+                                           "target_build": build, "update_type": update_type,
+                                           "update_report_count": 0})
+    if life_text is not None:
+        tree[3].write_text(life_text, encoding="utf-8")
+    return tree
+
+
+def check_qa_official(qa, tmp: Path) -> None:
+    """Review 2, LOW-1: the malformed inputs fail closed AND are QA errors; a partial projection too."""
+    codes = lambda es: {e["code"] for e in es}  # noqa: E731
+    n1 = _qa_win_tree(tmp / "n1", "2026-03 D", life_text=N1_LIFECYCLE_TEXT, kb="KB5079391", build="26200.8116")
+    e_n1, _w = _qa_scan(qa, n1)
+    padded = _qa_win_tree(tmp / "pad", "2026-03 D", kb="KB5079391", build="26200.8116",
+                          life_text=LIFECYCLE_TEXT.replace("relationship: withdrawn_for_new_installs",
+                                                           "relationship: 'withdrawn_for_new_installs '"))
+    e_pad, _w = _qa_scan(qa, padded)
+    shipped = _qa_win_tree(tmp / "ok", "2026-03 D", life_text=LIFECYCLE_TEXT, kb="KB5079391", build="26200.8116")
+    e_ok, _w = _qa_scan(qa, shipped)
+    check("G3-Q7 probe N1 (numeric builds) and a padded relationship are QA ERRORS (patch_lifecycle_invalid), "
+          "and QA's own view of the page fails closed with the file (no AVOID it would disagree with); the "
+          "shipped file is clean",
+          "patch_lifecycle_invalid" in codes(e_n1) and "patch_lifecycle_invalid" in codes(e_pad)
+          and "verdict_render_disagrees" not in codes(e_n1) | codes(e_pad)
+          and not e_ok, f"n1={codes(e_n1)} pad={codes(e_pad)} ok={codes(e_ok)}")
+    flagged, published, clean = {}, {}, {}
+    for i, value in enumerate(GATE2_MALFORMED + ("2026-03 B", "2026-03 D", "2026-03 OOB", "official-source")):
+        tree = _qa_win_tree(tmp / f"t{i}", value, build=f"26200.{1100 + i}")
+        errors, warnings = _qa_scan(qa, tree)
+        promoted, _kept = qa.promote_for_publication(errors, warnings)
+        bucket = flagged if value in GATE2_MALFORMED else clean
+        bucket[value] = ("windows_update_type_malformed" in codes(warnings), codes(errors),
+                         "windows_update_type_malformed" in codes(promoted))
+        published[value] = decide(win_record(update_type=value)).verdict
+    check("G3-Q8 review 2's gate2 release types ('2026-3x B', '2026-+3 B', '2026-1  B', and '2026-13 B') are "
+          "each a QA publication ERROR (windows_update_type_malformed: a writeback warning, promoted by "
+          "--publish-strict) and decide fails closed on them; B, D, OOB and the writer default are clean",
+          all(f == (True, set(), True) for f in flagged.values())
+          and all(c == (False, set(), False) for c in clean.values())
+          and all(published[v] == "INSUFFICIENT DATA" for v in GATE2_MALFORMED)
+          and published["2026-03 B"] == "SECURITY UPDATE", f"{flagged} {clean} {published}")
+    sec = _qa_win_tree(tmp / "partial", "2026-03 B", build="26200.1200")
+    paths, _ev, _rs, _life, proj = sec
+    data = yaml.safe_load(paths[0].read_text(encoding="utf-8").split("---")[1])
+    full = vp.project([data], {}, [], [])[0]
+    proj.write_text(vp.render({"schema_version": 1, "pages": {}}), encoding="utf-8")
+    e_partial, _w = _qa_scan(qa, sec)
+    proj.write_text(vp.render(full), encoding="utf-8")
+    e_full, _w = _qa_scan(qa, sec)
+    msg = next((e["message"] for e in e_partial if e["code"] == "verdict_render_disagrees"), "")
+    check("G3-Q9 a deploy projection without a page's OFFICIAL row (round 1's shape: reasoned rows only) is "
+          "an ERROR -- the page would render INSUFFICIENT DATA where decide gives SECURITY UPDATE -- and the "
+          "full projection is clean",
+          "renders 'INSUFFICIENT DATA'" in msg and "'SECURITY UPDATE'" in msg
+          and full["pages"] and "verdict_render_disagrees" not in codes(e_full), f"{msg[:200]} {codes(e_full)}")
 
 
 # ------------------------------------------------------------------------ [R] Liquid == Python
@@ -480,19 +604,22 @@ File.write(ARGV[1], JSON.generate(out), encoding: "utf-8")
 PROBE = "@@{{ gate_label }}|{{ gate_scope }}|{{ gate_body }}|{{ gate_panel_heading }}|{{ gate_panel_text }}@@"
 
 
-def gate_template(text: str | None = None) -> str:
+RECS_PROBE = "##{{ gate_recommendations | join: '~' }}##"
+
+
+def gate_template(text: str | None = None, suffix: str = "") -> str:
     text = text if text is not None else GATE_PATH.read_text(encoding="utf-8")
-    return text.replace("include.record", "rec").replace("include.count", "cnt") + PROBE
+    return text.replace("include.record", "rec").replace("include.count", "cnt") + PROBE + suffix
 
 
-def render_gate(cases: dict, site_data: dict, template: str | None = None) -> dict | None:
+def render_gate(cases: dict, site_data: dict, template: str | None = None, suffix: str = "") -> dict | None:
     ruby = shutil.which("ruby")
     if not ruby:
         return None
     with tempfile.TemporaryDirectory() as td:
         script, payload, out = Path(td) / "g.rb", Path(td) / "p.json", Path(td) / "o.json"
         script.write_text(_RENDER_RB, encoding="utf-8")
-        payload.write_text(json.dumps({"template": gate_template(template), "site": {"data": site_data},
+        payload.write_text(json.dumps({"template": gate_template(template, suffix), "site": {"data": site_data},
                                        "cases": cases}, default=str), encoding="utf-8")
         proc = subprocess.run([ruby, str(script), str(payload), str(out)], capture_output=True,
                               text=True, encoding="utf-8", errors="replace", timeout=900)
@@ -615,7 +742,6 @@ RULE_CASES = (
     ("G3-R4g OC: a reworded confirmation drops the WAIT to the next supported entry (A1's shape)", "OC-reworded"),
     ("G3-R4h a page with no projected row renders no verdict from its stored WAIT", "stored-wait-no-row"),
     ("G3-R4i A2's shape: an entry left with one of its two rows falls back", "A2-one-of-two"),
-    ("G3-R4j a forged WAIT row on a security page cannot displace SECURITY UPDATE", "sec-forged-row"),
 )
 
 
@@ -624,11 +750,7 @@ def check_render_matrix(template: str | None = None) -> None:
     cases = matrix_cases()
     records, counted, entries, projection = matrix_facts(cases)
     want = matrix_expectations(cases, records, counted, entries)
-    site_projection = copy.deepcopy(projection)
-    site_projection["pages"][vp.page_key(cases["sec-forged-row"]["rec"])] = {
-        "verdict": "WAIT", "scope": "if you use the test setup", "rule": "R3", "reasons": ["forged"],
-        "body": "A forged line.", "panel_heading": "", "panel_text": ""}
-    site = {"verdict_projection": site_projection, "patch_lifecycle": {"schema_version": 1, "entries": LIFE},
+    site = {"verdict_projection": projection, "patch_lifecycle": {"schema_version": 1, "entries": LIFE},
             # Present ONLY for the template mutants that try to read it; the shipped gate never does.
             "verdict_reasons": {"schema_version": 1, "entries": entries}}
     slim = {k: {"rec": dict(c["rec"], accepted_report_sources=[{"source_url": r["source_url"]} for r in c["rows"]]),
@@ -655,18 +777,76 @@ def check_render_matrix(template: str | None = None) -> None:
         check(label, got[name] == want[name] and verdicts[name] == absolute[name],
               f"rendered {got[name]!r}; authority {want[name][:2]!r}; expected {absolute[name]!r}")
 
-    # No projection at all (a local render, a fresh checkout): fail closed, official facts remain.
+    # A forged row: the gate prints the projection as it is (it re-derives nothing, official verdicts
+    # included), so QA's model of the gate must say exactly what the gate prints -- that is how QA's
+    # comparison with decide sees the forgery and stops the deploy (G3-Q4).
+    forged_rec = cases["sec-forged-row"]["rec"]
+    forged = copy.deepcopy(projection)
+    forged["pages"][vp.page_key(forged_rec)] = {
+        "verdict": "WAIT", "scope": "if you use the test setup", "rule": "R3", "reasons": ["forged"],
+        "body": "A forged line.", "panel_heading": "", "panel_text": "", "recommendations": []}
+    f_out = render_gate({"f": slim["sec-forged-row"]}, dict(site, verdict_projection=forged), template)
+    f_got = parse_probe((f_out or {}).get("f", "")) or ("",) * 5
+    f_model = vp.rendered_verdict(forged_rec, forged["pages"], LIFE)
+    check("G3-R4j a forged WAIT row on a security page prints exactly what QA's model of the gate says, so QA "
+          "sees it differ from decide's SECURITY UPDATE (the gate trusts only the projection; QA guards it)",
+          f_got[:2] == f_model == ("WAIT", "if you use the test setup")
+          and want["sec-forged-row"][0] == "SECURITY UPDATE", f"rendered {f_got[:2]!r}; model {f_model!r}")
+
+    # No projection at all (a local render, a fresh checkout): fail closed -- no verdict of any kind.
     bare = render_gate(slim, {"patch_lifecycle": {"schema_version": 1, "entries": LIFE},
                               "verdict_reasons": {"schema_version": 1, "entries": entries}}, template)
     bare_got = {k: parse_probe((bare or {}).get(k, "")) or ("",) * 5 for k in cases}
-    reasoned = [k for k, g in bare_got.items() if g[0] in ("WAIT", "TEST FIRST") or g[4]]
-    official = {k: bare_got[k][0] for k in ("sec-9", "sec-install", "avoid-preview", "avoid-security")}
-    check("G3-R5 with no projection the gate publishes no WAIT, no TEST FIRST and no panel, and the "
-          "official verdicts still render",
-          bare is not None and "__error__" not in bare and not reasoned
-          and official == {"sec-9": "SECURITY UPDATE", "sec-install": "SECURITY UPDATE",
-                           "avoid-preview": "AVOID", "avoid-security": "AVOID"},
-          f"{reasoned} {official}")
+    want_bare = {k: ("INSUFFICIENT DATA", "", pd.public_body(pd.Decision("INSUFFICIENT DATA", "R5"), c["rec"], c["n"]),
+                     "", "") for k, c in cases.items()}
+    model_bare = {k: vp.rendered_verdict(c["rec"], {}, LIFE) for k, c in cases.items()}
+    check("G3-R5 with no projection the gate publishes no verdict at all -- no AVOID, SECURITY UPDATE, WAIT, "
+          "TEST FIRST or panel, only the no-verdict line -- and QA's model of the gate says the same",
+          bare is not None and "__error__" not in bare and bare_got == want_bare
+          and set(model_bare.values()) == {("INSUFFICIENT DATA", "")},
+          str([(k, bare_got[k][:2]) for k in cases if bare_got[k] != want_bare[k]][:4]))
+
+
+def check_render_official(template: str | None = None) -> None:
+    """G3-R6/R7 (review 2, LOW-1): the two places the gate used to derive an official verdict itself."""
+    template = template if template is not None else TEMPLATE_OVERRIDE
+    types = GATE2_MALFORMED + ("2026-03 B", "2026-03 D", "2026-03 OOB")
+    recs = {t: win_record(update_type=t, build=f"26200.{1300 + i}", update_report_count=2)
+            for i, t in enumerate(types)}
+    projection = vp.project(list(recs.values()), {}, [], [])[0]
+    out = render_gate({t: {"rec": slim(r), "cnt": 2} for t, r in recs.items()},
+                      {"verdict_projection": projection, "patch_lifecycle": {"schema_version": 1, "entries": []}},
+                      template) or {}
+    got = {t: parse_probe(out.get(t, "")) for t in types}
+    want = {t: python_view(r, [], [], 2) for t, r in recs.items()}
+    check("G3-R6 review 2's gate2 release types render INSUFFICIENT DATA through the real gate, exactly as "
+          "decide says (nothing parses '2026-3x B' as a month any more); a well-formed B renders SECURITY UPDATE",
+          "__error__" not in out and got == want
+          and all(got[t][0] == "INSUFFICIENT DATA" for t in GATE2_MALFORMED)
+          and got["2026-03 B"][0] == "SECURITY UPDATE",
+          str({t: (got[t] or ("",))[0] for t in types}))
+
+    # A lifecycle file the deploy REFUSES (here: two entries, one with a foreign URL), which Liquid
+    # still sees in site.data: the gate must not match it. And N1 itself.
+    refused = copy.deepcopy(LIFECYCLE)
+    refused["entries"] = [dict(refused["entries"][0], official_url="https://example.test/kb5079391"),
+                          dict(refused["entries"][0], id="second")]
+    cases, wants = {}, {}
+    for name, text, life_data in (("refused", yaml.safe_dump(refused, sort_keys=False), refused),
+                                  ("n1", N1_LIFECYCLE_TEXT, yaml.safe_load(N1_LIFECYCLE_TEXT))):
+        _r, loaded, problems = fact_files(text)
+        assert problems and loaded == [], (name, problems)
+        pages = [win_record(update_type="2026-03 D", kb="KB5079391", build=b, update_report_count=1)
+                 for b in ("26100.8116", "26200.8116")]
+        proj = vp.project(pages, {}, [], loaded)[0]
+        res = render_gate({str(i): {"rec": slim(r), "cnt": 1} for i, r in enumerate(pages)},
+                          {"verdict_projection": proj, "patch_lifecycle": life_data}, template) or {}
+        cases[name] = [parse_probe(res.get(str(i), "")) for i in range(len(pages))]
+        wants[name] = [python_view(r, [], loaded, 1) for r in pages]
+    check("G3-R7 a lifecycle file the deploy refuses (a schema-invalid file, or probe N1's numeric builds) "
+          "renders no AVOID even though Jekyll still loads it: the gate matches no lifecycle entry itself",
+          cases == wants and all(g and g[0] == "INSUFFICIENT DATA" for gs in cases.values() for g in gs),
+          f"{ {k: [g and g[0] for g in v] for k, v in cases.items()} }")
 
 
 # ------------------------------------------------------------------------ corpus facts (shared)
@@ -789,11 +969,11 @@ def check_projection() -> None:
     expect, wrong = {}, []
     for r in c["recs"]:
         mine = c["valid"].get(vr.record_identity(r), [])
-        if mine:
-            d = pd.decide(r, valid_reasons=mine, lifecycle=LIFECYCLE["entries"])
+        d = pd.decide(r, valid_reasons=mine, lifecycle=LIFECYCLE["entries"])
+        if d.verdict != "INSUFFICIENT DATA":
             expect[vp.page_key(r)] = vp.row_for(d, r)
-    check(f"G3-P1 the projection IS the authority: one row per page with a supported entry ({len(rows)}), "
-          "each equal to decide/public_body/panel_text for that page",
+    check(f"G3-P1 the projection IS the authority: one row per page with a verdict ({len(rows)}: official "
+          "ones included), each equal to decide/public_body/panel_text for that page",
           rows == expect and len(rows) >= 1 and all(set(v) == set(vp.ROW_KEYS) for v in rows.values()),
           str(sorted(set(rows) ^ set(expect)))[:300])
     model = [(r.get("permalink"), vp.rendered_verdict(r, rows, LIFECYCLE["entries"]))
@@ -806,9 +986,30 @@ def check_projection() -> None:
     gate = GATE_PATH.read_text(encoding="utf-8")
     code = re.sub(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", "", gate, flags=re.S)
     check("G3-P0 the gate holds no copy of the support rule: it reads no reason entry, no cited row and no "
-          "accepted source, only the projection and the two official facts",
+          "accepted source, only the projection",
           "verdict_reasons" not in code and "accepted_report_sources" not in code and ".evidence" not in code
           and "site.data.verdict_projection.pages[pvg_key]" in code, "")
+    derives = [n for n in ("patch_lifecycle", "update_type", "target_kb", "slice:", "withdrawn_for_new_installs",
+                           "monthly security update") if n in code]
+    check("G3-P8 the gate re-derives no official verdict: it reads no lifecycle file, release type or KB, and "
+          "parses nothing (review 2, LOW-1: its own slice + plus: 0 reading parted from Python's)",
+          not derives and code.count("plus: 0") == 1 and "include.count | default: 0 | plus: 0" in code,
+          str(derives))
+
+
+def check_projection_official() -> None:
+    """G3-P9: a FRESH projection over the shipped corpus carries every official verdict."""
+    c = corpus()
+    rows = vp.project(c["recs"], c["groups"], REASONS["entries"], LIFECYCLE["entries"])[0]["pages"]
+    security = [r for r in c["recs"] if pd.is_monthly_security_update(r)]
+    withdrawn = [r for r in c["recs"] if pd.lifecycle_for(r, LIFECYCLE["entries"])]
+    missing = [vp.page_key(r) for r in security if (rows.get(vp.page_key(r)) or {}).get("verdict") != "SECURITY UPDATE"]
+    missing += [vp.page_key(r) for r in withdrawn
+                if (rows.get(vp.page_key(r)) or {}).get("verdict") != "AVOID"
+                or (rows.get(vp.page_key(r)) or {}).get("scope") != "for new installations"]
+    check(f"G3-P9 the projection carries every official verdict: SECURITY UPDATE for each of the "
+          f"{len(security)} monthly security updates and AVOID for both KB5079391 pages ({len(withdrawn)})",
+          len(security) == 43 and len(withdrawn) == 2 and not missing, str(missing[:4]))
 
 
 def check_projection_builder(tmp: Path) -> None:
@@ -1000,6 +1201,76 @@ def check_surfaces() -> None:
           and "Verdict: {{ decision_label }}{% if decision_scope != '' %} {{ decision_scope }}{% endif %}" in home, "")
 
 
+def check_feed_wording() -> None:
+    """G3-S6/S7 (review 2, LOW-4): the feed card's line over every report-bearing page."""
+    c = corpus()
+    site = {"data": {"verdict_projection": c["projection"], "patch_lifecycle": LIFECYCLE}}
+    bearing = [r for r in c["recs"] if int(r.get("update_report_count") or 0) > 0]
+    cases = {str(i): {"template": FEED_T, "item": dict(r, url=r.get("permalink")),
+                      "summary": str(r.get("update_consensus_summary") or "")} for i, r in enumerate(bearing)}
+    # The fallback: a stored line that lags (another lead), on each kind of identity the feed names.
+    kinds = {}
+    for r in bearing:
+        pid = str(r.get("product_id"))
+        kind = (pid, vp.rendered_verdict(r, c["projection"]["pages"])[0])
+        kinds.setdefault(kind, r)
+    for i, r in enumerate(kinds.values()):
+        cases[f"lag:{i}"] = {"template": FEED_T, "item": dict(r, url=r.get("permalink")),
+                             "summary": "STALE: an old line with another verdict."}
+    out = render_includes(cases, site) or {}
+
+    def line(key):
+        m = re.search(r"@@(.*?)@@", out.get(key, ""), re.S)
+        return m.group(1) if m else None
+
+    def expected(r):
+        d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"])
+        return pd.summary_line(d, r, int(r.get("update_report_count") or 0), identity=identity_of(r))
+    listed = [(r.get("permalink"), (line(str(i)) or "")[-80:]) for i, r in enumerate(bearing)
+              if line(str(i)) is None or "listed below" in line(str(i))]
+    unequal = [(r.get("permalink"), (line(str(i)) or "")[:70], expected(r)[:70]) for i, r in enumerate(bearing)
+               if line(str(i)) != expected(r) or str(r.get("update_consensus_summary") or "") != expected(r)]
+    check(f"G3-S6 no /updates/ feed card says its reports are 'listed below' (nothing is listed under a card): "
+          f"over all {len(bearing)} report-bearing pages the card prints the stored line, which is the policy's "
+          "feed line (lib/patch_decision.summary_line)",
+          "__error__" not in out and len(bearing) > 200 and not listed and not unequal,
+          f"{listed[:2]} {unequal[:2]}")
+    lag_bad = [(r.get("permalink"), line(f"lag:{i}"), expected(r)[:80]) for i, r in enumerate(kinds.values())
+               if line(f"lag:{i}") != expected(r)]
+    check(f"G3-S7 when the feed falls back to the gate's own line it still names the exact patch, build "
+          f"included, and equals the stored form ({len(kinds)} kinds of page: "
+          f"{', '.join(sorted({k[0] for k in kinds}))})",
+          bool(kinds) and any(k[0] == WIN for k in kinds) and not lag_bad, str(lag_bad[:2])[:400])
+
+
+def check_avoid_recommendations() -> None:
+    """G3-S8 (review 2, LOW-4): both KB5079391 pages carry the replacement step, the 24H2 one (0 reports,
+    no writer, its stored list retracted at zero) included."""
+    c = corpus()
+    fresh = vp.project(c["recs"], c["groups"], REASONS["entries"], LIFECYCLE["entries"])[0]
+    pages = [r for r in c["recs"] if pd.lifecycle_for(r, LIFECYCLE["entries"])]
+    out = render_gate({str(i): {"rec": slim(r), "cnt": int(r.get("update_report_count") or 0)}
+                       for i, r in enumerate(pages)},
+                      {"verdict_projection": fresh, "patch_lifecycle": LIFECYCLE}, TEMPLATE_OVERRIDE,
+                      suffix=RECS_PROBE) or {}
+    printed = {r.get("permalink"): (re.search(r"##(.*?)##", out.get(str(i), ""), re.S) or [None, None])[1]
+               for i, r in enumerate(pages)}
+    want = "~".join(pd.AVOID_RECOMMENDATIONS)
+    counts = sorted(int(r.get("update_report_count") or 0) for r in pages)
+    stored = [list(r.get("practical_recommendations") or []) for r in pages if int(r.get("update_report_count") or 0)]
+    layout = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
+    decision = (_AUX / "_includes" / "patch-decision.html").read_text(encoding="utf-8")
+    check("G3-S8 both KB5079391 AVOID pages carry the same Recommendations list from the projection -- "
+          "'install the replacement update instead' -- the zero-report 24H2 page included, and the report-"
+          "bearing page's stored list is that same list",
+          len(pages) == 2 and counts[0] == 0 and set(printed.values()) == {want}
+          and "install the replacement update instead" in want
+          and stored == [list(pd.AVOID_RECOMMENDATIONS)]
+          and "{% assign decision_recommendations = gate_recommendations %}" in decision
+          and "{% assign rec_list = decision_recommendations %}" in layout
+          and "{%- for rec in rec_list -%}" in layout, f"{printed} {stored}")
+
+
 # ------------------------------------------------------------------------ [X] mutants
 
 def run_mutant(label: str, body, mutants: list, *, mutate, restore) -> None:
@@ -1080,6 +1351,24 @@ def check_mutations(tmp: Path) -> None:
     real_body = pd.public_body
     real_add = qa.add
     real_summary = pd.summary_line
+    real_strict = vr._strict_string_problem
+    real_project = vp.project
+
+    def reasoned_only(records, groups, reasons, lifecycle):
+        projection, unsupported = real_project(records, groups, reasons, lifecycle)
+        return dict(projection, pages={k: v for k, v in projection["pages"].items()
+                                       if v["verdict"] in vp.REASONED}), unsupported
+
+    def old_model(record, rows, lifecycle=()):
+        """rendered_verdict before review 2: the official facts read from the record, not the row."""
+        if pd.lifecycle_for(dict(record), list(lifecycle or ())):
+            return pd.AVOID, pd.AVOID_SCOPE
+        if pd.is_monthly_security_update(dict(record)):
+            return pd.SECURITY_UPDATE, ""
+        row = rows.get(vp.page_key(record)) if isinstance(rows, dict) else None
+        if isinstance(row, dict) and row.get("verdict") in vp.REASONED and str(row.get("scope") or "").strip():
+            return str(row["verdict"]), str(row["scope"])
+        return pd.INSUFFICIENT_DATA, ""
 
     def tpl(old: str, new: str):
         """(mutate, restore) for the SHIPPED gate include, changed in memory only."""
@@ -1118,8 +1407,9 @@ def check_mutations(tmp: Path) -> None:
          swap(vr, "schema_errors", lambda entries: [m for m in real_schema(entries) if "material" not in m])),
         ("X9 a ninth verdict", check_decisions,
          swap(pd, "RISK_ORDER", pd.RISK_ORDER + ("SUPERSEDED",))),
-        ("X10 the gate drops a security update at zero reports", check_render_matrix,
-         tpl("{%- elsif pvg_security -%}", "{%- elsif pvg_security and pvg_count > 0 -%}")),
+        ("X10 the gate drops a projected security update at zero reports", check_render_matrix,
+         tpl("{%- if pvg_row_scope == '' -%}{%- assign pvg_printed = true -%}{%- endif -%}",
+             "{%- if pvg_row_scope == '' and pvg_count > 0 -%}{%- assign pvg_printed = true -%}{%- endif -%}")),
         ("X11 one reporter is enough", check_reason_audits,
          swap(vr, "support_problems", lambda e, rows, recs: [p for p in real_support(e, rows, recs)
                                                               if "distinct counted reporter" not in p])),
@@ -1136,8 +1426,9 @@ def check_mutations(tmp: Path) -> None:
         ("X16 'Pause updates' comes back to a Windows line", check_wording_writer,
          swap(pd, "public_body", lambda d, r, n: real_body(d, r, n) + (
              " Pause updates if this machine is doing production work." if (r or {}).get("product_id") == WIN else ""))),
-        ("X17 the gate words the security line differently from Python", check_render_matrix,
-         tpl("recommends keeping supported systems updated.' -%}", "recommends installing it now.' -%}")),
+        ("X17 the gate words the no-verdict line differently from Python", check_render_matrix,
+         tpl("If one matches your setup, test before relying on this update.{%- endcapture -%}",
+             "If one matches your setup, install it anyway.{%- endcapture -%}")),
         # Review 1's two probes, as mutants: each restores one way the render gate failed open.
         ("X18 (probe A1) the gate re-derives support from the cited URLs, round 0's rule, instead of reading "
          "the projection", check_projection_probes, tpl(PROJECTION_READ, URL_RULE_GATE)),
@@ -1160,6 +1451,37 @@ def check_mutations(tmp: Path) -> None:
         ("X24 the writer's summary goes back to a bare verdict beside a count", check_surfaces,
          swap(pd, "summary_line", lambda d, r, n, fallback="", identity="": real_summary(
              d, r, n, fallback, identity).replace(pd.verdict_phrase(d) + ":", d.verdict + ":", 1))),
+        # Review 2 (LOW-1..4): each restores ONE half of one fix.
+        ("X25 (probe N1) the lifecycle check accepts a value that is not a string", check_lifecycle,
+         swap(vr, "_strict_string_problem", lambda v: "" if not isinstance(v, str) else real_strict(v))),
+        ("X26 the lifecycle check trims a padded value instead of refusing it", check_lifecycle,
+         swap(vr, "_strict_string_problem", lambda v: real_strict(v.strip()) if isinstance(v, str) else real_strict(v))),
+        ("X27 (gate2) the gate parses the release type itself again (slice + plus: 0)", check_render_official,
+         tpl("{%- if pvg_printed -%}", OLD_TYPE_PARSE + "{%- if pvg_printed -%}")),
+        ("X28 the gate matches the lifecycle file itself again", check_render_official,
+         tpl("{%- if pvg_printed -%}", OLD_LIFECYCLE_MATCH + "{%- if pvg_printed -%}")),
+        ("X29 the projection carries the reasoned rows only, as before review 2", check_projection_official,
+         swap(vp, "project", reasoned_only)),
+        ("X30 QA's model of the gate derives the official verdicts from the record again",
+         check_render_matrix, swap(vp, "rendered_verdict", old_model)),
+        ("X31 QA no longer reports a malformed release type", lambda: check_qa(tmp / f"x31-{next(qa_runs)}"),
+         swap(pd, "release_type_problem", lambda record: "")),
+        ("X32 the writer's feed line keeps 'listed below' (Python half)", check_feed_wording,
+         swap(pd, "feed_body", lambda body: str(body or ""))),
+        ("X33 the feed card keeps 'listed below' (Liquid half)", check_feed_wording,
+         inc("patch-feed-summary.html",
+             "{%- assign pfs_body = gate_body | replace: '; the individual reports are listed below.', '.' | "
+             "replace: '; it is listed below.', '.' | replace: '; they are listed below.', '.' -%}",
+             "{%- assign pfs_body = gate_body -%}")),
+        ("X34 the feed's fallback line drops the patch name", check_feed_wording,
+         inc("patch-feed-summary.html", "{% if pfs_identity != '' %}{{ pfs_identity }}. {% endif %}", "")),
+        ("X35 an AVOID row carries no recommendations (Python half)", check_avoid_recommendations,
+         swap(pd, "recommendations", lambda decision: [])),
+        ("X36 the gate drops the row's recommendations (Liquid half)", check_avoid_recommendations,
+         tpl("{%- if pvg_row.recommendations and pvg_row.recommendations.size > 0 -%}{%- assign gate_recommendations "
+             "= pvg_row.recommendations -%}{%- endif -%}", "")),
+        ("X37 the menu-bar reason says the crash is not new in this OBS version again", check_wording,
+         swap(sys.modules[__name__], "REASONS", menu_bar_overclaim())),
     ]
     for label, body, (mutate, restore) in cases:
         run_mutant(label, body, mutants, mutate=mutate, restore=restore)
@@ -1169,6 +1491,40 @@ def check_mutations(tmp: Path) -> None:
         check(f"{label} -> caught", bool(failures), detail)
         if failures:
             print(f"        caught by: {', '.join(sorted(failures)[:4])}")
+
+
+# The two official derivations the gate carried until review 2, restored by X27 / X28 only.
+OLD_TYPE_PARSE = """{%- assign pvg_type = pvg_record.update_type | default: '' | strip -%}
+{%- if pvg_pid == 'microsoft-windows-11' and pvg_type.size == 9 and pvg_printed == false -%}
+  {%- assign pvg_year = pvg_type | slice: 0, 4 | plus: 0 -%}
+  {%- assign pvg_dash = pvg_type | slice: 4, 1 -%}
+  {%- assign pvg_month = pvg_type | slice: 5, 2 | plus: 0 -%}
+  {%- assign pvg_tail = pvg_type | slice: 7, 2 -%}
+  {%- if pvg_year >= 2000 and pvg_dash == '-' and pvg_month >= 1 and pvg_month <= 12 and pvg_tail == ' B' -%}
+    {%- assign pvg_printed = true -%}{%- assign pvg_row_verdict = 'SECURITY UPDATE' -%}{%- assign pvg_row_scope = '' -%}
+    {%- assign pvg_row_body = 'Microsoft classifies this as a monthly security update.' -%}
+  {%- endif -%}
+{%- endif -%}
+"""
+OLD_LIFECYCLE_MATCH = """{%- assign pvg_kb = pvg_record.target_kb | default: '' | strip -%}
+{%- for pvg_entry in site.data.patch_lifecycle.entries -%}
+  {%- if pvg_entry.product_id == pvg_pid and pvg_entry.kb == pvg_kb and pvg_entry.relationship == 'withdrawn_for_new_installs' and pvg_entry.builds contains pvg_build -%}
+    {%- assign pvg_printed = true -%}{%- assign pvg_row_verdict = 'AVOID' -%}{%- assign pvg_row_scope = 'for new installations' -%}
+    {%- assign pvg_row_body = 'Microsoft withdrew this update for new installations.' -%}{%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+"""
+
+
+def menu_bar_overclaim() -> dict:
+    """The shipped reasons with round 1's menu-bar line restored (X37 only)."""
+    mutated = copy.deepcopy(REASONS)
+    for e in mutated["entries"]:
+        if e.get("id") == MENU_BAR_ENTRY:
+            e["reason"] = str(e["reason"]).replace(
+                "so it is triggered by macOS 27; no report shows it was caused by this OBS update.",
+                "so the crash comes with macOS 27 and is not new in this OBS version.")
+    return mutated
 
 
 def check_wording_writer() -> None:
@@ -1204,12 +1560,16 @@ def run() -> int:
         print("\n[R] the Liquid gate renders what Python decides")
         check_render_matrix()
         check_render_corpus()
+        check_render_official()
         print("\n[P] one authority: the projection, review 1's probes, the builder")
         check_projection()
+        check_projection_official()
         check_projection_probes()
         check_projection_builder(tmp / "p")
-        print("\n[S] the scope prints with the verdict on every surface")
+        print("\n[S] the scope prints with the verdict on every surface; the feed card's wording")
         check_surfaces()
+        check_feed_wording()
+        check_avoid_recommendations()
         print("\n[X] mutants, each caught by a named check")
         check_mutations(tmp)
     print()
