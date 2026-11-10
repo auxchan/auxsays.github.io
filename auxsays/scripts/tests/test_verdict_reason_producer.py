@@ -449,8 +449,9 @@ def check_install() -> None:
     entries = [x for x in res.candidates] + [x for x in pro_res.candidates]
     check("VRP-I5 an install candidate is never WAIT and never new: TEST FIRST 'when installing it' only, and a "
           "WAIT-shaped install entry is refused by the candidate schema",
-          all(x["verdict"] == "TEST FIRST" and x["scope"] == "when installing it" for x in entries)
-          and bool(vrp.candidate_problems(dict(entries[0], verdict="WAIT"))))
+          len(entries) == 2  # a mutant that loses them fails this check instead of crashing the suite
+          and all(x["verdict"] == "TEST FIRST" and x["scope"] == "when installing it" for x in entries)
+          and bool(vrp.candidate_problems(dict(entries[0], verdict="WAIT"))), f"{len(entries)} install entries")
     sec = dict(KBP, update_type="2026-05 B")
     merged = vrp.merge({}, install_run(sec, [R1, R2]).candidates)
     d = pd.decide(sec, valid_reasons=merged.get(vr.record_identity(sec), []))
