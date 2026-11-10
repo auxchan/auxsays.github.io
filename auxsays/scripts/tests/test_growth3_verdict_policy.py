@@ -69,8 +69,14 @@ N1_LIFECYCLE_TEXT = LIFECYCLE_TEXT.replace('builds: ["26100.8116", "26200.8116"]
 # Review 2's gate2 cases: Liquid's `plus: 0` read each as a month number; Python's pattern does not.
 # The last two are the PR-A2 review's probe P3 (LOW-2): full-width and Arabic-Indic digits, which
 # Python's `\d` and int() accepted until the release-type patterns became re.ASCII.
+# Then G35-04 review 2's LOW-6 values (with re.ASCII on the shape detector, nothing reported them) and
+# two that each need one half of its fix: fully full-width (only NFKC shows the shape) and Arabic-Indic
+# digits with an Arabic letter (only a Unicode `\d` shows it).
 GATE2_MALFORMED = ("2026-3x B", "2026-+3 B", "2026-1  B", "2026-13 B",
-                   "２０２６-０８ B", "٢٠٢٦-٠٥ B")
+                   "２０２６-０８ B", "٢٠٢٦-٠٥ B",
+                   "２０２６-０８ Ｂ", "２０２６-０８　B", "٢٠٢٦-٠٥ Ｂ",
+                   "２０２６－０８ Ｂ", "٢٠٢٦-٠٥ ب")
+REVIEW2_LOW6 = ("２０２６-０８ Ｂ", "２０２６-０８　B", "٢٠٢٦-٠٥ Ｂ")
 # PR-A2 review, LOW-1 (probe P5): Unicode spaces Python's str.strip removes and Liquid's strip keeps.
 UNICODE_PADS = {"NBSP": " ", "THIN SPACE": " ", "IDEOGRAPHIC SPACE": "　", "NEL": "\u0085"}
 WIN, OBS = "microsoft-windows-11", "obs-studio"
@@ -588,13 +594,23 @@ def check_qa_official(qa, tmp: Path) -> None:
         bucket[value] = ("windows_update_type_malformed" in codes(warnings), codes(errors),
                          "windows_update_type_malformed" in codes(promoted))
         published[value] = decide(win_record(update_type=value)).verdict
-    check("G3-Q8 review 2's gate2 release types ('2026-3x B', '2026-+3 B', '2026-1  B', and '2026-13 B') and "
-          "the PR-A2 review's P3 (full-width / Arabic-Indic digits + ' B') are each a QA publication ERROR (windows_update_type_malformed: a writeback warning, promoted by "
-          "--publish-strict) and decide fails closed on them; B, D, OOB and the writer default are clean",
-          all(f == (True, set(), True) for f in flagged.values())
+    # An AVOID page's preview context line reads the strict ASCII preview pattern too.
+    avoid_ascii = win_record(update_type="2026-03 D", kb="KB5000002", build="26200.2000")
+    avoid_wide = win_record(update_type="２０２６-０３ D", kb="KB5000002", build="26200.2000")
+    body_ascii = pd.public_body(decide(avoid_ascii, (), LIFE), avoid_ascii, 1)
+    body_wide = pd.public_body(decide(avoid_wide, (), LIFE), avoid_wide, 1)
+    check("G3-Q8 review 2's gate2 release types ('2026-3x B', '2026-+3 B', '2026-1  B', and '2026-13 B'), "
+          "the PR-A2 review's P3 (full-width / Arabic-Indic digits + ' B') and G35-04 review 2's LOW-6 values "
+          "(a full-width 'Ｂ', an ideographic space, Arabic-Indic digits + 'Ｂ'; also fully full-width, and "
+          "Arabic-Indic digits + an Arabic letter) are each a QA publication ERROR (windows_update_type_malformed: "
+          "a writeback warning, promoted by --publish-strict) and decide fails closed on them; B, D, OOB and the "
+          "writer default are clean; an AVOID page's preview line reads only an ASCII 'YYYY-MM D'",
+          all(f == (True, set(), True) for f in flagged.values()) and set(REVIEW2_LOW6) <= set(flagged)
           and all(c == (False, set(), False) for c in clean.values())
           and all(published[v] == "INSUFFICIENT DATA" for v in GATE2_MALFORMED)
-          and published["2026-03 B"] == "SECURITY UPDATE", f"{flagged} {clean} {published}")
+          and published["2026-03 B"] == "SECURITY UPDATE"
+          and "non-security preview update" in body_ascii and "preview update" not in body_wide,
+          f"{flagged} {clean} {published} ascii={body_ascii!r} wide={body_wide!r}")
     sec = _qa_win_tree(tmp / "partial", "2026-03 B", build="26200.1200")
     paths, _ev, _rs, _life, proj = sec
     data = yaml.safe_load(paths[0].read_text(encoding="utf-8").split("---")[1])
@@ -1626,9 +1642,20 @@ def check_mutations(tmp: Path) -> None:
                                                      for f in vr.IDENTITY_FIELDS))),
         ("X39 (probe P5) QA no longer reports an identity Liquid and Python strip differently",
          lambda: check_qa(tmp / f"x39-{next(qa_runs)}"), swap(vr, "identity_padding_problems", lambda r: [])),
-        ("X40 (probe P3) the release-type patterns read any Unicode digit again (no re.ASCII)", check_render_official,
-         swap_many(pd, {n: re.compile(getattr(pd, n).pattern) for n in
-                        ("_MONTHLY_SECURITY_RE", "_PREVIEW_RE", "_RELEASE_TYPE_RE", "_RELEASE_TYPE_SHAPED_RE")})),
+        # X40 (probe P3), split one mutant per pattern (G35-04 review 2, LOW-6): reverting four at once
+        # let the shape detector's own fail-open survive.
+        ("X40a (probe P3) the monthly-security pattern reads any Unicode digit again (no re.ASCII)",
+         check_render_official, swap(pd, "_MONTHLY_SECURITY_RE", re.compile(pd._MONTHLY_SECURITY_RE.pattern))),
+        ("X40b the preview pattern reads any Unicode digit again (no re.ASCII)",
+         lambda: check_qa(tmp / f"x40b-{next(qa_runs)}"), swap(pd, "_PREVIEW_RE", re.compile(pd._PREVIEW_RE.pattern))),
+        ("X40c the strict release-type pattern reads any Unicode digit again (no re.ASCII)",
+         lambda: check_qa(tmp / f"x40c-{next(qa_runs)}"),
+         swap(pd, "_RELEASE_TYPE_RE", re.compile(pd._RELEASE_TYPE_RE.pattern))),
+        ("X40d (review 2, LOW-6) the shape detector is ASCII-only again (A2's re.ASCII)",
+         lambda: check_qa(tmp / f"x40d-{next(qa_runs)}"),
+         swap(pd, "_RELEASE_TYPE_SHAPED_RE", re.compile(pd._RELEASE_TYPE_SHAPED_RE.pattern, re.ASCII))),
+        ("X40e (review 2, LOW-6) the shape detector reads the raw value, not its NFKC form",
+         lambda: check_qa(tmp / f"x40e-{next(qa_runs)}"), swap(pd, "_release_type_shape", lambda raw: raw)),
         ("X41 the lifecycle KB and date patterns read any Unicode digit again", check_lifecycle,
          swap_many(vr, {"KB_RE": re.compile(r"^KB\d{7}$"), "DATE_RE": re.compile(r"^\d{4}-\d{2}-\d{2}$")})),
         ("X42 (probe P4) a lifecycle build is not checked against the ASCII build pattern", check_lifecycle,

@@ -306,7 +306,10 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 211
 # are ASCII-only and a lifecycle build must be an ASCII 12345.6789 (G3-L6, and Q8/R6 carry probe P3);
 # a lifecycle build no record carries is a publication error (G3-Q11); R4j pins the gate's
 # scope-acceptance clauses. 45 mutants (was 37), X38..X45 one fix half each.
-auxsays/scripts/tests/test_growth3_verdict_policy.py = 124
+# 124 -> 128 (G35-04 review 2, LOW-6): the release-type SHAPE detector reads Unicode digits and the
+# NFKC form again, so a fully non-ASCII type is a publication error (G3-Q8 carries the three review
+# values); X40 is split one mutant per pattern (X40a..X40e). 49 mutants.
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 128
 # G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
 # confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
 # the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the

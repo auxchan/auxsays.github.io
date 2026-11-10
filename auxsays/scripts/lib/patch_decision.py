@@ -64,6 +64,7 @@ The history above is kept because it explains why one function, not three, decid
 from __future__ import annotations
 
 import re
+import unicodedata
 from typing import Any
 
 INSUFFICIENT_DATA = "INSUFFICIENT DATA"
@@ -264,15 +265,30 @@ TEST_FIRST = "TEST FIRST"
 
 # ASCII ONLY (PR-A2 review, LOW-2, probe P3). Without re.ASCII, `\d` matches any Unicode digit and
 # int() reads it, so a preview page whose release type was rewritten with full-width or Arabic-Indic
-# digits and a " B" decided SECURITY UPDATE. Now such a value is not a release type; its " B" still
-# makes it SHAPED like one, so release_type_problem names it (windows_update_type_malformed).
+# digits and a " B" decided SECURITY UPDATE. Now such a value is not a release type; its shape still
+# marks it as meant to be one, so release_type_problem names it (windows_update_type_malformed).
 _MONTHLY_SECURITY_RE = re.compile(r"^(\d{4})-(\d{2}) B$", re.ASCII)
 _PREVIEW_RE = re.compile(r"^(\d{4})-(\d{2}) D$", re.ASCII)
 # Every release-health type a Windows record stores today: monthly security "B", preview "D",
 # out-of-band "OOB" (43 / 32 / 21 records; the 97th carries the writer default "official-source").
 _RELEASE_TYPE_RE = re.compile(r"^(\d{4})-(\d{2}) (?:B|D|OOB)$", re.ASCII)
 # A value that opens like one ("YYYY-") or ends with one of its type codes is MEANT to be one.
-_RELEASE_TYPE_SHAPED_RE = re.compile(r"^\s*\d{4}\s*-|\s(?:B|D|OOB)\s*$", re.ASCII)
+# NOT ASCII-only, on purpose (G35-04 review 2, LOW-6): this detector decides only whether a value the
+# strict patterns above refuse is REPORTED, so it must see the shape in any script. With re.ASCII here
+# too, full-width digits with a full-width "B" (U+FF22), full-width digits with an ideographic space
+# (U+3000) before "B", and Arabic-Indic digits with a full-width "B" matched neither the strict pattern
+# nor this one: a real B page lost SECURITY UPDATE with QA silent. It reads `_release_type_shape(raw)`,
+# the NFKC form, so full-width forms (the hyphen U+FF0D and the letter too) show the shape they
+# imitate; Unicode `\d` and `\s` cover what NFKC leaves alone (Arabic-Indic digits and letters).
+# test_growth3_verdict_policy G3-Q8 carries every one of these values.
+_RELEASE_TYPE_SHAPED_RE = re.compile(r"^\s*\d{4}\s*-|\s(?:B|D|OOB)\s*$")
+
+
+def _release_type_shape(raw: str) -> str:
+    """The form `_RELEASE_TYPE_SHAPED_RE` reads: NFKC (full-width digits, hyphen, letters and the
+    ideographic space become their ASCII look-alikes). Never used to ACCEPT a value: the strict
+    patterns always read the raw text."""
+    return unicodedata.normalize("NFKC", raw)
 
 # Public wording, ONE copy. The gate include renders these exact strings; the corpus test compares
 # every rendered page body with what the writer stored.
@@ -371,7 +387,7 @@ def release_type_problem(record: dict[str, Any] | None) -> str:
         return ""
     if not isinstance(raw, str):
         return f"update_type is a {type(raw).__name__} ({raw!r}), not a release-health type string"
-    if not _RELEASE_TYPE_SHAPED_RE.search(raw):
+    if not _RELEASE_TYPE_SHAPED_RE.search(_release_type_shape(raw)):
         return ""
     match = _RELEASE_TYPE_RE.match(raw.strip())
     if match and int(match.group(1)) >= 2000 and 1 <= int(match.group(2)) <= 12:
