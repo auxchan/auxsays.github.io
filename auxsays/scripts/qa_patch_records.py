@@ -340,6 +340,13 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         classification would vanish without a word; this says so. The value is collector-written,
         so, like record_names_conflicting_actions (AUX-009), one bad row must not discard a whole
         evidence run, and the deploy must not publish the page silently without its classification.
+      * record_identity_unicode_padding -- a record whose product_id, update_version or target_build
+        carries leading/trailing Unicode whitespace (U+00A0, U+2009, U+3000, U+0085, ...) that
+        Liquid's strip keeps and Python's removes (PR-A2 review, LOW-1, probe P5). The page and
+        `decide` agree on the padded key, but the page matches none of its reasons or counted rows,
+        so a verdict would vanish without a word. Collector-written, so the same two severities.
+      * patch_lifecycle_build_unmatched -- a build listed in a lifecycle entry that no record carries
+        (scan_lifecycle_builds, its own corpus-wide scan; PR-A2 review, LOW-3, probe P4).
 
     WARNINGS, never writer-blocking and never promoted for publication:
       * verdict_reason_unsupported -- an entry whose cited rows no longer all count on its page (an
@@ -407,6 +414,10 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
             add(warnings, path, "windows_update_type_malformed",
                 f"{release_problem}. lib/patch_decision.decide cannot read Microsoft's classification from "
                 "it, so this page renders no SECURITY UPDATE; correct the stored value.")
+        for padding in verdict_reasons.identity_padding_problems(data):
+            add(warnings, path, "record_identity_unicode_padding",
+                f"{padding}. The page key keeps it, so this page matches none of its reason entries or "
+                "counted reports and can lose its verdict silently; correct the stored value.")
         want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
                                      lifecycle=lifecycle)
         got_verdict, got_scope = verdict_projection.rendered_verdict(data, rows, lifecycle)
@@ -468,6 +479,31 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
                 f"card still leads with {expected_phrase!r} and the page's own line (it prints stored text "
                 "only where it matches them), and the stored prose catches up at the next promotion.")
     return errors, warnings
+
+
+def scan_lifecycle_builds(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """PR-A2 review, LOW-3 (probe P4): every OS build a lifecycle entry lists is carried by a record.
+
+    `patch_lifecycle_unmatched` (scan_verdict_policy) fires only when an entry matches NO page, so an
+    entry whose second build was mistyped -- or followed by an invisible character -- still matched
+    the first page and the withdrawal vanished from the second without a word. Checked per build;
+    a publication error (`patch_lifecycle_build_unmatched`, promoted by --publish-strict). Its own
+    scan because it is corpus-wide: a one-record QA fixture carries only one of the two builds."""
+    warnings: list[dict[str, str]] = []
+    try:
+        lifecycle = verdict_reasons.load_lifecycle(LIFECYCLE_PATH)
+    except verdict_reasons.FactFileError:
+        return [], []  # scan_verdict_policy reports the malformed file (patch_lifecycle_invalid)
+    if verdict_reasons.lifecycle_errors(lifecycle):
+        return [], []  # refused: it supports nothing, and scan_verdict_policy errors on it
+    fronts = [data for data in (front_matter(path) for path in files) if data.get("update_entry") is True]
+    for entry in lifecycle:
+        for build in entry.get("builds") or []:
+            if not any(patch_decision.lifecycle_for(data, [dict(entry, builds=[build])]) for data in fronts):
+                add(warnings, LIFECYCLE_PATH, "patch_lifecycle_build_unmatched",
+                    f"{entry.get('id')}: no record carries {entry.get('kb')} with OS build {build!r}, so the "
+                    "withdrawal applies to no page for that build; correct the build or the record.")
+    return [], warnings
 
 
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -1420,7 +1456,11 @@ def scan_route_integrity(
 PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
                                         "record_names_unknown_verdict",
                                         # GROWTH-3 review 2 (LOW-1): a release type decide cannot read.
-                                        "windows_update_type_malformed"})
+                                        "windows_update_type_malformed",
+                                        # PR-A2 review (LOW-1 / LOW-3): an identity Liquid and Python
+                                        # strip differently; a lifecycle build no page carries.
+                                        "record_identity_unicode_padding",
+                                        "patch_lifecycle_build_unmatched"})
 
 
 def promote_for_publication(
@@ -1478,6 +1518,9 @@ def main(argv: list[str] | None = None) -> int:
     warnings.extend(w)
     warnings.extend(scan_counted_row_classification(load_evidence_rows()))
     e, w = scan_verdict_policy(files)
+    errors.extend(e)
+    warnings.extend(w)
+    e, w = scan_lifecycle_builds(files)
     errors.extend(e)
     warnings.extend(w)
     e, w = scan_unconfigured_platform_split(files)

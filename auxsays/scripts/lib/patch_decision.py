@@ -262,13 +262,17 @@ AVOID_SCOPE = "for new installations"
 WAIT = "WAIT"
 TEST_FIRST = "TEST FIRST"
 
-_MONTHLY_SECURITY_RE = re.compile(r"^(\d{4})-(\d{2}) B$")
-_PREVIEW_RE = re.compile(r"^(\d{4})-(\d{2}) D$")
+# ASCII ONLY (PR-A2 review, LOW-2, probe P3). Without re.ASCII, `\d` matches any Unicode digit and
+# int() reads it, so a preview page whose release type was rewritten with full-width or Arabic-Indic
+# digits and a " B" decided SECURITY UPDATE. Now such a value is not a release type; its " B" still
+# makes it SHAPED like one, so release_type_problem names it (windows_update_type_malformed).
+_MONTHLY_SECURITY_RE = re.compile(r"^(\d{4})-(\d{2}) B$", re.ASCII)
+_PREVIEW_RE = re.compile(r"^(\d{4})-(\d{2}) D$", re.ASCII)
 # Every release-health type a Windows record stores today: monthly security "B", preview "D",
 # out-of-band "OOB" (43 / 32 / 21 records; the 97th carries the writer default "official-source").
-_RELEASE_TYPE_RE = re.compile(r"^(\d{4})-(\d{2}) (?:B|D|OOB)$")
+_RELEASE_TYPE_RE = re.compile(r"^(\d{4})-(\d{2}) (?:B|D|OOB)$", re.ASCII)
 # A value that opens like one ("YYYY-") or ends with one of its type codes is MEANT to be one.
-_RELEASE_TYPE_SHAPED_RE = re.compile(r"^\s*\d{4}\s*-|\s(?:B|D|OOB)\s*$")
+_RELEASE_TYPE_SHAPED_RE = re.compile(r"^\s*\d{4}\s*-|\s(?:B|D|OOB)\s*$", re.ASCII)
 
 # Public wording, ONE copy. The gate include renders these exact strings; the corpus test compares
 # every rendered page body with what the writer stored.
