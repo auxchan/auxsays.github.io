@@ -4578,6 +4578,23 @@ reached from / within 3 crawlable hops, or the feed controls answer from fewer t
 the next heaviest pages; which low-value vendor-note pages deserve indexing is an owner decision; GSC is still the
 only authoritative indexing read.
 
+**Follow-up (2026-11-10, review LOW-1..3)** From page 2 onward a cross-page sort broke ties differently than from
+/updates/: the loader held the other pages' cards after the page's own, and the stable sorts kept that order
+(Company sort from page 8 listed page 8's April Adobe records ahead of the November ones). `assets/js/auxsays.js`
+now assembles the catalogue, and the DOM, in the build's one order (earlier pages, this page, later pages); holds
+each patch once by its card's patch link, the page's own card winning; and compares each fetched page's build
+stamp (`data-feed-build` on the pager, from `site.time`) with its own: a page of another build is fetched once
+more with `cache: 'no-cache'`, and if it still differs the controls stay on this page's cards with a visible note.
+The gate adds STAMP (every feed page stamped, by one build); it fails the #239 build on all 16 pages. Measured on a
+deploy-order build: the 1,535 cards byte-identical and in the same order, each feed page identical apart from the
+53-byte stamp; in the in-app browser, Company sort over 1,535 and Windows 11 + risk sort (97) give the same
+card-order SHA-256 from pages 1, 8 and 16 (0eca3c751a1db8ff, e6947f75202b45eb; page 8 on #239 gave
+f72001b1a05a5db3), a page served stale once is retried once and the result is complete, a page stale twice falls
+back to this page with the note, and an injected duplicate is held once. `test_feed_discovery.py` 45 -> 59: [J]
+runs the shipped catalogue functions under node; V11b (`feed_hidden: false` or `"true"` and unlinked fails
+COVERAGE; the review's surviving mutant C11 now fails it); V18/V19 STAMP; W9/W10. PV9 pins the one fetch call in
+its new shape (66 unchanged). 13 one-change mutants, each caught by its named check.
+
 ---
 
 ### AUX-088 — Twenty community reports cited on the live pages were credited to an update they were not about
