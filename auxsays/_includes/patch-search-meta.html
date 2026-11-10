@@ -9,16 +9,17 @@
   NO SECOND VERDICT AUTHORITY. This include does not choose a verdict and does not re-run the
   decision ladder. It reads what the patch page itself just rendered: aux-base receives the finished
   aux-update markup as `content`, so the verdict is the text under the page's own "AUXSAYS verdict"
-  eyebrow, the maturity is the page's own verdict-box class, the early-evidence qualifier is the
-  page's own sentence, the recommendation is the page's own first sentence, and the identity is the
-  page's own h1. A search result cannot claim a verdict the page does not print, because there is
-  only one place the verdict is decided.
+  eyebrow, the maturity is the page's own verdict-box class, the recommendation is the page's own
+  first sentence, and the identity is the page's own h1. A search result cannot claim a verdict the
+  page does not print, because there is only one place the verdict is decided.
 
   LIVE WORDING NEEDS A CERTIFICATE AT RENDER TIME. The words "live consensus" appear only when the
   page's box reads live AND the shared maturity contract, which reads the deploy-time live
   eligibility projection, certifies the record now. A stored live claim the projection no longer
   lists reads as verified reports here exactly as it does on the page, so titles follow the
-  corrected live set with no change to this file.
+  corrected live set with no change to this file. They describe the COUNT ("53 user reports matched
+  so far (live consensus)"), never the verdict: no verdict is attributed to the report population
+  or to the maturity (GROWTH-3 review 2, LOW-2).
 
   HONEST STATES. INSUFFICIENT DATA prints "no verdict yet", never a decision word and never a claim
   that nothing is wrong; zero counted reports is stated as zero counted reports. A decision word is
@@ -72,8 +73,6 @@
     {%- include maturity-state.html record=psm_record -%}
     {%- assign psm_live = false -%}
     {%- if psm_box == 'live' and maturity_live -%}{%- assign psm_live = true -%}{%- endif -%}
-    {%- assign psm_early = false -%}
-    {%- if content contains 'treat this as early evidence' -%}{%- assign psm_early = true -%}{%- endif -%}
     {%- assign psm_count = psm_record.update_report_count | default: 0 | plus: 0 -%}
     {%- capture psm_reports -%}{{ psm_count }} user report{% unless psm_count == 1 %}s{% endunless %}{%- endcapture -%}
     {%- assign psm_kb = psm_record.target_kb | default: '' | strip -%}
@@ -118,20 +117,13 @@
       {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}{%- endcapture -%}
       {%- capture psm_description -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}.{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{% if psm_count > 0 %} {{ psm_reports }} matched so far.{% endif %}{%- endcapture -%}
     {%- else -%}
-      {%- if psm_count == 0 -%}
-        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}, no user reports counted{%- endcapture -%}
-        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}. No user reports have been counted for this update yet.{%- endcapture -%}
-      {%- elsif psm_live -%}
-        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}, live consensus of {{ psm_reports }}{%- endcapture -%}
-        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}, live consensus of {{ psm_reports }} matched to this update.{%- endcapture -%}
-      {%- elsif psm_early -%}
-        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }} on early evidence, {{ psm_reports }}{%- endcapture -%}
-        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }} on early evidence, {{ psm_reports }} matched to this update.{%- endcapture -%}
-      {%- else -%}
-        {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}, {{ psm_reports }}{%- endcapture -%}
-        {%- capture psm_lead -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}, from {{ psm_reports }} matched to this update.{%- endcapture -%}
-      {%- endif -%}
-      {%- capture psm_description -%}{{ psm_lead }}{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{%- endcapture -%}
+      {%- comment -%} WAIT and TEST FIRST rest on a reviewed reason about a stated setup, not on the whole
+        report population and not on the evidence maturity, so the title is the verdict and its scope
+        only, and the description gives the page's reason and then the count as a count. It never says
+        the verdict is "from" N reports, a "live consensus of" N or "on early evidence": OBS 32.2.2's
+        WAIT rests on one report and OBS's own note, not on its 53 (GROWTH-3 review 2, LOW-2). {%- endcomment -%}
+      {%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}{%- endcapture -%}
+      {%- capture psm_description -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}.{% if psm_sentence != '' %} {{ psm_sentence }}{% endif %}{% if psm_count > 0 %} {{ psm_reports }} matched so far{% if psm_live %} (live consensus){% endif %}.{% endif %}{%- endcapture -%}
     {%- endif -%}
     {%- assign psm_title = psm_title | strip_html | strip_newlines | strip | escape_once -%}
     {%- assign psm_description = psm_description | strip_html | strip_newlines | strip | escape_once -%}

@@ -793,8 +793,12 @@ def run() -> int:
     rec_block = LAYOUT_EMITTED.index('update-decision-actions__list')
     verdict_at = LAYOUT_EMITTED.index('<div id="verdict"')
     reasoning_at = LAYOUT_EMITTED.index('update-decision-reasoning')
+    # GROWTH-3 review 2 (LOW-4): the list is `rec_list` -- the stored field, or the list an official
+    # verdict carries from the verdict projection (AVOID) -- so a zero-report AVOID page lists the
+    # replacement step too. It is still the whole list.
     check("R1 the list is rendered, not just item one",
-          "for rec in page.practical_recommendations" in LAYOUT_EMITTED,
+          "for rec in rec_list" in LAYOUT_EMITTED
+          and "assign rec_list = page.practical_recommendations" in LAYOUT_EMITTED,
           "only the `| first` fallback consumes the field")
     check("R2 it sits with the primary decision content, not in methodology or context",
           verdict_at < rec_block < reasoning_at,
@@ -821,7 +825,7 @@ def run() -> int:
           "rec_seen contains rec_key" in LAYOUT_EMITTED)
     check("R7 recommendation text is escaped", "rec_text | escape" in LAYOUT_EMITTED)
     check("R8 the fallback that substitutes item one is preserved, so dedupe covers it",
-          "page.practical_recommendations | first" in LAYOUT_EMITTED)
+          "rec_list | first" in LAYOUT_EMITTED)
     for cls in ("update-decision-actions", "update-decision-actions__list"):
         check(f"R9 {cls} is styled rather than left to browser defaults",
               f".{cls} {{" in CSS, "no rule; the list would render unstyled in the verdict box")

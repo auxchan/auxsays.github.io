@@ -245,11 +245,14 @@ def leading_decision(text: str) -> str:
 # verbatim official confirmation). `build_verdict_projection.py` runs `decide` for every page at
 # deploy, before QA and before Jekyll, and writes the result -- verdict, scope, line, panel -- to
 # `_data/verdict_projection.yml` (lib/verdict_projection). `_includes/patch-verdict-gate.html` READS
-# that row and prints it; it never evaluates an entry. No row, or no projection: no WAIT, no TEST
-# FIRST, no panel. The gate derives only the two OFFICIAL facts itself (the lifecycle record, the
-# stored release type), so a zero-report security update -- which no writer touches -- still reads
-# SECURITY UPDATE. `qa_patch_records --publish-strict` errors when the projection a deploy built
-# disagrees with `decide`, and test_growth3_verdict_policy pins the gate against Python over the
+# that row and prints it; it never evaluates an entry. The OFFICIAL verdicts travel the same way:
+# the projection carries a row for every AVOID and SECURITY UPDATE page too (with its line, and
+# AVOID's recommendations), so a zero-report security update -- which no writer touches -- still
+# reads SECURITY UPDATE, and the gate re-derives nothing. Until review 2 it read the lifecycle file
+# and parsed the release type itself (`slice` + `plus: 0`), and printed AVOID / SECURITY UPDATE
+# where `decide` did not (LOW-1). No row, or no projection: INSUFFICIENT DATA, no panel (fail
+# closed). `qa_patch_records --publish-strict` errors when the projection a deploy built disagrees
+# with `decide` on any page, and test_growth3_verdict_policy pins the gate against Python over the
 # whole corpus. (Round 0 mirrored the support rule in Liquid with a URL-only check, which published
 # a WAIT that `decide` refused: GROWTH-3 review 1, D2.)
 # ---------------------------------------------------------------------------------------------
@@ -261,6 +264,11 @@ TEST_FIRST = "TEST FIRST"
 
 _MONTHLY_SECURITY_RE = re.compile(r"^(\d{4})-(\d{2}) B$")
 _PREVIEW_RE = re.compile(r"^(\d{4})-(\d{2}) D$")
+# Every release-health type a Windows record stores today: monthly security "B", preview "D",
+# out-of-band "OOB" (43 / 32 / 21 records; the 97th carries the writer default "official-source").
+_RELEASE_TYPE_RE = re.compile(r"^(\d{4})-(\d{2}) (?:B|D|OOB)$")
+# A value that opens like one ("YYYY-") or ends with one of its type codes is MEANT to be one.
+_RELEASE_TYPE_SHAPED_RE = re.compile(r"^\s*\d{4}\s*-|\s(?:B|D|OOB)\s*$")
 
 # Public wording, ONE copy. The gate include renders these exact strings; the corpus test compares
 # every rendered page body with what the writer stored.
@@ -288,6 +296,23 @@ PANEL_KIND = {"corroborated_install_problem": "affected_configuration",
               "regression": "deployment_caution"}
 PANEL_HEADING = {"affected_configuration": "Affected configuration",
                  "deployment_caution": "Deployment caution"}
+# The Recommendations list under an AVOID verdict. ONE copy: the record writer stores it on a
+# report-bearing page, and the verdict projection carries it for EVERY AVOID page, because the
+# zero-count retraction removes the stored list from a page with no reports -- which is why the 24H2
+# KB5079391 page (0 reports) printed none while 25H2 (1 report) did (GROWTH-3 review 2, LOW-4).
+AVOID_RECOMMENDATIONS = (
+    "If this device does not have this update yet, install the replacement update instead.",
+    "Check Microsoft's known-issue and safeguard-hold list for the replacement before installing it.",
+)
+# The /updates/ feed card prints the page's line, but the card lists no reports under it, so a
+# clause pointing at reports "listed below" is cut there (review 2, LOW-4). The patch page keeps
+# it: its reports ARE listed below. `_includes/patch-feed-summary.html` applies these same pairs
+# with Liquid's replace; test_growth3_verdict_policy pins the two over the corpus.
+FEED_UNLISTED = (
+    ("; the individual reports are listed below.", "."),
+    ("; it is listed below.", "."),
+    ("; they are listed below.", "."),
+)
 
 
 def _text(value: Any) -> str:
@@ -305,6 +330,37 @@ def is_monthly_security_update(record: dict[str, Any] | None) -> bool:
         return False
     match = _MONTHLY_SECURITY_RE.match(_text(rec.get("update_type")))
     return bool(match) and int(match.group(1)) >= 2000 and 1 <= int(match.group(2)) <= 12
+
+
+def release_type_problem(record: dict[str, Any] | None) -> str:
+    """Why a Windows record's stored release type cannot be read, or "".
+
+    `decide` reads Microsoft's classification from `update_type` with one strict pattern, so a
+    malformed value is never a SECURITY UPDATE: the page fails closed. Before GROWTH-3 review 2 the
+    Liquid gate parsed the same field itself with `slice` and `plus: 0`, which reads "2026-3x B",
+    "2026-+3 B" and "2026-1  B" as month numbers, and printed SECURITY UPDATE where Python did not
+    (LOW-1). The gate now prints only the projection, so the page and `decide` agree; this names the
+    value so QA reports it (`windows_update_type_malformed`, an ERROR under --publish-strict) instead
+    of letting a security classification silently vanish.
+
+    Only a value SHAPED like a release type (it opens "YYYY-" or ends " B" / " D" / " OOB") that
+    fails the pattern is a problem. The writer's default "official-source" is not one, and an
+    unrelated future word stays a fail-closed INSUFFICIENT DATA rather than a blocked lane."""
+    rec = record or {}
+    if _text(rec.get("product_id")) != WINDOWS:
+        return ""
+    raw = rec.get("update_type")
+    if raw is None:
+        return ""
+    if not isinstance(raw, str):
+        return f"update_type is a {type(raw).__name__} ({raw!r}), not a release-health type string"
+    if not _RELEASE_TYPE_SHAPED_RE.search(raw):
+        return ""
+    match = _RELEASE_TYPE_RE.match(raw.strip())
+    if match and int(match.group(1)) >= 2000 and 1 <= int(match.group(2)) <= 12:
+        return ""
+    return (f"update_type {raw!r} is shaped like a release-health type but is not 'YYYY-MM B', "
+            "'YYYY-MM D' or 'YYYY-MM OOB'")
 
 
 def _release_context(record: dict[str, Any]) -> str:
@@ -440,6 +496,26 @@ def panel_text(decision: Decision) -> str:
     return f"{scope[:1].upper()}{scope[1:]}: {_text(head.get('reason'))}"
 
 
+def recommendations(decision: Decision) -> list[str]:
+    """The Recommendations list an OFFICIAL verdict carries on every page it decides, or [].
+
+    Only AVOID has one: the stored `practical_recommendations` exist only where a writer ran (a page
+    with reports), so a zero-report withdrawal page would otherwise tell a reader to avoid the update
+    without telling them what to install instead (review 2, LOW-4)."""
+    if decision.verdict == AVOID and decision.lifecycle:
+        return list(AVOID_RECOMMENDATIONS)
+    return []
+
+
+def feed_body(body: str) -> str:
+    """The page's line as the /updates/ feed card prints it: no pointer to reports "listed below",
+    because nothing is listed below a card (review 2, LOW-4)."""
+    text = str(body or "")
+    for old, new in FEED_UNLISTED:
+        text = text.replace(old, new)
+    return text
+
+
 def verdict_phrase(decision: Decision) -> str:
     """The verdict as every surface prints it: the word and its scope, never one without the other.
 
@@ -466,8 +542,9 @@ def summary_line(decision: Decision, record: dict[str, Any] | None, report_count
     train: 28 records share "25H2"). `fallback` is used only when the policy has no line (a
     zero-report page, which no writer stores a summary for). The feed prints this string while its
     lead equals the page's verdict and scope, and composes the same lead from the gate when it does
-    not, so the feed never shows a verdict the page does not."""
-    body = public_body(decision, record, report_count)
+    not, so the feed never shows a verdict the page does not. The line is the FEED's form of the
+    page's line (`feed_body`): a feed card lists no reports, so it never says they are listed below."""
+    body = feed_body(public_body(decision, record, report_count))
     if body.startswith(_NO_VERDICT_LEAD):
         body = body[len(_NO_VERDICT_LEAD):]
         body = body[:1].upper() + body[1:]

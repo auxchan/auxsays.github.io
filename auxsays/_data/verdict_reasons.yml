@@ -52,7 +52,7 @@ entries:
     verdict: TEST FIRST
     reason_class: corroborated_issue
     scope: if you use the menu-bar icon on macOS 27
-    reason: Two users independently report that clicking OBS's menu-bar icon crashes it on macOS 27; the same OBS 32.2.2 works on macOS 26.3.1, so the crash comes with macOS 27 and is not new in this OBS version.
+    reason: Two users independently report that clicking OBS's menu-bar icon crashes it on macOS 27; the same OBS 32.2.2 works on macOS 26.3.1, so it is triggered by macOS 27; no report shows it was caused by this OBS update.
     evidence:
       - id: obs-studio-32-2-2-github-issue-13938
         source_url: https://github.com/obsproject/obs-studio/issues/13938

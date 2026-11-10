@@ -78,6 +78,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-090 | Resolved | Publication | Medium | Every OBS report on a patch page read "date not recorded", though each source states when it was posted |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
+| AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -4733,6 +4734,60 @@ authority and probes A1/A2 fail closed, G3-S1..S5 the scope on every surface); s
 **Reopen only if** a page prints WAIT or TEST FIRST without a supported reason entry, any surface prints a WAIT,
 TEST FIRST or AVOID without its scope, a monthly security update prints anything but SECURITY UPDATE (or the one
 AVOID), a report count, sentiment or theme moves a verdict, or any page advises pausing Windows Update.
+
+---
+
+### AUX-094 — The page could print an official verdict the decision code did not give, and QA could not see it
+
+- **Status** Resolved · **Area** Verdict policy · **Severity** Low (publication integrity)
+- **First seen** 2026-11-10 (GROWTH-3 PR-A review 2, LOW-1..4) · **Resolved** 2026-11-10 (G35-02, PR-A2)
+
+**Symptom** After AUX-093 the verdict gate still worked out AVOID and SECURITY UPDATE itself in Liquid, while QA
+modelled it with Python's normalised logic, so the two could part unseen. Probe N1 wrote the KB5079391 lifecycle
+builds as YAML numbers: `decide` said AVOID, both pages rendered INSUFFICIENT DATA, and QA passed 0/0. Liquid's
+`plus: 0` read "2026-3x B", "2026-+3 B" and "2026-1  B" as monthly security updates; Python did not. Separately,
+WAIT and TEST FIRST search titles tied the verdict to the whole report population or the maturity ("WAIT if you
+use macOS 27.2, live consensus of 53 user reports"; "... on early evidence"), the OBS 32.2.2 menu-bar reason said
+the crash "is not new in this OBS version" (its basis shows only that it is OS-triggered), feed cards said reports
+were "listed below" where none are, the feed's fallback line dropped the patch name, and the zero-report 24H2
+KB5079391 AVOID page printed no "install the replacement update instead".
+
+**Cause** Two copies of the official rules (Liquid and Python). Lifecycle values were coerced (`str(...).strip()`)
+rather than typed. The search include's reasoned branch kept round 0's count/maturity wording. The stored
+recommendation list is retracted at zero reports, so no writer reaches the 24H2 page.
+
+**Fix** One authority for every verdict. `lib/verdict_projection.project` writes a row for every page `decide`
+gives anything but INSUFFICIENT DATA (AVOID, SECURITY UPDATE, WAIT, TEST FIRST: 51 today), with its line, panel and
+AVOID's recommendations; `_includes/patch-verdict-gate.html` prints rows only and reads no lifecycle file, release
+type or KB. `rendered_verdict` models exactly that, so QA's comparison with `decide` covers official verdicts too
+(a missing, partial or forged row is `verdict_render_disagrees`). `lifecycle_errors` refuses a product_id, kb,
+relationship or build that is not a plain unpadded string: the file then supports nothing (fail closed) and QA
+errors. `patch_decision.release_type_problem` names a Windows release type shaped like "YYYY-MM B/D/OOB" that
+`decide` cannot read; QA reports it as `windows_update_type_malformed` (a writeback warning, an error under
+`--publish-strict`). Reasoned titles read "<identity>: <verdict scope>" and descriptions "AUXSAYS verdict for ...:
+<phrase>. <reason> N user reports matched so far (live consensus)." The menu-bar reason now ends "so it is
+triggered by macOS 27; no report shows it was caused by this OBS update." The feed prints `patch_decision.feed_body`
+(no "listed below") and its fallback names the exact patch; both AVOID pages print `AVOID_RECOMMENDATIONS` from
+the projection. Records: 28 stored summaries and one decision body re-worded by the zero-network in-place migration
+(verdict wording fields only).
+
+**Measured** Deploy-order builds (projections, QA `--publish-strict`, Jekyll) of 3b1017eb and the head, all 1,535
+patch pages read back: verdict and scope equal `decide` on every box, table cell, feed line, homepage row and My
+Patch Stack card and release; distribution unchanged (236 report-bearing: AVOID 1, SECURITY UPDATE 26, WAIT 1,
+TEST FIRST 5, INSUFFICIENT DATA 203). Rendered changes are exactly the 6 reasoned titles and descriptions, the
+32.2.2 box line, the 24H2 Recommendations list and 28 feed lines (8 patch pages and /updates/; the other 4 differing
+files are build timestamps). Probes N1 and gate2 as full builds: the pages render INSUFFICIENT DATA, equal to
+`decide` over the probed tree, and QA exits 1. Records' non-verdict fields and bodies, and every tracked `_data`
+file but `verdict_reasons.yml` (the one reason line), hash-identical.
+
+**Tests** `test_growth3_verdict_policy.py` 86 -> 112 (G3-L4/L5, Q7-Q9, R6/R7, P8/P9, S6-S8, W4; R4j, R5, P1
+restated; 13 new mutants X25-X37, one fix half each, all caught); `test_patch_decision_authority.py` 209 -> 211
+(S26 and mutant X8; S5-S8, S12-S16, S19 restated); `test_homepage_signals.py` builds its security case's row;
+`test_patch_page_hierarchy.py` R1/R8 pin the list by `rec_list` (262 unchanged).
+
+**Reopen only if** any surface prints a verdict, scope, line or recommendation that is not the projection row of
+its page, the gate reads a lifecycle file, release type or KB again, a lifecycle value Python would have to coerce
+is accepted, or a WAIT / TEST FIRST title or description attributes the verdict to the report count or maturity.
 
 ---
 

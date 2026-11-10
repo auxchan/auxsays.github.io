@@ -1506,24 +1506,30 @@ def check_search_snippets() -> None:
           not mismatched and len(patch_cases) >= 14, str(mismatched[:4]))
 
     win = heads["win_wait"]
-    check("S5 a Windows title leads with the exact KB, feature version and build",
-          win["titles"] == ["Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT if you use the test driver, "
-                            "12 user reports | AUXSAYS"],
+    # GROWTH-3 review 2 (LOW-2): a WAIT or TEST FIRST rests on a reviewed reason about a stated
+    # setup, so its title is "<identity>: <verdict scope>" and its description gives the reason, then
+    # the count as a count -- never "from N reports", "live consensus of N" or "on early evidence".
+    check("S5 a Windows title leads with the exact KB, feature version and build, then the verdict and "
+          "its scope only",
+          win["titles"] == ["Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT if you use the test driver | AUXSAYS"],
           str(win["titles"]))
-    check("S6 its description states the verdict and count, then the page's first recommendation "
-          "sentence only",
+    check("S6 its description states the verdict and scope, then the page's first recommendation sentence, "
+          "then the count as a count (never 'from N user reports')",
           win["descriptions"] == [
               "AUXSAYS verdict for Windows 11 KB5127648 (25H2, Build 26200.7840): WAIT if you use the "
-              "test driver, from 12 user reports matched to this update. Users report that the test "
-              "driver stops working after updating."], str(win["descriptions"]))
+              "test driver. Users report that the test driver stops working after updating. 12 user "
+              "reports matched so far."], str(win["descriptions"]))
     nokb = heads["win_no_kb"]
     check("S7 a record with no KB keeps the page's own heading and invents none",
-          nokb["titles"] == ["Windows 11 25H2 (Build 26200.7840): WAIT if you use the test driver, 12 user reports | AUXSAYS"]
+          nokb["titles"] == ["Windows 11 25H2 (Build 26200.7840): WAIT if you use the test driver | AUXSAYS"]
           and "KB" not in " ".join(nokb["titles"] + nokb["descriptions"]), str(nokb["titles"]))
-    check("S8 a low-evidence verdict carries the page's own early-evidence qualifier",
-          heads["early"]["titles"] == ["OBS Studio 99.0.0: TEST FIRST if you use the test dock on early evidence, "
-                                       "3 user reports | AUXSAYS"]
-          and "early evidence" in (heads["early"]["descriptions"] or [""])[0], str(heads["early"]["titles"]))
+    early_text = " ".join(heads["early"]["titles"] + heads["early"]["descriptions"])
+    check("S8 a low-evidence verdict is not attributed to the maturity: its title and description say "
+          "nothing about early evidence, and the count stays a count",
+          heads["early"]["titles"] == ["OBS Studio 99.0.0: TEST FIRST if you use the test dock | AUXSAYS"]
+          and "early evidence" not in early_text
+          and (heads["early"]["descriptions"] or [""])[0].endswith(" 3 user reports matched so far."),
+          f"{heads['early']['titles']} {heads['early']['descriptions']}")
     oz = heads["official_zero"]
     check("S9 an official-only page with no reports says there is no verdict, and claims none",
           oz["titles"] == ["OBS Studio 99.0.0: official notes, no verdict yet | AUXSAYS"]
@@ -1539,25 +1545,28 @@ def check_search_snippets() -> None:
           rendered_verdict(out["refused_label"]["content"]) == "INSUFFICIENT DATA"
           and rl["titles"] == ["OBS Studio 99.0.0: no verdict yet, 4 user reports so far | AUXSAYS"]
           and "SHIP IT" not in rl["raw_head"], str(rl["titles"]))
-    check("S12 a claim the deploy projection certifies reads as live consensus",
-          heads["live_certified"]["titles"]
-          == ["OBS Studio 99.0.0: WAIT if you use the test setup, live consensus of 40 user reports | AUXSAYS"],
-          str(heads["live_certified"]["titles"]))
+    lc = heads["live_certified"]
+    check("S12 a claim the deploy projection certifies reads as live consensus -- of the COUNT, in the "
+          "description: the title is the verdict and its scope only",
+          lc["titles"] == ["OBS Studio 99.0.0: WAIT if you use the test setup | AUXSAYS"]
+          and (lc["descriptions"] or [""])[0].endswith(" 40 user reports matched so far (live consensus)."),
+          f"{lc['titles']} {lc['descriptions']}")
     lv = [n for n in ("live_uncertified", "live_absent")
-          if heads[n]["titles"] != ["OBS Studio 99.0.0: WAIT if you use the test setup, 40 user reports | AUXSAYS"]
+          if heads[n]["titles"] != ["OBS Studio 99.0.0: WAIT if you use the test setup | AUXSAYS"]
           or "live" in " ".join(heads[n]["titles"] + heads[n]["descriptions"]).lower()]
     check("S13 the same stored claim, uncertified or with no projection, carries no live wording",
           not lv, str([(n, heads[n]["titles"]) for n in lv]))
     check("S14 markup that says live is not enough: the certificate is required too",
           "live" not in " ".join(heads["box_live_uncertified"]["titles"]
                                  + heads["box_live_uncertified"]["descriptions"]).lower()
-          and heads["box_live_uncertified"]["titles"] == ["OBS Studio 99.0.0: WAIT, 40 user reports | AUXSAYS"],
+          and heads["box_live_uncertified"]["titles"] == ["OBS Studio 99.0.0: WAIT | AUXSAYS"],
           str(heads["box_live_uncertified"]["titles"]))
     check("S15 and a certificate is not enough when the page itself does not render live",
-          heads["box_pilot_certified"]["titles"] == ["OBS Studio 99.0.0: WAIT, 40 user reports | AUXSAYS"],
+          heads["box_pilot_certified"]["titles"] == ["OBS Studio 99.0.0: WAIT | AUXSAYS"]
+          and "live" not in " ".join(heads["box_pilot_certified"]["descriptions"]).lower(),
           str(heads["box_pilot_certified"]["titles"]))
     check("S16 a legacy phrasing on the page prints its canonical action in the title",
-          heads["legacy"]["titles"] == ["OBS Studio 99.0.0: WAIT, 12 user reports | AUXSAYS"]
+          heads["legacy"]["titles"] == ["OBS Studio 99.0.0: WAIT | AUXSAYS"]
           and page_action(out["legacy"]["content"]) == "WAIT", str(heads["legacy"]["titles"]))
     unearned = [(n, c) for n in patch_cases for c in UNEARNED_CLAIMS
                 if c in " ".join(heads[n]["titles"] + heads[n]["descriptions"]).lower()]
@@ -1575,7 +1584,7 @@ def check_search_snippets() -> None:
     check("S19 identity text is escaped once and the JSON-LD parses",
           '<title>Copilot &quot;agent&quot; &amp; tools 1.0: WAIT' in esc["raw_head"]
           and "&amp;amp;" not in esc["raw_head"] and bool(esc["jsonld"])
-          and esc["titles"] == ['Copilot "agent" & tools 1.0: WAIT if you use the test setup, 12 user reports | AUXSAYS'],
+          and esc["titles"] == ['Copilot "agent" & tools 1.0: WAIT if you use the test setup | AUXSAYS'],
           esc["raw_head"][:400])
     incoherent = [n for n in patch_cases
                   if not heads[n]["jsonld"]
@@ -1616,6 +1625,15 @@ def check_search_snippets() -> None:
           seo_lines == ["{% assign patch_search_emitted = false %}{% if page.layout == 'aux-update' %}"
                         "{% include patch-search-meta.html record=page %}{% endif %}"
                         "{% unless patch_search_emitted %}{% seo %}{% endunless %}"], str(seo_lines))
+    reasoned = [n for n in patch_cases if page_action(out[n]["content"]) in ("WAIT", "TEST FIRST")]
+    attributed = [(n, (heads[n]["titles"] or [""])[0]) for n in reasoned
+                  if "user report" in title_claim((heads[n]["titles"] or [""])[0])
+                  or re.search(r"\bfrom \d+ user reports?|live consensus of|on early evidence",
+                               " ".join(heads[n]["titles"] + heads[n]["descriptions"]))
+                  or not (heads[n]["descriptions"] or [""])[0].startswith("AUXSAYS verdict for ")]
+    check(f"S26 no WAIT or TEST FIRST title or description ties the verdict to the report population or the "
+          f"maturity: the title is '<identity>: <verdict scope>', the count only a count ({len(reasoned)} pages; "
+          "GROWTH-3 review 2, LOW-2)", len(reasoned) >= 8 and not attributed, str(attributed[:3]))
 
 
 # ---------------------------------------------------------------- [R]/[N] regeneration repairs
@@ -1779,6 +1797,24 @@ def swap(owner, name: str, replacement):
     return mutate, restore
 
 
+def search_meta_mutant(tmp: Path):
+    """(mutate, restore) rendering the search include from a temp copy whose WAIT / TEST FIRST title
+    re-attaches the report count and maturity, round 1's wording."""
+    text = SEARCH_META.read_text(encoding="utf-8")
+    old = ("{%- capture psm_title -%}{{ psm_identity }}: {{ psm_phrase }}{%- endcapture -%}\n      "
+           "{%- capture psm_description -%}AUXSAYS verdict for {{ psm_identity }}: {{ psm_phrase }}.{% if "
+           "psm_sentence != '' %} {{ psm_sentence }}{% endif %}{% if psm_count > 0 %} {{ psm_reports }} matched so "
+           "far{% if psm_live %} (live consensus)")
+    assert text.count(old) == 1, "the reasoned title anchor moved"
+    new = old.replace("{{ psm_phrase }}{%- endcapture -%}",
+                      "{{ psm_phrase }}{% if psm_live %}, live consensus of {{ psm_reports }}{% elsif psm_count > 0 %}, "
+                      "from {{ psm_reports }}{% endif %}{%- endcapture -%}", 1)
+    copy_dir = Path(tempfile.mkdtemp(dir=tmp)) / "_includes"
+    shutil.copytree(INCLUDES_DIR, copy_dir)
+    (copy_dir / "patch-search-meta.html").write_bytes(text.replace(old, new).encode("utf-8"))
+    return swap(sys.modules[__name__], "INCLUDES_DIR", copy_dir)
+
+
 def check_mutations(tmp: Path) -> None:
     mutants: list[tuple[str, list[str], str]] = []
     real_coherence = acr._record_coherence_fields
@@ -1831,6 +1867,9 @@ def check_mutations(tmp: Path) -> None:
         ("X7 the corpus audit collapses every action into one",
          lambda: check_corpus_audit(tmp / f"x-{next(regen_runs)}"),
          swap(patch_decision, "action_of", lambda decision: "WAIT")),
+        # X8 -- GROWTH-3 review 2 (LOW-2): a reasoned verdict's title is tied to the count again.
+        ("X8 a WAIT / TEST FIRST title says 'live consensus of N' / 'from N user reports' again",
+         check_search_snippets, search_meta_mutant(tmp)),
     ]
 
     for label, body, (mutate, restore) in cases:

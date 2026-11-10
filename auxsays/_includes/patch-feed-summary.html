@@ -14,6 +14,12 @@
   printed: the card then shows the gate's verdict, scope and line, so the feed can never show a
   verdict, or a reason, that the page does not. Only the patch name between them is the stored text.
 
+  Review 2 (LOW-4). The line is the FEED's form of the page's line (lib/patch_decision.feed_body):
+  a card lists no reports, so "...; they are listed below." and its two siblings end at the clause
+  before (the same three replacements, in the same order). The fallback line names the exact patch
+  as the stored one does (product, version and, for the two build-aware products, the build --
+  lib/patch_identity.patch_display_label); it used to drop it.
+
   Input:   include.item     the feed item (a site.pages patch record)
            include.summary  the card's stored evidence summary, already cleaned; '' when none
   Output:  feed_summary_line  the line to print, or '' (no evidence block)
@@ -28,7 +34,7 @@
 {%- include patch-verdict-gate.html record=pfs_item count=pfs_count -%}
 {%- if feed_summary_line != '' and gate_body != '' -%}
   {%- capture pfs_phrase -%}{{ gate_label }}{% if gate_scope != '' %} {{ gate_scope }}{% endif %}{%- endcapture -%}
-  {%- assign pfs_body = gate_body -%}
+  {%- assign pfs_body = gate_body | replace: '; the individual reports are listed below.', '.' | replace: '; it is listed below.', '.' | replace: '; they are listed below.', '.' -%}
   {%- assign pfs_head = pfs_body | slice: 0, 16 -%}
   {%- if pfs_head == 'No verdict yet: ' -%}
     {%- assign pfs_rest = pfs_body | slice: 16, 100000 -%}
@@ -41,6 +47,13 @@
   {%- assign pfs_from = 0 | minus: pfs_len -%}
   {%- assign pfs_stored_tail = feed_summary_line | slice: pfs_from, pfs_len -%}
   {%- unless pfs_lead == pfs_phrase and pfs_stored_tail == pfs_body -%}
-    {%- capture feed_summary_line -%}{{ pfs_phrase }}: {{ pfs_body }}{%- endcapture -%}
+    {%- assign pfs_pid = pfs_item.product_id | default: '' | strip -%}
+    {%- assign pfs_name = pfs_item.update_product | default: pfs_pid | strip -%}
+    {%- assign pfs_version = pfs_item.update_version | append: '' | strip -%}
+    {%- assign pfs_build = '' -%}
+    {%- if pfs_pid == 'microsoft-windows-11' or pfs_pid == 'microsoft-powerpoint' -%}{%- assign pfs_build = pfs_item.target_build | append: '' | strip -%}{%- endif -%}
+    {%- capture pfs_identity -%}{{ pfs_name }} {{ pfs_version }}{% if pfs_build != '' %} (Build {{ pfs_build }}){% endif %}{%- endcapture -%}
+    {%- assign pfs_identity = pfs_identity | strip -%}
+    {%- capture feed_summary_line -%}{{ pfs_phrase }}: {% if pfs_identity != '' %}{{ pfs_identity }}. {% endif %}{{ pfs_body }}{%- endcapture -%}
   {%- endunless -%}
 {%- endif -%}
