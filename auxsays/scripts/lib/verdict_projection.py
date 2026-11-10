@@ -52,7 +52,7 @@ from typing import Any, Iterable, Mapping
 
 import yaml
 
-from . import patch_decision, verdict_reasons
+from . import patch_decision, verdict_reason_producer, verdict_reasons
 
 PROJECTION_NAME = "verdict_projection.yml"
 SCHEMA_VERSION = 1
@@ -98,6 +98,26 @@ def row_for(decision: patch_decision.Decision, record: Mapping[str, Any]) -> dic
     }
 
 
+def supported_reasons(records: Iterable[Mapping[str, Any]],
+                      counted_by_identity: Mapping[tuple[str, str, str], list[Mapping[str, Any]]],
+                      reasons: Iterable[Mapping[str, Any]],
+                      ) -> tuple[dict[tuple[str, str, str], list[dict[str, Any]]], dict[str, list[str]]]:
+    """The reasons decide reads per page: the SUPPORTED reviewed entries, plus -- only while
+    lib.verdict_reason_producer.PUBLIC_AUTO_ACTIVATION is on -- the producer's candidates behind them.
+
+    ONE place, so the projection the gate prints and QA's own view of decide can never read different
+    reasons. The switch is OFF (TEMPORARY, pending the owner's approval of public auto-activation):
+    then this is exactly the reviewed entries, and nothing published changes."""
+    records = [r for r in records if isinstance(r, Mapping)]
+    by_identity = {verdict_reasons.record_identity(r): r for r in records}
+    valid, unsupported = verdict_reasons.valid_reasons_by_identity(list(reasons or ()), counted_by_identity,
+                                                                   by_identity)
+    if verdict_reason_producer.PUBLIC_AUTO_ACTIVATION:
+        produced = verdict_reason_producer.produce(records, counted_by_identity)
+        valid = verdict_reason_producer.merge(valid, produced.candidates)
+    return valid, unsupported
+
+
 def project(records: Iterable[Mapping[str, Any]],
             counted_by_identity: Mapping[tuple[str, str, str], list[Mapping[str, Any]]],
             reasons: Iterable[Mapping[str, Any]], lifecycle: Iterable[Mapping[str, Any]],
@@ -107,8 +127,7 @@ def project(records: Iterable[Mapping[str, Any]],
     records = [r for r in records if isinstance(r, Mapping)]
     reasons = list(reasons or ())
     lifecycle = list(lifecycle or ())
-    by_identity = {verdict_reasons.record_identity(r): r for r in records}
-    valid, unsupported = verdict_reasons.valid_reasons_by_identity(reasons, counted_by_identity, by_identity)
+    valid, unsupported = supported_reasons(records, counted_by_identity, reasons)
     pages: dict[str, dict[str, Any]] = {}
     for rec in records:
         mine = valid.get(verdict_reasons.record_identity(rec), [])
@@ -141,9 +160,9 @@ def load_fact_files(aux_root: Path) -> tuple[list[dict[str, Any]], list[dict[str
     return reasons, lifecycle, problems
 
 
-def build(aux_root: Path) -> tuple[dict[str, Any], dict[str, list[str]], list[str]]:
-    """The projection for a site tree, from its records, its counted evidence and its fact files.
-    Raises on an unreadable evidence store (the caller decides what that means)."""
+def load_inputs(aux_root: Path) -> tuple[list[dict[str, Any]], dict[tuple[str, str, str], list[dict[str, Any]]]]:
+    """(records, counted rows per identity) of a site tree: the two inputs decide and the reason
+    producer read. Raises on an unreadable evidence store (the caller decides what that means)."""
     from patch_collectors.base import load_front_matter_and_body  # noqa: PLC0415 - offline reader
 
     from .report_counts import (counted_evidence_rows, load_evidence_store,  # noqa: PLC0415
@@ -156,9 +175,24 @@ def build(aux_root: Path) -> tuple[dict[str, Any], dict[str, list[str]], list[st
             records.append(data)
     rows = load_evidence_store(aux_root / "_data" / "consensus_evidence.yml")
     groups = counted_evidence_rows(rows, windows_targets=windows_targets_from_front_matter(records))
+    return records, groups
+
+
+def build(aux_root: Path) -> tuple[dict[str, Any], dict[str, list[str]], list[str]]:
+    """The projection for a site tree, from its records, its counted evidence and its fact files.
+    Raises on an unreadable evidence store (the caller decides what that means)."""
+    projection, unsupported, problems, _produced = build_all(aux_root)
+    return projection, unsupported, problems
+
+
+def build_all(aux_root: Path) -> tuple[dict[str, Any], dict[str, list[str]], list[str],
+                                       "verdict_reason_producer.ProducerResult"]:
+    """build(), plus the reason producer's run over the same inputs (written at deploy to the
+    git-ignored candidates artifact whether or not the switch is on)."""
+    records, groups = load_inputs(aux_root)
     reasons, lifecycle, problems = load_fact_files(aux_root)
     projection, unsupported = project(records, groups, reasons, lifecycle)
-    return projection, unsupported, problems
+    return projection, unsupported, problems, verdict_reason_producer.produce(records, groups)
 
 
 def render(projection: Mapping[str, Any]) -> str:

@@ -301,7 +301,19 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 211
 # projection is an error (G3-Q9); the menu-bar reason is non-causal (G3-W4); the feed says nothing
 # is "listed below" and its fallback keeps the patch name (G3-S6, S7); both KB5079391 pages carry the
 # replacement recommendation (G3-S8). 37 mutants (was 24), X25..X37 one fix half each.
+# 112 -> 124 (PR-A2 review, LOW-1..3 + MB1/MB2): the page key strips exactly what Liquid strips and
+# a Unicode-padded identity is a publication error (G3-R8, Q10); release types, KB numbers and dates
+# are ASCII-only and a lifecycle build must be an ASCII 12345.6789 (G3-L6, and Q8/R6 carry probe P3);
+# a lifecycle build no record carries is a publication error (G3-Q11); R4j pins the gate's
+# scope-acceptance clauses. 45 mutants (was 37), X38..X45 one fix half each.
 auxsays/scripts/tests/test_growth3_verdict_policy.py = 124
+# G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
+# confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
+# the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the
+# corroboration placeholder fails closed (VRP-P1); purity, no network (VRP-N1, N2); the activation
+# switch ships OFF and changes nothing, and ON the projection, QA and the real gate carry the
+# candidates (VRP-S0..S5); the shipped corpus (VRP-C1, C2). 10 mutants, each caught by a named check.
+auxsays/scripts/tests/test_verdict_reason_producer.py = 34
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93

@@ -294,10 +294,22 @@ SECURITY_PANEL_LEAD = {
         "Security update - a confirmed problem affects some setups. Microsoft recommends keeping "
         "supported systems updated. Hold deployment only on the affected systems until a fix is "
         "available."),
+    # G35-04: a vendor-confirmed serious defect (lib/verdict_reason_producer). Reached only while
+    # PUBLIC_AUTO_ACTIVATION is on (TEMPORARY: off, pending the owner's approval).
+    "vendor_confirmed_serious": (
+        "Security update - Microsoft confirms a known issue on some setups. Microsoft recommends "
+        "keeping supported systems updated. Hold deployment only on the affected systems until a fix "
+        "is available."),
 }
 PANEL_KIND = {"corroborated_install_problem": "affected_configuration",
               "corroborated_issue": "affected_configuration",
-              "regression": "deployment_caution"}
+              "regression": "deployment_caution",
+              "vendor_confirmed_serious": "deployment_caution"}
+# A vendor-confirmed reason may stand on a page with no user report, so its "other setups" line
+# cannot point at reports listed below.
+OTHER_SETUPS_BY_CLASS = {
+    "vendor_confirmed_serious": "Other setups: no problem is confirmed for them yet.",
+}
 PANEL_HEADING = {"affected_configuration": "Affected configuration",
                  "deployment_caution": "Deployment caution"}
 # The Recommendations list under an AVOID verdict. ONE copy: the record writer stores it on a
@@ -479,7 +491,7 @@ def public_body(decision: Decision, record: dict[str, Any] | None, report_count:
             parts.append(f"Also {_text(other.get('verdict'))} {_text(other.get('scope'))}: "
                          f"{_text(other.get('reason'))}")
         if not install:
-            parts.append(OTHER_SETUPS)
+            parts.append(OTHER_SETUPS_BY_CLASS.get(_text(head.get("reason_class")), OTHER_SETUPS))
         return " ".join(parts)
     if n == 0:
         return ""

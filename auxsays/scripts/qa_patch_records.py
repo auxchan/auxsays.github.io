@@ -385,8 +385,9 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
     fronts = [data for _path, data in entries]
     groups = counted_evidence_rows(load_evidence_rows(),
                                    windows_targets=windows_targets_from_front_matter(fronts))
-    by_identity = {verdict_reasons.record_identity(data): data for data in fronts}
-    valid, unsupported = verdict_reasons.valid_reasons_by_identity(reasons, groups, by_identity)
+    # The reasons decide reads -- reviewed entries, plus the reason producer's candidates only while its
+    # (temporary, owner-gated) activation switch is on: the same function the projection builder uses.
+    valid, unsupported = verdict_projection.supported_reasons(fronts, groups, reasons)
     expected, _unsupported = verdict_projection.project(fronts, groups, reasons, lifecycle)
     want_rows = expected["pages"]
 
