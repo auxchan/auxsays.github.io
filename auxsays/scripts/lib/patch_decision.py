@@ -235,6 +235,7 @@ def leading_decision(text: str) -> str:
 # ---------------------------------------------------------------------------------------------
 SECURITY_UPDATE = "SECURITY UPDATE"
 AVOID = "AVOID"
+AVOID_SCOPE = "for new installations"
 WAIT = "WAIT"
 TEST_FIRST = "TEST FIRST"
 
@@ -348,7 +349,9 @@ def decide(record: dict[str, Any] | None, *, valid_reasons: Any = (), lifecycle:
     security = is_monthly_security_update(rec)
     life = lifecycle_for(rec, lifecycle)
     if life:
-        return Decision(AVOID, "R1", lifecycle=life, reasons=ordered, security=security)
+        # Scoped like every non-default verdict: the withdrawal applies to INSTALLING the update,
+        # not to a device that already has it (owner decision 2).
+        return Decision(AVOID, "R1", scope=AVOID_SCOPE, lifecycle=life, reasons=ordered, security=security)
     if security:
         return Decision(SECURITY_UPDATE, "R2", reasons=ordered, security=True)
     if ordered:

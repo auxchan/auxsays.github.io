@@ -21,7 +21,8 @@
   Input:   include.record  a patch page (page) or a site.pages item
            include.count   that record's report count, as a number
   Outputs: gate_label      the published verdict
-           gate_scope      "if ..." / "when ..." qualifier for WAIT / TEST FIRST, else ''
+           gate_scope      "if ..." / "when ..." qualifier for WAIT / TEST FIRST, "for new
+                           installations" for AVOID (it applies to installing it), else ''
            gate_body       the recommendation line; '' only for a non-official zero-report page,
                            whose existing line stays
            gate_official   true for AVOID and SECURITY UPDATE (facts, not report evidence)
@@ -91,6 +92,7 @@
 {%- assign pvg_lead = 'Microsoft classifies this as a monthly security update and recommends keeping supported systems updated.' -%}
 {%- if pvg_life -%}
   {%- assign gate_label = 'AVOID' -%}
+  {%- assign gate_scope = 'for new installations' -%}
   {%- assign gate_official = true -%}
   {%- capture gate_body -%}Microsoft withdrew this update for new installations. Replacement: {{ pvg_life.replacement_kb }}.{% if pvg_security %} It was a monthly security update.{% elsif pvg_preview %} It was an optional non-security preview update.{% endif %} This applies to installing it, not to devices that already installed it.{%- endcapture -%}
 {%- elsif pvg_security -%}
