@@ -4712,7 +4712,7 @@ no counted report describing the confirmed problem, so they carry no reasoned ve
 
 **Tests** `test_growth3_verdict_policy.py` (52 checks, 17 mutants each caught by a named check: G3-D1..D12
 including G3-D4 "changing the count never changes the verdict", G3-F*, G3-L*, G3-W*, G3-Q*, G3-R1..R3 the gate
-equals Python on a matrix and over the corpus); five existing suites updated to the policy.
+equals Python on a matrix and over the corpus); seven existing suites updated to the policy.
 
 **Reopen only if** a page prints WAIT or TEST FIRST without a supported reason entry, a monthly security update
 prints anything but SECURITY UPDATE (or the one AVOID), a report count, sentiment or theme moves a verdict, or any
