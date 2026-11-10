@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """GROWTH-3: every verdict comes from the owner's policy, decided once, rendered everywhere alike.
 
-THE POLICY (owner decisions 1-3, 2026-11-06), implemented in lib/patch_decision.decide and mirrored
-for Liquid in _includes/patch-verdict-gate.html:
+THE POLICY (owner decisions 1-3, 2026-11-06), implemented in lib/patch_decision.decide:
   R1 AVOID            an official withdrawal for new installations (_data/patch_lifecycle.yml: ONE
                       verified exception, KB5079391 -> KB5086672)
   R2 SECURITY UPDATE  Microsoft's stored monthly-security classification (release type "YYYY-MM B");
@@ -13,13 +12,22 @@ for Liquid in _includes/patch-verdict-gate.html:
 Report count, sentiment, theme, severity, maturity and the clock decide nothing; SAFE ENOUGH stays
 unreachable.
 
+ONE AUTHORITY (fix round 1, review 1 D2). The Liquid gate (_includes/patch-verdict-gate.html) no
+longer decides a reasoned verdict: lib/verdict_projection writes decide's answer per page at deploy
+(build_verdict_projection.py, before QA and Jekyll) and the gate prints it. It derives only the two
+official facts itself.
+
 SECTIONS. [D] the decision procedure and its invariants (G3-D1..D12). [F] the reason file's audits
-(G3-F1..F7, G3-OC). [L] the lifecycle exception (G3-L1..L3). [W] public wording (G3-W1..W2).
-[Q] QA severities (G3-Q1..Q3). [R] the Liquid gate renders exactly what Python decides, on a
-synthetic matrix and over the whole corpus (G3-R1..R3). [X] mutants: each restores ONE thing the
+(G3-F0..F7, G3-OC). [L] the lifecycle exception (G3-L1..L3, G3-W0). [W] public wording (G3-W1..W3).
+[Q] QA: severities, and the rendered/authority comparison (G3-Q1..Q6). [R] the gate renders exactly
+what Python decides: a synthetic matrix with one case per support rule, no-projection fail-closed,
+and the whole corpus (G3-R0..R5). [P] the projection IS the authority, review 1's probes A1 and A2
+on the rendered page, the builder and its position in the deploy (G3-P0..P7). [S] the scope prints
+with the verdict on every surface (G3-S1..S5, review 1 D1). [X] mutants: each restores ONE thing the
 policy forbids, and must be caught by a named check that was passing before it.
 
-Needs ruby + the liquid gem for [R] and the template mutants. Offline; writes only in a temp dir.
+Needs ruby + the liquid gem for [R], [P], [S] and the template mutants. Offline; writes only in a
+temp dir.
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_growth3_verdict_policy.py
 """
 from __future__ import annotations
@@ -44,6 +52,7 @@ sys.path.insert(0, str(_AUX / "scripts"))
 import yaml  # noqa: E402
 
 from lib import patch_decision as pd  # noqa: E402
+from lib import verdict_projection as vp  # noqa: E402
 from lib import verdict_reasons as vr  # noqa: E402
 
 GATE_PATH = _AUX / "_includes" / "patch-verdict-gate.html"
@@ -246,17 +255,12 @@ def check_decisions() -> None:
 
 def check_corpus_guard() -> None:
     """G3-D11: invariants over the shipped corpus that hold however it grows."""
-    gen = _AUX / "updates" / "generated"
-    recs = []
-    for path in sorted(gen.glob("*.md")):
-        m = re.match(r"---\r?\n(.*?)\r?\n---\r?\n", path.read_text(encoding="utf-8"), re.S)
-        data = yaml.safe_load(m.group(1)) if m else {}
-        if isinstance(data, dict) and data.get("update_entry") is True:
-            recs.append(data)
+    c = corpus()
+    recs = c["recs"]
     reason_ids = {vr.reason_identity(e) for e in REASONS["entries"]}
     problems = []
     for r in recs:
-        d = decide(r, gate_valid(r), LIFECYCLE["entries"])
+        d = decide(r, c["valid"].get(vr.record_identity(r), []), LIFECYCLE["entries"])
         if d.verdict in ("WAIT", "TEST FIRST") and vr.record_identity(r) not in reason_ids:
             problems.append(("reasonless", r.get("permalink")))
         if pd.is_monthly_security_update(r) and d.verdict not in ("SECURITY UPDATE", "AVOID"):
@@ -268,13 +272,6 @@ def check_corpus_guard() -> None:
     check(f"G3-D11 corpus guard over {len(recs)} records: every WAIT/TEST FIRST has a reviewed entry, every "
           "monthly security update reads SECURITY UPDATE, nothing unreachable, no 'Pause updates'",
           len(recs) > 1000 and not problems, str(problems[:5]))
-
-
-def gate_valid(rec: dict) -> list[dict]:
-    """The reason entries the template's render-time rule supports for this record."""
-    urls = {str(s.get("source_url") or "") for s in rec.get("accepted_report_sources") or []}
-    return [e for e in REASONS["entries"] if vr.reason_identity(e) == vr.record_identity(rec)
-            and e.get("evidence") and all(str(ev.get("source_url")) in urls for ev in e["evidence"])]
 
 
 # ------------------------------------------------------------------------ [F] reason audits
@@ -361,41 +358,106 @@ def check_wording() -> None:
 
 # ------------------------------------------------------------------------ [Q] QA severities
 
-def check_qa(tmp: Path) -> None:
-    import qa_patch_records as qa
-    saved = (qa.REASONS_PATH, qa.LIFECYCLE_PATH, qa.EVIDENCE_PATH)
+def _qa_tree(tmp: Path, reasons: list, rows: list, conf_records: list = (), rec_over: dict | None = None):
+    """A one-page QA fixture: (record paths, evidence, reasons, lifecycle, projection path)."""
     gen = tmp / "gen"
     gen.mkdir(parents=True, exist_ok=True)
-    rec_path = gen / "r.md"
-    rec = record(update_entry=True, update_decision_label="TEST FIRST", accepted_report_sources=[])
-    rec_path.write_text("---\n" + yaml.safe_dump(rec) + "---\nbody\n", encoding="utf-8")
+    paths = []
+    rec = record(update_entry=True, update_decision_label="TEST FIRST", accepted_report_sources=[],
+                 permalink="/updates/t/obs-studio/99-0-0/", **(rec_over or {}))
+    for i, data in enumerate([rec, *[dict(c, update_entry=True, update_report_count=0) for c in conf_records]]):
+        path = gen / f"r{i}.md"
+        path.write_text("---\n" + yaml.safe_dump(data) + "---\nbody\n", encoding="utf-8")
+        paths.append(path)
     ev = tmp / "ev.yml"
     ev.write_text(yaml.safe_dump({"schema_version": 1, "evidence": [
-        dict(row(1), product_id=OBS, update_version="99.0.0", counted=True, patch_version_matched=True)]}),
+        dict(r, product_id=OBS, update_version="99.0.0", counted=True, patch_version_matched=True) for r in rows]}),
         encoding="utf-8")
-    good = tmp / "reasons.yml"
-    good.write_text(yaml.safe_dump({"schema_version": 1, "entries": [entry("t")]}), encoding="utf-8")
-    bad = tmp / "bad.yml"
-    bad.write_text(yaml.safe_dump({"schema_version": 1, "entries": [entry("b", scope="nope")]}), encoding="utf-8")
+    rs = tmp / "reasons.yml"
+    rs.write_text(yaml.safe_dump({"schema_version": 1, "entries": reasons}), encoding="utf-8")
     life = tmp / "life.yml"
     life.write_text(yaml.safe_dump({"schema_version": 1, "entries": []}), encoding="utf-8")
+    return paths, ev, rs, life, tmp / "verdict_projection.yml"
+
+
+def _qa_scan(qa, tree):
+    paths, ev, rs, life, proj = tree
+    saved = (qa.REASONS_PATH, qa.LIFECYCLE_PATH, qa.EVIDENCE_PATH, qa.PROJECTION_PATH)
     try:
-        qa.EVIDENCE_PATH, qa.LIFECYCLE_PATH = ev, life
-        qa.REASONS_PATH = good
-        errors, warnings = qa.scan_verdict_policy([rec_path])
-        codes_w = {w["code"] for w in warnings}
-        check("G3-Q1 an entry whose rows stopped counting is a WARNING, never an error",
-              not errors and "verdict_reason_unsupported" in codes_w, f"{errors} {codes_w}")
-        promoted, kept = qa.promote_for_publication(errors, warnings)
-        check("G3-Q2 ...and publish-strict does not promote it (the page has already fallen back)",
-              not promoted and "verdict_reason_unsupported" in {w["code"] for w in kept}
-              and "verdict_policy_drift" in codes_w)
-        qa.REASONS_PATH = bad
-        errors, _w = qa.scan_verdict_policy([rec_path])
-        check("G3-Q3 a malformed reason file is an ERROR (it only changes by reviewed pull request)",
-              "verdict_reasons_invalid" in {e["code"] for e in errors}, str(errors)[:200])
+        qa.REASONS_PATH, qa.LIFECYCLE_PATH, qa.EVIDENCE_PATH, qa.PROJECTION_PATH = rs, life, ev, proj
+        return qa.scan_verdict_policy(paths)
     finally:
-        qa.REASONS_PATH, qa.LIFECYCLE_PATH, qa.EVIDENCE_PATH = saved
+        qa.REASONS_PATH, qa.LIFECYCLE_PATH, qa.EVIDENCE_PATH, qa.PROJECTION_PATH = saved
+
+
+def check_qa(tmp: Path) -> None:
+    import qa_patch_records as qa
+    tmp.mkdir(parents=True, exist_ok=True)
+    # One counted row, an entry citing two: unsupported.
+    tree = _qa_tree(tmp / "q1", [entry("t")], [row(1)])
+    errors, warnings = _qa_scan(qa, tree)
+    codes_w = {w["code"] for w in warnings}
+    check("G3-Q1 an entry whose rows stopped counting is a WARNING, never an error",
+          not errors and "verdict_reason_unsupported" in codes_w, f"{errors} {codes_w}")
+    promoted, kept = qa.promote_for_publication(errors, warnings)
+    check("G3-Q2 ...and publish-strict does not promote it (the page has already fallen back)",
+          not promoted and "verdict_reason_unsupported" in {w["code"] for w in kept}
+          and "verdict_policy_drift" in codes_w)
+    bad = _qa_tree(tmp / "q3", [entry("b", scope="nope")], [row(1)])
+    errors, _w = _qa_scan(qa, bad)
+    check("G3-Q3 a malformed reason file is an ERROR (it only changes by reviewed pull request)",
+          "verdict_reasons_invalid" in {e["code"] for e in errors}, str(errors)[:200])
+
+    # G3-Q4: what the gate will READ against what Python decides. Two counted rows support entry t.
+    good = _qa_tree(tmp / "q4", [entry("t")], [row(1), row(2)])
+    paths, ev, rs, life, proj = good
+    errors_absent, _w = _qa_scan(qa, good)
+    data = yaml.safe_load(paths[0].read_text(encoding="utf-8").split("---")[1])
+    right = vp.project([data], {(OBS, "99.0.0", ""): [row(1), row(2)]}, [entry("t")], [])[0]
+    proj.write_text(vp.render(right), encoding="utf-8")
+    errors_right, _w = _qa_scan(qa, good)
+    forged = copy.deepcopy(right)
+    forged["pages"][vp.page_key(data)].update(verdict="WAIT")
+    proj.write_text(vp.render(forged), encoding="utf-8")
+    errors_forged, _w = _qa_scan(qa, good)
+    stale = copy.deepcopy(right)
+    stale["pages"][vp.page_key(data)]["body"] = "A line nobody decided."
+    proj.write_text(vp.render(stale), encoding="utf-8")
+    errors_stale, _w = _qa_scan(qa, good)
+    proj.write_text(vp.render({"schema_version": 1, "pages": {}}), encoding="utf-8")
+    errors_empty, _w = _qa_scan(qa, good)
+    codes = lambda es: {e["code"] for e in es}  # noqa: E731
+    check("G3-Q4 a Python/rendered disagreement is an ERROR: a forged verdict, a stale line or an empty "
+          "projection where the authority gives TEST FIRST; the exact projection, or none, is clean",
+          "verdict_render_disagrees" not in codes(errors_absent) | codes(errors_right)
+          and all("verdict_render_disagrees" in codes(es) for es in (errors_forged, errors_stale, errors_empty)),
+          f"absent={codes(errors_absent)} right={codes(errors_right)} forged={codes(errors_forged)} "
+          f"stale={codes(errors_stale)} empty={codes(errors_empty)}")
+    proj.write_text(vp.render({"schema_version": 1, "pages": {}, "error": "EvidenceStoreError: unreadable"}),
+                    encoding="utf-8")
+    errors_failed, _w = _qa_scan(qa, good)
+    proj.write_text("schema_version: 1\npages: [not, a, mapping]\n", encoding="utf-8")
+    errors_invalid, _w = _qa_scan(qa, good)
+    check("G3-Q6 a projection whose builder failed, or that cannot be read, is an ERROR",
+          "verdict_projection_failed" in codes(errors_failed)
+          and "verdict_projection_invalid" in codes(errors_invalid),
+          f"{codes(errors_failed)} {codes(errors_invalid)}")
+
+    # G3-Q5: the warning says what the page renders. A1's shape (the WAIT's confirmation reworded,
+    # a TEST FIRST still supported) and A2's (one of two rows left).
+    conf_rec = {"product_id": OBS, "update_version": "100.1.0",
+                "official_patch_notes_body": "* Fixed a crash in the test setup [dev]"}
+    a1 = _qa_tree(tmp / "q5a", [entry("w", "WAIT", "regression", rows=(1,), official_confirmation=CONF_REWORDED),
+                                entry("t", rows=(2, 3))], [row(1), row(2), row(3)], [conf_rec])
+    _e1, w1 = _qa_scan(qa, a1)
+    a2 = _qa_tree(tmp / "q5b", [entry("a2", rows=(1,))], [row(1), row(2)])
+    _e2, w2 = _qa_scan(qa, a2)
+    msg1 = next((w["message"] for w in w1 if w["code"] == "verdict_reason_unsupported"), "")
+    msg2 = next((w["message"] for w in w2 if w["code"] == "verdict_reason_unsupported"), "")
+    check("G3-Q5 the unsupported-entry warning names what the page actually renders: the next supported "
+          "TEST FIRST in A1's shape, INSUFFICIENT DATA in A2's -- never a fall-back it does not make",
+          "renders 'TEST FIRST if you use the test setup'" in msg1 and "INSUFFICIENT DATA" not in msg1
+          and "renders 'INSUFFICIENT DATA'" in msg2, f"A1: {msg1[-160:]} | A2: {msg2[-120:]}")
 
 
 # ------------------------------------------------------------------------ [R] Liquid == Python
@@ -450,68 +512,175 @@ def python_view(rec: dict, reasons: list, life: list, count: int) -> tuple:
     return (d.verdict, d.scope, pd.public_body(d, rec, count), heading, pd.panel_text(d))
 
 
-SYN_REASONS = [entry("w", "WAIT", "regression"), entry("t", rows=(3, 4)),
-               entry("i", "TEST FIRST", "corroborated_install_problem", pid=WIN, version="25H2",
-                     build="26200.1000", rows=(1, 2), scope="when installing it"),
-               entry("r", "WAIT", "regression", pid=WIN, version="25H2", build="26200.3000", rows=(1, 2))]
+# The synthetic matrix. Every case is its own page (its own identity), with the rows COUNTED on it,
+# the reason entries naming it, and the verdict it must render whatever the template does. The
+# gate is given ONLY the projection Python builds from these facts (no reason file at all), so a
+# case passes only if the authority's answer reaches the page unchanged. One case per support rule
+# (F1 x3, F2, F3, OC x2) as review 1 asked: the gate holds no copy of them, and each must still
+# fail closed on the rendered page.
+CONF_OK = {"product_id": OBS, "update_version": "100.0.0", "statement": "Fixed the test setup crash"}
+CONF_REWORDED = {"product_id": OBS, "update_version": "100.1.0", "statement": "Fixed the test setup crash"}
+CONF_RECORDS = [
+    {"product_id": OBS, "update_version": "100.0.0", "official_patch_notes_body": "* Fixed the\r\ntest setup crash [dev]"},
+    # A1's shape: the vendor note no longer carries the statement verbatim.
+    {"product_id": OBS, "update_version": "100.1.0", "official_patch_notes_body": "* Fixed a crash in the test setup [dev]"},
+]
 
 
-def synthetic_cases() -> dict:
-    src4 = [{"source_url": u} for u in URLS[:4]]
+def _case(version: str, n: int, rows, entries=(), want: str = "INSUFFICIENT DATA", *, rec=None, **over) -> dict:
+    base = rec if rec is not None else record(update_version=version)
+    base = dict(base, update_report_count=n, **over)
+    return {"rec": base, "n": n, "rows": list(rows), "entries": list(entries), "want": want}
+
+
+def _e(eid, version, verdict="TEST FIRST", rclass="corroborated_issue", **kw):
+    return entry(eid, verdict, rclass, version=version, **kw)
+
+
+def matrix_cases() -> dict:
+    twins = [row(1, "Same words posted twice."), row(2, "Same words  posted twice.")]
     return {
-        "wait+also": (record(accepted_report_sources=src4, update_report_count=4), 4),
-        "tf-only": (record(accepted_report_sources=[{"source_url": u} for u in URLS[2:4]]), 2),
-        "withdrawn": (record(accepted_report_sources=[{"source_url": URLS[0]}], update_report_count=1), 1),
-        "nothing-2": (record(accepted_report_sources=[]), 2),
-        "nothing-1": (record(accepted_report_sources=[], update_report_count=1), 1),
-        "zero": (record(accepted_report_sources=[], update_report_count=0), 0),
-        "sec-0": (win_record(update_report_count=0), 0),
-        "sec-1": (win_record(update_report_count=1), 1),
-        "sec-9": (win_record(update_report_count=9), 9),
-        "sec-install": (win_record(accepted_report_sources=[{"source_url": u} for u in URLS[:2]]), 2),
-        "sec-regression": (win_record(build="26200.3000", accepted_report_sources=[{"source_url": u} for u in URLS[:2]]), 2),
-        "avoid-preview": (win_record(update_type="2026-03 D", kb="KB5000002", build="26200.2000"), 1),
-        "avoid-security": (win_record(kb="KB5000002", build="26100.2000", update_report_count=0), 0),
-        "oob": (win_record(update_type="2026-03 OOB"), 2),
-        "preview-tf": (win_record(update_type="2026-03 D", accepted_report_sources=[{"source_url": u} for u in URLS[:2]]), 2),
+        "wait+also": _case("9.1", 4, [row(1), row(2), row(3), row(4)],
+                           [_e("w", "9.1", "WAIT", "regression"), _e("t", "9.1", rows=(3, 4))], "WAIT"),
+        "tf-only": _case("9.2", 2, [row(3), row(4)], [_e("t2", "9.2", rows=(3, 4))], "TEST FIRST"),
+        "F1-withdrawn": _case("9.3", 1, [row(1)], [_e("f1w", "9.3")]),
+        "F1-url-differs": _case("9.4", 2, [row(1), row(2)],
+                                [dict(_e("f1u", "9.4"), evidence=[{"id": "row-1", "source_url": URLS[0]},
+                                                                  {"id": "row-2", "source_url": URLS[3]}])]),
+        "F1-other-page": _case("9.5", 2, [row(3), row(4)], [_e("f1o", "9.5")]),
+        "F2-one-reporter": _case("9.7", 2, [row(1), row(2)], [_e("f2", "9.7", rows=(1,))]),
+        "F3-twins": _case("9.8", 2, twins, [_e("f3", "9.8")]),
+        "OC-found": _case("9.9", 1, [row(1)],
+                          [_e("oc", "9.9", "WAIT", "regression", rows=(1,), official_confirmation=CONF_OK)], "WAIT"),
+        "OC-reworded": _case("9.10", 3, [row(1), row(2), row(3)],
+                             [_e("ocr", "9.10", "WAIT", "regression", rows=(1,), official_confirmation=CONF_REWORDED),
+                              _e("ocr-t", "9.10", rows=(2, 3))], "TEST FIRST"),
+        "A2-one-of-two": _case("9.11", 4, [row(1), row(2)],
+                               [_e("a2", "9.11", "TEST FIRST", "corroborated_install_problem", rows=(1,),
+                                   scope="when installing it")]),
+        "stored-wait-no-row": _case("9.12", 5, [row(1)], [], update_decision_label="WAIT",
+                                    update_consensus_summary="WAIT: a stored line"),
+        "nothing-2": _case("9.13", 2, [row(1), row(2)]),
+        "nothing-1": _case("9.14", 1, [row(1)]),
+        "zero": _case("9.15", 0, []),
+        "sec-0": _case("", 0, [], rec=win_record(build="26200.1100"), want="SECURITY UPDATE"),
+        "sec-1": _case("", 1, [row(1)], rec=win_record(build="26200.1101"), want="SECURITY UPDATE"),
+        "sec-9": _case("", 9, [row(1), row(2)], rec=win_record(build="26200.1102"), want="SECURITY UPDATE"),
+        "sec-install": _case("", 2, [row(1), row(2)], [
+            entry("si", "TEST FIRST", "corroborated_install_problem", pid=WIN, version="25H2", build="26200.1000",
+                  scope="when installing it")], rec=win_record(build="26200.1000"), want="SECURITY UPDATE"),
+        "sec-regression": _case("", 2, [row(1), row(2)], [
+            entry("sr", "WAIT", "regression", pid=WIN, version="25H2", build="26200.3000")],
+            rec=win_record(build="26200.3000"), want="SECURITY UPDATE"),
+        "sec-unsupported": _case("", 1, [row(1)], [
+            entry("su", "TEST FIRST", "corroborated_install_problem", pid=WIN, version="25H2", build="26200.3100",
+                  scope="when installing it")], rec=win_record(build="26200.3100"), want="SECURITY UPDATE"),
+        "sec-forged-row": _case("", 3, [row(1)], [], rec=win_record(build="26200.3200"), want="SECURITY UPDATE"),
+        "avoid-preview": _case("", 1, [row(1)], rec=win_record(update_type="2026-03 D", kb="KB5000002",
+                                                               build="26200.2000"), want="AVOID"),
+        "avoid-security": _case("", 0, [], rec=win_record(kb="KB5000002", build="26100.2000"), want="AVOID"),
+        "oob": _case("", 2, [row(1), row(2)], rec=win_record(update_type="2026-03 OOB", build="26200.5000")),
+        "preview-tf": _case("", 2, [row(1), row(2)], [
+            entry("ptf", pid=WIN, version="25H2", build="26200.4000")],
+            rec=win_record(update_type="2026-03 D", build="26200.4000"), want="TEST FIRST"),
     }
 
 
+def matrix_facts(cases: dict) -> tuple[list, dict, list, dict]:
+    """(records, counted rows by identity, every entry, the projection Python builds from them)."""
+    records = [c["rec"] for c in cases.values()] + CONF_RECORDS
+    counted = {vr.record_identity(c["rec"]): c["rows"] for c in cases.values()}
+    # F1-other-page: its cited rows are counted, but on ANOTHER page.
+    counted[(OBS, "9.6", "")] = [row(1), row(2)]
+    entries = [e for c in cases.values() for e in c["entries"]]
+    projection, _unsupported = vp.project(records, counted, entries, LIFE)
+    return records, counted, entries, projection
+
+
+def matrix_expectations(cases: dict, records, counted, entries) -> dict:
+    by_ident = {vr.record_identity(r): r for r in records}
+    valid, _u = vr.valid_reasons_by_identity(entries, counted, by_ident)
+    return {k: python_view(c["rec"], valid.get(vr.record_identity(c["rec"]), []), LIFE, c["n"])
+            for k, c in cases.items()}
+
+
 TEMPLATE_OVERRIDE: str | None = None   # set only by the template mutants in [X]
+RULE_CASES = (
+    ("G3-R4a F1: a cited row that stopped counting (an audited withdrawal) falls back", "F1-withdrawn"),
+    ("G3-R4b F1: a cited row whose counted URL differs falls back", "F1-url-differs"),
+    ("G3-R4c F1: a cited row counted on ANOTHER page falls back", "F1-other-page"),
+    ("G3-R4d F2: one reporter without an official confirmation falls back", "F2-one-reporter"),
+    ("G3-R4e F3: the same text posted twice is one reporter, and falls back", "F3-twins"),
+    ("G3-R4f OC: a confirmation found verbatim admits one reporter (WAIT renders)", "OC-found"),
+    ("G3-R4g OC: a reworded confirmation drops the WAIT to the next supported entry (A1's shape)", "OC-reworded"),
+    ("G3-R4h a page with no projected row renders no verdict from its stored WAIT", "stored-wait-no-row"),
+    ("G3-R4i A2's shape: an entry left with one of its two rows falls back", "A2-one-of-two"),
+    ("G3-R4j a forged WAIT row on a security page cannot displace SECURITY UPDATE", "sec-forged-row"),
+)
 
 
 def check_render_matrix(template: str | None = None) -> None:
     template = template if template is not None else TEMPLATE_OVERRIDE
-    cases = synthetic_cases()
-    site = {"verdict_reasons": {"schema_version": 1, "entries": SYN_REASONS},
-            "patch_lifecycle": {"schema_version": 1, "entries": LIFE}}
-    out = render_gate({k: {"rec": r, "cnt": n} for k, (r, n) in cases.items()}, site, template)
+    cases = matrix_cases()
+    records, counted, entries, projection = matrix_facts(cases)
+    want = matrix_expectations(cases, records, counted, entries)
+    site_projection = copy.deepcopy(projection)
+    site_projection["pages"][vp.page_key(cases["sec-forged-row"]["rec"])] = {
+        "verdict": "WAIT", "scope": "if you use the test setup", "rule": "R3", "reasons": ["forged"],
+        "body": "A forged line.", "panel_heading": "", "panel_text": ""}
+    site = {"verdict_projection": site_projection, "patch_lifecycle": {"schema_version": 1, "entries": LIFE},
+            # Present ONLY for the template mutants that try to read it; the shipped gate never does.
+            "verdict_reasons": {"schema_version": 1, "entries": entries}}
+    slim = {k: {"rec": dict(c["rec"], accepted_report_sources=[{"source_url": r["source_url"]} for r in c["rows"]]),
+                "cnt": c["n"]} for k, c in cases.items()}
+    out = render_gate(slim, site, template)
     check("G3-R0 the liquid gem is available, so the template checks run for real",
           out is not None and "__error__" not in out, str(out)[:200] if out else "ruby missing")
     if not out or "__error__" in out:
         return
-    diffs = []
-    for name, (rec, n) in cases.items():
-        urls = {s["source_url"] for s in rec.get("accepted_report_sources") or []}
-        supported = [e for e in SYN_REASONS if vr.reason_identity(e) == vr.record_identity(rec)
-                     and all(ev["source_url"] in urls for ev in e["evidence"])]
-        want = python_view(rec, supported, LIFE, n)
-        got = parse_probe(out.get(name, ""))
-        if got != want:
-            diffs.append((name, got, want))
+    got = {k: parse_probe(out.get(k, "")) for k in cases}
+    diffs = [(k, got[k], want[k]) for k in cases if got[k] != want[k]]
     check(f"G3-R1 the gate renders exactly what decide/public_body/panel_text say ({len(cases)} cases: "
           "every rule, both panels, zero reports, a withdrawn citation)", not diffs, str(diffs[:2])[:600])
-    verdicts = {k: (parse_probe(v) or ("",))[0] for k, v in out.items()}
-    check("G3-R2 the matrix is not vacuous: it reaches all five published verdicts and fails closed",
-          {verdicts["avoid-preview"], verdicts["sec-9"], verdicts["wait+also"], verdicts["tf-only"],
-           verdicts["withdrawn"]} == {"AVOID", "SECURITY UPDATE", "WAIT", "TEST FIRST", "INSUFFICIENT DATA"}
-          and verdicts["avoid-security"] == "AVOID" and verdicts["sec-0"] == "SECURITY UPDATE", str(verdicts))
+    verdicts = {k: (g or ("",))[0] for k, g in got.items()}
+    absolute = {k: c["want"] for k, c in cases.items()}
+    check("G3-R2 the matrix is not vacuous: it reaches all five published verdicts, each case renders the "
+          "verdict written beside it, and both security panels render",
+          verdicts == absolute and set(verdicts.values()) == {"AVOID", "SECURITY UPDATE", "WAIT", "TEST FIRST",
+                                                              "INSUFFICIENT DATA"}
+          and (got["sec-install"] or ("",) * 5)[3] == "Affected configuration"
+          and (got["sec-regression"] or ("",) * 5)[3] == "Deployment caution",
+          str({k: (verdicts[k], absolute[k]) for k in cases if verdicts[k] != absolute[k]}))
+    for label, name in RULE_CASES:
+        check(label, got[name] == want[name] and verdicts[name] == absolute[name],
+              f"rendered {got[name]!r}; authority {want[name][:2]!r}; expected {absolute[name]!r}")
+
+    # No projection at all (a local render, a fresh checkout): fail closed, official facts remain.
+    bare = render_gate(slim, {"patch_lifecycle": {"schema_version": 1, "entries": LIFE},
+                              "verdict_reasons": {"schema_version": 1, "entries": entries}}, template)
+    bare_got = {k: parse_probe((bare or {}).get(k, "")) or ("",) * 5 for k in cases}
+    reasoned = [k for k, g in bare_got.items() if g[0] in ("WAIT", "TEST FIRST") or g[4]]
+    official = {k: bare_got[k][0] for k in ("sec-9", "sec-install", "avoid-preview", "avoid-security")}
+    check("G3-R5 with no projection the gate publishes no WAIT, no TEST FIRST and no panel, and the "
+          "official verdicts still render",
+          bare is not None and "__error__" not in bare and not reasoned
+          and official == {"sec-9": "SECURITY UPDATE", "sec-install": "SECURITY UPDATE",
+                           "avoid-preview": "AVOID", "avoid-security": "AVOID"},
+          f"{reasoned} {official}")
 
 
-def check_render_corpus() -> None:
-    gen = _AUX / "updates" / "generated"
-    sys.path.insert(0, str(_AUX / "scripts"))
+# ------------------------------------------------------------------------ corpus facts (shared)
+
+_CORPUS: dict = {}
+
+
+def corpus() -> dict:
+    """The shipped records, their counted evidence, the authority's supported entries and the
+    projection a deploy builds from this tree. Loaded once."""
+    if _CORPUS:
+        return _CORPUS
     from lib import report_counts  # noqa: PLC0415 - imports the collector base; offline
+    gen = _AUX / "updates" / "generated"
     recs = []
     for path in sorted(gen.glob("*.md")):
         m = re.match(r"---\r?\n(.*?)\r?\n---\r?\n", path.read_text(encoding="utf-8"), re.S)
@@ -522,25 +691,301 @@ def check_render_corpus() -> None:
     groups = report_counts.counted_evidence_rows(
         rows, windows_targets=report_counts.windows_targets_from_front_matter(recs))
     by_ident = {vr.record_identity(r): r for r in recs}
-    valid, _unsupported = vr.valid_reasons_by_identity(REASONS["entries"], groups, by_ident)
-    cases, want = {}, {}
-    for i, r in enumerate(recs):
-        n = int(r.get("update_report_count") or 0)
-        slim = {k: r.get(k) for k in ("product_id", "update_version", "target_build", "target_kb", "update_type",
-                                      "accepted_report_sources")}
-        slim["accepted_report_sources"] = [{"source_url": s.get("source_url")}
-                                           for s in r.get("accepted_report_sources") or []]
-        cases[str(i)] = {"rec": slim, "cnt": n}
-        want[str(i)] = python_view(r, valid.get(vr.record_identity(r), []), LIFECYCLE["entries"], n)
-    out = render_gate(cases, {"verdict_reasons": REASONS, "patch_lifecycle": LIFECYCLE})
+    valid, unsupported = vr.valid_reasons_by_identity(REASONS["entries"], groups, by_ident)
+    projection, _u = vp.project(recs, groups, REASONS["entries"], LIFECYCLE["entries"])
+    _CORPUS.update(recs=recs, groups=groups, valid=valid, unsupported=unsupported, projection=projection)
+    return _CORPUS
+
+
+def slim(r: dict) -> dict:
+    s = {k: r.get(k) for k in ("product_id", "update_version", "target_build", "target_kb", "update_type")}
+    s["accepted_report_sources"] = [{"source_url": x.get("source_url")} for x in r.get("accepted_report_sources") or []]
+    return s
+
+
+def check_render_corpus() -> None:
+    c = corpus()
+    recs = c["recs"]
+    cases = {str(i): {"rec": slim(r), "cnt": int(r.get("update_report_count") or 0)} for i, r in enumerate(recs)}
+    want = {str(i): python_view(r, c["valid"].get(vr.record_identity(r), []), LIFECYCLE["entries"],
+                                int(r.get("update_report_count") or 0)) for i, r in enumerate(recs)}
+    out = render_gate(cases, {"verdict_projection": c["projection"], "patch_lifecycle": LIFECYCLE})
     if not out or "__error__" in out:
         check("G3-R3 the gate renders the authority's verdict on every corpus record", False, str(out)[:200])
         return
     diffs = [(recs[int(k)].get("permalink"), parse_probe(out.get(k, "")), w) for k, w in want.items()
              if parse_probe(out.get(k, "")) != w]
-    check(f"G3-R3 over all {len(recs)} records the gate renders the authority's verdict, scope, line and panel "
-          "(the authority validating against the counted evidence store)", not diffs and len(recs) > 1000,
-          str(diffs[:2])[:600])
+    check(f"G3-R3 over all {len(recs)} records the gate, reading this tree's projection, renders the "
+          "authority's verdict, scope, line and panel", not diffs and len(recs) > 1000, str(diffs[:2])[:600])
+
+
+# ------------------------------------------------------------------------ [P] one authority: the projection
+
+OBS_NOTE = "Fixed a crash on macOS 27.2 when starting OBS Studio"
+A2_ENTRY = "adobe-acrobat-pro:15.023.20053:installer-exit-code-7"
+
+
+def probe_a1() -> tuple[list, list, dict]:
+    """Review 1's probe A1: OBS 33.0.0's stored note reworded, nothing else changed."""
+    c = corpus()
+    recs = copy.deepcopy(c["recs"])
+    hits = 0
+    for r in recs:
+        if r.get("product_id") == OBS and str(r.get("update_version")) == "33.0.0":
+            body = str(r.get("official_patch_notes_body") or "")
+            hits += body.count(OBS_NOTE)
+            r["official_patch_notes_body"] = body.replace(OBS_NOTE, "Fixed a startup crash on macOS 27.2")
+    assert hits >= 1, "the OBS 33.0.0 note this probe rewords is no longer stored"
+    return recs, REASONS["entries"], {"target": (OBS, "32.2.2", "")}
+
+
+def probe_a2() -> tuple[list, list, dict]:
+    """Review 1's probe A2: one of the two rows dropped from the Acrobat 15.023.20053 entry."""
+    reasons = copy.deepcopy(REASONS["entries"])
+    target = next(e for e in reasons if e["id"] == A2_ENTRY)
+    assert len(target["evidence"]) == 2, "the A2 entry no longer cites exactly two rows"
+    target["evidence"] = target["evidence"][:1]
+    return copy.deepcopy(corpus()["recs"]), reasons, {"target": ("adobe-acrobat-pro", "15.023.20053", "")}
+
+
+def render_probe(recs: list, reasons: list, target: tuple, template: str | None = None,
+                 project_fn=None) -> tuple[tuple | None, tuple]:
+    """(rendered probe, authority view) for the target page, the projection rebuilt from the
+    probe's facts exactly as a deploy would."""
+    c = corpus()
+    by_ident = {vr.record_identity(r): r for r in recs}
+    valid, _u = vr.valid_reasons_by_identity(reasons, c["groups"], by_ident)
+    projection, _u2 = (project_fn or vp.project)(recs, c["groups"], reasons, LIFECYCLE["entries"])
+    rec = by_ident[target]
+    n = int(rec.get("update_report_count") or 0)
+    out = render_gate({"p": {"rec": slim(rec), "cnt": n}},
+                      {"verdict_projection": projection, "patch_lifecycle": LIFECYCLE,
+                       "verdict_reasons": {"schema_version": 1, "entries": reasons}},
+                      template if template is not None else TEMPLATE_OVERRIDE)
+    return parse_probe((out or {}).get("p", "")), python_view(rec, valid.get(target, []), LIFECYCLE["entries"], n)
+
+
+PROJECT_OVERRIDE = None   # set only by the projection mutant in [X]
+
+
+def check_projection_probes() -> None:
+    recs, reasons, meta = probe_a1()
+    got, want = render_probe(recs, reasons, meta["target"], project_fn=PROJECT_OVERRIDE)
+    check("G3-P3 probe A1 (OBS 33.0.0's note reworded) fails closed on the rendered 32.2.2 page: the "
+          "unsupported WAIT is gone and the page renders the authority's TEST FIRST",
+          got is not None and got == want and got[:2] == ("TEST FIRST", "if you use the menu-bar icon on macOS 27"),
+          f"rendered {got and got[:2]!r}; authority {want[:2]!r}")
+    recs, reasons, meta = probe_a2()
+    got, want = render_probe(recs, reasons, meta["target"], project_fn=PROJECT_OVERRIDE)
+    check("G3-P4 probe A2 (one of two rows dropped from the Acrobat 15.023.20053 entry) fails closed on the "
+          "rendered page: INSUFFICIENT DATA, as the authority decides",
+          got is not None and got == want and got[:2] == ("INSUFFICIENT DATA", ""),
+          f"rendered {got and got[:2]!r}; authority {want[:2]!r}")
+
+
+def check_projection() -> None:
+    c = corpus()
+    rows = c["projection"]["pages"]
+    expect, wrong = {}, []
+    for r in c["recs"]:
+        mine = c["valid"].get(vr.record_identity(r), [])
+        if mine:
+            d = pd.decide(r, valid_reasons=mine, lifecycle=LIFECYCLE["entries"])
+            expect[vp.page_key(r)] = vp.row_for(d, r)
+    check(f"G3-P1 the projection IS the authority: one row per page with a supported entry ({len(rows)}), "
+          "each equal to decide/public_body/panel_text for that page",
+          rows == expect and len(rows) >= 1 and all(set(v) == set(vp.ROW_KEYS) for v in rows.values()),
+          str(sorted(set(rows) ^ set(expect)))[:300])
+    model = [(r.get("permalink"), vp.rendered_verdict(r, rows, LIFECYCLE["entries"]))
+             for r in c["recs"]
+             if vp.rendered_verdict(r, rows, LIFECYCLE["entries"])
+             != (lambda d: (d.verdict, d.scope))(pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []),
+                                                          lifecycle=LIFECYCLE["entries"]))]
+    check(f"G3-P2 QA's model of the gate (rendered_verdict) equals decide on all {len(c['recs'])} records",
+          not model, str(model[:3]))
+    gate = GATE_PATH.read_text(encoding="utf-8")
+    code = re.sub(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", "", gate, flags=re.S)
+    check("G3-P0 the gate holds no copy of the support rule: it reads no reason entry, no cited row and no "
+          "accepted source, only the projection and the two official facts",
+          "verdict_reasons" not in code and "accepted_report_sources" not in code and ".evidence" not in code
+          and "site.data.verdict_projection.pages[pvg_key]" in code, "")
+
+
+def check_projection_builder(tmp: Path) -> None:
+    """The bare script pages.yml runs, on a temp tree: writes the projection, and fails closed."""
+    script = _AUX / "scripts" / "build_verdict_projection.py"
+    out = tmp / "vp.yml"
+    proc = subprocess.run([sys.executable, str(script), "--output", str(out)], capture_output=True, text=True,
+                          encoding="utf-8", errors="replace", cwd=str(_REPO), timeout=600)
+    written = vp.load(out) if out.exists() else None
+    check("G3-P5 build_verdict_projection.py, run as pages.yml runs it, writes exactly this tree's projection",
+          proc.returncode == 0 and written is not None and written.get("pages") == corpus()["projection"]["pages"],
+          (proc.stdout + proc.stderr)[-300:])
+    root = tmp / "broken"
+    (root / "_data").mkdir(parents=True)
+    (root / "updates" / "generated").mkdir(parents=True)
+    (root / "_data" / "consensus_evidence.yml").write_text("evidence: [unclosed\n", encoding="utf-8")
+    bad_out = tmp / "vp_bad.yml"
+    bad = subprocess.run([sys.executable, str(script), "--root", str(root), "--output", str(bad_out)],
+                         capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=str(_REPO),
+                         timeout=300)
+    bad_written = vp.load(bad_out) if bad_out.exists() else None
+    check("G3-P6 an unreadable evidence store writes an EMPTY projection carrying the error and exits 0 "
+          "(rendered: fail closed; QA then errors)",
+          bad.returncode == 0 and bad_written is not None and bad_written.get("pages") == {}
+          and bool(bad_written.get("error")) and "::warning::" in bad.stdout, (bad.stdout + bad.stderr)[-300:])
+    ignored = (_REPO / ".gitignore").read_text(encoding="utf-8").splitlines()
+    order = {}
+    for wf_name in ("pages.yml", "davinci-archive-build-check.yml"):
+        wf = yaml.safe_load((_REPO / ".github" / "workflows" / wf_name).read_text(encoding="utf-8"))
+        steps = next(iter((wf.get("jobs") or {}).values())).get("steps") or [] if wf_name != "pages.yml" \
+            else (wf.get("jobs") or {}).get("build", {}).get("steps") or []
+        runs = [str(s.get("run") or "") for s in steps]
+        at = lambda needle: next((i for i, r in enumerate(runs) if needle in r), -1)  # noqa: E731
+        order[wf_name] = (at("pip install"), at("build_verdict_projection.py"), at("qa_patch_records.py"),
+                          at("jekyll build"))
+    check("G3-P7 pages.yml and the DaVinci archive build check build the projection after pip install, "
+          "BEFORE QA and BEFORE Jekyll; the projection is git-ignored",
+          "auxsays/_data/verdict_projection.yml" in ignored
+          and all(-1 < p < g < q < b for p, g, q, b in order.values()), str(order))
+
+
+# ------------------------------------------------------------------------ [S] the scope prints with the verdict
+
+_INCLUDE_RB = r"""
+require 'liquid'
+require 'json'
+module Shims
+  def relative_url(i) = "/" + i.to_s.sub(%r{\A/}, "")
+  def jsonify(i) = JSON.generate(i)
+  def where(input, prop, val) = Array(input).select { |x| x.is_a?(Hash) && x[prop].to_s == val.to_s }
+end
+Liquid::Template.register_filter(Shims)
+class JekyllInclude < Liquid::Tag
+  SYNTAX = /([\w.\/-]+)((\s+\w+\s*=\s*(?:"[^"]*"|'[^']*'|[\w.\[\]\/-]+))*)/
+  def initialize(name, markup, tokens)
+    super
+    m = markup.strip.match(SYNTAX) or raise Liquid::SyntaxError, "bad include: #{markup}"
+    @file = m[1]
+    @params = {}
+    (m[2] || "").scan(/(\w+)\s*=\s*("[^"]*"|'[^']*'|[\w.\[\]\/-]+)/) { |k, v| @params[k] = v }
+  end
+  def render(context)
+    path = File.join(context.registers[:include_root], @file)
+    raise Liquid::FileSystemError, "missing include #{@file}" unless File.exist?(path)
+    vals = {}
+    @params.each { |k, v| vals[k] = (v =~ /\A"(.*)"\z/m || v =~ /\A'(.*)'\z/m) ? $1 : context[v] }
+    partial = (context.registers[:cache] ||= {})[path] ||=
+      Liquid::Template.parse(File.read(path, encoding: "utf-8"))
+    context.stack { context["include"] = vals; partial.render!(context) }
+  end
+end
+Liquid::Template.register_tag("include", JekyllInclude)
+payload = JSON.parse(File.read(ARGV[0], encoding: "utf-8"))
+out = {}
+payload["cases"].each do |name, c|
+  begin
+    tpl = Liquid::Template.parse(c["template"])
+    out[name] = tpl.render!({ "site" => payload["site"], "item" => c["item"], "summary" => c["summary"] },
+                            registers: { include_root: payload["includes"] })
+  rescue => e
+    out[name] = "<<ERR #{e.class}: #{e.message}>>"
+  end
+end
+File.write(ARGV[1], JSON.generate(out), encoding: "utf-8")
+"""
+INCLUDE_OVERRIDES: dict = {}   # {include file name: mutated text}, set only by the surface mutants in [X]
+
+
+def render_includes(cases: dict, site: dict) -> dict | None:
+    ruby = shutil.which("ruby")
+    if not ruby:
+        return None
+    with tempfile.TemporaryDirectory() as td:
+        inc = Path(td) / "_includes"
+        shutil.copytree(_AUX / "_includes", inc)
+        for name, text in INCLUDE_OVERRIDES.items():
+            (inc / name).write_text(text, encoding="utf-8")
+        script, payload, out = Path(td) / "i.rb", Path(td) / "p.json", Path(td) / "o.json"
+        script.write_text(_INCLUDE_RB, encoding="utf-8")
+        payload.write_text(json.dumps({"cases": cases, "site": site, "includes": str(inc)}, default=str),
+                           encoding="utf-8")
+        proc = subprocess.run([ruby, str(script), str(payload), str(out)], capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=600)
+        if proc.returncode != 0 or not out.exists():
+            return {"__error__": (proc.stderr or "")[-400:]}
+        return json.loads(out.read_text(encoding="utf-8"))
+
+
+def _text(html: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html or "")).strip()
+
+
+ROW_T = "{% include patch-table-row.html item=item %}"
+FEED_T = "{% include patch-feed-summary.html item=item summary=summary %}@@{{ feed_summary_line }}@@"
+
+
+def check_surfaces() -> None:
+    """G3-S1..S3: every surface that prints a scoped verdict prints its scope, on the shipped corpus."""
+    c = corpus()
+    rows = c["projection"]["pages"]
+    scoped = [r for r in c["recs"] if vp.rendered_verdict(r, rows, LIFECYCLE["entries"])[1]]
+    site = {"data": {"verdict_projection": c["projection"], "patch_lifecycle": LIFECYCLE,
+                     "patch_verdicts": yaml.safe_load((_AUX / "_data" / "patch_verdicts.yml").read_text(encoding="utf-8"))}}
+    cases = {}
+    for i, r in enumerate(scoped):
+        item = dict(r, url=r.get("permalink"))
+        cases[f"row:{i}"] = {"template": ROW_T, "item": item, "summary": ""}
+        cases[f"feed:{i}"] = {"template": FEED_T, "item": item,
+                              "summary": str(r.get("update_consensus_summary") or "")}
+    # A stored summary that LAGS the policy (round 0's format) must still not lead the card.
+    drift = scoped[0] if scoped else {}
+    drift_v, drift_s = vp.rendered_verdict(drift, rows, LIFECYCLE["entries"]) if drift else ("", "")
+    cases["feed:drift"] = {"template": FEED_T, "item": dict(drift, url=drift.get("permalink")),
+                           "summary": f"{drift_v}: {drift.get('update_product')} has 53 user reports found."}
+    out = render_includes(cases, site) or {}
+    bad_rows, bad_feed, bad_store = [], [], []
+    drift_line = re.search(r"@@(.*?)@@", out.get("feed:drift", ""), re.S)
+    if not drift_line or not drift_line.group(1).startswith(f"{drift_v} {drift_s}: "):
+        bad_feed.append(("lagging stored summary", drift_line and drift_line.group(1)[:80]))
+    for i, r in enumerate(scoped):
+        verdict, scope = vp.rendered_verdict(r, rows, LIFECYCLE["entries"])
+        cell = re.search(r'<td data-label="Verdict">(.*?)</td>', out.get(f"row:{i}", ""), re.S)
+        if not cell or _text(cell.group(1)) != f"{verdict} {scope}":
+            bad_rows.append((r.get("permalink"), cell and _text(cell.group(1)), out.get(f"row:{i}", "")[:120]))
+        line = re.search(r"@@(.*?)@@", out.get(f"feed:{i}", ""), re.S)
+        if not str(r.get("update_consensus_summary") or "").strip():
+            # No stored summary (no reports): the card has no evidence line, so it prints no verdict.
+            if not line or line.group(1).strip():
+                bad_feed.append((r.get("permalink"), "a line without a stored summary", line and line.group(1)[:80]))
+        elif not line or not line.group(1).startswith(f"{verdict} {scope}: "):
+            bad_feed.append((r.get("permalink"), line and line.group(1)[:80]))
+        d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"])
+        stored = str(r.get("update_consensus_summary") or "")
+        if int(r.get("update_report_count") or 0) > 0 and \
+                (stored != pd.summary_line(d, r, int(r.get("update_report_count") or 0))
+                 or (line and line.group(1) != stored)):
+            bad_store.append((r.get("permalink"), stored[:60], line and line.group(1)[:60]))
+    check(f"G3-S1 every product/vendor table row prints its verdict WITH its scope ({len(scoped)} scoped pages: "
+          "WAIT, TEST FIRST and AVOID)", bool(scoped) and "__error__" not in out and not bad_rows,
+          str(bad_rows[:2])[:400] or str(out.get("__error__", ""))[:300])
+    check("G3-S2 every /updates/ feed card leads with the verdict and its scope, never the bare verdict",
+          bool(scoped) and not bad_feed, str(bad_feed[:2]))
+    check("G3-S3 each report-bearing scoped page's stored summary leads with the verdict and its scope, and is "
+          "exactly the feed card's line (lib/patch_decision.summary_line)", bool(scoped) and not bad_store,
+          str(bad_store[:2]))
+    lead = [r.get("permalink") for r in c["recs"] if int(r.get("update_report_count") or 0) > 0
+            and str(r.get("update_consensus_summary") or "").split(":", 1)[0].strip()
+            != pd.verdict_phrase(pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []),
+                                           lifecycle=LIFECYCLE["entries"]))]
+    check("G3-S4 every report-bearing record's stored summary opens with exactly the verdict phrase the "
+          "pages render (none opens with a bare verdict beside a count)", not lead, str(lead[:3]))
+    layout = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
+    home = (_AUX / "_layouts" / "aux-home.html").read_text(encoding="utf-8")
+    check("G3-S5 the patch page and the homepage row print the scope in the same statement as the verdict",
+          "<strong>{{ decision_label }}</strong>{% if decision_scope != '' %} <span class=\"update-decision-scope\">"
+          "{{ decision_scope }}</span>{% endif %}" in layout
+          and "Verdict: {{ decision_label }}{% if decision_scope != '' %} {{ decision_scope }}{% endif %}" in home, "")
 
 
 # ------------------------------------------------------------------------ [X] mutants
@@ -578,11 +1023,40 @@ def wrap_decide(transform):
     return swap(pd, "decide", mutated)
 
 
-def template_mutant(old: str, new: str):
-    text = GATE_PATH.read_text(encoding="utf-8")
-    assert text.count(old) == 1, old
-    mutated = text.replace(old, new)
-    return lambda: check_render_matrix(template=mutated)
+URL_RULE_GATE = """{%- assign pvg_row = nil -%}{%- assign pvg_row_rank = 99 -%}
+{%- capture pvg_urls -%}|{%- for pvg_src in pvg_record.accepted_report_sources -%}{{ pvg_src.source_url }}|{%- endfor -%}{%- endcapture -%}
+{%- for pvg_e in site.data.verdict_reasons.entries -%}
+  {%- assign pvg_e_version = pvg_e.update_version | append: '' | strip -%}
+  {%- assign pvg_e_build = pvg_e.target_build | append: '' | strip -%}
+  {%- if pvg_e.product_id == pvg_pid and pvg_e_version == pvg_version and pvg_e_build == pvg_build -%}
+    {%- assign pvg_ok = true -%}
+    {%- for pvg_ev in pvg_e.evidence -%}{%- assign pvg_k = '|' | append: pvg_ev.source_url | append: '|' -%}{%- unless pvg_urls contains pvg_k -%}{%- assign pvg_ok = false -%}{%- endunless -%}{%- endfor -%}
+    {%- if pvg_e.verdict == 'WAIT' -%}{%- assign pvg_r = 1 -%}{%- else -%}{%- assign pvg_r = 2 -%}{%- endif -%}
+    {%- if pvg_ok and pvg_r < pvg_row_rank -%}{%- assign pvg_row = pvg_e -%}{%- assign pvg_row_rank = pvg_r -%}{%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign pvg_row_verdict = pvg_row.verdict | default: '' | strip -%}
+{%- assign pvg_row_scope = pvg_row.scope | default: '' | strip -%}
+{%- assign pvg_row_body = pvg_row.reason | default: '' | strip -%}"""
+PROJECTION_READ = """{%- assign pvg_row = site.data.verdict_projection.pages[pvg_key] -%}
+{%- assign pvg_row_verdict = pvg_row.verdict | default: '' | strip -%}
+{%- assign pvg_row_scope = pvg_row.scope | default: '' | strip -%}
+{%- assign pvg_row_body = pvg_row.body | default: '' | strip -%}"""
+
+
+def weak_project(records, groups, reasons, lifecycle):
+    """The projection built with only F1 (every cited row counted, same URL): the rule round 0's gate
+    applied. It diverges from decide exactly where review 1's probes did."""
+    real = vr.support_problems
+
+    def f1_only(entry_, rows, recs):
+        return [p for p in real(entry_, rows, recs)
+                if "distinct counted reporter" not in p and "official confirmation" not in p]
+    vr.support_problems = f1_only
+    try:
+        return vp.project(records, groups, reasons, lifecycle)
+    finally:
+        vr.support_problems = real
 
 
 def check_mutations(tmp: Path) -> None:
@@ -593,12 +1067,19 @@ def check_mutations(tmp: Path) -> None:
     real_schema = vr.schema_errors
     real_body = pd.public_body
     real_add = qa.add
+    real_summary = pd.summary_line
 
     def tpl(old: str, new: str):
         """(mutate, restore) for the SHIPPED gate include, changed in memory only."""
         text = GATE_PATH.read_text(encoding="utf-8")
         assert text.count(old) == 1, old
         return swap(sys.modules[__name__], "TEMPLATE_OVERRIDE", text.replace(old, new))
+
+    def inc(name: str, old: str, new: str):
+        """(mutate, restore) for another shipped include, changed in a temp copy only."""
+        text = (_AUX / "_includes" / name).read_text(encoding="utf-8")
+        assert text.count(old) == 1, old
+        return swap(sys.modules[__name__], "INCLUDE_OVERRIDES", {name: text.replace(old, new)})
 
     qa_runs = iter(range(100))
     cases = [
@@ -634,9 +1115,9 @@ def check_mutations(tmp: Path) -> None:
          wrap_decide(lambda d, r, rs: D("WAIT", "R3") if r.get("severity") == "critical" else d)),
         ("X13 a second lifecycle entry is accepted", check_lifecycle,
          swap(vr, "MAX_LIFECYCLE_ENTRIES", 2)),
-        ("X14 the gate stops checking that the cited reports still count", check_render_matrix,
-         tpl("{%- unless pvg_urls contains pvg_key -%}{%- assign pvg_ok = false -%}{%- endunless -%}\n"
-             "      {%- assign pvg_n = pvg_n | plus: 1 -%}", "{%- assign pvg_n = pvg_n | plus: 1 -%}")),
+        ("X14 the gate trusts a stored label when the page has no projected row", check_render_matrix,
+         tpl("{%- assign gate_label = 'INSUFFICIENT DATA' -%}",
+             "{%- assign gate_label = pvg_record.update_decision_label | default: 'INSUFFICIENT DATA' -%}")),
         ("X15 QA reports an unsupported entry as an error", lambda: check_qa(tmp / f"x15-{next(qa_runs)}"),
          swap(qa, "add", lambda bucket, path, code, msg: real_add(
              bucket, path, "verdict_reasons_invalid" if code == "verdict_reason_unsupported" else code, msg))),
@@ -645,6 +1126,28 @@ def check_mutations(tmp: Path) -> None:
              " Pause updates if this machine is doing production work." if (r or {}).get("product_id") == WIN else ""))),
         ("X17 the gate words the security line differently from Python", check_render_matrix,
          tpl("recommends keeping supported systems updated.' -%}", "recommends installing it now.' -%}")),
+        # Review 1's two probes, as mutants: each restores one way the render gate failed open.
+        ("X18 (probe A1) the gate re-derives support from the cited URLs, round 0's rule, instead of reading "
+         "the projection", check_projection_probes, tpl(PROJECTION_READ, URL_RULE_GATE)),
+        ("X19 (probe A2) the projection is built with a weaker support rule than decide's",
+         check_projection_probes, swap(sys.modules[__name__], "PROJECT_OVERRIDE", weak_project)),
+        ("X20 QA ignores the projection a deploy built and checks only its own", lambda: check_qa(tmp / f"x20-{next(qa_runs)}"),
+         swap(vp, "load", lambda path: None)),
+        ("X21 QA's unsupported warning claims a fall-back to INSUFFICIENT DATA it does not make (round 0's text)",
+         lambda: check_qa(tmp / f"x21-{next(qa_runs)}"),
+         swap(qa, "add", lambda bucket, path, code, msg: real_add(
+             bucket, path, code, re.sub(r"renders .*?;", "renders 'INSUFFICIENT DATA';", msg)
+             if code == "verdict_reason_unsupported" else msg))),
+        ("X22 a table row prints the verdict without its scope", check_surfaces,
+         inc("patch-table-row.html",
+             "{% if row_verdict_scope != '' %} <span class=\"patch-verdict-scope\">{{ row_verdict_scope }}</span>{% endif %}",
+             "")),
+        ("X23 the feed card prints the stored summary as is, so a lagging one leads with a bare verdict",
+         check_surfaces, inc("patch-feed-summary.html", "{%- if feed_summary_line != '' and gate_body != '' -%}",
+                             "{%- if false -%}")),
+        ("X24 the writer's summary goes back to a bare verdict beside a count", check_surfaces,
+         swap(pd, "summary_line", lambda d, r, n, fallback="": real_summary(d, r, n, fallback).replace(
+             pd.verdict_phrase(d) + ":", d.verdict + ":", 1))),
     ]
     for label, body, (mutate, restore) in cases:
         run_mutant(label, body, mutants, mutate=mutate, restore=restore)
@@ -673,6 +1176,7 @@ def run() -> int:
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
         (tmp / "q").mkdir()
+        (tmp / "p").mkdir()
         print("\n[D] the decision procedure")
         check_decisions()
         check_corpus_guard()
@@ -683,11 +1187,17 @@ def run() -> int:
         print("\n[W] wording")
         check_wording()
         check_wording_writer()
-        print("\n[Q] QA severities")
+        print("\n[Q] QA: severities, and what renders against what the authority decides")
         check_qa(tmp / "q")
         print("\n[R] the Liquid gate renders what Python decides")
         check_render_matrix()
         check_render_corpus()
+        print("\n[P] one authority: the projection, review 1's probes, the builder")
+        check_projection()
+        check_projection_probes()
+        check_projection_builder(tmp / "p")
+        print("\n[S] the scope prints with the verdict on every surface")
+        check_surfaces()
         print("\n[X] mutants, each caught by a named check")
         check_mutations(tmp)
     print()

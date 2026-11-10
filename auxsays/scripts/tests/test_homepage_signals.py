@@ -858,8 +858,9 @@ PILOT = {"evidence_state": "pilot_sample", "intelligence_stage": "pilot"}
 # GROWTH-3: a STORED label no longer decides the verdict anywhere -- the shared gate decides it from
 # the record's facts and the two reviewed fact files -- so every case whose only input is a stored
 # WAIT / TEST FIRST now prints INSUFFICIENT DATA on the page AND on the row. Three cases carry the
-# facts that do decide: Microsoft's security classification, a supported reason entry, and the same
-# entry with one cited report gone (it must fail closed).
+# facts that do decide: Microsoft's security classification, a supported reason entry (the deploy's
+# verdict projection gives it a row), and the same entry with one cited report no longer counted (the
+# authority gives no row, so it must fail closed).
 REASON_URLS = ["https://reports.test/r1", "https://reports.test/r2"]
 VERDICT_FACTS = {
     "verdict_reasons": {"schema_version": 1, "entries": [{
@@ -875,6 +876,24 @@ VERDICT_FACTS = {
         "new_in_this_version": False, "reviewed_at": "2026-11-10", "basis": "test"}]},
     "patch_lifecycle": {"schema_version": 1, "entries": []},
 }
+
+
+def _verdict_projection() -> dict:
+    """The projection a deploy would build for these cases: lib/verdict_projection over the cases'
+    COUNTED rows. The gate prints only this; it never reads the reason file (review 1, D2). The
+    withdrawn case has one of its two cited rows counted, so the authority gives it no row."""
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from lib import verdict_projection  # noqa: PLC0415
+    rows = [{"id": "r1", "source_url": REASON_URLS[0], "report_text_excerpt": "Installing it fails at 40%."},
+            {"id": "r2", "source_url": REASON_URLS[1], "report_text_excerpt": "The installer stops with an error."}]
+    pages = [{"product_id": f"v-{n}", "update_version": "1.0", "update_report_count": c,
+              "permalink": f"/updates/t/v-{n}/"} for n, c in (("reasoned", 2), ("reason-withdrawn", 1))]
+    counted = {("v-reasoned", "1.0", ""): rows, ("v-reason-withdrawn", "1.0", ""): rows[:1]}
+    return verdict_projection.project(pages, counted, VERDICT_FACTS["verdict_reasons"]["entries"], [])[0]
+
+
+VERDICT_FACTS["verdict_projection"] = _verdict_projection()
 ROW_SCOPE = {"reasoned": "when installing it"}
 VERDICT_CASES = {
     "stored-wait": (dict(update_decision_label="WAIT", update_report_count=5, **PILOT, **SENTIMENT),

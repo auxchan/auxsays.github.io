@@ -183,28 +183,29 @@ def expected_choices(ordered: list[dict], product_id: str) -> list[dict]:
 
 
 # GROWTH-3: the verdict is the policy's (lib/patch_decision.decide), which every surface renders
-# through _includes/patch-verdict-gate.html. The expectation is computed in Python from the same two
-# committed fact files, with the gate's render-time support rule (every cited report still among the
-# record's accepted sources), so this check pins the template to the authority.
+# through _includes/patch-verdict-gate.html. The gate prints WAIT / TEST FIRST only from the deploy's
+# verdict projection (lib/verdict_projection), so the page is rendered WITH the projection this tree
+# builds, and the expectation -- verdict AND scope -- is the authority's own, from the counted evidence.
 import yaml  # noqa: E402
 
+sys.path.insert(0, str(AUX / "scripts"))
+from lib import verdict_projection  # noqa: E402
+
+_PROJECTION, _UNSUPPORTED, _PROBLEMS = verdict_projection.build(AUX)
 VERDICT_FACTS = {
-    "verdict_reasons": yaml.safe_load((AUX / "_data" / "verdict_reasons.yml").read_text(encoding="utf-8")),
     "patch_lifecycle": yaml.safe_load((AUX / "_data" / "patch_lifecycle.yml").read_text(encoding="utf-8")),
+    "verdict_projection": _PROJECTION,
 }
+
+
+def expected_phrase(rec: dict) -> tuple[str, str]:
+    """(verdict, scope) the authority gives this record, as every surface must print it."""
+    return verdict_projection.rendered_verdict(rec, _PROJECTION["pages"], VERDICT_FACTS["patch_lifecycle"]["entries"])
 
 
 def expected_verdict(rec: dict) -> str:
     """The policy's verdict for this record, from the authority itself."""
-    sys.path.insert(0, str(AUX / "scripts"))
-    from lib import patch_decision, verdict_reasons  # noqa: PLC0415
-    urls = {str(s.get("source_url") or "") for s in rec.get("accepted_report_sources") or []}
-    ident = verdict_reasons.record_identity(rec)
-    valid = [e for e in VERDICT_FACTS["verdict_reasons"]["entries"]
-             if verdict_reasons.reason_identity(e) == ident and e.get("evidence")
-             and all(str(ev.get("source_url")) in urls for ev in e["evidence"])]
-    return patch_decision.decide(rec, valid_reasons=valid,
-                                 lifecycle=VERDICT_FACTS["patch_lifecycle"]["entries"]).verdict
+    return expected_phrase(rec)[0]
 
 
 class TagCollector(HTMLParser):
@@ -254,7 +255,7 @@ def run() -> int:
     check("P4 the payload has one entry per tracked product",
           len(entries) == len(products), f"{len(entries)} entries vs {len(products)} products")
 
-    allowed = {"id", "name", "hist", "href", "ver", "date", "verdict", "rank", "ev", "n",
+    allowed = {"id", "name", "hist", "href", "ver", "date", "verdict", "scope", "rank", "ev", "n",
                "checked", "mon", "oa", "os", "recs", "more", "split", "plat"}
     extra = sorted({k for e in entries for k in e} - allowed)
     check("P5 the payload carries only dashboard fields, not whole records", not extra, str(extra))
@@ -285,11 +286,11 @@ def run() -> int:
         if match is None:
             wrong_record.append(f"{pid}: {got.get('href')} not among {[w.get('url') for w in wants]}")
             continue
-        if str(got.get("verdict") or "") != expected_verdict(match):
-            wrong_verdict.append(f"{pid}: {got.get('verdict')!r} != {expected_verdict(match)!r}")
+        if (str(got.get("verdict") or ""), str(got.get("scope") or "")) != expected_phrase(match):
+            wrong_verdict.append(f"{pid}: {(got.get('verdict'), got.get('scope'))!r} != {expected_phrase(match)!r}")
     check(f"R1 each product shows its newest dated non-archived record ({len(products)} products)",
           not wrong_record, "; ".join(wrong_record[:3]))
-    check("R2 the verdict matches the shared patch-table derivation",
+    check("R2 the verdict AND its scope match the authority (the gate's projection)",
           not wrong_verdict, "; ".join(wrong_verdict[:3]))
 
     archived_shown = [e["id"] for e in with_records
@@ -346,7 +347,8 @@ def run() -> int:
     # checks below were gated on `len(rec) == 5` and quietly began measuring an empty list -- IV2
     # passed over nothing at all. An exact width is what turned that into a visible failure.
     # 11 -> 12: rec[11] says whose release notes a record holds, for platform-split products (AUX-050).
-    REC_WIDTH = 12
+    # 12 -> 13: rec[12] is the verdict's scope, printed beside rec[5] (GROWTH-3 review 1, D1).
+    REC_WIDTH = 13
     bad_shape, unsorted, over_cap, bad_more = [], [], [], []
     build_aware, beta_flagged = [], []
     for entry in entries:
@@ -362,7 +364,7 @@ def run() -> int:
                     and isinstance(rec[5], str) and rec[5]
                     and isinstance(rec[6], int) and isinstance(rec[7], int)
                     and isinstance(rec[8], str) and isinstance(rec[9], int)
-                    and rec[10] in (0, 1)):
+                    and rec[10] in (0, 1) and isinstance(rec[12], str)):
                 bad_shape.append(f"{entry.get('id')}: {rec!r}")
                 break
         well_formed = [r for r in recs if isinstance(r, list) and len(r) == REC_WIDTH]
@@ -499,9 +501,9 @@ def run() -> int:
             if source is None:
                 continue
             reached += 1
-            want = expected_verdict(source)
-            if rec[5] != want:
-                verdict_drift.append(f"{entry.get('id')} {rec[0]}: {rec[5]!r} != {want!r}")
+            want, want_scope = expected_phrase(source)
+            if (rec[5], rec[12]) != (want, want_scope):
+                verdict_drift.append(f"{entry.get('id')} {rec[0]}: {(rec[5], rec[12])!r} != {(want, want_scope)!r}")
             if rec[7] != int(source.get("update_report_count") or 0):
                 count_drift.append(f"{entry.get('id')} {rec[0]}: {rec[7]}")
             want_rank, key = 99, str(rec[5]).upper()
@@ -518,8 +520,28 @@ def run() -> int:
 
     check("UP1 the per-release checks actually reached the records they judge",
           reached > 150, f"matched {reached} records to the corpus")
-    check("UP2 every release carries the verdict the shared derivation gives it",
+    check("UP2 every release carries the verdict AND scope the authority gives it",
           not verdict_drift, "; ".join(verdict_drift[:3]))
+    # The scoped OBS pages never reach THIS suite's payload: their release notes contain '---', which
+    # the corpus loader above splits on, so it skips them (the Windows and Acrobat scoped pages are
+    # older than the newest 24). So the carriage is proven on the real page with OBS 32.2.2, read with
+    # an anchored front-matter match, made the newest OBS record: the card's verdict and its release
+    # step must both carry the scope.
+    obs_text = (GENERATED / "2026-08-14-obs-studio-32-2-2.md").read_text(encoding="utf-8")
+    obs_rec = yaml.safe_load(re.match(r"---\r?\n(.*?)\r?\n---\r?\n", obs_text, re.S).group(1))
+    obs_rec = dict(obs_rec, url=str(obs_rec.get("permalink") or ""), update_status="")
+    obs_322 = str(obs_rec.get("update_published_at") or "")
+    obs_scoped = [r for r in records if not (r.get("product_id") == "obs-studio"
+                                             and str(r.get("update_published_at") or "") >= obs_322)] + [obs_rec]
+    _ok2, html2 = render_page(obs_scoped, products)
+    m2 = re.search(r'<script type="application/json" id="patch-stack-data">(.*?)</script>', html2, re.S)
+    obs2 = next((e for e in (json.loads(m2.group(1)) if m2 else []) if e.get("id") == "obs-studio"), {})
+    rec2 = next((r for r in obs2.get("recs") or [] if r[0] == "32.2.2"), [])
+    check("UP2b a scoped verdict is carried WITH its scope: the card's verdict and the release's rec[12] "
+          "(OBS 32.2.2 made current)",
+          (obs2.get("verdict"), obs2.get("scope")) == ("WAIT", "if you use macOS 27.2")
+          and len(rec2) == REC_WIDTH and (rec2[5], rec2[12]) == ("WAIT", "if you use macOS 27.2"),
+          f"{(obs2.get('verdict'), obs2.get('scope'))} {rec2[5:6] + rec2[12:13] if rec2 else rec2}")
     check("UP3 every release carries its own report count", not count_drift, "; ".join(count_drift[:3]))
     check("UP4 every release carries the rank its verdict maps to", not rank_drift, "; ".join(rank_drift[:3]))
     check("UP5 the official-notes flag uses the same pollution gate as the patch page",
@@ -863,7 +885,7 @@ def run() -> int:
     print("\n[PS] a release documented for another platform is never offered as an update")
 
     def prec(version, date, platform="", beta=0):
-        return [version, "", date, f"/u/{version}", beta, "", 1, 0, "", 0, 1, platform]
+        return [version, "", date, f"/u/{version}", beta, "", 1, 0, "", 0, 1, platform, ""]
 
     def pent(version, date):
         return {"v": version, "b": "", "d": date, "u": f"/u/{version}"}
@@ -1012,6 +1034,16 @@ def run() -> int:
     check("PS-19 a platform-scoped target is labelled by its platform, not as the newest tracked",
           html_card is not None and "<dt>Latest Windows release notes</dt>" in html_card
           and "UPDATE AVAILABLE" in html_card, (html_card or "")[:400])
+    scoped_card = render_card(dict(card_entry, verdict="WAIT", scope="if you use macOS 27.2", rank=1), {})
+    check("PS-21 a card prints its verdict WITH its scope (review 1, D1)",
+          scoped_card is not None and '>WAIT</span> <span class="patch-verdict-scope">if you use macOS 27.2</span>'
+          in scoped_card, (scoped_card or "node unavailable")[:300])
+    step_fn = js.split("const stepHtml", 1)[1].split("const pathHtml", 1)[0]
+    attention_fn = js.split("const attentionOf", 1)[1].split("const esc", 1)[0]
+    check("PS-22 every upgrade-path step and every attention reason prints the scope with the verdict",
+          "verdictHtml(rec[5], rec[12], rec[6])" in step_fn
+          and "scopedVerdict(entry.verdict, entry.scope)" in attention_fn
+          and "${esc(rec[5])}" not in step_fn, step_fn[:200])
     unknown_card = render_card(dict(card_entry, recs=[prec("2.0.9", "2026-08-12", "macos"),
                                                       prec("3.2.10", "2026-08-05", "windows")]),
                                {"elgato-wave-link": pent("3.2.10", "2026-08-05")})

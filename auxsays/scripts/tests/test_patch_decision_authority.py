@@ -1338,7 +1338,30 @@ def synthetic_content(box: str, *, verdicts: int = 1, label: str = "WAIT") -> st
             + '<p class="update-decision-recommendation">Hold this build for now.</p></div>')
 
 
+def with_projection(cases: dict) -> dict:
+    """Give each case's site the verdict projection a deploy would build for its page: the gate
+    prints WAIT / TEST FIRST only from that (GROWTH-3 review 1, D2). The page's accepted sources
+    stand for its COUNTED rows, one row per cited source, so the authority -- not a template rule --
+    decides which entry the page's evidence supports."""
+    from lib import verdict_projection, verdict_reasons  # noqa: PLC0415
+    for case in cases.values():
+        page = case["page"]
+        if page.get("update_entry") is not True:
+            continue
+        urls = {str(s.get("source_url") or "") for s in page.get("accepted_report_sources") or []}
+        rows = [{"id": item["id"], "source_url": item["source_url"],
+                 "report_text_excerpt": f"Report at {item['source_url']}"}
+                for e in SEARCH_REASONS["entries"] for item in e["evidence"] if item["source_url"] in urls]
+        case["site"]["data"]["verdict_projection"] = verdict_projection.project(
+            [page], {verdict_reasons.record_identity(page): rows}, SEARCH_REASONS["entries"], [])[0]
+    return cases
+
+
 def search_cases() -> dict:
+    return with_projection(_search_cases())
+
+
+def _search_cases() -> dict:
     live = dict(live_axes(), update_report_count=40, confirmed_patch_specific_report_count=40)
     newer_b = windows_page(url="/updates/microsoft/microsoft-windows-11/25h2/26200.7999/",
                            target_build="26200.7999", target_kb="KB5199999", update_type="2026-03 B",
