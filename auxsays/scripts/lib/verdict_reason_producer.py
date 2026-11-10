@@ -552,9 +552,10 @@ def windows_install_row(row: Mapping[str, Any], page: Mapping[str, Any]) -> dict
       * the row must name this update (`_page_mentions`: the KB, never the build alone);
       * denied install wording refuses the whole row (`_INSTALL_NEGATION_RX`);
       * "check for updates" and "rolls back to <build>" are not install failures (`_NOT_AN_INSTALL_RX`);
-      * where the row names other updates too, some install wording must sit nearest to this one
-        (a .NET update failing beside this one is not this one failing);
-      * error codes: only those nearest to this update (all of them when it is the only one named)."""
+      * where the row names other updates too, some install wording must be about this one, read as a
+        list (`_owner_is_page`): a .NET update failing beside this one is not this one failing;
+      * error codes: only those about this update, read the same way (all of them when it is the only
+        update named)."""
     text = _txt(row)
     if _INSTALL_NEGATION_RX.search(text):
         return {"ok": False, "why": "the row denies an install failure", "codes": []}
