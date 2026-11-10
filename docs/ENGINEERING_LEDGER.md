@@ -4879,22 +4879,53 @@ projection and QA alike. `build_verdict_projection.py` runs the producer at depl
 LOW-1..3 (AUX-094): the page key strips only what Liquid strips and a Unicode-padded identity is a publication
 error, release types, KB numbers and dates are ASCII-only, and a lifecycle build no record carries is an error.
 
-**Measured** Over the corpus: 48 candidates on 36 pages (24 install TEST FIRST, 21 vendor WAIT, 3 vendor TEST FIRST).
-Calibration: 9 of 9 install verdicts in the 66 with 0 false fires; 3 of 4 reviewed install entries reproduced
-(KB5086672 missed: one row says "error installing", one is German); no fire on the other 18 sampled pages. Of the
-six named pages, 24H2 26100.9550, 26H1 28000.2804, 26H1 28000.3086 and OBS 31.1.0 qualify; OBS 32.0.3 (a lag and a
-stale mixer entry) and OBS 32.2.2's #13862 (no version named; a recoverable profile problem) do not. Switch OFF: a
-deploy-order build equals main's on every page. Switch ON (test-only, staged copy): 33 projection rows change, QA
-`--publish-strict` has 0 errors, and every surface prints the candidate's scoped verdict, equal to `decide`.
+Review 1 found two contract holes with the switch ON, both fixed (producer version 2). (1) An ambiguous scope did
+not fail closed: `_scope_ok` was the "if/when/for" pattern alone, so "for a small number of devices", "for all
+editions of Windows 11", "if you use the update" and "if you use OBS" passed, and plausible vendor wording drafted a
+WAIT that covered everyone. `scope_problem` now needs a SETUP word (not a quantifier, a population noun, an edition,
+the update, a generic "application"/"program", a generic activity or the product's own name); otherwise the
+statement is an ambiguous scope and goes to the review queue. Windows tries Microsoft's "This issue affects ...",
+then "occurring in ...", then the title subject, and takes the first that names a setup. (2) The install class
+counted rows that do not report THIS update failing to install: a row denying it ("not that the update fails to
+install"), rows naming only a build (a rollback target, the update scan, a device's current build; 4 of the 5
+build-only cited rows were wrong) and a .NET update failing beside the page's KB, whose error code was listed.
+`windows_install_row` needs the page's KB (or "update/upgrade to <build>"), refuses denied wording, blanks "check
+for updates" and "rolls back to <build>", reads a row that names several updates as a list (what follows a name is
+that update's) and takes error codes from this update only. Also: an OBS version counts only where the note names
+it as defective ("Fixed a crash in V", "present in V"), never as where a file was created; the vendor "Other
+setups: no problem is confirmed" line prints only where vendor reasons stand alone on a page with no report.
 
-**Tests** `test_verdict_reason_producer.py` (34: VRP-V1..V7, I1..I6, P1, N1/N2, S0..S5, C1/C2; mutants VX1..VX10:
+**Measured** Over the corpus (producer version 2): 47 candidates on 36 pages (23 install TEST FIRST, 21 vendor WAIT,
+3 vendor TEST FIRST). Review 1's fixes removed exactly its six named rows from the install counts plus two rows
+whose install failure belongs to another update (26200.8457 loses 2 of 7, 26200.9550 its only second reporter and
+so its install candidate); the vendor class is unchanged. Calibration: 9 of 9 install verdicts in the 66 with 0
+false fires, now with all 25 cited Windows rows inside the reader's install clusters (was 25 of 27); 3 of 4 reviewed
+install entries reproduced (KB5086672 missed: one row says "error installing", one is German); no fire on the
+other 18 sampled pages. Of the six named pages, 24H2 26100.9550, 26H1 28000.2804, 26H1 28000.3086 and OBS 31.1.0
+qualify; OBS 32.0.3 (a lag and a stale mixer entry) and OBS 32.2.2's #13862 (no version named; a recoverable
+profile problem) do not. Switch OFF: a deploy-order build equals main's on every page (1,845 files, masked tree
+equal, projection byte-identical). Switch ON (test-only, staged copy): 33 projection rows change (14 security pages
+keep SECURITY UPDATE and gain a panel, 10 TEST FIRST, 9 WAIT), QA `--publish-strict` has 0 errors and 28
+`verdict_policy_drift` warnings, and every surface prints the candidate's scoped verdict, equal to `decide`. With
+review 1's probes added (a negated install pair, "a small number of devices", an OBS fix about OBS itself, "created
+in 31.0.4") the projection is byte-identical to plain ON: none of them drafts a verdict; two go to the review queue.
+
+**Tests** `test_verdict_reason_producer.py` (51: VRP-V1..V10, I1..I9, P1, N1/N2, S0..S5, C1/C2; mutants VX1..VX21:
 severity gate, exact version, scope, switch default, network call, independence gate, threshold, Acrobat product
-check, install WAIT, placeholder URLs); `test_growth3_verdict_policy.py` 112 -> 124 (G3-L6, Q10, Q11, R8; R4j pins
-MB1/MB2; X38..X45).
+check, install WAIT, placeholder URLs, and review 1's setup words, product name, OBS "created in V", Windows lag,
+vendor other-setups line, install denial, build alone, update scan / rollback, another update's failure, codes
+from the whole row, the near-identical-text cue; V9 carries the reviewer's probe statements, I7 six real cited rows
+frozen as negatives, I9 the DUPLICATES.md L1 and N2 pairs); `test_growth3_verdict_policy.py` 112 -> 124 (G3-L6,
+Q10, Q11, R8; R4j pins MB1/MB2; X38..X45).
 
 **Why deferred** Public automatic activation needs the owner's approval of that transition (AUTH_V2_35 D-A). The
 in-sample precision is partly circular: the install rules were written after reading the 66 and the labels apply
-the seeded standard.
+the seeded standard. Still open before activation: Amendment A3's strict install grouping (a shared code or stage;
+today different codes are one problem, A1's reading, which was a coordinator interpretation, not owner wording);
+an independence cue for a reworded cross-post (a shared distinctive word sequence) and a gate that compares every
+pair, not only kept rows; the record writers reading the producer's reasons; Windows scopes that are broader than
+Microsoft's text ("domain-joined devices" for "Credential Guard protected machine accounts"); a security panel
+that shows only its head reason; the rights posture for quoting Microsoft text (K1).
 
 **Current impact** None published: with the switch OFF every page renders exactly as before; the candidates are
 visible only in the deploy artifact.
@@ -4902,8 +4933,9 @@ visible only in the deploy artifact.
 **Revisit trigger** The owner approves public auto-activation, or an out-of-sample reading of new candidates.
 
 **Work that this item must not block** Reviewed reason entries, the lifecycle exception, collection and evidence
-work. On activation the stored summaries of candidate pages lag the page (a `verdict_policy_drift` warning until
-the next promotion); every surface already prints the gate.
+work. On activation the stored summaries of candidate pages lag the page, and that `verdict_policy_drift` warning
+does NOT clear at the next promotion: the record writers (`apply_consensus_to_records.py`,
+`build_consensus_from_evidence.py`) read reviewed reasons only. Every surface already prints the gate.
 
 ---
 
