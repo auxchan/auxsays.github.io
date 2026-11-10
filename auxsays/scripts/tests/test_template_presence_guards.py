@@ -700,7 +700,19 @@ def section_pv() -> None:
                 if fnmatch.fnmatchcase(rel, pat) or rel.startswith(pat)]
     check("PV8 Jekyll publishes the page: no exclude pattern in _config.yml matches it", not excluded, str(excluded))
     js = JS_PATH.read_text(encoding="utf-8")
-    sends = [w for w in ("fetch(", "XMLHttpRequest", "sendBeacon", "gtag(", "dataLayer") if w in js]
+    # G36-02: the paged Patch Feed reads its own other pages when a visitor searches or filters, so the
+    # script makes exactly one kind of request: a GET of this site's public feed pages, built only from
+    # the pager's same-origin links (origin + path, no query), without cookies. It carries nothing of
+    # the visitor's, so "kept only in your browser" still holds. Any other request is a send.
+    sends = [w for w in ("XMLHttpRequest", "sendBeacon", "gtag(", "dataLayer") if w in js]
+    loader_call = "otherPageUrls.map((url) => fetch(url, { credentials: 'omit' })"
+    urls_stmt = js.split("const otherPageUrls = ", 1)[1].split(";", 1)[0] if "const otherPageUrls = " in js else ""
+    feed_fetch_only = (js.count("fetch(") == 1 and loader_call in js
+                       and "a[data-feed-page-link]" in urls_stmt
+                       and "link.origin === window.location.origin" in urls_stmt
+                       and ".map((link) => link.origin + link.pathname)" in urls_stmt)
+    if not feed_fetch_only:
+        sends.append(f"fetch( x{js.count('fetch(')} outside the same-origin, cookie-less feed-page loader")
     check("PV9 what the notice says stays in the browser does: the site script sends nothing anywhere",
           "localStorage" in js and not sends, str(sends))
 

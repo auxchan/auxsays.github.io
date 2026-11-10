@@ -9,6 +9,35 @@ layout: aux-base
 {% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
 {% assign current_pages = update_pages | where_exp: "item", "item.update_status != 'archived' and item.feed_hidden != true" %}
 {% assign archived_pages = update_pages | where: "update_status", "archived" %}
+{%- comment -%}
+  PAGING (G36-02). The feed is one ordered list -- the current records newest first, then the
+  archived ones -- cut into pages of page.feed_page_size cards (updates/index.md). /updates/ is page
+  1; _plugins/patch_feed_pages.rb adds /updates/page/2/ onward with page.feed_page set, counting the
+  same records this list holds. One page used to carry every card: 4.3 MB, more than half of it past
+  the 2 MB Googlebot reads. Every page links every other one with a plain anchor below, and the
+  feed controls bring the other pages' cards in when a visitor searches, filters or sorts
+  (assets/js/auxsays.js, Patch Feed controls), so no record is reachable only through script.
+{%- endcomment -%}
+{%- assign feed_archived_listed = archived_pages | where_exp: "item", "item.feed_hidden != true" -%}
+{%- assign feed_page_size = page.feed_page_size | default: 100 | plus: 0 -%}
+{%- assign feed_page = page.feed_page | default: 1 | plus: 0 -%}
+{%- assign feed_current_count = current_pages.size -%}
+{%- assign feed_total = feed_current_count | plus: feed_archived_listed.size -%}
+{%- assign feed_pages = feed_total | plus: feed_page_size | minus: 1 | divided_by: feed_page_size -%}
+{%- if feed_pages < 1 -%}{%- assign feed_pages = 1 -%}{%- endif -%}
+{%- assign feed_start = feed_page | minus: 1 | times: feed_page_size -%}
+{%- assign feed_end = feed_start | plus: feed_page_size -%}
+{%- if feed_end > feed_total -%}{%- assign feed_end = feed_total -%}{%- endif -%}
+{%- assign feed_current_limit = 0 -%}
+{%- if feed_start < feed_current_count -%}
+  {%- assign feed_current_stop = feed_end -%}
+  {%- if feed_current_stop > feed_current_count -%}{%- assign feed_current_stop = feed_current_count -%}{%- endif -%}
+  {%- assign feed_current_limit = feed_current_stop | minus: feed_start -%}
+{%- endif -%}
+{%- assign feed_archive_offset = feed_start | minus: feed_current_count -%}
+{%- if feed_archive_offset < 0 -%}{%- assign feed_archive_offset = 0 -%}{%- endif -%}
+{%- assign feed_archive_limit = feed_end | minus: feed_current_count | minus: feed_archive_offset -%}
+{%- if feed_archive_limit < 0 -%}{%- assign feed_archive_limit = 0 -%}{%- endif -%}
 
 <section class="patch-shell">
   <section class="panel patch-hero reveal-up">
@@ -16,9 +45,10 @@ layout: aux-base
     <h1 class="patch-title">Patch Feed</h1>
     <p class="patch-subtitle">Official notes first. Patch-specific user reports second. Track what changed, what is official-source only, what has user reports, and which creator-critical tools deserve active monitoring.</p>
     <p class="patch-methodology-link"><a href="{{ '/updates/methodology/' | relative_url }}">Read the AUXSAYS methodology →</a></p>
+    {% if feed_page > 1 %}<p class="patch-page-note">Page {{ feed_page }} of {{ feed_pages }}: patches {{ feed_start | plus: 1 }}–{{ feed_end }} of {{ feed_total }}. <a href="{{ '/updates/' | relative_url }}">Latest patches and the Company Radar →</a></p>{% endif %}
   </section>
 
-  {% if notification_items and notification_items.size > 0 %}
+  {% if notification_items and notification_items.size > 0 and feed_page == 1 %}
   <section class="panel patch-notify reveal-up reveal-delay-1">
     <div class="eyebrow">Status change alerts</div>
     <div class="patch-notify-list">
@@ -137,7 +167,7 @@ layout: aux-base
     </div>
   </section>
 
-  {% if patch_companies and patch_companies.size > 0 %}
+  {% if patch_companies and patch_companies.size > 0 and feed_page == 1 %}
   <section class="panel patch-source-radar reveal-up reveal-delay-1" id="patch-source-radar">
     <div class="patch-source-radar-head">
       <div>
@@ -225,18 +255,20 @@ layout: aux-base
       <h2>Your watchlist is empty.</h2>
       <p>Choose the software you actually use and AUXSAYS will show its patch intelligence first.
         Use the <strong>Watch product</strong> control on any product below, or on a product page.</p>
-      <a class="patch-source-link patch-source-link--primary" href="#patch-source-grid">Browse tracked software →</a>
+      <a class="patch-source-link patch-source-link--primary" href="{{ '/updates/' | relative_url }}#patch-source-grid">Browse tracked software →</a>
     </div>
     <div data-watchlist-empty="no-matches" hidden>
       <h2>No current patches for your watched products.</h2>
       <p>Nothing new is affecting the products you watch. Clear the <strong>My Watchlist</strong>
         filter to see every tracked patch, or add more products.</p>
-      <a class="patch-source-link patch-source-link--primary" href="#patch-source-grid">Add more software →</a>
+      <a class="patch-source-link patch-source-link--primary" href="{{ '/updates/' | relative_url }}#patch-source-grid">Add more software →</a>
     </div>
   </section>
 
+  <p class="patch-feed-status" data-feed-status role="status" hidden></p>
+
   <section class="patch-feed patch-feed--current reveal-up" id="patch-feed">
-    {% for item in current_pages %}
+    {% for item in current_pages limit: feed_current_limit offset: feed_start %}
       {% assign it_feed_title = item.update_feed_title | default: '' | strip %}
       {% assign it_product = item.update_product | default: '' | strip %}
       {% assign it_version = item.update_version | default: '' | strip %}
@@ -327,14 +359,14 @@ layout: aux-base
     {% endfor %}
   </section>
 
-  <section class="patch-archive-wrap reveal-up reveal-delay-2" id="patch-archive-wrap">
+  <section class="patch-archive-wrap reveal-up reveal-delay-2" id="patch-archive-wrap"{% if feed_archive_limit == 0 %} hidden{% endif %}>
     <div class="section-head section-head--archive">
       <div class="eyebrow">Archive</div>
       <h2>Previous versions still available</h2>
       <p>Older updates stay public for research, rollback context, and documentary/reference use.</p>
     </div>
     <div class="patch-feed patch-feed--archive" id="patch-archive-feed">
-      {% for item in archived_pages %}
+      {% for item in feed_archived_listed limit: feed_archive_limit offset: feed_archive_offset %}
         {% assign it_feed_title = item.update_feed_title | default: '' | strip %}
         {% assign it_product = item.update_product | default: '' | strip %}
         {% assign it_version = item.update_version | default: '' | strip %}
@@ -426,6 +458,26 @@ layout: aux-base
       {% endfor %}
     </div>
   </section>
+
+  {%- comment -%}
+    Plain anchors, server-rendered on every page: this list is how a crawler (or a reader without
+    script) reaches every page of the feed, and how the feed controls find the pages to search.
+  {%- endcomment -%}
+  {% if feed_pages > 1 %}
+  <nav class="panel patch-pagination" id="patch-pagination" aria-label="Patch Feed pages" data-feed-pages data-feed-total="{{ feed_total }}">
+    <p class="patch-pagination-summary">Page {{ feed_page }} of {{ feed_pages }}: patches {{ feed_start | plus: 1 }}–{{ feed_end }} of {{ feed_total }}, newest first, then the archive.</p>
+    <ol class="patch-chips patch-pagination-list">
+      {%- for feed_n in (1..feed_pages) -%}
+      {%- if feed_n == 1 -%}{%- assign feed_href = '/updates/' | relative_url -%}{%- else -%}{%- capture feed_href -%}{{ '/updates/page/' | relative_url }}{{ feed_n }}/{%- endcapture -%}{%- endif -%}
+      <li><a class="patch-chip{% if feed_n == feed_page %} is-active{% endif %}" href="{{ feed_href }}" data-feed-page-link="{{ feed_n }}"{% if feed_n == feed_page %} aria-current="page"{% endif %}>{{ feed_n }}</a></li>
+      {%- endfor -%}
+    </ol>
+    <p class="patch-pagination-step">
+      {%- if feed_page > 1 -%}{%- assign feed_prev = feed_page | minus: 1 -%}<a rel="prev" href="{% if feed_prev == 1 %}{{ '/updates/' | relative_url }}{% else %}{{ '/updates/page/' | relative_url }}{{ feed_prev }}/{% endif %}">← Newer patches</a>{%- endif -%}
+      {%- if feed_page < feed_pages -%}{%- assign feed_next = feed_page | plus: 1 -%}<a rel="next" href="{{ '/updates/page/' | relative_url }}{{ feed_next }}/">Older patches →</a>{%- endif -%}
+    </p>
+  </nav>
+  {% endif %}
 
   <aside class="patch-legal-note reveal-up" aria-label="Independent publication disclaimer">
     <span class="patch-legal-icon">◇</span>
