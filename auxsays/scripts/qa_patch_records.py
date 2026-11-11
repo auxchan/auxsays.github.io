@@ -355,6 +355,12 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         so a verdict would vanish without a word. Collector-written, so the same two severities.
       * patch_lifecycle_build_unmatched -- a build listed in a lifecycle entry that no record carries
         (scan_lifecycle_builds, its own corpus-wide scan; PR-A2 review, LOW-3, probe P4).
+      * feed_official_verdict_unprinted (AUX-097) -- a /updates/ feed card whose page the gate gives
+        AVOID or SECURITY UPDATE, and whose line (lib/verdict_projection.feed_line, the feed card's
+        contract) does not lead with that verdict and its scope and end with the page's line. Until
+        AUX-097 the card printed a line only beside a stored summary, which only a writer stores (a
+        page with reports), so 17 zero-report security updates and the withdrawn KB5079391 showed an
+        "Insufficient data" pill and no verdict. The gate's row is read exactly as it will be printed.
 
     WARNINGS, never writer-blocking and never promoted for publication:
       * verdict_reason_unsupported -- an entry whose cited rows no longer all count on its page (an
@@ -447,6 +453,25 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
     for key in sorted(set(rows) - record_keys):
         add(errors, PROJECTION_PATH, "verdict_render_disagrees",
             f"{source} holds a row for {key!r}, which no record carries and the authority did not decide.")
+
+    # AUX-097: every feed card states the official verdict its page prints, at any report count.
+    for path, data in entries:
+        if data.get("feed_hidden") is True:
+            continue  # on no feed page
+        row = verdict_projection.printed_row(data, rows)
+        verdict = str((row or {}).get("verdict") or "").strip()
+        if row is None or verdict not in verdict_projection.OFFICIAL:
+            continue
+        lead = verdict_projection.phrase(verdict, str(row.get("scope") or "").strip())
+        tail = patch_decision.feed_body(str(row.get("body") or "").strip())
+        # Raw, not cleaned as the layout cleans it: a stored line is printed only when it already
+        # opens with the verdict and ends with the page's line, so either way the card must do both.
+        stored = data.get("update_consensus_summary") or data.get("community_summary") or ""
+        line = verdict_projection.feed_line(data, rows, stored)
+        if not line.startswith(f"{lead}: ") or not line.endswith(tail):
+            add(warnings, path, "feed_official_verdict_unprinted",
+                f"the page renders {lead!r} from {source}, but its /updates/ feed card would print "
+                f"{(line[:100] or 'no line')!r}: a reader of the feed would not learn the official verdict.")
 
     pages_by_identity: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
     for data in fronts:
@@ -1472,7 +1497,9 @@ PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
                                         # PR-A2 review (LOW-1 / LOW-3): an identity Liquid and Python
                                         # strip differently; a lifecycle build no page carries.
                                         "record_identity_unicode_padding",
-                                        "patch_lifecycle_build_unmatched"})
+                                        "patch_lifecycle_build_unmatched",
+                                        # AUX-097: a feed card that hides its page's official verdict.
+                                        "feed_official_verdict_unprinted"})
 
 
 def promote_for_publication(

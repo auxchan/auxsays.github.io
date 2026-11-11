@@ -24,6 +24,14 @@ WHAT IT CHECKS, on the built site:
   REACH    every patch page is reached from / by crawlable <a href> links within MAX_HOPS hops,
            reading each page only up to the Googlebot window -- independent of whether the reach
            comes through the feed or through the product trackers.
+  VERDICT  every feed card whose patch page states an OFFICIAL verdict (AVOID or SECURITY UPDATE,
+           which hold at any report count) states it too: exactly one line, opening with the
+           page's verdict and scope and ending with the page's recommendation in the feed's form
+           (lib/patch_decision.feed_body), and no status pill on the card that names a verdict
+           ("Insufficient data" over "AVOID ..." reads as two verdicts). Both sides are read from
+           the built pages, not from a model of the templates, so a template that drops the line or
+           puts the bare label back fails here, at deploy (AUX-097; QA runs before Jekyll and cannot
+           see the templates).
 
 A link counts only as an <a href> in the served HTML, read up to CRAWL_WINDOW_BYTES. A link that
 exists only through script, a data attribute or past the window is not a link here, because it is
@@ -34,12 +42,14 @@ emitted by _layouts/aux-base.html for every record), not from the source tree, s
 what is actually published.
 
 Run:  python auxsays/scripts/ci/verify_feed_discovery.py --site auxsays/_site [--source auxsays]
-Exit: 0 clean, 1 a budget, pager, stamp, coverage or reach failure, 2 the site directory is unusable.
+Exit: 0 clean, 1 a budget, pager, stamp, coverage, reach or verdict failure, 2 the site directory is
+unusable.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
+import html
 import re
 import sys
 from collections import deque
@@ -48,6 +58,11 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
 import yaml
+
+# Run as a bare script (the deploy) or imported as ci.verify_feed_discovery (the tests): either way the
+# verdict vocabulary and the feed's form of a line come from their one authority, lib/patch_decision.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from lib import patch_decision  # noqa: E402
 
 FEED_PAGE_BUDGET_BYTES = 1_000_000
 # Googlebot fetches the first 2 MB of an HTML response, headers included. 1 KiB is kept for the
@@ -58,6 +73,21 @@ FEED_URL = "/updates/"
 FEED_PAGE_RE = re.compile(r"/updates/page/(\d+)/")
 PATCH_BODY_RE = re.compile(rb'<body class="aux-page aux-update"')
 SITE_HOST = "auxsays.com"
+
+# VERDICT. The verdicts that hold at any report count, and every verdict word (a pill must name none).
+OFFICIAL_VERDICTS = (patch_decision.AVOID, patch_decision.SECURITY_UPDATE)
+VERDICT_WORDS = frozenset(patch_decision.CANONICAL_DECISIONS)
+# A feed card (_layouts/aux-updates.html, both loops) and the parts of it the check reads.
+CARD_RE = re.compile(r'<article class="panel patch-card[^"]*".*?</article>', re.S)
+CARD_LINK_RE = re.compile(r'<a class="patch-identity" href="([^"]+)"')
+CARD_PILL_RE = re.compile(r'<span class="patch-status patch-status--[^"]*"[^>]*>(.*?)</span>', re.S)
+CARD_LINE_RE = re.compile(r'<p class="patch-consensus-line">(.*?)</p>', re.S)
+# The patch page's verdict box (_layouts/aux-update.html), read with the markers
+# _includes/patch-search-meta.html already reads it by.
+PAGE_VERDICT_RE = re.compile(
+    r'<span class="update-decision-eyebrow">AUXSAYS verdict</span>\s*<strong>(.*?)</strong>'
+    r'(?:\s*<span class="update-decision-scope">(.*?)</span>)?\s*'
+    r'<p class="update-decision-recommendation">(.*?)</p>', re.S)
 
 
 class _Anchors(HTMLParser):
@@ -177,6 +207,61 @@ def feed_hidden_urls(source: Path | None) -> set[str]:
     return hidden
 
 
+def _text(fragment: str) -> str:
+    """A fragment's visible text: tags dropped, entities read, whitespace collapsed."""
+    return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", fragment or "")).split())
+
+
+def page_verdict(site: Site, url: str) -> tuple[str, str, str] | str | None:
+    """The (verdict, scope, recommendation) a built patch page states; None when the page has no
+    verdict box; "unreadable" when it has one (id="verdict") the markers no longer read."""
+    f = site.file_of(url)
+    if f is None:
+        return None
+    text = f.read_text(encoding="utf-8", errors="replace")
+    m = PAGE_VERDICT_RE.search(text)
+    if m is None:
+        return "unreadable" if 'id="verdict"' in text else None
+    return _text(m.group(1)), _text(m.group(2)), _text(m.group(3))
+
+
+def verdict_problems(site: Site, feed_pages: list[str], patches: set[str]) -> tuple[list[str], dict]:
+    """VERDICT: every feed card whose patch page states AVOID or SECURITY UPDATE states it too, and no
+    status pill on such a card names a verdict. Read from the bytes about to be served."""
+    problems: list[str] = []
+    official = stated = 0
+    for p in feed_pages:
+        for m in CARD_RE.finditer(site.file_of(p).read_text(encoding="utf-8", errors="replace")):
+            card = m.group(0)
+            link = CARD_LINK_RE.search(card)
+            url = site_path(html.unescape(link.group(1)), p) if link else None
+            if url is None or url not in patches:
+                continue  # COVERAGE reports a card that links no patch page
+            verdict = page_verdict(site, url)
+            if verdict == "unreadable":
+                problems.append(f"VERDICT {url} has a verdict box the gate cannot read (its markers changed)")
+                continue
+            if verdict is None or verdict[0] not in OFFICIAL_VERDICTS:
+                continue
+            official += 1
+            label, scope, body = verdict
+            phrase = f"{label} {scope}".strip()
+            tail = patch_decision.feed_body(body)
+            lines = [_text(x) for x in CARD_LINE_RE.findall(card)]
+            named = [x for x in (_text(x) for x in CARD_PILL_RE.findall(card)) if x.upper() in VERDICT_WORDS]
+            ok = True
+            if len(lines) != 1 or not lines[0].startswith(f"{phrase}: ") or not lines[0].endswith(tail):
+                ok = False
+                problems.append(f"VERDICT the card on {p} for {url} does not state its page's verdict "
+                                f"{phrase!r}: it prints {[s[:90] for s in lines]!r}")
+            if named:
+                ok = False
+                problems.append(f"VERDICT the card on {p} for {url} shows the status pill {named[0]!r}, a verdict "
+                                f"word, beside its page's verdict {phrase!r}")
+            stated += ok
+    return problems, {"official_cards": official, "official_stated": stated}
+
+
 def verify(site_dir: Path, source: Path | None) -> tuple[list[str], dict]:
     site = Site(site_dir)
     problems: list[str] = []
@@ -265,6 +350,11 @@ def verify(site_dir: Path, source: Path | None) -> tuple[list[str], dict]:
         problems.append(f"REACH ... and {len(unreached) - 20} more unreached patch pages")
     stats["reached"] = len(patches & set(dist))
     stats["max_hops"] = max((dist[u] for u in patches if u in dist), default=0)
+
+    # VERDICT: an official verdict is on the card, and no pill beside it reads as another one.
+    found, counts = verdict_problems(site, feed_pages, patches)
+    problems.extend(found)
+    stats.update(counts)
     return problems, stats
 
 
@@ -288,6 +378,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"patch pages {stats['patch_pages']}; feed-hidden {stats['feed_hidden']}; linked by the feed "
           f"{stats['linked_by_feed']}; reached from / {stats['reached']} within {MAX_HOPS} hops "
           f"(max {stats['max_hops']})")
+    print(f"official verdicts: {stats['official_cards']} feed cards whose page states AVOID or SECURITY UPDATE; "
+          f"{stats['official_stated']} state it")
     for p in problems:
         print(f"FAIL {p}")
     if problems:

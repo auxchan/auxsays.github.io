@@ -254,3 +254,54 @@ def rendered_verdict(record: Mapping[str, Any], rows: Mapping[str, Any],
 
 def phrase(verdict: str, scope: str) -> str:
     return f"{verdict} {scope}".strip()
+
+
+_NO_VERDICT_LEAD = "No verdict yet: "
+# The two build-aware products: the feed card names the build after the version (patch-feed-summary).
+_BUILD_NAMED = ("microsoft-windows-11", "microsoft-powerpoint")
+
+
+def _liquid_default(value: Any, fallback: str) -> str:
+    """`value | default: fallback | strip`: Liquid's default replaces nil, false and ''."""
+    if value is None or value is False or value == "":
+        return fallback.strip()
+    return str(value).strip()
+
+
+def feed_line(record: Mapping[str, Any], rows: Mapping[str, Any], summary: Any = "") -> str:
+    """The line the /updates/ feed card prints for this record (_includes/patch-feed-summary.html),
+    given the projection rows the gate reads and the card's stored summary as the layout passes it
+    ('' when the record stores none); "" means the card prints no line.
+
+    The include's contract, stated in Python so QA can see it (AUX-097): the gate's line in feed form
+    (`patch_decision.feed_body`, with "No verdict yet: " dropped), led by the verdict and its scope and
+    the exact patch -- printed as the stored summary when that already opens with the verdict phrase
+    and ends with that line, composed from the gate otherwise. A line is composed whenever the gate
+    has one AND the card has a stored summary or the verdict is OFFICIAL: an AVOID or SECURITY UPDATE
+    prints at any report count, with or without a stored summary. A zero-report page with no verdict
+    has no line; a summary beside no gate line is kept as stored. test_growth3_verdict_policy renders
+    the real include against this over every page, so the contract and the template cannot part."""
+    stored = _clean(summary)
+    count = max(int(record.get("update_report_count") or 0), 0)
+    row = printed_row(record, rows)
+    if row is None:
+        verdict, scope = patch_decision.INSUFFICIENT_DATA, ""
+        body = patch_decision.public_body(patch_decision.Decision(patch_decision.INSUFFICIENT_DATA, "R5"),
+                                          dict(record), count)
+    else:
+        verdict, scope, body = _clean(row.get("verdict")), _clean(row.get("scope")), _clean(row.get("body"))
+    if not body or not (stored or verdict in OFFICIAL):
+        return stored
+    text = patch_decision.feed_body(body)
+    if text.startswith(_NO_VERDICT_LEAD):
+        text = text[len(_NO_VERDICT_LEAD):]
+        text = text[:1].upper() + text[1:]
+    lead = phrase(verdict, scope)
+    if stored.split(":", 1)[0].strip() == lead and stored.endswith(text):
+        return stored
+    pid = _clean(record.get("product_id"))
+    name = _liquid_default(record.get("update_product"), pid)
+    version = _clean(record.get("update_version"))
+    build = _clean(record.get("target_build")) if pid in _BUILD_NAMED else ""
+    identity = f"{name} {version}{f' (Build {build})' if build else ''}".strip()
+    return f"{lead}: {f'{identity}. ' if identity else ''}{text}"

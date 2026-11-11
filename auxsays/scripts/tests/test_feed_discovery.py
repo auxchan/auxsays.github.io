@@ -12,7 +12,9 @@ refuses a deploy whose feed is over budget or whose patch pages a crawler cannot
   [V] the gate, run as a subprocess over synthetic built sites: a clean site passes, and each way the
       catalogue can be lost (over budget, unlinked, linked only through script or past 2 MB, on two
       pages, a pager link to nothing, an orphan page, an empty page, unreachable or too deep) fails
-      with its own code.
+      with its own code. VERDICT (AUX-097): an official card that states its page's verdict, under a
+      pill that names none, passes; one with no line, a stale or unscoped line, two lines, or an
+      "Insufficient data" pill fails, and so does a verdict box the gate can no longer read.
   [L] the SHIPPED paging block of the layout, rendered with the Liquid gem: for every page size and
       record mix the pages partition the ordered list exactly (no record lost, none twice, order kept),
       and the archive section is hidden exactly where a page holds no archived record.
@@ -286,6 +288,94 @@ def check_gate(tmp: Path) -> None:
           rc_t == 1 and f"STAMP /updates/ is stamped '{clock}' but its feed's cards give '{good}'" in out_t
           and rc_e == 1 and f"STAMP /updates/ is stamped '{earlier}' but its feed's cards give '{good}'" in out_e
           and vfd.feed_stamp(base["feed"]) == good, out_t[-300:] + out_e[-300:])
+
+
+def verdict_page(label: str, scope: str, body: str) -> str:
+    """A built patch page's verdict box, in the markup _layouts/aux-update.html emits."""
+    sc = f' <span class="update-decision-scope">{scope}</span>' if scope else ""
+    return page("aux-update", '<div id="verdict" class="update-decision-box update-decision-box--official">\n'
+                '  <div class="update-decision-box__header">\n'
+                '    <span class="update-decision-eyebrow">AUXSAYS verdict</span>\n'
+                f'    <strong>{label}</strong>{sc}\n'
+                f'    <p class="update-decision-recommendation">{body}</p>\n  </div></div>')
+
+
+def verdict_card(url: str, pill: str, line: str | None, label: str = "AUXSAYS verdict") -> str:
+    """A feed card with its status pill and, when given, its verdict line (_layouts/aux-updates.html)."""
+    block = ("" if line is None else f'<div class="patch-consensus-block"><span class="patch-consensus-label">{label}'
+             f'</span>\n<p class="patch-consensus-line">{line}</p></div>')
+    return (f'<article class="panel patch-card" data-kind="current"><a class="patch-identity" href="{url}">x</a>'
+            f'<span class="patch-status-stack"><span class="patch-status patch-status--{pill.lower().replace(" ", "-")}">'
+            f'{pill}</span><span class="patch-report-count">0 confirmed community reports</span></span>'
+            f'<h2><a href="{url}">x</a></h2>{block}</article>')
+
+
+def verdict_site(root: Path, cards: dict[str, str], pages: dict[str, str]) -> Path:
+    """The clean three-page feed of [V], with some patch pages stating verdicts and their cards replaced."""
+    P = [f"/updates/v/p/{i}/" for i in range(1, 8)]
+    site = build_site(root, patches=P, feed=[P[:3], P[3:6], P[6:]], extra=pages)
+    for f in [site / "updates" / "index.html", *(site / "updates" / "page").glob("*/index.html")]:
+        text = f.read_text(encoding="utf-8")
+        for url, html in cards.items():
+            text = text.replace(card(url), html)
+        f.write_text(text, encoding="utf-8")
+    return site
+
+
+def check_verdict(tmp: Path) -> None:
+    print("\n[V] VERDICT: an official verdict is on its feed card (AUX-097)")
+    P = [f"/updates/v/p/{i}/" for i in range(1, 8)]
+    sec_body = ("Microsoft classifies this as a monthly security update and recommends keeping supported systems "
+                "updated. No user reports are matched to this update yet.")
+    avoid_body = "Microsoft withdrew this update for new installations. Replacement: KB5086672."
+    listed = "Microsoft classifies this as a monthly security update; they are listed below."
+    pages = {P[0]: verdict_page("SECURITY UPDATE", "", sec_body),
+             P[3]: verdict_page("AVOID", "for new installations", avoid_body),
+             P[6]: verdict_page("SECURITY UPDATE", "", listed),
+             P[1]: verdict_page("INSUFFICIENT DATA", "", "No user reports are matched to this update yet.")}
+    good = {P[0]: verdict_card(P[0], "Not enough reports", f"SECURITY UPDATE: Windows 11 23H2 (Build 1.1). {sec_body}"),
+            P[3]: verdict_card(P[3], "Not enough reports",
+                               f"AVOID for new installations: Windows 11 24H2 (Build 2.2). {avoid_body}"),
+            P[6]: verdict_card(P[6], "Negative", "SECURITY UPDATE: Windows 11 (Build 3.3). Microsoft classifies this "
+                               "as a monthly security update.", label="Evidence summary"),
+            P[1]: verdict_card(P[1], "Insufficient data", None)}
+    rc, out = run_gate(verdict_site(tmp / "vv1", good, pages))
+    check("V21 official cards that state their page's verdict, scope and line (in the feed's form), under evidence "
+          "pills that name no verdict, pass; a zero-report INSUFFICIENT DATA card keeps its pill and no line",
+          rc == 0 and "official verdicts: 3 feed cards whose page states AVOID or SECURITY UPDATE; 3 state it" in out,
+          out[-400:])
+
+    bad = dict(good, **{P[3]: verdict_card(P[3], "Not enough reports", None)})
+    rc, out = run_gate(verdict_site(tmp / "vv2", bad, pages))
+    check("V22 an AVOID card that prints no line fails VERDICT for that card alone (the template-only regression "
+          "QA cannot see)",
+          rc == 1 and f"VERDICT the card on /updates/page/2/ for {P[3]} does not state its page's verdict "
+                      "'AVOID for new installations': it prints []" in out
+          and out.count("FAIL VERDICT") == 1 and "2 state it" in out, out[-400:])
+
+    bad = dict(good, **{P[0]: verdict_card(P[0], "Insufficient data", good[P[0]].split('consensus-line">')[1]
+                                            .split("</p>")[0])})
+    rc, out = run_gate(verdict_site(tmp / "vv3", bad, pages))
+    check("V23 an official card whose pill reads 'Insufficient data' (a verdict's name) fails VERDICT, even with its "
+          "line printed",
+          rc == 1 and f"VERDICT the card on /updates/ for {P[0]} shows the status pill 'Insufficient data', a verdict "
+                      "word, beside its page's verdict 'SECURITY UPDATE'" in out
+          and out.count("FAIL VERDICT") == 1, out[-400:])
+
+    stale = dict(good, **{P[3]: verdict_card(P[3], "Not enough reports",
+                                             "AVOID for new installations: Windows 11 24H2. An old reason.")})
+    bare = dict(good, **{P[3]: verdict_card(P[3], "Not enough reports", f"AVOID: Windows 11 24H2. {avoid_body}")})
+    two = dict(good, **{P[0]: good[P[0]].replace("</article>", '<p class="patch-consensus-line">WAIT: x.</p></article>')})
+    rcs = [run_gate(verdict_site(tmp / f"vv4{k}", cards, pages)) for k, cards in enumerate((stale, bare, two))]
+    check("V24 each half of the line is checked: the verdict over another line, the page's line under the bare "
+          "verdict (scope dropped), and a second line beside the right one each fail VERDICT",
+          all(rc == 1 and out.count("FAIL VERDICT") == 1 and "does not state its page's verdict" in out
+              for rc, out in rcs), " | ".join(o[-200:] for _r, o in rcs))
+
+    moved = dict(pages, **{P[3]: pages[P[3]].replace("update-decision-eyebrow", "update-decision-kicker")})
+    rc, out = run_gate(verdict_site(tmp / "vv5", good, moved))
+    check("V25 a patch page whose verdict box the gate can no longer read fails VERDICT (never a silent pass)",
+          rc == 1 and f"VERDICT {P[3]} has a verdict box the gate cannot read" in out, out[-300:])
 
 
 # ---------------------------------------------------------------- [L] the shipped paging block, in Liquid
@@ -873,12 +963,27 @@ def check_wiring() -> None:
           and '{% assign current_pages = update_pages | where_exp: "item", "item.update_status != \'archived\' and '
               'item.feed_hidden != true" %}' in layout
           and '{% assign archived_pages = update_pages | where: "update_status", "archived" %}' in layout, str(sort_stmt))
+    page_layout = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
+    box = ('<span class="update-decision-eyebrow">AUXSAYS verdict</span>\n'
+           "          <strong>{{ decision_label }}</strong>{% if decision_scope != '' %} "
+           '<span class="update-decision-scope">{{ decision_scope }}</span>{% endif %}\n'
+           '          <p class="update-decision-recommendation">{{ decision_body }}</p>')
+    check("W12 VERDICT reads what the shipped templates emit: the patch page's verdict box (eyebrow, verdict, "
+          "scope, line), and in both feed loops the card's identity link, its status pill and its line",
+          page_layout.count(box) == 1
+          and vfd.PAGE_VERDICT_RE.search(box.replace("{{ decision_label }}", "AVOID")
+                                         .replace("{% if decision_scope != '' %}", "").replace("{% endif %}", ""))
+          and layout.count('<a class="patch-identity" href="{{ item.url | relative_url }}">') == 2
+          and layout.count('<span class="patch-status patch-status--{{ reaction_class }}">') == 2
+          and layout.count('<p class="patch-consensus-line">{{ feed_summary_line }}</p>') == 4
+          and layout.count('<article class="panel patch-card') == 2, "")
 
 
 def run() -> int:
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
         check_gate(tmp)
+        check_verdict(tmp)
         check_liquid()
         check_generator()
         check_catalog()
