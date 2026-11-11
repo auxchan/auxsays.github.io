@@ -17,8 +17,8 @@ update_version: AU and India local data hosting
 update_logo_text: FIG
 update_published_at: '2026-02-12T00:00:00.000Z'
 update_last_checked: '2026-07-29T05:07:34Z'
-source_last_checked: '2026-10-07T01:07:51Z'
-official_body_last_checked: '2026-10-07T01:07:51Z'
+source_last_checked: '2026-11-11T08:49:04Z'
+official_body_last_checked: '2026-11-11T08:49:04Z'
 record_last_updated: '2026-07-29T05:07:34Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-07T01:07:51Z'
+  url: https://www.figma.com/release-notes/?title=au-india-local-data-hosting
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-11T08:49:04Z'
   url: https://www.figma.com/release-notes/?title=au-india-local-data-hosting
   status: captured-from-rss-feed
   body_captured: true
