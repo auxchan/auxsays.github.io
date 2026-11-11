@@ -80,6 +80,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
+| AUX-095 | Deferred | Verdict policy | Medium | A vendor-confirmed serious defect or a corroborated install failure gave no caution unless someone hand-wrote a reason (producer built; public activation OFF, temporary) |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -4883,6 +4884,139 @@ restated; 13 new mutants X25-X37, one fix half each, all caught); `test_patch_de
 **Reopen only if** any surface prints a verdict, scope, line or recommendation that is not the projection row of
 its page, the gate reads a lifecycle file, release type or KB again, a lifecycle value Python would have to coerce
 is accepted, or a WAIT / TEST FIRST title or description attributes the verdict to the report count or maturity.
+
+### AUX-095 — A vendor-confirmed serious defect or a corroborated install failure gave no caution unless someone hand-wrote a reason
+
+- **Status** Deferred (public activation) · **Area** Verdict policy · **Severity** Medium
+- **First seen** 2026-11-10 (GROWTH-3 PR-A, spec v3 s9; G35-05 calibration) · **Built** 2026-11-10 (G35-04,
+  branch feat/verdict-reason-producer); the activation switch is OFF and that state is TEMPORARY
+
+**Symptom** Every WAIT and TEST FIRST rested on a reviewed entry in `_data/verdict_reasons.yml`. Five zero-report
+pages whose vendor confirms a serious defect in that exact version (Windows 24H2 26100.9550, 26H1 28000.2804 and
+28000.3086; OBS 31.1.0 and 32.0.3) read INSUFFICIENT DATA, as did pages where two or more independent users report
+that the update fails to install (the calibration found 9 in the 66 unread pool pages).
+
+**Cause** No deterministic route from stored evidence to a reason: the owner allows vendor-only caution for a
+SERIOUS defect (decision 1, safeguard 1; AUTH_V2_35 D-B) and the calibration measured an install-failure rule
+(G35-05 s5), but nothing produced either.
+
+**Fix** `lib/verdict_reason_producer` is a pure function of the records and their counted rows (no network, file,
+clock or collector import). `vendor_confirmed_serious` reads OBS "Fixed ... in V" bullets and the stored
+release-health known-issue rows: exact version or originating build, the statement re-checked at its stored line, a
+closed severity vocabulary (data loss, critical install failure, substantial workflow breakage, crash), the affected
+setup; lag, cosmetic issues, preference or profile resets, no exact version and an unstated setup fail closed. WAIT
+where the vendor names this version as the start, TEST FIRST for a carried-over defect. The install class (A1)
+takes Windows rows naming the page's KB with install wording or Acrobat installer Exit Code 7 with a product check,
+runs the I11 independence gate first, and needs `MIN_INDEPENDENT_REPORTERS` (2): TEST FIRST "when installing it",
+never WAIT. Non-install corroboration is a fail-closed placeholder (different URLs never prove different users);
+pages needing a person go to a TEMPORARY review queue. `PUBLIC_AUTO_ACTIVATION` is the one switch. OFF,
+`verdict_projection.supported_reasons` returns the reviewed entries only; ON, it merges the candidates for the
+projection and QA alike. `build_verdict_projection.py` runs the producer at deploy and writes the git-ignored
+`_data/verdict_reason_candidates.yml`, so it is never a second writer of tracked data. Also closes the PR-A2 review's
+LOW-1..3 (AUX-094): the page key strips only what Liquid strips and a Unicode-padded identity is a publication
+error, release types, KB numbers and dates are ASCII-only, and a lifecycle build no record carries is an error.
+
+Review 1 found two contract holes with the switch ON, both fixed (producer version 2). (1) An ambiguous scope did
+not fail closed: `_scope_ok` was the "if/when/for" pattern alone, so "for a small number of devices", "for all
+editions of Windows 11", "if you use the update" and "if you use OBS" passed, and plausible vendor wording drafted a
+WAIT that covered everyone. `scope_problem` now needs a SETUP word (not a quantifier, a population noun, an edition,
+the update, a generic "application"/"program", a generic activity or the product's own name); otherwise the
+statement is an ambiguous scope and goes to the review queue. Windows tries Microsoft's "This issue affects ...",
+then "occurring in ...", then the title subject, and takes the first that names a setup. (2) The install class
+counted rows that do not report THIS update failing to install: a row denying it ("not that the update fails to
+install"), rows naming only a build (a rollback target, the update scan, a device's current build; 4 of the 5
+build-only cited rows were wrong) and a .NET update failing beside the page's KB, whose error code was listed.
+`windows_install_row` needs the page's KB (or "update/upgrade to <build>"), refuses denied wording, blanks "check
+for updates" and "rolls back to <build>", reads a row that names several updates as a list (what follows a name is
+that update's) and takes error codes from this update only. Also: an OBS version counts only where the note names
+it as defective ("Fixed a crash in V", "present in V"), never as where a file was created; the vendor "Other
+setups: no problem is confirmed" line prints only where vendor reasons stand alone on a page with no report.
+
+Review 2 (one bounded fix round, Amendment A4; producer version 3). (1) The setup-word rule was a deny-list, so the
+next unlisted word passed as a setup: "for a small number of devices in some environments" drafted a WAIT on
+"environments", "for some consumer devices" on "consumer". A scope now also fails closed (ambiguous scope, review
+queue) when it names its setup only vaguely: a hedge word anywhere ("some", "certain", "specific", "particular",
+"subset", "worldwide", "regions", "conditions", "circumstances", "scenarios" ...), a "small / limited number"
+phrase anywhere, or "environment(s)" with no named environment type right before it. The corpus's two scopes from
+Microsoft's description text ("virtual desktop environments", the Remote Desktop clause) still pass, and the
+corpus's candidates are unchanged. (2) A fail-open the PR-A2 hardening introduced on the switch-OFF path: with
+re.ASCII on the release-type SHAPE detector too, a type written as full-width digits with a full-width "B", with an
+ideographic space, or as Arabic-Indic digits matched neither the strict pattern nor the detector, so a real B page
+would lose SECURITY UPDATE with QA silent. The detector reads Unicode digits and spaces again, on the NFKC form;
+the strict patterns stay ASCII-only, so nothing new is accepted and such a value is `windows_update_type_malformed`,
+a publication error. (3) NOT shipped: a publication error for a product_id, update_version or target_build that is
+not ASCII `^[A-Za-z0-9._-]+$` (review 2 LOW-7). The live corpus fails it on 665 of 1,535 records, every one an
+update_version: all 437 GitHub and all 227 Figma records (their versions are changelog titles: spaces,
+punctuation, 30 with curly quotes or dashes) and one DaVinci record ("21 Public Beta 1"); product_id and
+target_build pass everywhere. A4 says to stop and report in that case, so the rule needs a narrower definition
+first.
+
+**Measured** Over the corpus (producer version 2): 47 candidates on 36 pages (23 install TEST FIRST, 21 vendor WAIT,
+3 vendor TEST FIRST). Review 1's fixes removed exactly its six named rows from the install counts plus two rows
+whose install failure belongs to another update (26200.8457 loses 2 of 7, 26200.9550 its only second reporter and
+so its install candidate); the vendor class is unchanged. Calibration: 9 of 9 install verdicts in the 66 with 0
+false fires, now with all 25 cited Windows rows inside the reader's install clusters (was 25 of 27); 3 of 4 reviewed
+install entries reproduced (KB5086672 missed: one row says "error installing", one is German); no fire on the
+other 18 sampled pages. Of the six named pages, 24H2 26100.9550, 26H1 28000.2804, 26H1 28000.3086 and OBS 31.1.0
+qualify; OBS 32.0.3 (a lag and a stale mixer entry) and OBS 32.2.2's #13862 (no version named; a recoverable
+profile problem) do not. Switch OFF: a deploy-order build equals main's on every page (1,845 files, masked tree
+equal, projection byte-identical). Switch ON (test-only, staged copy): 33 projection rows change (14 security pages
+keep SECURITY UPDATE and gain a panel, 10 TEST FIRST, 9 WAIT), QA `--publish-strict` has 0 errors and 28
+`verdict_policy_drift` warnings, and every surface prints the candidate's scoped verdict, equal to `decide`. With
+review 1's probes added (a negated install pair, "a small number of devices", an OBS fix about OBS itself, "created
+in 31.0.4") the projection is byte-identical to plain ON: none of them drafts a verdict; two go to the review queue.
+After review 2 (producer version 3, corpus as of main 65f8ed8e): 48 candidates, identical to version 2's on the same
+corpus (main's new evidence added one install TEST FIRST on 25H2 26200.9711, a security page). Switch OFF: the
+deploy-order build equals main's (1,845 files, masked tree equal, projection byte-identical). Switch ON: 34 rows
+change (15 security pages gain a panel, 10 TEST FIRST, 9 WAIT), QA 0 errors and 29 drift warnings; with review 2's
+Q4 row added the projection is byte-identical to plain ON and 26200.8894 renders INSUFFICIENT DATA (review 2: "WAIT
+for a small number of devices in some environments"), the row queued. Review 2's three release types on three real
+B pages: QA `--publish-strict` exits 1 with three `windows_update_type_malformed` errors, and each page renders what
+`decide` gives.
+
+**Tests** `test_verdict_reason_producer.py` (51: VRP-V1..V10, I1..I9, P1, N1/N2, S0..S5, C1/C2; mutants VX1..VX21:
+severity gate, exact version, scope, switch default, network call, independence gate, threshold, Acrobat product
+check, install WAIT, placeholder URLs, and review 1's setup words, product name, OBS "created in V", Windows lag,
+vendor other-setups line, install denial, build alone, update scan / rollback, another update's failure, codes
+from the whole row, the near-identical-text cue; V9 carries the reviewer's probe statements, I7 six real cited rows
+frozen as negatives, I9 the DUPLICATES.md L1 and N2 pairs); `test_growth3_verdict_policy.py` 112 -> 124 (G3-L6,
+Q10, Q11, R8; R4j pins MB1/MB2; X38..X45). Review 2: the producer suite 51 -> 56 (VRP-V8b pins the reviewer's Q4
+row and unit phrasings; VX22..VX25, one per half of the hedge rule); the verdict policy suite 124 -> 128 (G3-Q8
+carries the review's three release types plus a fully full-width and an Arabic-Indic one; X40 split into one
+mutant per pattern, X40a..X40e).
+
+**Why deferred** Public automatic activation needs the owner's approval of that transition (AUTH_V2_35 D-A). The
+in-sample precision is partly circular: the install rules were written after reading the 66 and the labels apply
+the seeded standard. Still open before activation, each REQUIRED before the switch may be turned on:
+- Amendment A3's strict install grouping (a shared code or stage; today different codes are one problem, A1's
+  reading, which was a coordinator interpretation, not owner wording), with fire counts under both readings (F1);
+- an independence cue for a reworded cross-post (a shared distinctive word sequence) and a gate that compares every
+  pair, not only kept rows (F2; review 2 LOW-4);
+- the record writers reading the producer's reasons, so the 28 `verdict_policy_drift` warnings with the switch on
+  clear (F3; review 2 LOW-5);
+- Windows scopes that are broader than Microsoft's text ("domain-joined devices" for "Credential Guard protected
+  machine accounts") (F4);
+- a security panel that shows only its head reason (F5);
+- the rights posture for quoting Microsoft text (K1, F6);
+- the install wording: the install verb must take this update as its subject in the same clause, "after / since
+  installing <KB> ... <other software> will not install" refused, and codes read only in an install or download
+  error context (a bugcheck code was listed as an install error) (F7; review 2 LOW-3);
+- a defect the vendor calls carried over ("in 32.1.0 and earlier", "since", "regression from", "also affected")
+  must not be WAIT and "new" (review 2 LOW-1);
+- an OBS crash is not automatically a core-flow crash: a launch or core-flow cue, otherwise no severity basis or
+  the review queue, and "rare" / "possible" crashes queued (review 2 LOW-2).
+Outside the switch: the ASCII machine-identity publication error (review 2 LOW-7) is not shipped, because 665 live
+records fail it (above).
+
+**Current impact** None published: with the switch OFF every page renders exactly as before; the candidates are
+visible only in the deploy artifact.
+
+**Revisit trigger** The owner approves public auto-activation, or an out-of-sample reading of new candidates.
+
+**Work that this item must not block** Reviewed reason entries, the lifecycle exception, collection and evidence
+work. On activation the stored summaries of candidate pages lag the page, and that `verdict_policy_drift` warning
+does NOT clear at the next promotion: the record writers (`apply_consensus_to_records.py`,
+`build_consensus_from_evidence.py`) read reviewed reasons only. Every surface already prints the gate.
 
 ---
 

@@ -671,7 +671,7 @@ def _qa_on(tree, argv):
     out = tree / "qa_status.json"
     keys = ("scan_priority_source_coverage", "scan_evidence_count_alignment",
             "scan_update_layout_public_copy", "scan_required_record_paths",
-            "scan_route_integrity")
+            "scan_route_integrity", "scan_lifecycle_builds")
     saved = {k: getattr(qa, k) for k in keys}
     saved_dir, saved_out = qa.GENERATED_DIR, qa.OUT_PATH
     try:
@@ -682,6 +682,8 @@ def _qa_on(tree, argv):
         qa.scan_update_layout_public_copy = lambda: ([], [])
         qa.scan_required_record_paths = lambda: ([], [])
         qa.scan_route_integrity = lambda: ([], [])
+        # Corpus-wide too: the shipped lifecycle file lists two builds a one-record fixture lacks.
+        qa.scan_lifecycle_builds = lambda files: ([], [])
         with contextlib.redirect_stdout(io.StringIO()):
             rc = qa.main(argv)
         return rc, json.loads(out.read_text(encoding="utf-8"))
