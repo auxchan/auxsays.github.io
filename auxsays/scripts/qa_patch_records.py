@@ -313,6 +313,14 @@ def load_counted_accepted_urls(
             for key, group in groups.items()}
 
 
+# verdict_policy_drift's last sentence, ONE copy (G35-04 review 1, LOW-4). The record writers
+# (apply_consensus_to_records.py, build_consensus_from_evidence.py) read REVIEWED reasons only, so a
+# difference that comes from a reason-producer candidate never reaches the stored prose: said so.
+DRIFT_CATCH_UP = ("The stored prose catches up when a record writer next promotes this page, unless the "
+                  "difference comes from a reason-producer candidate: the writers read reviewed reasons only, "
+                  "so that drift stays until they read the producer's reasons too.")
+
+
 def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     """GROWTH-3: the two reviewed fact files, what each page RENDERS against what the authority
     decides, and each report-bearing record's stored verdict against the policy.
@@ -340,6 +348,13 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         classification would vanish without a word; this says so. The value is collector-written,
         so, like record_names_conflicting_actions (AUX-009), one bad row must not discard a whole
         evidence run, and the deploy must not publish the page silently without its classification.
+      * record_identity_unicode_padding -- a record whose product_id, update_version or target_build
+        carries leading/trailing Unicode whitespace (U+00A0, U+2009, U+3000, U+0085, ...) that
+        Liquid's strip keeps and Python's removes (PR-A2 review, LOW-1, probe P5). The page and
+        `decide` agree on the padded key, but the page matches none of its reasons or counted rows,
+        so a verdict would vanish without a word. Collector-written, so the same two severities.
+      * patch_lifecycle_build_unmatched -- a build listed in a lifecycle entry that no record carries
+        (scan_lifecycle_builds, its own corpus-wide scan; PR-A2 review, LOW-3, probe P4).
       * feed_official_verdict_unprinted (AUX-097) -- a /updates/ feed card whose page the gate gives
         AVOID or SECURITY UPDATE, and whose line (lib/verdict_projection.feed_line, the feed card's
         contract) does not lead with that verdict and its scope and end with the page's line. Until
@@ -354,7 +369,10 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         the projection is decided from the same evidence -- and the message names what it renders.
       * verdict_policy_drift -- a report-bearing record whose stored verdict or stored summary lead
         differs from what the policy decides now. Every surface prints the gate's verdict, so the
-        page and the feed are already right; the stored prose catches up at the next promotion.
+        page and the feed are already right. The stored prose catches up when a record writer next
+        promotes the page -- EXCEPT where the difference comes from a reason-producer candidate
+        (lib/verdict_reason_producer, only while its switch is on): the writers read reviewed reasons
+        only, so that drift does not clear (G35-04 review 1, LOW-4; a recorded follow-up).
       * patch_lifecycle_unmatched -- a lifecycle entry no record carries.
     """
     errors: list[dict[str, str]] = []
@@ -384,8 +402,9 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
     fronts = [data for _path, data in entries]
     groups = counted_evidence_rows(load_evidence_rows(),
                                    windows_targets=windows_targets_from_front_matter(fronts))
-    by_identity = {verdict_reasons.record_identity(data): data for data in fronts}
-    valid, unsupported = verdict_reasons.valid_reasons_by_identity(reasons, groups, by_identity)
+    # The reasons decide reads -- reviewed entries, plus the reason producer's candidates only while its
+    # (temporary, owner-gated) activation switch is on: the same function the projection builder uses.
+    valid, unsupported = verdict_projection.supported_reasons(fronts, groups, reasons)
     expected, _unsupported = verdict_projection.project(fronts, groups, reasons, lifecycle)
     want_rows = expected["pages"]
 
@@ -413,6 +432,10 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
             add(warnings, path, "windows_update_type_malformed",
                 f"{release_problem}. lib/patch_decision.decide cannot read Microsoft's classification from "
                 "it, so this page renders no SECURITY UPDATE; correct the stored value.")
+        for padding in verdict_reasons.identity_padding_problems(data):
+            add(warnings, path, "record_identity_unicode_padding",
+                f"{padding}. The page key keeps it, so this page matches none of its reason entries or "
+                "counted reports and can lose its verdict silently; correct the stored value.")
         want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
                                      lifecycle=lifecycle)
         got_verdict, got_scope = verdict_projection.rendered_verdict(data, rows, lifecycle)
@@ -485,14 +508,39 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         if (stored and stored != decision.verdict) or (stored_lead and stored_lead != expected_phrase):
             add(warnings, path, "verdict_policy_drift",
                 f"stored verdict {stored!r} (summary opens {stored_lead or '(none)'!r}) but the verdict "
-                f"policy decides {expected_phrase!r}; every surface renders {expected_phrase!r}, and the "
-                "stored prose catches up at the next promotion.")
+                f"policy decides {expected_phrase!r}; every surface renders {expected_phrase!r}. "
+                + DRIFT_CATCH_UP)
         elif summary and summary != expected_summary:
             add(warnings, path, "verdict_policy_drift",
                 "the stored summary is not the policy's line (lib/patch_decision.summary_line); the feed "
                 f"card still leads with {expected_phrase!r} and the page's own line (it prints stored text "
-                "only where it matches them), and the stored prose catches up at the next promotion.")
+                "only where it matches them). " + DRIFT_CATCH_UP)
     return errors, warnings
+
+
+def scan_lifecycle_builds(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """PR-A2 review, LOW-3 (probe P4): every OS build a lifecycle entry lists is carried by a record.
+
+    `patch_lifecycle_unmatched` (scan_verdict_policy) fires only when an entry matches NO page, so an
+    entry whose second build was mistyped -- or followed by an invisible character -- still matched
+    the first page and the withdrawal vanished from the second without a word. Checked per build;
+    a publication error (`patch_lifecycle_build_unmatched`, promoted by --publish-strict). Its own
+    scan because it is corpus-wide: a one-record QA fixture carries only one of the two builds."""
+    warnings: list[dict[str, str]] = []
+    try:
+        lifecycle = verdict_reasons.load_lifecycle(LIFECYCLE_PATH)
+    except verdict_reasons.FactFileError:
+        return [], []  # scan_verdict_policy reports the malformed file (patch_lifecycle_invalid)
+    if verdict_reasons.lifecycle_errors(lifecycle):
+        return [], []  # refused: it supports nothing, and scan_verdict_policy errors on it
+    fronts = [data for data in (front_matter(path) for path in files) if data.get("update_entry") is True]
+    for entry in lifecycle:
+        for build in entry.get("builds") or []:
+            if not any(patch_decision.lifecycle_for(data, [dict(entry, builds=[build])]) for data in fronts):
+                add(warnings, LIFECYCLE_PATH, "patch_lifecycle_build_unmatched",
+                    f"{entry.get('id')}: no record carries {entry.get('kb')} with OS build {build!r}, so the "
+                    "withdrawal applies to no page for that build; correct the build or the record.")
+    return [], warnings
 
 
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -1446,6 +1494,10 @@ PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
                                         "record_names_unknown_verdict",
                                         # GROWTH-3 review 2 (LOW-1): a release type decide cannot read.
                                         "windows_update_type_malformed",
+                                        # PR-A2 review (LOW-1 / LOW-3): an identity Liquid and Python
+                                        # strip differently; a lifecycle build no page carries.
+                                        "record_identity_unicode_padding",
+                                        "patch_lifecycle_build_unmatched",
                                         # AUX-097: a feed card that hides its page's official verdict.
                                         "feed_official_verdict_unprinted"})
 
@@ -1505,6 +1557,9 @@ def main(argv: list[str] | None = None) -> int:
     warnings.extend(w)
     warnings.extend(scan_counted_row_classification(load_evidence_rows()))
     e, w = scan_verdict_policy(files)
+    errors.extend(e)
+    warnings.extend(w)
+    e, w = scan_lifecycle_builds(files)
     errors.extend(e)
     warnings.extend(w)
     e, w = scan_unconfigured_platform_split(files)

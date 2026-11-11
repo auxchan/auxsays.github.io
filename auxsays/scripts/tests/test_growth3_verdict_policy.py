@@ -20,11 +20,12 @@ file and of the release type ("YYYY-MM B" via slice + plus: 0) parted from Pytho
 not see it (review 2: probe N1, "2026-3x B").
 
 SECTIONS. [D] the decision procedure and its invariants (G3-D1..D12). [F] the reason file's audits
-(G3-F0..F7, G3-OC). [L] the lifecycle exception and its strict typing (G3-L1..L5, G3-W0). [W] public
-wording (G3-W1..W4). [Q] QA: severities, the rendered/authority comparison, the malformed lifecycle
-and release type (G3-Q1..Q9). [R] the gate renders exactly what Python decides: a synthetic matrix
-with one case per support rule, no-projection fail-closed, the whole corpus, and review 2's gate2
-and refused-lifecycle cases (G3-R0..R7). [P] the projection IS the authority, official verdicts
+(G3-F0..F7, G3-OC). [L] the lifecycle exception and its strict, ASCII typing (G3-L1..L6, G3-W0).
+[W] public wording (G3-W1..W4). [Q] QA: severities, the rendered/authority comparison, the malformed
+lifecycle and release type, Unicode-padded identities and unmatched lifecycle builds (G3-Q1..Q11).
+[R] the gate renders exactly what Python decides: a synthetic matrix with one case per support rule
+and per scope-acceptance clause, no-projection fail-closed, the whole corpus, review 2's gate2 and
+refused-lifecycle cases, and padded identities (G3-R0..R8). [P] the projection IS the authority, official verdicts
 included, review 1's probes A1 and A2 on the rendered page, the builder and its position in the
 deploy (G3-P0..P9). [S] the scope prints with the verdict on every surface, and the feed card's
 wording (G3-S1..S8, review 1 D1, review 2 LOW-4). [X] mutants: each restores ONE thing the policy
@@ -66,7 +67,18 @@ LIFECYCLE = yaml.safe_load(LIFECYCLE_TEXT)
 # Review 2's probe N1, exactly as it was written: the builds as YAML numbers.
 N1_LIFECYCLE_TEXT = LIFECYCLE_TEXT.replace('builds: ["26100.8116", "26200.8116"]', "builds: [26100.8116, 26200.8116]")
 # Review 2's gate2 cases: Liquid's `plus: 0` read each as a month number; Python's pattern does not.
-GATE2_MALFORMED = ("2026-3x B", "2026-+3 B", "2026-1  B", "2026-13 B")
+# The last two are the PR-A2 review's probe P3 (LOW-2): full-width and Arabic-Indic digits, which
+# Python's `\d` and int() accepted until the release-type patterns became re.ASCII.
+# Then G35-04 review 2's LOW-6 values (with re.ASCII on the shape detector, nothing reported them) and
+# two that each need one half of its fix: fully full-width (only NFKC shows the shape) and Arabic-Indic
+# digits with an Arabic letter (only a Unicode `\d` shows it).
+GATE2_MALFORMED = ("2026-3x B", "2026-+3 B", "2026-1  B", "2026-13 B",
+                   "２０２６-０８ B", "٢٠٢٦-٠٥ B",
+                   "２０２６-０８ Ｂ", "２０２６-０８　B", "٢٠٢٦-٠٥ Ｂ",
+                   "２０２６－０８ Ｂ", "٢٠٢٦-٠٥ ب")
+REVIEW2_LOW6 = ("２０２６-０８ Ｂ", "２０２６-０８　B", "٢٠٢٦-٠٥ Ｂ")
+# PR-A2 review, LOW-1 (probe P5): Unicode spaces Python's str.strip removes and Liquid's strip keeps.
+UNICODE_PADS = {"NBSP": " ", "THIN SPACE": " ", "IDEOGRAPHIC SPACE": "　", "NEL": "\u0085"}
 WIN, OBS = "microsoft-windows-11", "obs-studio"
 
 _PASS = 0
@@ -372,6 +384,27 @@ def check_lifecycle() -> None:
           all(any("whitespace" in e for e in errs) for errs in padded.values())
           and not vr.lifecycle_errors(entries), str({k: v[:1] for k, v in padded.items()}))
 
+    # PR-A2 review, LOW-3 (probe P4) and LOW-2: ASCII-strict builds, KB numbers and dates. Each value
+    # below is a plain, unpadded string, so the padding check alone accepted every one of them.
+    strict = {
+        "P4 zero-width space after a build": dict(entries[0], builds=["26100.8116​", "26200.8116"]),
+        "full-width digits in a build": dict(entries[0], builds=["２６１００.8116", "26200.8116"]),
+        "a build without the dot": dict(entries[0], builds=["26100-8116", "26200.8116"]),
+        "a zero-width space in a replacement build": dict(entries[0], replacement_builds=["26100.8117​"]),
+        "a full-width digit in the KB": dict(entries[0], kb="KB５079391"),
+        "full-width digits in a date": dict(entries[0], released="２０２６-03-26"),
+    }
+    strict_errors = {k: vr.lifecycle_errors([v]) for k, v in strict.items()}
+    p4_text = LIFECYCLE_TEXT.replace('builds: ["26100.8116", "26200.8116"]', 'builds: ["26100.8116\\u200b", "26200.8116"]')
+    assert p4_text != LIFECYCLE_TEXT, "the P4 anchor is no longer in patch_lifecycle.yml"
+    _r, p4_loaded, p4_problems = fact_files(p4_text)
+    check("G3-L6 PR-A2 review LOW-3 / LOW-2: a lifecycle build must be an ASCII 12345.6789 (P4's zero-width "
+          "space, full-width digits, a missing dot, a replacement build), the KB and dates ASCII digits; the P4 "
+          "file is refused through the deploy's loader, so neither KB5079391 page is AVOID; the shipped file passes",
+          all(strict_errors.values()) and p4_loaded == [] and any("patch_lifecycle" in m for m in p4_problems)
+          and all(decide(r, (), p4_loaded).verdict != "AVOID" for r in kb_pages) and not vr.lifecycle_errors(entries),
+          str({k: v[:1] for k, v in strict_errors.items() if not v}))
+
 
 def fact_files(lifecycle_text: str, reasons: list | None = None) -> tuple[list, list, list]:
     """lib/verdict_projection.load_fact_files over a temp tree holding these two files: exactly what a
@@ -561,13 +594,23 @@ def check_qa_official(qa, tmp: Path) -> None:
         bucket[value] = ("windows_update_type_malformed" in codes(warnings), codes(errors),
                          "windows_update_type_malformed" in codes(promoted))
         published[value] = decide(win_record(update_type=value)).verdict
-    check("G3-Q8 review 2's gate2 release types ('2026-3x B', '2026-+3 B', '2026-1  B', and '2026-13 B') are "
-          "each a QA publication ERROR (windows_update_type_malformed: a writeback warning, promoted by "
-          "--publish-strict) and decide fails closed on them; B, D, OOB and the writer default are clean",
-          all(f == (True, set(), True) for f in flagged.values())
+    # An AVOID page's preview context line reads the strict ASCII preview pattern too.
+    avoid_ascii = win_record(update_type="2026-03 D", kb="KB5000002", build="26200.2000")
+    avoid_wide = win_record(update_type="２０２６-０３ D", kb="KB5000002", build="26200.2000")
+    body_ascii = pd.public_body(decide(avoid_ascii, (), LIFE), avoid_ascii, 1)
+    body_wide = pd.public_body(decide(avoid_wide, (), LIFE), avoid_wide, 1)
+    check("G3-Q8 review 2's gate2 release types ('2026-3x B', '2026-+3 B', '2026-1  B', and '2026-13 B'), "
+          "the PR-A2 review's P3 (full-width / Arabic-Indic digits + ' B') and G35-04 review 2's LOW-6 values "
+          "(a full-width 'Ｂ', an ideographic space, Arabic-Indic digits + 'Ｂ'; also fully full-width, and "
+          "Arabic-Indic digits + an Arabic letter) are each a QA publication ERROR (windows_update_type_malformed: "
+          "a writeback warning, promoted by --publish-strict) and decide fails closed on them; B, D, OOB and the "
+          "writer default are clean; an AVOID page's preview line reads only an ASCII 'YYYY-MM D'",
+          all(f == (True, set(), True) for f in flagged.values()) and set(REVIEW2_LOW6) <= set(flagged)
           and all(c == (False, set(), False) for c in clean.values())
           and all(published[v] == "INSUFFICIENT DATA" for v in GATE2_MALFORMED)
-          and published["2026-03 B"] == "SECURITY UPDATE", f"{flagged} {clean} {published}")
+          and published["2026-03 B"] == "SECURITY UPDATE"
+          and "non-security preview update" in body_ascii and "preview update" not in body_wide,
+          f"{flagged} {clean} {published} ascii={body_ascii!r} wide={body_wide!r}")
     sec = _qa_win_tree(tmp / "partial", "2026-03 B", build="26200.1200")
     paths, _ev, _rs, _life, proj = sec
     data = yaml.safe_load(paths[0].read_text(encoding="utf-8").split("---")[1])
@@ -582,6 +625,56 @@ def check_qa_official(qa, tmp: Path) -> None:
           "full projection is clean",
           "renders 'INSUFFICIENT DATA'" in msg and "'SECURITY UPDATE'" in msg
           and full["pages"] and "verdict_render_disagrees" not in codes(e_full), f"{msg[:200]} {codes(e_full)}")
+
+    # G3-Q10 (PR-A2 review, LOW-1, probe P5): an identity Liquid and Python strip differently.
+    pad_found, pad_clean = {}, {}
+    for i, (name, pad) in enumerate(UNICODE_PADS.items()):
+        for field, tree in (
+                ("target_build", _qa_win_tree(tmp / f"pad-b{i}", "2026-03 B", build=f"26200.{1400 + i}{pad}")),
+                ("update_version", _qa_tree(tmp / f"pad-v{i}", [], [], rec_over={"update_version": f"99.{i}.0{pad}"}))):
+            errors, warnings = _qa_scan(qa, tree)
+            promoted, _kept = qa.promote_for_publication(errors, warnings)
+            pad_found[f"{name} {field}"] = ("record_identity_unicode_padding" in codes(warnings), codes(errors),
+                                            "record_identity_unicode_padding" in codes(promoted))
+    for name, value in (("ascii-padded", " 26200.1500 "), ("curly quote inside", "Figma’s update")):
+        tree = _qa_win_tree(tmp / f"pad-ok-{name}", "2026-03 B", build=value)
+        _e, warnings = _qa_scan(qa, tree)
+        pad_clean[name] = "record_identity_unicode_padding" in codes(warnings)
+    corpus_padded = [r.get("permalink") for r in corpus()["recs"] if vr.identity_padding_problems(r)]
+    check("G3-Q10 an identity field padded with U+00A0, U+2009, U+3000 or U+0085 (Liquid keeps it, Python's "
+          "strip drops it) is a QA publication ERROR on target_build and update_version alike; ASCII padding "
+          "and an inner non-ASCII character are not, and the shipped corpus has none",
+          all(v == (True, set(), True) for v in pad_found.values()) and not any(pad_clean.values())
+          and not corpus_padded, f"{pad_found} {pad_clean} {corpus_padded[:3]}")
+
+    # G3-Q11 (PR-A2 review, LOW-3): every lifecycle BUILD must be carried by a record; one is enough to fail.
+    one = _qa_win_tree(tmp / "life-one", "2026-03 D", life_text=LIFECYCLE_TEXT, kb="KB5079391", build="26200.8116")
+    both = _qa_tree(tmp / "life-both", [], [], conf_records=[win_record(update_type="2026-03 D", kb="KB5079391",
+                                                                         build="26100.8116", update_version="24H2")],
+                    rec_over={"product_id": WIN, "update_version": "25H2", "target_kb": "KB5079391",
+                              "target_build": "26200.8116", "update_type": "2026-03 D", "update_report_count": 0})
+    both[3].write_text(LIFECYCLE_TEXT, encoding="utf-8")
+
+    def scan_both(tree):
+        """scan_verdict_policy + scan_lifecycle_builds over one fixture, as qa.main runs them."""
+        e1, w1 = _qa_scan(qa, tree)
+        saved = qa.LIFECYCLE_PATH
+        try:
+            qa.LIFECYCLE_PATH = tree[3]
+            e2, w2 = qa.scan_lifecycle_builds(tree[0])
+        finally:
+            qa.LIFECYCLE_PATH = saved
+        return e1 + e2, w1 + w2
+    e_one, w_one = scan_both(one)
+    e_both, w_both = scan_both(both)
+    promoted_one, _k = qa.promote_for_publication(e_one, w_one)
+    msg = next((w["message"] for w in w_one if w["code"] == "patch_lifecycle_build_unmatched"), "")
+    check("G3-Q11 a lifecycle build no record carries is a QA publication ERROR, per build (the entry still "
+          "matches its other page, so the per-entry warning stays quiet); with both pages present it is clean",
+          "patch_lifecycle_build_unmatched" in codes(promoted_one) and "26100.8116" in msg
+          and "patch_lifecycle_unmatched" not in codes(w_one)
+          and "patch_lifecycle_build_unmatched" not in codes(w_both) and not e_both,
+          f"one={codes(w_one)} both={codes(w_both)} {codes(e_both)}")
 
 
 # ------------------------------------------------------------------------ [R] Liquid == Python
@@ -780,18 +873,36 @@ def check_render_matrix(template: str | None = None) -> None:
     # A forged row: the gate prints the projection as it is (it re-derives nothing, official verdicts
     # included), so QA's model of the gate must say exactly what the gate prints -- that is how QA's
     # comparison with decide sees the forgery and stops the deploy (G3-Q4).
-    forged_rec = cases["sec-forged-row"]["rec"]
+    # The PR-A2 review's MB1/MB2 gap: the gate's scope-acceptance clauses are pinned too -- a SCOPED
+    # SECURITY UPDATE row and an AVOID / WAIT / TEST FIRST row with NO scope are malformed, so the gate
+    # prints neither (and QA's model says the same, so QA reports the page's lost verdict).
+    test_scope = "if you use the test setup"
+    shapes = {  # name: (page, forged verdict, forged scope, what the gate must print)
+        "forged WAIT": ("sec-forged-row", "WAIT", test_scope, ("WAIT", test_scope)),
+        "MB1 scoped SECURITY UPDATE": ("sec-0", "SECURITY UPDATE", test_scope, ("INSUFFICIENT DATA", "")),
+        "MB2 unscoped AVOID": ("avoid-preview", "AVOID", "", ("INSUFFICIENT DATA", "")),
+        "MB2 unscoped WAIT": ("wait+also", "WAIT", "", ("INSUFFICIENT DATA", "")),
+        "MB2 unscoped TEST FIRST": ("tf-only", "TEST FIRST", "", ("INSUFFICIENT DATA", "")),
+    }
     forged = copy.deepcopy(projection)
-    forged["pages"][vp.page_key(forged_rec)] = {
-        "verdict": "WAIT", "scope": "if you use the test setup", "rule": "R3", "reasons": ["forged"],
-        "body": "A forged line.", "panel_heading": "", "panel_text": "", "recommendations": []}
-    f_out = render_gate({"f": slim["sec-forged-row"]}, dict(site, verdict_projection=forged), template)
-    f_got = parse_probe((f_out or {}).get("f", "")) or ("",) * 5
-    f_model = vp.rendered_verdict(forged_rec, forged["pages"], LIFE)
+    for page, verdict, scope, _printed in shapes.values():
+        forged["pages"][vp.page_key(cases[page]["rec"])] = {
+            "verdict": verdict, "scope": scope, "rule": "R3", "reasons": ["forged"],
+            "body": "A forged line.", "panel_heading": "", "panel_text": "", "recommendations": []}
+    f_out = render_gate({name: slim[page] for name, (page, *_rest) in shapes.items()},
+                        dict(site, verdict_projection=forged), template) or {}
+    f_got = {name: (parse_probe(f_out.get(name, "")) or ("",) * 5)[:2] for name in shapes}
+    f_model = {name: vp.rendered_verdict(cases[page]["rec"], forged["pages"], LIFE)
+               for name, (page, *_rest) in shapes.items()}
+    f_want = {name: printed for name, (*_rest, printed) in shapes.items()}
     check("G3-R4j a forged WAIT row on a security page prints exactly what QA's model of the gate says, so QA "
-          "sees it differ from decide's SECURITY UPDATE (the gate trusts only the projection; QA guards it)",
-          f_got[:2] == f_model == ("WAIT", "if you use the test setup")
-          and want["sec-forged-row"][0] == "SECURITY UPDATE", f"rendered {f_got[:2]!r}; model {f_model!r}")
+          "sees it differ from decide's SECURITY UPDATE (the gate trusts only the projection; QA guards it); "
+          "a scoped SECURITY UPDATE row (MB1) and an unscoped AVOID / WAIT / TEST FIRST row (MB2) print nothing, "
+          "in the gate and in QA's model alike",
+          f_got == f_model == f_want and want["sec-forged-row"][0] == "SECURITY UPDATE"
+          and all(want[page][0] == verdict for page, verdict in
+                  (("sec-0", "SECURITY UPDATE"), ("avoid-preview", "AVOID"), ("wait+also", "WAIT"), ("tf-only", "TEST FIRST"))),
+          f"rendered {f_got!r}; model {f_model!r}")
 
     # No projection at all (a local render, a fresh checkout): fail closed -- no verdict of any kind.
     bare = render_gate(slim, {"patch_lifecycle": {"schema_version": 1, "entries": LIFE},
@@ -847,6 +958,42 @@ def check_render_official(template: str | None = None) -> None:
           "renders no AVOID even though Jekyll still loads it: the gate matches no lifecycle entry itself",
           cases == wants and all(g and g[0] == "INSUFFICIENT DATA" for gs in cases.values() for g in gs),
           f"{ {k: [g and g[0] for g in v] for k, v in cases.items()} }")
+    check_render_identity(template)
+
+
+def check_render_identity(template: str | None = None) -> None:
+    """G3-R8 (PR-A2 review, LOW-1, probe P5): the page key Python builds is the key the gate builds.
+
+    Each Unicode pad is one Liquid's `| strip` keeps and Python's str.strip used to drop. A padded
+    security page must still render its SECURITY UPDATE (the projection row is found under the padded
+    key), and a padded reasoned page must render what decide gives it -- no transferred TEST FIRST, since
+    the reviewed entry names the unpadded version -- while the unpadded control page renders TEST FIRST."""
+    recs, counted, entries, kinds = {}, {}, [], {}
+    for i, (name, pad) in enumerate(UNICODE_PADS.items()):
+        sec = win_record(build=f"26200.{1600 + i}{pad}", update_report_count=0)
+        recs[f"sec {name}"], kinds[f"sec {name}"] = sec, "SECURITY UPDATE"
+        version = f"9.{40 + i}"
+        tf = record(update_version=f"{version}{pad}", update_report_count=2)
+        recs[f"tf {name}"], kinds[f"tf {name}"] = tf, "INSUFFICIENT DATA"
+        counted[vr.record_identity(tf)] = [row(1), row(2)]
+        entries.append(_e(f"pad-{i}", version))
+    control = record(update_version="9.49", update_report_count=2)
+    recs["tf control"], kinds["tf control"] = control, "TEST FIRST"
+    counted[vr.record_identity(control)] = [row(1), row(2)]
+    entries.append(_e("pad-control", "9.49"))
+    projection = vp.project(list(recs.values()), counted, entries, [])[0]
+    by_ident = {vr.record_identity(r): r for r in recs.values()}
+    valid, _u = vr.valid_reasons_by_identity(entries, counted, by_ident)
+    out = render_gate({k: {"rec": slim(r), "cnt": int(r["update_report_count"])} for k, r in recs.items()},
+                      {"verdict_projection": projection}, template) or {}
+    got = {k: parse_probe(out.get(k, "")) for k in recs}
+    want = {k: python_view(r, valid.get(vr.record_identity(r), []), [], int(r["update_report_count"]))
+            for k, r in recs.items()}
+    check("G3-R8 an identity padded with U+00A0, U+2009, U+3000 or U+0085 renders exactly what decide gives it "
+          "through the real gate: the padded security pages keep SECURITY UPDATE, a padded version takes no "
+          "reviewed TEST FIRST meant for the unpadded one, and the unpadded control renders it",
+          "__error__" not in out and got == want and {k: (g or ("",))[0] for k, g in got.items()} == kinds,
+          str({k: ((got[k] or ("",))[0], want[k][0]) for k in recs if got[k] != want[k]})[:600])
 
 
 # ------------------------------------------------------------------------ corpus facts (shared)
@@ -1277,7 +1424,7 @@ def check_avoid_recommendations() -> None:
 # ------------------------------------------------------------------------ AUX-097: official verdicts in the feed
 
 FEED_LAYOUT_PATH = _AUX / "_layouts" / "aux-updates.html"
-LAYOUT_OVERRIDE: str | None = None   # the feed layout's text, set only by mutant X40
+LAYOUT_OVERRIDE: str | None = None   # the feed layout's text, set only by mutant X48
 _FEED_ELSE = ("{% else %}{% include patch-feed-summary.html item=item summary='' %}"
               "{% if feed_summary_line != '' %}")
 
@@ -1288,7 +1435,7 @@ def feed_summary_of(r: dict) -> str:
 
 
 def pre_aux097_feed_line(record, rows, summary=""):
-    """The feed card's contract before AUX-097 (X39 and G3-Q10's probe only): no stored summary, no line."""
+    """The feed card's contract before AUX-097 (X47 and G3-Q12's probe only): no stored summary, no line."""
     return REAL_FEED_LINE(record, rows, summary) if str(summary or "").strip() else ""
 
 
@@ -1296,7 +1443,7 @@ REAL_FEED_LINE = vp.feed_line
 
 
 def pre_aux097_layout() -> str:
-    """The feed layout before AUX-097 (X40 only): a card with no stored summary prints nothing."""
+    """The feed layout before AUX-097 (X48 only): a card with no stored summary prints nothing."""
     text = FEED_LAYOUT_PATH.read_text(encoding="utf-8")
     out = re.sub(r"\{% else %\}\{% include patch-feed-summary\.html item=item summary='' %\}.*?"
                  r"\{% endif %\}\{% endif %\}", "{% endif %}", text, flags=re.S)
@@ -1311,7 +1458,7 @@ def feed_card_fragments(text: str) -> list[str]:
 
 
 def check_qa_feed(tmp: Path) -> None:
-    """G3-Q10 (AUX-097): QA sees a feed card that would hide its page's official verdict."""
+    """G3-Q12 (AUX-097): QA sees a feed card that would hide its page's official verdict."""
     import qa_patch_records as qa
     codes = lambda es: {e["code"] for e in es}  # noqa: E731
     code = "feed_official_verdict_unprinted"
@@ -1327,7 +1474,7 @@ def check_qa_feed(tmp: Path) -> None:
         restore()
     seen = {k: (code in codes(w), code in codes(qa.promote_for_publication(e, w)[0]), code in codes(e))
             for k, (e, w) in hidden.items()}
-    check("G3-Q10 a zero-report SECURITY UPDATE and the zero-report KB5079391 AVOID are clean in QA as shipped; "
+    check("G3-Q12 a zero-report SECURITY UPDATE and the zero-report KB5079391 AVOID are clean in QA as shipped; "
           "with the feed card's pre-AUX-097 contract (no stored summary, no line) each is "
           "feed_official_verdict_unprinted: a writeback WARNING that --publish-strict makes an ERROR",
           not any(code in codes(e) | codes(w) for e, w in shipped.values())
@@ -1429,6 +1576,13 @@ def run_mutant(label: str, body, mutants: list, *, mutate, restore) -> None:
 def swap(owner, name, replacement):
     original = getattr(owner, name)
     return (lambda: setattr(owner, name, replacement)), (lambda: setattr(owner, name, original))
+
+
+def swap_many(owner, replacements: dict):
+    """swap() for several attributes of one owner that together are ONE fix (e.g. a set of patterns)."""
+    originals = {name: getattr(owner, name) for name in replacements}
+    return ((lambda: [setattr(owner, n, v) for n, v in replacements.items()]),
+            (lambda: [setattr(owner, n, v) for n, v in originals.items()]))
 
 
 def wrap_decide(transform):
@@ -1615,18 +1769,52 @@ def check_mutations(tmp: Path) -> None:
              "= pvg_row.recommendations -%}{%- endif -%}", "")),
         ("X37 the menu-bar reason says the crash is not new in this OBS version again", check_wording,
          swap(sys.modules[__name__], "REASONS", menu_bar_overclaim())),
+        # PR-A2 review (LOW-1..3, MB1/MB2): each restores ONE half of one fix.
+        ("X38 (probe P5) the page key strips Unicode spaces again (Python's str.strip)", check_render_identity,
+         swap(vr, "record_identity", lambda r: tuple(str(r.get(f) if r.get(f) is not None else "").strip()
+                                                     for f in vr.IDENTITY_FIELDS))),
+        ("X39 (probe P5) QA no longer reports an identity Liquid and Python strip differently",
+         lambda: check_qa(tmp / f"x39-{next(qa_runs)}"), swap(vr, "identity_padding_problems", lambda r: [])),
+        # X40 (probe P3), split one mutant per pattern (G35-04 review 2, LOW-6): reverting four at once
+        # let the shape detector's own fail-open survive.
+        ("X40a (probe P3) the monthly-security pattern reads any Unicode digit again (no re.ASCII)",
+         check_render_official, swap(pd, "_MONTHLY_SECURITY_RE", re.compile(pd._MONTHLY_SECURITY_RE.pattern))),
+        ("X40b the preview pattern reads any Unicode digit again (no re.ASCII)",
+         lambda: check_qa(tmp / f"x40b-{next(qa_runs)}"), swap(pd, "_PREVIEW_RE", re.compile(pd._PREVIEW_RE.pattern))),
+        ("X40c the strict release-type pattern reads any Unicode digit again (no re.ASCII)",
+         lambda: check_qa(tmp / f"x40c-{next(qa_runs)}"),
+         swap(pd, "_RELEASE_TYPE_RE", re.compile(pd._RELEASE_TYPE_RE.pattern))),
+        ("X40d (review 2, LOW-6) the shape detector is ASCII-only again (A2's re.ASCII)",
+         lambda: check_qa(tmp / f"x40d-{next(qa_runs)}"),
+         swap(pd, "_RELEASE_TYPE_SHAPED_RE", re.compile(pd._RELEASE_TYPE_SHAPED_RE.pattern, re.ASCII))),
+        ("X40e (review 2, LOW-6) the shape detector reads the raw value, not its NFKC form",
+         lambda: check_qa(tmp / f"x40e-{next(qa_runs)}"), swap(pd, "_release_type_shape", lambda raw: raw)),
+        ("X41 the lifecycle KB and date patterns read any Unicode digit again", check_lifecycle,
+         swap_many(vr, {"KB_RE": re.compile(r"^KB\d{7}$"), "DATE_RE": re.compile(r"^\d{4}-\d{2}-\d{2}$")})),
+        ("X42 (probe P4) a lifecycle build is not checked against the ASCII build pattern", check_lifecycle,
+         swap(vr, "LIFECYCLE_BUILD_RE", re.compile(r".+", re.S))),
+        ("X43 (probe P4) QA no longer reports a lifecycle build that no record carries",
+         lambda: check_qa(tmp / f"x43-{next(qa_runs)}"),
+         swap(qa, "add", lambda bucket, path, code, msg: None if code == "patch_lifecycle_build_unmatched"
+              else real_add(bucket, path, code, msg))),
+        ("X44 (MB1) the gate prints a SECURITY UPDATE row that carries a scope", check_render_matrix,
+         tpl("{%- if pvg_row_scope == '' -%}{%- assign pvg_printed = true -%}{%- endif -%}",
+             "{%- assign pvg_printed = true -%}")),
+        ("X45 (MB2) the gate prints an AVOID / WAIT / TEST FIRST row that carries no scope", check_render_matrix,
+         tpl("{%- if pvg_row_scope != '' -%}{%- assign pvg_printed = true -%}{%- endif -%}",
+             "{%- assign pvg_printed = true -%}")),
         # AUX-097: each restores ONE half of the zero-report official feed line.
-        ("X38 the feed card composes a line only beside a stored summary again (Liquid half)", check_feed_official,
+        ("X46 the feed card composes a line only beside a stored summary again (Liquid half)", check_feed_official,
          inc("patch-feed-summary.html", "{%- if feed_summary_line != '' or gate_official -%}",
              "{%- if feed_summary_line != '' -%}")),
-        ("X39 QA's contract of the feed card drops the official line too (Python half)", check_feed_official,
+        ("X47 QA's contract of the feed card drops the official line too (Python half)", check_feed_official,
          swap(vp, "feed_line", pre_aux097_feed_line)),
-        ("X40 the feed layout gives a card with no stored summary no line again", check_feed_official,
+        ("X48 the feed layout gives a card with no stored summary no line again", check_feed_official,
          swap(sys.modules[__name__], "LAYOUT_OVERRIDE", pre_aux097_layout())),
-        ("X41 QA reports a hidden official verdict but no longer blocks publication on it",
-         lambda: check_qa_feed(tmp / f"x41-{next(qa_runs)}"),
+        ("X49 QA reports a hidden official verdict but no longer blocks publication on it",
+         lambda: check_qa_feed(tmp / f"x49-{next(qa_runs)}"),
          swap(qa, "PUBLICATION_BLOCKING_CODES", qa.PUBLICATION_BLOCKING_CODES - {"feed_official_verdict_unprinted"})),
-        ("X42 QA no longer checks the feed card's official line", lambda: check_qa_feed(tmp / f"x42-{next(qa_runs)}"),
+        ("X50 QA no longer checks the feed card's official line", lambda: check_qa_feed(tmp / f"x50-{next(qa_runs)}"),
          swap(qa, "add", lambda bucket, path, code, msg: None if code == "feed_official_verdict_unprinted"
               else real_add(bucket, path, code, msg))),
     ]

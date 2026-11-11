@@ -52,9 +52,19 @@ REASON_CLASSES = ("regression", "corroborated_issue", "corroborated_install_prob
 # lib.patch_decision.leading_decision) finds the end of the verdict at the first colon.
 SCOPE_RE = re.compile(r"^(?:if|when|for) [^\s:][^:\n]*[^.\s:]$")
 LIFECYCLE_RELATIONSHIPS = ("withdrawn_for_new_installs",)
-KB_RE = re.compile(r"^KB\d{7}$")
-DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+# ASCII ONLY (PR-A2 review, LOW-2 / LOW-3). `\d` matches any Unicode digit and `int()` reads them,
+# so a KB number written with a full-width digit passed, and an invisible character after a lifecycle
+# build passed because it is not whitespace. Every pattern here is ASCII, and each is matched against
+# the WHOLE value (fullmatch: a bare `$` also accepts a final newline).
+KB_RE = re.compile(r"^KB[0-9]{7}$", re.ASCII)
+DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", re.ASCII)
+LIFECYCLE_BUILD_RE = re.compile(r"^[0-9]{5}\.[0-9]{1,5}$", re.ASCII)
 MAX_LIFECYCLE_ENTRIES = 1
+# Exactly what Liquid's `| strip` removes (Ruby String#strip): ASCII whitespace and NUL, nothing else.
+# Python's str.strip() also removes Unicode spaces (U+00A0, U+2009, U+3000, U+0085, U+001C..U+001F),
+# which is how QA once modelled a page key the gate never builds (PR-A2 review, LOW-1).
+LIQUID_STRIP_CHARS = " \t\n\v\f\r\x00"
+IDENTITY_FIELDS = ("product_id", "update_version", "target_build")
 
 REQUIRED_REASON_KEYS = ("id", "product_id", "update_version", "verdict", "reason_class", "scope",
                         "evidence", "reason", "new_in_this_version", "reviewed_at", "basis")
@@ -99,14 +109,49 @@ def load_lifecycle(path: Path = LIFECYCLE_PATH) -> list[dict[str, Any]]:
     return _load(path, "entries")
 
 
+def liquid_strip(value: Any) -> str:
+    """`value | append: '' | strip` as the Liquid gate computes it: str() of the raw field, then only
+    ASCII whitespace and NUL removed from both ends."""
+    return str(value if value is not None else "").strip(LIQUID_STRIP_CHARS)
+
+
 def reason_identity(entry: Mapping[str, Any]) -> tuple[str, str, str]:
-    return (_s(entry.get("product_id")), _s(entry.get("update_version")), _s(entry.get("target_build")))
+    return (liquid_strip(entry.get("product_id")), liquid_strip(entry.get("update_version")),
+            liquid_strip(entry.get("target_build")))
 
 
 def record_identity(record: Mapping[str, Any]) -> tuple[str, str, str]:
-    """The identity a Liquid template sees: the RAW fields, no normalisation. Only build-aware
-    products carry `target_build`, so this equals lib.patch_identity.key_from for every record."""
-    return (_s(record.get("product_id")), _s(record.get("update_version")), _s(record.get("target_build")))
+    """The identity a Liquid template sees: the RAW fields, stripped exactly as Liquid's `| strip`
+    strips them and no further. Only build-aware products carry `target_build`, so for every record
+    without Unicode padding this equals lib.patch_identity.key_from.
+
+    ASCII-STRICT ON PURPOSE (PR-A2 review, LOW-1, probe P5). This used Python's str.strip(), which
+    also removes a no-break space: a target_build of "26200.7623" plus U+00A0 made QA and the
+    projection key the page "...|26200.7623" while the gate, whose `| strip` keeps U+00A0, looked up
+    the padded key, found no row and printed INSUFFICIENT DATA where decide gave SECURITY UPDATE, with
+    QA silent. Now both sides compute the same key. A value whose Unicode and ASCII stripping differ
+    matches no reason entry and no counted group (fail closed), and `identity_padding_problems` makes
+    it a publication error."""
+    return (liquid_strip(record.get("product_id")), liquid_strip(record.get("update_version")),
+            liquid_strip(record.get("target_build")))
+
+
+def identity_padding_problems(record: Mapping[str, Any]) -> list[str]:
+    """Identity fields whose Python (Unicode) stripping differs from Liquid's (ASCII) stripping, or [].
+
+    Such padding is invisible: the gate keeps it and every Python reader used to drop it. The page
+    and `decide` agree on it now (both keep it), but the page silently stops matching its reasons and
+    its counted evidence, so QA --publish-strict reports it (record_identity_unicode_padding)."""
+    problems = []
+    for field in IDENTITY_FIELDS:
+        raw = record.get(field)
+        if raw is None:
+            continue
+        text = str(raw)
+        if text.strip() != text.strip(LIQUID_STRIP_CHARS):
+            problems.append(f"{field} {text!r} carries leading or trailing Unicode whitespace that "
+                            "Liquid's strip keeps and Python's strip removes")
+    return problems
 
 
 def schema_errors(entries: Iterable[Mapping[str, Any]]) -> list[str]:
@@ -141,7 +186,7 @@ def schema_errors(entries: Iterable[Mapping[str, Any]]) -> list[str]:
         for field in ("product_id", "update_version", "reviewed_at", "basis"):
             if not _s(entry.get(field)):
                 errors.append(f"{label}: {field} is empty")
-        if not DATE_RE.match(_s(entry.get("reviewed_at"))):
+        if not DATE_RE.fullmatch(_s(entry.get("reviewed_at"))):
             errors.append(f"{label}: reviewed_at must be YYYY-MM-DD")
         evidence = entry.get("evidence")
         if not isinstance(evidence, list) or not evidence:
@@ -253,17 +298,22 @@ def lifecycle_errors(entries: list[Mapping[str, Any]]) -> list[str]:
             problem = _strict_string_problem(entry.get(field))
             if problem:
                 errors.append(f"{label}: {field} {problem}")
-        for position, build in enumerate(entry.get("builds") if isinstance(entry.get("builds"), list) else []):
-            problem = _strict_string_problem(build)
-            if problem:
-                errors.append(f"{label}: builds[{position}] {problem}")
+        for key in ("builds", "replacement_builds"):
+            for position, build in enumerate(entry.get(key) if isinstance(entry.get(key), list) else []):
+                problem = _strict_string_problem(build)
+                if not problem and not LIFECYCLE_BUILD_RE.fullmatch(str(build)):
+                    # PR-A2 review, LOW-3, probe P4: a build followed by a zero-width space is a plain,
+                    # unpadded string, so it passed, matched no page, and the 24H2 AVOID vanished.
+                    problem = "is not an ASCII OS build of the form 12345.6789"
+                if problem:
+                    errors.append(f"{label}: {key}[{position}] {problem}")
         if _s(entry.get("relationship")) not in LIFECYCLE_RELATIONSHIPS:
             errors.append(f"{label}: relationship must be one of {LIFECYCLE_RELATIONSHIPS}")
         for field in ("kb", "replacement_kb"):
-            if not KB_RE.match(_s(entry.get(field))):
-                errors.append(f"{label}: {field} must look like KB1234567")
+            if not KB_RE.fullmatch(_s(entry.get(field))):
+                errors.append(f"{label}: {field} must be an ASCII KB number like KB1234567")
         for field in ("released", "replacement_released", "verified_at"):
-            if not DATE_RE.match(_s(entry.get(field))):
+            if not DATE_RE.fullmatch(_s(entry.get(field))):
                 errors.append(f"{label}: {field} must be YYYY-MM-DD")
         if not _s(entry.get("official_url")).startswith("https://support.microsoft.com/"):
             errors.append(f"{label}: official_url must be the support.microsoft.com article")

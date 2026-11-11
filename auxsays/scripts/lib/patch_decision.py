@@ -64,6 +64,7 @@ The history above is kept because it explains why one function, not three, decid
 from __future__ import annotations
 
 import re
+import unicodedata
 from typing import Any
 
 INSUFFICIENT_DATA = "INSUFFICIENT DATA"
@@ -262,13 +263,32 @@ AVOID_SCOPE = "for new installations"
 WAIT = "WAIT"
 TEST_FIRST = "TEST FIRST"
 
-_MONTHLY_SECURITY_RE = re.compile(r"^(\d{4})-(\d{2}) B$")
-_PREVIEW_RE = re.compile(r"^(\d{4})-(\d{2}) D$")
+# ASCII ONLY (PR-A2 review, LOW-2, probe P3). Without re.ASCII, `\d` matches any Unicode digit and
+# int() reads it, so a preview page whose release type was rewritten with full-width or Arabic-Indic
+# digits and a " B" decided SECURITY UPDATE. Now such a value is not a release type; its shape still
+# marks it as meant to be one, so release_type_problem names it (windows_update_type_malformed).
+_MONTHLY_SECURITY_RE = re.compile(r"^(\d{4})-(\d{2}) B$", re.ASCII)
+_PREVIEW_RE = re.compile(r"^(\d{4})-(\d{2}) D$", re.ASCII)
 # Every release-health type a Windows record stores today: monthly security "B", preview "D",
 # out-of-band "OOB" (43 / 32 / 21 records; the 97th carries the writer default "official-source").
-_RELEASE_TYPE_RE = re.compile(r"^(\d{4})-(\d{2}) (?:B|D|OOB)$")
+_RELEASE_TYPE_RE = re.compile(r"^(\d{4})-(\d{2}) (?:B|D|OOB)$", re.ASCII)
 # A value that opens like one ("YYYY-") or ends with one of its type codes is MEANT to be one.
+# NOT ASCII-only, on purpose (G35-04 review 2, LOW-6): this detector decides only whether a value the
+# strict patterns above refuse is REPORTED, so it must see the shape in any script. With re.ASCII here
+# too, full-width digits with a full-width "B" (U+FF22), full-width digits with an ideographic space
+# (U+3000) before "B", and Arabic-Indic digits with a full-width "B" matched neither the strict pattern
+# nor this one: a real B page lost SECURITY UPDATE with QA silent. It reads `_release_type_shape(raw)`,
+# the NFKC form, so full-width forms (the hyphen U+FF0D and the letter too) show the shape they
+# imitate; Unicode `\d` and `\s` cover what NFKC leaves alone (Arabic-Indic digits and letters).
+# test_growth3_verdict_policy G3-Q8 carries every one of these values.
 _RELEASE_TYPE_SHAPED_RE = re.compile(r"^\s*\d{4}\s*-|\s(?:B|D|OOB)\s*$")
+
+
+def _release_type_shape(raw: str) -> str:
+    """The form `_RELEASE_TYPE_SHAPED_RE` reads: NFKC (full-width digits, hyphen, letters and the
+    ideographic space become their ASCII look-alikes). Never used to ACCEPT a value: the strict
+    patterns always read the raw text."""
+    return unicodedata.normalize("NFKC", raw)
 
 # Public wording, ONE copy. The gate include renders these exact strings; the corpus test compares
 # every rendered page body with what the writer stored.
@@ -290,10 +310,23 @@ SECURITY_PANEL_LEAD = {
         "Security update - a confirmed problem affects some setups. Microsoft recommends keeping "
         "supported systems updated. Hold deployment only on the affected systems until a fix is "
         "available."),
+    # G35-04: a vendor-confirmed serious defect (lib/verdict_reason_producer). Reached only while
+    # PUBLIC_AUTO_ACTIVATION is on (TEMPORARY: off, pending the owner's approval).
+    "vendor_confirmed_serious": (
+        "Security update - Microsoft confirms a known issue on some setups. Microsoft recommends "
+        "keeping supported systems updated. Hold deployment only on the affected systems until a fix "
+        "is available."),
 }
 PANEL_KIND = {"corroborated_install_problem": "affected_configuration",
               "corroborated_issue": "affected_configuration",
-              "regression": "deployment_caution"}
+              "regression": "deployment_caution",
+              "vendor_confirmed_serious": "deployment_caution"}
+# A vendor-confirmed reason may stand on a page with no user report, so its "other setups" line
+# cannot point at reports listed below. Used only when every reason on the page is of that class and
+# the page has no report (public_body).
+OTHER_SETUPS_BY_CLASS = {
+    "vendor_confirmed_serious": "Other setups: no problem is confirmed for them yet.",
+}
 PANEL_HEADING = {"affected_configuration": "Affected configuration",
                  "deployment_caution": "Deployment caution"}
 # The Recommendations list under an AVOID verdict. ONE copy: the record writer stores it on a
@@ -354,7 +387,7 @@ def release_type_problem(record: dict[str, Any] | None) -> str:
         return ""
     if not isinstance(raw, str):
         return f"update_type is a {type(raw).__name__} ({raw!r}), not a release-health type string"
-    if not _RELEASE_TYPE_SHAPED_RE.search(raw):
+    if not _RELEASE_TYPE_SHAPED_RE.search(_release_type_shape(raw)):
         return ""
     match = _RELEASE_TYPE_RE.match(raw.strip())
     if match and int(match.group(1)) >= 2000 and 1 <= int(match.group(2)) <= 12:
@@ -475,7 +508,12 @@ def public_body(decision: Decision, record: dict[str, Any] | None, report_count:
             parts.append(f"Also {_text(other.get('verdict'))} {_text(other.get('scope'))}: "
                          f"{_text(other.get('reason'))}")
         if not install:
-            parts.append(OTHER_SETUPS)
+            # The vendor line only where nothing else stands: no user-report reason and no report.
+            # Beside reports (or an "Also ... users independently report" reason) the usual line is
+            # the true one (G35-04 review 1, LOW-5).
+            alone = n == 0 and len({_text(e.get("reason_class")) for e in decision.reasons}) == 1
+            parts.append(OTHER_SETUPS_BY_CLASS.get(_text(head.get("reason_class")), OTHER_SETUPS) if alone
+                         else OTHER_SETUPS)
         return " ".join(parts)
     if n == 0:
         return ""
