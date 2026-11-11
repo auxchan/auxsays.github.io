@@ -22,13 +22,15 @@ not see it (review 2: probe N1, "2026-3x B").
 SECTIONS. [D] the decision procedure and its invariants (G3-D1..D12). [F] the reason file's audits
 (G3-F0..F7, G3-OC). [L] the lifecycle exception and its strict, ASCII typing (G3-L1..L6, G3-W0).
 [W] public wording (G3-W1..W4). [Q] QA: severities, the rendered/authority comparison, the malformed
-lifecycle and release type, Unicode-padded identities and unmatched lifecycle builds (G3-Q1..Q11).
+lifecycle and release type, Unicode-padded identities and unmatched lifecycle builds (G3-Q1..Q11), and a
+feed card that would hide its page's official verdict, each half of its line on its own (G3-Q12, Q13).
 [R] the gate renders exactly what Python decides: a synthetic matrix with one case per support rule
 and per scope-acceptance clause, no-projection fail-closed, the whole corpus, review 2's gate2 and
 refused-lifecycle cases, and padded identities (G3-R0..R8). [P] the projection IS the authority, official verdicts
 included, review 1's probes A1 and A2 on the rendered page, the builder and its position in the
 deploy (G3-P0..P9). [S] the scope prints with the verdict on every surface, and the feed card's
-wording (G3-S1..S8, review 1 D1, review 2 LOW-4). [X] mutants: each restores ONE thing the policy
+wording (G3-S1..S8, review 1 D1, review 2 LOW-4); every feed card states its page's official verdict at
+any report count, and its status pill then names no verdict (G3-S9..S13, AUX-097). [X] mutants: each restores ONE thing the policy
 forbids, and must be caught by a named check that was passing before it.
 
 Needs ruby + the liquid gem for [R], [P], [S] and the template mutants. Offline; writes only in a
@@ -1424,7 +1426,7 @@ def check_avoid_recommendations() -> None:
 # ------------------------------------------------------------------------ AUX-097: official verdicts in the feed
 
 FEED_LAYOUT_PATH = _AUX / "_layouts" / "aux-updates.html"
-LAYOUT_OVERRIDE: str | None = None   # the feed layout's text, set only by mutant X48
+LAYOUT_OVERRIDE: str | None = None   # the feed layout's text, set only by mutants X48 and X51
 _FEED_ELSE = ("{% else %}{% include patch-feed-summary.html item=item summary='' %}"
               "{% if feed_summary_line != '' %}")
 
@@ -1457,6 +1459,34 @@ def feed_card_fragments(text: str) -> list[str]:
     return re.findall(r"(\{% assign consensus_summary = .*?)\n[ ]*<div class=\"patch-card-links\">", text, re.S)
 
 
+PILL_SPAN = '<span class="patch-status patch-status--{{ reaction_class }}">'
+
+
+def feed_pill_fragments(text: str) -> list[str]:
+    """Each feed loop's status pill as shipped -- its label lookup, its class and its span -- wrapped
+    in @@ so the rendered pill can be read back (both loops: current and archive)."""
+    labels = re.findall(r"\{% assign reaction = item\.update_consensus_label [^%]*%\}", text)
+    classes = re.findall(r"\{% assign reaction_class = reaction [^%]*%\}", text)
+    pills = re.findall(re.escape(PILL_SPAN) + r".*?</span>", text)
+    if not (len(labels) == len(classes) == len(pills)):
+        return []
+    return [f"{a}{b}@@{p}@@" for a, b, p in zip(labels, classes, pills)]
+
+
+def stored_label(r: dict) -> str:
+    """The label the card's pill used to print: the layout's `default` chain over the stored fields."""
+    return str(r.get("update_consensus_label") or r.get("community_reaction") or "Insufficient")
+
+
+def pre_review_pill_layout() -> str:
+    """The feed layout as round 1 shipped it (X51 only): the pill prints the stored label, bare."""
+    text = FEED_LAYOUT_PATH.read_text(encoding="utf-8")
+    out = text.replace(PILL_SPAN + "{% include patch-feed-pill.html item=item label=reaction %}</span>",
+                       PILL_SPAN + "{{ reaction }}</span>")
+    assert out != text
+    return out
+
+
 def check_qa_feed(tmp: Path) -> None:
     """G3-Q12 (AUX-097): QA sees a feed card that would hide its page's official verdict."""
     import qa_patch_records as qa
@@ -1481,6 +1511,27 @@ def check_qa_feed(tmp: Path) -> None:
           and seen == {"security": (True, True, False), "avoid": (True, True, False)},
           f"shipped={ {k: sorted(codes(e) | codes(w)) for k, (e, w) in shipped.items()} } hidden={seen}")
 
+    # G3-Q13 (review 1, LOW-3): each half of the contract is checked on its own. A line that keeps the
+    # verdict but not the page's line, or the page's line under another verdict, hides the verdict too.
+    def lead_only(record, rows, summary=""):
+        return REAL_FEED_LINE(record, rows, summary).split(": ", 1)[0] + ": Windows 11. An old reason."
+
+    def tail_only(record, rows, summary=""):
+        return "WAIT: " + REAL_FEED_LINE(record, rows, summary).split(": ", 1)[-1]
+    halves = {}
+    for name, fake in (("lead only", lead_only), ("tail only", tail_only)):
+        mutate, restore = swap(vp, "feed_line", fake)
+        mutate()
+        try:
+            halves[name] = {k: code in codes(_qa_scan(qa, tree)[1]) for k, tree in trees.items()}
+        finally:
+            restore()
+    check("G3-Q13 QA checks each half of the feed line on its own: a line that keeps the verdict but drops the "
+          "page's line, and one that keeps the page's line under another verdict, are each "
+          "feed_official_verdict_unprinted",
+          halves == {"lead only": {"security": True, "avoid": True}, "tail only": {"security": True, "avoid": True}},
+          str(halves))
+
 
 def check_feed_official() -> None:
     """G3-S9..S12 (AUX-097): every feed card states the official verdict its page prints, at any report
@@ -1491,12 +1542,15 @@ def check_feed_official() -> None:
     site = {"data": {"verdict_projection": c["projection"], "patch_lifecycle": LIFECYCLE}}
     layout = LAYOUT_OVERRIDE if LAYOUT_OVERRIDE is not None else FEED_LAYOUT_PATH.read_text(encoding="utf-8")
     fragments = feed_card_fragments(layout)
+    pill_frags = feed_pill_fragments(layout)
     cases = {}
     for i, r in enumerate(recs):
         item = dict(r, url=r.get("permalink"))
         cases[f"inc:{i}"] = {"template": FEED_T, "item": item, "summary": feed_summary_of(r)}
         for j, frag in enumerate(fragments):
             cases[f"lay{j}:{i}"] = {"template": frag, "item": item, "summary": ""}
+        for j, frag in enumerate(pill_frags):
+            cases[f"pill{j}:{i}"] = {"template": frag, "item": item, "summary": ""}
     out = render_includes(cases, site) or {}
 
     def line(key):
@@ -1552,6 +1606,29 @@ def check_feed_official() -> None:
           "INSUFFICIENT DATA card",
           len(fragments) == 2 and layout.count(_FEED_ELSE) == 2 and "__error__" not in out and not bad_layout,
           str(bad_layout[:2])[:400])
+    # G3-S13 (review 1, MAJOR-1): the pill above that line is evidence, so on an official card it must not
+    # print "Insufficient data", the name of a verdict. It prints the patch page's word for that label.
+    bad_pill, renamed = [], []
+    for j in range(len(pill_frags)):
+        for i, r in enumerate(recs):
+            label = stored_label(r)
+            reworded = decisions[i].verdict in vp.OFFICIAL and "insufficient" in label.lower()
+            want = "Not enough reports" if reworded else label
+            cls = label.lower().replace(" ", "-")
+            m = re.search(r'@@<span class="patch-status patch-status--([^"]*)">(.*?)</span>@@',
+                          out.get(f"pill{j}:{i}", ""), re.S)
+            if not m or m.group(1) != cls or m.group(2) != want \
+                    or (decisions[i].verdict in vp.OFFICIAL and m.group(2).upper() in pd.CANONICAL_DECISIONS):
+                bad_pill.append((j, r.get("permalink"), label, m and m.group(2)))
+            elif reworded and j == 0:
+                renamed.append(r.get("permalink"))
+    check(f"G3-S13 both feed loops' status pill names no verdict on an official card: the {len(renamed)} "
+          "AVOID / SECURITY UPDATE cards whose stored label is 'Insufficient data' print the patch page's "
+          "community-signal word 'Not enough reports' (the withdrawn KB5079391 among them), and every other "
+          f"card of {len(recs)} prints its stored label, its class and data-status untouched",
+          len(pill_frags) == 2 and "__error__" not in out and not bad_pill and len(renamed) > 10
+          and "/updates/microsoft/microsoft-windows-11/24h2/26100.8116/" in renamed,
+          str(bad_pill[:3])[:400])
 
 
 def run_mutant(label: str, body, mutants: list, *, mutate, restore) -> None:
@@ -1817,6 +1894,14 @@ def check_mutations(tmp: Path) -> None:
         ("X50 QA no longer checks the feed card's official line", lambda: check_qa_feed(tmp / f"x50-{next(qa_runs)}"),
          swap(qa, "add", lambda bucket, path, code, msg: None if code == "feed_official_verdict_unprinted"
               else real_add(bucket, path, code, msg))),
+        # AUX-097 review 1 (MAJOR-1): each restores ONE half of the official card's pill wording.
+        ("X51 the feed layout prints the stored label bare again ('Insufficient data' over the verdict)",
+         check_feed_official, swap(sys.modules[__name__], "LAYOUT_OVERRIDE", pre_review_pill_layout())),
+        ("X52 the pill rewords every 'Insufficient data' card, official verdict or not", check_feed_official,
+         inc("patch-feed-pill.html", "{%- if gate_official -%}{%- assign pfp_label = 'Not enough reports' -%}{%- endif -%}",
+             "{%- assign pfp_label = 'Not enough reports' -%}")),
+        ("X53 the pill rewords an official card whatever its stored label", check_feed_official,
+         inc("patch-feed-pill.html", "{%- if pfp_key contains 'insufficient' -%}", "{%- if true -%}")),
     ]
     for label, body, (mutate, restore) in cases:
         run_mutant(label, body, mutants, mutate=mutate, restore=restore)

@@ -309,13 +309,15 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 211
 # 124 -> 128 (G35-04 review 2, LOW-6): the release-type SHAPE detector reads Unicode digits and the
 # NFKC form again, so a fully non-ASCII type is a publication error (G3-Q8 carries the three review
 # values); X40 is split one mutant per pattern (X40a..X40e). 49 mutants.
-# 128 -> 138 (AUX-097): every feed card states its page's official verdict at any report count --
+# 128 -> 143 (AUX-097): every feed card states its page's official verdict at any report count --
 # the include equals lib/verdict_projection.feed_line on every page (G3-S9), every AVOID / SECURITY
 # UPDATE card prints decide's line, the 18 zero-report ones included (G3-S10), a zero-report
 # INSUFFICIENT DATA card still prints none (G3-S11), both feed loops render it under 'AUXSAYS
 # verdict' (G3-S12), and QA's feed_official_verdict_unprinted is a publication error (G3-Q12);
-# G3-S2 restated. 54 mutants, X46..X50 one fix half each.
-auxsays/scripts/tests/test_growth3_verdict_policy.py = 138
+# G3-S2 restated. Review 1: the pill above an official verdict names no verdict -- 'Not enough
+# reports', the patch page's word, on the 18 (G3-S13) -- and QA checks each half of the line on
+# its own (G3-Q13). 57 mutants, X46..X53 one fix half each.
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 143
 # G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
 # confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
 # the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the
@@ -369,7 +371,11 @@ auxsays/scripts/tests/test_patch_stack_dashboard.py = 116
 # STAMP); G10/G11 (the generator ranks ties by permalink whatever the page order, and stamps the
 # feed from its cards); J8/J8b (the page plan from pages 1, 2, 8, 10 and 16), J9 (the catalogue's
 # outcome: 'mixed' is not 'failed'), J10 (what each outcome shows); W11 (the layout uses the rank).
-auxsays/scripts/tests/test_feed_discovery.py = 67
+# 67 -> 73 (AUX-097 review 1, LOW-1): VERDICT, read from the built pages -- official cards that
+# state their page's verdict under a pill that names none pass (V21); no line (V22), an
+# 'Insufficient data' pill (V23), a stale, unscoped or doubled line (V24) and an unreadable verdict
+# box (V25) fail; W12 pins the markers to the shipped templates.
+auxsays/scripts/tests/test_feed_discovery.py = 73
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over

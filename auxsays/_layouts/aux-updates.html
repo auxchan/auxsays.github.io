@@ -319,7 +319,7 @@ layout: aux-base
             </span>
           </a>
           <span class="patch-status-stack">
-            <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
+            <span class="patch-status patch-status--{{ reaction_class }}">{% include patch-feed-pill.html item=item label=reaction %}</span>
             {% assign official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
             {% assign official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
             {% if official_active > 0 or official_safeguard > 0 %}
@@ -423,7 +423,7 @@ layout: aux-base
               </span>
             </a>
             <span class="patch-status-stack">
-              <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
+              <span class="patch-status patch-status--{{ reaction_class }}">{% include patch-feed-pill.html item=item label=reaction %}</span>
               {% assign official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
               {% assign official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
               {% if official_active > 0 or official_safeguard > 0 %}

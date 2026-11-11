@@ -4855,29 +4855,49 @@ its verdict.
 **Fix** Feed card markup only. The include composes the line whenever the gate prints AVOID or SECURITY UPDATE,
 with or without a stored summary (verdict and scope, the exact patch, the page's line in feed form: the same
 fallback the card already used). Both feed loops in `_layouts/aux-updates.html` give a card with no stored
-summary that line under the label "AUXSAYS verdict" (the patch page's own heading), so the evidence pill beside
-it does not read as the verdict; the pill, the counts and the monitoring status are unchanged. A zero-report
-INSUFFICIENT DATA card still prints nothing. `lib/verdict_projection.feed_line` states the card's contract in
-Python, and QA reports `feed_official_verdict_unprinted` for a feed card whose page the gate gives an official
-verdict and whose line would not lead with it and end with the page's line (a writeback warning, an error under
+summary that line under the label "AUXSAYS verdict" (the patch page's own heading). A zero-report INSUFFICIENT
+DATA card still prints nothing. `lib/verdict_projection.feed_line` states the card's contract in Python, and QA
+reports `feed_official_verdict_unprinted` for a feed card whose page the gate gives an official verdict and whose
+line would not lead with it and end with the page's line (a writeback warning, an error under
 `--publish-strict`). No evidence, count, verdict, maturity, threshold or collection change.
 
-**Measured** Deploy-order builds (projections, QA `--publish-strict` 0/0, Jekyll) of main aa7dafa4 and the
-branch: of 1,540 feed cards, exactly the 18 changed, each by inserted lines only, each line equal to
-`patch_decision.summary_line` of `decide`; the other 1,522 cards and every other byte of the 16 feed pages are
-identical; every printed feed line (236 -> 254) leads with `decide`'s verdict phrase, and every card without one
-is a zero-report INSUFFICIENT DATA page (1,286). The homepage and My Patch Stack are byte-identical (neither
-shows the defect); the other differing files are build timestamps.
+**Review 1** (MAJOR-1) The 18 cards still printed the stored label "Insufficient data" as their status pill,
+above the verdict line. That is the name of a verdict, so each card showed two verdicts and the wrong one first.
+`_includes/patch-feed-pill.html` now prints the pill text in both loops: when the gate gives the page AVOID or
+SECURITY UPDATE and the stored label is an Insufficient label, it prints the patch page's own word for that label,
+"Not enough reports" (the page's "Community signal"); every other card prints its stored label as before. The
+pill's class and the card's `data-status` (the status filters and the "Risk first" sort) are unchanged. (LOW-1)
+QA runs before Jekyll and reads neither template, so a template-only regression passed the deploy:
+`scripts/ci/verify_feed_discovery.py` gained VERDICT, read from the built pages: every feed card whose patch page
+states AVOID or SECURITY UPDATE prints exactly one line that opens with that verdict and scope and ends with the
+page's line in feed form, and no status pill on it names a verdict. (LOW-3) QA's two halves of the line are
+each tested on their own.
 
-**Tests** `test_growth3_verdict_policy.py` 112 -> 122: G3-S9 the include equals `feed_line` on every record,
+**Measured** Deploy-order builds (projections, QA `--publish-strict` 0/0, Jekyll, then verify_feed_discovery)
+of main and the branch: of 1,540 feed cards, exactly the 18 changed, each by its pill text ("Insufficient data"
+-> "Not enough reports") and inserted lines only, each line equal to `patch_decision.summary_line` of `decide`;
+the other 1,522 cards and every other byte of the 16 feed pages are identical; every printed feed line
+(236 -> 254) leads with `decide`'s verdict phrase, and every card without one is a zero-report INSUFFICIENT DATA
+page (1,286). The pills of the 45 official cards go from {Insufficient data 18, Negative 27} to {Not enough
+reports 18, Negative 27}. VERDICT: main fails it on 36 counts (18 cards with no line, 18 with the verdict-word
+pill), the branch is clean (45 official cards, 45 state it), and a build of the branch with only main's layout
+branch put back fails it on the 18 while QA passes 0/0. The homepage and My Patch Stack are byte-identical.
+
+**Tests** `test_growth3_verdict_policy.py` 128 -> 143: G3-S9 the include equals `feed_line` on every record,
 G3-S10 every AVOID / SECURITY UPDATE card prints `decide`'s line (18 with no reports, KB5079391 among them),
 G3-S11 zero-report INSUFFICIENT DATA prints none, G3-S12 both feed loops render it under "AUXSAYS verdict",
-G3-Q10 QA's check is a publication error; G3-S2 restated. Mutants X38-X42 (include, Python contract, layout, QA
-promotion, QA check), each caught by a named check.
+G3-S13 both loops' pill names no verdict on an official card and is unchanged on every other, G3-Q12 QA's check
+is a publication error, G3-Q13 each half of QA's check on its own; G3-S2 restated. Mutants X46-X53 (include,
+Python contract, layout, QA promotion, QA check, the bare pill, the pill reworded off official cards or off the
+Insufficient label), each caught by a named check. `test_feed_discovery.py` 67 -> 73: V21-V25 (VERDICT passes a
+correct feed; fails no line, a verdict-word pill, a stale, unscoped or doubled line, an unreadable verdict box),
+W12 (its markers are the shipped templates').
 
 **Reopen only if** a feed card whose page prints AVOID or SECURITY UPDATE prints no verdict line or a different
-one, a zero-report INSUFFICIENT DATA card gains a line, or a card states an official verdict under the evidence
-label "Evidence summary" without a stored summary.
+one, or a status pill on it names a verdict; a zero-report INSUFFICIENT DATA card gains a line or a reworded
+pill; or a card states an official verdict under the evidence label "Evidence summary" without a stored summary.
+Not changed here (follow-ups): 27 official verdicts with reports still print under "Evidence summary" (so the two
+KB5079391 cards label one verdict two ways), and the "Risk first" sort still ranks a card by its stored label.
 
 ---
 
