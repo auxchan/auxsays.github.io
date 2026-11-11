@@ -72264,3 +72264,146 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9711'
+
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067084-teams-desktop-app-taskbar-notification
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067084/teams-desktop-app-taskbar-notification-badge-will
+  parent_title: Teams desktop app taskbar notification badge will not go away. - Microsoft Q&A
+  report_title: Teams desktop app taskbar notification badge will not go away. - Microsoft Q&A
+  report_text_excerpt: Teams desktop app taskbar notification badge will not go away. I have a notification badge that will not go away on my taskbar. I have marked all messages and activity notifications as read. I tried signing in and out (it did go away when I was signed out). The notification...
+  captured_at: '2026-11-11T15:07:03Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26288.2004.5269.3420
+  match_basis: 26288.2004.5269.3420
+  counted: false
+  exclusion_reason: platform_mac
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067187-question-6067187
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067187/latest-update-wont-install
+  parent_title: Latest update won't install - Microsoft Q&A
+  report_title: Latest update won't install - Microsoft Q&A
+  report_text_excerpt: Latest update won't install - Microsoft Q&A 2026-11 Security Update (KB5132061) (26300.9974) This update downloaded but for over an hour it just keeps on saying that it's installing without doing so.
+  captured_at: '2026-11-11T15:17:30Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067254-question-6067254
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067254/patch-tuesday-security-update-kb5132061
+  parent_title: Patch Tuesday security update KB5132061 - Microsoft Q&A
+  report_title: Patch Tuesday security update KB5132061 - Microsoft Q&A
+  report_text_excerpt: Patch Tuesday security update KB5132061 - Microsoft Q&A Todays Patch Tuesday Security Update KB5132061 installs on some machines and fails on others with various error codes dependong on which machine. It will install on one of my desktop Pcs and one laptop, but fails to...
+  captured_at: '2026-11-11T15:17:30Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6066296-question-6066296
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066296/multiple-bex64-crashes-reboots-from-bugcheck-blue
+  parent_title: Multiple BEX64 crashes, reboots from bugcheck, Blue screens, VSTs causing black screens.... - Microsoft Q&A
+  report_title: Multiple BEX64 crashes, reboots from bugcheck, Blue screens, VSTs causing black screens.... - Microsoft Q&A
+  report_text_excerpt: Multiple BEX64 crashes, reboots from bugcheck, Blue screens, VSTs causing black screens.... - Microsoft Q&A I have been attempting to get a VST update to work properly and have started investigating Event viewer and Reliability Monitor and seen multiple BEX64 shutdown,...
+  captured_at: '2026-11-11T15:18:05Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6066699-question-6066699
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6066699/black-screen-for-10-seconds-before-lock-screen-aft
+  parent_title: Black screen for 10 seconds before lock screen after clean install of Windows11 - Microsoft Q&A
+  report_title: Black screen for 10 seconds before lock screen after clean install of Windows11 - Microsoft Q&A
+  report_text_excerpt: Black screen for 10 seconds before lock screen after clean install of Windows11 - Microsoft Q&A Hi all, Since a clean install of Windows 11, my PC shows a black screen for about 18 seconds after the AORUS logo before the lock screen appears. The startup sound plays during this...
+  captured_at: '2026-11-11T15:18:05Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9818'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: boot failure
+  workflow_area: startup / boot
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
