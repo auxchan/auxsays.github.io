@@ -20,11 +20,21 @@
   as the stored one does (product, version and, for the two build-aware products, the build --
   lib/patch_identity.patch_display_label); it used to drop it.
 
+  AN OFFICIAL VERDICT PRINTS AT ANY REPORT COUNT (AUX-097). The line used to need a stored summary,
+  and only a writer stores one -- on a page with reports. So the 17 zero-report SECURITY UPDATE cards
+  and the zero-report AVOID card for the withdrawn KB5079391 printed no verdict at all, beside an
+  "Insufficient data" evidence pill, while their pages stated the official verdict. An AVOID or
+  SECURITY UPDATE the gate prints now always gives the card its line, composed exactly like the
+  fallback below (verdict and scope, the exact patch, the page's line in feed form). A zero-report
+  page with no verdict (INSUFFICIENT DATA) still has no line. lib/verdict_projection.feed_line
+  states this contract in Python for QA, and test_growth3_verdict_policy renders this file against
+  it over every page.
+
   Input:   include.item     the feed item (a site.pages patch record)
            include.summary  the card's stored evidence summary, already cleaned; '' when none
   Output:  feed_summary_line  the line to print, or '' (no evidence block)
-  A record with no stored summary (no reports) keeps no evidence block, as before. One with a
-  summary but no gate line (a non-official page with no reports) keeps its stored text.
+  A record with no stored summary keeps no evidence block unless its verdict is official. One with
+  a summary but no gate line (a non-official page with no reports) keeps its stored text.
 
   No literal Liquid tag appears in this comment on purpose: a comment block still parses tags.
 {%- endcomment -%}
@@ -32,7 +42,11 @@
 {%- assign pfs_count = pfs_item.update_report_count | default: 0 | plus: 0 -%}
 {%- assign feed_summary_line = include.summary | default: '' | strip -%}
 {%- include patch-verdict-gate.html record=pfs_item count=pfs_count -%}
-{%- if feed_summary_line != '' and gate_body != '' -%}
+{%- assign pfs_compose = false -%}
+{%- if gate_body != '' -%}
+  {%- if feed_summary_line != '' or gate_official -%}{%- assign pfs_compose = true -%}{%- endif -%}
+{%- endif -%}
+{%- if pfs_compose -%}
   {%- capture pfs_phrase -%}{{ gate_label }}{% if gate_scope != '' %} {{ gate_scope }}{% endif %}{%- endcapture -%}
   {%- assign pfs_body = gate_body | replace: '; the individual reports are listed below.', '.' | replace: '; it is listed below.', '.' | replace: '; they are listed below.', '.' -%}
   {%- assign pfs_head = pfs_body | slice: 0, 16 -%}

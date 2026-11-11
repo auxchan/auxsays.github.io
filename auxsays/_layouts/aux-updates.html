@@ -352,7 +352,13 @@ layout: aux-base
           <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
         </div>
         {% endif %}
-        {% endif %}
+        {% else %}{% include patch-feed-summary.html item=item summary='' %}{% if feed_summary_line != '' %}
+        <div class="patch-consensus-block patch-consensus-block--verdict">
+          <span class="patch-consensus-label">AUXSAYS verdict</span>
+          <p class="patch-consensus-line">{{ feed_summary_line }}</p>
+          <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
+        </div>
+        {% endif %}{% endif %}
         <div class="patch-card-links">
           <a href="{{ item.url | relative_url }}">Read breakdown →</a>
           {% if it_source_url != '' %}<a href="{{ it_source_url }}">Official source ↗</a>{% endif %}
@@ -450,7 +456,13 @@ layout: aux-base
             <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
           </div>
           {% endif %}
-          {% endif %}
+          {% else %}{% include patch-feed-summary.html item=item summary='' %}{% if feed_summary_line != '' %}
+          <div class="patch-consensus-block patch-consensus-block--verdict">
+            <span class="patch-consensus-label">AUXSAYS verdict</span>
+            <p class="patch-consensus-line">{{ feed_summary_line }}</p>
+            <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
+          </div>
+          {% endif %}{% endif %}
           <div class="patch-card-links">
             <a href="{{ item.url | relative_url }}">Read breakdown →</a>
             {% if it_source_url != '' %}<a href="{{ it_source_url }}">Official source ↗</a>{% endif %}

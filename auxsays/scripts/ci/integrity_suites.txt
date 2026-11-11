@@ -301,7 +301,13 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 211
 # projection is an error (G3-Q9); the menu-bar reason is non-causal (G3-W4); the feed says nothing
 # is "listed below" and its fallback keeps the patch name (G3-S6, S7); both KB5079391 pages carry the
 # replacement recommendation (G3-S8). 37 mutants (was 24), X25..X37 one fix half each.
-auxsays/scripts/tests/test_growth3_verdict_policy.py = 112
+# 112 -> 122 (AUX-097): every feed card states its page's official verdict at any report count --
+# the include equals lib/verdict_projection.feed_line on every page (G3-S9), every AVOID / SECURITY
+# UPDATE card prints decide's line, the 18 zero-report ones included (G3-S10), a zero-report
+# INSUFFICIENT DATA card still prints none (G3-S11), both feed loops render it under 'AUXSAYS
+# verdict' (G3-S12), and QA's feed_official_verdict_unprinted is a publication error (G3-Q10);
+# G3-S2 restated. 42 mutants, X38..X42 one fix half each.
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 122
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93

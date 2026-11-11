@@ -1167,8 +1167,9 @@ def check_surfaces() -> None:
         if not cell or _text(cell.group(1)) != f"{verdict} {scope}":
             bad_rows.append((r.get("permalink"), cell and _text(cell.group(1)), out.get(f"row:{i}", "")[:120]))
         line = re.search(r"@@(.*?)@@", out.get(f"feed:{i}", ""), re.S)
-        if not str(r.get("update_consensus_summary") or "").strip():
-            # No stored summary (no reports): the card has no evidence line, so it prints no verdict.
+        if not str(r.get("update_consensus_summary") or "").strip() and verdict not in vp.OFFICIAL:
+            # No stored summary (no reports) and a reasoned verdict: the card has no evidence line.
+            # An OFFICIAL verdict prints at any report count (AUX-097): G3-S9..S12.
             if not line or line.group(1).strip():
                 bad_feed.append((r.get("permalink"), "a line without a stored summary", line and line.group(1)[:80]))
         elif not line or not line.group(1).startswith(f"{verdict} {scope}: "):
@@ -1272,6 +1273,139 @@ def check_avoid_recommendations() -> None:
 
 
 # ------------------------------------------------------------------------ [X] mutants
+
+# ------------------------------------------------------------------------ AUX-097: official verdicts in the feed
+
+FEED_LAYOUT_PATH = _AUX / "_layouts" / "aux-updates.html"
+LAYOUT_OVERRIDE: str | None = None   # the feed layout's text, set only by mutant X40
+_FEED_ELSE = ("{% else %}{% include patch-feed-summary.html item=item summary='' %}"
+              "{% if feed_summary_line != '' %}")
+
+
+def feed_summary_of(r: dict) -> str:
+    """The stored summary a feed card hands the include ('' when the record stores none)."""
+    return str(r.get("update_consensus_summary") or r.get("community_summary") or "").strip()
+
+
+def pre_aux097_feed_line(record, rows, summary=""):
+    """The feed card's contract before AUX-097 (X39 and G3-Q10's probe only): no stored summary, no line."""
+    return REAL_FEED_LINE(record, rows, summary) if str(summary or "").strip() else ""
+
+
+REAL_FEED_LINE = vp.feed_line
+
+
+def pre_aux097_layout() -> str:
+    """The feed layout before AUX-097 (X40 only): a card with no stored summary prints nothing."""
+    text = FEED_LAYOUT_PATH.read_text(encoding="utf-8")
+    out = re.sub(r"\{% else %\}\{% include patch-feed-summary\.html item=item summary='' %\}.*?"
+                 r"\{% endif %\}\{% endif %\}", "{% endif %}", text, flags=re.S)
+    assert out != text
+    return out
+
+
+def feed_card_fragments(text: str) -> list[str]:
+    """Each feed loop's evidence/verdict markup, from the stored-summary lookup to the card links:
+    the part of the card AUX-097 changes, rendered as shipped (both loops: current and archive)."""
+    return re.findall(r"(\{% assign consensus_summary = .*?)\n[ ]*<div class=\"patch-card-links\">", text, re.S)
+
+
+def check_qa_feed(tmp: Path) -> None:
+    """G3-Q10 (AUX-097): QA sees a feed card that would hide its page's official verdict."""
+    import qa_patch_records as qa
+    codes = lambda es: {e["code"] for e in es}  # noqa: E731
+    code = "feed_official_verdict_unprinted"
+    trees = {"security": _qa_win_tree(tmp / "sec", "2026-03 B", build="26200.1300"),
+             "avoid": _qa_win_tree(tmp / "avoid", "2026-03 D", life_text=LIFECYCLE_TEXT, kb="KB5079391",
+                                   build="26200.8116")}
+    shipped = {k: _qa_scan(qa, tree) for k, tree in trees.items()}
+    mutate, restore = swap(vp, "feed_line", pre_aux097_feed_line)
+    mutate()
+    try:
+        hidden = {k: _qa_scan(qa, tree) for k, tree in trees.items()}
+    finally:
+        restore()
+    seen = {k: (code in codes(w), code in codes(qa.promote_for_publication(e, w)[0]), code in codes(e))
+            for k, (e, w) in hidden.items()}
+    check("G3-Q10 a zero-report SECURITY UPDATE and the zero-report KB5079391 AVOID are clean in QA as shipped; "
+          "with the feed card's pre-AUX-097 contract (no stored summary, no line) each is "
+          "feed_official_verdict_unprinted: a writeback WARNING that --publish-strict makes an ERROR",
+          not any(code in codes(e) | codes(w) for e, w in shipped.values())
+          and seen == {"security": (True, True, False), "avoid": (True, True, False)},
+          f"shipped={ {k: sorted(codes(e) | codes(w)) for k, (e, w) in shipped.items()} } hidden={seen}")
+
+
+def check_feed_official() -> None:
+    """G3-S9..S12 (AUX-097): every feed card states the official verdict its page prints, at any report
+    count, and the include, its Python contract and the feed layout agree on every page."""
+    c = corpus()
+    recs = c["recs"]
+    rows = c["projection"]["pages"]
+    site = {"data": {"verdict_projection": c["projection"], "patch_lifecycle": LIFECYCLE}}
+    layout = LAYOUT_OVERRIDE if LAYOUT_OVERRIDE is not None else FEED_LAYOUT_PATH.read_text(encoding="utf-8")
+    fragments = feed_card_fragments(layout)
+    cases = {}
+    for i, r in enumerate(recs):
+        item = dict(r, url=r.get("permalink"))
+        cases[f"inc:{i}"] = {"template": FEED_T, "item": item, "summary": feed_summary_of(r)}
+        for j, frag in enumerate(fragments):
+            cases[f"lay{j}:{i}"] = {"template": frag, "item": item, "summary": ""}
+    out = render_includes(cases, site) or {}
+
+    def line(key):
+        m = re.search(r"@@(.*?)@@", out.get(key, ""), re.S)
+        return m.group(1) if m else None
+    apart = [(r.get("permalink"), (line(f"inc:{i}") or "")[:70], vp.feed_line(r, rows, feed_summary_of(r))[:70])
+             for i, r in enumerate(recs) if line(f"inc:{i}") != vp.feed_line(r, rows, feed_summary_of(r))]
+    check(f"G3-S9 over all {len(recs)} records the feed card's include prints exactly "
+          "lib/verdict_projection.feed_line, the contract QA reads",
+          "__error__" not in out and len(recs) > 1000 and not apart,
+          str(apart[:2])[:400] or str(out.get("__error__"))[:300])
+    official, wrong, zero, quiet, lined = [], [], [], [], []
+    decisions = {}
+    for i, r in enumerate(recs):
+        d = pd.decide(r, valid_reasons=c["valid"].get(vr.record_identity(r), []), lifecycle=LIFECYCLE["entries"])
+        decisions[i] = d
+        n = int(r.get("update_report_count") or 0)
+        got = line(f"inc:{i}")
+        if d.verdict in vp.OFFICIAL:
+            official.append(r)
+            if n == 0 and not feed_summary_of(r):
+                zero.append((r.get("permalink"), d.verdict))
+            if got != pd.summary_line(d, r, n, identity=identity_of(r)):
+                wrong.append((r.get("permalink"), (got or "(no line)")[:80]))
+        elif n == 0 and not feed_summary_of(r):
+            (lined if got else quiet).append(r.get("permalink"))
+    zero_kinds = {v for _p, v in zero}
+    check(f"G3-S10 every page decide gives AVOID or SECURITY UPDATE ({len(official)}) has a feed card that "
+          "states it -- verdict, scope, the exact patch and the page's line (lib/patch_decision.summary_line) "
+          f"-- at any report count: {len(zero)} of them have no reports, the withdrawn KB5079391 among them",
+          len(official) > 20 and zero_kinds == {"AVOID", "SECURITY UPDATE"}
+          and "/updates/microsoft/microsoft-windows-11/24h2/26100.8116/" in {p for p, _v in zero} and not wrong,
+          str(wrong[:2])[:400])
+    check(f"G3-S11 a zero-report page with no verdict (INSUFFICIENT DATA, {len(quiet)} pages) still prints no "
+          "feed line", len(quiet) > 500 and not lined, str(lined[:3]))
+    bad_layout = []
+    for j in range(len(fragments)):
+        for i, r in enumerate(recs):
+            html = out.get(f"lay{j}:{i}", "")
+            d = decisions[i]
+            n = int(r.get("update_report_count") or 0)
+            lines = re.findall(r'<p class="patch-consensus-line">(.*?)</p>', html, re.S)
+            labels = re.findall(r'<span class="patch-consensus-label">(.*?)</span>', html, re.S)
+            if d.verdict in vp.OFFICIAL:
+                want_label = "AUXSAYS verdict" if not feed_summary_of(r) else "Evidence summary"
+                if lines != [pd.summary_line(d, r, n, identity=identity_of(r))] or labels != [want_label]:
+                    bad_layout.append((j, r.get("permalink"), labels, [s[:60] for s in lines]))
+            elif n == 0 and not feed_summary_of(r) and html.strip():
+                bad_layout.append((j, r.get("permalink"), "a block on a zero-report INSUFFICIENT DATA card"))
+    check(f"G3-S12 both feed loops ({len(fragments)}: current and archive), rendered as shipped, print every "
+          "official verdict under 'AUXSAYS verdict' when the card stores no summary (the evidence pill beside it "
+          "is not the verdict) and under 'Evidence summary' beside a stored one, and nothing on a zero-report "
+          "INSUFFICIENT DATA card",
+          len(fragments) == 2 and layout.count(_FEED_ELSE) == 2 and "__error__" not in out and not bad_layout,
+          str(bad_layout[:2])[:400])
+
 
 def run_mutant(label: str, body, mutants: list, *, mutate, restore) -> None:
     try:
@@ -1446,8 +1580,7 @@ def check_mutations(tmp: Path) -> None:
              "{% if row_verdict_scope != '' %} <span class=\"patch-verdict-scope\">{{ row_verdict_scope }}</span>{% endif %}",
              "")),
         ("X23 the feed card prints the stored summary as is, so a lagging one leads with a bare verdict",
-         check_surfaces, inc("patch-feed-summary.html", "{%- if feed_summary_line != '' and gate_body != '' -%}",
-                             "{%- if false -%}")),
+         check_surfaces, inc("patch-feed-summary.html", "{%- if pfs_compose -%}", "{%- if false -%}")),
         ("X24 the writer's summary goes back to a bare verdict beside a count", check_surfaces,
          swap(pd, "summary_line", lambda d, r, n, fallback="", identity="": real_summary(
              d, r, n, fallback, identity).replace(pd.verdict_phrase(d) + ":", d.verdict + ":", 1))),
@@ -1482,6 +1615,20 @@ def check_mutations(tmp: Path) -> None:
              "= pvg_row.recommendations -%}{%- endif -%}", "")),
         ("X37 the menu-bar reason says the crash is not new in this OBS version again", check_wording,
          swap(sys.modules[__name__], "REASONS", menu_bar_overclaim())),
+        # AUX-097: each restores ONE half of the zero-report official feed line.
+        ("X38 the feed card composes a line only beside a stored summary again (Liquid half)", check_feed_official,
+         inc("patch-feed-summary.html", "{%- if feed_summary_line != '' or gate_official -%}",
+             "{%- if feed_summary_line != '' -%}")),
+        ("X39 QA's contract of the feed card drops the official line too (Python half)", check_feed_official,
+         swap(vp, "feed_line", pre_aux097_feed_line)),
+        ("X40 the feed layout gives a card with no stored summary no line again", check_feed_official,
+         swap(sys.modules[__name__], "LAYOUT_OVERRIDE", pre_aux097_layout())),
+        ("X41 QA reports a hidden official verdict but no longer blocks publication on it",
+         lambda: check_qa_feed(tmp / f"x41-{next(qa_runs)}"),
+         swap(qa, "PUBLICATION_BLOCKING_CODES", qa.PUBLICATION_BLOCKING_CODES - {"feed_official_verdict_unprinted"})),
+        ("X42 QA no longer checks the feed card's official line", lambda: check_qa_feed(tmp / f"x42-{next(qa_runs)}"),
+         swap(qa, "add", lambda bucket, path, code, msg: None if code == "feed_official_verdict_unprinted"
+              else real_add(bucket, path, code, msg))),
     ]
     for label, body, (mutate, restore) in cases:
         run_mutant(label, body, mutants, mutate=mutate, restore=restore)
@@ -1557,6 +1704,7 @@ def run() -> int:
         check_wording_writer()
         print("\n[Q] QA: severities, and what renders against what the authority decides")
         check_qa(tmp / "q")
+        check_qa_feed(tmp / "qf")
         print("\n[R] the Liquid gate renders what Python decides")
         check_render_matrix()
         check_render_corpus()
@@ -1570,6 +1718,7 @@ def run() -> int:
         check_surfaces()
         check_feed_wording()
         check_avoid_recommendations()
+        check_feed_official()
         print("\n[X] mutants, each caught by a named check")
         check_mutations(tmp)
     print()

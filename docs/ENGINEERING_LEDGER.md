@@ -71,6 +71,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-061 | Resolved | Published claims | Low | A patch page lists "general workflow reports" as if it were a reported issue |
 | AUX-086 | Resolved | Publication | High | The homepage was 124 MB of HTML, so search crawlers never reached a patch signal |
 | AUX-096 | Resolved | Publication | High | The Patch Feed was one 4.3 MB page, and more than half of it was past what Googlebot reads |
+| AUX-097 | Resolved | Publication | Medium | Feed cards hid the official verdict of a withdrawn update and 17 security updates with no reports |
 | AUX-091 | Resolved | Publication | Medium | The homepage rows printed a sentiment word while the pages they open printed a verdict |
 | AUX-070 | Resolved | CI governance | Medium | The serial integrity job spent ~34 of its 45 minutes running 123 suites one after another |
 | AUX-066 | Resolved | Evidence integrity | Medium | Stored Teams evidence still said platform "Windows" and carried no theme, area or severity |
@@ -4829,6 +4830,53 @@ authority and probes A1/A2 fail closed, G3-S1..S5 the scope on every surface); s
 **Reopen only if** a page prints WAIT or TEST FIRST without a supported reason entry, any surface prints a WAIT,
 TEST FIRST or AVOID without its scope, a monthly security update prints anything but SECURITY UPDATE (or the one
 AVOID), a report count, sentiment or theme moves a verdict, or any page advises pausing Windows Update.
+
+---
+
+### AUX-097 — Feed cards hid the official verdict of a withdrawn update and 17 security updates with no reports
+
+- **Status** Resolved · **Area** Publication · **Severity** Medium (a withdrawn update read as unjudged in the feed)
+- **First seen** 2026-11-10 (G36-02 review note 5; live critic C2 sized it at 18 cards) · **Resolved** 2026-11-10
+  (G36 feed-verdict PR)
+
+**Symptom** On the Patch Feed, 18 cards printed no verdict while their pages stated an official one: the 24H2
+KB5079391 card (/updates/microsoft/microsoft-windows-11/24h2/26100.8116/, AVOID for new installations, withdrawn by
+Microsoft) and 17 Windows 11 23H2 / 24H2 / 26H1 SECURITY UPDATE cards on feed pages 2-9. Each had 0 accepted
+reports and showed only the "Insufficient data" evidence pill and NO ACCEPTED PATCH-SPECIFIC REPORTS, so a feed
+reader could not learn that the update was withdrawn or is a security update. Pre-existing: byte-identical before
+the feed was paged (#239).
+
+**Cause** The card printed its line only inside the layout's stored-summary block, and
+`_includes/patch-feed-summary.html` composed one only beside a stored summary. Only a writer stores
+`update_consensus_summary`, and only on a page with reports, so a zero-report page's card had no line whatever
+its verdict.
+
+**Fix** Feed card markup only. The include composes the line whenever the gate prints AVOID or SECURITY UPDATE,
+with or without a stored summary (verdict and scope, the exact patch, the page's line in feed form: the same
+fallback the card already used). Both feed loops in `_layouts/aux-updates.html` give a card with no stored
+summary that line under the label "AUXSAYS verdict" (the patch page's own heading), so the evidence pill beside
+it does not read as the verdict; the pill, the counts and the monitoring status are unchanged. A zero-report
+INSUFFICIENT DATA card still prints nothing. `lib/verdict_projection.feed_line` states the card's contract in
+Python, and QA reports `feed_official_verdict_unprinted` for a feed card whose page the gate gives an official
+verdict and whose line would not lead with it and end with the page's line (a writeback warning, an error under
+`--publish-strict`). No evidence, count, verdict, maturity, threshold or collection change.
+
+**Measured** Deploy-order builds (projections, QA `--publish-strict` 0/0, Jekyll) of main aa7dafa4 and the
+branch: of 1,540 feed cards, exactly the 18 changed, each by inserted lines only, each line equal to
+`patch_decision.summary_line` of `decide`; the other 1,522 cards and every other byte of the 16 feed pages are
+identical; every printed feed line (236 -> 254) leads with `decide`'s verdict phrase, and every card without one
+is a zero-report INSUFFICIENT DATA page (1,286). The homepage and My Patch Stack are byte-identical (neither
+shows the defect); the other differing files are build timestamps.
+
+**Tests** `test_growth3_verdict_policy.py` 112 -> 122: G3-S9 the include equals `feed_line` on every record,
+G3-S10 every AVOID / SECURITY UPDATE card prints `decide`'s line (18 with no reports, KB5079391 among them),
+G3-S11 zero-report INSUFFICIENT DATA prints none, G3-S12 both feed loops render it under "AUXSAYS verdict",
+G3-Q10 QA's check is a publication error; G3-S2 restated. Mutants X38-X42 (include, Python contract, layout, QA
+promotion, QA check), each caught by a named check.
+
+**Reopen only if** a feed card whose page prints AVOID or SECURITY UPDATE prints no verdict line or a different
+one, a zero-report INSUFFICIENT DATA card gains a line, or a card states an official verdict under the evidence
+label "Evidence summary" without a stored summary.
 
 ---
 
