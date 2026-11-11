@@ -1,0 +1,83 @@
+---
+layout: aux-update
+title: 'Figma New Figma Motion updates: physics based springs, style and Lottie export previews official update breakdown'
+description: 'Official Figma update record captured from Figma for New Figma Motion updates: physics based springs, style
+  and Lottie export previews.'
+permalink: /updates/figma/figma/new-figma-motion-updates-physics-based-springs-style-and-lottie-export-previews/
+update_entry: true
+company_id: figma
+product_id: figma
+update_brand_id: figma
+update_product: Figma
+update_category: Design Workflow
+update_type: official-source
+update_source_name: Figma
+update_source_url: https://www.figma.com/release-notes/?title=new-figma-motion-updates-physics-based-springs-style-and-lottie-export-previews
+update_download_url: ''
+update_version: 'New Figma Motion updates: physics based springs, style and Lottie export previews'
+update_logo_text: FIG
+update_published_at: '2026-11-10T00:00:00.000Z'
+update_last_checked: '2026-11-10T22:36:35Z'
+source_last_checked: '2026-11-10T22:36:35Z'
+official_body_last_checked: '2026-11-10T22:36:35Z'
+record_last_updated: '2026-11-10T22:36:35Z'
+patch_file_size: ''
+patch_file_size_note: ''
+patch_file_size_status: pending_adapter_support
+update_status: current
+update_feed_title: 'Figma New Figma Motion updates: physics based springs, style and Lottie export previews'
+update_detail_title: 'Figma New Figma Motion updates: physics based springs, style and Lottie export previews'
+update_consensus_label: Insufficient data
+update_report_count: 0
+update_consensus_confidence: Low
+quick_verdict: 'Figma New Figma Motion updates: physics based springs, style and Lottie export previews has an official AUXSAYS
+  record. Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.'
+official_summary: 'Figma published Figma New Figma Motion updates: physics based springs, style and Lottie export previews.'
+release_summary: With this Figma Motion feature bundle, Motion designers will have an easier way to preview preset animation
+  styles, view Lottie files before exporting, and more fine tune controls with physics based springs.
+consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
+  ingestion only.
+evidence_state: official_only
+evidence_state_label: Official source only
+intelligence_stage: official_live
+official_source_captured: true
+confirmed_patch_specific_report_count: 0
+evidence_last_checked: ''
+known_issues_present: null
+consensus_collection_status: deferred_official_only
+consensus_match_policy: confirmed_patch_specific_reports_v1
+consensus_match_policy_label: Confirmed patch-specific reports only
+consensus_report_count_label: confirmed patch-specific reports
+consensus_report_weighting: equal_per_confirmed_report
+consensus_low_context_policy: excluded
+complaint_themes: []
+status_events:
+- at: '2026-11-10T00:00:00.000Z'
+  label: Published
+  note: Official source entry detected.
+- at: '2026-11-10T22:36:47Z'
+  label: Insufficient data
+  note: AUXSAYS official-ingestion record initialized.
+official_patch_notes_source_type: rss-feed
+primary_official_source: https://www.figma.com/release-notes/
+fallback_official_sources:
+- https://forum.figma.com/product-updates-3
+official_patch_notes_capture_status: captured-from-rss-feed
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=new-figma-motion-updates-physics-based-springs-style-and-lottie-export-previews
+official_note_status: official_source_captured
+official_note_label: Official source summary
+official_source_type: rss-feed
+official_source_classification_note: Official vendor sources are classified before display so feature summaries, release notes,
+  fixed issues, and vendor announcements are not mislabeled.
+official_sources: []
+official_source_attempts:
+- at: '2026-11-10T22:36:35Z'
+  url: https://www.figma.com/release-notes/?title=new-figma-motion-updates-physics-based-springs-style-and-lottie-export-previews
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+official_patch_notes_body: With this Figma Motion feature bundle, Motion designers will have an easier way to preview preset
+  animation styles, view Lottie files before exporting, and more fine tune controls with physics based springs.
+official_checksums_body: ''
+official_checksums_capture_status: not-present
+---

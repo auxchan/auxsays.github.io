@@ -704,13 +704,18 @@ def section_pv() -> None:
     # script makes exactly one kind of request: a GET of this site's public feed pages, built only from
     # the pager's same-origin links (origin + path, no query), without cookies. It carries nothing of
     # the visitor's, so "kept only in your browser" still holds. Any other request is a send.
+    # The one call site takes its URL by index from that list; `cache` only picks the browser-cache
+    # mode ('no-cache' for one retry of a page from another build), it carries nothing. The list is
+    # feedPagePlan's: the pager's links on this page's own origin, as origin + path.
     sends = [w for w in ("XMLHttpRequest", "sendBeacon", "gtag(", "dataLayer") if w in js]
-    loader_call = "otherPageUrls.map((url) => fetch(url, { credentials: 'omit' })"
-    urls_stmt = js.split("const otherPageUrls = ", 1)[1].split(";", 1)[0] if "const otherPageUrls = " in js else ""
+    loader_call = "fetch(otherPageUrls[at], { credentials: 'omit', cache })"
+    plan_stmt = js.split("const feedPlan = ", 1)[1].split(";", 1)[0] if "const feedPlan = " in js else ""
+    plan_fn = js.split("const feedPagePlan = ", 1)[1].split("\n  };", 1)[0] if "const feedPagePlan = " in js else ""
     feed_fetch_only = (js.count("fetch(") == 1 and loader_call in js
-                       and "a[data-feed-page-link]" in urls_stmt
-                       and "link.origin === window.location.origin" in urls_stmt
-                       and ".map((link) => link.origin + link.pathname)" in urls_stmt)
+                       and "const otherPageUrls = feedPlan.urls;" in js
+                       and "a[data-feed-page-link]" in plan_stmt and "window.location.origin" in plan_stmt
+                       and "links.filter((link) => link.origin === origin)" in plan_fn
+                       and ".map((link) => link.origin + link.pathname)" in plan_fn)
     if not feed_fetch_only:
         sends.append(f"fetch( x{js.count('fetch(')} outside the same-origin, cookie-less feed-page loader")
     check("PV9 what the notice says stays in the browser does: the site script sends nothing anywhere",

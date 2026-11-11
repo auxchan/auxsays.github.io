@@ -19,9 +19,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21 Public Beta 1. 15 user reports are matched to this
-  exact update, but no problem in them is confirmed as reported independently by two or more users. If one matches
-  your setup, test before relying on this update.'
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21 Public Beta 1. 15 user reports are matched to this exact
+  update, but no problem in them is confirmed as reported independently by two or more users. If one matches your setup, test
+  before relying on this update.'
 update_report_count: 15
 update_consensus_confidence: Low-Medium
 status_change_type: new
@@ -37,9 +37,8 @@ patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
 quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21 Public Beta 1 is a beta build with 15 user reports found.'
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 15 user reports are matched to this exact update, but no problem in them
-  is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
-  this update.'
+update_decision_body: 'No verdict yet: 15 user reports are matched to this exact update, but no problem in them is confirmed
+  as reported independently by two or more users. If one matches your setup, test before relying on this update.'
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21 Public Beta 1. Stable/Studio reports are excluded and tracked on the separate
   stable page.
@@ -163,16 +162,11 @@ legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evi
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
-source_last_checked: '2026-11-10T10:05:04Z'
-official_body_last_checked: '2026-11-10T10:05:04Z'
+source_last_checked: '2026-11-10T22:38:10Z'
+official_body_last_checked: '2026-11-10T22:38:10Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-11-08T15:39:58Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
 - at: '2026-11-09T00:35:28Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
@@ -189,6 +183,11 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 - at: '2026-11-10T10:05:04Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
+- at: '2026-11-10T22:38:10Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
