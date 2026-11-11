@@ -1,0 +1,32 @@
+{
+  "DisasterDeclarationsSummaries": [
+    {
+      "femaDeclarationString": "EM-3654-HI",
+      "disasterNumber": 3654,
+      "state": "HI",
+      "declarationType": "EM",
+      "declarationDate": "2026-09-25T00:00:00Z",
+      "fyDeclared": 2026,
+      "incidentType": "Tropical Storm",
+      "declarationTitle": "TROPICAL STORM NOLO",
+      "ihProgramDeclared": false,
+      "iaProgramDeclared": false,
+      "paProgramDeclared": true,
+      "hmProgramDeclared": false,
+      "incidentBeginDate": "2026-09-23T00:00:00Z",
+      "incidentEndDate": null,
+      "disasterCloseoutDate": null,
+      "tribalRequest": false,
+      "fipsStateCode": "15",
+      "fipsCountyCode": "001",
+      "placeCode": "99001",
+      "designatedArea": "Hawaii (County)",
+      "declarationRequestNumber": "26162",
+      "incidentId": "2026092301",
+      "region": 9,
+      "lastRefresh": "2026-09-26T11:08:59.582Z",
+      "hash": "11c5f0a0e753e501102f48f5a02839bbc4876d33",
+      "id": "7b4da9d3-d2cf-4517-98ae-a32b05e81918"
+    }
+  ]
+}

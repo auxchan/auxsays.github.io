@@ -124,8 +124,10 @@ function validateFactualPayload(candidate: PublicationCandidatePayload) {
   assert(proof.sourceId in candidate.sources && proof.seriesId === "DOL-UI-SA-INITIAL", "DOL revision proof source or series is invalid");
   assert(Array.isArray(proof.releases) && proof.releases.length === 2, "DOL revision proof requires advance and revised releases");
   assert(proof.releases.every((release) => isIsoTime(release.publishedAt) && /^https:\/\/www\.dol\.gov\//.test(release.evidenceUrl) && /^[a-f0-9]{64}$/i.test(release.artifactSha256)), "DOL revision release evidence is invalid");
-  assert(proof.releases[0].value === 217000 && proof.releases[1].value === 210000, "DOL revision proof values are invalid");
-  assert(isIsoTime(proof.asKnown.cutoff) && proof.asKnown.value === 217000 && proof.latestRevisedTruth.value === 210000, "DOL replay semantics are invalid");
+  assert(proof.releases.every((release) => Number.isFinite(release.value) && release.displayValue === `${release.value.toLocaleString("en-US")} claims`), "DOL revision proof values are invalid");
+  assert(Date.parse(proof.releases[0].publishedAt) <= Date.parse(proof.releases[1].publishedAt), "DOL revision releases are not chronologically ordered");
+  assert(isIsoTime(proof.asKnown.cutoff) && proof.asKnown.value === proof.releases[0].value && proof.asKnown.displayValue === proof.releases[0].displayValue, "DOL as-known replay semantics are invalid");
+  assert(proof.latestRevisedTruth.value === proof.releases[1].value && proof.latestRevisedTruth.displayValue === proof.releases[1].displayValue, "DOL latest-revised replay semantics are invalid");
   const serialized = JSON.stringify(candidate).toLowerCase();
   assert(!serialized.includes("synthetic test"), "factual snapshot contains fixture claims");
   validatePublicHierarchy(candidate);

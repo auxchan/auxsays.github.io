@@ -1,10 +1,14 @@
 # Human Level-3 Framework QA
 
-Status: `HUMAN_LEVEL3_FRAMEWORK_QA = PENDING`
+Status: `HUMAN_LEVEL3_FRAMEWORK_QA = PASS`
 
 Machine gate: **PASS**
 
-Framework status: `LEVEL3_FRAMEWORK_READY = PENDING_HUMAN_QA`
+Framework status: `FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS`
+
+Approved by: Taylor
+
+Approval recorded: 2026-09-27
 
 Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 
@@ -33,10 +37,13 @@ This review is intentionally bounded. The automated gate covered all 100 parents
 - Is each exact-ten neighborhood readable in both camera modes without another framework redesign?
 - Does the inspector communicate identity, tracking scope, relevance, source posture, and factual status clearly without overwhelming the graph?
 
-## Approval statement
+## Recorded approval statement
 
-If the run passes, record exactly:
+Taylor recorded exactly:
 
 > **HUMAN_LEVEL3_FRAMEWORK_QA: PASS. I approve the current Level-3 parent framework as ready to freeze for the subsequent governed Level-4 development pipeline. This does not approve new Level-4 economic content, structural relationships, forecasting, or fixture publication.**
 
-Only after that approval may governance record `LEVEL3_FRAMEWORK_READY = PASS`. Do not begin the next economic sprint as part of this QA.
+The framework is now frozen as `FROZEN_EXCEPT_FOR_VERIFIED_DEFECTS`.
+This closes only the framework gate. It does not approve new Level-4 economic
+content, fixture replacement, structural relationships, causal interpretation,
+materiality, forecasting, Phase 5, public activation, or deployment.

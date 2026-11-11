@@ -1,8 +1,9 @@
 import blsDolRegistry from "../../../data/config/layoffs/sources_bls_dol.json";
 import censusRegistry from "../../../data/config/layoffs/sources_census.json";
 import contextRegistry from "../../../data/config/layoffs/sources_bea_fed_courts.json";
+import femaRegistry from "../../../data/config/layoffs/sources_fema.json";
 import claimClassRegistry from "../../../data/config/layoffs/level4_claim_classes.json";
-import { layoffsBranchTaxonomy, layoffsCanonicalFactorId } from "./layoffsBranchTaxonomy";
+import { layoffsBranchTaxonomy, layoffsCanonicalFactorId, layoffsResolveCanonicalFactorId } from "./layoffsBranchTaxonomy";
 
 export type LayoffsSourceActivationState = "ACCEPTED" | "SOURCE_ENABLED_PENDING_ACCEPTANCE" | "SOURCE_IDENTIFIED" | "BLOCKED";
 export type LayoffsClaimClass = "A_DIRECT_OBS" | "B_CALC" | "C_EVENT_OR_STRUCTURAL" | "D_TAXONOMY_OR_SOURCE_PROBLEM";
@@ -49,21 +50,40 @@ const configuredAliases: Readonly<Record<string, string>> = Object.freeze({
   "continued-ui-claims": "continued-claims-insured-unemployment",
   "insured-unemployment-rate": "continued-claims-insured-unemployment",
   "closing-establishment-losses": "establishment-closures",
-  "establishment-death-job-losses": "establishment-deaths",
-  "bds-job-destruction": "gross-job-losses",
   "bds-job-destruction-continuers": "establishment-contractions",
   "bds-job-destruction-deaths": "establishment-closures",
-  "bds-establishment-exits": "establishment-deaths",
   "bds-firm-deaths": "firm-deaths",
   "bds-firm-death-establishments": "firm-age-size-vulnerability",
   "bds-firm-death-employment": "firm-death-shutdown-stress",
-  "business-formations-four-quarters": "business-formation"
+  "payroll-growth": "total-nonfarm-payroll-change",
+  "business-formation": "business-formations-within-4-quarters",
+  "business-formations-four-quarters": "business-formations-within-4-quarters",
+  "business-formations": "business-formations-within-4-quarters",
+  "regional-employment-growth": "state-level-payroll-growth-breadth",
+  "industry-payroll-contraction": "payroll-contraction-breadth",
+  "establishment-deaths": "jobs-lost-at-establishment-deaths",
+  "establishment-death-job-losses": "jobs-lost-at-establishment-deaths",
+  "business-bankruptcy-stress": "business-bankruptcy-filings-12-month-total",
+  "business-bankruptcy-filings": "business-bankruptcy-filings-12-month-total",
+  "consumer-demand": "real-personal-consumption-expenditures-growth",
+  "disaster-operational-shock": "fema-disaster-declaration"
 });
 
 function canonicalId(configured: string) {
   const slug = configured.replace(/^factor:(canonical:)?/, "");
   const canonicalSlug = configuredAliases[slug] ?? slug;
-  return canonicalBySlug.get(canonicalSlug) ?? `factor:canonical:${canonicalSlug}`;
+  return layoffsResolveCanonicalFactorId(canonicalBySlug.get(canonicalSlug) ?? `factor:canonical:${canonicalSlug}`);
+}
+
+const statePriority: Readonly<Record<LayoffsSourceActivationState, number>> = Object.freeze({
+  SOURCE_IDENTIFIED: 0,
+  BLOCKED: 1,
+  SOURCE_ENABLED_PENDING_ACCEPTANCE: 2,
+  ACCEPTED: 3,
+});
+
+function promoteState(current: LayoffsSourceActivationState, candidate: LayoffsSourceActivationState) {
+  return statePriority[candidate] > statePriority[current] ? candidate : current;
 }
 
 const mutable = new Map<string, { activationState: LayoffsSourceActivationState; series: LayoffsSourceSeries[]; blockedReason?: string }>();
@@ -84,21 +104,32 @@ for (const group of layoffsBranchTaxonomy) {
 }
 
 for (const row of blsDolRegistry.series) {
+  // Phase-3 public-summary metrics share the governed production retriever,
+  // but they are not members of the frozen Layoffs Level-4 source taxonomy.
+  if ("governance_scope" in row && row.governance_scope === "PHASE3_PUBLIC_METRIC") continue;
   const id = canonicalId(row.canonical_factor);
   const state = mutable.get(id) ?? { activationState: "SOURCE_IDENTIFIED" as const, series: [] };
   state.series.push({ sourceId: row.source_id, seriesId: row.series_id, label: row.label, unit: row.unit, cadence: row.frequency, adjustment: row.seasonal_adjustment, evidenceUrl: row.human_evidence_url, methodologyUrl: row.methodology_url });
-  state.activationState = row.activation_state === "ACCEPTED_EXISTING" ? "ACCEPTED" : "SOURCE_ENABLED_PENDING_ACCEPTANCE";
+  const acceptedForConfiguredFactor = row.activation_state === "ACCEPTED_EXISTING"
+    && (typeof row.observation_canonical_factor !== "string" || canonicalId(row.observation_canonical_factor) === id);
+  state.activationState = promoteState(state.activationState, acceptedForConfiguredFactor ? "ACCEPTED" : "SOURCE_ENABLED_PENDING_ACCEPTANCE");
   mutable.set(id, state);
 }
 
 for (const source of censusRegistry.sources) {
   for (const row of source.series) {
-    for (const placement of row.placement_candidates) {
-      const id = canonicalId(`factor:${placement}`);
+    const sourceFactorId = canonicalId(row.canonical_factor);
+    const canonicalTargets = new Set(row.placement_candidates.map((placement) => canonicalId(`factor:${placement}`)));
+    if (mutable.has(sourceFactorId)) canonicalTargets.add(sourceFactorId);
+    else if (canonicalTargets.size === 0) canonicalTargets.add(sourceFactorId);
+    for (const id of canonicalTargets) {
       const state = mutable.get(id) ?? { activationState: "SOURCE_IDENTIFIED" as const, series: [] };
       state.series.push({ sourceId: source.source_id, seriesId: row.source_series_id, label: row.label, unit: row.unit, cadence: source.cadence, adjustment: row.seasonal_adjustment, evidenceUrl: source.evidence_url, methodologyUrl: source.methodology_url });
-      state.activationState = "BLOCKED";
-      state.blockedReason = `Scheduled retrieval requires ${censusRegistry.credential_environment_variable}; values remain unavailable until retrieval, rights, and acceptance pass.`;
+      state.activationState = promoteState(
+        state.activationState,
+        id === "factor:canonical:business-formations-within-4-quarters" ? "SOURCE_IDENTIFIED" : "BLOCKED"
+      );
+      if (state.activationState === "BLOCKED") state.blockedReason = `Scheduled retrieval requires ${censusRegistry.credential_environment_variable}; values remain unavailable until retrieval, rights, and acceptance pass.`;
       mutable.set(id, state);
     }
   }
@@ -118,8 +149,8 @@ for (const source of contextRegistry.sources) {
       evidenceUrl: source.evidence_url,
       methodologyUrl: source.methodology_url
     });
-    state.activationState = "SOURCE_ENABLED_PENDING_ACCEPTANCE";
-    state.blockedReason = source.blocked_reason;
+    state.activationState = promoteState(state.activationState, "SOURCE_ENABLED_PENDING_ACCEPTANCE");
+    if (state.activationState !== "ACCEPTED") state.blockedReason = source.blocked_reason;
     mutable.set(id, state);
   }
   for (const row of source.selector_candidates ?? []) {
@@ -135,16 +166,34 @@ for (const source of contextRegistry.sources) {
       evidenceUrl: source.evidence_url,
       methodologyUrl: source.methodology_url
     });
-    state.activationState = "BLOCKED";
-    state.blockedReason = source.blocked_reason;
+    state.activationState = promoteState(state.activationState, "BLOCKED");
+    if (state.activationState === "BLOCKED") state.blockedReason = source.blocked_reason;
     mutable.set(id, state);
   }
+}
+
+for (const source of femaRegistry.sources) {
+  const id = canonicalId(source.canonicalFactorId);
+  const state = mutable.get(id) ?? { activationState: "SOURCE_IDENTIFIED" as const, series: [] };
+  state.series.push({
+    sourceId: source.sourceId,
+    seriesId: source.datasetSelector,
+    label: source.product,
+    unit: "event record",
+    cadence: source.cadence,
+    adjustment: "not applicable — event semantics",
+    evidenceUrl: source.evidenceUrl,
+    methodologyUrl: source.methodologyUrl,
+  });
+  state.activationState = promoteState(state.activationState, "SOURCE_IDENTIFIED");
+  state.blockedReason = source.blockedReason;
+  mutable.set(id, state);
 }
 
 export const layoffsFactorSourceStates: Readonly<Record<string, LayoffsFactorSourceState>> = Object.freeze(Object.fromEntries([...mutable.entries()].map(([id, state]) => [id, Object.freeze({ canonicalFactorId: id, ...state, series: Object.freeze(state.series), claimClassification: claimClassifications.get(id) })])));
 
 export function layoffsFactorSourceState(canonicalFactorId: string) {
-  return layoffsFactorSourceStates[canonicalFactorId];
+  return layoffsFactorSourceStates[layoffsResolveCanonicalFactorId(canonicalFactorId)];
 }
 
 export const LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT = Object.values(layoffsFactorSourceStates).filter((row) => row.activationState === "SOURCE_ENABLED_PENDING_ACCEPTANCE").length;

@@ -11,6 +11,10 @@ from systems_monitor_data.layoffs_bls_dol import (
     load_layoffs_bls_dol_registry,
     parse_bls_api_response,
     parse_dol_national_xml,
+    parse_dol_official_release_html,
+    parse_dol_official_release_text,
+    repair_dol_candidate_batch,
+    dol_source_freshness,
 )
 
 
@@ -23,12 +27,17 @@ class LayoffsBlsDolTests(unittest.TestCase):
         cls.acquisition, cls.specs = load_layoffs_bls_dol_registry(REGISTRY)
 
     def test_registry_has_reviewed_exact_series_and_no_credentials(self):
-        self.assertEqual(19, len(self.specs))
+        self.assertEqual(24, len(self.specs))
         ids = {spec.series_id for spec in self.specs}
         self.assertIn("JTS000000000000000LDL", ids)
         self.assertIn("LNS13026638", ids)
         self.assertIn("LNS13023653", ids)
         self.assertIn("CES0500000002", ids)
+        self.assertIn("CES0000000001", ids)
+        self.assertIn("JTS000000000000000JOL", ids)
+        self.assertIn("JTS000000000000000HIL", ids)
+        self.assertIn("LNS14000000", ids)
+        self.assertIn("LNS11300000", ids)
         self.assertIn("BDS0000000000000000110004LQ5", ids)
         self.assertIn("BDS0000000000000000110005LQ5", ids)
         self.assertIn("BDS0000000000000000110006LQ5", ids)
@@ -39,6 +48,63 @@ class LayoffsBlsDolTests(unittest.TestCase):
         serialized = REGISTRY.read_text(encoding="utf-8").lower()
         self.assertNotIn("api_key", serialized)
         self.assertNotIn("registrationkey", serialized)
+
+        payroll = next(spec for spec in self.specs if spec.series_id == "CES0000000001")
+        self.assertEqual("Total nonfarm payroll employment", payroll.label)
+        self.assertEqual("thousands of persons", payroll.unit)
+        self.assertEqual("monthly", payroll.frequency)
+        self.assertEqual("seasonally adjusted", payroll.seasonal_adjustment)
+        self.assertEqual("ACCEPTED_EXISTING", payroll.activation_state)
+
+    def test_official_pdf_text_parser_covers_all_three_sa_measures_and_revisions(self):
+        specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
+        text = """
+        UNEMPLOYMENT INSURANCE WEEKLY CLAIMS
+        TRANSMISSION OF MATERIALS IN THIS RELEASE IS EMBARGOED UNTIL
+        8:30 A.M. (Eastern) Thursday, October 8, 2026
+        SEASONALLY ADJUSTED DATA
+        In the week ending October 3, the advance figure for seasonally adjusted initial claims was 197,000,
+        a decrease from the previous week's revised level. The previous week's level was revised up by 2,000 from 197,000 to 199,000.
+        The advance seasonally adjusted insured unemployment rate was 1.1 percent for the week ending September 26,
+        unchanged. The advance number for seasonally adjusted insured unemployment during the week ending September 26 was 1,716,000,
+        an increase from the previous week's revised level. The previous week's level was revised down by 2,000 from 1,701,000 to 1,699,000.
+        """
+        batch = parse_dol_official_release_text(
+            text,
+            specs,
+            artifact_sha256="d" * 64,
+            retrieved_time="2026-10-08T13:00:00Z",
+            provenance_url="https://www.dol.gov/ui/data.pdf",
+        )
+        current = {(row.source_series_id, row.observation_period): row.value for row in batch.observations}
+        self.assertEqual(Decimal("197000"), current[("DOL-UI-SA-INITIAL", "2026-10-03")])
+        self.assertEqual(Decimal("199000"), current[("DOL-UI-SA-INITIAL", "2026-09-26")])
+        self.assertEqual(Decimal("1716000"), current[("DOL-UI-SA-CONTINUED", "2026-09-26")])
+        self.assertEqual(Decimal("1699000"), current[("DOL-UI-SA-CONTINUED", "2026-09-19")])
+        self.assertEqual(Decimal("1.1"), current[("DOL-UI-SA-IUR", "2026-09-26")])
+
+    def test_official_release_uses_eastern_standard_time_and_allows_holiday_weekday(self):
+        specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
+        text = """
+        UNEMPLOYMENT INSURANCE WEEKLY CLAIMS
+        TRANSMISSION OF MATERIALS IN THIS RELEASE IS EMBARGOED UNTIL
+        8:30 A.M. (Eastern) Wednesday, November 25, 2026
+        SEASONALLY ADJUSTED DATA
+        In the week ending November 21, the advance figure for seasonally adjusted initial claims was 201,000,
+        a decrease from the previous week's revised level. The previous week's level was revised down by 1,000 from 203,000 to 202,000.
+        The advance seasonally adjusted insured unemployment rate was 1.1 percent for the week ending November 14,
+        unchanged. The advance number for seasonally adjusted insured unemployment during the week ending November 14 was 1,720,000,
+        an increase from the previous week's revised level. The previous week's level was revised up by 2,000 from 1,716,000 to 1,718,000.
+        """
+        parsed = parse_dol_official_release_text(
+            text,
+            specs,
+            artifact_sha256="d" * 64,
+            retrieved_time="2026-11-25T14:00:00Z",
+            provenance_url="https://www.dol.gov/ui/data.pdf",
+        )
+        self.assertTrue(parsed.observations)
+        self.assertTrue(all(row.public_time == "2026-11-25T13:30:00Z" for row in parsed.observations))
 
     def test_bls_parser_preserves_period_unit_adjustment_and_preliminary_marker(self):
         wanted = {
@@ -98,6 +164,119 @@ class LayoffsBlsDolTests(unittest.TestCase):
         self.assertEqual(Decimal("1.2"), by_id["DOL-UI-SA-IUR"].value)
         self.assertEqual({"2026-08-01"}, {row.observation_period for row in batch.observations})
         self.assertTrue(all(row.publication_time_kind == "conservative_retrieval_bound" for row in batch.observations))
+        self.assertRegex(batch.source_release_marker, r"^DOL-UI-r539cyNational-data-through-2026-08-01-[0-9a-f]{16}$")
+        self.assertEqual("2026-08-27", batch.source_report_run_date)
+        self.assertTrue(all(row.release_id.startswith("DOL-UI-r539cyNational-observation-2026-08-01-") for row in batch.observations))
+        self.assertEqual(3, len({row.release_id for row in batch.observations}))
+        self.assertTrue(all(row.revision_status == "current_revised_snapshot" for row in batch.observations))
+
+    def test_dol_release_identity_comes_from_source_and_freshness_fails_closed(self):
+        specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
+        payload = (FIXTURES / "layoffs_dol_xml_minimized.xml").read_bytes()
+        first = parse_dol_national_xml(
+            payload,
+            specs,
+            release_id="retrieval-one",
+            artifact_sha256="c" * 64,
+            retrieved_time="2026-08-27T15:00:00Z",
+            accepted_time=None,
+            provenance_url=self.acquisition["dol_ui"]["endpoint"],
+        )
+        retry = parse_dol_national_xml(
+            payload,
+            specs,
+            release_id="retrieval-two",
+            artifact_sha256="c" * 64,
+            retrieved_time="2026-08-27T15:00:00Z",
+            accepted_time=None,
+            provenance_url=self.acquisition["dol_ui"]["endpoint"],
+        )
+        self.assertEqual(
+            [row.observation_id for row in first.observations],
+            [row.observation_id for row in retry.observations],
+        )
+        freshness = dol_source_freshness(first.observations, retrieved_time="2026-09-20T00:00:00Z", stale_after_hours=336)
+        self.assertEqual("STALE", freshness["status"])
+        self.assertEqual("2026-08-01", freshness["newestObservationPeriod"])
+
+    def test_official_dol_release_fallback_parses_advance_and_prior_revision_without_ocr(self):
+        spec = next(spec for spec in self.specs if spec.series_id == "DOL-UI-SA-INITIAL")
+        payload = b"""<html><body><h1>Unemployment Insurance Weekly Claims Report</h1><div>United States Department of Labor</div><div>09/10/2026 08:00 AM EDT</div><p>In the week ending September 5, the advance figure for seasonally adjusted initial claims was 206,000, a decrease of 1,000 from the previous week's revised level. The previous week's level was revised up by 1,000 from 206,000 to 207,000.</p></body></html>"""
+        batch = parse_dol_official_release_html(
+            payload,
+            spec,
+            artifact_sha256="f" * 64,
+            retrieved_time="2026-09-14T20:00:00Z",
+            provenance_url="https://content.govdelivery.com/accounts/USDOL/bulletins/4299777",
+        )
+        by_period = {row.observation_period: row for row in batch.observations}
+        self.assertEqual(Decimal("206000"), by_period["2026-09-05"].value)
+        self.assertEqual("official_release_advance", by_period["2026-09-05"].revision_status)
+        self.assertEqual(Decimal("207000"), by_period["2026-08-29"].value)
+        self.assertEqual("official_release_revised", by_period["2026-08-29"].revision_status)
+        self.assertTrue(all(row.public_time == "2026-09-10T12:00:00Z" for row in batch.observations))
+        self.assertTrue(all(row.release_id.startswith("DOL-UI-r539cyNational-observation-") for row in batch.observations))
+
+    def test_xml_and_official_release_share_semantic_observation_identity(self):
+        specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
+        initial = next(spec for spec in specs if spec.series_id == "DOL-UI-SA-INITIAL")
+        xml = parse_dol_national_xml(
+            (FIXTURES / "layoffs_dol_xml_minimized.xml").read_bytes(),
+            specs,
+            release_id="transport-xml",
+            artifact_sha256="c" * 64,
+            retrieved_time="2026-08-06T15:00:00Z",
+            accepted_time=None,
+            provenance_url=self.acquisition["dol_ui"]["endpoint"],
+        )
+        html = parse_dol_official_release_html(
+            b"<html><body>United States Department of Labor Unemployment Insurance Weekly Claims Report 08/06/2026 08:30 AM EDT In the week ending August 1, the advance figure for seasonally adjusted initial claims was 200,000. The previous week's level was revised up by 1,000 from 198,000 to 199,000.</body></html>",
+            initial,
+            artifact_sha256="d" * 64,
+            retrieved_time="2026-08-06T15:00:00Z",
+            provenance_url="https://content.govdelivery.com/accounts/USDOL/bulletins/test",
+        )
+        xml_initial = next(row for row in xml.observations if row.source_series_id == "DOL-UI-SA-INITIAL")
+        html_initial = next(row for row in html.observations if row.observation_period == "2026-08-01")
+        self.assertEqual(xml_initial.release_id, html_initial.release_id)
+        self.assertEqual(xml_initial.observation_id, html_initial.observation_id)
+
+    def test_official_release_parser_fails_closed_on_context_drift(self):
+        spec = next(spec for spec in self.specs if spec.series_id == "DOL-UI-SA-INITIAL")
+        with self.assertRaisesRegex(ValueError, "initial-claims sentence"):
+            parse_dol_official_release_html(
+                b"<html><body>United States Department of Labor Unemployment Insurance Weekly Claims Report 09/10/2026 08:00 AM EDT 206,000 claims</body></html>",
+                spec,
+                artifact_sha256="f" * 64,
+                retrieved_time="2026-09-14T20:00:00Z",
+                provenance_url="https://content.govdelivery.com/accounts/USDOL/bulletins/4299777",
+            )
+
+    def test_dol_daily_report_run_date_does_not_manufacture_a_new_release(self):
+        specs = [spec for spec in self.specs if spec.source_id == "dol-ui-claims"]
+        payload = (FIXTURES / "layoffs_dol_xml_minimized.xml").read_text(encoding="utf-8")
+        later_run = payload.replace('rundate="8/27/2026"', 'rundate="8/28/2026"')
+        kwargs = dict(
+            specs=specs,
+            release_id="retrieval-wrapper",
+            artifact_sha256="c" * 64,
+            retrieved_time="2026-08-28T15:00:00Z",
+            accepted_time=None,
+            provenance_url=self.acquisition["dol_ui"]["endpoint"],
+        )
+        first = parse_dol_national_xml(payload.encode(), **kwargs)
+        second = parse_dol_national_xml(later_run.encode(), **kwargs)
+        self.assertEqual(first.source_release_marker, second.source_release_marker)
+        self.assertEqual(
+            [row.observation_id for row in first.observations],
+            [row.observation_id for row in second.observations],
+        )
+        self.assertEqual(
+            [row.release_id for row in first.observations],
+            [row.release_id for row in second.observations],
+        )
+        self.assertEqual("2026-08-27", first.source_report_run_date)
+        self.assertEqual("2026-08-28", second.source_report_run_date)
 
     def test_future_official_publication_time_is_rejected(self):
         spec = next(spec for spec in self.specs if spec.series_id == "LNS13026638")
@@ -126,7 +305,7 @@ class LayoffsBlsDolTests(unittest.TestCase):
         self.assertEqual(first.observation_id, retry.observation_id)
         self.assertNotEqual(first.observation_id, revised.observation_id)
 
-    def test_collector_builds_one_bounded_bls_request_for_all_sixteen_series(self):
+    def test_collector_builds_one_bounded_bls_request_for_all_twenty_one_series(self):
         calls = []
 
         class FakeRetriever:
@@ -138,7 +317,7 @@ class LayoffsBlsDolTests(unittest.TestCase):
         bls_specs = [spec for spec in self.specs if spec.source_id != "dol-ui-claims"]
         self.assertEqual("artifact", collector.retrieve_bls(bls_specs, 2025, 2026))
         body = json.loads(calls[0][1]["body"])
-        self.assertEqual(16, len(body["seriesid"]))
+        self.assertEqual(21, len(body["seriesid"]))
         self.assertEqual("2025", body["startyear"])
         self.assertEqual("2026", body["endyear"])
 
@@ -162,7 +341,7 @@ class LayoffsBlsDolTests(unittest.TestCase):
 
             def retrieve_dol(self, year):
                 from systems_monitor_data.retrieval import RetrievedArtifact
-                return RetrievedArtifact(dol, "text/xml", self.dol_url, "2026-08-27T15:00:00Z", 1, 1)
+                return RetrievedArtifact(dol, "text/xml", self.dol_url, "2026-08-10T15:00:00Z", 1, 1)
 
             bls_url = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
             dol_url = "https://oui.doleta.gov/unemploy/wkclaims/report.asp"
@@ -183,6 +362,55 @@ class LayoffsBlsDolTests(unittest.TestCase):
             self.assertTrue(all(row["accepted_time"] is None for row in result["candidates"]))
             self.assertTrue(all(row["publication_eligible"] is False for row in result["candidates"]))
             self.assertTrue(all(row["activation_state"] == "SOURCE_ENABLED_PENDING_ACCEPTANCE" for row in result["candidates"]))
+
+    def test_runner_uses_official_release_when_primary_xml_retrieval_is_broken(self):
+        official_release = b"""<html><body><h1>Unemployment Insurance Weekly Claims Report</h1><div>United States Department of Labor</div><div>09/10/2026 08:00 AM EDT</div><p>In the week ending September 5, the advance figure for seasonally adjusted initial claims was 206,000, a decrease of 1,000 from the previous week's revised level. The previous week's level was revised up by 1,000 from 206,000 to 207,000.</p></body></html>"""
+
+        class FakeCollector:
+            def retrieve_bls(self, specs, start_year, end_year):
+                document = {"status": "REQUEST_SUCCEEDED", "message": [], "Results": {"series": []}}
+                for spec in specs:
+                    period = "Q04" if spec.frequency == "quarterly" else "M07"
+                    document["Results"]["series"].append({
+                        "seriesID": spec.series_id,
+                        "data": [{"year": "2025" if spec.frequency == "quarterly" else "2026", "period": period, "value": "100", "footnotes": [{}]}],
+                    })
+                from systems_monitor_data.retrieval import RetrievedArtifact
+                return RetrievedArtifact(json.dumps(document).encode(), "application/json", self.bls_url, "2026-09-14T20:00:00Z", 1, 1)
+
+            def retrieve_dol(self, year):
+                raise RuntimeError("bounded primary retrieval failed")
+
+            def retrieve_dol_official_release(self):
+                from systems_monitor_data.retrieval import RetrievedArtifact
+                return RetrievedArtifact(official_release, "text/html", self.fallback_url, "2026-09-14T20:00:00Z", 1, 1)
+
+            bls_url = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+            fallback_url = "https://content.govdelivery.com/accounts/USDOL/bulletins/4299777"
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            result = collect_layoffs_bls_dol_candidates(
+                registry_path=REGISTRY,
+                raw_root=root / "raw",
+                candidate_path=root / "candidate.json",
+                start_year=2025,
+                end_year=2026,
+                collector=FakeCollector(),
+            )
+            diagnostics = result["sourceDiagnostics"]
+            self.assertEqual("BROKEN", diagnostics["dolPrimaryFreshness"]["status"])
+            self.assertEqual("CURRENT", diagnostics["dolFreshness"]["status"])
+            self.assertEqual("SUCCESS_WITH_PRIMARY_BROKEN", diagnostics["dolAcquisitionOverallStatus"])
+            self.assertEqual("BROKEN", diagnostics["dolAcquisitionMethods"]["primaryXml"]["status"])
+            self.assertEqual("CURRENT", diagnostics["dolAcquisitionMethods"]["officialReleaseFallback"]["status"])
+            fallback_rows = [row for row in result["candidates"] if row["source_id"] == "dol-ui-claims"]
+            self.assertEqual({"2026-08-29", "2026-09-05"}, {row["observation_period"] for row in fallback_rows})
+            self.assertTrue(all(row["acquisition_method"] == "dol_official_release_fallback" for row in fallback_rows))
+            self.assertEqual(
+                result,
+                repair_dol_candidate_batch(result, registry_path=REGISTRY, raw_root=root / "raw"),
+            )
 
 
 if __name__ == "__main__":
