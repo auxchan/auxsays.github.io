@@ -516,7 +516,7 @@ auxsays/scripts/tests/test_fill_obs_report_dates.py = 47
 # plus DaVinci, and --regenerate runs one scoped promotion per declared product, never unscoped. Pairs the reviews
 # did not agree on stay counted. Bare script on frozen fixtures whose free text is synthetic; the live store is
 # read only for the pins.
-auxsays/scripts/tests/test_withdraw_duplicate_reports.py = 49
+auxsays/scripts/tests/test_withdraw_duplicate_reports.py = 52
 # AUX-092: the OBS producer now stores that same day on every NEW row. source_date = the UTC day of the
 # creation stamp the release-date gate already reads (an issue's created_at, the opening post's own <time>),
 # directly after captured_at, no key when the stamp gives no UTC day; equal to every AUX-090 pin. A frozen

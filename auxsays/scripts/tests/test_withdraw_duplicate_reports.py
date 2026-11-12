@@ -586,6 +586,58 @@ def run() -> int:  # noqa: PLR0915
     check("E19 the cross-identity 9550 copy, even with two agreeing labels, refuses: its kept row is on another patch",
           "the kept row is on another patch" in message, message[:300])
 
+    # E20 (review 1, LOW-1): at a same-time capture the source's POST NUMBER decides, not source_date. The
+    # 26200.7922 pair is the one where they disagree: q5791250 is the lower number but the later-dated post.
+    n2_k_date, n2_w_date = str(n2_k.get("source_date") or ""), str(n2_w.get("source_date") or "")
+    n2_low = copy.deepcopy(n2_withdraw)
+    for lab in labels(n2_low):
+        lab["duplicate_of_id"] = n2_k["id"]
+    low_message = plan_of(text, single(base, n2_keep, n2_low))
+    n2_keep_hi = {"role": "retain", **{k: str(n2_w.get(k) or "") for k in SEL},
+                  "block_sha256_before": sha(n2_block_w), "record_file": n2_keep["record_file"],
+                  "target_kb": "KB5077241", "target_os_build": "26200.7922"}
+    n2_high = dict(copy.deepcopy(l1), **{k: str(n2_k.get(k) or "") for k in SEL},
+                   block_sha256_before=sha(n2_block_k), block_sha256_after=sha(own_edit(n2_block_k, WIN)),
+                   record_file=n2_keep["record_file"], target_kb="KB5077241", target_os_build="26200.7922",
+                   duplicate_of={k: n2_keep_hi[k] for k in SEL})
+    for lab in labels(n2_high):
+        lab["duplicate_of_id"] = n2_w["id"]
+    high_message = plan_of(text, single(base, n2_keep_hi, n2_high))
+    check("E20 at a same-time capture the lower post number is kept even when it is the later-dated post "
+          "(26200.7922: keeping q5791250 plans, keeping q5794016 refuses)",
+          bool(n2_k_date) and bool(n2_w_date) and n2_k_date > n2_w_date and low_message == ""
+          and "the kept row is not the earlier post" in high_message,
+          f"{n2_k_date} {n2_w_date} | {low_message[:200]} | {high_message[:200]}")
+
+    # E21 (review 1, LOW-2): the selection is exact on all five fields; a selector off by its source_url or
+    # its update_version matches no block, even though the other four fields still name one.
+    url_off = copy.deepcopy(base)
+    entry_of(url_off, OBS, "32.2.0", "13690")["source_url"] += "-not-this-report"
+    version_off = copy.deepcopy(base)
+    entry_of(version_off, DAV, "20.2", "1rvhlmx")["update_version"] = "20.2.1"
+    url_message, version_message = plan_of(text, url_off), plan_of(text, version_off)
+    check("E21 a selector off by its source_url, or by its update_version, matches no block and refuses",
+          "0 blocks match the five-field identity" in url_message
+          and "0 blocks match the five-field identity" in version_message,
+          f"{url_message[:200]} | {version_message[:200]}")
+
+    # E22 (review 1, LOW-3): two duplicate labels with an empty kept-row id never authorize a withdrawal, and
+    # never one under a reason that is not the duplicate reason.
+    blank = copy.deepcopy(base)
+    target = entry_of(blank, OBS, "32.2.1", "195984")
+    target["exclusion_reason"] = "identity_not_the_subject"
+    target.pop("duplicate_of", None)
+    for lab in labels(target):
+        lab["duplicate_of_id"] = ""
+    other_reason = copy.deepcopy(base)
+    entry_of(other_reason, OBS, "32.2.1", "195984")["exclusion_reason"] = "identity_not_the_subject"
+    blank_message = plan_of(text, blank)
+    check("E22 duplicate labels authorize only a duplicate withdrawal of a NAMED kept row (an empty id, or "
+          "another reason, refuses)",
+          not wd._two_labels(target) and not wd._two_labels(entry_of(other_reason, OBS, "32.2.1", "195984"))
+          and wd._two_labels(entry_of(base, OBS, "32.2.1", "195984"))
+          and blank_message != "" and plan_of(text, other_reason) != "", blank_message[:200])
+
     print("F  writers and source post numbers")
     expected_writers = (
         ("build_consensus_from_evidence.py", "--product-id", WIN, "--product-id", OBS, "--product-id", DAV,

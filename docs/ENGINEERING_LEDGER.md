@@ -4764,7 +4764,9 @@ updated to N." event; verdicts are unchanged. 26200.8973's newest counted captur
 2026-09-05 and OBS 31.1.2's from 2026-10-12 to 2026-10-05, because a withdrawn row was the newest. On 26200.8894
 and OBS 32.2.0 one evidence sample is replaced by the writer's own selection, and OBS 31.1.2 shows three samples
 instead of four. A second run of the tool and the writers changes nothing.
-`test_withdraw_duplicate_reports.py` pins it (49 checks; 24 mutants, each killed by a named check); the AUX-088
+`test_withdraw_duplicate_reports.py` pins it (52 checks; 28 mutants, each killed by a named check: review 1's three
+additions pin that a same-time tie is decided by the post number, that selection is exact on all five fields, and
+that two duplicate labels never authorize a withdrawal without a named kept row); the AUX-088
 suite's scope check now refuses any scope beyond the two declared ones (81).
 
 **Reopen only if** any of the fourteen counts again, an original stops counting without its own audited

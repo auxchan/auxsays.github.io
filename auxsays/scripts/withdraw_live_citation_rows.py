@@ -23,7 +23,7 @@ THE MECHANISM IS AUX-072's AND AUX-079's, imported rather than copied: five-fiel
 (product_id, update_version, target_build, id, source_url), the block splitter and its row-for-block
 proof, pinned before/after block hashes, the field-by-field proof that nothing but the withdrawal
 fields moved, dry run by default, `--write --confirm-write`, all or nothing, idempotent. Scoped to
-the two products:
+the products the manifest declares (AUX-088: Windows and OBS; AUX-098 adds DaVinci):
 
   microsoft-windows-11  build-aware: target_build is part of the identity, the record's CURRENT
                         target KB and OS build must equal the pinned ones, and the edit is AUX-079's
@@ -209,7 +209,10 @@ def _two_labels(entry: dict[str, Any]) -> bool:
     if first.get("label") == DUPLICATE_LABEL and blind.get("label") == DUPLICATE_LABEL:
         kept = str((entry.get("duplicate_of") or {}).get("id") or "")
         by = (str(first.get("by") or "").strip(), str(blind.get("by") or "").strip())
-        return (reasons and first.get("duplicate_of_id") == kept and blind.get("duplicate_of_id") == kept
+        # Two duplicate labels authorize only a duplicate withdrawal, and only of a named kept row: an empty
+        # kept id would otherwise equal two empty label ids (review 1, LOW-3).
+        return (reasons and bool(kept) and entry.get("exclusion_reason") == DUPLICATE_REASON
+                and first.get("duplicate_of_id") == kept and blind.get("duplicate_of_id") == kept
                 and all(by) and by[0] != by[1])
     return False
 
