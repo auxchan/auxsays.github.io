@@ -196,9 +196,9 @@ jobs:
           path: ./auxsays/_site
 
       # AUX-099: the shadow ledger is kept only when this deploy got this far, so an appearance is a
-      # deployment's. Never part of the Pages artifact above.
+      # deployment's. Never part of the Pages artifact above. A missing ledger only warns.
       - name: Save the reason producer's shadow ledger
-        if: success() && github.ref == 'refs/heads/main' && hashFiles('.producer-shadow/ledger.json') != ''
+        if: success() && github.ref == 'refs/heads/main'
         continue-on-error: true
         uses: actions/cache/save@v4
         with:
@@ -206,7 +206,7 @@ jobs:
           key: producer-shadow-v1-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Keep a copy of the reason producer's shadow ledger
-        if: success() && github.ref == 'refs/heads/main' && hashFiles('.producer-shadow/ledger.json') != ''
+        if: success() && github.ref == 'refs/heads/main'
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
@@ -214,6 +214,8 @@ jobs:
           path: .producer-shadow/ledger.json
           retention-days: 90
           if-no-files-found: ignore
+          # The ledger sits in a dot-directory; upload-artifact skips hidden files unless told.
+          include-hidden-files: true
 
   deploy:
     environment:
