@@ -31,7 +31,7 @@ from patch_collectors.base import (
     split_front_matter,
     atomic_write_text,
 )
-from lib import live_eligibility, maturity, monitoring_health, verdict_reasons
+from lib import live_eligibility, maturity, monitoring_health, verdict_projection, verdict_reasons
 from lib.report_counts import EvidenceStoreError, load_evidence_store
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1053,7 +1053,24 @@ def _policy_decision(pid: str, ver: str, build: str, rows: list[dict[str, Any]],
     mine = [e for e in reasons if verdict_reasons.reason_identity(e) == ident]
     confirmations = _confirmation_records(mine)
     valid = [e for e in mine if not verdict_reasons.support_problems(e, rows, confirmations)]
+    # The page's reasons as the projection gathers them: the reason producer's candidates join only while
+    # its (temporary, owner-gated) switch is on, so the prose stored here is the page's verdict (AUX-099).
+    valid = verdict_projection.page_supported_reasons(facts, rows, valid, _all_entry_records)
     return patch_decision.decide(facts, valid_reasons=valid, lifecycle=lifecycle), facts
+
+
+_ALL_ENTRY_RECORDS: list[dict[str, Any]] = []
+
+
+def _all_entry_records() -> list[dict[str, Any]]:
+    """Every generated record's front matter, read once per run -- and only when the reason producer's
+    switch is on (verdict_projection.page_supported_reasons calls this; off, nothing is read)."""
+    if not _ALL_ENTRY_RECORDS:
+        for path in sorted(GENERATED_DIR.glob("*.md")):
+            data = _load_front_matter(path)
+            if data.get("update_entry") is True:
+                _ALL_ENTRY_RECORDS.append(data)
+    return list(_ALL_ENTRY_RECORDS)
 
 
 def _confirmation_records(entries: list[dict[str, Any]]) -> dict[tuple[str, str, str], dict[str, Any]]:

@@ -266,7 +266,7 @@ def check_vendor() -> None:
     check("VRP-V2 the same defects on 31.1.1 are CARRIED OVER from 31.1.0, so they are TEST FIRST and never "
           "called new (a persistent problem is never a regression)",
           [v for v, _s, _b in carried] == ["TEST FIRST"] * 3
-          and all("carried over from OBS 31.1.0" in r for r in reasons_3111)
+          and all("persists in OBS 31.1.1 (carried over from OBS 31.1.0)" in r for r in reasons_3111)
           and all(not c["new_in_this_version"] for c in res.candidates if c["update_version"] == "31.1.1"),
           f"{carried}")
     check("VRP-V3 OBS 32.0.3 (named page) does not qualify: its confirmed defects are an audio LAG (minor lag) and "
@@ -415,6 +415,61 @@ def check_vendor_body() -> None:
           f"alone={alone[-60:]!r} reports={with_reports[-60:]!r} beside={beside[-60:]!r}")
 
 
+def check_vendor_persistence() -> None:
+    """AUTH_V2_38 WS2 items 6 and 7 (review 2 LOW-1, LOW-2): persistence is never 'new'; OBS crash severity."""
+    notes = "\r\n".join([
+        "## OBS Studio 32.1.1 Hotfix Changes",
+        "* Fixed an issue in 32.1.0 and earlier where audio monitoring devices did not work [probe]",   # review 2 Q2
+        "* Fixed a rare crash in 32.1.0 when closing the About dialog [probe]",                         # review 2 Q5
+        "* Fixed a crash in 32.1.0 when closing the About dialog [probe]",
+        "* Fixed a crash in 32.1.0 when attempting to log info about a browser source crash [probe]",
+        "* Fixed a crash in 32.1.0 when resizing the window [probe]",
+        "* Fixed a crash in 32.1.0 when starting a recording with the replay buffer active [probe]",
+        "* Fixed a possible crash in 32.1.0 on Windows when opening source properties [probe]",
+        "* Fixed an issue in 32.1.0 where the virtual camera did not work since 31.0.0 [probe]",
+    ])
+    res = vrp.produce([obs("32.1.0", "2026-03-20T00:00:00Z"), obs("32.1.1", "2026-04-02T00:00:00Z", notes)], {})
+    by = {}
+    for c in res.candidates:
+        by[c["failure"]] = (c["verdict"], c["severity_basis"], c["new_in_this_version"], c["reason"])
+    ex = {e["source"]["statement"]: e["excluded"] for e in res.excluded}
+    queued = sorted(q["source"]["statement"] for q in res.review_queue)
+    q2 = by.get("Fixed an issue in 32.1.0 and earlier where audio monitoring devices did not work")
+    since = by.get("Fixed an issue in 32.1.0 where the virtual camera did not work since 31.0.0")
+    persist_reasons = [r for r in (q2, since) if r]
+    win_notes = "Base text.\n\n" + "\n".join([HEADER_25H2, (
+        f"- Active: USB audio devices might fail to start This issue also affects earlier updates of Windows 11. {EM} "
+        "status Confirmed; originating OS Build 26200.8524 KB5089573; last updated 2026-10-30 10:00 PT.")])
+    win_res = vrp.produce([win("25H2", "26200.8524", "KB5089573", "2026-05-27T00:00:00Z"),
+                           win("25H2", "26200.9818", "KB5134140", "2026-10-28T00:00:00Z", win_notes)], {})
+    wc = [(c["verdict"], c["new_in_this_version"], c["reason"]) for c in win_res.candidates]
+    check("VRP-V11 a defect the vendor calls carried over is PERSISTENT, never new or caused: review 2's Q2 ('in "
+          "32.1.0 and earlier') and 'did not work since 31.0.0' are TEST FIRST on 32.1.0 saying the problem "
+          "persists, as is a Microsoft known issue that 'also affects earlier updates'; none is WAIT and no reason "
+          "says new, caused, introduced or originates",
+          len(persist_reasons) == 2 and all(v == "TEST FIRST" and new is False and "persists" in reason
+                                            for v, _s, new, reason in persist_reasons)
+          and wc and all(v == "TEST FIRST" and new is False and "persists" in r for v, new, r in wc)
+          and not any(re.search(r"\b(?:new|caus\w*|introduc\w*|originat\w*)\b", r, re.I)
+                      for r in [x[3] for x in persist_reasons] + [x[2] for x in wc]),
+          f"q2={q2} since={since} win={wc}")
+    record = by.get("Fixed a crash in 32.1.0 when starting a recording with the replay buffer active")
+    check("VRP-V12 an OBS crash is serious only on launch or in a core workflow: review 2's Q5 (a RARE crash when "
+          "closing the About dialog) and a POSSIBLE crash in source properties go to the review queue, never to a "
+          "page; a crash when closing the About dialog or while logging has no severity basis; a crash when starting "
+          "a recording is a core-flow crash",
+          record is not None and record[:2] == ("WAIT", "crash_in_core_flow")
+          and ex.get("Fixed a rare crash in 32.1.0 when closing the About dialog") == "uncertain_severity"
+          and ex.get("Fixed a possible crash in 32.1.0 on Windows when opening source properties") == "uncertain_severity"
+          and ex.get("Fixed a crash in 32.1.0 when closing the About dialog") == "no_severity_basis"
+          and ex.get("Fixed a crash in 32.1.0 when attempting to log info about a browser source crash") == "no_severity_basis"
+          and ex.get("Fixed a crash in 32.1.0 when resizing the window") == "no_severity_basis"
+          and queued == ["Fixed a possible crash in 32.1.0 on Windows when opening source properties",
+                         "Fixed a rare crash in 32.1.0 when closing the About dialog"]
+          and all(q["kind"] == "uncertain_severity" and q["queue_key"] for q in res.review_queue),
+          f"record={record} ex={ex} queued={queued}")
+
+
 # ------------------------------------------------------------------------ [I] install failures
 
 def wrow(i, title, excerpt, date="2026-05-01", url=None, **over):
@@ -425,44 +480,67 @@ def wrow(i, title, excerpt, date="2026-05-01", url=None, **over):
 
 
 KBP = win("25H2", "26200.5000", "KB5099999", "2026-05-01T00:00:00Z", update_type="2026-05 D", count=3)
+# Two reports of ONE problem (the same error code) whose details show two incidents: a Dell and an HP laptop.
 R1 = wrow(1, "KB5099999 failed to install error 0x800f0991",
           "Update KB5099999 failed to install with error 0x800f0991 on my Dell laptop, tried twice.")
-R2 = wrow(2, "Cannot install the May preview KB5099999",
-          "Downloading KB5099999 keeps failing at 35 percent, download error 0x80070306, the troubleshooter found nothing.",
+R2 = wrow(2, "KB5099999 Install error 0x800f0991 on a new HP laptop",
+          "Installing KB5099999 fails with Install error - 0x800f0991 every time on my HP laptop, Windows 11 Home.",
           "2026-05-02")
 R3 = wrow(3, "Start menu broken after KB5099999", "The Start menu does not open since the update.", "2026-05-03")
+# The first increment's second row: another error code at a stage, and no detail that sets it apart.
+R2_OTHER_CODE = wrow(4, "Cannot install the May preview KB5099999",
+                     "Downloading KB5099999 keeps failing at 35 percent, download error 0x80070306, the troubleshooter "
+                     "found nothing.", "2026-05-02")
+INSTALL_REASON = "Two reports of separate incidents say that this update fails to install with error 0x800f0991."
 
 
-def install_run(page, rows):
-    return vrp.produce([page], {vr.record_identity(page): rows})
+def install_run(page, rows, **kw):
+    return vrp.produce([page], {vr.record_identity(page): rows}, **kw)
+
+
+def install_cands(result):
+    return [x for x in result.candidates if x["producer"]["class"] == vrp.INSTALL_CLASS]
 
 
 def check_install() -> None:
     res = install_run(KBP, [R1, R2, R3])
-    c = [x for x in res.candidates if x["producer"]["class"] == vrp.INSTALL_CLASS]
-    check("VRP-I1 Windows: two rows that name the page's KB with install wording are TEST FIRST 'when installing "
-          "it' with their error codes (any codes count: owner option a); the unrelated Start-menu row is not cited",
+    c = install_cands(res)
+    check("VRP-I1 Windows: two reports of ONE problem (the same error code) whose details show SEPARATE incidents "
+          "(a Dell and an HP laptop) are TEST FIRST 'when installing it', naming the shared code; the unrelated "
+          "Start-menu row is not cited",
           len(c) == 1 and (c[0]["verdict"], c[0]["scope"]) == ("TEST FIRST", "when installing it")
-          and c[0]["reason"] == "Two users independently report that this update fails to install "
-                                "(errors 0x80070306, 0x800f0991)."
+          and c[0]["reason"] == INSTALL_REASON and c[0]["problem_key"] == "error 0x800f0991"
+          and c[0]["independence_basis"] == ["device"]
           and [e["id"] for e in c[0]["evidence"]] == ["w-1", "w-2"] and c[0]["new_in_this_version"] is False,
           str(c)[:300])
     other_kb = install_run(KBP, [wrow(1, "KB5088888 failed to install", "KB5088888 failed to install, error 0x800f0991."),
                                  wrow(2, "KB5088888 will not install", "KB5088888 will not install on two PCs.")])
-    xpost = install_run(KBP, [R1, dict(R2, report_text_excerpt=R2["report_text_excerpt"] + " I previously posted this on another forum.")])
-    twins = install_run(KBP, [R1, dict(R1, id="w-9", source_url="https://answers.test/other/9")])
-    kbset = install_run(KBP, [dict(R1, report_text_excerpt="KB5099999 and KB5088888 failed to install, error 0x800f0991."),
-                              dict(R2, report_text_excerpt="Both KB5099999 and KB5088888 keep failing, download error 0x80070306.")])
-    logs = install_run(KBP, [dict(R1, report_text_excerpt=R1["report_text_excerpt"] + " log https://obsproject.com/logs/AbCd12"),
-                             dict(R2, report_text_excerpt=R2["report_text_excerpt"] + " log https://obsproject.com/logs/AbCd12")])
+    # Detection: each pair carries DIFFERENT source reporter ids (which alone would count as two), and one
+    # copy cue -- so the cue is what removes the would-be second reporter.
+    ids = lambda a, b: (dict(a, source_reporter_id="author-a"), dict(b, source_reporter_id="author-b"))  # noqa: E731
+    plain = (dict(R1, report_text_excerpt="Update KB5099999 failed to install with error 0x800f0991, tried twice."),
+             dict(R2, report_text_excerpt="Installing KB5099999 fails with Install error - 0x800f0991 every time."))
+    xpost = install_run(KBP, list(ids(plain[0], dict(plain[1], report_text_excerpt=plain[1]["report_text_excerpt"]
+                                                    + " I previously posted this on another forum."))))
+    twins = install_run(KBP, list(ids(plain[0], dict(plain[0], id="w-9", source_url="https://answers.test/other/9"))))
+    kbset = install_run(KBP, list(ids(
+        dict(plain[0], report_text_excerpt="KB5099999 and KB5088888 failed to install, error 0x800f0991."),
+        dict(plain[1], report_text_excerpt="Both KB5088888 and KB5099999 keep failing to install, install error "
+                                           "0x800f0991."))))
+    logs = install_run(KBP, list(ids(
+        dict(plain[0], report_text_excerpt=plain[0]["report_text_excerpt"] + " log https://obsproject.com/logs/AbCd12"),
+        dict(plain[1], report_text_excerpt=plain[1]["report_text_excerpt"] + " log https://obsproject.com/logs/AbCd12"))))
+    two_ids = install_run(KBP, list(ids(*plain)))
     gate = {"other KB": other_kb, "declared cross-post": xpost, "same text at two URLs": twins,
             "same KB set": kbset, "same log URL": logs}
-    check("VRP-I2 the MANDATORY independence gate runs before reporters are counted: a declared cross-post, the "
-          "same text at a second URL, the same set of KB numbers and a shared log URL are ONE reporter (different "
-          "URLs prove nothing), so none of them fires; rows naming another KB never qualify",
-          all(not r.candidates for r in gate.values())
+    check("VRP-I2 cross-post DETECTION only removes a would-be second reporter: two rows with different source "
+          "reporter ids count as two, but a declared cross-post, the same text at a second URL, the same set of KB "
+          "numbers or a shared log URL makes them ONE report (no candidate; queued for a person); rows naming "
+          "another KB never qualify",
+          all(not install_cands(r) for r in gate.values()) and len(install_cands(two_ids)) == 1
+          and install_cands(two_ids)[0]["independence_basis"] == ["source_reporter_id"]
           and all(any(q["class"] == vrp.INSTALL_CLASS for q in r.review_queue) for n, r in gate.items() if n != "other KB"),
-          str({n: [x["id"] for x in r.candidates] for n, r in gate.items()}))
+          str({n: [x["id"] for x in install_cands(r)] for n, r in gate.items()}))
     pro = {"update_entry": True, "product_id": "adobe-acrobat-pro", "update_version": "15.099.20001",
            "permalink": "/updates/adobe/adobe-acrobat-pro/15-099-20001/", "update_report_count": 2}
     reader = dict(pro, product_id="adobe-acrobat-reader", permalink="/updates/adobe/adobe-acrobat-reader/15-099-20001/")
@@ -471,15 +549,22 @@ def check_install() -> None:
               "the Creative Cloud app shows an error.", applicability=shared)
     a2 = wrow(12, "Cannot install Acrobat Pro DC on Windows 10", "Installer stops with Exit Code: 7 after the "
               "extraction step on a new Windows 10 machine.", "2026-05-02", applicability=shared)
+    a3 = wrow(13, "Acrobat DC will not install on my iMac", "Exit Code: 7 again on my iMac, Creative Cloud says the "
+              "install failed.", "2026-05-03", applicability=shared)
     pro_res, reader_res = install_run(pro, [a1, a2]), install_run(reader, [a1, a2])
     reader_ok = install_run(reader, [dict(a1, report_text_excerpt=a1["report_text_excerpt"] + " Same with Reader."),
                                      dict(a2, report_text_excerpt=a2["report_text_excerpt"] + " Acrobat Reader too.")])
-    check("VRP-I3 Acrobat: two installer Exit Code 7 rows fire on Pro; the same rows shared with Reader do NOT fire "
-          "on the Reader page unless they name Reader (the calibration's P15/P16 refusal)",
-          [x["reason"] for x in pro_res.candidates] == [
-              "Two users independently report that installing this version fails with installer Exit Code 7."]
-          and reader_res.candidates == [] and len(reader_ok.candidates) == 1,
-          f"{[x['id'] for x in pro_res.candidates]} {[x['id'] for x in reader_res.candidates]}")
+    two_macs = install_run(pro, [a1, a3])
+    check("VRP-I3 Acrobat: two installer Exit Code 7 reports from a Mac and from Windows 10 (separate incidents) fire "
+          "on Pro; the same rows shared with Reader do NOT fire on the Reader page unless they name Reader (the "
+          "calibration's P15/P16 refusal); two Mac reports that never state different versions are not shown to be "
+          "separate incidents, so they do not fire",
+          [x["reason"] for x in install_cands(pro_res)] == [
+              "Two reports of separate incidents say that installing this version fails with installer Exit Code 7."]
+          and install_cands(pro_res)[0]["independence_basis"] == ["os", "os_version"]
+          and install_cands(reader_res) == [] and len(install_cands(reader_ok)) == 1 and install_cands(two_macs) == [],
+          f"{[x['id'] for x in install_cands(pro_res)]} {[x['id'] for x in install_cands(reader_res)]} "
+          f"{[x['independence_basis'] for x in install_cands(pro_res)]} {len(install_cands(two_macs))}")
     saved = vrp.MIN_INDEPENDENT_REPORTERS
     try:
         vrp.MIN_INDEPENDENT_REPORTERS = 3
@@ -489,7 +574,7 @@ def check_install() -> None:
     check("VRP-I4 the reporter threshold is ONE named constant, 2 (A1: at least 2 independent reporters remain); "
           "raising it to 3 stops the two-reporter page firing",
           vrp.MIN_INDEPENDENT_REPORTERS == 2 and raised == [], str(raised)[:200])
-    entries = [x for x in res.candidates] + [x for x in pro_res.candidates]
+    entries = install_cands(res) + install_cands(pro_res)
     check("VRP-I5 an install candidate is never WAIT and never new: TEST FIRST 'when installing it' only, and a "
           "WAIT-shaped install entry is refused by the candidate schema",
           len(entries) == 2  # a mutant that loses them fails this check instead of crashing the suite
@@ -600,14 +685,12 @@ def check_install_rows() -> None:
           f"wrong={wrong} refused={ {n: v['why'] for n, v in refused.items()} } upgrade={upgrade} kept={kept} "
           f"fires={[c['reason'] for c in fires]}")
     listing = wrow(24, "Updates fail - Microsoft Q&A", "2026-05 Security Update (KB5099999) (26200.5000) Install error - "
-                   "0x800f0991 2026-05 .NET Framework Update (KB5088888) Install error - 0x800703f1")
-    alone = wrow(25, "KB5099999 will not install", "KB5099999 will not install, error 0x80073712 every time.", "2026-05-03")
+                   "0x800f0991 2026-05 .NET Framework Update (KB5088888) Install error - 0x800703f1 on my Dell laptop")
     codes = vrp.windows_install_row(listing, KBP)["codes"]
-    reason = [c["reason"] for c in install_run(KBP, [listing, alone]).candidates]
+    reason = [c["reason"] for c in install_cands(install_run(KBP, [listing, R2]))]
     check("VRP-I8 error codes come only from THIS update: in a Windows Update listing the .NET update's "
-          "0x800703f1 is not listed for this KB, so the reason names the page's own codes",
-          codes == ["0x800f0991"] and reason == ["Two users independently report that this update fails to install "
-                                                 "(errors 0x80073712, 0x800f0991)."], f"{codes} {reason}")
+          "0x800703f1 is not listed for this KB, so the reason names the page's own code",
+          codes == ["0x800f0991"] and reason == [INSTALL_REASON], f"{codes} {reason}")
     pairs = {"L1": L1, "N2": N2}
     why = {n: vrp.same_reporter(*rows) for n, rows in pairs.items()}
     gate = {n: len(vrp.independent_reporters(rows)[0]) for n, rows in pairs.items()}
@@ -615,6 +698,138 @@ def check_install_rows() -> None:
           "same misspelt sentences at two URLs -- to one reporter each, on the near-identical-text cue (I10)",
           all(w == "near-identical text once templates are stripped" for w in why.values())
           and gate == {"L1": 1, "N2": 1}, f"{why} {gate}")
+
+
+# Review 1 LOW-2: L1's real row re-posted under a new title with one added sentence (Jaccard 0.32 then).
+L1_REPOST = wrow("q5999001", "Can't get the January security update to install - Microsoft Q&A",
+                 "2026-01 Security Update (KB5074109) (26200.7623) Install error - 0x80070306. I install this many times "
+                 "after successfully installation. this show an error and say retry. Has anyone found a fix for this yet?",
+                 "2026-02-20", url=LEARN + "5999001/cant-get-the-january-security-update-to-install")
+# Review 2 Q3: one person's REWORDED re-post (Jaccard 0.231): no passage, no detail, nothing to tell it apart.
+Q3_ORIGINAL = wrow(31, "KB5099999 fails to install and Outlook is broken",
+                   "Windows Update cannot finish: KB5099999 fails to install with error 0x800f0991 each time. Outlook also "
+                   "broke on May 2 and a repair did not help.")
+Q3_REWORDED = wrow(32, "Can't install KB5099999, Outlook broken since May 2",
+                   "Hi all, Windows Update will not complete on my PC and Outlook has problems too. The update KB5099999 "
+                   "fails to install every time with error 0x800f0991. Outlook started misbehaving on May 2 so I tried a "
+                   "repair.", "2026-05-04")
+
+
+def check_independence() -> None:
+    """AUTH_V2_37 correction 2 / AUTH_V2_38 WS2 items 1-3: independence fails closed; detection only removes."""
+    same_code = [dict(R1, report_text_excerpt="Update KB5099999 failed to install with error 0x800f0991, tried twice."),
+                 dict(R2, report_title="KB5099999 Install error 0x800f0991",
+                      report_text_excerpt="Installing KB5099999 fails with Install error - 0x800f0991 every time.")]
+    unknown = install_run(KBP, same_code)
+    queued = [q for q in unknown.review_queue if q["class"] == vrp.INSTALL_CLASS]
+    reworded = install_run(KBP, [Q3_ORIGINAL, Q3_REWORDED])
+    repost = vrp.same_reporter(L1[0], L1_REPOST)
+    l1_three = len(vrp.independent_reporters([L1[0], L1_REPOST, L1[1]])[0])
+    # A cross-site re-post (two DIFFERENT source reporter ids, which alone would count as two) that keeps one
+    # distinctive passage and rewords everything else: only the shared-passage cue sees it.
+    passage = "I install this many times after successfully installation this show an error and say retry"
+    first = wrow(33, "KB5099999 keeps failing to install", f"KB5099999 keeps failing to install with error 0x800f0991. "
+                 f"{passage}.", source_reporter_id="site-a:1")
+    second = wrow(34, "Help please, the May security update KB5099999 will not install, error 0x800f0991",
+                  f"Hello everyone, posting again because nobody answered: {passage}. Tried SFC, DISM, the "
+                  "troubleshooter, a clean boot, resetting the Windows Update components and the catalog download of "
+                  "KB5099999, error 0x800f0991 each time, nothing works.", "2026-05-06", source_reporter_id="site-b:7")
+    cross_site = install_run(KBP, [first, second])
+    cross_why = vrp.same_reporter(first, second)
+    ta, tb = vrp._content_tokens(first), vrp._content_tokens(second)
+    low_overlap = len(ta & tb) / len(ta | tb) < vrp.INDEPENDENCE_JACCARD
+    check("VRP-I10a independence FAILS CLOSED: two rows of one problem at different URLs, with no stated detail and "
+          "no source reporter id, are not two reporters -- no candidate, refused as not enough independent reports "
+          "and queued for a person; review 2's reworded re-post (Q3) is never a second reporter; review 1's L1 "
+          "re-post under a new title is DETECTED as one report and L1's three rows count once; a cross-site re-post "
+          "under a different reporter id that rewords all but one distinctive passage is DETECTED by that passage "
+          "and removed as a second reporter",
+          not install_cands(unknown) and len(queued) == 1 and queued[0]["kind"] == "independence"
+          and queued[0]["problem_key"] == "error 0x800f0991"
+          and any(e["excluded"] == "not_enough_independent_reporters" for e in unknown.excluded)
+          and not install_cands(reworded) and repost in ("a shared distinctive passage",
+                                                         "near-identical text once templates are stripped")
+          and l1_three == 1 and low_overlap and cross_why == "a shared distinctive passage"
+          and not install_cands(cross_site),
+          f"unknown={[c['id'] for c in install_cands(unknown)]} queued={queued} reworded="
+          f"{[c['reason'] for c in install_cands(reworded)]} repost={repost!r} l1={l1_three} "
+          f"cross={cross_why!r} low={low_overlap} cross_cands={len(install_cands(cross_site))}")
+    # Conservative grouping: two near-identical Windows Update listings whose details conflict are TWO
+    # incidents; a shared author with conflicting details is two incidents; a shared author otherwise one.
+    tpl = "2026-05 Security Update (KB5099999) (26200.5000) Install error - 0x800f0991 on my {} laptop."
+    dell, hp = (wrow(41, "Install error 0x800f0991", tpl.format("Dell")),
+                wrow(42, "Install error 0x800f0991", tpl.format("HP"), "2026-05-02"))
+    conflicting = install_run(KBP, [dell, hp])
+    same_author = install_run(KBP, [dict(dell, source_reporter_id="a1"), dict(hp, source_reporter_id="a1")])
+    one_author = install_run(KBP, [dict(same_code[0], source_reporter_id="a1"), dict(same_code[1], source_reporter_id="a1")])
+    sim = vrp.same_reporter(dell, dict(dell, id="x", report_text_excerpt=tpl.format("Dell")))
+    check("VRP-I10b conservative grouping: near-identical text whose details conflict (a Dell and an HP laptop) is "
+          "NOT merged -- two incidents, a candidate; a shared source author with conflicting details is still two "
+          "incidents; a shared author with nothing apart is one report; identical text with identical details is one",
+          len(install_cands(conflicting)) == 1 and install_cands(conflicting)[0]["independence_basis"] == ["device"]
+          and len(install_cands(same_author)) == 1 and not install_cands(one_author)
+          and sim == "near-identical text once templates are stripped"
+          and vrp.same_reporter(dell, hp) == "",
+          f"conflicting={len(install_cands(conflicting))} same_author={len(install_cands(same_author))} "
+          f"one_author={len(install_cands(one_author))} sim={sim!r} dell/hp={vrp.same_reporter(dell, hp)!r}")
+
+
+def check_install_subject() -> None:
+    """AUTH_V2_38 WS2 item 4 (review 2 LOW-3, F7): the install verb's subject is this update; install-context codes."""
+    base = "The Start menu stopped opening after the May update."
+    q1a = wrow(51, "Start menu broken after KB5099999", base + " After installing KB5099999 my Nvidia graphics "
+               "driver will not install anymore.")
+    q1b = wrow(52, "Start menu broken after KB5099999", base + " Since KB5099999 the HP Smart printer app fails to "
+               "install from the Store.", "2026-05-02")
+    printer = wrow(53, "KB5099999 then a printer problem", "KB5099999 installed but my printer driver fails to install, "
+                   "error 0x80070643.")
+    crash = wrow(54, "KB5099999 fails to install", "KB5099999 fails to install with error 0x800f0922 and the PC then "
+                 "crashed with HYPERVISOR_ERROR 0x20001.")
+    glued = wrow(55, "Install error - 0x800f09912026-05 Preview Update (KB5099999)", "Install error - "
+                 "0x800f09912026-05 Preview Update (KB5099999) (26200.5000) every day.")
+    follow = wrow(56, "2026-05 update KB5099999 won't install", "2026-05 update KB5099999 won't install. Get error "
+                  "code 0x800f0991")
+    italian = wrow(57, "Aggiornamento della sicurezza (KB5099999) Errore di installazione - 0x80070002",
+                   "ENG: I've been trying for days. Can't install it.")
+    both = wrow(58, "KB5099999 and KB5088888 failed to install", "KB5099999 and KB5088888 failed to install, error "
+                "0x800f0991.")
+    got = {n: vrp.windows_install_row(r, KBP) for n, r in (("q1a", q1a), ("q1b", q1b), ("printer", printer),
+                                                           ("crash", crash), ("glued", glued), ("follow", follow),
+                                                           ("italian", italian), ("both", both))}
+    fires = install_cands(install_run(KBP, [q1a, q1b]))
+    check("VRP-I11 the install verb's subject must be THIS update: review 2's Q1 rows ('After installing KB... my "
+          "Nvidia graphics driver will not install', 'Since KB... the HP Smart printer app fails to install') and a "
+          "printer driver failing after the update are refused, so Q1 fires nothing; codes come only from install-"
+          "error context -- never a bugcheck (HYPERVISOR_ERROR 0x20001) -- and are read when glued to the next word, "
+          "in the sentence after the failure, under a localized 'install error' label; updates named together share "
+          "the failure",
+          not got["q1a"]["ok"] and not got["q1b"]["ok"] and not got["printer"]["ok"] and not fires
+          and got["crash"]["codes"] == ["0x800f0922"] and got["glued"]["codes"] == ["0x800f0991"]
+          and got["follow"]["codes"] == ["0x800f0991"] and got["italian"]["codes"] == ["0x80070002"]
+          and got["both"]["ok"] and got["both"]["codes"] == ["0x800f0991"],
+          str({n: (v["ok"], v["codes"], v["why"][:40]) for n, v in got.items()}))
+
+
+def check_install_grouping() -> None:
+    """AUTH_V2_38 WS2 item 5 (Amendment A3): a specific shared characteristic; different codes alone are not one problem."""
+    other = dict(R2, report_text_excerpt=R2["report_text_excerpt"].replace("0x800f0991", "0x80073712"),
+                 report_title=R2["report_title"].replace("0x800f0991", "0x80073712"))
+    strict = install_run(KBP, [R1, other])
+    lenient = install_run(KBP, [R1, other], install_grouping="lenient")
+    rollback = install_run(KBP, [dict(R1, report_text_excerpt=R1["report_text_excerpt"] + " It rolls back after the "
+                                      "restart."),
+                                 dict(other, report_text_excerpt=other["report_text_excerpt"] + " Each time it rolls "
+                                      "back after restarting.")])
+    rb = install_cands(rollback)
+    check("VRP-I12 strict install grouping is the default (A3): two separate incidents with DIFFERENT error codes are "
+          "not one problem -- no candidate, refused as sharing no characteristic and queued; the same two sharing a "
+          "named stage (it rolls back) are one problem; A1's lenient reading exists only to be measured",
+          vrp.INSTALL_GROUPING == "strict" and not install_cands(strict)
+          and any(e["excluded"] == "no_shared_failure_characteristic" for e in strict.excluded)
+          and any(q["class"] == vrp.INSTALL_CLASS for q in strict.review_queue)
+          and len(install_cands(lenient)) == 1 and len(rb) == 1 and rb[0]["problem_key"] == "rolls back"
+          and rb[0]["reason"].endswith("fails to install: it rolls back instead of completing."),
+          f"strict={len(install_cands(strict))} lenient={len(install_cands(lenient))} rollback={[c['reason'] for c in rb]}")
 
 
 # ------------------------------------------------------------------------ [P] placeholder
@@ -753,6 +968,43 @@ def check_switch(tmp: Path) -> None:
     check_render_switch_on()
     check_qa_switch(tmp / "qa")
     check_builder(tmp / "builder")
+    check_writers(tmp / "writers")
+
+
+def check_writers(tmp: Path) -> None:
+    """AUTH_V2_38 WS2 item 8: the record writers gather a page's reasons exactly as the projection does, so
+    with the switch ON the prose they store is the page's verdict and verdict_policy_drift clears."""
+    import apply_consensus_to_records as acr  # noqa: PLC0415 - the writer itself, offline
+    import build_consensus_from_evidence as bce  # noqa: PLC0415
+    recs = named_fixture()
+    gen = tmp / "generated"
+    gen.mkdir(parents=True, exist_ok=True)
+    for i, r in enumerate(recs):
+        (gen / f"r{i:02d}.md").write_text("---\n" + yaml.safe_dump(r, allow_unicode=True) + "---\nbody\n",
+                                          encoding="utf-8")
+    index = {(r["product_id"], r["update_version"], r.get("target_build", "")): r for r in recs}
+    page = recs[0]   # OBS 31.1.0: three vendor WAITs, no report
+    got = {}
+    saved_dir, saved_cache = acr.GENERATED_DIR, list(acr._ALL_ENTRY_RECORDS)
+    try:
+        acr.GENERATED_DIR = gen
+        for on in (False, True):
+            acr._ALL_ENTRY_RECORDS.clear()
+            with switch(on):
+                a = acr._policy_decision(OBS, "31.1.0", "", [], dict(page))[0]
+                b = bce.policy_decision(OBS, "31.1.0", "", [], dict(page), index)[0]
+                valid, _u = vp.supported_reasons(recs, {}, [])
+                want = pd.decide(dict(page), valid_reasons=valid.get(vr.record_identity(page), []))
+            got[on] = ((a.verdict, a.scope), (b.verdict, b.scope), (want.verdict, want.scope))
+    finally:
+        acr.GENERATED_DIR = saved_dir
+        acr._ALL_ENTRY_RECORDS[:] = saved_cache
+    check("VRP-S6 the record writers (apply_consensus_to_records, build_consensus_from_evidence) gather a page's "
+          "reasons as the projection does: switch OFF they store INSUFFICIENT DATA for OBS 31.1.0, exactly as before; "
+          "switch ON they store decide's verdict over the producer's candidates, so the stored prose never lags the "
+          "page (the drift that never cleared)",
+          got[False] == (("INSUFFICIENT DATA", ""),) * 3 and got[True][0] == got[True][1] == got[True][2]
+          and got[True][0][0] == "WAIT", str(got))
 
 
 _RENDER_RB = r"""
@@ -921,11 +1173,30 @@ def check_corpus() -> None:
     install_only.candidates = [x for x in res.candidates if x["producer"]["class"] == vrp.INSTALL_CLASS]
     agree = vrp.agreement_with_reviewed(install_only, c["reasons"])
     install = [a for a in agree if a["reason_class"] == "corroborated_install_problem"]
-    check("VRP-C2 against the reviewed install entries the producer agrees or abstains, never contradicts: it "
-          "reproduces at least 3 of the 4 (the calibration's 3/4) and proposes no other install verdict or scope "
-          "on any reviewed page",
+    check("VRP-C2 against the reviewed install entries the producer agrees or abstains, never contradicts, and "
+          "proposes no other install verdict or scope on any reviewed page. With independence failing closed and "
+          "strict grouping it reproduces 1 of the 4 (Acrobat 15.023.20053: a Mac and a Windows 10 incident); the "
+          "calibration's 3/4 was the lenient, assumed-independent reading",
           not any(a["producer"] == "differs" for a in agree)
-          and sum(a["producer"] == "agrees" for a in install) >= 3 and len(install) == 4, str(agree)[:400])
+          and sum(a["producer"] == "agrees" for a in install) >= 1 and len(install) == 4, str(agree)[:400])
+    install_c = [x for x in res.candidates if x["producer"]["class"] == vrp.INSTALL_CLASS]
+    unproven = []
+    for x in install_c:
+        rows = {r.get("id"): r for r in c["groups"].get(vr.reason_identity(x), [])}
+        cited = [rows[e["id"]] for e in x["evidence"] if e["id"] in rows]
+        pairs = [(a, b) for i, a in enumerate(cited) for b in cited[i + 1:]]
+        if len(cited) < 2 or not x["independence_basis"] or not x["problem_key"] or not all(
+                vrp.distinct_incident({"details": vrp.incident_details(a, x["product_id"]),
+                                       "reporter_ids": vrp._reporter_ids(a)},
+                                      {"details": vrp.incident_details(b, x["product_id"]),
+                                       "reporter_ids": vrp._reporter_ids(b)}) for a, b in pairs):
+            unproven.append(x["id"])
+    vendor_waits = [x for x in res.candidates if x["verdict"] == "WAIT"]
+    check(f"VRP-C3 over the shipped corpus every install candidate ({len(install_c)}) rests on reports of ONE "
+          "problem (a shared characteristic) whose every pair the source shows to be separate incidents, never on "
+          "an assumed second reporter; every WAIT is a vendor-confirmed defect new in that version",
+          not unproven and all(x["producer"]["class"] == vrp.VENDOR_CLASS and x["new_in_this_version"]
+                               for x in vendor_waits), str(unproven[:3]))
 
 
 # ------------------------------------------------------------------------ [X] mutants
@@ -988,6 +1259,29 @@ def all_codes(real):
     return mutated
 
 
+def similarity_ignores_conflicts(real):
+    """Before AUX-099: text similarity merged two rows whatever their details said."""
+    def mutated(a, b, product_id=""):
+        why = real(a, b, product_id)
+        if why:
+            return why
+        ta, tb = vrp._content_tokens(a), vrp._content_tokens(b)
+        if ta | tb and len(ta & tb) / len(ta | tb) >= vrp.INDEPENDENCE_JACCARD:
+            return "near-identical text once templates are stripped"
+        return ""
+    return mutated
+
+
+def uncertain_drafted(real):
+    """Before AUX-099: 'a possible crash' was drafted like any other."""
+    def mutated(statement):
+        got = real(statement)
+        if got.get("excluded") == "uncertain_severity" and got.get("severity"):
+            return {k: v for k, v in got.items() if k not in ("excluded", "note")}
+        return got
+    return mutated
+
+
 def check_mutations(tmp: Path) -> None:
     real_obs, real_win = vrp.classify_obs_statement, vrp.classify_windows_issue
     real_statements, real_produce, real_indep = vrp._obs_statements, vrp.produce, vrp.independent_reporters
@@ -1036,7 +1330,8 @@ def check_mutations(tmp: Path) -> None:
          [swap(vrp, "PUBLIC_AUTO_ACTIVATION", True)]),
         ("VX5 a network call added to the producer", check_purity, [swap(vrp, "produce", with_network)]),
         ("VX6 the independence gate removed (every qualifying row is a reporter)", check_install,
-         [swap(vrp, "independent_reporters", lambda rows: (sorted(rows, key=lambda r: str(r.get("id"))), []))]),
+         [swap(vrp, "independent_reporters", lambda rows, product_id="": (sorted(rows, key=lambda r: str(r.get("id"))),
+                                                                          []))]),
         ("VX7 the reporter threshold lowered to one", check_install, [swap(vrp, "MIN_INDEPENDENT_REPORTERS", 1)]),
         ("VX8 the Acrobat product check removed (a Pro row counts on the Reader page)", check_install,
          [swap(vrp, "_acrobat_row_matches", lambda row, pid: bool(vrp._EXIT7_RX.search(vrp._txt(row))))]),
@@ -1078,6 +1373,38 @@ def check_mutations(tmp: Path) -> None:
          [swap(vrp, "_names_environment_type", lambda word, generic: True)]),
         ("VX25 'environments' is vague even after a named type ('virtual desktop environments')", check_vendor_scope,
          [swap(vrp, "_names_environment_type", lambda word, generic: False)]),
+        # AUTH_V2_38 WS2 (AUX-099): one mutant per fix half.
+        ("VX26 (item 3) an unknown second reporter counts: independence is assumed, not established",
+         check_independence, [swap(vrp, "distinct_incident", lambda a, b, product_id="": "assumed")]),
+        ("VX27 (item 2) similarity collapses incidents whose details conflict (conservative grouping off)",
+         check_independence, [swap(vrp, "same_reporter", similarity_ignores_conflicts(vrp.same_reporter))]),
+        ("VX28 (item 1) the shared-distinctive-passage cue disabled (a reworded re-post goes undetected)",
+         check_independence, [swap(vrp, "SHARED_PASSAGE_WORDS", 10 ** 6)]),
+        ("VX29 (item 4) the install verb's subject is not checked (another program failing counts)",
+         check_install_subject, [swap(vrp, "_install_subject", lambda text, span, refs, page_spans, other_spans:
+                                      vrp._owner_is_page(span, page_spans, other_spans))]),
+        ("VX30 (item 4) a crash or bugcheck code is read as an install error", check_install_subject,
+         [swap(vrp, "_CRASH_CONTEXT_RX", NEVER)]),
+        ("VX31 (item 4) updates named together: only the nearest one counts", check_install_subject,
+         [swap(vrp, "_coordinated", lambda text, refs, i, step: refs[i][2])]),
+        ("VX32 (item 5) lenient grouping by default: different error codes are one problem again",
+         check_install_grouping, [swap(vrp, "INSTALL_GROUPING", "lenient")]),
+        ("VX33 (item 6) an OBS defect 'in V and earlier' / 'since' is new in V again", check_vendor_persistence,
+         [swap(vrp, "_PERSISTENT_RE", NEVER)]),
+        ("VX34 (item 6) a Microsoft issue that also affects earlier updates originates in this one again",
+         check_vendor_persistence, [swap(vrp, "_WIN_PERSISTENT_RE", NEVER)]),
+        ("VX35 (item 7) an OBS crash needs no core-workflow cue", check_vendor_persistence,
+         [swap(vrp, "_OBS_CORE_FLOW_RE", re.compile(""))]),
+        ("VX36 (item 7) a crash while logging or in a dialog counts as a core-flow crash", check_vendor_persistence,
+         [swap(vrp, "_OBS_NOT_CORE_RE", NEVER)]),
+        ("VX37 (item 7) a possible / rare crash is drafted instead of queued", check_vendor_persistence,
+         [swap(vrp, "classify_obs_statement", uncertain_drafted(vrp.classify_obs_statement))]),
+        ("VX38 (item 3) a different source reporter id is not a different reporter", check_install,
+         [swap(vrp, "_reporter_ids", lambda row: frozenset())]),
+        ("VX39 (item 8) the record writers read reviewed reasons only again (the drift never clears)",
+         lambda: check_writers(tmp / "x39"),
+         [swap(vp, "page_supported_reasons", lambda page, rows, reviewed_valid, records=():
+               [dict(e) for e in reviewed_valid])]),
     ]
     del real_indep, real_acrobat
     mutants: list = []
@@ -1103,9 +1430,13 @@ def run() -> int:
         check_vendor()
         check_vendor_scope()
         check_vendor_body()
+        check_vendor_persistence()
         print("\n[I] user-corroborated install failures and the independence gate")
         check_install()
         check_install_rows()
+        check_independence()
+        check_install_subject()
+        check_install_grouping()
         print("\n[P] the corroboration placeholder")
         check_placeholder()
         print("\n[N] purity")

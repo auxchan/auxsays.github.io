@@ -118,6 +118,35 @@ def supported_reasons(records: Iterable[Mapping[str, Any]],
     return valid, unsupported
 
 
+def page_supported_reasons(page: Mapping[str, Any], rows: Iterable[Mapping[str, Any]],
+                           reviewed_valid: Iterable[Mapping[str, Any]], records: Any = ()) -> list[dict[str, Any]]:
+    """The reasons decide reads for ONE page, as the record writers gather them: `reviewed_valid` (the
+    page's supported reviewed entries) plus -- only while PUBLIC_AUTO_ACTIVATION is on -- the producer's
+    candidates for this exact page, merged exactly as `supported_reasons` merges them.
+
+    WHY (AUX-099, AUTH_V2_38 WS2 item 8). The record writers (apply_consensus_to_records,
+    build_consensus_from_evidence) gathered reviewed reasons only, so with the switch on the prose they
+    stored lagged the page on every report-bearing candidate page, and QA's verdict_policy_drift never
+    cleared (29 warnings in G35-04 round 3, 10 after the AUX-099 producer repairs). Through this one
+    function they store the page's verdict, and the drift clears at the next promotion. Switch OFF it
+    returns `reviewed_valid` unchanged and runs nothing, so no stored prose changes.
+
+    `records`: every generated record (the vendor class reads official statements stored on OTHER
+    records), or a zero-argument callable returning them, called only when the switch is on. The install
+    class reads only `rows`, which are this page's own counted rows, so the result equals the
+    corpus-wide `supported_reasons` for this page."""
+    reviewed = [dict(e) for e in reviewed_valid or ()]
+    if not verdict_reason_producer.PUBLIC_AUTO_ACTIVATION:
+        return reviewed
+    pool = [r for r in (records() if callable(records) else records or ()) if isinstance(r, Mapping)]
+    ident = verdict_reasons.record_identity(page)
+    if not any(verdict_reasons.record_identity(r) == ident for r in pool):
+        pool.append(dict(page))
+    produced = verdict_reason_producer.produce(pool, {ident: list(rows or ())})
+    mine = [c for c in produced.candidates if verdict_reasons.reason_identity(c) == ident]
+    return verdict_reason_producer.merge({ident: reviewed}, mine).get(ident, [])
+
+
 def project(records: Iterable[Mapping[str, Any]],
             counted_by_identity: Mapping[tuple[str, str, str], list[Mapping[str, Any]]],
             reasons: Iterable[Mapping[str, Any]], lifecycle: Iterable[Mapping[str, Any]],

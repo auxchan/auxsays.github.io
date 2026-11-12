@@ -314,11 +314,11 @@ def load_counted_accepted_urls(
 
 
 # verdict_policy_drift's last sentence, ONE copy (G35-04 review 1, LOW-4). The record writers
-# (apply_consensus_to_records.py, build_consensus_from_evidence.py) read REVIEWED reasons only, so a
-# difference that comes from a reason-producer candidate never reaches the stored prose: said so.
-DRIFT_CATCH_UP = ("The stored prose catches up when a record writer next promotes this page, unless the "
-                  "difference comes from a reason-producer candidate: the writers read reviewed reasons only, "
-                  "so that drift stays until they read the producer's reasons too.")
+# (apply_consensus_to_records.py, build_consensus_from_evidence.py) gather a page's reasons through
+# lib/verdict_projection.page_supported_reasons -- the reviewed entries, plus the reason producer's candidates
+# while its switch is on -- so every drift, a candidate's included, clears at the next promotion (AUX-099).
+DRIFT_CATCH_UP = ("The stored prose catches up when a record writer next promotes this page: the writers "
+                  "gather the page's reasons exactly as the verdict projection does.")
 
 
 def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -376,9 +376,9 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
       * verdict_policy_drift -- a report-bearing record whose stored verdict or stored summary lead
         differs from what the policy decides now. Every surface prints the gate's verdict, so the
         page and the feed are already right. The stored prose catches up when a record writer next
-        promotes the page -- EXCEPT where the difference comes from a reason-producer candidate
-        (lib/verdict_reason_producer, only while its switch is on): the writers read reviewed reasons
-        only, so that drift does not clear (G35-04 review 1, LOW-4; a recorded follow-up).
+        promotes the page; that includes a difference from a reason-producer candidate (only while its
+        switch is on), because the writers gather reasons as the projection does (G35-04 review 1,
+        LOW-4; closed by AUX-099).
       * patch_lifecycle_unmatched -- a lifecycle entry no record carries.
     """
     errors: list[dict[str, str]] = []

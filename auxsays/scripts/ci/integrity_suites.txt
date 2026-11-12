@@ -333,7 +333,15 @@ auxsays/scripts/tests/test_growth3_verdict_policy.py = 146
 # update only (I8), the L1/N2 duplicate pairs (I9). 21 mutants (was 10), VX11..VX21 one fix half each.
 # Review 2 (51 -> 56): a hedged scope is ambiguous -- the Q4 row and the review's unit phrasings
 # (V8b). 25 mutants, VX22..VX25 one fix half each.
-auxsays/scripts/tests/test_verdict_reason_producer.py = 56
+# AUX-099 (56 -> 78; AUTH_V2_38 WS2 items 1-8): independence fails closed -- an unknown second reporter never
+# counts, only a different source reporter id or conflicting incident details do, and a reworded cross-post is
+# detected by a shared distinctive passage (I2, I10a); similarity or a shared author never merges incidents
+# whose details conflict (I10b); the install verb's subject is this update and codes come only from install-
+# error context (I11); strict grouping on a shared code or stage (I12); a carried-over defect persists, never
+# new (V11); an OBS crash needs a launch or core-flow cue and a possible / rare one is queued (V12); every
+# corpus install candidate rests on separate incidents of one problem (C3); the record writers gather reasons
+# as the projection does, so switch-ON drift clears (S6). 39 mutants, VX26..VX39 one fix half each.
+auxsays/scripts/tests/test_verdict_reason_producer.py = 78
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93

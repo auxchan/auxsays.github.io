@@ -1,4 +1,4 @@
-"""The deterministic verdict-reason producer (G35-04, first increment).
+"""The deterministic verdict-reason producer (G35-04; independence and shadow repairs, AUX-099).
 
 WHAT IT IS. A pure function of stored data -- the generated records and their counted evidence rows
 -- that proposes reason entries of two classes, in the shape lib/patch_decision.decide already reads:
@@ -21,29 +21,39 @@ WHAT IT IS. A pure function of stored data -- the generated records and their co
     and "for some consumer devices" or "for devices in some regions" name one only vaguely, so they
     go to the review queue, never to a page. An OBS version counts only where the vendor
     names it as the defective one ("Fixed a crash in V", "present in V"), never as where an input
-    file was made ("created in V").
+    file was made ("created in V"). An OBS crash is serious only on launch or in a core workflow the
+    note names (recording, streaming, capture, scenes, sources, outputs, audio ...); a crash when
+    closing a dialog is not, and a defect the vendor calls possible, rare or occasional goes to the
+    review queue (review 2, LOW-2).
     Recommendation: WAIT scoped to the setup when the vendor names this version as where the defect
-    starts (the earliest version it names, or the originating build); TEST FIRST when the defect is
-    carried over from an earlier version (a persistent problem is never called new) or is an
-    installation failure.
+    starts (the earliest version it names, or the originating build); TEST FIRST, saying the problem
+    PERSISTS, when the defect is carried over from an earlier version or the vendor says so ("and
+    earlier", "since", "also affected": review 2, LOW-1) -- a persistent problem is never called new
+    or caused -- and for an installation failure.
 
-  * user_corroborated_install_failure (G35-04 Amendment A1; calibration G35-05 section 5). The
-    update fails to install, reported by at least MIN_INDEPENDENT_REPORTERS independent users on
-    the page's own counted rows. A Windows row counts only when it reports THIS update failing to
-    install (`windows_install_row`): it names the page's KB (a build alone is a device's current
-    build or a rollback target, not the update, unless the row says "update/upgrade to <build>"); its
-    install wording is not negated ("not that the update fails to install"), not about the update
-    scan ("failed to check for updates") and not about another update (the nearest update the row
-    names to that wording is this page's); and only the error codes attributed to this page's update
-    are listed. Acrobat rows show installer "Exit Code 7" (a row shared between Pro and Reader must
-    name this page's product). The MANDATORY independence gate (I11) runs before reporters are
-    counted: a declared cross-post never counts, and a row that repeats a kept row (template-stripped
-    token overlap, a shared log URL, the same set of two or more KB numbers) is the same reporter.
-    Different URLs alone prove nothing (AUTH_V2_35 D-A). Different error codes are grouped as one
-    problem here (A1's reading). That reading was a coordinator interpretation, NOT owner wording
-    (Amendment A3: the owner's text is "the same concrete issue"); A3's strict grouping (a shared
-    code or a shared stage) is not built in this increment -- a recorded follow-up, and one more
-    reason the switch stays OFF. Recommendation: TEST FIRST "when installing it" -- never WAIT.
+  * user_corroborated_install_failure (G35-04 Amendments A1, A3; AUTH_V2_37 correction 2). The update
+    fails to install, in at least MIN_INDEPENDENT_REPORTERS reports of SEPARATE incidents of ONE
+    problem on the page's own counted rows.
+      - A Windows row counts only when it reports THIS update failing to install
+        (`windows_install_row`): it names the page's KB (a build alone is a device's current build or a
+        rollback target); its install wording is not negated, not about the update scan, and takes
+        THIS update as its subject or object -- "after installing KB... my driver will not install" is
+        the driver failing, not the update (review 2 LOW-3); error codes are read only in install-error
+        context, never from a crash or bugcheck. Acrobat rows show installer "Exit Code 7" (a row
+        shared between Pro and Reader must name this page's product).
+      - One problem (A3, INSTALL_GROUPING "strict"): rows group only on a shared failure
+        characteristic -- the same error code, the same named stage, the installer's Exit Code 7.
+        Different error codes alone are not one problem.
+      - Independence FAILS CLOSED (AUTH_V2_37 correction 2). Copies are DETECTED -- a declared
+        cross-post, the same log, near-identical text, a shared distinctive passage (a reworded
+        re-post keeps one), the same KB set, the same incident details -- and only ever REMOVE a
+        would-be second reporter; detection never touches stored evidence. A second report COUNTS only
+        where the source supports a different reporter or incident: a source reporter id that differs
+        (no collector stores one today), or concrete incident details that cannot belong to one
+        incident (two different computers, editions, OS versions, failure points). Unknown is not
+        independent. Shared wording or a shared author never merges two incidents whose details
+        conflict (conservative grouping).
+    Recommendation: TEST FIRST "when installing it" -- never WAIT.
 
 Everything else -- non-install user corroboration -- is NOT produced: `corroboration_candidates` is
 the placeholder interface for that later work, and it fails closed. Pages that need a person go to
@@ -52,13 +62,13 @@ the review queue, which is TEMPORARY: it has no automated promotion yet.
 THE SWITCH. `PUBLIC_AUTO_ACTIVATION` is the ONE activation switch. It is OFF, and it is TEMPORARY:
 public automatic activation needs the owner's approval of that transition (AUTH_V2_35 D-A). OFF,
 the decision authority reads only the reviewed `_data/verdict_reasons.yml`, so nothing published
-changes; the producer still runs at deploy and its candidates are written to the git-ignored
-`_data/verdict_reason_candidates.yml` for review. ON, lib/verdict_projection merges the candidates
-into the supported reasons, so the projection, the gate, every surface and QA carry them.
+changes; the producer still runs at deploy -- SHADOW operation -- and its candidates are written to the
+git-ignored `_data/verdict_reason_candidates.yml`, which lib/producer_shadow turns into bounded,
+public-safe diagnostics. ON, lib/verdict_projection merges the candidates into the supported reasons,
+so the projection, the gate, every surface and QA carry them.
 
-NEVER A SECOND WRITER. The producer runs only where the projection is built (deploy time,
-build_verdict_projection.py) and writes only that derived, git-ignored artifact. No collector, lane
-or record writer imports it.
+NEVER A SECOND WRITER. The producer runs only where reasons are gathered for a decision and writes
+nothing; build_verdict_projection.py writes its derived, git-ignored artifact. No collector imports it.
 
 Reads its arguments and nothing else: no network, no clock, no file, no collector import
 (test_verdict_reason_producer pins the import list).
@@ -72,7 +82,7 @@ from typing import Any, Iterable, Mapping
 
 from . import verdict_reasons
 
-PRODUCER_VERSION = "3"
+PRODUCER_VERSION = "4"
 # THE ONE ACTIVATION SWITCH. TEMPORARY: OFF until the owner approves public auto-activation
 # (AUTH_V2_35 D-A). Flipping it is a reviewed one-line change, never an environment variable or a
 # workflow input, so no deploy can turn it on by itself.
@@ -85,7 +95,8 @@ SEVERITY_BASES = ("data_loss", "critical_install_failure", "substantial_workflow
                   "crash_on_launch", "crash_in_core_flow")
 EXCLUSION_REASONS = ("minor_lag", "recoverable_preference_or_profile", "narrow_cosmetic",
                      "no_severity_basis", "no_exact_version", "no_exact_page", "ambiguous_scope",
-                     "no_stored_official_text", "candidate_schema", "not_enough_independent_reporters")
+                     "no_stored_official_text", "candidate_schema", "not_enough_independent_reporters",
+                     "no_shared_failure_characteristic", "uncertain_severity")
 # A1: "at least 2 independent reporters remain". The single named threshold.
 MIN_INDEPENDENT_REPORTERS = 2
 REVIEW_QUEUE_LABEL = ("TEMPORARY review queue: no automated promotion exists for these yet; a person "
@@ -121,12 +132,37 @@ _OBS_BULLET_RE = re.compile(r"^\s*[*-]\s*(Fixed\b.*?)\s*(?:\[[^\]\n]*\]\s*(?:\(\
 # the newer release (review 1, LOW-3). A bare number (macOS 27.2) is never one either.
 _OBS_VERSION_LIST = r"(?:OBS Studio )?(\d+\.\d+\.\d+)((?:(?:,|,? and) (?:OBS Studio )?\d+\.\d+\.\d+)*)"
 _OBS_NAMED_RE = re.compile(
-    r"^Fixed (?:a |an )?(?:possible |potential |rare |random )?(?:crash|freeze|hang|issue|bug|regression|problem)e?s? "
+    r"^Fixed (?:a |an )?(?:(?:possible|potential|rare|random|occasional|intermittent|sporadic) )?"
+    r"(?:crash|freeze|hang|issue|bug|regression|problem)e?s? "
     r"in " + _OBS_VERSION_LIST + r"|\b(?:present|introduced) in " + _OBS_VERSION_LIST, re.ASCII)
-_OBS_HEAD_RE = re.compile(r"^Fixed (?:a |an )?(?:possible |potential |rare |random )?(crash|freeze|hang)\b", re.I)
+_OBS_HEAD_RE = re.compile(r"^Fixed (?:a |an )?(?P<q>(?:possible|potential|rare|random|occasional|intermittent|sporadic) )?"
+                          r"(?P<kind>crash|freeze|hang)\b", re.I)
 _OS_RE = re.compile(r"\bon (Windows|macOS(?: [0-9]+(?:\.[0-9]+)*)?|Linux)\b", re.ASCII)
 _WHEN_RE = re.compile(r"\bwhen ([a-z][^;]*?)\s*\.?$")
 _LAUNCH_RE = re.compile(r"\b(?:when (?:starting|launching|opening) OBS|on (?:launch|startup)|at startup)\b", re.I)
+# Review 2, LOW-2: a crash is serious when OBS will not launch or when it breaks a CORE workflow -- what the
+# "when ..." clause names: recording, streaming, capture, scenes, sources and their properties, outputs,
+# encoders, audio, transitions, the virtual camera, the replay buffer. A crash that names neither ("when
+# closing the About dialog", "when attempting to log info about ...") has no severity basis.
+_OBS_CORE_FLOW_RE = re.compile(
+    r"\b(?:record\w*|stream\w*|broadcast\w*|going live|outputs?|encod\w*|captur\w*|scenes?|sources?|properties|"
+    r"transitions?|virtual ?cam\w*|replay buffer|studio mode|audio|mixer|filters?|multitrack|decklink|ndi|"
+    r"websocket|hotkeys?)\b", re.I)
+_OBS_NOT_CORE_RE = re.compile(
+    r"\b(?:log\w*|about (?:dialog|window|box)|help|crash report\w*|crash handler|update check\w*|checking for "
+    r"updates|auto-?config\w*|wizard|tooltips?|themes?|exit\w*|clos(?:e|ing) OBS|shut\w* down|shutdown|quit\w*)\b",
+    re.I)
+# A defect the vendor itself calls uncertain ("a possible crash", "a rare freeze", "can sometimes") is for a
+# person: the review queue, never an automatic verdict (review 2, LOW-2).
+_UNCERTAIN_RE = re.compile(r"\b(?:possible|potential|potentially|rare|rarely|random|occasional|occasionally|"
+                           r"intermittent|sporadic|sometimes|in some cases)\b", re.I)
+# Review 2, LOW-1 (A3): wording that says the defect was ALREADY there -- "in 32.1.0 and earlier", "since",
+# "a regression from", "also affected", "still present" -- makes it a PERSISTENT defect: TEST FIRST saying it
+# persists, never WAIT and never "new" or caused by this version.
+_PERSISTENT_RE = re.compile(
+    r"\b(?:and (?:earlier|older|prior|before)|or (?:earlier|older)|(?:and|or) (?:all )?(?:previous|prior|older|earlier) "
+    r"(?:versions?|releases?|builds?|updates?)|since\b|regression (?:from|since)|also affect\w*|still (?:present|"
+    r"occur\w*|happen\w*)|persist\w*|carried over|long-?standing|pre-?existing)", re.I)
 _DATA_LOSS_RE = re.compile(r"\bdata loss\b|\b(?:recordings?|files?|projects?|scene collections?|data)\b[^.]{0,40}"
                            r"\b(?:lost|deleted|corrupt\w*|overwritten|wiped)\b", re.I)
 _INSTALL_FAIL_RE = re.compile(r"\b(?:fail(?:s|ed|ing)? to install|install(?:ation|er)? (?:fail\w*|error)|"
@@ -163,17 +199,23 @@ def classify_obs_statement(statement: str) -> dict[str, str]:
     Severity comes from the defect the bullet names, through a CLOSED grammar: a crash / freeze head
     noun, or "where <feature> did not work" / "causing <feature> to fail" (the feature stops working
     outright), or data loss, or an installation failure. A lag, a cosmetic issue and a preference or
-    profile reset are excluded BEFORE that, unless the head noun is a crash (a crash is a crash in
-    any feature). Anything the grammar does not recognise has no severity basis: excluded."""
+    profile reset are excluded BEFORE that, unless the head noun is a crash (a crash outranks those).
+    A crash is serious only on launch or in a CORE workflow the "when ..." clause names (review 2, LOW-2):
+    otherwise it has no severity basis. A crash, freeze or hang the vendor calls uncertain ("a possible
+    crash", "a rare freeze") is `uncertain_severity`: refused, and queued for a person. Anything the
+    grammar does not recognise has no severity basis: excluded."""
     text = re.sub(r"\s+", " ", statement).strip()
     os_m = _OS_RE.search(text)
     os_name = os_m.group(1) if os_m else ""
     head = _OBS_HEAD_RE.match(text)
     if head:
-        kind = head.group(1).lower()
+        kind = head.group("kind").lower()
         when = _WHEN_RE.search(text)
         if kind == "crash":
-            severity = "crash_on_launch" if _LAUNCH_RE.search(text) else "crash_in_core_flow"
+            core = bool(when) and bool(_OBS_CORE_FLOW_RE.search(when.group(1))) \
+                and not _OBS_NOT_CORE_RE.search(when.group(1))
+            severity = ("crash_on_launch" if _LAUNCH_RE.search(text) else
+                        "crash_in_core_flow" if core else "")
         else:
             severity = "substantial_workflow_breakage"
         if when:
@@ -185,6 +227,12 @@ def classify_obs_statement(statement: str) -> dict[str, str]:
             scope = f"if you use {os_name}"
         else:
             scope = ""  # no affected setup stated: `_scope_ok` refuses it when it is proposed
+        if head.group("q") or _UNCERTAIN_RE.search(text):
+            return {"excluded": "uncertain_severity", "severity": severity, "failure_kind": kind, "scope": scope,
+                    "note": f"the vendor calls this {kind} uncertain" + ("" if severity else
+                                                                        ", outside a launch or a core workflow")}
+        if not severity:
+            return {"excluded": "no_severity_basis", "note": "a crash outside a launch or a core workflow"}
         return {"severity": severity, "failure_kind": kind, "scope": scope}
     if _LAG_RE.search(text):
         return {"excluded": "minor_lag"}
@@ -258,20 +306,24 @@ def _obs_candidates(records: list[Mapping[str, Any]], pages: Mapping[tuple[str, 
             if page is None:
                 out.exclude(VENDOR_CLASS, "no_exact_page", source, product_id=OBS, update_version=version)
                 continue
+            problem_key = "obs: " + st["statement"].lower()
             if "excluded" in verdict_info:
                 out.exclude(VENDOR_CLASS, verdict_info["excluded"], source, product_id=OBS, update_version=version,
-                            severity=verdict_info.get("severity", ""))
+                            severity=verdict_info.get("severity", ""), note=verdict_info.get("note", ""),
+                            problem_key=problem_key)
                 continue
             first = sorted(st["named"], key=_version_key)[0]
-            new = version == first
-            persistent = "" if new else f", carried over from OBS {first}"
-            reason = (f"OBS confirms this problem in OBS {version}{persistent}: its {st['fixed_in']} release notes "
-                      f"say \"{st['statement']}\".")
+            persists_from = (f"OBS {first}" if version != first
+                             else "earlier versions" if _PERSISTENT_RE.search(st["statement"]) else "")
+            new = not persists_from
+            lead = (f"OBS confirms this problem persists in OBS {version} (carried over from {persists_from})"
+                    if persists_from else f"OBS confirms this problem in OBS {version}")
+            reason = f"{lead}: its {st['fixed_in']} release notes say \"{st['statement']}\"."
             out.propose(_candidate(
                 VENDOR_CLASS, page, verdict=_vendor_verdict(verdict_info["severity"], new),
                 scope=verdict_info["scope"], reason=reason, severity=verdict_info["severity"],
                 failure=st["statement"], new=new, fixed_in=st["fixed_in"],
-                citation=dict(source, vendor="OBS Project"),
+                citation=dict(source, vendor="OBS Project"), problem_key=problem_key,
                 inputs={"statement_sha256": _sha(st["statement"]), "body_sha256": st["body_sha256"]}))
 
 
@@ -304,6 +356,11 @@ _WIN_DATA_LOSS_RE = re.compile(r"\b(?:data loss|lose (?:data|files)|files? might
 _WIN_LAG_RE = re.compile(r"\b(?:slow|slower|lag|latency|delay\w*|performance)\b", re.I)
 _WIN_COSMETIC_RE = re.compile(r"\b(?:display incorrectly|appear incorrectly|cosmetic|visual|misaligned|icons?|"
                               r"animation|wallpaper)\b", re.I)
+# Microsoft's wording that an issue is older than its originating build (narrower than OBS's: a known
+# issue "since installing this update" is new in it).
+_WIN_PERSISTENT_RE = re.compile(r"\b(?:and earlier|or earlier|also affect\w* (?:earlier|previous|older)|(?:earlier|previous|"
+                                r"older) (?:updates|versions|builds|releases) (?:are|were) also affected|still present|"
+                                r"persist\w*|long-?standing|pre-?existing)\b", re.I)
 
 
 def _win_subject_scope(subject: str) -> str:
@@ -391,19 +448,24 @@ def _windows_candidates(records: list[Mapping[str, Any]], out: "ProducerResult")
                 out.exclude(VENDOR_CLASS, "no_exact_page", source, product_id=WINDOWS, update_version=line,
                             target_build=m.group("build"))
                 continue
+            problem_key = f"windows: {info.get('title', '').lower()} ({m.group('kb')})"
             if "excluded" in info:
                 out.exclude(VENDOR_CLASS, info["excluded"], source, product_id=WINDOWS, update_version=line,
-                            target_build=m.group("build"), severity=info.get("severity", ""))
+                            target_build=m.group("build"), severity=info.get("severity", ""), problem_key=problem_key)
                 continue
             resolved = m.group("resolved") or ""
             status = (f"; Microsoft marks it resolved by {resolved}" if resolved
                       else f"; Microsoft lists it as {m.group('status').strip().lower()}")
-            reason = (f"Microsoft lists a known issue that originates in this update (OS build {m.group('build')}, "
-                      f"{m.group('kb')}): \"{info['title']}\"{status}.")
+            # The originating build is where Microsoft says the issue STARTS. Wording that it also affects
+            # earlier updates makes it a persistent defect: TEST FIRST, never "originates" (review 2 LOW-1, A3).
+            new = not _WIN_PERSISTENT_RE.search(m.group("summary"))
+            lead = ("Microsoft lists a known issue that originates in this update" if new
+                    else "Microsoft lists a known issue that persists in this update (it also affects earlier updates)")
+            reason = f"{lead} (OS build {m.group('build')}, {m.group('kb')}): \"{info['title']}\"{status}."
             out.propose(_candidate(
-                VENDOR_CLASS, page, verdict=_vendor_verdict(info["severity"], True), scope=info["scope"],
-                reason=reason, severity=info["severity"], failure=info["title"], new=True,
-                fixed_in=resolved, citation=dict(source, vendor="Microsoft"),
+                VENDOR_CLASS, page, verdict=_vendor_verdict(info["severity"], new), scope=info["scope"],
+                reason=reason, severity=info["severity"], failure=info["title"], new=new,
+                fixed_in=resolved, citation=dict(source, vendor="Microsoft"), problem_key=problem_key,
                 inputs={"statement_sha256": _sha(source["statement"]), "body_sha256": _sha(body)}))
 
 
@@ -416,8 +478,28 @@ _INSTALL_RX = re.compile(
     r"(?:will|would|could|does|did)(?: not|n't) install|can(?:'|no)?t install|cannot install|unable to install|"
     r"won't install|not install|download(?:ing)? error|keeps? (?:failing|giving me the message)|try again|"
     r"death loop|update(?:s)? (?:fail|failed|failing)|installation fail|failed to update|backed out)")
+# The install wordings that can take the update as their OBJECT ("failed to install KB5072033", "unable to
+# install the 2025-12 Security Update (KB...)", "Install error - 0x... 2025-11 Preview Update (KB...)").
+_INSTALL_TRANSITIVE_RX = re.compile(
+    r"^(?:fail(?:ed|s|ing)? to (?:install|download)|(?:will|would|could|does|did)(?: not|n't) install|"
+    r"can(?:'|no)?t install|cannot install|unable to install|won't install|not install|"
+    r"install(?:ation)? (?:error|fail|issue|problem)|download(?:ing)? error|failed to update)")
 _EXIT7_RX = re.compile(r"exit code:?\s*7\b")
-_CODE_RX = re.compile(r"\b0x[0-9a-f]{3,8}\b")
+# Windows install errors are HRESULTs: exactly eight hex digits, read without a trailing word boundary so a
+# code glued to the next word still reads ("0x800f0983How", "0x800f09912026": review 2, note 12). A
+# shorter code must end at a word boundary.
+_CODE_RX = re.compile(r"\b0x(?:[0-9a-f]{8}|[0-9a-f]{3,7}\b)")
+# A code inside a crash or bugcheck report is not an install error ("HYPERVISOR_ERROR 0x20001", review 2
+# LOW-3): read on the 60 characters before the code.
+_CRASH_CONTEXT_RX = re.compile(r"(?:bug ?check|bsod|blue ?screen|stop (?:code|error)|crash\w*|minidump|kernel|"
+                               r"[a-z]+_(?:error|exception|failure|violation))[^.;\n]{0,40}$")
+# A code LABELLED as an install or download error is in install-error context wherever it stands ("Install
+# error - 0x...", "Download error - 0x...", "Errore di installazione - 0x..."); read on the text right
+# before the code. In the clause after one that reports this update failing, an "error" / "code" label is.
+_INSTALL_ERROR_LABEL_RX = re.compile(r"(?:install\w*|download\w*)\W{0,3}(?:error|errore|fehler|erreur|failure)\W{0,5}$|"
+                                     r"(?:error|errore|fehler|erreur)\W{0,3}(?:de |di |d')?(?:install\w*|download\w*)"
+                                     r"\W{0,5}$")
+_ERROR_LABEL_RX = re.compile(r"\b(?:error|code)\b[^.;\n]{0,12}$")
 _XPOST_RX = re.compile(r"(previously posted|also posted|cross-?post|posted (?:this|it) (?:on|in)|i recently posted|"
                        r"part 2|part two)")
 _LOGURL_RX = re.compile(r"obsproject\.com/logs/[a-z0-9]+", re.I)
@@ -434,57 +516,286 @@ _TEMPLATE_RX = (
     re.compile(r"install(?:ation)? error\s*-?\s*0x[0-9a-f]+|download(?:ing)? error\s*-?\s*0x[0-9a-f]+", re.I),
     re.compile(r"- microsoft q&a", re.I),
 )
-INDEPENDENCE_JACCARD = 0.45   # I10: template-stripped token overlap at or above this is one reporter
+INDEPENDENCE_JACCARD = 0.45   # I10: template-stripped token overlap at or above this is one report
+# A distinctive passage: this many consecutive content words (template-stripped, function words removed)
+# shared by two rows make them one report, however the rest is reworded (review 1 LOW-2, review 2 LOW-4).
+SHARED_PASSAGE_WORDS = 8
+# Strict install grouping (Amendment A3, the default): rows are ONE problem only when they share a specific
+# failure characteristic -- the same install error code, the same named stage (rolls back; stops at the same
+# percentage) or, for Acrobat, the installer's Exit Code 7. "lenient" is A1's superseded reading (any install
+# failure is one problem), kept only so the two readings can be measured side by side.
+INSTALL_GROUPING = "strict"
+INSTALL_GROUPINGS = ("strict", "lenient")
+# A source-provided reporter identity on a counted row. The evidence schema stores none today (no collector
+# writes an author field), so independence rests on incident details alone; a row that carries one is
+# compared by it.
+REPORTER_ID_FIELD = "source_reporter_id"
 
 
 def _txt(row: Mapping[str, Any]) -> str:
     return (_s(row.get("report_title")) + " \n " + _s(row.get("report_text_excerpt"))).lower()
 
 
-def _content_tokens(row: Mapping[str, Any]) -> set[str]:
+def _stripped(row: Mapping[str, Any]) -> str:
     text = _s(row.get("report_title")) + " " + _s(row.get("report_text_excerpt"))
     for rx in _TEMPLATE_RX:
         text = rx.sub(" ", text)
-    return {w for w in re.findall(r"[a-z0-9][a-z0-9.+-]{2,}", text.lower()) if w not in _STOP}
+    return text.lower()
+
+
+def _content_words(row: Mapping[str, Any]) -> list[str]:
+    """The row's content words in order: template-stripped, function words dropped, and a word's trailing
+    punctuation dropped ("retry." and "retry" are one word; "26200.7623" keeps its inner dot)."""
+    words = (w.rstrip(".+-") for w in re.findall(r"[a-z0-9][a-z0-9.+-]{2,}", _stripped(row)))
+    return [w for w in words if len(w) >= 3 and w not in _STOP]
+
+
+def _content_tokens(row: Mapping[str, Any]) -> set[str]:
+    return set(_content_words(row))
+
+
+def _passages(row: Mapping[str, Any]) -> set[tuple[str, ...]]:
+    words = _content_words(row)
+    n = SHARED_PASSAGE_WORDS
+    return {tuple(words[i:i + n]) for i in range(len(words) - n + 1)}
 
 
 def _kb_set(row: Mapping[str, Any]) -> set[str]:
     return set(re.findall(r"kb ?(\d{7})", _txt(row)))
 
 
-def same_reporter(a: Mapping[str, Any], b: Mapping[str, Any]) -> str:
-    """Why rows a and b are one reporter under the I11 independence gate, or "" when no cue fires.
-    A different URL is never evidence of a different reporter."""
-    ta, tb = _content_tokens(a), _content_tokens(b)
-    if ta | tb and len(ta & tb) / len(ta | tb) >= INDEPENDENCE_JACCARD:
-        return "near-identical text once templates are stripped"
+# ---------------------------------------------------------------- incident details (independence)
+# AUTH_V2_37 correction 2: reporter independence FAILS CLOSED. Text similarity may DETECT that two rows are
+# one report; it can never ESTABLISH that two unknown accounts are two people. A second report counts only
+# when the source supports a DISTINCT identity (REPORTER_ID_FIELD, different on both rows) or a DISTINCT
+# INCIDENT: both rows state a concrete detail of the same kind and the values cannot belong to one incident
+# -- two different computers (manufacturer or model family), processors, Windows editions or architectures,
+# operating systems or OS versions (an Acrobat installer on a Mac and on Windows 10), or failure points (the
+# install stops at 8% and at 41%). A row that states no such detail cannot be told apart from anyone, so it
+# never makes a second reporter: unknown is not independent.
+_DEVICE_FAMILY_RX = (
+    ("surface", re.compile(r"\bsurface (?:laptop|pro|book|go|studio)\b")),
+    ("lenovo", re.compile(r"\b(?:ideapad|thinkpad|thinkbook|thinkcentre|legion|yoga)\b")),
+    ("dell", re.compile(r"\b(?:xps|inspiron|latitude|optiplex|alienware|vostro)\b")),
+    ("hp", re.compile(r"\b(?:elitebook|probook|zbook|pavilion|victus|elitedesk|prodesk)\b")),
+    ("asus", re.compile(r"\b(?:zenbook|vivobook|rog strix|tuf gaming)\b")),
+    ("acer", re.compile(r"\b(?:aspire|predator helios|travelmate)\b")),
+    ("huawei", re.compile(r"\bmatebook\b")),
+    ("toshiba", re.compile(r"\bdynabook\b")),
+    ("samsung", re.compile(r"\bgalaxy book\b")),
+    ("apple", re.compile(r"\b(?:macbook|imac|mac mini|mac pro)\b")),
+)
+# A manufacturer counts as the computer's only beside a computer noun ("my Dell laptop"), never alone
+# ("the HP Smart printer app").
+_DEVICE_BRAND_RX = re.compile(
+    r"\b(dell|hp|lenovo|asus|acer|msi|samsung|razer|gigabyte|huawei|toshiba|fujitsu|medion|microsoft)\b"
+    r"(?:\s+[a-z0-9-]+){0,2}?\s+(?:laptop|notebook|pc|desktop|computer|machine|tablet|workstation|ultrabook|"
+    r"all-in-one)s?\b")
+# A processor only where the row names one ("Intel(R) Core(TM) i9", "Ryzen", "Snapdragon"), never a bare
+# vendor name, which is as often a driver ("failed error: Intel - SoftwareComponent").
+_CPU_RX = (("intel", re.compile(r"\b(?:intel(?:\(r\))? (?:core|celeron|pentium|xeon|processor|cpu)|"
+                                r"core(?:\(tm\))? i[3579]|core ultra|celeron|pentium|xeon)\b")),
+           ("amd", re.compile(r"\b(?:ryzen|threadripper|athlon|amd (?:processor|cpu))\b")),
+           ("qualcomm", re.compile(r"\b(?:snapdragon|qualcomm (?:processor|cpu))\b")))
+_EDITION_RX = re.compile(r"\bwindows ?11 ?(home|pro|enterprise|education|iot|se)\b|\b(home|pro|enterprise|education) "
+                         r"edition\b")
+_ARCH_RX = re.compile(r"\b(x64|arm64|x86)(?:-based)?\b")
+_MAC_RX = re.compile(r"\b(?:mac|macos|mac os|os x|osx|macbook|imac|el capitan|sierra|mojave|catalina|big sur|monterey|"
+                     r"ventura|sonoma|sequoia)\b")
+_WINDOWS_OS_RX = re.compile(r"\b(?:windows ?(7|8\.1|8|10|11|xp|vista)|win ?(7|8|10|11))\b")
+_MAC_NAMES = {"el capitan": "10.11", "high sierra": "10.13", "sierra": "10.12", "mojave": "10.14", "catalina": "10.15",
+              "big sur": "11", "monterey": "12", "ventura": "13", "sonoma": "14", "sequoia": "15"}
+_MAC_VERSION_RX = re.compile(r"\b(?:mac ?os(?: x)?|os x|osx)\s*(10\.\d{1,2}|1[1-9])\b|\b(10\.(?:[4-9]|1[0-5]))\.\d+\b")
+_PERCENT_RX = re.compile(r"\b(?:at|to|reaches|reached|reaching|around|about|until)\s+(\d{1,3})\s?(?:%|percent\b)")
+
+
+def incident_details(row: Mapping[str, Any], product_id: str = "") -> dict[str, frozenset]:
+    """The concrete incident details a row states, by kind (only kinds it states)."""
+    text = _blank(_txt(row), _NOT_AN_INSTALL_RX)
+    found: dict[str, set] = {}
+
+    def add(kind: str, value: str) -> None:
+        found.setdefault(kind, set()).add(value)
+    for family, rx in _DEVICE_FAMILY_RX:
+        if rx.search(text):
+            add("device", family)
+    for m in _DEVICE_BRAND_RX.finditer(text):
+        add("device", "surface" if m.group(1) == "microsoft" else m.group(1))
+    for cpu, rx in _CPU_RX:
+        if rx.search(text):
+            add("cpu", cpu)
+    for m in _EDITION_RX.finditer(text):
+        add("edition", m.group(1) or m.group(2))
+    for m in _ARCH_RX.finditer(text):
+        add("architecture", m.group(1))
+    if _s(product_id) != WINDOWS:
+        if _MAC_RX.search(text):
+            add("os", "mac")
+        for m in _WINDOWS_OS_RX.finditer(text):
+            add("os", "windows")
+            add("os_version", "windows-" + (m.group(1) or m.group(2)))
+        for name, version in _MAC_NAMES.items():
+            if re.search(r"\b" + name + r"\b", text) and not (name == "sierra" and "high sierra" in text):
+                add("os_version", "macos-" + version)
+        for m in _MAC_VERSION_RX.finditer(text):
+            add("os_version", "macos-" + (m.group(1) or m.group(2)))
+    for m in _PERCENT_RX.finditer(text):
+        if int(m.group(1)) <= 100:
+            add("failure_point", m.group(1) + "%")
+    return {k: frozenset(v) for k, v in sorted(found.items())}
+
+
+def _conflicting(a: Mapping[str, frozenset], b: Mapping[str, frozenset]) -> list[str]:
+    """The detail kinds both state with values that cannot belong to one incident (disjoint), or []."""
+    return [k for k in sorted(set(a) & set(b)) if a[k] and b[k] and not (a[k] & b[k])]
+
+
+def _reporter_ids(row: Mapping[str, Any]) -> frozenset:
+    value = _s(row.get(REPORTER_ID_FIELD))
+    return frozenset({value}) if value else frozenset()
+
+
+def same_reporter(a: Mapping[str, Any], b: Mapping[str, Any], product_id: str = "") -> str:
+    """Why rows a and b are ONE report (a copy or cross-post), or "" when no cue fires. DETECTION ONLY:
+    a cue removes a would-be second reporter; no cue never makes two rows independent (that needs
+    `distinct_incident`), and nothing here touches stored evidence.
+
+    Cues: a declared cross-post; the same log URL; near-identical text once templates are stripped; a
+    shared distinctive passage (SHARED_PASSAGE_WORDS consecutive content words: a reworded re-post keeps
+    one); the same set of two or more KB numbers; the same source reporter id; the same incident details.
+    CONSERVATIVE: two rows whose details conflict are two incidents, so no cue but the shared log merges
+    them -- shared wording or a shared author alone never collapses genuinely distinct incidents."""
     if _XPOST_RX.search(_txt(a)) or _XPOST_RX.search(_txt(b)):
         return "a declared cross-post"
     la = {m.lower() for m in _LOGURL_RX.findall(_s(a.get("report_text_excerpt")))}
     lb = {m.lower() for m in _LOGURL_RX.findall(_s(b.get("report_text_excerpt")))}
     if la & lb:
         return "the same log URL"
+    da, db = incident_details(a, product_id), incident_details(b, product_id)
+    if _conflicting(da, db):
+        return ""
+    ta, tb = _content_tokens(a), _content_tokens(b)
+    if ta | tb and len(ta & tb) / len(ta | tb) >= INDEPENDENCE_JACCARD:
+        return "near-identical text once templates are stripped"
+    if _passages(a) & _passages(b):
+        return "a shared distinctive passage"
     ka, kb = _kb_set(a), _kb_set(b)
     if len(ka) >= 2 and ka == kb:
         return "the same set of KB numbers"
+    if _reporter_ids(a) and _reporter_ids(a) == _reporter_ids(b):
+        return "the same source reporter id"
+    shared = set(da) & set(db)
+    if len(shared) >= 2 and all(da[k] == db[k] for k in shared):
+        return "the same incident details"
     return ""
 
 
-def independent_reporters(rows: list[Mapping[str, Any]]) -> tuple[list[Mapping[str, Any]], list[dict[str, str]]]:
-    """(kept rows, dropped rows with why). Deterministic order (source_date, id); a declared cross-post
-    never counts, and a row that is one reporter with an already kept row is dropped."""
-    kept: list[Mapping[str, Any]] = []
+def distinct_incident(a: Mapping[str, Any], b: Mapping[str, Any], product_id: str = "") -> str:
+    """What the SOURCE supports as a different reporter or incident for a and b (row or cluster
+    mappings: `details`, `reporter_ids`), or "" -- unknown is never independent (fails closed)."""
+    conflict = _conflicting(a["details"], b["details"])
+    if conflict:
+        return "different " + " and ".join(k.replace("_", " ") for k in conflict)
+    if a["reporter_ids"] and b["reporter_ids"] and not (a["reporter_ids"] & b["reporter_ids"]):
+        return "different source reporter ids"
+    return ""
+
+
+def _merge_details(rows: list[Mapping[str, frozenset]]) -> dict[str, frozenset]:
+    merged: dict[str, set] = {}
+    for d in rows:
+        for k, v in d.items():
+            merged.setdefault(k, set()).update(v)
+    return {k: frozenset(v) for k, v in sorted(merged.items())}
+
+
+def _max_clique(n: int, edge: Any) -> list[int]:
+    """The largest set of vertices 0..n-1 pairwise joined by `edge`; ties go to the lexicographically
+    smallest index list (deterministic). Bron-Kerbosch with pivoting; the graphs here are a few dozen
+    vertices at most, because a cluster that states no detail and no reporter id has no edge at all."""
+    adj = [{j for j in range(n) if j != i and edge(i, j)} for i in range(n)]
+    best: list[list[int]] = [[]]
+
+    def expand(r: list[int], p: set[int], x: set[int]) -> None:
+        if not p and not x:
+            cand = sorted(r)
+            if len(cand) > len(best[0]) or (len(cand) == len(best[0]) and cand < best[0]):
+                best[0] = cand
+            return
+        if len(r) + len(p) < len(best[0]):
+            return
+        pivot = max(p | x, key=lambda u: (len(adj[u] & p), -u))
+        for v in sorted(p - adj[pivot]):
+            expand(r + [v], p & adj[v], x & adj[v])
+            p = p - {v}
+            x = x | {v}
+    expand([], set(range(n)), set())
+    return best[0]
+
+
+def independent_reporters(rows: list[Mapping[str, Any]], product_id: str = "",
+                          ) -> tuple[list[Mapping[str, Any]], list[dict[str, str]]]:
+    """(one kept row per INDEPENDENT report, dropped rows with why). Fails closed.
+
+    1. A declared cross-post never counts.
+    2. Rows one report under `same_reporter` are joined (union-find over EVERY pair, so a row matching
+       only a row that is itself dropped still joins it).
+    3. Reports count together only where every pair is a `distinct_incident`: the largest such set is
+       kept. One report with no stated detail is one reporter; two of them are still one."""
+    ordered = sorted(rows, key=lambda r: (_s(r.get("source_date")), _s(r.get("id"))))
     dropped: list[dict[str, str]] = []
-    for row in sorted(rows, key=lambda r: (_s(r.get("source_date")), _s(r.get("id")))):
+    live = []
+    for row in ordered:
         if _XPOST_RX.search(_txt(row)):
             dropped.append({"id": _s(row.get("id")), "why": "a declared cross-post"})
-            continue
-        why = next((w for w in (same_reporter(row, k) for k in kept) if w), "")
-        if why:
-            dropped.append({"id": _s(row.get("id")), "why": why})
-            continue
-        kept.append(row)
+        else:
+            live.append(row)
+    parent = list(range(len(live)))
+
+    def find(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+    joined_by: dict[int, str] = {}
+    for i in range(len(live)):
+        for j in range(i + 1, len(live)):
+            why = same_reporter(live[i], live[j], product_id)
+            if why and find(i) != find(j):
+                joined_by.setdefault(j, f"one report with {_s(live[i].get('id'))}: {why}")
+                parent[find(j)] = find(i)
+    clusters: dict[int, list[int]] = {}
+    for i in range(len(live)):
+        clusters.setdefault(find(i), []).append(i)
+    groups = sorted(clusters.values(), key=lambda members: members[0])
+    info = [{"details": _merge_details([incident_details(live[i], product_id) for i in g]),
+             "reporter_ids": frozenset().union(*[_reporter_ids(live[i]) for i in g])} for g in groups]
+    chosen = _max_clique(len(groups), lambda a, b: bool(distinct_incident(info[a], info[b], product_id)))
+    if not chosen and groups:
+        chosen = [0]
+    kept = [live[groups[c][0]] for c in chosen]
+    for gi, members in enumerate(groups):
+        for pos, i in enumerate(members):
+            if gi in chosen and pos == 0:
+                continue
+            why = joined_by.get(i) or ("the source does not establish a different reporter or incident from "
+                                      "the reports counted")
+            dropped.append({"id": _s(live[i].get("id")), "why": why})
+    dropped.sort(key=lambda d: d["id"])
     return kept, dropped
+
+
+def independence_basis(kept: list[Mapping[str, Any]], product_id: str = "") -> list[str]:
+    """The detail kinds (never their values) that separate the kept reports: what a reviewer checks."""
+    kinds: set[str] = set()
+    for i in range(len(kept)):
+        for j in range(i + 1, len(kept)):
+            a = {"details": incident_details(kept[i], product_id), "reporter_ids": _reporter_ids(kept[i])}
+            b = {"details": incident_details(kept[j], product_id), "reporter_ids": _reporter_ids(kept[j])}
+            kinds.update(_conflicting(a["details"], b["details"]))
+            if a["reporter_ids"] and b["reporter_ids"] and not (a["reporter_ids"] & b["reporter_ids"]):
+                kinds.add("source_reporter_id")
+    return sorted(kinds)
 
 
 # Review 1, MAJOR-2: a row "about" this update is not a row reporting that THIS update fails to install.
@@ -509,6 +820,24 @@ _NOT_AN_INSTALL_RX = re.compile(
     r"check(?:ing)? for (?:new )?updates?(?: with (?:the )?(?:error|code)(?: code)?:? ?\(?0x[0-9a-f]+\)?)?|"
     r"\broll(?:s|ed|ing)? ?back to (?:os )?(?:build )?[0-9]{5}\.[0-9]{1,5}")
 _KB_MENTION_RX = re.compile(r"\bkb ?([0-9]{7})\b")
+# An update named without its KB ("the update", "this security update", "Windows Update", "update"): about
+# this page's update only where the row names this page's KB and the list reading gives it to this page.
+_GENERIC_UPDATE_RX = re.compile(r"\b(?:(?:this|the|that|an?|latest|recent|new|newest|security|cumulative|preview|"
+                                r"quality|monthly|optional|non-security|windows|11)\s+)*updates?\b")
+# Words that put ANOTHER subject or object between the update and the install wording (review 2 LOW-3, F7:
+# "After installing KB5089573 my Nvidia graphics driver will not install anymore", "Since KB5089573 the HP
+# Smart printer app fails to install from the Store"): other software, or a new possessive subject ("my
+# driver"; "on my laptop" is a place, not a subject).
+_FOREIGN_SUBJECT_RX = re.compile(
+    r"\b(?:drivers?|apps?|applications?|programs?|software|games?|printers?|office|store|nvidia|geforce|radeon|"
+    r"realtek|dotnet|framework|defender|edge|teams|outlook|chrome|firefox|steam|bios|firmware|antivirus|"
+    r"language packs?|feature update|other updates?|another update)\b|\.net\b"
+    r"|(?<!\bon )(?<!\bin )(?<!\bfor )(?<!\bwith )(?<!\bfrom )(?<!\bto )\b(?:my|our|his|her|their)\b")
+_CLAUSE_BREAK_RX = re.compile(r"[.!?;](?=\s)|\n")
+_SUBJECT_GAP = 80   # characters between the update's name and install wording that takes it as subject
+_OBJECT_GAP = 60    # characters between transitive install wording and the update it takes as object
+_ROLLBACK_RX = re.compile(r"\b(?:roll(?:s|ed|ing)?[ -]?back|undo(?:ing)? (?:the )?changes|revert(?:s|ed|ing)? (?:the )?"
+                          r"changes|could ?n[o']?t complete the updates?)\b")
 
 
 def _blank(text: str, rx: re.Pattern) -> str:
@@ -547,34 +876,131 @@ def _owner_is_page(span: tuple[int, int], page_spans: list[tuple[int, int]],
     return owner
 
 
+def _clause(text: str, pos: int) -> tuple[int, int]:
+    start, end = 0, len(text)
+    for m in _CLAUSE_BREAK_RX.finditer(text):
+        if m.end() <= pos:
+            start = m.end()
+        elif m.start() >= pos:
+            end = m.start()
+            break
+    return start, end
+
+
+def _install_subject(text: str, span: tuple[int, int], refs: list[tuple[int, int, bool]],
+                     page_spans: list[tuple[int, int]], other_spans: list[tuple[int, int]]) -> bool:
+    """Whether the install wording at `span` takes THIS update as its subject or object (review 2 LOW-3,
+    F7). In its clause: the nearest update named before it, with no other subject in between; else, for a
+    transitive wording, the update named right after it; else, with no update and no other subject named
+    before it in the clause, the update the row is about (the list reading). Otherwise it is about
+    something else -- a driver, an app, another update -- and does not count."""
+    c0, c1 = _clause(text, span[0])
+    if text[span[0]:span[1]].startswith("update"):
+        return _owner_is_page(span, page_spans, other_spans)   # "update failed": its own subject
+    before = [r for r in refs if c0 <= r[0] and r[1] <= span[0]]
+    after = [r for r in refs if span[1] <= r[0] < c1]
+    if before:
+        gap = text[before[-1][1]:span[0]]
+        if len(gap) <= _SUBJECT_GAP and not _FOREIGN_SUBJECT_RX.search(gap):
+            return _coordinated(text, before, len(before) - 1, -1)
+    if after and _INSTALL_TRANSITIVE_RX.match(text[span[0]:span[1]]):
+        gap = text[span[1]:after[0][0]]
+        if len(gap) <= _OBJECT_GAP and not _FOREIGN_SUBJECT_RX.search(gap):
+            return _coordinated(text, after, 0, 1)
+    if not before and not _FOREIGN_SUBJECT_RX.search(text[c0:span[0]]):
+        return _owner_is_page(span, page_spans, other_spans)
+    return False
+
+
+# Updates named together as one subject or object: "KB5099999 and KB5088888 failed to install", "failed to
+# install KB5088888, KB5099999 and KB5077777".
+_COORDINATION_RX = re.compile(r"^[\s(),]*(?:and|&|or|plus|as well as|,)[\s(),]*$")
+
+
+def _coordinated(text: str, refs: list[tuple[int, int, bool]], i: int, step: int) -> bool:
+    """Whether this page's update is among the updates named together with refs[i] (walking `step`)."""
+    while True:
+        if refs[i][2]:
+            return True
+        j = i + step
+        if not 0 <= j < len(refs):
+            return False
+        gap = text[refs[j][1]:refs[i][0]] if step < 0 else text[refs[i][1]:refs[j][0]]
+        if not _COORDINATION_RX.match(gap):
+            return False
+        i = j
+
+
 def windows_install_row(row: Mapping[str, Any], page: Mapping[str, Any]) -> dict[str, Any]:
-    """{ok, why, codes}: whether this counted row reports that THIS page's update fails to install,
-    and the error codes it attributes to this update. Fails closed:
+    """{ok, why, codes, stages}: whether this counted row reports that THIS page's update fails to install,
+    the install error codes it attributes to this update, and the named failure stages. Fails closed:
       * the row must name this update (`_page_mentions`: the KB, never the build alone);
       * denied install wording refuses the whole row (`_INSTALL_NEGATION_RX`);
       * "check for updates" and "rolls back to <build>" are not install failures (`_NOT_AN_INSTALL_RX`);
-      * where the row names other updates too, some install wording must be about this one, read as a
-        list (`_owner_is_page`): a .NET update failing beside this one is not this one failing;
-      * error codes: only those about this update, read the same way (all of them when it is the only
-        update named)."""
+      * some install wording must take THIS update as its subject or object (`_install_subject`): a
+        driver, an app or another update failing to install after this one is not this one failing;
+      * error codes: only in a clause that reports this update failing to install, never in a crash or
+        bugcheck context, and, where the row names several updates, only this update's (the list
+        reading, `_owner_is_page`)."""
     text = _txt(row)
     if _INSTALL_NEGATION_RX.search(text):
-        return {"ok": False, "why": "the row denies an install failure", "codes": []}
+        return {"ok": False, "why": "the row denies an install failure", "codes": [], "stages": []}
     text = _blank(text, _NOT_AN_INSTALL_RX)
     page_spans = _page_mentions(text, page)
     if not page_spans:
-        return {"ok": False, "why": "the row does not name this update (its KB)", "codes": []}
+        return {"ok": False, "why": "the row does not name this update (its KB)", "codes": [], "stages": []}
     kb = re.sub(r"[^0-9]", "", _s(page.get("target_kb")))
     other_spans = [(m.start(), m.end()) for m in _KB_MENTION_RX.finditer(text) if m.group(1) != kb]
     wording = [(m.start(), m.end()) for m in _INSTALL_RX.finditer(text)]
     if not wording:
-        return {"ok": False, "why": "no install-failure wording", "codes": []}
-    if other_spans and not any(_owner_is_page(w, page_spans, other_spans) for w in wording):
-        return {"ok": False, "why": "the install failure it reports is another update's", "codes": []}
-    codes = [m.group(0) for m in _CODE_RX.finditer(text)
-             if m.group(0)[2:].lstrip("0") and (not other_spans
-                                                or _owner_is_page((m.start(), m.end()), page_spans, other_spans))]
-    return {"ok": True, "why": "", "codes": sorted(set(codes))}
+        return {"ok": False, "why": "no install-failure wording", "codes": [], "stages": []}
+    refs = sorted([(s, e, True) for s, e in page_spans] + [(s, e, False) for s, e in other_spans]
+                  + [(m.start(), m.end(), _owner_is_page((m.start(), m.end()), page_spans, other_spans))
+                     for m in _GENERIC_UPDATE_RX.finditer(text)
+                     if not any(m.start() < e and s < m.end() for s, e in page_spans + other_spans)])
+    accepted = [w for w in wording if _install_subject(text, w, refs, page_spans, other_spans)]
+    if not accepted:
+        if other_spans and not any(_owner_is_page(w, page_spans, other_spans) for w in wording):
+            return {"ok": False, "why": "the install failure it reports is another update's", "codes": [], "stages": []}
+        return {"ok": False, "why": "the install failure it reports is not this update's (another subject fails "
+                "to install)", "codes": [], "stages": []}
+    clauses = sorted({_clause(text, w[0]) for w in accepted})
+    # The clause right after one that reports this update failing, when it names no other update or
+    # subject: "20206-01 update won't install. Get error code 0x800f0991".
+    follow = []
+    for c0, c1 in clauses:
+        nxt = _clause(text, min(c1 + 1, len(text)))
+        if nxt[0] > c0 and not any(nxt[0] <= s < nxt[1] for s, _e in other_spans) \
+                and not _FOREIGN_SUBJECT_RX.search(text[nxt[0]:nxt[1]]):
+            follow.append(nxt)
+    codes = []
+    for m in _CODE_RX.finditer(text):
+        code = m.group(0)
+        lead = text[max(0, m.start() - 60):m.start()]
+        if not code[2:].lstrip("0") or _CRASH_CONTEXT_RX.search(lead):
+            continue
+        clause = next(((c0, c1) for c0, c1 in clauses if c0 <= m.start() < c1), None)
+        if not (clause or _INSTALL_ERROR_LABEL_RX.search(lead)
+                or (any(c0 <= m.start() < c1 for c0, c1 in follow) and _ERROR_LABEL_RX.search(lead))):
+            continue
+        # Whose code: the install wording it follows in its clause ("KB1 and KB2 failed to install, error
+        # 0x..." is both updates'; in a listing, "KB2 ... Install error - 0x..." is KB2's), else the list reading.
+        before = [w for w in wording if clause and clause[0] <= w[0] < m.start()]
+        if before:
+            if before[-1] not in accepted:
+                continue
+        elif other_spans and not _owner_is_page((m.start(), m.end()), page_spans, other_spans):
+            continue
+        codes.append(code)
+    stages = set()
+    for c0, c1 in clauses + follow:   # "... fails to install. It rolls back after the restart."
+        clause = text[c0:c1]
+        if _ROLLBACK_RX.search(clause):
+            stages.add("rolls back")
+        for m in _PERCENT_RX.finditer(clause):
+            if int(m.group(1)) <= 100:
+                stages.add(f"stops at {m.group(1)}%")
+    return {"ok": True, "why": "", "codes": sorted(set(codes)), "stages": sorted(stages)}
 
 
 def _acrobat_row_matches(row: Mapping[str, Any], product_id: str) -> bool:
@@ -591,11 +1017,45 @@ def _acrobat_row_matches(row: Mapping[str, Any], product_id: str) -> bool:
 
 
 _NUMBER_WORDS = {2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"}
+ACROBAT_GROUP = "installer exit code 7"
+
+
+def install_groups(rows: list[tuple[Mapping[str, Any], dict[str, Any]]], mode: str = "") -> dict[str, list]:
+    """Rows that report ONE install problem, by the characteristic they share (Amendment A3). Strict (the
+    default, INSTALL_GROUPING): the same error code, the same named stage, or the installer's Exit Code 7 --
+    different codes alone are not one problem, and a row with no specific characteristic joins no group.
+    Lenient (A1's superseded reading, for measurement only): every install row is one problem."""
+    mode = mode or INSTALL_GROUPING
+    if mode not in INSTALL_GROUPINGS:
+        raise ValueError(f"unknown install grouping {mode!r}")
+    groups: dict[str, list] = {}
+    for row, info in rows:
+        keys = ["any install failure"] if mode == "lenient" else (
+            [f"error {c}" for c in info.get("codes", [])] + list(info.get("stages", []))
+            + ([ACROBAT_GROUP] if info.get("exit7") else []))
+        for key in keys:
+            groups.setdefault(key, []).append(row)
+    return groups
+
+
+def _install_reason(n: int, key: str, product_id: str) -> str:
+    count = _NUMBER_WORDS.get(n, str(n))
+    if product_id in ACROBAT:
+        return f"{count} reports of separate incidents say that installing this version fails with installer Exit Code 7."
+    if key.startswith("error "):
+        detail = f" with error {key[len('error '):]}"
+    elif key == "rolls back":
+        detail = ": it rolls back instead of completing"
+    elif key.startswith("stops at "):
+        detail = f": it stops at {key[len('stops at '):]}"
+    else:
+        detail = ""
+    return f"{count} reports of separate incidents say that this update fails to install{detail}."
 
 
 def _install_candidates(records: list[Mapping[str, Any]],
                         counted_by_identity: Mapping[tuple[str, str, str], list[Mapping[str, Any]]],
-                        out: "ProducerResult") -> None:
+                        out: "ProducerResult", mode: str = "") -> None:
     for page in records:
         pid = _s(page.get("product_id"))
         if pid != WINDOWS and pid not in ACROBAT:
@@ -603,43 +1063,50 @@ def _install_candidates(records: list[Mapping[str, Any]],
         rows = list(counted_by_identity.get(verdict_reasons.record_identity(page), []) or [])
         if len(rows) < MIN_INDEPENDENT_REPORTERS:
             continue
-        codes_by_row: dict[str, list[str]] = {}
+        matching: list[tuple[Mapping[str, Any], dict[str, Any]]] = []
         if pid == WINDOWS:
             if not _s(page.get("target_kb")) or not _s(page.get("target_build")):
                 continue
-            matching = []
             for r in rows:
-                verdict = windows_install_row(r, page)
-                if verdict["ok"]:
-                    matching.append(r)
-                    codes_by_row[_s(r.get("id"))] = verdict["codes"]
+                info = windows_install_row(r, page)
+                if info["ok"]:
+                    matching.append((r, info))
         else:
-            matching = [r for r in rows if _acrobat_row_matches(r, pid)]
+            matching = [(r, {"exit7": True}) for r in rows if _acrobat_row_matches(r, pid)]
         if len(matching) < MIN_INDEPENDENT_REPORTERS:
             continue
-        kept, dropped = independent_reporters(matching)
-        source = {"record": _s(page.get("permalink")), "rows": [_s(r.get("id")) for r in matching],
-                  "dropped_by_independence_gate": dropped}
-        if len(kept) < MIN_INDEPENDENT_REPORTERS:
-            out.exclude(INSTALL_CLASS, "not_enough_independent_reporters", source, product_id=pid,
-                        update_version=_s(page.get("update_version")), target_build=_s(page.get("target_build")),
-                        note=f"{len(kept)} independent reporter(s) after the independence gate")
-            out.queue(INSTALL_CLASS, page, "install-failure rows that the independence gate collapsed to "
-                      f"{len(kept)} reporter(s): a person decides whether they are separate incidents", source)
+        identity = {"product_id": pid, "update_version": _s(page.get("update_version")),
+                    "target_build": _s(page.get("target_build"))}
+        groups = install_groups(matching, mode)
+        scored = []
+        for key, members in groups.items():
+            kept, dropped = independent_reporters(members, pid)
+            scored.append((len(kept), len(members), key, kept, dropped, members))
+        scored.sort(key=lambda s: (-s[0], -s[1], s[2]))
+        if not scored or scored[0][1] < MIN_INDEPENDENT_REPORTERS:
+            source = {"record": _s(page.get("permalink")), "rows": [_s(r.get("id")) for r, _i in matching]}
+            out.exclude(INSTALL_CLASS, "no_shared_failure_characteristic", source, **identity,
+                        note=f"{len(matching)} install-failure rows share no error code or named stage")
+            out.queue(INSTALL_CLASS, page, "install-failure reports that share no error code or named stage: a "
+                      "person decides whether they are one problem", source, problem_key="no shared characteristic")
             continue
-        n = len(kept)
-        count = _NUMBER_WORDS.get(n, str(n))
-        if pid == WINDOWS:
-            codes = sorted({c for r in kept for c in codes_by_row.get(_s(r.get("id")), [])})
-            errors = f" (errors {', '.join(codes)})" if codes else ""
-            reason = f"{count} users independently report that this update fails to install{errors}."
-        else:
-            reason = f"{count} users independently report that installing this version fails with installer Exit Code 7."
+        n, _members_n, key, kept, dropped, members = scored[0]
+        source = {"record": _s(page.get("permalink")), "problem": key, "rows": [_s(r.get("id")) for r in members],
+                  "dropped_by_independence_gate": dropped}
+        if n < MIN_INDEPENDENT_REPORTERS:
+            out.exclude(INSTALL_CLASS, "not_enough_independent_reporters", source, **identity,
+                        note=f"{len(members)} rows report this problem ({key}); the source establishes {n} "
+                             "independent report(s)")
+            out.queue(INSTALL_CLASS, page, f"install-failure reports of one problem ({key}) whose independence the "
+                      "source does not establish: a person decides whether they are separate incidents", source,
+                      problem_key=key)
+            continue
         evidence = [{"id": _s(r.get("id")), "source_url": _s(r.get("source_url"))} for r in kept]
         out.propose(_candidate(
-            INSTALL_CLASS, page, verdict="TEST FIRST", scope=INSTALL_SCOPE, reason=reason,
+            INSTALL_CLASS, page, verdict="TEST FIRST", scope=INSTALL_SCOPE, reason=_install_reason(n, key, pid),
             severity="critical_install_failure", failure="the update fails to install", new=False, fixed_in="",
-            citation={}, evidence=evidence,
+            citation={}, evidence=evidence, problem_key=key,
+            independence=independence_basis(kept, pid),
             inputs={"rows_sha256": _sha([[e["id"], e["source_url"]] for e in evidence]),
                     "excerpts_sha256": _sha([_s(r.get("report_text_excerpt")) for r in kept])}))
 
@@ -680,24 +1147,35 @@ def rows_are_independent(row_a: Mapping[str, Any], row_b: Mapping[str, Any], *,
 
 # ============================================================ assembly
 
+def candidate_key(cls: str, identity: Iterable[str], verdict: str, scope: str, problem_key: str) -> str:
+    """The STABLE identity of a candidate: its class, exact page, verdict, scope and the problem it is about
+    (the vendor's statement, or the install failure's shared characteristic). Never the reporter count, the
+    cited rows or the reason's wording, so one more report of the same problem is the same candidate (a
+    repeat appearance), not a new one. The shadow diagnostics key on it (lib/producer_shadow)."""
+    return _sha([cls, list(identity), verdict, scope, problem_key])[:16]
+
+
 def _candidate(cls: str, page: Mapping[str, Any], *, verdict: str, scope: str, reason: str, severity: str,
-               failure: str, new: bool, fixed_in: str, citation: dict, inputs: dict,
-               evidence: list | None = None) -> dict[str, Any]:
+               failure: str, new: bool, fixed_in: str, citation: dict, inputs: dict, problem_key: str,
+               evidence: list | None = None, independence: list | None = None) -> dict[str, Any]:
     ident = verdict_reasons.record_identity(page)
-    digest = _sha([cls, list(ident), verdict, scope, reason])[:12]
+    key = candidate_key(cls, ident, verdict, scope, problem_key)
     entry = {
-        "id": f"auto:{cls}:{ident[0]}:{ident[1]}{(':' + ident[2]) if ident[2] else ''}:{digest}",
+        "id": f"auto:{cls}:{ident[0]}:{ident[1]}{(':' + ident[2]) if ident[2] else ''}:{key[:12]}",
+        "candidate_key": key,
         "product_id": ident[0], "update_version": ident[1],
         "verdict": verdict,
         "reason_class": INSTALL_REASON_CLASS if cls == INSTALL_CLASS else VENDOR_CLASS,
         "scope": scope, "reason": reason,
-        "severity_basis": severity, "failure": failure,
+        "severity_basis": severity, "failure": failure, "problem_key": problem_key,
         "evidence": list(evidence or []),
         "citation": citation,
         "new_in_this_version": bool(new),
         "page": _s(page.get("permalink")),
         "producer": {"class": cls, "version": PRODUCER_VERSION, "inputs": inputs},
     }
+    if cls == INSTALL_CLASS:
+        entry["independence_basis"] = list(independence or [])
     if ident[2]:
         entry["target_build"] = ident[2]
     if fixed_in:
@@ -843,6 +1321,20 @@ def candidate_problems(entry: Mapping[str, Any]) -> list[str]:
     return problems
 
 
+# Refusals a person reads: the TEMPORARY review queue, with why.
+QUEUED_EXCLUSIONS = {
+    "ambiguous_scope": "a serious confirmed defect whose affected setup the producer cannot state",
+    "uncertain_severity": "a defect the vendor itself calls possible, rare or occasional: a person decides whether "
+                          "it is serious",
+}
+
+
+def _queue_key(cls: str, kind: str, fields: Mapping[str, Any]) -> str:
+    """The STABLE identity of a review-queue item: class, kind, exact page and problem -- never the rows."""
+    return _sha([cls, kind] + [_s(fields.get(k)) for k in ("product_id", "update_version", "target_build",
+                                                              "problem_key")])[:16]
+
+
 class ProducerResult:
     """What one run proposes, refuses and queues. Every list is in a deterministic order."""
 
@@ -857,7 +1349,7 @@ class ProducerResult:
                     "target_build": entry.get("target_build", "")}
         if not _scope_ok(entry.get("scope"), _s(entry.get("product_id"))):
             self.exclude(cls, "ambiguous_scope", entry.get("citation") or {}, **identity,
-                         severity=entry.get("severity_basis", ""),
+                         severity=entry.get("severity_basis", ""), problem_key=entry.get("problem_key", ""),
                          note=f"proposed scope {_s(entry.get('scope'))!r}: "
                               f"{scope_problem(entry.get('scope'), _s(entry.get('product_id')))}")
             return
@@ -873,13 +1365,19 @@ class ProducerResult:
         item = {"class": cls, "excluded": reason, **{k: v for k, v in identity.items() if v not in ("", None)},
                 "source": dict(source)}
         self.excluded.append(item)
-        if reason == "ambiguous_scope" and identity.get("severity"):
-            self.review_queue.append({"class": cls, "why": "a serious confirmed defect whose affected setup "
-                                      "the producer cannot state", **{k: v for k, v in identity.items() if v},
-                                      "source": dict(source)})
+        why = QUEUED_EXCLUSIONS.get(reason)
+        if why and (identity.get("severity") or reason == "uncertain_severity"):
+            fields = {k: v for k, v in identity.items() if v}
+            self.review_queue.append({"class": cls, "why": why, "queue_key": _queue_key(cls, reason, fields),
+                                      "kind": reason, **fields, "source": dict(source)})
 
-    def queue(self, cls: str, page: Mapping[str, Any], why: str, source: Mapping[str, Any]) -> None:
-        self.review_queue.append({"class": cls, "why": why, "page": _s(page.get("permalink")),
+    def queue(self, cls: str, page: Mapping[str, Any], why: str, source: Mapping[str, Any], *,
+              problem_key: str = "") -> None:
+        ident = verdict_reasons.record_identity(page)
+        fields = {k: v for k, v in (("product_id", ident[0]), ("update_version", ident[1]),
+                                    ("target_build", ident[2]), ("problem_key", problem_key)) if v}
+        self.review_queue.append({"class": cls, "why": why, "queue_key": _queue_key(cls, "independence", fields),
+                                  "kind": "independence", **fields, "page": _s(page.get("permalink")),
                                   "source": dict(source)})
 
     def as_dict(self) -> dict[str, Any]:
@@ -887,15 +1385,17 @@ class ProducerResult:
 
 
 def produce(records: Iterable[Mapping[str, Any]],
-            counted_by_identity: Mapping[tuple[str, str, str], list[Mapping[str, Any]]]) -> ProducerResult:
+            counted_by_identity: Mapping[tuple[str, str, str], list[Mapping[str, Any]]], *,
+            install_grouping: str = "") -> ProducerResult:
     """THE PRODUCER: every candidate, refusal and review item for this tree. Pure and deterministic:
-    the same records and counted rows give the same result, byte for byte."""
+    the same records and counted rows give the same result, byte for byte. `install_grouping` exists to
+    MEASURE A1's superseded lenient reading beside the strict default (A3); nothing ships with it."""
     records = [r for r in records if isinstance(r, Mapping) and r.get("update_entry", True) is not False]
     pages = {verdict_reasons.record_identity(r): r for r in records}
     out = ProducerResult()
     _obs_candidates(records, pages, out)
     _windows_candidates(records, out)
-    _install_candidates(records, counted_by_identity, out)
+    _install_candidates(records, counted_by_identity, out, install_grouping)
     out.candidates.sort(key=lambda c: (c["product_id"], c["update_version"], c.get("target_build", ""), c["id"]))
     out.excluded.sort(key=lambda e: json.dumps(e, sort_keys=True, ensure_ascii=False))
     out.review_queue.sort(key=lambda e: json.dumps(e, sort_keys=True, ensure_ascii=False))
