@@ -342,6 +342,13 @@ auxsays/scripts/tests/test_growth3_verdict_policy.py = 146
 # corpus install candidate rests on separate incidents of one problem (C3); the record writers gather reasons
 # as the projection does, so switch-ON drift clears (S6). 39 mutants, VX26..VX39 one fix half each.
 auxsays/scripts/tests/test_verdict_reason_producer.py = 78
+# AUX-099, shadow operation of the reason producer (switch OFF): the deploy ledger tells a first-seen
+# candidate from a repeat appearance by stable identity -- a baseline first deploy, 0 new over unchanged
+# evidence, exactly the expected new candidate after one added row, a repeat after one more report, a
+# rules change and a lost ledger never prospective, bounded (PS-L1..L7); public-safe (P1, P2); never
+# public, never a tracked writer, pages.yml's steps main-only and continue-on-error (N1..N3); the bare
+# script end to end (S1). 6 mutants, PX1..PX6.
+auxsays/scripts/tests/test_producer_shadow.py = 19
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
