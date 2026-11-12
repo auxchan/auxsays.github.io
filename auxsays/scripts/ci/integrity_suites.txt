@@ -317,7 +317,11 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 211
 # G3-S2 restated. Review 1: the pill above an official verdict names no verdict -- 'Not enough
 # reports', the patch page's word, on the 18 (G3-S13) -- and QA checks each half of the line on
 # its own (G3-Q13). 57 mutants, X46..X53 one fix half each.
-auxsays/scripts/tests/test_growth3_verdict_policy.py = 143
+# 143 -> 146 (AUX-099, G35-04 review 2 LOW-7, probe P6): an invisible or control character (Unicode Cf,
+# Cc, Zl, Zp, or a space separator other than a plain space) inside product_id / update_version /
+# target_build is a publication error, printable Unicode changelog titles are not, and the shipped
+# corpus has none (G3-Q14). 59 mutants, X54/X55 one fix half each.
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 146
 # G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
 # confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
 # the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the

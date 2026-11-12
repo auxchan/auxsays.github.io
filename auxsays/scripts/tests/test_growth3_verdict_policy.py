@@ -22,8 +22,9 @@ not see it (review 2: probe N1, "2026-3x B").
 SECTIONS. [D] the decision procedure and its invariants (G3-D1..D12). [F] the reason file's audits
 (G3-F0..F7, G3-OC). [L] the lifecycle exception and its strict, ASCII typing (G3-L1..L6, G3-W0).
 [W] public wording (G3-W1..W4). [Q] QA: severities, the rendered/authority comparison, the malformed
-lifecycle and release type, Unicode-padded identities and unmatched lifecycle builds (G3-Q1..Q11), and a
-feed card that would hide its page's official verdict, each half of its line on its own (G3-Q12, Q13).
+lifecycle and release type, Unicode-padded identities and unmatched lifecycle builds (G3-Q1..Q11), a
+feed card that would hide its page's official verdict, each half of its line on its own (G3-Q12, Q13), and
+an invisible or control character inside an identity (G3-Q14, probe P6).
 [R] the gate renders exactly what Python decides: a synthetic matrix with one case per support rule
 and per scope-acceptance clause, no-projection fail-closed, the whole corpus, review 2's gate2 and
 refused-lifecycle cases, and padded identities (G3-R0..R8). [P] the projection IS the authority, official verdicts
@@ -81,6 +82,24 @@ GATE2_MALFORMED = ("2026-3x B", "2026-+3 B", "2026-1  B", "2026-13 B",
 REVIEW2_LOW6 = ("２０２６-０８ Ｂ", "２０２６-０８　B", "٢٠٢٦-٠٥ Ｂ")
 # PR-A2 review, LOW-1 (probe P5): Unicode spaces Python's str.strip removes and Liquid's strip keeps.
 UNICODE_PADS = {"NBSP": " ", "THIN SPACE": " ", "IDEOGRAPHIC SPACE": "　", "NEL": "\u0085"}
+# G35-04 review 2, LOW-7 (probe P6) and its relatives: an invisible or control character INSIDE an
+# identity, or at its end where it is not whitespace: (update_version, target_build) per character.
+# Written as escapes so the characters stay visible in this file.
+INVISIBLE_IDENTITY_PROBES = {
+    "P6 zero-width space at the end": ("15.010.20056​", "26200.1500​"),
+    "zero-width no-break space (BOM)": ("15.010.﻿20056", "26200.﻿1501"),
+    "soft hyphen": ("15.010­.20056", "26200.15­02"),
+    "word joiner": ("15.010.2005⁠6", "26200.15⁠03"),
+    "inner no-break space": ("15.010 20056", "26200. 1504"),
+    "inner ideographic space": ("15.010　20056", "26200.　1505"),
+    "bell control character at the end": ("15.010.20056\u0007", "26200.1506\u0007"),
+    "line separator": ("15.010 20056", "26200. 1507"),
+    "paragraph separator": ("15.010 20056", "26200. 1508"),
+}
+# Printable Unicode that real changelog-title versions carry (VERIFY_3: 30 of them are non-ASCII).
+PRINTABLE_IDENTITY_VALUES = ("Copilot cloud agent starts 20% faster with Actions custom images",
+                             "Figma’s update", "Dev Mode — annotations", "Pricing in € for teams",
+                             "Acrobat™ export", "agentâ€™s mojibake", "21 Public Beta 1")
 WIN, OBS = "microsoft-windows-11", "obs-studio"
 
 _PASS = 0
@@ -677,6 +696,33 @@ def check_qa_official(qa, tmp: Path) -> None:
           and "patch_lifecycle_unmatched" not in codes(w_one)
           and "patch_lifecycle_build_unmatched" not in codes(w_both) and not e_both,
           f"one={codes(w_one)} both={codes(w_both)} {codes(e_both)}")
+
+    # G3-Q14 (G35-04 review 2, LOW-7, probe P6; AUTH_V2_38 WS2 first commit): an invisible or control
+    # character INSIDE an identity field. Printable Unicode (the changelog-title versions) stays valid.
+    inv_found, inv_clean = {}, {}
+    for i, (name, (version, build)) in enumerate(INVISIBLE_IDENTITY_PROBES.items()):
+        for field, tree in (
+                ("update_version", _qa_tree(tmp / f"inv-v{i}", [], [], rec_over={"update_version": version})),
+                ("target_build", _qa_win_tree(tmp / f"inv-b{i}", "2026-03 B", build=build))):
+            errors, warnings = _qa_scan(qa, tree)
+            promoted, _kept = qa.promote_for_publication(errors, warnings)
+            inv_found[f"{name} {field}"] = ("record_identity_invisible_character" in codes(warnings), codes(errors),
+                                            "record_identity_invisible_character" in codes(promoted))
+    for i, value in enumerate(PRINTABLE_IDENTITY_VALUES):
+        tree = _qa_tree(tmp / f"inv-ok{i}", [], [], rec_over={"update_version": value})
+        _e, warnings = _qa_scan(qa, tree)
+        inv_clean[value] = "record_identity_invisible_character" in codes(warnings)
+    corpus_invisible = [r.get("permalink") for r in corpus()["recs"] if vr.identity_invisible_problems(r)]
+    corpus_titles = sum(1 for r in corpus()["recs"]
+                        if not re.fullmatch(r"[A-Za-z0-9._-]+", vr.liquid_strip(r.get("update_version"))))
+    check("G3-Q14 an invisible or control character inside product_id / update_version / target_build (probe P6's "
+          "U+200B, U+FEFF, a soft hyphen, a word joiner, an inner no-break or ideographic space, a control "
+          "character, a line or paragraph separator) is a QA publication ERROR; printable Unicode titles (curly "
+          "quotes, dashes, a euro or trade-mark sign, mojibake) are not, and the shipped corpus has none -- its "
+          "hundreds of changelog-title versions all pass",
+          all(v == (True, set(), True) for v in inv_found.values()) and not any(inv_clean.values())
+          and not corpus_invisible and corpus_titles > 600,
+          f"{inv_found} {inv_clean} {corpus_invisible[:3]} titles={corpus_titles}")
 
 
 # ------------------------------------------------------------------------ [R] Liquid == Python
@@ -1902,6 +1948,13 @@ def check_mutations(tmp: Path) -> None:
              "{%- assign pfp_label = 'Not enough reports' -%}")),
         ("X53 the pill rewords an official card whatever its stored label", check_feed_official,
          inc("patch-feed-pill.html", "{%- if pfp_key contains 'insufficient' -%}", "{%- if true -%}")),
+        # G35-04 review 2, LOW-7 (probe P6; AUTH_V2_38 WS2 first commit): each restores ONE half.
+        ("X54 (probe P6) QA no longer reports an invisible or control character inside an identity",
+         lambda: check_qa(tmp / f"x54-{next(qa_runs)}"), swap(vr, "identity_invisible_problems", lambda r: [])),
+        ("X55 (probe P6) an invisible identity character is reported but no longer blocks publication",
+         lambda: check_qa(tmp / f"x55-{next(qa_runs)}"),
+         swap(qa, "PUBLICATION_BLOCKING_CODES",
+              qa.PUBLICATION_BLOCKING_CODES - {"record_identity_invisible_character"})),
     ]
     for label, body, (mutate, restore) in cases:
         run_mutant(label, body, mutants, mutate=mutate, restore=restore)

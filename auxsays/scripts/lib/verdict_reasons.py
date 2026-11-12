@@ -36,6 +36,7 @@ This module reads YAML and nothing else: no collector import, no network.
 from __future__ import annotations
 
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
@@ -151,6 +152,43 @@ def identity_padding_problems(record: Mapping[str, Any]) -> list[str]:
         if text.strip() != text.strip(LIQUID_STRIP_CHARS):
             problems.append(f"{field} {text!r} carries leading or trailing Unicode whitespace that "
                             "Liquid's strip keeps and Python's strip removes")
+    return problems
+
+
+# Characters that print as nothing, or as a blank that is not a plain space: format characters (Cf:
+# U+200B zero-width space, U+FEFF, U+00AD soft hyphen, U+2060 ...), control characters (Cc), the line
+# and paragraph separators (Zl, Zp), and every space separator except U+0020 (Zs: U+00A0, U+2009,
+# U+3000 ...). G35-04 review 2, LOW-7 (probe P6): "15.010.20056" + U+200B is neither whitespace nor
+# padding, so the page key kept it, the page matched none of its reasons or counted rows, the reviewed
+# TEST FIRST vanished and QA said nothing. A narrower rule than "ASCII only": 673 live versions are
+# changelog TITLES (GitHub, Figma) with spaces, dashes, curly quotes and other printable Unicode, and
+# they stay valid (VERIFY_3; AUTH_V2_38 WS2).
+INVISIBLE_IDENTITY_CATEGORIES = frozenset({"Cf", "Cc", "Zl", "Zp"})
+
+
+def _invisible(ch: str) -> bool:
+    category = unicodedata.category(ch)
+    return category in INVISIBLE_IDENTITY_CATEGORIES or (category == "Zs" and ch != " ")
+
+
+def identity_invisible_problems(record: Mapping[str, Any]) -> list[str]:
+    """Identity fields that carry an invisible or control character, or [].
+
+    Read on the value the page key is built from (`liquid_strip`), with leading and trailing Unicode
+    whitespace also set aside: that is padding, which `identity_padding_problems` reports. What is left
+    must contain no character of INVISIBLE_IDENTITY_CATEGORIES and no space separator other than a plain
+    space. A legitimate Unicode title (a curly apostrophe, an em dash, a trade-mark sign) passes: those
+    are printable. QA --publish-strict reports a finding as `record_identity_invisible_character`."""
+    problems = []
+    for field in IDENTITY_FIELDS:
+        raw = record.get(field)
+        if raw is None:
+            continue
+        text = liquid_strip(raw).strip()
+        found = sorted({ch for ch in text if _invisible(ch)})
+        if found:
+            names = ", ".join(f"U+{ord(ch):04X} {unicodedata.name(ch, unicodedata.category(ch))}" for ch in found)
+            problems.append(f"{field} {text!r} contains an invisible or control character ({names})")
     return problems
 
 

@@ -353,6 +353,12 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         Liquid's strip keeps and Python's removes (PR-A2 review, LOW-1, probe P5). The page and
         `decide` agree on the padded key, but the page matches none of its reasons or counted rows,
         so a verdict would vanish without a word. Collector-written, so the same two severities.
+      * record_identity_invisible_character -- a record whose product_id, update_version or target_build
+        contains an invisible or control character anywhere (Unicode Cf, Cc, Zl, Zp, or a space
+        separator other than a plain space; G35-04 review 2, LOW-7, probe P6: "15.010.20056" + U+200B
+        silently dropped the page's reviewed TEST FIRST). Printable Unicode -- the changelog titles
+        GitHub and Figma records use as their version -- is valid. Collector-written: the same two
+        severities.
       * patch_lifecycle_build_unmatched -- a build listed in a lifecycle entry that no record carries
         (scan_lifecycle_builds, its own corpus-wide scan; PR-A2 review, LOW-3, probe P4).
       * feed_official_verdict_unprinted (AUX-097) -- a /updates/ feed card whose page the gate gives
@@ -435,6 +441,10 @@ def scan_verdict_policy(files: list[Path]) -> tuple[list[dict[str, str]], list[d
         for padding in verdict_reasons.identity_padding_problems(data):
             add(warnings, path, "record_identity_unicode_padding",
                 f"{padding}. The page key keeps it, so this page matches none of its reason entries or "
+                "counted reports and can lose its verdict silently; correct the stored value.")
+        for invisible in verdict_reasons.identity_invisible_problems(data):
+            add(warnings, path, "record_identity_invisible_character",
+                f"{invisible}. The page key keeps it, so this page matches none of its reason entries or "
                 "counted reports and can lose its verdict silently; correct the stored value.")
         want = patch_decision.decide(data, valid_reasons=valid.get(verdict_reasons.record_identity(data), []),
                                      lifecycle=lifecycle)
@@ -1498,6 +1508,9 @@ PUBLICATION_BLOCKING_CODES = frozenset({"record_names_conflicting_actions",
                                         # strip differently; a lifecycle build no page carries.
                                         "record_identity_unicode_padding",
                                         "patch_lifecycle_build_unmatched",
+                                        # G35-04 review 2 (LOW-7, probe P6): an invisible or control
+                                        # character inside an identity field.
+                                        "record_identity_invisible_character",
                                         # AUX-097: a feed card that hides its page's official verdict.
                                         "feed_official_verdict_unprinted"})
 
