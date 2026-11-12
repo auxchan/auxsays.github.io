@@ -408,7 +408,8 @@ def classify_windows_issue(summary: str) -> dict[str, str]:
         + ([f"if you use {occurs.group('np').strip()}"] if occurs else []) \
         + [_win_subject_scope(subject.strip())]
     scope = next((s for s in options if s and not scope_problem(s, WINDOWS)), "")
-    return {"severity": severity, "title": title, "scope": scope}
+    refused = "; ".join(f"{s!r}: {scope_problem(s, WINDOWS)}" for s in options if s) if not scope else ""
+    return {"severity": severity, "title": title, "scope": scope, "scope_refused": refused}
 
 
 def _windows_candidates(records: list[Mapping[str, Any]], out: "ProducerResult") -> None:
@@ -462,11 +463,15 @@ def _windows_candidates(records: list[Mapping[str, Any]], out: "ProducerResult")
             lead = ("Microsoft lists a known issue that originates in this update" if new
                     else "Microsoft lists a known issue that persists in this update (it also affects earlier updates)")
             reason = f"{lead} (OS build {m.group('build')}, {m.group('kb')}): \"{info['title']}\"{status}."
-            out.propose(_candidate(
+            candidate = _candidate(
                 VENDOR_CLASS, page, verdict=_vendor_verdict(info["severity"], new), scope=info["scope"],
                 reason=reason, severity=info["severity"], failure=info["title"], new=new,
                 fixed_in=resolved, citation=dict(source, vendor="Microsoft"), problem_key=problem_key,
-                inputs={"statement_sha256": _sha(source["statement"]), "body_sha256": _sha(body)}))
+                inputs={"statement_sha256": _sha(source["statement"]), "body_sha256": _sha(body)})
+            if info.get("scope_refused"):
+                # Why no wording named a setup, for the review queue (VERIFY_3 note 3: it read only "scope ''").
+                candidate["scope_note"] = info["scope_refused"]
+            out.propose(candidate)
 
 
 # ============================================================ user_corroborated_install_failure
@@ -1347,11 +1352,13 @@ class ProducerResult:
         cls = (entry.get("producer") or {}).get("class", "")
         identity = {"product_id": entry.get("product_id", ""), "update_version": entry.get("update_version", ""),
                     "target_build": entry.get("target_build", "")}
+        scope_note = entry.pop("scope_note", "")
         if not _scope_ok(entry.get("scope"), _s(entry.get("product_id"))):
             self.exclude(cls, "ambiguous_scope", entry.get("citation") or {}, **identity,
                          severity=entry.get("severity_basis", ""), problem_key=entry.get("problem_key", ""),
                          note=f"proposed scope {_s(entry.get('scope'))!r}: "
-                              f"{scope_problem(entry.get('scope'), _s(entry.get('product_id')))}")
+                              f"{scope_problem(entry.get('scope'), _s(entry.get('product_id')))}"
+                              + (f"; refused wording: {scope_note}" if scope_note else ""))
             return
         problems = candidate_problems(entry)
         if problems:
