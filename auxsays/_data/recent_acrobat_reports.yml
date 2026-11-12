@@ -23,7 +23,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-12T00:38:38Z'
+  captured_at: '2026-11-12T15:08:11Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -42,7 +42,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-12T00:38:38Z'
+  captured_at: '2026-11-12T15:08:11Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -62,7 +62,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-12T00:38:38Z'
+  captured_at: '2026-11-12T15:08:11Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -203,7 +203,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-11-11T06:09:58Z'
+  captured_at: '2026-11-12T15:08:11Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -243,7 +243,7 @@ reports:
   window_start: '2026-05-18'
   window_version: 26.001.21563
 - attribution_state: not_established
-  captured_at: '2026-11-11T06:09:58Z'
+  captured_at: '2026-11-12T15:08:11Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -622,7 +622,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-12T01:01:51Z'
+  captured_at: '2026-11-12T15:31:05Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -803,7 +803,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-11-11T06:32:11Z'
+  captured_at: '2026-11-12T15:31:05Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true

@@ -72407,3 +72407,236 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9818'
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067328-question-6067328
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067328/2026-11-security-update-kb5132061-26300-9974-insta
+  parent_title: 2026-11 Security Update (KB5132061) (26300.9974) - Install error - 0x800f0993 - Microsoft Q&A
+  report_title: 2026-11 Security Update (KB5132061) (26300.9974) - Install error - 0x800f0993 - Microsoft Q&A
+  report_text_excerpt: 2026-11 Security Update (KB5132061) (26300.9974) - Install error - 0x800f0993 - Microsoft Q&A This update will not complete. Restarted my computer several times with no joy. Any ideas?
+  captured_at: '2026-11-12T16:07:16Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067961-question-6067961
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067961/2026-11-security-update-kb5132061-26300-9974-faile
+  parent_title: 2026-11 Security Update (KB5132061) (26300.9974) Failed to install on ‎11/‎11/‎2026 - 0x800f0993 - Microsoft Q&A
+  report_title: 2026-11 Security Update (KB5132061) (26300.9974) Failed to install on ‎11/‎11/‎2026 - 0x800f0993 - Microsoft Q&A
+  report_text_excerpt: 2026-11 Security Update (KB5132061) (26300.9974) Failed to install on ‎11/‎11/‎2026 - 0x800f0993 - Microsoft Q&A This Security Update will absolutely not install. Upon a download where it jumps up to 100% all of a sudden it begins to install. Again slowly but suddently to 68%...
+  captured_at: '2026-11-12T16:07:16Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067996-question-6067996
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067996/dism-unable-to-fix-corrupt-component-store-after-i
+  parent_title: DISM Unable to Fix Corrupt Component Store After Installing Windows 11 26H2 CU November 10, 2026—KB5132061 - Microsoft Q&A
+  report_title: DISM Unable to Fix Corrupt Component Store After Installing Windows 11 26H2 CU November 10, 2026—KB5132061 - Microsoft Q&A
+  report_text_excerpt: DISM Unable to Fix Corrupt Component Store After Installing Windows 11 26H2 CU November 10, 2026—KB5132061 - Microsoft Q&A I have just installed the Windows 11 26H2 CU November 10, 2026—KB5132061 and as usual, it has corrupted the Component Store. So I have ran the following...
+  captured_at: '2026-11-12T16:07:16Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6068248-question-6068248
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6068248/windows-update-2026-11-security-update-kb5132061-2
+  parent_title: Windows Update -2026-11 Security Update (KB5132061) (26300.9974) - Install error - 0x800f0993 - Microsoft Q&A
+  report_title: Windows Update -2026-11 Security Update (KB5132061) (26300.9974) - Install error - 0x800f0993 - Microsoft Q&A
+  report_text_excerpt: Windows Update -2026-11 Security Update (KB5132061) (26300.9974) - Install error - 0x800f0993 - Microsoft Q&A I was Updating my Window an I got a Install error - 0x800f0993 for 2026-11 Security Update (KB5132061) (26300.9974) I have done the Following. Open Command Prompt as...
+  captured_at: '2026-11-12T16:07:16Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067564-question-6067564
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067564/windows-11-26h2-kb5132061-fails-with-0x800f0993-ft
+  parent_title: Windows 11 26H2 KB5132061 fails with 0x800f0993 — ftpsvc.dll hydration failure - Microsoft Q&A
+  report_title: Windows 11 26H2 KB5132061 fails with 0x800f0993 — ftpsvc.dll hydration failure - Microsoft Q&A
+  report_text_excerpt: 'Windows 11 26H2 KB5132061 fails with 0x800f0993 — ftpsvc.dll hydration failure - Microsoft Q&A System: Windows 11 Pro 26H2, OS Build 26300.9818 Failed update: KB5132061 (November 2026 Security Update), target build 26300.9974 Error: 0x800f0993 The November 2026 cumulative...'
+  captured_at: '2026-11-12T16:07:16Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067714-question-6067714
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067714/how-to-fix-an-update-loop-for-2026-11-security-upd
+  parent_title: How to fix an update loop  for 2026-11 Security Update (KB5132061) (26300.9974) - Microsoft Q&A
+  report_title: How to fix an update loop  for 2026-11 Security Update (KB5132061) (26300.9974) - Microsoft Q&A
+  report_text_excerpt: How to fix an update loop for 2026-11 Security Update (KB5132061) (26300.9974) - Microsoft Q&A An update seems to be in a loop. How do i stop it?
+  captured_at: '2026-11-12T16:07:16Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067664-question-6067664
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067664/2026-11-security-update-26300-9974-hasnt-completed
+  parent_title: 2026-11 Security Update 26300.9974 hasn't completed after 16 hrs - Microsoft Q&A
+  report_title: 2026-11 Security Update 26300.9974 hasn't completed after 16 hrs - Microsoft Q&A
+  report_text_excerpt: 2026-11 Security Update 26300.9974 hasn't completed after 16 hrs - Microsoft Q&A Hi. Not sure what is the bug here but my update started 16 hrs ago.. went several times through downloading & installing and still.. it's now at 0% Downloading. Any idea why? Are we victims of the...
+  captured_at: '2026-11-12T16:07:16Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067407-question-6067407
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067407/kb5132061-26300-9974-will-not-install-on-window11
+  parent_title: (KB5132061) (26300.9974) will not install on Window11 desktop home - Microsoft Q&A
+  report_title: (KB5132061) (26300.9974) will not install on Window11 desktop home - Microsoft Q&A
+  report_text_excerpt: (KB5132061) (26300.9974) will not install on Window11 desktop home - Microsoft Q&A why won' t security update 2026-11 (KB5132061) (26300.9974) install. All other updates on my windows 11 desktop have installed without any problems. None of the suggestion online work to fix the...
+  captured_at: '2026-11-12T16:07:16Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
