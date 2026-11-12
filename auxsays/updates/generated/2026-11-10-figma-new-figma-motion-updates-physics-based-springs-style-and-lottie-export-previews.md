@@ -18,8 +18,8 @@ update_version: 'New Figma Motion updates: physics based springs, style and Lott
 update_logo_text: FIG
 update_published_at: '2026-11-10T00:00:00.000Z'
 update_last_checked: '2026-11-10T22:36:35Z'
-source_last_checked: '2026-11-12T03:32:47Z'
-official_body_last_checked: '2026-11-12T03:32:47Z'
+source_last_checked: '2026-11-12T17:53:26Z'
+official_body_last_checked: '2026-11-12T17:53:26Z'
 record_last_updated: '2026-11-10T22:36:35Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -87,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-12T03:32:47Z'
+  url: https://www.figma.com/release-notes/?title=new-figma-motion-updates-physics-based-springs-style-and-lottie-export-previews
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-12T17:53:26Z'
   url: https://www.figma.com/release-notes/?title=new-figma-motion-updates-physics-based-springs-style-and-lottie-export-previews
   status: captured-from-rss-feed
   body_captured: true
