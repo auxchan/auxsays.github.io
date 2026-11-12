@@ -1158,7 +1158,9 @@ def check_projection_official() -> None:
                 or (rows.get(vp.page_key(r)) or {}).get("scope") != "for new installations"]
     check(f"G3-P9 the projection carries every official verdict: SECURITY UPDATE for each of the "
           f"{len(security)} monthly security updates and AVOID for both KB5079391 pages ({len(withdrawn)})",
-          len(security) == 43 and len(withdrawn) == 2 and not missing, str(missing[:4]))
+          # Non-vacuity only: the corpus grows with every monthly ingest, so the count is a floor, never a pin
+          # (it read == 43 and turned main red at 48).
+          len(security) >= 1 and len(withdrawn) == 2 and not missing, str(missing[:4]))
 
 
 def check_projection_builder(tmp: Path) -> None:
