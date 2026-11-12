@@ -82,6 +82,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
 | AUX-095 | Deferred | Verdict policy | Medium | A vendor-confirmed serious defect or a corroborated install failure gave no caution unless someone hand-wrote a reason (producer built; public activation OFF, temporary) |
+| AUX-099 | Deferred | Verdict policy | Medium | The reason producer counted unknown accounts as independent reporters and had no record of what it would have published (repaired; shadow operation; public activation OFF) |
 | AUX-065 | Resolved | Coverage | Medium | DaVinci Resolve versions never archived, so routine collection spent its whole budget on releases nobody installs |
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
@@ -5075,6 +5076,8 @@ the seeded standard. Still open before activation, each REQUIRED before the swit
   the review queue, and "rare" / "possible" crashes queued (review 2 LOW-2).
 Outside the switch: the ASCII machine-identity publication error (review 2 LOW-7) is not shipped, because 665 live
 records fail it (above).
+AUX-099 (2026-11-12) closes F1, F2, F3 and F7 and review 2's LOW-1 and LOW-2 above, and ships review 2's LOW-7 as a
+narrower rule (an invisible or control character in an identity); F4, F5 and F6 stay open.
 
 **Current impact** None published: with the switch OFF every page renders exactly as before; the candidates are
 visible only in the deploy artifact.
@@ -5085,6 +5088,98 @@ visible only in the deploy artifact.
 work. On activation the stored summaries of candidate pages lag the page, and that `verdict_policy_drift` warning
 does NOT clear at the next promotion: the record writers (`apply_consensus_to_records.py`,
 `build_consensus_from_evidence.py`) read reviewed reasons only. Every surface already prints the gate.
+
+---
+
+### AUX-099 — The reason producer counted unknown accounts as independent reporters and had no record of what it would have published
+
+- **Status** Deferred (public activation; the producer and its shadow operation are built) · **Area** Verdict policy · **Severity** Medium
+- **First seen** 2026-11-10 (G35-04 reviews 1-2, VERIFY_3; AUX-095's "still open before activation" list) · **Built**
+  2026-11-12 (G38 WS2, branch feat/producer-shadow, AUTH_V2_38 WS2); the activation switch stays OFF
+
+**Symptom** The reason producer (AUX-095) drafted 25 install-failure TEST FIRST reasons, all but three on Windows
+pages, by counting every Learn Q&A question at a different URL as a different user: "24 users independently report"
+on 25H2 26200.7462 rested on no evidence that any two of those accounts were different people (AUTH_V2_37 correction
+2). It grouped different error codes as one problem (A1's reading, superseded by A3), counted "after installing KB...
+my Nvidia driver will not install" as the update failing and listed a bugcheck code as an install error (review 2
+LOW-3), let a reworded re-post count as a second reporter (review 1 LOW-2, review 2 LOW-4), drafted "WAIT ... new" for a
+defect OBS said was "in 32.1.0 and earlier" (review 2 LOW-1), and called every OBS crash a core-flow crash, a rare one
+when closing the About dialog included (review 2 LOW-2). With the switch on, the record writers kept the reviewed-only
+prose, so 29 `verdict_policy_drift` warnings never cleared (F3). Nothing was recorded across deploys, so an activation
+review could not tell a new case from the same case seen again. Separately, an identity field ending in U+200B
+("15.010.20056" + zero-width space) silently dropped a page's reviewed TEST FIRST with QA quiet (review 2 LOW-7, P6).
+
+**Cause** Independence was a deny-list of copy cues (anything not caught counted as a second person); the install
+rule read wording and codes anywhere in a row; the vendor grammar had no persistence or core-flow notion; the writers
+gathered reasons in their own copy of the rule; the A4 ASCII-identity rule could not ship (673 live changelog-title
+versions fail it).
+
+**Fix** (all behind `PUBLIC_AUTO_ACTIVATION`, which stays OFF; producer version 4)
+- First commit: `record_identity_invisible_character`, a publication error for an invisible or control character
+  (Unicode Cf, Cc, Zl, Zp, or a space separator other than a plain space) inside product_id / update_version /
+  target_build (`verdict_reasons.identity_invisible_problems`). Printable Unicode titles stay valid; 0 of 1,551 live
+  records fail.
+- Independence FAILS CLOSED: a second report counts only when the source shows a different reporter id or concrete
+  incident details that cannot belong to one incident (`distinct_incident`); the largest set of pairwise-separate
+  reports is counted. Copy detection (a declared cross-post, the same log, near-identical text, a shared distinctive
+  passage, the same KB set or reporter id or incident details; union-find over every pair) only removes a would-be
+  second reporter, never proves one, never touches stored evidence, and never merges reports whose details conflict.
+- The install verb's subject (or object) must be this update; codes only in install-error context, never in a crash
+  or bugcheck context; glued codes ("0x800f0983How") read.
+- Strict grouping (`INSTALL_GROUPING = "strict"`, A3): the same error code, the same named stage or the installer's
+  Exit Code 7; different codes alone are not one problem. Lenient remains only as a measurement mode.
+- Persistence: OBS "and earlier / since / regression from / also affected" and a Microsoft issue that "also affects
+  earlier updates" are TEST FIRST saying the problem persists, never WAIT, new or caused.
+- An OBS crash needs a launch or core-workflow cue; a crash the vendor calls possible / rare / occasional goes to the
+  review queue (`uncertain_severity`).
+- The record writers gather a page's reasons through `verdict_projection.page_supported_reasons`, the projection's
+  merge, so with the switch on the stored prose follows the page and the drift clears at the next promotion.
+- Shadow operation: candidates and queue items carry a stable identity (`candidate_key`, `queue_key`: class, page,
+  verdict, scope, problem; never the counts or wording). `lib/producer_shadow` + `scripts/producer_shadow.py` record
+  each deploy in `.producer-shadow/ledger.json`: first-seen vs repeat, baseline (first deploy, lost ledger) and
+  rules-change items never prospective, bounded (3,000 items, 90 deploys), public-safe (page paths, verdicts, counts,
+  closed labels only). pages.yml (main only, every step continue-on-error) restores it from the Actions cache, runs it
+  after the projection, saves it after the Pages upload and keeps a 90-day run artifact. Not tracked, not rendered,
+  no writeback lane involved. Retention: a cache entry lives until 7 days without access (the daily deploy keeps the
+  newest alive); a lost ledger re-baselines and says so.
+
+**Measured** On the corpus at ec5da166 (1,551 records), producer version 4 drafts 26 candidates, down from 49: 23 vendor (OBS
+32.0.0's "possible crash" now goes to the review queue) and 3 install failures, down from 25. The 3 are Acrobat Pro
+pages whose two Exit Code 7 reports come from different operating systems or OS versions (15.023.20053,
+17.009.20058, 18.011.20055). 0 of the 21 Windows install candidates survive: their Learn Q&A reports carry no
+reporter id, and within any shared error code or stage no two state conflicting incident details. 23 items are
+queued: 22 install pages (independence not established, or no shared characteristic) and the uncertain OBS crash.
+A1's lenient grouping would draft 6 (3 more, all Windows). The subject rule refuses 2 rows main counted (a machine
+"failing to install", a boot loop under "my PC"), and 2 codes glued to the next word are now read. Switch OFF: a
+deploy-order build equals main's (1,861 files, 4 differ only in build timestamps, masked tree 591e9a33... and
+projection fbf64dd8... on both, QA 0/0, both verifiers clean). Switch ON (test build): QA 0 errors and 10
+`verdict_policy_drift` warnings (29 in G35-04 round 3), in two classes: 8 report-bearing pages whose stored verdict
+reads INSUFFICIENT DATA, and 2 security pages whose stored summary lacks the panel. One record-writer promotion with
+the switch ON clears all 10 (QA 0/0), changing only the verdict-prose fields of exactly those 10 pages; the same
+promotion with the switch OFF changes no record. 15 pages change with the switch ON (12 drafted verdicts, 3 security
+pages gain a panel), every surface equal to `decide`. With every probe of reviews 1-2 and VERIFY_3 added to one
+switch-ON build, the only verdict change is OBS 32.1.0, TEST FIRST "persists" (review 2 Q2, never WAIT or new); R2,
+R3, Q4 and Q5 are queued; R1, R4, Q1, Q3 and review 1's re-post draft nothing; P6 and LOW-6 stop QA (exit 1). Two
+simulated deploys over unchanged evidence: the second records 0 new candidates (26 and 23 repeat appearances); one
+added Exit Code 7 row from Windows 10 on Acrobat Pro 15.008.20082 records exactly that one new prospective
+candidate; the next deploy, 0.
+
+**Tests** `test_growth3_verdict_policy.py` 143 -> 146 (G3-Q14; X54/X55; G3-P9 made a floor because the corpus now has
+48 security updates). `test_verdict_reason_producer.py` 56 -> 78 (VRP-I2 detection-only, I10a/b fail-closed and
+conservative, I11 subject and codes, I12 strict grouping, V11 persistence, V12 crash severity, C3 corpus, S6 writers;
+VX26..VX39 one per fix). New `test_producer_shadow.py` 19 (PS-L1..L7 the deploy ledger incl. the two-deploy and
+one-added-row proofs, P1/P2 public safety, N1..N3 never public / never a tracked writer / pages.yml steps, S1 the bare
+script; PX1..PX6).
+
+**Why deferred** Public activation needs the owner's separate approval (AUTH_V2_38 activation criteria: per reason
+class, at least 30 distinct prospective positive candidates with no unsupported recommendation plus an adversarial
+negative set; repeated shadow observations never count as independent validation). Still open before activation:
+F4 (Windows scopes broader than Microsoft's text), F5 (a security panel shows only its head reason), F6/K1 (rights
+posture for quoting Microsoft text), and the vendor class has no labelled set beyond the six named pages.
+
+**Current impact** None published. The candidates and the shadow ledger are visible only in the deploy artifacts.
+
+**Revisit trigger** The shadow ledger reaches the activation review size for a class, or the owner asks.
 
 ---
 
