@@ -95,11 +95,26 @@ INVISIBLE_IDENTITY_PROBES = {
     "bell control character at the end": ("15.010.20056\u0007", "26200.1506\u0007"),
     "line separator": ("15.010 20056", "26200. 1507"),
     "paragraph separator": ("15.010 20056", "26200. 1508"),
+    # G38 WS2 review 2, LOW-2 (probe p6x): characters OUTSIDE Cf / Cc / Zl / Zp / Zs that print as nothing -- every
+    # Unicode Default_Ignorable_Code_Point, the Hangul fillers, the braille blank.
+    "variation selector U+FE0F": ("15.010.20056\ufe0f", "26200.1509\ufe0f"),
+    "combining grapheme joiner U+034F": ("15.010.20056\u034f", "26200.1510\u034f"),
+    "Hangul filler U+3164": ("15.010.20056\u3164", "26200.1511\u3164"),
+    "Hangul choseong filler U+115F": ("15.010.20056\u115f", "26200.1512\u115f"),
+    "Hangul jungseong filler U+1160": ("15.010.20056\u1160", "26200.1513\u1160"),
+    "halfwidth Hangul filler U+FFA0": ("15.010.20056\uffa0", "26200.1514\uffa0"),
+    "zero-width joiner U+200D outside an emoji": ("15.010.20056\u200d", "26200.1515\u200d"),
+    "tag space U+E0020": ("15.010.20056\U000e0020", "26200.1516\U000e0020"),
+    "Mongolian vowel separator U+180E": ("15.010.20056\u180e", "26200.1517\u180e"),
+    "braille pattern blank U+2800": ("15.010.20056\u2800", "26200.1518\u2800"),
 }
 # Printable Unicode that real changelog-title versions carry (VERIFY_3: 30 of them are non-ASCII).
 PRINTABLE_IDENTITY_VALUES = ("Copilot cloud agent starts 20% faster with Actions custom images",
                              "Figma’s update", "Dev Mode — annotations", "Pricing in € for teams",
-                             "Acrobat™ export", "agentâ€™s mojibake", "21 Public Beta 1")
+                             "Acrobat™ export", "agentâ€™s mojibake", "21 Public Beta 1",
+                             # emoji sequences a changelog title may carry: U+FE0F after an emoji, U+200D between two
+                             "Release \U0001f6e0\ufe0f fixes", "v1 \U0001f469\u200d\U0001f4bb build",
+                             "Keycap 1\ufe0f\u20e3 release")
 WIN, OBS = "microsoft-windows-11", "obs-studio"
 
 _PASS = 0
@@ -723,17 +738,28 @@ def check_qa_official(qa, tmp: Path) -> None:
         _e, warnings = _qa_scan(qa, tree)
         inv_clean[value] = "record_identity_invisible_character" in codes(warnings)
     corpus_invisible = [r.get("permalink") for r in corpus()["recs"] if vr.identity_invisible_problems(r)]
+    # The emoji exception is update_version's alone: in product_id and target_build, U+FE0F and U+200D are refused
+    # even after an emoji (brief item 5: "without exception").
+    emoji_elsewhere = {f: bool(vr.identity_invisible_problems({f: v})) for f, v in (
+        ("product_id", "obs-\U0001f6e0\ufe0fstudio"), ("target_build", "26200.\U0001f6e0\ufe0f1"),
+        ("product_id", "obs-\U0001f469\u200d\U0001f4bbstudio"))}
+    emoji_title = not vr.identity_invisible_problems({"update_version": "Release \U0001f6e0\ufe0f fixes"})
     corpus_titles = sum(1 for r in corpus()["recs"]
                         if not re.fullmatch(r"[A-Za-z0-9._-]+", vr.liquid_strip(r.get("update_version"))))
     check("G3-Q14 an invisible or control character inside product_id / update_version / target_build (probe P6's "
           "U+200B, U+FEFF, a soft hyphen, a word joiner, an inner no-break or ideographic space, a control "
-          "character, a line or paragraph separator) is a QA publication ERROR; printable Unicode titles (curly "
-          "quotes, dashes, a euro or trade-mark sign, mojibake) are not, and the shipped corpus has none -- its "
-          "hundreds of changelog-title versions all pass",
+          "character, a line or paragraph separator) is a QA publication ERROR, and so is every other character "
+          "that prints as nothing (G38 WS2 review 2, LOW-2: U+FE0F, U+034F, the Hangul fillers U+3164 / U+115F / "
+          "U+1160 / U+FFA0, a lone U+200D, a tag character, U+180E, the braille blank); printable Unicode titles "
+          "(curly quotes, dashes, a euro or trade-mark sign, mojibake, an emoji sequence with U+FE0F or U+200D) "
+          "are not -- that exception is update_version's alone, never product_id's or target_build's -- and the "
+          "shipped corpus has none: its hundreds of changelog-title versions all pass",
           all(v == (True, set(), True) for v in inv_found.values()) and not any(inv_clean.values())
           and len(inv_pid) == len(INVISIBLE_IDENTITY_PROBES) and all(v == (True, True) for v in inv_pid.values())
+          and all(emoji_elsewhere.values()) and emoji_title
           and not corpus_invisible and corpus_titles > 600,
-          f"{inv_found} pid={inv_pid} {inv_clean} {corpus_invisible[:3]} titles={corpus_titles}")
+          f"{inv_found} pid={inv_pid} {inv_clean} emoji_elsewhere={emoji_elsewhere} title={emoji_title} "
+          f"{corpus_invisible[:3]} titles={corpus_titles}")
 
 
 # ------------------------------------------------------------------------ [R] Liquid == Python
@@ -1766,6 +1792,18 @@ def weak_project(records, groups, reasons, lifecycle):
         vr.support_problems = real
 
 
+def emoji_everywhere(real):
+    """The emoji exception read in every identity field (brief item 5 says update_version only)."""
+    def mutated(record):
+        moved = {k: v for k, v in record.items()}
+        out = []
+        for field in vr.IDENTITY_FIELDS:
+            if field in moved and field != "update_version":
+                out += [p.replace("update_version", field) for p in real({"update_version": moved[field]})]
+        return out + real({k: v for k, v in moved.items() if k not in vr.IDENTITY_FIELDS or k == "update_version"})
+    return mutated
+
+
 def check_mutations(tmp: Path) -> None:
     D = pd.Decision
     import qa_patch_records as qa
@@ -1968,6 +2006,12 @@ def check_mutations(tmp: Path) -> None:
          lambda: check_qa(tmp / f"x55-{next(qa_runs)}"),
          swap(qa, "PUBLICATION_BLOCKING_CODES",
               qa.PUBLICATION_BLOCKING_CODES - {"record_identity_invisible_character"})),
+        # G38 WS2 review 2, LOW-2 (round 3): one per half.
+        ("X56 (LOW-2) the Default_Ignorable / Hangul-filler rule removed (U+FE0F, U+3164, U+034F pass again)",
+         lambda: check_qa(tmp / f"x56-{next(qa_runs)}"), swap(vr, "_default_ignorable", lambda cp: False)),
+        ("X57 (LOW-2) the emoji-sequence exception applies to product_id and target_build too",
+         lambda: check_qa(tmp / f"x57-{next(qa_runs)}"),
+         swap(vr, "identity_invisible_problems", emoji_everywhere(vr.identity_invisible_problems))),
     ]
     for label, body, (mutate, restore) in cases:
         run_mutant(label, body, mutants, mutate=mutate, restore=restore)

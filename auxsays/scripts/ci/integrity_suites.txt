@@ -321,7 +321,10 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 211
 # Cc, Zl, Zp, or a space separator other than a plain space) inside product_id / update_version /
 # target_build is a publication error, printable Unicode changelog titles are not, and the shipped
 # corpus has none (G3-Q14). 59 mutants, X54/X55 one fix half each.
-auxsays/scripts/tests/test_growth3_verdict_policy.py = 146
+# 146 -> 148 (AUX-099 round 3, G38 WS2 review 2 LOW-2): every Default_Ignorable_Code_Point, the Hangul fillers and
+# the braille blank are errors too, in product_id and target_build without exception; in update_version U+FE0F
+# and U+200D pass only inside an emoji sequence (G3-Q14). 61 mutants, X56/X57 one fix half each.
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 148
 # G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
 # confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
 # the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the

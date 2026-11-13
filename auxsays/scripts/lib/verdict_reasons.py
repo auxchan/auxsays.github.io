@@ -164,11 +164,53 @@ def identity_padding_problems(record: Mapping[str, Any]) -> list[str]:
 # changelog TITLES (GitHub, Figma) with spaces, dashes, curly quotes and other printable Unicode, and
 # they stay valid (VERIFY_3; AUTH_V2_38 WS2).
 INVISIBLE_IDENTITY_CATEGORIES = frozenset({"Cf", "Cc", "Zl", "Zp"})
+# G38 WS2 review 2, LOW-2: characters OUTSIDE those categories print as nothing too -- U+FE0F (a variation
+# selector, Mn), U+034F (combining grapheme joiner, Mn), U+3164 / U+115F / U+1160 / U+FFA0 (Hangul fillers,
+# Lo) -- and each one reproduced P6 (the reviewed TEST FIRST vanished, QA exit 0). The rule now also covers
+# EVERY Unicode Default_Ignorable_Code_Point (DerivedCoreProperties.txt, Unicode 16.0; reserved code points
+# in its ranges included), the Hangul fillers by name, and U+2800 BRAILLE PATTERN BLANK (So, prints blank).
+DEFAULT_IGNORABLE_RANGES = (
+    (0x00AD, 0x00AD), (0x034F, 0x034F), (0x061C, 0x061C), (0x115F, 0x1160), (0x17B4, 0x17B5), (0x180B, 0x180F),
+    (0x200B, 0x200F), (0x202A, 0x202E), (0x2060, 0x206F), (0x3164, 0x3164), (0xFE00, 0xFE0F), (0xFEFF, 0xFEFF),
+    (0xFFA0, 0xFFA0), (0xFFF0, 0xFFF8), (0x1BCA0, 0x1BCA3), (0x1D173, 0x1D17A), (0xE0000, 0xE0FFF))
+HANGUL_FILLERS = frozenset({0x115F, 0x1160, 0x3164, 0xFFA0})
+BLANK_SYMBOLS = frozenset({0x2800})
+# In update_version only, a changelog title may carry an emoji sequence ("🛠️", "👩‍💻"): U+FE0F (emoji
+# presentation) right after an emoji, and U+200D (zero-width joiner) between two emoji, are part of the
+# visible glyph there. Anywhere else -- and in product_id and target_build always -- they are invisible.
+EMOJI_SEQUENCE_JOINERS = frozenset({0xFE0F, 0x200D})
+
+
+def _default_ignorable(cp: int) -> bool:
+    return any(lo <= cp <= hi for lo, hi in DEFAULT_IGNORABLE_RANGES) or cp in HANGUL_FILLERS or cp in BLANK_SYMBOLS
 
 
 def _invisible(ch: str) -> bool:
     category = unicodedata.category(ch)
-    return category in INVISIBLE_IDENTITY_CATEGORIES or (category == "Zs" and ch != " ")
+    return (category in INVISIBLE_IDENTITY_CATEGORIES or (category == "Zs" and ch != " ")
+            or _default_ignorable(ord(ch)))
+
+
+def _emoji_base(ch: str) -> bool:
+    """An emoji a variation selector or a joiner may follow: a pictographic symbol (So), a skin-tone modifier
+    (Sk, U+1F3FB..U+1F3FF), or a regional-indicator letter."""
+    cp = ord(ch)
+    return ((unicodedata.category(ch) == "So" and cp not in BLANK_SYMBOLS) or 0x1F3FB <= cp <= 0x1F3FF
+            or 0x1F1E6 <= cp <= 0x1F1FF)
+
+
+def _in_emoji_sequence(text: str, i: int) -> bool:
+    """Whether text[i] (U+FE0F or U+200D) belongs to a visible emoji sequence: U+FE0F right after an emoji (or
+    after a keycap base 0-9 # * that U+20E3 follows); U+200D after an emoji (or its U+FE0F) AND before one."""
+    cp = ord(text[i])
+    prev = text[i - 1] if i > 0 else ""
+    nxt = text[i + 1] if i + 1 < len(text) else ""
+    if cp == 0xFE0F:
+        return bool(prev) and (_emoji_base(prev) or (prev in "0123456789#*" and nxt == "⃣"))
+    if cp == 0x200D:
+        before = text[i - 2] if prev == "️" and i > 1 else prev
+        return bool(before) and bool(nxt) and _emoji_base(before) and _emoji_base(nxt)
+    return False
 
 
 def identity_invisible_problems(record: Mapping[str, Any]) -> list[str]:
@@ -176,16 +218,21 @@ def identity_invisible_problems(record: Mapping[str, Any]) -> list[str]:
 
     Read on the value the page key is built from (`liquid_strip`), with leading and trailing Unicode
     whitespace also set aside: that is padding, which `identity_padding_problems` reports. What is left
-    must contain no character of INVISIBLE_IDENTITY_CATEGORIES and no space separator other than a plain
-    space. A legitimate Unicode title (a curly apostrophe, an em dash, a trade-mark sign) passes: those
-    are printable. QA --publish-strict reports a finding as `record_identity_invisible_character`."""
+    must contain no character of INVISIBLE_IDENTITY_CATEGORIES, no space separator other than a plain
+    space, and no Default_Ignorable_Code_Point, Hangul filler or blank symbol (DEFAULT_IGNORABLE_RANGES) --
+    in product_id and target_build without exception; in update_version a U+FE0F or U+200D inside an emoji
+    sequence of a changelog title is visible and allowed (`_in_emoji_sequence`). A legitimate Unicode title
+    (a curly apostrophe, an em dash, a trade-mark sign, an emoji) passes: those are printable. QA
+    --publish-strict reports a finding as `record_identity_invisible_character`."""
     problems = []
     for field in IDENTITY_FIELDS:
         raw = record.get(field)
         if raw is None:
             continue
         text = liquid_strip(raw).strip()
-        found = sorted({ch for ch in text if _invisible(ch)})
+        found = sorted({ch for i, ch in enumerate(text) if _invisible(ch)
+                        and not (field == "update_version" and ord(ch) in EMOJI_SEQUENCE_JOINERS
+                                 and _in_emoji_sequence(text, i))})
         if found:
             names = ", ".join(f"U+{ord(ch):04X} {unicodedata.name(ch, unicodedata.category(ch))}" for ch in found)
             problems.append(f"{field} {text!r} contains an invisible or control character ({names})")
