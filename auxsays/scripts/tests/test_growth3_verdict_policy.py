@@ -708,6 +708,16 @@ def check_qa_official(qa, tmp: Path) -> None:
             promoted, _kept = qa.promote_for_publication(errors, warnings)
             inv_found[f"{name} {field}"] = ("record_identity_invisible_character" in codes(warnings), codes(errors),
                                             "record_identity_invisible_character" in codes(promoted))
+    # product_id too (G38 WS2 review: a mutant that stopped checking product_id survived): the probe's own
+    # invisible character inside the OBS product id.
+    inv_pid = {}
+    for i, (name, (version, _build)) in enumerate(INVISIBLE_IDENTITY_PROBES.items()):
+        extra = "".join(ch for ch in version if ch not in "0123456789.")
+        tree = _qa_tree(tmp / f"inv-p{i}", [], [], rec_over={"product_id": f"obs-{extra}studio"})
+        errors, warnings = _qa_scan(qa, tree)
+        promoted, _kept = qa.promote_for_publication(errors, warnings)
+        inv_pid[name] = ("record_identity_invisible_character" in codes(warnings),
+                         "record_identity_invisible_character" in codes(promoted))
     for i, value in enumerate(PRINTABLE_IDENTITY_VALUES):
         tree = _qa_tree(tmp / f"inv-ok{i}", [], [], rec_over={"update_version": value})
         _e, warnings = _qa_scan(qa, tree)
@@ -721,8 +731,9 @@ def check_qa_official(qa, tmp: Path) -> None:
           "quotes, dashes, a euro or trade-mark sign, mojibake) are not, and the shipped corpus has none -- its "
           "hundreds of changelog-title versions all pass",
           all(v == (True, set(), True) for v in inv_found.values()) and not any(inv_clean.values())
+          and len(inv_pid) == len(INVISIBLE_IDENTITY_PROBES) and all(v == (True, True) for v in inv_pid.values())
           and not corpus_invisible and corpus_titles > 600,
-          f"{inv_found} {inv_clean} {corpus_invisible[:3]} titles={corpus_titles}")
+          f"{inv_found} pid={inv_pid} {inv_clean} {corpus_invisible[:3]} titles={corpus_titles}")
 
 
 # ------------------------------------------------------------------------ [R] Liquid == Python
