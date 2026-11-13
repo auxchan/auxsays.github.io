@@ -17,8 +17,8 @@ update_version: Design in 3D, natively in Figma, and ship directly to code
 update_logo_text: FIG
 update_published_at: '2026-11-12T00:00:00.000Z'
 update_last_checked: '2026-11-12T17:53:26Z'
-source_last_checked: '2026-11-13T02:21:34Z'
-official_body_last_checked: '2026-11-13T02:21:34Z'
+source_last_checked: '2026-11-13T09:22:13Z'
+official_body_last_checked: '2026-11-13T09:22:13Z'
 record_last_updated: '2026-11-12T17:53:26Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-13T02:21:34Z'
+  url: https://www.figma.com/release-notes/?title=design-in-3d-natively-in-figma-and-ship-directly-to-code
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-13T09:22:13Z'
   url: https://www.figma.com/release-notes/?title=design-in-3d-natively-in-figma-and-ship-directly-to-code
   status: captured-from-rss-feed
   body_captured: true
