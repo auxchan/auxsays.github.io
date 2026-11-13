@@ -352,7 +352,15 @@ auxsays/scripts/tests/test_growth3_verdict_policy.py = 148
 # earlier / previous / older / prior is carry-over, a causal "since" is not (V11); a freeze or hang needs the
 # core-flow cue too (V12); every judged corpus page ends as a candidate or a recorded refusal (C2, C3).
 # 51 mutants, VX40..VX51 one fix each.
-auxsays/scripts/tests/test_verdict_reason_producer.py = 93
+# AUX-099 round 3 (93 -> 113; G38 WS2 review 2: fail closed instead of adding phrases): a vendor WAIT only from a
+# fully recognised statement -- any trailing clause, aside, version number or history word is queued, "earlier"
+# counts only beside a version, a Microsoft row that speaks about history is queued (V11); a hedged crash is
+# uncertain (V14); identity only from own-machine statements (I16); a shared long passage beats an identity
+# conflict, reporter ids compare per site (I17); the install subject and object are an allow-list (I18);
+# Acrobat rows about another version or product are refused (I19); explicit copy declarations (I20); a stage
+# never joins two codes (I21); codes only in install-error context (I22); the writers add candidates beside a
+# reviewed entry (S7). 62 mutants, VX52..VX62 one change each.
+auxsays/scripts/tests/test_verdict_reason_producer.py = 113
 # AUX-099, shadow operation of the reason producer (switch OFF): the deploy ledger tells a first-seen
 # candidate from a repeat appearance by stable identity -- a baseline first deploy, 0 new over unchanged
 # evidence, exactly the expected new candidate after one added row, a repeat after one more report, a

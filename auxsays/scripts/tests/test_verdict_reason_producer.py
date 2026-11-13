@@ -428,72 +428,111 @@ P6_PERSISTENT = [
     "Fixed a crash in 32.1.0 when switching scenes, first reported with 31.1.2",
     "Fixed a crash in 32.1.0, there ever since the first release, when switching scene collections",
 ]
-P6_NEW = [
-    "Fixed a crash in 32.1.0 when stopping a recording since the output was freed twice",
-    "Fixed a crash in 32.1.0 on macOS 14.4.1 when starting the replay buffer",
+# G38 WS2 review 2 (MAJOR-3, g38ws2rev2/tools/py/new_probes.py N6a-i): carried-over wordings no list named. Under
+# round 3 none is read through a phrase: each leaves words the grammar does not recognise, so each is queued.
+N6_CARRIED = [
+    "Fixed a crash in 32.1.0 when starting a recording that has existed for a long time",
+    "Fixed a crash in 32.1.0 when starting a recording, a bug dating back several releases",
+    "Fixed an old crash in 32.1.0 when starting a recording",
+    "Fixed a crash in 32.1.0 when starting a recording that had been present for several versions",
+    "Fixed a crash in 32.1.0 when starting a recording that has been around for a while",
+    "Fixed a crash in 32.1.0 when starting a recording (not a regression)",
+    "Fixed a crash in 32.1.0 when starting a recording that also happened in 31.1",
+    "Fixed a crash in 32.1.0 when starting a recording, an issue in the 31.x series as well",
+    "Fixed a crash in 32.1.0 when starting a recording that predates this release",
 ]
+# Review 2 LOW-4 (brief item 7): "earlier" as plain English is not carry-over -- and not recognised either.
+EARLIER_PLAIN = "Fixed a crash in 32.1.0 when stopping a recording earlier than the stream"
+# A causal "since" is a history word all the same (brief item 3): queued, never "new".
+CAUSAL_SINCE = "Fixed a crash in 32.1.0 when stopping a recording since the output was freed twice"
+SINCE_VERSION = "Fixed an issue in 32.1.0 where the virtual camera did not work since 31.0.0"
+P6_NEW = ["Fixed a crash in 32.1.0 on macOS 14.4.1 when starting the replay buffer"]
 P7_NOT_CORE = [
     "Fixed a freeze in 32.1.0 when closing the About dialog",
     "Fixed a hang in 32.1.0 when opening the Help menu",
     "Fixed a freeze in 32.1.0 when checking for updates",
 ]
 P7_CORE = ["Fixed a freeze in 32.1.0 when starting a stream"]
+# G38 WS2 review 2, LOW-1 (rendered T4; reviewer mutant MM21): a crash the vendor hedges is never a WAIT. The first
+# is the reviewer's own wording; without the head's hedge check it would be queued for its clause alone, so the
+# check below asks for the HEDGE as the reason.
+HEDGED = [
+    "Fixed a crash in 32.1.0 that could occur when stopping a stream",
+    "Fixed a crash in 32.1.0 that may happen when starting a recording",
+    "Fixed a crash in 32.1.0 that might occur when starting a stream",
+    "Fixed a crash in 32.1.0 in some cases when starting a recording",
+    "Fixed a crash in 32.1.0 when starting a recording, which rarely happens",
+]
+Q2 = "Fixed an issue in 32.1.0 and earlier where audio monitoring devices did not work"
+WIN_ALSO_EARLIER = (f"- Active: USB audio devices might fail to start This issue also affects earlier updates of Windows "
+                    f"11. {EM} status Confirmed; originating OS Build 26200.8524 KB5089573; last updated 2026-10-30 10:00 PT.")
+WIN_SINCE_JUNE = (f"- Active: USB audio devices might fail to start This issue has been reported since the June update. "
+                  f"{EM} status Confirmed; originating OS Build 26200.8524 KB5089573; last updated 2026-10-30 10:00 PT.")
+
+
+def persistence_run(statements: list[str]):
+    notes = "\r\n".join(["## OBS Studio 32.1.1 Hotfix Changes"] + [f"* {s} [probe]" for s in statements])
+    return vrp.produce([obs("32.1.0", "2026-03-20T00:00:00Z"), obs("32.1.1", "2026-04-02T00:00:00Z", notes)], {})
 
 
 def check_vendor_persistence() -> None:
-    """AUTH_V2_38 WS2 items 6 and 7 (review 2 LOW-1, LOW-2): persistence is never 'new'; OBS crash severity."""
-    notes = "\r\n".join([
-        "## OBS Studio 32.1.1 Hotfix Changes",
-        "* Fixed an issue in 32.1.0 and earlier where audio monitoring devices did not work [probe]",   # review 2 Q2
-        "* Fixed a rare crash in 32.1.0 when closing the About dialog [probe]",                         # review 2 Q5
-        "* Fixed a crash in 32.1.0 when closing the About dialog [probe]",
-        "* Fixed a crash in 32.1.0 when attempting to log info about a browser source crash [probe]",
-        "* Fixed a crash in 32.1.0 when resizing the window [probe]",
-        "* Fixed a crash in 32.1.0 when starting a recording with the replay buffer active [probe]",
-        "* Fixed a possible crash in 32.1.0 on Windows when opening source properties [probe]",
-        "* Fixed an issue in 32.1.0 where the virtual camera did not work since 31.0.0 [probe]",
-    ] + [f"* {s} [probe]" for s in P6_PERSISTENT + P6_NEW + P7_NOT_CORE + P7_CORE])
-    res = vrp.produce([obs("32.1.0", "2026-03-20T00:00:00Z"), obs("32.1.1", "2026-04-02T00:00:00Z", notes)], {})
-    by = {}
-    for c in res.candidates:
-        by[c["failure"]] = (c["verdict"], c["severity_basis"], c["new_in_this_version"], c["reason"])
+    """AUTH_V2_38 WS2 items 6 and 7; round-3 brief items 3, 4 and 7: fail closed on wording, never a phrase list."""
+    queued_ones = P6_PERSISTENT + N6_CARRIED + [EARLIER_PLAIN, CAUSAL_SINCE, SINCE_VERSION]
+    res = persistence_run([Q2] + queued_ones + P6_NEW + P7_NOT_CORE + P7_CORE + HEDGED + [
+        "Fixed a rare crash in 32.1.0 when closing the About dialog",
+        "Fixed a crash in 32.1.0 when closing the About dialog",
+        "Fixed a crash in 32.1.0 when attempting to log info about a browser source crash",
+        "Fixed a crash in 32.1.0 when resizing the window",
+        "Fixed a crash in 32.1.0 when starting a recording with the replay buffer active",
+        "Fixed a possible crash in 32.1.0 on Windows when opening source properties"])
+    by = {c["failure"]: (c["verdict"], c["severity_basis"], c["new_in_this_version"], c["reason"], c["scope"])
+          for c in res.candidates}
     ex = {e["source"]["statement"]: e["excluded"] for e in res.excluded}
-    queued = sorted(q["source"]["statement"] for q in res.review_queue)
-    q2 = by.get("Fixed an issue in 32.1.0 and earlier where audio monitoring devices did not work")
-    since = by.get("Fixed an issue in 32.1.0 where the virtual camera did not work since 31.0.0")
-    persist_reasons = [r for r in [q2, since] + [by.get(s) for s in P6_PERSISTENT] if r]
-    new_ones = [by.get(s) for s in P6_NEW]
-    win_notes = "Base text.\n\n" + "\n".join([HEADER_25H2, (
-        f"- Active: USB audio devices might fail to start This issue also affects earlier updates of Windows 11. {EM} "
-        "status Confirmed; originating OS Build 26200.8524 KB5089573; last updated 2026-10-30 10:00 PT.")])
+    kinds = {q["source"]["statement"]: q["kind"] for q in res.review_queue}
+    q2 = by.get(Q2)
+    # Each is queued as unrecognised wording -- or, where even the head is not the grammar's ("an old crash"), refused
+    # for naming no version the grammar reads. Never a candidate either way.
+    unqueued = [s for s in queued_ones if s in by or not (
+        (ex.get(s) == "unrecognised_wording" and kinds.get(s) == "unrecognised_wording")
+        or ex.get(s) == "no_exact_version")]
+    never_new = [s for s in N6_CARRIED + P6_PERSISTENT if not vrp._obs_persistence(s, "32.1.0")]
     win_res = vrp.produce([win("25H2", "26200.8524", "KB5089573", "2026-05-27T00:00:00Z"),
-                           win("25H2", "26200.9818", "KB5134140", "2026-10-28T00:00:00Z", win_notes)], {})
-    wc = [(c["verdict"], c["new_in_this_version"], c["reason"]) for c in win_res.candidates]
-    regression = by.get(P6_PERSISTENT[1])
-    scopes = {c["failure"]: c["scope"] for c in res.candidates}
-    history_kept_out = [scopes.get(s) for s in (P6_PERSISTENT[0], P6_PERSISTENT[2])]
-    check("VRP-V11 a defect the vendor calls carried over is PERSISTENT, never new or caused: review 2's Q2 ('in "
-          "32.1.0 and earlier'), 'did not work since 31.0.0', and the G38 WS2 review's phrasings -- 'that also "
-          "occurred in earlier versions' (rendered S3), '(a regression in 31.0.0)', 'which existed in previous "
-          "versions', 'as in 32.0.4', '(also seen in 31.1.2)', an older OBS version named anywhere ('first reported "
-          "with 31.1.2'), 'ever since the first release' -- are TEST FIRST on 32.1.0 saying the problem persists, as "
-          "is a Microsoft known issue that "
-          "'also affects earlier updates'; none is WAIT and no reason says new, caused, introduced or originates. A "
-          "causal 'since' ('since the output was freed twice') and a platform's version ('on macOS 14.4.1') are not "
-          "carry-over: those stay WAIT, new in 32.1.0. The carry-over remark stays out of the scope ('when starting a "
-          "recording', not '... that also occurred in earlier versions')",
-          len(persist_reasons) == 2 + len(P6_PERSISTENT)
-          and history_kept_out == ["when starting a recording", "when starting a stream"]
-          and all(v == "TEST FIRST" and new is False and "persists" in reason for v, _s, new, reason in persist_reasons)
-          and regression is not None and "carried over from OBS 31.0.0" in regression[3]
-          and wc and all(v == "TEST FIRST" and new is False and "persists" in r for v, new, r in wc)
-          and not any(re.search(r"\b(?:new|caus\w*|introduc\w*|originat\w*)\b", r, re.I)
-                      for r in [x[3] for x in persist_reasons] + [x[2] for x in wc])
-          and all(n is not None and n[0] == "WAIT" and n[2] is True for n in new_ones),
-          f"q2={q2} since={since} persist={len(persist_reasons)} "
-          f"{[(s[:40], by.get(s, ('-',))[0]) for s in P6_PERSISTENT]} new={new_ones} win={wc}")
+                           win("25H2", "26200.9818", "KB5134140", "2026-10-28T00:00:00Z", "Base text.\n\n" + "\n".join(
+                               [HEADER_25H2, WIN_ALSO_EARLIER]))], {})
+    win_since = vrp.produce([win("25H2", "26200.8524", "KB5089573", "2026-05-27T00:00:00Z"),
+                             win("25H2", "26200.9818", "KB5134140", "2026-10-28T00:00:00Z", "Base text.\n\n" + "\n".join(
+                                 [HEADER_25H2, WIN_SINCE_JUNE]))], {})
+    win_q = [(q["kind"], q.get("target_build")) for r in (win_res, win_since) for q in r.review_queue]
+    new_ones = [by.get(s) for s in P6_NEW]
+    leaked = [c["scope"] for c in res.candidates if re.search(r"\b(?:that|which)\b|[(),]", c["scope"])]
+    check("VRP-V11 FAIL CLOSED ON WORDING (G38 WS2 review 2, MAJOR-3; brief items 3 and 7): a vendor WAIT ('new in this "
+          "version') is drafted only from a fully recognised statement. Every carried-over phrasing -- review 1's seven "
+          "('that also occurred in earlier versions', '(a regression in 31.0.0)', ', which existed in previous "
+          "versions', ', as in 32.0.4' ...), review 2's nine ('that has existed for a long time', ', a bug dating back "
+          "several releases', 'an old crash', '(not a regression)', 'that predates this release' ...), a causal "
+          "'since', 'did not work since 31.0.0' and 'earlier than the stream' -- is refused as unrecognised wording "
+          "and queued, never a candidate and never in a scope; review 2's carried-over phrasings never read as new; "
+          "'earlier' as plain English is not carry-over (_obs_persistence ''), so it can never be published as "
+          "'persists'. Fully recognised carry-over -- 'in 32.1.0 and earlier' -- is TEST FIRST saying the problem "
+          "persists, and a platform's version ('on macOS 14.4.1') is not an OBS version: WAIT, new in 32.1.0. A "
+          "Microsoft known issue whose text speaks about its history ('also affects earlier updates', 'since the "
+          "June update') is queued, never 'originates'",
+          q2 is not None and q2[0] == "TEST FIRST" and q2[2] is False and "persists" in q2[3]
+          and "carried over from earlier versions" in q2[3]
+          and not unqueued and not never_new and not leaked
+          and vrp._obs_persistence(EARLIER_PLAIN, "32.1.0") == "" and EARLIER_PLAIN not in by
+          and not any(c["verdict"] == "WAIT" and "persists" in c["reason"] for c in res.candidates)
+          and all(n is not None and n[0] == "WAIT" and n[2] is True for n in new_ones)
+          and not win_res.candidates and not win_since.candidates
+          and win_q == [("unrecognised_wording", "26200.8524")] * 2
+          and not any(re.search(r"\b(?:caus\w*|introduc\w*|originat\w*)\b", c["reason"], re.I)
+                      for c in res.candidates if not c["new_in_this_version"]),
+          f"q2={q2} unqueued={[s[:50] for s in unqueued]} never_new={never_new} leaked={leaked} "
+          f"earlier={vrp._obs_persistence(EARLIER_PLAIN, '32.1.0')!r} new={new_ones} win={win_q} "
+          f"wc={[(c['verdict'], c['reason'][:60]) for c in win_res.candidates + win_since.candidates]}")
     record = by.get("Fixed a crash in 32.1.0 when starting a recording with the replay buffer active")
     freeze = by.get(P7_CORE[0])
+    uncertain = sorted(s for s, k in kinds.items() if k == "uncertain_severity")
     check("VRP-V12 an OBS crash, freeze or hang is serious only on launch or in a core workflow: review 2's Q5 (a "
           "RARE crash when closing the About dialog) and a POSSIBLE crash in source properties go to the review queue, "
           "never to a page; a crash when closing the About dialog or while logging has no severity basis, nor has a "
@@ -508,10 +547,16 @@ def check_vendor_persistence() -> None:
           and ex.get("Fixed a crash in 32.1.0 when closing the About dialog") == "no_severity_basis"
           and ex.get("Fixed a crash in 32.1.0 when attempting to log info about a browser source crash") == "no_severity_basis"
           and ex.get("Fixed a crash in 32.1.0 when resizing the window") == "no_severity_basis"
-          and queued == ["Fixed a possible crash in 32.1.0 on Windows when opening source properties",
-                         "Fixed a rare crash in 32.1.0 when closing the About dialog"]
-          and all(q["kind"] == "uncertain_severity" and q["queue_key"] for q in res.review_queue),
-          f"record={record} freeze={freeze} ex={ex} queued={queued}")
+          and {"Fixed a possible crash in 32.1.0 on Windows when opening source properties",
+               "Fixed a rare crash in 32.1.0 when closing the About dialog"} <= set(uncertain),
+          f"record={record} freeze={freeze} ex={ex} uncertain={uncertain}")
+    hedged = {s: (ex.get(s), kinds.get(s)) for s in HEDGED}
+    check("VRP-V14 a crash the vendor HEDGES is never a WAIT (G38 WS2 review 2, LOW-1; rendered T4; reviewer mutant "
+          "MM21): 'a crash that could occur when stopping a stream', 'may happen', 'might occur', 'in some cases', "
+          "'which rarely happens' are each refused as UNCERTAIN severity -- the hedge itself is the reason, read on the "
+          "whole bullet -- and queued for a person; none is a candidate",
+          all(v == ("uncertain_severity", "uncertain_severity") for v in hedged.values())
+          and not any(s in by for s in HEDGED), str(hedged))
 
 
 # ------------------------------------------------------------------------ [I] install failures
@@ -591,8 +636,8 @@ def check_install() -> None:
     shared = "adobe-acrobat-reader,adobe-acrobat-pro"
     a1 = wrow(11, "Acrobat DC install fails on my Mac", "Acrobat DC install fails with Exit Code: 7 on El Capitan 10.11.3, "
               "the Creative Cloud app shows an error. ERROR: DW003", applicability=shared)
-    a2 = wrow(12, "Cannot install Acrobat Pro DC on Windows 10", "Installer stops with Exit Code: 7 after the "
-              "extraction step on a new Windows 10 machine. For example, ERROR: DW003", "2026-05-02", applicability=shared)
+    a2 = wrow(12, "Cannot install Acrobat Pro DC on Windows 10", "I'm on Windows 10. The installer stops with Exit "
+              "Code: 7 after the extraction step. For example, ERROR: DW003", "2026-05-02", applicability=shared)
     a3 = wrow(13, "Acrobat DC will not install on my iMac", "Exit Code: 7 again on my iMac, Creative Cloud says the "
               "install failed. ERROR: DW003", "2026-05-03", applicability=shared)
     pro_res, reader_res = install_run(pro, [a1, a2]), install_run(reader, [a1, a2])
@@ -741,8 +786,10 @@ def check_install_rows() -> None:
     why = {n: vrp.same_reporter(*rows) for n, rows in pairs.items()}
     gate = {n: len(vrp.independent_reporters(rows)[0]) for n, rows in pairs.items()}
     check("VRP-I9 the independence gate collapses DUPLICATES.md's L1 (26200.7623, live) and N2 (26200.7922) -- the "
-          "same misspelt sentences at two URLs -- to one reporter each, on the near-identical-text cue (I10)",
-          all(w == "near-identical text once templates are stripped" for w in why.values())
+          "same misspelt sentences at two URLs -- to one reporter each, on a copy cue (the shared passage, or I10's "
+          "near-identical text)",
+          all(w in ("near-identical text once templates are stripped", "a shared distinctive passage")
+              for w in why.values())
           and gate == {"L1": 1, "N2": 1}, f"{why} {gate}")
 
 
@@ -868,13 +915,14 @@ def check_install_subject() -> None:
           "OBJECT is other software, the update named after it or before it ('I can't install the new Realtek driver "
           "since KB...', 'unable to install Office after KB...', 'Since KB... I can't install the ... driver'), so the "
           "Dell / HP pair and the rendered S2 pair fire nothing; codes come only from install-error context -- never "
-          "a bugcheck (HYPERVISOR_ERROR 0x20001) -- and are read when glued to the next word, in the sentence after "
-          "the failure, under a localized 'install error' label; updates named together share the failure",
+          "a bugcheck (HYPERVISOR_ERROR 0x20001) -- and are read when glued to the next word and in the sentence after "
+          "the failure; updates named together share the failure; 'Can't install it' names no update (round 3: an "
+          "object that is not this update named is foreign), so the Italian row is refused",
           not got["q1a"]["ok"] and not got["q1b"]["ok"] and not got["printer"]["ok"] and not fires
           and not any(got[n]["ok"] for n in ("p4a", "p4b", "p4c", "p4kb", "s2a", "s2b")) and not fires_p4
           and got["kept"]["ok"] and got["kept"]["codes"] == ["0x80070103"]
           and got["crash"]["codes"] == ["0x800f0922"] and got["glued"]["codes"] == ["0x800f0991"]
-          and got["follow"]["codes"] == ["0x800f0991"] and got["italian"]["codes"] == ["0x80070002"]
+          and got["follow"]["codes"] == ["0x800f0991"] and not got["italian"]["ok"]
           and got["both"]["ok"] and got["both"]["codes"] == ["0x800f0991"],
           str({n: (v["ok"], v["codes"], v["why"][:40]) for n, v in got.items()}) + f" fires_p4={len(fires_p4)}")
 
@@ -885,15 +933,21 @@ def check_install_grouping() -> None:
                  report_title=R2["report_title"].replace("0x800f0991", "0x80073712"))
     strict = install_run(KBP, [R1, other])
     lenient = install_run(KBP, [R1, other], install_grouping="lenient")
-    rollback = install_run(KBP, [dict(R1, report_text_excerpt=R1["report_text_excerpt"] + " It rolls back after the "
-                                      "restart."),
-                                 dict(other, report_text_excerpt=other["report_text_excerpt"] + " Each time it rolls "
-                                      "back after restarting.")])
+    coded_rollback = install_run(KBP, [dict(R1, report_text_excerpt=R1["report_text_excerpt"] + " It rolls back after "
+                                            "the restart."),
+                                       dict(other, report_text_excerpt=other["report_text_excerpt"] + " Each time it "
+                                            "rolls back after restarting.")])
+    rollback = install_run(KBP, [wrow(5, "KB5099999 rolls back", "KB5099999 fails to install on my Dell laptop and rolls "
+                                      "back after the restart."),
+                                 wrow(6, "KB5099999 undoing changes", "KB5099999 keeps failing to install on my HP laptop, "
+                                      "it rolls back every time.", "2026-05-02")])
     rb = install_cands(rollback)
     check("VRP-I12 strict install grouping is the default (A3): two separate incidents with DIFFERENT error codes are "
-          "not one problem -- no candidate, refused as sharing no characteristic and queued; the same two sharing a "
-          "named stage (it rolls back) are one problem; A1's lenient reading exists only to be measured",
-          vrp.INSTALL_GROUPING == "strict" and not install_cands(strict)
+          "not one problem -- no candidate, refused as sharing no characteristic and queued -- and a stage every "
+          "failed update shows (it rolls back) never joins two rows whose codes differ (G38 WS2 review 2, probes N5a "
+          "and N5c); two separate incidents that state NO code and both roll back are one problem; A1's lenient "
+          "reading exists only to be measured",
+          vrp.INSTALL_GROUPING == "strict" and not install_cands(strict) and not install_cands(coded_rollback)
           and any(e["excluded"] == "no_shared_failure_characteristic" for e in strict.excluded)
           and any(q["class"] == vrp.INSTALL_CLASS for q in strict.review_queue)
           and len(install_cands(lenient)) == 1 and len(rb) == 1 and rb[0]["problem_key"] == "rolls back"
@@ -921,8 +975,8 @@ def check_acrobat_rows() -> None:
     # P5a: the SPECIFIC installer errors differ (DW003/DW006 on a Mac, DW071 on Windows 10); only the generic Exit
     # Code 7 is shared. P5b: the same specific error on both (a control: one problem).
     p5a = [wrow(75, "Install fails on Mac", "Acrobat Pro DC will not install on my Mac." + ACRO_TAIL + "DW003, DW006"),
-           wrow(76, "Installation failed error DW071", "Windows 10 clean install, Acrobat DC fails installation:"
-                + ACRO_TAIL + "DW071", "2026-05-02")]
+           wrow(76, "Installation failed error DW071", "I'm on Windows 10 (a clean install). Acrobat DC fails "
+                "installation:" + ACRO_TAIL + "DW071", "2026-05-02")]
     p5b = [p5a[0], dict(p5a[1], report_title="Installation failed error DW003",
                         report_text_excerpt=p5a[1]["report_text_excerpt"].replace("DW071", "DW003"))]
     no_code = [wrow(77, "Acrobat Pro DC fails on my Mac", "Acrobat Pro DC fails to install on my Mac, Exit Code: 7."),
@@ -980,7 +1034,7 @@ def check_one_machine() -> None:
     s1_dropped = vrp.independent_reporters(s1)[1]
     same_stall = vrp.same_reporter(
         wrow(89, "x", "KB5099999 fails to install on my Dell XPS laptop, it stops at 35% every time."),
-        wrow(90, "y", "Windows Update halts at 35% while installing KB5099999 on this XPS from Dell; tried SFC, DISM "
+        wrow(90, "y", "Windows Update halts at 35% while installing KB5099999 on my XPS from Dell; tried SFC, DISM "
              "and a clean boot without luck."))
     check("VRP-I14 what ONE person on ONE machine shows twice is never a second incident: a retry that stops at "
           "another percentage (P3a), a CPU at 100% beside an install at 20% (P3b), the same Mac before and after an "
@@ -1008,10 +1062,11 @@ def check_copy_clusters() -> None:
     """AUTH_V2_38 WS2 items 1 and 2 over clusters (review P2b; reviewer mutants RM5, RM6, RM7)."""
     common = ("Something didn't go as planned. No need to worry, undoing changes. Please keep your computer on. "
               "We couldn't complete the updates, undoing changes, don't turn off your computer.")
-    dell = wrow(91, "KB5099999 fails on Dell XPS", "My Dell XPS 13 cannot install KB5099999, error 0x800f0922. " + common)
-    lenovo = wrow(92, "KB5099999 fails on ThinkPad", "ThinkPad T14 here. KB5099999 failed to install, 0x800f0922. "
-                  + common, "2026-05-02")
-    bridge = wrow(93, "Same", "KB5099999 failed to install, 0x800f0922. " + common, "2026-05-03")
+    dell = wrow(91, "KB5099999 fails", "My Dell XPS 13 cannot install KB5099999, error 0x800f0922 again.")
+    lenovo = wrow(92, "KB5099999 fails", "My ThinkPad T14 cannot install KB5099999, error 0x800f0922 again.",
+                  "2026-05-02")
+    bridge = wrow(93, "KB5099999 fails", "Cannot install KB5099999, error 0x800f0922 again.", "2026-05-03")
+    del common
     bridged = vrp.independent_reporters([dell, lenovo, bridge])
     # One row names a Dell, the other a Dell AND an HP: they can be one machine (overlap is not a conflict).
     overlap = install_run(KBP, [wrow(94, "KB5099999 install error 0x800f0991", "KB5099999 failed to install with error "
@@ -1029,8 +1084,9 @@ def check_copy_clusters() -> None:
                                          "Windows forum.")),
               vrp.same_reporter(R1, dict(R2, report_text_excerpt=R2["report_text_excerpt"] + " Reposting since nobody "
                                          "replied.")))
-    check("VRP-I15 copy detection and conservative grouping over CLUSTERS: a detail-less third row quoting the same "
-          "error text never bridges a Dell and a ThinkPad incident into one report (P2b: two stay two); rows whose "
+    check("VRP-I15 copy detection and conservative grouping over CLUSTERS: a detail-less third row that is "
+          "near-identical to both never bridges a Dell and a ThinkPad incident into one report (P2b: two stay two -- "
+          "on the weak cues; a shared long passage is a copy whatever machines it names, VRP-I17); rows whose "
           "computers overlap ('my Dell' / 'my Dell and my HP') can be one machine, so they are not two; a copy of a "
           "copy is one report -- a chain A~B~C whose ends carry different reporter ids and share nothing directly "
           "counts once; a declared cross-post or re-post is one report even when the rows are compared directly",
@@ -1040,6 +1096,221 @@ def check_copy_clusters() -> None:
           and direct == ("a declared cross-post", "a declared cross-post"),
           f"bridged={[r['id'] for r in bridged[0]]} overlap={len(install_cands(overlap))} "
           f"chain={[r['id'] for r in chain_kept]} direct={direct}")
+
+
+# G38 WS2 review 2 (round 3 of AUX-099): fail closed instead of adding phrases. Probe shapes from
+# g38ws2rev2/tools/py/new_probes.py and obj_probes.py, re-pointed at this suite's KB5099999 page.
+ACRO_DW003 = ACRO_TAIL + "DW003"
+
+
+def check_own_machine_identity() -> None:
+    """Brief item 1 (review 2, MAJOR-1): identity details come ONLY from the reporter's own-machine statements."""
+    dell = wrow(101, "KB5099999 fails on my Dell XPS 15", "KB5099999 fails to install with error 0x800f0922 on my Dell "
+                "XPS 15.")
+    x64 = wrow(107, "KB5099999 x64", "KB5099999 failed to install with error 0x800f0922. System type 64-bit operating "
+               "system, x64-based processor.", "2026-05-02")
+    not_own = {  # N3a-d: an app, another app, a third party, an update title and a file path
+        "app": (dell, wrow(102, "May update still failing", "Update KB5099999 keeps failing to install, error "
+                           "0x800f0922. Microsoft PC Manager says the update service is healthy.", "2026-05-03")),
+        "my app": (dell, wrow(103, "May update", "KB5099999 fails to install, error 0x800f0922. My Microsoft PC Manager "
+                              "app says all is fine.", "2026-05-03")),
+        "remote desktop": (dell, wrow(104, "Remote help", "I connect with Microsoft Remote Desktop to the office. "
+                                      "KB5099999 failed to install with 0x800f0922 again.", "2026-05-03")),
+        "third party": (dell, wrow(105, "Same error again", "KB5099999 fails to install again with 0x800f0922. My "
+                                   "brother's HP laptop took it without problems.", "2026-05-03")),
+        "title and path": (x64, wrow(106, "2026-05 Cumulative Update for Windows 11 Version 25H2 for arm64-based Systems "
+                                     "(KB5099999) fails", "KB5099999 failed to install, 0x800f0922. The log points to "
+                                     "C:\\Program Files (x86)\\Common Files.", "2026-05-03")),
+    }
+    refused = {n: [c["independence_basis"] for c in install_cands(install_run(KBP, list(rows)))]
+               for n, rows in not_own.items()}
+    mac_q = [wrow(121, "Acrobat DC install fails Windows 10", "I'm on Windows 10. Acrobat Pro DC will not install."
+                  + ACRO_DW003),
+             wrow(122, "Still Exit Code 7", "The installer still ends with Exit Code: 7, ERROR: DW003. Is the Mac "
+                  "download any different? I only have this one PC.", "2026-05-03")]
+    own = {  # the three own-machine forms the grammar reads
+        "I'm on": [dell, wrow(111, "KB5099999 install error", "I'm on a Surface Laptop 7. KB5099999 failed to install, "
+                              "error 0x800f0922.", "2026-05-03")],
+        "I have": [dell, wrow(113, "x", "I have a ThinkPad T14 and KB5099999 fails to install, 0x800f0922 each time.",
+                              "2026-05-03")],
+        "system information": [wrow(114, "x", "KB5099999 fails to install with 0x800f0922. Edition Windows 11 Pro Version "
+                                    "25H2"),
+                               wrow(115, "y", "KB5099999 fails to install with 0x800f0922. Edition Windows 11 Home "
+                                    "Version 25H2", "2026-05-03")],
+        "my Mac / I'm on Windows 10": [mac_q[0], wrow(123, "Acrobat on my Mac", "Acrobat Pro DC will not install on my "
+                                                      "Mac." + ACRO_DW003, "2026-05-03")],
+    }
+    fired = {n: [c["independence_basis"] for c in install_cands(install_run(ACRO_PRO if "Mac" in n else KBP, rows))]
+             for n, rows in own.items()}
+    check("VRP-I16 identity comes ONLY from the reporter's own-machine statements (G38 WS2 review 2, MAJOR-1; brief item "
+          "1): an app ('Microsoft PC Manager', 'my Microsoft PC Manager app', 'Microsoft Remote Desktop'), a third "
+          "party's computer ('my brother's HP laptop'), an update title ('for arm64-based Systems') and a file path "
+          "('Program Files (x86)') never make a second machine, and neither does a question about another download "
+          "('Is the Mac download any different?', N3e) -- no candidate; 'I'm on a Surface Laptop 7', 'I have a ThinkPad "
+          "T14', two system-information lines ('Edition Windows 11 Pro' / 'Home') and 'my Mac' beside 'I'm on "
+          "Windows 10' do",
+          all(v == [] for v in refused.values()) and not install_cands(install_run(ACRO_PRO, mac_q))
+          and fired == {"I'm on": [["device"]], "I have": [["device"]], "system information": [["edition"]],
+                        "my Mac / I'm on Windows 10": [["os"]]},
+          f"refused={refused} mac_q={[c['id'] for c in install_cands(install_run(ACRO_PRO, mac_q))]} fired={fired}")
+
+
+def check_copy_over_identity() -> None:
+    """Brief item 1: an identity conflict never overrides a strong text-copy cue; reporter ids compare per site."""
+    passage = ("after the restart the screen sits on working on updates for a long time and then it says "
+               "undoing changes")
+    n1a = [wrow(131, "KB5099999 fails", "KB5099999 fails to install with 0x800f0922 on my Dell laptop, " + passage + "."),
+           wrow(132, "Help: May update", "Help! KB5099999 won't install (0x800f0922). " + passage + ". This is my HP "
+                "laptop.", "2026-05-03")]
+    n2a = [wrow(133, "KB5099999 fails 0x800f0922", "KB5099999 fails to install with error 0x800f0922 on my Dell XPS 13."),
+           wrow(134, "KB5099999 fails 0x800f0922", "KB5099999 fails to install with error 0x800f0922 on my ThinkPad X1.",
+                "2026-05-03")]
+    sites = [wrow(135, "KB5099999 install error", "KB5099999 fails to install with 0x800f0922 every time.",
+                  url="https://learn.test/q/135", source_reporter_id="alice-123"),
+             wrow(136, "Windows 11 May update", "KB5099999 failed to install, error 0x800f0922 again today.", "2026-05-03",
+                  url="https://techcommunity.test/t/136", source_reporter_id="4471")]
+    same_site = [sites[0], dict(sites[1], source_url="https://learn.test/q/136")]
+    got = {"n1a": (vrp.same_reporter(*n1a), [c["id"] for c in install_cands(install_run(KBP, n1a))]),
+           "n2a": (vrp.same_reporter(*n2a), [c["independence_basis"] for c in install_cands(install_run(KBP, n2a))]),
+           "sites": [c["id"] for c in install_cands(install_run(KBP, sites))],
+           "same site": [c["independence_basis"] for c in install_cands(install_run(KBP, same_site))]}
+    check("VRP-I17 a strong copy cue beats an identity conflict (brief item 1): a re-post that keeps a long distinctive "
+          "passage stays ONE report even when the two copies name different own machines (N1a: a Dell, then an HP) -- "
+          "no candidate; the weak cues stay conservative, so two short near-identical rows from a Dell and a ThinkPad "
+          "remain two (N2a); source reporter ids are compared only within one site, so ids from two sites never make "
+          "two reporters (N3f), while two ids of one site do",
+          got == {"n1a": ("a shared distinctive passage", []), "n2a": ("", [["device"]]), "sites": [],
+                  "same site": [["source_reporter_id"]]}, str(got))
+
+
+# obj_probes.py (review 2, MAJOR-2), verbatim but for the KB, plus an intransitive foreign subject and another month.
+OBJ_REFUSED = [
+    "Unable to install WSL since KB5099999, it fails with 0x800f0922.",
+    "I can't install Zoom since KB5099999, error 0x80070643.",
+    "Cannot install Visual Studio 2022 after KB5099999, error 0x80070643.",
+    "Since KB5099999 I'm unable to install iTunes, error 0x80070643.",
+    "Failed to install Docker Desktop after KB5099999 with 0x80070643.",
+    "Unable to install Hyper-V since KB5099999: 0x800f0922.",
+    "Can't install Python 3.13 since KB5099999 (0x80070643).",
+    "After KB5099999 the 25H2 feature update fails to install with 0x800f0922.",
+    "After KB5099999 the next update fails to install with 0x800f0922.",
+    "After installing KB5099999, the .NET update fails to install with 0x800f0922.",
+    "After installing KB5099999, the Defender update fails to install with 0x800f0922.",
+    "After KB5099999 the driver update fails to install with 0x800f0922.",
+    "Since KB5099999 Zoom fails to install, error 0x80070643.",
+    "After KB5099999 the June update fails to install with 0x800f0922.",
+    "Since KB5099999 the security update fails to install with 0x800f0922.",
+]
+OBJ_ACCEPTED = [
+    "KB5099999 fails to install with 0x800f0922.",
+    "Unable to install the update KB5099999, 0x800f0922.",
+    "After KB5099999 the optional update fails to install with 0x800f0922.",
+    "2026-05 Cumulative Update Preview for Windows 11 Version 25H2 (KB5099999) (26200.5000) Install error - 0x800f0922",
+    "The May preview update KB5099999 keeps failing to install, 0x800f0922.",
+    "2026-05 Security Update (KB5099999) (26200.5000) fails to install with 0x800f0922.",
+]
+
+
+def check_install_allow_list() -> None:
+    """Brief item 2 (review 2, MAJOR-2): what fails to install is this update only by an ALLOW-LIST."""
+    refused = [t for t in OBJ_REFUSED if vrp.windows_install_row(wrow(0, "", t), KBP)["ok"]]
+    accepted = [t for t in OBJ_ACCEPTED if not vrp.windows_install_row(wrow(0, "", t), KBP)["ok"]]
+    b_page = dict(KBP, update_type="2026-05 B")
+    optional_b = vrp.windows_install_row(wrow(0, "", OBJ_ACCEPTED[2]), b_page)["ok"]
+    t2 = [wrow(171, "Start menu broken after KB5099999", "The Start menu stopped opening. Separately, since KB5099999 "
+               "I'm unable to install iTunes on my Dell XPS 13, error 0x80070643 every time."),
+          wrow(172, "Taskbar broken after KB5099999", "Also, after installing KB5099999 the .NET update fails to install "
+               "with 0x80070643 on my ThinkPad X1.", "2026-05-02")]
+    check("VRP-I18 the install subject and object are an ALLOW-LIST (G38 WS2 review 2, MAJOR-2; brief item 2): review "
+          "2's fifteen probe wordings -- other software as the object ('unable to install WSL / Zoom / Visual Studio "
+          "2022 / iTunes / Docker Desktop / Hyper-V / Python 3.13 since KB...'), '<noun> update' naming another update "
+          "('the .NET / Defender / driver / next / 25H2 feature update'), another subject ('Since KB... Zoom fails to "
+          "install'), another month ('the June update' on a May page), another release type ('the security update' on "
+          "a preview page) -- are all refused, and the rendered T2 pair fires nothing; this update's own name still "
+          "counts: its KB, 'the update', its own qualifiers ('the optional update' on a D page, refused on a B page), "
+          "and the names Windows Update prints ('2026-05 Security Update (KB...)')",
+          not refused and not accepted and optional_b is False and not install_cands(install_run(KBP, t2)),
+          f"accepted wrongly={refused} refused wrongly={accepted} optional on B={optional_b}")
+
+
+def check_acrobat_identity() -> None:
+    """Brief item 6 (review 2, LOW-3): an Acrobat row about another version or the other product is refused."""
+    page_version = ACRO_PRO["update_version"]
+    other_version = [
+        wrow(141, "Acrobat DC 15.020.20039 update won't install", "On my Mac the Acrobat Pro DC 15.020.20039 updater "
+             "fails:" + ACRO_DW003),
+        wrow(142, "Acrobat 2015 classic installer fails", "I'm on Windows 10: the Acrobat 2015 (Classic) 15.006.30279 "
+             "installer fails," + ACRO_DW003, "2026-05-03"),
+        wrow(143, "Acrobat XI", "Acrobat XI will not install on my Mac." + ACRO_DW003),
+        wrow(144, "two-part", "Acrobat DC 15.020 fails on my Mac." + ACRO_DW003)]
+    reader_only = [wrow(145, "Reader DC won't install", "Adobe Reader DC will not install on my Mac," + ACRO_DW003),
+                   wrow(146, "Reader install error", "I'm on Windows 10. Acrobat Reader DC fails with" + ACRO_DW003,
+                        "2026-05-03")]
+    same = wrow(147, "x", f"Acrobat Pro DC {page_version} will not install on my Mac." + ACRO_DW003)
+    why = {"version": [vrp.acrobat_install_row(r, ACRO_PRO["product_id"], page_version)["why"] for r in other_version],
+           "reader": [vrp.acrobat_install_row(r, ACRO_PRO["product_id"], page_version)["why"] for r in reader_only],
+           "pro on reader": vrp.acrobat_install_row(same, "adobe-acrobat-reader", page_version)["why"]}
+    runs = {"N4a": install_run(ACRO_PRO, other_version[:2]), "N4b": install_run(ACRO_PRO, reader_only)}
+    check("VRP-I19 an Acrobat row that names ANOTHER Acrobat version ('15.020.20039', '15.006.30279', '15.020') or "
+          "generation ('Acrobat XI'), or only the OTHER product (Reader on the Pro page, Acrobat Pro on the Reader "
+          "page), is refused, as Windows refuses another KB (G38 WS2 review 2, LOW-3; brief item 6): review 2's N4a and "
+          "N4b give no candidate; a row naming this very version still counts",
+          all(w.startswith("the row names another Acrobat version") for w in why["version"])
+          and why["reader"] == ["the row names the other Acrobat product only"] * 2
+          and why["pro on reader"] == "the row names the other Acrobat product only"
+          and vrp.acrobat_install_row(same, ACRO_PRO["product_id"], page_version)["ok"]
+          and not any(install_cands(r) for r in runs.values()), str(why))
+
+
+def check_declared_copies() -> None:
+    """Brief item 8 (review 2, LOW-5): explicit copy declarations, a supplement to item 1."""
+    base = (wrow(181, "KB5099999 fails 0x800f0922", "KB5099999 fails to install with error 0x800f0922 on my Dell XPS 13."),
+            wrow(182, "KB5099999 fails 0x800f0922", "KB5099999 fails to install with error 0x800f0922 on my ThinkPad X1.",
+                 "2026-05-03"))
+    declarations = ["I asked the same question on the Tech Community last week.",
+                    "This is a copy of my post on the Windows forum.", "Duplicate of my question from yesterday.",
+                    "Copying my question from the Tech Community here:"]
+    why = [vrp.same_reporter(base[0], dict(base[1], report_text_excerpt=base[1]["report_text_excerpt"] + " " + d))
+           for d in declarations]
+    runs = [install_cands(install_run(KBP, [base[0], dict(base[1], report_text_excerpt=base[1]["report_text_excerpt"]
+                                                           + " " + d)])) for d in declarations]
+    check("VRP-I20 explicit copy declarations ('I asked the same question on ...', 'a copy of my post', 'duplicate of my "
+          "question', 'copying my question from ...') make a row a declared copy -- even beside conflicting own "
+          "machines -- so it never counts as a second reporter (G38 WS2 review 2, LOW-5; brief item 8, a supplement to "
+          "item 1)", why == ["a declared cross-post"] * 4 and not any(runs) and install_cands(install_run(KBP, list(base))),
+          f"{why} {[len(r) for r in runs]}")
+
+
+def check_codes_before_stages() -> None:
+    """Review 2's probes N5a / N5c: a stage every failed update shows never joins two different codes."""
+    n5a = [wrow(151, "x", "KB5099999 fails to install with error 0x800f0922 on my Dell XPS 13. We couldn't complete the "
+                "updates, undoing changes."),
+           wrow(152, "y", "KB5099999 failed to install with error 0x80070002 on my ThinkPad X1. It rolls back after the "
+                "restart.", "2026-05-03")]
+    n5c = [wrow(153, "x", "KB5099999 fails to install with error 0x800f0922 on my Dell XPS 13, it gets to 100% then "
+                "fails."),
+           wrow(154, "y", "KB5099999 failed to install with 0x80070002 on my ThinkPad X1; download goes to 100% and then "
+                "error.", "2026-05-03")]
+    groups = {n: sorted(vrp.install_groups([(r, vrp.windows_install_row(r, KBP)) for r in rows]))
+              for n, rows in (("n5a", n5a), ("n5c", n5c))}
+    check("VRP-I21 a row that states an error code groups on its code only (G38 WS2 review 2, probes N5a and N5c): two "
+          "separate machines with DIFFERENT codes that both roll back, or both reach 100%, are not one problem -- no "
+          "candidate",
+          groups == {"n5a": ["error 0x80070002", "error 0x800f0922"], "n5c": ["error 0x80070002", "error 0x800f0922"]}
+          and not install_cands(install_run(KBP, n5a)) and not install_cands(install_run(KBP, n5c)), str(groups))
+
+
+def check_install_context_codes() -> None:
+    """Review 2, LOW-7 (reviewer mutant MM12): a code outside install-error context is not this update's."""
+    printer = wrow(161, "KB5099999 fails to install", "KB5099999 fails to install on my Dell XPS 13. Separately my "
+                   "printer shows 0x00000709 when I print.")
+    store = wrow(162, "KB5099999 fails to install", "KB5099999 won't install on my Dell XPS 13. Zoom gives error code "
+                 "0x80070643 too.")
+    got = {n: vrp.windows_install_row(r, KBP) for n, r in (("printer", printer), ("store", store))}
+    check("VRP-I22 codes only in install-error context (review 2's LOW-3 fix, pinned: reviewer mutant MM12): a code in "
+          "the sentence after the failure that names something else ('my printer shows 0x00000709', 'Zoom gives error "
+          "code 0x80070643') is not listed for this update",
+          all(v["ok"] and v["codes"] == [] for v in got.values()), str(got))
 
 
 # ------------------------------------------------------------------------ [P] placeholder
@@ -1215,6 +1486,36 @@ def check_writers(tmp: Path) -> None:
           "page (the drift that never cleared)",
           got[False] == (("INSUFFICIENT DATA", ""),) * 3 and got[True][0] == got[True][1] == got[True][2]
           and got[True][0][0] == "WAIT", str(got))
+    # G38 WS2 review 2, LOW-7 (reviewer mutant MM24): beside a SUPPORTED reviewed entry the writers still add the
+    # candidates -- never "the reviewed entries, or else the candidates".
+    reviewed = {"id": "obs-studio:31.1.0:writer-probe", "product_id": OBS, "update_version": "31.1.0",
+                "verdict": "TEST FIRST", "reason_class": "corroborated_issue", "scope": "if you use Studio Mode",
+                "reason": "Two users report that Studio Mode stops responding in OBS 31.1.0.",
+                "evidence": [{"id": "probe-1", "source_url": "https://example.test/1"},
+                             {"id": "probe-2", "source_url": "https://example.test/2"}],
+                "new_in_this_version": False, "reviewed_at": "2026-11-13", "basis": "VRP-S7 probe"}
+    saved_reasons = (vr.load_reasons, vr.support_problems)
+    both = {}
+    try:
+        vr.load_reasons = lambda *a, **k: [dict(reviewed)]
+        vr.support_problems = lambda entry, rows, confirmations=None: []
+        acr.GENERATED_DIR = gen
+        acr._ALL_ENTRY_RECORDS.clear()
+        with switch(True):
+            a = acr._policy_decision(OBS, "31.1.0", "", [], dict(page))[0]
+            b = bce.policy_decision(OBS, "31.1.0", "", [], dict(page), index)[0]
+            want = vp.page_supported_reasons(dict(page), [], [dict(reviewed)], recs)
+        both = {"apply": sorted(str(r.get("id")) for r in a.reasons),
+                "build": sorted(str(r.get("id")) for r in b.reasons), "want": sorted(str(r.get("id")) for r in want)}
+    finally:
+        vr.load_reasons, vr.support_problems = saved_reasons
+        acr.GENERATED_DIR = saved_dir
+        acr._ALL_ENTRY_RECORDS[:] = saved_cache
+    check("VRP-S7 beside a supported REVIEWED entry, both record writers still gather the producer's candidates with "
+          "the switch ON, exactly as the projection does (G38 WS2 review 2, LOW-7: reviewer mutant MM24, 'candidates "
+          "only when the page has no reviewed reason', is caught here)",
+          both and both["apply"] == both["build"] == both["want"] and reviewed["id"] in both["want"]
+          and any(i.startswith("auto:") for i in both["want"]), str(both))
 
 
 _RENDER_RB = r"""
@@ -1546,13 +1847,55 @@ def exit7_grouping(real):
     return mutated
 
 
-# The persistence and declared-copy patterns as round 1 of AUX-099 shipped them (the phrase lists the review broke).
-OLD_PERSISTENT_RE = re.compile(
-    r"\b(?:and (?:earlier|older|prior|before)|or (?:earlier|older)|(?:and|or) (?:all )?(?:previous|prior|older|earlier) "
-    r"(?:versions?|releases?|builds?|updates?)|since\b|regression (?:from|since)|also affect\w*|still (?:present|"
-    r"occur\w*|happen\w*)|persist\w*|carried over|long-?standing|pre-?existing)", re.I)
+# The declared-copy pattern as round 1 of AUX-099 shipped it (the cue list the review broke).
 OLD_XPOST_RX = re.compile(r"(previously posted|also posted|cross-?post|posted (?:this|it) (?:on|in)|i recently posted|"
                           r"part 2|part two)")
+
+
+# Round 2's declared-copy cue list (before G38 WS2 review 2, LOW-5).
+ROUND2_XPOST_RX = re.compile(r"(previously posted|also posted|cross-?post|posted (?:this|it) (?:on|in)|i recently posted|"
+                             r"part 2|part two|follow(?:ing)?[- ]?up (?:on|to|from) my|\bre-?post(?:ing|ed|s)?\b|"
+                             r"posting (?:this |it )?again|(?:i )?posted (?:this |it )?(?:before|earlier|already|"
+                             r"yesterday|last week)|my (?:earlier|previous|original|last|other) (?:post|question|"
+                             r"thread|topic)|same as my (?:earlier|previous|other|original) )")
+
+
+def objects_unread(real):
+    """Before round 3 the object of a transitive install wording was a deny-list: here, not read at all."""
+    def mutated(text, allowed, own, page):
+        return True if allowed is vrp._OBJECT_ADVERBS else real(text, allowed, own, page)
+    return mutated
+
+
+def subjects_unread(real):
+    """The words between an update and intransitive install wording are not read (any subject is this update)."""
+    def mutated(text, allowed, own, page):
+        return True if allowed is vrp._SUBJECT_FILLER_WORDS else real(text, allowed, own, page)
+    return mutated
+
+
+def conflict_first(real):
+    """Round 2's order: an identity conflict ends the comparison before any text cue but a declaration or a log."""
+    def mutated(a, b, product_id=""):
+        why = real(a, b, product_id)
+        if why == "a shared distinctive passage" and vrp._conflicting(vrp.incident_details(a, product_id),
+                                                                     vrp.incident_details(b, product_id)):
+            return ""
+        return why
+    return mutated
+
+
+def stages_join_codes(real):
+    """Round 2's grouping: a row's named stages group it beside its codes."""
+    def mutated(rows, mode=""):
+        groups = real(rows, mode)
+        if (mode or vrp.INSTALL_GROUPING) == "strict":
+            for row, info in rows:
+                if not info.get("acrobat") and info.get("codes"):
+                    for stage in info.get("stages", []):
+                        groups.setdefault(stage, []).append(row)
+        return groups
+    return mutated
 
 
 def check_mutations(tmp: Path) -> None:
@@ -1561,7 +1904,7 @@ def check_mutations(tmp: Path) -> None:
     real_problems = vrp.candidate_problems
     gated = {"minor_lag", "narrow_cosmetic", "recoverable_preference_or_profile", "no_severity_basis"}
 
-    def acrobat_exit7_only(row, pid):
+    def acrobat_exit7_only(row, pid, version=""):
         """The Acrobat row check reduced to 'Exit Code 7 is shown' (no product, negation or other-product check)."""
         text = vrp._txt(row)
         return {"ok": bool(vrp._EXIT7_RX.search(text)), "why": "",
@@ -1660,18 +2003,18 @@ def check_mutations(tmp: Path) -> None:
         ("VX28 (item 1) the shared-distinctive-passage cue disabled (a reworded re-post goes undetected)",
          check_independence, [swap(vrp, "SHARED_PASSAGE_WORDS", 10 ** 6)]),
         ("VX29 (item 4) the install verb's subject is not checked (another program failing counts)",
-         check_install_subject, [swap(vrp, "_install_subject", lambda text, span, refs, page_spans, other_spans:
-                                      vrp._owner_is_page(span, page_spans, other_spans))]),
+         check_install_subject, [swap(vrp, "_install_subject", lambda text, span, refs, page_spans, other_spans,
+                                      page=None: vrp._owner_is_page(span, page_spans, other_spans))]),
         ("VX30 (item 4) a crash or bugcheck code is read as an install error", check_install_subject,
          [swap(vrp, "_CRASH_CONTEXT_RX", NEVER)]),
         ("VX31 (item 4) updates named together: only the nearest one counts", check_install_subject,
          [swap(vrp, "_coordinated", lambda text, refs, i, step: refs[i][2])]),
         ("VX32 (item 5) lenient grouping by default: different error codes are one problem again",
          check_install_grouping, [swap(vrp, "INSTALL_GROUPING", "lenient")]),
-        ("VX33 (item 6) an OBS defect 'in V and earlier' / 'since' is new in V again", check_vendor_persistence,
-         [swap(vrp, "_PERSISTENT_RE", NEVER)]),
-        ("VX34 (item 6) a Microsoft issue that also affects earlier updates originates in this one again",
-         check_vendor_persistence, [swap(vrp, "_WIN_PERSISTENT_RE", NEVER)]),
+        ("VX33 (item 6; brief item 3) history words are no longer read (a causal 'since' is drafted as new)",
+         check_vendor_persistence, [swap(vrp, "_PERSISTENT_RE", NEVER)]),
+        ("VX34 (item 6; brief item 3) a Microsoft issue whose text speaks about its history originates in this one "
+         "again", check_vendor_persistence, [swap(vrp, "_WIN_HISTORY_RE", NEVER)]),
         ("VX35 (item 7) an OBS crash needs no core-workflow cue", check_vendor_persistence,
          [swap(vrp, "_OBS_CORE_FLOW_RE", re.compile(""))]),
         ("VX36 (item 7) a crash while logging or in a dialog counts as a core-flow crash", check_vendor_persistence,
@@ -1695,8 +2038,8 @@ def check_mutations(tmp: Path) -> None:
         ("VX43 (item 2) overlapping identity details ('my Dell' / 'my Dell and my HP') count as two machines",
          check_copy_clusters, [swap(vrp, "_conflicting", lambda a, b: [
              k for k in vrp.IDENTITY_DETAIL_KINDS if a.get(k) and b.get(k) and a[k] != b[k]])]),
-        ("VX44 (item 4, MAJOR-2) the install verb's OBJECT is not read (other software failing counts)",
-         check_install_subject, [swap(vrp, "_FOREIGN_OBJECT_RX", NEVER)]),
+        ("VX44 (item 4, MAJOR-2; brief item 2) the install verb's OBJECT is not read (other software failing counts)",
+         check_install_subject, [swap(vrp, "_only_fillers", objects_unread(vrp._only_fillers))]),
         ("VX45 (item 4, MAJOR-2) an Acrobat row saying the version installed counts", check_acrobat_rows,
          [swap(vrp, "_ACROBAT_NEGATION_RX", NEVER)]),
         ("VX46 (item 4, MAJOR-2) another Adobe product's Exit Code 7 counts for Acrobat", check_acrobat_rows,
@@ -1704,13 +2047,37 @@ def check_mutations(tmp: Path) -> None:
         ("VX47 (item 5, MAJOR-3) Acrobat rows group on the generic Exit Code 7 again", check_acrobat_rows,
          [swap(vrp, "install_groups", exit7_grouping(vrp.install_groups))]),
         ("VX48 (item 6, MAJOR-4) an older OBS version named anywhere in a bullet is not carry-over",
-         check_vendor_persistence, [swap(vrp, "_ANY_VERSION_RE", NEVER)]),
-        ("VX49 (item 6, MAJOR-4) persistence is round 1's phrase list ('earlier' / 'previous' anywhere is new)",
-         check_vendor_persistence, [swap(vrp, "_PERSISTENT_RE", OLD_PERSISTENT_RE)]),
-        ("VX50 (item 6) a causal 'since' reads as carry-over", check_vendor_persistence,
-         [swap(vrp, "_PERSISTENT_RE", re.compile(vrp._PERSISTENT_RE.pattern + r"|\bsince\b", re.I))]),
+         check_vendor, [swap(vrp, "_ANY_VERSION_RE", NEVER)]),
+        ("VX49 (brief item 7) 'earlier' / 'previous' count as carry-over anywhere (published as 'persists')",
+         check_vendor_persistence, [swap(vrp, "_CARRY_QUALIFIES_RE", vrp._CARRY_WORD_RE)]),
+        ("VX50 (brief item 3) the recognition grammar is off (a trailing remark is drafted as new)",
+         check_vendor_persistence, [swap(vrp, "_obs_unrecognised", lambda statement: "")]),
         ("VX51 (item 7, LOW-1) a freeze or hang needs no core-workflow cue", check_vendor_persistence,
          [swap(vrp, "classify_obs_statement", freeze_needs_no_core_flow(vrp.classify_obs_statement))]),
+        # Round 3 (G38 WS2 review 2): one mutant per change, beside the source mutants run outside the suite.
+        ("VX52 (brief item 1) identity read from ANY text again (an app, a path, a third party)",
+         check_own_machine_identity, [swap(vrp, "_own_machine_phrases", lambda text: [text])]),
+        ("VX53 (brief item 1) an identity conflict overrides the shared-passage cue again",
+         check_copy_over_identity, [swap(vrp, "COPY_CUES_OVER_IDENTITY", ("the same log URL",)),
+                                    swap(vrp, "same_reporter", conflict_first(vrp.same_reporter))]),
+        ("VX54 (brief item 1) source reporter ids are compared across sites", check_copy_over_identity,
+         [swap(vrp, "_ids_differ", lambda a, b: bool(a) and bool(b) and not (a & b))]),
+        ("VX55 (brief item 2) '<noun> update' names this update whatever the noun", check_install_allow_list,
+         [swap(vrp, "_update_np", lambda text, start, page, own: (None, start))]),
+        ("VX56 (brief item 2) another subject before intransitive wording is not read ('Zoom fails to install')",
+         check_install_allow_list, [swap(vrp, "_only_fillers", subjects_unread(vrp._only_fillers))]),
+        ("VX57 (brief item 4) a hedge is read only in the head qualifier (reviewer mutant MM21)",
+         check_vendor_persistence, [swap(vrp, "_UNCERTAIN_RE", NEVER)]),
+        ("VX58 (brief item 6) another Acrobat version counts", check_acrobat_identity,
+         [swap(vrp, "_acrobat_other_version", lambda text, version: "")]),
+        ("VX59 (brief item 6) the other Acrobat product counts", check_acrobat_identity,
+         [swap(vrp, "_READER_NAME_RX", NEVER), swap(vrp, "_PRO_NAME_RX", NEVER)]),
+        ("VX60 (brief item 8) the explicit copy declarations are gone (round 2's cue list)", check_declared_copies,
+         [swap(vrp, "_XPOST_RX", ROUND2_XPOST_RX)]),
+        ("VX61 (probes N5a / N5c) a shared stage joins two different codes again", check_codes_before_stages,
+         [swap(vrp, "install_groups", stages_join_codes(vrp.install_groups))]),
+        ("VX62 (reviewer mutant MM12) codes read outside install-error context", check_install_context_codes,
+         [swap(vrp, "windows_install_row", all_codes(vrp.windows_install_row))]),
     ]
     mutants: list = []
     for label, body, swaps in cases:
@@ -1745,6 +2112,13 @@ def run() -> int:
         check_acrobat_rows()
         check_one_machine()
         check_copy_clusters()
+        check_own_machine_identity()
+        check_copy_over_identity()
+        check_install_allow_list()
+        check_acrobat_identity()
+        check_declared_copies()
+        check_codes_before_stages()
+        check_install_context_codes()
         print("\n[P] the corroboration placeholder")
         check_placeholder()
         print("\n[N] purity")
