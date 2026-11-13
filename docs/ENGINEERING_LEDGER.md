@@ -5259,6 +5259,67 @@ crash / freeze severity, C2/C3 corpus, S6 writers; VX26..VX51 one per fix). New 
 (PS-L1..L8 the deploy ledger incl. the two-deploy and one-added-row proofs and the distinct-page count, P1/P2 public
 safety, N1..N3 never public / never a tracked writer / pages.yml steps, S1 the bare script; PX1..PX7).
 
+**Round 3 (G38 WS2 review 2: fail closed instead of adding phrases)** The second review still drew an install TEST
+FIRST from a second report whose machine nobody stated -- "Microsoft PC Manager" and "Microsoft Remote Desktop" read
+as a Surface, an update title ("x64-based Systems") and a path ("Program Files (x86)") as two architectures, "my
+brother's HP laptop" as the reporter's own, "Is the Mac download any different?" as a Mac -- and let an identity
+detail added to a re-post override the shared passage. It counted "the .NET / driver / next / feature update fails to
+install" and "unable to install WSL / Zoom / iTunes since KB..." as this update failing (the object rule was a
+deny-list, and "update" inside "<X> update" was credited to the page). Eight carried-over phrasings ("that has existed
+for a long time", "(not a regression)", "that predates this release" ...) still drafted WAIT "new", a crash that
+"could occur" became WAIT, "earlier than the stream" read as carry-over, invisible characters outside Cf / Cc / Zl /
+Zp / Zs (U+FE0F, U+034F, U+3164) still hid a reviewed verdict, Acrobat rows about another version or about Reader
+counted on a Pro page, and the shadow ledger keyed rules changes on a hand-bumped number. Round 3 answers none of this
+by adding the reviewer's phrasings to a list: each rule now drafts only from text it fully recognises, and refuses or
+queues the rest (producer version 5).
+- Independence: identity details come ONLY from the reporter's own-machine statements -- "my / our <computer>", "I'm
+  on / I'm running / I have <system>", system-information lines (`_own_machine_phrases`). Never from an app or product
+  name, a path, an update title, a question about another download or a third party; "microsoft" is no longer a
+  computer brand. A shared distinctive passage (and the same log) joins two rows whatever machines they name
+  (`COPY_CUES_OVER_IDENTITY`); the weaker cues stay conservative. Reporter ids are compared only within one site.
+  Explicit copy declarations ("a copy of my post", "duplicate of my question", "asked the same question on",
+  "copying my question from") are a supplement.
+- Install subject and object: an ALLOW-LIST (`_update_np`, `_only_fillers`). Install wording counts for this update
+  only when what fails to install is its KB, "the update", or "update" qualified by articles and this update's own
+  qualifiers (servicing month, release type, version line); a name its KB follows is that KB's. Any other word before
+  "update", any other object of a transitive wording and any other subject is foreign; unknown counts as foreign. The
+  clause after a failure lends its code only when it holds nothing but an error label.
+- Vendor WAIT only from a fully recognised statement: an OBS bullet must be the head plus one recognised tail of plain
+  words (`_obs_unrecognised`); anything left over -- a trailing "that / which" clause, a parenthesis, an aside, a
+  version number, a release noun, a history word -- is `unrecognised_wording`, queued, never a candidate and never in a
+  scope. "Earlier" / "previous" / "older" / "prior" count as carry-over only where they qualify a version or a
+  release. A Microsoft row that speaks about the issue's history is queued (`_WIN_HISTORY_RE`). A hedged crash
+  ("could", "may", "might", "in some cases", "rarely") is `uncertain_severity`, queued.
+- Acrobat rows that name another Acrobat version or generation, or only the other product, are refused.
+- A row that states an error code groups on its code only, so a shared "rolls back" or "reaches 100%" never joins
+  two different codes (review probes N5a / N5c).
+- Identity rule: every Unicode Default_Ignorable_Code_Point, the Hangul fillers and U+2800 are errors in product_id
+  and target_build without exception; in update_version U+FE0F and U+200D pass only inside an emoji sequence.
+- Shadow: the rules' version is a hash of the rule sources (`producer_shadow.rules_version`, RULE_SOURCES), computed by
+  the deploy script; a compact `seen` set (key -> origin, at most 50,000) makes an evicted item that returns a repeat;
+  the docstring now says what can still add a key (a reworded statement, another problem overtaking a page).
+
+**Measured, round 3** (corpus at 52ac8ef4 + this branch, 1,553 records) Candidates unchanged: the same 14 vendor
+candidate keys (7 Windows, 7 OBS), 0 install. Queue 26 -> 26 (25 install, 1 vendor uncertain); two install items
+changed problem (26200.9168 "rolls back" and 26300.9818 "error 0x800f081f" -> "no shared characteristic"); refusals
+`no_shared_failure_characteristic` 16 -> 18, `not_enough_independent_reporters` 9 -> 7. Install rows that qualify: 149
+-> 141 (8 refused: a pronoun or indirect object, "how to fix ... udate error", plural "updates", a title template). 0
+of 1,553 records fail the wider identity rule; the 30 non-ASCII titles pass. Switch OFF: a deploy-order build equals
+main's at 52ac8ef4 (1,863 files, 4 differ only in build timestamps, masked tree a0407a08... and projection 07fe73f8...
+on both, QA 0/0, both verifiers clean). Switch ON (test builds): QA 0 errors and the same 6 drift warnings as round 2
+(4 report-bearing pages, 2 security panels). With the reviewers' probes added -- review 2's T1-T4 and its all-probes
+script, review 1's S1-S4, and the data probes of reviews 1-2 and VERIFY_3 -- the only verdict change is OBS 32.1.0
+TEST FIRST "persists" (review 2's Q2, "in 32.1.0 and earlier", fully recognised). T1 and T2 draft nothing; T3's
+carried-over crash and S3 are queued as unrecognised wording; T4's "could occur" crash is queued as uncertain. p6x
+with U+FE0F, U+3164 or U+034F (switch ON) makes QA exit 1 with exactly one record_identity_invisible_character. Two
+simulated deploys over unchanged evidence: 14 / 26 baseline, then 0 new. One added row on Acrobat Pro 18.011.20055 (a
+reporter on Windows 10 with the Mac report's DW003) gives exactly one new prospective candidate, and the next deploy
+0; the projection is unchanged throughout.
+
+**Tests, round 3** `test_verdict_reason_producer.py` 93 -> 113 (V11 rewritten, V14, I16..I22, S7; VX52..VX62),
+`test_producer_shadow.py` 21 -> 26 (PS-L9, L10, S2; PX8, PX9), `test_growth3_verdict_policy.py` 146 -> 148 (G3-Q14
+widened; X56, X57).
+
 **Why deferred** Public activation needs the owner's separate approval (AUTH_V2_38 activation criteria: per reason
 class, at least 30 distinct prospective positive candidates with no unsupported recommendation plus an adversarial
 negative set; repeated shadow observations never count as independent validation). Still open before activation:
