@@ -5303,18 +5303,18 @@ queues the rest (producer version 5).
 candidate keys (7 Windows, 7 OBS), 0 install. Queue 26 -> 26 (25 install, 1 vendor uncertain); two install items
 changed problem (26200.9168 "rolls back" and 26300.9818 "error 0x800f081f" -> "no shared characteristic"); refusals
 `no_shared_failure_characteristic` 16 -> 18, `not_enough_independent_reporters` 9 -> 7. Install rows that qualify: 149
--> 141 (8 refused: a pronoun or indirect object, "how to fix ... udate error", plural "updates", a title template). 0
-of 1,553 records fail the wider identity rule; the 30 non-ASCII titles pass. Switch OFF: a deploy-order build equals
-main's at 52ac8ef4 (1,863 files, 4 differ only in build timestamps, masked tree a0407a08... and projection 07fe73f8...
-on both, QA 0/0, both verifiers clean). Switch ON (test builds): QA 0 errors and the same 6 drift warnings as round 2
-(4 report-bearing pages, 2 security panels). With the reviewers' probes added -- review 2's T1-T4 and its all-probes
-script, review 1's S1-S4, and the data probes of reviews 1-2 and VERIFY_3 -- the only verdict change is OBS 32.1.0
-TEST FIRST "persists" (review 2's Q2, "in 32.1.0 and earlier", fully recognised). T1 and T2 draft nothing; T3's
-carried-over crash and S3 are queued as unrecognised wording; T4's "could occur" crash is queued as uncertain. p6x
-with U+FE0F, U+3164 or U+034F (switch ON) makes QA exit 1 with exactly one record_identity_invisible_character. Two
-simulated deploys over unchanged evidence: 14 / 26 baseline, then 0 new. One added row on Acrobat Pro 18.011.20055 (a
-reporter on Windows 10 with the Mac report's DW003) gives exactly one new prospective candidate, and the next deploy
-0; the projection is unchanged throughout.
+-> 141 (8 refused: a pronoun or vague object -- "Can't install it", "this version" --, plural "updates", or unknown
+words between the update and the failure). 0 of 1,553 records fail the wider identity rule; the 30 non-ASCII titles
+pass. Switch OFF: a deploy-order build equals main's at 52ac8ef4 (1,863 files, 4 differ only in build timestamps,
+masked tree a0407a08... and projection 07fe73f8... on both, QA 0/0, both verifiers clean). Switch ON (test builds): QA
+0 errors and the same 6 drift warnings as round 2 (4 report-bearing pages, 2 security panels). With the reviewers'
+probes added -- review 2's T1-T4 and its all-probes script, review 1's S1-S4, and the data probes of reviews 1-2 and
+VERIFY_3 -- the only verdict change is OBS 32.1.0 TEST FIRST "persists" (review 2's Q2, "in 32.1.0 and earlier", fully
+recognised). T1 and T2 draft nothing; T3's carried-over crash and S3 are queued as unrecognised wording; T4's "could
+occur" crash is queued as uncertain. p6x with U+FE0F, U+3164 or U+034F (switch ON) makes QA exit 1 with exactly one
+record_identity_invisible_character. Two simulated deploys over unchanged evidence: 14 / 26 baseline, then 0 new. One
+added row on Acrobat Pro 18.011.20055 (a reporter on Windows 10 with the Mac report's DW003) gives exactly one new
+prospective candidate, and the next deploy 0; the projection is unchanged throughout.
 
 **Tests, round 3** `test_verdict_reason_producer.py` 93 -> 113 (V11 rewritten, V14, I16..I22, S7; VX52..VX62),
 `test_producer_shadow.py` 21 -> 26 (PS-L9, L10, S2; PX8, PX9), `test_growth3_verdict_policy.py` 146 -> 148 (G3-Q14
