@@ -469,6 +469,8 @@ def check_vendor_persistence() -> None:
                            win("25H2", "26200.9818", "KB5134140", "2026-10-28T00:00:00Z", win_notes)], {})
     wc = [(c["verdict"], c["new_in_this_version"], c["reason"]) for c in win_res.candidates]
     regression = by.get(P6_PERSISTENT[1])
+    scopes = {c["failure"]: c["scope"] for c in res.candidates}
+    history_kept_out = [scopes.get(s) for s in (P6_PERSISTENT[0], P6_PERSISTENT[2])]
     check("VRP-V11 a defect the vendor calls carried over is PERSISTENT, never new or caused: review 2's Q2 ('in "
           "32.1.0 and earlier'), 'did not work since 31.0.0', and the G38 WS2 review's phrasings -- 'that also "
           "occurred in earlier versions' (rendered S3), '(a regression in 31.0.0)', 'which existed in previous "
@@ -476,8 +478,10 @@ def check_vendor_persistence() -> None:
           "with 31.1.2') -- are TEST FIRST on 32.1.0 saying the problem persists, as is a Microsoft known issue that "
           "'also affects earlier updates'; none is WAIT and no reason says new, caused, introduced or originates. A "
           "causal 'since' ('since the output was freed twice') and a platform's version ('on macOS 14.4.1') are not "
-          "carry-over: those stay WAIT, new in 32.1.0",
+          "carry-over: those stay WAIT, new in 32.1.0. The carry-over remark stays out of the scope ('when starting a "
+          "recording', not '... that also occurred in earlier versions')",
           len(persist_reasons) == 2 + len(P6_PERSISTENT)
+          and history_kept_out == ["when starting a recording", "when starting a stream"]
           and all(v == "TEST FIRST" and new is False and "persists" in reason for v, _s, new, reason in persist_reasons)
           and regression is not None and "carried over from OBS 31.0.0" in regression[3]
           and wc and all(v == "TEST FIRST" and new is False and "persists" in r for v, new, r in wc)

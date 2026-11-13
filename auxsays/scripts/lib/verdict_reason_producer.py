@@ -177,6 +177,11 @@ _PERSISTENT_RE = re.compile(
     r"\bregression (?:from|since|in)\b|\balso (?:affect\w*|occur\w*|happen\w*|present|seen|existed|exists|reported)\b|"
     r"\bstill (?:present|occur\w*|happen\w*)|\bpersist\w*|\bcarried over\b|\blong-?standing\b|\bpre-?existing\b|"
     r"\bexist(?:ed|s)? (?:in|since|before)\b|\b(?:as|like) in (?:obs (?:studio )?)?v?\d", re.I)
+# A trailing carry-over remark in a "when ..." clause (", which existed in previous versions", "that also occurred in
+# earlier versions", "(also seen in 31.1.2)"): the defect's history, kept out of the scope.
+_PERSISTENCE_TAIL_RE = re.compile(
+    r"\s*,?\s*\b(?:that|which)\s+(?:also\s+)?(?:occurred|existed|happened|appeared|was present|were present)\b.*$|"
+    r"\s*\([^()]*\b(?:regression|also|earlier|previous|older|prior|since)\b[^()]*\)\s*$", re.I)
 # A three-part version number anywhere in a bullet, and the platforms / components whose own version numbers
 # are not OBS versions ("on macOS 14.4.1", "Qt 6.5.3").
 _ANY_VERSION_RE = re.compile(r"(?<![\w.])(\d+\.\d+\.\d+)(?![\w.]*\d)", re.ASCII)
@@ -259,8 +264,10 @@ def classify_obs_statement(statement: str) -> dict[str, str]:
         else:
             severity = "substantial_workflow_breakage" if launch or core else ""
         if when:
-            clause = when.group(1).strip().rstrip(".")
-            scope = f"when {clause}"
+            # The carry-over remark is about the defect's history, not the setup: "when starting a recording
+            # that also occurred in earlier versions" is scoped "when starting a recording".
+            clause = _PERSISTENCE_TAIL_RE.sub("", when.group(1).strip().rstrip(".")).strip()
+            scope = f"when {clause}" if clause else ""
             if os_name and f"on {os_name}" not in clause:
                 scope += f" on {os_name}"
         elif os_name:
