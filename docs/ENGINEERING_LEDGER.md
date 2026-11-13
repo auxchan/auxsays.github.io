@@ -5108,30 +5108,53 @@ when closing the About dialog included (review 2 LOW-2). With the switch on, the
 prose, so 29 `verdict_policy_drift` warnings never cleared (F3). Nothing was recorded across deploys, so an activation
 review could not tell a new case from the same case seen again. Separately, an identity field ending in U+200B
 ("15.010.20056" + zero-width space) silently dropped a page's reviewed TEST FIRST with QA quiet (review 2 LOW-7, P6).
+The review of the first repair (G38 WS2) still drew TEST FIRST from one person's retry that stopped at another
+percentage, from one Mac posting before and after an OS upgrade, from a driver or Office failing to install "since
+KB...", from another Adobe product's Exit Code 7 and from Acrobat reports of different installer errors grouped on
+that generic code; and WAIT "new" from OBS notes saying a crash "also occurred in earlier versions" and from a freeze
+when closing the About dialog.
 
 **Cause** Independence was a deny-list of copy cues (anything not caught counted as a second person); the install
 rule read wording and codes anywhere in a row; the vendor grammar had no persistence or core-flow notion; the writers
 gathered reasons in their own copy of the rule; the A4 ASCII-identity rule could not ship (673 live changelog-title
-versions fail it).
+versions fail it). The first repair then counted any differing detail as a separate incident (a percentage and an OS
+version included), read only the text BEFORE an install verb, grouped Acrobat on the installer's generic Exit Code 7,
+kept persistence a phrase list, and applied the core-flow rule to crashes only.
 
 **Fix** (all behind `PUBLIC_AUTO_ACTIVATION`, which stays OFF; producer version 4)
 - First commit: `record_identity_invisible_character`, a publication error for an invisible or control character
   (Unicode Cf, Cc, Zl, Zp, or a space separator other than a plain space) inside product_id / update_version /
   target_build (`verdict_reasons.identity_invisible_problems`). Printable Unicode titles stay valid; 0 of 1,551 live
   records fail.
-- Independence FAILS CLOSED: a second report counts only when the source shows a different reporter id or concrete
-  incident details that cannot belong to one incident (`distinct_incident`); the largest set of pairwise-separate
-  reports is counted. Copy detection (a declared cross-post, the same log, near-identical text, a shared distinctive
-  passage, the same KB set or reporter id or incident details; union-find over every pair) only removes a would-be
-  second reporter, never proves one, never touches stored evidence, and never merges reports whose details conflict.
-- The install verb's subject (or object) must be this update; codes only in install-error context, never in a crash
-  or bugcheck context; glued codes ("0x800f0983How") read.
-- Strict grouping (`INSTALL_GROUPING = "strict"`, A3): the same error code, the same named stage or the installer's
-  Exit Code 7; different codes alone are not one problem. Lenient remains only as a measurement mode.
-- Persistence: OBS "and earlier / since / regression from / also affected" and a Microsoft issue that "also affects
-  earlier updates" are TEST FIRST saying the problem persists, never WAIT, new or caused.
-- An OBS crash needs a launch or core-workflow cue; a crash the vendor calls possible / rare / occasional goes to the
-  review queue (`uncertain_severity`).
+- Independence FAILS CLOSED: a second report counts only when the source shows a different reporter id or identity
+  details that cannot belong to one machine -- a different computer (family or brand), processor, edition,
+  architecture or operating system (`distinct_incident`, `IDENTITY_DETAIL_KINDS`); the largest set of
+  pairwise-separate reports is counted. A failure point or an OS version never separates two reports: one person's
+  retry stops at another percentage, and one Mac upgraded from Sierra to High Sierra shows two versions
+  (`COPY_ONLY_DETAIL_KINDS`, read as copy cues only). Copy detection (a declared cross-post, re-post or follow-up, the
+  same log, near-identical text, a shared distinctive passage, the same KB set or reporter id or incident details;
+  union-find over every pair, so a copy of a copy is one report) only removes a would-be second reporter, never
+  proves one, never touches stored evidence, and never puts two machines whose details conflict into one report, not
+  even through a detail-less third row (`_may_join`). Overlapping details ("my Dell" / "my Dell and my HP") are not a
+  conflict.
+- The install verb's subject (or object) must be this update; a transitive wording whose object is other software
+  ("I can't install the new Realtek driver since KB...", "unable to install Office after KB...") is that software
+  failing, wherever the update is named. Codes only in install-error context, never in a crash or bugcheck context;
+  glued codes ("0x800f0983How") read.
+- Acrobat rows (`acrobat_install_row`): installer Exit Code 7 that is not another Adobe product's ("Acrobat works,
+  but Photoshop fails with Exit Code: 7"), no statement that the version installed or that the error is gone, and a
+  row shared between Pro and Reader names this page's product.
+- Strict grouping (`INSTALL_GROUPING = "strict"`, A3): the same error code or the same named stage; for Acrobat the
+  same SPECIFIC installer error (the DW / DF code), never the generic Exit Code 7 that every installer failure prints.
+  Different codes alone are not one problem; an Acrobat row with no specific error joins no group. Lenient remains
+  only as a measurement mode.
+- Persistence: an OBS fix note that names an older OBS version anywhere ("a regression in 31.0.0", "as in 32.0.4"),
+  or says "earlier", "previous", "older" or "prior" anywhere, or a temporal "since", "also affected / occurred /
+  seen", "still present" (a causal "since" is not carry-over), and a Microsoft issue that "also affects earlier
+  updates", are TEST FIRST saying the problem persists, never WAIT, new or caused. The carry-over remark stays out of
+  the scope.
+- An OBS crash, freeze or hang needs a launch or core-workflow cue; one the vendor calls possible / rare / occasional
+  goes to the review queue (`uncertain_severity`).
 - The record writers gather a page's reasons through `verdict_projection.page_supported_reasons`, the projection's
   merge, so with the switch on the stored prose follows the page and the drift clears at the next promotion.
 - Shadow operation: candidates and queue items carry a stable identity (`candidate_key`, `queue_key`: class, page,
@@ -5143,33 +5166,39 @@ versions fail it).
   no writeback lane involved. Retention: a cache entry lives until 7 days without access (the daily deploy keeps the
   newest alive); a lost ledger re-baselines and says so.
 
-**Measured** On the corpus at ec5da166 (1,551 records), producer version 4 drafts 26 candidates, down from 49: 23 vendor (OBS
-32.0.0's "possible crash" now goes to the review queue) and 3 install failures, down from 25. The 3 are Acrobat Pro
-pages whose two Exit Code 7 reports come from different operating systems or OS versions (15.023.20053,
-17.009.20058, 18.011.20055). 0 of the 21 Windows install candidates survive: their Learn Q&A reports carry no
-reporter id, and within any shared error code or stage no two state conflicting incident details. 23 items are
-queued: 22 install pages (independence not established, or no shared characteristic) and the uncertain OBS crash.
-A1's lenient grouping would draft 6 (3 more, all Windows). The subject rule refuses 2 rows main counted (a machine
+**Measured** On the corpus at ec5da166 (1,551 records), producer version 4 drafts 23 candidates, down from 49: all
+23 vendor (OBS 32.0.0's "possible crash" now goes to the review queue) and 0 install failures, down from 25. 0 of the
+21 Windows install candidates survive: their Learn Q&A reports carry no reporter id, and within any shared error code
+or stage no two state conflicting identity details. 0 of the 4 Acrobat install candidates survive: the three that
+survived the first round rested on Exit Code 7 alone (17.009.20058 also on two macOS versions), and their reports
+show no shared specific installer error (15.023.20053: DW003/DW071 beside a row with none; 18.011.20055:
+DW003/DW006 beside DW071); 15.010.20056's three Mac reports share DW003 but no identity detail. All 25 pages with two
+or more rows reporting their update failing to install end as a recorded refusal and a review-queue item
+(`not_enough_independent_reporters` 9, `no_shared_failure_characteristic` 16); 26 items are queued in all, with the
+uncertain OBS crash. The 4 reviewed install entries are unchanged and the producer abstains on all of them (on 3 with
+a recorded refusal; 26200.8117 has one install row). The subject rule refuses 2 rows main counted (a machine
 "failing to install", a boot loop under "my PC"), and 2 codes glued to the next word are now read. Switch OFF: a
 deploy-order build equals main's (1,861 files, 4 differ only in build timestamps, masked tree 591e9a33... and
-projection fbf64dd8... on both, QA 0/0, both verifiers clean). Switch ON (test build): QA 0 errors and 10
-`verdict_policy_drift` warnings (29 in G35-04 round 3), in two classes: 8 report-bearing pages whose stored verdict
-reads INSUFFICIENT DATA, and 2 security pages whose stored summary lacks the panel. One record-writer promotion with
-the switch ON clears all 10 (QA 0/0), changing only the verdict-prose fields of exactly those 10 pages; the same
-promotion with the switch OFF changes no record. 15 pages change with the switch ON (12 drafted verdicts, 3 security
-pages gain a panel), every surface equal to `decide`. With every probe of reviews 1-2 and VERIFY_3 added to one
-switch-ON build, the only verdict change is OBS 32.1.0, TEST FIRST "persists" (review 2 Q2, never WAIT or new); R2,
-R3, Q4 and Q5 are queued; R1, R4, Q1, Q3 and review 1's re-post draft nothing; P6 and LOW-6 stop QA (exit 1). Two
-simulated deploys over unchanged evidence: the second records 0 new candidates (26 and 23 repeat appearances); one
-added Exit Code 7 row from Windows 10 on Acrobat Pro 15.008.20082 records exactly that one new prospective
-candidate; the next deploy, 0.
+projection fbf64dd8... on both, QA 0/0, both verifiers clean). Switch ON (test build): QA 0 errors and 8
+`verdict_policy_drift` warnings (29 in G35-04 round 3), in two classes: 6 report-bearing pages whose stored verdict
+reads INSUFFICIENT DATA (OBS 31.1.1, 32.0.0; Windows 26100.9278, 26200.9278, 26200.9550, 26300.9550), and 2 security
+pages whose stored summary lacks the panel (26200.9445, 28000.2954). One record-writer promotion with the switch ON
+clears all 8 (QA 0/0), changing only the verdict-prose fields of exactly those 8 pages; the same promotion with the
+switch OFF changes no record. With every probe of reviews 1-2, VERIFY_3 and the G38 WS2 review added to switch-ON
+builds, the only verdict change is OBS 32.1.0, TEST FIRST "persists" (review 2 Q2; the review's carried-over crash
+note), never WAIT or new; the review's same-person retry with a follow-up (26200.7922), driver and Office install
+failures (26300.9818) and a freeze when closing the About dialog draft nothing; R2, R3, Q4 and Q5 are queued; P6
+and LOW-6 stop QA (exit 1). Two simulated deploys over unchanged evidence: the second records 0 new candidates (23
+and 26 repeat appearances); one added Windows 10 row on Acrobat Pro 15.008.20082 showing the same installer error
+(DW006) as the page's Mac report records exactly that one new prospective candidate; the next deploy, 0.
 
-**Tests** `test_growth3_verdict_policy.py` 143 -> 146 (G3-Q14; X54/X55; G3-P9 made a floor because the corpus now has
-48 security updates). `test_verdict_reason_producer.py` 56 -> 78 (VRP-I2 detection-only, I10a/b fail-closed and
-conservative, I11 subject and codes, I12 strict grouping, V11 persistence, V12 crash severity, C3 corpus, S6 writers;
-VX26..VX39 one per fix). New `test_producer_shadow.py` 19 (PS-L1..L7 the deploy ledger incl. the two-deploy and
-one-added-row proofs, P1/P2 public safety, N1..N3 never public / never a tracked writer / pages.yml steps, S1 the bare
-script; PX1..PX6).
+**Tests** `test_growth3_verdict_policy.py` 143 -> 146 (G3-Q14 on all three identity fields; X54/X55; G3-P9 made a
+floor because the corpus now has 48 security updates). `test_verdict_reason_producer.py` 56 -> 93 (VRP-I2
+detection-only, I10a/b fail-closed and conservative, I11 subject, object and codes, I12 strict grouping, I13 Acrobat
+rows and the specific installer error, I14 one person on one machine, I15 copy clusters, V11 persistence, V12
+crash / freeze severity, C2/C3 corpus, S6 writers; VX26..VX51 one per fix). New `test_producer_shadow.py` 19
+(PS-L1..L7 the deploy ledger incl. the two-deploy and one-added-row proofs, P1/P2 public safety, N1..N3 never public /
+never a tracked writer / pages.yml steps, S1 the bare script; PX1..PX6).
 
 **Why deferred** Public activation needs the owner's separate approval (AUTH_V2_38 activation criteria: per reason
 class, at least 30 distinct prospective positive candidates with no unsupported recommendation plus an adversarial
