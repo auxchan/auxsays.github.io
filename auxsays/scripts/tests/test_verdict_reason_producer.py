@@ -426,6 +426,7 @@ P6_PERSISTENT = [
     "Fixed an issue in 32.1.0 where audio capture devices did not work, as in 32.0.4",
     "Fixed an issue in 32.1.0 (also seen in 31.1.2) where the replay buffer did not work",
     "Fixed a crash in 32.1.0 when switching scenes, first reported with 31.1.2",
+    "Fixed a crash in 32.1.0, there ever since the first release, when switching scene collections",
 ]
 P6_NEW = [
     "Fixed a crash in 32.1.0 when stopping a recording since the output was freed twice",
@@ -475,7 +476,8 @@ def check_vendor_persistence() -> None:
           "32.1.0 and earlier'), 'did not work since 31.0.0', and the G38 WS2 review's phrasings -- 'that also "
           "occurred in earlier versions' (rendered S3), '(a regression in 31.0.0)', 'which existed in previous "
           "versions', 'as in 32.0.4', '(also seen in 31.1.2)', an older OBS version named anywhere ('first reported "
-          "with 31.1.2') -- are TEST FIRST on 32.1.0 saying the problem persists, as is a Microsoft known issue that "
+          "with 31.1.2'), 'ever since the first release' -- are TEST FIRST on 32.1.0 saying the problem persists, as "
+          "is a Microsoft known issue that "
           "'also affects earlier updates'; none is WAIT and no reason says new, caused, introduced or originates. A "
           "causal 'since' ('since the output was freed twice') and a platform's version ('on macOS 14.4.1') are not "
           "carry-over: those stay WAIT, new in 32.1.0. The carry-over remark stays out of the scope ('when starting a "
