@@ -13,15 +13,24 @@ item by `queue_key` (class, kind, exact page, problem). Neither changes when one
 wording moves, so the same candidate at the next deploy is a REPEAT appearance, never a new one.
 
 ORIGINS, failing closed. The first deploy after this module ships records every current item as `baseline`:
-those existed before shadow operation began, so none is prospective. A deploy that runs a different producer
-version records the items it sees for the first time as `rules_change`: new rules re-reading old evidence
-are not new cases. A ledger that cannot be restored (first run, cache evicted, unreadable) is re-established
-as a new baseline and the deploy says so. Only an item first seen under an unchanged producer version
-against a continuing ledger is `prospective`. Every way of losing track UNDER-counts prospective cases;
-none can inflate them.
+those existed before shadow operation began, so none is prospective. A deploy whose RULES differ from the last
+one's records the items it sees for the first time as `rules_change`: new rules re-reading old evidence are not
+new cases. The rules' version is not a hand-kept number (a forgotten bump would let rule-made items count as
+prospective; G38 WS2 review 2, LOW-6): it is `rules_version`, a hash of the source of every module the
+candidates depend on (RULE_SOURCES), which the deploy script computes; ANY edit to one of them is a rules
+change. A ledger that cannot be restored (first run, cache evicted, unreadable) is re-established as a new
+baseline and the deploy says so. An item seen before, evicted from the bounded entries and seen again is a
+REPEAT (the compact `seen` set remembers every key the ledger ever recorded, with its origin), never first
+seen again. Only an item first seen under unchanged rules against a continuing ledger is `prospective`.
+What these rules cannot tell apart, and so what a person still checks before any activation: an item whose
+identity changes while its case does not -- the vendor rewords a statement, or another problem overtakes a
+page's install candidate -- is a new key. That is why the diagnostics also count DISTINCT pages
+(`prospective_pages`), and why repeated shadow observations are never independent validation.
 
 BOUNDED. At most MAX_ENTRIES items (inactive ones evicted oldest-first, baseline before prospective; the
-running totals keep counting what was evicted) and the last MAX_DEPLOYS deploy summaries.
+running totals keep counting what was evicted), the last MAX_DEPLOYS deploy summaries, and a `seen` set of at
+most MAX_SEEN keys (about 25 bytes each); a ledger whose set is full is re-established as a baseline, which
+under-counts and never inflates.
 
 PUBLIC-SAFE (the repository is public; the ledger is an Actions cache entry and a run artifact, readable by
 anyone who can read the repository). Stored per item: class, product id, version, build, verdict, scope,
@@ -34,13 +43,23 @@ Pure: reads its arguments only (no file, network or clock); the deploy script su
 """
 from __future__ import annotations
 
+import hashlib
 import re
 from typing import Any, Mapping
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 MAX_ENTRIES = 3000
 MAX_DEPLOYS = 90
+MAX_SEEN = 50000
 ORIGINS = ("baseline", "rules_change", "prospective")
+_ORIGIN_CODE = {"baseline": "b", "rules_change": "r", "prospective": "p"}
+_CODE_ORIGIN = {v: k for k, v in _ORIGIN_CODE.items()}
+# The source files (relative to auxsays/) whose content decides which candidates and queue items exist: the
+# producer's rules, the identity and scope helpers it imports, the loader that feeds it records and counted
+# rows, the counting authority, and the deploy step that writes its artifact. `rules_version` hashes them.
+RULE_SOURCES = ("scripts/lib/verdict_reason_producer.py", "scripts/lib/verdict_reasons.py",
+                "scripts/lib/verdict_projection.py", "scripts/lib/report_counts.py",
+                "scripts/build_verdict_projection.py")
 # The only problem labels an item may carry: install characteristics from the producer's closed vocabulary.
 _PROBLEM_LABEL_RE = re.compile(r"^(?:error 0x[0-9a-f]{3,8}|rolls back|stops at [0-9]{1,3}%|installer error D[WF][0-9]{3}|"
                                r"no shared characteristic|any install failure)$")
@@ -91,10 +110,22 @@ def observation(artifact: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
     return dict(sorted(items.items()))
 
 
+def rules_version(sources: Mapping[str, Any]) -> str:
+    """The rules' version: a hash of the rule sources' text (path -> text, or None for a missing file), line
+    endings normalised. Pure; the deploy script reads the files."""
+    h = hashlib.sha256()
+    for path in sorted(sources):
+        text = sources[path]
+        h.update(path.encode("utf-8") + b"\0")
+        h.update(b"<missing>" if text is None else str(text).replace("\r\n", "\n").encode("utf-8"))
+        h.update(b"\0")
+    return "src-" + h.hexdigest()[:16]
+
+
 def new_ledger() -> dict[str, Any]:
     return {"schema_version": SCHEMA_VERSION, "producer_version": "", "baseline": {}, "resets": 0,
             "totals": {f"{origin}_{kind}": 0 for origin in ORIGINS for kind in ("candidate", "queue")}
-            | {"evicted": 0}, "deploys": [], "entries": {}}
+            | {"evicted": 0, "returned": 0}, "deploys": [], "entries": {}, "seen": {}}
 
 
 def ledger_problem(ledger: Any) -> str:
@@ -104,16 +135,20 @@ def ledger_problem(ledger: Any) -> str:
     if ledger.get("schema_version") != SCHEMA_VERSION:
         return f"schema_version {ledger.get('schema_version')!r} is not {SCHEMA_VERSION}"
     if not isinstance(ledger.get("entries"), Mapping) or not isinstance(ledger.get("deploys"), list) \
-            or not isinstance(ledger.get("totals"), Mapping):
+            or not isinstance(ledger.get("totals"), Mapping) or not isinstance(ledger.get("seen"), Mapping):
         return "malformed ledger"
+    if len(ledger["seen"]) >= MAX_SEEN:
+        return f"the seen-key set reached MAX_SEEN ({MAX_SEEN})"
     return ""
 
 
 def update(ledger: Any, artifact: Mapping[str, Any], *, deploy: str, commit: str, observed_at: str,
-           ) -> tuple[dict[str, Any], dict[str, Any]]:
-    """(the ledger after this deploy, this deploy's summary). Never raises on a bad ledger: it re-baselines."""
+           rules: str = "") -> tuple[dict[str, Any], dict[str, Any]]:
+    """(the ledger after this deploy, this deploy's summary). Never raises on a bad ledger: it re-baselines.
+    `rules`: the deploy's `rules_version` (the deploy script always passes it); without it, the artifact's
+    producer_version stands in."""
     seen = {"deploy": _s(deploy), "commit": _s(commit)[:40], "at": _s(observed_at)}
-    version = _s(artifact.get("producer_version"))
+    version = _s(rules) or _s(artifact.get("producer_version"))
     problem = ledger_problem(ledger)
     if problem:
         prior_resets = int((ledger or {}).get("resets") or 0) if isinstance(ledger, Mapping) else 0
@@ -124,6 +159,7 @@ def update(ledger: Any, artifact: Mapping[str, Any], *, deploy: str, commit: str
         ledger = {k: (dict(v) if isinstance(v, Mapping) else list(v) if isinstance(v, list) else v)
                   for k, v in ledger.items()}
         ledger["entries"] = {k: dict(v) for k, v in ledger["entries"].items()}
+        ledger["seen"] = dict(ledger["seen"])
         if ledger["deploys"] and ledger["deploys"][-1].get("deploy") == seen["deploy"]:
             return ledger, dict(ledger["deploys"][-1], mode="already_recorded")
         mode = "continuing" if _s(ledger.get("producer_version")) == version else "rules_change"
@@ -135,8 +171,10 @@ def update(ledger: Any, artifact: Mapping[str, Any], *, deploy: str, commit: str
     origin = {"baseline": "baseline", "rules_change": "rules_change", "continuing": "prospective"}[mode]
     current = observation(artifact)
     entries = ledger["entries"]
+    known = ledger["seen"]
     first_seen: dict[str, list[str]] = {"candidate": [], "queue": []}
     repeats = {"candidate": 0, "queue": 0}
+    returned = 0
     for key, item in current.items():
         kind = item["kind"]
         if key in entries:
@@ -146,10 +184,19 @@ def update(ledger: Any, artifact: Mapping[str, Any], *, deploy: str, commit: str
             entry["appearances"] = int(entry.get("appearances") or 0) + 1
             entry["active"] = True
             repeats[kind] += 1
+        elif key in known:
+            # Seen before and evicted from the bounded entries: a REPEAT, never first seen again (G38 WS2 review 2,
+            # LOW-6). It keeps the origin it was first recorded with; the totals counted it then.
+            entries[key] = dict(item, origin=_CODE_ORIGIN.get(_s(known[key]), "baseline"), returned=True,
+                                last_seen=dict(seen, producer_version=version), appearances=1, active=True)
+            repeats[kind] += 1
+            returned += 1
+            ledger["totals"]["returned"] = int(ledger["totals"].get("returned") or 0) + 1
         else:
             entries[key] = dict(item, origin=origin, first_seen=dict(seen, producer_version=version),
                                 last_seen=dict(seen, producer_version=version), appearances=1, active=True)
             ledger["totals"][f"{origin}_{kind}"] = int(ledger["totals"].get(f"{origin}_{kind}") or 0) + 1
+            known[key] = _ORIGIN_CODE[origin]
             first_seen[kind].append(key)
     gone = 0
     for key, entry in entries.items():
@@ -157,12 +204,13 @@ def update(ledger: Any, artifact: Mapping[str, Any], *, deploy: str, commit: str
             entry["active"] = False
             gone += 1
     ledger["entries"] = dict(sorted(_bounded(entries, ledger["totals"]).items()))
+    ledger["seen"] = dict(sorted(known.items()))
     ledger["producer_version"] = version
     summary.update(candidates=sum(1 for i in current.values() if i["kind"] == "candidate"),
                    queue=sum(1 for i in current.values() if i["kind"] == "queue"),
                    first_seen_candidates=len(first_seen["candidate"]), first_seen_queue=len(first_seen["queue"]),
                    first_seen_origin=origin, repeat_candidates=repeats["candidate"], repeat_queue=repeats["queue"],
-                   no_longer_present=gone,
+                   returned_after_eviction=returned, no_longer_present=gone,
                    new_prospective_candidates=first_seen["candidate"] if origin == "prospective" else [],
                    new_prospective_queue=first_seen["queue"] if origin == "prospective" else [])
     ledger["deploys"] = (ledger["deploys"] + [{k: v for k, v in summary.items()
@@ -198,7 +246,7 @@ def render_summary(ledger: Mapping[str, Any], summary: Mapping[str, Any]) -> str
     prospective items -- page paths, verdicts and classes only."""
     totals = ledger.get("totals") or {}
     lines = ["## Verdict-reason producer: shadow diagnostics (activation OFF)", "",
-             f"Deploy `{summary.get('deploy')}` at `{_s(summary.get('commit'))[:12]}`, producer version "
+             f"Deploy `{summary.get('deploy')}` at `{_s(summary.get('commit'))[:12]}`, rules version "
              f"{summary.get('producer_version')}, ledger mode **{summary.get('mode')}**.", ""]
     if summary.get("producer_error"):
         lines.append("The producer reported an error this deploy, so nothing was observed.")

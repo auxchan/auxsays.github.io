@@ -99,7 +99,7 @@ def row(i: int, title: str, excerpt: str, date: str) -> dict:
 MAC = row(1, "Acrobat DC install fails on my Mac",
           "Exit Code: 7 on El Capitan 10.11.3 from Creative Cloud. ERROR: DW003", "2026-05-01")
 WIN10 = row(2, "Cannot install Acrobat Pro DC on Windows 10",
-            "Installer stops with Exit Code: 7 on Windows 10. ERROR: DW003", "2026-05-02")
+            "I'm on Windows 10. The installer stops with Exit Code: 7. ERROR: DW003", "2026-05-02")
 # A third reporter (its own source reporter id), worded apart from the other two so no copy cue joins it.
 WIN7 = row(3, "Acrobat Pro DC on my old Windows 7 machine", "Setup ends with exit code 7 after the extraction step, "
            "DW003 listed under specific errors.", "2026-05-03")
@@ -112,10 +112,11 @@ def artifact(rows: list, *, records=RECORDS) -> dict:
     return json.loads(json.dumps(vrp.artifact(result)))
 
 
-def deploy(ledger, art, n: int, version_override: str | None = None):
+def deploy(ledger, art, n: int, version_override: str | None = None, rules: str = ""):
     if version_override is not None:
         art = dict(art, producer_version=version_override)
-    return ps.update(ledger, art, deploy=f"run{n}.1", commit=f"{n:040x}", observed_at=f"2026-11-{12 + n:02d}T05:41:00Z")
+    return ps.update(ledger, art, deploy=f"run{n}.1", commit=f"{n:040x}", observed_at=f"2026-11-{12 + n:02d}T05:41:00Z",
+                     rules=rules)
 
 
 EXPECTED_KEY = "c:" + vrp.candidate_key(vrp.INSTALL_CLASS, vr.record_identity(PRO), "TEST FIRST", vrp.INSTALL_SCOPE,
@@ -204,13 +205,12 @@ def check_ledger() -> None:
         return {"id": f"win-{i}", "source_url": f"https://answers.test/{i}", "report_title": "KB5089573 fails",
                 "report_text_excerpt": text, "source_date": date}
     code = [wrow(1, "My Dell XPS 13 cannot install KB5089573, error 0x800f0922.", "2026-05-20"),
-            wrow(2, "ThinkPad T14: KB5089573 failed to install with 0x800f0922.", "2026-05-21")]
-    rollback = [wrow(3, "HP EliteBook 840: KB5089573 failed to install, error 0x80070002, it rolls back after the "
+            wrow(2, "On my ThinkPad T14 KB5089573 failed to install with 0x800f0922.", "2026-05-21")]
+    rollback = [wrow(3, "My HP EliteBook 840 tried KB5089573 twice; it failed to install and rolled back after the "
                      "restart.", "2026-05-22"),
-                wrow(4, "Surface Pro 9: KB5089573 fails to install with 0x8007000d and rolled back after the "
-                     "restart.", "2026-05-23"),
-                wrow(5, "Asus Zenbook here, KB5089573 failed to install (0x80073712), it rolls back after the "
-                     "restart.", "2026-05-24")]
+                wrow(4, "I'm on a Surface Pro 9. KB5089573 fails to install, then it rolls back.", "2026-05-23"),
+                wrow(5, "I have an Asus Zenbook here and KB5089573 keeps failing to install: it rolls back every "
+                     "time.", "2026-05-24")]
     led = None
     for n, rows in enumerate(([], code, code + rollback), start=1):
         art = json.loads(json.dumps(vrp.artifact(vrp.produce([win], {vr.record_identity(win): rows}))))
@@ -224,6 +224,47 @@ def check_ledger() -> None:
           and ps.class_counts(led)[vrp.INSTALL_CLASS]["prospective_pages"] == 1
           and "| Distinct pages with a prospective candidate (still held) | 1 |" in text,
           f"keys={keys} pages={ps.prospective_pages(led)} counts={ps.class_counts(led)}")
+
+
+def check_ledger_low6() -> None:
+    """G38 WS2 review 2, LOW-6: a forgotten version bump and an evicted-then-returning key never inflate."""
+    saved = (ps.MAX_ENTRIES, ps.MAX_DEPLOYS)
+    try:
+        ps.MAX_ENTRIES, ps.MAX_DEPLOYS = 2, 10
+        mk = lambda keys: {"producer_version": "5", "review_queue": [], "candidates": [  # noqa: E731
+            {"candidate_key": k, "producer": {"class": vrp.VENDOR_CLASS}, "product_id": "p", "update_version": k,
+             "verdict": "WAIT", "scope": "if you use x", "evidence": []} for k in keys]}
+        led, s1 = deploy(None, mk(["a", "b"]), 1, rules="src-1")          # baseline a, b
+        led, s2 = deploy(led, mk(["c", "d"]), 2, rules="src-1")           # prospective c, d; a, b inactive
+        led, s3 = deploy(led, mk(["c", "d", "e"]), 3, rules="src-1")      # e prospective: a or b evicted
+        evicted = sorted({"c:a", "c:b"} - set(led["entries"]))
+        led, s4 = deploy(led, mk(["a", "b", "c", "d", "e"]), 4, rules="src-1")   # the evicted ones come back
+    finally:
+        ps.MAX_ENTRIES, ps.MAX_DEPLOYS = saved
+    back = {k: led["entries"].get(k, {}) for k in evicted}
+    check("PS-L9 an item seen before, EVICTED from the bounded entries and seen again is a REPEAT -- never first seen "
+          "again, never prospective -- because the compact `seen` set remembers every key the ledger ever recorded "
+          "with its origin (G38 WS2 review 2, LOW-6); the totals count it once",
+          evicted and s4["first_seen_candidates"] == 0 and not s4["new_prospective_candidates"]
+          and s4["returned_after_eviction"] == len(evicted)
+          and all(e.get("origin") == "baseline" and e.get("returned") is True for e in back.values())
+          and led["totals"]["prospective_candidate"] == 3 and led["totals"]["baseline_candidate"] == 2
+          and set(led["seen"]) == {"c:a", "c:b", "c:c", "c:d", "c:e"},
+          f"evicted={evicted} s4={ {k: s4.get(k) for k in ('first_seen_candidates', 'returned_after_eviction')} } "
+          f"back={back} totals={led['totals']}")
+    art = mk(["a"])
+    l1, _s = deploy(None, art, 1, rules=ps.rules_version({"lib/x.py": "rule = 1\n"}))
+    l2, s2 = deploy(l1, mk(["a", "f"]), 2, rules=ps.rules_version({"lib/x.py": "rule = 2\n"}))
+    same = ps.rules_version({"lib/x.py": "rule = 1\r\n"}) == ps.rules_version({"lib/x.py": "rule = 1\n"})
+    check("PS-L10 the rules' version is a HASH of the rule sources, not a hand-kept number (G38 WS2 review 2, LOW-6): "
+          "any edit to a rule source is a rules change even when the artifact's producer_version is unchanged, so "
+          "items first seen then are a rules change, never prospective; the hash ignores line endings; RULE_SOURCES "
+          "names the producer, its helpers, the loader and the counting authority",
+          s2["mode"] == "rules_change" and s2["first_seen_origin"] == "rules_change" and not s2["new_prospective_candidates"]
+          and art["producer_version"] == mk(["a", "f"])["producer_version"] and same
+          and {"scripts/lib/verdict_reason_producer.py", "scripts/lib/verdict_reasons.py",
+               "scripts/lib/verdict_projection.py", "scripts/lib/report_counts.py"} <= set(ps.RULE_SOURCES)
+          and all((_AUX / rel).is_file() for rel in ps.RULE_SOURCES), f"{s2} same={same}")
 
 
 # ------------------------------------------------------------------------ [P] public safety
@@ -308,7 +349,8 @@ def check_never_public() -> None:
              if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)}
     check("PS-N3 never a tracked writer: the ledger path is git-ignored and outside auxsays/, no writeback lane "
           "touches it, and lib/producer_shadow is pure (standard library only; no file, clock or network)",
-          ".producer-shadow/" in ignored and imports <= {"__future__", "re", "typing"} and "open" not in calls
+          ".producer-shadow/" in ignored and imports <= {"__future__", "hashlib", "re", "typing"}
+          and "open" not in calls
           and not any("producer-shadow" in p.read_text(encoding="utf-8", errors="replace")
                       for p in (_REPO / ".github" / "workflows").glob("*.yml") if p.name != "pages.yml"),
           f"{sorted(imports)} {sorted(calls & {'open'})}")
@@ -337,6 +379,17 @@ def check_script(tmp: Path) -> None:
     p4 = run(None, 4)
     data4 = json.loads(ledger.read_text(encoding="utf-8"))
     text = summary.read_text(encoding="utf-8") if summary.exists() else ""
+    blocked = tmp / "blocked-ledger"
+    blocked.mkdir(exist_ok=True)   # a DIRECTORY where the ledger file must go: writing it raises
+    p5 = subprocess.run([sys.executable, str(SCRIPT), "--candidates", str(cand), "--ledger", str(blocked),
+                         "--deploy-id", "run5.1", "--observed-at", "2026-11-17T05:41:00Z"],
+                        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=300, env=env)
+    check("PS-S2 the script never fails a deploy: when it raises (here the ledger path is a directory, so the write "
+          "fails) it warns and exits 0 (G38 WS2 review 2, LOW-7: reviewer mutant MM29); the version it records is the "
+          "rule sources' hash",
+          p5.returncode == 0 and "::warning::producer shadow diagnostics failed" in p5.stdout
+          and str(data.get("producer_version", "")).startswith("src-"),
+          f"rc={p5.returncode} {p5.stdout[-300:]} {p5.stderr[-300:]} version={data.get('producer_version')}")
     check("PS-S1 the bare script pages.yml runs: three consecutive deploys give baseline, then 0 new over unchanged "
           "evidence, then exactly one new prospective candidate after one added row; a missing artifact is recorded as "
           "a producer error and still exits 0; the step summary is appended each time",
@@ -375,8 +428,8 @@ def swap(owner, name, replacement):
 def check_mutations(tmp: Path) -> None:
     real_update, real_obs = ps.update, ps.observation
 
-    def every_first_seen_prospective(ledger, art, *, deploy, commit, observed_at):
-        led, summ = real_update(ledger, art, deploy=deploy, commit=commit, observed_at=observed_at)
+    def every_first_seen_prospective(ledger, art, *, deploy, commit, observed_at, rules=""):
+        led, summ = real_update(ledger, art, deploy=deploy, commit=commit, observed_at=observed_at, rules=rules)
         for e in led["entries"].values():
             if e.get("appearances") == 1:
                 e["origin"] = "prospective"
@@ -397,9 +450,17 @@ def check_mutations(tmp: Path) -> None:
                 out[k]["reason"] = c.get("reason")
         return out
 
-    def rules_ignored(ledger, art, *, deploy, commit, observed_at):
+    def rules_ignored(ledger, art, *, deploy, commit, observed_at, rules=""):
         if isinstance(ledger, dict) and ledger.get("producer_version"):
-            ledger = dict(ledger, producer_version=str(art.get("producer_version")))
+            ledger = dict(ledger, producer_version=str(rules or art.get("producer_version")))
+        return real_update(ledger, art, deploy=deploy, commit=commit, observed_at=observed_at, rules=rules)
+
+    def seen_forgotten(ledger, art, *, deploy, commit, observed_at, rules=""):
+        if isinstance(ledger, dict) and isinstance(ledger.get("seen"), dict):
+            ledger = dict(ledger, seen={k: v for k, v in ledger["seen"].items() if k in ledger.get("entries", {})})
+        return real_update(ledger, art, deploy=deploy, commit=commit, observed_at=observed_at, rules=rules)
+
+    def rules_ignored_hash(ledger, art, *, deploy, commit, observed_at, rules=""):
         return real_update(ledger, art, deploy=deploy, commit=commit, observed_at=observed_at)
 
     cases = [
@@ -416,6 +477,10 @@ def check_mutations(tmp: Path) -> None:
         ("PX7 the distinct-page count counts keys (one page's two problems read as two cases)", check_ledger,
          swap(ps, "prospective_pages", lambda ledger, product_class="": ps.unique_prospective(
              ledger, "candidate", product_class))),
+        ("PX8 (LOW-6) the seen set is not consulted (an evicted key that returns is first seen again)",
+         check_ledger_low6, swap(ps, "update", seen_forgotten)),
+        ("PX9 (LOW-6) the rules' version is ignored (the artifact's hand-kept number decides again)",
+         check_ledger_low6, swap(ps, "update", rules_ignored_hash)),
     ]
     mutants: list = []
     for label, body, (mutate, restore) in cases:
@@ -438,6 +503,7 @@ def run() -> int:
         tmp = Path(td)
         print("\n[L] the ledger over consecutive simulated deploys")
         check_ledger()
+        check_ledger_low6()
         print("\n[P] public safety")
         check_public_safety()
         print("\n[N] never public, never a tracked writer")

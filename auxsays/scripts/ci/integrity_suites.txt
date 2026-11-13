@@ -368,7 +368,9 @@ auxsays/scripts/tests/test_verdict_reason_producer.py = 113
 # public, never a tracked writer, pages.yml's steps main-only and continue-on-error (N1..N3); the bare
 # script end to end (S1). 6 mutants, PX1..PX6. Review (19 -> 21): one page whose install candidate changes
 # problem carries two keys, so the diagnostics also count distinct pages (PS-L8; PX7).
-auxsays/scripts/tests/test_producer_shadow.py = 21
+# Review 2 (21 -> 26, LOW-6/LOW-7): an evicted key that returns is a repeat (the seen set, PS-L9); the rules'
+# version is a hash of the rule sources (PS-L10); the script exits 0 on an exception (PS-S2). PX8, PX9.
+auxsays/scripts/tests/test_producer_shadow.py = 26
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93

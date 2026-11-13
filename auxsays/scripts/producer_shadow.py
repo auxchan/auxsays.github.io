@@ -60,6 +60,18 @@ def _write_atomic(path: Path, text: str) -> None:
     os.replace(tmp, path)
 
 
+def rules_version() -> str:
+    """lib/producer_shadow.rules_version over the rule sources as checked out for this deploy: any edit to one
+    of them is a rules change, with no number for anyone to forget to bump (G38 WS2 review 2, LOW-6)."""
+    sources = {}
+    for rel in producer_shadow.RULE_SOURCES:
+        try:
+            sources[rel] = (AUX / rel).read_text(encoding="utf-8")
+        except OSError:
+            sources[rel] = None
+    return producer_shadow.rules_version(sources)
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ledger", type=Path, required=True, help="the shadow ledger (JSON), read and rewritten")
@@ -79,7 +91,7 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:  # noqa: BLE001 - diagnostics never fail a deploy
         artifact = {"error": f"{type(exc).__name__}: {exc}"}
     ledger, summary = producer_shadow.update(_read_ledger(args.ledger), artifact, deploy=args.deploy_id,
-                                             commit=args.commit, observed_at=observed_at)
+                                             commit=args.commit, observed_at=observed_at, rules=rules_version())
     _write_atomic(args.ledger, json.dumps(ledger, indent=1, sort_keys=True, ensure_ascii=True) + "\n")
     text = producer_shadow.render_summary(ledger, summary)
     if args.summary:
