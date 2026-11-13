@@ -6859,8 +6859,8 @@ evidence:
   patch_version_matched: true
   matched_version: '20.2'
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: render/export failure
   workflow_area: render/export
   platform: windows
@@ -8817,8 +8817,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: windows
@@ -8839,8 +8839,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.0
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: windows
@@ -16952,10 +16952,10 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5101684
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -16981,10 +16981,10 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5101684
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -17157,10 +17157,10 @@ evidence:
   matched_kb: KB5121767
   matched_os_build: '26200.8894'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: display regression
   workflow_area: display / graphics
   platform: windows
@@ -24564,10 +24564,10 @@ evidence:
   match_basis: exact_os_build
   matched_kb: KB5074109
   matched_os_build: '26200.7623'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -27526,10 +27526,10 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5101684
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: unspecified Windows issue
   workflow_area: Windows workflow
   platform: windows
@@ -27555,10 +27555,10 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5101684
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -28048,10 +28048,10 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5101684
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -28185,10 +28185,10 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5101684
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -51366,8 +51366,8 @@ evidence:
   patch_version_matched: true
   matched_version: 31.1.2
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: macos
@@ -51540,8 +51540,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: macos
@@ -51584,8 +51584,8 @@ evidence:
   patch_version_matched: true
   matched_version: 32.2.1
   match_basis: body
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: duplicate_existing_evidence
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: linux

@@ -1,0 +1,770 @@
+schema_version: 1
+evidence:
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1srsu3m-little-bits-of-render-just-killin-me
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1srsu3m/little_bits_of_render_just_killin_me/
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: render/export failure in render/export.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: render/export failure in render/export.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: render/export failure in render/export.'
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2026-04-21'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rvhlmx-audio-problem-after-exporting
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rvhlmx/audio_problem_after_exporting/
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: render/export failure in render/export.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: render/export failure in render/export.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: render/export failure in render/export.'
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2026-03-16'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rnhcy6-problem-audio-after-exporting
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rnhcy6/problem_audio_after_exporting/
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: render/export failure in render/export.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: render/export failure in render/export.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: render/export failure in render/export.'
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2026-03-07'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13685
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13685
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-07-22T23:19:38Z'
+  source_date: '2026-07-22'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13689
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13689
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-07-23T01:10:22Z'
+  source_date: '2026-07-23'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13690
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13690
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-07-23T01:10:22Z'
+  source_date: '2026-07-23'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5965489-keep-getting-install-error-25h2-os-bui
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  target_build: '26200.8973'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5965489/keep-getting-install-error-25h2-os-build-26200-897
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-08-04T23:29:55Z'
+  source_date: '2026-08-03'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-31-1-2-github-issue-13711
+  product_id: obs-studio
+  update_version: 31.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13711
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-08-07T03:54:19Z'
+  source_date: '2026-07-28'
+  patch_version_matched: true
+  matched_version: 31.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13711
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13711
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-28'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13729
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13729
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-08-07T03:56:38Z'
+  source_date: '2026-07-31'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-05T04:16:28Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5982769-file-history-problems-after-installing
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5982769/file-history-problems-after-installing-kb5101684-a
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-05T04:16:28Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5983062-files-are-backed-up-but-file-history-s
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5983062/files-are-backed-up-but-file-history-status-and-pr
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-05T04:16:28Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-05T04:16:30Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26100.8973'
+  evidence_valid_for_current_patch: false
+  stale_due_to_patch_rollover: false
+  counted: false
+  exclusion_reason: cross_patch_duplicate
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956430-os-build-26200-8894-office-errors-majo
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5956430/os-build-26200-8894-office-errors-major-headache-p
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: display regression in display / graphics.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: display regression in display / graphics.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: display regression in display / graphics.'
+  captured_at: '2026-09-05T04:16:32Z'
+  source_date: '2026-07-28'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_kb: KB5121767
+  matched_os_build: '26200.8894'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956328-os-build-26200-8894-office-errors-majo
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5956328/os-build-26200-8894-office-errors-major-headache
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: display regression in display / graphics.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: display regression in display / graphics.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: display regression in display / graphics.'
+  captured_at: '2026-09-05T04:16:32Z'
+  source_date: '2026-07-24'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_kb: KB5121767
+  matched_os_build: '26200.8894'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5791250-how-to-fix-an-windows-update-that-will
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5791250/how-to-fix-an-windows-update-that-will-not-install
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-05T22:25:04Z'
+  source_date: '2026-03-11'
+  target_release_date: '2026-02-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7922'
+  match_basis: exact_os_build
+  matched_kb: KB5077241
+  matched_os_build: '26200.7922'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7922'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5794016-2026-preview-update-kb5077241-26200-79
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5794016/2026-preview-update-(kb5077241)-(26200-7922)-could
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-05T22:25:04Z'
+  source_date: '2026-03-02'
+  target_release_date: '2026-02-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7922'
+  match_basis: exact_os_build
+  matched_kb: KB5077241
+  matched_os_build: '26200.7922'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7922'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5769728-security-update-kb5074109-26200-7623-i
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5769728/security-update-(kb5074109)-(26200-7623)-install-e
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-05T22:25:43Z'
+  source_date: '2026-02-10'
+  target_release_date: '2026-01-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7623'
+  match_basis: exact_os_build
+  matched_kb: KB5074109
+  matched_os_build: '26200.7623'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7623'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5708079-security-updates-are-not-installing
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5708079/security-updates-are-not-installing
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-05T22:25:43Z'
+  source_date: '2026-02-04'
+  target_release_date: '2026-01-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7623'
+  match_basis: exact_os_build
+  matched_kb: KB5074109
+  matched_os_build: '26200.7623'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7623'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5101684kb5120249-caused-file-history-e
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5101684kb5120249-caused-file-history-errors-but-microsoft-has-not-acknowledged/4550372
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified Windows issue in Windows workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified Windows issue in Windows workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified Windows issue in Windows workflow.'
+  captured_at: '2026-09-06T00:07:59Z'
+  source_date: '2026-08-26'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-win-11-25h2-kb5101684-previe
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/win-11-25h2-kb5101684-preview-and-win-10-22h2-kb5120249-issue/4547615
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-06T00:07:59Z'
+  source_date: '2026-08-17'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-file-history-broken-after-kb5101684-kb51
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/file-history-broken-after-kb5101684--kb5120249/4551560
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-06T03:26:24Z'
+  source_date: '2026-08-30'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-broken-file-history-after-ju
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/broken-file-history-after-julyaugust-updates-kb5101684-on-win11-25h2--kb5120249-/4552324
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-08T12:34:56Z'
+  source_date: '2026-09-01'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6014283-title-file-explorer-stuck-in-legacy-cl
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6014283/title-file-explorer-stuck-in-legacy-classic-ui-no
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-26T12:28:48Z'
+  source_date: '2026-09-25'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9550'
+  match_basis: exact_os_build
+  matched_kb: KB5124010
+  matched_os_build: '26200.9550'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9550'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6019205-file-explorer-stuck-in-legacy-classic
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6019205/file-explorer-stuck-in-legacy-classic-ui-no-tabs-w
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: update/install failure in windows update.'
+  captured_at: '2026-09-30T13:43:33Z'
+  source_date: '2026-09-30'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5124010
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5124010
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9550'
+- id: obs-studio-31-1-2-obs-forum-thread-196230
+  product_id: obs-studio
+  update_version: 31.1.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/image-source-causes-rendering-lag-and-dropped-frames-when-opening-properties-or-changing-images-on-macos.196230/
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-10-12T00:33:53Z'
+  source_date: '2026-08-31'
+  patch_version_matched: true
+  matched_version: 31.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-obs-forum-thread-196230
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/image-source-causes-rendering-lag-and-dropped-frames-when-opening-properties-or-changing-images-on-macos.196230/
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-10-12T00:41:05Z'
+  source_date: '2026-08-31'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-obs-forum-thread-195984
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/flatpak-dumps-core-if-ran-in-nixos-from-desktop-file-but-works-in-command-line-exec.195984/
+  parent_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_title: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-098), not recorded source text: unspecified issue in general OBS workflow.'
+  captured_at: '2026-10-12T00:41:05Z'
+  source_date: '2026-08-01'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
