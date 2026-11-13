@@ -21,15 +21,16 @@ WHAT IT IS. A pure function of stored data -- the generated records and their co
     and "for some consumer devices" or "for devices in some regions" name one only vaguely, so they
     go to the review queue, never to a page. An OBS version counts only where the vendor
     names it as the defective one ("Fixed a crash in V", "present in V"), never as where an input
-    file was made ("created in V"). An OBS crash is serious only on launch or in a core workflow the
-    note names (recording, streaming, capture, scenes, sources, outputs, audio ...); a crash when
-    closing a dialog is not, and a defect the vendor calls possible, rare or occasional goes to the
+    file was made ("created in V"). An OBS crash, freeze or hang is serious only on launch or in a core
+    workflow the note names (recording, streaming, capture, scenes, sources, outputs, audio ...); one
+    when closing a dialog is not, and a defect the vendor calls possible, rare or occasional goes to the
     review queue (review 2, LOW-2).
     Recommendation: WAIT scoped to the setup when the vendor names this version as where the defect
     starts (the earliest version it names, or the originating build); TEST FIRST, saying the problem
-    PERSISTS, when the defect is carried over from an earlier version or the vendor says so ("and
-    earlier", "since", "also affected": review 2, LOW-1) -- a persistent problem is never called new
-    or caused -- and for an installation failure.
+    PERSISTS, when the defect is carried over from an earlier version or the vendor says so (an older
+    version number anywhere in the note, "earlier" / "previous" / "older" / "prior", a temporal "since",
+    "also affected": review 2, LOW-1; G38 WS2 review, MAJOR-4) -- a persistent problem is never called
+    new or caused -- and for an installation failure.
 
   * user_corroborated_install_failure (G35-04 Amendments A1, A3; AUTH_V2_37 correction 2). The update
     fails to install, in at least MIN_INDEPENDENT_REPORTERS reports of SEPARATE incidents of ONE
@@ -38,21 +39,25 @@ WHAT IT IS. A pure function of stored data -- the generated records and their co
         (`windows_install_row`): it names the page's KB (a build alone is a device's current build or a
         rollback target); its install wording is not negated, not about the update scan, and takes
         THIS update as its subject or object -- "after installing KB... my driver will not install" is
-        the driver failing, not the update (review 2 LOW-3); error codes are read only in install-error
-        context, never from a crash or bugcheck. Acrobat rows show installer "Exit Code 7" (a row
-        shared between Pro and Reader must name this page's product).
+        the driver failing, not the update (review 2 LOW-3), and so is install wording whose object is
+        other software ("can't install the Realtek driver since KB..."); error codes are read only in
+        install-error context, never from a crash or bugcheck. Acrobat rows (`acrobat_install_row`)
+        show installer "Exit Code 7" that is not another Adobe product's, do not say the version
+        installed, and a row shared between Pro and Reader must name this page's product.
       - One problem (A3, INSTALL_GROUPING "strict"): rows group only on a shared failure
-        characteristic -- the same error code, the same named stage, the installer's Exit Code 7.
-        Different error codes alone are not one problem.
+        characteristic -- the same error code, the same named stage, for Acrobat the same SPECIFIC
+        installer error (DW / DF code), never the generic Exit Code 7 every failure prints. Different
+        error codes alone are not one problem.
       - Independence FAILS CLOSED (AUTH_V2_37 correction 2). Copies are DETECTED -- a declared
-        cross-post, the same log, near-identical text, a shared distinctive passage (a reworded
-        re-post keeps one), the same KB set, the same incident details -- and only ever REMOVE a
-        would-be second reporter; detection never touches stored evidence. A second report COUNTS only
-        where the source supports a different reporter or incident: a source reporter id that differs
-        (no collector stores one today), or concrete incident details that cannot belong to one
-        incident (two different computers, editions, OS versions, failure points). Unknown is not
-        independent. Shared wording or a shared author never merges two incidents whose details
-        conflict (conservative grouping).
+        cross-post, re-post or follow-up, the same log, near-identical text, a shared distinctive
+        passage (a reworded re-post keeps one), the same KB set, the same incident details -- and only
+        ever REMOVE a would-be second reporter; detection never touches stored evidence. A second report
+        COUNTS only where the source supports a different reporter or machine: a source reporter id that
+        differs (no collector stores one today), or identity details that cannot belong to one machine
+        (two different computers, processors, editions, architectures, operating systems). A failure
+        point or an OS version never does: one person's retry or OS upgrade shows both. Unknown is not
+        independent. Shared wording or a shared author never merges two machines whose details conflict
+        (conservative grouping), not even through a third row.
     Recommendation: TEST FIRST "when installing it" -- never WAIT.
 
 Everything else -- non-install user corroboration -- is NOT produced: `corroboration_candidates` is
@@ -156,13 +161,45 @@ _OBS_NOT_CORE_RE = re.compile(
 # person: the review queue, never an automatic verdict (review 2, LOW-2).
 _UNCERTAIN_RE = re.compile(r"\b(?:possible|potential|potentially|rare|rarely|random|occasional|occasionally|"
                            r"intermittent|sporadic|sometimes|in some cases)\b", re.I)
-# Review 2, LOW-1 (A3): wording that says the defect was ALREADY there -- "in 32.1.0 and earlier", "since",
-# "a regression from", "also affected", "still present" -- makes it a PERSISTENT defect: TEST FIRST saying it
-# persists, never WAIT and never "new" or caused by this version.
+# Review 2, LOW-1 (A3): wording that says the defect was ALREADY there makes it a PERSISTENT defect: TEST FIRST
+# saying it persists, never WAIT and never "new" or caused by this version. The rule is not a phrase list of
+# carried-over idioms (G38 WS2 review, MAJOR-4: "that also occurred in earlier versions", "which existed in
+# previous versions" read as new): "earlier", "previous(ly)", "older" or "prior" ANYWHERE in the bullet is
+# persistent, and so is any older OBS version number in it (`_obs_persistence`: "(a regression in 31.0.0)",
+# "as in 32.0.4", "(also seen in 31.1.2)"). Beside those: a temporal "since" ("since 31.0", "since the first
+# release"; a causal one -- "since the output was freed twice" -- is not), "a regression from / since / in",
+# "also affected / occurred / seen", "still present", "persists", "carried over", "long-standing",
+# "pre-existing".
 _PERSISTENT_RE = re.compile(
-    r"\b(?:and (?:earlier|older|prior|before)|or (?:earlier|older)|(?:and|or) (?:all )?(?:previous|prior|older|earlier) "
-    r"(?:versions?|releases?|builds?|updates?)|since\b|regression (?:from|since)|also affect\w*|still (?:present|"
-    r"occur\w*|happen\w*)|persist\w*|carried over|long-?standing|pre-?existing)", re.I)
+    r"\b(?:earlier|previous|previously|older|prior)\b|"
+    r"\bsince (?:at least |about |around |as early as )?(?:obs (?:studio )?)?(?:v(?:ersion)? ?)?\d|"
+    r"\bsince (?:the )?(?:first|initial|original|introduction|launch|release|beginning|start)\b|\bever since\b|"
+    r"\bregression (?:from|since|in)\b|\balso (?:affect\w*|occur\w*|happen\w*|present|seen|existed|exists|reported)\b|"
+    r"\bstill (?:present|occur\w*|happen\w*)|\bpersist\w*|\bcarried over\b|\blong-?standing\b|\bpre-?existing\b|"
+    r"\bexist(?:ed|s)? (?:in|since|before)\b|\b(?:as|like) in (?:obs (?:studio )?)?v?\d", re.I)
+# A three-part version number anywhere in a bullet, and the platforms / components whose own version numbers
+# are not OBS versions ("on macOS 14.4.1", "Qt 6.5.3").
+_ANY_VERSION_RE = re.compile(r"(?<![\w.])(\d+\.\d+\.\d+)(?![\w.]*\d)", re.ASCII)
+_PLATFORM_BEFORE_RE = re.compile(
+    r"\b(?:macos|mac os(?: x)?|os x|windows|linux|ubuntu|debian|fedora|kernel|mesa|qt|cef|chromium|ffmpeg|python|"
+    r"lua|nvidia|amd|intel|cuda|driver|sdk|plugin|obs-websocket|websocket|pipewire|wayland|glibc|xcode|vulkan|"
+    r"directx|opengl|librist|srt|x264|aja|decklink)\s*(?:version\s*)?v?$", re.I)
+
+
+def _obs_persistence(statement: str, version: str, named: list[str]) -> str:
+    """Where an OBS bullet says the defect was already there BEFORE `version`: "OBS <v>" for the earliest
+    older OBS version it names (as the defective one, or anywhere -- "a regression in 31.0.0", "as in 32.0.4"),
+    "earlier versions" for carried-over wording without one, or "" when the bullet names `version` as where
+    the defect starts (new in it). A version number that belongs to a platform or component ("macOS 14.4.1")
+    is not an OBS version."""
+    key = _version_key(version)
+    older = [v for v in named if _version_key(v) < key]
+    for m in _ANY_VERSION_RE.finditer(statement):
+        if _version_key(m.group(1)) < key and not _PLATFORM_BEFORE_RE.search(statement[max(0, m.start() - 40):m.start()]):
+            older.append(m.group(1))
+    if older:
+        return f"OBS {sorted(set(older), key=_version_key)[0]}"
+    return "earlier versions" if _PERSISTENT_RE.search(statement) else ""
 _DATA_LOSS_RE = re.compile(r"\bdata loss\b|\b(?:recordings?|files?|projects?|scene collections?|data)\b[^.]{0,40}"
                            r"\b(?:lost|deleted|corrupt\w*|overwritten|wiped)\b", re.I)
 _INSTALL_FAIL_RE = re.compile(r"\b(?:fail(?:s|ed|ing)? to install|install(?:ation|er)? (?:fail\w*|error)|"
@@ -200,10 +237,10 @@ def classify_obs_statement(statement: str) -> dict[str, str]:
     noun, or "where <feature> did not work" / "causing <feature> to fail" (the feature stops working
     outright), or data loss, or an installation failure. A lag, a cosmetic issue and a preference or
     profile reset are excluded BEFORE that, unless the head noun is a crash (a crash outranks those).
-    A crash is serious only on launch or in a CORE workflow the "when ..." clause names (review 2, LOW-2):
-    otherwise it has no severity basis. A crash, freeze or hang the vendor calls uncertain ("a possible
-    crash", "a rare freeze") is `uncertain_severity`: refused, and queued for a person. Anything the
-    grammar does not recognise has no severity basis: excluded."""
+    A crash, freeze or hang is serious only on launch or in a CORE workflow the "when ..." clause names
+    (review 2, LOW-2; G38 WS2 review, LOW-1): otherwise it has no severity basis. A crash, freeze or hang
+    the vendor calls uncertain ("a possible crash", "a rare freeze") is `uncertain_severity`: refused, and
+    queued for a person. Anything the grammar does not recognise has no severity basis: excluded."""
     text = re.sub(r"\s+", " ", statement).strip()
     os_m = _OS_RE.search(text)
     os_name = os_m.group(1) if os_m else ""
@@ -211,13 +248,16 @@ def classify_obs_statement(statement: str) -> dict[str, str]:
     if head:
         kind = head.group("kind").lower()
         when = _WHEN_RE.search(text)
+        # The core-flow rule holds for a freeze or a hang as for a crash (G38 WS2 review, LOW-1): "a freeze
+        # when closing the About dialog" or "a hang when opening the Help menu" breaks no core workflow.
+        core = bool(when) and bool(_OBS_CORE_FLOW_RE.search(when.group(1))) \
+            and not _OBS_NOT_CORE_RE.search(when.group(1))
+        launch = bool(_LAUNCH_RE.search(text))
         if kind == "crash":
-            core = bool(when) and bool(_OBS_CORE_FLOW_RE.search(when.group(1))) \
-                and not _OBS_NOT_CORE_RE.search(when.group(1))
-            severity = ("crash_on_launch" if _LAUNCH_RE.search(text) else
+            severity = ("crash_on_launch" if launch else
                         "crash_in_core_flow" if core else "")
         else:
-            severity = "substantial_workflow_breakage"
+            severity = "substantial_workflow_breakage" if launch or core else ""
         if when:
             clause = when.group(1).strip().rstrip(".")
             scope = f"when {clause}"
@@ -232,7 +272,7 @@ def classify_obs_statement(statement: str) -> dict[str, str]:
                     "note": f"the vendor calls this {kind} uncertain" + ("" if severity else
                                                                         ", outside a launch or a core workflow")}
         if not severity:
-            return {"excluded": "no_severity_basis", "note": "a crash outside a launch or a core workflow"}
+            return {"excluded": "no_severity_basis", "note": f"a {kind} outside a launch or a core workflow"}
         return {"severity": severity, "failure_kind": kind, "scope": scope}
     if _LAG_RE.search(text):
         return {"excluded": "minor_lag"}
@@ -312,9 +352,7 @@ def _obs_candidates(records: list[Mapping[str, Any]], pages: Mapping[tuple[str, 
                             severity=verdict_info.get("severity", ""), note=verdict_info.get("note", ""),
                             problem_key=problem_key)
                 continue
-            first = sorted(st["named"], key=_version_key)[0]
-            persists_from = (f"OBS {first}" if version != first
-                             else "earlier versions" if _PERSISTENT_RE.search(st["statement"]) else "")
+            persists_from = _obs_persistence(st["statement"], version, st["named"])
             new = not persists_from
             lead = (f"OBS confirms this problem persists in OBS {version} (carried over from {persists_from})"
                     if persists_from else f"OBS confirms this problem in OBS {version}")
@@ -505,8 +543,14 @@ _INSTALL_ERROR_LABEL_RX = re.compile(r"(?:install\w*|download\w*)\W{0,3}(?:error
                                      r"(?:error|errore|fehler|erreur)\W{0,3}(?:de |di |d')?(?:install\w*|download\w*)"
                                      r"\W{0,5}$")
 _ERROR_LABEL_RX = re.compile(r"\b(?:error|code)\b[^.;\n]{0,12}$")
+# A DECLARED copy: the author says this row repeats or continues their own earlier post -- a cross-post, a
+# re-post, a follow-up ("following up on my question from last week", "reposting", "my previous thread";
+# G38 WS2 review, MAJOR-1). Such a row is never a second reporter.
 _XPOST_RX = re.compile(r"(previously posted|also posted|cross-?post|posted (?:this|it) (?:on|in)|i recently posted|"
-                       r"part 2|part two)")
+                       r"part 2|part two|follow(?:ing)?[- ]?up (?:on|to|from) my|\bre-?post(?:ing|ed|s)?\b|"
+                       r"posting (?:this |it )?again|(?:i )?posted (?:this |it )?(?:before|earlier|already|yesterday|"
+                       r"last week)|my (?:earlier|previous|original|last|other) (?:post|question|thread|topic)|"
+                       r"same as my (?:earlier|previous|other|original) )")
 _LOGURL_RX = re.compile(r"obsproject\.com/logs/[a-z0-9]+", re.I)
 _STOP = set("the a an and or of to in on for with is are was it its this that my i me we our you your after when "
             "not no from at by be as but if any all can can't cannot does doesn't won't will update updates windows "
@@ -573,11 +617,18 @@ def _kb_set(row: Mapping[str, Any]) -> set[str]:
 # AUTH_V2_37 correction 2: reporter independence FAILS CLOSED. Text similarity may DETECT that two rows are
 # one report; it can never ESTABLISH that two unknown accounts are two people. A second report counts only
 # when the source supports a DISTINCT identity (REPORTER_ID_FIELD, different on both rows) or a DISTINCT
-# INCIDENT: both rows state a concrete detail of the same kind and the values cannot belong to one incident
-# -- two different computers (manufacturer or model family), processors, Windows editions or architectures,
-# operating systems or OS versions (an Acrobat installer on a Mac and on Windows 10), or failure points (the
-# install stops at 8% and at 41%). A row that states no such detail cannot be told apart from anyone, so it
-# never makes a second reporter: unknown is not independent.
+# MACHINE: both rows state a detail of the same IDENTITY kind (IDENTITY_DETAIL_KINDS) and the values cannot
+# belong to one machine -- two different computers (manufacturer or model family), processors, Windows
+# editions or architectures, or operating systems (an Acrobat installer on a Mac and on Windows 10). A row
+# that states no such detail cannot be told apart from anyone, so it never makes a second reporter: unknown
+# is not independent.
+# What ONE person on ONE machine can show twice is never a second incident (G38 WS2 review, MAJOR-1): a
+# retry that stops at another percentage, a CPU at 100% beside an install at 20%, the same Mac upgraded from
+# Sierra to High Sierra between two posts. Failure points and OS versions are COPY_ONLY_DETAIL_KINDS: read
+# only as copy-detection cues (the same ones on two rows), never as independence and never as a conflict
+# that keeps two copies apart.
+IDENTITY_DETAIL_KINDS = ("architecture", "cpu", "device", "edition", "os")
+COPY_ONLY_DETAIL_KINDS = ("failure_point", "os_version")
 _DEVICE_FAMILY_RX = (
     ("surface", re.compile(r"\bsurface (?:laptop|pro|book|go|studio)\b")),
     ("lenovo", re.compile(r"\b(?:ideapad|thinkpad|thinkbook|thinkcentre|legion|yoga)\b")),
@@ -615,7 +666,8 @@ _PERCENT_RX = re.compile(r"\b(?:at|to|reaches|reached|reaching|around|about|unti
 
 
 def incident_details(row: Mapping[str, Any], product_id: str = "") -> dict[str, frozenset]:
-    """The concrete incident details a row states, by kind (only kinds it states)."""
+    """The concrete incident details a row states, by kind (only kinds it states): IDENTITY_DETAIL_KINDS
+    and COPY_ONLY_DETAIL_KINDS."""
     text = _blank(_txt(row), _NOT_AN_INSTALL_RX)
     found: dict[str, set] = {}
 
@@ -651,8 +703,10 @@ def incident_details(row: Mapping[str, Any], product_id: str = "") -> dict[str, 
 
 
 def _conflicting(a: Mapping[str, frozenset], b: Mapping[str, frozenset]) -> list[str]:
-    """The detail kinds both state with values that cannot belong to one incident (disjoint), or []."""
-    return [k for k in sorted(set(a) & set(b)) if a[k] and b[k] and not (a[k] & b[k])]
+    """The IDENTITY detail kinds both state with values that cannot belong to one machine (disjoint), or [].
+    Overlapping values ("my Dell" and "my Dell and my HP") can be one machine: no conflict. A failure point
+    or an OS version never conflicts (one machine retried, or upgraded)."""
+    return [k for k in IDENTITY_DETAIL_KINDS if a.get(k) and b.get(k) and not (a[k] & b[k])]
 
 
 def _reporter_ids(row: Mapping[str, Any]) -> frozenset:
@@ -665,11 +719,13 @@ def same_reporter(a: Mapping[str, Any], b: Mapping[str, Any], product_id: str = 
     a cue removes a would-be second reporter; no cue never makes two rows independent (that needs
     `distinct_incident`), and nothing here touches stored evidence.
 
-    Cues: a declared cross-post; the same log URL; near-identical text once templates are stripped; a
-    shared distinctive passage (SHARED_PASSAGE_WORDS consecutive content words: a reworded re-post keeps
-    one); the same set of two or more KB numbers; the same source reporter id; the same incident details.
-    CONSERVATIVE: two rows whose details conflict are two incidents, so no cue but the shared log merges
-    them -- shared wording or a shared author alone never collapses genuinely distinct incidents."""
+    Cues: a declared cross-post, re-post or follow-up; the same log URL; near-identical text once templates
+    are stripped; a shared distinctive passage (SHARED_PASSAGE_WORDS consecutive content words: a reworded
+    re-post keeps one); the same set of two or more KB numbers; the same source reporter id; the same
+    incident details (any kinds, the copy-only ones included).
+    CONSERVATIVE: two rows whose IDENTITY details conflict are two machines, so no cue but a declaration or
+    the shared log merges them -- shared wording or a shared author alone never collapses genuinely distinct
+    incidents."""
     if _XPOST_RX.search(_txt(a)) or _XPOST_RX.search(_txt(b)):
         return "a declared cross-post"
     la = {m.lower() for m in _LOGURL_RX.findall(_s(a.get("report_text_excerpt")))}
@@ -704,6 +760,12 @@ def distinct_incident(a: Mapping[str, Any], b: Mapping[str, Any], product_id: st
     if a["reporter_ids"] and b["reporter_ids"] and not (a["reporter_ids"] & b["reporter_ids"]):
         return "different source reporter ids"
     return ""
+
+
+def _may_join(why: str, a: Mapping[str, frozenset], b: Mapping[str, frozenset]) -> bool:
+    """Whether two clusters a copy cue links may become ONE report: never when their merged identity details
+    conflict (that would put two machines into one report), except on the same log URL."""
+    return why == "the same log URL" or not _conflicting(a, b)
 
 
 def _merge_details(rows: list[Mapping[str, frozenset]]) -> dict[str, frozenset]:
@@ -742,11 +804,15 @@ def independent_reporters(rows: list[Mapping[str, Any]], product_id: str = "",
                           ) -> tuple[list[Mapping[str, Any]], list[dict[str, str]]]:
     """(one kept row per INDEPENDENT report, dropped rows with why). Fails closed.
 
-    1. A declared cross-post never counts.
+    1. A declared cross-post, re-post or follow-up never counts.
     2. Rows one report under `same_reporter` are joined (union-find over EVERY pair, so a row matching
-       only a row that is itself dropped still joins it).
+       only a row that is itself joined to another still joins that one: a copy of a copy is one report).
+       CONSERVATIVE at the cluster too: a join that would put machines whose identity details conflict
+       into one report is refused (a detail-less third row quoting the same text never bridges a Dell
+       and a ThinkPad incident; review P2b), except on the same log URL.
     3. Reports count together only where every pair is a `distinct_incident`: the largest such set is
-       kept. One report with no stated detail is one reporter; two of them are still one."""
+       kept (`_max_clique` returns at least one cluster whenever there is one). One report with no stated
+       detail is one reporter; two of them are still one."""
     ordered = sorted(rows, key=lambda r: (_s(r.get("source_date")), _s(r.get("id"))))
     dropped: list[dict[str, str]] = []
     live = []
@@ -756,6 +822,7 @@ def independent_reporters(rows: list[Mapping[str, Any]], product_id: str = "",
         else:
             live.append(row)
     parent = list(range(len(live)))
+    cluster_details = {i: incident_details(row, product_id) for i, row in enumerate(live)}
 
     def find(i: int) -> int:
         while parent[i] != i:
@@ -766,9 +833,12 @@ def independent_reporters(rows: list[Mapping[str, Any]], product_id: str = "",
     for i in range(len(live)):
         for j in range(i + 1, len(live)):
             why = same_reporter(live[i], live[j], product_id)
-            if why and find(i) != find(j):
-                joined_by.setdefault(j, f"one report with {_s(live[i].get('id'))}: {why}")
-                parent[find(j)] = find(i)
+            ri, rj = find(i), find(j)
+            if not why or ri == rj or not _may_join(why, cluster_details[ri], cluster_details[rj]):
+                continue
+            joined_by.setdefault(j, f"one report with {_s(live[i].get('id'))}: {why}")
+            parent[rj] = ri
+            cluster_details[ri] = _merge_details([cluster_details[ri], cluster_details.pop(rj)])
     clusters: dict[int, list[int]] = {}
     for i in range(len(live)):
         clusters.setdefault(find(i), []).append(i)
@@ -776,8 +846,6 @@ def independent_reporters(rows: list[Mapping[str, Any]], product_id: str = "",
     info = [{"details": _merge_details([incident_details(live[i], product_id) for i in g]),
              "reporter_ids": frozenset().union(*[_reporter_ids(live[i]) for i in g])} for g in groups]
     chosen = _max_clique(len(groups), lambda a, b: bool(distinct_incident(info[a], info[b], product_id)))
-    if not chosen and groups:
-        chosen = [0]
     kept = [live[groups[c][0]] for c in chosen]
     for gi, members in enumerate(groups):
         for pos, i in enumerate(members):
@@ -833,11 +901,19 @@ _GENERIC_UPDATE_RX = re.compile(r"\b(?:(?:this|the|that|an?|latest|recent|new|ne
 # "After installing KB5089573 my Nvidia graphics driver will not install anymore", "Since KB5089573 the HP
 # Smart printer app fails to install from the Store"): other software, or a new possessive subject ("my
 # driver"; "on my laptop" is a place, not a subject).
+_OTHER_SOFTWARE = (r"\b(?:drivers?|apps?|applications?|programs?|software|games?|printers?|office|store|nvidia|"
+                   r"geforce|radeon|realtek|dotnet|framework|defender|edge|teams|outlook|chrome|firefox|"
+                   r"steam|bios|firmware|antivirus|language packs?|feature update|other updates?|another update)\b"
+                   r"|\.net\b")
 _FOREIGN_SUBJECT_RX = re.compile(
-    r"\b(?:drivers?|apps?|applications?|programs?|software|games?|printers?|office|store|nvidia|geforce|radeon|"
-    r"realtek|dotnet|framework|defender|edge|teams|outlook|chrome|firefox|steam|bios|firmware|antivirus|"
-    r"language packs?|feature update|other updates?|another update)\b|\.net\b"
-    r"|(?<!\bon )(?<!\bin )(?<!\bfor )(?<!\bwith )(?<!\bfrom )(?<!\bto )\b(?:my|our|his|her|their)\b")
+    _OTHER_SOFTWARE + r"|(?<!\bon )(?<!\bin )(?<!\bfor )(?<!\bwith )(?<!\bfrom )(?<!\bto )\b(?:my|our|his|her|their)\b")
+# The OBJECT of a transitive install wording, read from the wording up to the next update named, a clause
+# break, a comma or a linking word: "I can't install the new Realtek audio driver since KB...", "unable to
+# install Office after KB..." -- the driver or Office is what fails to install, not the update (G38 WS2
+# review, MAJOR-2). Other software there refuses the wording, wherever the update is named.
+_FOREIGN_OBJECT_RX = re.compile(_OTHER_SOFTWARE)
+_OBJECT_END_RX = re.compile(r"[,;:.!?()\n]|\b(?:since|after|before|when|while|because|as|but|and|or|so|then|with|on|"
+                            r"in|from|for|due|via|through|using|at|to|until|every|each|again|anymore|error|code)\b")
 _CLAUSE_BREAK_RX = re.compile(r"[.!?;](?=\s)|\n")
 _SUBJECT_GAP = 80   # characters between the update's name and install wording that takes it as subject
 _OBJECT_GAP = 60    # characters between transitive install wording and the update it takes as object
@@ -895,15 +971,22 @@ def _clause(text: str, pos: int) -> tuple[int, int]:
 def _install_subject(text: str, span: tuple[int, int], refs: list[tuple[int, int, bool]],
                      page_spans: list[tuple[int, int]], other_spans: list[tuple[int, int]]) -> bool:
     """Whether the install wording at `span` takes THIS update as its subject or object (review 2 LOW-3,
-    F7). In its clause: the nearest update named before it, with no other subject in between; else, for a
-    transitive wording, the update named right after it; else, with no update and no other subject named
-    before it in the clause, the update the row is about (the list reading). Otherwise it is about
-    something else -- a driver, an app, another update -- and does not count."""
+    F7). A transitive wording whose OBJECT is other software ("can't install the new Realtek driver since
+    KB...") is that software failing: refused first, wherever the update is named (G38 WS2 review,
+    MAJOR-2). Then, in its clause: the nearest update named before it, with no other subject in between;
+    else, for a transitive wording, the update named right after it; else, with no update and no other
+    subject named before it in the clause, the update the row is about (the list reading). Otherwise it is
+    about something else -- a driver, an app, another update -- and does not count."""
     c0, c1 = _clause(text, span[0])
     if text[span[0]:span[1]].startswith("update"):
         return _owner_is_page(span, page_spans, other_spans)   # "update failed": its own subject
     before = [r for r in refs if c0 <= r[0] and r[1] <= span[0]]
     after = [r for r in refs if span[1] <= r[0] < c1]
+    if _INSTALL_TRANSITIVE_RX.match(text[span[0]:span[1]]):
+        stop = _OBJECT_END_RX.search(text, span[1])
+        obj_end = min([c1] + [r[0] for r in after] + ([stop.start()] if stop else []))
+        if _FOREIGN_OBJECT_RX.search(text[span[1]:max(obj_end, span[1])]):
+            return False
     if before:
         gap = text[before[-1][1]:span[0]]
         if len(gap) <= _SUBJECT_GAP and not _FOREIGN_SUBJECT_RX.search(gap):
@@ -1008,36 +1091,84 @@ def windows_install_row(row: Mapping[str, Any], page: Mapping[str, Any]) -> dict
     return {"ok": True, "why": "", "codes": sorted(set(codes)), "stages": sorted(stages)}
 
 
-def _acrobat_row_matches(row: Mapping[str, Any], product_id: str) -> bool:
+# Acrobat (G38 WS2 review, MAJOR-2 and MAJOR-3). The installer prints "Exit Code: 7 Please see specific
+# errors below" for EVERY failure; the specific error is the DW / DF code after it ("ERROR: DW003, DW006").
+_ADOBE_INSTALLER_CODE_RX = re.compile(r"\b(d[wf]\d{3})\b")
+# Another Adobe product, whose installer prints the same Exit Code 7.
+_ADOBE_OTHER_PRODUCT_RX = re.compile(
+    r"\b(?:photoshop|illustrator|premiere|after effects|lightroom|indesign|incopy|dreamweaver|audition|"
+    r"media encoder|character animator|fireworks|speedgrade|captivate|framemaker|robohelp|"
+    r"adobe (?:xd|animate|bridge|dimension|muse|prelude|fresco|substance\w*)|flash player)\b")
+_ACROBAT_NAME_RX = re.compile(r"\b(?:acrobat|reader)\b")
+# The row says this version DID install, or that the error went away.
+_ACROBAT_NEGATION_RX = re.compile(
+    r"\binstall(?:ed|s) (?:fine|ok|okay|correctly|successfully|normally|without (?:any )?(?:issues?|problems?|"
+    r"errors?))\b|\b(?:successfully|correctly|properly) installed\b|"
+    r"\b(?:exit code:?\s*7|the error|the problem|the issue|it)\b(?:\W+\w+){0,3}?\W+(?:is|was|has been) "
+    r"(?:gone|fixed|resolved|solved)\b|\bno longer (?:get|gets|getting|see|seeing|shows?)\b")
+
+
+def acrobat_install_row(row: Mapping[str, Any], product_id: str) -> dict[str, Any]:
+    """{ok, why, codes}: whether this counted row reports that THIS Acrobat product fails to install, and
+    the installer's specific error codes (DW / DF) it shows. Fails closed:
+      * installer Exit Code 7 must be shown, and a row shared between Pro and Reader must name this page's
+        product (the calibration's P15/P16 refusal);
+      * a row that says the version installed, or that the error is gone, is refused;
+      * Exit Code 7 counts only where it is not another Adobe product's ("Acrobat installed fine, but
+        Photoshop fails with Exit Code: 7"): the product named nearest before it in its clause, else the
+        first after it, else the row's.
+    Codes are read outside clauses about another product."""
     text = _txt(row)
     if not _EXIT7_RX.search(text):
-        return False
+        return {"ok": False, "why": "no installer Exit Code 7", "codes": []}
     if "," in _s(row.get("applicability")):
         names_reader = "reader" in text
         if product_id.endswith("reader") and not names_reader:
-            return False
+            return {"ok": False, "why": "a shared row that does not name this product", "codes": []}
         if product_id.endswith("pro") and names_reader and "acrobat dc" not in text and "acrobat pro" not in text:
-            return False
-    return True
+            return {"ok": False, "why": "a shared row that does not name this product", "codes": []}
+    if _INSTALL_NEGATION_RX.search(text) or _ACROBAT_NEGATION_RX.search(text):
+        return {"ok": False, "why": "the row denies an install failure", "codes": []}
+    names = sorted([(m.start(), False) for m in _ACROBAT_NAME_RX.finditer(text)]
+                   + [(m.start(), True) for m in _ADOBE_OTHER_PRODUCT_RX.finditer(text)])
+    row_foreign = any(f for _p, f in names) and not any(not f for _p, f in names)
+    owned = []
+    for m in _EXIT7_RX.finditer(text):
+        c0, c1 = _clause(text, m.start())
+        before = [f for p, f in names if c0 <= p < m.start()]
+        after = [f for p, f in names if m.start() <= p < c1]
+        foreign = before[-1] if before else after[0] if after else row_foreign
+        owned.append(not foreign)
+    if not any(owned):
+        return {"ok": False, "why": "the Exit Code 7 it reports is another Adobe product's", "codes": []}
+    foreign_clauses = {_clause(text, p) for p, f in names if f}
+    codes = sorted({m.group(1).upper() for m in _ADOBE_INSTALLER_CODE_RX.finditer(text)
+                    if not any(c0 <= m.start() < c1 for c0, c1 in foreign_clauses)})
+    return {"ok": True, "why": "", "codes": codes}
 
 
 _NUMBER_WORDS = {2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"}
-ACROBAT_GROUP = "installer exit code 7"
+ACROBAT_GROUP_PREFIX = "installer error "
 
 
 def install_groups(rows: list[tuple[Mapping[str, Any], dict[str, Any]]], mode: str = "") -> dict[str, list]:
     """Rows that report ONE install problem, by the characteristic they share (Amendment A3). Strict (the
-    default, INSTALL_GROUPING): the same error code, the same named stage, or the installer's Exit Code 7 --
-    different codes alone are not one problem, and a row with no specific characteristic joins no group.
-    Lenient (A1's superseded reading, for measurement only): every install row is one problem."""
+    default, INSTALL_GROUPING): the same error code, the same named stage, or, for Acrobat, the same
+    SPECIFIC installer error (DW / DF code) -- never the generic Exit Code 7 the installer prints for every
+    failure (G38 WS2 review, MAJOR-3). Different codes alone are not one problem, and a row with no specific
+    characteristic joins no group. Lenient (A1's superseded reading, for measurement only): every install
+    row is one problem."""
     mode = mode or INSTALL_GROUPING
     if mode not in INSTALL_GROUPINGS:
         raise ValueError(f"unknown install grouping {mode!r}")
     groups: dict[str, list] = {}
     for row, info in rows:
-        keys = ["any install failure"] if mode == "lenient" else (
-            [f"error {c}" for c in info.get("codes", [])] + list(info.get("stages", []))
-            + ([ACROBAT_GROUP] if info.get("exit7") else []))
+        if mode == "lenient":
+            keys = ["any install failure"]
+        elif info.get("acrobat"):
+            keys = [ACROBAT_GROUP_PREFIX + c for c in info.get("codes", [])]
+        else:
+            keys = [f"error {c}" for c in info.get("codes", [])] + list(info.get("stages", []))
         for key in keys:
             groups.setdefault(key, []).append(row)
     return groups
@@ -1046,7 +1177,9 @@ def install_groups(rows: list[tuple[Mapping[str, Any], dict[str, Any]]], mode: s
 def _install_reason(n: int, key: str, product_id: str) -> str:
     count = _NUMBER_WORDS.get(n, str(n))
     if product_id in ACROBAT:
-        return f"{count} reports of separate incidents say that installing this version fails with installer Exit Code 7."
+        detail = (f"installer error {key[len(ACROBAT_GROUP_PREFIX):]} (Exit Code 7)"
+                  if key.startswith(ACROBAT_GROUP_PREFIX) else "installer Exit Code 7")
+        return f"{count} reports of separate incidents say that installing this version fails with {detail}."
     if key.startswith("error "):
         detail = f" with error {key[len('error '):]}"
     elif key == "rolls back":
@@ -1077,7 +1210,10 @@ def _install_candidates(records: list[Mapping[str, Any]],
                 if info["ok"]:
                     matching.append((r, info))
         else:
-            matching = [(r, {"exit7": True}) for r in rows if _acrobat_row_matches(r, pid)]
+            for r in rows:
+                info = acrobat_install_row(r, pid)
+                if info["ok"]:
+                    matching.append((r, dict(info, acrobat=True)))
         if len(matching) < MIN_INDEPENDENT_REPORTERS:
             continue
         identity = {"product_id": pid, "update_version": _s(page.get("update_version")),
@@ -1090,10 +1226,11 @@ def _install_candidates(records: list[Mapping[str, Any]],
         scored.sort(key=lambda s: (-s[0], -s[1], s[2]))
         if not scored or scored[0][1] < MIN_INDEPENDENT_REPORTERS:
             source = {"record": _s(page.get("permalink")), "rows": [_s(r.get("id")) for r, _i in matching]}
+            what = "specific installer error" if pid in ACROBAT else "error code or named stage"
             out.exclude(INSTALL_CLASS, "no_shared_failure_characteristic", source, **identity,
-                        note=f"{len(matching)} install-failure rows share no error code or named stage")
-            out.queue(INSTALL_CLASS, page, "install-failure reports that share no error code or named stage: a "
-                      "person decides whether they are one problem", source, problem_key="no shared characteristic")
+                        note=f"{len(matching)} install-failure rows share no {what}")
+            out.queue(INSTALL_CLASS, page, f"install-failure reports that share no {what}: a person decides "
+                      "whether they are one problem", source, problem_key="no shared characteristic")
             continue
         n, _members_n, key, kept, dropped, members = scored[0]
         source = {"record": _s(page.get("permalink")), "problem": key, "rows": [_s(r.get("id")) for r in members],

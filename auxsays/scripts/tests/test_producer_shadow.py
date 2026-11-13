@@ -96,10 +96,13 @@ def row(i: int, title: str, excerpt: str, date: str) -> dict:
             "source_reporter_id": f"{SECRET}-author-{i}"}
 
 
-MAC = row(1, "Acrobat DC install fails on my Mac", "Exit Code: 7 on El Capitan 10.11.3 from Creative Cloud.", "2026-05-01")
-WIN10 = row(2, "Cannot install Acrobat Pro DC on Windows 10", "Installer stops with Exit Code: 7 on Windows 10.",
-            "2026-05-02")
-WIN7 = row(3, "Acrobat Pro DC install on Windows 7 fails", "Exit Code: 7 again, this time on Windows 7.", "2026-05-03")
+MAC = row(1, "Acrobat DC install fails on my Mac",
+          "Exit Code: 7 on El Capitan 10.11.3 from Creative Cloud. ERROR: DW003", "2026-05-01")
+WIN10 = row(2, "Cannot install Acrobat Pro DC on Windows 10",
+            "Installer stops with Exit Code: 7 on Windows 10. ERROR: DW003", "2026-05-02")
+# A third reporter (its own source reporter id), worded apart from the other two so no copy cue joins it.
+WIN7 = row(3, "Acrobat Pro DC on my old Windows 7 machine", "Setup ends with exit code 7 after the extraction step, "
+           "DW003 listed under specific errors.", "2026-05-03")
 WIN7_SAME_AUTHOR_AS_10 = dict(WIN7, source_reporter_id=WIN10["source_reporter_id"])
 
 
@@ -116,7 +119,7 @@ def deploy(ledger, art, n: int, version_override: str | None = None):
 
 
 EXPECTED_KEY = "c:" + vrp.candidate_key(vrp.INSTALL_CLASS, vr.record_identity(PRO), "TEST FIRST", vrp.INSTALL_SCOPE,
-                                        vrp.ACROBAT_GROUP)
+                                        vrp.ACROBAT_GROUP_PREFIX + "DW003")
 
 
 # ------------------------------------------------------------------------ [L] the ledger
@@ -139,9 +142,9 @@ def check_ledger() -> None:
     a3 = artifact([MAC, WIN10])
     l3, s3 = deploy(l2, a3, 3)
     entry = l3["entries"].get(EXPECTED_KEY) or {}
-    check("PS-L3 one added evidence row (a second Exit Code 7 report, from Windows 10: a separate incident) gives "
-          "EXACTLY the expected new candidate -- the Acrobat install TEST FIRST, by its stable key -- as the one "
-          "unique prospective candidate, and nothing else is new",
+    check("PS-L3 one added evidence row (a second report of the same installer error, from Windows 10: another "
+          "machine) gives EXACTLY the expected new candidate -- the Acrobat install TEST FIRST, by its stable key "
+          "-- as the one unique prospective candidate, and nothing else is new",
           s3["new_prospective_candidates"] == [EXPECTED_KEY] and s3["first_seen_queue"] == 0
           and entry.get("origin") == "prospective" and entry.get("verdict") == "TEST FIRST"
           and entry.get("reports") == 2 and l3["totals"]["prospective_candidate"] == 1,
@@ -213,8 +216,9 @@ def check_public_safety() -> None:
     labels = {e.get("problem") for e in led["entries"].values() if e.get("problem")}
     odd = ps._problem("error 0x800f0991; the user wrote this")
     check("PS-P2 every stored field is from a closed list, and a problem label must match the producer's closed "
-          "vocabulary (an error code, a named stage, the installer exit code) or it is dropped",
-          keys <= allowed and labels <= {vrp.ACROBAT_GROUP} and odd == "" and ps._problem("error 0x800f0991") != "",
+          "vocabulary (an error code, a named stage, a specific installer error) or it is dropped",
+          keys <= allowed and labels <= {vrp.ACROBAT_GROUP_PREFIX + "DW003"} and odd == ""
+          and ps._problem("error 0x800f0991") != "" and ps._problem("installer error DW003") != "",
           f"{sorted(keys - allowed)} {labels} {odd!r}")
 
 

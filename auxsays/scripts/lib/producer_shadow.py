@@ -42,7 +42,7 @@ MAX_ENTRIES = 3000
 MAX_DEPLOYS = 90
 ORIGINS = ("baseline", "rules_change", "prospective")
 # The only problem labels an item may carry: install characteristics from the producer's closed vocabulary.
-_PROBLEM_LABEL_RE = re.compile(r"^(?:error 0x[0-9a-f]{3,8}|rolls back|stops at [0-9]{1,3}%|installer exit code 7|"
+_PROBLEM_LABEL_RE = re.compile(r"^(?:error 0x[0-9a-f]{3,8}|rolls back|stops at [0-9]{1,3}%|installer error D[WF][0-9]{3}|"
                                r"no shared characteristic|any install failure)$")
 _CANDIDATE_FIELDS = ("class", "product_id", "update_version", "target_build", "verdict", "scope", "severity_basis",
                      "new_in_this_version", "reports", "independence_basis", "problem", "page", "source_record",

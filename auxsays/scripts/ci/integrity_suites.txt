@@ -341,7 +341,15 @@ auxsays/scripts/tests/test_growth3_verdict_policy.py = 146
 # new (V11); an OBS crash needs a launch or core-flow cue and a possible / rare one is queued (V12); every
 # corpus install candidate rests on separate incidents of one problem (C3); the record writers gather reasons
 # as the projection does, so switch-ON drift clears (S6). 39 mutants, VX26..VX39 one fix half each.
-auxsays/scripts/tests/test_verdict_reason_producer.py = 78
+# AUX-099 review (78 -> 93): only identity details (computer, CPU, edition, architecture, OS family) or a
+# reporter id separate two reports -- a failure point or an OS version never does, and a declared follow-up is a
+# copy (I14); a third row never bridges two machines, overlap is not a conflict, a copy of a copy is one report
+# (I15); install wording whose object is other software is refused (I11); Acrobat rows: another product's Exit
+# Code 7 and denials refused, grouping on the specific DW/DF error (I3, I13); any older OBS version or
+# earlier / previous / older / prior is carry-over, a causal "since" is not (V11); a freeze or hang needs the
+# core-flow cue too (V12); every judged corpus page ends as a candidate or a recorded refusal (C2, C3).
+# 51 mutants, VX40..VX51 one fix each.
+auxsays/scripts/tests/test_verdict_reason_producer.py = 93
 # AUX-099, shadow operation of the reason producer (switch OFF): the deploy ledger tells a first-seen
 # candidate from a repeat appearance by stable identity -- a baseline first deploy, 0 new over unchanged
 # evidence, exactly the expected new candidate after one added row, a repeat after one more report, a
