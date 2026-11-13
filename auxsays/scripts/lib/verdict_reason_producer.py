@@ -191,20 +191,21 @@ _PLATFORM_BEFORE_RE = re.compile(
     r"directx|opengl|librist|srt|x264|aja|decklink)\s*(?:version\s*)?v?$", re.I)
 
 
-def _obs_persistence(statement: str, version: str, named: list[str]) -> str:
+def _obs_persistence(statement: str, version: str) -> str:
     """Where an OBS bullet says the defect was already there BEFORE `version`: "OBS <v>" for the earliest
-    older OBS version it names (as the defective one, or anywhere -- "a regression in 31.0.0", "as in 32.0.4"),
-    "earlier versions" for carried-over wording without one, or "" when the bullet names `version` as where
-    the defect starts (new in it). A version number that belongs to a platform or component ("macOS 14.4.1")
-    is not an OBS version."""
+    older OBS version it names ANYWHERE (as the defective one -- "in 31.1.0 and 31.1.1" read on 31.1.1 -- or
+    not: "a regression in 31.0.0", "as in 32.0.4"), "earlier versions" for carried-over wording without one,
+    or "" when the bullet names `version` as where the defect starts (new in it). A version number that
+    belongs to a platform or component ("macOS 14.4.1") is not an OBS version."""
     key = _version_key(version)
-    older = [v for v in named if _version_key(v) < key]
-    for m in _ANY_VERSION_RE.finditer(statement):
-        if _version_key(m.group(1)) < key and not _PLATFORM_BEFORE_RE.search(statement[max(0, m.start() - 40):m.start()]):
-            older.append(m.group(1))
+    older = {m.group(1) for m in _ANY_VERSION_RE.finditer(statement)
+             if _version_key(m.group(1)) < key
+             and not _PLATFORM_BEFORE_RE.search(statement[max(0, m.start() - 40):m.start()])}
     if older:
-        return f"OBS {sorted(set(older), key=_version_key)[0]}"
+        return f"OBS {sorted(older, key=_version_key)[0]}"
     return "earlier versions" if _PERSISTENT_RE.search(statement) else ""
+
+
 _DATA_LOSS_RE = re.compile(r"\bdata loss\b|\b(?:recordings?|files?|projects?|scene collections?|data)\b[^.]{0,40}"
                            r"\b(?:lost|deleted|corrupt\w*|overwritten|wiped)\b", re.I)
 _INSTALL_FAIL_RE = re.compile(r"\b(?:fail(?:s|ed|ing)? to install|install(?:ation|er)? (?:fail\w*|error)|"
@@ -359,7 +360,7 @@ def _obs_candidates(records: list[Mapping[str, Any]], pages: Mapping[tuple[str, 
                             severity=verdict_info.get("severity", ""), note=verdict_info.get("note", ""),
                             problem_key=problem_key)
                 continue
-            persists_from = _obs_persistence(st["statement"], version, st["named"])
+            persists_from = _obs_persistence(st["statement"], version)
             new = not persists_from
             lead = (f"OBS confirms this problem persists in OBS {version} (carried over from {persists_from})"
                     if persists_from else f"OBS confirms this problem in OBS {version}")
