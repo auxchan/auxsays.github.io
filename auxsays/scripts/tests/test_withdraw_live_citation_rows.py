@@ -627,11 +627,17 @@ def run() -> int:  # noqa: PLR0915
     proc, same = refused("aux088-e19-", manifest=foreign)
     check("E19 a row of any product but Windows and OBS is refused",
           proc.returncode == 1 and "not a Windows or OBS row" in proc.stdout and same, proc.stdout[-300:])
+    # AUX-098 added a second declared scope (Windows, OBS and DaVinci); anything else still refuses.
     scope = fixture_manifest()
-    scope["products"] = [WIN, OBS, "blackmagic-davinci"]
+    scope["products"] = [WIN, OBS, "blackmagic-davinci", "adobe-acrobat-reader"]
     proc, same = refused("aux088-e19b-", manifest=scope)
-    check("E19b a manifest cannot widen the product scope",
-          proc.returncode == 1 and "product scope differs" in proc.stdout and same, proc.stdout[-300:])
+    reordered = fixture_manifest()
+    reordered["products"] = [OBS, WIN]
+    proc2, same2 = refused("aux088-e19b2-", manifest=reordered)
+    check("E19b a manifest cannot widen the product scope beyond the tool's declared scopes, nor reorder one",
+          proc.returncode == 1 and "product scope differs" in proc.stdout and same
+          and proc2.returncode == 1 and "product scope differs" in proc2.stdout and same2,
+          proc.stdout[-300:] + proc2.stdout[-300:])
 
     # A pinned row stored UNCOUNTED, with an edit and a field set that would turn it back on: the field
     # proof agrees with the edit, so only the "no row starts counting" guard can refuse it.

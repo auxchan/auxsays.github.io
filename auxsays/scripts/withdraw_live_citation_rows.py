@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audited withdrawal of live-page citations credited to the wrong update, Windows and OBS (AUX-088).
+"""Audited withdrawal of live-page citations credited to the wrong update (AUX-088) and of reports posted twice (AUX-098).
 
 A citation audit of the six live-consensus pages (Windows 11 25H2 26200.7462, .7623, .7840; OBS Studio
 32.1.1, 32.1.2, 32.2.2) flagged stored rows that count against an update they are not about. A second
@@ -23,7 +23,7 @@ THE MECHANISM IS AUX-072's AND AUX-079's, imported rather than copied: five-fiel
 (product_id, update_version, target_build, id, source_url), the block splitter and its row-for-block
 proof, pinned before/after block hashes, the field-by-field proof that nothing but the withdrawal
 fields moved, dry run by default, `--write --confirm-write`, all or nothing, idempotent. Scoped to
-the two products:
+the products the manifest declares (AUX-088: Windows and OBS; AUX-098 adds DaVinci):
 
   microsoft-windows-11  build-aware: target_build is part of the identity, the record's CURRENT
                         target KB and OS build must equal the pinned ones, and the edit is AUX-079's
@@ -65,6 +65,29 @@ pinned hash is also satisfied by its recorded successor -- for a kept row (befor
 withdrawn row (after), never for a row still to withdraw, whose edit must start from the pinned bytes.
 A successor that is not recorded against that exact pinned hash still refuses.
 
+DUPLICATES POSTED TWICE (AUX-098). Two independent adjudications of the counted corpus found reports one
+person posted twice (a cross-post or a re-post of one incident). The same mechanism withdraws them, with
+four surgical additions and no other change:
+
+  scope       a manifest declares one of two product scopes: AUX-088's (Windows, OBS), which its two
+              pinned manifests keep, or that scope plus blackmagic-davinci. Every entry must be a row of
+              the scope its manifest declares. DaVinci has no build contract (target_build empty) and
+              takes the non-Windows two-line edit; a DaVinci block carrying a validity line refuses.
+  two labels  besides AUX-088's two INCORRECT labels, a duplicate may carry two `same_report_duplicate`
+              labels from two different, named reviewers, and BOTH must name the kept row the entry
+              names (`duplicate_of_id` == duplicate_of.id). Agreeing that two rows are one report is not
+              enough; the two reviews must agree on which row stays.
+  same time   the kept row is normally the EARLIER capture. Rows found in one collection run share a
+              capture time, so the retained row is then the earlier POST: the entry must state
+              `capture_tie: true` (and must not state it when the captures differ), both labels must be
+              `same_report_duplicate`, and the tool itself derives a source-native ordinal from both stored
+              URLs in one family -- the Microsoft Learn question number, the Reddit base-36 post id -- and
+              the kept row's must be the lower. Any other family, a missing ordinal, or two families
+              refuses. `source_date` never decides: it is a thread's last activity.
+  writers     `--regenerate` runs the reconcile and one `--product-id` promotion per product of the
+              manifest's declared scope, so a DaVinci manifest adds exactly davinci-updates.yml's own
+              scoped promotion (`--product-id blackmagic-davinci`); nothing ever runs unscoped.
+
 Exit: 0 dry run, written, or nothing left to do; 1 refused (nothing written); 2 usage error;
 3 a scoped writer failed after the store step.
 """
@@ -98,20 +121,36 @@ MANIFEST = SCRIPTS / "audit" / "live_citation_withdrawal.json"
 BASELINE = SCRIPTS / "audit" / "live_citation_withdrawal_baseline_v2.json"
 
 OBS_PRODUCT_ID = "obs-studio"
-PRODUCTS = (WINDOWS_PRODUCT_ID, OBS_PRODUCT_ID)
+DAVINCI_PRODUCT_ID = "blackmagic-davinci"
+PRODUCTS = (WINDOWS_PRODUCT_ID, OBS_PRODUCT_ID)  # AUX-088's scope; its two manifests pin it
+EXTENDED_PRODUCTS = PRODUCTS + (DAVINCI_PRODUCT_ID,)  # AUX-098
+SCOPES = {PRODUCTS: "Windows or OBS", EXTENDED_PRODUCTS: "Windows, OBS or DaVinci"}
 SELECTOR = aux072.SELECTOR
 DUPLICATE_REASON = "duplicate_existing_evidence"
 REASONS = frozenset({aux072.REASON, DUPLICATE_REASON, "version_named_but_working",
                      "version_is_rollback_target", "not_a_real_issue_report"})
 INCORRECT = "INCORRECT"
+DUPLICATE_LABEL = "same_report_duplicate"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
-FRONT_RE = re.compile(r"^product_id:\s*['\"]?(" + "|".join(re.escape(p) for p in PRODUCTS) + r")['\"]?\s*$", re.M)
-WRITERS = (
-    ("build_consensus_from_evidence.py", "--product-id", WINDOWS_PRODUCT_ID, "--product-id", OBS_PRODUCT_ID,
-     "--reconcile-only"),
-    ("apply_consensus_to_records.py", "--product-id", WINDOWS_PRODUCT_ID, "--write-all", "--confirm-write"),
-    ("apply_consensus_to_records.py", "--product-id", OBS_PRODUCT_ID, "--write-all", "--confirm-write"),
+FRONT_RE = re.compile(r"^product_id:\s*['\"]?(" + "|".join(re.escape(p) for p in EXTENDED_PRODUCTS)
+                      + r")['\"]?\s*$", re.M)
+# Source-native post ordinals, for a same-time capture only: (family, URL pattern, base of the id).
+ORDINAL_FAMILIES = (
+    ("microsoft_learn_question",
+     re.compile(r"^https://learn\.microsoft\.com/(?:[a-z]{2}-[a-z]{2}/)?answers/questions/([0-9]+)(?:[/?#]|$)"), 10),
+    ("reddit_post", re.compile(r"^https://(?:www\.)?reddit\.com/r/[A-Za-z0-9_]+/comments/([0-9a-z]+)(?:[/?#]|$)"), 36),
 )
+
+
+def writers_for(scope: tuple[str, ...]) -> tuple[tuple[str, ...], ...]:
+    """The reconcile scoped to the products, then each product's own scoped promotion. Never unscoped."""
+    reconcile = ("build_consensus_from_evidence.py",
+                 *(arg for product in scope for arg in ("--product-id", product)), "--reconcile-only")
+    return (reconcile,) + tuple(("apply_consensus_to_records.py", "--product-id", product, "--write-all",
+                                 "--confirm-write") for product in scope)
+
+
+WRITERS = writers_for(PRODUCTS)
 
 
 class Refusal(Exception):
@@ -136,9 +175,9 @@ def withdrawn_fields(product_id: str, reason: str) -> dict[str, Any]:
 
 
 def withdraw_block(block: str, product_id: str, reason: str) -> str:
-    """Each old line must occur exactly once in the block; an OBS block must carry no validity line."""
+    """Each old line must occur exactly once in the block; a non-Windows block must carry no validity line."""
     if product_id != WINDOWS_PRODUCT_ID and (aux072.VALID_TRUE in block or aux072.VALID_FALSE in block):
-        raise Refusal("unexpected block shape: an OBS row carrying evidence_valid_for_current_patch")
+        raise Refusal("unexpected block shape: a non-Windows row carrying evidence_valid_for_current_patch")
     for old, new in edit_for(product_id, reason):
         if block.count(old) != 1:
             raise Refusal(f"unexpected block shape: {old.strip()!r} occurs {block.count(old)} times")
@@ -155,10 +194,36 @@ def load_manifest(path: Path) -> list[dict[str, Any]]:
     return manifest_entries(json.loads(Path(path).read_text(encoding="utf-8")))
 
 
-def _labelled_incorrect(adj: dict[str, Any]) -> bool:
-    first, blind = adj.get("first_audit") or {}, adj.get("second_blind") or {}
-    return (first.get("label") == INCORRECT and blind.get("label") == INCORRECT
-            and bool(str(first.get("reason") or "").strip()) and bool(str(blind.get("reason_class") or "").strip()))
+def _labels(entry: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+    adj = entry.get("adjudication") or {}
+    return adj.get("first_audit") or {}, adj.get("second_blind") or {}
+
+
+def _two_labels(entry: dict[str, Any]) -> bool:
+    """Two agreeing labels with reasons: both INCORRECT (AUX-088), or both `same_report_duplicate` from two
+    different named reviewers that each name the kept row this entry names (AUX-098)."""
+    first, blind = _labels(entry)
+    reasons = bool(str(first.get("reason") or "").strip()) and bool(str(blind.get("reason_class") or "").strip())
+    if first.get("label") == INCORRECT and blind.get("label") == INCORRECT:
+        return reasons
+    if first.get("label") == DUPLICATE_LABEL and blind.get("label") == DUPLICATE_LABEL:
+        kept = str((entry.get("duplicate_of") or {}).get("id") or "")
+        by = (str(first.get("by") or "").strip(), str(blind.get("by") or "").strip())
+        # Two duplicate labels authorize only a duplicate withdrawal, and only of a named kept row: an empty
+        # kept id would otherwise equal two empty label ids (review 1, LOW-3).
+        return (reasons and bool(kept) and entry.get("exclusion_reason") == DUPLICATE_REASON
+                and first.get("duplicate_of_id") == kept and blind.get("duplicate_of_id") == kept
+                and all(by) and by[0] != by[1])
+    return False
+
+
+def manifest_scope(doc: dict[str, Any]) -> tuple[str, ...]:
+    """The product scope the manifest declares: AUX-088's (Windows, OBS) or that plus DaVinci, exactly."""
+    scope = tuple(doc.get("products") or ())
+    if scope not in SCOPES:
+        raise Refusal("manifest: the product scope differs from the tool's (Windows and OBS, or Windows, OBS "
+                      "and DaVinci)")
+    return scope
 
 
 def manifest_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: PLR0912
@@ -167,8 +232,7 @@ def manifest_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: PLR0
         raise Refusal("manifest: the selector is not the five-field identity")
     if sorted(doc.get("exclusion_reasons") or []) != sorted(REASONS):
         raise Refusal("manifest: the exclusion reasons differ from the tool's closed vocabulary")
-    if list(doc.get("products") or []) != list(PRODUCTS):
-        raise Refusal("manifest: the product scope differs from the tool's (Windows and OBS)")
+    scope = manifest_scope(doc)
     entries = doc.get("entries")
     if not isinstance(entries, list) or not entries:
         raise Refusal("manifest: no entries")
@@ -177,8 +241,8 @@ def manifest_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: PLR0
     for entry in entries:
         ident = _ident(entry)
         product = ident[0]
-        if product not in PRODUCTS:
-            raise Refusal(f"manifest: not a Windows or OBS row: {ident}")
+        if product not in scope:
+            raise Refusal(f"manifest: not a {SCOPES[scope]} row: {ident}")
         required = [ident[i] for i in (0, 1, 3, 4)]
         if not all(required):
             raise Refusal(f"manifest: an entry lacks part of the five-field identity: {ident}")
@@ -202,8 +266,9 @@ def manifest_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: PLR0
             continue
         if entry.get("exclusion_reason") not in REASONS:
             raise Refusal(f"manifest: reason {entry.get('exclusion_reason')!r} is outside the closed vocabulary: {ident[3]}")
-        if not _labelled_incorrect(entry.get("adjudication") or {}) or not str(entry.get("basis") or "").strip():
-            raise Refusal(f"manifest: row lacks two INCORRECT labels with reasons and a stated basis: {ident[3]}")
+        if not _two_labels(entry) or not str(entry.get("basis") or "").strip():
+            raise Refusal(f"manifest: row lacks two INCORRECT labels (or two same_report_duplicate labels from "
+                          f"two reviewers naming its kept row) with reasons and a stated basis: {ident[3]}")
     referenced: set[tuple[str, ...]] = set()
     for entry in entries:
         if entry["role"] != "withdraw":
@@ -255,8 +320,8 @@ def _pin_holds(entry: dict[str, Any], key: str, digest: str, baseline: dict) -> 
 
 
 def patch_records(generated_dir: Path) -> dict[tuple[str, str, str], list[tuple[str, dict[str, Any]]]]:
-    """Canonical patch key -> [(file name, front matter)] for every Windows and OBS update record.
-    Only files whose front matter names one of the two products are parsed."""
+    """Canonical patch key -> [(file name, front matter)] for every Windows, OBS and DaVinci update record.
+    Only files whose front matter names one of the three products are parsed."""
     out: dict[tuple[str, str, str], list[tuple[str, dict[str, Any]]]] = {}
     for path in sorted(Path(generated_dir).glob("*.md")):
         head = path.read_text(encoding="utf-8").split(EOL + "---", 1)[0]
@@ -272,9 +337,10 @@ def _targets(records: dict) -> dict[tuple[str, str, str], dict[str, Any]]:
     return windows_targets_from_front_matter(data for found in records.values() for _name, data in found)
 
 
-def _counts(rows: list[dict[str, Any]], targets: dict) -> dict[tuple[str, str, str], int]:
-    """The authoritative counted population of the two products, per patch (Windows gate included)."""
-    return counted_evidence_counts([r for r in rows if str(r.get("product_id") or "") in PRODUCTS],
+def _counts(rows: list[dict[str, Any]], targets: dict,
+            scope: tuple[str, ...] = PRODUCTS) -> dict[tuple[str, str, str], int]:
+    """The authoritative counted population of the scope's products, per patch (Windows gate included)."""
+    return counted_evidence_counts([r for r in rows if str(r.get("product_id") or "") in scope],
                                    windows_targets=targets)
 
 
@@ -292,22 +358,60 @@ def _record_refusal(entry: dict[str, Any], records: dict) -> str:
     return ""
 
 
-def _duplicate_refusal(row: dict[str, Any], kept: dict[str, Any]) -> str:
-    """'' when `kept` still counts, on the same patch, as the earlier capture of another report URL."""
+def source_ordinal(url: str) -> tuple[str, int] | None:
+    """(family, the source's own post number) for a URL of a family with sequential post ids, else None."""
+    for family, pattern, base in ORDINAL_FAMILIES:
+        match = pattern.match(str(url or ""))
+        if match:
+            return family, int(match.group(1), base)
+    return None
+
+
+def _tie_refusal(row: dict[str, Any], kept: dict[str, Any], entry: dict[str, Any]) -> str:
+    """'' when a same-time capture is decided: two duplicate labels and the kept row the earlier post."""
+    first, blind = _labels(entry)
+    if not (first.get("label") == DUPLICATE_LABEL and blind.get("label") == DUPLICATE_LABEL):
+        return "a same-time capture needs two same_report_duplicate labels naming the kept row"
+    mine, theirs = source_ordinal(str(row.get("source_url") or "")), source_ordinal(str(kept.get("source_url") or ""))
+    if mine is None or theirs is None:
+        return "a same-time capture whose source gives no post number"
+    if mine[0] != theirs[0]:
+        return "a same-time capture across two source families"
+    if not theirs[1] < mine[1]:
+        return "the kept row is not the earlier post"
+    return ""
+
+
+def _duplicate_refusal(row: dict[str, Any], kept: dict[str, Any], entry: dict[str, Any] | None = None) -> str:
+    """'' when `kept` still counts, on the same patch, as the earlier capture of another report URL -- or,
+    captured at the same instant and stated as such, as the earlier post (AUX-098)."""
     if key_from(row) != key_from(kept):
         return "the kept row is on another patch"
     if report_url_key(str(row.get("source_url") or "")) == report_url_key(str(kept.get("source_url") or "")):
         return "the kept row is the same report URL"
-    if not str(kept.get("captured_at") or "") < str(row.get("captured_at") or ""):
+    row_at, kept_at = str(row.get("captured_at") or ""), str(kept.get("captured_at") or "")
+    tie = (entry or {}).get("capture_tie") is True
+    if row_at and kept_at == row_at:
+        if not tie:
+            return "the kept row is not the earlier capture"
+        why = _tie_refusal(row, kept, entry or {})
+        if why:
+            return why
+    elif not kept_at < row_at:
         return "the kept row is not the earlier capture"
+    elif tie:
+        return "capture_tie is stated but the kept row is the earlier capture"
     if kept.get("counted") is not True:
         return "the kept row does not count"
     return ""
 
 
 def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR0912, PLR0915
-         baseline: dict | None = None) -> dict[str, Any]:
-    """Decide every entry and prove the resulting text, without writing. Raises Refusal."""
+         baseline: dict | None = None, scope: tuple[str, ...] | None = None) -> dict[str, Any]:
+    """Decide every entry and prove the resulting text, without writing. Raises Refusal.
+    `scope` is the manifest's declared product scope (AUX-088's when every entry is a Windows or OBS row)."""
+    if scope is None:
+        scope = PRODUCTS if all(e.get("product_id") in PRODUCTS for e in entries) else EXTENDED_PRODUCTS
     blocks = aux072.store_blocks(text)
     by_identity: dict[tuple[str, ...], list[int]] = {}
     for index, (_lo, _hi, row) in enumerate(blocks):
@@ -368,7 +472,7 @@ def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR09
         row, kept = located.get(_ident(entry)), located.get(_ident(entry, "duplicate_of"))
         if row is None or kept is None:
             continue  # already refused above
-        why = _duplicate_refusal(row, kept)
+        why = _duplicate_refusal(row, kept, entry)
         if why:
             refusals.append(f"duplicate {entry['update_version']} {entry['id']}: {why}")
     if refusals:
@@ -397,7 +501,7 @@ def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR09
         raise Refusal("a row would start counting: " + "; ".join(newly_counted))
 
     targets = _targets(records)
-    before, after = _counts(rows_before, targets), _counts(rows_after, targets)
+    before, after = _counts(rows_before, targets, scope), _counts(rows_after, targets, scope)
     withdrawn = {_ident(e) for e in entries if e["role"] == "withdraw"}
     pinned = {_ident(e) for e in entries}
     reports = {report_url_key(e["source_url"]) for e in entries if e["role"] == "withdraw"}
@@ -411,7 +515,7 @@ def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR09
                          "unchanged": index not in edits and after_row == row})
     touched = sorted({patch_key(*k[:3]) for k in withdrawn})
     population = {product: [sum(n for k, n in before.items() if k[0] == product),
-                            sum(n for k, n in after.items() if k[0] == product)] for product in PRODUCTS}
+                            sum(n for k, n in after.items() if k[0] == product)] for product in scope}
     return {
         "new_text": new_text,
         "entries": decided,
@@ -428,9 +532,12 @@ def run(store: Path, generated_dir: Path, manifest: Path, write: bool,
         baseline: Path | None = BASELINE) -> dict[str, Any]:
     raw = Path(store).read_bytes()
     text = raw.decode("utf-8")
-    result = plan(text, load_manifest(manifest), patch_records(generated_dir), load_baseline(baseline))
+    doc = json.loads(Path(manifest).read_text(encoding="utf-8"))
+    scope = manifest_scope(doc)
+    result = plan(text, manifest_entries(doc), patch_records(generated_dir), load_baseline(baseline), scope)
     new_text = result.pop("new_text")
     result.update({
+        "product_scope": list(scope),
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "exclusion_reasons": sorted(REASONS),
         "store_sha256_before": sha(raw),
@@ -473,7 +580,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--write", action="store_true", help="apply the withdrawal in place")
     ap.add_argument("--confirm-write", action="store_true", help="required together with --write")
     ap.add_argument("--regenerate", action="store_true",
-                    help="after the store step, run the scoped Windows and OBS writers (default tree only)")
+                    help="after the store step, run the writers scoped to the manifest's products (default tree only)")
     ap.add_argument("--audit", type=Path, help="also write the run's audit JSON here")
     ap.add_argument("--parent-commit", default="", help="commit the store was read at (audit only)")
     args = ap.parse_args(argv)
@@ -507,7 +614,7 @@ def main(argv: list[str] | None = None) -> int:
           f"(still counted: {sum(1 for s in siblings if s['counted'] is True)})")
     status = 0
     if args.regenerate:
-        result["writers"] = regenerate()
+        result["writers"] = regenerate(writers_for(tuple(result["product_scope"])))
         for step in result["writers"]:
             print(f"writer rc={step['returncode']}: {step['command']}")
         if any(step["returncode"] != 0 for step in result["writers"]):

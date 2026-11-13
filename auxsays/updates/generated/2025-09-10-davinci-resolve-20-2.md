@@ -19,7 +19,7 @@ update_published_at: '2025-09-10T00:00:00Z'
 update_last_checked: '2026-07-21T19:55:13Z'
 source_last_checked: '2026-07-21T19:55:13Z'
 official_body_last_checked: '2026-07-21T19:55:13Z'
-record_last_updated: '2026-09-30T14:12:50.198268Z'
+record_last_updated: '2026-11-12T21:59:28.379960Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,23 +27,23 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.2
 update_detail_title: DaVinci Resolve 20.2
 update_consensus_label: Negative
-update_report_count: 16
+update_report_count: 15
 update_consensus_confidence: Low-Medium
-quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 20.2 has 16 user reports found.'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 20.2 has 15 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.2 in its official support downloads feed.
 release_summary: This software update adds support for immersive EXR workflows and streaming immersive content from
   Fusion directly into Apple Vision Pro. In addition, there is improved track patching and ripple trim controls,
   new custom metadata fields and support for playing Apple ProRes RAW. DaVinci Resolve Studio 20.2 also improves
   MultiText alignment and transformation controls in Fusion and adds a new AI Cinematic Haze effect on the color
   page. This version requires a DaVinci Resolve Studio license dongle or software activation code.
-consensus_report: '16 user reports found for DaVinci Resolve 20.2. Current reports mention render/export failures,
+consensus_report: '15 user reports found for DaVinci Resolve 20.2. Current reports mention render/export failures,
   startup or application crashes, and performance slowdowns. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 16
+confirmed_patch_specific_report_count: 15
 evidence_last_checked: '2026-09-30T13:29:16Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
@@ -78,6 +78,9 @@ status_events:
 - at: '2026-09-30T14:12:50.198268Z'
   label: User reports found
   note: User report count updated to 16.
+- at: '2026-11-12T21:59:28.379960Z'
+  label: User reports found
+  note: User report count updated to 15.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -130,7 +133,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20.2. 16 user reports are matched to this exact update,
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20.2. 15 user reports are matched to this exact update,
   but no problem in them is confirmed as reported independently by two or more users. If one matches your setup,
   test before relying on this update.'
 evidence_samples:
@@ -197,15 +200,6 @@ accepted_report_sources:
   patch_version_matched: true
   issue: performance slowdowns in timeline / GPU performance
   workflow_area: timeline / GPU performance
-- source_name: r/davinciresolve
-  source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1rvhlmx/audio_problem_after_exporting/
-  source_title: Audio Problem after Exporting
-  source_date: '2026-03-16'
-  version_matched: '20.2'
-  patch_version_matched: true
-  issue: render/export failures
-  workflow_area: render/export
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1rnhcy6/problem_audio_after_exporting/
@@ -329,7 +323,7 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 16 user reports are matched to this exact update, but no problem in them
+update_decision_body: 'No verdict yet: 15 user reports are matched to this exact update, but no problem in them
   is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
   this update.'
 practical_recommendations:

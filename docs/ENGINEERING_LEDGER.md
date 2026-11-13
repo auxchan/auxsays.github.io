@@ -78,6 +78,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-079 | Resolved | Evidence integrity | High | Fourteen stored Windows rows counted against a patch they were not about, or twice for one question |
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
 | AUX-090 | Resolved | Publication | Medium | Every OBS report on a patch page read "date not recorded", though each source states when it was posted |
+| AUX-098 | Resolved | Evidence integrity | Medium | Fourteen reports that one person had posted twice were each counted as two reports |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
@@ -4723,6 +4724,55 @@ with 43 mutants each killed by a named check.
 **Reopen only if** a stored OBS date differs from its source's own creation time, a reply is dated by its
 parent, a pinned row's `captured_at` or `counted` changes without its own audited change, or a pinned row moves
 without a recorded successor.
+
+---
+### AUX-098 — Fourteen reports that one person had posted twice were each counted as two reports
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-10 (a read of every counted row; a blind second adjudication) · **Resolved** 2026-11-12
+
+**Symptom** A read of every counted row found reports that one person had posted twice: a copy on a second site,
+the same question asked again, an issue filed again after it was closed. Each copy counted as another report. The
+unit counted is a report, not a person and not a URL, so one incident posted twice is one report. A second
+adjudication, made blind to the first labels, agreed on 14 rows in 8 groups on 7 pages, and named the same
+original as the first in every group.
+
+**Scope** Only rows that both adjudications labelled a duplicate of the same original. Three pairs are held out
+and still count: on 26200.7922 both say the two rows are one report but keep opposite rows; on Acrobat Reader
+15.020.20039 only one says duplicate; a 26H2 26300.9550 copy of a 25H2 question needs a different reason (the
+post names another build), which has no second label, and its original is on another patch. The same person's
+different incidents stay counted. No acceptance rule changes, and text similarity never withdraws anything.
+
+**Fix** `withdraw_live_citation_rows.py` (AUX-088) withdraws them from a third pinned manifest,
+`scripts/audit/live_citation_withdrawal_v3.json`, with four additions:
+- a manifest declares AUX-088's scope (Windows, OBS) or that scope plus DaVinci, which has no build contract and
+  takes the two-line edit;
+- a duplicate may carry two `same_report_duplicate` labels from two named reviewers, and both must name the kept
+  row the entry names;
+- rows found in one collection run share a capture time, so the kept row is then the earlier post: the entry must
+  state the tie, and the tool reads the Microsoft Learn question number or the Reddit post id from both stored URLs
+  and requires the kept one to be lower (any other source refuses; `source_date` is last activity and never used);
+- `--regenerate` runs the reconcile and one scoped promotion per declared product (for DaVinci, davinci-updates.yml's
+  own `--product-id blackmagic-davinci` step), never unscoped.
+The rest is AUX-088's: five-field selection, pinned block hashes, all or nothing, idempotent. Every row is kept
+with `counted: false` and `duplicate_existing_evidence`, and each original stays byte-identical and counted.
+
+**Measured** Counted rows: Windows 532 -> 524, OBS 293 -> 288, DaVinci 336 -> 335 (all products 1485 -> 1471);
+every row kept; store diff 36 lines. Pages: 25H2 26200.7623 41 -> 40 (still live, 7 over the minimum), 26200.8894
+7 -> 6, 26200.8973 16 -> 10; OBS 31.1.2 4 -> 3, 32.2.0 10 -> 8, 32.2.1 28 -> 26; DaVinci 20.2 16 -> 15. No live
+decision changes. Each of the seven records loses exactly its withdrawn sources and gains one "User report count
+updated to N." event; verdicts are unchanged. 26200.8973's newest counted capture moves back from 2026-09-08 to
+2026-09-05 and OBS 31.1.2's from 2026-10-12 to 2026-10-05, because a withdrawn row was the newest. On 26200.8894
+and OBS 32.2.0 one evidence sample is replaced by the writer's own selection, and OBS 31.1.2 shows three samples
+instead of four. A second run of the tool and the writers changes nothing.
+`test_withdraw_duplicate_reports.py` pins it (52 checks; 28 mutants, each killed by a named check: review 1's three
+additions pin that a same-time tie is decided by the post number, that selection is exact on all five fields, and
+that two duplicate labels never authorize a withdrawal without a named kept row); the AUX-088
+suite's scope check now refuses any scope beyond the two declared ones (81).
+
+**Reopen only if** any of the fourteen counts again, an original stops counting without its own audited
+withdrawal, a held-out pair is withdrawn without two labels naming the same original, or a same-time capture is
+decided by anything but the source's own post number.
 
 ---
 ### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks

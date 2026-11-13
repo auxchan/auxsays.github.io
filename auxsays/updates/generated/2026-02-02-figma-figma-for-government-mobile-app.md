@@ -17,8 +17,8 @@ update_version: Figma for Government Mobile App
 update_logo_text: FIG
 update_published_at: '2026-02-02T00:00:00.000Z'
 update_last_checked: '2026-07-30T03:47:00Z'
-source_last_checked: '2026-10-08T01:59:36Z'
-official_body_last_checked: '2026-10-08T01:59:36Z'
+source_last_checked: '2026-11-13T02:21:34Z'
+official_body_last_checked: '2026-11-13T02:21:34Z'
 record_last_updated: '2026-07-30T03:47:00Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-08T01:59:36Z'
+  url: https://www.figma.com/release-notes/?title=figma-for-government-mobile-app
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-13T02:21:34Z'
   url: https://www.figma.com/release-notes/?title=figma-for-government-mobile-app
   status: captured-from-rss-feed
   body_captured: true
