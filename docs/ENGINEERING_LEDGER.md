@@ -5242,6 +5242,14 @@ failures (26300.9818) and a freeze when closing the About dialog draft nothing; 
 and LOW-6 stop QA (exit 1). Two simulated deploys over unchanged evidence: the second records 0 new candidates (23
 and 26 repeat appearances); one added Windows 10 row on Acrobat Pro 15.008.20082 showing the same installer error
 (DW006) as the page's Mac report records exactly that one new prospective candidate; the next deploy, 0.
+Re-measured after merging main at 52ac8ef4 (AUX-098's duplicate withdrawal and the 2026-11-10 official ingest; 1,553
+records): 14 vendor candidates and 0 install. The newest Windows release-health roll-ups no longer list 9 of the
+issues the earlier ones carried, so those 9 vendor drafts went away; main's own producer drops the same 9 (49 -> 40).
+The install side is unchanged (25 judged pages refused, 26 items queued). Switch OFF: a deploy-order build equals
+main's at 52ac8ef4 (1,863 files, 4 differ only in build timestamps, masked tree 8509410c... and projection
+07fe73f8... on both, QA 0/0, both verifiers clean). Switch ON: QA 0 errors and 6 drift warnings (4 report-bearing
+pages, 2 security panels), cleared by one record-writer promotion that changes exactly those 6 records; the
+probes give the same results; the shadow proof gives 14 / 26 baseline, 0 new, then exactly 1 new.
 
 **Tests** `test_growth3_verdict_policy.py` 143 -> 146 (G3-Q14 on all three identity fields; X54/X55; G3-P9 made a
 floor because the corpus now has 48 security updates). `test_verdict_reason_producer.py` 56 -> 93 (VRP-I2
