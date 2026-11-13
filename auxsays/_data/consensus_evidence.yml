@@ -71235,7 +71235,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
   product_id: microsoft-teams
   update_version: 26288.2004.5269.3420
@@ -71356,7 +71355,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
   product_id: microsoft-teams
   update_version: 26276.513.5241.9675
@@ -71477,7 +71475,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -71598,7 +71595,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -71719,7 +71715,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -71840,7 +71835,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -71961,7 +71955,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -72082,7 +72075,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6066202-ms-teams-responding-with-a-message-tha
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -72203,7 +72195,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6065914-question-6065914
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -72234,7 +72225,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9818'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6065278-question-6065278
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -72264,7 +72254,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9711'
-
 - id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067084-teams-desktop-app-taskbar-notification
   product_id: microsoft-teams
   update_version: 26288.2004.5269.3420
@@ -72289,7 +72278,6 @@ evidence:
   severity: ''
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067187-question-6067187
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -72348,7 +72336,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9974'
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6066296-question-6066296
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -72407,7 +72394,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9818'
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6067328-question-6067328
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -72640,3 +72626,630 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9974'
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067759-planner-tabs-fail-to-load-in-microsoft
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067759/planner-tabs-fail-to-load-in-microsoft-teams-deskt
+  parent_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_text_excerpt: 'Planner tabs fail to load in Microsoft Teams (Desktop and Web) Incident: Planner tabs fail to load in Microsoft Teams (Desktop and Web) Affected service: Microsoft Teams / Microsoft Planner Issue start date: November 9, 2026 Scope: Multiple users across the organization...'
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-microsoft-released-windows-11-2
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-microsoft-released-windows-11-26h2-for-mtr-devices-yet/4572822
+  parent_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_text_excerpt: Has Microsoft released Windows 11 26H2 for MTR devices yet? Hi Experts,Hopefully, some Microsoft experts will see this post and release Windows 11 26H2 for MTR soon.Thank you!ROSE
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-login-redirects-to
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-login-redirects-to-old-organization/3301259
+  parent_title: Microsoft Teams login redirects to old organization
+  report_title: Microsoft Teams login redirects to old organization
+  report_text_excerpt: Microsoft Teams login redirects to old organization When attempting to log in to Microsoft Teams, I am directed to an old organisation for which I no longer have an account, and so I am unable to login.&amp;nbsp;There appears to be no way to use an alternative login.
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2022-05-03'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067759-planner-tabs-fail-to-load-in-microsoft
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067759/planner-tabs-fail-to-load-in-microsoft-teams-deskt
+  parent_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_text_excerpt: 'Planner tabs fail to load in Microsoft Teams (Desktop and Web) Incident: Planner tabs fail to load in Microsoft Teams (Desktop and Web) Affected service: Microsoft Teams / Microsoft Planner Issue start date: November 9, 2026 Scope: Multiple users across the organization...'
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-microsoft-released-windows-11-2
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-microsoft-released-windows-11-26h2-for-mtr-devices-yet/4572822
+  parent_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_text_excerpt: Has Microsoft released Windows 11 26H2 for MTR devices yet? Hi Experts,Hopefully, some Microsoft experts will see this post and release Windows 11 26H2 for MTR soon.Thank you!ROSE
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-login-redirects-to
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-login-redirects-to-old-organization/3301259
+  parent_title: Microsoft Teams login redirects to old organization
+  report_title: Microsoft Teams login redirects to old organization
+  report_text_excerpt: Microsoft Teams login redirects to old organization When attempting to log in to Microsoft Teams, I am directed to an old organisation for which I no longer have an account, and so I am unable to login.&amp;nbsp;There appears to be no way to use an alternative login.
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2022-05-03'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067759-planner-tabs-fail-to-load-in-microsoft
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067759/planner-tabs-fail-to-load-in-microsoft-teams-deskt
+  parent_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_text_excerpt: 'Planner tabs fail to load in Microsoft Teams (Desktop and Web) Incident: Planner tabs fail to load in Microsoft Teams (Desktop and Web) Affected service: Microsoft Teams / Microsoft Planner Issue start date: November 9, 2026 Scope: Multiple users across the organization...'
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-microsoft-released-windows-11-2
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-microsoft-released-windows-11-26h2-for-mtr-devices-yet/4572822
+  parent_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_text_excerpt: Has Microsoft released Windows 11 26H2 for MTR devices yet? Hi Experts,Hopefully, some Microsoft experts will see this post and release Windows 11 26H2 for MTR soon.Thank you!ROSE
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-login-redirects-to
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-login-redirects-to-old-organization/3301259
+  parent_title: Microsoft Teams login redirects to old organization
+  report_title: Microsoft Teams login redirects to old organization
+  report_text_excerpt: Microsoft Teams login redirects to old organization When attempting to log in to Microsoft Teams, I am directed to an old organisation for which I no longer have an account, and so I am unable to login.&amp;nbsp;There appears to be no way to use an alternative login.
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2022-05-03'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067759-planner-tabs-fail-to-load-in-microsoft
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067759/planner-tabs-fail-to-load-in-microsoft-teams-deskt
+  parent_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_text_excerpt: 'Planner tabs fail to load in Microsoft Teams (Desktop and Web) Incident: Planner tabs fail to load in Microsoft Teams (Desktop and Web) Affected service: Microsoft Teams / Microsoft Planner Issue start date: November 9, 2026 Scope: Multiple users across the organization...'
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-microsoft-released-windows-11-2
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-microsoft-released-windows-11-26h2-for-mtr-devices-yet/4572822
+  parent_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_text_excerpt: Has Microsoft released Windows 11 26H2 for MTR devices yet? Hi Experts,Hopefully, some Microsoft experts will see this post and release Windows 11 26H2 for MTR soon.Thank you!ROSE
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-login-redirects-to
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-login-redirects-to-old-organization/3301259
+  parent_title: Microsoft Teams login redirects to old organization
+  report_title: Microsoft Teams login redirects to old organization
+  report_text_excerpt: Microsoft Teams login redirects to old organization When attempting to log in to Microsoft Teams, I am directed to an old organisation for which I no longer have an account, and so I am unable to login.&amp;nbsp;There appears to be no way to use an alternative login.
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2022-05-03'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067759-planner-tabs-fail-to-load-in-microsoft
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067759/planner-tabs-fail-to-load-in-microsoft-teams-deskt
+  parent_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_text_excerpt: 'Planner tabs fail to load in Microsoft Teams (Desktop and Web) Incident: Planner tabs fail to load in Microsoft Teams (Desktop and Web) Affected service: Microsoft Teams / Microsoft Planner Issue start date: November 9, 2026 Scope: Multiple users across the organization...'
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-microsoft-released-windows-11-2
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-microsoft-released-windows-11-26h2-for-mtr-devices-yet/4572822
+  parent_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_text_excerpt: Has Microsoft released Windows 11 26H2 for MTR devices yet? Hi Experts,Hopefully, some Microsoft experts will see this post and release Windows 11 26H2 for MTR soon.Thank you!ROSE
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-login-redirects-to
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-login-redirects-to-old-organization/3301259
+  parent_title: Microsoft Teams login redirects to old organization
+  report_title: Microsoft Teams login redirects to old organization
+  report_text_excerpt: Microsoft Teams login redirects to old organization When attempting to log in to Microsoft Teams, I am directed to an old organisation for which I no longer have an account, and so I am unable to login.&amp;nbsp;There appears to be no way to use an alternative login.
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2022-05-03'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067759-planner-tabs-fail-to-load-in-microsoft
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067759/planner-tabs-fail-to-load-in-microsoft-teams-deskt
+  parent_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_text_excerpt: 'Planner tabs fail to load in Microsoft Teams (Desktop and Web) Incident: Planner tabs fail to load in Microsoft Teams (Desktop and Web) Affected service: Microsoft Teams / Microsoft Planner Issue start date: November 9, 2026 Scope: Multiple users across the organization...'
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-microsoft-released-windows-11-2
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-microsoft-released-windows-11-26h2-for-mtr-devices-yet/4572822
+  parent_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_text_excerpt: Has Microsoft released Windows 11 26H2 for MTR devices yet? Hi Experts,Hopefully, some Microsoft experts will see this post and release Windows 11 26H2 for MTR soon.Thank you!ROSE
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-login-redirects-to
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-login-redirects-to-old-organization/3301259
+  parent_title: Microsoft Teams login redirects to old organization
+  report_title: Microsoft Teams login redirects to old organization
+  report_text_excerpt: Microsoft Teams login redirects to old organization When attempting to log in to Microsoft Teams, I am directed to an old organisation for which I no longer have an account, and so I am unable to login.&amp;nbsp;There appears to be no way to use an alternative login.
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2022-05-03'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067759-planner-tabs-fail-to-load-in-microsoft
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067759/planner-tabs-fail-to-load-in-microsoft-teams-deskt
+  parent_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_text_excerpt: 'Planner tabs fail to load in Microsoft Teams (Desktop and Web) Incident: Planner tabs fail to load in Microsoft Teams (Desktop and Web) Affected service: Microsoft Teams / Microsoft Planner Issue start date: November 9, 2026 Scope: Multiple users across the organization...'
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-microsoft-released-windows-11-2
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-microsoft-released-windows-11-26h2-for-mtr-devices-yet/4572822
+  parent_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_text_excerpt: Has Microsoft released Windows 11 26H2 for MTR devices yet? Hi Experts,Hopefully, some Microsoft experts will see this post and release Windows 11 26H2 for MTR soon.Thank you!ROSE
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-login-redirects-to
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-login-redirects-to-old-organization/3301259
+  parent_title: Microsoft Teams login redirects to old organization
+  report_title: Microsoft Teams login redirects to old organization
+  report_text_excerpt: Microsoft Teams login redirects to old organization When attempting to log in to Microsoft Teams, I am directed to an old organisation for which I no longer have an account, and so I am unable to login.&amp;nbsp;There appears to be no way to use an alternative login.
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2022-05-03'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6067759-planner-tabs-fail-to-load-in-microsoft
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6067759/planner-tabs-fail-to-load-in-microsoft-teams-deskt
+  parent_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_title: Planner tabs fail to load in Microsoft Teams (Desktop and Web) - Microsoft Q&A
+  report_text_excerpt: 'Planner tabs fail to load in Microsoft Teams (Desktop and Web) Incident: Planner tabs fail to load in Microsoft Teams (Desktop and Web) Affected service: Microsoft Teams / Microsoft Planner Issue start date: November 9, 2026 Scope: Multiple users across the organization...'
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-has-microsoft-released-windows-11-2
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/has-microsoft-released-windows-11-26h2-for-mtr-devices-yet/4572822
+  parent_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_title: Has Microsoft released Windows 11 26H2 for MTR devices yet?
+  report_text_excerpt: Has Microsoft released Windows 11 26H2 for MTR devices yet? Hi Experts,Hopefully, some Microsoft experts will see this post and release Windows 11 26H2 for MTR soon.Thank you!ROSE
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-login-redirects-to
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-login-redirects-to-old-organization/3301259
+  parent_title: Microsoft Teams login redirects to old organization
+  report_title: Microsoft Teams login redirects to old organization
+  report_text_excerpt: Microsoft Teams login redirects to old organization When attempting to log in to Microsoft Teams, I am directed to an old organisation for which I no longer have an account, and so I am unable to login.&amp;nbsp;There appears to be no way to use an alternative login.
+  captured_at: '2026-11-13T00:25:44Z'
+  source_date: '2022-05-03'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5132061-failed-to-install-10-times-wit
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5132061-failed-to-install-10-times-with-error-code-0x80070306/4572476
+  parent_title: KB5132061 failed to install 10 times with error code 0x80070306
+  report_title: KB5132061 failed to install 10 times with error code 0x80070306
+  report_text_excerpt: KB5132061 failed to install 10 times with error code 0x80070306 My laptop is running Windows 11 25H2 Home Edition. I don&apos;t have the Windows Sandbox feature, and the update failed 11 times. This is the first time I&apos;ve encountered this problem.KB5132061 failed to...
+  captured_at: '2026-11-13T00:35:27Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+- id: obs-studio-32-2-2-github-issue-14194
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14194
+  parent_title: Encoder Anomaly
+  report_title: Encoder Anomaly
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/r6lELcmiBQRLKOsd ### OBS Studio Crash Log URL _No response_ ### Expected Behavior - Def'
+  captured_at: '2026-11-13T01:05:53Z'
+  source_date: '2026-11-12'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
