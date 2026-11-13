@@ -5161,7 +5161,8 @@ kept persistence a phrase list, and applied the core-flow rule to crashes only.
   verdict, scope, problem; never the counts or wording). `lib/producer_shadow` + `scripts/producer_shadow.py` record
   each deploy in `.producer-shadow/ledger.json`: first-seen vs repeat, baseline (first deploy, lost ledger) and
   rules-change items never prospective, bounded (3,000 items, 90 deploys), public-safe (page paths, verdicts, counts,
-  closed labels only). pages.yml (main only, every step continue-on-error) restores it from the Actions cache, runs it
+  closed labels only). Beside the unique keys it counts the distinct pages with a prospective candidate: one page
+  whose install candidate changes problem (another problem overtakes) carries two keys, and that is one case. pages.yml (main only, every step continue-on-error) restores it from the Actions cache, runs it
   after the projection, saves it after the Pages upload and keeps a 90-day run artifact. Not tracked, not rendered,
   no writeback lane involved. Retention: a cache entry lives until 7 days without access (the daily deploy keeps the
   newest alive); a lost ledger re-baselines and says so.
@@ -5196,9 +5197,9 @@ and 26 repeat appearances); one added Windows 10 row on Acrobat Pro 15.008.20082
 floor because the corpus now has 48 security updates). `test_verdict_reason_producer.py` 56 -> 93 (VRP-I2
 detection-only, I10a/b fail-closed and conservative, I11 subject, object and codes, I12 strict grouping, I13 Acrobat
 rows and the specific installer error, I14 one person on one machine, I15 copy clusters, V11 persistence, V12
-crash / freeze severity, C2/C3 corpus, S6 writers; VX26..VX51 one per fix). New `test_producer_shadow.py` 19
-(PS-L1..L7 the deploy ledger incl. the two-deploy and one-added-row proofs, P1/P2 public safety, N1..N3 never public /
-never a tracked writer / pages.yml steps, S1 the bare script; PX1..PX6).
+crash / freeze severity, C2/C3 corpus, S6 writers; VX26..VX51 one per fix). New `test_producer_shadow.py` 21
+(PS-L1..L8 the deploy ledger incl. the two-deploy and one-added-row proofs and the distinct-page count, P1/P2 public
+safety, N1..N3 never public / never a tracked writer / pages.yml steps, S1 the bare script; PX1..PX7).
 
 **Why deferred** Public activation needs the owner's separate approval (AUTH_V2_38 activation criteria: per reason
 class, at least 30 distinct prospective positive candidates with no unsupported recommendation plus an adversarial

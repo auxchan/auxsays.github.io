@@ -216,7 +216,9 @@ def render_summary(ledger: Mapping[str, Any], summary: Mapping[str, Any]) -> str
               f"{summary.get('first_seen_candidates', 0)} | {summary.get('first_seen_queue', 0)} |",
               f"| Repeat appearances | {summary.get('repeat_candidates', 0)} | {summary.get('repeat_queue', 0)} |",
               f"| Unique prospective since shadow operation began | {totals.get('prospective_candidate', 0)} | "
-              f"{totals.get('prospective_queue', 0)} |", ""]
+              f"{totals.get('prospective_queue', 0)} |",
+              f"| Distinct pages with a prospective candidate (still held) | {len(prospective_pages(ledger))} | |",
+              ""]
     entries = ledger.get("entries") or {}
     new = list(summary.get("new_prospective_candidates") or []) + list(summary.get("new_prospective_queue") or [])
     if new:
@@ -229,12 +231,25 @@ def render_summary(ledger: Mapping[str, Any], summary: Mapping[str, Any]) -> str
     return "\n".join(lines) + "\n"
 
 
+def prospective_pages(ledger: Mapping[str, Any], product_class: str = "") -> list[str]:
+    """The DISTINCT pages with a prospective candidate the ledger still holds (optionally one producer class).
+    An activation review counts these beside the keys: one page can carry two keys over time -- its install
+    candidate is the problem with the most separate reports, so when another problem overtakes, the page's
+    candidate changes problem and identity -- and two keys on one page are not two cases."""
+    return sorted({_s(e.get("page")) for e in (ledger.get("entries") or {}).values()
+                   if e.get("origin") == "prospective" and e.get("kind") == "candidate"
+                   and (not product_class or e.get("class") == product_class)})
+
+
 def class_counts(ledger: Mapping[str, Any]) -> dict[str, dict[str, int]]:
-    """Unique items per producer class and origin: what an activation review starts from."""
+    """Unique items per producer class and origin, and the distinct pages with a prospective one: what an
+    activation review starts from."""
     out: dict[str, dict[str, int]] = {}
     for e in (ledger.get("entries") or {}).values():
         if e.get("kind") != "candidate":
             continue
         row = out.setdefault(_s(e.get("class")), {o: 0 for o in ORIGINS})
         row[_s(e.get("origin"))] = row.get(_s(e.get("origin")), 0) + 1
+    for cls, row in out.items():
+        row["prospective_pages"] = len(prospective_pages(ledger, cls))
     return dict(sorted(out.items()))

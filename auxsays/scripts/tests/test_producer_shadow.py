@@ -6,7 +6,7 @@ item) seen for the FIRST time apart from a REPEAT appearance, by the producer's 
 first seen under an unchanged producer version, against a continuing ledger, is PROSPECTIVE; a first deploy,
 a lost ledger and a rules change are baselines that never inflate the prospective count.
 
-SECTIONS. [L] the ledger over consecutive simulated deploys (PS-L1..L7): baseline, a repeat deploy counts 0
+SECTIONS. [L] the ledger over consecutive simulated deploys (PS-L1..L8): baseline, a repeat deploy counts 0
 new, one added evidence row is exactly the expected new candidate, one more report of it is a repeat, a rules
 change and a lost ledger are not prospective, a re-run is not double counted, the ledger stays bounded. [P]
 public safety (PS-P1, P2). [N] never public, never a tracked writer (PS-N1..N3). [S] the bare script pages.yml
@@ -193,6 +193,37 @@ def check_ledger() -> None:
           and led["totals"]["evicted"] == 16 - len(led["entries"])
           and led["totals"]["prospective_candidate"] + led["totals"]["baseline_candidate"] == 16,
           f"{kept} {led['totals']} {len(led['deploys'])}")
+    # The G38 WS2 review's shadow probe: on one Windows page two reports of one code (a Dell and a ThinkPad) draft
+    # a candidate; three more that roll back (HP, Surface, Asus) overtake it, and the page's candidate changes
+    # problem and identity. Two keys, ONE page.
+    win = {"update_entry": True, "product_id": "microsoft-windows-11", "update_version": "25H2",
+           "target_build": "26200.8524", "target_kb": "KB5089573",
+           "permalink": "/updates/microsoft/microsoft-windows-11/25h2/26200.8524/"}
+
+    def wrow(i: int, text: str, date: str) -> dict:
+        return {"id": f"win-{i}", "source_url": f"https://answers.test/{i}", "report_title": "KB5089573 fails",
+                "report_text_excerpt": text, "source_date": date}
+    code = [wrow(1, "My Dell XPS 13 cannot install KB5089573, error 0x800f0922.", "2026-05-20"),
+            wrow(2, "ThinkPad T14: KB5089573 failed to install with 0x800f0922.", "2026-05-21")]
+    rollback = [wrow(3, "HP EliteBook 840: KB5089573 failed to install, error 0x80070002, it rolls back after the "
+                     "restart.", "2026-05-22"),
+                wrow(4, "Surface Pro 9: KB5089573 fails to install with 0x8007000d and rolled back after the "
+                     "restart.", "2026-05-23"),
+                wrow(5, "Asus Zenbook here, KB5089573 failed to install (0x80073712), it rolls back after the "
+                     "restart.", "2026-05-24")]
+    led = None
+    for n, rows in enumerate(([], code, code + rollback), start=1):
+        art = json.loads(json.dumps(vrp.artifact(vrp.produce([win], {vr.record_identity(win): rows}))))
+        led, summ = deploy(led, art, n)
+    keys = ps.unique_prospective(led)
+    text = ps.render_summary(led, summ)
+    check("PS-L8 two keys are not two cases: when another problem overtakes a page's install candidate, the page "
+          "carries a second prospective key, and the diagnostics also count DISTINCT pages (one here) for an "
+          "activation review",
+          len(keys) == 2 and ps.prospective_pages(led) == [win["permalink"]]
+          and ps.class_counts(led)[vrp.INSTALL_CLASS]["prospective_pages"] == 1
+          and "| Distinct pages with a prospective candidate (still held) | 1 |" in text,
+          f"keys={keys} pages={ps.prospective_pages(led)} counts={ps.class_counts(led)}")
 
 
 # ------------------------------------------------------------------------ [P] public safety
@@ -382,6 +413,9 @@ def check_mutations(tmp: Path) -> None:
         ("PX5 the ledger copies the candidate's reason text", check_public_safety, swap(ps, "observation", copies_text)),
         ("PX6 any problem label is stored (no closed vocabulary)", check_public_safety,
          swap(ps, "_PROBLEM_LABEL_RE", re.compile(r".+", re.S))),
+        ("PX7 the distinct-page count counts keys (one page's two problems read as two cases)", check_ledger,
+         swap(ps, "prospective_pages", lambda ledger, product_class="": ps.unique_prospective(
+             ledger, "candidate", product_class))),
     ]
     mutants: list = []
     for label, body, (mutate, restore) in cases:

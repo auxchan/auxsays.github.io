@@ -355,8 +355,9 @@ auxsays/scripts/tests/test_verdict_reason_producer.py = 93
 # evidence, exactly the expected new candidate after one added row, a repeat after one more report, a
 # rules change and a lost ledger never prospective, bounded (PS-L1..L7); public-safe (P1, P2); never
 # public, never a tracked writer, pages.yml's steps main-only and continue-on-error (N1..N3); the bare
-# script end to end (S1). 6 mutants, PX1..PX6.
-auxsays/scripts/tests/test_producer_shadow.py = 19
+# script end to end (S1). 6 mutants, PX1..PX6. Review (19 -> 21): one page whose install candidate changes
+# problem carries two keys, so the diagnostics also count distinct pages (PS-L8; PX7).
+auxsays/scripts/tests/test_producer_shadow.py = 21
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
