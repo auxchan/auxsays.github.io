@@ -4,7 +4,26 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20196
+  report_date: '2026-11-13'
+  report_excerpt: PowerPoint Is not openining PowerPoint Is not openining My PowerPoint is not working
+    currently showing error and repair now i tried but not working any help so i can run again my PowerPoint.
+  report_id: microsoft-powerpoint:44ab91aaa380b894
+  report_title: PowerPoint Is not openining
+  source_family: Microsoft Q&A
+  source_report_id: '6070180'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6070180/powerpoint-is-not-openining
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20196'
+  window_start: '2026-11-10'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -25,7 +44,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -45,7 +64,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -66,7 +85,7 @@ reports:
   window_start: '2026-11-04'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -88,7 +107,7 @@ reports:
   window_start: '2026-11-04'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -109,7 +128,7 @@ reports:
   window_start: '2026-10-28'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -149,7 +168,7 @@ reports:
   window_start: '2026-10-21'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -169,7 +188,7 @@ reports:
   window_start: '2026-10-21'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -710,7 +729,7 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -753,7 +772,7 @@ reports:
   window_start: '2025-01-30'
   window_version: '2501'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -774,7 +793,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -838,7 +857,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -859,7 +878,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-11-13T02:15:44Z'
+  captured_at: '2026-11-13T09:17:54Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
