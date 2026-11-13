@@ -73253,3 +73253,318 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6068707-question-6068707
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6068707/kb5132061-fails-with-0x800f0922-on-26h2-home-china
+  parent_title: KB5132061 fails with 0x800F0922 on 26H2 Home China, event manifest registration returns 1630 - Microsoft Q&A
+  report_title: KB5132061 fails with 0x800F0922 on 26H2 Home China, event manifest registration returns 1630 - Microsoft Q&A
+  report_text_excerpt: KB5132061 fails with 0x800F0922 on 26H2 Home China, event manifest registration returns 1630 - Microsoft Q&A
+  captured_at: '2026-11-13T20:34:07Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6069328-question-6069328
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6069328/onedirive-does-not-sync-at-all
+  parent_title: Onedirive does not sync at all - Microsoft Q&A
+  report_title: Onedirive does not sync at all - Microsoft Q&A
+  report_text_excerpt: Onedirive does not sync at all - Microsoft Q&A Hi, After I have installed (KB5132061) (26300.9974) and restarted pc and working laptop too, the Onedrive business either Free Microsoft account does not sync . After Onedrive reset no option to login again. What happened? What is...
+  captured_at: '2026-11-13T20:34:07Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6068782-question-6068782
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6068782/windows-11-26h2-wont-boot-after-kb5132061-update-e
+  parent_title: Windows 11 26H2 Won't Boot After KB5132061 Update – Error 0xc0000001, Corrupt Boot Binary, DISM 0x800f0915. How Can I Repair Without Reinstalling? - Microsoft Q&A
+  report_title: Windows 11 26H2 Won't Boot After KB5132061 Update – Error 0xc0000001, Corrupt Boot Binary, DISM 0x800f0915. How Can I Repair Without Reinstalling? - Microsoft Q&A
+  report_text_excerpt: Windows 11 26H2 Won't Boot After KB5132061 Update – Error 0xc0000001, Corrupt Boot Binary, DISM 0x800f0915. How Can I Repair Without Reinstalling? - Microsoft Q&A I'm looking for help with a serious Windows 11 boot failure that happened immediately after a Windows update on...
+  captured_at: '2026-11-13T20:34:07Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: boot failure
+  workflow_area: startup / boot
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h1-microsoft-learn-qna-learn-6068464-question-6068464
+  product_id: microsoft-windows-11
+  update_version: 26H1
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6068464/windows-11-26h1-build-28000-3501-kb5132059-has-res
+  parent_title: Windows 11 26H1 build 28000.3501 (KB5132059) has resulted in some .exe files failing to execute. - Microsoft Q&A
+  report_title: Windows 11 26H1 build 28000.3501 (KB5132059) has resulted in some .exe files failing to execute. - Microsoft Q&A
+  report_text_excerpt: 'Windows 11 26H1 build 28000.3501 (KB5132059) has resulted in some .exe files failing to execute. - Microsoft Q&A An executable compiled with #pragma comment(linker, "/align:16") no longer runs after upgrading to Windows 11 26H1 build 28000.3501 (KB5132059). Source code of...'
+  captured_at: '2026-11-13T20:34:12Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '28000.3501'
+  match_basis: exact_os_build
+  matched_kb: KB5132059
+  matched_os_build: '28000.3501'
+  matched_feature_version: 26H1
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '28000.3501'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6069097-question-6069097
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6069097/kb5132061-26200-9974-causes-repeated-bsod-0x3b-in
+  parent_title: KB5132061 (26200.9974) causes repeated BSOD 0x3B in Registry process ~8-11 min after boot - Microsoft Q&A
+  report_title: KB5132061 (26200.9974) causes repeated BSOD 0x3B in Registry process ~8-11 min after boot - Microsoft Q&A
+  report_text_excerpt: KB5132061 (26200.9974) causes repeated BSOD 0x3B in Registry process ~8-11 min after boot - Microsoft Q&A After installing 2026-11 security update KB5132061 (OS build 26200.9974), the PC crashed 8 times in one day with SYSTEM_SERVICE_EXCEPTION (0x3B, c0000005). Process...
+  captured_at: '2026-11-13T20:34:17Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26200.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6069109-question-6069109
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6069109/how-to-fix-2026-11-security-update-kb5132061-26200
+  parent_title: How to fix 2026-11 Security Update (KB5132061) (26200.9974) error 0x80070005 - Microsoft Q&A
+  report_title: How to fix 2026-11 Security Update (KB5132061) (26200.9974) error 0x80070005 - Microsoft Q&A
+  report_text_excerpt: How to fix 2026-11 Security Update (KB5132061) (26200.9974) error 0x80070005 - Microsoft Q&A Keeps failing when trying to do windows update. Restarted PC unable to install update
+  captured_at: '2026-11-13T20:34:17Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26200.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6068703-question-6068703
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6068703/after-upgrading-to-26h2-ui-is-english-and-german
+  parent_title: After upgrading to 26h2 UI is English and German - Microsoft Q&A
+  report_title: After upgrading to 26h2 UI is English and German - Microsoft Q&A
+  report_text_excerpt: After upgrading to 26h2 UI is English and German - Microsoft Q&A After installing the latest feature update, 26h2, Windows sometimes displayed English and sometimes German. Installing the latest update, KB5127648—the October 2026 Security Update—didn't help. No solution has...
+  captured_at: '2026-11-13T20:35:12Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5127648
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5127648
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9711'
+- id: obs-studio-33-0-1-github-issue-14193
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14193
+  parent_title: Open preview projector > instant crash (Arch/KDE)
+  report_title: Open preview projector > instant crash (Arch/KDE)
+  report_text_excerpt: 'System Info Other ### Other OS Arch Linux x86_64 (7.2.15-arch1-1) ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/VzO6aAfGV7bDjCxu ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Open'
+  captured_at: '2026-11-13T21:01:59Z'
+  source_date: '2026-11-12'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14192
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14192
+  parent_title: '[Crash Risk] Global video variables should be re-created during resetting video'
+  report_title: '[Crash Risk] Global video variables should be re-created during resetting video'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL no ### OBS Studio Crash Log URL _No response_ ### Expected Behavior During resetting video, some global variables s'
+  captured_at: '2026-11-13T21:01:59Z'
+  source_date: '2026-11-12'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14187
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14187
+  parent_title: 'Windows 11 Insider Preview: WGC capture can''t preform correctly.'
+  report_title: 'Windows 11 Insider Preview: WGC capture can''t preform correctly.'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/l7gNV6tTEO2Ouk91 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS''s'
+  captured_at: '2026-11-13T21:01:59Z'
+  source_date: '2026-11-11'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14186
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14186
+  parent_title: OBS not working (Debian Flatpak)
+  report_title: OBS not working (Debian Flatpak)
+  report_text_excerpt: 'erating System Info Other ### Other OS Debian Linux 13.7 - Flatpak ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Unable to access the upload function ### OBS Studio Crash Log URL _No response_ ### Expected Behavior After updatin'
+  captured_at: '2026-11-13T21:01:59Z'
+  source_date: '2026-11-10'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14195
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14195
+  parent_title: Private canvases are never freed or restored across obs_reset_video() — canvas->mix is left dangling (hh vs hh_uuid)
+  report_title: Private canvases are never freed or restored across obs_reset_video() — canvas->mix is left dangling (hh vs hh_uuid)
+  report_text_excerpt: 'y 33.x release; the same code is present in 32.2.x. Verified on Windows and macOS against 33.0.1. ## Summary Canvases are added to `obs->data.canvases` with the **`hh_uuid`** hash handle, but the two functions that tear down and rebuild canvas mixes iterate that same table with t'
+  captured_at: '2026-11-13T21:01:59Z'
+  source_date: '2026-11-12'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
