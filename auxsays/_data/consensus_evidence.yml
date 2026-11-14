@@ -73590,3 +73590,637 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5764199-token-exchange-fails-specifically-on-m
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5764199/token-exchange-fails-specifically-on-mobile-client
+  parent_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_text_excerpt: Token exchange fails specifically on Mobile Clients with AADSTS50013 I have developed a custom Microsoft Teams Tab application using the Teams Toolkit (v5.x) and Teams JS SDK v2.19. The Single Sign-On (SSO) flow works seamlessly on both the Teams Desktop and Web clients....
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-02-06'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-calendar-maximum-nu
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-calendar---maximum-number-of-events-for-meetings/4573352
+  parent_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_text_excerpt: Microsoft Teams Calendar - maximum number of events for meetings Effective today, 11/13/2026, my Microsoft Teams is limiting the number of meetings I can put on my calendar.&amp;nbsp; Does any one know why this is happening and how to fix it?&amp;nbsp; This is the error that I...
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5764199-token-exchange-fails-specifically-on-m
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5764199/token-exchange-fails-specifically-on-mobile-client
+  parent_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_text_excerpt: Token exchange fails specifically on Mobile Clients with AADSTS50013 I have developed a custom Microsoft Teams Tab application using the Teams Toolkit (v5.x) and Teams JS SDK v2.19. The Single Sign-On (SSO) flow works seamlessly on both the Teams Desktop and Web clients....
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-02-06'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-calendar-maximum-nu
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-calendar---maximum-number-of-events-for-meetings/4573352
+  parent_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_text_excerpt: Microsoft Teams Calendar - maximum number of events for meetings Effective today, 11/13/2026, my Microsoft Teams is limiting the number of meetings I can put on my calendar.&amp;nbsp; Does any one know why this is happening and how to fix it?&amp;nbsp; This is the error that I...
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5764199-token-exchange-fails-specifically-on-m
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5764199/token-exchange-fails-specifically-on-mobile-client
+  parent_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_text_excerpt: Token exchange fails specifically on Mobile Clients with AADSTS50013 I have developed a custom Microsoft Teams Tab application using the Teams Toolkit (v5.x) and Teams JS SDK v2.19. The Single Sign-On (SSO) flow works seamlessly on both the Teams Desktop and Web clients....
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-02-06'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-calendar-maximum-nu
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-calendar---maximum-number-of-events-for-meetings/4573352
+  parent_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_text_excerpt: Microsoft Teams Calendar - maximum number of events for meetings Effective today, 11/13/2026, my Microsoft Teams is limiting the number of meetings I can put on my calendar.&amp;nbsp; Does any one know why this is happening and how to fix it?&amp;nbsp; This is the error that I...
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5764199-token-exchange-fails-specifically-on-m
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5764199/token-exchange-fails-specifically-on-mobile-client
+  parent_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_text_excerpt: Token exchange fails specifically on Mobile Clients with AADSTS50013 I have developed a custom Microsoft Teams Tab application using the Teams Toolkit (v5.x) and Teams JS SDK v2.19. The Single Sign-On (SSO) flow works seamlessly on both the Teams Desktop and Web clients....
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-02-06'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-calendar-maximum-nu
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-calendar---maximum-number-of-events-for-meetings/4573352
+  parent_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_text_excerpt: Microsoft Teams Calendar - maximum number of events for meetings Effective today, 11/13/2026, my Microsoft Teams is limiting the number of meetings I can put on my calendar.&amp;nbsp; Does any one know why this is happening and how to fix it?&amp;nbsp; This is the error that I...
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5764199-token-exchange-fails-specifically-on-m
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5764199/token-exchange-fails-specifically-on-mobile-client
+  parent_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_text_excerpt: Token exchange fails specifically on Mobile Clients with AADSTS50013 I have developed a custom Microsoft Teams Tab application using the Teams Toolkit (v5.x) and Teams JS SDK v2.19. The Single Sign-On (SSO) flow works seamlessly on both the Teams Desktop and Web clients....
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-02-06'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-calendar-maximum-nu
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-calendar---maximum-number-of-events-for-meetings/4573352
+  parent_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_text_excerpt: Microsoft Teams Calendar - maximum number of events for meetings Effective today, 11/13/2026, my Microsoft Teams is limiting the number of meetings I can put on my calendar.&amp;nbsp; Does any one know why this is happening and how to fix it?&amp;nbsp; This is the error that I...
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5764199-token-exchange-fails-specifically-on-m
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5764199/token-exchange-fails-specifically-on-mobile-client
+  parent_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_text_excerpt: Token exchange fails specifically on Mobile Clients with AADSTS50013 I have developed a custom Microsoft Teams Tab application using the Teams Toolkit (v5.x) and Teams JS SDK v2.19. The Single Sign-On (SSO) flow works seamlessly on both the Teams Desktop and Web clients....
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-02-06'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-calendar-maximum-nu
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-calendar---maximum-number-of-events-for-meetings/4573352
+  parent_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_text_excerpt: Microsoft Teams Calendar - maximum number of events for meetings Effective today, 11/13/2026, my Microsoft Teams is limiting the number of meetings I can put on my calendar.&amp;nbsp; Does any one know why this is happening and how to fix it?&amp;nbsp; This is the error that I...
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5764199-token-exchange-fails-specifically-on-m
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5764199/token-exchange-fails-specifically-on-mobile-client
+  parent_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_text_excerpt: Token exchange fails specifically on Mobile Clients with AADSTS50013 I have developed a custom Microsoft Teams Tab application using the Teams Toolkit (v5.x) and Teams JS SDK v2.19. The Single Sign-On (SSO) flow works seamlessly on both the Teams Desktop and Web clients....
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-02-06'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-calendar-maximum-nu
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-calendar---maximum-number-of-events-for-meetings/4573352
+  parent_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_text_excerpt: Microsoft Teams Calendar - maximum number of events for meetings Effective today, 11/13/2026, my Microsoft Teams is limiting the number of meetings I can put on my calendar.&amp;nbsp; Does any one know why this is happening and how to fix it?&amp;nbsp; This is the error that I...
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5764199-token-exchange-fails-specifically-on-m
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5764199/token-exchange-fails-specifically-on-mobile-client
+  parent_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_title: Token exchange fails specifically on Mobile Clients with AADSTS50013 - Microsoft Q&A
+  report_text_excerpt: Token exchange fails specifically on Mobile Clients with AADSTS50013 I have developed a custom Microsoft Teams Tab application using the Teams Toolkit (v5.x) and Teams JS SDK v2.19. The Single Sign-On (SSO) flow works seamlessly on both the Teams Desktop and Web clients....
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-02-06'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: sign-in failure
+  workflow_area: authentication
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-calendar-maximum-nu
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-calendar---maximum-number-of-events-for-meetings/4573352
+  parent_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_title: Microsoft Teams Calendar - maximum number of events for meetings
+  report_text_excerpt: Microsoft Teams Calendar - maximum number of events for meetings Effective today, 11/13/2026, my Microsoft Teams is limiting the number of meetings I can put on my calendar.&amp;nbsp; Does any one know why this is happening and how to fix it?&amp;nbsp; This is the error that I...
+  captured_at: '2026-11-14T14:24:06Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6070531-question-6070531
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6070531/after-update-for-windows-11-version-26h2-volume-ca
+  parent_title: After update for Windows 11, version 26H2 volume can no longer be controlled from Keyboard or Mouse. - Microsoft Q&A
+  report_title: After update for Windows 11, version 26H2 volume can no longer be controlled from Keyboard or Mouse. - Microsoft Q&A
+  report_text_excerpt: 'After update for Windows 11, version 26H2 volume can no longer be controlled from Keyboard or Mouse. - Microsoft Q&A After the following updates, i can no longer control volume from USB controllers like keyboard and mice: Windows 11, version 26H2 2026-11 Security Update...'
+  captured_at: '2026-11-14T14:32:19Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6071308-question-6071308
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071308/bsods-0x3b-0x1e-in-vgk-sys-riot-vanguard-on-window
+  parent_title: BSODs 0x3B / 0x1E in vgk.sys (Riot Vanguard) on Windows 11 26H2 build 26300, even after a clean install - Microsoft Q&A
+  report_title: BSODs 0x3B / 0x1E in vgk.sys (Riot Vanguard) on Windows 11 26H2 build 26300, even after a clean install - Microsoft Q&A
+  report_text_excerpt: BSODs 0x3B / 0x1E in vgk.sys (Riot Vanguard) on Windows 11 26H2 build 26300, even after a clean install - Microsoft Q&A Since around August my PC has been getting frequent BSODs (sometimes just a black screen, then a restart). Every crash dump points to vgk.sys , the kernel...
+  captured_at: '2026-11-14T14:32:19Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6070278-question-6070278
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6070278/kb5132061-ddeml-server-no-longer-receives-xtyp-con
+  parent_title: 'KB5132061: DDEML server no longer receives XTYP_CONNECT when DDEMLMom is subclassed with SetWindowLongPtrA - Microsoft Q&A'
+  report_title: 'KB5132061: DDEML server no longer receives XTYP_CONNECT when DDEMLMom is subclassed with SetWindowLongPtrA - Microsoft Q&A'
+  report_text_excerpt: 'KB5132061: DDEML server no longer receives XTYP_CONNECT when DDEMLMom is subclassed with SetWindowLongPtrA - Microsoft Q&A After installing KB5132061 (Windows 11 25H2, OS build 26200.9974), our 32-bit DDEML server stopped accepting DDE conversations. Uninstalling the KB fixes...'
+  captured_at: '2026-11-14T14:32:31Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26200.9974'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-learn-6070489-question-6070489
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6070489/kb5132061-build-26100-9974-causes-inaccessible-boo
+  parent_title: KB5132061 (Build 26100.9974) causes INACCESSIBLE_BOOT_DEVICE — Startup Repair reports corrupted boot binary - Microsoft Q&A
+  report_title: KB5132061 (Build 26100.9974) causes INACCESSIBLE_BOOT_DEVICE — Startup Repair reports corrupted boot binary - Microsoft Q&A
+  report_text_excerpt: 'KB5132061 (Build 26100.9974) causes INACCESSIBLE_BOOT_DEVICE — Startup Repair reports corrupted boot binary - Microsoft Q&A After installing the November 2026 Windows 11 update KB5132061, my computer became unbootable and displays INACCESSIBLE_BOOT_DEVICE. My system: Windows...'
+  captured_at: '2026-11-14T14:32:36Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26100.9974'
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.9974'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-learn-6070987-question-6070987
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6070987/task-manager-cpu-column-in-processes-and-details-s
+  parent_title: 'Task Manager: CPU column in Processes and Details stops updating after a few minutes (memory, I/O and GPU keep updating) - Microsoft Q&A'
+  report_title: 'Task Manager: CPU column in Processes and Details stops updating after a few minutes (memory, I/O and GPU keep updating) - Microsoft Q&A'
+  report_text_excerpt: 'Task Manager: CPU column in Processes and Details stops updating after a few minutes (memory, I/O and GPU keep updating) - Microsoft Q&A After Task Manager has been open for a few minutes, the CPU column on the Processes and Details tabs stops updating. The values stay frozen...'
+  captured_at: '2026-11-14T14:32:36Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.9974'
+  match_basis: exact_os_build
+  matched_os_build: '26100.9974'
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.9974'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6071073-question-6071073
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071073/no-network-access-outside-lan-subnet-after-windows
+  parent_title: No network access outside LAN subnet after Windows driver update. - Microsoft Q&A
+  report_title: No network access outside LAN subnet after Windows driver update. - Microsoft Q&A
+  report_text_excerpt: 'No network access outside LAN subnet after Windows driver update. - Microsoft Q&A System info: W11 Pro 25H2 26200.9711 Intel i7-12700KF 64Gb RAM Nvidia GeForce RTX 3050 Went to my computer to start work in the morning. Programs were closed, so windows decided to restart to...'
+  captured_at: '2026-11-14T14:33:44Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9711'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6070993-question-6070993
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6070993/dns-problems
+  parent_title: DNS problems - Microsoft Q&A
+  report_title: DNS problems - Microsoft Q&A
+  report_text_excerpt: DNS problems - Microsoft Q&A I have Windows 11 Pro 25H2, build 26200.9711. My computer suddenly developed browser and DNS problems. DISM ScanHealth reports repairable component-store corruption, but RestoreHealth fails with 0x800f0915 even using a local WIM source. SFC finds...
+  captured_at: '2026-11-14T14:33:44Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9711'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9711'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9711'
+- id: obs-studio-31-0-3-obs-forum-thread-186280
+  product_id: obs-studio
+  update_version: 31.0.3
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/video-glitch-a-few-old-frames-displayed-when-switching-video-source.186280/
+  parent_title: Video glitch (a few old frames displayed) when switching Video source.
+  report_title: Video glitch (a few old frames displayed) when switching Video source.
+  report_text_excerpt: 'll team (Serie A Baseball, Italy). I have three IP cameras managed by OBS Studio (version 31.0.3, 64 bit). When switching to one of the three cameras, I have a “time glitch” in the OBS output video: the video of the “new” camera jumps back to a few seconds earlier, insterting abo'
+  captured_at: '2026-11-14T14:47:34Z'
+  source_date: '2025-05-30'
+  patch_version_matched: true
+  matched_version: 31.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-31-0-3-obs-forum-thread-186331
+  product_id: obs-studio
+  update_version: 31.0.3
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/question-help-high-latency-in-streaming-over-rtsp-from-multiple-sources.186331/
+  parent_title: Question/Help High latency in streaming over RTSP from multiple sources
+  report_title: Question/Help High latency in streaming over RTSP from multiple sources
+  report_text_excerpt: 'type 64-bit operating system, x64-based processor OS: Windows 11 Pro OBS Studio version: 31.0.3 Network details: All cameras are connected via wired LAN to the same system which is using OBS. I''ve also tried reducing latency using WiFi first, but got no good results. Log details'
+  captured_at: '2026-11-14T14:47:34Z'
+  source_date: '2025-06-02'
+  patch_version_matched: true
+  matched_version: 31.0.3
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
