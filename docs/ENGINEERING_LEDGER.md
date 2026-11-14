@@ -44,6 +44,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-040 | Resolved | Build reproducibility | High | The deployed gem set was whatever rubygems served that minute — now a tracked, frozen lock |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-100 | Resolved | Collector telemetry | High | One forum post holding only a video made every OBS forum health row partial, and the newest release was the one the budget never reached |
 | AUX-048 | Resolved | Security | High | A page on the public domain asked visitors for a repository-write token |
 | AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
@@ -2078,6 +2079,50 @@ mean the limit has moved from reach to acceptance.
 **Cross-reference** AUX-026 is why the retired slot still emits. The lesson that generalises: a
 matcher fix and the veto covering what it newly exposes are **one change** -- ship them together,
 and measure the veto alone to prove it is a counterweight and not a deletion.
+
+### AUX-100 — One forum post holding only a video made every OBS forum health row partial, and the newest release was the one the budget never reached
+
+- **Status** Resolved · **Area** Collector telemetry · **Severity** High
+- **First seen** 2026-11-11 (run 42970476237) · **Resolved** 2026-11-14 (production check: the next natural
+  Patch Evidence Collection run)
+
+**Symptom** From 2026-11-11 every OBS `obs_forum` health row read `partial`, and the writer took 32.1.1, 32.1.2
+and 32.2.2 off live consensus. Their accepted reports had not changed. Separately, the one `success` row in the
+table was 33.0.1's, frozen since 2026-11-10: the newest release had not been refreshed for days.
+
+**Cause** `threads_bodyless` counted every opening post with an empty body, `forum_status` returned `partial` on
+any count, and that one pool status was written onto every version's forum row, so H4 and H6 failed for all of
+them. The empty body was thread 196879, whose opening post holds only an embedded video player: a wrapper with no
+text at all, so nothing was lost. Versions were also walked in string order, oldest first, and the collector
+deadline arrived before the newest release in most runs.
+
+**Fix** In discovery and health only:
+- An empty body is classified by cause, with an independent stdlib-parser scan of the wrapper. A missing wrapper,
+  text the extractor failed to return, and a wrapper with nothing explainable in it still count in
+  `threads_bodyless` and degrade on any count. A post that is only an image, embed or attachment, or only a quote,
+  counts in `threads_textless`. It degrades the pool only when such posts are a material share of it (a bounded
+  collapse guard). Each empty-body thread is named, with its class, in a bounded `obs_forum_empty_body` event.
+- Versions are walked newest release first (the newest three), then least recently refreshed. A run that gets
+  one version past the newest refreshes the stalest of the rest.
+- `obs_forum_budget_stop` and `collector_budget_stop` carry fetched, parsed, failed and skipped counts and name the
+  processed and skipped versions, and every run emits `obs_version_walk`. A skipped version still gets no row, so
+  the existing staleness rule decides when it stops counting. No new status.
+
+Unchanged: H4, H6, `DEGRADED_STATUSES`, live eligibility, the 33-report minimum, `evaluate_issue` and evidence rows.
+
+**Measured** An offline replay of the old and new code over one recorded 180-thread pool. The authority's inputs
+are identical for all 180 posts. Candidates (47), accepted reports (25), rows and rejections are identical for all
+18 versions. The only change: the forum status goes from `partial` to `success` on 9 versions and to `no_results`
+on 9. `test_obs_forum_evidence_family.py` grows from 190 to 257 checks, and T20.7/T20.8 (all bodyless ->
+partial) are unchanged. 20 source mutants, each killed by a named check.
+
+**Reopen only if** any of these happens:
+- a pool holding a missing wrapper, an extraction failure or an unexplained empty wrapper reports anything but
+  `partial`;
+- a pool where textless posts are a material share reports healthy;
+- a skipped version gets a health row in that run;
+- accepted forum evidence changes because of body classification;
+- the newest OBS release goes a scheduled day without a refresh while runs process more than three versions.
 
 ### AUX-029 — Patch Decision Authority v2, Phase 1
 
