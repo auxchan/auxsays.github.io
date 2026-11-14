@@ -1251,7 +1251,7 @@ def _run_health_recovery_checks() -> None:
     suppressed30 = [f for e, f in _ev if e == "obs_forum_empty_body_suppressed"]
     check("T30.4 the per-thread diagnostic is bounded during a collapse",
           len(named30) == forum._MAX_EMPTY_BODY_EVENTS and suppressed30
-          and suppressed30[0]["count"] == big - forum._MAX_EMPTY_BODY_EVENTS,
+          and suppressed30[0].get("count") == big - forum._MAX_EMPTY_BODY_EVENTS,
           f"{len(named30)} named, suppressed={suppressed30}")
     # The bound itself, at the edges. Driven through forum_status, which is what health reads.
     def status_for(in_pool, textless):
@@ -1270,6 +1270,11 @@ def _run_health_recovery_checks() -> None:
           and status_for(2, 2) == "partial", f"{status_for(20, 3)} {status_for(2, 2)}")
     check("T30.9 no empty bodies at all is never a collapse",
           not forum.empty_body_collapse({"threads_in_pool": 0}) and status_for(180, 0) == "success")
+    # The reviewed bound, pinned in absolute terms so a change to it is a deliberate test change.
+    # History: 0 empty bodies in ~90 runs of a ~180-thread pool, then 1 (thread 196879).
+    check("T30.10 the reviewed bound for a production-sized pool: 8 of 180 healthy, 9 of 180 partial",
+          status_for(180, 8) == "success" and status_for(180, 9) == "partial",
+          f"{status_for(180, 8)} {status_for(180, 9)}")
 
     print("T31 accepted evidence is unchanged: the authority sees identical inputs")
     fixtures = (THREAD_HTML, QUOTE_THREAD_HTML, NESTED_QUOTE_HTML, TEXT_THREAD_HTML,
@@ -1391,17 +1396,17 @@ def _run_health_recovery_checks() -> None:
           str(sorted(health_versions)))
     stop33 = [f for e, f in events33 if e == "collector_budget_stop"]
     check("T33.3 the budget stop names the processed and skipped versions",
-          len(stop33) == 1 and stop33[0]["processed"] == ",".join(expected_done)
-          and stop33[0]["skipped"] == ",".join(expected_skipped)
-          and stop33[0]["versions_processed"] == 4 and stop33[0]["versions_skipped"] == 14,
+          len(stop33) == 1 and stop33[0].get("processed") == ",".join(expected_done)
+          and stop33[0].get("skipped") == ",".join(expected_skipped)
+          and stop33[0].get("versions_processed") == 4 and stop33[0].get("versions_skipped") == 14,
           str(stop33))
     check("T33.4 and carries the pool's fetched, parsed, failed and skipped counts",
-          bool(stop33) and stop33[0]["threads_fetched"] == 180 and stop33[0]["threads_parsed"] == 178
-          and stop33[0]["threads_failed"] == 2 and stop33[0]["threads_skipped"] == 0, str(stop33))
+          bool(stop33) and stop33[0].get("threads_fetched") == 180 and stop33[0].get("threads_parsed") == 178
+          and stop33[0].get("threads_failed") == 2 and stop33[0].get("threads_skipped") == 0, str(stop33))
     walk33 = [f for e, f in events33 if e == "obs_version_walk"]
     check("T33.5 every run records its walk, budget stop or not",
-          len(walk33) == 1 and walk33[0]["budget_stopped"] is True
-          and walk33[0]["order"] == ",".join(order) and walk33[0]["skipped"] == ",".join(expected_skipped),
+          len(walk33) == 1 and walk33[0].get("budget_stopped") is True
+          and walk33[0].get("order") == ",".join(order) and walk33[0].get("skipped") == ",".join(expected_skipped),
           str(walk33))
 
     # A budget that runs out INSIDE the forum pool: the stop carries counts, and no version gets a row.
@@ -1433,15 +1438,15 @@ def _run_health_recovery_checks() -> None:
         forum.reset_pool()
     fstop = [f for e, f in events34 if e == "obs_forum_budget_stop"]
     check("T33.6 a pool budget stop carries fetched, parsed, failed and skipped counts",
-          len(fstop) == 1 and fstop[0]["reason"] == "thread_fetch" and fstop[0]["threads_fetched"] == 1
-          and fstop[0]["threads_parsed"] == 1 and fstop[0]["threads_failed"] == 0
-          and fstop[0]["threads_skipped"] == 1, str(fstop))
+          len(fstop) == 1 and fstop[0].get("reason") == "thread_fetch" and fstop[0].get("threads_fetched") == 1
+          and fstop[0].get("threads_parsed") == 1 and fstop[0].get("threads_failed") == 0
+          and fstop[0].get("threads_skipped") == 1, str(fstop))
     check("T33.7 a run whose pool was cut short writes NO version rows at all",
           out34 == [], str(out34))
     cstop = [f for e, f in events34 if e == "collector_budget_stop"]
     check("T33.8 and its collector stop lists every version as skipped",
-          len(cstop) == 1 and cstop[0]["versions_processed"] == 0 and cstop[0]["versions_skipped"] == 18
-          and cstop[0]["threads_skipped"] == 1, str(cstop))
+          len(cstop) == 1 and cstop[0].get("versions_processed") == 0 and cstop[0].get("versions_skipped") == 18
+          and cstop[0].get("threads_skipped") == 1, str(cstop))
 
     events35, restore35 = _capture_emits()
     prior_budget = rb.get_run_budget()
@@ -1451,9 +1456,9 @@ def _run_health_recovery_checks() -> None:
     finally:
         restore35()
         rb.set_run_budget(prior_budget)
-    lstop = [f for e, f in events35 if e == "obs_forum_budget_stop" and f["reason"] == "listing_enumeration"]
+    lstop = [f for e, f in events35 if e == "obs_forum_budget_stop" and f.get("reason") == "listing_enumeration"]
     check("T33.9 a listing-stage stop is emitted once, with the listings it skipped",
-          len(lstop) == 1 and lstop[0]["listings_requested"] == 1 and lstop[0]["listings_skipped"] == 2,
+          len(lstop) == 1 and lstop[0].get("listings_requested") == 1 and lstop[0].get("listings_skipped") == 2,
           str(lstop))
 
     print("T34 the registry describes the new failure semantics")

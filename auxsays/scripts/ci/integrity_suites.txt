@@ -246,7 +246,7 @@ auxsays/scripts/tests/test_obs_consensus_projection.py = 50
 # still degrading), the pool-collapse bound at its edges, identical acceptance inputs, the
 # newest-first walk with no starvation, and budget stops that name skipped versions and give them
 # no row.
-auxsays/scripts/tests/test_obs_forum_evidence_family.py = 256
+auxsays/scripts/tests/test_obs_forum_evidence_family.py = 257
 # The same projection-coherence class for DaVinci, whose count is moved by the scheduled lane's
 # unscoped reconcile while its rebuild authority lived only in a dispatch-only workflow. Pins the
 # lane step (scoped, after reconciliation, before the first QA) and drives the real writer over a
