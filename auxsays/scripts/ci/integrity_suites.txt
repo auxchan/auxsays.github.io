@@ -240,7 +240,13 @@ auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
 auxsays/scripts/tests/test_obs_consensus_projection.py = 50
-auxsays/scripts/tests/test_obs_forum_evidence_family.py = 190
+# OBS forum health (AUX-100): one embed-only opening post made every OBS forum row partial and
+# revoked live on three patches whose evidence had not changed. Pins the empty-body split by cause
+# (textless vs missing wrapper / extraction failure / unexplained empty wrapper, the last three
+# still degrading), the pool-collapse bound at its edges, identical acceptance inputs, the
+# newest-first walk with no starvation, and budget stops that name skipped versions and give them
+# no row.
+auxsays/scripts/tests/test_obs_forum_evidence_family.py = 256
 # The same projection-coherence class for DaVinci, whose count is moved by the scheduled lane's
 # unscoped reconcile while its rebuild authority lived only in a dispatch-only workflow. Pins the
 # lane step (scoped, after reconciliation, before the first QA) and drives the real writer over a
