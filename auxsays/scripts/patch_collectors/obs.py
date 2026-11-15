@@ -16,16 +16,111 @@ write_evidence call, so a report discovered twice becomes duplicate telemetry, n
 """
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import collect_obs_reports as legacy_obs
 
-from .base import CollectorContext, ProductCollector, method_health_row, utc_now
+from .base import CollectorContext, ProductCollector, load_method_health, method_health_row, utc_now
 from . import obs_forum_source as forum
 from . import runtime_budget as rb
 
 GITHUB_METHOD_ID = "github_issues"
 FORUM_METHOD_ID = "obs_forum"
+
+# WALK ORDER. Versions used to be walked in string order, oldest first, under a deadline that
+# a normal run reaches after ~17 of 18 versions and a slow run after far fewer -- so the NEWEST
+# release, the one a reader is deciding whether to install, was the one never refreshed: its rows
+# sat frozen for days while still reading `success`. Now the newest few releases go first, and
+# every other version follows least-recently-refreshed first, so the versions a run does not
+# reach this time are the first ones the next run reaches. Deterministic for the same inputs.
+NEWEST_FIRST = 3
+
+_VERSION_PARTS_RE = re.compile(r"^(\d+(?:\.\d+){0,3})(?:([-+])(.*))?$")
+_STAMP_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}")
+
+
+def version_order_key(version: str) -> tuple:
+    """Numeric release order: 33.10.0 after 33.9.0, and a pre-release before its release."""
+    text = str(version or "").strip()
+    match = _VERSION_PARTS_RE.match(text)
+    if not match:
+        return ((-1, -1, -1, -1), 0, "", text)
+    numbers = tuple(int(part) for part in match.group(1).split("."))
+    numbers = numbers + (0,) * (4 - len(numbers))
+    rank = 0 if match.group(2) == "-" else 1
+    return (numbers, rank, match.group(3) or "", text)
+
+
+def _refresh_stamp(value: Any) -> str:
+    """A comparable UTC second, or '' (never refreshed) for anything that is not one."""
+    match = _STAMP_RE.match(str(value or "").strip())
+    return match.group(0) if match else ""
+
+
+def last_refreshed_by_version() -> dict[str, str]:
+    """When each OBS version's monitoring rows were last written, from the committed health table.
+
+    Both families are written together per version, so the OLDER of the two is used; a version
+    missing either row has never been fully refreshed and reads as ''. Read-only. An unreadable
+    table yields {} -- the order then falls back to newest-first throughout, still deterministic.
+    """
+    try:
+        rows = load_method_health()
+    except Exception:  # noqa: BLE001 -- ordering must never fail a collection run
+        return {}
+    stamps: dict[str, dict[str, str]] = {}
+    for row in rows:
+        if row.get("product_id") != legacy_obs.PRODUCT_ID:
+            continue
+        method = row.get("method_id")
+        if method not in (GITHUB_METHOD_ID, FORUM_METHOD_ID):
+            continue
+        version = str(row.get("update_version") or "").strip()
+        stamps.setdefault(version, {})[str(method)] = _refresh_stamp(row.get("last_run"))
+    out: dict[str, str] = {}
+    for version, by_method in stamps.items():
+        if GITHUB_METHOD_ID in by_method and FORUM_METHOD_ID in by_method:
+            out[version] = min(by_method[GITHUB_METHOD_ID], by_method[FORUM_METHOD_ID])
+        else:
+            out[version] = ""
+    return out
+
+
+def walk_order(versions, last_refreshed: dict[str, str]) -> list[str]:
+    """The order a run processes versions in: newest NEWEST_FIRST first, then least recently refreshed.
+
+    Ties among the rest (same stamp, or never refreshed) go newest first. A version is starved
+    only if every run reaches no more than NEWEST_FIRST versions; any run that gets one further
+    refreshes the stalest of the rest, which then moves to the back of the queue.
+    """
+    newest_first = sorted(set(versions), key=version_order_key, reverse=True)
+    rank = {version: index for index, version in enumerate(newest_first)}
+    head = newest_first[:NEWEST_FIRST]
+    rest = sorted(newest_first[NEWEST_FIRST:],
+                  key=lambda version: (_refresh_stamp(last_refreshed.get(version)), rank[version]))
+    return head + rest
+
+
+def coverage_fields(order: list[str], processed: list[str], skipped: list[str],
+                    pool_stats: dict[str, int]) -> dict[str, Any]:
+    """Which versions a run processed and skipped, plus the pool's fetched/parsed/failed/skipped counts.
+
+    A skipped version gets no result and so no health row: its committed rows keep their old
+    last_run, and the existing staleness rule decides when that stops counting as monitored. This
+    makes the incomplete coverage diagnosable; it does not invent a status for it.
+    """
+    return {
+        "versions_total": len(order),
+        "versions_processed": len(processed),
+        "versions_skipped": len(skipped),
+        "processed": ",".join(processed),
+        "skipped": ",".join(skipped),
+        "threads_fetched": int(pool_stats.get("threads_requested") or 0),
+        "threads_parsed": int(pool_stats.get("threads_in_pool") or 0),
+        "threads_failed": int(pool_stats.get("threads_failed") or 0) + int(pool_stats.get("threads_unparsed") or 0),
+        "threads_skipped": int(pool_stats.get("threads_skipped") or 0),
+    }
 
 
 def forum_candidates(version: str, pool: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -116,8 +211,13 @@ def forum_status(pool_error: str | None, stats: dict[str, int], accepted: int) -
         return "blocked"
     if stats.get("threads_requested", 0) > 0 and stats.get("threads_in_pool", 0) == 0:
         return "broken"
+    # threads_bodyless counts only the empty bodies that point at OUR failure -- a missing wrapper,
+    # an extraction failure, an unexplained empty wrapper -- so any count still degrades. A
+    # legitimately textless post (images/embeds only, or quote only) degrades only when such posts
+    # are a material share of the pool, which is what a site-wide markup change looks like.
     if (stats.get("listings_failed", 0) or stats.get("threads_failed", 0)
-            or stats.get("threads_unparsed", 0) or stats.get("threads_bodyless", 0)):
+            or stats.get("threads_unparsed", 0) or stats.get("threads_bodyless", 0)
+            or forum.empty_body_collapse(stats)):
         return "partial"
     if accepted > 0:
         return "success"
@@ -130,9 +230,10 @@ class ObsCollector(ProductCollector):
     def collect(self, context: CollectorContext) -> list[dict[str, Any]]:
         records_by_version = {version: path for version, path in legacy_obs.active_obs_records()}
         if context.target_versions:
-            versions = sorted(context.target_versions)
+            versions = list(context.target_versions)
         else:
-            versions = sorted(records_by_version)
+            versions = list(records_by_version)
+        order = walk_order(versions, last_refreshed_by_version())
 
         # ONE pool for the whole run. A thread is fetched once and evaluated against every
         # version offline; per-version fetching would multiply forum requests by the version count.
@@ -140,10 +241,16 @@ class ObsCollector(ProductCollector):
         pool, pool_stats, pool_error = forum.get_pool()
 
         results: list[dict[str, Any]] = []
-        for version in versions:
+        processed: list[str] = []
+        skipped: list[str] = []
+        for index, version in enumerate(order):
             _b = rb.get_run_budget()
             if _b is not None and _b.collector_finalize_expired():
-                rb.emit("collector_budget_stop", product_id=self.product_id, reason="collector_finalize")
+                # Every version from here on gets NO result and so no health row -- never a fresh
+                # or successful one. The stop names them, with the pool's own counts.
+                skipped = order[index:]
+                rb.emit("collector_budget_stop", product_id=self.product_id, reason="collector_finalize",
+                        **coverage_fields(order, processed, skipped, pool_stats))
                 break
             if not legacy_obs.valid_update_version(version):
                 results.append({
@@ -153,6 +260,7 @@ class ObsCollector(ProductCollector):
                     "accepted_count": 0,
                     "rejected_count": 0,
                 })
+                processed.append(version)
                 continue
 
             record_path = records_by_version.get(version)
@@ -228,4 +336,9 @@ class ObsCollector(ProductCollector):
             if record_path:
                 result["record_path"] = str(record_path.relative_to(legacy_obs.ROOT))
             results.append(result)
+            processed.append(version)
+        # Every run says what it covered, budget stop or not, so a run that reaches only part of
+        # the walk is diagnosable from its own log.
+        rb.emit("obs_version_walk", product_id=self.product_id, order=",".join(order),
+                budget_stopped=bool(skipped), **coverage_fields(order, processed, skipped, pool_stats))
         return results

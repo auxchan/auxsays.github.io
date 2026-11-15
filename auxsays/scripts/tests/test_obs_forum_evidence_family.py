@@ -166,6 +166,48 @@ NESTED_QUOTE_HTML = """
 """
 
 
+def _opening_post(wrapper_inner: str, after_wrapper: str = "", title: str = "OBS window capture is black") -> str:
+    """A thread page whose opening post's bbWrapper holds `wrapper_inner`, plus a reply with text.
+
+    The reply is there so a parser that searched past the opening post would find words to
+    borrow; every empty-body case below must stay empty instead.
+    """
+    return f"""
+<!doctype html><html><body>
+<h1 class="p-title-value">{title}</h1>
+<article data-author="firstauthor" data-content="post-7001">
+  <time class="u-dt" datetime="2026-11-10T21:17:11+0000">Nov 10, 2026</time>
+  <div class="bbWrapper">{wrapper_inner}</div>
+  {after_wrapper}
+</article>
+<article data-author="secondauthor" data-content="post-7002">
+  <time class="u-dt" datetime="2026-11-11T09:00:00+0000">Nov 11, 2026</time>
+  <div class="bbWrapper">I am on 32.1.2 and see the same black capture.</div>
+</article>
+</body></html>
+"""
+
+
+# The shape of obsproject.com thread 196879, the post that tripped threads_bodyless in production:
+# a wrapper holding nothing but an embedded video player. Structure only -- no real post text.
+EMBED_ONLY_THREAD_HTML = _opening_post(
+    '<div class="bbMediaWrapper"><div class="bbMediaWrapper-inner">'
+    '<iframe src="https://www.youtube.com/embed/abc" loading="lazy" allowfullscreen></iframe>'
+    '</div></div>')
+IMAGE_ONLY_THREAD_HTML = _opening_post(
+    '<img src="https://obsproject.com/forum/attachments/x.png" class="bbImage" alt="" />')
+ATTACHMENT_ONLY_THREAD_HTML = _opening_post(
+    "", '<section class="message-attachments"><ul class="attachmentList">'
+        '<li class="file"><a href="/forum/attachments/log-txt.123/">log.txt</a></li></ul></section>')
+QUOTE_ONLY_THREAD_HTML = _opening_post(
+    '<blockquote class="bbCodeBlock bbCodeBlock--quote"><div class="bbCodeBlock-content">'
+    "othermember said: since 32.1.2 my capture is black.</div></blockquote>")
+# A wrapper with nothing in it at all: no text, no quote, no media, no attachment. That is also
+# what hidden or moderated content looks like, so it must NOT be presumed legitimately empty.
+EMPTY_WRAPPER_THREAD_HTML = _opening_post("  ")
+TEXT_THREAD_HTML = _opening_post(f"Since {VER} my recording crashes every time.")
+
+
 def gh_issue(title="", body="", created_at="2026-09-01T00:00:00Z", labels=None, number=1):
     return {
         "title": title,
@@ -980,6 +1022,7 @@ def run() -> int:
     already = dict(kept, counted=False, exclusion_reason="version_is_rollback_target")
     check("T27.5 an already-withdrawn row is skipped, so the tool is idempotent",
           wd.refused_rows([already]) == [], str(wd.refused_rows([already])))
+    _run_health_recovery_checks()
     print("T17 implementing this did not rewrite stored OBS evidence")
     live_now = obs.EVIDENCE_PATH.read_bytes() if obs.EVIDENCE_PATH.exists() else b""
     check("T17.1 the live evidence store is byte-identical after the suite",
@@ -999,6 +1042,432 @@ def run() -> int:
         for label in _ERRORS:
             print(f"  failed: {label}")
     return 1 if _FAIL else 0
+
+
+def _listing_of(count: int, start: int = 300000) -> str:
+    links = "".join(f'<a href="/forum/threads/thread-{n}.{n}/">t{n}</a>'
+                    for n in range(start, start + count))
+    return f'<html><body><div class="structItemContainer-group">{links}</div></body></html>'
+
+
+class _CountdownBudget:
+    """A run budget that reports expiry after `allow` checks. Deterministic, no clock."""
+
+    def __init__(self, allow: int) -> None:
+        self.allow = allow
+        self.calls = 0
+
+    def collector_finalize_expired(self) -> bool:
+        self.calls += 1
+        return self.calls > self.allow
+
+
+def _capture_emits():
+    """Swap the runtime emitter for a recorder; returns (events, restore)."""
+    from patch_collectors import runtime_budget as rb
+    events: list[tuple[str, dict]] = []
+    real = rb.emit
+
+    def fake(event, **fields):
+        events.append((event, dict(fields)))
+
+    rb.emit = fake
+
+    def restore():
+        rb.emit = real
+
+    return events, restore
+
+
+# The 18 OBS versions tracked when this was written, in no particular order on purpose.
+_OBS_VERSIONS = ["32.1.1", "31.0.3", "33.0.0", "32.2.2", "31.1.0", "32.0.0", "31.0.4", "32.1.2",
+                 "32.2.0", "31.1.1", "32.0.1", "33.0.1", "31.1.2", "32.0.2", "32.0.3", "32.0.4",
+                 "32.1.0", "32.2.1"]
+
+
+def _run_health_recovery_checks() -> None:
+    """T28-T34: truthful empty-body health, newest-first walk, and budget-stop telemetry."""
+    from patch_collectors import runtime_budget as rb
+    from patch_collectors.base import CollectorContext
+
+    print("T28 a legitimately textless opening post is classified, kept and judged unchanged")
+    cases = (
+        ("embed-only (the thread 196879 shape)", EMBED_ONLY_THREAD_HTML, forum.BODY_NON_TEXT_ONLY),
+        ("image-only", IMAGE_ONLY_THREAD_HTML, forum.BODY_NON_TEXT_ONLY),
+        ("attachment-only", ATTACHMENT_ONLY_THREAD_HTML, forum.BODY_NON_TEXT_ONLY),
+        ("quote-only", QUOTE_ONLY_THREAD_HTML, forum.BODY_QUOTE_ONLY),
+    )
+    for label, html, expected in cases:
+        post = forum.parse_opening_post(html)
+        check(f"T28 the {label} post parses with an EMPTY body (the reply is never borrowed)",
+              post is not None and post["body"] == "", str(post and post["body"]))
+        check(f"T28 the {label} post is classified {expected}",
+              post is not None and post["body_state"] == expected, str(post and post["body_state"]))
+        check(f"T28 {expected} is a non-degrading (textless) state",
+              expected in forum.TEXTLESS_BODY_STATES and expected not in forum.DEGRADING_BODY_STATES)
+    text_post = forum.parse_opening_post(TEXT_THREAD_HTML)
+    check("T28.1 a post with text is classified text",
+          text_post["body_state"] == forum.BODY_TEXT, text_post["body_state"])
+
+    # One textless post in a realistic pool: the production shape. It must not degrade the pool.
+    many = 60
+    pages = {f"https://obsproject.com/forum/threads/thread-{n}.{n}/": TEXT_THREAD_HTML
+             for n in range(300000, 300000 + many)}
+    pages["https://obsproject.com/forum/threads/thread-300007.300007/"] = EMBED_ONLY_THREAD_HTML
+
+    def realistic_fetch(url, timeout=25):
+        if "/list/" in url:
+            return _listing_of(many)
+        return pages[url]
+
+    events, restore = _capture_emits()
+    try:
+        pool28, stats28 = forum.build_pool(max_threads_per_forum=many, listing_pages=1,
+                                           fetch=realistic_fetch)
+    finally:
+        restore()
+    check("T28.2 the textless post stays in the pool, judged on its title as before",
+          stats28["threads_in_pool"] == many and len(pool28) == many, str(stats28))
+    check("T28.3 it is counted as textless, not bodyless",
+          stats28["threads_textless"] == 1 and stats28["threads_bodyless"] == 0, str(stats28))
+    check("T28.4 one textless post does NOT make the pool partial",
+          obs_adapter.forum_status(None, stats28, 1) == "success"
+          and obs_adapter.forum_status(None, stats28, 0) == "no_results",
+          obs_adapter.forum_status(None, stats28, 1) + " " + str(stats28))
+    named = [f for e, f in events if e == "obs_forum_empty_body"]
+    check("T28.5 the diagnostic names the empty-body thread by id and class",
+          named == [{"thread": "/forum/threads/thread-300007.300007/", "thread_id": "300007",
+                     "state": forum.BODY_NON_TEXT_ONLY, "degrading": False}], str(named))
+    check("T28.6 and it carries no post text (only path, id, class, flag)",
+          all(set(f) == {"thread", "thread_id", "state", "degrading"} for f in named), str(named))
+
+    print("T29 a missing wrapper, an empty wrapper and an extraction failure stay degrading")
+    no_wrapper = forum.parse_opening_post(NO_BODY_THREAD_HTML)
+    check("T29.1 a missing wrapper is classified no_wrapper",
+          no_wrapper["body_state"] == forum.BODY_NO_WRAPPER, no_wrapper["body_state"])
+    empty_wrapper = forum.parse_opening_post(EMPTY_WRAPPER_THREAD_HTML)
+    check("T29.2 a wrapper with nothing explainable in it is classified empty_wrapper",
+          empty_wrapper["body_state"] == forum.BODY_EMPTY_WRAPPER, empty_wrapper["body_state"])
+    check("T29.3 both are degrading states",
+          {forum.BODY_NO_WRAPPER, forum.BODY_EMPTY_WRAPPER} <= forum.DEGRADING_BODY_STATES)
+
+    # A GENUINE extraction failure: the wrapper holds the author's own text, outside any quote,
+    # and our extractor returns nothing. Produced the way it would really happen -- a regression
+    # in our own quote stripping or balanced-div slicing -- and caught by the independent scan.
+    real_strip = forum._strip_blockquotes
+    real_slice = forum._slice_balanced_div
+    try:
+        forum._strip_blockquotes = lambda html: ""
+        stripped_away = forum.parse_opening_post(TEXT_THREAD_HTML)
+    finally:
+        forum._strip_blockquotes = real_strip
+    check("T29.4 a quote-strip regression that empties a real post is an extraction failure",
+          stripped_away["body"] == "" and stripped_away["body_state"] == forum.BODY_EXTRACTION_FAILED,
+          str(stripped_away["body_state"]))
+    try:
+        forum._slice_balanced_div = lambda html, start: ""
+        sliced_away = forum.parse_opening_post(QUOTE_THREAD_HTML)
+    finally:
+        forum._slice_balanced_div = real_slice
+    check("T29.5 a slicing regression that loses text beside a quote is an extraction failure, "
+          "not quote-only",
+          sliced_away["body"] == "" and sliced_away["body_state"] == forum.BODY_EXTRACTION_FAILED,
+          str(sliced_away["body_state"]))
+    check("T29.6 extraction_failed is a degrading state",
+          forum.BODY_EXTRACTION_FAILED in forum.DEGRADING_BODY_STATES)
+    check("T29.7 a wrapper the independent scan cannot find is an extraction failure",
+          forum.classify_body("<p>no wrapper markup here</p>", True, "") == forum.BODY_EXTRACTION_FAILED)
+
+    def degrading_fetch_for(html):
+        def fetch(url, timeout=25):
+            if "/list/" in url:
+                return LISTING_HTML
+            if "obs-crashes-on-record" in url:
+                return THREAD_HTML
+            return html
+        return fetch
+
+    for label, html in (("missing wrapper", NO_BODY_THREAD_HTML),
+                        ("empty wrapper", EMPTY_WRAPPER_THREAD_HTML)):
+        pool29, stats29 = forum.build_pool(max_threads_per_forum=5, listing_pages=1,
+                                           fetch=degrading_fetch_for(html))
+        check(f"T29 one {label} post is counted bodyless, not textless",
+              stats29["threads_bodyless"] == 1 and stats29["threads_textless"] == 0, str(stats29))
+        check(f"T29 one {label} post still makes the pool partial",
+              obs_adapter.forum_status(None, stats29, 1) == "partial",
+              obs_adapter.forum_status(None, stats29, 1))
+    try:
+        forum._strip_blockquotes = lambda html: ""
+        pool29f, stats29f = forum.build_pool(max_threads_per_forum=5, listing_pages=1,
+                                             fetch=degrading_fetch_for(QUOTE_THREAD_HTML))
+    finally:
+        forum._strip_blockquotes = real_strip
+    check("T29.8 an extraction failure across the pool is bodyless and partial",
+          stats29f["threads_bodyless"] == 2 and stats29f["threads_textless"] == 0
+          and obs_adapter.forum_status(None, stats29f, 0) == "partial", str(stats29f))
+    # A post the parser handed over without a state (a future refactor) must fail closed.
+    real_parse = forum.parse_opening_post
+    try:
+        forum.parse_opening_post = lambda html: {k: v for k, v in (real_parse(html) or {}).items()
+                                                 if k != "body_state"} or None
+        pool29s, stats29s = forum.build_pool(max_threads_per_forum=5, listing_pages=1,
+                                             fetch=degrading_fetch_for(EMBED_ONLY_THREAD_HTML))
+    finally:
+        forum.parse_opening_post = real_parse
+    check("T29.9 an empty body with no recorded state fails closed into the degrading counter",
+          stats29s["threads_bodyless"] == 1 and stats29s["threads_textless"] == 0, str(stats29s))
+
+    print("T30 legitimately textless posts still degrade the pool when they are a material share")
+    def all_textless(url, timeout=25):
+        if "/list/" in url:
+            return LISTING_HTML
+        return IMAGE_ONLY_THREAD_HTML
+
+    pool30, stats30 = forum.build_pool(max_threads_per_forum=5, listing_pages=1, fetch=all_textless)
+    check("T30.1 a pool where every post is image-only counts them all as textless",
+          stats30["threads_textless"] == len(pool30) == 2 and stats30["threads_bodyless"] == 0,
+          str(stats30))
+    check("T30.2 and a pool-wide collapse reports partial, not success",
+          obs_adapter.forum_status(None, stats30, 1) == "partial",
+          obs_adapter.forum_status(None, stats30, 1) + " " + str(stats30))
+    big = 60
+    big_pages = {f"https://obsproject.com/forum/threads/thread-{n}.{n}/": EMBED_ONLY_THREAD_HTML
+                 for n in range(300000, 300000 + big)}
+
+    def big_collapse(url, timeout=25):
+        if "/list/" in url:
+            return _listing_of(big)
+        return big_pages[url]
+
+    _ev, _restore = _capture_emits()
+    try:
+        pool30b, stats30b = forum.build_pool(max_threads_per_forum=big, listing_pages=1,
+                                             fetch=big_collapse)
+    finally:
+        _restore()
+    check("T30.3 a 60-thread pool of embed-only posts reports partial",
+          obs_adapter.forum_status(None, stats30b, 3) == "partial", str(stats30b))
+    named30 = [f for e, f in _ev if e == "obs_forum_empty_body"]
+    suppressed30 = [f for e, f in _ev if e == "obs_forum_empty_body_suppressed"]
+    check("T30.4 the per-thread diagnostic is bounded during a collapse",
+          len(named30) == forum._MAX_EMPTY_BODY_EVENTS and suppressed30
+          and suppressed30[0].get("count") == big - forum._MAX_EMPTY_BODY_EVENTS,
+          f"{len(named30)} named, suppressed={suppressed30}")
+    # The bound itself, at the edges. Driven through forum_status, which is what health reads.
+    def status_for(in_pool, textless):
+        return obs_adapter.forum_status(None, {"threads_requested": in_pool, "threads_in_pool": in_pool,
+                                               "threads_textless": textless}, 1)
+    collapse_at = -(-180 // forum._EMPTY_BODY_COLLAPSE_DENOMINATOR)
+    check("T30.5 in a 180-thread pool, one fewer than a material share is still healthy",
+          status_for(180, collapse_at - 1) == "success", status_for(180, collapse_at - 1))
+    check("T30.6 and a material share is partial",
+          status_for(180, collapse_at) == "partial", status_for(180, collapse_at))
+    check("T30.7 the floor: a small pool is not degraded by one or two textless posts",
+          status_for(20, 1) == "success" and status_for(20, 2) == "success",
+          f"{status_for(20, 1)} {status_for(20, 2)}")
+    check("T30.8 but a small pool that is mostly textless is",
+          status_for(20, forum._EMPTY_BODY_COLLAPSE_FLOOR) == "partial"
+          and status_for(2, 2) == "partial", f"{status_for(20, 3)} {status_for(2, 2)}")
+    check("T30.9 no empty bodies at all is never a collapse",
+          not forum.empty_body_collapse({"threads_in_pool": 0}) and status_for(180, 0) == "success")
+    # The reviewed bound, pinned in absolute terms so a change to it is a deliberate test change.
+    # History: 0 empty bodies in ~90 runs of a ~180-thread pool, then 1 (thread 196879).
+    check("T30.10 the reviewed bound for a production-sized pool: 8 of 180 healthy, 9 of 180 partial",
+          status_for(180, 8) == "success" and status_for(180, 9) == "partial",
+          f"{status_for(180, 8)} {status_for(180, 9)}")
+
+    print("T31 accepted evidence is unchanged: the authority sees identical inputs")
+    fixtures = (THREAD_HTML, QUOTE_THREAD_HTML, NESTED_QUOTE_HTML, TEXT_THREAD_HTML,
+                EMBED_ONLY_THREAD_HTML, QUOTE_ONLY_THREAD_HTML, NO_BODY_THREAD_HTML)
+    inputs_same = True
+    rows_same = True
+    leaked = False
+    for index, html in enumerate(fixtures):
+        post = forum.parse_opening_post(html)
+        path = f"/forum/threads/fixture.{8800 + index}/"
+        post.update(thread_path=path, source_url=forum.thread_url(path))
+        bare = {k: v for k, v in post.items() if k != "body_state"}
+        for version in (VER, OTHER):
+            if (obs.evaluate_issue(post, version, RELEASE) != obs.evaluate_issue(bare, version, RELEASE)
+                    or obs.match_basis(post, version) != obs.match_basis(bare, version)):
+                inputs_same = False
+            got_rows = obs_adapter.evaluate_forum_candidates(version, RELEASE, [post], "2026-11-14T00:00:00Z")
+            bare_rows = obs_adapter.evaluate_forum_candidates(version, RELEASE, [bare], "2026-11-14T00:00:00Z")
+            if got_rows != bare_rows:
+                rows_same = False
+            for row in got_rows[0]:
+                if "body_state" in row or any(str(v) in forum.DEGRADING_BODY_STATES | forum.TEXTLESS_BODY_STATES
+                                              for v in row.values()):
+                    leaked = True
+    check("T31.1 evaluate_issue and match_basis give the same answer with or without body_state",
+          inputs_same)
+    check("T31.2 accepted rows and rejections are identical with or without body_state", rows_same)
+    check("T31.3 no evidence row carries the diagnostic", not leaked)
+    check("T31.4 a text post's body is byte-identical to the pinned pre-change extraction",
+          forum.parse_opening_post(THREAD_HTML)["body"]
+          == "I updated to 32.2.2. OBS now crashes every time I start a recording. Log attached.",
+          forum.parse_opening_post(THREAD_HTML)["body"])
+    accepted31 = obs_adapter.evaluate_forum_candidates(VER, RELEASE, obs_adapter.forum_candidates(VER, pool28),
+                                                        "2026-11-14T00:00:00Z")[0]
+    accepted31_bare = obs_adapter.evaluate_forum_candidates(
+        VER, RELEASE, obs_adapter.forum_candidates(VER, [{k: v for k, v in p.items() if k != "body_state"}
+                                                         for p in pool28]), "2026-11-14T00:00:00Z")[0]
+    check("T31.5 over a whole pool, candidates and accepted rows match with the diagnostic removed",
+          accepted31 == accepted31_bare and len(accepted31) == many - 1,
+          f"{len(accepted31)} vs {len(accepted31_bare)}")
+
+    print("T32 the newest OBS release is walked first, and no version is starved")
+    check("T32.1 release order is numeric, not string order",
+          obs_adapter.version_order_key("33.10.0") > obs_adapter.version_order_key("33.9.0")
+          and sorted(["33.9.0", "33.10.0"])[0] == "33.10.0")
+    check("T32.2 a pre-release sorts before its release",
+          obs_adapter.version_order_key("32.0.0-beta1") < obs_adapter.version_order_key("32.0.0"))
+    same = {v: "2026-11-14T15:00:00Z" for v in _OBS_VERSIONS}
+    order = obs_adapter.walk_order(_OBS_VERSIONS, same)
+    check("T32.3 the newest releases come first",
+          order[:3] == ["33.0.1", "33.0.0", "32.2.2"], str(order[:4]))
+    check("T32.4 every version is walked exactly once",
+          sorted(order) == sorted(_OBS_VERSIONS) and len(order) == len(_OBS_VERSIONS), str(order))
+    check("T32.5 the order is deterministic and independent of input order",
+          obs_adapter.walk_order(list(reversed(_OBS_VERSIONS)), same) == order
+          and obs_adapter.walk_order(sorted(_OBS_VERSIONS), dict(same)) == order)
+    stale = dict(same, **{"31.1.0": "2026-11-01T00:00:00Z", "32.1.2": "2026-11-05T00:00:00Z"})
+    stale.pop("32.0.3")
+    order_stale = obs_adapter.walk_order(_OBS_VERSIONS, stale)
+    check("T32.6 after the newest, the least recently refreshed come next (never-refreshed first)",
+          order_stale[3:6] == ["32.0.3", "31.1.0", "32.1.2"], str(order_stale[:7]))
+    check("T32.7 a newest release that was refreshed most recently still goes first",
+          obs_adapter.walk_order(_OBS_VERSIONS, dict(same, **{"33.0.1": "2026-11-14T23:59:59Z"}))[0] == "33.0.1")
+    # Starvation, simulated: each run reaches only a few versions more than the reserved newest.
+    # Every version must be refreshed, and within a bounded number of runs.
+    refreshed = {v: "2026-11-01T00:00:00Z" for v in _OBS_VERSIONS}
+    first_seen: dict[str, int] = {}
+    reach = obs_adapter.NEWEST_FIRST + 1
+    for run_no in range(1, 40):
+        stamp = f"2026-11-{1 + run_no // 24:02d}T{run_no % 24:02d}:00:00Z"
+        for version in obs_adapter.walk_order(_OBS_VERSIONS, refreshed)[:reach]:
+            refreshed[version] = stamp
+            first_seen.setdefault(version, run_no)
+    rest = len(_OBS_VERSIONS) - obs_adapter.NEWEST_FIRST
+    check("T32.8 with runs that reach only one version past the newest, every version is refreshed",
+          set(first_seen) == set(_OBS_VERSIONS), str(sorted(set(_OBS_VERSIONS) - set(first_seen))))
+    check("T32.9 and none waits longer than one full rotation of the rest",
+          max(first_seen.values()) <= rest, str(max(first_seen.values())))
+    check("T32.10 an unreadable health table falls back to newest-first, still deterministic",
+          obs_adapter.walk_order(_OBS_VERSIONS, {})[:3] == ["33.0.1", "33.0.0", "32.2.2"])
+
+    print("T33 a budget stop records what was processed and skipped; skipped versions get no row")
+    pooled33 = [forum_post(body=f"Since {VER} my recording crashes every time.", thread_id="9101")]
+    pool_stats33 = {"threads_requested": 180, "threads_in_pool": 178, "threads_failed": 1,
+                    "threads_unparsed": 1, "threads_skipped": 0, "threads_textless": 1}
+    calls33: list[str] = []
+
+    def fake_collect_one33(version, record_path, since, max_pages, write,
+                           extra_accepted=None, extra_rejected=None):
+        calls33.append(version)
+        return 0, {"version": version, "accepted_count": 1, "rejected_count": 0,
+                   "github_status": "ok", "github_accepted_count": 0, "github_rejected_count": 0,
+                   "added_rows_by_source_type": {}}
+
+    real = (obs.collect_one, obs.active_obs_records, forum.reset_pool, forum.get_pool,
+            obs_adapter.last_refreshed_by_version, rb.get_run_budget())
+    events33, restore33 = _capture_emits()
+    try:
+        obs.collect_one = fake_collect_one33
+        obs.active_obs_records = lambda: [(v, None) for v in _OBS_VERSIONS]
+        forum.reset_pool = lambda: None
+        forum.get_pool = lambda *a, **k: (list(pooled33), dict(pool_stats33), None)
+        obs_adapter.last_refreshed_by_version = lambda: dict(same)
+        rb.set_run_budget(_CountdownBudget(allow=4))
+        out33 = obs_adapter.ObsCollector().collect(CollectorContext(write=True, since=None, max_pages=1))
+    finally:
+        restore33()
+        (obs.collect_one, obs.active_obs_records, forum.reset_pool, forum.get_pool,
+         obs_adapter.last_refreshed_by_version) = real[:5]
+        rb.set_run_budget(real[5])
+    expected_done = order[:4]
+    expected_skipped = order[4:]
+    check("T33.1 the run processed the newest releases first, then stopped",
+          [r["version"] for r in out33] == expected_done and calls33 == expected_done,
+          str([r["version"] for r in out33]))
+    health_versions = {row["update_version"] for r in out33 for row in r.get("method_health") or []}
+    check("T33.2 no skipped version gets ANY health row, so none can look freshly refreshed",
+          health_versions == set(expected_done) and not (health_versions & set(expected_skipped)),
+          str(sorted(health_versions)))
+    stop33 = [f for e, f in events33 if e == "collector_budget_stop"]
+    check("T33.3 the budget stop names the processed and skipped versions",
+          len(stop33) == 1 and stop33[0].get("processed") == ",".join(expected_done)
+          and stop33[0].get("skipped") == ",".join(expected_skipped)
+          and stop33[0].get("versions_processed") == 4 and stop33[0].get("versions_skipped") == 14,
+          str(stop33))
+    check("T33.4 and carries the pool's fetched, parsed, failed and skipped counts",
+          bool(stop33) and stop33[0].get("threads_fetched") == 180 and stop33[0].get("threads_parsed") == 178
+          and stop33[0].get("threads_failed") == 2 and stop33[0].get("threads_skipped") == 0, str(stop33))
+    walk33 = [f for e, f in events33 if e == "obs_version_walk"]
+    check("T33.5 every run records its walk, budget stop or not",
+          len(walk33) == 1 and walk33[0].get("budget_stopped") is True
+          and walk33[0].get("order") == ",".join(order) and walk33[0].get("skipped") == ",".join(expected_skipped),
+          str(walk33))
+
+    # A budget that runs out INSIDE the forum pool: the stop carries counts, and no version gets a row.
+    def pool_fetch(url, timeout=25):
+        if "/list/" in url:
+            return LISTING_HTML
+        return THREAD_HTML
+
+    events34, restore34 = _capture_emits()
+    real_get_pool34 = forum.get_pool
+    real_lr34 = obs_adapter.last_refreshed_by_version
+    real_records34 = obs.active_obs_records
+    prior_budget = rb.get_run_budget()
+    try:
+        # 3 listing checks + 1 thread check pass; the second thread check expires.
+        rb.set_run_budget(_CountdownBudget(allow=4))
+        forum.reset_pool()
+        forum.get_pool = lambda *a, **k: real_get_pool34(max_threads_per_forum=5, listing_pages=1,
+                                                          fetch=pool_fetch)
+        obs_adapter.last_refreshed_by_version = lambda: dict(same)
+        obs.active_obs_records = lambda: [(v, None) for v in _OBS_VERSIONS]
+        out34 = obs_adapter.ObsCollector().collect(CollectorContext(write=False, since=None, max_pages=1))
+    finally:
+        restore34()
+        forum.get_pool = real_get_pool34
+        obs_adapter.last_refreshed_by_version = real_lr34
+        obs.active_obs_records = real_records34
+        rb.set_run_budget(prior_budget)
+        forum.reset_pool()
+    fstop = [f for e, f in events34 if e == "obs_forum_budget_stop"]
+    check("T33.6 a pool budget stop carries fetched, parsed, failed and skipped counts",
+          len(fstop) == 1 and fstop[0].get("reason") == "thread_fetch" and fstop[0].get("threads_fetched") == 1
+          and fstop[0].get("threads_parsed") == 1 and fstop[0].get("threads_failed") == 0
+          and fstop[0].get("threads_skipped") == 1, str(fstop))
+    check("T33.7 a run whose pool was cut short writes NO version rows at all",
+          out34 == [], str(out34))
+    cstop = [f for e, f in events34 if e == "collector_budget_stop"]
+    check("T33.8 and its collector stop lists every version as skipped",
+          len(cstop) == 1 and cstop[0].get("versions_processed") == 0 and cstop[0].get("versions_skipped") == 18
+          and cstop[0].get("threads_skipped") == 1, str(cstop))
+
+    events35, restore35 = _capture_emits()
+    prior_budget = rb.get_run_budget()
+    try:
+        rb.set_run_budget(_CountdownBudget(allow=1))
+        forum.build_pool(max_threads_per_forum=5, listing_pages=1, fetch=pool_fetch)
+    finally:
+        restore35()
+        rb.set_run_budget(prior_budget)
+    lstop = [f for e, f in events35 if e == "obs_forum_budget_stop" and f.get("reason") == "listing_enumeration"]
+    check("T33.9 a listing-stage stop is emitted once, with the listings it skipped",
+          len(lstop) == 1 and lstop[0].get("listings_requested") == 1 and lstop[0].get("listings_skipped") == 2,
+          str(lstop))
+
+    print("T34 the registry describes the new failure semantics")
+    from lib import acquisition_methods as am
+    entry = next(m for m in am.METHODS if m["method_id"] == "obs_forum")
+    modes = " ".join(entry["failure_modes"])
+    check("T34.1 failure_modes say a legitimately textless post is counted apart",
+          "threads_textless" in modes and "threads_bodyless" in modes, modes[:200])
+    check("T34.2 failure_modes describe the pool-collapse safeguard", "material share" in modes)
 
 
 if __name__ == "__main__":
