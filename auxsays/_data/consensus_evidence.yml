@@ -74246,3 +74246,49 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-1182215-how-to-add-one-user-to-bulk-microsoft
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/1182215/how-to-add-one-user-to-bulk-microsoft-teams
+  parent_title: How to add one user to bulk microsoft teams - Microsoft Q&A
+  report_title: How to add one user to bulk microsoft teams - Microsoft Q&A
+  report_text_excerpt: How to add one user to bulk microsoft teams Hi I have a questions regarding Microsoft Teams.Please answer me. thanks I have 200 microsoft Teams in my tenant. I want to add one user "jhon" (as a admin) in 50 specifically microsoft teams. I have a csv file of 50 teams. How can I...
+  captured_at: '2026-11-15T07:08:39Z'
+  source_date: '2023-02-20'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14206
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14206
+  parent_title: '[Crash] OBS silently crashes after apx. 10 minutes when recording or streaming'
+  report_title: '[Crash] OBS silently crashes after apx. 10 minutes when recording or streaming'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/bATRuWvi4HHCSPPB ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/fwKoB'
+  captured_at: '2026-11-15T07:29:50Z'
+  source_date: '2026-11-15'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
