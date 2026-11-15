@@ -5320,11 +5320,41 @@ prospective candidate, and the next deploy 0; the projection is unchanged throug
 `test_producer_shadow.py` 21 -> 26 (PS-L9, L10, S2; PX8, PX9), `test_growth3_verdict_policy.py` 146 -> 148 (G3-Q14
 widened; X56, X57).
 
+**Round-3 verification (2026-11-14, head cbe2ab9e): shadow infrastructure deployed; activation NOT ready.** Two
+independent verifiers. Integrity PASS: with the switch OFF a deploy-order build equals main (masked tree hash,
+verdict_projection byte-identical, QA 0/0, both payload verifiers clean); the shadow ledger re-baselines on a rules
+change, counts 0 new on unchanged evidence and exactly 1 new on one added row, keeps evicted keys as repeats, holds no
+report text or URLs, and the step cannot fail a deploy. Fresh probes FAIL (switch ON only): 11 of 109 new adversarial
+probes still draft a wrong verdict in a rendered switch-ON build with QA passing. Merged anyway under the v2.38 ruling
+(ON-path-only defects are recorded here as activation blockers; no further implementation round). Over-refusal on the
+verifier's legitimate positives: 5 of 34. The blockers, each a condition for turning ANY class on:
+- B1 (V-new): an unpunctuated history tail inside the scope clause ("... seen by many for months", "... for years") is
+  drafted as a new WAIT and leaks into the scope. The tail slot is still open-ended, not a closed grammar.
+- B2 (I): another update named by a relative clause ("the update that followed / replaced / superseded KB...") counts
+  as this update.
+- B3 (I): "my old / other / work <computer>" is read as the reporter's failing machine, so a former computer makes a
+  second incident.
+- B4 (I, Acrobat): another Acrobat version or product passes when named by a short or unpadded version ("Acrobat 11",
+  "15.20.20039") or only by an installer filename; and another Adobe app missing from the product list counts.
+- B5 (V-new, Windows): Microsoft text with a hedge or an "investigating" status is still drafted as WAIT (the hedge rule
+  covers OBS only); a policy decision is needed because nearly every Microsoft known issue says "might".
+- B6 (shadow accuracy): the rules version hashes five rule files but not every module a candidate depends on (the
+  counting predicate and front-matter loader in patch_collectors/base.py, and modules report_counts imports), so an edit
+  there alone would count rule-made candidates as prospective. No public effect; must be closed before shadow counts
+  feed any activation review.
+- Test gaps (LOW): the plural "updates" refusal and the seen-map size bound each have no check that catches their
+  removal. Limitation (LOW): a subdivision-flag emoji (tag characters) in a changelog-title update_version would be a
+  publication error; 0 of 1,558 records carry one.
+
 **Why deferred** Public activation needs the owner's separate approval (AUTH_V2_38 activation criteria: per reason
 class, at least 30 distinct prospective positive candidates with no unsupported recommendation plus an adversarial
-negative set; repeated shadow observations never count as independent validation). Still open before activation:
-F4 (Windows scopes broader than Microsoft's text), F5 (a security panel shows only its head reason), F6/K1 (rights
-posture for quoting Microsoft text), and the vendor class has no labelled set beyond the six named pages.
+negative set; repeated shadow observations never count as independent validation). The v2.38 ruling adds two
+conditions: prospective means newly published or newly collected evidence after the rules are frozen (a historical
+candidate first seen after a rules change is not prospective), deduplicated across runs; and activation must be per
+class through an explicit, reviewed, fail-closed allowlist, so the single `PUBLIC_AUTO_ACTIVATION` switch must be
+replaced before any class is turned on. Still open before activation: B1-B6 above, F4 (Windows scopes broader than
+Microsoft's text), F5 (a security panel shows only its head reason), F6/K1 (rights posture for quoting Microsoft
+text), and the vendor class has no labelled set beyond the six named pages.
 
 **Current impact** None published. The candidates and the shadow ledger are visible only in the deploy artifacts.
 
