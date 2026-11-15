@@ -74224,3 +74224,25 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14203
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14203
+  parent_title: Frame freeze when alt-tabbing, doesn't resume when tabbing back in. Also obs keyboard shortcuts dont work in-game
+  report_title: Frame freeze when alt-tabbing, doesn't resume when tabbing back in. Also obs keyboard shortcuts dont work in-game
+  report_text_excerpt: '### Operating System Info Other ### Other OS PopOS ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/edBUOf14ZCqo91Mh ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Alt-t'
+  captured_at: '2026-11-14T23:41:29Z'
+  source_date: '2026-11-14'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
