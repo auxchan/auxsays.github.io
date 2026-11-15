@@ -74292,3 +74292,322 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071675/teams-desktop-keeps-auto-signing-in-a-personal-acc
+  parent_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_text_excerpt: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA Hi everyone, I’m having several linked problems with the new Teams desktop app on Windows 11 and I’m hoping someone can help. My setup...
+  captured_at: '2026-11-15T19:38:43Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071675/teams-desktop-keeps-auto-signing-in-a-personal-acc
+  parent_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_text_excerpt: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA Hi everyone, I’m having several linked problems with the new Teams desktop app on Windows 11 and I’m hoping someone can help. My setup...
+  captured_at: '2026-11-15T19:38:43Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-10-22'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071675/teams-desktop-keeps-auto-signing-in-a-personal-acc
+  parent_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_text_excerpt: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA Hi everyone, I’m having several linked problems with the new Teams desktop app on Windows 11 and I’m hoping someone can help. My setup...
+  captured_at: '2026-11-15T19:38:43Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071675/teams-desktop-keeps-auto-signing-in-a-personal-acc
+  parent_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_text_excerpt: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA Hi everyone, I’m having several linked problems with the new Teams desktop app on Windows 11 and I’m hoping someone can help. My setup...
+  captured_at: '2026-11-15T19:38:43Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-10-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071675/teams-desktop-keeps-auto-signing-in-a-personal-acc
+  parent_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_text_excerpt: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA Hi everyone, I’m having several linked problems with the new Teams desktop app on Windows 11 and I’m hoping someone can help. My setup...
+  captured_at: '2026-11-15T19:38:43Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-09-24'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071675/teams-desktop-keeps-auto-signing-in-a-personal-acc
+  parent_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_text_excerpt: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA Hi everyone, I’m having several linked problems with the new Teams desktop app on Windows 11 and I’m hoping someone can help. My setup...
+  captured_at: '2026-11-15T19:38:43Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-09-08'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071675/teams-desktop-keeps-auto-signing-in-a-personal-acc
+  parent_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_text_excerpt: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA Hi everyone, I’m having several linked problems with the new Teams desktop app on Windows 11 and I’m hoping someone can help. My setup...
+  captured_at: '2026-11-15T19:38:43Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-08-20'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071675/teams-desktop-keeps-auto-signing-in-a-personal-acc
+  parent_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_title: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA - Microsoft Q&A
+  report_text_excerpt: Teams desktop keeps auto-signing in a personal account I can’t remove, rejects my second personal account, and my work account fails after 2FA Hi everyone, I’m having several linked problems with the new Teams desktop app on Windows 11 and I’m hoping someone can help. My setup...
+  captured_at: '2026-11-15T19:38:43Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: install/update failure
+  workflow_area: update
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6071549-question-6071549
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071549/kb5132061-9-lower-multi-core-cpu-performance-on-ry
+  parent_title: 'KB5132061: ~9% lower multi-core CPU performance on Ryzen 7 9850X3D (Zen 5), reproducible by uninstall/reinstall - Microsoft Q&A'
+  report_title: 'KB5132061: ~9% lower multi-core CPU performance on Ryzen 7 9850X3D (Zen 5), reproducible by uninstall/reinstall - Microsoft Q&A'
+  report_text_excerpt: 'KB5132061: ~9% lower multi-core CPU performance on Ryzen 7 9850X3D (Zen 5), reproducible by uninstall/reinstall - Microsoft Q&A After installing KB5132061 (build 26300.9974), Cinebench R23 multi-core on my Ryzen 7 9850X3D dropped by about 9%. Uninstalling the update restores...'
+  captured_at: '2026-11-15T19:48:35Z'
+  source_date: '2026-11-15'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6071468-question-6071468
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071468/kb5132061-regression-rdp-to-hyper-v-vms-with-gpu-p
+  parent_title: 'KB5132061 regression: RDP to Hyper-V VMs with GPU-P (AMD V710) disconnects ~1s (dxgkrnl 0xC000A003) - Microsoft Q&A'
+  report_title: 'KB5132061 regression: RDP to Hyper-V VMs with GPU-P (AMD V710) disconnects ~1s (dxgkrnl 0xC000A003) - Microsoft Q&A'
+  report_text_excerpt: 'KB5132061 regression: RDP to Hyper-V VMs with GPU-P (AMD V710) disconnects ~1s (dxgkrnl 0xC000A003) - Microsoft Q&A Also filed via Feedback Hub (Hyper-V category). Since cumulative update KB5132061, every RDP session to a Hyper-V guest that uses a GPU partition (GPU-P / WDDM...'
+  captured_at: '2026-11-15T19:48:35Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6071515-question-6071515
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071515/windows-11-home-suddenly-deactivated-error-0xc004c
+  parent_title: Windows 11 Home suddenly deactivated – Error 0xC004C003 – Microsoft support unable to help - Microsoft Q&A
+  report_title: Windows 11 Home suddenly deactivated – Error 0xC004C003 – Microsoft support unable to help - Microsoft Q&A
+  report_text_excerpt: Windows 11 Home suddenly deactivated – Error 0xC004C003 – Microsoft support unable to help - Microsoft Q&A Her er et grundigt opslag på engelsk, som du kan lægge direkte ind i Microsoft Community-forummet. Jeg har medtaget alle de fejlmeddelelser og forsøg, vi har gennemgået –...
+  captured_at: '2026-11-15T19:48:35Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6071627-question-6071627
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6071627/problem-with-my-hard-drive-after-windows-update-no
+  parent_title: problem with my hard drive after Windows update "November 2026 Security Update (KB5132061) (26200.9974)." - Microsoft Q&A
+  report_title: problem with my hard drive after Windows update "November 2026 Security Update (KB5132061) (26200.9974)." - Microsoft Q&A
+  report_text_excerpt: problem with my hard drive after Windows update "November 2026 Security Update (KB5132061) (26200.9974)." - Microsoft Q&A Hi, I'm having a problem with my hard drive. It started after the Windows update "November 2026 Security Update (KB5132061) (26200.9974)." This happens...
+  captured_at: '2026-11-15T19:48:48Z'
+  source_date: '2026-11-15'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26200.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
