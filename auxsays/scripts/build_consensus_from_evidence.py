@@ -17,7 +17,7 @@ from typing import Any
 import yaml
 
 from patch_collectors.base import load_front_matter_and_body
-from lib import live_eligibility, maturity, patch_decision, verdict_reasons
+from lib import live_eligibility, maturity, patch_decision, verdict_projection, verdict_reasons
 from lib.report_counts import (EvidenceStoreError, counted_evidence_rows, format_maturity_transition,
                                format_reconcile_detail, load_evidence_store, reconcile_record_counts,
                                windows_targets_from_front_matter)
@@ -275,6 +275,10 @@ def policy_decision(product_id: str, version: str, target_build: str, items: lis
     ident = verdict_reasons.record_identity(facts)
     valid = [e for e in reasons if verdict_reasons.reason_identity(e) == ident
              and not verdict_reasons.support_problems(e, items, by_identity)]
+    # As apply_consensus_to_records gathers them: the reason producer's candidates join only while its
+    # (temporary, owner-gated) switch is on (AUX-099).
+    valid = verdict_projection.page_supported_reasons(
+        facts, items, valid, lambda: [r for r in (records or {}).values() if r.get("update_entry") is True])
     return patch_decision.decide(facts, valid_reasons=valid, lifecycle=lifecycle), facts
 
 

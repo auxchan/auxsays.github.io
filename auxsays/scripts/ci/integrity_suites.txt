@@ -323,7 +323,14 @@ auxsays/scripts/tests/test_patch_decision_authority.py = 211
 # G3-S2 restated. Review 1: the pill above an official verdict names no verdict -- 'Not enough
 # reports', the patch page's word, on the 18 (G3-S13) -- and QA checks each half of the line on
 # its own (G3-Q13). 57 mutants, X46..X53 one fix half each.
-auxsays/scripts/tests/test_growth3_verdict_policy.py = 143
+# 143 -> 146 (AUX-099, G35-04 review 2 LOW-7, probe P6): an invisible or control character (Unicode Cf,
+# Cc, Zl, Zp, or a space separator other than a plain space) inside product_id / update_version /
+# target_build is a publication error, printable Unicode changelog titles are not, and the shipped
+# corpus has none (G3-Q14). 59 mutants, X54/X55 one fix half each.
+# 146 -> 148 (AUX-099 round 3, G38 WS2 review 2 LOW-2): every Default_Ignorable_Code_Point, the Hangul fillers and
+# the braille blank are errors too, in product_id and target_build without exception; in update_version U+FE0F
+# and U+200D pass only inside an emoji sequence (G3-Q14). 61 mutants, X56/X57 one fix half each.
+auxsays/scripts/tests/test_growth3_verdict_policy.py = 148
 # G35-04, the deterministic verdict-reason producer (lib/verdict_reason_producer): the vendor-
 # confirmed-serious class on frozen copies of the stored statements, the six named pages (VRP-V1..V7);
 # the user-corroborated install-failure class and its mandatory independence gate (VRP-I1..I6); the
@@ -335,7 +342,41 @@ auxsays/scripts/tests/test_growth3_verdict_policy.py = 143
 # update only (I8), the L1/N2 duplicate pairs (I9). 21 mutants (was 10), VX11..VX21 one fix half each.
 # Review 2 (51 -> 56): a hedged scope is ambiguous -- the Q4 row and the review's unit phrasings
 # (V8b). 25 mutants, VX22..VX25 one fix half each.
-auxsays/scripts/tests/test_verdict_reason_producer.py = 56
+# AUX-099 (56 -> 78; AUTH_V2_38 WS2 items 1-8): independence fails closed -- an unknown second reporter never
+# counts, only a different source reporter id or conflicting incident details do, and a reworded cross-post is
+# detected by a shared distinctive passage (I2, I10a); similarity or a shared author never merges incidents
+# whose details conflict (I10b); the install verb's subject is this update and codes come only from install-
+# error context (I11); strict grouping on a shared code or stage (I12); a carried-over defect persists, never
+# new (V11); an OBS crash needs a launch or core-flow cue and a possible / rare one is queued (V12); every
+# corpus install candidate rests on separate incidents of one problem (C3); the record writers gather reasons
+# as the projection does, so switch-ON drift clears (S6). 39 mutants, VX26..VX39 one fix half each.
+# AUX-099 review (78 -> 93): only identity details (computer, CPU, edition, architecture, OS family) or a
+# reporter id separate two reports -- a failure point or an OS version never does, and a declared follow-up is a
+# copy (I14); a third row never bridges two machines, overlap is not a conflict, a copy of a copy is one report
+# (I15); install wording whose object is other software is refused (I11); Acrobat rows: another product's Exit
+# Code 7 and denials refused, grouping on the specific DW/DF error (I3, I13); any older OBS version or
+# earlier / previous / older / prior is carry-over, a causal "since" is not (V11); a freeze or hang needs the
+# core-flow cue too (V12); every judged corpus page ends as a candidate or a recorded refusal (C2, C3).
+# 51 mutants, VX40..VX51 one fix each.
+# AUX-099 round 3 (93 -> 113; G38 WS2 review 2: fail closed instead of adding phrases): a vendor WAIT only from a
+# fully recognised statement -- any trailing clause, aside, version number or history word is queued, "earlier"
+# counts only beside a version, a Microsoft row that speaks about history is queued (V11); a hedged crash is
+# uncertain (V14); identity only from own-machine statements (I16); a shared long passage beats an identity
+# conflict, reporter ids compare per site (I17); the install subject and object are an allow-list (I18);
+# Acrobat rows about another version or product are refused (I19); explicit copy declarations (I20); a stage
+# never joins two codes (I21); codes only in install-error context (I22); the writers add candidates beside a
+# reviewed entry (S7). 62 mutants, VX52..VX62 one change each.
+auxsays/scripts/tests/test_verdict_reason_producer.py = 113
+# AUX-099, shadow operation of the reason producer (switch OFF): the deploy ledger tells a first-seen
+# candidate from a repeat appearance by stable identity -- a baseline first deploy, 0 new over unchanged
+# evidence, exactly the expected new candidate after one added row, a repeat after one more report, a
+# rules change and a lost ledger never prospective, bounded (PS-L1..L7); public-safe (P1, P2); never
+# public, never a tracked writer, pages.yml's steps main-only and continue-on-error (N1..N3); the bare
+# script end to end (S1). 6 mutants, PX1..PX6. Review (19 -> 21): one page whose install candidate changes
+# problem carries two keys, so the diagnostics also count distinct pages (PS-L8; PX7).
+# Review 2 (21 -> 26, LOW-6/LOW-7): an evicted key that returns is a repeat (the seen set, PS-L9); the rules'
+# version is a hash of the rule sources (PS-L10); the script exits 0 on an exception (PS-S2). PX8, PX9.
+auxsays/scripts/tests/test_producer_shadow.py = 26
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
 auxsays/scripts/tests/test_patch_index_identity.py = 93
