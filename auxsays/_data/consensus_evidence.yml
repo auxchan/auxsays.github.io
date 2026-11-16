@@ -74292,7 +74292,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
   product_id: microsoft-teams
   update_version: 26288.2004.5269.3420
@@ -74317,7 +74316,6 @@ evidence:
   severity: medium
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26276-513-5241-9675-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
   product_id: microsoft-teams
   update_version: 26276.513.5241.9675
@@ -74342,7 +74340,6 @@ evidence:
   severity: medium
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1717-5229-7049-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
   product_id: microsoft-teams
   update_version: 26260.1717.5229.7049
@@ -74367,7 +74364,6 @@ evidence:
   severity: medium
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26260-1701-5139-3736-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
   product_id: microsoft-teams
   update_version: 26260.1701.5139.3736
@@ -74392,7 +74388,6 @@ evidence:
   severity: medium
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26246-1604-5133-838-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
   product_id: microsoft-teams
   update_version: 26246.1604.5133.838
@@ -74417,7 +74412,6 @@ evidence:
   severity: medium
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26225-1806-5074-1452-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
   product_id: microsoft-teams
   update_version: 26225.1806.5074.1452
@@ -74442,7 +74436,6 @@ evidence:
   severity: medium
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26213-1006-5014-9784-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
   product_id: microsoft-teams
   update_version: 26213.1006.5014.9784
@@ -74467,7 +74460,6 @@ evidence:
   severity: medium
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-teams-26198-304-4946-9672-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6071675-teams-desktop-keeps-auto-signing-in-a
   product_id: microsoft-teams
   update_version: 26198.304.4946.9672
@@ -74492,7 +74484,6 @@ evidence:
   severity: medium
   sentiment: ''
   source_weight: 1
-
 - id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6071549-question-6071549
   product_id: microsoft-windows-11
   update_version: 26H2
@@ -74581,7 +74572,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26300.9974'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6071627-question-6071627
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -74611,3 +74601,248 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9974'
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-27-fewer-audio-channels-error-when-relink
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-27-fewer-audio-channels-error-when-relinking-projects-from-version-26-2-2-workaround-found-1656474
+  parent_title: Premiere Pro 27 “Fewer Audio Channels” Error When Relinking Projects from Version 26.2.2 — Workaround Found
+  report_title: Premiere Pro 27 “Fewer Audio Channels” Error When Relinking Projects from Version 26.2.2 — Workaround Found
+  report_text_excerpt: I regularly receive client projects created in Premiere Pro 26.2.2 and import them into my editing template. This workflow worked flawlessly in Premiere 26.5.3. After upgrading to Premiere 27, relinking the client's media (a mixture of MXF and ProRes files) produced a “Fewer...
+  captured_at: '2026-11-16T22:40:44Z'
+  source_date: '2026-11-16'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6072136-teams-started-converting-my-images-to
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6072136/teams-started-converting-my-images-to-file-attachm
+  parent_title: Teams started converting my images to file attachments in Teams - Microsoft Q&A
+  report_title: Teams started converting my images to file attachments in Teams - Microsoft Q&A
+  report_text_excerpt: Teams started converting my images to file attachments in Teams Pasted images incorrectly uploaded to OneDrive Since 3 days ago pasting screenshots with Ctrl+V in Microsoft Teams uploads them as PNG file attachments to OneDrive/Microsoft Teams Chat Files instead of inserting...
+  captured_at: '2026-11-16T22:44:34Z'
+  source_date: '2026-11-15'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26288.2004.5269.3420
+  match_basis: 26288.2004.5269.3420
+  counted: false
+  exclusion_reason: platform_web
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6072271-question-6072271
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6072271/windows-11-pro-26h2-fails-to-boot-after-kb5132061
+  parent_title: Windows 11 Pro 26H2 fails to boot after KB5132061 (26300.9974) on two attempts — 0x800F0823 during rollback - Microsoft Q&A
+  report_title: Windows 11 Pro 26H2 fails to boot after KB5132061 (26300.9974) on two attempts — 0x800F0823 during rollback - Microsoft Q&A
+  report_text_excerpt: Windows 11 Pro 26H2 fails to boot after KB5132061 (26300.9974) on two attempts — 0x800F0823 during rollback - Microsoft Q&A Windows 11 Pro 26H2 fails to boot after KB5132061 (26300.9974) on two attempts — 0x800F0823 during rollback Has Microsoft identified a servicing or boot...
+  captured_at: '2026-11-16T22:52:39Z'
+  source_date: '2026-11-15'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: boot failure
+  workflow_area: startup / boot
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6072218-question-6072218
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6072218/the-windows-11-2026-11-security-update-kb5132061-2
+  parent_title: The Windows 11 2026-11 Security Update (KB5132061) (26300.9974) installation error 0x800f081f - Microsoft Q&A
+  report_title: The Windows 11 2026-11 Security Update (KB5132061) (26300.9974) installation error 0x800f081f - Microsoft Q&A
+  report_text_excerpt: The Windows 11 2026-11 Security Update (KB5132061) (26300.9974) installation error 0x800f081f - Microsoft Q&A It was stated that this error will be repaired within 24 to 48 hours since it launch in November 10th, it's November 15th and it's still not fixed. Any idea if this...
+  captured_at: '2026-11-16T22:52:39Z'
+  source_date: '2026-11-15'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6072040-question-6072040
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6072040/how-to-fix-2026-11-security-update-kb5132061-26300
+  parent_title: How to fix 2026-11 Security Update (KB5132061) (26300.9974) installation - Microsoft Q&A
+  report_title: How to fix 2026-11 Security Update (KB5132061) (26300.9974) installation - Microsoft Q&A
+  report_text_excerpt: How to fix 2026-11 Security Update (KB5132061) (26300.9974) installation - Microsoft Q&A 2026-11 Security Update (KB5132061) (26300.9974) Failed to install multiple times on ‎15/‎11/‎2026
+  captured_at: '2026-11-16T22:52:39Z'
+  source_date: '2026-11-15'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6072059-question-6072059
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6072059/zbook-x-g1i-ac-battery-flapping-after-x97-01-06-05
+  parent_title: 'ZBook X G1i: AC/battery flapping after X97 01.06.05 with Samsung TB3 power - Microsoft Q&A'
+  report_title: 'ZBook X G1i: AC/battery flapping after X97 01.06.05 with Samsung TB3 power - Microsoft Q&A'
+  report_text_excerpt: 'ZBook X G1i: AC/battery flapping after X97 01.06.05 with Samsung TB3 power - Microsoft Q&A Operating System: Microsoft Windows 11 I am looking for confirmation from HP firmware engineering or other ZBook X G1i owners. Hardware/software - HP ZBook X G1i 16-inch Mobile...'
+  captured_at: '2026-11-16T22:52:39Z'
+  source_date: '2026-11-16'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5132061-update-failed-known-issues-in
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5132061-update-failed---known-issues-in-this-update/4572914
+  parent_title: KB5132061 update failed - Known issues in this update
+  report_title: KB5132061 update failed - Known issues in this update
+  report_text_excerpt: KB5132061 update failed - Known issues in this update &amp;nbsp;Hello, I have a question about a Microsoft announcement.My question:KB5132061 failed to install 10 times with error code 0x80070306 | Microsoft Community HubHi everyone, when I checked Microsoft&apos;s support...
+  captured_at: '2026-11-16T22:52:39Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6072035-question-6072035
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6072035/how-i-fixing-inaccessible-boot-device-0x7b-after-w
+  parent_title: how i Fixing INACCESSIBLE_BOOT_DEVICE (0x7B) After Windows 11 update - Windows Update KB5132061 (26200.9974) - Microsoft Q&A
+  report_title: how i Fixing INACCESSIBLE_BOOT_DEVICE (0x7B) After Windows 11 update - Windows Update KB5132061 (26200.9974) - Microsoft Q&A
+  report_text_excerpt: 'how i Fixing INACCESSIBLE_BOOT_DEVICE (0x7B) After Windows 11 update - Windows Update KB5132061 (26200.9974) - Microsoft Q&A Result from Acer Nitro 5 case Windows successfully recovered without formatting the SSD or reinstalling Windows. Suspected trigger: Windows Update...'
+  captured_at: '2026-11-16T22:52:49Z'
+  source_date: '2026-11-15'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26200.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+- id: obs-studio-33-0-1-github-issue-14211
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14211
+  parent_title: RTMP Hard-Locks Rate Control to CBR Without Warning
+  report_title: RTMP Hard-Locks Rate Control to CBR Without Warning
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) 33.0.1 Built from Source ### OBS Studio Log URL https://obsproject.com/logs/QeMqecYxV3odeR0a ### OBS Studio Crash Log URL _No response_ ### Expected Beh'
+  captured_at: '2026-11-16T23:06:04Z'
+  source_date: '2026-11-16'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
