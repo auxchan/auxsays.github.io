@@ -17,8 +17,8 @@ update_version: Disable Figma Templates in Buzz
 update_logo_text: FIG
 update_published_at: '2025-12-11T00:00:00.000Z'
 update_last_checked: '2026-08-02T09:37:20Z'
-source_last_checked: '2026-10-10T08:25:42Z'
-official_body_last_checked: '2026-10-10T08:25:42Z'
+source_last_checked: '2026-11-16T09:02:56Z'
+official_body_last_checked: '2026-11-16T09:02:56Z'
 record_last_updated: '2026-08-02T09:37:20Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-10T08:25:42Z'
+  url: https://www.figma.com/release-notes/?title=disable-figma-templates-in-buzz
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-16T09:02:56Z'
   url: https://www.figma.com/release-notes/?title=disable-figma-templates-in-buzz
   status: captured-from-rss-feed
   body_captured: true
