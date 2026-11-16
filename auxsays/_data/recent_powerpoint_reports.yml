@@ -4,7 +4,26 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2610|20527.20196
+  report_date: '2026-11-16'
+  report_excerpt: Powerpoint not open Powerpoint not open I am unable to open power point from 2 days,
+    below message displayed
+  report_id: microsoft-powerpoint:edcc6ee4d49ee07c
+  report_title: Powerpoint not open
+  source_family: Microsoft Q&A
+  source_report_id: '6072652'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6072652/powerpoint-not-open
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20527.20196'
+  window_start: '2026-11-10'
+  window_version: '2610'
+- attribution_state: not_established
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -23,7 +42,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -43,7 +62,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -64,7 +83,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -84,7 +103,7 @@ reports:
   window_start: '2026-11-10'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -105,7 +124,7 @@ reports:
   window_start: '2026-11-04'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -127,7 +146,7 @@ reports:
   window_start: '2026-11-04'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -148,7 +167,7 @@ reports:
   window_start: '2026-10-28'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -188,7 +207,7 @@ reports:
   window_start: '2026-10-21'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -208,7 +227,7 @@ reports:
   window_start: '2026-10-21'
   window_version: '2610'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -749,7 +768,29 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2506|18925.20184
+  report_date: '2025-11-11'
+  report_excerpt: keystroke to mute a playing video in powerpoint and to resume playing after pausing
+    with a P styroke keystroke to mute a playing video in powerpoint and to resume playing after pausing
+    with a P styroke I am on a PC Windows 11 playing a video in PowerPoint (I'm not sure which...
+  report_id: microsoft-powerpoint:67198e36b60482cd
+  report_title: keystroke to mute a playing video in powerpoint and to resume playing after pausing with
+    a P styroke
+  source_family: Microsoft Q&A
+  source_report_id: '5618252'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5618252/keystroke-to-mute-a-playing-video-in-powerpoint-an
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '18925.20184'
+  window_end: '2026-01-27'
+  window_start: '2025-07-22'
+  window_version: '2506'
+- attribution_state: not_established
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -792,7 +833,7 @@ reports:
   window_start: '2025-01-30'
   window_version: '2501'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -813,7 +854,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -877,7 +918,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -898,7 +939,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-11-15T21:29:39Z'
+  captured_at: '2026-11-16T08:58:29Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
