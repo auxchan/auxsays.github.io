@@ -18,8 +18,8 @@ update_version: Budget limit increased to 40,000 budgets per account
 update_logo_text: GIT
 update_published_at: '2026-11-16T21:30:49Z'
 update_last_checked: '2026-11-17T00:26:39Z'
-source_last_checked: '2026-11-17T00:26:39Z'
-official_body_last_checked: '2026-11-17T00:26:39Z'
+source_last_checked: '2026-11-17T10:25:07Z'
+official_body_last_checked: '2026-11-17T10:25:07Z'
 record_last_updated: '2026-11-17T00:26:39Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-11-17T00:26:39Z'
+  url: https://github.blog/changelog/2026-11-16-budget-limit-increased-to-40000-budgets-per-account
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-17T10:25:07Z'
   url: https://github.blog/changelog/2026-11-16-budget-limit-increased-to-40000-budgets-per-account
   status: captured-from-rss-feed
   body_captured: true
