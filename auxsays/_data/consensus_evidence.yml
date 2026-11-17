@@ -74868,3 +74868,298 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-archivinghiding-post-strings-in-a-c
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/archivinghiding-post-strings-in-a-channel/1611729
+  parent_title: Archiving/hiding post strings in a channel
+  report_title: Archiving/hiding post strings in a channel
+  report_text_excerpt: Archiving/hiding post strings in a channel Why can&apos;t posts strings be hidden/archived within team channels just like email strings can be archived? Am I missing something? It seems my only alternatives with channel posts are deleting them or leaving them in the channel to...
+  captured_at: '2026-11-17T21:38:10Z'
+  source_date: '2020-08-25'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-archivinghiding-post-strings-in-a-c
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/archivinghiding-post-strings-in-a-channel/1611729
+  parent_title: Archiving/hiding post strings in a channel
+  report_title: Archiving/hiding post strings in a channel
+  report_text_excerpt: Archiving/hiding post strings in a channel Why can&apos;t posts strings be hidden/archived within team channels just like email strings can be archived? Am I missing something? It seems my only alternatives with channel posts are deleting them or leaving them in the channel to...
+  captured_at: '2026-11-17T21:38:10Z'
+  source_date: '2020-08-25'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-archivinghiding-post-strings-in-a-c
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/archivinghiding-post-strings-in-a-channel/1611729
+  parent_title: Archiving/hiding post strings in a channel
+  report_title: Archiving/hiding post strings in a channel
+  report_text_excerpt: Archiving/hiding post strings in a channel Why can&apos;t posts strings be hidden/archived within team channels just like email strings can be archived? Am I missing something? It seems my only alternatives with channel posts are deleting them or leaving them in the channel to...
+  captured_at: '2026-11-17T21:38:10Z'
+  source_date: '2020-08-25'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-archivinghiding-post-strings-in-a-c
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/archivinghiding-post-strings-in-a-channel/1611729
+  parent_title: Archiving/hiding post strings in a channel
+  report_title: Archiving/hiding post strings in a channel
+  report_text_excerpt: Archiving/hiding post strings in a channel Why can&apos;t posts strings be hidden/archived within team channels just like email strings can be archived? Am I missing something? It seems my only alternatives with channel posts are deleting them or leaving them in the channel to...
+  captured_at: '2026-11-17T21:38:10Z'
+  source_date: '2020-08-25'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-archivinghiding-post-strings-in-a-c
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/archivinghiding-post-strings-in-a-channel/1611729
+  parent_title: Archiving/hiding post strings in a channel
+  report_title: Archiving/hiding post strings in a channel
+  report_text_excerpt: Archiving/hiding post strings in a channel Why can&apos;t posts strings be hidden/archived within team channels just like email strings can be archived? Am I missing something? It seems my only alternatives with channel posts are deleting them or leaving them in the channel to...
+  captured_at: '2026-11-17T21:38:10Z'
+  source_date: '2020-08-25'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-archivinghiding-post-strings-in-a-c
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/archivinghiding-post-strings-in-a-channel/1611729
+  parent_title: Archiving/hiding post strings in a channel
+  report_title: Archiving/hiding post strings in a channel
+  report_text_excerpt: Archiving/hiding post strings in a channel Why can&apos;t posts strings be hidden/archived within team channels just like email strings can be archived? Am I missing something? It seems my only alternatives with channel posts are deleting them or leaving them in the channel to...
+  captured_at: '2026-11-17T21:38:10Z'
+  source_date: '2020-08-25'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-archivinghiding-post-strings-in-a-c
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/archivinghiding-post-strings-in-a-channel/1611729
+  parent_title: Archiving/hiding post strings in a channel
+  report_title: Archiving/hiding post strings in a channel
+  report_text_excerpt: Archiving/hiding post strings in a channel Why can&apos;t posts strings be hidden/archived within team channels just like email strings can be archived? Am I missing something? It seems my only alternatives with channel posts are deleting them or leaving them in the channel to...
+  captured_at: '2026-11-17T21:38:10Z'
+  source_date: '2020-08-25'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-archivinghiding-post-strings-in-a-c
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/archivinghiding-post-strings-in-a-channel/1611729
+  parent_title: Archiving/hiding post strings in a channel
+  report_title: Archiving/hiding post strings in a channel
+  report_text_excerpt: Archiving/hiding post strings in a channel Why can&apos;t posts strings be hidden/archived within team channels just like email strings can be archived? Am I missing something? It seems my only alternatives with channel posts are deleting them or leaving them in the channel to...
+  captured_at: '2026-11-17T21:38:10Z'
+  source_date: '2020-08-25'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6073541-question-6073541
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6073541/windows-11-26h2-kb5132061-repeatedly-fails-with-0x
+  parent_title: Windows 11 26H2 KB5132061 repeatedly fails with 0x800F0922 / EventsInstaller 0x80070057, some systems enter BSOD boot loop - Microsoft Q&A
+  report_title: Windows 11 26H2 KB5132061 repeatedly fails with 0x800F0922 / EventsInstaller 0x80070057, some systems enter BSOD boot loop - Microsoft Q&A
+  report_text_excerpt: Windows 11 26H2 KB5132061 repeatedly fails with 0x800F0922 / EventsInstaller 0x80070057, some systems enter BSOD boot loop - Microsoft Q&A We are experiencing a widespread Windows 11 26H2 servicing issue in a managed business environment affecting multiple systems. Affected...
+  captured_at: '2026-11-17T21:47:14Z'
+  source_date: '2026-11-16'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-learn-6073400-question-6073400
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6073400/regression-directshow-cameracontrol-zoom-unavailab
+  parent_title: 'Regression: DirectShow CameraControl Zoom unavailable since Windows 11 25H2 KB5120998 / Build 26200.9278 - Microsoft Q&A'
+  report_title: 'Regression: DirectShow CameraControl Zoom unavailable since Windows 11 25H2 KB5120998 / Build 26200.9278 - Microsoft Q&A'
+  report_text_excerpt: 'Regression: DirectShow CameraControl Zoom unavailable since Windows 11 25H2 KB5120998 / Build 26200.9278 - Microsoft Q&A I do have quite a similar issue as https://learn.microsoft.com/en-us/answers/questions/6043239/camera-zoom-slider-disappeared-after-windows-11-up , but I...'
+  captured_at: '2026-11-17T21:47:24Z'
+  source_date: '2026-11-16'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26200.9974'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9974'
+- id: obs-studio-33-0-1-github-issue-14216
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14216
+  parent_title: Game Capture causes DaVinci Resolve to crash randomly
+  report_title: Game Capture causes DaVinci Resolve to crash randomly
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OFmluMsH462aX54v ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
+  captured_at: '2026-11-17T22:01:06Z'
+  source_date: '2026-11-17'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196921
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-crashes-when-closing-it-v-33-0-1.196921/
+  parent_title: OBS crashes when closing it (v. 33.0.1)
+  report_title: OBS crashes when closing it (v. 33.0.1)
+  report_text_excerpt: Hi everyone, Idk why but when i close my OBS i keep seeing the popup that says "Oops, OBS has crashed!" (something it didn't do yesterday). The only thin i've made today different than yesterday was that i've downloaded the most recent version of all the scripts i previously...
+  captured_at: '2026-11-17T22:00:49Z'
+  source_date: '2026-11-17'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
