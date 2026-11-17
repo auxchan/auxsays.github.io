@@ -74846,3 +74846,25 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196918
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/audio-input-intermittently-produces-white-noise-since-updating-to-version-33-0-1.196918/
+  parent_title: Audio input intermittently produces white noise since updating to version 33.0.1
+  report_title: Audio input intermittently produces white noise since updating to version 33.0.1
+  report_text_excerpt: Since updating OBS to version 33.0.1 , I have been experiencing several issues. 1. Intermittent white noise on microphone audio input When I add a microphone as an Audio Input Capture source, intermittent white noise (a
+  captured_at: '2026-11-17T09:01:46Z'
+  source_date: '2026-11-17'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
