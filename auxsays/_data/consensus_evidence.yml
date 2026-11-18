@@ -75163,3 +75163,217 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-share-content-didnt-appear-or-freez
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/share-content-didnt-appear-or-freeze-during-teams-meeting-/4542778
+  parent_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_text_excerpt: Share content didn&apos;t appear or freeze during teams meeting. Hi Everyone,I having an issue where when participant trying to share content during microsoft teams meeting, the content didn&apos;t show on the display and sometime the content is freeze. We join the meeting...
+  captured_at: '2026-11-18T08:11:37Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-share-content-didnt-appear-or-freez
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/share-content-didnt-appear-or-freeze-during-teams-meeting-/4542778
+  parent_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_text_excerpt: Share content didn&apos;t appear or freeze during teams meeting. Hi Everyone,I having an issue where when participant trying to share content during microsoft teams meeting, the content didn&apos;t show on the display and sometime the content is freeze. We join the meeting...
+  captured_at: '2026-11-18T08:11:37Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-share-content-didnt-appear-or-freez
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/share-content-didnt-appear-or-freeze-during-teams-meeting-/4542778
+  parent_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_text_excerpt: Share content didn&apos;t appear or freeze during teams meeting. Hi Everyone,I having an issue where when participant trying to share content during microsoft teams meeting, the content didn&apos;t show on the display and sometime the content is freeze. We join the meeting...
+  captured_at: '2026-11-18T08:11:37Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-share-content-didnt-appear-or-freez
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/share-content-didnt-appear-or-freeze-during-teams-meeting-/4542778
+  parent_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_text_excerpt: Share content didn&apos;t appear or freeze during teams meeting. Hi Everyone,I having an issue where when participant trying to share content during microsoft teams meeting, the content didn&apos;t show on the display and sometime the content is freeze. We join the meeting...
+  captured_at: '2026-11-18T08:11:37Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-share-content-didnt-appear-or-freez
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/share-content-didnt-appear-or-freeze-during-teams-meeting-/4542778
+  parent_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_text_excerpt: Share content didn&apos;t appear or freeze during teams meeting. Hi Everyone,I having an issue where when participant trying to share content during microsoft teams meeting, the content didn&apos;t show on the display and sometime the content is freeze. We join the meeting...
+  captured_at: '2026-11-18T08:11:37Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-share-content-didnt-appear-or-freez
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/share-content-didnt-appear-or-freeze-during-teams-meeting-/4542778
+  parent_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_text_excerpt: Share content didn&apos;t appear or freeze during teams meeting. Hi Everyone,I having an issue where when participant trying to share content during microsoft teams meeting, the content didn&apos;t show on the display and sometime the content is freeze. We join the meeting...
+  captured_at: '2026-11-18T08:11:37Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-share-content-didnt-appear-or-freez
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/share-content-didnt-appear-or-freeze-during-teams-meeting-/4542778
+  parent_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_text_excerpt: Share content didn&apos;t appear or freeze during teams meeting. Hi Everyone,I having an issue where when participant trying to share content during microsoft teams meeting, the content didn&apos;t show on the display and sometime the content is freeze. We join the meeting...
+  captured_at: '2026-11-18T08:11:37Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-share-content-didnt-appear-or-freez
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/share-content-didnt-appear-or-freeze-during-teams-meeting-/4542778
+  parent_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_title: Share content didn&apos;t appear or freeze during teams meeting.
+  report_text_excerpt: Share content didn&apos;t appear or freeze during teams meeting. Hi Everyone,I having an issue where when participant trying to share content during microsoft teams meeting, the content didn&apos;t show on the display and sometime the content is freeze. We join the meeting...
+  captured_at: '2026-11-18T08:11:37Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14220
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14220
+  parent_title: 'Settings/About crash: stale fontconfig cache in the Flatpak sandbox, SEGV in FcCharSetFindLeafForward (backtrace + workaround)'
+  report_title: 'Settings/About crash: stale fontconfig cache in the Flatpak sandbox, SEGV in FcCharSetFindLeafForward (backtrace + workaround)'
+  report_text_excerpt: '(GNOME, Wayland), kernel 7.0.0, Mesa 26.2.5, AMD Radeon RX 9060 XT ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/9vCingQ62xNyERQt ### OBS Studio Crash Log URL _No response_ ### Expected Behavior File'
+  captured_at: '2026-11-18T08:37:09Z'
+  source_date: '2026-11-17'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1

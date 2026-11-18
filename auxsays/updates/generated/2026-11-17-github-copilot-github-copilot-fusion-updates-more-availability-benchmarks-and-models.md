@@ -18,8 +18,8 @@ update_version: 'GitHub Copilot Fusion updates: more availability, benchmarks, a
 update_logo_text: GIT
 update_published_at: '2026-11-17T18:04:48Z'
 update_last_checked: '2026-11-17T23:25:59Z'
-source_last_checked: '2026-11-17T23:25:59Z'
-official_body_last_checked: '2026-11-17T23:25:59Z'
+source_last_checked: '2026-11-18T10:06:26Z'
+official_body_last_checked: '2026-11-18T10:06:26Z'
 record_last_updated: '2026-11-17T23:25:59Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -85,6 +85,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-11-17T23:25:59Z'
+  url: https://github.blog/changelog/2026-11-17-github-copilot-fusion-updates-more-availability-benchmarks-and-models
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-18T10:06:26Z'
   url: https://github.blog/changelog/2026-11-17-github-copilot-fusion-updates-more-availability-benchmarks-and-models
   status: captured-from-rss-feed
   body_captured: true
