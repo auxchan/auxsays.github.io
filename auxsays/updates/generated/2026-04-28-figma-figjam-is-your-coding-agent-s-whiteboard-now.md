@@ -1,6 +1,6 @@
 ---
 layout: aux-update
-title: Figma FigJam is your coding agentâ€™s whiteboard now official update breakdown
+title: Figma FigJam is your coding agent’s whiteboard now official update breakdown
 description: Official Figma update record captured from Figma.
 permalink: /updates/figma/figma/figjam-is-your-coding-agent-s-whiteboard-now/
 update_entry: true
@@ -13,7 +13,7 @@ update_type: official-source
 update_source_name: Figma
 update_source_url: https://www.figma.com/release-notes/?title=figjam-is-your-coding-agents-whiteboard-now
 update_download_url: ''
-update_version: FigJam is your coding agentâ€™s whiteboard now
+update_version: FigJam is your coding agent’s whiteboard now
 update_logo_text: FIG
 update_published_at: '2026-04-28T00:00:00.000Z'
 update_last_checked: '2026-04-28T18:07:29Z'
@@ -21,16 +21,16 @@ patch_file_size: ''
 patch_file_size_status: not_provided_by_source
 patch_file_size_note: ''
 update_status: current
-update_feed_title: Figma FigJam is your coding agentâ€™s whiteboard now
-update_detail_title: Figma FigJam is your coding agentâ€™s whiteboard now
+update_feed_title: Figma FigJam is your coding agent’s whiteboard now
+update_detail_title: Figma FigJam is your coding agent’s whiteboard now
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma FigJam is your coding agentâ€™s whiteboard now has an official AUXSAYS record. Confirmed patch-specific
+quick_verdict: Figma FigJam is your coding agent’s whiteboard now has an official AUXSAYS record. Confirmed patch-specific
   consensus is deferred until official ingestion is stable.
-official_summary: Figma published Figma FigJam is your coding agentâ€™s whiteboard now.
+official_summary: Figma published Figma FigJam is your coding agent’s whiteboard now.
 release_summary: With new MCP tool updates and FigJam skills, you can now generate architecture diagrams, ERDs, and more in
-  FigJam directly from your coding agent â€” including into files you're already working in.
+  FigJam directly from your coding agent — including into files you're already working in.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 complaint_themes: []
