@@ -505,9 +505,9 @@ auxsays/scripts/tests/test_official_notes_platform.py = 68
 # any file; zero network, idempotent, and its scope proof refuses a concurrent change (AUX-051).
 auxsays/scripts/tests/test_official_notes_platform_backlog.py = 10
 # The one-time transcoding repair (G39): text a 2026-05-02 local pass read as cp1252 is restored only
-# where undoing the misreading is exact; correct UTF-8, ASCII, mixed fields (reported) and nested evidence
-# copies are never changed; zero network, idempotent, and its scope proof refuses a concurrent change.
-auxsays/scripts/tests/test_transcoded_text_repair.py = 9
+# where undoing the misreading is exact; correct UTF-8, ASCII, mixed fields (reported), text misread
+# twice (M10) and nested evidence copies are never changed; zero network, idempotent, and its scope proof refuses a concurrent change.
+auxsays/scripts/tests/test_transcoded_text_repair.py = 10
 auxsays/scripts/tests/test_reader_evidence_identity.py = 17
 auxsays/scripts/tests/test_report_count_reconciliation.py = 17
 auxsays/scripts/tests/test_acquisition_method_registry.py = 30

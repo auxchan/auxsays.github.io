@@ -9,7 +9,8 @@ writer's serializer.
 WHAT IS PINNED HERE.
   [M] the repair undoes exactly the misreading of curly quotes, dashes, accented letters, the euro and
       trade-mark signs and the no-break space; correct UTF-8 text, ASCII and a field that mixes correct
-      and damaged text are never changed (the last is reported, not guessed); a dry run writes nothing
+      and damaged text are never changed (the last is reported, not guessed), nor is text misread twice
+      (M10: one undo would leave it damaged); a dry run writes nothing
       and plans exactly the damaged records and fields; a write repairs those fields, leaves every other
       field and every other file as it was, and touches no nested evidence copy; a second run is a
       no-op; no socket is used; the scope proof refuses a write during which another file changed.
@@ -124,6 +125,10 @@ def section_m() -> None:
     untouched = [s for s in (CORRECT, "SÃO PAULO", "plain ascii", "naïve", "Ångström", "€5")
                  if migration.repair_text(s) is not None]
     check("M2 correct UTF-8 text and ASCII are never changed", not untouched, str(untouched))
+    # (Each sample must survive a second strict cp1252 read; a closing curly quote does not, see M1.)
+    twice = [s for s in (TITLE, "en – dash", "café") if migration.repair_text(misread(misread(s))) is not None]
+    check("M10 text misread twice is left alone, never half repaired (one undo still carries the signature)",
+          not twice, str(twice))
 
     with tempfile.TemporaryDirectory() as td:
         records = build(Path(td))
