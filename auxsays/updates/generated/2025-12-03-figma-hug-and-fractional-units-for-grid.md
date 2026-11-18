@@ -17,8 +17,8 @@ update_version: Hug and fractional units for grid
 update_logo_text: FIG
 update_published_at: '2025-12-03T00:00:00.000Z'
 update_last_checked: '2026-08-03T06:53:15Z'
-source_last_checked: '2026-10-11T15:15:20Z'
-official_body_last_checked: '2026-10-11T15:15:20Z'
+source_last_checked: '2026-11-18T10:06:21Z'
+official_body_last_checked: '2026-11-18T10:06:21Z'
 record_last_updated: '2026-08-03T06:53:15Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-10-11T15:15:20Z'
+  url: https://www.figma.com/release-notes/?title=hug-and-fractional-units-for-grid
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-18T10:06:21Z'
   url: https://www.figma.com/release-notes/?title=hug-and-fractional-units-for-grid
   status: captured-from-rss-feed
   body_captured: true
