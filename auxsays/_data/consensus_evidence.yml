@@ -75377,3 +75377,319 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-dropping-calls-1584
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-dropping-calls/1584582
+  parent_title: Microsoft teams Dropping calls
+  report_title: Microsoft teams Dropping calls
+  report_text_excerpt: Microsoft teams Dropping calls So I am having an issue with Microsoft Teams on a daily meeting.&amp;nbsp; The issue is that one user continually gets dropped from the teams meetings.&amp;nbsp; He&apos;s tried both of our wifi networks, his personal network, and a wired...
+  captured_at: '2026-11-18T21:12:49Z'
+  source_date: '2020-08-12'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-dropping-calls-1584
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-dropping-calls/1584582
+  parent_title: Microsoft teams Dropping calls
+  report_title: Microsoft teams Dropping calls
+  report_text_excerpt: Microsoft teams Dropping calls So I am having an issue with Microsoft Teams on a daily meeting.&amp;nbsp; The issue is that one user continually gets dropped from the teams meetings.&amp;nbsp; He&apos;s tried both of our wifi networks, his personal network, and a wired...
+  captured_at: '2026-11-18T21:12:49Z'
+  source_date: '2020-08-12'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-dropping-calls-1584
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-dropping-calls/1584582
+  parent_title: Microsoft teams Dropping calls
+  report_title: Microsoft teams Dropping calls
+  report_text_excerpt: Microsoft teams Dropping calls So I am having an issue with Microsoft Teams on a daily meeting.&amp;nbsp; The issue is that one user continually gets dropped from the teams meetings.&amp;nbsp; He&apos;s tried both of our wifi networks, his personal network, and a wired...
+  captured_at: '2026-11-18T21:12:49Z'
+  source_date: '2020-08-12'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-dropping-calls-1584
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-dropping-calls/1584582
+  parent_title: Microsoft teams Dropping calls
+  report_title: Microsoft teams Dropping calls
+  report_text_excerpt: Microsoft teams Dropping calls So I am having an issue with Microsoft Teams on a daily meeting.&amp;nbsp; The issue is that one user continually gets dropped from the teams meetings.&amp;nbsp; He&apos;s tried both of our wifi networks, his personal network, and a wired...
+  captured_at: '2026-11-18T21:12:49Z'
+  source_date: '2020-08-12'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-dropping-calls-1584
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-dropping-calls/1584582
+  parent_title: Microsoft teams Dropping calls
+  report_title: Microsoft teams Dropping calls
+  report_text_excerpt: Microsoft teams Dropping calls So I am having an issue with Microsoft Teams on a daily meeting.&amp;nbsp; The issue is that one user continually gets dropped from the teams meetings.&amp;nbsp; He&apos;s tried both of our wifi networks, his personal network, and a wired...
+  captured_at: '2026-11-18T21:12:49Z'
+  source_date: '2020-08-12'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-dropping-calls-1584
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-dropping-calls/1584582
+  parent_title: Microsoft teams Dropping calls
+  report_title: Microsoft teams Dropping calls
+  report_text_excerpt: Microsoft teams Dropping calls So I am having an issue with Microsoft Teams on a daily meeting.&amp;nbsp; The issue is that one user continually gets dropped from the teams meetings.&amp;nbsp; He&apos;s tried both of our wifi networks, his personal network, and a wired...
+  captured_at: '2026-11-18T21:12:49Z'
+  source_date: '2020-08-12'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-dropping-calls-1584
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-dropping-calls/1584582
+  parent_title: Microsoft teams Dropping calls
+  report_title: Microsoft teams Dropping calls
+  report_text_excerpt: Microsoft teams Dropping calls So I am having an issue with Microsoft Teams on a daily meeting.&amp;nbsp; The issue is that one user continually gets dropped from the teams meetings.&amp;nbsp; He&apos;s tried both of our wifi networks, his personal network, and a wired...
+  captured_at: '2026-11-18T21:12:49Z'
+  source_date: '2020-08-12'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-microsoft-teams-dropping-calls-1584
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/microsoft-teams-dropping-calls/1584582
+  parent_title: Microsoft teams Dropping calls
+  report_title: Microsoft teams Dropping calls
+  report_text_excerpt: Microsoft teams Dropping calls So I am having an issue with Microsoft Teams on a daily meeting.&amp;nbsp; The issue is that one user continually gets dropped from the teams meetings.&amp;nbsp; He&apos;s tried both of our wifi networks, his personal network, and a wired...
+  captured_at: '2026-11-18T21:12:49Z'
+  source_date: '2020-08-12'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: audio / video failure
+  workflow_area: meeting audio and video
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6073729-question-6073729
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6073729/kb5132061-on-windows-11-26h2-caused-sage-50-peacht
+  parent_title: KB5132061 on Windows 11 26H2 caused Sage 50 (Peachtree) crashes, and rollback to 24H2 caused additional Windows problems - Microsoft Q&A
+  report_title: KB5132061 on Windows 11 26H2 caused Sage 50 (Peachtree) crashes, and rollback to 24H2 caused additional Windows problems - Microsoft Q&A
+  report_text_excerpt: KB5132061 on Windows 11 26H2 caused Sage 50 (Peachtree) crashes, and rollback to 24H2 caused additional Windows problems - Microsoft Q&A Hello, I experienced serious system and application problems after installing Windows update KB5132061 (the windows update launched on 10...
+  captured_at: '2026-11-18T21:21:27Z'
+  source_date: '2026-11-18'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6074137-question-6074137
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6074137/windows-11-2026-11-security-update-kb5132061-faili
+  parent_title: Windows 11 2026-11 Security Update (KB5132061) failing with install error 0x80070306 - Microsoft Q&A
+  report_title: Windows 11 2026-11 Security Update (KB5132061) failing with install error 0x80070306 - Microsoft Q&A
+  report_text_excerpt: Windows 11 2026-11 Security Update (KB5132061) failing with install error 0x80070306 - Microsoft Q&A Hello, I am trying to install the 2026-11 Security Update (KB5132061) (26300.9974) on Windows 11, but it repeatedly fails with Install error - 0x80070306 . How can I resolve...
+  captured_at: '2026-11-18T21:21:27Z'
+  source_date: '2026-11-17'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: obs-studio-33-0-1-github-issue-14223
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14223
+  parent_title: '[Regression in 33.0.1] Cannot copy/paste Group between scenes ("Paste" greyed out / naming conflict errors)'
+  report_title: '[Regression in 33.0.1] Cannot copy/paste Group between scenes ("Paste" greyed out / naming conflict errors)'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/cBTrOmXA1QlxZjST ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Descr'
+  captured_at: '2026-11-18T21:35:23Z'
+  source_date: '2026-11-18'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-1-github-issue-14222
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14222
+  parent_title: '[macOS] coreaudio: infinite retry loop on missing audio device UID causes system-wide CPU saturation and unclean shutdown'
+  report_title: '[macOS] coreaudio: infinite retry loop on missing audio device UID causes system-wide CPU saturation and unclean shutdown'
+  report_text_excerpt: unclean shutdown detected` on the next launch. This was observed across **OBS 33.0.0 and 33.0.1** on macOS 26.7.1 (Sequoia). The behavior worsened in 33.0.1 — in 33.0.0, the loop would eventually stop after bursts; in 33.0.1 the loop **never terminates** for the entire session d
+  captured_at: '2026-11-18T21:35:23Z'
+  source_date: '2026-11-18'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-33-0-0-github-issue-14222
+  product_id: obs-studio
+  update_version: 33.0.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14222
+  parent_title: '[macOS] coreaudio: infinite retry loop on missing audio device UID causes system-wide CPU saturation and unclean shutdown'
+  report_title: '[macOS] coreaudio: infinite retry loop on missing audio device UID causes system-wide CPU saturation and unclean shutdown'
+  report_text_excerpt: a `Crash or unclean shutdown detected` on the next launch. This was observed across **OBS 33.0.0 and 33.0.1** on macOS 26.7.1 (Sequoia). The behavior worsened in 33.0.1 — in 33.0.0, the loop would eventually stop after bursts; in 33.0.1 the loop **never terminates** for the entir
+  captured_at: '2026-11-18T21:36:27Z'
+  source_date: '2026-11-18'
+  patch_version_matched: true
+  matched_version: 33.0.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
