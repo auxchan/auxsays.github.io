@@ -96,6 +96,15 @@ def _text(fragment: str) -> str:
     return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", fragment or "")).split())
 
 
+def _fold(value):  # noqa: ANN001, ANN202
+    """Whitespace folded the way _text folds a page title, so a value comparison is like for like.
+
+    The include writes the same text into <title> and into the JSON-LD, unfolded; the title is read
+    through _text, which folds a no-break space or a doubled space. Folding only that side refused a
+    correct page whose stored title holds one (the ingest lane writes U+00A0 from vendor text)."""
+    return " ".join(value.split()) if isinstance(value, str) else value
+
+
 def _directives(content: str) -> set[str]:
     return {d.strip().lower() for d in (content or "").split(",") if d.strip()}
 
@@ -349,7 +358,7 @@ def verify(site_dir: Path, source: Path | None) -> tuple[list[str], list[str], d
             if len(web) != 1:
                 errors.append(f"JSONLD {url} is a patch page with {len(web)} WebPage blocks, not 1")
             else:
-                wrong = {k: (web[0].get(k), v) for k, v in want.items() if web[0].get(k) != v}
+                wrong = {k: (web[0].get(k), v) for k, v in want.items() if _fold(web[0].get(k)) != _fold(v)}
                 if wrong:
                     errors.append(f"JSONLD {url} states values its page does not: "
                                   + "; ".join(f"{k} {got!r} vs page {exp!r}" for k, (got, exp) in wrong.items()))

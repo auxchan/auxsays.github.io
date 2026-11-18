@@ -13,7 +13,8 @@ WHAT IS PINNED HERE.
         two canonicals, a canonical to nothing, a non-absolute canonical, a sitemap URL with no page, a
         sitemap URL whose page canonicalises elsewhere, one robots.txt disallows, a duplicate sitemap
         URL, a live page missing from its product hub. A live page missing from its company hub, a
-        mojibake title and an entity in the site-wide SEO tag's JSON-LD only WARN (exit 0).
+        mojibake title and an entity in the site-wide SEO tag's JSON-LD only WARN (exit 0). A title with a
+        no-break or doubled space whose JSON-LD states the same text is clean: both sides are folded alike.
   [JL]  the bytes of _includes/patch-search-meta.html: each JSON-LD value is decoded from its HTML form
         and written with the backslash-u escapes for <, > and & (the replaces were once no-ops because
         an editor decoded the escapes). The rendered result is pinned by test_patch_decision_authority
@@ -219,6 +220,14 @@ def section_v() -> None:
     variant("V19 an HTML entity in the site-wide SEO tag's JSON-LD (not a patch page) only WARNS: an editorial title "
             "must not stop every deploy", 0, f"WARN JSONLD {COMPANY} carries HTML entities ['&amp;'] in the SEO tag's",
             seo_entity)
+
+    # The ingest lane writes U+00A0 from vendor text, and a doubled space survives a template. The include
+    # writes the same text into <title> and into the JSON-LD; the gate must compare them like for like.
+    spaced = "Tool" + chr(0xA0) + "1.0:  no verdict yet"
+    variant("V20 a patch page whose title holds a no-break space and a doubled space, with JSON-LD stating the same "
+            "text, is clean (whitespace is folded on both sides of the value comparison)", 0,
+            "verify_publication_hygiene: clean (0 warning(s))",
+            lambda p: p[PATCH].update(title=spaced, description="Two  spaces and a no" + chr(0xA0) + "break."))
 
 
 # --------------------------------------------------------------------------------------------------
