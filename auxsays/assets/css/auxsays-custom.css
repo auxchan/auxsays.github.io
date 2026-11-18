@@ -504,6 +504,13 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   .about-portrait-wrap { max-width: min(280px, 72vw); }
   .patch-card-headline { align-items: flex-start; }
   .patch-status-stack { justify-items: start; }
+  /* G39: a phone-width card kept its content on one 393-577 px track inside a 351 px card, and the
+     page clipped the rest. The track may now shrink to the card, the status stack drops under the
+     product name when both do not fit, and the monitoring pill wraps under its label. */
+  .patch-card { grid-template-columns: minmax(0, 1fr); }
+  .patch-card-headline { flex-wrap: wrap; }
+  .patch-status-stack { max-width: 100%; }
+  .patch-card-monitoring { flex-wrap: wrap; }
 }
 
 /* Refinement pass: clearer homepage icons, visible hero terrain, softer About portrait */

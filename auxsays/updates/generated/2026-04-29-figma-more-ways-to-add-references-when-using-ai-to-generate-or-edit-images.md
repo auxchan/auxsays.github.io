@@ -29,7 +29,7 @@ update_consensus_confidence: Low
 quick_verdict: Figma More ways to add references when using AI to generate or edit images has an official AUXSAYS record.
   Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.
 official_summary: Figma published Figma More ways to add references when using AI to generate or edit images.
-release_summary: Itâ€™s now easier to add references when using Make Image and Edit Image in Figma.
+release_summary: It’s now easier to add references when using Make Image and Edit Image in Figma.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only

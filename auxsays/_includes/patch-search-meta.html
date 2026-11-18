@@ -139,9 +139,24 @@
     {%- endif -%}
     {%- assign psm_canonical = psm_canonical | escape_once -%}
     {%- assign psm_locale = psm_record.locale | default: site.locale | default: psm_record.lang | default: site.lang | default: 'en_US' | replace: '-', '_' | escape_once -%}
-    {%- assign psm_json_description = psm_description | jsonify | replace: '&', '&' | replace: '<', '<' | replace: '>', '>' -%}
-    {%- assign psm_json_headline = psm_title | jsonify | replace: '&', '&' | replace: '<', '<' | replace: '>', '>' -%}
-    {%- assign psm_json_url = psm_canonical | jsonify | replace: '&', '&' | replace: '<', '<' | replace: '>', '>' -%}
+    {%- comment -%}
+      JSON-LD CARRIES THE TEXT, NOT ITS HTML (G39). A <script> element is raw text: the browser and a
+      search engine read "&amp;" there as five characters, not as "&". The values above are HTML-escaped
+      for the attributes they fill, so the JSON values are first decoded back to the plain text (the
+      exact inverse of escape_once's five entities, "&amp;" last so an escaped entity stays text), then
+      serialized with jsonify, then "<", ">" and "&" are written as JSON unicode escapes (backslash, "u",
+      then 003c, 003e or 0026), which decode to the same characters and can never close the script element.
+      Editing tools have been seen to decode those escapes on the way in: test_publication_hygiene [JL]
+      reads the bytes of this file and fails if a replace is ever a no-op again.
+      Before G39 the JSON took the escaped text and these three replaces had lost their backslashes,
+      so 16 Figma pages published "PDF &amp; JPEG" and "agent&#39;s" as their structured headline.
+    {%- endcomment -%}
+    {%- assign psm_text_description = psm_description | replace: '&quot;', '"' | replace: '&#39;', "'" | replace: '&lt;', '<' | replace: '&gt;', '>' | replace: '&amp;', '&' -%}
+    {%- assign psm_text_headline = psm_title | replace: '&quot;', '"' | replace: '&#39;', "'" | replace: '&lt;', '<' | replace: '&gt;', '>' | replace: '&amp;', '&' -%}
+    {%- assign psm_text_url = psm_canonical | replace: '&quot;', '"' | replace: '&#39;', "'" | replace: '&lt;', '<' | replace: '&gt;', '>' | replace: '&amp;', '&' -%}
+    {%- assign psm_json_description = psm_text_description | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
+    {%- assign psm_json_headline = psm_text_headline | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
+    {%- assign psm_json_url = psm_text_url | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' -%}
     {%- assign patch_search_emitted = true -%}
 <!-- Patch page search metadata: title and description from the page's own verdict -->
 <title>{{ psm_title }} | {{ psm_site_title }}</title>

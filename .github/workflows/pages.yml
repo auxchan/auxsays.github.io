@@ -190,6 +190,18 @@ jobs:
       - name: Verify the Patch Feed stays within budget and every patch page stays reachable
         run: python auxsays/scripts/ci/verify_feed_discovery.py --site auxsays/_site
 
+      # Also on the exact bytes about to be served (G39). Refuses contradictory indexing signals: a
+      # sitemap URL with no page or another canonical, duplicate or dangling canonicals, robots
+      # directives that conflict or disagree with a page's explicit `robots:` policy, a noindex page in
+      # the sitemap, JSON-LD that does not parse or whose patch-page values carry HTML entities or differ
+      # from the page, and a live-consensus page its product hub does not link. Heuristics and things an
+      # editorial title can trigger (mojibake, company-hub links, entities in the SEO gem's JSON-LD) only
+      # warn. Proven on real builds: main at ce023523 fails it (35 errors: 17 pages of JSON-LD entities,
+      # the DaVinci 20.2.2 noindex field nothing rendered), the G39 build is clean. It cannot see HTTP
+      # headers, and it cannot say whether Google indexes a page.
+      - name: Verify search signals agree with each other
+        run: python auxsays/scripts/ci/verify_publication_hygiene.py --site auxsays/_site
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
