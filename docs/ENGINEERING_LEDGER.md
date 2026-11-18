@@ -45,6 +45,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-040 | Resolved | Build reproducibility | High | The deployed gem set was whatever rubygems served that minute — now a tracked, frozen lock |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
 | AUX-100 | Resolved | Collector telemetry | High | One forum post holding only a video made every OBS forum health row partial, and the newest release was the one the budget never reached |
+| AUX-101 | Resolved | Publication | Medium | Search signals contradicted the page: entity-escaped JSON-LD, a noindex field nothing rendered, a mojibake title, phone cards wider than the screen |
 | AUX-048 | Resolved | Security | High | A page on the public domain asked visitors for a repository-write token |
 | AUX-041 | Resolved | Evidence integrity | High | A published theme contradicted the reporter and a platform label was never earned — one shared, negation-aware classifier |
 | AUX-047 | Resolved | Deployment | High | The published-payload gate refused a licence notice and halted every deploy |
@@ -2124,6 +2125,43 @@ partial) are unchanged. 20 source mutants, each killed by a named check.
 - a skipped version gets a health row in that run;
 - accepted forum evidence changes because of body classification;
 - the newest OBS release goes a scheduled day without a refresh while runs process more than three versions.
+
+### AUX-101 — Search signals contradicted the page: entity-escaped JSON-LD, a noindex field nothing rendered, a mojibake title, phone cards wider than the screen
+
+- **Status** Resolved · **Area** Publication · **Severity** Medium
+- **First seen** 2026-11-10 (GROWTH-3 and G36 live checks) · **Resolved** 2026-11-18 (G39; production check: the
+  first Pages deploy after merge)
+
+**Symptom** 17 patch pages (16 Figma, 1 GitHub) published `&#39;` and `&amp;` inside their JSON-LD headline and
+description. The DaVinci 20.2.2 route notice set `robots: noindex` and was published indexable, canonical to
+itself and in the sitemap, while its text said 20.2.2 was not tracked (it has been since 2026-07-21). One Figma
+title read "agentâ€™s". At 375 px every feed card laid its content on a 393-608 px track inside a 351 px card.
+
+**Cause** `_includes/patch-search-meta.html` jsonified the HTML-escaped title, and its three `<`/`>`/`&` escapes
+were no-ops: an editor had decoded the backslash-u sequences on the way in (the same thing happened again while
+fixing it). No layout read `page.robots`. A one-off local pass on 2026-05-02 (a02573fd) read three generated
+records as cp1252; the refresh window never re-observes them. The feed card's headline did not wrap, the identity
+was `max-content` and the monitoring pill `nowrap`, so the card's grid track took their width.
+
+**Fix** The include decodes each value to plain text, jsonifies it and writes the real escapes. `aux-base`
+renders an explicit `robots:` policy and nothing otherwise; the notice keeps noindex, leaves the sitemap
+(`sitemap: false`) and links the tracked record. `migrate_repair_transcoded_text.py` (zero network, writer
+serializer, hashed scope) repaired the three records: every repaired field equals the collector's original
+output. Four rules inside the 860 px block fix the cards. `verify_publication_hygiene.py` runs at deploy: errors
+for sitemap, canonical, robots and JSON-LD contradictions and a live page missing from its product hub; warnings
+for mojibake and company-hub gaps. Evidence, counts, verdicts and live certification are unchanged.
+
+**Measured** main at ce023523 fails the new gate (35 errors); the G39 build is clean in 1.5 s. Built-file diff:
+29 files, each one of the four repairs or a build timestamp. Feed pages at 375 px: 0 of 100 cards overflow (was
+100 of 100). `test_publication_hygiene.py` (27), `test_transcoded_text_repair.py` (9), S19/S20 now read the JSON-LD
+without unescaping it.
+
+**Not shown by this** Whether Google indexes any page: that needs Search Console data. HTTP headers
+(X-Robots-Tag) cannot be set on GitHub Pages and are a live check.
+
+**Reopen only if** the gate errors on a correct deploy; a JSON-LD value on the live site carries an HTML entity;
+a page with an explicit `robots:` policy renders a different one, or a page without one renders any; a stored
+title shows the cp1252 pattern again; or a feed card at 375 px is wider than its card.
 
 ### AUX-029 — Patch Decision Authority v2, Phase 1
 

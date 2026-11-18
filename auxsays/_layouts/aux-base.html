@@ -9,6 +9,17 @@
       verdict cannot be read back, keeps the site-wide SEO tag exactly as before.
     {%- endcomment %}
     {% assign patch_search_emitted = false %}{% if page.layout == 'aux-update' %}{% include patch-search-meta.html record=page %}{% endif %}{% unless patch_search_emitted %}{% seo %}{% endunless %}
+    {%- comment -%}
+      AN EXPLICIT ROBOTS POLICY IS RENDERED, AND ONLY AN EXPLICIT ONE (G39). A page whose front matter
+      sets `robots:` gets exactly that meta tag; no other page gets one, so nothing is de-listed by
+      default. Before G39 the field existed on one page and nothing read it, so a page created as a
+      "friendly noindex route" was published indexable, self-canonical and in the sitemap.
+      verify_publication_hygiene.py ROBOTS refuses a deploy in which the two disagree.
+    {%- endcomment %}
+    {%- assign aux_robots = page.robots | default: '' | strip -%}
+    {%- if aux_robots != '' %}
+    <meta name="robots" content="{{ aux_robots | escape }}">
+    {%- endif %}
     <link rel="stylesheet" href="{{ '/assets/css/jekyll-theme-chirpy.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/auxsays-custom.css' | relative_url }}">
     <script>

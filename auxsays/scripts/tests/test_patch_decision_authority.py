@@ -1447,8 +1447,9 @@ def search_head(html: str) -> dict:
         parsed = json.loads(ld[0]) if len(ld) == 1 else None
     except ValueError:
         parsed = None
-    if isinstance(parsed, dict):  # JSON-LD carries the HTML-escaped text, as the SEO tag's does
-        parsed = {k: htmlmod.unescape(v) if isinstance(v, str) else v for k, v in parsed.items()}
+    # G39: the JSON-LD is read as a search engine reads it -- NOT unescaped. A <script> element is raw
+    # text, so its values must already be the plain text the head tags decode to; "&amp;" there is
+    # five characters. (This used to unescape them, which is how 16 Figma pages passed S20.)
     return {"titles": titles, "descriptions": all_of(SEARCH_DESC_RE),
             "canonicals": all_of(SEARCH_CANON_RE), "og_url": all_of(SEARCH_OGURL_RE),
             "og_title": all_of(SEARCH_OGT_RE), "og_description": all_of(SEARCH_OGD_RE),
@@ -1583,11 +1584,16 @@ def check_search_snippets() -> None:
           nb["titles"] == ["Windows 11 KB5127648 (25H2, Build 26200.7840): SECURITY UPDATE | AUXSAYS"]
           and "KB5199999" not in nb["raw_head"], str(nb["titles"]))
     esc = heads["escaping"]
+    # G39: the JSON-LD carries the plain text (no HTML entity), with "&" written as the JSON escape
+    # backslash-u0026 so nothing in it can close the script element. chr(92) is the backslash.
+    esc_ld = "".join(esc["jsonld_raw"])
     check("S19 identity text is escaped once and the JSON-LD parses",
           '<title>Copilot &quot;agent&quot; &amp; tools 1.0: WAIT' in esc["raw_head"]
           and "&amp;amp;" not in esc["raw_head"] and bool(esc["jsonld"])
-          and esc["titles"] == ['Copilot "agent" & tools 1.0: WAIT if you use the test setup | AUXSAYS'],
-          esc["raw_head"][:400])
+          and esc["titles"] == ['Copilot "agent" & tools 1.0: WAIT if you use the test setup | AUXSAYS']
+          and esc["jsonld"].get("headline") == 'Copilot "agent" & tools 1.0: WAIT if you use the test setup'
+          and "&" not in esc_ld and chr(92) + "u0026" in esc_ld,
+          esc["raw_head"][:400] + " || " + esc_ld[:300])
     incoherent = [n for n in patch_cases
                   if not heads[n]["jsonld"]
                   or heads[n]["jsonld"].get("headline") != (heads[n]["og_title"] or [None])[0]

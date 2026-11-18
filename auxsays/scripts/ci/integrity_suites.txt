@@ -423,6 +423,14 @@ auxsays/scripts/tests/test_patch_stack_dashboard.py = 116
 # 'Insufficient data' pill (V23), a stale, unscoped or doubled line (V24) and an unreadable verdict
 # box (V25) fail; W12 pins the markers to the shipped templates.
 auxsays/scripts/tests/test_feed_discovery.py = 73
+# Search signals that contradict each other (G39). Runs the deploy gate (verify_publication_hygiene.py)
+# over synthetic built sites: a correct site with an honoured explicit noindex page and a page without
+# structured data is clean, and each defect class fails a NAMED check (JSON-LD entity / parse / values,
+# robots policy vs render, noindex in the sitemap, conflicting directives, canonicals, sitemap, robots.txt,
+# a live page missing from its product hub); mojibake and company-hub gaps only warn. [JL] pins the
+# include's JSON escapes by bytes (they were once no-ops), [RB] renders aux-base's robots block with the
+# Liquid gem (ruby + liquid required), [CSS] the phone-width card rules, [W] the pages.yml step.
+auxsays/scripts/tests/test_publication_hygiene.py = 27
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over
@@ -492,6 +500,10 @@ auxsays/scripts/tests/test_official_notes_platform.py = 68
 # the record's own stored notes prove it, with the shipped classifier, and changes no other byte of
 # any file; zero network, idempotent, and its scope proof refuses a concurrent change (AUX-051).
 auxsays/scripts/tests/test_official_notes_platform_backlog.py = 10
+# The one-time transcoding repair (G39): text a 2026-05-02 local pass read as cp1252 is restored only
+# where undoing the misreading is exact; correct UTF-8, ASCII, mixed fields (reported) and nested evidence
+# copies are never changed; zero network, idempotent, and its scope proof refuses a concurrent change.
+auxsays/scripts/tests/test_transcoded_text_repair.py = 9
 auxsays/scripts/tests/test_reader_evidence_identity.py = 17
 auxsays/scripts/tests/test_report_count_reconciliation.py = 17
 auxsays/scripts/tests/test_acquisition_method_registry.py = 30
