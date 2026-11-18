@@ -108,6 +108,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
 | AUX-078 | Resolved | Evidence integrity | Medium | A Microsoft Q&A question re-found under an edited title was counted twice on one patch |
 | AUX-089 | Resolved | Publication | Medium | Search titles and descriptions of every patch page hid the decision behind "official update breakdown" |
+| AUX-102 | Resolved | Coverage governance | High | The catalog said 30 products were monitored that no lane monitored, and nothing reported the gap |
 
 ---
 
@@ -2169,6 +2170,69 @@ title shows the cp1252 pattern again; or a feed card at 375 px is wider than its
 refusal into QA and the writer, if a stored title or description holding literal entity text other than the five
 escape_once writes (for example `&#38;`) blocks a deploy; and if a `robots:` policy is ever set through
 `_config.yml` defaults or on a post without a permalink, because the gate reads page front matter only.
+
+### AUX-102 — The catalog said 30 products were monitored that no lane monitored, and nothing reported the gap
+
+- **Status** Resolved · **Area** Coverage governance · **Severity** High
+- **First seen** 2026-11-18 (two press stories about NVIDIA GeForce 621.14 / 621.24, on which AUXSAYS had
+  nothing) · **Resolved** 2026-11-18 (production check: the first Pages deploy after merge)
+
+**Symptom** On main d6e691cc, 30 of 47 catalog products had no enabled official lane, 18 of them Core
+(NVIDIA, AMD, Steam, Photoshop, After Effects, Lightroom Classic, Media Encoder, Unreal, ChatGPT, Gemini,
+Claude, Midjourney, Runway, Perplexity, LottieFiles, Twitch, YouTube, Kick), and 29 of the 30 carried the
+catalog label "Monitoring active". The pills were already derived (AUX-039), but the prose was not: 27
+company pages said "<Company> is tracked by AUXSAYS", 31 product pages said the product "is tracked for ...
+public release signals" over a "STAGED / official source mapped" card, and the hub counted "tracked
+software". Nothing could have produced a record for NVIDIA 621.14 (2026-11-04) or 621.24 (2026-11-12),
+and nothing reported that, so the first sign was the press, about ten days after the first user report.
+
+**Cause** Catalog inclusion had no coupling to collection. A product entered `patch_products.yml` with
+hand-written coverage fields and a disabled source; a disabled lane writes no telemetry, so its silence
+looked like a quiet product; a broken enabled lane (Netlify) was labelled correctly and alarmed nobody;
+and `patch_backfill_queue.yml` held 37 `queued` rows that nothing reads. One "monitoring" word stood for
+four capabilities: official release detection, community report discovery, patch consensus and
+product-level issue signals.
+
+**Fix**
+- `build_coverage_projection.py` (deploy-time, git-ignored `_data/coverage_state.yml`) derives per product
+  the official state (the AUX-039 authority, unchanged), the community state (from method health, with the
+  per-patch authority's healthy statuses and freshness window) and one closed label: "Official updates
+  monitored", "Official updates monitored; community reports not monitored", "Monitoring temporarily
+  impaired", "Monitoring planned; not active", "Not currently monitored". Only a healthy official lane is
+  affirmative; a switched-off lane is not monitored (never "broken"); an enabled lane that is not healthy is
+  impaired. Companies aggregate with counts.
+- Product, company, latest-signals and hub pages take every coverage word from it. The retired catalog
+  fields (`coverage_state`, `coverage_status_label`, `ingestion_status`, `current_status_label`,
+  `ingestion_active`, `dossier_note`) are deleted, and company summaries no longer say "is tracked".
+- `_data/coverage_debt.yml` is the reviewed baseline: one entry per Core gap with a remediation priority,
+  a blocking reason, a next action, a plan and a review date. NVIDIA is the one `planned` entry and lists
+  the two releases a person verified on NVIDIA's pages.
+- `assess_coverage.py` runs in `pages.yml` (daily schedule) as a continue-on-error job summary plus a
+  90-day artifact: Core gaps with their next step, impaired enabled lanes, lanes or chains that stopped
+  running, verified releases missing from the store, community methods that do not work, backfill nothing
+  executes, debt past review or resolved. It never commits and never stops a deploy.
+- `ci/verify_coverage_claims.py` runs after the build: it refuses a pill that disagrees with the
+  projection, the "Coverage status unknown" fallback, a retired claim phrase on an unmonitored page or the
+  hub, a static coverage field back in the catalog, and a NEW Core product whose lane is switched off with
+  no debt entry. Existing debt and runtime impairment never block.
+- The product-level early-warning contract is defined, not built:
+  [`docs/PRODUCT_LEVEL_SIGNALS_CONTRACT.md`](PRODUCT_LEVEL_SIGNALS_CONTRACT.md).
+
+Unchanged: every collector, source, threshold, verdict, evidence row and live decision; the AUX-039
+official projection and its states.
+
+**Measured** MEASURED_PLACEHOLDER
+
+**Not shown by this** Whether an enabled lane is missing releases it should have found: no permitted
+independent official reference exists for any product except the two NVIDIA releases recorded by hand.
+Partial rot (AUX-003 family) stays invisible. The assessment cannot see that `pages.yml` itself stopped
+running.
+
+**Reopen only if** a deployed product or company page shows a coverage label the projection does not
+give it; a page for a product with no operating official lane says "is tracked", "Monitoring active" or
+"official source mapped"; a Core product is added with its lane switched off and the deploy does not
+refuse it; a deploy is refused because an enabled lane is failing; `test_coverage_governance.py` reports
+anything but its governed count; or the assessment stops appearing in the Pages job summary.
 
 ### AUX-029 — Patch Decision Authority v2, Phase 1
 

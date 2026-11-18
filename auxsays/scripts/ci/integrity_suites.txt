@@ -622,6 +622,13 @@ auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
 # and this repo's Windows dev setup both provide; it reports and fails if bash is absent
 # rather than passing vacuously.
 auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
+# AUX-102: AUXSAYS never claims to monitor what it does not monitor. 30 of 47 catalog products had no
+# operating official lane while the catalog said "Monitoring active" and their pages said "is tracked".
+# Pins the coverage projection (official and community capabilities, five plain labels, fail closed), the
+# debt gate (a NEW switched-off Core product without a debt entry is refused; runtime impairment never
+# is), the deploy check on seeded contradictions, real Liquid renders of the product, company and
+# latest-signals templates, and the daily assessment's flags and no-false-alarm cases.
+auxsays/scripts/tests/test_coverage_governance.py = 82
 
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
