@@ -2149,11 +2149,12 @@ renders an explicit `robots:` policy and nothing otherwise; the notice keeps noi
 serializer, hashed scope) repaired the three records: every repaired field equals the collector's original
 output. Four rules inside the 860 px block fix the cards. `verify_publication_hygiene.py` runs at deploy: errors
 for sitemap, canonical, robots and JSON-LD contradictions and a live page missing from its product hub; warnings
-for mojibake and company-hub gaps. Evidence, counts, verdicts and live certification are unchanged.
+for mojibake, company-hub gaps and entities in the SEO gem's own JSON-LD (an editorial title must not stop every
+deploy). Evidence, counts, verdicts and live certification are unchanged.
 
 **Measured** main at ce023523 fails the new gate (35 errors); the G39 build is clean in 1.5 s. Built-file diff:
 29 files, each one of the four repairs or a build timestamp. Feed pages at 375 px: 0 of 100 cards overflow (was
-100 of 100). `test_publication_hygiene.py` (27), `test_transcoded_text_repair.py` (9), S19/S20 now read the JSON-LD
+100 of 100). `test_publication_hygiene.py` (28), `test_transcoded_text_repair.py` (9), S19/S20 now read the JSON-LD
 without unescaping it.
 
 **Not shown by this** Whether Google indexes any page: that needs Search Console data. HTTP headers
