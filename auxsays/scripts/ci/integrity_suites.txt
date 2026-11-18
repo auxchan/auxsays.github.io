@@ -429,10 +429,12 @@ auxsays/scripts/tests/test_feed_discovery.py = 73
 # robots policy vs render, noindex in the sitemap, conflicting directives, canonicals, sitemap, robots.txt,
 # a live page missing from its product hub); mojibake, company-hub gaps and entities in the SEO gem's
 # JSON-LD only warn, and a title with a no-break or doubled space whose JSON-LD says the same is clean
-# (V20). [JL] pins the include's JSON escapes by bytes (they were once no-ops), [RB] renders
+# (V20); a page the deploy-time live projection certifies but the gate cannot read as live, or that
+# no built page serves, fails HUBS so the hub check cannot go vacuous (V21, V22; W4 pins the gate's
+# live marker to aux-update.html). [JL] pins the include's JSON escapes by bytes (they were once no-ops), [RB] renders
 # aux-base's robots block with the Liquid gem (ruby + liquid required), [CSS] the phone-width card rules,
 # [W] the pages.yml step.
-auxsays/scripts/tests/test_publication_hygiene.py = 29
+auxsays/scripts/tests/test_publication_hygiene.py = 32
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over

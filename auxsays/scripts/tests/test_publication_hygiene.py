@@ -15,6 +15,8 @@ WHAT IS PINNED HERE.
         URL, a live page missing from its product hub. A live page missing from its company hub, a
         mojibake title and an entity in the site-wide SEO tag's JSON-LD only WARN (exit 0). A title with a
         no-break or doubled space whose JSON-LD states the same text is clean: both sides are folded alike.
+        A page the deploy-time live projection certifies but whose verdict box the gate cannot read as
+        live, or that no built page serves, fails HUBS (the hub check cannot go vacuous).
   [JL]  the bytes of _includes/patch-search-meta.html: each JSON-LD value is decoded from its HTML form
         and written with the backslash-u escapes for <, > and & (the replaces were once no-ops because
         an editor decoded the escapes). The rendered result is pinned by test_patch_decision_authority
@@ -23,7 +25,8 @@ WHAT IS PINNED HERE.
         rendered exactly, and a page without one gets no robots tag. Needs ruby + liquid.
   [CSS] the phone-width card rules sit inside the max-width 860px block.
   [W]   wiring: pages.yml runs the gate on auxsays/_site after the build and before the upload, and it
-        is not continue-on-error; the DaVinci 20.2.2 notice keeps its noindex policy out of the sitemap.
+        is not continue-on-error; the DaVinci 20.2.2 notice keeps its noindex policy out of the sitemap;
+        the gate's live marker is the class aux-update.html renders for a live page.
 
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_publication_hygiene.py
 """
@@ -55,6 +58,8 @@ BASE_LAYOUT = AUX / "_layouts" / "aux-base.html"
 CSS = AUX / "assets" / "css" / "auxsays-custom.css"
 PAGES_YML = _REPO / ".github" / "workflows" / "pages.yml"
 NOTICE = AUX / "updates" / "blackmagic-design" / "davinci-resolve" / "20-2-2" / "index.md"
+UPDATE_LAYOUT = AUX / "_layouts" / "aux-update.html"
+STATE_INCLUDE = AUX / "_includes" / "patch-evidence-state.html"
 ORIGIN = "https://auxsays.com"
 
 _PASS = 0
@@ -123,7 +128,8 @@ def base_pages() -> dict[str, dict]:
 
 def make_site(root: Path, pages: dict[str, dict], *, sitemap: list[str] | None = None,
               robots_txt: str = "User-agent: *\nDisallow: /norobots/\n",
-              policies: dict[str, str] | None = None) -> tuple[Path, Path]:
+              policies: dict[str, str] | None = None,
+              certified: list[str] | None = (PATCH,)) -> tuple[Path, Path]:
     site = root / "_site"
     for url, spec in pages.items():
         f = site / url.lstrip("/") / "index.html"
@@ -138,6 +144,10 @@ def make_site(root: Path, pages: dict[str, dict], *, sitemap: list[str] | None =
     source = root / "src"
     source.mkdir()
     (source / "_config.yml").write_text("title: AUXSAYS\n", encoding="utf-8")
+    if certified is not None:  # the deploy-time live projection, as build_live_eligibility_projection.py writes it
+        (source / "_data").mkdir()
+        (source / "_data" / "live_eligibility.yml").write_text(
+            yaml.safe_dump({"generated_at": "2026-11-18T00:00:00Z", "urls": list(certified)}), encoding="utf-8")
     for i, (url, policy) in enumerate((policies if policies is not None else {NOTICE_URL: "noindex"}).items()):
         d = source / "updates" / f"p{i}"
         d.mkdir(parents=True)
@@ -228,6 +238,17 @@ def section_v() -> None:
             "text, is clean (whitespace is folded on both sides of the value comparison)", 0,
             "verify_publication_hygiene: clean (0 warning(s))",
             lambda p: p[PATCH].update(title=spaced, description="Two  spaces and a no" + chr(0xA0) + "break."))
+
+    def unreadable_live(p):  # noqa: ANN001 -- the layout renamed the box's class, and a hub dropped the page
+        p[PATCH]["live"] = False
+        p[PRODUCT]["links"] = [COMPANY]
+    variant("V21 a page the deploy-time projection certifies live whose verdict box the gate cannot read as live "
+            "fails HUBS (the hub check would otherwise find 0 live pages and pass)", 1,
+            f"HUBS the deploy-time projection certifies {PATCH} live, but its page does not render the live verdict box",
+            unreadable_live)
+    variant("V22 a page the projection certifies live that no built page serves fails HUBS", 1,
+            "HUBS the deploy-time projection certifies /updates/acme/tool/2-0/ live, but no built page serves it",
+            certified=[PATCH, "/updates/acme/tool/2-0/"])
 
 
 # --------------------------------------------------------------------------------------------------
@@ -352,6 +373,14 @@ def section_w() -> None:
     check("W3 the DaVinci 20.2.2 notice keeps its explicit noindex policy and stays out of the sitemap",
           front.get("robots") == "noindex" and front.get("sitemap") is False
           and "/updates/blackmagic-design/blackmagic-davinci/20-2-2/" in text, str(front))
+    layout = UPDATE_LAYOUT.read_text(encoding="utf-8")
+    box = re.search(r'class="(update-decision-box update-decision-box--)\{\{ evidence_state_class \}\}"', layout)
+    rendered = f'class="{box.group(1)}live"' if box else None
+    assigns_live = "{% assign evidence_state_class = 'live' %}" in STATE_INCLUDE.read_text(encoding="utf-8")
+    check("W4 the gate's live marker is the verdict box a live patch page renders (aux-update.html's class with "
+          "patch-evidence-state.html's 'live'), so HUBS reads the real pages",
+          rendered == gate.LIVE_BOX and assigns_live, f"layout renders {rendered!r}, gate reads {gate.LIVE_BOX!r}, "
+          f"include assigns live: {assigns_live}")
 
 
 def main() -> int:

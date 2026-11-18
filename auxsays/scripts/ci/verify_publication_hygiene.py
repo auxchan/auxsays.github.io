@@ -30,6 +30,11 @@ WHAT IT CHECKS, on the built site. ERROR blocks the deploy; WARN is printed and 
                    so it is reported for a template fix instead.
   HUBS      ERROR  every live-consensus patch page (its verdict box certified live) is linked by a
                    plain <a href> from its product hub page, read up to the crawl window.
+            ERROR  every page the deploy-time projection (_data/live_eligibility.yml) certifies live
+                   renders the live verdict box this check reads. Without it the check could go
+                   vacuous: a renamed class would find 0 live pages and pass. It cannot refuse a
+                   correct deploy: QA --publish-strict, which runs first, refuses any live claim that
+                   lacks the live words the layout reads, so a certified page renders live.
             WARN   ... and from its company hub page (a company hub may summarise; the product
                    tracker is the page that must list it).
   MOJIBAKE  WARN   a title, description, h1 or JSON-LD value carrying the UTF-8-read-as-cp1252
@@ -248,6 +253,25 @@ def explicit_robots_policies(source: Path | None) -> dict[str, str]:
     return policies
 
 
+def certified_live_urls(source: Path | None) -> tuple[list[str] | None, str]:
+    """(URLs the deploy-time live projection certifies, '') -- or (None, why) when there is none to read:
+    no source, or a render without the projection (a local build). It is generated before Jekyll runs,
+    so in a deploy it is always there."""
+    if source is None:
+        return None, "no source"
+    f = source / "_data" / "live_eligibility.yml"
+    if not f.is_file():
+        return None, "no projection"
+    try:
+        data = yaml.load(f.read_text(encoding="utf-8"), Loader=yaml.SafeLoader)  # noqa: S506 -- SafeLoader
+    except Exception as exc:  # noqa: BLE001 -- any failure to read it is reported, never a crash
+        return None, f"projection unreadable: {exc.__class__.__name__}"
+    urls = data.get("urls") if isinstance(data, dict) else None
+    if not isinstance(urls, list):
+        return None, "projection has no urls list"
+    return [str(u).strip() for u in urls if str(u or "").strip()], ""
+
+
 def _strings(value) -> list[str]:  # noqa: ANN001
     if isinstance(value, dict):
         return [s for v in value.values() for s in _strings(v)]
@@ -390,7 +414,17 @@ def verify(site_dir: Path, source: Path | None) -> tuple[list[str], list[str], d
                 warnings.append(f"HUBS live page {url} is not linked from its company hub {hub}")
         if products and all(url in site.links(h) for h in products):
             hub_ok += 1
-    stats.update(live_pages=len(live), live_linked_from_product_hub=hub_ok, live_urls=live)
+    certified, why = certified_live_urls(source)
+    if certified is not None:
+        for url in sorted(set(certified) - set(live)):
+            errors.append(f"HUBS the deploy-time projection certifies {url} live, but "
+                          + ("no built page serves it" if url not in pages
+                             else "its page does not render the live verdict box this check reads")
+                          + ", so its hub links go unchecked")
+    elif source is not None and why != "no projection":
+        warnings.append(f"HUBS the live projection was not compared ({why})")
+    stats.update(live_pages=len(live), live_linked_from_product_hub=hub_ok, live_urls=live,
+                 live_certified=len(certified) if certified is not None else None)
     return errors, warnings, stats
 
 
@@ -421,7 +455,9 @@ def main(argv: list[str] | None = None) -> int:
           f"{stats['explicit_policies'] if source is not None else 'not checked (no source)'}")
     print(f"JSON-LD blocks {stats['jsonld_blocks']}, parsed {stats['jsonld_parsed']}, pages with HTML entities "
           f"{stats['jsonld_entity_pages']}")
-    print(f"live-consensus pages {stats['live_pages']}; linked from their product hub "
+    certified = stats["live_certified"]
+    print(f"live-consensus pages {stats['live_pages']} (the deploy-time projection certifies "
+          f"{certified if certified is not None else 'n/a: not present'}); linked from their product hub "
           f"{stats['live_linked_from_product_hub']}")
     _report("WARN", warnings)
     _report("FAIL", errors)
