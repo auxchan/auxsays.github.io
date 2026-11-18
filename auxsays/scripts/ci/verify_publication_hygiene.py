@@ -43,6 +43,15 @@ WHAT IT CHECKS, on the built site. ERROR blocks the deploy; WARN is printed and 
 Not every page must be indexable, and not every page needs structured data: an explicit noindex
 policy is honoured, and only a contradiction is refused.
 
+KNOWN LIMITS (named in AUX-101's reopen conditions).
+  - The include decodes the five entities Liquid's escape_once writes. A stored title or description
+    holding other literal entity text (say "&#38;" or "&rsquo;") reads correctly in HTML but reaches the
+    JSON-LD as that text, and JSONLD refuses the deploy. That output is wrong, so it blocks; the fix is
+    the record, through its writer. No page does today (the gate is clean on the current build).
+  - An explicit robots policy is read from page front matter only. A `robots:` set through _config.yml
+    `defaults:`, or on a post or collection page without a `permalink:`, is not mapped to its URL and
+    would be reported as a mismatch. No page does either today.
+
 Run:  python auxsays/scripts/ci/verify_publication_hygiene.py --site auxsays/_site [--source auxsays]
 Exit: 0 clean (warnings allowed), 1 an error, 2 the site directory is unusable.
 """
