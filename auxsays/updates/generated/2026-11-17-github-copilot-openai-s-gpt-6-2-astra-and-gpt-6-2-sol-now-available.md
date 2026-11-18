@@ -17,8 +17,8 @@ update_version: OpenAI’s GPT-6.2 Astra and GPT-6.2 Sol now available
 update_logo_text: GIT
 update_published_at: '2026-11-17T20:20:29Z'
 update_last_checked: '2026-11-17T23:25:59Z'
-source_last_checked: '2026-11-18T10:06:26Z'
-official_body_last_checked: '2026-11-18T10:06:26Z'
+source_last_checked: '2026-11-18T23:00:45Z'
+official_body_last_checked: '2026-11-18T23:00:45Z'
 record_last_updated: '2026-11-17T23:25:59Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -92,6 +92,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-18T10:06:26Z'
+  url: https://github.blog/changelog/2026-11-17-openais-gpt-6-2-astra-and-gpt-6-2-sol-now-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-18T23:00:45Z'
   url: https://github.blog/changelog/2026-11-17-openais-gpt-6-2-astra-and-gpt-6-2-sol-now-available
   status: captured-from-rss-feed
   body_captured: true
