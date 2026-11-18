@@ -12,8 +12,8 @@ WHAT IS PINNED HERE.
         noindex page in the sitemap, a rendered robots tag no source asked for, conflicting directives,
         two canonicals, a canonical to nothing, a non-absolute canonical, a sitemap URL with no page, a
         sitemap URL whose page canonicalises elsewhere, one robots.txt disallows, a duplicate sitemap
-        URL, a live page missing from its product hub. A live page missing from its company hub and a
-        mojibake title only WARN (exit 0).
+        URL, a live page missing from its product hub. A live page missing from its company hub, a
+        mojibake title and an entity in the site-wide SEO tag's JSON-LD only WARN (exit 0).
   [JL]  the bytes of _includes/patch-search-meta.html: each JSON-LD value is decoded from its HTML form
         and written with the backslash-u escapes for <, > and & (the replaces were once no-ops because
         an editor decoded the escapes). The rendered result is pinned by test_patch_decision_authority
@@ -212,6 +212,13 @@ def section_v() -> None:
     damaged = "Tool agent" + "’s".encode("utf-8").decode("cp1252")
     variant("V18 a mojibake title only WARNS", 0, "WARN MOJIBAKE",
             lambda p: p[BARE].update(title=damaged))
+
+    def seo_entity(p):  # noqa: ANN001
+        p[COMPANY]["title"] = "Acme &amp; Co"
+        p[COMPANY]["jsonld"] = [json.dumps({"@type": "WebPage", "headline": "Acme &amp; Co", "url": ORIGIN + COMPANY})]
+    variant("V19 an HTML entity in the site-wide SEO tag's JSON-LD (not a patch page) only WARNS: an editorial title "
+            "must not stop every deploy", 0, f"WARN JSONLD {COMPANY} carries HTML entities ['&amp;'] in the SEO tag's",
+            seo_entity)
 
 
 # --------------------------------------------------------------------------------------------------

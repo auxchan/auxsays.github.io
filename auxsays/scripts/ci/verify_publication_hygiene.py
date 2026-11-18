@@ -19,11 +19,15 @@ WHAT IT CHECKS, on the built site. ERROR blocks the deploy; WARN is printed and 
                    no page renders a robots directive its source did not ask for (an accidental
                    noindex de-lists a page silently). Header directives (X-Robots-Tag) cannot be set
                    on GitHub Pages and are a live-verification step, not a build check.
-  JSONLD    ERROR  every application/ld+json block parses; no string in one carries an HTML entity
-                   (a <script> element is raw text, so "&amp;" there is five characters, not "&");
-                   and a patch page's block (_includes/patch-search-meta.html) states the page's own
-                   title, description and canonical URL. A page with no block is fine: structured
-                   data is not required where a page needs none.
+  JSONLD    ERROR  every application/ld+json block parses; no string in a patch page's block
+                   (_includes/patch-search-meta.html, which this repository writes) carries an HTML
+                   entity (a <script> element is raw text, so "&amp;" there is five characters, not
+                   "&"); and that block states the page's own title, description and canonical URL.
+                   A page with no block is fine: structured data is not required where a page needs none.
+            WARN   an HTML entity in a block the site-wide SEO tag wrote (jekyll-seo-tag escapes the
+                   title before it builds its JSON-LD, so any page title with "&" or an apostrophe gets
+                   one). None does today; an editorial title must not be able to stop every deploy,
+                   so it is reported for a template fix instead.
   HUBS      ERROR  every live-consensus patch page (its verdict box certified live) is linked by a
                    plain <a href> from its product hub page, read up to the crawl window.
             WARN   ... and from its company hub page (a company hub may summarise; the product
@@ -331,7 +335,11 @@ def verify(site_dir: Path, source: Path | None) -> tuple[list[str], list[str], d
         leaked = sorted({m for d in docs for s in _strings(d) for m in ENTITY_RE.findall(s)})
         if leaked:
             entity_pages.append(url)
-            errors.append(f"JSONLD {url} carries HTML entities {leaked[:4]!r} in its structured data")
+            if page.is_patch_meta:
+                errors.append(f"JSONLD {url} carries HTML entities {leaked[:4]!r} in its structured data")
+            else:
+                warnings.append(f"JSONLD {url} carries HTML entities {leaked[:4]!r} in the SEO tag's structured "
+                                f"data (its title is escaped before the JSON is built)")
         if page.is_patch_meta:
             web = [d for d in docs if isinstance(d, dict) and d.get("@type") == "WebPage"]
             title = page.titles[0][: -len(SITE_TITLE_SUFFIX)] if page.titles and page.titles[0].endswith(
