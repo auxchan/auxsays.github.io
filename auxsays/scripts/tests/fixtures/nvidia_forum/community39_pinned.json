@@ -1,0 +1,13 @@
+{
+ "success": true,
+ "errors": [],
+ "pagination": {
+  "_page": 1,
+  "_pageSize": 15,
+  "_totalPages": 67,
+  "_totalRows": 1000
+ },
+ "data": {
+  "topics": []
+ }
+}

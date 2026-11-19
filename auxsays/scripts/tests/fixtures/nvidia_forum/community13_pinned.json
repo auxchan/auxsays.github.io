@@ -1,0 +1,143 @@
+{
+ "success": true,
+ "errors": [],
+ "pagination": {
+  "_page": 1,
+  "_pageSize": 15,
+  "_totalPages": 67,
+  "_totalRows": 1000
+ },
+ "data": {
+  "topics": [
+   {
+    "id": 592767,
+    "title": "GeForce GRD 621.24 Feedback Thread (Released 11/12/26)",
+    "type": "discussion",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794493802,
+    "replyCount": 183,
+    "upvotes": -1,
+    "lastActivityStamp": 1795053302,
+    "isPinned": 1,
+    "isGhosted": 0,
+    "publishAt": 1794493800,
+    "updatedStamp": 1795053302,
+    "hasOfficialReply": 1,
+    "user": {
+     "id": "1015",
+     "aclactions": {
+      "officialreply": true
+     }
+    },
+    "lastComment": {
+     "id": 3634662
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 1001,
+    "title": "Display Driver Uninstaller (DDU & More) Updated 11/14/2026",
+    "type": "discussion",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1373187147,
+    "replyCount": 2955,
+    "upvotes": 297,
+    "lastActivityStamp": 1794669464,
+    "isPinned": 1,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794808985,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1016",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3633885
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 583738,
+    "title": "DLSS 5 FAQ [9/3/2026]",
+    "type": "discussion",
+    "isVisible": 1,
+    "status": "locked",
+    "createdStamp": 1773686437,
+    "replyCount": 0,
+    "upvotes": 29,
+    "lastActivityStamp": 1773686437,
+    "isPinned": 1,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1795046028,
+    "hasOfficialReply": 1,
+    "user": {
+     "id": "1017",
+     "aclactions": {
+      "officialreply": true
+     }
+    },
+    "lastComment": {
+     "id": 3599769
+    },
+    "communities": [
+     {
+      "id": 5,
+      "title": "GeForce Graphics Cards"
+     },
+     {
+      "id": 6,
+      "title": "GeForce Laptops"
+     },
+     {
+      "id": 7,
+      "title": "G-SYNC Monitors"
+     },
+     {
+      "id": 8,
+      "title": "Gaming PCs"
+     },
+     {
+      "id": 12,
+      "title": "Legacy Products"
+     },
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     },
+     {
+      "id": 14,
+      "title": "GeForce Experience"
+     },
+     {
+      "id": 51,
+      "title": "NVIDIA Reflex"
+     },
+     {
+      "id": 129,
+      "title": "NVIDIA App"
+     },
+     {
+      "id": 132,
+      "title": "DLSS"
+     }
+    ]
+   }
+  ]
+ }
+}
