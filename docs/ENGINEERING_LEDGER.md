@@ -2203,7 +2203,9 @@ product-level issue signals.
   impaired. Companies aggregate with counts.
 - Product, company, latest-signals and hub pages take every coverage word from it. The retired catalog
   fields (`coverage_state`, `coverage_status_label`, `ingestion_status`, `current_status_label`,
-  `ingestion_active`, `dossier_note`) are deleted, and company summaries no longer say "is tracked".
+  `ingestion_active`, `dossier_note`) are deleted, and company summaries no longer say "is tracked". The
+  33 company pages' own meta descriptions (what a search result shows) no longer say "<Company> is
+  tracked as part of the AUXSAYS Patch Feed intelligence layer" or "<Company> tracking focuses on".
 - `_data/coverage_debt.yml` is the reviewed baseline: one entry per Core gap with a remediation priority,
   a blocking reason, a next action, a plan and a review date. NVIDIA is the one `planned` entry and lists
   the two releases a person verified on NVIDIA's pages.
@@ -2219,7 +2221,8 @@ product-level issue signals.
   after a recent success is reported as impaired, not as a Core gap; a persistent failure is both.
 - `ci/verify_coverage_claims.py` runs after the build: it refuses a pill that disagrees with the
   projection, the "Coverage status unknown" fallback pill, a retired claim phrase in an unmonitored page's
-  or the hub's coverage prose or in catalog text, a static coverage field back in the catalog, and a NEW
+  or the hub's coverage prose or meta description or in catalog text, a static coverage field back in the
+  catalog, and a NEW
   Core product whose lane is switched off with no debt entry. Existing debt and runtime impairment never
   block. The phrase rules read only the template prose the layouts mark `data-coverage-prose`, never the
   vendor-written record titles on the same pages: a changelog titled "Monitoring active sessions in the
@@ -2242,7 +2245,7 @@ catalog, in the sitemap, claiming tracking), now removed. Built-file diff: 104 f
 prose, pill styles, the orphan's sitemap line or build timestamps. Evidence store and verdict projection
 byte-identical; live set unchanged. The assessment on that data: 19 Core gaps (all with debt entries),
 2 impaired enabled lanes, NVIDIA 621.14 and 621.24 missing from the store, 37 backfill rows with no
-executor. `test_coverage_governance.py` (98 checks, blocking); every source mutant in both rounds is
+executor. `test_coverage_governance.py` (100 checks, blocking); every source mutant in both rounds is
 caught by a named check.
 
 **Not shown by this** Whether an enabled lane is missing releases it should have found: no permitted

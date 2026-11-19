@@ -625,6 +625,19 @@ def section_e() -> None:
     split = run_gate(neighbours)
     check("E17 two neighbouring marked regions never form a claim phrase between them", not split, split)
 
+    # The meta description is what a search result shows, and it comes from the page's own front
+    # matter: "NVIDIA tracking focuses on ..." sat there, invisible to a text scan, after the prose
+    # was fixed.
+    def meta(pages):
+        for rel, who in (("updates/darkco/index.html", "DARKCO"), ("updates/index.html", "Patch Feed")):
+            pages[rel] = pages[rel].replace(
+                "<html>", f'<html><head><meta name="description" content="{who} is tracked as part of the '
+                          f'AUXSAYS Patch Feed intelligence layer." /></head>')
+    described = run_gate(meta)
+    check("E18 a claim phrase in an unmonitored page's or the hub's meta description is refused",
+          any(e.startswith("PROSE updates/darkco/index.html") for e in described)
+          and any(e.startswith("PROSE updates/index.html") for e in described), described)
+
 
 # ------------------------------------------------------------------------------------------------
 # [F] real Liquid renders of the shipped layouts
@@ -836,6 +849,17 @@ def section_g() -> None:
                          'class="patch-source-reason"')
              if not re.search(re.escape(m) + r"\s+" + gate.PROSE_ATTR + r"\b", hub_layout)]
     check("G5 the hub layout marks its radar head and company card counts as coverage prose", not marks, marks)
+    said = []
+    for page in sorted(list((_AUX / "updates").glob("*/index.md")) + list((_AUX / "updates").glob("*/*/index.md"))
+                       + [_AUX / "updates" / "index.md"]):
+        if "generated" in page.parts:
+            continue
+        text = page.read_text(encoding="utf-8")
+        front = yaml.safe_load(text.split("---", 2)[1]) if text.startswith("---") else {}
+        for key in ("title", "description"):
+            said += [f"{page.relative_to(_AUX).as_posix()}:{key}:{p}" for p in gate.CLAIM_PHRASES
+                     if p in str((front or {}).get(key) or "")]
+    check("G6 no product, company or hub page's own title or description says it is tracked", not said, said[:6])
 
 
 # ------------------------------------------------------------------------------------------------

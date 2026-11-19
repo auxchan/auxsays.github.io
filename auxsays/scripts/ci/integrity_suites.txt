@@ -629,7 +629,7 @@ auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
 # is), the deploy check on seeded contradictions (and on vendor record titles, which must never block),
 # real Liquid renders of the product, company and latest-signals templates, and the daily assessment's
 # flags, missing-capability reasons, detection latency and no-false-alarm cases.
-auxsays/scripts/tests/test_coverage_governance.py = 98
+auxsays/scripts/tests/test_coverage_governance.py = 100
 
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --

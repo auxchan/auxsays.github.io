@@ -14,7 +14,8 @@ first version scanned the whole visible page, so one such title would have faile
 someone intervened, and a lane going stale at runtime would have brought its pages' record titles into
 the scan. So the phrase rules read only the template's own coverage prose, which the layouts mark with
 `data-coverage-prose` (status line, stat card, Coverage section, tracking-rules lines, the hub's radar
-head), and the catalog text, which is reviewed and checked as data. The fallback rule reads pill
+head), the page's own meta description (written in the page's front matter, and what a search result
+shows), and the catalog text, which is reviewed and checked as data. The fallback rule reads pill
 markup, never text. The templates are also guarded statically (test_coverage_governance G3).
 
 WHAT IT CHECKS. ERROR blocks the deploy; WARN is printed and never blocks.
@@ -40,9 +41,10 @@ WHAT IT CHECKS. ERROR blocks the deploy; WARN is printed and never blocks.
   PROSE      ERROR  every product and company page, and the Patch Feed hub, carries marked coverage
                     prose (so the rule below can never pass by reading nothing), and every marked
                     region closes.
-             ERROR  the marked coverage prose of a product or company page whose coverage is not
-                    operating, and of the hub, carries none of the retired claim phrases ("is tracked
-                    by AUXSAYS", "is tracked for", "Monitoring active", "official source mapped", ...).
+             ERROR  the marked coverage prose and the meta description of a product or company page
+                    whose coverage is not operating, and of the hub, carry none of the retired claim
+                    phrases ("is tracked by AUXSAYS", "is tracked for", "Monitoring active", "official
+                    source mapped", ...).
 
 Run:  python auxsays/scripts/ci/verify_coverage_claims.py --site auxsays/_site [--source auxsays]
 Exit: 0 clean (warnings allowed), 1 an error, 2 the site directory is unusable.
@@ -68,11 +70,11 @@ FORBIDDEN_CATALOG_KEYS = ("coverage_state", "coverage_status_label", "ingestion_
 # Claim phrases retired by AUX-102. Case-sensitive on purpose: the per-patch monitoring card's own
 # status vocabulary is upper case ("MONITORING ACTIVE") and describes community collection for one
 # patch, which is a different, correctly derived claim.
-CLAIM_PHRASES = ("is tracked by AUXSAYS", "is tracked for", "is tracked because", "tracking focuses on",
-                 "Monitoring active", "official source mapped", "Source map staged", "not yet monitoring",
-                 "OFFICIAL SOURCE ACTIVE")
-HUB_PHRASES = ("is tracked by AUXSAYS", "is tracked because", "tracking focuses on", "Monitoring active",
-               "tracked companies", "tracked software")
+CLAIM_PHRASES = ("is tracked by AUXSAYS", "is tracked for", "is tracked because", "is tracked as part of",
+                 "tracking focuses on", "Monitoring active", "official source mapped", "Source map staged",
+                 "not yet monitoring", "OFFICIAL SOURCE ACTIVE")
+HUB_PHRASES = ("is tracked by AUXSAYS", "is tracked because", "is tracked as part of", "tracking focuses on",
+               "Monitoring active", "tracked companies", "tracked software")
 NOT_OPERATING = ("impaired", "planned", "not_monitored")
 
 _PILL = re.compile(r"<span\b([^>]*\bdata-coverage-(product|company)=\"([^\"]*)\"[^>]*)>([^<]*)</span>", re.I)
@@ -82,6 +84,9 @@ _STATE_CLASS = re.compile(r"patch-coverage-pill--coverage-([a-z_]+)")
 _FALLBACK_PILL = re.compile(r"\bclass=\"[^\"]*\bpatch-coverage-pill--coverage-unknown\b", re.I)
 _TAG = re.compile(r"<[^>]+>")
 _SCRIPT = re.compile(r"<(script|style)\b.*?</\1>", re.S | re.I)
+# The page's meta description: from the page's own front matter (never a vendor record on a product,
+# company or hub page), and the text a search result shows for it.
+_META_DESCRIPTION = re.compile(r"<meta name=\"description\" content=\"([^\"]*)\"", re.I)
 
 # The attribute a layout puts on an element whose text is the template's own coverage prose.
 PROSE_ATTR = "data-coverage-prose"
@@ -282,7 +287,8 @@ def check_site(site: Path, catalog: list[dict], companies_cat: list[dict], produ
         # Regions are joined with a separator no phrase contains, so two neighbouring regions can
         # never form a phrase between them.
         regions, closed = coverage_prose(text)
-        prose = " | ".join(regions)
+        described = [" ".join(html.unescape(d).split()) for d in _META_DESCRIPTION.findall(text)]
+        prose = " | ".join(regions + described)
         stats["prose_regions"] += len(regions)
         if not regions:
             errors.append(f"PROSE {rel}: the page carries no marked coverage prose ({PROSE_ATTR}), so "
