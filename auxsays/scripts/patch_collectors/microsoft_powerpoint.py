@@ -38,6 +38,7 @@ import re
 from typing import Any
 
 from lib import evidence_classification as ec
+from lib import github_api
 from lib import learn_fetch_policy
 from lib.build_claims import (
     BUILD_TOKEN_RE, OFFICE_FULL_VERSION_RE, extract_build_claims,
@@ -127,7 +128,9 @@ TECH_COMMUNITY_MAX_HYDRATIONS = 30
 # it reach threads outside every enumerator's window.
 OPEN_WEB_METHOD_ID = "open_web_discovery"
 OPEN_WEB_MAX_QUERIES = 10
-OPEN_WEB_MAX_REQUESTS = 24
+# 8 queries x 2 providers. It was 24 = 8 x 3 while GitHub search was a third provider; keeping 8
+# queries keeps the Learn and Stack Exchange traffic exactly what it was when that provider left.
+OPEN_WEB_MAX_REQUESTS = 16
 OPEN_WEB_MAX_HYDRATIONS = 120
 # How far back a run looks. 60 days covers every currently tracked PowerPoint build's release date
 # with margin; older builds cannot gain new reports from a recency sweep, and pretending otherwise
@@ -1183,7 +1186,9 @@ def github_method_status(candidates: list[dict[str, Any]], accepted: list[dict[s
     if errors and (candidates or rejected):
         return "partial"
     if errors:
-        return "blocked" if any("rate_limited" in str(e.get("reason") or "") for e in errors) else "broken"
+        # Any refusal that stops the run (rate limit, access denial, other 403) is `blocked`; the
+        # blocked_reason names which one.
+        return "blocked" if any(github_api.is_stop(e.get("reason")) for e in errors) else "broken"
     if rejected and any(str(r.get("exclusion_reason")) in NEAR_MISS_REASONS for r in rejected):
         return "low_confidence"
     return "no_results"
@@ -1541,13 +1546,18 @@ def run_github_method(record: PatchRecord, target: dict[str, Any], context: Coll
     queries = build_queries + list(GITHUB_SYMPTOM_QUERIES)
 
     def _symptom_route():
+        symptom_errors: list[dict[str, Any]] = []
         found, tel = github_officedev_source.collect_officedev_candidates(
-            queries=list(GITHUB_SYMPTOM_QUERIES), errors=gh_errors,
+            queries=list(GITHUB_SYMPTOM_QUERIES), errors=symptom_errors,
             max_requests=len(GITHUB_SYMPTOM_QUERIES), source_type=GITHUB_SOURCE_TYPE)
-        return [{"candidates": found, "telemetry": tel}]
+        return [{"candidates": found, "telemetry": tel, "errors": symptom_errors}]
 
     payload = cached_product_candidates("github_symptom", list(GITHUB_SYMPTOM_QUERIES),
                                         _symptom_route)[0]
+    # The symptom route runs once per run and its answer is shared by every record, so a failure in
+    # it is a failure in EVERY record's collection. Carrying only the first record's copy let the
+    # other records report a refused route as a complete one.
+    gh_errors.extend(dict(e) for e in payload.get("errors") or [])
     gh_candidates = list(payload["candidates"])
     telemetry = dict(payload["telemetry"])
     if build_queries:
@@ -1578,6 +1588,7 @@ def run_github_method(record: PatchRecord, target: dict[str, Any], context: Coll
         + "Product comes from the template's Host field, so an Excel issue stays Excel however often "
         "it says PowerPoint; only the desktop half of the Office version field can supply a build. "
         "Same acceptance gates as every other method."
+        + (f" {github_api.stop_note()}" if github_api.stop_state() and gh_errors else "")
     )
     row = health_row(record, GITHUB_METHOD_ID, GITHUB_SOURCE_TYPE, gh_status, gh_candidates, gh_accepted, gh_rejected, gh_errors, captured_at, gh_notes)
     return gh_accepted, gh_rejected, row

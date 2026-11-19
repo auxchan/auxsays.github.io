@@ -14,12 +14,10 @@ from patch_collectors import runtime_budget as rb
 
 import argparse
 import json
-import os
 import re
 import sys
 import textwrap
 import urllib.parse
-import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -27,6 +25,7 @@ from typing import Any
 import yaml
 
 from lib import evidence_classification as ec
+from lib import github_api
 from lib.normalize import split_front_matter, atomic_write_text
 from lib.patch_identity import patch_key
 from lib.report_counts import counted_evidence_counts
@@ -35,7 +34,8 @@ from lib.target_outcome import target_is_contradicted
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 GENERATED_DIR = ROOT / "updates" / "generated"
-API_ROOT = "https://api.github.com"
+API_ROOT = github_api.API_ORIGIN
+SEARCH_PER_PAGE = 100
 REPO = "obsproject/obs-studio"
 PRODUCT_ID = "obs-studio"
 SOURCE_NAME = "obsproject/obs-studio"
@@ -139,30 +139,32 @@ def slug(value: str) -> str:
     return value[:80].strip("-")
 
 
+def request_json_with_meta(url: str) -> tuple[Any, dict[str, str]]:
+    """One GitHub API GET through the shared transport (lib/github_api.py): paced, a truthful
+    User-Agent, the run's runtime budget, and the first refusal stops every later GitHub request."""
+    return github_api.get_json(url, endpoint_family="obs_github")
+
+
 def request_json(url: str) -> Any:
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "User-Agent": "AUXSAYS-OBS-Report-Beta",
-        "X-GitHub-Api-Version": "2022-11-28",
-    }
-    token = os.getenv("GITHUB_TOKEN")
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), 30)) as response:
-        return json.loads(rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="obs_github").decode("utf-8"))
+    return request_json_with_meta(url)[0]
 
 
 def search_issues(version: str, since: str | None, max_pages: int) -> list[dict[str, Any]]:
+    """Every issue the search returns for this version, up to `max_pages` pages.
+
+    Paging follows GitHub's contract (rel="next" in the Link header). It used to stop only on an
+    EMPTY page, so every version with fewer than 100 hits spent a second search on a page that could
+    only be empty -- 11 of 18 versions return nothing at all.
+    """
     query = f'repo:{REPO} is:issue "{version}"'
     if since:
         query += f" created:>={since}"
     results: list[dict[str, Any]] = []
     seen: set[str] = set()
     for page in range(1, max(1, max_pages) + 1):
-        encoded = urllib.parse.urlencode({"q": query, "per_page": "100", "page": str(page)})
+        encoded = urllib.parse.urlencode({"q": query, "per_page": str(SEARCH_PER_PAGE), "page": str(page)})
         url = f"{API_ROOT}/search/issues?{encoded}"
-        payload = request_json(url)
+        payload, meta = request_json_with_meta(url)
         items = payload.get("items") or []
         if not items:
             break
@@ -173,16 +175,33 @@ def search_issues(version: str, since: str | None, max_pages: int) -> list[dict[
             if issue_url and issue_url not in seen:
                 seen.add(issue_url)
                 results.append(item)
+        if not github_api.has_next_page(meta, payload, page=page, per_page=SEARCH_PER_PAGE):
+            break
     return results
 
 
 def fetch_issue(item: dict[str, Any]) -> dict[str, Any]:
+    """The issue as GitHub serves it now, which is what every acceptance decision reads.
+
+    KEPT DELIBERATELY. The search item carries the same fields, but from the search INDEX, which can
+    lag an edit; a reporter who later adds "fixed in 32.1.2" changes what the role check reads. That
+    equivalence cannot be proven offline, so the fetch stays -- through the shared transport.
+
+    An ordinary failure (a 404 for a moved issue, a 5xx, the network) falls back to the search item,
+    exactly as before. A REFUSAL is different: the transport has stopped the run, and evaluating the
+    rest of this version from search items would publish a collection GitHub cut short as a complete
+    one, so it propagates and the version is reported as not collected.
+    """
     url = str(item.get("url") or "")
     if not url:
         return item
     try:
         issue = request_json(url)
         return issue if isinstance(issue, dict) else item
+    except github_api.GitHubError as exc:
+        if github_api.is_stop(exc):
+            raise
+        return item
     except Exception:
         return item
 

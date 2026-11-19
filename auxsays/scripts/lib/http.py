@@ -18,6 +18,10 @@ USER_AGENT = (
     "(KHTML, like Gecko) Chrome/124.0 Safari/537.36 "
     "AUXSAYS-Patch-Ingest/1.2 (+https://auxsays.com)"
 )
+# GitHub's API is never sent a browser string: GitHub asks for the application's own name, and AUXSAYS
+# has no reason to look like anything else there. Production GitHub traffic uses lib/github_api.py;
+# this keeps any request that still reaches api.github.com through this module truthful too.
+GITHUB_API_USER_AGENT = "AUXSAYS-patch-evidence/1.0 (+https://auxsays.com)"
 
 
 @dataclass
@@ -382,7 +386,10 @@ def fetch_text(
              if redirect_hosts is not None else None)
 
     for attempt in range(attempts):
-        req = urllib.request.Request(url, headers=_headers(headers))
+        request_headers = _headers(headers)
+        if _github_auth_allowed(url):
+            request_headers["User-Agent"] = GITHUB_API_USER_AGENT
+        req = urllib.request.Request(url, headers=request_headers)
         if bound is not None:
             setattr(req, _REDIRECT_HOSTS_ATTR, bound)
         if send_auth:

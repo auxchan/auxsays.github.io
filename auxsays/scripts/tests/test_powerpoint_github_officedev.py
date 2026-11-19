@@ -181,14 +181,15 @@ def run() -> int:
     b = gh.issue_candidate(issue(7001, "B", CALIBRATION_BODY, login="userB"), source_type="x", source_name="y")
     check("D2.1 two DIFFERENT issues on the same build remain separate evidence",
           a["source_url"] != b["source_url"]
-          and a["github_author_login"] != b["github_author_login"])
+          and a["github_issue_number"] != b["github_issue_number"])
 
     print()
     print("=" * 96)
-    print("G6  the reporter's identity is retained for author-authority decisions")
+    print("G6  the reporter's account is never read: nothing needs to know who wrote the issue")
     print("=" * 96)
-    check("G6.1 author login and id are carried",
-          cand["github_author_login"] == "reporter" and cand["github_author_id"] == "33959505")
+    check("G6.1 no author login, id or other account field is carried (G49)",
+          not any("author" in key or "login" in key or key == "user" for key in cand)
+          and "reporter" not in repr(cand) and "33959505" not in repr(cand), str(sorted(cand)))
     check("G6.2 comments are NOT folded into the reporter's text",
           "github_comment" not in cand and "comments" not in cand)
     check("G6.3 a pull request is never a report", gh.issue_candidate(
