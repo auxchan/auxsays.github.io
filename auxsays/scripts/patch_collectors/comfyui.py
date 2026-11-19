@@ -430,15 +430,28 @@ def enumerate_issues(since: str, errors: list[dict[str, Any]], *,
     return issues, telemetry
 
 
-def candidates_for(version: str, issues: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def issue_text(issue: dict[str, Any]) -> str:
+    """The opening post as the decision path reads it: title, newline, body, cleaned."""
+    return clean_text(f"{issue.get('title') or ''}\n{issue.get('body') or ''}")
+
+
+def candidates_for(version: str, issues: list[dict[str, Any]], *,
+                   texts: dict[int, str] | None = None) -> list[dict[str, Any]]:
     """Issues whose opening post names this version at all, by the shared exact matcher.
 
     An issue that never names the version is not a REJECTED candidate for it, it was never a
     candidate (the OBS forum rule): counting every issue in the window as a rejection for every
-    record would make the telemetry meaningless.
+    record would make the telemetry meaningless. `texts` caches issue_text per issue for a run that
+    tests one walk against every record.
     """
-    return [issue for issue in issues
-            if _occurrences(clean_text(f"{issue.get('title') or ''}\n{issue.get('body') or ''}"), version)]
+    out = []
+    for issue in issues:
+        text = texts.get(id(issue)) if texts else None
+        if text is None:
+            text = issue_text(issue)
+        if version in text and _occurrences(text, version):
+            out.append(issue)
+    return out
 
 
 def reposts(candidates: list[dict[str, Any]]) -> dict[int, int]:
@@ -527,12 +540,14 @@ class ComfyUICollector(base.ProductCollector):
                 truncated=bool(telemetry.get("truncated")), errors=len(errors))
 
         results: list[dict[str, Any]] = []
+        run_rows: list[dict[str, Any]] = []
+        texts = {id(issue): issue_text(issue) for issue in issues}
         for record in records:
             if budget_expired():
                 rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
                 break
             version = str(record.update_version or "")
-            candidates = candidates_for(version, issues)
+            candidates = candidates_for(version, issues, texts=texts)
             repeated = reposts(candidates)
             accepted: list[dict[str, Any]] = []
             rejected: list[dict[str, Any]] = []
@@ -573,17 +588,31 @@ class ComfyUICollector(base.ProductCollector):
                      for reason in {str(r.get("exclusion_reason") or "") for r in rejected}}.items())),
                 "method_health": health,
             }
-            if context.write:
-                persisted: list[dict[str, Any]] = []
-                already_held: list[dict[str, Any]] = []
-                added, _total, _rows = base.append_evidence_rows(
-                    accepted + rejected, out_added=persisted, out_already_held=already_held)
-                # The health delta speaks about ACCEPTED reports: excluded rows are stored for audit,
-                # and must not be credited as reports this method added (or already held).
-                base.finalize_method_health_delta(
-                    health, [r for r in persisted if r.get("counted")],
-                    [r for r in already_held if r.get("counted")])
-                result["evidence_rows_added"] = added
-                result["record_updated"] = apply_consensus_writeback(version) if accepted else False
+            run_rows.extend(accepted + rejected)
             results.append(result)
+
+        if context.write:
+            # ONE append for the run. The store is read and rewritten once, not once per record:
+            # measured, per-record appends plus per-record writebacks cost ~390 s for 50 records,
+            # almost all of it re-reading the same 3,000-row store.
+            persisted: list[dict[str, Any]] = []
+            already_held: list[dict[str, Any]] = []
+            if run_rows:
+                base.append_evidence_rows(run_rows, out_added=persisted, out_already_held=already_held)
+            # The health delta speaks about ACCEPTED reports: excluded rows are stored for audit,
+            # and must not be credited as reports this method added (or already held). Attribution
+            # is per (patch, source type), so one call finalizes every record's row.
+            base.finalize_method_health_delta(
+                [row for result in results for row in result["method_health"]],
+                [r for r in persisted if r.get("counted")],
+                [r for r in already_held if r.get("counted")])
+            new_accepted = {str(r.get("update_version") or "") for r in persisted if r.get("counted")}
+            for result in results:
+                version = str(result["version"])
+                result["evidence_rows_added"] = sum(
+                    1 for r in persisted if str(r.get("update_version") or "") == version)
+                # Freshness moves only when a new accepted report arrived; a re-found report changes
+                # nothing the writeback could write.
+                result["record_updated"] = (apply_consensus_writeback(version)
+                                            if version in new_accepted else False)
         return results
