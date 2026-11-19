@@ -410,6 +410,8 @@ def section_identity() -> None:
     check("I19 a version only on a specification line is environment",
           decide("GPU: RTX 4090\nDriver: 621.14\nGame crashes after the new season patch.")
           == "driver_version_environment_only")
+    check("I19b ...but a field whose own segment names the failure is attribution",
+          decide("GPU: RTX 4090\nDriver: 621.14 crashes in every game\n") == "COUNT")
     check("I20 ...a bare spec item in a list too",
           decide("System: RTX 4090, Windows 11, driver 621.14, 2TB SSD.\nThe game crashes.")
           == "driver_version_environment_only")
