@@ -2221,7 +2221,18 @@ product-level issue signals.
 Unchanged: every collector, source, threshold, verdict, evidence row and live decision; the AUX-039
 official projection and its states.
 
-**Measured** MEASURED_PLACEHOLDER
+**Measured** On main 75c4ea5c's data the 47 products read: 7 official and community monitored, 8 official
+only, 2 impaired (Premiere Pro, Netlify), 1 planned (NVIDIA), 29 not monitored. The new deploy check fails
+main's deploy-order build with 293 errors (82 catalog claim fields, 18 Core gaps with no debt entry, 47
+product pages with no coverage pill, 146 claim phrases on unmonitored pages); the branch build is clean, and
+on it a seeded "monitored" pill, a seeded "is tracked for" sentence and a seeded new Core product without a
+debt entry are each refused. It also found the orphaned "Creative Cloud / Firefly" product page (not in the
+catalog, in the sitemap, claiming tracking), now removed. Built-file diff: 104 files, all coverage labels,
+prose, pill styles, the orphan's sitemap line or build timestamps. Evidence store and verdict projection
+byte-identical; live set unchanged. The assessment on that data: 19 Core gaps (all with debt entries),
+2 impaired enabled lanes, NVIDIA 621.14 and 621.24 missing from the store, 37 backfill rows with no
+executor. `test_coverage_governance.py` (83 checks, blocking); 47 source mutants, each caught by a named
+check.
 
 **Not shown by this** Whether an enabled lane is missing releases it should have found: no permitted
 independent official reference exists for any product except the two NVIDIA releases recorded by hand.
