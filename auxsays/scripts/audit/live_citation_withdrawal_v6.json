@@ -1,0 +1,175 @@
+{
+ "schema": 1,
+ "ledger": "AUX-114",
+ "version": 6,
+ "supplements": "auxsays/scripts/audit/live_citation_withdrawal.json (AUX-088), live_citation_withdrawal_v2.json (AUX-090), live_citation_withdrawal_v3.json (AUX-098), live_citation_withdrawal_v4.json (AUX-108) and live_citation_withdrawal_v5.json (AUX-111), which stay unchanged",
+ "purpose": "Pinned audited withdrawal of one stored DaVinci Resolve report counted against 21.0.4: a how-to question in which 21.0.4 is the version the author runs, not a version reported as having a problem. The row is kept; only counted and exclusion_reason change.",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "products": [
+  "microsoft-windows-11",
+  "obs-studio",
+  "blackmagic-davinci"
+ ],
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "edit": {
+  "counted": false,
+  "exclusion_reason": "per entry (closed vocabulary)",
+  "evidence_valid_for_current_patch": "not present on DaVinci rows; a block carrying it refuses",
+  "row_retained": true
+ },
+ "parent_commit": "0e84d3942f009211c40043fdf69cbfe3c0ba6f58",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256_at_pin": "5fff14639d0f5feb22b8b88047acf8bcc49363615b214056b79a164e242f8d1f",
+ "adjudication_packet": {
+  "packet_sha256": "ab9e1c6cea79fc011144d9a3981619a43a1e84a081bea014a6435f571749573b",
+  "brief_sha256": "e7f69f4115191c3ae9061d5956a10ee2cb7422880e603237ae3badae4876ee34",
+  "control_rule_sha256": "83ee18570be71b57039b6bf014ad0ec9219e471449890aba9d22d4392ca47bfb",
+  "labels_a_sha256": "65d08886f58c045e26e9d8b1da047fd4666e733bbf8c1e1cfbc0038eebac9111",
+  "labels_b_sha256": "a7fc9f8d4f6f92068434b0dec3f42020352ea3bfb5dafb2531f616876d8b1ee9",
+  "items": 12,
+  "targets": 4,
+  "controls": 8,
+  "note": "A label-free shuffled packet of stored text: four candidate rows and eight counted controls drawn by a rule fixed before the draw (for each candidate, one row on its own page that must stay counted and one row of another version of the same product). The brief named no row and stated no hypothesis. Only this row is withdrawn; the other three candidates are held."
+ },
+ "basis": "A row is here only when TWO independent blind adjudications, each made from the stored text alone without the key, the earlier labels or each other's labels, labelled it INCORRECT for the credited version: second_blind and third_blind. first_audit records an earlier pair of blind labels on the same row as provenance; it is not one of the two determinations. The row takes the closed reason both blind reviews support. Candidates both reviews labelled INCORRECT whose deciding evidence is not in the stored text, or whose withdrawal would override an existing rule, are held and stay counted.",
+ "note": "The entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn). No retain entries: it is not a duplicate.",
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "21.0.4",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w23ivu-linux-is-there-a-way-to-enable-hdr-in-the",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1w23ivu/linux_is_there_a_way_to_enable_hdr_in_the/",
+   "record_file": "auxsays/updates/generated/2026-08-05-davinci-resolve-21-0-4.md",
+   "block_sha256_before": "bf59becaa6669ccf44038b53f910ee1bfd72ba0de08819d9856d5835ca322e2a",
+   "exclusion_reason": "not_a_real_issue_report",
+   "block_sha256_after": "45ea77138cb7ac49d6c78da221c31e30136be8fff133adbd690d9450f4d29eac",
+   "captured_at": "2026-09-25T22:19:36Z",
+   "case": "D2",
+   "adjudication": {
+    "first_audit": {
+     "by": "G52 blind adjudicators A and B, control P12 (2026-11-19_g52-role-row-withdrawal/adjudication/LABELS_A.md and LABELS_B.md; stored text only)",
+     "case": "P12",
+     "label": "INCORRECT",
+     "reason": "both G52 blind reviews: a how-to question about enabling HDR previews on Linux; 21.0.4 is named as the author's setup and no defect is reported (not_a_real_issue_report).",
+     "labels_a_sha256": "a0c256151aeb7c3c21111de3e7203fe4d513a177935f0a4de2b78a34480ffecc",
+     "labels_b_sha256": "09b590f3124cdf0a971b0385044d7dae1a1947e3b716e0f5c0055b02d6af2e1e",
+     "counts_toward_the_two": false
+    },
+    "second_blind": {
+     "by": "G59 blind adjudicator A (2026-11-19_g59-four-row-adjudication/adjudication/LABELS_A.md; stored text only; no key, control rule or other labeler's output read)",
+     "case": "P11",
+     "label": "INCORRECT",
+     "reason_class": "not_a_real_issue_report",
+     "reason": "A how-to question about enabling HDR in the previews, on Studio 21.0.4, that reports no fault."
+    },
+    "third_blind": {
+     "by": "G59 blind adjudicator B (2026-11-19_g59-four-row-adjudication/adjudication/LABELS_B.md; stored text only; no key, control rule or other labeler's output read)",
+     "case": "P11",
+     "label": "INCORRECT",
+     "reason_class": "not_a_real_issue_report",
+     "reason": "Names Studio 21.0.4 on Linux as the author's setup, but the post is a how-to question about HDR previews, not a reported defect."
+    }
+   },
+   "basis": "A question asking whether HDR can be enabled in the previews on Linux. 21.0.4 is the version the author runs, named as part of their setup; no problem with 21.0.4 is reported."
+  }
+ ],
+ "held_out": [
+  {
+   "group": "G59 target D1",
+   "page": "blackmagic-davinci|20.2.1|",
+   "packet_case": "P01",
+   "rows": [
+    {
+     "product_id": "blackmagic-davinci",
+     "update_version": "20.2.1",
+     "target_build": "",
+     "id": "blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1noccl9-davinci-resolve-2021is-out",
+     "source_url": "https://www.reddit.com/r/davinciresolve/comments/1noccl9/davinci_resolve_2021is_out/"
+    }
+   ],
+   "why": "Held by the G59 ruling and kept counted. Both blind reviews labelled it INCORRECT (version_named_but_working), but the version mention that made the row count is not in the stored text, so its role cannot be judged, and the source is not re-read. AUX-108's hold stands."
+  },
+  {
+   "group": "G59 target A1",
+   "page": "adobe-acrobat-reader|15.010.20056|",
+   "packet_case": "P04",
+   "rows": [
+    {
+     "product_id": "adobe-acrobat-reader",
+     "update_version": "15.010.20056",
+     "target_build": "",
+     "id": "acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-installation-acrobat-dc-failed-on-el-capitan-10-11-3-5943",
+     "source_url": "https://community.adobe.com/questions-18/installation-acrobat-dc-failed-on-el-capitan-10-11-3-594365"
+    }
+   ],
+   "why": "Held by the G59 ruling and kept counted. Both blind reviews labelled it INCORRECT (identity_not_the_subject: an Acrobat DC installer failure that names no edition), but the existing rule for an Acrobat report that names a shared build without an edition counts it on both editions, so a withdrawal would override that rule by adjudication. It waits for an owner policy decision. The same report also counts on Acrobat Pro 15.010.20056, and its must-stay control (P02) received the same labels; neither changes here."
+  },
+  {
+   "group": "G59 target P1",
+   "page": "adobe-premiere-pro|26.2|",
+   "packet_case": "P03",
+   "rows": [
+    {
+     "product_id": "adobe-premiere-pro",
+     "update_version": "26.2",
+     "target_build": "",
+     "id": "adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-26-3-2-2-freezes-sometimes-all-windows-wh",
+     "source_url": "https://community.adobe.com/bug-reports-728/premiere-pro-26-3-2-2-freezes-sometimes-all-windows-when-the-interface-changes-main-thread-stuck-in-accessibility-ui-automation-requests-1653348"
+    }
+   ],
+   "why": "Held by the G59 ruling and kept counted. Both blind reviews labelled it INCORRECT (identity_not_the_subject), but the 26.2 mention that made the row count is not in the stored text, so its role cannot be verified from the retained context."
+  }
+ ],
+ "must_stay_counted": [
+  {
+   "product_id": "blackmagic-davinci",
+   "update_version": "21.0.4",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-0-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vkctcb-i-cant-get-davinci-to-export",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1vkctcb/i_cant_get_davinci_to_export/",
+   "packet_case": "P08",
+   "control_role": "must-stay control on the withdrawn row's own page",
+   "block_sha256": "3c628536790dc8b2e9d955bc5de43b729bbfe7a61611dc5b7a0d72ec72c8e06e"
+  },
+  {
+   "product_id": "blackmagic-davinci",
+   "update_version": "21",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1w927vk-why-isnt-my-gpu-being-recognized-resolve",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1w927vk/why_isnt_my_gpu_being_recognized_resolve_21/",
+   "packet_case": "P05",
+   "control_role": "other-version control of the same product",
+   "block_sha256": "59412cfd68e604c6fdad6e741b3c66601495c662ebb8d23605dc5d215094a3a7"
+  }
+ ],
+ "findings_not_withdrawn": [
+  {
+   "group": "control P02",
+   "page": "adobe-acrobat-reader|15.010.20056|",
+   "rows": [
+    {
+     "product_id": "adobe-acrobat-reader",
+     "update_version": "15.010.20056",
+     "target_build": "",
+     "id": "acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-acrobat-fails-to-install-from-both-the-cloud-app-and-dire",
+     "source_url": "https://community.adobe.com/questions-18/acrobat-fails-to-install-from-both-the-cloud-app-and-direct-download-from-adobe-com-604847"
+    }
+   ],
+   "why": "A1's must-stay control, which both blind reviews also labelled INCORRECT (identity_not_the_subject), for the same reason as A1. It belongs to the same owner policy question, so it is recorded here and stays counted."
+  }
+ ]
+}
