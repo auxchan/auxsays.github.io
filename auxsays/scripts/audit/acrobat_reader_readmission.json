@@ -1,0 +1,133 @@
+{
+ "schema": 1,
+ "ledger": "AUX-110",
+ "purpose": "Pinned audited re-admission of stored Acrobat Reader rows that the role veto withdrew as 'version named but working' although the post reports a problem on that version. Two fresh blind adjudicators both labelled each row CORRECT. Only counted and exclusion_reason change; the row is kept.",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "products": [
+  "adobe-acrobat-reader"
+ ],
+ "readmit_from_reasons": [
+  "version_named_but_working"
+ ],
+ "edit": {
+  "counted": "false -> true",
+  "exclusion_reason": "version_named_but_working -> null",
+  "row_retained": true
+ },
+ "parent_commit": "894bbd22f92f47fde812b61fb5d30ba9ba48446b",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256_at_pin": "eaa16062ddec3f84049faf720343185b212cfcc591a39ee1cae5281f3ffe6f92",
+ "adjudication": {
+  "question": "Does this report describe a concrete problem attributable to the exact named version?",
+  "labels": [
+   "CORRECT",
+   "INCORRECT",
+   "UNSURE"
+  ],
+  "packet_sha256": "2c0af039f8bda9bf1a972cbcdb13c780200381257eaf8fa9866f251a41aab02c",
+  "brief_sha256": "907c9024939701e5162ddae1d34d69b2ce6e6c608233c4d507366f3f9e57f359",
+  "packet_built_utc": "2026-11-19T12:48:41Z",
+  "packet_entries": 14,
+  "controls": {
+   "count": 11,
+   "labelled_as_expected": {
+    "adjudicator_c": 11,
+    "adjudicator_d": 11
+   }
+  },
+  "gate": "A row is re-admitted only when BOTH adjudicators independently label it CORRECT. A disagreement, an UNSURE or an INCORRECT holds it; no third adjudicator is consulted.",
+  "basis": "Stored text only (title, parent title and the stored excerpt). A fresh, shuffled, label-free packet with new ids; the brief names no row, no hypothesis and no expected label. Two adjudicators who had not seen any earlier finding labelled it independently; both labelled all 11 controls as expected. An earlier adjudication (whose brief named the hypothesised rows) and a critic re-read reached the same labels; they are not the gate."
+ },
+ "held": [
+  {
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "25.001.21111",
+   "target_build": "",
+   "id": "acrobat-25-001-21111-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-install-acrobat-reader-in-windows-11-1548715",
+   "source_url": "https://community.adobe.com/questions-9/unable-to-install-acrobat-reader-in-windows-11-1548715",
+   "why": "Both fresh labels are CORRECT on stored text, but the second build that triggered its veto (multiple_builds_named_target_not_blamed) lies past the stored excerpt, so the labels could not judge the condition the gate decided on. Held until that context is recovered through an authorised procedure."
+  }
+ ],
+ "note": "Each entry must match exactly one stored block whose sha256 equals block_sha256_before (to re-admit), block_sha256_after or a recorded successor (already re-admitted). The shipped veto still refuses both rows on their stored text and is not changed; this manifest is the exemption list for any check that replays it.",
+ "entries": [
+  {
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "18.009.20044",
+   "target_build": "",
+   "id": "acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-users-unable-to-open-pdf-s-after-recent-adobe-reader-dc-u",
+   "source_url": "https://community.adobe.com/questions-12/users-unable-to-open-pdf-s-after-recent-adobe-reader-dc-update-18-009-20044-1511973",
+   "record_file": "2017-11-14-adobe-acrobat-reader-18-009-20044.md",
+   "exclusion_reason_before": "version_named_but_working",
+   "block_sha256_before": "bd38c52eafcb105c49db7153c11609f439e49fae9f943f1dac8fda0a4f1d8d94",
+   "block_sha256_after": "86950d8a486f487f31da26a536e9b8629f1ce949e4fec702673221864c0587b5",
+   "labels": [
+    {
+     "by": "adjudicator_c",
+     "packet_id": "R02",
+     "label": "CORRECT",
+     "reason": "The title and the post tie users being unable to open PDFs to the recent update to this exact version."
+    },
+    {
+     "by": "adjudicator_d",
+     "packet_id": "R02",
+     "label": "CORRECT",
+     "reason": "The post names this exact version as the update after which the failure began."
+    }
+   ],
+   "veto_misread": "The shipped veto reads the version followed by 'I work' (the start of 'I work in IT support') as the version working.",
+   "successors": [
+    {
+     "block_sha256_from": "86950d8a486f487f31da26a536e9b8629f1ce949e4fec702673221864c0587b5",
+     "block_sha256_to": "e315e63a16121e60c71bb91909f2b710f42220d09ec9bcb2b17d2de9a0d97e3b",
+     "change": {
+      "issue_theme": [
+       "install/update failure",
+       "unspecified Acrobat issue"
+      ],
+      "workflow_area": [
+       "deployment",
+       "Acrobat workflow"
+      ],
+      "severity": [
+       "high",
+       "medium"
+      ]
+     },
+     "changed_by": "recompute_evidence_classification.py --correction-manifest audit/acrobat_reader_label_correction.json (AUX-110)"
+    }
+   ]
+  },
+  {
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "19.021.20047",
+   "target_build": "",
+   "id": "acrobat-19-021-20047-adobe-community-bug-report-https-community-adobe-com-questions-12-not-responding-after-upgrade-adobe-acrobat-reader-dc-19-0",
+   "source_url": "https://community.adobe.com/questions-12/not-responding-after-upgrade-adobe-acrobat-reader-dc-19-012-20040-upgrading-to-19-021-20047-1518668",
+   "record_file": "2019-10-15-adobe-acrobat-reader-19-021-20047.md",
+   "exclusion_reason_before": "version_named_but_working",
+   "block_sha256_before": "b4ec994d2b7fdedaf8d9e1b6b22f97dc92b48d5fda244bb4834933c9a76c1abc",
+   "block_sha256_after": "b8393f8d42ffb77aabac14229741b54496512faf78d3afbc8c19775f320855de",
+   "labels": [
+    {
+     "by": "adjudicator_c",
+     "packet_id": "R06",
+     "label": "CORRECT",
+     "reason": "Users were fine on the earlier build and report 'Not Responding' since upgrading to this version."
+    },
+    {
+     "by": "adjudicator_d",
+     "packet_id": "R06",
+     "label": "CORRECT",
+     "reason": "The earlier build is where users were working; 'Not Responding' began after the upgrade to this version."
+    }
+   ],
+   "veto_misread": "The shipped veto reads 'All users were working', the sentence about the earlier build, as this version working."
+  }
+ ]
+}

@@ -12620,12 +12620,12 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat reader
   applicability: adobe-acrobat-reader
-  counted: false
-  exclusion_reason: version_named_but_working
-  issue_theme: install/update failure
-  workflow_area: deployment
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
   platform: windows
-  severity: high
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-some-pdfs-are-shown-as-blank-and-application-wont-start-u
@@ -13322,8 +13322,8 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat reader
   applicability: adobe-acrobat-reader
-  counted: false
-  exclusion_reason: version_named_but_working
+  counted: true
+  exclusion_reason: null
   issue_theme: crash or launch failure
   workflow_area: application stability
   platform: windows

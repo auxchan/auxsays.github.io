@@ -1,0 +1,158 @@
+schema_version: 1
+evidence:
+- id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-there-was-an-error-opening-this-documen
+  product_id: adobe-acrobat-reader
+  update_version: 18.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-dc-there-was-an-error-opening-this-document-failed-to-load-an-application-resource-internal-error-1512140
+  parent_title: Fixture report 1 title
+  report_title: Fixture report 1 title
+  report_text_excerpt: Fixture report 1 title Synthetic marker text standing in for the stored excerpt.
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-11-29'
+  target_release_date: '2017-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-users-unable-to-open-pdf-s-after-recent-adobe-reader-dc-u
+  product_id: adobe-acrobat-reader
+  update_version: 18.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/users-unable-to-open-pdf-s-after-recent-adobe-reader-dc-update-18-009-20044-1511973
+  parent_title: Fixture report 2 title
+  report_title: Fixture report 2 title
+  report_text_excerpt: Fixture report 2 title Synthetic marker text standing in for the stored excerpt.
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-11-20'
+  target_release_date: '2017-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: false
+  exclusion_reason: version_named_but_working
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-not-responding-after-upgrade-adobe-acrobat-reader-dc-19-0
+  product_id: adobe-acrobat-reader
+  update_version: 19.012.20040
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/not-responding-after-upgrade-adobe-acrobat-reader-dc-19-012-20040-upgrading-to-19-021-20047-1518668
+  parent_title: Fixture report 3 title
+  report_title: Fixture report 3 title
+  report_text_excerpt: Fixture report 3 title Synthetic marker text standing in for the stored excerpt.
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-11-05'
+  target_release_date: '2019-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20040
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: false
+  exclusion_reason: version_named_but_rollback_target
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-021-20047-adobe-community-bug-report-https-community-adobe-com-questions-12-embedded-pdf-viewing-generates-error-0-521-and-crashes-in
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20047
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/embedded-pdf-viewing-generates-error-0-521-and-crashes-internet-explorer-1518646
+  parent_title: Fixture report 4 title
+  report_title: Fixture report 4 title
+  report_text_excerpt: Fixture report 4 title Synthetic marker text standing in for the stored excerpt.
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-11-01'
+  target_release_date: '2019-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20047
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-021-20047-adobe-community-bug-report-https-community-adobe-com-questions-12-not-responding-after-upgrade-adobe-acrobat-reader-dc-19-0
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20047
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/not-responding-after-upgrade-adobe-acrobat-reader-dc-19-012-20040-upgrading-to-19-021-20047-1518668
+  parent_title: Fixture report 5 title
+  report_title: Fixture report 5 title
+  report_text_excerpt: Fixture report 5 title Synthetic marker text standing in for the stored excerpt.
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-11-05'
+  target_release_date: '2019-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20047
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: false
+  exclusion_reason: version_named_but_working
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-25-001-21111-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-install-acrobat-reader-in-windows-11-1548715
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.21111
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/unable-to-install-acrobat-reader-in-windows-11-1548715
+  parent_title: Fixture report 6 title
+  report_title: Fixture report 6 title
+  report_text_excerpt: Fixture report 6 title Synthetic marker text standing in for the stored excerpt.
+  captured_at: '2026-09-01T16:31:11Z'
+  source_date: '2026-02-05'
+  target_release_date: '2026-01-20'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.21111
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: false
+  exclusion_reason: multiple_builds_named_target_not_blamed
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1

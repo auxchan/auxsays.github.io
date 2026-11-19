@@ -111,6 +111,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-077 | Resolved | Evidence integrity | Medium | Learn Q&A fetchers followed a redirect to any host and would have parsed that page as the Learn thread |
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
+| AUX-110 | Resolved | Evidence integrity | Medium | Two Acrobat Reader reports of a real problem on the update were withdrawn as "the version works" |
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
 | AUX-078 | Resolved | Evidence integrity | Medium | A Microsoft Q&A question re-found under an edited title was counted twice on one patch |
 | AUX-089 | Resolved | Publication | Medium | Search titles and descriptions of every patch page hid the decision behind "official update breakdown" |
@@ -273,6 +274,72 @@ foreign-product veto (row 41) is rejected here by identity, but the veto gap its
 **Reopen only if** a counted Windows row has a title that names another update and neither the record's
 build nor KB (outside a stated affected range), or the exception ever keeps a range that starts above the
 target or is on another train.
+
+---
+
+### AUX-110 — Two Acrobat Reader reports of a real problem on the update were withdrawn as "the version works"
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-19 (a false-negative audit of the Acrobat role veto) · **Resolved** 2026-11-19
+
+**Symptom** Two stored Acrobat Reader reports describe a problem that began with the update they name, and both
+were stored `counted: false` with `exclusion_reason: version_named_but_working`. On 18.009.20044 the veto read
+the version followed by "I work" (the start of "I work in IT support") as the version working. On 19.021.20047
+it read "All users were working", which is about the earlier build the users upgraded from. Pages 18.009.20044
+and 19.021.20047 each showed one report fewer than they have.
+
+**Cause** The #104 role veto (`lib.target_outcome.target_is_contradicted`) matches working cues by proximity, and
+these two sentences put a working word next to the target version. Nothing could undo a stored withdrawal: the
+withdrawal tools only go true -> false, the label-only recompute never writes `counted`, and the evidence-loss
+guard does not police re-acceptance. The veto itself is not changed (no blanket contraction fix): other phrasings
+it refuses correctly would move with it.
+
+**Scope** Only rows that two fresh blind adjudicators both labelled CORRECT ("a concrete problem attributable to
+the exact named version") on a shuffled, label-free packet of stored text whose brief named no row and no
+hypothesis; both labelled all 11 controls as expected. 25.001.21111 (thread 1548715) was also labelled CORRECT
+twice but is HELD: the second build that triggered its veto (`multiple_builds_named_target_not_blamed`) lies past
+the stored excerpt, so the labels could not judge what the gate decided. The other role-vetoed Reader rows stay
+withdrawn, including 19.012.20040 on the same thread (the build the users upgraded from).
+
+**Fix** `readmit_adjudicated_rows.py`, the first audited re-admission, is `withdraw_live_citation_rows.py`
+(AUX-088) inverted and imported rather than copied: five-field selection, pinned before/after block hashes, a
+two-line edit (`counted: false -> true`, `exclusion_reason: <reason> -> null`), a field-by-field proof, dry run
+by default, `--write --confirm-write`, all or nothing, idempotent. It is closed on every axis: Acrobat Reader only;
+one from-reason (`version_named_but_working`); two CORRECT labels with reasons from two different named
+adjudicators on one packet entry; the held row refused; a re-admitted row must enter the authoritative counted
+population, and one whose report is already counted on the patch under another row refuses. The store write goes
+through `single_writer.guarded_write` with the fingerprint it read, and `--expected-store-sha256` refuses a store
+other than the one pinned. `--regenerate` runs only the lane's two scoped Reader writers. The manifest is
+`scripts/audit/acrobat_reader_readmission.json`; the run audit is `..._2026-11-19.json`.
+Re-admitted as stored, 1511973 would have published "install/update failure"; the post reports PDFs failing to
+open after the update. `recompute_evidence_classification.py --correction-manifest` corrects it to the shipped
+Acrobat classifier's own answer on the retained text ("unspecified Acrobat issue", "Acrobat workflow", medium):
+a pinned manifest (`scripts/audit/acrobat_reader_label_correction.json`) names the row, its stored labels and the
+new ones, which must equal the classifier's answer; only theme, area and severity move, through the tool's single
+write site. The re-admission manifest records that change as the block's successor, so a second run of either tool
+is a no-op.
+
+**Measured** Store: 7 lines (2+2 re-admission, 3 labels), every row kept, the sibling and the held row
+byte-identical, no evidence loss. Counted Reader rows 166 -> 168: 18.009.20044 4 -> 5, 19.021.20047 1 -> 2, no
+other patch moves. Only the two records change: counts, accepted sources, evidence samples, the count prose, one
+"User report count updated to N." event each. On 18.009.20044 the theme list becomes "crash or launch failure,
+unspecified acrobat issue, and signing/certificate failure"; 19.021.20047's sentence moves from "one report does not
+show a pattern" to "no problem in them is confirmed as reported independently by two or more users". Label
+(Negative), confidence (Low), maturity (pilot), the verdict (INSUFFICIENT DATA), the verdict projection and the
+live set are unchanged. `test_readmit_adjudicated_rows.py` pins it (72 checks; five mutants, each killed by its
+named check).
+
+**Residual** The shipped veto still refuses both rows on their stored text, so any later check that replays it
+over stored rows must read this manifest as its exemption list; the suite pins that on stored text the veto refuses
+exactly these two among every counted Acrobat row. #104 judged the full post, not the 280-character excerpt: its
+cue order (affected, then rollback, before working) shows the full text held no affected or rollback cue for the
+target, but says nothing about what else the post said past the cut. The evidence-loss guard cannot catch a wrong
+re-admission; precision rests on the manifest, at PR time. Before merge, re-run the tool and the scoped writers on
+current main with `--expected-store-sha256`.
+
+**Reopen only if** either row stops counting without its own audited withdrawal, a row is re-admitted without two
+CORRECT labels from two adjudicators, 25.001.21111 counts before its context is recovered through an authorised
+procedure, or a replay of the veto over stored rows flags a counted row this manifest does not name.
 
 ---
 

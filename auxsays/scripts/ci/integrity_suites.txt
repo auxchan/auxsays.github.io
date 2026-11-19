@@ -576,6 +576,15 @@ auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
 # byte-identical, all-or-nothing refusal on any drift, idempotent. Run as the bare script on frozen
 # verbatim fixtures; never reads or writes the live store beyond hashing it.
 auxsays/scripts/tests/test_withdraw_windows_identity_not_the_subject_rows.py = 44
+# AUX-110: the first audited RE-ADMISSION (counted false -> true): two Acrobat Reader rows the role veto withdrew as
+# "version named but working" that two fresh blind adjudicators both labelled CORRECT, through the AUX-088 mechanism
+# inverted (five-field selection, pinned block hashes, two lines per row, Reader only, one from-reason, two CORRECT
+# labels from two named adjudicators, the held row refused, a report already counted on the patch refused, all or
+# nothing, idempotent, two scoped Reader writers), plus recompute_evidence_classification.py's pinned correction of
+# one row's theme (the shipped classifier's own answer only, recorded as the re-admitted block's successor). Bare
+# scripts on a synthetic-text fixture; the live store is read only, and on its stored text the shipped veto refuses
+# exactly the manifest's rows among the counted Acrobat rows.
+auxsays/scripts/tests/test_readmit_adjudicated_rows.py = 72
 # AUX-079: the audited withdrawal of ten Windows rows both adjudicators judged off-topic (Track B) and four
 # later captures of a Q&A question already counted on the same patch (Track C, keep-first, derived). The
 # AUX-072 mechanism: five-field selection, pinned block hashes, three lines per row with each track's own
