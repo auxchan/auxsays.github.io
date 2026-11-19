@@ -118,6 +118,15 @@ FALLBACK_RELATIONSHIPS = frozenset({
 # historical -- removed or superseded; kept because the measurement still teaches something
 STATUSES = frozenset({"active", "blocked", "disabled", "staged", "historical"})
 
+# OPTIONAL `rights_status`: what is known about the right to collect from the source. That is a
+# different question from `status` (whether the source answers), and a method can be `active` with
+# its rights unresolved.
+# unresolved -- the source's own terms appear to restrict this access and nothing settles it yet
+#               (no permission from the source, no owner decision). Collection may continue
+#               provisionally; `rights_note` says on what basis and what stops it. Never a clearance.
+# An entry WITHOUT the field records nothing about rights. Absence is not a clearance either.
+RIGHTS_STATUSES = frozenset({"unresolved"})
+
 # Canonical health vocabulary. Imported from the routing module rather than restated, so the two
 # cannot drift: a status this registry claims a method can report must be one routing can evaluate.
 from lib.method_routing import HEALTH_STATUSES  # noqa: E402  (re-exported on purpose)
@@ -125,6 +134,20 @@ from lib.method_routing import HEALTH_STATUSES  # noqa: E402  (re-exported on pu
 REQUIRED_FIELDS = (
     "method_id", "method_family", "implementation", "purpose", "discovery_model",
     "transport", "status", "fallback_relationship", "evidence",
+)
+
+# The rights note shared by every method whose requests go to Adobe Community (community.adobe.com).
+# Stated once so the entries that carry it cannot drift apart. Ledger: AUX-113.
+_ADOBE_COMMUNITY_RIGHTS_NOTE = (
+    "Unresolved since 2026-11-19. Adobe's General Terms of Use (effective 2025-10-03) count discussion "
+    "forums as Services. On a plain reading, s6.18 (no data mining or similar data gathering and "
+    "extraction in connection with the Services) and s6.6 (access only through an interface Adobe "
+    "provides or permits) cover this access. robots.txt not disallowing these endpoints settles nothing "
+    "about the terms. The owner's decision on Adobe Community collection is pending. Until it is made, "
+    "this access continues unchanged as a temporary position, not a clearance: no new method, query, "
+    "host or scope; the no-evasion safeguards stay; a method Adobe refuses or objects to is suspended, "
+    "never worked around. An owner risk acceptance, if given, would not be permission from Adobe. The "
+    "same status covers the Acrobat Pro, Acrobat Reader and Premiere Pro lanes."
 )
 
 # --- the registry ------------------------------------------------------------------------------
@@ -368,6 +391,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_community_announcement_prose_parser",
         "source_family": "community.adobe.com official announcement threads (vendor-authored posts on a forum platform)",
         "status": "active",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE + " This entry is the official lane's one pinned announcement page, not community collection; it carries the status because the terms cover the forum host, whoever wrote the post.",
         "fallback_relationship": "fallback",
         "purpose": ["official_ingestion"],
         "discovery_model": ["direct_fetch"],
@@ -392,7 +417,7 @@ METHODS: list[dict[str, Any]] = [
     ],
         "execution": "No auth, no key, no JS, no pagination. Reachable from CI — this is the fetch-stable host the lane was redesigned around.",
         "evidence_rules": "official_ingestion authority ONLY. The module states it directly at adobe_release_notes.py:272: 'Official Adobe posts are not counted as user consensus evidence.' A vendor post on a community platform must not be read as a user report — the record sets official_note_status 'official_source_captured' and...",
-        "measured_notes": "This is the production path for adobe-premiere-pro today: secondary_official_url is a community.adobe.com announcement and the live run at 2026-09-29T08:02:18Z produced exactly 1 record (fetched 1, written 1, seen ledger 2, status healthy). PREMIERE_OFFICIAL_CONTEXT_URLS pins the two real announcement URLs it has been built against: 26.2 -> community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825 and 26.2.2 -> .../what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755 (adobe_release_notes.py:53-56). 2026-11-06: HelpX has refused CI with HTTP 403 since 2026-09-08 (run 34252632666), so this fallback is the only page that answers, and it is ONE release's announcement: the source now records `partial`, never healthy, and nothing newer than 26.2.2 can be discovered from it (GROWTH-2A closed SOURCE-BLOCKED).",
+        "measured_notes": "This is the production path for adobe-premiere-pro today: secondary_official_url is a community.adobe.com announcement and the live run at 2026-09-29T08:02:18Z produced exactly 1 record (fetched 1, written 1, seen ledger 2, status healthy). PREMIERE_OFFICIAL_CONTEXT_URLS pins the two real announcement URLs it has been built against: 26.2 -> community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825 and 26.2.2 -> .../what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755 (adobe_release_notes.py:53-56). 2026-11-06: HelpX has refused CI with HTTP 403 since 2026-09-08 (run 34252632666), so this fallback is the only page that answers, and it is ONE release's announcement: the source now records `partial`, never healthy, and nothing newer than 26.2.2 can be discovered from it (GROWTH-2A closed SOURCE-BLOCKED). 2026-11-19 (AUX-087 reopened): reachable is not complete. The 2026-09-29 'written 1' created nothing new: CI has created one Premiere record ever, 26.2 on 2026-04-30 (ae96e579), and 26.2.2 was added by hand (2774273e) and is only refreshed. The page answers on the runs examined, but this method has no discovery stage, so it can only re-read 26.2.2: vendor posts for 26.3 (June 2026) and 27.0 (posted 2026-11-10 per the board's topic data) sit on the same board and were never fetched. Re-pinning to the 27.0 post would yield no record (its title carries no date and the fail-closed rule drops it) and is held; the 26.2.2 pin stays until automated discovery can replace it without losing coverage.",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/adapters/adobe_release_notes.py:53-56, :87-102, :105-141, :232-240, :281-341, :353-366; D:/Auxsays/.am/auxsays/_data/patch_ingest_state.json (adobe-premiere-pro bucket, 2026-09-29T08:02:18Z).",
     },
     {
@@ -465,6 +490,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_community_premiere_bug_tab_listing_walk",
         "source_family": "adobe_community_premiere_pro_product_hub",
         "status": "blocked",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE,
         "fallback_relationship": "archive_recheck",
         "purpose": ["candidate_discovery", "fallback"],
         "discovery_model": ["query_search", "enumeration"],
@@ -849,13 +876,13 @@ METHODS: list[dict[str, Any]] = [
         "method_family": "html_release_history",
         "implementation": "helpx_release_notes_heading_parser",
         "source_family": "Adobe HelpX release-notes documents (one page, many versions)",
-        "status": "active",
+        "status": "blocked",
         "fallback_relationship": "primary",
         "purpose": ["official_ingestion"],
         "discovery_model": ["query_search"],
         "transport": ["html"],
-        "health_statuses": ["no_results", "success"],
-        "proven_on": ["adobe-premiere-pro"],
+        "health_statuses": ["blocked", "no_results", "success"],
+        "proven_on": ["adobe-premiere-pro (parser proven on test fixtures only; CI has never received a HelpX page)"],
         "strengths": [
         "Test-pinned on real HelpX heading shapes: two <h2> headings 'May 2026 (version 26.2.2)' and 'April 2026 (version 26.2)' produce two...",
         "The test explicitly pins that an official record carries NO report_count: '26.2.2 remains official-only before community evidence' asserts...",
@@ -870,10 +897,10 @@ METHODS: list[dict[str, Any]] = [
         "The body of a Premiere record can be REPLACED by a hand-authored constant: when product_id == 'adobe-premiere-pro' and (source_type ==...",
         "A dormant hardcoded consensus seed exists: _premiere_262_pilot_consensus returns a fixed consensus_label 'Moderate',...",
     ],
-        "execution": "No auth, no key, no pagination, no JS. Runs on whatever bytes the failover produced.",
+        "execution": "BLOCKED from CI egress: helpx.adobe.com has answered every collection run with HTTP 403 Access Denied since 2026-09-08 (run 34252632666); before that the request timed out. No auth, no key, no pagination, no JS. Runs on whatever bytes the failover produced, which since then are always the pinned community announcement's, never a HelpX page.",
         "evidence_rules": "official_ingestion. The record carries official_note_status 'release_notes_captured', official_note_label 'Official release notes', capture_status 'captured-from-official-adobe-source', and the hand-authored bodies state their own class: 'AUXSAYS note: this is an official release-note/fixed-issue summary. Community...",
-        "measured_notes": "The pilot-consensus seed is INERT in production: it is gated on ingestion.allow_legacy_premiere_pilot_consensus_seed (adobe_release_notes.py:342) and a repo-wide grep finds that key ONLY at that line — it appears in no YAML file. Live 2026-09-29 run produced 1 record for adobe-premiere-pro, and the seen ledger holds 2 identities total.",
-        "revisit_trigger": "A Premiere version other than 26.2 / 26.2.2 is captured from a release_notes-classified URL — _premiere_release_notes_body will fall through to the parsed body and the record's substance will change shape without any...",
+        "measured_notes": "The pilot-consensus seed is INERT in production: it is gated on ingestion.allow_legacy_premiere_pilot_consensus_seed (adobe_release_notes.py:342) and a repo-wide grep finds that key ONLY at that line — it appears in no YAML file. Live 2026-09-29 run produced 1 record for adobe-premiere-pro, and the seen ledger holds 2 identities total. 2026-11-19 (AUX-087 reopened): status corrected from active to blocked. CI has never received a HelpX page: runs took about 25 s (the HelpX timeout) until 2026-09-08 and get a fast 403 since, and the runs examined refresh the title-derived 26.2.2 id with upstream_candidates 0 (for example run 44502299432, 2026-11-19). That 2026-09-29 record was the pinned fallback's refresh, not this path. Two parser hazards stay open for the day this path first sees real bytes: the version-heading pattern's lazy span can cross element boundaries, and the release date is then read from the next 14,000 characters, which on a forum page are replies.",
+        "revisit_trigger": "HelpX, or another official Adobe route carrying Premiere release identity, answers HTTP 200 from CI: this path then sees real markup for the first time and must be re-verified against that capture before its records are trusted. Separately: a Premiere version other than 26.2 / 26.2.2 is captured from a release_notes-classified URL — _premiere_release_notes_body will fall through to the parsed body and the record's substance will change shape without any...",
         "evidence": "D:/Auxsays/.am/auxsays/scripts/adapters/adobe_release_notes.py:20-37, :73-89, :175-196, :199-228, :243-279, :281-344; D:/Auxsays/.am/auxsays/scripts/tests/test_adobe_release_notes_adapter.py:47-80; repo-wide grep for allow_legacy_premiere_pilot_consensus_seed...",
     },
     {
@@ -948,6 +975,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_community_t5_searchpage_html_scrape",
         "source_family": "adobe_community_legacy_t5_forums",
         "status": "blocked",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE,
         "fallback_relationship": "archive_recheck",
         "purpose": ["context_resolution", "candidate_discovery"],
         "discovery_model": ["query_search", "enumeration"],
@@ -1361,6 +1390,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_community_insided_algolia_search_plus_gettopics_hydration",
         "source_family": "adobe_community_insided_forums",
         "status": "active",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE,
         "fallback_relationship": "fallback",
         "purpose": ["community_discovery", "candidate_discovery", "fallback"],
         "discovery_model": ["query_search", "enumeration"],
@@ -1554,6 +1585,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "premiere_stored_evidence_url_refetch",
         "source_family": "auxsays_own_consensus_evidence_store",
         "status": "active",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE + " The URLs come from AUXSAYS's own evidence store, but each recheck fetches the report page from Adobe Community again.",
         "fallback_relationship": "archive_recheck",
         "purpose": ["candidate_discovery", "recheck"],
         "discovery_model": ["query_search", "direct_fetch"],
