@@ -458,9 +458,12 @@ auxsays/scripts/tests/test_learn_fetch_same_origin.py = 115
 # family for a shared version through the real writer, no cross-family attribution (a Studio-named report
 # in a Game Ready thread is vetoed), hotfix/beta/unknown names failing closed, 401/403/429/451/challenge/
 # HTML/refusing bodies as `blocked` with no records, no request after a refusal in the same run or any
-# later one until a reviewed clearing time, schema and host stops, the per-run request budget, and
-# provenance on the records and the health bucket -- all through the real runner, offline.
-auxsays/scripts/tests/test_nvidia_driver_lookup.py = 103
+# later one until a reviewed clearing time that has passed (cleared once), schema and host stops, the
+# per-run request budget, and provenance on the records and the health bucket -- all through the real
+# runner, offline. Also: redirects checked BEFORE they are followed (real lib.http over a fake wire: no
+# request reaches a host the lookup redirected to), and the patch-ingest.yml gate under which a FAILED
+# run that recorded a new refusal still commits its state (simulated step by step).
+auxsays/scripts/tests/test_nvidia_driver_lookup.py = 137
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68

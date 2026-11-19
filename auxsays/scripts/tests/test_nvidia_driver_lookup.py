@@ -5,7 +5,10 @@ Offline. Every NVIDIA response comes from fixtures recorded on 2026-11-19 (tests
 nvidia_driver_lookup/: both family lookups and two details records, with only the per-row list of GPU
 model names removed) or is derived from them. The transport is replaced at the adapter's own
 `fetch_text` seam, and HTTP failures are raised in lib.http's own message format, so the adapter's
-classification path is the production one. Write-path checks write only into temporary directories.
+classification path is the production one. The redirect checks (F') go one layer lower: the REAL
+lib.http.fetch_text and redirect handler over a fake urllib HTTPS transport that records every URL that
+reaches the wire. Section J walks patch-ingest.yml's steps as the runner would. Write-path checks write
+only into temporary directories.
 
 Run with: python auxsays/scripts/tests/test_nvidia_driver_lookup.py
 """
@@ -13,6 +16,7 @@ from __future__ import annotations
 
 import contextlib
 import copy
+import http.client
 import io
 import json
 import os
@@ -20,6 +24,10 @@ import re
 import sys
 import tempfile
 import traceback
+import urllib.error
+import urllib.parse
+import urllib.request
+import urllib.response
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -154,28 +162,139 @@ def run_fetch(net: Net, product_id: str, scan: dict | None = None, **ingestion):
         return [], probe, scan, exc
 
 
-def ingest(tmp: Path, sources: list[dict], net: Net) -> dict:
-    """Drive the REAL runner (patch_ingest.main) in write mode against temporary paths."""
+def ingest(tmp: Path, sources: list[dict], net, extra: tuple[str, ...] = ()) -> dict:
+    """Drive the REAL runner (patch_ingest.main) in write mode against temporary paths.
+
+    `outputs` is what the run appended to $GITHUB_OUTPUT (a fresh file per run)."""
     config = tmp / "sources.yml"
     config.write_text(yaml.safe_dump(sources, sort_keys=False), encoding="utf-8")
     nv.fetch_text = net
-    argv, summary = sys.argv, os.environ.get("GITHUB_STEP_SUMMARY")
+    saved = {k: os.environ.get(k) for k in ("GITHUB_STEP_SUMMARY", "GITHUB_OUTPUT")}
     os.environ["GITHUB_STEP_SUMMARY"] = str(tmp / "summary.md")
+    gh_output = tmp / "github_output.txt"
+    gh_output.write_text("", encoding="utf-8")
+    os.environ["GITHUB_OUTPUT"] = str(gh_output)
+    argv = sys.argv
     sys.argv = ["patch_ingest.py", "--config", str(config), "--state", str(tmp / "state.json"),
-                "--output", str(tmp / "generated"), "--no-refresh-linked-bodies"]
+                "--output", str(tmp / "generated"), "--no-refresh-linked-bodies", *extra]
     out = io.StringIO()
     try:
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
             rc = patch_ingest.main()
     finally:
         sys.argv = argv
-        if summary is None:
-            os.environ.pop("GITHUB_STEP_SUMMARY", None)
-        else:
-            os.environ["GITHUB_STEP_SUMMARY"] = summary
-    state = json.loads((tmp / "state.json").read_text(encoding="utf-8"))
-    return {"rc": rc, "state": state, "files": sorted((tmp / "generated").glob("*.md"))
-            if (tmp / "generated").exists() else []}
+        for key, value in saved.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+    state_path = tmp / "state.json"
+    state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
+    return {"rc": rc, "state": state, "outputs": gh_output.read_text(encoding="utf-8"),
+            "files": sorted((tmp / "generated").glob("*.md")) if (tmp / "generated").exists() else []}
+
+
+class FakeHTTPS(urllib.request.HTTPSHandler):
+    """A urllib HTTPS transport served from routes, BELOW lib.http's real opener and redirect handler.
+
+    Every URL that reaches the transport is recorded in `seen`, so "no request reached host X" is a
+    fact about the wire, not about what the adapter chose to report."""
+
+    def __init__(self, routes: dict):
+        super().__init__()
+        self.routes = routes          # host -> callable(url) -> (status, headers, body bytes)
+        self.seen: list[str] = []
+
+    def https_open(self, req):
+        url = req.full_url
+        self.seen.append(url)
+        host = urllib.parse.urlsplit(url).hostname or ""
+        route = self.routes.get(host)
+        status, headers, payload = route(url) if route else (599, {}, b"unrouted")
+        msg = http.client.HTTPMessage()
+        for key, value in headers.items():
+            msg[key] = value
+        resp = urllib.response.addinfourl(io.BytesIO(payload), msg, url, status)
+        resp.msg = http.client.responses.get(status, "")
+        return resp
+
+    def hosts(self) -> list[str]:
+        return [urllib.parse.urlsplit(u).hostname or "" for u in self.seen]
+
+
+@contextlib.contextmanager
+def wire(routes: dict):
+    """Swap lib.http's opener for one with the REAL redirect handler over a FakeHTTPS transport, and
+    give the adapter the REAL lib.http.fetch_text."""
+    fake = FakeHTTPS(routes)
+    real_opener, real_fetch = http_lib._OPENER, nv.fetch_text
+    http_lib._OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}),
+                                                   http_lib._AuthStrippingRedirectHandler(), fake)
+    nv.fetch_text = http_lib.fetch_text
+    try:
+        yield fake
+    finally:
+        http_lib._OPENER = real_opener
+        nv.fetch_text = real_fetch
+
+
+def lookup_route(product_id: str):
+    return lambda url: (200, {"Content-Type": "text/html; charset=UTF-8"},
+                        json.dumps(LOOKUP[product_id]).encode("utf-8"))
+
+
+def redirect_to(location: str | None, status: int = 302):
+    return lambda url: (status, ({"Location": location} if location is not None else {}), b"")
+
+
+class _Ctx(dict):
+    def __missing__(self, key):          # an unset step output or input reads as '' in Actions
+        return ""
+
+
+def gha_if(expr: str, ctx: dict, status: dict) -> bool:
+    """Evaluate a workflow `if:` (the subset these workflows use) the way Actions does.
+
+    An expression with no status function gets Actions' implicit `success() &&`."""
+    text = re.sub(r"^\s*\$\{\{|\}\}\s*$", "", str(expr or "").strip()).strip() or "success()"
+    if not re.search(r"\b(success|failure|cancelled|always)\(\)", text):
+        text = f"success() && ({text})"
+    py = text.replace("&&", " and ").replace("||", " or ")
+    py = re.sub(r"!(?!=)", " not ", py)
+    py = re.sub(r"\b(success|failure|cancelled|always)\(\)", r"FN_\1", py)
+    py = re.sub(r"\b(?:github|steps)(?:\.[A-Za-z_][\w-]*)+", lambda m: f"CTX[{m.group(0)!r}]", py)
+    py = re.sub(r"\bnull\b", "None", py)
+    env = {"CTX": _Ctx(ctx), "FN_success": status["success"], "FN_failure": status["failure"],
+           "FN_cancelled": status["cancelled"], "FN_always": True}
+    return bool(eval(py, {"__builtins__": {}}, env))  # noqa: S307 - workflow text from this repo
+
+
+def simulate_job(steps: list[dict], inputs: dict, fails: set, outputs: dict, cancel_after: str = "") -> dict:
+    """Walk a job's steps as the runner does: evaluate each `if`, record outcomes and outputs.
+
+    `fails` names the steps (by id, else name) that fail when they run; `outputs` gives a step's
+    outputs, set even when it fails (the runner reads $GITHUB_OUTPUT after a failed step too)."""
+    ctx: dict = {f"github.event.inputs.{k}": v for k, v in inputs.items()}
+    failed = cancelled = False
+    ran: dict[str, str] = {}
+    for step in steps:
+        key = step.get("id") or step.get("name")
+        status = {"success": not failed and not cancelled, "failure": failed and not cancelled,
+                  "cancelled": cancelled}
+        if not gha_if(step.get("if", ""), ctx, status):
+            ran[key] = "skipped"
+            ctx[f"steps.{key}.outcome"] = "skipped"
+            continue
+        outcome = "failure" if key in fails else "success"
+        ran[key] = outcome
+        ctx[f"steps.{key}.outcome"] = outcome
+        for name, value in (outputs.get(key) or {}).items():
+            ctx[f"steps.{key}.outputs.{name}"] = value
+        failed = failed or outcome == "failure"
+        if key == cancel_after:
+            cancelled = True
+    ran["__job__"] = "failure" if failed else "success"
+    return ran
 
 
 def front(path: Path) -> dict:
@@ -289,19 +408,21 @@ def _run() -> None:
         "studio_named": dict(extra, ID="900004", Version="621.32", Name="NVIDIA%20Studio%20Driver"),
         "unknown": dict(extra, ID="900005", Version="621.33", Name="NVIDIA%20App"),
         "crd_flag": dict(extra, ID="900006", Version="621.34", IsCRD="1"),
+        "not_dch": dict(extra, ID="900007", Version="621.35", IsDC="0"),
     }
     for info in cases.values():
         mixed.lookups[GRD]["IDS"].insert(0, {"downloadInfo": info})
     mixed.lookups[GRD]["Success"] = str(len(mixed.lookups[GRD]["IDS"]))
     recs, probe, _, exc = run_fetch(mixed, GRD, scan={"details_verified": [i["ID"] for i in rows(LOOKUP[GRD])]})
     published = {r["version"] for r in recs}
-    check("C1 none of hotfix / beta / non-WHQL / Studio-named / unknown / flag-mismatch rows is published",
-          exc is None and not (published & {"621.12", "621.30", "621.31", "621.32", "621.33", "621.34"}),
+    check("C1 none of hotfix / beta / non-WHQL / Studio-named / unknown / flag-mismatch / non-DCH rows is published",
+          exc is None and not (published & {"621.12", "621.30", "621.31", "621.32", "621.33", "621.34", "621.35"}),
           f"{exc!r} {sorted(published)}")
     skipped = (probe.get("nvidia") or {}).get("skipped") or {}
     check("C2 each skip is counted by its reason, never silently dropped",
           skipped.get("name_not_this_family") == 3 and skipped.get("beta") == 1
-          and skipped.get("not_whql") == 1 and skipped.get("studio_flag_disagrees_with_name") == 1,
+          and skipped.get("not_whql") == 1 and skipped.get("studio_flag_disagrees_with_name") == 1
+          and skipped.get("not_dch_package") == 1,
           str(skipped))
     check("C3 the genuine Game Ready rows still publish beside them", "621.14" in published and "621.24" in published)
     check("C4 the identity rule directly: a Studio name in the Game Ready query matches nothing",
@@ -411,12 +532,21 @@ def _run() -> None:
               b_grd.get("status") == "failing" and b_grd.get("last_error_type") == "blocked"
               and monitoring.derive_state(sources[0], b_grd, now=datetime.now(timezone.utc)) == "blocked",
               f"{b_grd.get('status')} {b_grd.get('last_error_type')}")
-        # Read defensively so a regression fails the checks below by name instead of crashing the suite.
-        stored_at = str(((b_grd.get("scan") or {}).get("access_refused") or {}).get("at") or "")
-        refused_at = (datetime.fromisoformat(stored_at.replace("Z", "+00:00")) if stored_at
-                      else datetime.now(timezone.utc))
+        # A clearing time must be after the refusal AND already passed. Refusal times are stored at
+        # second precision, so "refusal + 1 s" can still lie in the future when these runs take
+        # milliseconds. Backdate the stored refusal in this TEMPORARY state (never the repo's) so the
+        # clearing times below are unambiguously past. Read defensively so a regression fails the
+        # checks below by name instead of crashing the suite.
+        state_path = tmp / "state.json"
+        temp_state = json.loads(state_path.read_text(encoding="utf-8"))
+        refused_at = datetime.now(timezone.utc).replace(microsecond=0) - timedelta(days=2)
+        for pid in (GRD, NSD):
+            stored = ((temp_state.get("sources", {}).get(pid) or {}).get("scan") or {}).get("access_refused")
+            if isinstance(stored, dict):
+                stored["at"] = refused_at.strftime("%Y-%m-%dT%H:%M:%SZ")
+        state_path.write_text(json.dumps(temp_state), encoding="utf-8")
         early = (refused_at - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
-        late = (refused_at + timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        late = (refused_at + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
         nv.reset_process_state()
         net3 = Net()
         third = ingest(tmp, [source(GRD, access_refusal_cleared_at=early),
@@ -431,6 +561,86 @@ def _run() -> None:
         check("E13 a reviewed clearing time AFTER the refusal resumes collection for both families",
               net4.lookups_made() == 2 and len(names) == 4
               and "access_refused" not in (fourth["state"]["sources"][GRD].get("scan") or {}), str(names))
+        # Clear ONCE: the same clearing time stays in config; a NEW refusal after it suspends again.
+        nv.reset_process_state()
+        net5 = Net()
+        net5.override["lookup"] = http_error(403)
+        fifth = ingest(tmp, [source(GRD, access_refusal_cleared_at=late),
+                             source(NSD, access_refusal_cleared_at=late)], net5)
+        nv.reset_process_state()
+        net6 = Net()
+        sixth = ingest(tmp, [source(GRD, access_refusal_cleared_at=late),
+                             source(NSD, access_refusal_cleared_at=late)], net6)
+        check("E14 a clearing time clears once: a later refusal is asked once, then suspended again",
+              len(net5.calls) == 1 and net6.calls == [] and len(sixth["files"]) == len(fourth["files"])
+              and (sixth["state"]["sources"][GRD].get("scan") or {}).get("access_refused"),
+              f"{len(net5.calls)} then {net6.calls}")
+
+    print("\n=== E'. a failed run that recorded a NEW refusal says so, so the workflow still commits it ===")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        nv.reset_process_state()
+        net = Net()
+        net.override["lookup"] = http_error(403)
+        first = ingest(tmp, [source(GRD), source(NSD)], net)
+        check("E15 a FAILED write run that recorded a new refusal emits access_refusal_recorded=true",
+              first["rc"] == 1 and "access_refusal_recorded=true" in first["outputs"].splitlines(),
+              repr(first["outputs"]))
+        nv.reset_process_state()
+        second = ingest(tmp, [source(GRD), source(NSD)], Net())
+        check("E16 the next run (already suspended, also FAILED) emits nothing: the refusal is not new",
+              second["rc"] == 1 and "access_refusal_recorded" not in second["outputs"], repr(second["outputs"]))
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        nv.reset_process_state()
+        net = Net()
+        net.override["lookup"] = http_error(500)
+        failed = ingest(tmp, [source(GRD), source(NSD)], net)
+        check("E17 a FAILED run with no refusal emits nothing (its commit is still skipped, as before)",
+              failed["rc"] == 1 and "access_refusal_recorded" not in failed["outputs"], repr(failed["outputs"]))
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        nv.reset_process_state()
+        net = Net()
+        net.override["lookup"] = http_error(403)
+        dry = ingest(tmp, [source(GRD), source(NSD)], net, extra=("--dry-run",))
+        check("E18 a dry run emits nothing and writes no state",
+              "access_refusal_recorded" not in dry["outputs"] and not (tmp / "state.json").exists(),
+              repr(dry["outputs"]))
+    check("E19 the runner's refusal snapshot reads only a dated scan.access_refused",
+          patch_ingest.access_refusals({"sources": {
+              "a": {"scan": {"access_refused": {"at": "2026-11-19T00:00:00Z", "detail": "HTTP 403"}}},
+              "b": {"scan": {"access_refused": {"detail": "no time"}}}, "c": {"scan": {}}, "d": "junk"}})
+          == {"a": "2026-11-19T00:00:00Z"})
+
+    print("\n=== E''. a FUTURE clearing time never re-arms requests ===")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        net = Net()
+        net.override["lookup"] = http_error(403)
+        future = "2099-01-01T00:00:00Z"
+        for _ in range(4):
+            nv.reset_process_state()                       # four separate processes (runs)
+            ingest(tmp, [source(GRD, access_refusal_cleared_at=future),
+                         source(NSD, access_refusal_cleared_at=future)], net)
+        check("E20 against a standing 403 with a 2099 clearing time, four runs make ONE request in total",
+              len(net.calls) == 1, f"{len(net.calls)} requests: {net.calls}")
+    scan = {"access_refused": {"at": "2026-11-19T00:00:00Z", "detail": "HTTP 403"}}
+    now = datetime(2026, 11, 20, tzinfo=timezone.utc)
+    nv.reset_process_state()
+    try:
+        nv._check_suspension(dict(scan), {"access_refusal_cleared_at": "2026-11-21T00:00:00Z"}, now=now)
+        future_held = False
+    except nv.AccessRefused:
+        future_held = True
+    cleared = dict(scan)
+    try:
+        nv._check_suspension(cleared, {"access_refusal_cleared_at": "2026-11-19T12:00:00Z"}, now=now)
+        past_cleared = "access_refused" not in cleared
+    except nv.AccessRefused:
+        past_cleared = False
+    check("E21 a clearing time after the refusal clears only once it has passed",
+          future_held and past_cleared, f"future_held={future_held} past_cleared={past_cleared}")
 
     print("\n=== F. schema and source-authority stops ===")
     schema_cases = {
@@ -493,6 +703,93 @@ def _run() -> None:
           exc is None and "621.24" not in {r["version"] for r in recs}
           and (probe.get("nvidia") or {}).get("skipped", {}).get("details_disagree") == 1
           and "285320" not in scan.get("details_verified", []), str(probe))
+
+    print("\n=== F'. redirects are checked BEFORE they are followed (real lib.http, fake wire) ===")
+    verified_all = {"details_verified": [i["ID"] for i in rows(LOOKUP[GRD])]}
+    nv.reset_process_state()
+    with wire({"gfwsl.geforce.com": redirect_to("https://mirror.example.net/drivers.json"),
+               "mirror.example.net": lookup_route(GRD)}) as fake:
+        recs, _, scan, exc = run_fetch(nv.fetch_text, GRD, scan=copy.deepcopy(verified_all))
+    check("F10 a 302 to an unlisted host: authority stop, ZERO requests to that host, nothing published",
+          isinstance(exc, nv.SourceAuthorityStop) and not recs and fake.hosts() == ["gfwsl.geforce.com"]
+          and "access_refused" not in scan, f"{exc!r} wire={fake.seen}")
+    hop = {"n": 0}
+
+    def two_hops(url):
+        hop["n"] += 1
+        return (302, {"Location": "/services_toolkit/next"}, b"") if hop["n"] == 1 \
+            else (302, {"Location": "https://mirror.example.net/x"}, b"")
+    nv.reset_process_state()
+    with wire({"gfwsl.geforce.com": two_hops, "mirror.example.net": lookup_route(GRD)}) as fake:
+        recs, _, _, exc = run_fetch(nv.fetch_text, GRD, scan=copy.deepcopy(verified_all))
+    check("F11 the bound holds on EVERY hop: same host followed, then the off-host hop refused unsent",
+          isinstance(exc, nv.SourceAuthorityStop) and not recs
+          and fake.hosts() == ["gfwsl.geforce.com", "gfwsl.geforce.com"], f"{exc!r} wire={fake.seen}")
+    same = {"n": 0}
+
+    def same_host(url):
+        same["n"] += 1
+        if same["n"] == 1:
+            return 302, {"Location": url.replace("numberOfResults=12", "numberOfResults=12&sort1=0")}, b""
+        return 200, {"Content-Type": "text/html; charset=UTF-8"}, json.dumps(LOOKUP[GRD]).encode("utf-8")
+    nv.reset_process_state()
+    with wire({"gfwsl.geforce.com": same_host}) as fake:
+        recs, _, _, exc = run_fetch(nv.fetch_text, GRD, scan=copy.deepcopy(verified_all))
+    check("F12 a redirect that stays on the same NVIDIA host is followed and publishes normally",
+          exc is None and len(recs) == 12 and fake.hosts() == ["gfwsl.geforce.com"] * 2,
+          f"{exc!r} {len(recs)} wire={fake.seen}")
+    for label, route in (("a file: Location", redirect_to("file:///etc/passwd")),
+                         ("no Location at all", redirect_to(None)),
+                         ("plain http on the same host", redirect_to("http://gfwsl.geforce.com/x")),
+                         ("the same host on another port", redirect_to("https://gfwsl.geforce.com:8443/x")),
+                         ("a userinfo authority", redirect_to("https://user@gfwsl.geforce.com/x")),
+                         ("the other NVIDIA fetch host", redirect_to("https://www.nvidia.com/x", 301))):
+        nv.reset_process_state()
+        with wire({"gfwsl.geforce.com": route, "www.nvidia.com": lookup_route(GRD)}) as fake:
+            recs, _, scan, exc = run_fetch(nv.fetch_text, GRD, scan=copy.deepcopy(verified_all))
+        check(f"F13 {label}: authority stop, nothing followed, nothing published",
+              isinstance(exc, nv.SourceAuthorityStop) and not recs and fake.hosts() == ["gfwsl.geforce.com"]
+              and "access_refused" not in scan, f"{exc!r} wire={fake.seen}")
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        nv.reset_process_state()
+        with wire({"gfwsl.geforce.com": redirect_to("https://mirror.example.net/drivers.json"),
+                   "www.nvidia.com": lookup_route(GRD), "mirror.example.net": lookup_route(GRD)}) as fake:
+            run = ingest(tmp, [source(GRD), source(NSD)], nv.fetch_text)
+        bucket = run["state"]["sources"][GRD]
+        check("F14 write run (real runner): no record, no request to the mirror, an error with no suspension",
+              run["files"] == [] and "mirror.example.net" not in fake.hosts() and len(fake.seen) == 2
+              and bucket.get("last_error_type") and not (bucket.get("scan") or {}).get("access_refused"),
+              f"{run['files']} wire={fake.seen} {bucket.get('last_error_type')}")
+    with wire({"gfwsl.geforce.com": redirect_to("https://mirror.example.net/x"),
+               "mirror.example.net": lambda url: (200, {}, b"{}")}) as fake:
+        result = http_lib.fetch_text("https://gfwsl.geforce.com/start")
+    check("F15 the bound is opt-in: an unbounded fetch_text follows redirects exactly as before",
+          result.final_url == "https://mirror.example.net/x" and fake.hosts() == ["gfwsl.geforce.com",
+                                                                                   "mirror.example.net"],
+          f"{result.final_url} wire={fake.seen}")
+    check("F16 redirect_allowed: https, listed host, default port, no userinfo -- nothing else",
+          http_lib.redirect_allowed("https://gfwsl.geforce.com/a", frozenset({"gfwsl.geforce.com"}))
+          and http_lib.redirect_allowed("https://gfwsl.geforce.com:443/a", frozenset({"gfwsl.geforce.com"}))
+          and not any(http_lib.redirect_allowed(u, frozenset({"gfwsl.geforce.com"})) for u in (
+              "http://gfwsl.geforce.com/a", "https://gfwsl.geforce.com:444/a", "https://u:p@gfwsl.geforce.com/a",
+              "https://gfwsl.geforce.com.example.net/a", "https://gfwsl.geforce.com:bad/a", "")))
+    reached: list = []
+    real_opener, real_curl = http_lib._OPENER, http_lib._curl_fetch_text
+
+    class _Dead:
+        def open(self, req, timeout=None):
+            raise urllib.error.URLError("simulated")
+    http_lib._OPENER = _Dead()
+    http_lib._curl_fetch_text = lambda url, *a, **k: reached.append(url)
+    try:
+        for bound in (None, frozenset({"helpx.adobe.com"})):
+            with contextlib.suppress(Exception):
+                http_lib.fetch_text("https://helpx.adobe.com/x.html", curl_fallback=True, redirect_hosts=bound)
+    finally:
+        http_lib._OPENER, http_lib._curl_fetch_text = real_opener, real_curl
+    check("F17 a bounded fetch never takes the curl fallback (curl follows redirects on its own)",
+          reached == ["https://helpx.adobe.com/x.html"], str(reached))
 
     print("\n=== G. request budget: one lookup, details for NEW drivers only ===")
     nv.reset_process_state()
@@ -593,6 +890,55 @@ def _run() -> None:
     state_lib.record_provenance(st, "other", None)
     check("I9 a source that declares no provenance gets no provenance key (byte-identical buckets)",
           "provenance" not in st["sources"]["other"])
+
+    print("\n=== J. the workflow: a FAILED run that recorded a refusal still commits; nothing else changes ===")
+    wf = yaml.safe_load((_REPO / ".github/workflows/patch-ingest.yml").read_text(encoding="utf-8"))
+    steps = wf["jobs"]["ingest"]["steps"]
+    ids = {st.get("id") for st in steps}
+    check("J1 both ingestion steps, both pre-commit gates and the commit carry the ids the gate reads",
+          {"ingest_enabled", "ingest_selected", "precommit_logos", "precommit_qa", "commit"} <= ids, str(ids))
+    routine = {"source": None, "dry_run": None}
+    refused = {"access_refusal_recorded": "true"}
+    gates = ("precommit_logos", "precommit_qa", "commit")
+    converge = ("Converge records whose patch identity this run advanced",
+                "Promote Windows consensus to its current patch identity", "Converge DaVinci archive status")
+    scenarios = [
+        # label, inputs, failing steps, step outputs, cancel after, expected {step: outcome}
+        ("J2 a routine healthy run commits (unchanged)", routine, set(), {}, "",
+         {"commit": "success", "precommit_qa": "success", converge[0]: "success", "__job__": "success"}),
+        ("J3 a FAILED run that recorded a new refusal: gates run, the state is committed, the job stays failed",
+         routine, {"ingest_enabled"}, {"ingest_enabled": refused}, "",
+         {"precommit_logos": "success", "precommit_qa": "success", "commit": "success",
+          converge[0]: "skipped", converge[1]: "skipped", converge[2]: "skipped", "__job__": "failure"}),
+        ("J4 a FAILED run with no refusal still skips every gate and the commit (unchanged)",
+         routine, {"ingest_enabled"}, {}, "",
+         {"precommit_logos": "skipped", "precommit_qa": "skipped", "commit": "skipped", "__job__": "failure"}),
+        ("J5 refusal path, QA fails: no commit", routine, {"ingest_enabled", "precommit_qa"},
+         {"ingest_enabled": refused}, "", {"commit": "skipped", "__job__": "failure"}),
+        ("J6 refusal path, the logo gate fails: no commit", routine, {"ingest_enabled", "precommit_logos"},
+         {"ingest_enabled": refused}, "", {"precommit_qa": "success", "commit": "skipped", "__job__": "failure"}),
+        ("J7 a healthy ingest whose QA fails still does not commit (unchanged)", routine, {"precommit_qa"}, {}, "",
+         {"commit": "skipped", "__job__": "failure"}),
+        ("J8 a converge failure still skips the gates and the commit (unchanged)", routine, {converge[0]}, {}, "",
+         {"precommit_logos": "skipped", "precommit_qa": "skipped", "commit": "skipped"}),
+        ("J9 a dry run never commits, refusal or not", {"source": None, "dry_run": "true"}, {"ingest_enabled"},
+         {"ingest_enabled": refused}, "", {"precommit_qa": "skipped", "commit": "skipped"}),
+        ("J10 a cancelled run never commits on the refusal path", routine, {"ingest_enabled"},
+         {"ingest_enabled": refused}, "ingest_enabled", {"commit": "skipped"}),
+        ("J11 a selected-source dispatch that failed with a new refusal commits too",
+         {"source": GRD, "dry_run": "false"}, {"ingest_selected"}, {"ingest_selected": refused}, "",
+         {"ingest_enabled": "skipped", "commit": "success", "__job__": "failure"}),
+        ("J12 an output of 'false' is not the refusal path", routine, {"ingest_enabled"},
+         {"ingest_enabled": {"access_refusal_recorded": "false"}}, "", {"commit": "skipped"}),
+    ]
+    for label, inputs, fails, outputs, cancel_after, expected in scenarios:
+        ran = simulate_job(steps, inputs, fails, outputs, cancel_after)
+        wrong = {k: (ran.get(k), v) for k, v in expected.items() if ran.get(k) != v}
+        check(label, not wrong, f"got/expected {wrong}")
+    run_text = "\n".join(str(st.get("run") or "") for st in steps if st.get("id") in ("ingest_enabled", "ingest_selected"))
+    check("J13 the ingestion steps still run the runner directly, so its exit code is the step's outcome",
+          "|| rc" not in run_text and "continue-on-error" not in json.dumps(steps)
+          and run_text.count("python auxsays/scripts/patch_ingest.py") == 4, run_text)
 
 
 if __name__ == "__main__":

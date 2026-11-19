@@ -1175,9 +1175,9 @@ METHODS: list[dict[str, Any]] = [
     ],
         "failure_modes": [
         "the lookup answers with Content-Type text/html although the body is JSON, so HTML is detected by content, not by header",
-        "HTTP 401/403/429/451, a bot challenge, an HTML body or a refusing body suspend the method in this run and every later one until a reviewed config change clears it",
+        "HTTP 401/403/429/451, a bot challenge, an HTML body or a refusing body suspend the method in this run and every later one until a reviewed config change clears it (a clearing time counts once it has passed, and once); a run that failed outright still commits the suspension",
         "a changed envelope, request echo or identity field is a schema stop (no records); a listing with rows but none of the family reads broken immediately",
-        "a configured URL other than the pinned query, a redirect to another host, or a driver page off www.nvidia.com is a source-authority stop",
+        "a configured URL other than the pinned query, a redirect to another host, or a driver page off www.nvidia.com is a source-authority stop; redirects are bounded to the host asked and checked before they are followed (lib.http redirect_hosts), so nothing is sent to the other host",
     ],
         "execution": "Unauthenticated, honest client name, no retries, no downloads. Per family per run: one lookup plus at most two details reads, each for a driver not verified before (adapters/nvidia_driver_lookup.py DETAILS_PER_RUN).",
         "evidence_rules": "official_ingestion only: records are official_only with zero reports and carry driver_family, driver_branch, nvidia_download_id and provenance (source_origin, collection_method, collection_authorization). Any future user-report path must use lib/nvidia_driver_identity.report_family, under which an explicit other-family mention vetoes a thread's family.",

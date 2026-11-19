@@ -3608,6 +3608,23 @@ envelope, request echo or identity field is a schema stop; a configured URL off 
 redirect to another host, or a driver page off nvidia.com is a source-authority stop. A stop never
 removes a published record.
 
+Hardened before merge (review 1 and the G47 ruling):
+
+- **Redirects are checked before they are followed.** `lib.http.fetch_text(redirect_hosts=...)` is an
+  opt-in bound: every hop must be https on a listed host (default port, no userinfo), checked in the
+  redirect handler BEFORE urllib builds the next request, and copied onto each redirected request so
+  the second hop is bound too. Anything else raises `RedirectRefused` with nothing sent to the
+  destination. The NVIDIA adapter bounds each request to the host it asked; the earlier final-URL
+  check stays as a second line. Callers that pass no bound are unchanged.
+- **A clearing time clears once.** It counts only when it is after the refusal AND already passed. A
+  future time used to sit after every new refusal and re-arm one request per run.
+- **A refusal survives a run that failed outright.** A FAILED ingest step skipped the writeback, so
+  the suspension never reached main and the next run asked again. `patch_ingest.py` now emits the
+  step output `access_refusal_recorded=true` when a FAILED run recorded a NEW refusal; on that path
+  only, `patch-ingest.yml` still runs the logo and QA gates and commits the state when both pass.
+  The job stays failed, the converge steps stay skipped, and every other failure still skips the
+  commit. A commit that itself fails still loses the suspension; the next run then asks once more.
+
 `lib/nvidia_driver_identity.report_family` is the attribution rule any future NVIDIA user-report
 path must use: a report naming only a version belongs to a family only inside that family's own
 feedback thread, and an explicit mention of the other family vetoes it.
@@ -3618,8 +3635,9 @@ Pinned by `test_nvidia_driver_lookup.py` (blocking, offline, through the real wr
 
 **Reopen only if** an NVIDIA record carries another family's download id or driver page, a record is
 published from a listing row NVIDIA did not name as that family, the adapter makes a request after a
-recorded refusal without a later clearing time, or the first scheduled run after merge does not
-produce records for both families (then record what the runner was told, and stop).
+recorded refusal without a later, already-passed clearing time, a request reaches a host the adapter
+was redirected to, or the first scheduled run after merge does not produce records for both families
+(then record what the runner was told, and stop).
 
 ### AUX-046 — four Elgato products had no records because the HTML pages challenge the runner
 

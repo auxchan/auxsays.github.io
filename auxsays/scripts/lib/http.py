@@ -96,6 +96,50 @@ def _strip_authorization(request: urllib.request.Request) -> None:
         del request.unredirected_hdrs[key]
 
 
+class RedirectRefused(RuntimeError):
+    """A redirect to a destination the caller did not allow. Raised BEFORE that destination is asked.
+
+    Only a caller that passes ``redirect_hosts`` to fetch_text can receive it. ``destination`` is the
+    absolute URL the redirect named (empty when the response named none)."""
+
+    def __init__(self, code: int, origin: str, destination: str) -> None:
+        self.code = int(code)
+        self.origin = str(origin or "")
+        self.destination = str(destination or "")
+        host = (urllib.parse.urlsplit(self.destination).hostname or "") if self.destination else ""
+        super().__init__(f"Redirect refused (HTTP {self.code}) to host {host!r}; it was not followed")
+
+
+# The attribute a bounded request carries. Copied onto every redirected request, so the bound holds
+# on the second and later hops too, not only on the first.
+_REDIRECT_HOSTS_ATTR = "_auxsays_redirect_hosts"
+
+
+def redirect_allowed(url: str, hosts: frozenset[str]) -> bool:
+    """True only for an https URL on one of ``hosts``, on the default port, with no userinfo.
+
+    The same strictness as _github_auth_allowed: a nondefault port or a userinfo authority on an
+    allowed host is a different destination, and anything that does not parse is refused."""
+    try:
+        parsed = urllib.parse.urlsplit(str(url or ""))
+        scheme = (parsed.scheme or "").lower()
+        hostname = parsed.hostname
+        username, password, port = parsed.username, parsed.password, parsed.port
+    except ValueError:
+        return False
+    return (scheme == "https" and hostname in hosts and username is None and password is None
+            and port in (None, 443))
+
+
+def _close_quietly(fp) -> None:
+    if fp is None:
+        return
+    try:
+        fp.close()
+    except Exception:  # noqa: BLE001 - best effort; the refusal is what matters
+        pass
+
+
 class _AuthStrippingRedirectHandler(urllib.request.HTTPRedirectHandler):
     """Never forward the GitHub token off an approved host.
 
@@ -108,10 +152,21 @@ class _AuthStrippingRedirectHandler(urllib.request.HTTPRedirectHandler):
     It calls the SAME _github_auth_allowed gate as the initial request -- there is deliberately
     no second, looser redirect rule -- so a redirect to a nondefault port or a userinfo
     authority on the approved host also loses Authorization.
+
+    A request that carries a redirect bound (fetch_text's ``redirect_hosts``) has every redirect
+    destination checked HERE, before urllib builds or sends the redirected request: urllib resolves
+    the Location against the request first, so ``newurl`` is absolute, and a refused destination
+    raises RedirectRefused with no request made to it. Requests without a bound are unchanged.
     """
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: D102
+        bound = getattr(req, _REDIRECT_HOSTS_ATTR, None)
+        if bound is not None and not redirect_allowed(newurl, bound):
+            _close_quietly(fp)
+            raise RedirectRefused(code, getattr(req, "full_url", ""), newurl)
         new_request = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new_request is not None and bound is not None:
+            setattr(new_request, _REDIRECT_HOSTS_ATTR, bound)
         if new_request is not None and not _github_auth_allowed(newurl):
             _strip_authorization(new_request)
         return new_request
@@ -293,8 +348,16 @@ def fetch_text(
     curl_fallback: bool | None = None,
     authenticate: bool = False,
     raise_on_challenge: bool = True,
+    redirect_hosts: frozenset[str] | set[str] | tuple[str, ...] | None = None,
 ) -> FetchResult:
     """Fetch text with small, explicit reliability controls.
+
+    `redirect_hosts`, when given, bounds every redirect: a hop is followed only to an https URL
+    on one of those hosts (default port, no userinfo), checked BEFORE the redirected request is
+    made. Any other redirect -- including one urllib itself declines, such as a `file:` Location
+    or a 3xx with no Location -- raises RedirectRefused and nothing is sent to its destination.
+    A bounded fetch never uses the curl fallback, which follows redirects on its own. Without it,
+    redirects are followed as before.
 
     `max_bytes` is useful for very large documentation pages where the parser
     only needs the first portion of the HTML. It reduces slow reads without
@@ -315,9 +378,13 @@ def fetch_text(
     last_exc: Exception | None = None
     attempts = max(1, int(retries) + 1)
     send_auth = bool(authenticate) and _github_auth_allowed(url)
+    bound = (frozenset(str(h).strip().lower() for h in redirect_hosts)
+             if redirect_hosts is not None else None)
 
     for attempt in range(attempts):
         req = urllib.request.Request(url, headers=_headers(headers))
+        if bound is not None:
+            setattr(req, _REDIRECT_HOSTS_ATTR, bound)
         if send_auth:
             token = os.getenv("GITHUB_TOKEN")
             if token:
@@ -346,6 +413,12 @@ def fetch_text(
                     final_url=resp.geturl(),
                 )
         except urllib.error.HTTPError as exc:
+            if bound is not None and 300 <= int(exc.code or 0) < 400:
+                # A redirect urllib declined before our handler saw it (a non-http Location, or no
+                # Location at all). Nothing was sent anywhere else; name it as the refusal it is.
+                location = str(exc.headers.get("location") or "") if exc.headers is not None else ""
+                _close_quietly(exc)
+                raise RedirectRefused(exc.code, url, location) from None
             body = exc.read().decode("utf-8", errors="replace")
             last_exc = _format_fetch_error(f"HTTP {exc.code}", url, body[:500])
             # Retrying hard 4xx usually wastes time. 408/429 can be transient.
@@ -364,7 +437,7 @@ def fetch_text(
     # host. Dead today -- the one config site that names the key sets it false -- but the
     # docstring above promises "For Adobe URLs only", and an inoperative restriction is
     # worse than none because it reads as a control that is already in place.
-    should_curl = bool(curl_fallback) and "adobe.com" in _domain(url)
+    should_curl = bool(curl_fallback) and "adobe.com" in _domain(url) and bound is None
     if should_curl:
         try:
             return _curl_fetch_text(url, timeout=timeout, headers=headers, max_bytes=max_bytes,

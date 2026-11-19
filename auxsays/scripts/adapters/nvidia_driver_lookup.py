@@ -28,15 +28,20 @@ STOP RULES (each fails closed: the run publishes nothing for that family):
   or a body that refuses automated access -- raises ``AccessRefused``. The refusal is recorded in
   this source's persisted scan state and in this process, so the other family makes no request in
   this run and neither family makes one in any later run. It stays suspended until a reviewed config
-  change sets ``ingestion.access_refusal_cleared_at`` to a time after the refusal. Its message
-  contains "access refused", which lib.state.classify_error records as error type ``blocked``.
+  change sets ``ingestion.access_refusal_cleared_at`` to a time after the refusal that has already
+  passed (a future time clears nothing until it arrives, then clears that one refusal once). Its
+  message contains "access refused", which lib.state.classify_error records as error type
+  ``blocked``. A run that recorded a new refusal and otherwise failed outright still commits its
+  state (patch_ingest's ``access_refusal_recorded`` step output), so the suspension survives it.
 * schema integrity -- a changed envelope, a request echo that is not the pinned query, a missing or
   malformed identity field, a date whose weekday contradicts it -- raises ``SchemaIntegrityStop``.
   A listing whose rows exist but none belongs to the family returns nothing and reports an
   extraction mismatch, so the source reads broken immediately rather than quiet.
 * source authority -- a configured URL that is not the pinned one, a redirect to another host, or a
-  driver page outside nvidia.com -- raises ``SourceAuthorityStop``. A new host needs its ownership,
-  restrictions and robots policy checked by a person before collection continues.
+  driver page outside nvidia.com -- raises ``SourceAuthorityStop``. Redirects are bounded to the
+  host asked (lib.http ``redirect_hosts``): each hop is checked BEFORE it is followed, so a redirect
+  elsewhere sends nothing to that host. A new host needs its ownership, restrictions and robots
+  policy checked by a person before collection continues.
 
 Disabling the source, or any stop, never removes a record already published.
 """
@@ -50,7 +55,7 @@ from datetime import date, datetime, timezone
 from typing import Any
 
 from lib import nvidia_driver_identity as identity
-from lib.http import fetch_text
+from lib.http import RedirectRefused, fetch_text
 from lib.normalize import utc_now
 
 ADAPTER_ID = "nvidia_driver_lookup"
@@ -183,14 +188,19 @@ def _parse_instant(value: Any) -> datetime | None:
     return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
 
 
-def _check_suspension(scan_state: dict[str, Any] | None, ingestion: dict[str, Any]) -> None:
+def _check_suspension(scan_state: dict[str, Any] | None, ingestion: dict[str, Any],
+                      now: datetime | None = None) -> None:
     global _PROCESS_REFUSAL
     stored = (scan_state or {}).get("access_refused") if isinstance(scan_state, dict) else None
     if isinstance(stored, dict) and stored.get("at"):
         refused_at = _parse_instant(stored.get("at"))
         cleared_at = _parse_instant(ingestion.get("access_refusal_cleared_at"))
-        # Cleared only by an explicit, later, parseable timestamp. Anything else keeps it suspended.
-        if refused_at is not None and cleared_at is not None and cleared_at > refused_at:
+        current = now or datetime.now(timezone.utc)
+        # Cleared only by an explicit, parseable timestamp that is later than the refusal AND not in
+        # the future. A future time would otherwise sit "after" every new refusal and re-arm a request
+        # on every run; bounded by now, one clearing time clears one refusal, once. Anything else
+        # keeps the method suspended.
+        if refused_at is not None and cleared_at is not None and refused_at < cleared_at <= current:
             scan_state.pop("access_refused", None)
         else:
             raise AccessRefused(
@@ -211,8 +221,14 @@ def _get_json(url: str, scan_state: dict[str, Any] | None) -> Any:
     if host not in FETCH_HOSTS:
         raise SourceAuthorityStop(f"refusing to contact unapproved host {host!r}")
     try:
+        # Redirects are bounded to the host asked: every hop is checked BEFORE it is followed, so a
+        # redirect to any other host is refused without a single request reaching that host.
         result = fetch_text(url, timeout=TIMEOUT_SECONDS, headers=REQUEST_HEADERS, retries=0,
-                            max_bytes=MAX_BYTES)
+                            max_bytes=MAX_BYTES, redirect_hosts=frozenset({host}))
+    except RedirectRefused as exc:
+        raise SourceAuthorityStop(
+            f"the NVIDIA service at {host!r} redirected to {_host(exc.destination) or 'an unnamed destination'!r} "
+            f"(HTTP {exc.code}); the redirect was not followed and nothing was requested there") from None
     except RuntimeError as exc:
         message = str(exc)
         code = re.search(r"\bHTTP (\d{3})\b", message)
@@ -223,6 +239,7 @@ def _get_json(url: str, scan_state: dict[str, Any] | None) -> Any:
         raise
     final_host = _host(result.final_url or url)
     if final_host != host:
+        # Second line of defence: the bound above already refuses this before any request.
         raise SourceAuthorityStop(f"the NVIDIA service redirected from {host!r} to {final_host!r}")
     text = (result.text or "").lstrip("\ufeff").strip()
     if text.startswith("<"):
