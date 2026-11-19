@@ -511,6 +511,12 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
   .patch-card-headline { flex-wrap: wrap; }
   .patch-status-stack { max-width: 100%; }
   .patch-card-monitoring { flex-wrap: wrap; }
+  /* G43: the Windows 11 product page was 441 px wide on a 375 px phone. A patch-history row's
+     "No accepted patch-specific reports" pill (white-space: nowrap, 261 px) beside its label set the
+     table's narrowest width, and the product-page grid track grew to fit it. The track may now shrink
+     to the page, and the pill wraps inside itself. The selector outranks the later .patch-monitoring rule. */
+  .patch-intel-shell { grid-template-columns: minmax(0, 1fr); }
+  .patch-cell-monitoring .patch-monitoring { white-space: normal; }
 }
 
 /* Refinement pass: clearer homepage icons, visible hero terrain, softer About portrait */

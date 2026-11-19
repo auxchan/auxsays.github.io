@@ -1398,6 +1398,12 @@ def _search_cases() -> dict:
                            "site": search_site(pages=[newer_b])},
         "escaping": {"page": search_page(update_detail_title='Copilot "agent" & tools 1.0'),
                      "site": search_site()},
+        # G43: the writer's "<label> <vendor headline>" when the headline opens with the label's last word.
+        "label_twice": {"page": search_page(update_product=LABEL_TWICE_PRODUCT,
+                                            update_detail_title=LABEL_TWICE_STORED,
+                                            update_feed_title=LABEL_TWICE_STORED,
+                                            title=LABEL_TWICE_STORED + " official update breakdown"),
+                        "site": search_site()},
         "box_live_uncertified": {"page": search_page(**live), "site": search_site([]),
                                  "content": synthetic_content("live")},
         "box_pilot_certified": {"page": search_page(**live), "site": search_site([PATCH_URL]),
@@ -1411,6 +1417,9 @@ def _search_cases() -> dict:
 
 
 FALLBACK_CASES = ("not_a_patch_page", "unreadable_page", "two_verdicts")
+LABEL_TWICE_PRODUCT = "GitHub / Copilot"
+LABEL_TWICE_STORED = "GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker"
+LABEL_ONCE = "GitHub / Copilot Student GPT-5.3-Codex removal from model picker"
 
 
 def render_search(cases: dict) -> dict[str, dict]:
@@ -1642,6 +1651,24 @@ def check_search_snippets() -> None:
     check(f"S26 no WAIT or TEST FIRST title or description ties the verdict to the report population or the "
           f"maturity: the title is '<identity>: <verdict scope>', the count only a count ({len(reasoned)} pages; "
           "GROWTH-3 review 2, LOW-2)", len(reasoned) >= 8 and not attributed, str(attributed[:3]))
+    # G43: a stored title that repeats its product label is shown with the label once, in the heading, the
+    # source citation and every search field read back from the heading; S20 above already holds the
+    # JSON-LD headline equal to that title for this case too.
+    twice, twice_head = out["label_twice"]["content"], heads["label_twice"]
+    twice_title = (twice_head["titles"] or [""])[0]
+    check("S27 a title that repeats its product label shows the label once in the heading, the citation, "
+          "the search title and the JSON-LD headline (G43)",
+          f'<h1 class="update-title">{LABEL_ONCE}</h1>' in twice and f">{LABEL_ONCE}</a>" in twice
+          and twice_title.startswith(LABEL_ONCE + ": ")
+          and (twice_head["jsonld"] or {}).get("headline") == twice_title.rsplit(" | ", 1)[0]
+          and "Copilot Copilot" not in twice + twice_head["raw_head"],
+          f"title={twice_title!r} jsonld={(twice_head['jsonld'] or {}).get('headline')!r}")
+    early_title = (heads["early"]["titles"] or [""])[0]
+    check("S28 a title that does not repeat its label is shown exactly as stored (G43)",
+          '<h1 class="update-title">OBS Studio 99.0.0</h1>' in out["early"]["content"]
+          and early_title.startswith("OBS Studio 99.0.0: ")
+          and (heads["escaping"]["titles"] or [""])[0].startswith('Copilot "agent" & tools 1.0: '),
+          f"{early_title!r} {(heads['escaping']['titles'] or [''])[0]!r}")
 
 
 # ---------------------------------------------------------------- [R]/[N] regeneration repairs
