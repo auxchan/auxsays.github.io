@@ -970,9 +970,14 @@ git checkout between releases prints the previous release number, so a build rep
 is an install whose companion packages ComfyUI itself reports as older than the release requires.
 A post carrying logs of several core versions (several sessions) gets no declaration immunity:
 the shared role reading must say which version is the affected one, or the row is refused.
-A failure whose traceback runs through a custom-node pack, and a maintainer-labelled feature request
-or custom-node issue, are the ecosystem, not the release. One person filing the same report twice is
-one report. Every exclusion is stored as an uncounted row with its reason.
+A declaration is a whole line as ComfyUI or its report template prints it; the reporter's prose
+naming "ComfyUI version X" mid-sentence names the core but is not a declaration, because a
+declaration is immune to the shared role vetoes (review round 1: one such sentence turned a
+rollback target into the counted version). A failure whose traceback runs through a custom-node
+pack (Python frames, or a JavaScript frame in the pack's web code under `/extensions/<pack>/`), and a
+maintainer-labelled feature request or custom-node issue, are the ecosystem, not the release. One
+person filing the same report twice is one report. Every exclusion is stored as an uncounted row
+with its reason.
 
 **The acceptance authority is unchanged** After identity, rows go through the shared
 `base.apply_acceptance_gates` and the shared `lib.target_outcome` role check, exactly as stored rows
@@ -981,9 +986,11 @@ rows carry the derived sentiment the promotion requires (the AUX-019 rule), and 
 freshness only; counts and projections come from reconciliation and the new scoped promotion step.
 
 **Measured before building** Issues created 2026-09-29 to 2026-11-19: 368. Through the shipped
-decision path: 115 candidates for the ten newest releases, 60 accepted across nine of them; refused
-as not the core identity 23, as a build past the tag 23, custom node in the failure path 5, and one
-each for concreteness, date, a mixed install and a repost. Every accepted row was read.
+decision path: 115 candidates for the ten newest releases, 59 accepted across nine of them; refused
+as not the core identity 23, as a build past the tag 23, custom node in the failure path 6, and one
+each for concreteness, date, a mixed install and a repost. The accepted rows were read at
+measurement time, and that reading missed one: a Comfy Cloud error report whose JavaScript stack ran
+through a custom node's web code (#17021), found by the independent review and now refused.
 
 **Five write-mode gates registered** Ownership (`comfyui` owns `github_issues` / `github_issue`),
 registration (`AUXSAYS_ENABLE_COMFYUI_CONSENSUS`, true on the scheduled step), the writeback
@@ -996,10 +1003,17 @@ promotion writes no verdict prose; pages move to the pilot maturity with the ver
 range forms ("ComfyUI vA and vB", "vA and above") attach only to the version the product name sits
 beside. Patch tags with no GitHub Release (v0.45.1 to v0.45.6 and similar) have no record, so 28
 issues in the window that declare only such a version cannot attach anywhere: an official-lane
-coverage gap, not this lane's.
+coverage gap, not this lane's. Decisions are made once, at first capture: a label or edit added
+later never changes a stored row (store semantics), so the label exclusions hold only for labels
+present when the issue was first collected. A bare startup line cannot tell the release from a git
+checkout past its tag unless a describe or master marker is also in the post. A single pasted log
+from a session other than the failing one still reads as the reporter's build. "Upgraded from
+ComfyUI vA to vB" gives vA core identity, and only the shared role reading can then refuse it (the
+shared rollback cues have no upgraded-from form).
 
-**Verification** `test_comfyui_github_issues.py` replays twenty captured issues to their recorded
-decisions and drives the write path, the real ownership validators and the promotion agreement.
+**Verification** `test_comfyui_github_issues.py` replays twenty-two captured issues to their
+recorded decisions, pins the declaration-line rule on a real captured report, and drives the write
+path, the real ownership validators and the promotion agreement.
 Production proof: pending the first natural scheduled run after merge.
 
 **Reopen only if** a counted ComfyUI row's version is not the reporter's core release (a package,
