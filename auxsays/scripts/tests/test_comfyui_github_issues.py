@@ -424,7 +424,8 @@ def section_wiring(cases: list[dict]) -> None:
         with patched([(comfy.github, "request_json", fetch),
                       (base, "generated_records", lambda pid, tv=None, **kw: [r for r in recs if not tv or r.update_version in tv]),
                       (base, "append_evidence_rows", append),
-                      (comfy, "apply_consensus_writeback", lambda v: writebacks.append(v) or True)]):
+                      (comfy, "apply_consensus_writebacks",
+                       lambda vs: writebacks.extend(vs) or {v: True for v in vs})]):
             ctx = base.CollectorContext(write=True, since="2026-09-01", max_pages=5,
                                         target_versions={"0.43.0", "0.44.0"})
             first = comfy.ComfyUICollector().collect(ctx)
@@ -511,6 +512,25 @@ def section_wiring(cases: list[dict]) -> None:
     check("W28 promotion proposes no official identity or verdict field", not official, str(official))
     check("W29 the pilot maturity comes from the one authority",
           fields.get("evidence_state") == "pilot_sample", str(fields.get("evidence_state")))
+
+    # The batched writeback asks the shared authority ONCE, and still selects per patch.
+    import apply_consensus_to_records as acr  # noqa: PLC0415
+    dry_calls: list[int] = []
+    applied: list[str] = []
+    groups = [{"update_version": "0.43.0", "would_write": True, "matched_generated_record_path": "a.md",
+               "proposed_fields_if_written": {"evidence_last_checked": "x"}},
+              {"update_version": "0.44.0", "would_write": False, "matched_generated_record_path": "b.md",
+               "proposed_fields_if_written": {}}]
+    with patched([(acr, "run_dry_run", lambda **kw: dry_calls.append(1) or groups),
+                  (acr, "_index_generated_records", lambda: {}),
+                  (acr, "apply_collector_record_fields",
+                   lambda path, fields: applied.append(Path(path).name) or {"write_plan": {"fields": fields}})]):
+        out = comfy.apply_consensus_writebacks(["0.43.0", "0.44.0"])
+        none = comfy.apply_consensus_writebacks([])
+    check("W30 several patches cost one dry run of the shared authority", len(dry_calls) == 1, str(dry_calls))
+    check("W31 and each patch is still selected on its own (a blocked group writes nothing)",
+          out == {"0.43.0": True, "0.44.0": False} and applied == ["a.md"] and none == {},
+          f"{out} {applied} {none}")
 
 
 def run() -> int:

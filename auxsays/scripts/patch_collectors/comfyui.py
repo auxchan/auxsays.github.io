@@ -501,21 +501,37 @@ def apply_consensus_writeback(update_version: str) -> bool:
     samples, which belong to reconciliation and the scoped promotion step. Selects by canonical
     identity and refuses an ambiguous resolution.
     """
+    return apply_consensus_writebacks([update_version]).get(update_version, False)
+
+
+def apply_consensus_writebacks(update_versions: list[str]) -> dict[str, bool]:
+    """`apply_consensus_writeback` for several patches from ONE dry run of the shared authority.
+
+    The dry run reads the whole evidence store and indexes every generated record; measured, one
+    call per accepted patch was ~25 s each, most of a ComfyUI run. Selection per patch is unchanged:
+    exactly one group under the version, `would_write`, and the record the dry run resolved.
+    """
     from apply_consensus_to_records import (_index_generated_records,  # noqa: PLC0415
                                             apply_collector_record_fields, run_dry_run)
 
+    wanted = [str(v) for v in update_versions if str(v or "")]
+    out = {version: False for version in wanted}
+    if not wanted:
+        return out
     results = run_dry_run(evidence_path=base.EVIDENCE_PATH, product_id_filter=PRODUCT_ID,
                           is_candidate_mode=False, records_index=_index_generated_records(),
                           write_requested=True)
-    matches = [item for item in results if item.get("update_version") == update_version]
-    if len(matches) != 1 or not matches[0].get("would_write"):
-        return False
-    record_rel = matches[0].get("matched_generated_record_path")
-    if not record_rel:
-        return False
-    fields = dict(matches[0].get("proposed_fields_if_written") or {})
-    applied = apply_collector_record_fields(ROOT / record_rel, fields) or {}
-    return bool((applied.get("write_plan") or {}).get("fields"))
+    for version in wanted:
+        matches = [item for item in results if item.get("update_version") == version]
+        if len(matches) != 1 or not matches[0].get("would_write"):
+            continue
+        record_rel = matches[0].get("matched_generated_record_path")
+        if not record_rel:
+            continue
+        fields = dict(matches[0].get("proposed_fields_if_written") or {})
+        applied = apply_collector_record_fields(ROOT / record_rel, fields) or {}
+        out[version] = bool((applied.get("write_plan") or {}).get("fields"))
+    return out
 
 
 class ComfyUICollector(base.ProductCollector):
@@ -606,13 +622,13 @@ class ComfyUICollector(base.ProductCollector):
                 [row for result in results for row in result["method_health"]],
                 [r for r in persisted if r.get("counted")],
                 [r for r in already_held if r.get("counted")])
-            new_accepted = {str(r.get("update_version") or "") for r in persisted if r.get("counted")}
+            new_accepted = sorted({str(r.get("update_version") or "") for r in persisted if r.get("counted")})
+            # Freshness moves only when a new accepted report arrived; a re-found report changes
+            # nothing the writeback could write.
+            updated = apply_consensus_writebacks(new_accepted)
             for result in results:
                 version = str(result["version"])
                 result["evidence_rows_added"] = sum(
                     1 for r in persisted if str(r.get("update_version") or "") == version)
-                # Freshness moves only when a new accepted report arrived; a re-found report changes
-                # nothing the writeback could write.
-                result["record_updated"] = (apply_consensus_writeback(version)
-                                            if version in new_accepted else False)
+                result["record_updated"] = bool(updated.get(version, False))
         return results
