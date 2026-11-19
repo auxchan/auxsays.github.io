@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       product_id:
-        description: "Optional product_id: obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, or microsoft-powerpoint (dry_run only)"
+        description: "Optional product_id: obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, microsoft-powerpoint, microsoft-teams, or comfyui"
         required: false
         type: string
       dry_run:
@@ -102,6 +102,12 @@ jobs:
           # role. Bounded live dry run on the PR branch: 741 candidates judged, 5 accepted across 3
           # of 4 tracked patches, both source families reachable on every record.
           AUXSAYS_ENABLE_TEAMS_CONSENSUS: "true"
+          # ComfyUI community evidence: ACTIVE. ONE source family, ComfyUI's own public GitHub issues,
+          # walked once per run by creation date. A report counts only when its opening post shows the
+          # exact core release (ComfyUI's own version output, or the reporter naming ComfyUI beside
+          # the number) and passes the shared acceptance gates; a package, custom-node, frontend or
+          # Desktop version, or a build past the release tag, is refused with its reason.
+          AUXSAYS_ENABLE_COMFYUI_CONSENSUS: "true"
           # NO DOUBLE COLLECTION. PowerPoint is driven by the repo-owned orchestration graph in the
           # dedicated job below, so it is REMOVED from this runner's collector registry. The
           # exclusion is enforced inside build_collectors(), not by this step's arguments, so the
@@ -136,9 +142,9 @@ jobs:
           product_id="$(printf '%s' "$raw_product_id" | tr -d '\r' | sed -E 's/^[[:space:]]*product_id:[[:space:]]*//' | xargs)"
 
           case "$product_id" in
-            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|adobe-acrobat-reader|adobe-acrobat-pro|microsoft-windows-11|microsoft-powerpoint|microsoft-teams) ;;
+            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|adobe-acrobat-reader|adobe-acrobat-pro|microsoft-windows-11|microsoft-powerpoint|microsoft-teams|comfyui) ;;
             *)
-              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, microsoft-powerpoint, or microsoft-teams."
+              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, microsoft-powerpoint, microsoft-teams, or comfyui."
               exit 2
               ;;
           esac
@@ -389,6 +395,25 @@ jobs:
             --product-id adobe-premiere-pro \
             --write-all --confirm-write
 
+      - name: Promote ComfyUI consensus to its counted population
+        # ComfyUI community evidence is ACTIVE in this lane from the same change, so its records get the
+        # treatment every counted product gets. The ComfyUI collector's in-collector writeback sets
+        # freshness only (COLLECTOR_WRITABLE_FIELDS), so nothing before this step can produce
+        # update_consensus_summary or evidence_samples; without it the first accepted ComfyUI report
+        # reaches QA with report_count > 0 and neither field -- the #70 wedge that discards every other
+        # product's evidence for the cycle.
+        #
+        # POSITION IS LOAD-BEARING, as for the steps above: after reconciliation, before the first QA.
+        # Scoped to one --product-id; an empty value promotes the whole corpus, which #76 made exit 2.
+        # comfyui has no branch in _record_coherence_fields, so this writes no verdict prose, and no
+        # official identity field: update_version, update_published_at and the release notes stay the
+        # official lane's alone.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id comfyui \
+            --write-all --confirm-write
+
       - name: QA patch records
         id: qa
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -446,6 +471,7 @@ jobs:
             --allow 'auxsays/updates/generated/*acrobat*.md' \
             --allow 'auxsays/updates/generated/*powerpoint*.md' \
             --allow 'auxsays/updates/generated/*microsoft-teams*.md' \
+            --allow 'auxsays/updates/generated/*comfyui*.md' \
             --validate 'python auxsays/scripts/qa_patch_records.py' \
             --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
             --validate 'python auxsays/scripts/validate_evidence_method_health.py' \

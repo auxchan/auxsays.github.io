@@ -103,6 +103,7 @@ from lib import report_counts                                            # noqa:
 from patch_collectors import adobe_acrobat_community as ac              # noqa: E402
 from patch_collectors import adobe_premiere as ap                       # noqa: E402
 from patch_collectors import base                                       # noqa: E402
+from patch_collectors import comfyui as comfy                           # noqa: E402
 from patch_collectors import microsoft_powerpoint as ppt                # noqa: E402
 from patch_collectors import microsoft_teams as teams                   # noqa: E402
 from patch_collectors import microsoft_windows as mw                    # noqa: E402
@@ -118,7 +119,8 @@ MODES = ("workflow", "flags_on", "code_default")
 
 WINDOWS, OBS, TEAMS, PPT = "microsoft-windows-11", "obs-studio", "microsoft-teams", "microsoft-powerpoint"
 PREMIERE, PRO, READER = "adobe-premiere-pro", "adobe-acrobat-pro", "adobe-acrobat-reader"
-PRODUCTS = (WINDOWS, OBS, TEAMS, PPT, PREMIERE, PRO, READER)
+COMFY = "comfyui"
+PRODUCTS = (WINDOWS, OBS, TEAMS, PPT, PREMIERE, PRO, READER, COMFY)
 
 PASS = FAIL = 0
 FAILURES: list[str] = []
@@ -151,6 +153,7 @@ def warn(label: str, ok: bool, detail: str = "") -> None:
 REGISTRATION_FLAGS = frozenset({
     "AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK", "AUXSAYS_ENABLE_ACROBAT_CONSENSUS",
     "AUXSAYS_ENABLE_POWERPOINT_CONSENSUS", "AUXSAYS_ENABLE_TEAMS_CONSENSUS",
+    "AUXSAYS_ENABLE_COMFYUI_CONSENSUS",
     "AUXSAYS_ORCHESTRATED_PRODUCTS",
 })
 # MODE flags choose an owned method's state inside a production path. Each names the
@@ -417,6 +420,14 @@ def drive_teams(scenario: str):
         return _one_result(teams.TeamsCommunityCollector().collect(_context(TEAMS)), TEAMS), {}
 
 
+def drive_comfyui(scenario: str):
+    # The per-method transport entry point is the shared GitHub request; an answered walk is a
+    # well-formed empty search page, a refused one raises the 403 the API sends.
+    empty_page = lambda: ({"total_count": 0, "incomplete_results": False, "items": []}, {})  # noqa: E731
+    with patched([(comfy.github, "request_json", stub("github_issues", scenario, answer=empty_page))]):
+        return _one_result(comfy.ComfyUICollector().collect(_context(COMFY)), COMFY), {}
+
+
 def drive_premiere(scenario: str):
     saved = dict(ap.PREMIERE_METHODS)
     try:
@@ -509,11 +520,12 @@ DRIVERS = {
     WINDOWS: drive_windows, OBS: drive_obs, TEAMS: drive_teams, PPT: drive_powerpoint,
     PREMIERE: drive_premiere,
     PRO: lambda s: drive_acrobat(PRO, s), READER: lambda s: drive_acrobat(READER, s),
+    COMFY: drive_comfyui,
 }
 # The production path each driver calls, as the runner registers it (PowerPoint: the graph).
 DRIVER_PATH = {WINDOWS: "WindowsLearnQnaCollector", OBS: "ObsCollector", TEAMS: "TeamsCommunityCollector",
                PREMIERE: "AdobePremiereCollector", PRO: "AdobeAcrobatCollector",
-               READER: "AdobeAcrobatCollector", PPT: "graph"}
+               READER: "AdobeAcrobatCollector", PPT: "graph", COMFY: "ComfyUICollector"}
 # A DEPENDENT method runs only on what the product's other methods hand it; with no input the
 # production path emits no row for it (the router skips RESOLVE_CONTEXT). Exactly one exists.
 DEPENDENT = {(PPT, "learn_qna_segment_context")}
@@ -525,6 +537,7 @@ PINNED = {
     WINDOWS: {"learn_qna_search_rss": "exec", "techcommunity_windows_sitemap": "exec"},
     OBS: {"github_issues": "exec", "obs_forum": "exec", "known_watchlist": "disabled"},
     TEAMS: {"learn_qna_search_rss": "exec", "tech_community_discussions": "exec"},
+    COMFY: {"github_issues": "exec"},
     PRO: {
         "adobe_community_algolia_search": lambda: "exec",
         "adobe_community_search": lambda: "exec" if flag_on("AUXSAYS_ACROBAT_RETIRED_METHODS") else "disabled",

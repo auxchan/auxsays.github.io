@@ -149,6 +149,8 @@ SITES = [
     ("collect_obs_reports", lambda m: m.apply_consensus_writeback("1.0"), "obs"),
     ("patch_collectors.microsoft_teams",
      lambda m: m.apply_consensus_writeback("1.0"), "teams"),
+    ("patch_collectors.comfyui",
+     lambda m: m.apply_consensus_writeback("1.0"), "comfyui"),
 ]
 
 
@@ -512,7 +514,9 @@ def run() -> int:
                         "adobe_acrobat_community.py", "collect_obs_reports.py",
                         # Teams community evidence (default-off): its writeback reuses the
                         # dry run's canonical resolution exactly as the others do.
-                        "microsoft_teams.py"}, str(idx_users))
+                        "microsoft_teams.py",
+                        # ComfyUI GitHub-issues evidence: the same Teams-shaped writeback.
+                        "comfyui.py"}, str(idx_users))
 
     acr_src = (_SCRIPTS / "apply_consensus_to_records.py").read_text(encoding="utf-8")
     check("doctrine: the index parameter is typed as the identity TRIPLE everywhere",
