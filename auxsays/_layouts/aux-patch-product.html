@@ -20,6 +20,21 @@ layout: aux-base
 {% assign monitoring_state = monitoring.state | default: "unverified" %}
 {% assign monitoring_label = monitoring.label | default: "Official update monitoring status unknown" %}
 {% assign monitoring_last_success = monitoring.last_success | default: "" %}
+{%- comment -%}
+  COVERAGE (AUX-102) comes from the deploy-time coverage projection and nowhere else: the pill, the
+  stat card, the no-record prose and the community line all read it. Catalog inclusion is not
+  monitoring -- 30 of 47 catalogued products had no operating official lane while this page called
+  each "tracked for ... public release signals". FAIL CLOSED: with no row the page reads "Coverage
+  status unknown", which ci/verify_coverage_claims.py refuses on a deploy build.
+  Elements marked data-coverage-prose hold this template's own coverage wording. The deploy check
+  reads only those for retired claim phrases, never the vendor-written record rows, so a changelog
+  title can never block a deploy. Keep every coverage sentence inside a marked element.
+{%- endcomment -%}
+{% assign coverage = site.data.coverage_state.products | where: "product_id", page.product_id | first %}
+{% assign coverage_state = coverage.state | default: "unknown" %}
+{% assign coverage_label = coverage.label | default: "Coverage status unknown" %}
+{% assign coverage_community = coverage.community | default: "unknown" %}
+{% if coverage_community == 'operating' %}{% assign community_label = 'Community reports monitored' %}{% elsif coverage_community == 'impaired' %}{% assign community_label = 'Community report collection impaired' %}{% elsif coverage_community == 'absent' %}{% assign community_label = 'Community reports not monitored' %}{% else %}{% assign community_label = 'Community report monitoring status unknown' %}{% endif %}
 {% assign cadence_label = product.cadence | default: '' %}
 {% if cadence_label == 'High' %}
   {% assign cadence_label = 'Frequent updates' %}
@@ -44,7 +59,7 @@ layout: aux-base
           <h1 class="patch-intel-title">{{ product.product_name }}</h1>
         </div>
         <p class="patch-intel-subtitle">{{ product.watch_reason }}</p>
-        <div class="patch-status-line">
+        <div class="patch-status-line" data-coverage-prose>
           {%- comment -%}
             Records and monitoring answer DIFFERENT questions, so both are shown. "Patch records
             available" used to REPLACE the monitoring state, so a product with records and broken
@@ -54,7 +69,7 @@ layout: aux-base
           {% if product_updates.size > 0 %}
           <span class="patch-coverage-pill patch-coverage-pill--documented">Patch records available</span>
           {% endif %}
-          <span class="patch-coverage-pill patch-coverage-pill--monitor-{{ monitoring_state }}">{{ monitoring_label }}</span>
+          <span class="patch-coverage-pill patch-coverage-pill--coverage-{{ coverage_state }}" data-coverage-product="{{ page.product_id }}">{{ coverage_label }}</span>
           <span>{{ product.category_label }}</span>
           <span>{{ cadence_label }}</span>
         </div>
@@ -68,16 +83,22 @@ layout: aux-base
         </button>
         {% endif %}
       </div>
-      <div class="patch-intel-stat-card">
+      <div class="patch-intel-stat-card" data-coverage-prose>
         {% if product_updates.size > 0 %}
         <span>{{ product_updates.size }}</span>
         <em>tracked patch records</em>
-        {% elsif product.ingestion_active %}
+        {% elsif coverage_state == 'full' or coverage_state == 'official_only' %}
         <span>OFFICIAL SOURCE ACTIVE</span>
         <em>awaiting first tracked patch</em>
+        {% elsif coverage_state == 'impaired' %}
+        <span>IMPAIRED</span>
+        <em>official checks are not succeeding</em>
+        {% elsif coverage_state == 'planned' %}
+        <span>PLANNED</span>
+        <em>monitoring is not active yet</em>
         {% else %}
-        <span>STAGED</span>
-        <em>official source mapped</em>
+        <span>NOT MONITORED</span>
+        <em>no official update lane is running</em>
         {% endif %}
       </div>
     </div>
@@ -101,10 +122,18 @@ layout: aux-base
   </section>
   {% else %}
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
-    <div class="section-head section-head--archive">
-      <div class="eyebrow">Monitoring focus</div>
-      <h2>{{ product.product_name }} watch profile</h2>
-      <p>{{ product.product_name }} is tracked for creator impact, workflow stability, compatibility changes, platform behavior, pricing/policy shifts, and public release signals.</p>
+    <div class="section-head section-head--archive" data-coverage-prose>
+      <div class="eyebrow">Coverage</div>
+      <h2>{{ product.product_name }} profile</h2>
+      {% if coverage_state == 'full' or coverage_state == 'official_only' %}
+      <p>AUXSAYS monitors {{ product.product_name }} official updates. No update has been recorded yet.</p>
+      {% elsif coverage_state == 'impaired' %}
+      <p>Monitoring of {{ product.product_name }} is temporarily impaired: {{ monitoring_label | downcase }}{% if coverage_community == 'impaired' %}; {{ community_label | downcase }}{% endif %}. No update has been recorded yet.</p>
+      {% elsif coverage_state == 'planned' %}
+      <p>{{ product.product_name }} is in the AUXSAYS catalog. Monitoring is planned but not active, so no updates have been recorded, and the absence of records here says nothing about whether its updates are safe.</p>
+      {% else %}
+      <p>{{ product.product_name }} is in the AUXSAYS catalog but is not currently monitored, so no updates have been recorded, and the absence of records here says nothing about whether its updates are safe.</p>
+      {% endif %}
     </div>
     <div class="patch-dossier-grid">
       <div class="patch-dossier-card patch-dossier-card--wide">
@@ -132,12 +161,16 @@ layout: aux-base
           {% endfor %}
         </ul>
       </div>
-      <div class="patch-dossier-card">
+      <div class="patch-dossier-card" data-coverage-prose>
         <h3>Consensus method</h3>
         <ul>
+          {% if coverage_community == 'operating' %}
           {% for method in product.consensus_method %}
           <li>{{ method }}</li>
           {% endfor %}
+          {% else %}
+          <li>{{ community_label }} for {{ product.product_name }}, so no community reports are counted.</li>
+          {% endif %}
         </ul>
       </div>
     </div>
@@ -164,7 +197,8 @@ layout: aux-base
     <summary>Tracking Rules — tracking scope and evidence rules for this product.</summary>
     <div class="patch-monitor-card"><strong>Signal:</strong> {{ product.signal_notes }}</div>
     <div class="patch-monitor-card"><strong>Impact:</strong> {{ product.impact }}</div>
-    <div class="patch-monitor-card"><strong>Status:</strong> {% if product_updates.size > 0 %}{{ product_updates.size }} official patch record{% if product_updates.size != 1 %}s{% endif %} tracked{% else %}No patch records yet{% endif %} &mdash; {{ monitoring_label }}{% if monitoring_state != 'healthy' %}{% if monitoring_last_success != '' %}, last successful check {{ monitoring_last_success }}{% else %}, no successful check recorded{% endif %}{% endif %}</div>
+    <div class="patch-monitor-card" data-coverage-prose><strong>Status:</strong> {% if product_updates.size > 0 %}{{ product_updates.size }} official patch record{% if product_updates.size != 1 %}s{% endif %} tracked{% else %}No patch records yet{% endif %} &mdash; {{ monitoring_label }}{% if monitoring_state != 'healthy' %}{% if monitoring_last_success != '' %}, last successful check {{ monitoring_last_success }}{% else %}, no successful check recorded{% endif %}{% endif %}</div>
+    <div class="patch-monitor-card" data-coverage-prose><strong>Coverage:</strong> {{ coverage_label }}. {{ community_label }}. Product-level issue signals are not monitored.</div>
   </details>
 
   {%- comment -%} Progressive enhancement: sortable column headers + a compact mobile Sort control.

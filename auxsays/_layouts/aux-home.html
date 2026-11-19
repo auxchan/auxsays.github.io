@@ -42,7 +42,7 @@ layout: aux-base
 <section class="home-dashboard home-dashboard--patch reveal-up reveal-delay-1">
   <nav class="panel home-tracker-nav" aria-labelledby="home-trackers-title">
     <h2 class="home-section-label home-section-label--inline" id="home-trackers-title"><span>Tracked software</span></h2>
-    <p>Pick your software. Each tracker follows the source named under it and lists every update AUXSAYS tracks; each update opens to its verdict and recommendation.</p>
+    <p>Pick your software. Each tracker names the official source for its updates and lists every update AUXSAYS has recorded; each update opens to its verdict and recommendation.</p>
     {%- assign home_tracker_ids = site.pages | where: "update_entry", true | group_by: "product_id" | map: "name" -%}
     {%- assign home_tracker_lead = "microsoft-windows-11|obs-studio|adobe-premiere-pro|adobe-acrobat-pro|adobe-acrobat-reader|microsoft-teams|microsoft-powerpoint|blackmagic-davinci" | split: "|" %}
     <ul class="home-tracker-list" data-home-tracker-list>
