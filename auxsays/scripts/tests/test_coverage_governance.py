@@ -393,10 +393,11 @@ def section_d() -> None:
                                                      [debt_entry("added"), debt_entry("live")]), proj)
         check("D7 debt for a product that now operates only warns", not errs_w and any("live" in w for w in warns),
               (errs_w, warns))
-        claim = [dict(product("live"), coverage_status_label="Monitoring active"), product("added")]
+        # A field whose VALUE carries no claim phrase, so only the field rule can refuse it.
+        claim = [dict(product("live"), coverage_state="active_watch"), product("added")]
         ce, _w = gate.check_data(write_source(Path(td) / "f", claim, comps, [debt_entry("added")]), proj)
         check("D8 a static coverage field back in the catalog is refused",
-              any(e.startswith("CATALOG product live") for e in ce), ce)
+              any(e.startswith("CATALOG product live carries a static coverage field") for e in ce), ce)
         # Catalog text renders OUTSIDE the marked coverage prose (subtitles, cards), so the deploy
         # check reads it as data instead: it is hand-written and reviewed, never vendor text.
         said = [dict(product("live"), watch_reason="LIVE is tracked for creator stability."), product("added")]
@@ -937,9 +938,10 @@ def section_h() -> None:
           ({p: offstate[p] for p in failed}, {p: sorted(codes(rep, p)) for p in failed}))
     lane = {f["product_id"]: f for f in rep["flags"] if f["code"] == "enabled_lane_impaired"}
     check("H3c one failed fetch after a recent success is transient (no Core gap); a persistent failure is a Core gap",
-          not codes(rep, "wobbly") & {"core_gap", "core_gap_undocumented"} and lane["wobbly"]["persistent"] is False
-          and "core_gap_undocumented" in codes(rep, "refused") and lane["refused"]["persistent"] is True
-          and "core_gap_undocumented" in codes(rep, "garbled") and lane["garbled"]["persistent"] is True,
+          not codes(rep, "wobbly") & {"core_gap", "core_gap_undocumented"}
+          and lane.get("wobbly", {}).get("persistent") is False
+          and "core_gap_undocumented" in codes(rep, "refused") and lane.get("refused", {}).get("persistent") is True
+          and "core_gap_undocumented" in codes(rep, "garbled") and lane.get("garbled", {}).get("persistent") is True,
           {p: (sorted(codes(rep, p)), lane.get(p, {}).get("persistent")) for p in ("wobbly", "refused", "garbled")})
     check("H4 a healthy lane that found no new release in 200 days raises nothing",
           not codes(rep, "quiet"), codes(rep, "quiet"))
@@ -1014,8 +1016,9 @@ def section_h() -> None:
             "silent": ("lane_unreachable", "no_discovery_method"), "wobbly": ("lane_unverified", "no_discovery_method"),
             "stale": ("vendor_terms_unresolved", "no_discovery_method"),
             "comm": (None, "methods_not_working"), "exp": ("lane_disabled", "methods_disabled")}
-    got = {p: (missing[p]["official_ingestion"], missing[p]["community_discovery"]) for p in want}
-    closed = all(tuple(m) == assess.CAPABILITIES and m["issue_detection"] == "not_built"
+    got = {p: (missing.get(p, {}).get("official_ingestion"), missing.get(p, {}).get("community_discovery"))
+           for p in want}
+    closed = all(tuple(m) == assess.CAPABILITIES and m.get("issue_detection") == "not_built"
                  and all(v is None or v in assess.REASON_CODES for v in m.values()) for m in missing.values())
 
     def blind(inputs):
@@ -1040,19 +1043,18 @@ def section_h() -> None:
         {"version": "621.14", "published": NOW - timedelta(days=14), "discovered": NOW - timedelta(days=13)},
         {"version": "621.24", "published": NOW - timedelta(days=6), "discovered": NOW - timedelta(days=5)}]})
     nv_r2d = next(p for p in nv_held["products"] if p["product_id"] == "nvidia")["detection_latency"]["release_to_discovery"]
+    def pick(pid, *keys):     # .get(), so a wrong shape FAILS this check by name instead of crashing
+        return tuple(r2d.get(pid, {}).get(k) for k in keys)
     check("H18 release-to-discovery is measured only from source timestamps; unknown and undiscovered are never numbers",
-          (r2d["obs"]["status"], r2d["obs"]["precision"], r2d["obs"]["hours_min"], r2d["obs"]["hours_max"])
-          == ("measured", "exact", 3.5, 3.5)
-          and (r2d["quiet"]["status"], r2d["quiet"]["precision"], r2d["quiet"]["hours_min"], r2d["quiet"]["hours_max"])
-          == ("measured", "day", 6.0, 30.0)
-          and (r2d["comm"]["status"], r2d["comm"]["reason"]) == ("unknown", "discovery_time_not_recorded")
-          and (r2d["stale"]["status"], r2d["stale"]["reason"]) == ("unknown", "inconsistent_timestamps")
-          and (r2d["undocumented"]["status"], r2d["undocumented"]["reason"]) == ("unknown", "no_release_observed")
-          and (r2d["nvidia"]["status"], r2d["nvidia"]["version"], r2d["nvidia"]["released"])
-          == ("not_discovered", "621.24", "2026-11-12")
-          and (nv_r2d["status"], nv_r2d["hours_max"]) == ("measured", 24.0)
-          and not any("hours_min" in r or "hours_max" in r for r in r2d.values() if r["status"] != "measured")
-          and all(v["discovery_to_publication"] == {"status": "unknown", "reason": "publication_time_not_recorded"}
+          pick("obs", "status", "precision", "hours_min", "hours_max") == ("measured", "exact", 3.5, 3.5)
+          and pick("quiet", "status", "precision", "hours_min", "hours_max") == ("measured", "day", 6.0, 30.0)
+          and pick("comm", "status", "reason") == ("unknown", "discovery_time_not_recorded")
+          and pick("stale", "status", "reason") == ("unknown", "inconsistent_timestamps")
+          and pick("undocumented", "status", "reason") == ("unknown", "no_release_observed")
+          and pick("nvidia", "status", "version", "released") == ("not_discovered", "621.24", "2026-11-12")
+          and (nv_r2d.get("status"), nv_r2d.get("hours_max")) == ("measured", 24.0)
+          and not any("hours_min" in r or "hours_max" in r for r in r2d.values() if r.get("status") != "measured")
+          and all(v.get("discovery_to_publication") == {"status": "unknown", "reason": "publication_time_not_recorded"}
                   for v in lat.values()), (r2d, nv_r2d))
 
     # A crash must be visible in the job summary (the step is continue-on-error).
