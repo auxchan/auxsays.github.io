@@ -1,0 +1,41 @@
+{
+ "schema": 1,
+ "ledger": "AUX-110",
+ "purpose": "Pinned correction of one stored Acrobat Reader row's theme, applied by recompute_evidence_classification.py --correction-manifest. The row is re-admitted by AUX-110 (audit/acrobat_reader_readmission.json); restored with its stored theme it would publish a problem the post does not report.",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "fields": [
+  "issue_theme",
+  "severity",
+  "workflow_area"
+ ],
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "parent_commit": "894bbd22f92f47fde812b61fb5d30ba9ba48446b",
+ "note": "`to` must equal the shipped Acrobat classifier's answer on the retained text (title and stored excerpt), so the new label is derived, not typed. Platform, sentiment, counted and every other field are untouched.",
+ "entries": [
+  {
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "18.009.20044",
+   "target_build": "",
+   "id": "acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-users-unable-to-open-pdf-s-after-recent-adobe-reader-dc-u",
+   "source_url": "https://community.adobe.com/questions-12/users-unable-to-open-pdf-s-after-recent-adobe-reader-dc-update-18-009-20044-1511973",
+   "from": {
+    "issue_theme": "install/update failure",
+    "workflow_area": "deployment",
+    "severity": "high"
+   },
+   "to": {
+    "issue_theme": "unspecified Acrobat issue",
+    "workflow_area": "Acrobat workflow",
+    "severity": "medium"
+   },
+   "basis": "The stored post reports that, after the update, users cannot open PDFs when they open an email attachment; it reports no install or update failure. The shipped Acrobat classifier on the retained text returns 'unspecified Acrobat issue / Acrobat workflow / medium'. Re-admitted with the stored theme, the 18.009.20044 page would list 'install/update failure' and print it on the restored source.",
+   "authorized_by": "G54 review correction 7 and the 2026-11-19 G54 ruling (correct the inaccurate theme through the existing label-only mechanism)"
+  }
+ ]
+}

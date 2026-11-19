@@ -26,10 +26,20 @@ version-match fields and the text itself. The single write site refuses any othe
 Zero network. Stored text only: refetching would re-theme rows this defect never touched (the stored
 excerpt disagrees with the full thread on 44 of 105 rows measured).
 
+A PINNED CORRECTION (AUX-110). Acrobat themes are outside the re-judging above (no frozen chain), so a
+theme a person found wrong on a row is corrected only through a manifest (`--correction-manifest`): the
+row by its five-field identity, its stored labels (`from`) and the new ones (`to`), a basis and who
+authorised it. `to` must be EXACTLY the shipped classifier's answer on the retained text, so the label is
+derived, never typed by hand; only theme, workflow_area and severity move (never platform, sentiment or
+counted); a stored label that is neither `from` nor `to` refuses the whole run; a row already at `to` is
+left alone. The write goes through the same single write site and the same field-by-field proof.
+
 Run:  python auxsays/scripts/recompute_evidence_classification.py            # dry run, JSON on stdout
       python auxsays/scripts/recompute_evidence_classification.py --write    # in-place, block-scoped
       python auxsays/scripts/recompute_evidence_classification.py --product-id P --only-id ID ... [--write]
                                                                               # a NAMED handful only
+      python auxsays/scripts/recompute_evidence_classification.py --correction-manifest PATH [--write]
+                                                                              # a PINNED correction only
 """
 from __future__ import annotations
 
@@ -296,6 +306,11 @@ def decide(row: dict[str, Any]) -> dict[str, Any]:
 
 # --- the single write site -----------------------------------------------------------------------
 
+def _write_store(store: Path, text: str) -> None:
+    """The one place this module writes: the whole store, already proven field by field."""
+    store.write_bytes(text.encode("utf-8"))
+
+
 _ID_LINE = re.compile(r"^- id: (.+)$", re.M)
 
 
@@ -387,7 +402,98 @@ def run(store: Path, write: bool, only_ids: tuple[str, ...] = (), product_id: st
         report["only_ids"] = {rows[i].get("id"): {"theme": basis[i]["theme"], "written": i in writes}
                               for i in sorted(selected)}
     if write and writes:
-        store.write_bytes(new_text.encode("utf-8"))
+        _write_store(store, new_text)
+        report["written"] = True
+    return report
+
+
+# --- a pinned, human-authorised correction (AUX-110) ----------------------------------------------
+
+CORRECTION_SELECTOR = ("product_id", "update_version", "target_build", "id", "source_url")
+
+
+def _shipped_labels(row: dict[str, Any]) -> dict[str, str]:
+    theme, area, _platform, severity, _sentiment = _shipped(row)
+    return {"issue_theme": theme, "workflow_area": area, "severity": severity}
+
+
+def correction_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:
+    """The pinned corrections, refusing a manifest that could select ambiguously or widen the fields."""
+    if list(doc.get("selector") or []) != list(CORRECTION_SELECTOR):
+        raise SystemExit("refusing: the correction manifest's selector is not the five-field identity")
+    if sorted(doc.get("fields") or []) != sorted(ONLY_ID_WRITABLE):
+        raise SystemExit("refusing: the correction manifest's fields are not theme, workflow_area and severity")
+    entries = doc.get("entries")
+    if not isinstance(entries, list) or not entries:
+        raise SystemExit("refusing: the correction manifest has no entries")
+    seen: set[tuple[str, ...]] = set()
+    for entry in entries:
+        ident = tuple(str(entry.get(key) or "") for key in CORRECTION_SELECTOR)
+        if not all(ident[i] for i in (0, 1, 3, 4)) or ident[0] not in REPAIRED_AT:
+            raise SystemExit(f"refusing: a correction lacks part of its identity or names no repaired product: {ident}")
+        if ident in seen:
+            raise SystemExit(f"refusing: a correction names one row twice: {ident[3]}")
+        seen.add(ident)
+        frm, to = entry.get("from"), entry.get("to")
+        if not (isinstance(frm, dict) and isinstance(to, dict)
+                and set(frm) == set(ONLY_ID_WRITABLE) and set(to) == set(ONLY_ID_WRITABLE)) or frm == to:
+            raise SystemExit(f"refusing: a correction must state from and to for exactly theme, workflow_area "
+                             f"and severity, and change one of them: {ident[3]}")
+        if not str(entry.get("basis") or "").strip() or not str(entry.get("authorized_by") or "").strip():
+            raise SystemExit(f"refusing: a correction must state its basis and who authorised it: {ident[3]}")
+    return entries
+
+
+def run_corrections(store: Path, manifest: Path, write: bool) -> dict[str, Any]:
+    """Apply a pinned correction manifest, all or nothing. Refusals raise SystemExit before any write."""
+    raw = store.read_bytes().decode("utf-8")
+    rows = yaml.load(raw, Loader=yaml.SafeLoader)["evidence"]
+    doc = json.loads(Path(manifest).read_text(encoding="utf-8"))
+    entries = correction_entries(doc)
+    writes: dict[int, dict[str, str]] = {}
+    decided: list[dict[str, Any]] = []
+    for entry in entries:
+        ident = tuple(str(entry.get(key) or "") for key in CORRECTION_SELECTOR)
+        hits = [i for i, row in enumerate(rows)
+                if tuple(_s(row, key) for key in CORRECTION_SELECTOR) == ident]
+        if len(hits) != 1:
+            raise SystemExit(f"refusing: correction {ident[3]!r} matches {len(hits)} rows, not exactly one")
+        index = hits[0]
+        row = rows[index]
+        derived = _shipped_labels(row)
+        if entry["to"] != derived:
+            raise SystemExit(f"refusing: correction {ident[3]!r} is not the shipped classifier's answer on the "
+                             f"retained text ({derived})")
+        if derived["severity"] not in ec.VALID_SEVERITIES:
+            raise SystemExit(f"refusing {ident[3]!r}: severity {derived['severity']!r} would un-count it")
+        current = {key: _s(row, key) for key in ONLY_ID_WRITABLE}
+        if current == entry["to"]:
+            action = "already_corrected"
+        elif current == entry["from"]:
+            action = "correct"
+            writes[index] = dict(entry["to"])
+        else:
+            raise SystemExit(f"refusing: correction {ident[3]!r}: the stored labels {current} are neither the "
+                             f"pinned from nor to")
+        decided.append({**dict(zip(CORRECTION_SELECTOR, ident)), "action": action,
+                        "from": entry["from"], "to": entry["to"], "counted": row.get("counted")})
+    new_text = apply_writes(raw, [row.get("id") for row in rows], writes)
+    after_rows = yaml.load(new_text, Loader=yaml.SafeLoader)["evidence"]
+    if len(after_rows) != len(rows):
+        raise SystemExit("refusing: the row count changed")
+    for index, (old, new) in enumerate(zip(rows, after_rows)):
+        if new != dict(old, **writes.get(index, {})):
+            raise SystemExit(f"refusing row {index} ({old.get('id')}): the edit changed more than decided")
+    report = {
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "mode": "correction_manifest",
+        "manifest_sha256": hashlib.sha256(Path(manifest).read_bytes()).hexdigest(),
+        "store_sha256_before": hashlib.sha256(raw.encode("utf-8")).hexdigest(),
+        "store_sha256_after": hashlib.sha256(new_text.encode("utf-8")).hexdigest(),
+        "rows_changed": len(writes), "corrections": decided, "written": False,
+    }
+    if write and writes:
+        _write_store(store, new_text)
         report["written"] = True
     return report
 
@@ -400,9 +506,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--only-id", action="append", default=[], metavar="ID",
                         help="consider ONLY this row id (repeatable); writes theme, workflow_area and "
                              "severity only, never platform")
+    parser.add_argument("--correction-manifest", type=Path, default=None,
+                        help="apply ONLY this pinned correction manifest (AUX-110); excludes --only-id")
     args = parser.parse_args(argv)
     if args.product_id and not args.only_id:
         parser.error("--product-id is only meaningful with --only-id")
+    if args.correction_manifest is not None:
+        if args.only_id:
+            parser.error("--correction-manifest cannot be combined with --only-id")
+        print(json.dumps(run_corrections(args.store, args.correction_manifest, args.write),
+                         indent=2, ensure_ascii=False))
+        return 0
     print(json.dumps(run(args.store, args.write, tuple(args.only_id), args.product_id),
                      indent=2, ensure_ascii=False))
     return 0
