@@ -19,15 +19,20 @@ WHAT THIS PROVES, IN ORDER.
   S  Stop rules and the request guard: page 2+, oldest sort, comment anchors, search, reply
      expansion, the all-communities listing and other hosts are refused BEFORE a request; 401/403/
      429/451, a challenge, HTML for JSON and a refusing body suspend the method (persisted; the next
-     cycle makes zero requests); a schema change and a redirect to another host publish nothing and
+     cycle makes zero requests); a schema change and ANY redirect (another host, or the same host
+     pointing at page 2, an older anchor, search or the all-communities listing) publish nothing and
      send nothing there; robots disallowing the view skips the cycle; the 12-hour cadence; the
      request ceiling and spacing.
   W  The gates a dry run never reaches: registration, ownership (through the real validators),
      routing, the scoped promotion steps and their position, the writeback allow-list, the
      transaction surface; and the write path against a temporary store: excluded rows stored with
-     reasons, the same comment observed again never a second row, health crediting accepted rows only.
-  P  Public text: no names, @mentions or links in stored text; titles are thread titles; the stored
-     URL is the forum's own link to the one comment; the date is the comment's own creation time.
+     reasons, the same comment observed again never a second row (also when it is served again under
+     another thread), health crediting accepted rows only.
+  P  Public text: no names (staff names, @mentions, members' display names addressed in plain text),
+     no links in stored text, and no name in any fixture; titles are thread titles; the stored URL is
+     the forum's own link to the one comment; the date is the comment's own creation time.
+  M  One comment served under two threads (a moderator's move) is stored once, under the thread it
+     was first seen in; members addressed by plain name are not stored.
 
 Offline and deterministic: every socket is refused for the whole run. Run:
     PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_nvidia_forum_evidence.py
@@ -251,7 +256,11 @@ EXPECTED_GRD = {
     ("621.14", 3633347): "notebook_driver_not_tracked",
     ("621.14", 3633148): "driver_family_conflicts_with_thread",
     ("621.14", 3633067): "not_a_real_issue_report",
-    ("621.24", 3634576): "COUNT", ("621.24", 3634403): "COUNT", ("621.24", 3634344): "COUNT",
+    ("621.24", 3634576): "COUNT", ("621.24", 3634403): "COUNT",
+    # LiveKernelEvent 141/1b8 black screens "after upgrading to 621.01", "tried 617.42 but still
+    # happened", then 621.24 "still do happen": the problem began on, and persists across, other
+    # versions -- nothing release-specific to 621.24 (G44 s4 row 4). Investigated, not counted.
+    ("621.24", 3634344): "driver_module_crash_without_regression_evidence",
     ("621.24", 3634606): "driver_version_environment_only",
     ("621.24", 3634580): "driver_version_environment_only",
     ("621.24", 3634571): "driver_attribution_disclaimed",
@@ -313,8 +322,11 @@ def section_fixture() -> dict:
     check("F10 Game Ready 621.14 counts exactly its 7 recorded reports",
           {c for p, v, c in counted if p == GRD and v == "621.14"}
           == {3633489, 3633451, 3633448, 3633356, 3633066, 3633062, 3633052})
-    check("F11 Game Ready 621.24 counts exactly its 3 recorded reports",
-          {c for p, v, c in counted if p == GRD and v == "621.24"} == {3634576, 3634403, 3634344})
+    check("F11 Game Ready 621.24 counts exactly its 2 recorded reports",
+          {c for p, v, c in counted if p == GRD and v == "621.24"} == {3634576, 3634403})
+    check("F11b a module crash dated to another version (621.01) and still seen on 617.42 is investigated",
+          got.get((GRD, "621.24", 3634344)) == "driver_module_crash_without_regression_evidence",
+          str(got.get((GRD, "621.24", 3634344))))
     check("F12 the 9-days-early SSD-write report (3633066, Game Ready thread) is counted for Game Ready only",
           got.get((GRD, "621.14", 3633066)) == "COUNT" and got.get((NSD, "621.14", 3633066)) == OTHER)
     check("F13 a Studio-named report inside the Game Ready thread is vetoed for both families",
@@ -416,6 +428,16 @@ def section_identity() -> None:
     check("I18 ...but a laptop named as ANOTHER machine says nothing about the reporter's",
           decide("Since updating to 621.14 my games crash. It works on another system with an RTX 4070 Laptop GPU.")
           == "COUNT")
+    check("I18b an 'other' qualifying anything but a machine turns nothing off ('Like other users here, my laptop')",
+          decide("Like other users here, my laptop crashes in every game since 621.14.") == "notebook_driver_not_tracked")
+    check("I18c ...nor does 'different' ('Different games all crash on my laptop')",
+          decide("Different games all crash on my laptop since 621.14.") == "notebook_driver_not_tracked")
+    check("I18d a first-person notebook is always the reporter's ('My RTX 4060 laptop', 'my other laptop')",
+          decide("My RTX 4060 laptop crashes since updating to 621.14.") == "notebook_driver_not_tracked"
+          and decide("Since updating to 621.14 my games crash, on my other laptop too.") == "notebook_driver_not_tracked")
+    check("I18e ...an unqualified 'the laptop' is a notebook report; someone else's ('my wife's laptop') is not",
+          decide("Different games crash on the laptop since updating to 621.14.") == "notebook_driver_not_tracked"
+          and decide("Since updating to 621.14 my desktop games crash. My wife's laptop is fine.") == "COUNT")
     check("I19 a version only on a specification line is environment",
           decide("GPU: RTX 4090\nDriver: 621.14\nGame crashes after the new season patch.")
           == "driver_version_environment_only")
@@ -436,6 +458,23 @@ def section_identity() -> None:
           == "driver_module_crash_without_regression_evidence")
     check("I25 ...with a rollback it is regression evidence",
           decide("nvlddmkm.sys TDR crash on 621.14. Rolling back to 610.88 fixes it.") == "COUNT")
+    check("I24b a regression cue about ANOTHER version is not evidence for this one",
+          decide("nvlddmkm TDR crashes started after updating to 617.42 months ago. Still crashing on 621.14, "
+                 "same as before.") == "driver_module_crash_without_regression_evidence")
+    check("I24c ...nor when the problem began on one version and persisted on another (the 3634344 shape)",
+          decide("Screen goes black after upgrading to 621.01. I tried 617.42 but still happened. Then clean "
+                 "installed 621.14, still happens. LiveKernelEvent 141.")
+          == "driver_module_crash_without_regression_evidence")
+    check("I24d a rollback that does not fix it is not a contrast",
+          decide("nvlddmkm.sys TDR crash on 621.14. Rolled back to 610.88 but it still crashes.")
+          == "driver_module_crash_without_regression_evidence"
+          and decide("nvlddmkm.sys TDR crash on 621.14. Rolled back to 610.88, still not working.")
+          == "driver_module_crash_without_regression_evidence")
+    check("I25b dating the crash to THIS version is evidence ('since updating from 617.42 to 621.14', 'new in')",
+          decide("Since updating from 617.42 to 621.14 I get nvlddmkm TDR crashes.") == "COUNT"
+          and decide("nvlddmkm TDR crash, new in 621.14.") == "COUNT")
+    check("I25c ...so is another version named as fine",
+          decide("nvlddmkm TDR crashes on 621.14. 610.88 was fine.") == "COUNT")
     check("I26 a fine-only post is not a problem report",
           decide("Installed 621.14, clean install. No issues at all, seems fine.") == "positive_report_not_a_problem")
     user_topic = thread("Crash report 621.14 621.24", False)
@@ -453,10 +492,21 @@ def section_identity() -> None:
                                 item(rollback, created=1794154118), "2026-11-19T00:00:00Z")
     check("I28c a comment created before the release cannot count for it (the shared date gate)",
           early is not None and early["exclusion_reason"] == "source_date_before_or_unverified_against_release")
-    text = nf.clean_text("Thanks @Mexicola9302 and Manuel@NVIDIA, mail me at a.b@example.com https://x.example/y")
+    text = nf.clean_text("Thanks @SampleUser42 and Casey@NVIDIA, mail me at a.b@example.com https://x.example/y")
     check("I29 names, @mentions, e-mail addresses and links are removed from stored text",
-          "Mexicola" not in text and "Manuel" not in text and "a.b@" not in text and "x.example" not in text
+          "SampleUser" not in text and "Casey" not in text and "a.b@" not in text and "x.example" not in text
           and "@user" in text and "[link]" in text, text)
+    text = nf.clean_text("I don't know, plainmember7... ask PLAINMEMBER7 or Laptop about 621.14",
+                         {"plainmember7", "Laptop", "ab"})
+    check("I30 a member addressed by plain name (a display name in the same response) is removed",
+          "plainmember7" not in text.lower() and text.count("[name]") == 2, text)
+    check("I30b ...but a display name the identity rules read (here 'Laptop') is kept, so no decision moves",
+          "Laptop" in text and not nf.scrubbable_name("Laptop") and not nf.scrubbable_name("Studio")
+          and not nf.scrubbable_name("621.14") and not nf.scrubbable_name("ab") and nf.scrubbable_name("plainmember7"))
+    check("I30c display names are collected from every user object of a response, nested replies included",
+          nf.display_names({"user": {"displayName": "A1b2"}, "comments": [{"user": {"displayName": "C3d4"},
+                                                                        "ghostedByUser": {"displayName": None}}]})
+          == {"A1b2", "C3d4"})
 
 
 # ------------------------------------------------------------------------------------------------
@@ -477,8 +527,9 @@ def section_gap() -> None:
     check("G5 the previous newest gone with a comment at the same second on the boundary: tie retained",
           "boundary_timestamp_tie" in cmp(w, tie))
     ties_inside = [[c, 1000] for c, _t in w]
-    check("G6 timestamp ties INSIDE an overlapping window are no gap",
-          cmp(ties_inside, ties_inside + [[999, 1000]]) in ([], ["comments_appeared_inside_previous_span"]))
+    check("G6 timestamp ties INSIDE an overlapping window are no gap", cmp(ties_inside, list(reversed(ties_inside))) == [])
+    check("G6b ...but a NEW comment at that same second sat inside the span already read: uncertainty retained",
+          cmp(ties_inside, ties_inside + [[999, 1000]]) == ["comments_appeared_inside_previous_span"])
     edited = copy.deepcopy(w)
     check("G7 an edit (same id and creation time) is no gap", cmp(w, edited, 25, 25) == [])
     check("G8 reordered results decide the same", cmp(w, list(reversed(shifted)), 30, 33) == cmp(w, shifted, 30, 33))
@@ -676,13 +727,58 @@ def section_stops() -> None:
           statuses == {"broken"} and rows == 0 and "forums-mirror.example.net" not in fake.hosts()
           and {r["method_health"][0]["blocked_reason"] for rr in res.values() for r in rr} == {"source_authority_stop"},
           f"{statuses} {fake.hosts()[-3:]}")
+    same_dest = f"https://{API}/forums-api/1.0/topics?id=593067&x=1"
     same = {(API, "/forums-api/1.0/topics", "593067"):
-            lambda url: (_respond(301, b"", "text/html", {"Location": f"https://{API}/forums-api/1.0/topics?id=593067&x=1"})
+            lambda url: (_respond(301, b"", "text/html", {"Location": same_dest})
                          if "x=1" not in url else _respond(200, fixture("topic_593067.json")))}
     with wire(same) as (fake, _p, _s):
-        run_both(write=False)
-    check("S11 a redirect is bounded to the host asked (lib.http redirect_hosts): a same-host hop is sent there only",
-          all(h in (WWW, API) for h in fake.hosts()))
+        res = run_both(write=False)
+    reasons = {r["method_health"][0]["blocked_reason"] for rr in res.values() for r in rr}
+    rows = sum(r["accepted_count"] + r["rejected_count"] for rr in res.values() for r in rr)
+    check("S11 a SAME-host redirect is not followed either: nothing sent there, source-authority stop, no rows",
+          same_dest not in fake.seen and reasons == {"source_authority_stop"} and rows == 0,
+          f"{reasons} rows={rows} sent_there={same_dest in fake.seen}")
+
+    def to(dest):
+        return lambda url: _respond(302, b"", "text/html", {"Location": dest(url)})
+    forbidden_hops = {
+        "comments -> page 2": ((API, "/forums-api/1.0/topics/comments", None),
+                               lambda url: url.replace("_page=1", "_page=2")),
+        "comments -> older anchor, +after": ((API, "/forums-api/1.0/topics/comments", None),
+                                             lambda url: url.replace("%2Bbefore", "%2Bafter")
+                                             .split("_anchorValue=")[0] + "_anchorValue=3633066&_anchorDirection=%2Bafter"
+                                             "&_anchorOffset=0&includeGhosted=0"),
+        "topics -> search": ((API, "/forums-api/1.0/topics", None),
+                             lambda url: f"https://{API}/forums-api/1.0/search?q=621.24"),
+        "pinned -> all communities": ((API, "/forums-api/1.0/communities/pinned", None),
+                                      lambda url: f"https://{API}/forums-api/1.0/categories/all/communities"),
+        "www robots -> commentPage": ((WWW, "/robots.txt", None),
+                                      lambda url: f"https://{WWW}/en-us/geforce/forums/game-ready-drivers/13/592433/x/"
+                                                  "?commentPage=2"),
+    }
+    leaked = {}
+    for label, (key, dest) in forbidden_hops.items():
+        with wire({key: to(dest)}) as (fake, _p, _s):
+            res = run_both(write=False)
+        sources = [u for u in fake.seen if urllib.parse.urlsplit(u).path == key[1]]
+        hop = dest(sources[0]) if sources else ""
+        reasons = {r["method_health"][0]["blocked_reason"] for rr in res.values() for r in rr}
+        # The hop must be one the guard refuses (else the shape proves nothing), must never be sent,
+        # and the cycle must stop on it.
+        if not sources or hop in fake.seen or src.permitted_request(hop, {})[0] \
+                or reasons != {"source_authority_stop"}:
+            leaked[label] = (bool(sources), hop in fake.seen, sorted(reasons))
+    check(f"S11b a same-host redirect to a forbidden view sends NOTHING there ({len(forbidden_hops)} shapes)",
+          not leaked, str(leaked))
+    moved: list[str] = []
+    with patched([(src, "fetch_text", lambda url, **kw: moved.append(url) or http_lib.FetchResult(
+            url=url, status=200, headers={}, text="User-agent: *\n", final_url=url + "?moved=1"))]):
+        try:
+            src.Transport(src.empty_state()).get(src.ROBOTS_URLS[WWW])
+            stopped = False
+        except src.SourceAuthorityStop:
+            stopped = True
+    check("S11c an answer from any URL but the one asked is a source-authority stop", stopped and len(moved) == 1)
 
     disallow = fixture("robots_www.txt") + "\nUser-agent: *\nDisallow: /en-us/geforce/forums/\n"
     with wire({(WWW, "/robots.txt", None): lambda url: _respond(200, disallow, "text/plain")}) as (fake, _p, _s):
@@ -763,8 +859,8 @@ def section_stops() -> None:
     with patched([(src, "fetch_text", lambda url, **kw: calls.append(kw) or http_lib.FetchResult(
             url=url, status=200, headers={}, text="x", final_url=url))]):
         src.Transport(src.empty_state()).get(src.ROBOTS_URLS[API])
-    check("S21 every request carries the redirect bound (its own host) and no retries",
-          calls and calls[0].get("redirect_hosts") == frozenset({API}) and calls[0].get("retries") == 0, str(calls))
+    check("S21 every request carries an EMPTY redirect bound (no redirect followed) and no retries",
+          calls and calls[0].get("redirect_hosts") == frozenset() and calls[0].get("retries") == 0, str(calls))
 
 
 # ------------------------------------------------------------------------------------------------
@@ -868,12 +964,12 @@ def section_wiring(fixture_results: dict) -> None:
               and h3["duplicate_existing_evidence"] == h3["accepted_reports"] == 6
               and h3["status"] == "success", f"{len(stored)}->{len(stored_third)} {h3}")
         counted = [r for r in stored if r["counted"]]
-        check("W13 the first write stores every candidate: 10 counted, every excluded row with its reason",
-              len(counted) == 10 and all(r.get("exclusion_reason") for r in stored if not r["counted"]),
+        check("W13 the first write stores every candidate: 9 counted, every excluded row with its reason",
+              len(counted) == 9 and all(r.get("exclusion_reason") for r in stored if not r["counted"]),
               f"{len(counted)} of {len(stored)}")
         check("W14 a shared-component report is stored once per family, excluded in both, counted in neither",
               {(r["product_id"], r["counted"], r["exclusion_reason"]) for r in stored
-               if r["id"].endswith("-592907-3633770")}
+               if r["id"].endswith("-comment-3633770")}
               == {(GRD, False, U), (NSD, False, U)})
         check("W15 every stored row belongs to its family, a tracked version and the one source type",
               all(r["product_id"] in (GRD, NSD) and r["update_version"] in DATES and r["source_type"] == nf.SOURCE_TYPE
@@ -914,11 +1010,21 @@ def section_wiring(fixture_results: dict) -> None:
 
         # Public text of what was stored.
         print("\n[P] public text of the stored rows")
-        names = ("Manuel", "koroush", "Mexicola", "postictal", "jaafaman", "mertuygr", "darky")
         texts = " ".join(str(r.get(f) or "") for r in stored
                          for f in ("report_text_excerpt", "matched_context", "report_title", "parent_title"))
-        check("P1 no person's name or @handle in any stored text", not any(n.lower() in texts.lower() for n in names)
-              and "@NVIDIA" not in texts)
+        name_fields: list[str] = []
+        for path in sorted(FIX.glob("*.json")):
+            stack = [json.loads(path.read_text(encoding="utf-8"))]
+            while stack:
+                node = stack.pop()
+                if isinstance(node, dict):
+                    name_fields += [f"{path.name}:{k}" for k in node
+                                    if k in ("displayName", "name", "username", "nickname", "avatar", "email")]
+                    stack.extend(v for v in node.values() if isinstance(v, (dict, list)))
+                elif isinstance(node, list):
+                    stack.extend(v for v in node if isinstance(v, (dict, list)))
+        check("P1 no fixture carries a person's name field (users are opaque ids), no stored text a staff name",
+              not name_fields and "@NVIDIA" not in texts, str(name_fields[:3]))
         check("P2 no link inside stored report text", "http" not in " ".join(
             str(r.get("report_text_excerpt") or "") + str(r.get("matched_context") or "") for r in stored))
         thread_titles = {fixture(f"topic_{t}.json")["data"]["topic"]["title"]
@@ -929,7 +1035,7 @@ def section_wiring(fixture_results: dict) -> None:
                   and r["source_url"].endswith("?comment=" + r["id"].rsplit("-", 1)[1]) for r in stored))
         check("P5 ...and the shared gate reads it as a specific report URL",
               all(base.source_url_is_specific(r["source_url"]) for r in stored))
-        r66 = next(r for r in stored if r["id"] == f"{GRD}-621-14-nvidia-forum-592433-3633066")
+        r66 = next(r for r in stored if r["id"] == f"{GRD}-621-14-nvidia-forum-comment-3633066")
         check("P6 the report date is the comment's own creation time (2026-11-08 16:08:38Z), not its last activity",
               r66["source_date"] == "2026-11-08T16:08:38Z" and r66["match_basis"] == "exact_version_text"
               and r66["matched_text"] == "621.14", str(r66.get("source_date")))
@@ -937,6 +1043,71 @@ def section_wiring(fixture_results: dict) -> None:
         check("P8 the state file carries ids, times and provenance only (no text, no user)",
               "body" not in state_path.read_text(encoding="utf-8")
               and "collection_authorization" in json.loads(state_path.read_text(encoding="utf-8"))["provenance"])
+
+
+# ------------------------------------------------------------------------------------------------
+def section_moved_comment() -> None:
+    print("\n[M] one comment, two threads: identity is the comment; members' names never stored")
+    created = 1794600000                                    # 2026-11-13, after both releases
+    reporter = {"id": "9001", "displayName": "Reporter_Alpha7", "aclactions": {"officialreply": False}}
+    helper = {"id": "9002", "displayName": "Helper_Bravo3", "aclactions": {"officialreply": False}}
+    report = {"id": 3640001, "createdStamp": created, "updatedStamp": created, "lastActivityStamp": created,
+              "isVisible": 1, "isGhosted": 0, "status": "default", "replyCount": 0, "isOfficialReply": 0,
+              "topic": {"id": 592907}, "user": reporter, "comments": [],
+              "body": "Game Ready 621.14 crashes in every game since updating. Thanks Helper_Bravo3 and "
+                      "@Reporter_Alpha7 and Casey@NVIDIA, the tip did not help."}
+    tip = dict(report, id=3640002, user=helper, createdStamp=created - 60, body="Try a clean install with DDU.")
+    first = copy.deepcopy(fixture("comments_592907.json"))
+    first["data"]["comments"] = [report, tip] + first["data"]["comments"]
+    first["pagination"]["_totalRows"] += 2
+    # The next cycle: a moderator moved the comment into the 621.14 feedback thread.
+    topic2 = copy.deepcopy(fixture("topic_592433.json"))
+    topic2["data"]["topic"]["lastComment"]["id"] = 3640001
+    topic2["data"]["topic"]["lastActivityStamp"] = 1795300000
+    second = copy.deepcopy(fixture("comments_592433.json"))
+    second["data"]["comments"] = [dict(copy.deepcopy(report), topic={"id": 592433})] + second["data"]["comments"][:24]
+    second["pagination"]["_totalRows"] += 1
+    with tempfile.TemporaryDirectory() as tmp:
+        store = Path(tmp) / "consensus_evidence.yml"
+        store.write_text(yaml.safe_dump({"schema_version": 1, "evidence": []}), encoding="utf-8")
+        real_append = base.append_evidence_rows
+
+        def append(rows, path=None, **kw):
+            return real_append(rows, store, **kw)
+        state_path = Path(tmp) / "state.json"
+        quiet = [(base, "append_evidence_rows", append), (nf, "apply_consensus_writebacks", lambda pid, vs: {})]
+        with wire({(API, "/forums-api/1.0/topics/comments", "592907"): lambda url: _respond(200, first)},
+                  state_path=state_path) as (_fake, _p, _s):
+            with patched(quiet):
+                run_both(write=True)
+                stored1 = base.load_evidence(store)
+        age_state(state_path)
+        with wire({(API, "/forums-api/1.0/topics", "592433"): lambda url: _respond(200, topic2),
+                   (API, "/forums-api/1.0/topics/comments", "592433"): lambda url: _respond(200, second)},
+                  state_path=state_path) as (fake, _p, _s):
+            with patched(quiet):
+                again = run_both(write=True)
+                stored2 = base.load_evidence(store)
+            reread = [u for u in fake.seen if "comments?id=592433" in u]
+    mine1 = [r for r in stored1 if r["id"].endswith("-comment-3640001")]
+    mine2 = [r for r in stored2 if r["id"].endswith("-comment-3640001")]
+    grd = next((r for r in mine1 if r["product_id"] == GRD), {})
+    check("M1 the comment is stored once per family the first time (Game Ready counted: the reporter named it)",
+          sorted((r["product_id"], r["counted"]) for r in mine1) == [(GRD, True), (NSD, False)], str(mine1)[:200])
+    check("M2 served again under ANOTHER thread, it is never a second row (the second read happened)",
+          len(mine2) == len(mine1) == 2 and len(stored2) == len(stored1) and reread, f"{len(stored1)}->{len(stored2)}")
+    check("M3 the stored row keeps the thread it was first seen under",
+          [r["source_url"] for r in mine2 if r["product_id"] == GRD] == [grd.get("source_url")]
+          and "/592907/" in str(grd.get("source_url")) and str(grd.get("source_url")).endswith("?comment=3640001"))
+    h = next(r for r in again[GRD] if r["version"] == "621.14")
+    check("M4 the second sighting is credited as already held, not as a report this run added",
+          h.get("evidence_rows_added") == 0 and h["method_health"][0]["duplicate_existing_evidence"] >= 1, str(h)[:200])
+    texts = " ".join(str(r.get(f) or "") for r in stored2
+                     for f in ("report_text_excerpt", "matched_context", "report_title", "parent_title"))
+    check("P1b members' display names addressed in plain text, @handles and staff names are never stored",
+          not any(n.lower() in texts.lower() for n in ("Reporter_Alpha7", "Helper_Bravo3", "Casey"))
+          and "[name]" in str(grd.get("report_text_excerpt")) and "@user" in str(grd.get("report_text_excerpt")),
+          str(grd.get("report_text_excerpt")))
 
 
 def run() -> int:
@@ -948,6 +1119,7 @@ def run() -> int:
     section_gap()
     section_stops()
     section_wiring(results)
+    section_moved_comment()
     check("Z no socket was opened by the whole suite", _REFUSED[0] == 0, str(_REFUSED[0]))
     print()
     print("=" * 74)

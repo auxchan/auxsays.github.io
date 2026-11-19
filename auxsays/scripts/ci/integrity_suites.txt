@@ -474,9 +474,10 @@ auxsays/scripts/tests/test_nvidia_driver_lookup.py = 137
 # replayed through the real lib.http transport to their recorded decisions for BOTH driver families (family
 # from a qualifying staff title or the reporter only; shared-component reports unassigned in both; notebook,
 # environment-only, disclaimed, module-crash and fine-only posts excluded), the coverage-gap contract, every
-# forbidden request shape refused before it is sent, refusal/schema/redirect/robots stops, the 12-hour
-# cadence, and the write-mode gates against a temporary store.
-auxsays/scripts/tests/test_nvidia_forum_evidence.py = 142
+# forbidden request shape refused before it is sent, refusal/schema/robots stops, ANY redirect refused before
+# the hop (same host included), the 12-hour cadence, the write-mode gates against a temporary store, one
+# comment served under two threads stored once, and no member's name in fixtures or stored text.
+auxsays/scripts/tests/test_nvidia_forum_evidence.py = 163
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68

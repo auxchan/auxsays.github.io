@@ -28,9 +28,12 @@ STOP RULES. HTTP 401/403/429/451, a bot challenge, an HTML page where JSON was e
 refusing automated access raises ``AccessRefused``: the refusal is persisted in the state file and
 the method stays suspended -- zero requests -- until a reviewed change sets
 ``ACCESS_REFUSAL_CLEARED_AT`` to a time after it that has passed (the same rule as the official
-NVIDIA lane). A redirect is followed only to the host asked (lib.http ``redirect_hosts``, checked
-before the hop is made); anything else is a ``SourceAuthorityStop`` with nothing sent there. A
-response missing the fields identity rests on is a ``SchemaIntegrityStop``. None of these deletes a
+NVIDIA lane). NO redirect is followed, not even one on the same host: every measured default view and
+both robots files answer directly, and a same-host hop could name page 2, an older-comment anchor,
+search or the all-communities listing without the request guard ever seeing it. Every request is
+made with an EMPTY lib.http redirect bound, so any redirect is refused before the hop and becomes a
+``SourceAuthorityStop`` with nothing sent to its destination. A response missing the fields
+identity rests on is a ``SchemaIntegrityStop``. None of these deletes a
 stored row: a stored report stops counting only through audited withdrawal.
 
 WHAT THE WINDOW CANNOT SEE. Only the latest 25 top-level comments of a thread are visible, and only
@@ -84,6 +87,9 @@ MAX_STATE_THREADS = 40
 USER_AGENT = "AUXSAYS-Patch-Evidence/1.0 (+https://auxsays.com; read-only, low rate)"
 REQUEST_HEADERS = {"User-Agent": USER_AGENT, "Accept": "application/json"}
 ACCESS_REFUSAL_CODES = frozenset({401, 403, 429, 451})
+# The redirect bound every request carries: no host at all, so lib.http refuses ANY redirect before
+# the hop (FORUM_MEASUREMENT request log 2026-11-19: every final URL equals the URL asked).
+NO_REDIRECTS: frozenset[str] = frozenset()
 # Set ONLY by a reviewed change, to a time after a recorded refusal (ISO 8601, UTC). A future time
 # clears nothing until it arrives, then clears that one refusal once.
 ACCESS_REFUSAL_CLEARED_AT = ""
@@ -307,7 +313,7 @@ def _sleep(seconds: float) -> None:      # replaced by tests
 
 
 class Transport:
-    """Every request of a cycle goes through here: guard, budget, spacing, redirect bound."""
+    """Every request of a cycle goes through here: guard, budget, spacing, no redirects."""
 
     def __init__(self, state: dict[str, Any] | None, *, max_requests: int = MAX_REQUESTS_PER_CYCLE):
         self.state = state
@@ -340,12 +346,14 @@ class Transport:
         self.requests.append(url)
         self._last = time.monotonic()
         try:
+            # An empty bound: lib.http refuses every redirect, same host or not, before the hop.
+            # permitted_request vetted `url` only; a destination it never saw is never requested.
             result = fetch_text(url, timeout=TIMEOUT_SECONDS, headers=REQUEST_HEADERS, retries=0,
-                                max_bytes=MAX_BYTES, redirect_hosts=frozenset({host}))
+                                max_bytes=MAX_BYTES, redirect_hosts=NO_REDIRECTS)
         except RedirectRefused as exc:
             raise SourceAuthorityStop(
-                f"{host} redirected to {_host(exc.destination) or 'an unnamed destination'} "
-                f"(HTTP {exc.code}); the redirect was not followed and nothing was sent there") from None
+                f"{host} redirected (HTTP {exc.code}) to {_host(exc.destination) or 'an unnamed destination'}; "
+                "no redirect is followed and nothing was sent there") from None
         except RuntimeError as exc:
             message = str(exc)
             code = re.search(r"\bHTTP (\d{3})\b", message)
@@ -354,8 +362,10 @@ class Transport:
             if "Browser challenge" in message:
                 raise self._refusal("bot challenge") from None
             raise TransportError(message[:200], int(code.group(1)) if code else None) from None
-        if _host(result.final_url or url) != host:
-            raise SourceAuthorityStop(f"{host} answered from {_host(result.final_url)}")
+        if (result.final_url or url) != url:
+            # Defence in depth: with no redirect followed, the answer comes from the URL asked.
+            raise SourceAuthorityStop(f"{host} answered from {_host(result.final_url) or 'elsewhere'}, "
+                                      "not from the URL asked")
         return (result.text or "").lstrip("﻿")
 
     def get_json(self, url: str) -> dict[str, Any]:

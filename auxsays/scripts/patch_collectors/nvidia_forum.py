@@ -26,14 +26,18 @@ IDENTITY, IN ORDER (each refusal is stored as an excluded row with its reason, s
    `driver_family_unassigned` for BOTH products and counted for neither: one report is never two
    family reports.
 3. Desktop only. Both products are desktop driver packages; a laptop or notebook report is
-   `notebook_driver_not_tracked`, never merged into a desktop record.
+   `notebook_driver_not_tracked`, never merged into a desktop record. A first-person notebook ("my
+   laptop") is always the reporter's; only a notebook inside an other-machine phrase ("works on
+   another system with an RTX 4070 Laptop GPU") is someone else's.
 4. The version must be the subject (GPT G44 s4). Named only on a specification line ("Driver:
    621.14", "NVIDIA Driver Version: 621.24", "Using latest drivers 621.14") it is environment, not
    attribution: `driver_version_environment_only`. Named in a sentence where the reporter says they
    cannot tell whether it is the cause: `driver_attribution_disclaimed`. A crash in a driver module
-   (nvlddmkm, TDR, LiveKernelEvent) with no rollback, contrast or "since updating" is investigated,
-   not counted: `driver_module_crash_without_regression_evidence`. A post that only says the driver
-   is fine and names no malfunction is not a problem report: `positive_report_not_a_problem`.
+   (nvlddmkm, TDR, LiveKernelEvent) without regression evidence for THIS version -- dated to it, or a
+   contrast with a version that works, and nothing saying it began on or also occurs on another
+   version -- is investigated, not counted: `driver_module_crash_without_regression_evidence`. A
+   post that only says the driver is fine and names no malfunction is not a problem report:
+   `positive_report_not_a_problem`.
 5. Role. With another tracked version named, silence is not enough: the shared role reading
    (lib.target_outcome) must say the version is the affected one; with none, a version named as
    working, fixed or rolled back to is vetoed (target_is_contradicted).
@@ -41,16 +45,19 @@ IDENTITY, IN ORDER (each refusal is stored as an excluded row with its reason, s
 THEN THE SHARED AUTHORITY, UNCHANGED: base.apply_acceptance_gates (exact version, specific URL,
 created on or after the release, concrete problem). No threshold, weight or acceptance rule of this
 product's own exists. The report date is the comment's own creation time, never its last activity.
-The stored URL is the forum's own link to that one comment, under its thread.
+The stored URL is the forum's own link to that one comment, under its thread. A row is keyed on the
+comment, so the same comment served again under another thread (a move or a merge) is never a
+second row.
 
-PUBLIC TEXT. Names, @mentions and e-mail addresses are removed from every stored text, and links are
-replaced by a marker. Report titles are the thread's title.
+PUBLIC TEXT. Names (staff names, @mentions and the display names of every member in the same
+response), e-mail addresses are removed from every stored text, and links are replaced by a marker.
+Report titles are the thread's title.
 """
 from __future__ import annotations
 
 import re
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Iterable
 
 from lib import evidence_classification as ec
 from lib import nvidia_driver_identity as identity
@@ -77,15 +84,47 @@ _MENTION_RE = re.compile(r"(?<![\w.@])@[A-Za-z0-9_][\w.-]{0,40}")
 _URL_RE = re.compile(r"https?://[^\s)\]>]+|\bwww\.[^\s)\]>]+", re.I)
 
 
-def clean_text(text: Any) -> str:
-    """The commenter's own words: quoted lines dropped, people's names and links removed."""
+def clean_text(text: Any, names: Iterable[str] = ()) -> str:
+    """The commenter's own words: quoted lines dropped, people's names and links removed.
+
+    `names` are the display names of the forum members in the same response (display_names): a
+    reply addressing someone by plain name ("I don't know, <name>...") carries no @, so those names
+    are removed wherever the text uses them (scrubbable_name says which may be)."""
     value = str(text or "").replace("\r\n", "\n").replace("\r", "\n")
     value = _QUOTE_LINE_RE.sub("", value)
     value = _EMAIL_RE.sub("[email]", value)
     value = _STAFF_NAME_RE.sub("NVIDIA staff", value)
     value = _MENTION_RE.sub("@user", value)
     value = _URL_RE.sub("[link]", value)
+    for name in sorted({str(n).strip() for n in names if scrubbable_name(n)}, key=lambda n: (-len(n), n)):
+        value = re.sub(rf"(?<![\w@]){re.escape(name)}(?!\w)", "[name]", value, flags=re.I)
     return value.strip()
+
+
+def display_names(*payloads: Any) -> set[str]:
+    """Every forum member's display name in these responses (the `displayName` of each user)."""
+    out: set[str] = set()
+    stack: list[Any] = list(payloads)
+    while stack:
+        node = stack.pop()
+        if isinstance(node, dict):
+            name = node.get("displayName")
+            if isinstance(name, str) and name.strip():
+                out.add(name.strip())
+            stack.extend(v for v in node.values() if isinstance(v, (dict, list)))
+        elif isinstance(node, list):
+            stack.extend(v for v in node if isinstance(v, (dict, list)))
+    return out
+
+
+def scrubbable_name(name: Any) -> bool:
+    """May this display name be removed from comment text without changing a decision? Not when it
+    is under 3 characters, or when it is (or contains) a driver version, a family, or a word the
+    attribution rules below read: such a name stays, the rules keep their input."""
+    text = str(name or "").strip()
+    if len(text) < 3 or driver_versions_in(text) or identity.families_named(text):
+        return False
+    return not any(rule.search(text) for rule in _NAME_PROTECTED_RULES)
 
 
 _DRIVER_VERSION_RE = re.compile(r"(?<![\w.])(\d{3,4}\.\d{2})(?![\w]|\.\d)")
@@ -128,9 +167,25 @@ def thread_profile(title: str, staff_author: bool) -> dict[str, Any]:
 # --- attribution ---------------------------------------------------------------------------------------
 
 _NOTEBOOK_RE = re.compile(r"\b(?:laptops?|notebooks?|max-q|mobile\s+gpu)\b", re.I)
-# A notebook named as SOMEONE ELSE's machine ("works on another system with an RTX 4070 Laptop GPU",
-# comment 3633451) says nothing about the reporter's own install.
-_OTHER_MACHINE_RE = re.compile(r"\b(?:another|other|second|different|friend'?s|wife'?s|husband'?s)\b", re.I)
+# The reporter's OWN notebook: a first-person possessive governing the notebook's noun phrase ("my
+# laptop", "My RTX 4060 laptop", "on our notebook"). Always a notebook report, whatever else the
+# sentence says ("Like other users here, my laptop crashes ..."). "my wife's laptop" is not first
+# person: the possessive belongs to someone else.
+_OWN_NOTEBOOK_LEAD_RE = re.compile(r"\b(?:my|our)\s+(?:(?![\w.-]+'s\b)[\w.+-]+\s+){0,4}\Z", re.I)
+# A notebook named as SOMEONE ELSE's machine says nothing about the reporter's own install, in ONE
+# shape only: an other-machine phrase -- "another"/"a different"/"a friend's" qualifying a machine
+# noun -- whose own description holds the notebook mention ("works on another system with an RTX
+# 4070 Laptop GPU", comment 3633451; "a friend's laptop"). An "other" or "different" qualifying
+# anything else ("other users", "different games") is not that shape and turns nothing off.
+_OTHER_OWNER = (r"(?:another|other|second|different|friend'?s|wife'?s|husband'?s|partner'?s|brother'?s"
+                r"|sister'?s|son'?s|daughter'?s)")
+_MACHINE_NOUN = r"(?:systems?|pcs?|machines?|computers?|rigs?|devices?|builds?|laptops?|notebooks?)"
+_OTHER_MACHINE_RE = re.compile(rf"\b{_OTHER_OWNER}\s+{_MACHINE_NOUN}\b", re.I)
+# What may sit between that machine noun and the notebook mention: a short description of the
+# same machine ("with an RTX 4070", "running a", "that has the") and nothing else.
+_MACHINE_DESCRIPTION_RE = re.compile(
+    r"\A\s+(?:(?:with|using|running|that\s+has|which\s+has|having)\s+)?(?:an?\s+|the\s+)?"
+    r"(?:[\w+-]+\s+){0,4}\Z", re.I)
 
 # A specification line names a version as environment: a short label (driver, driver version, ver.)
 # immediately before the number, inside its own comma/sentence segment, with no defect word in the
@@ -152,17 +207,49 @@ _DEFECT_RE = re.compile(rf"\b(?:{_DEFECT_WORDS})\b", re.I)
 _ENV_BREAK_RE = re.compile(rf"\b(?:{_DEFECT_WORDS}|caus\w*|introduc\w*|since|after|still|new)\b", re.I)
 _ENV_MAX_WORDS = 6
 
-# G44 s4 row 4: a crash in an NVIDIA driver module, without release-specific regression evidence, is
-# investigated, never counted automatically. Regression evidence is a rollback, a contrast with a
-# version that is not affected, or the reporter dating the problem to an update.
+# G44 s4 row 4: a crash in an NVIDIA driver module, without RELEASE-SPECIFIC regression evidence, is
+# investigated, never counted automatically. The evidence must concern the record's own version
+# (regression_evidence_for): the reporter dating the problem to that version, a contrast with a
+# version that works, or the template's regression field -- and a text that says the problem began on
+# another version, or also occurs on another one, has none (comment 3634344: "black screen after
+# upgrading to 621.01 ... tried 617.42 but still happened ... clean installed 621.24, still do happen").
 _MODULE_CRASH_RE = re.compile(
     r"\b(?:nvlddmkm(?:\.sys)?|video_tdr_failure|livekernelevent|tdrs?|0x116|0x141|0x1b8|bug\s*check)\b", re.I)
-_REGRESSION_EVIDENCE_RE = re.compile(
-    r"\b(?:roll(?:ed|ing|s)?\s*back|revert\w*|downgrad\w*|went\s+back|go(?:ing|es)?\s+back"
-    r"|new\s+in|since\s+(?:updating|installing|upgrading|the\s+(?:update|new\s+driver))"
-    r"|after\s+(?:updating|installing|upgrading|the\s+update)|driver\s+regression\s*:\s*yes"
-    r"|not\s+affected|unaffected|is\s+clean|was\s+(?:fine|stable)|last\s+(?:known[\s-]+)?(?:good|working))\b",
-    re.I)
+# Dating cues. Each must be followed, within a short run of plain words, by the version it dates.
+_ONSET_CUE_RE = re.compile(
+    r"\b(?:since|after|when)\s+(?:(?:i|we)\s+)?(?:updat\w*|upgrad\w*|install\w*|switch\w*|mov\w*|went|going)\b"
+    r"|\b(?:since|after)\s+(?:the\s+)?(?:update|upgrade|installation)\s+(?:to|of)\b"
+    r"|\bnew\s+(?:in|with|since)\b|\b(?:started|began|begun|appeared)\s+(?:with|on|after|since|in)\b"
+    r"|\b(?:broken|affected|bad)\s*(?:driver|version)?\s*[:=]", re.I)
+_ONSET_MAX_GAP_WORDS = 8
+_ONSET_GAP_RE = re.compile(r"[\w\s.'+-]*")
+# ... or the version named first: "621.14 introduced / broke / caused ...".
+_ONSET_FOLLOW_RE = re.compile(
+    r"\s*(?:(?:driver|update|version)\s+)?(?:introduced|broke|brought|caused|causes|triggered|started)\b", re.I)
+# Dating to "the update" with no version: release-specific only when no other version is named.
+_IMPLICIT_ONSET_RE = re.compile(
+    r"\b(?:since|after)\s+(?:updating|upgrading|installing"
+    r"|the\s+(?:latest\s+|last\s+|new\s+|recent\s+)?(?:driver\s+)?(?:update|upgrade)|the\s+new\s+driver)\b", re.I)
+# A contrast with a version that works: a rollback, a last working driver, a version not affected,
+# or the template's own regression field.
+_CONTRAST_RE = re.compile(
+    r"\b(?:roll(?:ed|ing|s)?\s*back|revert\w*|downgrad\w*)\b"
+    r"|\b(?:went|go(?:ing|es)?)\s+back\s+to\s+(?:the\s+|an?\s+)?(?:(?:older|previous|old|last|earlier)\s+)?"
+    r"(?:drivers?\b|versions?\b|v?\d{3,4}\.\d{2})"
+    r"|\bnot\s+affected\b|\bunaffected\b|\b(?:is|was|runs?|ran)\s+clean\b|\bwas\s+(?:fine|stable)\b"
+    r"|\blast\s+(?:known[\s-]+)?(?:good|working|stable)\b|\bdriver\s+regression\s*[:=]\s*yes\b", re.I)
+# The problem persisting on another driver ("tried 617.42 but still happened", "same on older
+# drivers", "rolled back, same crash") ...
+_PERSISTS_RE = re.compile(r"\b(?:still|also|too|same|as\s+well|even\s+(?:on|with)|again|persist\w*)\b", re.I)
+_OLDER_DRIVER_RE = re.compile(
+    r"\b(?:older|previous|earlier|prior|past|other|old)\s+(?:\w+\s+)?(?:drivers?|versions?|releases?)\b"
+    r"|\b(?:roll(?:ed|ing|s)?\s*back|revert\w*|downgrad\w*)\b", re.I)
+# ... unless the same sentence says that driver works ("rolling back to 610.88 fixes it"). Negated
+# forms ("still not working", "doesn't fix it") are not that.
+_FIXED_RE = re.compile(
+    r"(?<!not\s)(?<!n't\s)(?<!never\s)(?<!no\slonger\s)"
+    r"\b(?:fix(?:es|ed)?|fine|stable|works?|worked|working|resolv\w*|solv\w*|gone|unaffected"
+    r"|no\s+(?:more\s+)?(?:issues?|problems?|crash\w*))\b", re.I)
 
 # A post that only says the driver is fine is not a problem report, whatever the shared concreteness
 # vocabulary makes of it ("Installed 621.24 over 591, clean install ... No issues at all": the word
@@ -178,6 +265,12 @@ _DISCLAIMER_RE = re.compile(
     r"\b(?:cannot|can't|can not|not able to|unable to)\s+(?:confirm|tell|say|determine)\s+(?:whether|if)\b"
     r"|\bnot\s+(?:an?\s+)?(?:issue|problem|bug)\s+(?:specific|related|limited)\s+to\b"
     r"|\bnot\s+sure\s+(?:whether|if)\b", re.I)
+
+# Display names that collide with the vocabulary these rules read are never removed from a comment.
+_NAME_PROTECTED_RULES: tuple[re.Pattern[str], ...] = (
+    _NOTEBOOK_RE, _OTHER_MACHINE_RE, re.compile(r"\b(?:my|our|drivers?|ver(?:sion)?|game|ready|studio)\b", re.I),
+    _DEFECT_RE, _ENV_BREAK_RE, _MODULE_CRASH_RE, _ONSET_CUE_RE, _IMPLICIT_ONSET_RE, _CONTRAST_RE,
+    _PERSISTS_RE, _OLDER_DRIVER_RE, _FIXED_RE, _POSITIVE_RE, _DISCLAIMER_RE)
 
 
 def _bounds(text: str, start: int, end: int, pattern: re.Pattern[str]) -> tuple[int, int]:
@@ -206,15 +299,90 @@ def is_environment_occurrence(text: str, start: int, end: int) -> bool:
     return False
 
 
+def _notebook_is_other_machine(text: str, sentence_start: int, start: int, end: int) -> bool:
+    """Is this notebook mention inside an other-machine phrase of its own sentence?"""
+    for phrase in _OTHER_MACHINE_RE.finditer(text, sentence_start, end):
+        if phrase.start() <= start and phrase.end() >= end:
+            return True                     # "another laptop", "a friend's notebook"
+        if phrase.end() <= start and _MACHINE_DESCRIPTION_RE.match(text[phrase.end():start]):
+            return True                     # "another system with an RTX 4070 Laptop GPU"
+    return False
+
+
 def own_machine_is_notebook(text: str) -> bool:
+    """Does the reporter's own machine look like a notebook? Every notebook mention counts unless it
+    is plainly another machine's; a first-person one ("my laptop") always counts."""
     for hit in _NOTEBOOK_RE.finditer(text):
-        if not _OTHER_MACHINE_RE.search(text[max(0, hit.start() - 50):hit.start()]):
+        lo, _hi = _bounds(text, hit.start(), hit.end(), _SENTENCE_BREAK_RE)
+        if _OWN_NOTEBOOK_LEAD_RE.search(text[lo:hit.start()]):
+            return True
+        if not _notebook_is_other_machine(text, lo, hit.start(), hit.end()):
             return True
     return False
 
 
-def module_crash_without_regression(text: str) -> bool:
-    return bool(_MODULE_CRASH_RE.search(text)) and not _REGRESSION_EVIDENCE_RE.search(text)
+def _sentences_naming(text: str, version: str) -> list[tuple[int, int, int, int]]:
+    """(sentence start, sentence end, occurrence start, occurrence end) for every exact occurrence."""
+    return [(*_bounds(text, s, e, _SENTENCE_BREAK_RE), s, e) for s, e in occurrences(text, version)]
+
+
+def _onset_names(text: str, version: str) -> bool:
+    """Does the text date the problem to `version` itself? "since updating to V", "after upgrading
+    from X to V", "new in V", "started with V", "Broken: V", or "V introduced/broke/caused ...".
+    A version the reporter updated FROM is not the one they date the problem to."""
+    for lo, _hi, start, end in _sentences_naming(text, version):
+        lead = text[lo:start]
+        for cue in _ONSET_CUE_RE.finditer(lead):
+            gap = lead[cue.end():]
+            if not _ONSET_GAP_RE.fullmatch(gap) or len(re.findall(r"[\w.'+-]+", gap)) > _ONSET_MAX_GAP_WORDS \
+                    or re.search(r"\bfrom\s+(?:(?:driver|version)\s+|v)?\Z", gap, re.I):
+                continue
+            # Only a "from X" may sit between the cue and the version; any other version there is
+            # the one the cue is about.
+            if all(re.search(r"\bfrom\s+(?:(?:driver|version)\s+|v)?\Z", gap[:m.start()], re.I)
+                   for m in _DRIVER_VERSION_RE.finditer(gap)):
+                return True
+        if _ONSET_FOLLOW_RE.match(text, end):
+            return True
+    return False
+
+
+def _fixed_in(sentence: str) -> bool:
+    return bool(_FIXED_RE.search(sentence))
+
+
+def _problem_predates_or_persists(text: str, version: str) -> bool:
+    """Does the text say the problem began on another version, or also occurs on another (older)
+    one? Then nothing in it is release-specific to `version`."""
+    for other in sorted(driver_versions_in(text) - {version}):
+        if _onset_names(text, other):
+            return True                     # "black screen after upgrading to 621.01"
+        for lo, hi, _s, _e in _sentences_naming(text, other):
+            sentence = text[lo:hi]
+            if _PERSISTS_RE.search(sentence) and not _fixed_in(sentence):
+                return True                 # "I tried 617.42 but still happened"
+    for sentence in _SENTENCE_BREAK_RE.split(text):
+        if _OLDER_DRIVER_RE.search(sentence) and _PERSISTS_RE.search(sentence) and not _fixed_in(sentence):
+            return True                     # "happened on older drivers too", "rolled back, same crash"
+    return False
+
+
+def regression_evidence_for(text: str, version: str) -> bool:
+    """Release-specific regression evidence for THIS version (G44 s4 row 4): the reporter dates the
+    problem to it, contrasts it with a version that works (a rollback that fixes it, a last working
+    driver, a version not affected), or fills the template's regression field -- and nothing says
+    the problem began on, or also occurs on, another version."""
+    if _problem_predates_or_persists(text, version):
+        return False
+    if _onset_names(text, version):
+        return True
+    if not (driver_versions_in(text) - {version}) and _IMPLICIT_ONSET_RE.search(text):
+        return True                         # "since the update", with no other version named
+    return bool(_CONTRAST_RE.search(text))
+
+
+def module_crash_without_regression(text: str, version: str) -> bool:
+    return bool(_MODULE_CRASH_RE.search(text)) and not regression_evidence_for(text, version)
 
 
 def positive_only(text: str) -> bool:
@@ -306,7 +474,7 @@ def evaluate_comment(product_id: str, record: base.PatchRecord, tracked_versions
         reason = "driver_version_environment_only"
     if not reason and attribution_disclaimed(own, spans):
         reason = "driver_attribution_disclaimed"
-    if not reason and module_crash_without_regression(own):
+    if not reason and module_crash_without_regression(own, version):
         reason = "driver_module_crash_without_regression_evidence"
     if not reason and positive_only(own):
         reason = "positive_report_not_a_problem"
@@ -353,7 +521,10 @@ def evaluate_comment(product_id: str, record: base.PatchRecord, tracked_versions
         platform=platform,
         severity=severity,
         sentiment="",
-        row_id=f"{product_id}-{base.slug(version)}-nvidia-forum-{int(thread['topic_id'])}-{int(item['comment_id'])}",
+        # Keyed on the COMMENT, never on the thread: comment ids are forum-wide, and a moderator's
+        # move or merge serves the same comment under another topic. The stored row (with the URL
+        # of the thread it was first seen under) wins; the second sighting is "already held".
+        row_id=f"{product_id}-{base.slug(version)}-nvidia-forum-comment-{int(item['comment_id'])}",
         matched_text=provenance.get("matched_text", ""),
         matched_field=provenance.get("matched_field", ""),
         matched_context=provenance.get("matched_context", ""),
@@ -394,16 +565,18 @@ def _records() -> dict[str, list[base.PatchRecord]]:
 
 def _items_for(thread: dict[str, Any], topic: dict[str, Any], comments: list[dict[str, Any]],
                community_id: int, community_slug: str) -> list[dict[str, Any]]:
-    """Every user-authored, visible comment the default view shows, as candidates."""
+    """Every user-authored, visible comment the default view shows, as candidates. Every forum
+    member named in the topic and comments responses is removed from each comment's text."""
     topic_id = int(topic["id"])
     topic_slug = src.forum_slug(topic.get("title"))
+    names = display_names(topic, comments)
     out: list[dict[str, Any]] = []
 
     def add(comment: dict[str, Any], own: str) -> None:
         if src.is_staff(comment.get("user")) or comment.get("isOfficialReply") == 1 or not src.visible(comment):
             return
         out.append({"comment_id": int(comment["id"]), "created": int(comment["createdStamp"]),
-                    "own_text": clean_text(own),
+                    "own_text": clean_text(own, names),
                     "url": src.comment_url(community_id, community_slug, topic_id, topic_slug, int(comment["id"]))})
 
     first = topic.get("firstComment") or {}

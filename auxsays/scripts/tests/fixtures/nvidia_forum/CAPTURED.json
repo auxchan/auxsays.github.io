@@ -1,5 +1,5 @@
 {
- "note": "Scrubbed copies of NVIDIA GeForce forum default-view responses: user names, avatars and ids replaced by opaque numbers, staff names and @mentions neutralised, long bodies trimmed to the lines the decisions read. Only fields the collector reads are kept.",
+ "note": "Scrubbed copies of NVIDIA GeForce forum default-view responses: user names, avatars and ids replaced by opaque numbers, staff names, @mentions and plain-name addresses in bodies and titles neutralised, long bodies trimmed to the lines the decisions read. Only fields the collector reads are kept.",
  "captured": {
   "592433": "2026-11-19T03:04Z",
   "592767": "2026-11-19T03:06Z",

@@ -3754,17 +3754,21 @@ defect of 621.14/621.24 was reported on the NVIDIA GeForce forum about 9 days be
   activity has not moved is not re-read.
 - **Stops**: 401/403/429/451, a challenge, HTML for JSON or a refusing body suspend the method,
   persisted in `_data/nvidia_forum_state.json`, until a reviewed change sets
-  `ACCESS_REFUSAL_CLEARED_AT` (after the refusal, already passed, once). A redirect off the host asked
-  (lib.http `redirect_hosts`), a schema change or an unreadable or disallowing robots policy store
-  nothing that cycle. Nothing stored is ever removed by a stop.
+  `ACCESS_REFUSAL_CLEARED_AT` (after the refusal, already passed, once). Any redirect, the same host
+  included (an empty lib.http `redirect_hosts` bound, refused before the hop), a schema change or an
+  unreadable or disallowing robots policy store nothing that cycle. Nothing stored is ever removed by a stop.
 - **Identity**: a comment is a candidate only when its OWN text names a tracked version (links and
   quotes removed). Family from a staff feedback thread whose title names exactly one version and one
   family, for that version only, or from the reporter naming it; the other family named vetoes; with
   no family the row is stored `driver_family_unassigned` for both and counted for neither (the
-  shared-component case). Notebook reports, versions on a specification line only, disclaimed
-  attribution, module crashes without regression evidence and fine-only posts are excluded with their
+  shared-component case). Notebook reports (first person always; another machine's only inside an
+  other-machine phrase), versions on a specification line only, disclaimed attribution, module crashes
+  without regression evidence for the record's own version (dated to it or contrasted with a working
+  version, and not begun on or persisting on another) and fine-only posts are excluded with their
   reasons. Then `base.apply_acceptance_gates` and `lib.target_outcome` unchanged; the date is the
-  comment's own creation time; the URL is the forum's own link to that comment.
+  comment's own creation time; the URL is the forum's own link to that comment; the row is keyed on the
+  comment (a comment moved to another thread is never a second row); members' display names are removed
+  from stored text.
 - **Coverage gaps** (GPT G47 s2): each read thread's last window (comment ids and creation times) is
   kept; no overlap with the previous newest gone, a boundary tie, a comment appearing inside the span
   already read, or more new comments than the window shows reports `partial` /
@@ -3777,7 +3781,8 @@ defect of 621.14/621.24 was reported on the NVIDIA GeForce forum about 9 days be
 
 Measured on the captured windows (offline replay through the shipped path): Game Ready 621.14 counts 7
 (the measurement's critic counted 8; 3633067 has no word the shared concreteness vocabulary accepts),
-621.24 counts 3; Studio counts none; every SSD-topic comment is unassigned.
+621.24 counts 2 (3634344, a module crash that began on 621.01 and persisted on 617.42, is investigated);
+Studio counts none; every SSD-topic comment is unassigned.
 
 Pinned by `test_nvidia_forum_evidence.py` (blocking, offline, real lib.http over a fake transport).
 
@@ -3785,8 +3790,8 @@ Pinned by `test_nvidia_forum_evidence.py` (blocking, offline, real lib.http over
 signal for unassigned reports (G44 s5).
 
 **Reopen only if** a comment is counted for both families, a request outside the default views is
-sent, a request is made after a recorded refusal without a later, already-passed clearing time, a
-request reaches a host the forum redirected to, a health note claims comprehensive monitoring, or the
+sent, a request is made after a recorded refusal without a later, already-passed clearing time, any
+redirect is followed, a health note claims comprehensive monitoring, or the
 first scheduled run after merge is refused (then record what the runner was told, and stop).
 
 ### AUX-045 — a counted row could not show the evidence for its own version match
