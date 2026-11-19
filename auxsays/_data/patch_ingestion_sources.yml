@@ -178,7 +178,7 @@
   ingestion:
     type: html_blog
     adapter: html_blog
-    official_url: https://gemini.google/updates/
+    official_url: https://gemini.google/release-notes/
     secondary_official_url: null
     feed_url: null
     api_url: null
@@ -1774,7 +1774,7 @@
   ingestion:
     type: manual_watch
     adapter: manual_watch
-    official_url: https://kick.com/blog
+    official_url: null
     secondary_official_url: null
     feed_url: null
     api_url: null
@@ -1840,6 +1840,11 @@
     - Reddit
     difficulty: TBD
     defer_until_official_ingestion_stable: true
+  source_health_note: >-
+    No official update source is mapped (AUX-112). The former official_url, kick.com/blog, answered 404
+    on 2026-11-19, and no changelog or release notes for Kick's streaming platform were found to replace
+    it. Kick's developer-API changelog (docs.kick.com) records API changes, not product releases, and is
+    not mapped. Kick's terms bar automated access. The lane stays disabled.
 - company_id: rumble
   product_id: rumble
   company: Rumble
