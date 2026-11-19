@@ -2334,9 +2334,11 @@ records, and only their `official_patch_notes_body` and `release_summary`. `test
 **Not done** The site publishes no contact channel, so the removal paragraph names none (owner decision).
 ComfyUI evidence-text minimisation is deferred (G1). GitHub changelog records keep the handles GitHub itself
 thanks in its posts. The earlier text stays in the public git history. A stop is per process, so the
-PowerPoint job, a separate process after OBS and ComfyUI, starts unstopped.
+PowerPoint job, a separate process after OBS and ComfyUI, starts unstopped. Two tools no schedule runs keep
+their own GitHub requests: `revalidate_consensus_evidence.py --live-fetch` (dispatch only) and the one-off
+`fill_obs_report_dates.py`. Conditional requests (ETag) were not added: a run keeps no cache to send them from.
 
-**Reopen only if** a production request to api.github.com bypasses `lib/github_api.get_json`; a request is sent
+**Reopen only if** a scheduled lane sends a request to api.github.com that bypasses `lib/github_api.get_json`; a request is sent
 after a refusal in the same process; a refused or cut-short GitHub collection reads `success` or `no_results`;
 `open_web_source.PROVIDERS` regains a GitHub provider; or a stored GitHub release record carries a
 "by @name" credit or a "New Contributors" handle line again.
