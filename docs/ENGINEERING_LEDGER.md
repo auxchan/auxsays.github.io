@@ -5266,8 +5266,8 @@ row (34).
 
 **Why deferred** Every attribution change measured would have removed these rows only by also dropping real
 reports, by missing them, or by adding wording lists that nothing counterbalances in the lanes that would need
-them. The data correction removes the measured exposure; the remaining risk is in the mechanism, not in counted
-rows.
+them. The data correction removes the five rows both reviews confirmed; the remaining risk is in the mechanism and
+in the still-counted rows named under Current impact.
 
 **Current impact** Still counted: DaVinci 20.2.1 (held out) and the DaVinci 21.0.4 control, each awaiting its own
 audited review, and two measured rows of this class outside the withdrawal tool's product scope, Premiere Pro
