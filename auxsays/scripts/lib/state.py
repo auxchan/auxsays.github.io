@@ -289,6 +289,27 @@ def _record_primary_source(bucket: dict[str, Any], primary_source_error: str | N
         bucket["primary_last_success_at"] = checked_at
 
 
+PROVENANCE_FIELDS = ("source_origin", "collection_method", "collection_authorization")
+
+
+def record_provenance(state: dict[str, Any], product_id: str, provenance: Any) -> None:
+    """Carry a source's declared provenance on its persisted health bucket.
+
+    Only a source whose config declares ``ingestion.provenance`` gets the key, and only the named
+    fields are copied, so every other bucket in this committed file stays byte-identical. A source
+    that stops declaring it loses the key rather than keeping a stale statement.
+    """
+    bucket = source_state(state, product_id)
+    values = {}
+    if isinstance(provenance, dict):
+        values = {key: str(provenance.get(key) or "").strip() for key in PROVENANCE_FIELDS
+                  if str(provenance.get(key) or "").strip()}
+    if values:
+        bucket["provenance"] = values
+    else:
+        bucket.pop("provenance", None)
+
+
 def update_source_error(
     state: dict[str, Any],
     product_id: str,
@@ -337,6 +358,12 @@ def classify_error(error: str) -> str:
     # different, so the classification has to be.
     if "browser challenge" in text or "just a moment" in text or "cdn-cgi/challenge-platform" in text:
         return "challenged"
+    # An adapter that recognises a refusal itself (HTTP 401/429, an HTML page where JSON was
+    # expected, a body refusing automated access, or a suspension it recorded after one) says
+    # "access refused". That is the same fact as a 403 -- the source is refusing automated checks --
+    # and must not fall through to a generic "error" that reads as "status unknown" in public.
+    if "access refused" in text:
+        return "blocked"
     if "403" in text or "forbidden" in text:
         return "blocked"
     if "404" in text or "not found" in text:

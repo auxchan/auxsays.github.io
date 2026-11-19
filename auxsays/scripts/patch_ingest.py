@@ -32,7 +32,7 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from lib.http import fetch_text
 from lib.normalize import split_front_matter, strip_tags, utc_now
-from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION
+from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION, record_provenance
 from lib import ingest_health
 from lib.write_update_record import refresh_existing_record, write_record
 from lib.version_landing import ensure_for_record
@@ -414,6 +414,8 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
             primary_source_error=primary_source_error,
             **({"tolerance": int(tolerance)} if tolerance is not None else {}),
         )
+        # Declared provenance rides on the health bucket (only for a source that declares it).
+        record_provenance(state, product_id, (source.get("ingestion") or {}).get("provenance"))
 
     created_count = len(written) if write else len(would_create)
     result = {
@@ -496,6 +498,7 @@ def main() -> int:
                     adapter=adapter_name,
                     error=sanitize_error_message(exc),
                 )
+                record_provenance(state, product_id, (source.get("ingestion") or {}).get("provenance"))
             print(f"[ERROR] {error['product_id']}: {error['error']}", file=sys.stderr)
             # DELIBERATELY NO `break` HERE. `--strict` used to abandon the loop on the first error,
             # so one blocked vendor discarded the valid discovery of every source that had not run

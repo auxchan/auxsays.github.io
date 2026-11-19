@@ -776,32 +776,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   ingestion_status: First patch record pending
-- id: nvidia
-  company_name: NVIDIA
-  product_name: NVIDIA App / GeForce / Studio
-  badge_text: NV
-  category_key: hardware-drivers
-  category_label: Hardware / Drivers
-  priority: Core
-  cadence: High
-  impact: GPU drivers, DLSS, streaming encoders, AI workflows, and gaming performance.
-  watch_reason: NVIDIA driver and app changes can directly affect PC gaming, streaming, AI, and creator stability.
-  source_url: https://www.nvidia.com/en-us/geforce/news/
-  source_label: GeForce news
-  signal_notes: Track Game Ready drivers, Studio drivers, NVENC, DLSS, app changes, and known issues.
-  source_id: nvidia
-  logo_label: NVIDIA
-  logo_path: /assets/img/patch-logos/nvidia.png
-  company_id: nvidia
-  product_id: nvidia
-  company_url: /updates/nvidia/
-  product_url: /updates/nvidia/nvidia/
-  current_status_label: Tracking initialized
-  current_status_score: 0
-  documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
 - id: amd
   company_name: AMD
   product_name: AMD Software / Radeon

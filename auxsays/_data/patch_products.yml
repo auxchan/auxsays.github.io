@@ -1119,49 +1119,76 @@
   dossier_note: Steam is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
   asset_type: product_icon
-- id: nvidia
+- id: nvidia-geforce-game-ready
   company_name: NVIDIA
-  product_name: NVIDIA App / GeForce / Studio
-  badge_text: NV
+  product_name: GeForce Game Ready Driver
+  badge_text: GRD
   category_key: hardware-drivers
   category_label: Hardware / Drivers
   priority: Core
   cadence: High
-  impact: GPU drivers, DLSS, streaming encoders, AI workflows, and gaming performance.
-  watch_reason: NVIDIA driver and app changes can directly affect PC gaming, streaming,
-    AI, and creator stability.
-  source_url: https://www.nvidia.com/en-us/geforce/news/
-  source_label: GeForce news
-  signal_notes: Track Game Ready drivers, Studio drivers, NVENC, DLSS, app changes,
-    and known issues.
-  source_id: nvidia
+  impact: GPU driver changes for PC gaming performance, DLSS, display behavior, capture and streaming
+    encoders.
+  watch_reason: Game Ready driver updates can change gaming performance, capture and streaming stability,
+    and display behavior.
+  source_url: https://www.nvidia.com/en-us/geforce/drivers/
+  source_label: NVIDIA driver downloads
+  signal_notes: Game Ready and Studio drivers can share a version number. Each family is its own product,
+    and a record or report never carries over from one family to the other.
+  source_id: nvidia-geforce-game-ready
   logo_label: NVIDIA
   logo_path: /assets/img/patch-logos/nvidia.png
   company_id: nvidia
-  product_id: nvidia
+  product_id: nvidia-geforce-game-ready
   company_url: /updates/nvidia/
-  product_url: /updates/nvidia/nvidia/
-  current_status_label: Tracking initialized
+  product_url: /updates/nvidia/nvidia-geforce-game-ready/
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
-  - Community reports are grouped by recurring theme, severity, and frequency.
-  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Only confirmed patch-specific reports are counted.
+  - A report counts when the exact patch/version is named in the report itself or
+    in the parent discussion title.
+  - Every confirmed patch-specific report has equal weight.
   record_trigger_rules:
-  - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - New Game Ready driver in NVIDIA's official driver listing.
+  - Meaningful workflow impact for gaming, streaming, capture or display behavior.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: NVIDIA App / GeForce / Studio is tracked for release changes, workflow
-    impact, compatibility shifts, stability signals, and community consensus.
+  asset_type: company_fallback
+- id: nvidia-studio-driver
+  company_name: NVIDIA
+  product_name: NVIDIA Studio Driver
+  badge_text: NSD
+  category_key: hardware-drivers
+  category_label: Hardware / Drivers
+  priority: Core
+  cadence: High
+  impact: GPU driver changes for creative applications, video editing, 3D, encoding and AI workflows.
+  watch_reason: Studio driver updates can change stability and performance in creative applications such
+    as video editors, 3D tools and streaming software.
+  source_url: https://www.nvidia.com/en-us/geforce/drivers/
+  source_label: NVIDIA driver downloads
+  signal_notes: Studio and Game Ready drivers can share a version number. Each family is its own product,
+    and a record or report never carries over from one family to the other.
+  source_id: nvidia-studio-driver
+  logo_label: NVIDIA
+  logo_path: /assets/img/patch-logos/nvidia.png
+  company_id: nvidia
+  product_id: nvidia-studio-driver
+  company_url: /updates/nvidia/
+  product_url: /updates/nvidia/nvidia-studio-driver/
+  current_status_score: 0
+  documented_update_count: 0
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Only confirmed patch-specific reports are counted.
+  - A report counts when the exact patch/version is named in the report itself or
+    in the parent discussion title.
+  - Every confirmed patch-specific report has equal weight.
+  record_trigger_rules:
+  - New Studio driver in NVIDIA's official driver listing.
+  - Meaningful workflow impact for creative applications, encoding, 3D or AI workloads.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
   asset_type: company_fallback
 - id: amd
   company_name: AMD

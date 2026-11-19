@@ -225,13 +225,16 @@
   logo_path: /assets/img/patch-logos/nvidia.png
   company_url: /updates/nvidia/
   official_sources:
-  - label: GeForce news
-    url: https://www.nvidia.com/en-us/geforce/news/
-    product_id: nvidia
+  - label: NVIDIA driver downloads (Game Ready)
+    url: https://www.nvidia.com/en-us/geforce/drivers/
+    product_id: nvidia-geforce-game-ready
+  - label: NVIDIA driver downloads (Studio)
+    url: https://www.nvidia.com/en-us/geforce/drivers/
+    product_id: nvidia-studio-driver
   documented_update_count: 0
   coverage_state: active_watch
   coverage_status_label: Monitoring active
-  tracked_product_count: 1
+  tracked_product_count: 2
   asset_type: company_logo
 - id: obs-project
   company_name: OBS Project

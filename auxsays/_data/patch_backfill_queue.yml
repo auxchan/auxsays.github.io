@@ -295,17 +295,6 @@
   coverage_state: active_watch
   documented_update_count: 0
   backfill_status: queued
-- product_id: nvidia
-  company_id: nvidia
-  product_name: NVIDIA App / GeForce / Studio
-  company_name: NVIDIA
-  priority: Core
-  category_key: hardware-drivers
-  source_url: https://www.nvidia.com/en-us/geforce/news/
-  source_label: GeForce news
-  coverage_state: active_watch
-  documented_update_count: 0
-  backfill_status: queued
 - product_id: amd
   company_id: amd
   product_name: AMD Software / Radeon

@@ -93,6 +93,21 @@ TEAMS_IDENTITY_FIELDS = (
     "teams_edition",
 )
 
+# NVIDIA driver records: the family NVIDIA named the driver under, its branch, NVIDIA's download id
+# (provenance, not identity -- identity is product_id + update_version), the precision of the
+# release date NVIDIA gives, and where the record came from and under what authority. Written to
+# front matter only; no layout renders them. Same lesson as teams_edition: a field an adapter emits
+# reaches disk only if it is listed here.
+NVIDIA_DRIVER_FIELDS = (
+    "driver_family",
+    "driver_branch",
+    "nvidia_download_id",
+    "release_date_precision",
+    "source_origin",
+    "collection_method",
+    "collection_authorization",
+)
+
 # Explicit cross-product applicability: the list of product_ids one official item applies
 # to, plus a human label. Opt-in. Lets a single official item feed several app pages while
 # preserving a common source identity and an auditable applicability list (never blind
@@ -147,7 +162,7 @@ ATTRIBUTION_LABELS = {
 # which would silently downgrade a record the moment one parse failed to see the app block.
 OPTIONAL_STRUCTURED_FIELDS = (
     OFFICE_APP_IDENTITY_FIELDS + ACROBAT_IDENTITY_FIELDS + TEAMS_IDENTITY_FIELDS
-    + APPLICABILITY_FIELDS
+    + APPLICABILITY_FIELDS + NVIDIA_DRIVER_FIELDS
 )
 
 

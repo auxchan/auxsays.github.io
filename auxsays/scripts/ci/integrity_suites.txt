@@ -453,6 +453,14 @@ auxsays/scripts/tests/test_powerpoint_context_resolution.py = 101
 # nothing parsed or stored; the host test is equality; same-origin fetches are byte-identical to the
 # frozen pre-change transports; the AST pin forbids urlopen in every Learn fetch module.
 auxsays/scripts/tests/test_learn_fetch_same_origin.py = 115
+# AUX-105: NVIDIA Game Ready and Studio drivers share version numbers (621.14, 621.24), so they are two
+# products and the family comes from NVIDIA's own query AND name, never a version. Pins one record per
+# family for a shared version through the real writer, no cross-family attribution (a Studio-named report
+# in a Game Ready thread is vetoed), hotfix/beta/unknown names failing closed, 401/403/429/451/challenge/
+# HTML/refusing bodies as `blocked` with no records, no request after a refusal in the same run or any
+# later one until a reviewed clearing time, schema and host stops, the per-run request budget, and
+# provenance on the records and the health bucket -- all through the real runner, offline.
+auxsays/scripts/tests/test_nvidia_driver_lookup.py = 101
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68

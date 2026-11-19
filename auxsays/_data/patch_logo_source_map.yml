@@ -1144,8 +1144,8 @@ products:
   manual_review_required: false
   recommended_filename: "steam.png"
   usage_notes: "Fetched official Steam Mobile app icon from Valve's verified App Store listing."
-- id: "nvidia"
-  display_name: "NVIDIA App / GeForce / Studio"
+- id: "nvidia-geforce-game-ready"
+  display_name: "GeForce Game Ready Driver"
   company_id: "nvidia"
   current_local_asset: "/assets/img/patch-logos/nvidia.png"
   current_asset_exists: true
@@ -1154,10 +1154,30 @@ products:
   desired_local_asset: "/assets/img/patch-logos/nvidia.png"
   source_status: official_source_identified
   preferred_source_type: official_product_page
-  official_source_url: "https://www.nvidia.com/en-us/geforce/news/"
+  official_source_url: "https://www.nvidia.com/en-us/geforce/drivers/"
   direct_asset_url: ""
   source_domain: "www.nvidia.com"
-  source_owner: "NVIDIA App / GeForce / Studio"
+  source_owner: "NVIDIA"
+  official_or_vendor_controlled: true
+  fallback_source: false
+  auto_fetchable: false
+  manual_review_required: true
+  recommended_filename: "nvidia.png"
+  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+- id: "nvidia-studio-driver"
+  display_name: "NVIDIA Studio Driver"
+  company_id: "nvidia"
+  current_local_asset: "/assets/img/patch-logos/nvidia.png"
+  current_asset_exists: true
+  current_is_company_fallback: true
+  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/nvidia.png"
+  source_status: official_source_identified
+  preferred_source_type: official_product_page
+  official_source_url: "https://www.nvidia.com/en-us/geforce/drivers/"
+  direct_asset_url: ""
+  source_domain: "www.nvidia.com"
+  source_owner: "NVIDIA"
   official_or_vendor_controlled: true
   fallback_source: false
   auto_fetchable: false
