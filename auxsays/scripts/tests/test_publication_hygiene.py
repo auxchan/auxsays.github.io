@@ -23,7 +23,14 @@ WHAT IS PINNED HERE.
         S19/S20.
   [RB]  the robots block of _layouts/aux-base.html, rendered with the Liquid gem: an explicit policy is
         rendered exactly, and a page without one gets no robots tag. Needs ruby + liquid.
-  [CSS] the phone-width card rules sit inside the max-width 860px block.
+  [CSS] the phone-width card rules sit inside the max-width 860px block, and (G43) so do the product-page
+        rules that kept the Windows 11 page at 441 px on a 375 px phone; neither exists outside it.
+  [TT]  (G43) _includes/patch-display-title.html, rendered with the Liquid gem: a stored title that repeats
+        its product label ("GitHub / Copilot Copilot Student ...") shows the label once, every other title
+        comes back byte-identical, and the include prints nothing. aux-update.html carries a written-out
+        copy (the top of that layout holds no include tag), rendered over the same titles (TT5). The
+        heading, search title and JSON-LD headline of a rendered patch page are pinned by
+        test_patch_decision_authority S27/S28.
   [W]   wiring: pages.yml runs the gate on auxsays/_site after the build and before the upload, and it
         is not continue-on-error; the DaVinci 20.2.2 notice keeps its noindex policy out of the sitemap;
         the gate's live marker is the class aux-update.html renders for a live page.
@@ -350,6 +357,123 @@ def section_css() -> None:
     missing = [w for w in want if w not in flat]
     check("CSS1 a phone-width card lets its track shrink and wraps its headline, status stack and monitoring pill",
           not missing, str(missing))
+    # G43: the Windows 11 product page (441 px on a 375 px phone). Phone-only, so desktop cannot change.
+    css = CSS.read_text(encoding="utf-8")
+    g43 = [".patch-intel-shell { grid-template-columns: minmax(0, 1fr); }",
+           ".patch-cell-monitoring .patch-monitoring { white-space: normal; }"]
+    outside = css
+    for block in media_blocks(css, "max-width: 860px"):
+        outside = outside.replace(block, "")
+    outside = re.sub(r"\s+", " ", outside)
+    check("CSS2 a phone-width product page lets its grid track shrink and its monitoring pill wrap, inside the "
+          "max-width 860px block and nowhere else (G43)",
+          all(w in flat for w in g43) and not any(w in outside for w in g43),
+          str([w for w in g43 if w not in flat]))
+
+
+# --------------------------------------------------------------------------------------------------
+# [TT] a patch title names its product once (G43)
+# --------------------------------------------------------------------------------------------------
+
+TITLE_INCLUDE = AUX / "_includes" / "patch-display-title.html"
+TITLE_LAYOUTS = {AUX / "_layouts" / "aux-update.html": 0, AUX / "_layouts" / "aux-updates.html": 2,
+                 AUX / "_layouts" / "aux-home.html": 1}
+# aux-update.html's written-out copy of the include (the top of that layout holds no include tag).
+COPY_START = "{%- assign pdt_raw = display_title -%}"
+COPY_END = "{%- assign cite_title = page.update_feed_title"
+_TT_COPY_RUBY = r"""
+require 'liquid'
+require 'json'
+tpl = Liquid::Template.parse('[' + File.read(ARGV[0], encoding: 'utf-8') + ']{{ display_title }}')
+out = JSON.parse(File.read(ARGV[1], encoding: 'utf-8')).map do |t, p|
+  tpl.render!({ 'display_title' => t, 'page' => { 'update_product' => p } })
+end
+print JSON.generate(out)
+"""
+_TT_RUBY = r"""
+require 'liquid'
+require 'json'
+tpl = Liquid::Template.parse('[' + File.read(ARGV[0], encoding: 'utf-8') + ']{{ patch_display_title }}')
+out = JSON.parse(File.read(ARGV[1], encoding: 'utf-8')).map do |t, p|
+  tpl.render!({ 'include' => { 'title' => t, 'product' => p } })
+end
+print JSON.generate(out)
+"""
+GH = "GitHub / Copilot"
+TT_AFFECTED = [
+    ("GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker", GH,
+     "GitHub / Copilot Student GPT-5.3-Codex removal from model picker"),
+    ("GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker official update breakdown", GH,
+     "GitHub / Copilot Student GPT-5.3-Codex removal from model picker official update breakdown"),
+    ("Figma Figma for Zoom GA", "Figma", "Figma for Zoom GA"),
+    ("OBS Studio OBS Studio 32.0.1", "OBS Studio", "OBS Studio 32.0.1"),
+]
+TT_UNAFFECTED = [
+    ("OBS Studio 32.0.1", "OBS Studio"),
+    ("Figma Figmaverse launch", "Figma"),
+    ("Windows 11 25H2 (Build 26200.7840)", "Windows 11"),
+    ('Copilot "agent" & tools 1.0', "OBS Studio"),
+    ("GitHub / Copilot Copilot Student", GH),
+    ("GitHub / Copilot Copilot Student", ""),
+    ("", GH),
+]
+
+
+def section_tt() -> None:
+    print("\n[TT] a patch title names its product once")
+    ruby = shutil.which("ruby")
+    cases = [[t, p] for t, p, _ in TT_AFFECTED] + [[t, p] for t, p in TT_UNAFFECTED]
+    if not ruby:
+        check("TT1 the title include renders under the Liquid gem", False, "ruby missing")
+        return
+    with tempfile.TemporaryDirectory() as td:
+        payload, script = Path(td) / "p.json", Path(td) / "t.rb"
+        payload.write_text(json.dumps(cases), encoding="utf-8")
+        script.write_text(_TT_RUBY, encoding="utf-8")
+        proc = subprocess.run([ruby, str(script), str(TITLE_INCLUDE), str(payload)], capture_output=True,
+                              text=True, encoding="utf-8", timeout=120)
+    try:
+        out = json.loads(proc.stdout)
+    except ValueError:
+        check("TT1 the title include renders under the Liquid gem", False, (proc.stderr or proc.stdout)[:300])
+        return
+    printed = [o.split("]", 1)[0] for o in out]
+    shown = [o.split("]", 1)[1] if "]" in o else o for o in out]
+    got_affected = shown[:len(TT_AFFECTED)]
+    want_affected = [w for _, _, w in TT_AFFECTED]
+    check("TT1 a title that repeats its product label (GitHub Copilot, Figma, a whole label) shows it once",
+          got_affected == want_affected, str(list(zip(got_affected, want_affected))))
+    got_unaffected = shown[len(TT_AFFECTED):]
+    check("TT2 every other title comes back byte-identical: a word that only begins with the label, a "
+          "label that is not repeated, a no-break space, no label, no title",
+          got_unaffected == [t for t, _ in TT_UNAFFECTED], str(got_unaffected))
+    check("TT3 the include prints nothing of its own", printed == ["["] * len(cases), str(printed[:3]))
+    wired = {p.name: p.read_text(encoding="utf-8").count("{% include patch-display-title.html ")
+             for p in TITLE_LAYOUTS}
+    layout = (AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
+    start, end = layout.find(COPY_START), layout.find(COPY_END)
+    heading_after = 0 <= start < end < layout.find('<h1 class="update-title">{{ display_title }}</h1>')
+    check("TT4 both Patch Feed card branches and the homepage list use the include; the patch page applies "
+          "its written-out copy before the heading and holds no include tag for it",
+          wired == {p.name: n for p, n in TITLE_LAYOUTS.items()} and heading_after
+          and "{{ cite_title }}</a>" in layout, f"{wired} copy@{start}..{end}")
+    if not heading_after:
+        check("TT5 the patch page's copy renders exactly as the include", False, "copy not found")
+        return
+    with tempfile.TemporaryDirectory() as td:
+        block, payload, script = Path(td) / "b.liquid", Path(td) / "p.json", Path(td) / "c.rb"
+        block.write_text(layout[start:end], encoding="utf-8")
+        payload.write_text(json.dumps(cases), encoding="utf-8")
+        script.write_text(_TT_COPY_RUBY, encoding="utf-8")
+        proc = subprocess.run([ruby, str(script), str(block), str(payload)], capture_output=True, text=True,
+                              encoding="utf-8", timeout=120)
+    try:
+        copy_out = json.loads(proc.stdout)
+    except ValueError:
+        check("TT5 the patch page's copy renders exactly as the include", False, (proc.stderr or proc.stdout)[:300])
+        return
+    check("TT5 the patch page's copy renders exactly as the include over every case, and prints nothing",
+          copy_out == ["[]" + s for s in shown], str([(a, b) for a, b in zip(copy_out, shown) if a != "[]" + b][:3]))
 
 
 def section_w() -> None:
@@ -388,6 +512,7 @@ def main() -> int:
     section_jl()
     section_rb()
     section_css()
+    section_tt()
     section_w()
     print()
     print("=" * 78)

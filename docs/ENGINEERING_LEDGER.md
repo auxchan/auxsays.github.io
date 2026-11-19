@@ -95,6 +95,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-082 | Resolved | Compliance | Medium | The published Systems Monitor bundle shipped its dependencies without their licence notices |
+| AUX-104 | Resolved | Presentation | Low | The Windows 11 page scrolled sideways on phones, and 46 patch titles printed their product name twice |
 | AUX-085 | Resolved | Test integrity | Medium | A Systems Monitor test timing race failed a site deploy after every test had passed |
 | AUX-073 | Deferred | Coverage | Low | Windows Learn opening-post hydration (L1) shelved by owner decision O1; never merged |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
@@ -2083,6 +2084,50 @@ mean the limit has moved from reach to acceptance.
 **Cross-reference** AUX-026 is why the retired slot still emits. The lesson that generalises: a
 matcher fix and the veto covering what it newly exposes are **one change** -- ship them together,
 and measure the veto alone to prove it is a counterweight and not a deletion.
+
+### AUX-104 — The Windows 11 page scrolled sideways on phones, and 46 patch titles printed their product name twice
+
+- **Status** Resolved · **Area** Presentation · **Severity** Low
+- **First seen** 2026-11-18 (G39 review, LOW-6 and the GitHub title) · **Resolved** 2026-11-18 (G43; production
+  check: the first Pages deploy after merge)
+
+**Symptom** At a 375 px phone width `/updates/microsoft/microsoft-windows-11/` was 441 px wide, and so were the
+OBS product page and the Microsoft company page. 46 records showed their product label twice in the heading, the
+search title, og/twitter titles, the JSON-LD headline, the source citation and the Patch Feed card: 36 "GitHub /
+Copilot Copilot ..." (for example "GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker") and
+10 "Figma Figma ...". 57 built pages carried it: the 46 patch pages and the 11 Patch Feed pages.
+
+**Cause** In the phone layout a patch-history row puts each value beside its label, and the Monitoring value
+"No accepted patch-specific reports" is a `white-space: nowrap` pill (261 px). That row set the table's narrowest
+width, and `.patch-intel-shell` (a grid with an automatic track) grew to it, as the feed cards did in AUX-101. The
+titles: `lib/write_update_record.public_titles` stores "<product label> <vendor headline>", and these vendors'
+headlines start with the label's own last word.
+
+**Fix** Two rules inside the existing `@media (max-width: 860px)` block: the product-page track may shrink to
+the page, and the Monitoring pill wraps inside itself. `_includes/patch-display-title.html` prints a repeated
+label once (the longest repeated run of the label's trailing words, followed by a space or nothing) and returns
+every other title unchanged. Both Patch Feed card branches and the homepage list use it. The patch page applies a
+written-out copy to its heading and citation, because the top of `aux-update.html` must hold no include tag:
+three suites render it standalone up to its first include (TT5 renders the copy and the include over the same
+titles). `patch-search-meta.html` reads the heading back, so the search title and JSON-LD headline change with
+it. Stored records, the writer and every evidence, count and verdict field are unchanged.
+
+**Measured** Built-file diff against main 75c4ea5c, both built with one fixed build time: 58 files, the
+stylesheet and the 57 title pages, and every changed line is the label printed once. QA `--publish-strict` 0/0;
+`verify_published_payload`, `verify_feed_discovery` and `verify_publication_hygiene` clean. Document width at 375
+px: Windows 11, OBS and Microsoft pages 441 -> 375; at 320 px 441 -> 320. Desktop (1440 px) geometry of every
+element is identical on the pages whose text did not change. `test_publication_hygiene.py` 32 -> 38,
+`test_patch_decision_authority.py` 211 -> 213.
+
+**Not fixed** At 320 px some patch-history tables are still a few pixels to about 45 px wider than their box
+(a verdict and its scope, or a version and its build, beside the label). They scroll inside their own
+`overflow-x: auto` wrapper; the page does not. The writer still stores the doubled titles; only the display
+removes the repeat.
+
+**Reopen only if** a product, company or version page is wider than the screen at 375 px; a stored title that
+repeats its label is shown with the repeat; a title that does not repeat its label renders differently from the
+stored text; or a patch page's JSON-LD headline differs from its title. Reopen the 320 px residual if a 320 px
+page itself scrolls sideways, or if phone analytics show 320 px traffic worth a layout change.
 
 ### AUX-100 — One forum post holding only a video made every OBS forum health row partial, and the newest release was the one the budget never reached
 
