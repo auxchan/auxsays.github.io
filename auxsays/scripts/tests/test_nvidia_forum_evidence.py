@@ -735,6 +735,18 @@ def section_stops() -> None:
     check("S19 switched off in method routing: 0 requests, an honest disabled row, nothing stored",
           len(fake.seen) == 0 and {r["method_health"][0]["status"] for rr in res.values() for r in rr} == {"disabled"}
           and all(r["method_health"][0]["last_run"] == "" for rr in res.values() for r in rr))
+    saved = copy.deepcopy(routing.METHOD_PLANS)
+    try:
+        routing.METHOD_PLANS[GRD] = {"primary": [], "disabled": [nf.METHOD_ID]}
+        with wire() as (fake, _p, _s):
+            res = run_both(write=False)
+    finally:
+        routing.METHOD_PLANS.clear()
+        routing.METHOD_PLANS.update(saved)
+    check("S19b switched off for ONE family: that family reports disabled, the other still reads",
+          {r["method_health"][0]["status"] for r in res[GRD]} == {"disabled"}
+          and "disabled" not in {r["method_health"][0]["status"] for r in res[NSD]} and len(fake.seen) == 16,
+          f"{len(fake.seen)} {[r['method_health'][0]['status'] for r in res[NSD]]}")
     t2 = src.Transport(src.empty_state(), max_requests=2)
     with patched([(src, "fetch_text", lambda url, **kw: http_lib.FetchResult(url=url, status=200, headers={},
                                                                               text="x", final_url=url)),

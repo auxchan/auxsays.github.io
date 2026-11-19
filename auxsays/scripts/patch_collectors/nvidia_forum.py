@@ -481,12 +481,7 @@ def run_cycle(context: base.CollectorContext, versions: set[str], *, keep_versio
         cycle.update(stop="schema_changed", stop_status="broken", detail=str(exc))
         return cycle
     cycle["state"] = state
-    disabled = METHOD_ID in plan_methods(identity.GAME_READY).get("disabled", []) \
-        and METHOD_ID in plan_methods(identity.STUDIO).get("disabled", [])
     suspended = src.suspension(state, current)
-    if disabled:
-        cycle.update(stop="disabled", stop_status="disabled", detail="switched off in method routing")
-        return cycle
     if suspended:
         cycle.update(stop="access_refused", stop_status="blocked", detail=suspended)
         return cycle
@@ -700,6 +695,18 @@ class NvidiaForumCollector(base.ProductCollector):
             raise ValueError(f"not an NVIDIA driver product: {product_id!r}")
         self.product_id = product_id
 
+    def _disabled_result(self, record: base.PatchRecord, context: base.CollectorContext) -> dict[str, Any]:
+        version = str(record.update_version or "")
+        health = base.method_health_row(
+            product_id=self.product_id, update_version=version, method_id=METHOD_ID, source_type=SOURCE_TYPE,
+            status="disabled", candidates_found=0, accepted_reports=0, rejected_reports=0,
+            blocked_reason="disabled_in_method_routing", last_run="",
+            notes="NVIDIA GeForce forum default views: switched off in method routing. Nothing was read; "
+                  "nothing already stored was removed.")
+        return {"product_id": self.product_id, "version": version, "mode": "write" if context.write else "dry-run",
+                "candidates_reviewed": 0, "accepted_count": 0, "rejected_count": 0, "accepted_urls": [],
+                "rejection_reasons": {}, "method_health": [health]}
+
     def collect(self, context: base.CollectorContext) -> list[dict[str, Any]]:
         target = getattr(context, "target_versions", None)
         known = _records()
@@ -707,6 +714,11 @@ class NvidiaForumCollector(base.ProductCollector):
         tracked = {r.update_version for r in known[self.product_id]}
         everything = [r for pid in PRODUCTS for r in known[pid]]
         versions = {r.update_version for r in everything if not target or r.update_version in target}
+        if METHOD_ID in plan_methods(self.product_id).get("disabled", []):
+            # Switched off in method routing for this family: no forum request on its behalf, an
+            # honest `disabled` row per record (a method that stops emitting leaves a frozen row),
+            # and nothing already stored is touched. The other family may still read.
+            return [self._disabled_result(record, context) for record in records]
         cycle = run_cycle(context, versions, keep_versions={r.update_version for r in everything})
         if context.write and cycle.get("state") is not None and cycle.get("ran") and not cycle.get("saved"):
             src.save_state(cycle["state"])
