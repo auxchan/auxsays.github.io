@@ -27,7 +27,7 @@ layout: aux-base
           <h1 class="patch-intel-title">{{ company.company_name }}</h1>
         </div>
         <p class="patch-intel-subtitle">{{ company.summary }}</p>
-        <div class="patch-status-line">
+        <div class="patch-status-line" data-coverage-prose>
           {%- comment -%}
             The COMPANY-level claim was the third render site of the same defect (AUX-039): 27
             companies asserted "Monitoring active" with ZERO healthy products. A company holds products
@@ -36,6 +36,8 @@ layout: aux-base
             which keeps official and community monitoring apart and gives a mixed company a count. A
             catalogued product is "software", never "tracked software": 26 of the 27 companies with no
             patch records had no operating lane. FAIL CLOSED: no row reads "Coverage status unknown".
+            Coverage wording stays inside data-coverage-prose elements: the deploy check reads only
+            those for retired claim phrases, never the vendor-written record rows.
           {%- endcomment -%}
           {% assign company_coverage = site.data.coverage_state.companies | where: "company_id", company.id | first %}
           <span class="patch-coverage-pill patch-coverage-pill--coverage-{{ company_coverage.state | default: 'unknown' }}" data-coverage-company="{{ company.id }}">{{ company_coverage.label | default: 'Coverage status unknown' }}</span>
@@ -43,7 +45,7 @@ layout: aux-base
           <span>{{ documented_count }} tracked patch record{% if documented_count != 1 %}s{% endif %}</span>
         </div>
       </div>
-      <div class="patch-intel-stat-card">
+      <div class="patch-intel-stat-card" data-coverage-prose>
         <span>{{ products.size }}</span>
         <em>software product{% if products.size != 1 %}s{% endif %}</em>
       </div>
@@ -60,7 +62,7 @@ layout: aux-base
   </section>
 
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
-    <div class="section-head section-head--archive">
+    <div class="section-head section-head--archive" data-coverage-prose>
       <div class="eyebrow">Software</div>
       <h2>Software and workflow surfaces</h2>
       <p>Follow the software lanes below for release history, stability signals, workflow impact, official sources, and confirmed patch-specific consensus as records are added.</p>
@@ -102,7 +104,7 @@ layout: aux-base
         </div>
         <p>{{ product.impact }}</p>
         <p class="patch-source-signal"><strong>Signal:</strong> {{ product.signal_notes }}</p>
-        <div class="patch-status-line patch-status-line--compact">
+        <div class="patch-status-line patch-status-line--compact" data-coverage-prose>
           {%- comment -%}
             Same correction as the product page: the coverage label comes from the generated coverage
             projection, never from the catalog, which claimed "Monitoring active" for 29 products with
@@ -140,7 +142,7 @@ layout: aux-base
   </section>
   {% else %}
   <section class="panel patch-intel-section reveal-up reveal-delay-2">
-    <div class="section-head section-head--archive">
+    <div class="section-head section-head--archive" data-coverage-prose>
       <div class="eyebrow">Coverage</div>
       <h2>{{ company.company_name }} profile</h2>
       {% assign company_coverage_state = company_coverage.state | default: 'unknown' %}

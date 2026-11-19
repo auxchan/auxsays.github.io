@@ -172,7 +172,7 @@ layout: aux-base
 
   {% if patch_companies and patch_companies.size > 0 and feed_page == 1 %}
   <section class="panel patch-source-radar reveal-up reveal-delay-1" id="patch-source-radar">
-    <div class="patch-source-radar-head">
+    <div class="patch-source-radar-head" data-coverage-prose>
       <div>
         <div class="eyebrow">Company Radar</div>
         <h2 class="patch-source-title">Creator-critical companies to monitor</h2>
@@ -225,7 +225,7 @@ layout: aux-base
           <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image">
             <img src="{% if company.logo_path contains "://" %}{{ company.logo_path }}{% else %}{{ company.logo_path | relative_url }}{% endif %}" alt="{{ company.company_name }} logo" loading="lazy">
           </span>
-          <span class="patch-source-meta">
+          <span class="patch-source-meta" data-coverage-prose>
             <strong><a href="{{ company.company_url | relative_url }}">{{ company.company_name }}</a></strong>
             <em>{{ company_products.size }} software product{% if company_products.size != 1 %}s{% endif %}</em>
           </span>
@@ -241,7 +241,7 @@ layout: aux-base
           {% if company_products.size > 4 %}<span class="patch-watch-tag-more">+{{ company_products.size | minus: 4 }} more</span>{% endif %}
         </div>
         <p>{{ company.summary }}</p>
-        <p class="patch-source-reason">Hierarchy: {{ company.company_name }} → software → patches/updates{% if company_update_count > 0 %} • {{ company_update_count }} tracked patch record{% if company_update_count != 1 %}s{% endif %}{% endif %}.</p>
+        <p class="patch-source-reason" data-coverage-prose>Hierarchy: {{ company.company_name }} → software → patches/updates{% if company_update_count > 0 %} • {{ company_update_count }} tracked patch record{% if company_update_count != 1 %}s{% endif %}{% endif %}.</p>
         <div class="patch-card-links patch-source-card-links">
           {% if company.company_url %}<a class="patch-source-link patch-source-link--primary" href="{{ company.company_url | relative_url }}">View company →</a>{% endif %}
           {% assign first_official_source = company.official_sources | first %}

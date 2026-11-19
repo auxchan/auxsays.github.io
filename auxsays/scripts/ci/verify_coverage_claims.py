@@ -7,11 +7,23 @@ said it "is tracked for ... public release signals", and none of that was true f
 (NVIDIA among them). The pills had already been fixed (AUX-039); nothing stopped the prose, the
 catalog fields or the next new product from saying it again.
 
+ONLY TEXT AUXSAYS WROTE CAN BLOCK A DEPLOY. Product, company and hub pages also render vendor-written
+text (record titles in the history and latest-signals tables, feed cards), and vendors write ordinary
+English: a changelog titled "Monitoring active sessions in the audit log" is not a coverage claim. A
+first version scanned the whole visible page, so one such title would have failed every deploy until
+someone intervened, and a lane going stale at runtime would have brought its pages' record titles into
+the scan. So the phrase rules read only the template's own coverage prose, which the layouts mark with
+`data-coverage-prose` (status line, stat card, Coverage section, tracking-rules lines, the hub's radar
+head), and the catalog text, which is reviewed and checked as data. The fallback rule reads pill
+markup, never text. The templates are also guarded statically (test_coverage_governance G3).
+
 WHAT IT CHECKS. ERROR blocks the deploy; WARN is printed and never blocks.
   CATALOG    ERROR  `patch_products.yml` / `patch_companies.yml` carry none of the retired static
                     coverage fields (coverage_state, coverage_status_label, ingestion_status,
                     current_status_label, ingestion_active, dossier_note): coverage is derived, never
                     written by hand.
+             ERROR  no catalog text carries a retired claim phrase (the catalog is hand-written and
+                    reviewed, and its text renders outside the marked coverage prose).
   DEBT       ERROR  `_data/coverage_debt.yml` is well formed and names catalog products only.
              ERROR  a Core product whose official lane is switched off by CONFIGURATION (no source, a
                     disabled source, a manual-only source) has a debt entry. Existing gaps are listed
@@ -22,12 +34,15 @@ WHAT IT CHECKS. ERROR blocks the deploy; WARN is printed and never blocks.
                     and company, and every state and label is a member of the closed vocabulary.
   PILLS      ERROR  every coverage pill on the built site (an element carrying data-coverage-product or
                     data-coverage-company) shows exactly the state and label the projection gives that
-                    product or company; every product page carries its own pill; and no page shows the
-                    "Coverage status unknown" fallback, which only a render without the projection
-                    produces.
-  PROSE      ERROR  a product or company page whose coverage is not operating, and the Patch Feed hub,
-                    carry none of the retired claim phrases ("is tracked by AUXSAYS", "is tracked for",
-                    "Monitoring active", "official source mapped", ...).
+                    product or company; every product page carries its own pill; and no page carries a
+                    fallback pill ("Coverage status unknown"), which only a render without the
+                    projection produces.
+  PROSE      ERROR  every product and company page, and the Patch Feed hub, carries marked coverage
+                    prose (so the rule below can never pass by reading nothing), and every marked
+                    region closes.
+             ERROR  the marked coverage prose of a product or company page whose coverage is not
+                    operating, and of the hub, carries none of the retired claim phrases ("is tracked
+                    by AUXSAYS", "is tracked for", "Monitoring active", "official source mapped", ...).
 
 Run:  python auxsays/scripts/ci/verify_coverage_claims.py --site auxsays/_site [--source auxsays]
 Exit: 0 clean (warnings allowed), 1 an error, 2 the site directory is unusable.
@@ -38,6 +53,7 @@ import argparse
 import html
 import re
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -61,13 +77,95 @@ NOT_OPERATING = ("impaired", "planned", "not_monitored")
 
 _PILL = re.compile(r"<span\b([^>]*\bdata-coverage-(product|company)=\"([^\"]*)\"[^>]*)>([^<]*)</span>", re.I)
 _STATE_CLASS = re.compile(r"patch-coverage-pill--coverage-([a-z_]+)")
+# A fallback pill, recognised by its MARKUP. Vendor text reaches a page HTML-escaped, so it can never
+# produce a class attribute; the bare words "Coverage status unknown" in a record title are not a pill.
+_FALLBACK_PILL = re.compile(r"\bclass=\"[^\"]*\bpatch-coverage-pill--coverage-unknown\b", re.I)
 _TAG = re.compile(r"<[^>]+>")
 _SCRIPT = re.compile(r"<(script|style)\b.*?</\1>", re.S | re.I)
+
+# The attribute a layout puts on an element whose text is the template's own coverage prose.
+PROSE_ATTR = "data-coverage-prose"
+_VOID = frozenset(("area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source",
+                   "track", "wbr"))
 
 
 def page_text(text: str) -> str:
     """Visible-ish text: scripts and styles dropped, tags removed, entities decoded, space collapsed."""
     return " ".join(html.unescape(_TAG.sub(" ", _SCRIPT.sub(" ", text))).split())
+
+
+class _ProseRegions(HTMLParser):
+    """Collects the text inside every element carrying `data-coverage-prose`.
+
+    A region ends at the end tag that balances its opening tag (same tag name, counted), so markup
+    nested inside it is fine. Script and style content is never text. A region still open at the end
+    of the document is reported, never scanned: reading on to the end of the page would reach the
+    vendor-written records this rule exists to leave alone.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.regions: list[list[str]] = []
+        self._tag: str | None = None
+        self._depth = 0
+        self._skip = 0
+
+    def handle_starttag(self, tag: str, attrs: list) -> None:
+        if tag in ("script", "style"):
+            self._skip += 1
+            return
+        if tag in _VOID:
+            return
+        if self._tag is None:
+            if any(name == PROSE_ATTR for name, _value in attrs):
+                self._tag, self._depth = tag, 1
+                self.regions.append([])
+            return
+        if tag == self._tag:
+            self._depth += 1
+        self.regions[-1].append(" ")
+
+    def handle_startendtag(self, tag: str, attrs: list) -> None:
+        if self._tag is not None:
+            self.regions[-1].append(" ")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in ("script", "style"):
+            self._skip = max(0, self._skip - 1)
+            return
+        if self._tag is None:
+            return
+        self.regions[-1].append(" ")
+        if tag == self._tag:
+            self._depth -= 1
+            if self._depth == 0:
+                self._tag = None
+
+    def handle_data(self, data: str) -> None:
+        if self._tag is not None and not self._skip:
+            self.regions[-1].append(data)
+
+
+def coverage_prose(text: str) -> tuple[list[str], bool]:
+    """(the text of each closed `data-coverage-prose` region, whether every region closed)."""
+    parser = _ProseRegions()
+    parser.feed(text)
+    parser.close()
+    closed = parser._tag is None
+    regions = parser.regions if closed else parser.regions[:-1]
+    return [" ".join("".join(r).split()) for r in regions], closed
+
+
+def _strings(value: Any, path: str = ""):
+    """Every string inside a catalog row, with the key path it sits at."""
+    if isinstance(value, str):
+        yield path, value
+    elif isinstance(value, dict):
+        for k, v in value.items():
+            yield from _strings(v, f"{path}.{k}" if path else str(k))
+    elif isinstance(value, list):
+        for i, v in enumerate(value):
+            yield from _strings(v, f"{path}[{i}]")
 
 
 def url_to_file(site: Path, url: str) -> Path:
@@ -101,6 +199,11 @@ def check_data(source: Path, products_proj: dict | None) -> tuple[list[str], lis
             if found:
                 errors.append(f"CATALOG {kind} {row.get(key)} carries a static coverage field {found}: "
                               f"coverage is derived by build_coverage_projection.py, never written by hand")
+            for where, value in _strings(row):
+                for phrase in CLAIM_PHRASES:
+                    if phrase in value:
+                        errors.append(f"CATALOG {kind} {row.get(key)} {where} says {phrase!r}: catalog "
+                                      f"text describes the software, never whether it is monitored")
     try:
         debt = cov.load_debt(data / "coverage_debt.yml")
     except (ValueError, yaml.YAMLError) as exc:
@@ -143,7 +246,7 @@ def check_projection(catalog_ids: set[str], company_ids: set[str], products: dic
 def check_site(site: Path, catalog: list[dict], companies_cat: list[dict], products: dict,
                companies: dict) -> tuple[list[str], dict]:
     errors: list[str] = []
-    stats = {"pages": 0, "pills": 0, "product_pages": 0, "company_pages": 0}
+    stats = {"pages": 0, "pills": 0, "product_pages": 0, "company_pages": 0, "prose_regions": 0}
     product_pages: dict[Path, str] = {}
     company_pages: dict[Path, str] = {}
     for product in catalog:
@@ -156,43 +259,53 @@ def check_site(site: Path, catalog: list[dict], companies_cat: list[dict], produ
         stats["pages"] += 1
         text = path.read_text(encoding="utf-8", errors="replace")
         rel = path.relative_to(site).as_posix()
-        if cov.UNKNOWN_LABEL in text or "patch-coverage-pill--coverage-unknown" in text:
-            errors.append(f"PILLS {rel} shows the '{cov.UNKNOWN_LABEL}' fallback: the coverage "
-                          f"projection was missing or incomplete when it was built")
+        fallback = bool(_FALLBACK_PILL.search(text))
         for attrs, kind, ident, label in _PILL.findall(text):
             stats["pills"] += 1
             want = (products if kind.lower() == "product" else companies).get(ident)
             m = _STATE_CLASS.search(attrs)
             got_state, got_label = (m.group(1) if m else ""), " ".join(html.unescape(label).split())
+            fallback = fallback or got_label == cov.UNKNOWN_LABEL
             if want is None:
                 errors.append(f"PILLS {rel}: a pill names {kind} {ident!r}, which has no projection row")
             elif (got_state, got_label) != (want.get("state"), want.get("label")):
                 errors.append(f"PILLS {rel}: {kind} {ident} shows ({got_state!r}, {got_label!r}); the "
                               f"projection says ({want.get('state')!r}, {want.get('label')!r})")
+        if fallback:
+            errors.append(f"PILLS {rel} shows the '{cov.UNKNOWN_LABEL}' fallback: the coverage "
+                          f"projection was missing or incomplete when it was built")
         pid = product_pages.get(path)
+        cid = company_pages.get(path)
+        if pid is None and cid is None and path != hub:
+            continue
+        # Phrase rules read the template's marked coverage prose only, never vendor-written records.
+        regions, closed = coverage_prose(text)
+        prose = " ".join(regions)
+        stats["prose_regions"] += len(regions)
+        if not regions:
+            errors.append(f"PROSE {rel}: the page carries no marked coverage prose ({PROSE_ATTR}), so "
+                          f"its coverage wording cannot be checked")
+        if not closed:
+            errors.append(f"PROSE {rel}: a {PROSE_ATTR} region never closes")
         if pid is not None:
             stats["product_pages"] += 1
             if f'data-coverage-product="{pid}"' not in text:
                 errors.append(f"PILLS {rel}: the product page for {pid} carries no coverage pill of its own")
             state = (products.get(pid) or {}).get("state")
             if state in NOT_OPERATING:
-                visible = page_text(text)
                 for phrase in CLAIM_PHRASES:
-                    if phrase in visible:
+                    if phrase in prose:
                         errors.append(f"PROSE {rel}: {pid} is {state} but the page says {phrase!r}")
-        cid = company_pages.get(path)
         if cid is not None:
             stats["company_pages"] += 1
             state = (companies.get(cid) or {}).get("state")
             if state in NOT_OPERATING:
-                visible = page_text(text)
                 for phrase in CLAIM_PHRASES:
-                    if phrase in visible:
+                    if phrase in prose:
                         errors.append(f"PROSE {rel}: company {cid} is {state} but the page says {phrase!r}")
         if path == hub:
-            visible = page_text(text)
             for phrase in HUB_PHRASES:
-                if phrase in visible:
+                if phrase in prose:
                     errors.append(f"PROSE {rel}: the Patch Feed hub says {phrase!r}")
     for path, pid in sorted(product_pages.items()):
         if not path.is_file():
@@ -243,7 +356,8 @@ def main(argv: list[str] | None = None) -> int:
     errors, warnings, stats = verify(args.site, source, args.projection)
     if stats:
         print(f"pages {stats['pages']}; coverage pills {stats['pills']}; product pages "
-              f"{stats['product_pages']}; company pages {stats['company_pages']}")
+              f"{stats['product_pages']}; company pages {stats['company_pages']}; coverage prose "
+              f"regions {stats['prose_regions']}")
     for w in warnings:
         print(f"WARN  {w}")
     for e in errors:

@@ -2210,11 +2210,22 @@ product-level issue signals.
 - `assess_coverage.py` runs in `pages.yml` (daily schedule) as a continue-on-error job summary plus a
   90-day artifact: Core gaps with their next step, impaired enabled lanes, lanes or chains that stopped
   running, verified releases missing from the store, community methods that do not work, backfill nothing
-  executes, debt past review or resolved. It never commits and never stops a deploy.
+  executes, debt past review or resolved. It never commits and never stops a deploy, and a crash says so in
+  the job summary instead of leaving it empty. Every product row also carries a closed reason code for each
+  capability that is missing (official ingestion, community discovery, product-level issue detection) and
+  its release-to-discovery latency, measured only from source timestamps (the vendor's release time and
+  the time ingestion first recorded the release; a day-only release date gives a range) and otherwise
+  `unknown` or, for a verified release the store lacks, `not_discovered`. A Core lane that failed once
+  after a recent success is reported as impaired, not as a Core gap; a persistent failure is both.
 - `ci/verify_coverage_claims.py` runs after the build: it refuses a pill that disagrees with the
-  projection, the "Coverage status unknown" fallback, a retired claim phrase on an unmonitored page or the
-  hub, a static coverage field back in the catalog, and a NEW Core product whose lane is switched off with
-  no debt entry. Existing debt and runtime impairment never block.
+  projection, the "Coverage status unknown" fallback pill, a retired claim phrase in an unmonitored page's
+  or the hub's coverage prose or in catalog text, a static coverage field back in the catalog, and a NEW
+  Core product whose lane is switched off with no debt entry. Existing debt and runtime impairment never
+  block. The phrase rules read only the template prose the layouts mark `data-coverage-prose`, never the
+  vendor-written record titles on the same pages: a changelog titled "Monitoring active sessions in the
+  audit log" must not stop a deploy (review round 1 reproduced exactly that against the first version,
+  which scanned the whole page). A page with no marked prose, or a marked region that never closes, is
+  refused rather than read as clean.
 - The product-level early-warning contract is defined, not built:
   [`docs/PRODUCT_LEVEL_SIGNALS_CONTRACT.md`](PRODUCT_LEVEL_SIGNALS_CONTRACT.md).
 
@@ -2231,19 +2242,34 @@ catalog, in the sitemap, claiming tracking), now removed. Built-file diff: 104 f
 prose, pill styles, the orphan's sitemap line or build timestamps. Evidence store and verdict projection
 byte-identical; live set unchanged. The assessment on that data: 19 Core gaps (all with debt entries),
 2 impaired enabled lanes, NVIDIA 621.14 and 621.24 missing from the store, 37 backfill rows with no
-executor. `test_coverage_governance.py` (83 checks, blocking); 47 source mutants, each caught by a named
-check.
+executor. `test_coverage_governance.py` (97 checks, blocking); every source mutant in both rounds is
+caught by a named check.
 
 **Not shown by this** Whether an enabled lane is missing releases it should have found: no permitted
 independent official reference exists for any product except the two NVIDIA releases recorded by hand.
 Partial rot (AUX-003 family) stays invisible. The assessment cannot see that `pages.yml` itself stopped
 running.
 
+**Follow-up: detection latency (open)** Release-to-discovery is measured for the newest record of each
+product only, and discovery-to-publication is `unknown` everywhere because nothing records when a record
+first went live. To make detection latency observable across releases: record a first-publication time
+per record (for example the deploy that first served it), keep a per-release latency history instead of the
+newest record alone, and, once product-level issue detection exists (see the contract), add
+first-user-report-to-discovery from source-native report timestamps. Until then an unknown time stays
+`unknown`, never a number.
+
+**Follow-up: automatic fallback execution (open)** When an enabled collector is blocked, broken, stale or
+low-confidence, no compatible permitted fallback method executes automatically; the assessment only
+surfaces the gap (`enabled_lane_impaired`, `missing_capabilities`). Building that execution is deliberately
+not in this change (no platform rewrite). The natural home is the role routing in `lib/method_routing.py`
+(AUX-025): register a permitted fallback per source, run it when the primary is impaired, and report a
+gap only when none exists. A fallback never widens which sources are permitted.
+
 **Reopen only if** a deployed product or company page shows a coverage label the projection does not
 give it; a page for a product with no operating official lane says "is tracked", "Monitoring active" or
 "official source mapped"; a Core product is added with its lane switched off and the deploy does not
-refuse it; a deploy is refused because an enabled lane is failing; `test_coverage_governance.py` reports
-anything but its governed count; or the assessment stops appearing in the Pages job summary.
+refuse it; a deploy is refused because an enabled lane is failing or because of a vendor record's text;
+`test_coverage_governance.py` reports anything but its governed count; or the assessment stops appearing in the Pages job summary.
 
 ### AUX-029 — Patch Decision Authority v2, Phase 1
 

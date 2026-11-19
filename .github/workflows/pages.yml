@@ -235,8 +235,9 @@ jobs:
 
       # AUX-102, also on the exact bytes about to be served. Refuses a coverage pill that disagrees
       # with the coverage projection, the "Coverage status unknown" fallback, a retired claim phrase
-      # ("is tracked by AUXSAYS", "Monitoring active", ...) on a page whose product or company is not
-      # monitored, a static coverage field back in the catalog, and a NEW Core product whose official
+      # ("is tracked by AUXSAYS", "Monitoring active", ...) in the marked coverage prose of a page whose
+      # product or company is not monitored or in catalog text (vendor record titles are never read), a
+      # static coverage field back in the catalog, and a NEW Core product whose official
       # lane is switched off without a coverage debt entry. Existing gaps are listed in the debt file
       # and never block; a lane failing at runtime changes its label and never blocks.
       - name: Verify coverage claims agree with the coverage projection

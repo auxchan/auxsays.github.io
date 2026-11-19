@@ -11,7 +11,7 @@ so its silence looked like a quiet product; a broken enabled lane alarmed nobody
 
 WHAT THIS PINS.
   [A] the coverage label per product, from the official and community capabilities, fail closed --
-      including every representative case GPT's directive names (NVIDIA, ChatGPT, Premiere, OBS, a
+      including every representative case the sprint brief names (NVIDIA, ChatGPT, Premiere, OBS, a
       healthy lane with no new release, a stale or failed lane)
   [B] the company aggregate
   [C] the real projection and its deploy wiring (generated, git-ignored, before the build; the check
@@ -54,7 +54,7 @@ import build_monitoring_projection as official  # noqa: E402
 import verify_coverage_claims as gate  # noqa: E402
 
 NOW = datetime(2026, 11, 18, 12, 0, tzinfo=timezone.utc)
-GPT_LABELS = ("Official updates monitored",
+PLAIN_LABELS = ("Official updates monitored",
               "Official updates monitored; community reports not monitored",
               "Monitoring temporarily impaired",
               "Monitoring planned; not active",
@@ -235,7 +235,7 @@ def section_a() -> None:
           == "impaired")
 
     check("A18 the label vocabulary is exactly the five plain-language labels",
-          tuple(cov.COVERAGE_LABELS.values()) == GPT_LABELS, list(cov.COVERAGE_LABELS.values()))
+          tuple(cov.COVERAGE_LABELS.values()) == PLAIN_LABELS, list(cov.COVERAGE_LABELS.values()))
     grid = {cov.derive_coverage(o, c, planned=p)
             for o in official.PUBLIC_STATES + ("something_new",)
             for c in cov.COMMUNITY_STATES for p in (True, False)}
@@ -255,7 +255,7 @@ def section_b() -> None:
     print("\n[B] a company summarises its products without overstating them")
     cc = cov.company_coverage
     check("B1 uniform products -> that label", cc([("official_only", "healthy")] * 4)
-          == ("official_only", GPT_LABELS[1]))
+          == ("official_only", PLAIN_LABELS[1]))
     check("B2 all official lanes monitored, community on some -> says so with a count",
           cc([("full", "healthy")] * 3 + [("official_only", "healthy")])
           == ("mixed", "Official updates monitored; community reports monitored for 3 of 4 products"))
@@ -397,6 +397,14 @@ def section_d() -> None:
         ce, _w = gate.check_data(write_source(Path(td) / "f", claim, comps, [debt_entry("added")]), proj)
         check("D8 a static coverage field back in the catalog is refused",
               any(e.startswith("CATALOG product live") for e in ce), ce)
+        # Catalog text renders OUTSIDE the marked coverage prose (subtitles, cards), so the deploy
+        # check reads it as data instead: it is hand-written and reviewed, never vendor text.
+        said = [dict(product("live"), watch_reason="LIVE is tracked for creator stability."), product("added")]
+        csum = [{"id": "acme", "summary": "Acme tracking focuses on drivers."}]
+        se, _w = gate.check_data(write_source(Path(td) / "g", said, csum, [debt_entry("added")]), proj)
+        check("D10 a retired claim phrase in catalog text (product or company) is refused by field",
+              any(e.startswith("CATALOG product live watch_reason") for e in se)
+              and any(e.startswith("CATALOG company acme summary") for e in se), se)
     entries = cov.load_debt()
     catalog = {cov.product_id_of(p) for p in yaml.safe_load(
         (_AUX / "_data" / "patch_products.yml").read_text(encoding="utf-8"))}
@@ -435,36 +443,60 @@ def pill(kind: str, ident: str, state: str, label: str) -> str:
             f'data-coverage-{kind}="{ident}">{label}</span>')
 
 
+def marked(inner: str, tag: str = "div") -> str:
+    """Template-owned coverage prose, marked the way the shipped layouts mark it."""
+    return f'<{tag} class="coverage-text" {gate.PROSE_ATTR}>{inner}</{tag}>'
+
+
+def record_rows(*titles: str) -> str:
+    """Vendor-written record rows, as the history and latest-signals tables render them."""
+    rows = "".join(f'<tr><td><a href="/r/">{t}</a></td></tr>' for t in titles)
+    return f'<table class="patch-table" data-patch-table><tbody>{rows}</tbody></table>'
+
+
 def synthetic_site(root: Path, mutate=None) -> tuple[Path, Path, Path]:
-    """A tiny deploy: two products, two companies, a hub, and the projection that describes them."""
+    """A tiny deploy: two products, two companies, a hub, and the projection that describes them.
+
+    Each page carries its coverage wording inside marked prose and, like the real pages, vendor
+    record titles outside it.
+    """
     products = [product("watched", "acme"), product("dark", "darkco")]
     companies = [{"id": "acme", "company_url": "/updates/acme/"},
                  {"id": "darkco", "company_url": "/updates/darkco/"}]
     source = write_source(root / "src", products, companies, [debt_entry("dark")])
     proj_rows = {"products": [
-        {"product_id": "watched", "state": "full", "label": GPT_LABELS[0], "official": "healthy",
+        {"product_id": "watched", "state": "full", "label": PLAIN_LABELS[0], "official": "healthy",
          "community": "operating"},
-        {"product_id": "dark", "state": "not_monitored", "label": GPT_LABELS[4], "official": "disabled",
+        {"product_id": "dark", "state": "not_monitored", "label": PLAIN_LABELS[4], "official": "disabled",
          "community": "absent"}],
         "companies": [
-        {"company_id": "acme", "state": "full", "label": GPT_LABELS[0], "official_monitored": 1, "total": 1},
-        {"company_id": "darkco", "state": "not_monitored", "label": GPT_LABELS[4], "official_monitored": 0,
+        {"company_id": "acme", "state": "full", "label": PLAIN_LABELS[0], "official_monitored": 1, "total": 1},
+        {"company_id": "darkco", "state": "not_monitored", "label": PLAIN_LABELS[4], "official_monitored": 0,
          "total": 1}]}
     projection = source / "_data" / "coverage_state.yml"
     projection.write_text(yaml.safe_dump(proj_rows), encoding="utf-8")
     site = root / "site"
     pages = {
         "index.html": "<html><body>home</body></html>",
-        "updates/index.html": "<html><body><em>companies</em> <em>software products</em></body></html>",
-        "updates/acme/index.html": "<html><body>" + pill("company", "acme", "full", GPT_LABELS[0])
-        + pill("product", "watched", "full", GPT_LABELS[0]) + "</body></html>",
-        "updates/acme/watched/index.html": "<html><body><p>AUXSAYS monitors WATCHED official updates.</p>"
-        + pill("product", "watched", "full", GPT_LABELS[0]) + "</body></html>",
-        "updates/darkco/index.html": "<html><body>" + pill("company", "darkco", "not_monitored", GPT_LABELS[4])
-        + "<p>DARKCO is in the AUXSAYS catalog but its official updates are not currently monitored.</p>"
-        + pill("product", "dark", "not_monitored", GPT_LABELS[4]) + "</body></html>",
-        "updates/darkco/dark/index.html": "<html><body><p>DARK is in the AUXSAYS catalog but is not currently"
-        " monitored.</p>" + pill("product", "dark", "not_monitored", GPT_LABELS[4]) + "</body></html>",
+        "updates/index.html": "<html><body>" + marked("<em>companies</em> <em>software products</em>")
+        + '<article class="panel patch-card"><h3>WATCHED 2.0 official update</h3></article></body></html>',
+        "updates/acme/index.html": "<html><body>" + marked(pill("company", "acme", "full", PLAIN_LABELS[0]))
+        + record_rows("WATCHED 2.0") + marked(pill("product", "watched", "full", PLAIN_LABELS[0]))
+        + "</body></html>",
+        "updates/acme/watched/index.html": "<html><body>"
+        + marked(pill("product", "watched", "full", PLAIN_LABELS[0]))
+        + marked("<p>AUXSAYS monitors WATCHED official updates.</p>") + record_rows("WATCHED 2.0")
+        + "</body></html>",
+        "updates/darkco/index.html": "<html><body>"
+        + marked(pill("company", "darkco", "not_monitored", PLAIN_LABELS[4]))
+        + marked("<p>DARKCO is in the AUXSAYS catalog but its official updates are not currently monitored.</p>")
+        + marked("<li>DARK " + pill("product", "dark", "not_monitored", PLAIN_LABELS[4]) + "</li>", "ul")
+        + "</body></html>",
+        "updates/darkco/dark/index.html": "<html><body>"
+        + marked(pill("product", "dark", "not_monitored", PLAIN_LABELS[4]))
+        + marked("<span>NOT MONITORED</span><em>no official update lane is running</em>")
+        + marked("<p>DARK is in the AUXSAYS catalog but is not currently monitored.</p>")
+        + "</body></html>",
     }
     if mutate:
         mutate(pages)
@@ -484,6 +516,12 @@ def run_gate(mutate=None, drop_projection=False) -> list[str]:
         return errors
 
 
+def _append(rel: str, html_text: str):
+    def mutate(pages):
+        pages[rel] = pages[rel].replace("</body>", html_text + "</body>")
+    return mutate
+
+
 def section_e() -> None:
     print("\n[E] the deploy check refuses a seeded contradiction and passes a clean site")
     clean = run_gate()
@@ -491,34 +529,38 @@ def section_e() -> None:
 
     def lie(pages):
         pages["updates/darkco/dark/index.html"] = pages["updates/darkco/dark/index.html"].replace(
-            pill("product", "dark", "not_monitored", GPT_LABELS[4]), pill("product", "dark", "full", GPT_LABELS[0]))
+            pill("product", "dark", "not_monitored", PLAIN_LABELS[4]), pill("product", "dark", "full", PLAIN_LABELS[0]))
     errs = run_gate(lie)
     check("E2 a seeded contradiction (an unmonitored product's pill says monitored) is refused",
           any(e.startswith("PILLS updates/darkco/dark/index.html") and "dark" in e for e in errs), errs)
 
     def company_lie(pages):
         pages["updates/darkco/index.html"] = pages["updates/darkco/index.html"].replace(
-            pill("company", "darkco", "not_monitored", GPT_LABELS[4]), pill("company", "darkco", "full", GPT_LABELS[0]))
+            pill("company", "darkco", "not_monitored", PLAIN_LABELS[4]), pill("company", "darkco", "full", PLAIN_LABELS[0]))
     check("E3 a company pill that disagrees with the projection is refused",
           any("company darkco" in e for e in run_gate(company_lie)))
 
-    def fallback(pages):
-        pages["updates/acme/watched/index.html"] += pill("product", "watched", "unknown", cov.UNKNOWN_LABEL)
-    check("E4 the 'Coverage status unknown' fallback on a deploy build is refused",
-          any("fallback" in e for e in run_gate(fallback)))
+    check("E4 the 'Coverage status unknown' fallback pill on a deploy build is refused",
+          any("fallback" in e for e in run_gate(_append(
+              "updates/acme/watched/index.html", pill("product", "watched", "unknown", cov.UNKNOWN_LABEL)))))
 
     def no_pill(pages):
-        pages["updates/darkco/dark/index.html"] = "<html><body>no pill</body></html>"
+        pages["updates/darkco/dark/index.html"] = "<html><body>" + marked("no pill") + "</body></html>"
     check("E5 a product page with no coverage pill of its own is refused",
           any("carries no coverage pill" in e for e in run_gate(no_pill)))
 
     def prose(pages):
-        pages["updates/darkco/index.html"] += "<p>DARKCO is tracked by AUXSAYS for changes that matter.</p>"
+        pages["updates/darkco/index.html"] = pages["updates/darkco/index.html"].replace(
+            "are not currently monitored.</p>",
+            "are not currently monitored. DARKCO is tracked by AUXSAYS for changes that matter.</p>")
     def prose_ok(pages):
-        pages["updates/acme/watched/index.html"] += "<p>WATCHED is tracked for workflow stability.</p>"
+        pages["updates/acme/watched/index.html"] = pages["updates/acme/watched/index.html"].replace(
+            "official updates.</p>", "official updates. WATCHED is tracked for workflow stability.</p>")
     def stat(pages):
-        pages["updates/darkco/dark/index.html"] += "<span>STAGED</span><em>official source mapped</em>"
-    check("E6 a retired claim phrase on an unmonitored company page is refused",
+        pages["updates/darkco/dark/index.html"] = pages["updates/darkco/dark/index.html"].replace(
+            "<span>NOT MONITORED</span><em>no official update lane is running</em>",
+            "<span>STAGED</span><em>official source mapped</em>")
+    check("E6 a retired claim phrase in an unmonitored company page's coverage prose is refused",
           any(e.startswith("PROSE updates/darkco/index.html") for e in run_gate(prose)))
     check("E7 ... and the retired stat card on an unmonitored product page",
           any(e.startswith("PROSE updates/darkco/dark/index.html") for e in run_gate(stat)))
@@ -526,18 +568,54 @@ def section_e() -> None:
           not run_gate(prose_ok), run_gate(prose_ok))
 
     def hub(pages):
-        pages["updates/index.html"] = "<html><body><em>tracked software</em></body></html>"
+        pages["updates/index.html"] = pages["updates/index.html"].replace(
+            "<em>software products</em>", "<em>tracked software</em>")
     check("E9 the hub calling catalogued software 'tracked' is refused",
           any("hub" in e for e in run_gate(hub)))
     check("E10 a deploy without the projection is refused, never passed",
           any(e.startswith("PROJECTION") for e in run_gate(drop_projection=True)))
 
-    def stranger(pages):
-        pages["updates/acme/index.html"] += pill("product", "ghost", "full", GPT_LABELS[0])
     check("E11 a pill for a product the projection does not know is refused",
-          any("ghost" in e for e in run_gate(stranger)))
+          any("ghost" in e for e in run_gate(_append(
+              "updates/acme/index.html", pill("product", "ghost", "full", PLAIN_LABELS[0])))))
 
+    # Vendor-written text is not a coverage claim. A changelog titled with ordinary English that
+    # happens to match a retired phrase must never fail a deploy, on any page, in any coverage state.
+    vendor = ("Monitoring active sessions in the audit log", "Usage is tracked for every seat",
+              "Coverage status unknown for legacy runners")
 
+    def vendor_rows(pages):
+        for rel in ("updates/darkco/dark/index.html", "updates/darkco/index.html", "updates/acme/index.html"):
+            pages[rel] = pages[rel].replace("</body>", record_rows(*vendor) + "</body>")
+    rows_errs = run_gate(vendor_rows)
+    check("E12 a record title carrying a claim phrase, on an unmonitored product or company page, passes",
+          not rows_errs, rows_errs)
+
+    def vendor_feed(pages):
+        pages["updates/index.html"] = pages["updates/index.html"].replace(
+            "<h3>WATCHED 2.0 official update</h3>",
+            "<h3>Monitoring active for tracked software inventory</h3><p>tracked companies</p>")
+    feed_errs = run_gate(vendor_feed)
+    check("E13 a Patch Feed card carrying a claim phrase passes the hub rule", not feed_errs, feed_errs)
+
+    def unmark(rel):
+        def mutate(pages):
+            pages[rel] = pages[rel].replace(f" {gate.PROSE_ATTR}", "")
+        return mutate
+    check("E14 a product page, company page or hub with no marked coverage prose is refused, never read as clean",
+          all(any(e.startswith(f"PROSE {rel}") and "no marked coverage prose" in e for e in run_gate(unmark(rel)))
+              for rel in ("updates/darkco/dark/index.html", "updates/darkco/index.html", "updates/index.html")))
+
+    unclosed = run_gate(_append("updates/darkco/dark/index.html",
+                                f"<div {gate.PROSE_ATTR}><span>NOT MONITORED" + record_rows(*vendor)))
+    check("E15 a marked region that never closes is refused, and the records after it are not read as prose",
+          any("never closes" in e for e in unclosed) and not any("says" in e for e in unclosed), unclosed)
+
+    regions, closed = gate.coverage_prose(
+        '<div x="1" data-coverage-prose>A <div>B <br> <img src="i"> C</div> D<script>no</script></div>'
+        '<p>outside</p><span data-coverage-prose>E</span>')
+    check("E16 marked prose balances nested tags, skips scripts and leaves unmarked text out",
+          regions == ["A B C D", "E"] and closed, regions)
 # ------------------------------------------------------------------------------------------------
 # [F] real Liquid renders of the shipped layouts
 # ------------------------------------------------------------------------------------------------
@@ -610,43 +688,47 @@ def section_f() -> None:
     print("\n[F] the shipped layouts take every coverage word from the projection")
     prod = lambda pid, cid: dict(product(pid, cid), product_name=pid.upper(),  # noqa: E731
                                  consensus_method=["Community reports are grouped by recurring theme."])
-    products = [prod("nv", "nvco"), prod("gpt", "oai"), prod("elg", "elco"), prod("net", "netco")]
+    products = [prod("nv", "nvco"), prod("gpt", "oai"), prod("elg", "elco"), prod("net", "netco"),
+                prod("cim", "cimco")]
     companies = [{"id": c, "company_name": c.upper(), "company_url": f"/updates/{c}/"}
-                 for c in ("nvco", "oai", "elco", "netco")]
-    rows = [{"product_id": "nv", "state": "planned", "label": GPT_LABELS[3], "official": "disabled", "community": "absent"},
-            {"product_id": "gpt", "state": "not_monitored", "label": GPT_LABELS[4], "official": "disabled", "community": "absent"},
-            {"product_id": "elg", "state": "official_only", "label": GPT_LABELS[1], "official": "healthy", "community": "absent"},
-            {"product_id": "net", "state": "impaired", "label": GPT_LABELS[2], "official": "broken", "community": "absent"}]
-    company_of = {"nv": "nvco", "gpt": "oai", "elg": "elco", "net": "netco"}
+                 for c in ("nvco", "oai", "elco", "netco", "cimco")]
+    rows = [{"product_id": "nv", "state": "planned", "label": PLAIN_LABELS[3], "official": "disabled", "community": "absent"},
+            {"product_id": "gpt", "state": "not_monitored", "label": PLAIN_LABELS[4], "official": "disabled", "community": "absent"},
+            {"product_id": "elg", "state": "official_only", "label": PLAIN_LABELS[1], "official": "healthy", "community": "absent"},
+            {"product_id": "net", "state": "impaired", "label": PLAIN_LABELS[2], "official": "broken", "community": "absent"},
+            {"product_id": "cim", "state": "impaired", "label": PLAIN_LABELS[2], "official": "healthy", "community": "impaired"}]
+    company_of = {"nv": "nvco", "gpt": "oai", "elg": "elco", "net": "netco", "cim": "cimco"}
     crows = [{"company_id": company_of[r["product_id"]], "state": r["state"], "label": r["label"],
               "official_monitored": 0, "total": 1} for r in rows]
     coverage = {"products": rows, "companies": crows}
     monitoring = [{"product_id": "net", "state": "broken", "label": official.STATE_LABELS["broken"],
-                   "last_success": "", "last_checked": ""}]
+                   "last_success": "", "last_checked": ""},
+                  {"product_id": "cim", "state": "healthy", "label": official.STATE_LABELS["healthy"],
+                   "last_success": "2026-11-18", "last_checked": "2026-11-18"}]
     site = _site(coverage, products, companies, monitoring)
 
     out = {pid: render(PRODUCT_LAYOUT, {"site": site, "page": {"product_id": pid, "company_id": cid}})
-           for pid, cid in (("nv", "nvco"), ("gpt", "oai"), ("elg", "elco"), ("net", "netco"))}
+           for pid, cid in (("nv", "nvco"), ("gpt", "oai"), ("elg", "elco"), ("net", "netco"), ("cim", "cimco"))}
     if out["nv"] is None:
-        for n in range(1, 9):
+        for n in range(1, 11):
             check(f"F{n} could not render: ruby/liquid unavailable", False, "install ruby and the liquid gem")
         return
     text = {k: gate.page_text(v) for k, v in out.items()}
     claims = {k: [p for p in gate.CLAIM_PHRASES if p in v] for k, v in text.items()}
     check("F1 an unmonitored product page: projection pill, no claim phrase, honest stat card and community line",
-          ("product", "gpt", "not_monitored", GPT_LABELS[4]) in pills_in(out["gpt"]) and not claims["gpt"]
+          ("product", "gpt", "not_monitored", PLAIN_LABELS[4]) in pills_in(out["gpt"]) and not claims["gpt"]
           and "NOT MONITORED" in text["gpt"] and "is not currently monitored" in text["gpt"]
           and "Community reports not monitored for GPT" in text["gpt"]
           and "grouped by recurring theme" not in text["gpt"], (pills_in(out["gpt"]), claims["gpt"]))
     check("F2 a planned product page says planned, not active, and claims nothing",
-          ("product", "nv", "planned", GPT_LABELS[3]) in pills_in(out["nv"]) and not claims["nv"]
+          ("product", "nv", "planned", PLAIN_LABELS[3]) in pills_in(out["nv"]) and not claims["nv"]
           and "Monitoring is planned but not active" in text["nv"] and "PLANNED" in text["nv"],
           (pills_in(out["nv"]), claims["nv"]))
     check("F3 an official-only product with no records yet reads monitored and awaiting a record",
-          ("product", "elg", "official_only", GPT_LABELS[1]) in pills_in(out["elg"])
+          ("product", "elg", "official_only", PLAIN_LABELS[1]) in pills_in(out["elg"])
           and "OFFICIAL SOURCE ACTIVE" in text["elg"] and "AUXSAYS monitors ELG official updates" in text["elg"])
     check("F4 an impaired product page discloses the impairment and its official detail",
-          ("product", "net", "impaired", GPT_LABELS[2]) in pills_in(out["net"]) and not claims["net"]
+          ("product", "net", "impaired", PLAIN_LABELS[2]) in pills_in(out["net"]) and not claims["net"]
           and "IMPAIRED" in text["net"] and "official source responded but could not be read" in text["net"],
           text["net"][:400])
     absent = render(PRODUCT_LAYOUT, {"site": _site(None, products, companies),
@@ -654,14 +736,14 @@ def section_f() -> None:
     got = pills_in(absent)
     check("F5 with NO projection the product page reads 'Coverage status unknown', never monitored",
           got == [("product", "elg", "unknown", cov.UNKNOWN_LABEL)]
-          and not any(lbl in gate.page_text(absent) for lbl in GPT_LABELS[:2]), got)
+          and not any(lbl in gate.page_text(absent) for lbl in PLAIN_LABELS[:2]), got)
 
     comp = render(COMPANY_LAYOUT, {"site": site, "page": {"company_id": "oai"}})
     ctext = gate.page_text(comp)
     got = pills_in(comp)
     check("F6 an unmonitored company page: company pill and product cards from the projection, no claim",
-          got[:1] == [("company", "oai", "not_monitored", GPT_LABELS[4])]
-          and ("product", "gpt", "not_monitored", GPT_LABELS[4]) in got
+          got[:1] == [("company", "oai", "not_monitored", PLAIN_LABELS[4])]
+          and ("product", "gpt", "not_monitored", PLAIN_LABELS[4]) in got
           and not [p for p in gate.CLAIM_PHRASES if p in ctext] and "1 software product" in ctext
           and "tracked software" not in ctext, (got, ctext[:300]))
     nvco = render(COMPANY_LAYOUT, {"site": site, "page": {"company_id": "nvco"}})
@@ -676,6 +758,31 @@ def section_f() -> None:
     check("F8 the company 'latest signals' list shows each no-record product's projection pill",
           got == want and "not yet monitoring" not in latest and "awaiting first record" not in latest,
           (got, want))
+
+    # Official checks working, community collection configured and failing, no records yet: the
+    # catalog's community method list must not be shown, and the impairment names both halves.
+    check("F9 a zero-record product whose community collection is impaired lists no community method",
+          ("product", "cim", "impaired", PLAIN_LABELS[2]) in pills_in(out["cim"])
+          and "grouped by recurring theme" not in text["cim"]
+          and "Community report collection impaired for CIM" in text["cim"]
+          and "temporarily impaired: official updates monitored; community report collection impaired."
+          in text["cim"], text["cim"][:500])
+
+    # The deploy check reads ONLY marked prose, so every coverage sentence must sit inside it.
+    prose = {k: " ".join(gate.coverage_prose(v)[0]) for k, v in out.items()}
+    cprose = " ".join(gate.coverage_prose(comp)[0])
+    lprose = " ".join(gate.coverage_prose(latest)[0])
+    check("F10 the shipped layouts mark every coverage sentence they render as coverage prose",
+          all(gate.coverage_prose(v)[1] for v in list(out.values()) + [comp, latest])
+          and all(s in prose["gpt"] for s in (PLAIN_LABELS[4], "NOT MONITORED", "is not currently monitored",
+                                               "Community reports not monitored for GPT", "No patch records yet",
+                                               "Product-level issue signals are not monitored"))
+          and "Monitoring is planned but not active" in prose["nv"] and "OFFICIAL SOURCE ACTIVE" in prose["elg"]
+          and "temporarily impaired" in prose["net"]
+          and all(s in cprose for s in (PLAIN_LABELS[4], "1 software product",
+                                         "its official updates are not currently monitored"))
+          and all(r["label"] in lprose and r["product_id"].upper() in lprose for r in rows),
+          (prose["gpt"][:300], cprose[:300], lprose[:300]))
 
 
 # ------------------------------------------------------------------------------------------------
@@ -712,6 +819,13 @@ def section_g() -> None:
                                                          str(c.get("summary") or ""), re.I)]
     check("G4 company summaries describe why a company matters, never whether it is monitored",
           not summaries, summaries)
+    # The hub is not rendered in [F]; pin its marked coverage prose here (the real-build gate also
+    # refuses a hub with none).
+    hub_layout = (_AUX / "_layouts" / "aux-updates.html").read_text(encoding="utf-8")
+    marks = [m for m in ('class="patch-source-radar-head"', 'class="patch-source-meta"',
+                         'class="patch-source-reason"')
+             if not re.search(re.escape(m) + r"\s+" + gate.PROSE_ATTR + r"\b", hub_layout)]
+    check("G5 the hub layout marks its radar head and company card counts as coverage prose", not marks, marks)
 
 
 # ------------------------------------------------------------------------------------------------
@@ -721,15 +835,29 @@ def section_g() -> None:
 def fleet():
     products = [product("obs", "obs"), product("quiet", "q"), product("stale", "s"), product("nvidia", "nv"),
                 product("undocumented", "u"), product("ps", "adobe"), product("comm", "c"),
-                product("exp", "e", priority="Expansion")]
+                product("exp", "e", priority="Expansion"),
+                # enabled lanes failing at runtime, one per way an enabled lane can fail
+                product("refused", "r"), product("garbled", "g"), product("wobbly", "w"),
+                product("silent", "si", priority="Expansion"), product("nosrc", "n", priority="Expansion")]
     sources = [source("obs", cadence="6h"), source("quiet"), source("stale"), source("nvidia", enabled=False),
                source("undocumented", enabled=False), source("ps", enabled=False), source("comm"),
-               source("exp", enabled=False)]
+               source("exp", enabled=False), source("refused"), source("garbled"), source("wobbly"),
+               source("silent")]
     states = {"obs": ingest(), "quiet": ingest(last_records_written=0),
               "stale": ingest(success_hours=24 * 9, checked_hours=24 * 9),
               "ps": ingest("failing", success_hours=None, last_error_type="timeout", consecutive_failures=2),
-              "comm": ingest()}
-    methods = [method("obs", "forum", "success", 2), method("comm", "forum", "blocked", 3)]
+              "comm": ingest(),
+              # refused for ten days -> blocked, persistent
+              "refused": ingest("failing", success_hours=24 * 10, last_error_type="blocked", consecutive_failures=20),
+              # fetches fine on every run (so last_success_at is fresh) but extracts nothing -> broken,
+              # and persistent although its last "success" is an hour old
+              "garbled": ingest("broken", consecutive_empty_extractions=30, extraction_mismatch=True),
+              # ONE failed fetch after a success three hours ago -> the writer's `degraded`, transient
+              "wobbly": ingest("degraded", success_hours=3, last_error_type="timeout", consecutive_failures=1),
+              # not answering for five days -> unreachable
+              "silent": ingest("failing", success_hours=24 * 5, last_error_type="timeout", consecutive_failures=10)}
+    methods = [method("obs", "forum", "success", 2), method("comm", "forum", "blocked", 3),
+               method("exp", "reddit", "disabled", 3)]
     debt = [debt_entry("nvidia", plan="planned",
                        observed_official_releases=[{"version": "621.14", "released": "2026-11-04", "reference": "r1"},
                                                    {"version": "621.24", "released": "2026-11-12", "reference": "r2"}]),
@@ -767,6 +895,18 @@ def section_h() -> None:
           "core_gap_undocumented" in codes(rep, "undocumented"), codes(rep, "undocumented"))
     check("H3 an enabled lane gone stale is flagged as impaired",
           "enabled_lane_impaired" in codes(rep, "stale"))
+    offstate = {r["product_id"]: r["state"] for r in fleet()[0].official_rows}
+    failed = {"refused": "blocked", "garbled": "broken", "wobbly": "unverified", "silent": "unreachable"}
+    check("H3b an enabled lane that is refused, broken, failing once or not answering is flagged as impaired",
+          {p: offstate[p] for p in failed} == failed
+          and all("enabled_lane_impaired" in codes(rep, p) for p in failed),
+          ({p: offstate[p] for p in failed}, {p: sorted(codes(rep, p)) for p in failed}))
+    lane = {f["product_id"]: f for f in rep["flags"] if f["code"] == "enabled_lane_impaired"}
+    check("H3c one failed fetch after a recent success is transient (no Core gap); a persistent failure is a Core gap",
+          not codes(rep, "wobbly") & {"core_gap", "core_gap_undocumented"} and lane["wobbly"]["persistent"] is False
+          and "core_gap_undocumented" in codes(rep, "refused") and lane["refused"]["persistent"] is True
+          and "core_gap_undocumented" in codes(rep, "garbled") and lane["garbled"]["persistent"] is True,
+          {p: (sorted(codes(rep, p)), lane.get(p, {}).get("persistent")) for p in ("wobbly", "refused", "garbled")})
     check("H4 a healthy lane that found no new release in 200 days raises nothing",
           not codes(rep, "quiet"), codes(rep, "quiet"))
     check("H5 a switched-off lane with a frozen failing row is a coverage gap, not a broken collector",
@@ -831,6 +971,78 @@ def section_h() -> None:
           and status_before == status_after, f"rc={rc} tree changed={status_before != status_after}")
     check("H16 the assessment carries no raw error text from the sources",
           body and not re.search(r"Access Denied|<HTML|last_error\"|primary_source_error\"", body))
+
+    # A machine-readable reason for every MISSING capability (GPT 111826, principle 1).
+    missing = {p["product_id"]: p["missing_capabilities"] for p in rep["products"]}
+    want = {"obs": (None, None), "nvidia": ("vendor_terms_unresolved", "no_discovery_method"),
+            "undocumented": ("lane_disabled", "no_discovery_method"), "nosrc": ("no_source", "no_discovery_method"),
+            "refused": ("lane_blocked", "no_discovery_method"), "garbled": ("lane_broken", "no_discovery_method"),
+            "silent": ("lane_unreachable", "no_discovery_method"), "wobbly": ("lane_unverified", "no_discovery_method"),
+            "stale": ("vendor_terms_unresolved", "no_discovery_method"),
+            "comm": (None, "methods_not_working"), "exp": ("lane_disabled", "methods_disabled")}
+    got = {p: (missing[p]["official_ingestion"], missing[p]["community_discovery"]) for p in want}
+    closed = all(tuple(m) == assess.CAPABILITIES and m["issue_detection"] == "not_built"
+                 and all(v is None or v in assess.REASON_CODES for v in m.values()) for m in missing.values())
+
+    def blind(inputs):
+        return cov.Inputs(inputs.products, inputs.companies, inputs.sources, inputs.official_rows, None,
+                          inputs.debt, 14)
+    unread = {p["missing_capabilities"]["community_discovery"] for p in run_assess(mutate_inputs=blind)["products"]}
+    check("H17 every missing capability carries a closed reason code, and only an operating one is null",
+          got == want and closed and unread == {"method_health_unreadable"}, (got, closed, unread))
+
+    # Detection latency from source timestamps only (principle 2): never a guessed number.
+    midnight = (NOW - timedelta(days=200)).replace(hour=0)
+    lat_records = {
+        "obs": [{"version": "33.0.1", "published": NOW - timedelta(days=20),
+                 "discovered": NOW - timedelta(days=20) + timedelta(hours=3.5)}],
+        "quiet": [{"version": "2.0", "published": midnight, "discovered": midnight + timedelta(hours=30)}],
+        "comm": [{"version": "1.0", "published": NOW - timedelta(days=3), "discovered": None}],
+        "stale": [{"version": "5.0", "published": NOW - timedelta(days=3),
+                   "discovered": NOW - timedelta(days=4)}]}
+    lat = {p["product_id"]: p["detection_latency"] for p in run_assess(records=lat_records)["products"]}
+    r2d = {p: lat[p]["release_to_discovery"] for p in lat}
+    nv_held = run_assess(records={"nvidia": [
+        {"version": "621.14", "published": NOW - timedelta(days=14), "discovered": NOW - timedelta(days=13)},
+        {"version": "621.24", "published": NOW - timedelta(days=6), "discovered": NOW - timedelta(days=5)}]})
+    nv_r2d = next(p for p in nv_held["products"] if p["product_id"] == "nvidia")["detection_latency"]["release_to_discovery"]
+    check("H18 release-to-discovery is measured only from source timestamps; unknown and undiscovered are never numbers",
+          (r2d["obs"]["status"], r2d["obs"]["precision"], r2d["obs"]["hours_min"], r2d["obs"]["hours_max"])
+          == ("measured", "exact", 3.5, 3.5)
+          and (r2d["quiet"]["status"], r2d["quiet"]["precision"], r2d["quiet"]["hours_min"], r2d["quiet"]["hours_max"])
+          == ("measured", "day", 6.0, 30.0)
+          and (r2d["comm"]["status"], r2d["comm"]["reason"]) == ("unknown", "discovery_time_not_recorded")
+          and (r2d["stale"]["status"], r2d["stale"]["reason"]) == ("unknown", "inconsistent_timestamps")
+          and (r2d["undocumented"]["status"], r2d["undocumented"]["reason"]) == ("unknown", "no_release_observed")
+          and (r2d["nvidia"]["status"], r2d["nvidia"]["version"], r2d["nvidia"]["released"])
+          == ("not_discovered", "621.24", "2026-11-12")
+          and (nv_r2d["status"], nv_r2d["hours_max"]) == ("measured", 24.0)
+          and not any("hours_min" in r or "hours_max" in r for r in r2d.values() if r["status"] != "measured")
+          and all(v["discovery_to_publication"] == {"status": "unknown", "reason": "publication_time_not_recorded"}
+                  for v in lat.values()), (r2d, nv_r2d))
+
+    # A crash must be visible in the job summary (the step is continue-on-error).
+    real = assess.assess
+    with tempfile.TemporaryDirectory() as td, io.StringIO() as sink:
+        summ, out = Path(td) / "s.md", Path(td) / "a.json"
+        saved, sys.stdout = sys.stdout, sink
+        saved_err, sys.stderr = sys.stderr, sink
+
+        def boom(**_kw):
+            raise KeyError("sources")
+        assess.assess = boom
+        try:
+            rc = assess.main(["--summary", str(summ), "--output", str(out)])
+        except Exception as exc:  # noqa: BLE001 -- fail H19 by name
+            rc = f"raised {exc!r}"
+        finally:
+            assess.assess = real
+            sys.stdout, sys.stderr = saved, saved_err
+        said = summ.read_text(encoding="utf-8") if summ.exists() else ""
+        wrote = out.exists()
+    check("H19 an assessment that crashes says so in the job summary and exits non-zero",
+          rc == 1 and "Coverage assessment FAILED" in said and "KeyError" in said and not wrote,
+          (rc, said[:200]))
 
 
 # ------------------------------------------------------------------------------------------------

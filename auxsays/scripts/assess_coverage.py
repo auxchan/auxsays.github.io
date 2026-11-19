@@ -26,7 +26,21 @@ FIVE QUESTIONS, KEPT APART (a single "monitoring" word hid every one of them):
 
 NO FALSE ALARMS. A healthy check that found no new release is healthy, however long the product has
 been quiet. A switched-off lane is reported as a coverage gap, never as a broken collector, even when
-its frozen state row still says `failing`.
+its frozen state row still says `failing`. A Core lane whose last run failed but which succeeded
+within its own recency window is a transient failure: it is reported as `enabled_lane_impaired`, and
+it becomes a Core gap only once the failure persists past that window.
+
+A REASON FOR EVERY MISSING CAPABILITY. Each product row carries `missing_capabilities`, one closed
+reason code (`REASON_CODES`) per capability that is not operating -- official ingestion, community
+discovery, product-level issue detection -- and null for one that is. A gap with no reason is not
+debt anyone can work.
+
+DETECTION LATENCY, NEVER GUESSED. `detection_latency.release_to_discovery` is measured only from
+source timestamps: the vendor's release time on the newest record and the time ingestion first
+recorded it. A release dated to the day gives a range, not a number. A verified official release the
+store does not hold reads `not_discovered`, with its release date. Anything else reads `unknown` with
+a reason. `discovery_to_publication` is `unknown` everywhere: the site does not record when a record
+first went live (AUX-102 follow-up).
 
 Run:  python auxsays/scripts/assess_coverage.py [--summary FILE] [--output FILE] [--now ISO]
 """
@@ -36,7 +50,8 @@ import argparse
 import json
 import re
 import sys
-from datetime import datetime, timezone
+import traceback
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -68,7 +83,95 @@ FLAG_ORDER = (
     "debt_resolved",             # a debt entry for a product whose lane now operates
 )
 
+CONTRACT_DOC = "docs/PRODUCT_LEVEL_SIGNALS_CONTRACT.md"
+# The CLOSED reason vocabulary for a capability that is not operating (GPT 111826, principle 1).
+REASON_CODES = {
+    # official ingestion: the reviewed debt entry's blocking reason when there is one, else the lane's state
+    **cov.BLOCKING_REASONS,
+    "lane_disabled": "an official source is configured but switched off (or manual only), with no debt entry",
+    "no_source": "no official ingestion source exists for this product, and no debt entry explains it",
+    "lane_stale": "the enabled official lane has not succeeded recently enough for its cadence",
+    "lane_blocked": "the official source is refusing the enabled lane's automated checks",
+    "lane_unreachable": "the official source did not answer the enabled lane",
+    "lane_broken": "the official source answered the enabled lane but could not be read",
+    "lane_unverified": "the enabled official lane has no recognisable successful run",
+    # community discovery
+    "no_discovery_method": "no community discovery method is registered for this product",
+    "methods_disabled": "community discovery methods exist, and every one is switched off",
+    "methods_not_working": "community discovery methods are active, and none succeeded within the freshness window",
+    "method_health_unreadable": "the community method-health telemetry could not be read",
+    # product-level issue detection
+    "not_built": f"product-level issue detection is not built for any product ({CONTRACT_DOC})",
+}
+CAPABILITIES = ("official_ingestion", "community_discovery", "issue_detection")
+# Why a latency is not measured.
+LATENCY_UNKNOWN = {
+    "no_release_observed": "no release of this product is recorded or independently known",
+    "discovery_time_not_recorded": "the newest record does not carry the time ingestion first recorded it",
+    "inconsistent_timestamps": "the recorded discovery precedes the vendor's release time",
+    "publication_time_not_recorded": "the site does not record when a record first went live",
+}
+
 _TOP_KEY = re.compile(r"^(update_entry|product_id|update_version|update_published_at):[ \t]*(.*)$", re.M)
+# The status event ingestion writes when it first creates a record: a source timestamp of discovery.
+_DISCOVERED = re.compile(r"^- at:[ \t]*'?([^'\n]+?)'?[ \t]*\n[ \t]+label:[^\n]*\n[ \t]+note:[ \t]*"
+                         r"AUXSAYS official-ingestion record initialized\.", re.M)
+
+
+def official_reason(official_state: str, entry: Mapping | None) -> str | None:
+    """The reason official ingestion is missing, or None when the lane operates."""
+    if official_state == "healthy":
+        return None
+    if entry and entry.get("blocking_reason") in cov.BLOCKING_REASONS:
+        return str(entry["blocking_reason"])
+    if official_state == "disabled":
+        return "lane_disabled"
+    if official_state == "unconfigured":
+        return "no_source"
+    code = f"lane_{official_state}"
+    return code if code in REASON_CODES else "lane_unverified"
+
+
+def community_reason(community_state: str, rows: list[Mapping], *, readable: bool) -> str | None:
+    """The reason community discovery is missing, or None when it operates."""
+    if community_state == "operating":
+        return None
+    if not readable:
+        return "method_health_unreadable"
+    if community_state == "impaired":
+        return "methods_not_working"
+    return "methods_disabled" if rows else "no_discovery_method"
+
+
+def _hours(delta: timedelta) -> float:
+    return round(delta.total_seconds() / 3600, 1)
+
+
+def release_to_discovery(newest: Mapping | None, undiscovered: Mapping | None) -> dict:
+    """How long a release took to reach the patch store, from source timestamps only.
+
+    `undiscovered` (a verified official release the store does not hold) wins: the honest answer is
+    that it has not been discovered, never a number. A release time at exactly midnight is treated as
+    a date, so the result is a range from the end of that day to its start; never a point estimate.
+    """
+    if undiscovered:
+        return {"status": "not_discovered", "basis": "observed_official_release",
+                "version": str(undiscovered.get("version") or ""),
+                "released": str(undiscovered.get("released") or "")}
+    if not newest:
+        return {"status": "unknown", "reason": "no_release_observed"}
+    published, discovered = newest.get("published"), newest.get("discovered")
+    base = {"basis": "newest_record", "version": newest.get("version") or "", "released_at": _iso(published),
+            "discovered_at": _iso(discovered)}
+    if discovered is None:
+        return {"status": "unknown", "reason": "discovery_time_not_recorded", **base}
+    day_only = (published.hour, published.minute, published.second, published.microsecond) == (0, 0, 0, 0)
+    latest = discovered - published
+    earliest = discovered - (published + timedelta(days=1)) if day_only else latest
+    if latest < timedelta(0):
+        return {"status": "unknown", "reason": "inconsistent_timestamps", **base}
+    return {"status": "measured", "precision": "day" if day_only else "exact",
+            "hours_min": max(0.0, _hours(earliest)), "hours_max": _hours(latest), **base}
 
 
 def _iso(dt: datetime | None) -> str:
@@ -83,9 +186,10 @@ def _scalar(text: str) -> Any:
 
 
 def load_records(records_dir: Path = RECORDS_DIR) -> dict[str, list[dict]]:
-    """product_id -> [{version, published}] for every patch record, from top-level front matter keys.
+    """product_id -> [{version, published, discovered}] for every patch record.
 
-    Only four top-level scalars are read, so the bodies (which can hold anything) are never parsed.
+    Only four top-level scalars and the ingestion-created status event are read, so the bodies
+    (which can hold anything) are never parsed.
     """
     out: dict[str, list[dict]] = {}
     for path in sorted(records_dir.glob("*.md")):
@@ -100,9 +204,11 @@ def load_records(records_dir: Path = RECORDS_DIR) -> dict[str, list[dict]]:
         pid = str(fields.get("product_id") or "").strip()
         if not pid:
             continue
+        found = _DISCOVERED.search(front)
         out.setdefault(pid, []).append({
             "version": str(fields.get("update_version") or "").strip(),
             "published": official.parse_instant(fields.get("update_published_at")),
+            "discovered": official.parse_instant(found.group(1)) if found else None,
         })
     return out
 
@@ -194,6 +300,8 @@ def assess(*, now: datetime, inputs: cov.Inputs | None = None, state: Mapping | 
         observed = [r for r in (entry or {}).get("observed_official_releases") or [] if isinstance(r, dict)]
         missing = [str(r.get("version")) for r in observed if str(r.get("version")) not in held]
         latest_known = max(observed, key=lambda r: str(r.get("released") or "")) if observed else None
+        unheld = [r for r in observed if str(r.get("version")) not in held]
+        latest_unheld = max(unheld, key=lambda r: str(r.get("released") or "")) if unheld else None
         success_field = st.get("primary_last_success_at") if str(st.get("status")) == "partial" \
             else st.get("last_success_at")
         newest_method: dict[str, dict] = {}
@@ -232,6 +340,16 @@ def assess(*, now: datetime, inputs: cov.Inputs | None = None, state: Mapping | 
                                   for mid, m in sorted(newest_method.items())},
             "debt": ({k: entry.get(k) for k in ("remediation_priority", "blocking_reason", "next_action",
                                                  "plan", "review_by", "ledger")} if entry else None),
+            "missing_capabilities": {
+                "official_ingestion": official_reason(row["official"], entry),
+                "community_discovery": community_reason(row["community"], methods.get(pid, []),
+                                                        readable=inputs.method_rows is not None),
+                "issue_detection": "not_built",
+            },
+            "detection_latency": {
+                "release_to_discovery": release_to_discovery(newest, latest_unheld),
+                "discovery_to_publication": {"status": "unknown", "reason": "publication_time_not_recorded"},
+            },
         }
         for k in ("review_by",):
             if facts["debt"] and facts["debt"].get(k) is not None:
@@ -239,7 +357,19 @@ def assess(*, now: datetime, inputs: cov.Inputs | None = None, state: Mapping | 
         products.append(facts)
 
         operating = row["state"] in cov.OPERATING_STATES
-        if facts["priority"] == "Core" and row["official"] != "healthy":
+        # A gap of CONFIGURATION (switched off, no source) is a Core gap at once. A RUNTIME failure of
+        # an enabled lane is TRANSIENT only in the writer's own sense: one failed fetch (`degraded`,
+        # lib/state.py; a second makes it `failing`) after a success inside the lane's recency window.
+        # That is reported as enabled_lane_impaired alone, so one bad night does not ask the owner for
+        # a debt entry. Everything else is persistent. `last_success_at` alone cannot decide it: it
+        # records a successful FETCH, and a broken extractor (Netlify) fetches fine on every run.
+        window = official.recency_window(official.parse_cadence(ingestion.get("polling_frequency")),
+                                         ingestion.get("monitoring_recency_hours"))
+        succeeded = official.parse_instant(success_field)
+        transient = (str(st.get("status") or "").strip().lower() == "degraded" and window is not None
+                     and succeeded is not None and succeeded <= now and now - succeeded <= window)
+        persistent = row["official"] in cov.OFFICIAL_OFF or not transient
+        if facts["priority"] == "Core" and row["official"] != "healthy" and persistent:
             if entry:
                 flags.append(_flag("core_gap", pid, cov.BLOCKING_REASONS.get(entry.get("blocking_reason"), ""),
                                    remediation_priority=entry.get("remediation_priority"),
@@ -252,13 +382,13 @@ def assess(*, now: datetime, inputs: cov.Inputs | None = None, state: Mapping | 
                                    coverage=row["state"]))
         if src.get("enabled") and row["official"] not in ("healthy",) + cov.OFFICIAL_OFF:
             flags.append(_flag("enabled_lane_impaired", pid,
-                               f"official lane is {row['official']}",
+                               f"official lane is {row['official']} "
+                               f"({'persistent' if persistent else 'transient'})",
+                               persistent=persistent,
                                last_successful_check=facts["official_lane"]["last_successful_check"],
                                consecutive_failures=st.get("consecutive_failures"),
                                consecutive_empty_extractions=st.get("consecutive_empty_extractions")))
         if src.get("enabled") and row["official"] != "unconfigured":
-            window = official.recency_window(official.parse_cadence(ingestion.get("polling_frequency")),
-                                             ingestion.get("monitoring_recency_hours"))
             checked = official.parse_instant(st.get("last_checked_at"))
             if window is not None and (checked is None or now - checked > window):
                 flags.append(_flag("execution_missing", pid,
@@ -304,6 +434,16 @@ def assess(*, now: datetime, inputs: cov.Inputs | None = None, state: Mapping | 
         counts[r["state"]] = counts.get(r["state"], 0) + 1
     flag_counts = {code: sum(1 for f in flags if f["code"] == code) for code in FLAG_ORDER}
     reference_count = sum(1 for p in products if p["latest_known_release"])
+    missing_counts: dict[str, dict[str, int]] = {cap: {} for cap in CAPABILITIES}
+    for p in products:
+        for cap in CAPABILITIES:
+            code = p["missing_capabilities"][cap]
+            if code is not None:
+                missing_counts[cap][code] = missing_counts[cap].get(code, 0) + 1
+    latency_counts: dict[str, int] = {}
+    for p in products:
+        status = p["detection_latency"]["release_to_discovery"]["status"]
+        latency_counts[status] = latency_counts.get(status, 0) + 1
     return {
         "schema": SCHEMA,
         "generated_at": _iso(now),
@@ -311,6 +451,10 @@ def assess(*, now: datetime, inputs: cov.Inputs | None = None, state: Mapping | 
         "coverage_counts": dict(sorted(counts.items())),
         "flag_counts": flag_counts,
         "independent_reference_products": reference_count,
+        "missing_capability_counts": {cap: dict(sorted(v.items())) for cap, v in missing_counts.items()},
+        "release_to_discovery_counts": dict(sorted(latency_counts.items())),
+        "reason_codes": dict(REASON_CODES),
+        "latency_unknown_reasons": dict(LATENCY_UNKNOWN),
         "flags": sorted(flags, key=lambda f: (FLAG_ORDER.index(f["code"]), f["product_id"])),
         "products": products,
         "companies": company_rows,
@@ -352,7 +496,20 @@ def summary_markdown(report: dict) -> str:
             elif f.get("products"):
                 extra = f" ({len(f['products'])} products)"
             lines.append(f"- `{f['code']}` {f['product_id'] or 'all'}: {f['detail']}{extra}")
-    lines += ["", f"Release-gap check: {report['independent_reference_products']} product(s) have an "
+    mc = report.get("missing_capability_counts") or {}
+    lines += ["", "### Why capabilities are missing", ""]
+    for cap in CAPABILITIES:
+        parts = ", ".join(f"{code} {n}" for code, n in sorted((mc.get(cap) or {}).items(), key=lambda kv: -kv[1]))
+        lines.append(f"- {cap.replace('_', ' ')}: {parts or 'none missing'}")
+    undiscovered = [(p["product_id"], p["detection_latency"]["release_to_discovery"]) for p in report["products"]
+                    if p["detection_latency"]["release_to_discovery"]["status"] == "not_discovered"]
+    lc = report.get("release_to_discovery_counts") or {}
+    lines += ["", f"Release-to-discovery: measured for {lc.get('measured', 0)} product(s) from source "
+                  f"timestamps, unknown for {lc.get('unknown', 0)}"
+                  + "".join(f"; NOT DISCOVERED: {pid} {r.get('version')} (released {r.get('released')})"
+                            for pid, r in undiscovered)
+                  + ". Discovery-to-publication: not recorded yet.",
+              "", f"Release-gap check: {report['independent_reference_products']} product(s) have an "
                   "independent official reference; for the rest, missing updates cannot be measured yet.", ""]
     return "\n".join(lines)
 
@@ -364,8 +521,21 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--now", help="ISO time to assess at (default: now)")
     args = ap.parse_args(argv)
     now = official.parse_instant(args.now) if args.now else datetime.now(timezone.utc)
-    report = assess(now=now)
-    text = summary_markdown(report)
+    try:
+        report = assess(now=now)
+        text = summary_markdown(report)
+    except Exception as exc:  # noqa: BLE001 -- the step is continue-on-error, so SAY it failed
+        # A crash used to leave only a step annotation and an empty job summary, which reads like a
+        # quiet day. The summary now says the assessment did not run; the exit code stays non-zero.
+        failed = (f"## Coverage assessment FAILED, {_iso(now)}\n\nThe assessment raised "
+                  f"{type(exc).__name__}, so no coverage report was produced this run. Nothing about "
+                  f"coverage can be read from this run's summary.\n")
+        if args.summary:
+            with open(args.summary, "a", encoding="utf-8", newline="") as fh:
+                fh.write(failed)
+        print(failed)
+        traceback.print_exc()
+        return 1
     if args.summary:
         with open(args.summary, "a", encoding="utf-8", newline="") as fh:
             fh.write(text)

@@ -37,7 +37,7 @@
     deploy check refuses. Zero records is an absence of records, never "no user problems". {%- endcomment -%}
   {% capture staged_html %}{% for product in ls_products %}{% capture pmark2 %}|{{ product.id }}|{% endcapture %}{% unless latest_seen contains pmark2 %}{% assign ls_coverage = site.data.coverage_state.products | where: "product_id", product.id | first %}<li class="patch-latest-staged"><span class="patch-latest-staged__name">{{ product.product_name }}</span> <span class="patch-coverage-pill patch-coverage-pill--coverage-{{ ls_coverage.state | default: 'unknown' }}" data-coverage-product="{{ product.id }}">{{ ls_coverage.label | default: 'Coverage status unknown' }}</span> <a class="patch-latest-staged__link" href="{{ product.product_url | relative_url }}">Full history →</a></li>{% endunless %}{% endfor %}{% endcapture %}
   {% if staged_html contains "patch-latest-staged" %}
-  <ul class="patch-latest-staged-list">
+  <ul class="patch-latest-staged-list" data-coverage-prose>
     {{ staged_html }}
   </ul>
   {% endif %}
