@@ -62,6 +62,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-105 | Resolved | Official ingestion | High | NVIDIA drivers had no official lane, and one catalog product stood for three products |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
+| AUX-112 | Resolved | Published claims | Low | Two catalog products linked readers to an official source that no longer exists (Gemini replaced; Kick has none) |
 | AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
 | AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
 | AUX-051 | Resolved | Published claims | Medium | Four records made just before AUX-050 could never be labelled, so their readers were stuck on UNKNOWN |
@@ -4213,6 +4214,51 @@ it is a 27-file change touching **all four committing workflows**, on a reposito
 queue is depth one, so it was deliberately not bundled with a copy fix. Until it lands, the guard
 in section [F] asserts that no layout, include or page reads it. That guard is containment, not a
 substitute for the move.
+
+### AUX-112 — Two catalog products linked readers to an official source that no longer exists
+
+- **Status** Resolved · **Area** Published claims · **Severity** Low
+- **First seen** 2026-11-19 (a read-only feasibility scan of products with no lane) · **Resolved** 2026-11-19
+
+**Symptom** The Gemini and Kick product pages, their company pages and their Patch Feed hub cards linked
+"Official source" to an address that answers 404: `https://gemini.google/updates/` ("Gemini updates") and
+`https://kick.com/blog` ("Kick blog", a path that Kick now serves as its "Channel Not Found" page). The same
+address was the `official_url` of each product's disabled ingestion source, and sat in `patch_sources.yml` and
+the backfill queue. Both coverage labels were already derived and correct ("Not currently monitored"); only
+the source link was false.
+
+**Cause** Catalog source addresses are written by hand, and nothing checks that they still answer. Both lanes
+are switched off, so no run ever requested them.
+
+**Fix** (data only)
+- Gemini: every catalog copy now points to `https://gemini.google/release-notes/`, labelled "Gemini Apps
+  release notes". Checked on 2026-11-19 with ordinary read-only requests (the robots file, the old address,
+  the new page): the new page answered HTTP 200 from Google's own server, canonical to itself, titled as the Gemini Apps release updates, 98 dated entries from 2023-04-10 to
+  2026-11-19, and a robots file that allows everything. It is the same product (the Gemini app) and the same
+  kind of source (official release notes). Its entries carry dates and model names, not app version numbers.
+- Kick: no official replacement exists, so the address is removed, not replaced. `source_url`, `source_label`
+  and the ingestion `official_url` are null, and the company's `official_sources` list is empty. The product
+  page now says "Official source pending." and the company page "Kick source pending", and neither links
+  anything. Checked and rejected: Kick's help centre "What's New / Updates" collection (one article, about
+  system status, last updated 2026-05-22); app-store version histories (hosted by the stores or by mirrors,
+  generic notes, mobile app only); a third-party release aggregator whose "Kick" entries belong to an
+  unrelated bookkeeping product of the same name; Kick's social accounts. Kick's homepage is not linked in
+  its place, because it would read as a release feed.
+- `coverage_debt.yml`: both next actions restated to match. Blocking reasons, priorities and plans unchanged.
+
+Unchanged: both lanes stay disabled, and no collector, adapter, schedule, record, evidence row, count, verdict
+or coverage label changed.
+
+**Recorded, not decided** Whether Kick belongs in the Core tier. It has no official release source, and its
+terms (s1.4) bar automated access. That is an owner decision, and this entry does not make it.
+
+**Not shown by this** Whether any other catalog source address has stopped answering. Nothing checks them;
+this entry fixes the two a scan happened to find.
+
+**Reopen only if** the Gemini or Kick product or company page links an official source that answers 404 or is
+not the vendor's own page for that product's updates; Kick's catalog gains a source address that is not an
+official Kick release source; or a deploy shows the Kick page linking any official source while
+`patch_products.yml` maps none.
 
 ### AUX-049 — a record built from one platform's notes did not say so
 

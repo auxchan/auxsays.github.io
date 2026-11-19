@@ -139,8 +139,8 @@
   logo_path: /assets/img/patch-logos/google.png
   company_url: /updates/google/
   official_sources:
-  - label: Gemini updates
-    url: https://gemini.google/updates/
+  - label: Gemini Apps release notes
+    url: https://gemini.google/release-notes/
     product_id: google-gemini
   documented_update_count: 0
   tracked_product_count: 1
@@ -154,10 +154,9 @@
   summary: Changes to Kick can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
   logo_path: /assets/img/patch-logos/kick.png
   company_url: /updates/kick/
-  official_sources:
-  - label: Kick blog
-    url: https://kick.com/blog
-    product_id: kick
+  # No official update source is mapped: kick.com/blog answers 404 and Kick publishes no
+  # changelog to replace it (AUX-112).
+  official_sources: []
   documented_update_count: 0
   tracked_product_count: 1
   asset_type: company_logo
