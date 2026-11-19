@@ -5269,7 +5269,10 @@ reports, by missing them, or by adding wording lists that nothing counterbalance
 them. The data correction removes the measured exposure; the remaining risk is in the mechanism, not in counted
 rows.
 
-**Current impact** No counted row of this class remains on the stored text that can be judged. About a quarter of
+**Current impact** Still counted: DaVinci 20.2.1 (held out) and the DaVinci 21.0.4 control, each awaiting its own
+audited review, and two measured rows of this class outside the withdrawal tool's product scope, Premiere Pro
+26.2.2 and Acrobat Reader 15.020.20039, taken up at the next Adobe audited withdrawal once that tool's scope
+widens to cover them. About a quarter of
 counted rows store too little text around the version to judge its role; that is an auditability gap, tracked by
 the version-centred evidence work, not proof of wrong counting.
 
