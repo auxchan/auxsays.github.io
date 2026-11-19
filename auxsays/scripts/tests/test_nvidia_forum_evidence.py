@@ -1041,10 +1041,10 @@ def section_wiring(fixture_results: dict) -> None:
                   and r["source_url"].endswith("?comment=" + r["id"].rsplit("-", 1)[1]) for r in stored))
         check("P5 ...and the shared gate reads it as a specific report URL",
               all(base.source_url_is_specific(r["source_url"]) for r in stored))
-        r66 = next(r for r in stored if r["id"] == f"{GRD}-621-14-nvidia-forum-comment-3633066")
+        r66 = next((r for r in stored if r["id"] == f"{GRD}-621-14-nvidia-forum-comment-3633066"), {})
         check("P6 the report date is the comment's own creation time (2026-11-08 16:08:38Z), not its last activity",
-              r66["source_date"] == "2026-11-08T16:08:38Z" and r66["match_basis"] == "exact_version_text"
-              and r66["matched_text"] == "621.14", str(r66.get("source_date")))
+              r66.get("source_date") == "2026-11-08T16:08:38Z" and r66.get("match_basis") == "exact_version_text"
+              and r66.get("matched_text") == "621.14", str(r66.get("source_date")))
         check("P7 counted rows carry the sentiment the promotion requires", all(r["sentiment"] == "negative" for r in counted))
         check("P8 the state file carries ids, times and provenance only (no text, no user)",
               "body" not in state_path.read_text(encoding="utf-8")
@@ -1095,8 +1095,9 @@ def section_moved_comment() -> None:
                 again = run_both(write=True)
                 stored2 = base.load_evidence(store)
             reread = [u for u in fake.seen if "comments?id=592433" in u]
-    mine1 = [r for r in stored1 if r["id"].endswith("-comment-3640001")]
-    mine2 = [r for r in stored2 if r["id"].endswith("-comment-3640001")]
+    # Found by the comment's own link, not by the row id under test.
+    mine1 = [r for r in stored1 if str(r.get("source_url") or "").endswith("?comment=3640001")]
+    mine2 = [r for r in stored2 if str(r.get("source_url") or "").endswith("?comment=3640001")]
     grd = next((r for r in mine1 if r["product_id"] == GRD), {})
     check("M1 the comment is stored once per family the first time (Game Ready counted: the reporter named it)",
           sorted((r["product_id"], r["counted"]) for r in mine1) == [(GRD, True), (NSD, False)], str(mine1)[:200])
