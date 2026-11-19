@@ -62,7 +62,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-105 | Resolved | Official ingestion | High | NVIDIA drivers had no official lane, and one catalog product stood for three products |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
-| AUX-112 | Resolved | Published claims | Low | Two catalog products linked readers to an official source that no longer exists (Gemini replaced; Kick has no product release source) |
+| AUX-112 | Resolved | Published claims | Low | Two catalog products linked readers to an official source that no longer exists (Gemini replaced; no Kick platform release source found) |
 | AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
 | AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
 | AUX-051 | Resolved | Published claims | Medium | Four records made just before AUX-050 could never be labelled, so their readers were stuck on UNKNOWN |
@@ -4218,7 +4218,7 @@ substitute for the move.
 ### AUX-112 — Two catalog products linked readers to an official source that no longer exists
 
 - **Status** Resolved · **Area** Published claims · **Severity** Low
-- **First seen** 2026-11-19 (a read-only feasibility scan of products with no lane) · **Resolved** 2026-11-19
+- **First seen** 2026-11-19 (a read-only feasibility scan of Core products without an operating lane) · **Resolved** 2026-11-19
 
 **Symptom** The Gemini and Kick product pages, their company pages and their Patch Feed hub cards linked
 "Official source" to an address that answers 404: `https://gemini.google/updates/` ("Gemini updates") and
@@ -4228,7 +4228,7 @@ the backfill queue. Both coverage labels were already derived and correct ("Not 
 the source link was false.
 
 **Cause** Catalog source addresses are written by hand, and nothing checks that they still answer. Both lanes
-are switched off, so no run ever requested them.
+are switched off, so no automatic ingestion run requests them.
 
 **Fix** (data only)
 - Gemini: every catalog copy now points to `https://gemini.google/release-notes/`, labelled "Gemini Apps
@@ -4236,19 +4236,21 @@ are switched off, so no run ever requested them.
   the new page): the new page answered HTTP 200 from Google's own server, canonical to itself, titled as the Gemini Apps release updates, 98 dated entries from 2023-04-10 to
   2026-11-19, and a robots file that allows everything. It is the same product (the Gemini app) and the same
   kind of source (official release notes). Its entries carry dates and model names, not app version numbers.
-- Kick: no official release source for the product was found, so the address is removed, not replaced.
-  `source_url`, `source_label` and the ingestion `official_url` are null, and the company's
+- Kick: no official release source for its streaming platform was found, so the address is removed, not
+  replaced. `source_url`, `source_label` and the ingestion `official_url` are null, and the company's
   `official_sources` list is empty. The product page now says "Official source pending." and the company
   page "Kick source pending", and neither links anything. Considered and rejected (the help-centre
-  collection, the developer-API changelog's source repository and the aggregator were opened; no other
-  candidate was):
+  collection, the developer-API changelog's source repository, the aggregator and the App Store listing
+  were opened; no other candidate was):
   - Kick's help centre "What's New / Updates" collection: one article, about system status, last updated
     2026-05-22;
   - Kick's developer documentation changelog (docs.kick.com; source repository KickEngineering/KickDevDocs,
     newest entry headed 11/08/2026, which is 2026-08-11 because its headings are day first): official and
     current, but it covers the developer API, not the product;
-  - app-store version histories (found by web search, not opened): hosted by the stores or by mirrors, and
-    about the mobile and TV apps rather than the platform;
+  - app-store version histories: the App Store listing (developer Kick Streaming) carries official, current,
+    versioned notes, newest 40.35.4 dated 2026-11-13, but for the iPhone, iPad and Apple TV apps rather than
+    the platform, hosted by Apple, and 18 of its 25 listed entries say only "Bug fixes" or similar; other
+    store and mirror histories were found by web search only;
   - a third-party release aggregator whose "Kick" entries belong to an unrelated bookkeeping product of the
     same name;
   - Kick's social accounts;
@@ -4258,9 +4260,9 @@ are switched off, so no run ever requested them.
 Unchanged: both lanes stay disabled, and no collector, adapter, schedule, record, evidence row, count, verdict
 or coverage label changed.
 
-**Recorded, not decided** Whether Kick belongs in the Core tier. It has no official release source for the
-product (only a developer-API changelog), and its terms (s1.4) bar automated access. That is an owner
-decision, and this entry does not make it.
+**Recorded, not decided** Whether Kick belongs in the Core tier. No official release source for its
+streaming platform was found (Kick's official release notes cover its developer API and its apps), and its
+terms (s1.4) bar automated access. That is an owner decision, and this entry does not make it.
 
 **Not shown by this** Whether any other catalog source address has stopped answering. Nothing checks them;
 this entry fixes the two a scan happened to find.
