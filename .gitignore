@@ -28,6 +28,10 @@ auxsays/_data/verdict_reason_candidates.yml
 # went stale between push and CI. The layouts fail closed to 'unverified' when it is absent.
 auxsays/_data/monitoring_state.yml
 auxsays/_data/monitoring_company_state.yml
+# Generated at deploy by build_coverage_projection.py (AUX-102), never committed, for the same reason:
+# coverage moves with the clock and with files every lane rewrites. Pages read "Coverage status unknown"
+# when it is absent, and ci/verify_coverage_claims.py refuses that on a deploy build.
+auxsays/_data/coverage_state.yml
 # Generated at deploy by source_health_snapshot.py (pages.yml), never committed. It is a function of
 # ingest state that every scheduled lane moves, so the committed copy went stale (37 rows against 47
 # sources, an older status vocabulary). No template, include or layout reads it; see AUX-069.

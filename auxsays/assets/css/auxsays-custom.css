@@ -1992,14 +1992,19 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
 /* MONITORING STATE pills. Colour is SUPPLEMENTARY here: each state already carries distinct
    text ("Monitoring active" vs "Source is refusing automated checks"), so the state is never
    conveyed by styling alone. Only `healthy` is green; everything else is deliberately not,
-   because a reader glancing at the pill should not read an unestablished state as working. */
-.patch-coverage-pill--monitor-healthy {
+   because a reader glancing at the pill should not read an unestablished state as working.
+   The COVERAGE pills (AUX-102) share these groups: an operating official lane is green, an impaired
+   lane is red, a mixed or unknown state is amber, and planned or not monitored is neutral. */
+.patch-coverage-pill--monitor-healthy,
+.patch-coverage-pill--coverage-full,
+.patch-coverage-pill--coverage-official_only {
   border-color: rgba(59,165,103,.34);
   background: rgba(59,165,103,.12);
   color: #d9f7e5;
 }
 
 .patch-coverage-pill--monitor-failing,
+.patch-coverage-pill--coverage-impaired,
 .patch-coverage-pill--monitor-blocked,
 .patch-coverage-pill--monitor-unreachable,
 .patch-coverage-pill--monitor-broken {
@@ -2009,6 +2014,8 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
 }
 
 .patch-coverage-pill--monitor-partial,
+.patch-coverage-pill--coverage-mixed,
+.patch-coverage-pill--coverage-unknown,
 .patch-coverage-pill--monitor-stale,
 .patch-coverage-pill--monitor-unverified {
   border-color: rgba(214,176,96,.34);
@@ -2017,6 +2024,8 @@ html.js-reveal .reveal-up.is-visible { opacity:1; transform:none; }
 }
 
 .patch-coverage-pill--monitor-disabled,
+.patch-coverage-pill--coverage-planned,
+.patch-coverage-pill--coverage-not_monitored,
 .patch-coverage-pill--monitor-unconfigured {
   border-color: var(--border-subtle);
   background: rgba(255,255,255,.03);

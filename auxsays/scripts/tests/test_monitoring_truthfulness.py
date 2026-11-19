@@ -351,8 +351,15 @@ def render_layout(path: Path, site_data: dict, page: dict):
 
 
 def pills(html: str) -> list:
-    """-> [(state, label)] for every monitoring pill in rendered html."""
-    return re.findall(r'patch-coverage-pill--monitor-([a-z]+)">([^<]*)</span>', html)
+    """-> [(state, label)] for every COVERAGE pill in rendered html.
+
+    AUX-102 moved the product, card and company pills onto the coverage projection
+    (build_coverage_projection.py), which reuses this file's official state and adds community
+    monitoring. The official label this suite derives is still published, in the product page's
+    Status line; G7 pins that it is.
+    """
+    return re.findall(r'patch-coverage-pill--coverage-([a-z_]+)" data-coverage-(?:product|company)="[^"]*">'
+                      r'([^<]*)</span>', html)
 
 
 def _steps_by_job(workflow: dict):
@@ -475,15 +482,22 @@ def section_g_generated_never_committed() -> None:
     # "absent". Prefer an affirmative one: that is the claim the fallback must never fabricate.
     pick = next((r for r in rows if r["state"] == "healthy" and r["product_id"] in products), None) \
         or next((r for r in rows if r["state"] != "unverified" and r["product_id"] in products), None)
-    unknown = proj.STATE_LABELS["unverified"]
+    # AUX-102: the pills now come from the COVERAGE projection, which is built from this file's
+    # product states plus community method health. Absent, every pill reads "Coverage status unknown".
+    import build_coverage_projection as cov
+    unknown = cov.UNKNOWN_LABEL
     affirmative = proj.STATE_LABELS["healthy"]
     if pick is None:
         for n in ("G6", "G7", "G8", "G9"):
             check(f"{n} SKIPPED - no non-fallback product to render", False,
                   "the generated projection has no product to distinguish present from absent")
         return
+    now = datetime.now(timezone.utc)
+    cov_rows, cov_crows = cov.build(cov.load_inputs(now=now), now=now)
+    coverage = {"products": cov_rows, "companies": cov_crows}
+    cpick = next((r for r in cov_rows if r["product_id"] == pick["product_id"]), None)
     company_id = products[pick["product_id"]].get("company_id")
-    crow = next((c for c in crows if c["company_id"] == company_id), None)
+    crow = next((c for c in cov_crows if c["company_id"] == company_id), None)
     page = {"company_id": company_id, "product_id": pick["product_id"]}
     product_layout = _AUX / "_layouts" / "aux-patch-product.html"
     company_layout = _AUX / "_layouts" / "aux-patch-company.html"
@@ -499,27 +513,30 @@ def section_g_generated_never_committed() -> None:
         return
     got = pills(absent)
     check("G6 with NO projection the product page reads unknown, never monitored",
-          bool(got) and all(s == "unverified" and lbl == unknown for s, lbl in got)
+          bool(got) and all(s == "unknown" and lbl == unknown for s, lbl in got)
           and affirmative not in absent, f"pills={got}")
-    present = render_layout(product_layout, dict(data, monitoring_state=rows), page)
+    present = render_layout(product_layout, dict(data, monitoring_state=rows, coverage_state=coverage), page)
     got = pills(present)
-    check("G7 with the generated projection the product page shows its derived state",
-          (pick["state"], pick["label"]) in got, f"want {(pick['state'], pick['label'])}, pills={got}")
+    # The coverage pill is the projection's, and the official state this suite derives is still
+    # published beside it (the Status line), so neither projection can drop out unnoticed.
+    check("G7 with the generated projections the product page shows its derived coverage and official state",
+          cpick is not None and (cpick["state"], cpick["label"]) in got
+          and f"&mdash; {pick['label']}" in present,
+          f"want {cpick and (cpick['state'], cpick['label'])} + official {pick['label']!r}, pills={got}")
 
     absent_c = render_layout(company_layout, data, {"company_id": company_id})
     got = pills(absent_c)
     check("G8 with NO projection the company pill and every product card read unknown",
-          bool(got) and all(s == "unverified" and lbl == unknown for s, lbl in got)
+          bool(got) and all(s == "unknown" and lbl == unknown for s, lbl in got)
           and affirmative not in absent_c, f"pills={got}")
-    present_c = render_layout(company_layout, dict(data, monitoring_state=rows,
-                                                   monitoring_company_state=crows),
+    present_c = render_layout(company_layout, dict(data, monitoring_state=rows, coverage_state=coverage),
                               {"company_id": company_id})
     got = pills(present_c)
     # The company pill renders BEFORE every product card, so it is got[0]. Matching anywhere on
     # the page would let a product card with the same state stand in for a broken company pill.
     check("G9 with the generated projection the company page shows its derived states",
-          crow is not None and bool(got) and got[0] == (crow["state"], crow["label"])
-          and (pick["state"], pick["label"]) in got[1:],
+          crow is not None and cpick is not None and bool(got) and got[0] == (crow["state"], crow["label"])
+          and (cpick["state"], cpick["label"]) in got[1:],
           f"want company {crow and (crow['state'], crow['label'])} + product, pills={got}")
 
 

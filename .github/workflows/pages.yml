@@ -103,6 +103,37 @@ jobs:
       - name: Generate public monitoring projection
         run: python auxsays/scripts/build_monitoring_projection.py
 
+      # AUX-102. Also BEFORE `jekyll build`: every coverage label on the product, company and hub pages
+      # comes from this file -- official and community monitoring kept apart, derived from the sources,
+      # the ingest state and the method health above, never from the catalog. It exits non-zero only on
+      # a malformed _data/coverage_debt.yml (a reviewed file, checked in PR CI too).
+      - name: Generate public coverage projection
+        run: python auxsays/scripts/build_coverage_projection.py
+
+      # AUX-102: the daily coverage assessment. It names every Core product with no operating official
+      # lane (with its remediation priority, blocking reason and next action from the reviewed debt
+      # file), enabled lanes that are failing or stale, lanes that have stopped running, verified
+      # official releases missing from the store, community methods that are configured but not working,
+      # and backfill rows nothing executes. Job summary plus a 90-day run artifact; it never commits and
+      # is continue-on-error, so a deploy never depends on it. This workflow's daily schedule is what
+      # makes it daily.
+      - name: Assess coverage (owner report)
+        continue-on-error: true
+        run: >-
+          python auxsays/scripts/assess_coverage.py
+          --summary "$GITHUB_STEP_SUMMARY"
+          --output "$RUNNER_TEMP/coverage-assessment/coverage_assessment.json"
+
+      - name: Keep the coverage assessment
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-assessment
+          path: ${{ runner.temp }}/coverage-assessment/coverage_assessment.json
+          retention-days: 90
+          if-no-files-found: warn
+
       # Also BEFORE `jekyll build`: `_includes/maturity-state.html` renders a stored live claim as
       # live only when this lists the page. It reads and never writes records, and on unreadable
       # inputs writes an empty list and exits 0 -- every claim then reads Verified reports.
@@ -201,6 +232,16 @@ jobs:
       # headers, and it cannot say whether Google indexes a page.
       - name: Verify search signals agree with each other
         run: python auxsays/scripts/ci/verify_publication_hygiene.py --site auxsays/_site
+
+      # AUX-102, also on the exact bytes about to be served. Refuses a coverage pill that disagrees
+      # with the coverage projection, the "Coverage status unknown" fallback, a retired claim phrase
+      # ("is tracked by AUXSAYS", "Monitoring active", ...) in the marked coverage prose of a page whose
+      # product or company is not monitored or in catalog text (vendor record titles are never read), a
+      # static coverage field back in the catalog, and a NEW Core product whose official
+      # lane is switched off without a coverage debt entry. Existing gaps are listed in the debt file
+      # and never block; a lane failing at runtime changes its label and never blocks.
+      - name: Verify coverage claims agree with the coverage projection
+        run: python auxsays/scripts/ci/verify_coverage_claims.py --site auxsays/_site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

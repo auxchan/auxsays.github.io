@@ -2,6 +2,6 @@
 layout: aux-patch-company
 title: Make Patch Intelligence
 company_id: make
-description: Make is tracked as part of the AUXSAYS Patch Feed intelligence layer.
+description: 'Make software in the AUXSAYS Patch Feed, with its official update sources and coverage status.'
 permalink: /updates/make/
 ---

@@ -17,6 +17,7 @@ Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_vendor_page_lay
 """
 from __future__ import annotations
 
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -125,20 +126,22 @@ def run() -> int:
     check("latest-summary staged products still link to full history (server-rendered)",
           "patch-latest-staged__link" in LATEST and "product.product_url" in LATEST)
 
-    # 16. honest empty/disabled states from STRUCTURED product/source state (not label strings)
-    check("no-record state derives from the ingestion SOURCE enabled flag + coverage_state (structured)",
-          "site.data.patch_ingestion_sources | where: \"product_id\", product.id" in LATEST
-          and "src.enabled == true" in LATEST
-          and "product.coverage_state" in LATEST)
-    check("no-record state does NOT decide from human-readable coverage_status_label strings",
-          "staged_lower" not in LATEST
-          and "downcase" not in LATEST
-          and "coverage_status_label | downcase" not in LATEST)
-    check("each source state has its own wording, and an enabled source claims only that it is enabled",
-          "Source disabled" in LATEST and "Official update source enabled" in LATEST
-          and "No configured ingestion source" in LATEST and "Monitoring active" not in LATEST)
-    check("unknown state fails closed to restrained neutral wording",
-          "No patch records yet" in LATEST)
+    # 16. honest no-record states from the deploy-time COVERAGE projection (AUX-102). The include
+    # used to decide from the source's `enabled` flag plus the catalog's hand-written coverage_state,
+    # so an enabled-but-broken source read "awaiting first record" and a switched-off one "not yet
+    # monitoring". Comments are stripped before the negative checks: the include explains the history.
+    live = re.sub(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", "", LATEST, flags=re.S)
+    check("no-record state derives from the coverage projection (structured, deploy-time)",
+          'site.data.coverage_state.products | where: "product_id", product.id' in live
+          and 'data-coverage-product="{{ product.id }}"' in live)
+    check("no-record state does NOT decide from catalog coverage fields, the enabled flag or label strings",
+          "product.coverage_state" not in live and "coverage_status_label" not in live
+          and "src.enabled" not in live and "downcase" not in live)
+    check("each no-record product carries the projection's label, never a hand-written monitoring claim",
+          "ls_coverage.label" in live and "Monitoring active" not in live
+          and "not yet monitoring" not in live and "awaiting first record" not in live)
+    check("unknown state fails closed to the 'Coverage status unknown' wording",
+          "default: 'Coverage status unknown'" in live and "default: 'unknown'" in live)
 
     # 17. routes: vendor layout does not alter permalinks; uses item.url; loads the shared module
     check("vendor layout preserves record URLs (uses item.url) and loads the shared sort module",
