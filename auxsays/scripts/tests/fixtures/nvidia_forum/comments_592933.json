@@ -1,0 +1,74 @@
+{
+ "success": true,
+ "errors": [],
+ "pagination": {
+  "_page": 1,
+  "_pageSize": 25,
+  "_totalPages": 1,
+  "_totalRows": 1
+ },
+ "anchor": {
+  "_anchorValue": "3634385",
+  "_anchorDirection": "+before",
+  "_anchorOffset": "0"
+ },
+ "data": {
+  "comments": [
+   {
+    "id": 3633888,
+    "createdStamp": 1794670680,
+    "updatedStamp": 1794908985,
+    "lastActivityStamp": 1794908985,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 1,
+    "upvotes": 1,
+    "topic": {
+     "id": 592933
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1102",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "I had this problem. DDU took care of it.",
+    "comments": [
+     {
+      "id": 3634385,
+      "createdStamp": 1794908985,
+      "updatedStamp": 1794908994,
+      "lastActivityStamp": 1794908985,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 1,
+      "upvotes": 1,
+      "topic": {
+       "id": 592933
+      },
+      "parent": {
+       "id": 3633888
+      },
+      "user": {
+       "id": "1014",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Thank you! That really helped :)",
+      "comments": []
+     }
+    ]
+   }
+  ]
+ }
+}

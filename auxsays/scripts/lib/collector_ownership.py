@@ -93,6 +93,10 @@ ALLOWED_METHODS: dict[str, set[str]] = {
     # ComfyUI's own public GitHub issues: the same method id and source type OBS uses for its own
     # repository's issues, because it is the same mechanic against the same kind of source family.
     "comfyui": {"github_issues"},
+    # NVIDIA GeForce forum default views, one method shared by both driver families: the same forum
+    # read once per run, each family keeping only what its own identity rules establish.
+    "nvidia-geforce-game-ready": {"nvidia_forum_default_views"},
+    "nvidia-studio-driver": {"nvidia_forum_default_views"},
 }
 
 # Per-product allowed evidence source_type identities. Evidence rows carry ``source_type`` (not a
@@ -125,6 +129,8 @@ ALLOWED_SOURCE_TYPES: dict[str, set[str]] = {
     # Tech Community is a different community, not a second route into Learn Q&A.
     "microsoft-teams": {"microsoft_learn_qna", "microsoft_tech_community"},
     "comfyui": {"github_issue"},
+    "nvidia-geforce-game-ready": {"nvidia_forum_comment"},
+    "nvidia-studio-driver": {"nvidia_forum_comment"},
 }
 
 # Per-product allowed permalink route slug(s). A record's public permalink is the canonical shape

@@ -57,6 +57,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-044 | Resolved | Public truthfulness | High | Promoting a page to live consensus would have hidden its collection warnings |
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 | AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
+| AUX-106 | Resolved | Community evidence | High | NVIDIA drivers had no community evidence; their reports live on NVIDIA's own forum |
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-105 | Resolved | Official ingestion | High | NVIDIA drivers had no official lane, and one catalog product stood for three products |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
@@ -3729,6 +3730,64 @@ name such as `ATTRIBUTION_DRAFT.md` or an arbitrary note.
 that existed when it was written. The Systems Monitor output is assembled by a separate build step,
 so the local verification of AUX-038 never saw it. Verify a new deploy-gate rule against the full
 production build, not the Jekyll output alone.
+
+### AUX-106 — NVIDIA drivers had no community evidence; their reports live on NVIDIA's own forum
+
+- **Status** Resolved · **Area** Community evidence · **Severity** High
+- **First seen** 2026-11-18 · **Resolved** 2026-11-19 (fix pending its first scheduled collection run)
+
+AUX-105 gave both NVIDIA driver families an official lane, which can only ever say INSUFFICIENT DATA:
+no community source existed. The measured independent sources are unusable (G44/G45). The SSD-write
+defect of 621.14/621.24 was reported on the NVIDIA GeForce forum about 9 days before the press
+(comment 3633066, 2026-11-08 16:08Z, inside the feedback thread's latest-25 window from posting on).
+
+**Repair.** One collector, `patch_collectors/nvidia_forum.py`, registered once per family
+(`AUXSAYS_ENABLE_NVIDIA_FORUM_CONSENSUS`), and its source, `patch_collectors/nvidia_forum_source.py`:
+
+- **Only the forum's two default views**, through the calls its own pages make: a community's pinned
+  and 15 most recently active topics, and a topic's latest 25 top-level comments with the replies the
+  forum embeds. `permitted_request` refuses page 2+, the oldest sort, comment anchors, reply expansion,
+  search, user pages, the all-communities listing and every other host before anything is sent. Both
+  robots files are re-read each cycle; the www page a call stands for must be allowed.
+- **One cycle per 12 hours** (state file, whatever the 6-hourly cron), at most 16 requests and 5
+  threads, 4 s apart, honest client name, no retries; both families share it. A thread whose last
+  activity has not moved is not re-read.
+- **Stops**: 401/403/429/451, a challenge, HTML for JSON or a refusing body suspend the method,
+  persisted in `_data/nvidia_forum_state.json`, until a reviewed change sets
+  `ACCESS_REFUSAL_CLEARED_AT` (after the refusal, already passed, once). A redirect off the host asked
+  (lib.http `redirect_hosts`), a schema change or an unreadable or disallowing robots policy store
+  nothing that cycle. Nothing stored is ever removed by a stop.
+- **Identity**: a comment is a candidate only when its OWN text names a tracked version (links and
+  quotes removed). Family from a staff feedback thread whose title names exactly one version and one
+  family, for that version only, or from the reporter naming it; the other family named vetoes; with
+  no family the row is stored `driver_family_unassigned` for both and counted for neither (the
+  shared-component case). Notebook reports, versions on a specification line only, disclaimed
+  attribution, module crashes without regression evidence and fine-only posts are excluded with their
+  reasons. Then `base.apply_acceptance_gates` and `lib.target_outcome` unchanged; the date is the
+  comment's own creation time; the URL is the forum's own link to that comment.
+- **Coverage gaps** (GPT G47 s2): each read thread's last window (comment ids and creation times) is
+  kept; no overlap with the previous newest gone, a boundary tie, a comment appearing inside the span
+  already read, or more new comments than the window shows reports `partial` /
+  `possible_missed_comments` with the reason in the notes and the state. Never a count; never a page
+  read to repair it. Notes always say only the window is visible.
+- **Wiring**: method registry (`nvidia_forum_default_views`), method routing (one primary per family;
+  `disabled` there switches all requests off), ownership, promotion products and a scoped promotion
+  step per family, the writeback allow-list (records are named `*geforce-game-ready-driver*` and
+  `*nvidia-studio-driver*`, plus the state file), the transaction surface.
+
+Measured on the captured windows (offline replay through the shipped path): Game Ready 621.14 counts 7
+(the measurement's critic counted 8; 3633067 has no word the shared concreteness vocabulary accepts),
+621.24 counts 3; Studio counts none; every SSD-topic comment is unassigned.
+
+Pinned by `test_nvidia_forum_evidence.py` (blocking, offline, real lib.http over a fake transport).
+
+**Not done here:** notebook driver products; any second NVIDIA community; the product-level early
+signal for unassigned reports (G44 s5).
+
+**Reopen only if** a comment is counted for both families, a request outside the default views is
+sent, a request is made after a recorded refusal without a later, already-passed clearing time, a
+request reaches a host the forum redirected to, a health note claims comprehensive monitoring, or the
+first scheduled run after merge is refused (then record what the runner was told, and stop).
 
 ### AUX-045 — a counted row could not show the evidence for its own version match
 
