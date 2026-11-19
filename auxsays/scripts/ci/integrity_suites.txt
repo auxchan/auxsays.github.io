@@ -532,7 +532,7 @@ auxsays/scripts/tests/test_ingestion_run_health.py = 128
 # record without a title identity and a source date, and no inherited announcement URL.
 auxsays/scripts/tests/test_premiere_source_truth.py = 49
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
-auxsays/scripts/tests/test_windows_count_authority.py = 104
+auxsays/scripts/tests/test_windows_count_authority.py = 108
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 # AUX-067: a build-only identity whose TITLE is about another KB or build is not a report on the build
