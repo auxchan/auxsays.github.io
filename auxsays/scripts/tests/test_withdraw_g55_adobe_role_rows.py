@@ -222,15 +222,18 @@ def refused(prefix: str, manifest: dict, store_text: str | None = None) -> tuple
 
 
 def reader_refusal(doc: dict) -> str:
-    """The manifest reader's own verdict, in process: '' when it accepts, else its refusal text."""
+    """The manifest reader's own verdict, in process: '' when it accepts, else its refusal text. Any other
+    exception comes back as its type and text, so a crash is never mistaken for the refusal a check expects."""
     try:
         wd.manifest_entries(doc)
     except wd.Refusal as exc:
         return str(exc)
+    except Exception as exc:  # noqa: BLE001
+        return f"CRASH {type(exc).__name__}: {exc}"
     return ""
 
 
-def planner_refusal(text: str, entries: list[dict], scope: tuple[str, ...]) -> str:
+def planner_refusal(text: str, entries: list[dict], scope: tuple[str, ...] | None) -> str:
     """The planner's own verdict, in process and without the manifest reader in front of it."""
     with tempfile.TemporaryDirectory(prefix="aux111-plan-") as tmp:
         _store, generated, _man = make_tree(Path(tmp), text, None, {})
@@ -238,6 +241,8 @@ def planner_refusal(text: str, entries: list[dict], scope: tuple[str, ...]) -> s
             wd.plan(text, entries, wd.patch_records(generated), {}, scope)
         except wd.Refusal as exc:
             return str(exc)
+        except Exception as exc:  # noqa: BLE001
+            return f"CRASH {type(exc).__name__}: {exc}"
     return ""
 
 
