@@ -564,6 +564,62 @@
      "id": 1018
     }
    }
+  },
+  {
+   "label": "custom node: browser stack runs through custom-node packs' web code (Comfy Cloud)",
+   "record_version": "0.40.0",
+   "record_published_at": "2026-10-13T21:29:16Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "custom_node_in_failure_path",
+    "match_basis": "core_version_declaration",
+    "source_date": "2026-10-14"
+   },
+   "issue": {
+    "number": 17021,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17021",
+    "title": "Hong",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\n[free text removed]\n\n### Actual Behavior\n\n\n# ComfyUI Error Report\n## Error Details\n- **Node ID:** N/A\n- **Node Type:** N/A\n- **Exception Type:** Loading aborted due to error reloading workflow data\n- **Exception Message:** TypeError: Cannot read properties of null (reading 'outputs')\n## Stack Trace\n```\nTypeError: Cannot read properties of null (reading 'outputs')\n    at ComfyNode.onConnectionsChange (https://cloud.comfy.org/extensions/comfyui-videohelpersuite/js/VHS.core.js:614:65)\n    at ComfyNode.configure (https://cloud.comfy.org/assets/settingStore-DaYLCj6f.js:2:340902)\n    at window.LGraphNode.configure (https://cloud.co\n...\n- **ComfyUI Version:** v0.40.0\n- **Python Version:** \n- **PyTorch Version:** \n(Please add any additional context or steps to reproduce the error here)",
+    "created_at": "2026-10-14T10:57:19Z",
+    "updated_at": "2026-10-14T10:57:19Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1019
+    }
+   }
+  },
+  {
+   "label": "accepted: reporter's prose environment line, no startup log",
+   "record_version": "0.44.0",
+   "record_published_at": "2026-11-04T01:12:27Z",
+   "expected": {
+    "candidate": true,
+    "counted": true,
+    "exclusion_reason": null,
+    "match_basis": "core_version_text",
+    "source_date": "2026-11-05"
+   },
+   "issue": {
+    "number": 17552,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17552",
+    "title": "Execution cache silently replays stale outputs when a reference image file changes (autogrow images inputs are not folded into downstream cache signatures)",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists — the repro graph below contains **core nodes only** (`LoadImage`, `UNETLoader`, `CLIPLoader`, `VAELoader`, `TextEncodeQwenImage21`, `QwenImage21Cache`, `EmptyLatentImage`, `KSampler`, `VAEDecode`, `SaveImage`) and uses the core `euler` sampler. (Custom nodes are installed on the server, but none appear in the prompt.)\n\n### Expected Behavior\n\nSubmitting the same prompt twice (same seed, same node IDs, same filename) where only the **content** of the referenced image file changed between the two submissions should re-run the image-dependent nodes (encoder → KSampler → VAEDecode → SaveImage) and produce a different output.\n\n### Actual Behavior\n\nThe second submission completes in **~0.1 s** and returns the **previous run's output byte-identical** (md5 match). The `execution_cached` WebSocket event list\n...\nEnvironment: ComfyUI **v0.44.0** (Python 3.12.3), Linux, CUDA (NVIDIA RTX PRO 6000 Blackwell Workstation Edition, 96 GB). Also reproduced on **v0.37.0**.\n- #15937 / #12936 — fail-closed cache signatures for *opaque/unsafe* values; a list of links is safely representable and would still canonicalize as a constant, so the link-recognition gap remains.",
+    "created_at": "2026-11-05T05:55:32Z",
+    "updated_at": "2026-11-05T08:16:58Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [],
+    "user": {
+     "id": 1020
+    }
+   }
   }
  ]
 }

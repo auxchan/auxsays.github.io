@@ -84,10 +84,32 @@ _ANSI_RE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
 #   error report         "- **ComfyUI Version:** 0.44.0"
 #   ComfyUI-Manager      "### ComfyUI Version: v0.44.0-27-g1332fab | Released on '...'"
 # The optional describe suffix is `git describe`: N commits past the tag.
+#
+# A DECLARATION IS A LINE, NOT A PHRASE. The pattern alone also matches the reporter's prose
+# ("Downgrading to ComfyUI version 0.43.0 avoids it"), and a declaration is what the shared role
+# reading (lib.target_outcome R1) treats as the reporter's own build: immune to every veto, and it
+# turns any other version beside the product name into "declared_core_version_differs". So a match
+# is a declaration only when it is the whole of its line: before it, only what a log or a report
+# template puts there (a timestamp, bracketed segments such as [INFO], a log level, a container's
+# "name  | " prefix, list and markdown markers); after it, only markup, ComfyUI-Manager's
+# "| Released on" segment, a parenthetical, a ", commit <sha>" note or a series marker (".x", "+").
+# Measured on the 368-issue corpus (G42 review): every match the unanchored pattern found was
+# already such a line, so this removes no real declaration. Prose naming "ComfyUI version X" still
+# names the core (core_version_text); it just carries no immunity.
 CORE_DECLARATION_RE = re.compile(
     r"\bcomfyui\s+version\b[\s:=*_`]*v?(?P<version>\d+(?:\.\d+){1,3})(?![0-9])(?!\.[0-9])"
     r"(?P<describe>-(?P<ahead>\d+)(?:-g[0-9a-f]{4,40})?(?![0-9A-Za-z]))?",
     re.I)
+# Removed from the text before a declaration, before checking that no word is left. Alternatives do
+# not overlap and nothing is nested, so a long line of brackets cannot backtrack.
+_DECLARATION_PREFIX_SEGMENT_RE = re.compile(
+    r"\[\d{1,3}(?:;\d{1,3})*m"                  # a colour code whose escape byte was lost: [32m
+    r"|\[[^\]\n]*\]"                              # [INFO], [2026-11-05 10:00:00.123]
+    r"|\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}"          # 2026-10-30T21:52:08.393092
+    r"|\b(?i:info|debug|warning|warn|error)\b"    # a log level
+    r"|\A[\w.-]+[ \t]+\|")                        # docker compose: "comfyui  | "
+_DECLARATION_TAIL_RE = re.compile(r"\A[\s*_`.+]*(?:\Z|[|(]|,\s*commit\b|x\b)", re.I)
+_LETTER_RE = re.compile(r"[A-Za-z]")
 
 # The reporter's own words naming the core right before the version: "ComfyUI v0.45.0",
 # "ComfyUI 0.43.0, portable", "**ComfyUI:** v0.42.0", "| ComfyUI | v0.38.0", "ComfyUI portable
@@ -138,11 +160,23 @@ def _line_of(text: str, start: int, end: int) -> str:
     return text[lo: hi if hi >= 0 else len(text)]
 
 
+def _is_declaration_line(text: str, hit: re.Match) -> bool:
+    """Is this match the whole of its line, as ComfyUI or a report template prints it (see above)?"""
+    lo = text.rfind("\n", 0, hit.start()) + 1
+    hi = text.find("\n", hit.end())
+    prefix = _DECLARATION_PREFIX_SEGMENT_RE.sub(" ", text[lo:hit.start()])
+    tail = text[hit.end(): hi if hi >= 0 else len(text)]
+    return not _LETTER_RE.search(prefix) and bool(_DECLARATION_TAIL_RE.match(tail))
+
+
 def declared_core_versions(text: str) -> dict[str, list[int]]:
     """Every core version ComfyUI's own output in the post declares, with each declaration's offset
-    past the tag (0 when the declaration is the tag itself)."""
+    past the tag (0 when the declaration is the tag itself). Prose is never a declaration."""
     found: dict[str, list[int]] = {}
-    for hit in CORE_DECLARATION_RE.finditer(clean_text(text)):
+    body = clean_text(text)
+    for hit in CORE_DECLARATION_RE.finditer(body):
+        if not _is_declaration_line(body, hit):
+            continue
         ahead = int(hit.group("ahead") or 0)
         found.setdefault(hit.group("version"), []).append(ahead)
     return found
@@ -232,20 +266,31 @@ def resolve_identity(text: str, version: str) -> dict[str, Any]:
 # The failure the post shows ran through third-party code, so it is not established as a defect of
 # the core release, whatever the post's version line says.
 _CUSTOM_NODE_FRAME_RE = re.compile(r"\bFile \"[^\"\n]*[\\/]custom_nodes[\\/][^\"\n]*\", line \d+")
+# The same failure in the browser: a JavaScript source position inside a custom-node pack's web
+# code. ComfyUI's server serves each custom node's web directory at `/extensions/<pack>/`
+# (server.py, nodes.EXTENSION_WEB_DIRS); only `/extensions/core/` is the core's own. A stack frame
+# names a line (`.../extensions/comfyui-videohelpersuite/js/VHS.core.js:614:65`, in Chrome's
+# `at fn (...)` and Firefox's `fn@...` alike); ComfyUI's deprecation warning naming
+# `/extensions/core/groupNode.js.` names no line and is the core's path anyway. Measured (G42
+# review): issue #17021's error report ran through VideoHelperSuite's frontend this way.
+_CUSTOM_NODE_WEB_FRAME_RE = re.compile(
+    r"/extensions/(?!core/)[^/\s()\"'<>]+/[^\s()\"'<>?#:]*\.m?js(?:\?[^\s()\"'<>:]*)?:\d+")
 
 
 def issue_kind_exclusion(labels: list[str], text: str = "") -> str:
     """Why this is not a problem report about the core release itself, or ''.
 
     A maintainer's triage label (custom node, feature request), or a failure whose traceback runs
-    through a custom-node pack -- the ecosystem, not the release.
+    through a custom-node pack -- Python frames or the pack's browser code -- the ecosystem, not the
+    release.
     """
     names = {str(label or "").strip().lower() for label in labels}
     if names & CUSTOM_NODE_LABELS:
         return "custom_node_issue"
     if names & FEATURE_LABELS:
         return "feature_request_not_a_problem_report"
-    if _CUSTOM_NODE_FRAME_RE.search(clean_text(text)):
+    body = clean_text(text)
+    if _CUSTOM_NODE_FRAME_RE.search(body) or _CUSTOM_NODE_WEB_FRAME_RE.search(body):
         return "custom_node_in_failure_path"
     return ""
 

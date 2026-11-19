@@ -2,16 +2,19 @@
 """ComfyUI community evidence from its own GitHub issues: identity, the shared authority, the wiring.
 
 WHAT THIS PROVES, IN ORDER.
-  F  Fixture replay. Twenty issues captured from Comfy-Org/ComfyUI on 2026-11-18 (bodies trimmed,
+  F  Fixture replay. Twenty-two issues captured from Comfy-Org/ComfyUI on 2026-11-18 (bodies trimmed,
      author accounts replaced by opaque numbers) are replayed through the shipped decision path, and
      each lands on the decision recorded when it was captured: accepted reports; a version that is
      only a Python package's, the Desktop app's or a third-party build's; builds past the release tag
      (ComfyUI-Manager describe, `master @ <sha>`); a mixed install whose frontend package is older than
-     the release requires; failures that run through a custom-node pack; a maintainer-labelled feature
-     request; a "latest version" complaint that names no release; a same-author repost; an issue
-     created before the release and edited later; a version the reporter names as working; two
-     sessions' logs where the older version is the one rolled back to.
+     the release requires; failures that run through a custom-node pack (Python frames, or the pack's
+     browser code); a maintainer-labelled feature request; a "latest version" complaint that names no
+     release; a same-author repost; an issue created before the release and edited later; a version
+     the reporter names as working; two sessions' logs where the older version is the one rolled back
+     to.
   I  Identity unit checks on the exact shapes those decisions rest on.
+  P  A declaration is a whole line: the reporter's prose naming "ComfyUI version X" never earns the
+     immunity a declaration carries (review round 1, on a real captured report).
   A  The acceptance authority is the shared one: base.apply_acceptance_gates decides, its own reasons
      are what a refused row carries, counted rows carry the sentiment the promotion requires, and the
      date is the issue's creation day -- never its last activity.
@@ -239,6 +242,72 @@ def section_identity() -> None:
           comfy.issue_kind_exclusion(["Custom Nodes Bug"]) == "custom_node_issue"
           and comfy.issue_kind_exclusion(["Feature"]) == "feature_request_not_a_problem_report"
           and comfy.issue_kind_exclusion(["Potential Bug", "User Support"]) == "")
+    # G42 review F1: the same ecosystem failure in the browser. Custom-node web code is served at
+    # /extensions/<pack>/; a stack frame through it is the pack's failure, not the release's.
+    chrome = ("TypeError: Cannot read properties of null (reading 'outputs')\n"
+              "    at ComfyNode.onConnectionsChange (https://cloud.comfy.org/extensions/"
+              "comfyui-videohelpersuite/js/VHS.core.js:614:65)\n"
+              "    at ComfyNode.configure (https://cloud.comfy.org/assets/settingStore-DaYLCj6f.js:2:340902)")
+    firefox = "onConnectionsChange@http://127.0.0.1:8188/extensions/ComfyUI-KJNodes/js/setgetnodes.js:88:21"
+    check("I17 a JavaScript stack frame in a custom-node pack's web code is an ecosystem failure "
+          "(Chrome and Firefox frame shapes)",
+          comfy.issue_kind_exclusion([], chrome) == "custom_node_in_failure_path"
+          and comfy.issue_kind_exclusion([], firefox) == "custom_node_in_failure_path",
+          f"{comfy.issue_kind_exclusion([], chrome)!r} {comfy.issue_kind_exclusion([], firefox)!r}")
+    core_web = ("    at app.registerExtension (http://127.0.0.1:8188/extensions/core/groupNode.js:1200:9)\n"
+                "    at ComfyApp.setup (http://127.0.0.1:8188/assets/index-BZ3Xz.js:12:345)\n"
+                "[DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/groupNode.js. "
+                "This is likely caused by a custom node extension using outdated APIs.\n"
+                "self.app.add_routes([web.static('/extensions/' + name, dir)])\n"
+                "GET http://127.0.0.1:8188/extensions/comfyui-manager/js/comfyui-manager.js 200 OK")
+    check("I18 the core's own /extensions/core/ frames, its bundled assets, and a custom-node script path that "
+          "names no source line (a request log, not a failure) are not",
+          comfy.issue_kind_exclusion([], core_web) == "", comfy.issue_kind_exclusion([], core_web))
+
+
+# ------------------------------------------------------------------------------------------------
+def section_prose(cases: list[dict]) -> None:
+    print("\n[P] a declaration is a whole line; prose naming 'ComfyUI version X' is the reporter's words")
+    # G42 review F2. A declaration earns the shared role reading's R1 immunity and makes any other
+    # version beside the product name "declared_core_version_differs", so prose must never be one.
+    # The repro is the real accepted issue #17552 (prose environment line, no startup log) with one
+    # sentence appended.
+    real = next(c["issue"] for c in cases if c["issue"]["number"] == 17552)
+    r043 = record("0.43.0", "2026-10-27T02:40:46Z")
+    row = comfy.evaluate_issue(R044, real, CAPTURED)
+    check("P0 the captured report counts for 0.44.0 on the reporter's own prose",
+          row.get("counted") is True and row.get("match_basis") == "core_version_text",
+          f"{row.get('exclusion_reason')} {row.get('match_basis')}")
+    variant = dict(real, body=real["body"] + "\n\nDowngrading to ComfyUI version 0.43.0 avoids it.\n")
+    r44 = comfy.evaluate_issue(R044, variant, CAPTURED)
+    r43 = comfy.evaluate_issue(r043, variant, CAPTURED)
+    check("P1 one rollback sentence written as 'ComfyUI version 0.43.0' leaves the report on 0.44.0",
+          r44.get("counted") is True, str(r44.get("exclusion_reason")))
+    check("P2 ...and the rollback target is refused by the shared role reading, never counted",
+          r43.get("counted") is False and r43.get("exclusion_reason") == "version_role_rollback_target",
+          f"{r43.get('counted')} {r43.get('exclusion_reason')} {r43.get('match_basis')}")
+    check("P3 words before it on the line: not a declaration",
+          comfy.declared_core_versions("I went back to ComfyUI version 0.43.0") == {},
+          str(comfy.declared_core_versions("I went back to ComfyUI version 0.43.0")))
+    check("P4 words after it on the line: not a declaration",
+          comfy.declared_core_versions("- ComfyUI version 0.43.0 works fine, it broke after the update.") == {},
+          str(comfy.declared_core_versions("- ComfyUI version 0.43.0 works fine, it broke after the update.")))
+    # Every declaration-line shape measured in the 368-issue corpus still declares.
+    shapes = ("comfyui  | [INFO] ComfyUI version: 0.44.0",
+              "2026-10-30T21:52:08.393092 - [32m[INFO][0m ComfyUI version: 0.44.0",
+              "2026-10-05T21:25:48.237835 - ### ComfyUI Version: v0.44.0 | Released on '2026-11-04'",
+              "[2026-11-05 10:00:00.123] [info] ComfyUI version: 0.44.0",
+              "\u2022 ComfyUI Version: v0.44.0",
+              "- ComfyUI version: v0.44.0, commit `6b747c0428c343e1417219641db93a4fb7cb69ae`",
+              "ComfyUI Version: 0.44.0 (Windows Standalone Build)",
+              "- **ComfyUI Version:** v0.44.0")
+    missed = [s for s in shapes if set(comfy.declared_core_versions(s)) != {"0.44.0"}]
+    check("P5 every measured declaration-line shape still declares the version", not missed, str(missed))
+    import time  # noqa: PLC0415
+    began = time.monotonic()
+    noisy = comfy.declared_core_versions("[1]" * 20000 + " so ComfyUI version: 0.44.0")
+    check("P6 a long line of bracket segments is read promptly and is not a declaration",
+          noisy == {} and time.monotonic() - began < 5, f"{noisy} {time.monotonic() - began:.2f}s")
 
 
 # ------------------------------------------------------------------------------------------------
@@ -560,6 +629,7 @@ def run() -> int:
     print("=" * 78)
     cases = section_fixture()
     section_identity()
+    section_prose(cases)
     section_authority()
     section_discovery()
     section_wiring(cases)
