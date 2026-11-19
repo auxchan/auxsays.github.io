@@ -58,6 +58,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 | AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
+| AUX-105 | Resolved | Official ingestion | High | NVIDIA drivers had no official lane, and one catalog product stood for three products |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
 | AUX-049 | Resolved | Published claims | High | A record built from one platform's release notes did not say so, and nothing kept consensus from mixing platforms |
 | AUX-050 | Resolved | Published claims | High | My Patch Stack recommended another platform's older release as an update |
@@ -3798,6 +3799,80 @@ owner.
 **Reopen only if** a built site contains `vault/` or `vault.js`, or a shipped page, post, template,
 tab or script links to this site's `/vault/`, carries the token field, or calls the GitHub contents
 API.
+
+### AUX-105 — NVIDIA drivers had no official lane, and one catalog product stood for three products
+
+- **Status** Resolved · **Area** Official ingestion · **Severity** High
+- **First seen** 2026-11-18 · **Resolved** 2026-11-19 (fix pending its first scheduled ingestion run)
+
+The catalog held one product, `nvidia` ("NVIDIA App / GeForce / Studio"), with a disabled source that
+pointed at a news page whose own config said the version could not be extracted. Nothing could have
+produced a record for Game Ready 621.14 (2026-11-04) or 621.24 (2026-11-12), and nothing did.
+
+The bundle was also the wrong identity. Game Ready and Studio drivers share version numbers: 621.14
+and 621.24 each shipped as BOTH families on the same day under different NVIDIA download ids. A
+version-keyed record cannot say which driver it is about, and a report quoting "621.14" cannot be
+placed on one.
+
+**Repair.** Two products, `nvidia-geforce-game-ready` and `nvidia-studio-driver`; NVIDIA App is not
+part of either and stays uncatalogued until it has its own source. `/updates/nvidia/nvidia/` now
+redirects to the NVIDIA profile. One adapter, `adapters/nvidia_driver_lookup.py`, reads NVIDIA's
+driver listing with one pinned desktop / Windows 11 / DCH query per family:
+
+- a row belongs to a family only when NVIDIA's family query AND NVIDIA's own name for the row agree
+  (`lib/nvidia_driver_identity.listing_matches`); hotfix, beta, unknown and other-family names
+  publish nothing and are counted;
+- version, branch, release date and driver page are read from the row, never inferred; NVIDIA gives
+  a date only, so the record says so;
+- identity is `(product_id, update_version)`; NVIDIA's download id is kept as provenance;
+- per family per run: one listing request, plus a details read only for a driver not verified
+  before, which is also a cross-check of the same download id;
+- records carry `driver_family`, `driver_branch`, `nvidia_download_id` and the source's provenance
+  fields, and the health bucket carries the same provenance; no layout renders them.
+
+Stop rules, each publishing nothing: an access refusal (HTTP 401/403/429/451, a challenge, HTML where
+JSON was expected, a refusing body) is recorded as `blocked`, suspends the method for the rest of the
+run and every later run until a reviewed config change sets `access_refusal_cleared_at`; a changed
+envelope, request echo or identity field is a schema stop; a configured URL off the pinned query, a
+redirect to another host, or a driver page off nvidia.com is a source-authority stop. A stop never
+removes a published record.
+
+Hardened before merge (review 1 and the G47 ruling):
+
+- **Redirects are checked before they are followed.** `lib.http.fetch_text(redirect_hosts=...)` is an
+  opt-in bound: every hop must be https on a listed host (default port, no userinfo), checked in the
+  redirect handler BEFORE urllib builds the next request, and copied onto each redirected request so
+  the second hop is bound too. Anything else raises `RedirectRefused` with nothing sent to the
+  destination. The NVIDIA adapter bounds each request to the host it asked; the earlier final-URL
+  check stays as a second line. Callers that pass no bound are unchanged.
+- **A clearing time clears once.** It counts only when it is after the refusal AND already passed. A
+  future time used to sit after every new refusal and re-arm one request per run.
+- **A refusal survives a run that failed outright.** A FAILED ingest step skipped the writeback, so
+  the suspension never reached main and the next run asked again. `patch_ingest.py` now emits the
+  step output `access_refusal_recorded=true` when a FAILED run recorded a NEW refusal; on that path
+  only, `patch-ingest.yml` still runs the logo and QA gates and commits the state when both pass.
+  The job stays failed, the converge steps stay skipped, and every other failure still skips the
+  commit. A commit that itself fails still loses the suspension; the next run then asks once more.
+
+Coverage debt (AUX-102, merged first): the bundled `nvidia` entry in `_data/coverage_debt.yml` is now one
+entry per driver family, each with that family's own observed 621.14 and 621.24 driver pages. The daily
+assessment reports them as missing until the first scheduled run publishes them, and asks for each entry
+to be removed once that family's lane operates. The NVIDIA company summary no longer lists NVIDIA App,
+which neither product covers.
+
+`lib/nvidia_driver_identity.report_family` is the attribution rule any future NVIDIA user-report
+path must use: a report naming only a version belongs to a family only inside that family's own
+feedback thread, and an explicit mention of the other family vetoes it.
+
+Pinned by `test_nvidia_driver_lookup.py` (blocking, offline, through the real writer and runner).
+
+**Not done here:** NVIDIA App; notebook and hotfix drivers; any NVIDIA community source.
+
+**Reopen only if** an NVIDIA record carries another family's download id or driver page, a record is
+published from a listing row NVIDIA did not name as that family, the adapter makes a request after a
+recorded refusal without a later, already-passed clearing time, a request reaches a host the adapter
+was redirected to, or the first scheduled run after merge does not produce records for both families
+(then record what the runner was told, and stop).
 
 ### AUX-046 — four Elgato products had no records because the HTML pages challenge the runner
 

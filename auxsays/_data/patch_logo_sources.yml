@@ -771,9 +771,21 @@ assets:
   last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
   notes: Official Steam Mobile App Store icon from Valve's verified app listing.
-- asset_id: nvidia
+- asset_id: nvidia-geforce-game-ready
   kind: company_fallback
-  owner_name: NVIDIA App / GeForce / Studio
+  owner_name: GeForce Game Ready Driver
+  source_type: company_fallback
+  source_url: /updates/nvidia/
+  local_path: /assets/img/patch-logos/nvidia.png
+  attribution_required: false
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
+  last_verified_at: '2026-05-01'
+  fallback_to_company_logo: true
+  notes: Explicit fallback to company logo.
+- asset_id: nvidia-studio-driver
+  kind: company_fallback
+  owner_name: NVIDIA Studio Driver
   source_type: company_fallback
   source_url: /updates/nvidia/
   local_path: /assets/img/patch-logos/nvidia.png

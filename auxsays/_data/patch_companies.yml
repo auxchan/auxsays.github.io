@@ -199,15 +199,18 @@
   priority: Core
   category_keys:
   - hardware-drivers
-  summary: Game Ready drivers, Studio drivers, NVIDIA App changes, NVENC, DLSS and RTX features can affect creator and gaming stability.
+  summary: Game Ready and Studio driver releases, NVENC, DLSS and RTX features can affect creator and gaming stability.
   logo_path: /assets/img/patch-logos/nvidia.png
   company_url: /updates/nvidia/
   official_sources:
-  - label: GeForce news
-    url: https://www.nvidia.com/en-us/geforce/news/
-    product_id: nvidia
+  - label: NVIDIA driver downloads (Game Ready)
+    url: https://www.nvidia.com/en-us/geforce/drivers/
+    product_id: nvidia-geforce-game-ready
+  - label: NVIDIA driver downloads (Studio)
+    url: https://www.nvidia.com/en-us/geforce/drivers/
+    product_id: nvidia-studio-driver
   documented_update_count: 0
-  tracked_product_count: 1
+  tracked_product_count: 2
   asset_type: company_logo
 - id: obs-project
   company_name: OBS Project

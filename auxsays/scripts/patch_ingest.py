@@ -18,6 +18,7 @@ import copy
 import importlib
 import inspect
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -32,7 +33,7 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from lib.http import fetch_text
 from lib.normalize import split_front_matter, strip_tags, utc_now
-from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION
+from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION, record_provenance
 from lib import ingest_health
 from lib.write_update_record import refresh_existing_record, write_record
 from lib.version_landing import ensure_for_record
@@ -245,6 +246,32 @@ def resolve_scan_limit(source: dict[str, Any], args: argparse.Namespace) -> int:
     return value
 
 
+def access_refusals(state: dict[str, Any]) -> dict[str, str]:
+    """{product_id: refusal time} for every source whose persisted scan state records an access refusal.
+
+    An adapter that stops on an access refusal (nvidia_driver_lookup) writes
+    ``scan.access_refused = {"at": ..., "detail": ...}`` and makes no request while it is there."""
+    found: dict[str, str] = {}
+    for product_id, bucket in ((state or {}).get("sources") or {}).items():
+        scan = bucket.get("scan") if isinstance(bucket, dict) else None
+        refused = scan.get("access_refused") if isinstance(scan, dict) else None
+        if isinstance(refused, dict) and refused.get("at"):
+            found[str(product_id)] = str(refused.get("at"))
+    return found
+
+
+def write_step_output(name: str, value: str) -> None:
+    """Append ``name=value`` to $GITHUB_OUTPUT when it is set (a workflow step); otherwise do nothing."""
+    out_path = os.environ.get("GITHUB_OUTPUT")
+    if not out_path:
+        return
+    try:
+        with open(out_path, "a", encoding="utf-8") as handle:
+            handle.write(f"{name}={value}\n")
+    except OSError:
+        pass
+
+
 def _adapter_fetch(module: Any, source: dict[str, Any], limit: int, state: dict[str, Any], product_id: str, *, write: bool, probe: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     """Call ``module.fetch``, giving adapters that sweep detail requests across runs a
     persisted per-source scan-progress dict.
@@ -414,6 +441,8 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
             primary_source_error=primary_source_error,
             **({"tolerance": int(tolerance)} if tolerance is not None else {}),
         )
+        # Declared provenance rides on the health bucket (only for a source that declares it).
+        record_provenance(state, product_id, (source.get("ingestion") or {}).get("provenance"))
 
     created_count = len(written) if write else len(would_create)
     result = {
@@ -469,6 +498,7 @@ def main() -> int:
     sources = load_sources(args.config)
     state = load_state(args.state)
     state["last_run_started_at"] = utc_now()
+    refusals_before = access_refusals(state)
 
     results = []
     errors = []
@@ -496,6 +526,7 @@ def main() -> int:
                     adapter=adapter_name,
                     error=sanitize_error_message(exc),
                 )
+                record_provenance(state, product_id, (source.get("ingestion") or {}).get("provenance"))
             print(f"[ERROR] {error['product_id']}: {error['error']}", file=sys.stderr)
             # DELIBERATELY NO `break` HERE. `--strict` used to abandon the loop on the first error,
             # so one blocked vendor discarded the valid discovery of every source that had not run
@@ -539,6 +570,18 @@ def main() -> int:
     # annotation and step summary above make it visible on the run page. Only a run with nothing
     # trustworthy in it fails the lane.
     if verdict == ingest_health.RUN_FAILED:
+        # A FAILED run exits 1, and the workflow skips the writeback after a failed step. An access
+        # refusal recorded in THIS run would then never reach main, and the next run would ask the
+        # refusing source again. So a failed run that recorded a new refusal says so; the workflow's
+        # commit step reads `access_refusal_recorded` and still commits the state (through the same
+        # QA-validated writeback), while the job itself stays failed. A refusal that was already
+        # persisted before this run is not new and changes nothing here.
+        new_refusals = sorted(pid for pid, at in access_refusals(state).items()
+                              if refusals_before.get(pid) != at)
+        if new_refusals and not args.dry_run:
+            write_step_output("access_refusal_recorded", "true")
+            print("Access refusal recorded this run for " + ", ".join(new_refusals)
+                  + "; the state is committed so the suspension holds on the next run.", file=sys.stderr)
         return 1
     if errors and args.strict:
         return 1

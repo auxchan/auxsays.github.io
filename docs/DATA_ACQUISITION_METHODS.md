@@ -43,7 +43,7 @@ widening how we look never widens what counts. The validator refuses any entry t
 
 ## The families
 
-21 families, 60 concrete implementations. Counts are generated from the registry.
+21 families, 61 concrete implementations. Counts are generated from the registry.
 
 | family | methods | purposes | transports |
 |---|---|---|---|
@@ -57,7 +57,7 @@ widening how we look never widens what counts. The validator refuses any entry t
 | `html_table_enumeration` | 4 | community_discovery, fallback, official_ingestion | html |
 | `in_page_harvest` | 1 | candidate_discovery, context_resolution, recheck | html |
 | `issue_tracker_search_api` | 3 | candidate_discovery, community_discovery | github_api, html, rest_json |
-| `json_api_listing` | 4 | candidate_discovery, official_ingestion | github_api, rest_json |
+| `json_api_listing` | 5 | candidate_discovery, official_ingestion | github_api, rest_json |
 | `json_api_search` | 5 | candidate_discovery, community_discovery, context_resolution, fallback, recheck | github_api, html, rest_json |
 | `known_url_recheck` | 5 | candidate_discovery, context_resolution, recheck | html, rest_json, rss_xml |
 | `manual_watch` | 1 | candidate_discovery | html |
@@ -69,7 +69,7 @@ widening how we look never widens what counts. The validator refuses any entry t
 | `sitemap_walk` | 2 | candidate_discovery, recheck | html, rss_xml |
 | `transport_failover` | 2 | candidate_discovery, official_ingestion | subprocess_curl |
 
-**22** methods carry `official_ingestion`; **36** do community or candidate discovery; **19** are not
+**23** methods carry `official_ingestion`; **36** do community or candidate discovery; **19** are not
 running today — 13 blocked, 3 disabled, 3 staged — and all of them are kept.
 
 ### Enumeration and search are different shapes

@@ -409,7 +409,17 @@ def section_d() -> None:
     entries = cov.load_debt()
     catalog = {cov.product_id_of(p) for p in yaml.safe_load(
         (_AUX / "_data" / "patch_products.yml").read_text(encoding="utf-8"))}
-    nvidia = next((e for e in entries if e.get("product_id") == "nvidia"), {})
+    # NVIDIA's drivers are two products (AUX-105): Game Ready and Studio share version numbers, so each
+    # family's gap carries ITS OWN observed releases, and no reference may name the other family's driver.
+    by_pid = {e.get("product_id"): e for e in entries}
+    own_pages = {"nvidia-geforce-game-ready": {"283968", "285320"}, "nvidia-studio-driver": {"283966", "285317"}}
+
+    def family_gap_ok(pid: str) -> bool:
+        entry = by_pid.get(pid) or {}
+        releases = entry.get("observed_official_releases") or []
+        pages = {str(r.get("reference") or "").rstrip("/").rsplit("/", 1)[-1] for r in releases}
+        return (entry.get("plan") == "planned" and {r.get("version") for r in releases} >= {"621.14", "621.24"}
+                and pages == own_pages[pid])
     # JSON-safe too: offline render harnesses (test_patch_decision_hierarchy's site_payload) serialise
     # every _data file, and an unquoted YAML date there is a datetime.date json.dumps refuses.
     try:
@@ -417,10 +427,11 @@ def section_d() -> None:
         json_safe = True
     except TypeError:
         json_safe = False
-    check("D9 the reviewed debt file is valid and JSON-safe, and the NVIDIA gap carries its plan and releases",
-          not cov.debt_errors(entries, catalog) and json_safe and nvidia.get("plan") == "planned"
-          and {r.get("version") for r in nvidia.get("observed_official_releases") or []} >= {"621.14", "621.24"},
-          (cov.debt_errors(entries, catalog)[:3], json_safe))
+    check("D9 the reviewed debt file is valid and JSON-safe, and each NVIDIA driver family's gap carries its "
+          "plan and its own releases (the retired bundled `nvidia` id is gone)",
+          not cov.debt_errors(entries, catalog) and json_safe and "nvidia" not in by_pid
+          and all(family_gap_ok(pid) for pid in own_pages),
+          (cov.debt_errors(entries, catalog)[:3], json_safe, sorted(p for p in by_pid if "nvidia" in str(p))))
 
 
 _REAL: dict = {}
