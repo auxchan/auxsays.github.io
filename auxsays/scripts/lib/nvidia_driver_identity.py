@@ -39,6 +39,7 @@ FAMILIES: dict[str, dict[str, Any]] = {
     GAME_READY: {
         "listing_name": "GeForce Game Ready Driver",
         "label": "GeForce Game Ready",
+        "badge": "GRD",
         "up_crd": "0",
         "is_crd": "0",
         # Every Game Ready row the lookup returns carries IsWHQL "1"; a row that does not is a beta
@@ -48,6 +49,7 @@ FAMILIES: dict[str, dict[str, Any]] = {
     STUDIO: {
         "listing_name": "NVIDIA Studio Driver",
         "label": "NVIDIA Studio",
+        "badge": "NSD",
         "up_crd": "1",
         "is_crd": "1",
         # Measured 2026-11-19: every Studio row returns IsWHQL "0", although its installer file name

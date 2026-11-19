@@ -217,9 +217,9 @@ def _run() -> None:
     check("A3 each record carries its own family's NVIDIA download id (283968 / 283966)",
           g.get("nvidia_download_id") == "283968" and s.get("nvidia_download_id") == "283966",
           f"{g.get('nvidia_download_id')} / {s.get('nvidia_download_id')}")
-    check("A4 product ids and driver families never cross",
-          g.get("product_id") == GRD and g.get("driver_family") == "GeForce Game Ready"
-          and s.get("product_id") == NSD and s.get("driver_family") == "NVIDIA Studio")
+    check("A4 product ids, driver families and badges never cross",
+          g.get("product_id") == GRD and g.get("driver_family") == "GeForce Game Ready" and g.get("logo_text") == "GRD"
+          and s.get("product_id") == NSD and s.get("driver_family") == "NVIDIA Studio" and s.get("logo_text") == "NSD")
     check("A5 each record links only its own driver page",
           g.get("source_url", "").endswith("/283968/") and s.get("source_url", "").endswith("/283966/")
           and "283966" not in json.dumps(g) and "283968" not in json.dumps(s))

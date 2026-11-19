@@ -448,6 +448,7 @@ def _record(source: dict[str, Any], product_id: str, info: dict[str, Any], prov:
         "category": source.get("public_category"),
         "version": version,
         "title": f"{software} {version}",
+        "logo_text": spec["badge"],
         "published_at": f"{released}T00:00:00Z",
         "source_url": page,
         "official_url": page,
