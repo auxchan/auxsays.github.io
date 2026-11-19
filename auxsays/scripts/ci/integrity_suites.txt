@@ -460,7 +460,7 @@ auxsays/scripts/tests/test_learn_fetch_same_origin.py = 115
 # HTML/refusing bodies as `blocked` with no records, no request after a refusal in the same run or any
 # later one until a reviewed clearing time, schema and host stops, the per-run request budget, and
 # provenance on the records and the health bucket -- all through the real runner, offline.
-auxsays/scripts/tests/test_nvidia_driver_lookup.py = 101
+auxsays/scripts/tests/test_nvidia_driver_lookup.py = 103
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68

@@ -353,6 +353,9 @@ def _run() -> None:
         "challenge": lambda url: (_ for _ in ()).throw(http_lib._format_fetch_error(
             "Browser challenge", url, "bot-protection interstitial served at HTTP 200")),
         "html": body("<!DOCTYPE html><html><body>Access Denied</body></html>"),
+        # An HTML page with no refusal wording at all (a maintenance or error page served at 200) is
+        # still not JSON: it must be caught by its shape, not by its words.
+        "html_plain": body("<!DOCTYPE html><html><head><title>NVIDIA</title></head><body>Back soon</body></html>"),
         "rejection": body(json.dumps({"error": "Access denied: automated requests are not permitted"})),
     }
     for name, handler in refusals.items():
@@ -408,7 +411,10 @@ def _run() -> None:
               b_grd.get("status") == "failing" and b_grd.get("last_error_type") == "blocked"
               and monitoring.derive_state(sources[0], b_grd, now=datetime.now(timezone.utc)) == "blocked",
               f"{b_grd.get('status')} {b_grd.get('last_error_type')}")
-        refused_at = datetime.fromisoformat(b_grd["scan"]["access_refused"]["at"].replace("Z", "+00:00"))
+        # Read defensively so a regression fails the checks below by name instead of crashing the suite.
+        stored_at = str(((b_grd.get("scan") or {}).get("access_refused") or {}).get("at") or "")
+        refused_at = (datetime.fromisoformat(stored_at.replace("Z", "+00:00")) if stored_at
+                      else datetime.now(timezone.utc))
         early = (refused_at - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
         late = (refused_at + timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
         nv.reset_process_state()
