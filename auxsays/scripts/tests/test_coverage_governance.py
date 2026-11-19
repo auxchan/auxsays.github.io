@@ -691,7 +691,8 @@ def section_g() -> None:
         # "OFFICIAL SOURCE ACTIVE" is left out: the product layout prints it for an OPERATING lane only,
         # which [F] renders; the deploy check refuses it on an unmonitored page.
         for phrase in [p for p in gate.CLAIM_PHRASES if p != "OFFICIAL SOURCE ACTIVE"] + [
-                "tracked companies", "tracked software item", "Tracked software and"]:
+                "tracked companies", "tracked software item", "Tracked software and",
+                "follows the source named under it"]:
             if phrase in live:
                 phrases.append(f"{path.name}:{phrase}")
     check("G2 no layout or include reads a retired catalog coverage field", not readers, readers)
