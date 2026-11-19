@@ -4,6 +4,27 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
+  captured_at: '2026-11-19T07:19:39Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.003.22110|26.003.22110
+  report_date: '2026-11-18'
+  report_excerpt: I generate reviews through the acrobat review system, and I started experiencing an
+    issue out of the blue where it is telling me to save the file to a different location before I can
+    initiate the review. Up until Monday, everything worked normally with the acrobat review...
+  report_id: adobe-acrobat-pro:eb98e5617ab2b782
+  report_title: I generate reviews through the acrobat review system, and I started experiencing an issue
+    out of the blue where it is telling me to save the file to a different location before I can initiate
+    the review.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/i-generate-reviews-through-the-acrobat-review-system-and-i-started-experiencing-an-issue-out-of-the-blue-where-it-is-telling-me-to-save-the-file-to-a-different-location-before-i-can-initiate-the-review-1656814
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.003.22110
+  window_start: '2026-11-16'
+  window_version: 26.003.22110
+- attribution_state: not_established
   captured_at: '2026-11-18T07:22:36Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
@@ -23,7 +44,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-18T20:27:42Z'
+  captured_at: '2026-11-19T07:19:39Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -42,7 +63,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-18T20:27:42Z'
+  captured_at: '2026-11-19T07:19:39Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -62,7 +83,7 @@ reports:
   window_start: '2026-09-08'
   window_version: 26.002.21901
 - attribution_state: not_established
-  captured_at: '2026-11-18T20:27:42Z'
+  captured_at: '2026-11-19T07:19:39Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -243,7 +264,7 @@ reports:
   window_start: '2026-05-18'
   window_version: 26.001.21563
 - attribution_state: not_established
-  captured_at: '2026-11-18T20:27:42Z'
+  captured_at: '2026-11-19T07:19:39Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -603,6 +624,27 @@ reports:
   window_start: '2017-02-21'
   window_version: 15.023.20070
 - attribution_state: not_established
+  captured_at: '2026-11-19T07:40:10Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.003.22110|26.003.22110
+  report_date: '2026-11-18'
+  report_excerpt: I generate reviews through the acrobat review system, and I started experiencing an
+    issue out of the blue where it is telling me to save the file to a different location before I can
+    initiate the review. Up until Monday, everything worked normally with the acrobat review...
+  report_id: adobe-acrobat-reader:ff69877747a6ae97
+  report_title: I generate reviews through the acrobat review system, and I started experiencing an issue
+    out of the blue where it is telling me to save the file to a different location before I can initiate
+    the review.
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/i-generate-reviews-through-the-acrobat-review-system-and-i-started-experiencing-an-issue-out-of-the-blue-where-it-is-telling-me-to-save-the-file-to-a-different-location-before-i-can-initiate-the-review-1656814
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.003.22110
+  window_start: '2026-11-16'
+  window_version: 26.003.22110
+- attribution_state: not_established
   captured_at: '2026-11-18T07:45:09Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
@@ -622,7 +664,7 @@ reports:
   window_start: '2026-11-02'
   window_version: 26.003.22075
 - attribution_state: not_established
-  captured_at: '2026-11-18T20:48:28Z'
+  captured_at: '2026-11-19T07:40:10Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -642,7 +684,7 @@ reports:
   window_start: '2026-10-14'
   window_version: 26.002.22031
 - attribution_state: not_established
-  captured_at: '2026-11-18T20:48:28Z'
+  captured_at: '2026-11-19T07:40:10Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
