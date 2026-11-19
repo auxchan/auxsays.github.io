@@ -2498,10 +2498,10 @@ Partial rot (AUX-003 family) stays invisible. The assessment cannot see that `pa
 running.
 
 **Recorded 2026-11-19: reachable is not complete** Premiere Pro is the measured case of the gap above: a
-lane scheduled every cycle, answered by its fallback and read `healthy` for two months, while it could
-never discover a release after 26.2.2. Scheduling, reachability, source blockage and discovery
-completeness are separate facts; see AUX-087, "For coverage assessments". Recorded as a distinction, not
-built as a new monitor.
+lane scheduled every cycle, answered by its fallback and read `healthy` from 2026-05-21 to 2026-11-06 (536
+of 538 checks; the other two were degraded), about five and a half months, while it could never discover a
+release after 26.2.2. Scheduling, reachability, source blockage and discovery completeness are separate
+facts; see AUX-087, "For coverage assessments". Recorded as a distinction, not built as a new monitor.
 
 **Follow-up: detection latency (open)** Release-to-discovery is measured for the newest record of each
 product only, and discovery-to-publication is `unknown` everywhere because nothing records when a record
@@ -6373,9 +6373,10 @@ Premiere 27.0 appeared on the Announcements board. The lane never fetched it. Th
 **Held, not done**
 - **27.0 is not created.** A bare re-pin to its post yields no record (the title carries no date, and the
   fail-closed rule drops it, correctly). 27.0 is never created from an unverified date, or with a summary
-  carrying the page's script text. Re-pinning would also add 27.0 to the community lane's searches (6 to 9
-  per cycle), which the no-expansion condition of AUX-113 does not allow. One hand pin replaced by another
-  is rejected: that keeps the manual dependency that caused this.
+  carrying the page's script text. A 27.0 record, however it is produced, would also enrol 27.0 in the
+  community lane's per-record searches (Algolia queries 6 to 9 per cycle), which the no-expansion condition
+  of AUX-113 does not allow. One hand pin replaced by another is rejected: that keeps the manual dependency
+  that caused this.
 - **The 26.2.2 pin stays** until a validated automated replacement keeps its coverage.
 - **26.3 is held.** The lane reads one page per run, and its only date is the title's month.
 
@@ -6389,7 +6390,8 @@ announcement post by three days).
 
 **For coverage assessments (AUX-102)** A collector can be scheduled, reachable through a fallback and
 apparently healthy while it systematically misses releases. This lane ran every cycle, its fallback page
-answered, and it read `healthy` for two months while it could only ever see one release. Scheduling,
+answered, and it read `healthy` from 2026-05-21 to 2026-11-06 (536 of 538 checks; the other two were
+degraded), about five and a half months, while it could only ever see one release. Scheduling,
 reachability, source blockage and discovery completeness are separate facts, and an assessment that
 establishes the first two has said nothing about the last. `_data/coverage_debt.yml` now states the three
 for Premiere. This records the distinction; it is not a mandate for a monitoring framework. Today the only
@@ -6431,7 +6433,8 @@ plain reading:
 They cover the three Adobe Community lanes AUXSAYS runs: Acrobat Pro, Acrobat Reader and Premiere Pro (the
 keyless search and topic chain, the Premiere known-URL recheck, the switched-off search and bug-tab methods,
 and the Premiere official lane's one pinned announcement page on the same host). robots.txt does not
-disallow the endpoints these lanes use, which settles nothing about the terms. Not legal advice.
+disallow the endpoints the running methods use (it does disallow the switched-off bug-tab walk's sort
+parameter), and that settles nothing about the terms. Not legal advice.
 
 **Position until the owner decides** Rights status **unresolved**: not a clearance, and an owner risk
 acceptance would not be permission from Adobe.

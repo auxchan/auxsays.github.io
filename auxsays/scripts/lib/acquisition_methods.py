@@ -142,10 +142,11 @@ _ADOBE_COMMUNITY_RIGHTS_NOTE = (
     "Unresolved since 2026-11-19. Adobe's General Terms of Use (effective 2025-10-03) count discussion "
     "forums as Services. On a plain reading, s6.18 (no data mining or similar data gathering and "
     "extraction in connection with the Services) and s6.6 (access only through an interface Adobe "
-    "provides or permits) cover this access. robots.txt not disallowing these endpoints settles nothing "
-    "about the terms. The owner's decision on Adobe Community collection is pending. Until it is made, "
-    "this access continues unchanged as a temporary position, not a clearance: no new method, query, "
-    "host or scope; the no-evasion safeguards stay; a method Adobe refuses or objects to is suspended, "
+    "provides or permits) cover this access. Where robots.txt does not disallow an endpoint, that "
+    "settles nothing about the terms. The owner's decision on Adobe Community collection is pending. "
+    "Until it is made, the methods that run continue unchanged and the switched-off ones stay off, as "
+    "a temporary position, not a clearance: no new method, query, host or scope; the no-evasion "
+    "safeguards stay; a method Adobe refuses or objects to is suspended, "
     "never worked around. An owner risk acceptance, if given, would not be permission from Adobe. The "
     "same status covers the Acrobat Pro, Acrobat Reader and Premiere Pro lanes."
 )
@@ -491,7 +492,7 @@ METHODS: list[dict[str, Any]] = [
         "source_family": "adobe_community_premiere_pro_product_hub",
         "status": "blocked",
         "rights_status": "unresolved",
-        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE,
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE + " This method's listing URL carries sort=latest_replies, which community.adobe.com/robots.txt disallows (Disallow: *&sort=*, read 2026-11-19): it must not be re-enabled as written.",
         "fallback_relationship": "archive_recheck",
         "purpose": ["candidate_discovery", "fallback"],
         "discovery_model": ["query_search", "enumeration"],
@@ -2277,6 +2278,8 @@ METHODS: list[dict[str, Any]] = [
         "implementation": "adobe_official_then_secondary_candidate_chain",
         "source_family": "Adobe: helpx.adobe.com release notes (primary) and community.adobe.com announcement posts (secondary)",
         "status": "active",
+        "rights_status": "unresolved",
+        "rights_note": _ADOBE_COMMUNITY_RIGHTS_NOTE + " This entry makes the request to the pinned community.adobe.com announcement (its secondary candidate) that single_page_prose_extraction parses. Its primary, HelpX, is not Adobe Community.",
         "fallback_relationship": "none",
         "purpose": ["official_ingestion"],
         "discovery_model": ["enumeration"],

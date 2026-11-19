@@ -234,7 +234,7 @@ def run() -> int:
     # which also keeps this check from passing on an empty set.
     adobe_community = {"adobe_community_algolia_search", "adobe_community_known_url_recheck",
                        "adobe_community_search", "adobe_community_bug_tab_index",
-                       "single_page_prose_extraction"}
+                       "single_page_prose_extraction", "ordered_official_source_failover"}
     bad_rights = [m["method_id"] for m in methods
                   if ("rights_status" in m or m["method_id"] in adobe_community)
                   and (m.get("rights_status") not in am.RIGHTS_STATUSES
