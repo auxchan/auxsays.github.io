@@ -401,10 +401,17 @@ def section_d() -> None:
     catalog = {cov.product_id_of(p) for p in yaml.safe_load(
         (_AUX / "_data" / "patch_products.yml").read_text(encoding="utf-8"))}
     nvidia = next((e for e in entries if e.get("product_id") == "nvidia"), {})
-    check("D9 the reviewed debt file is valid, and the NVIDIA gap carries its plan and verified releases",
-          not cov.debt_errors(entries, catalog) and nvidia.get("plan") == "planned"
+    # JSON-safe too: offline render harnesses (test_patch_decision_hierarchy's site_payload) serialise
+    # every _data file, and an unquoted YAML date there is a datetime.date json.dumps refuses.
+    try:
+        json.dumps(entries)
+        json_safe = True
+    except TypeError:
+        json_safe = False
+    check("D9 the reviewed debt file is valid and JSON-safe, and the NVIDIA gap carries its plan and releases",
+          not cov.debt_errors(entries, catalog) and json_safe and nvidia.get("plan") == "planned"
           and {r.get("version") for r in nvidia.get("observed_official_releases") or []} >= {"621.14", "621.24"},
-          cov.debt_errors(entries, catalog)[:3])
+          (cov.debt_errors(entries, catalog)[:3], json_safe))
 
 
 _REAL: dict = {}

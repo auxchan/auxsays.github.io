@@ -19,6 +19,9 @@
 #   observed_official_releases (optional)
 #                         official releases a person verified on the vendor's own pages. The assessment
 #                         reports any that the patch store does not hold. Reading a page is not collection.
+#
+# Dates are QUOTED strings: offline render harnesses serialise every _data file to JSON, and an unquoted
+# YAML date becomes a value json.dumps refuses (test_patch_decision_hierarchy failed on it).
 schema_version: 1
 entries:
 - product_id: nvidia
@@ -30,15 +33,15 @@ entries:
     one fail-closed adapter on NVIDIA's driver lookup service, probe it from a GitHub-hosted runner, then
     enable it on the existing ingest schedule.
   plan: planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
   observed_official_releases:
   - version: "621.14"
-    released: 2026-11-04
+    released: "2026-11-04"
     family: GeForce Game Ready Driver
     reference: https://www.nvidia.com/en-us/drivers/details/283968/
   - version: "621.24"
-    released: 2026-11-12
+    released: "2026-11-12"
     family: GeForce Game Ready Driver
     reference: https://www.nvidia.com/en-us/drivers/details/285320/
 - product_id: adobe-premiere-pro
@@ -48,7 +51,7 @@ entries:
     Find an official Adobe release source that answers the collection runners. Until then the lane reads
     only a pinned announcement of one release and the page says monitoring is impaired.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-087
 - product_id: adobe-photoshop
   remediation_priority: P2
@@ -57,7 +60,7 @@ entries:
     The fail-closed adapter exists; find an official Photoshop release source that answers the collection
     runners, probe it from a GitHub-hosted runner, then enable the lane.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-017
 - product_id: adobe-after-effects
   remediation_priority: P2
@@ -66,7 +69,7 @@ entries:
     Same Adobe help host as Photoshop and Premiere Pro, which refuses the collection runners. Find an official
     After Effects release source that answers them, validate an adapter, then enable the lane.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: adobe-media-encoder
   remediation_priority: P2
@@ -75,7 +78,7 @@ entries:
     Same Adobe help host as Photoshop and Premiere Pro, which refuses the collection runners. Find an official
     Media Encoder release source that answers them, validate an adapter, then enable the lane.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: adobe-lightroom-classic
   remediation_priority: P3
@@ -84,7 +87,7 @@ entries:
     Same Adobe help host as Photoshop and Premiere Pro, which refuses the collection runners. Find an official
     Lightroom Classic release source that answers them, validate an adapter, then enable the lane.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: openai-chatgpt
   remediation_priority: P2
@@ -93,7 +96,7 @@ entries:
     Measure the mapped ChatGPT release notes from a GitHub-hosted runner (reachability, terms, structure),
     then build one fail-closed adapter and enable it, or record why it cannot be monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: amd
   remediation_priority: P2
@@ -102,7 +105,7 @@ entries:
     Measure AMD's official driver download pages from a GitHub-hosted runner (reachability, terms,
     structure), then build one fail-closed driver adapter and enable it, or record why it cannot be monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: anthropic-claude
   remediation_priority: P3
@@ -111,7 +114,7 @@ entries:
     Measure the mapped Claude release notes from a GitHub-hosted runner (reachability, terms, structure),
     then build one fail-closed adapter and enable it, or record why it cannot be monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: google-gemini
   remediation_priority: P3
@@ -120,7 +123,7 @@ entries:
     Measure the mapped Gemini updates page from a GitHub-hosted runner (reachability, terms, structure),
     then build one fail-closed adapter and enable it, or record why it cannot be monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: epic-unreal
   remediation_priority: P3
@@ -129,7 +132,7 @@ entries:
     Measure the mapped Unreal Engine release notes from a GitHub-hosted runner (reachability, terms,
     structure), then build one fail-closed adapter and enable it, or record why it cannot be monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: steam
   remediation_priority: P3
@@ -138,7 +141,7 @@ entries:
     Measure the mapped Steam news source from a GitHub-hosted runner (reachability, terms, structure), then
     build one fail-closed adapter and enable it, or record why it cannot be monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: perplexity
   remediation_priority: P3
@@ -147,7 +150,7 @@ entries:
     The mapped source is a broad blog, not release notes. Find an official Perplexity changelog suitable
     for automated detection; until one exists the product stays not monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: runway
   remediation_priority: P3
@@ -156,7 +159,7 @@ entries:
     The mapped source is a research blog, not release notes. Find an official Runway changelog suitable for
     automated detection; until one exists the product stays not monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: lottiefiles
   remediation_priority: P3
@@ -165,7 +168,7 @@ entries:
     The mapped source is a broad blog, not release notes. Find an official LottieFiles changelog suitable
     for automated detection; until one exists the product stays not monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: twitch
   remediation_priority: P3
@@ -174,7 +177,7 @@ entries:
     The mapped source is a broad blog, not release notes. Find an official Twitch changelog suitable for
     automated detection; until one exists the product stays not monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: youtube
   remediation_priority: P3
@@ -183,7 +186,7 @@ entries:
     The mapped source is a broad news blog, not release notes. Find an official YouTube or YouTube Studio
     changelog suitable for automated detection; until one exists the product stays not monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: midjourney
   remediation_priority: P3
@@ -192,7 +195,7 @@ entries:
     Only a manual watch is mapped. Find an official Midjourney changelog suitable for automated detection;
     until one exists the product stays not monitored.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
 - product_id: kick
   remediation_priority: P3
@@ -201,5 +204,5 @@ entries:
     Only a manual watch of a low-value blog is mapped. Find an official Kick changelog suitable for automated
     detection, or reconsider whether Kick belongs in the Core tier.
   plan: not_planned
-  review_by: 2026-12-18
+  review_by: "2026-12-18"
   ledger: AUX-102
