@@ -2,6 +2,6 @@
 layout: aux-patch-company
 title: GitHub Patch Intelligence
 company_id: github
-description: GitHub is tracked as part of the AUXSAYS Patch Feed intelligence layer.
+description: 'GitHub software in the AUXSAYS Patch Feed, with its official update sources and coverage status.'
 permalink: /updates/github/
 ---
