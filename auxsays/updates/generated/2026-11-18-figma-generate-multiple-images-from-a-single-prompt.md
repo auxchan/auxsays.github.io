@@ -17,8 +17,8 @@ update_version: Generate multiple images from a single prompt
 update_logo_text: FIG
 update_published_at: '2026-11-18T00:00:00.000Z'
 update_last_checked: '2026-11-18T23:00:18Z'
-source_last_checked: '2026-11-19T10:05:09Z'
-official_body_last_checked: '2026-11-19T10:05:09Z'
+source_last_checked: '2026-11-19T23:17:43Z'
+official_body_last_checked: '2026-11-19T23:17:43Z'
 record_last_updated: '2026-11-18T23:00:18Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-19T10:05:09Z'
+  url: https://www.figma.com/release-notes/?title=generate-multiple-images-from-a-single-prompt
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-19T23:17:43Z'
   url: https://www.figma.com/release-notes/?title=generate-multiple-images-from-a-single-prompt
   status: captured-from-rss-feed
   body_captured: true
