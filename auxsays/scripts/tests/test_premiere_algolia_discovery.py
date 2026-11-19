@@ -324,8 +324,18 @@ def run() -> int:
                            .read_text(encoding="utf-8")) or {}
     rows = [r for r in (store.get("evidence") or []) if r.get("product_id") == "adobe-premiere-pro"]
     withdrawn = [r for r in rows if r.get("counted") is False]
-    check("H1 the three withdrawn rows are still withdrawn, with reasons",
-          len(withdrawn) == 3 and all(str(r.get("exclusion_reason") or "").strip() for r in withdrawn),
+    # AUX-111 withdrew one more Premiere row through the audited withdrawal tool. It is accepted here only as
+    # that manifest's own entry, at that manifest's reason, so any OTHER row that stops counting still fails H1.
+    _v5 = json.loads((_REPO / "auxsays" / "scripts" / "audit" / "live_citation_withdrawal_v5.json")
+                     .read_text(encoding="utf-8"))
+    _audited = {(str(e["id"]), str(e["source_url"])): e["exclusion_reason"]
+                for e in _v5["entries"] if e["product_id"] == "adobe-premiere-pro"}
+    _later = [r for r in withdrawn if (str(r.get("id")), str(r.get("source_url"))) in _audited]
+    _phase_a = [r for r in withdrawn if (str(r.get("id")), str(r.get("source_url"))) not in _audited]
+    check("H1 the three withdrawn rows are still withdrawn, with reasons (and the only other is AUX-111's audited row)",
+          len(_phase_a) == 3 and all(str(r.get("exclusion_reason") or "").strip() for r in _phase_a)
+          and len(_later) == len(_audited) == 1
+          and all(r.get("exclusion_reason") == _audited[(str(r["id"]), str(r["source_url"]))] for r in _later),
           str([(str(r.get("id"))[:34], r.get("exclusion_reason")) for r in withdrawn]))
     check("H2 the board listing url still counts for nothing",
           not any(r.get("counted") is True and "bd-p/premiere-pro" in str(r.get("source_url"))
