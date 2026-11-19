@@ -649,7 +649,7 @@ auxsays/scripts/tests/test_microsoft_teams_community.py = 85
 # ComfyUI community evidence from its own GitHub issues (AUX-103): captured issues replayed to their
 # recorded decisions, core-release identity (never a package, custom-node, frontend, Desktop or
 # untagged build), the shared acceptance authority, walk health, and the write-mode gates.
-auxsays/scripts/tests/test_comfyui_github_issues.py = 114
+auxsays/scripts/tests/test_comfyui_github_issues.py = 117
 # Teams classification: platform from the reporter's text ('unknown' when not stated, never the product's
 # release platform), theme/area/severity from the shared scorer, nothing invented when unsupported, sentiment
 # frozen, and the builder's severity_summary no longer reads a missing severity as 'low'. Source-pins the three

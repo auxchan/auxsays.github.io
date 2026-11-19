@@ -968,6 +968,8 @@ the version output ComfyUI itself prints, or from the reporter naming ComfyUI be
 git checkout between releases prints the previous release number, so a build reported past the tag
 (ComfyUI-Manager's describe output, or a development commit named as the build) is refused, and so
 is an install whose companion packages ComfyUI itself reports as older than the release requires.
+A post carrying logs of several core versions (several sessions) gets no declaration immunity:
+the shared role reading must say which version is the affected one, or the row is refused.
 A failure whose traceback runs through a custom-node pack, and a maintainer-labelled feature request
 or custom-node issue, are the ecosystem, not the release. One person filing the same report twice is
 one report. Every exclusion is stored as an uncounted row with its reason.
@@ -996,7 +998,7 @@ beside. Patch tags with no GitHub Release (v0.45.1 to v0.45.6 and similar) have 
 issues in the window that declare only such a version cannot attach anywhere: an official-lane
 coverage gap, not this lane's.
 
-**Verification** `test_comfyui_github_issues.py` replays nineteen captured issues to their recorded
+**Verification** `test_comfyui_github_issues.py` replays twenty captured issues to their recorded
 decisions and drives the write path, the real ownership validators and the promotion agreement.
 Production proof: pending the first natural scheduled run after merge.
 

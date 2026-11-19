@@ -2,14 +2,15 @@
 """ComfyUI community evidence from its own GitHub issues: identity, the shared authority, the wiring.
 
 WHAT THIS PROVES, IN ORDER.
-  F  Fixture replay. Nineteen issues captured from Comfy-Org/ComfyUI on 2026-11-18 (bodies trimmed,
+  F  Fixture replay. Twenty issues captured from Comfy-Org/ComfyUI on 2026-11-18 (bodies trimmed,
      author accounts replaced by opaque numbers) are replayed through the shipped decision path, and
      each lands on the decision recorded when it was captured: accepted reports; a version that is
      only a Python package's, the Desktop app's or a third-party build's; builds past the release tag
      (ComfyUI-Manager describe, `master @ <sha>`); a mixed install whose frontend package is older than
      the release requires; failures that run through a custom-node pack; a maintainer-labelled feature
      request; a "latest version" complaint that names no release; a same-author repost; an issue
-     created before the release and edited later; a version the reporter names as working.
+     created before the release and edited later; a version the reporter names as working; two
+     sessions' logs where the older version is the one rolled back to.
   I  Identity unit checks on the exact shapes those decisions rest on.
   A  The acceptance authority is the shared one: base.apply_acceptance_gates decides, its own reasons
      are what a refused row carries, counted rows carry the sentiment the promotion requires, and the
@@ -275,6 +276,15 @@ def section_authority() -> None:
     row = comfy.evaluate_issue(R044, fixed, CAPTURED)
     check("A9 the shared role veto refuses a version the report names as not affected",
           str(row.get("exclusion_reason") or "").startswith("version_role_"), str(row.get("exclusion_reason")))
+    two_logs = ("Session 1:\n[INFO] ComfyUI version: 0.43.0\nSession 2:\n[INFO] ComfyUI version: 0.44.0\n"
+                "Loading the workflow takes three minutes and then the server crashes.")
+    row = comfy.evaluate_issue(R044, issue(905, "Workflow load crashes the server", two_logs), CAPTURED)
+    check("A11 two sessions' logs with no statement of which failed: no declaration is immune, refused",
+          row.get("exclusion_reason") == "multiple_core_versions_declared", str(row.get("exclusion_reason")))
+    stated = two_logs + "\nIt fails on 0.44.0 every time."
+    row = comfy.evaluate_issue(R044, issue(906, "Workflow load crashes the server", stated), CAPTURED)
+    check("A12 ...and counted when the shared role reading says the version is the affected one",
+          row.get("counted") is True, str(row.get("exclusion_reason")))
     check("A10 the module declares no acceptance vocabulary of its own",
           not any(hasattr(comfy, n) for n in ("ISSUE_TERMS", "CONCRETE_ISSUE_TERMS", "ISSUE_EXTRA_TERMS")))
 

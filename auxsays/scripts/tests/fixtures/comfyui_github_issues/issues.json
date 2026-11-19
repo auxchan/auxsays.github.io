@@ -514,6 +514,32 @@
    }
   },
   {
+   "label": "role: two sessions' logs; the older version is the rollback, not the failure",
+   "record_version": "0.26.0",
+   "record_published_at": "2026-06-23T18:47:38Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "multiple_core_versions_declared",
+    "match_basis": "core_version_declaration",
+    "source_date": "2026-10-26"
+   },
+   "issue": {
+    "number": 17362,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17362",
+    "title": "[Windows/RTX 4070] Suspected Anima initialization regression on 0.41; rollback to 0.26 restores performance with DynamicVRAM enabled",
+    "body": "### Custom Node Testing\n\n- [ ] I have reproduced this with all custom nodes disabled.\n\nThis is a **suspected performance regression with rollback evidence**, not a bisected root cause or a clean core-only reproducer. The workflow includes Impact Pack's `FaceDetailer`, and SageAttention is enabled. I am explicitly leaving the checkbox unchecked.\n\n### Expected Behavior\n\nRepeated runs of the same Anima image workflow should not develop multi-minute model-initialization stalls. The older working version completes full runs in roughly 2.5–3 minutes on this machine, with DynamicVRAM enabled.\n\n### Actual Behavior\n\nAfter updating the backend/dependencies, image generation became much slower. The user initially observed roughly 200 seconds becoming roughly 700 seconds, particularly after running several images.\n\nA captured session on ComfyUI `0.41.0-6-ge087d8f6c` with `comfy-aimdo 0.5.5` shows:\n\n\n...\nDowngrading only aimdo from `0.5.6` to `0.5.5` did not resolve the reported problem. Rolling back the core **and its corresponding dependencies** to `0.26.0 / aimdo 0.4.10 / kitchen 0.2.10` restored normal behavior according to the user. The old-version logs also contain successful full executions o\n| Core + matching dependencies rollback | 0.26.0 | 0.4.10 | 0.2.10 | Normal behavior restored; successful full runs around 142–166 seconds |\n[INFO] ComfyUI version: 0.41.0\n[INFO] ComfyUI version: 0.26.0\n### Environment and Version Comparison\n- System RAM: approximately 64 GB (65422 MB reported by ComfyUI)\n| Before aimdo-only downgrade | 0.41.0 + 6 commits | 0.5.6 | 0.2.37 | User reported severe slowdown |\n| Aimdo-only downgrade | 0.41.0 + 6 commits | 0.5.5 | 0.2.37 | Still slow; multi-minute initialization captured |\nWorking core commit: `f6c162ddcfbd7eefb39c06fe5b8d4c46e8d09f40`\nThe aimdo-only 0.5.5 experiment was below the slow core's recommended 0.5.6 dependency. The successful rollback restored the versions required by the older core. These are separate observations, not a claim that 0.5.5 is a supported fix for the newer core.\n5. Compare with the older core/dependency set above, keeping the same frontend, Torch, models, custom nodes, and launch arguments.\nThis describes the affected local setup, **not a guaranteed minimal reproducer**. Workflow JSON and prompts are not attached for privacy. No new test runs or changes to the working environment were performed solely for this report.\n[INFO] pytorch version: 2.8.0+cu129\n[INFO] comfy-aimdo version: 0.5.5\n[INFO] comfy-kitchen version: 0.2.37\nWorking configuration:\n[INFO] comfy-aimdo version: 0.4.10\n[INFO] comfy-kitchen version: 0.2.10\n- Custom nodes and SageAttention have not been excluded. The installed frontend is intentionally older than the core's recommendation.\n- Related symptoms appear in #12927 (including an Anima comment), but the OS, versions, and workloads differ. I cannot confirm the same cause.\nCould maintainers advise whether this version-range rollback points to a known regression, and which narrowly scoped diagnostics would best distinguish model-compilation overhead from memory/offloading thrashing?\nReport assembled with AI assistance from local version records, logs, and user-observed behavior; no unperformed tests are claimed.",
+    "created_at": "2026-10-26T13:23:26Z",
+    "updated_at": "2026-11-06T07:10:33Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [],
+    "user": {
+     "id": 1017
+    }
+   }
+  },
+  {
    "label": "not concrete under the shared vocabulary (measured miss)",
    "record_version": "0.44.0",
    "record_published_at": "2026-11-04T01:12:27Z",
@@ -535,7 +561,7 @@
     "state_reason": null,
     "labels": [],
     "user": {
-     "id": 1017
+     "id": 1018
     }
    }
   }

@@ -48,7 +48,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from lib import evidence_classification as ec
-from lib.target_outcome import target_is_contradicted
+from lib.target_outcome import AFFECTED, classify_target_outcome, target_is_contradicted
 from patch_collectors import base
 from patch_collectors import github_officedev_source as github
 from patch_collectors import runtime_budget as rb
@@ -312,9 +312,22 @@ def evaluate_issue(record: base.PatchRecord, issue: dict[str, Any], captured_at:
         [str((label or {}).get("name") or "") for label in issue.get("labels") or [] if isinstance(label, dict)],
         own)
     if not reason:
-        contradiction = target_is_contradicted(own, version, identity["declared"])
-        if contradiction is not None:
-            reason = f"version_role_{contradiction.outcome}"
+        declared = identity["declared"]
+        if len(declared) > 1:
+            # Several sessions' logs, several core versions: a pasted log is not a statement of
+            # WHICH run failed, so no declaration may claim the shared R1 immunity. Measured: a
+            # post carrying a 0.41.0 log and a 0.26.0 log was about 0.41.0, and 0.26.0 was the
+            # version it rolled back to. The durable rule for a post naming more than one tracked
+            # version (acrobat shared-build lesson): silence is not enough, the shared role reading
+            # must say AFFECTED.
+            outcome = classify_target_outcome(own, version)
+            if outcome.outcome != AFFECTED:
+                reason = (f"version_role_{outcome.outcome}" if outcome.vetoes
+                          else "multiple_core_versions_declared")
+        else:
+            contradiction = target_is_contradicted(own, version, declared)
+            if contradiction is not None:
+                reason = f"version_role_{contradiction.outcome}"
     matched = bool(identity["established"]) or bool(_occurrences(own, version))
     span_start, span_end = (_occurrences(own, version) or [(-1, -1)])[0]
     provenance = base.match_provenance([("report_text", own)], span_start, span_end)
