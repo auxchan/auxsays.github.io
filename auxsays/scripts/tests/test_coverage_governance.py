@@ -162,6 +162,10 @@ def section_a() -> None:
     r = coverage_of("nvidia", nvp)
     check("A4 NVIDIA with a reviewed plan -> 'Monitoring planned; not active', never monitored",
           (r["state"], r["label"]) == ("planned", "Monitoring planned; not active"), r)
+    unplanned = make_inputs([product("amd", "amd")], [source("amd", enabled=False)], {},
+                            debt=[debt_entry("amd", plan="not_planned")])
+    check("A4b a debt entry WITHOUT a plan leaves the product 'Not currently monitored'",
+          coverage_of("amd", unplanned)["state"] == "not_monitored", coverage_of("amd", unplanned))
 
     # ChatGPT: an official URL is configured, the lane is off. A frozen healthy state row (left over
     # from a lane that was switched off) must not make it read as monitored either.
