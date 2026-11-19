@@ -154,8 +154,9 @@
   summary: Changes to Kick can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
   logo_path: /assets/img/patch-logos/kick.png
   company_url: /updates/kick/
-  # No official update source is mapped: kick.com/blog answers 404 and Kick publishes no
-  # changelog to replace it (AUX-112).
+  # No official update source is mapped (AUX-112): kick.com/blog answers 404, and no changelog
+  # or release-notes page for Kick's streaming platform was found to replace it. Kick's
+  # developer-API changelog (docs.kick.com) records API changes, not product releases.
   official_sources: []
   documented_update_count: 0
   tracked_product_count: 1

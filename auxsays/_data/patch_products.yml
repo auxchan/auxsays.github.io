@@ -792,8 +792,10 @@
   watch_reason: Kick matters for creators evaluating live-stream revenue, discoverability,
     and platform redundancy.
   # No official update source is mapped (AUX-112). The old kick.com/blog address answers 404,
-  # and on 2026-11-19 Kick published no changelog or release-notes page to replace it. A
-  # generic homepage is not linked in its place, because it would look like a release feed.
+  # and on 2026-11-19 no changelog or release-notes page for Kick's streaming platform was
+  # found to replace it. Kick's developer-API changelog (docs.kick.com) records API changes,
+  # not product releases, so it is not linked. Nor is a generic homepage, because it would
+  # look like a release feed.
   source_url: null
   source_label: null
   signal_notes: Track monetization, content policy, streaming tools, mobile app changes,

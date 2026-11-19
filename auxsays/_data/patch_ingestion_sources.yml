@@ -1841,10 +1841,10 @@
     difficulty: TBD
     defer_until_official_ingestion_stable: true
   source_health_note: >-
-    No official update source is mapped (AUX-112). The former official_url, kick.com/blog, answered
-    404 on 2026-11-19, and Kick published no changelog or release-notes page to replace it: its help
-    centre's "What's New / Updates" collection held one system-status article. Kick's terms bar
-    automated access. The lane stays disabled.
+    No official update source is mapped (AUX-112). The former official_url, kick.com/blog, answered 404
+    on 2026-11-19, and no changelog or release notes for Kick's streaming platform were found to replace
+    it. Kick's developer-API changelog (docs.kick.com) records API changes, not product releases, and is
+    not mapped. Kick's terms bar automated access. The lane stays disabled.
 - company_id: rumble
   product_id: rumble
   company: Rumble
