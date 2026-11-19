@@ -230,7 +230,7 @@ layout: aux-base
                   <span class="home-patch-dot home-patch-dot--{{ evidence_state_class }}" aria-hidden="true"></span>
                   <span class="home-watch-flag" data-home-watch-flag hidden>Watching</span>
                   <span class="home-patch-copy">
-                    <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
+                    <strong>{% assign home_item_title = item.update_feed_title | default: item.update_detail_title | default: item.title %}{% include patch-display-title.html title=home_item_title product=item.update_product %}{{ patch_display_title | default: home_item_title }}</strong>
                     <em>
                       <span class="home-patch-verdict" data-home-verdict>Verdict: {{ decision_label }}{% if decision_scope != '' %} {{ decision_scope }}{% endif %}</span>
                       {% if report_count > 0 %}

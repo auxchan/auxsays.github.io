@@ -57,7 +57,36 @@ layout: aux-base
   {% assign display_title = page.update_feed_title %}
 {% else %}
   {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
-{% endif %}
+{% endif %}{%- comment -%}
+  G43: the product label once. The same rule as _includes/patch-display-title.html, written out here
+  because this part of the layout must hold no include tag: several suites render it standalone, up to
+  its first include. test_publication_hygiene TT5 renders this block and the include over the same
+  titles and requires the same output.
+{%- endcomment -%}
+{%- assign pdt_raw = display_title -%}
+{%- assign pdt_title = display_title | default: '' -%}
+{%- assign pdt_product = page.update_product | default: '' | strip -%}
+{%- if pdt_title != '' and pdt_product != '' -%}
+  {%- assign pdt_words = pdt_product | split: ' ' -%}
+  {%- assign pdt_count = pdt_words.size -%}
+  {%- for pdt_take in (1..pdt_count) reversed -%}
+    {%- assign pdt_from = pdt_count | minus: pdt_take -%}
+    {%- assign pdt_tail = pdt_words | slice: pdt_from, pdt_take | join: ' ' -%}
+    {%- capture pdt_doubled -%}{{ pdt_product }} {{ pdt_tail }}{%- endcapture -%}
+    {%- if pdt_title == pdt_doubled -%}
+      {%- assign display_title = pdt_product -%}
+      {%- break -%}
+    {%- endif -%}
+    {%- assign pdt_prefix = pdt_doubled | append: ' ' -%}
+    {%- assign pdt_start = pdt_title | slice: 0, pdt_prefix.size -%}
+    {%- if pdt_start == pdt_prefix -%}
+      {%- assign pdt_rest = pdt_title | slice: pdt_prefix.size, pdt_title.size -%}
+      {%- assign display_title = pdt_product | append: ' ' | append: pdt_rest -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign cite_title = page.update_feed_title | default: pdt_raw -%}{% if cite_title == pdt_raw %}{% assign cite_title = display_title %}{% endif %}
 {% assign evidence_checked_at = page.evidence_last_checked | default: '' %}
 {% assign evidence_checked_label = 'Not recorded' %}
 {% if evidence_checked_at != '' %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
@@ -913,7 +942,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}{% if pub_at_clean != '' %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a>.</cite><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
           {% endfor %}
         {% elsif src_url_clean != '' %}
-          <li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}{% if pub_at_clean != '' %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ page.update_source_url }}">{{ page.update_feed_title | default: display_title }}</a>.</cite><span>{{ official_source_type | replace: '_', ' ' }}</span></li>
+          <li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}{% if pub_at_clean != '' %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ page.update_source_url }}">{{ cite_title }}</a>.</cite><span>{{ official_source_type | replace: '_', ' ' }}</span></li>
         {% endif %}
         {% if dl_url_clean != '' %}<li><cite>{% if src_name_clean != '' %}{{ page.update_source_name }}. {% endif %}<a href="{{ page.update_download_url }}">Download page</a>.</cite><span>download</span></li>{% endif %}
       </ul>

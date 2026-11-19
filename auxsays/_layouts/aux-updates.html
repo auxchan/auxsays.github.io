@@ -338,7 +338,7 @@ layout: aux-base
         {% assign card_title = it_product %}
         {% else %}
         {% assign card_title = item.title %}
-        {% endif %}
+        {% endif %}{% include patch-display-title.html title=card_title product=it_product %}{% assign card_title = patch_display_title | default: card_title %}
         <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ card_title }}</a></h2>
         <p class="patch-card-summary">{{ item.description }}</p>
         {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
@@ -442,7 +442,7 @@ layout: aux-base
           {% assign card_title = it_product %}
           {% else %}
           {% assign card_title = item.title %}
-          {% endif %}
+          {% endif %}{% include patch-display-title.html title=card_title product=it_product %}{% assign card_title = patch_display_title | default: card_title %}
           <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ card_title }}</a></h2>
           <p class="patch-card-summary">{{ item.description }}</p>
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
