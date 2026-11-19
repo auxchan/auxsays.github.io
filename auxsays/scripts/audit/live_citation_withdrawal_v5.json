@@ -1,0 +1,164 @@
+{
+ "schema": 1,
+ "ledger": "AUX-111",
+ "version": 5,
+ "supplements": "auxsays/scripts/audit/live_citation_withdrawal.json (AUX-088), live_citation_withdrawal_v2.json (AUX-090), live_citation_withdrawal_v3.json (AUX-098) and live_citation_withdrawal_v4.json (AUX-108), which stay unchanged",
+ "purpose": "Pinned audited withdrawal of two stored Adobe reports counted against a version the report is not about: the Premiere Pro version a project was created in, and the Acrobat Reader version an update started from. Every row is kept; only counted and exclusion_reason change.",
+ "selector": [
+  "product_id",
+  "update_version",
+  "target_build",
+  "id",
+  "source_url"
+ ],
+ "products": [
+  "adobe-acrobat-reader",
+  "adobe-premiere-pro"
+ ],
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "edit": {
+  "counted": false,
+  "exclusion_reason": "per entry (closed vocabulary)",
+  "evidence_valid_for_current_patch": "not present on these rows; a block carrying it refuses",
+  "row_retained": true
+ },
+ "parent_commit": "cfd2c36af236d9c4c59f9a32f8548b116856d525",
+ "store_path": "auxsays/_data/consensus_evidence.yml",
+ "store_sha256_at_pin": "2a052694b646a2970abf4778e9bb89afe873f8064c16bcb387a44ed8b1716076",
+ "adjudication_packet": {
+  "packet_sha256": "f944c74e129010b6a0a8b56384e60f191c9a73294ebd5b59ea2b6ad86467b86b",
+  "brief_sha256": "5b66aebd11fb71ec03d20ab9e2df08bc335b7f99bb65f6db6c695e34a4d8aefd",
+  "control_rule_sha256": "050683bedf6a81b579e2618d1b0d8c138059b7eebea2f495349c0c0500fd5910",
+  "labels_a_sha256": "c1b60ce9e5312bf6da6895822b4bce30638892ec9db9ed753a65455146b7f6d8",
+  "labels_b_sha256": "6da65703d9331aa49577ab2bba48dd2e35e65b0631ceb6e03456ca1e498f2a19",
+  "items": 8,
+  "controls": 6,
+  "note": "A label-free shuffled packet of stored text: the two rows and six counted controls drawn by a rule fixed before the draw (three per product, one on each row's own page that must stay counted). The brief named no row and stated no hypothesis."
+ },
+ "basis": "A row is here only when TWO independent blind adjudications, each made from the stored text alone without the first audit's labels, the selection key or each other's labels, labelled it INCORRECT for the credited version: second_blind and third_blind. first_audit is the corpus measurement that proposed the row; it is recorded as provenance and is not one of the two determinations. Each row takes the closed reason both blind reviews support. The tool grants these two identities and no other row of either product.",
+ "note": "Each entry must match exactly one stored block whose sha256 equals block_sha256_before (to withdraw) or block_sha256_after (already withdrawn). No retain entries: neither is a duplicate.",
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "15.020.20039",
+   "target_build": "",
+   "id": "acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-failed-to-patch-from-15-020-20039-to-15-020-2042-1510656",
+   "source_url": "https://community.adobe.com/questions-12/failed-to-patch-from-15-020-20039-to-15-020-2042-1510656",
+   "record_file": "auxsays/updates/generated/2016-10-11-adobe-acrobat-reader-15-020-20039.md",
+   "block_sha256_before": "a7f8065c7cf653e60397a3f6830127d94fd702c34fb4b5507c3f89dd545f79b6",
+   "exclusion_reason": "version_named_but_working",
+   "block_sha256_after": "36e844897f99b35152b1a5ecf709a800597cb8d00f297d92f4395019d287dc97",
+   "captured_at": "2026-08-09T02:47:52Z",
+   "case": "T8",
+   "adjudication": {
+    "first_audit": {
+     "by": "G51 corpus measurer (2026-11-19_g51-rollback-attribution/CORPUS.md)",
+     "case": "T8",
+     "label": "INCORRECT",
+     "reason": "other role (upgrade-source version): the failure is patching from 15.020.20039 to the next build.",
+     "counts_toward_the_two": false
+    },
+    "second_blind": {
+     "by": "G55 blind adjudicator A (2026-11-19_g55-adobe-role-withdrawal/adjudication/LABELS_A.md; stored text only; no key, first audit, control rule or other labeler's output read)",
+     "case": "P05",
+     "label": "INCORRECT",
+     "reason_class": "version_named_but_working",
+     "reason": "15.020.20039 is the installed base version and is not described as malfunctioning; the failure is applying the next patch."
+    },
+    "third_blind": {
+     "by": "G55 blind adjudicator B (2026-11-19_g55-adobe-role-withdrawal/adjudication/LABELS_B.md; stored text only; no key, first audit, control rule or other labeler's output read)",
+     "case": "P05",
+     "label": "INCORRECT",
+     "reason_class": "version_named_but_working",
+     "reason": "15.020.20039 is the installed starting point; the failure belongs to the patch to the later version, and nothing reports 15.020.20039 itself as broken.",
+     "alternative_reason_class": "identity_not_the_subject"
+    }
+   },
+   "basis": "The report is about failing to patch FROM 15.020.20039 to a later build; 15.020.20039 is the installed version the update starts from and is not reported as having a problem."
+  },
+  {
+   "role": "withdraw",
+   "product_id": "adobe-premiere-pro",
+   "update_version": "26.2.2",
+   "target_build": "",
+   "id": "adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-27-fewer-audio-channels-error-when-relink",
+   "source_url": "https://community.adobe.com/bug-reports-728/premiere-pro-27-fewer-audio-channels-error-when-relinking-projects-from-version-26-2-2-workaround-found-1656474",
+   "record_file": "auxsays/updates/generated/2026-05-01-premiere-pro-26-2-2.md",
+   "block_sha256_before": "9ffefc5db640a698d70208aa76ba97442a6a995a82f442e3874b8314bdcfa5e6",
+   "exclusion_reason": "version_named_but_working",
+   "block_sha256_after": "b05be664d4099742d0ec62a58354bcca4640cbbd1228a81bf219ab3191574156",
+   "captured_at": "2026-11-16T22:40:44Z",
+   "case": "T7",
+   "adjudication": {
+    "first_audit": {
+     "by": "G51 corpus measurer (2026-11-19_g51-rollback-attribution/CORPUS.md)",
+     "case": "T7",
+     "label": "INCORRECT",
+     "reason": "other role (project-origin version): the client projects were created in 26.2.2; the failing version is 27.",
+     "counts_toward_the_two": false
+    },
+    "second_blind": {
+     "by": "G55 blind adjudicator A (2026-11-19_g55-adobe-role-withdrawal/adjudication/LABELS_A.md; stored text only; no key, first audit, control rule or other labeler's output read)",
+     "case": "P04",
+     "label": "INCORRECT",
+     "reason_class": "version_named_but_working",
+     "reason": "26.2.2 is only where the client projects came from; the error is tied to Premiere 27 (it worked in 26.5.3 and failed after upgrading to 27).",
+     "alternative_reason_class": "identity_not_the_subject"
+    },
+    "third_blind": {
+     "by": "G55 blind adjudicator B (2026-11-19_g55-adobe-role-withdrawal/adjudication/LABELS_B.md; stored text only; no key, first audit, control rule or other labeler's output read)",
+     "case": "P04",
+     "label": "INCORRECT",
+     "reason_class": "version_named_but_working",
+     "reason": "26.2.2 is only where the client projects were made; the error comes after upgrading to Premiere 27, so the problem is tied to 27, not to 26.2.2.",
+     "alternative_reason_class": "identity_not_the_subject"
+    }
+   },
+   "basis": "The report is about an error in Premiere Pro 27 when relinking projects that were created in 26.2.2; it says the workflow worked in 26.5.3 and failed after the upgrade to 27. 26.2.2 is the projects' origin, not the version with the problem."
+  }
+ ],
+ "held_out": [],
+ "must_stay_counted": [
+  {
+   "product_id": "adobe-acrobat-reader",
+   "update_version": "15.020.20039",
+   "target_build": "",
+   "id": "acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-624-adobe-acrobat-reader-dc-crash-on-launch-673695",
+   "source_url": "https://community.adobe.com/questions-624/adobe-acrobat-reader-dc-crash-on-launch-673695",
+   "packet_case": "P02",
+   "block_sha256": "db355d7fe28e843f7cb74c0aee7afb80227b32886d45c1adf358a88575578073"
+  },
+  {
+   "product_id": "adobe-premiere-pro",
+   "update_version": "26.2.2",
+   "target_build": "",
+   "id": "adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-pr-26-2-2-keyframe-handles-bug-1627000",
+   "source_url": "https://community.adobe.com/bug-reports-728/pr-26-2-2-keyframe-handles-bug-1627000",
+   "packet_case": "P08",
+   "block_sha256": "1f5da42c439d042dad16ecce69061b27d960fb189a90d543a0a111729c817847"
+  }
+ ],
+ "findings_not_withdrawn": [
+  {
+   "group": "control P01",
+   "page": "adobe-acrobat-reader|15.010.20056|",
+   "rows": [
+    {
+     "product_id": "adobe-acrobat-reader",
+     "update_version": "15.010.20056",
+     "target_build": "",
+     "id": "acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-installation-acrobat-dc-failed-on-el-capitan-10-11-3-5943",
+     "source_url": "https://community.adobe.com/questions-18/installation-acrobat-dc-failed-on-el-capitan-10-11-3-594365"
+    }
+   ],
+   "why": "A random counted control that both blind reviews labelled INCORRECT (identity_not_the_subject: an Acrobat DC installer failure that names no version). It was not a candidate, so it is reported for its own audited review and stays counted here."
+  }
+ ]
+}

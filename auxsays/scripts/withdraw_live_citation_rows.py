@@ -88,6 +88,24 @@ four surgical additions and no other change:
               manifest's declared scope, so a DaVinci manifest adds exactly davinci-updates.yml's own
               scoped promotion (`--product-id blackmagic-davinci`); nothing ever runs unscoped.
 
+ACROBAT READER AND PREMIERE PRO (AUX-111). A third scope, exactly (adobe-acrobat-reader,
+adobe-premiere-pro), for two rows a blind adjudication found counted against a version the report is
+not about. Widening the products is NOT a licence for the products, so the extension is closed three
+ways and adds no route around any check above:
+
+  identities  a product with a GRANT may be withdrawn only at the five-field identities its grant names
+              (PRODUCT_GRANTS), whatever scope a manifest declares; every other row of that product,
+              and every other Adobe product (Acrobat Pro, Photoshop, ...), refuses. Checked when the
+              manifest is read and again when the run is planned.
+  two blind   besides the two labels above, every granted row needs two blind INCORRECT labels
+              (second_blind, third_blind) from two different named reviewers, neither the first audit,
+              on one packet case, each with a reason, and the row's reason one that BOTH support.
+  writers     the reconcile scoped to the two products, then each product's own scoped promotion, the
+              same two steps obs-evidence-collection.yml runs for them.
+
+Both products have no build contract (target_build empty) and take the two-line edit; a block carrying a
+validity line refuses, as for DaVinci.
+
 Exit: 0 dry run, written, or nothing left to do; 1 refused (nothing written); 2 usage error;
 3 a scoped writer failed after the store step.
 """
@@ -122,9 +140,30 @@ BASELINE = SCRIPTS / "audit" / "live_citation_withdrawal_baseline_v2.json"
 
 OBS_PRODUCT_ID = "obs-studio"
 DAVINCI_PRODUCT_ID = "blackmagic-davinci"
+READER_PRODUCT_ID = "adobe-acrobat-reader"
+PREMIERE_PRODUCT_ID = "adobe-premiere-pro"
 PRODUCTS = (WINDOWS_PRODUCT_ID, OBS_PRODUCT_ID)  # AUX-088's scope; its two manifests pin it
 EXTENDED_PRODUCTS = PRODUCTS + (DAVINCI_PRODUCT_ID,)  # AUX-098
-SCOPES = {PRODUCTS: "Windows or OBS", EXTENDED_PRODUCTS: "Windows, OBS or DaVinci"}
+ADOBE_PRODUCTS = (READER_PRODUCT_ID, PREMIERE_PRODUCT_ID)  # AUX-111, bound to PRODUCT_GRANTS
+SCOPES = {PRODUCTS: "Windows or OBS", EXTENDED_PRODUCTS: "Windows, OBS or DaVinci",
+          ADOBE_PRODUCTS: "Acrobat Reader or Premiere Pro"}
+ALL_PRODUCTS = tuple(dict.fromkeys(product for scope in SCOPES for product in scope))
+# A product listed here may be withdrawn ONLY at these five-field identities (product_id, update_version,
+# target_build, id, source_url), under any scope: the rows AUX-111's blind adjudication found counted against
+# a version the report is not about. A new row needs its own audited grant here, not a wider manifest.
+PRODUCT_GRANTS: dict[str, frozenset[tuple[str, ...]]] = {
+    READER_PRODUCT_ID: frozenset({(
+        READER_PRODUCT_ID, "15.020.20039", "",
+        "acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-failed-to-patch-"
+        "from-15-020-20039-to-15-020-2042-1510656",
+        "https://community.adobe.com/questions-12/failed-to-patch-from-15-020-20039-to-15-020-2042-1510656")}),
+    PREMIERE_PRODUCT_ID: frozenset({(
+        PREMIERE_PRODUCT_ID, "26.2.2", "",
+        "adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-"
+        "pro-27-fewer-audio-channels-error-when-relink",
+        "https://community.adobe.com/bug-reports-728/premiere-pro-27-fewer-audio-channels-error-when-relinking-"
+        "projects-from-version-26-2-2-workaround-found-1656474")}),
+}
 SELECTOR = aux072.SELECTOR
 DUPLICATE_REASON = "duplicate_existing_evidence"
 REASONS = frozenset({aux072.REASON, DUPLICATE_REASON, "version_named_but_working",
@@ -132,7 +171,7 @@ REASONS = frozenset({aux072.REASON, DUPLICATE_REASON, "version_named_but_working
 INCORRECT = "INCORRECT"
 DUPLICATE_LABEL = "same_report_duplicate"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
-FRONT_RE = re.compile(r"^product_id:\s*['\"]?(" + "|".join(re.escape(p) for p in EXTENDED_PRODUCTS)
+FRONT_RE = re.compile(r"^product_id:\s*['\"]?(" + "|".join(re.escape(p) for p in ALL_PRODUCTS)
                       + r")['\"]?\s*$", re.M)
 # Source-native post ordinals, for a same-time capture only: (family, URL pattern, base of the id).
 ORDINAL_FAMILIES = (
@@ -217,12 +256,42 @@ def _two_labels(entry: dict[str, Any]) -> bool:
     return False
 
 
+def _supported(label: dict[str, Any]) -> set[str]:
+    """The closed reasons one blind label supports: its reason class and any stated alternative."""
+    return {str(label.get("reason_class") or "").strip(),
+            str(label.get("alternative_reason_class") or "").strip()} - {""}
+
+
+def _two_blind_labels(entry: dict[str, Any]) -> bool:
+    """AUX-111: two independently established INCORRECT determinations, the blind reviews second_blind and
+    third_blind -- two different named reviewers, neither the first audit, one packet case, each with a reason,
+    every reason they name in the closed set, and the row's reason one that BOTH support."""
+    adj = entry.get("adjudication") or {}
+    first, a, b = (adj.get(key) or {} for key in ("first_audit", "second_blind", "third_blind"))
+    first_by, a_by, b_by = (str(x.get("by") or "").strip() for x in (first, a, b))
+    return (a.get("label") == INCORRECT and b.get("label") == INCORRECT
+            and bool(a_by) and bool(b_by) and a_by != b_by and first_by not in (a_by, b_by)
+            and bool(str(a.get("case") or "").strip()) and a.get("case") == b.get("case")
+            and bool(str(a.get("reason") or "").strip()) and bool(str(b.get("reason") or "").strip())
+            and _supported(a) <= REASONS and _supported(b) <= REASONS
+            and entry.get("exclusion_reason") in (_supported(a) & _supported(b)))
+
+
+def _grant_refusal(ident: tuple[str, ...]) -> str:
+    """'' unless the row's product has a grant that does not name this exact five-field identity."""
+    grant = PRODUCT_GRANTS.get(ident[0])
+    if grant is not None and tuple(ident) not in grant:
+        return f"not an identity this tool grants for {ident[0]}: {ident}"
+    return ""
+
+
 def manifest_scope(doc: dict[str, Any]) -> tuple[str, ...]:
-    """The product scope the manifest declares: AUX-088's (Windows, OBS) or that plus DaVinci, exactly."""
+    """The product scope the manifest declares, exactly one of SCOPES: AUX-088's (Windows, OBS), that plus
+    DaVinci, or AUX-111's (Acrobat Reader, Premiere Pro)."""
     scope = tuple(doc.get("products") or ())
     if scope not in SCOPES:
         raise Refusal("manifest: the product scope differs from the tool's (Windows and OBS, or Windows, OBS "
-                      "and DaVinci)")
+                      "and DaVinci, or Acrobat Reader and Premiere Pro)")
     return scope
 
 
@@ -243,6 +312,9 @@ def manifest_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: PLR0
         product = ident[0]
         if product not in scope:
             raise Refusal(f"manifest: not a {SCOPES[scope]} row: {ident}")
+        granted = _grant_refusal(ident)
+        if granted:
+            raise Refusal("manifest: " + granted)
         required = [ident[i] for i in (0, 1, 3, 4)]
         if not all(required):
             raise Refusal(f"manifest: an entry lacks part of the five-field identity: {ident}")
@@ -269,6 +341,9 @@ def manifest_entries(doc: dict[str, Any]) -> list[dict[str, Any]]:  # noqa: PLR0
         if not _two_labels(entry) or not str(entry.get("basis") or "").strip():
             raise Refusal(f"manifest: row lacks two INCORRECT labels (or two same_report_duplicate labels from "
                           f"two reviewers naming its kept row) with reasons and a stated basis: {ident[3]}")
+        if product in PRODUCT_GRANTS and not _two_blind_labels(entry):
+            raise Refusal(f"manifest: a granted row lacks two blind INCORRECT labels from two different named "
+                          f"reviewers that both support its reason: {ident[3]}")
     referenced: set[tuple[str, ...]] = set()
     for entry in entries:
         if entry["role"] != "withdraw":
@@ -320,8 +395,9 @@ def _pin_holds(entry: dict[str, Any], key: str, digest: str, baseline: dict) -> 
 
 
 def patch_records(generated_dir: Path) -> dict[tuple[str, str, str], list[tuple[str, dict[str, Any]]]]:
-    """Canonical patch key -> [(file name, front matter)] for every Windows, OBS and DaVinci update record.
-    Only files whose front matter names one of the three products are parsed."""
+    """Canonical patch key -> [(file name, front matter)] for every update record of a product some scope
+    names (Windows, OBS, DaVinci, Acrobat Reader, Premiere Pro). Only files whose front matter names one of
+    those products are parsed."""
     out: dict[tuple[str, str, str], list[tuple[str, dict[str, Any]]]] = {}
     for path in sorted(Path(generated_dir).glob("*.md")):
         head = path.read_text(encoding="utf-8").split(EOL + "---", 1)[0]
@@ -409,9 +485,11 @@ def _duplicate_refusal(row: dict[str, Any], kept: dict[str, Any], entry: dict[st
 def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR0912, PLR0915
          baseline: dict | None = None, scope: tuple[str, ...] | None = None) -> dict[str, Any]:
     """Decide every entry and prove the resulting text, without writing. Raises Refusal.
-    `scope` is the manifest's declared product scope (AUX-088's when every entry is a Windows or OBS row)."""
+    `scope` is the manifest's declared product scope (when omitted: the first scope holding every entry's
+    product, so AUX-088's when every entry is a Windows or OBS row, and otherwise AUX-098's)."""
     if scope is None:
-        scope = PRODUCTS if all(e.get("product_id") in PRODUCTS for e in entries) else EXTENDED_PRODUCTS
+        products = {e.get("product_id") for e in entries}
+        scope = next((s for s in SCOPES if products <= set(s)), EXTENDED_PRODUCTS)
     blocks = aux072.store_blocks(text)
     by_identity: dict[tuple[str, ...], list[int]] = {}
     for index, (_lo, _hi, row) in enumerate(blocks):
@@ -424,6 +502,10 @@ def plan(text: str, entries: list[dict[str, Any]], records: dict,  # noqa: PLR09
     for entry in entries:
         ident = _ident(entry)
         label = f"{ident[0]} {ident[1]} {ident[2]} {ident[3]}".replace("  ", " ")
+        granted = _grant_refusal(ident)  # again here: a caller may plan entries the manifest reader never saw
+        if granted:
+            refusals.append(granted)
+            continue
         hits = by_identity.get(ident, [])
         if len(hits) != 1:
             refusals.append(f"{len(hits)} blocks match the five-field identity of {label}")

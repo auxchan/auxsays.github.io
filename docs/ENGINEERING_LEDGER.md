@@ -86,6 +86,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-090 | Resolved | Publication | Medium | Every OBS report on a patch page read "date not recorded", though each source states when it was posted |
 | AUX-098 | Resolved | Evidence integrity | Medium | Fourteen reports that one person had posted twice were each counted as two reports |
 | AUX-108 | Deferred | Evidence integrity | Medium | Five reports counted against a version they were not about: the build a device fell back to, the version an author upgraded from, a version only asked about (rows withdrawn; the attribution fix deferred behind named triggers) |
+| AUX-111 | Resolved | Evidence integrity | Medium | Two Adobe reports counted against a version they were not about: the Premiere Pro version a project was made in, the Acrobat Reader version an update started from |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
@@ -5412,9 +5413,8 @@ them. The data correction removes the five rows both reviews confirmed; the rema
 in the still-counted rows named under Current impact.
 
 **Current impact** Still counted: DaVinci 20.2.1 (held out) and the DaVinci 21.0.4 control, each awaiting its own
-audited review, and two measured rows of this class outside the withdrawal tool's product scope, Premiere Pro
-26.2.2 and Acrobat Reader 15.020.20039, taken up at the next Adobe audited withdrawal once that tool's scope
-widens to cover them. About a quarter of
+audited review. The two measured rows of this class that were outside the withdrawal tool's product scope, Premiere
+Pro 26.2.2 and Acrobat Reader 15.020.20039, are withdrawn under AUX-111. About a quarter of
 counted rows store too little text around the version to judge its role; that is an auditability gap, tracked by
 the version-centred evidence work, not proof of wrong counting.
 
@@ -5439,6 +5439,77 @@ the separate adjudication of the Acrobat Reader rows the role check refused.
 **Reopen only if** (the data correction) any of the five counts again; the held-out row or the control is withdrawn
 without two blind labels of its own; or the 21.1 report of the upgrade post, or the 26200.9168 report of the update
 failing to install, stops counting without its own audited withdrawal.
+
+---
+### AUX-111 — Two Adobe reports counted against a version they were not about: the Premiere Pro version a project was made in, the Acrobat Reader version an update started from
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-19 (the AUX-108 audit; outside that withdrawal's product scope) · **Resolved** 2026-11-19
+
+**Symptom** Two counted Adobe reports name the credited version only in a role other than "the version with the
+problem":
+- Premiere Pro 26.2.2: an error in Premiere Pro 27 when relinking client projects that were created in 26.2.2;
+  the author says the workflow worked in a later 26.x release and failed after the upgrade to 27.
+- Acrobat Reader 15.020.20039: a report of failing to patch from 15.020.20039 to a later build; 15.020.20039 is
+  where the update starts, not a version reported as broken.
+
+Each page counted one report more than it has. AUX-108 named both and could not take them up: the withdrawal
+tool's product scope covered only Windows, OBS and DaVinci.
+
+**Scope** Only these two rows, and only because two fresh blind adjudicators each labelled both incorrect for the
+credited version. Each adjudicator read only the stored text, in a shuffled packet with six counted controls drawn
+by a rule written down before the draw (three per product, including one on each row's own page that must stay
+counted). The brief named no row and stated no hypothesis. Both must-stay controls were labelled correct by both
+adjudicators and stay counted. One other control, an Acrobat Reader 15.010.20056 installer report that names no
+version, was labelled incorrect by both. It was not a candidate, so it is recorded in the manifest for its own
+review and stays counted. No acceptance rule, threshold or vocabulary changed.
+
+**Fix** `withdraw_live_citation_rows.py` (AUX-088) gains a third product scope, exactly (Acrobat Reader, Premiere
+Pro), closed so that widening the products does not open the products:
+- a per-product grant names the only identities of either product that may be withdrawn: these two, by full
+  five-field identity, under any scope;
+- the grant is checked when the manifest is read and again when the run is planned;
+- a granted row also needs two blind INCORRECT labels, checked in the tool itself, from two different named
+  adjudicators (neither the first audit) on one packet case, both supporting the row's reason;
+- every other Adobe product (Acrobat Pro, even for the same report on the same version, and Photoshop) and a scope
+  that adds, drops or reorders a product refuse;
+- `--regenerate` runs the reconcile scoped to the two products and each product's own scoped promotion, the same
+  steps the scheduled lane runs for them.
+
+The older scopes, their writers and their four manifests are unchanged and still accepted. A fifth pinned manifest,
+`scripts/audit/live_citation_withdrawal_v5.json`, withdraws the two rows. It records both blind labels, the first
+audit as provenance only, and the packet's file hashes. The rest is AUX-088's:
+- pinned block hashes;
+- a two-line edit per row: `counted: false` and `exclusion_reason: version_named_but_working`, the reason both
+  adjudicators support;
+- every row kept, all or nothing, idempotent.
+
+The two records were regenerated only by those scoped writers. A scheduled collector that sees either report again
+does not re-admit it, because both Adobe collectors persist through the store's append guard, which refuses a
+report the store already holds, counted or not.
+
+**Measured**
+- Store: 4 lines changed; every row kept, and no row starts counting. No evidence loss.
+- Counted rows: Acrobat Reader 168 -> 167, Premiere Pro 28 -> 27.
+- Pages: Acrobat Reader 15.020.20039 6 -> 5; Premiere Pro 26.2.2 19 -> 18.
+- Each record loses exactly its withdrawn source and gains one "User report count updated to N." event. One evidence
+  sample on the Reader page is replaced by the writer's own selection.
+- On Premiere Pro 26.2.2:
+  - the theme sentence's third theme changes, because the withdrawn report's theme leaves the top three;
+  - the newest accepted report is now the one captured on 2026-10-07, so the page states that date and its
+    staleness notice shows.
+- Unchanged: label (Negative), evidence strength (Low; Low-Medium), the decision (INSUFFICIENT DATA), maturity
+  (pilot) and the live set.
+- A second run changes nothing.
+- `test_withdraw_g55_adobe_role_rows.py` pins it with 42 checks, fixture counts only. It includes the scope guard:
+  an unrelated Adobe product, a changed scope, an unlisted identity of either product and a granted identity with
+  any one field changed are each refused by the manifest reader, which every run goes through, and the planner, on
+  its own, refuses an unlisted identity of either product under every scope. Each half of the guard has its own
+  mutant, and each mutant is killed by its own check.
+
+**Reopen only if** either row counts again; the Acrobat Reader 15.010.20056 control or either must-stay row stops
+counting without its own audited withdrawal; or a manifest withdraws an Acrobat Reader or Premiere Pro row that the
+tool's grant does not name.
 
 ---
 ### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks
