@@ -144,21 +144,14 @@ def search_stack_exchange(query: str) -> list[str]:
     return urls
 
 
-def search_github(query: str) -> list[str]:
-    """OfficeDev issues, via the GitHub search API."""
-    from . import github_officedev_source as gh  # noqa: PLC0415
-
-    _pace()
-    scoped = query if "repo:" in query else f"repo:{gh.REPO} {query}"
-    items, _telemetry = gh.collect_officedev_candidates(queries=[scoped], errors=[],
-                                                        max_requests=1)
-    return [str(item.get("source_url") or "") for item in items]
-
-
+# GitHub search is deliberately NOT a provider. It was one (`github_search`), and every URL it
+# returned was thrown away: hydrate_discovered_url has no GitHub branch, so each OfficeDev hit became
+# None. That was about 296 GitHub searches a run -- roughly 80% of all AUXSAYS GitHub search traffic --
+# for nothing, and it passed `errors=[]`, so a refusal was invisible. OfficeDev issues are collected by
+# their own lane (github_officedev_source, method github_officedev_issues), which reads them in full.
 PROVIDERS: tuple[tuple[str, Any], ...] = (
     ("learn_qna_search", search_learn_qna),
     ("stack_exchange_search", search_stack_exchange),
-    ("github_search", search_github),
 )
 
 
@@ -297,7 +290,7 @@ def discover_urls(queries: list[str], *, errors: list[dict[str, Any]],
                 telemetry["supported"] += 1
             # Every provider is asked every query. They are not fallbacks for one another --
             # they index DIFFERENT corpora, so stopping at the first that answers would silently
-            # drop Stack Exchange and GitHub whenever Learn happened to return something.
+            # drop Stack Exchange whenever Learn happened to return something.
     return list(found.values()), telemetry
 
 
