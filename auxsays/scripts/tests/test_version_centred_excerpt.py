@@ -236,7 +236,7 @@ def part_b() -> None:
     check("B6 Acrobat: leading whitespace in the candidate text is accounted for",
           V in srow["report_text_excerpt"] and srow["report_text_excerpt"] == row["report_text_excerpt"])
     t5 = dict(cand)
-    t5.pop(base.FIRST_POST_ONLY)
+    t5.pop(base.FIRST_POST_ONLY, None)
     check("B7 Acrobat: a candidate that is not one opening post (the /t5 thread page) keeps the head",
           acr_row(t5)["report_text_excerpt"] == base.excerpt(t5["report_text"]))
     check("B8 Acrobat: the Algolia builder marks its candidates as one opening post",
@@ -569,10 +569,21 @@ def part_h() -> None:
     check("H1 documented dependency: one post read through the head and through the window gives a different "
           "install-row outcome", a["ok"] != b["ok"] or a["codes"] != b["codes"], f"head={a} window={b}")
     check("H2 the activation switch is OFF", vrp.PUBLIC_AUTO_ACTIVATION is False)
-    src = (SCRIPTS / "lib" / "verdict_reason_producer.py").read_text(encoding="utf-8")
-    switch = src.split("PUBLIC_AUTO_ACTIVATION = False", 1)[0].rsplit("\n\n", 1)[-1]
-    check("H3 the switch's TEMPORARY note records the excerpt dependency (AUX-109) beside it",
-          "TEMPORARY" in switch and "AUX-109" in switch and "excerpt" in switch, switch[-300:])
+    # Scoped to the comment block DIRECTLY above the assignment (statement-scoped, not module-scoped),
+    # and to the sentences that carry the governance, not to words that occur anywhere near them.
+    lines = (SCRIPTS / "lib" / "verdict_reason_producer.py").read_text(encoding="utf-8").splitlines()
+    at = lines.index("PUBLIC_AUTO_ACTIVATION = False") if "PUBLIC_AUTO_ACTIVATION = False" in lines else -1
+    block: list[str] = []
+    i = at - 1
+    while at > 0 and i >= 0 and lines[i].startswith("#"):
+        block.insert(0, lines[i].lstrip("# ").rstrip())
+        i -= 1
+    note = " ".join(" ".join(block).split())
+    needed = ("THE ONE ACTIVATION SWITCH. TEMPORARY", "EXCERPT DEPENDENCY (AUX-109)",
+              "This producer reads `report_text_excerpt`",
+              "Turning this switch on therefore needs its own approval covering this dependency")
+    check("H3 the switch's TEMPORARY note records the excerpt dependency (AUX-109) directly above it",
+          at > 0 and all(s in note for s in needed), str([s for s in needed if s not in note]))
 
 
 def part_i() -> None:
