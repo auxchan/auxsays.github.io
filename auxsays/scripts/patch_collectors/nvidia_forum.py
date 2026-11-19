@@ -27,8 +27,10 @@ IDENTITY, IN ORDER (each refusal is stored as an excluded row with its reason, s
    family reports.
 3. Desktop only. Both products are desktop driver packages; a laptop or notebook report is
    `notebook_driver_not_tracked`, never merged into a desktop record. A first-person notebook ("my
-   laptop") is always the reporter's; only a notebook inside an other-machine phrase ("works on
-   another system with an RTX 4070 Laptop GPU") is someone else's.
+   laptop") is always the reporter's, and so is an unowned one ("another laptop", "a different
+   laptop", "other laptop users"). A notebook is someone else's only through a possessive owner ("a
+   friend's laptop", "her laptop") or inside an other-machine phrase's description ("works on
+   another system with an RTX 4070 Laptop GPU"). Anything else fails closed: a notebook report.
 4. The version must be the subject (GPT G44 s4). Named only on a specification line ("Driver:
    621.14", "NVIDIA Driver Version: 621.24", "Using latest drivers 621.14") it is environment, not
    attribution: `driver_version_environment_only`. Named in a sentence where the reporter says they
@@ -50,8 +52,10 @@ comment, so the same comment served again under another thread (a move or a merg
 second row.
 
 PUBLIC TEXT. Names (staff names, @mentions and the display names of every member in the same
-response), e-mail addresses are removed from every stored text, and links are replaced by a marker.
-Report titles are the thread's title.
+responses and the thread's listing entry), e-mail addresses are removed from every stored text, and
+links are replaced by a marker. Report titles are the thread's title through the same removal (the
+promotion copies them into the record); the raw title is read by thread qualification, the www path
+a call stands for and the presentation-only theme reading, never stored as a report title.
 """
 from __future__ import annotations
 
@@ -172,15 +176,24 @@ _NOTEBOOK_RE = re.compile(r"\b(?:laptops?|notebooks?|max-q|mobile\s+gpu)\b", re.
 # sentence says ("Like other users here, my laptop crashes ..."). "my wife's laptop" is not first
 # person: the possessive belongs to someone else.
 _OWN_NOTEBOOK_LEAD_RE = re.compile(r"\b(?:my|our)\s+(?:(?![\w.-]+'s\b)[\w.+-]+\s+){0,4}\Z", re.I)
-# A notebook named as SOMEONE ELSE's machine says nothing about the reporter's own install, in ONE
-# shape only: an other-machine phrase -- "another"/"a different"/"a friend's" qualifying a machine
-# noun -- whose own description holds the notebook mention ("works on another system with an RTX
-# 4070 Laptop GPU", comment 3633451; "a friend's laptop"). An "other" or "different" qualifying
-# anything else ("other users", "different games") is not that shape and turns nothing off.
-_OTHER_OWNER = (r"(?:another|other|second|different|friend'?s|wife'?s|husband'?s|partner'?s|brother'?s"
-                r"|sister'?s|son'?s|daughter'?s)")
+# A notebook named as SOMEONE ELSE's machine says nothing about the reporter's own install, in TWO
+# shapes only, and everything else fails closed (a notebook report, never counted for a desktop
+# record):
+#   1. the notebook word owned by another PERSON, through a possessive ("a friend's laptop", "my
+#      wife's laptop", "his/her laptop", "their laptop");
+#   2. an other-machine phrase -- "another"/"a different"/a possessive qualifying a machine noun --
+#      whose own description holds the notebook mention ("works on another system with an RTX 4070
+#      Laptop GPU", comment 3633451).
+# "another laptop", "a different laptop", "other laptop users" are NOT shape 1: nothing says whose
+# laptop it is, and it is usually the reporter's own ("Another laptop user here: since 621.14 ...").
+# An "other" or "different" qualifying anything else ("other users", "different games") is neither
+# shape and turns nothing off.
+_POSSESSIVE_OWNER = (r"(?:friend'?s|wife'?s|husband'?s|partner'?s|brother'?s|sister'?s|son'?s|daughter'?s"
+                     r"|his|her|their)")
+_OTHER_OWNER = rf"(?:another|other|second|different|{_POSSESSIVE_OWNER})"
 _MACHINE_NOUN = r"(?:systems?|pcs?|machines?|computers?|rigs?|devices?|builds?|laptops?|notebooks?)"
 _OTHER_MACHINE_RE = re.compile(rf"\b{_OTHER_OWNER}\s+{_MACHINE_NOUN}\b", re.I)
+_POSSESSIVE_PHRASE_RE = re.compile(rf"{_POSSESSIVE_OWNER}\s", re.I)
 # What may sit between that machine noun and the notebook mention: a short description of the
 # same machine, introduced as one ("with an RTX 4070", "running a", "that has the") and nothing
 # else -- "another PC but the laptop crashes" names two machines.
@@ -304,7 +317,11 @@ def _notebook_is_other_machine(text: str, sentence_start: int, start: int, end: 
     """Is this notebook mention inside an other-machine phrase of its own sentence?"""
     for phrase in _OTHER_MACHINE_RE.finditer(text, sentence_start, end):
         if phrase.start() <= start and phrase.end() >= end:
-            return True                     # "another laptop", "a friend's notebook"
+            # The notebook word IS the phrase's machine: someone else's only through a possessive
+            # owner ("a friend's notebook", "her laptop"); "another laptop" is the reporter's.
+            if _POSSESSIVE_PHRASE_RE.match(phrase.group(0)):
+                return True
+            continue
         if phrase.end() <= start and _MACHINE_DESCRIPTION_RE.match(text[phrase.end():start]):
             return True                     # "another system with an RTX 4070 Laptop GPU"
     return False
@@ -495,6 +512,12 @@ def evaluate_comment(product_id: str, record: base.PatchRecord, tracked_versions
                 reason = f"version_role_{contradiction.outcome}"
 
     title = str(thread.get("title") or "")
+    # The STORED title goes through the same name removal as the comment text (the promotion copies
+    # it into the record's source_title): a user topic's title can carry a member's @handle or display
+    # name. `names` are the forum members of the topic, its comments and its listing entry
+    # (_read_thread). The raw title stays the input of thread_profile and of the presentation-only
+    # theme reading below, so no decision reads the scrubbed text.
+    stored_title = clean_text(title, thread.get("names") or ())
     theme, area, platform, severity = classify(title, own)
     start, end = spans[0]
     provenance = base.match_provenance([("report_text", own)], start, end)
@@ -504,8 +527,8 @@ def evaluate_comment(product_id: str, record: base.PatchRecord, tracked_versions
         source_type=SOURCE_TYPE,
         source_name=SOURCE_NAME,
         source_url=str(item.get("url") or ""),
-        parent_title=title,
-        report_title=title,
+        parent_title=stored_title,
+        report_title=stored_title,
         report_text=own,
         captured_at=captured_at,
         # The comment's own creation time. lastActivityStamp and updatedStamp move with replies,
@@ -565,12 +588,13 @@ def _records() -> dict[str, list[base.PatchRecord]]:
 
 
 def _items_for(thread: dict[str, Any], topic: dict[str, Any], comments: list[dict[str, Any]],
-               community_id: int, community_slug: str) -> list[dict[str, Any]]:
+               community_id: int, community_slug: str, names: Iterable[str] | None = None) -> list[dict[str, Any]]:
     """Every user-authored, visible comment the default view shows, as candidates. Every forum
-    member named in the topic and comments responses is removed from each comment's text."""
+    member named in the topic and comments responses (and the listing entry: `names`, from
+    _read_thread) is removed from each comment's text."""
     topic_id = int(topic["id"])
     topic_slug = src.forum_slug(topic.get("title"))
-    names = display_names(topic, comments)
+    names = set(names) if names is not None else display_names(topic, comments)
     out: list[dict[str, Any]] = []
 
     def add(comment: dict[str, Any], own: str) -> None:
@@ -611,7 +635,9 @@ def _select_threads(listings: list[tuple[int, str, dict[str, Any]]], state: dict
         tid = int(topic["id"])
         known[tid] = {"topic_id": tid, "community_id": community_id, "community_slug": community_slug,
                       "title": title, "listed_activity": int(topic["lastActivityStamp"]),
-                      "created": int(topic.get("createdStamp") or 0), **profile}
+                      "created": int(topic.get("createdStamp") or 0),
+                      # Removed from the stored evidence title; never written to the state file.
+                      "listing_names": sorted(display_names(topic)), **profile}
     for tid_text, entry in (state.get("threads") or {}).items():
         tid = int(tid_text)
         profile = thread_profile(str(entry.get("title") or ""), bool(entry.get("staff")))
@@ -782,8 +808,13 @@ def _read_thread(transport: src.Transport, policies: dict[str, Any], thread: dic
              "window": window, "last_read_at": base.utc_now(),
              "first_read_at": stored.get("first_read_at") or base.utc_now(),
              "gap_reasons": gap, "coverage": coverage}
-    return dict(merged, outcome="read", items=_items_for(merged, topic, comments, community_id, community_slug),
-                gap=gap, coverage=coverage, state_entry=entry)
+    # Every forum member of the topic, its comments and its listing entry: removed from each
+    # comment's text (_items_for) and from the stored title (evaluate_comment), the same removal for
+    # both. Held for this cycle only, never written to the state file.
+    names = sorted(display_names(topic, comments) | set(thread.get("listing_names") or ()))
+    return dict(merged, outcome="read",
+                items=_items_for(merged, topic, comments, community_id, community_slug, names),
+                gap=gap, coverage=coverage, state_entry=entry, names=names)
 
 
 # --- health ---------------------------------------------------------------------------------------------

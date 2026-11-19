@@ -3761,14 +3761,15 @@ defect of 621.14/621.24 was reported on the NVIDIA GeForce forum about 9 days be
   quotes removed). Family from a staff feedback thread whose title names exactly one version and one
   family, for that version only, or from the reporter naming it; the other family named vetoes; with
   no family the row is stored `driver_family_unassigned` for both and counted for neither (the
-  shared-component case). Notebook reports (first person always; another machine's only inside an
-  other-machine phrase), versions on a specification line only, disclaimed attribution, module crashes
+  shared-component case). Notebook reports (first person always, and "another laptop" too; another
+  person's only through a possessive owner, "a friend's laptop", or inside an other-machine phrase's
+  description), versions on a specification line only, disclaimed attribution, module crashes
   without regression evidence for the record's own version (dated to it or contrasted with a working
   version, and not begun on or persisting on another) and fine-only posts are excluded with their
   reasons. Then `base.apply_acceptance_gates` and `lib.target_outcome` unchanged; the date is the
   comment's own creation time; the URL is the forum's own link to that comment; the row is keyed on the
-  comment (a comment moved to another thread is never a second row); members' display names are removed
-  from stored text.
+  comment (a comment moved to another thread is never a second row); members' @handles and display
+  names are removed from stored text and from the stored thread titles the promotion copies.
 - **Coverage gaps** (GPT G47 s2): each read thread's last window (comment ids and creation times) is
   kept; no overlap with the previous newest gone, a boundary tie, a comment appearing inside the span
   already read, or more new comments than the window shows reports `partial` /

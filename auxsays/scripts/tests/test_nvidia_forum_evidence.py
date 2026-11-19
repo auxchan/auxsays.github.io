@@ -33,6 +33,9 @@ WHAT THIS PROVES, IN ORDER.
      the forum's own link to the one comment; the date is the comment's own creation time.
   M  One comment served under two threads (a moderator's move) is stored once, under the thread it
      was first seen in; members addressed by plain name are not stored.
+  T  A user topic whose title carries a member's @handle and display names: the stored titles (which
+     the promotion copies into the record) go through the same name removal as the comment text, and
+     no decision moves.
 
 Offline and deterministic: every socket is refused for the whole run. Run:
     PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_nvidia_forum_evidence.py
@@ -322,6 +325,8 @@ def section_fixture() -> dict:
     check("F10 Game Ready 621.14 counts exactly its 7 recorded reports",
           {c for p, v, c in counted if p == GRD and v == "621.14"}
           == {3633489, 3633451, 3633448, 3633356, 3633066, 3633062, 3633052})
+    check("F10b comment 3633451 ('works on another system with an RTX 4070 Laptop GPU') still counts for Game Ready",
+          got.get((GRD, "621.14", 3633451)) == "COUNT", str(got.get((GRD, "621.14", 3633451))))
     check("F11 Game Ready 621.24 counts exactly its 2 recorded reports",
           {c for p, v, c in counted if p == GRD and v == "621.24"} == {3634576, 3634403})
     check("F11b a module crash dated to another version (621.01) and still seen on 617.42 is investigated",
@@ -441,6 +446,19 @@ def section_identity() -> None:
     check("I18f another machine named earlier in the sentence does not make a LATER laptop someone else's",
           decide("Since updating to 621.14 it works on another PC but the laptop crashes in every game.")
           == "notebook_driver_not_tracked")
+    unowned = ("Another laptop user here: since 621.14 every game crashes on launch.",
+               "Another laptop owner with the same problem, 621.14 crashes in every game.",
+               "Same here on a different laptop, 621.14 crashes in every game since updating.",
+               "Like other laptop users, since 621.14 every game crashes on launch.")
+    check("I18g 'another laptop', 'a different laptop', 'other laptop users' say nothing of whose laptop: "
+          "the reporter's notebook, never the desktop record",
+          all(decide(t) == "notebook_driver_not_tracked" for t in unowned), str([decide(t) for t in unowned]))
+    owned = ("Since updating to 621.14 my desktop games crash. My friend's laptop is fine.",
+             "Since updating to 621.14 my desktop games crash. His laptop is fine.",
+             "Since updating to 621.14 my desktop games crash. Her laptop is fine.",
+             "Since updating to 621.14 my desktop games crash. Their laptop is fine.")
+    check("I18h ...a laptop is another person's only through a possessive owner (friend's, his, her, their)",
+          all(decide(t) == "COUNT" for t in owned), str([decide(t) for t in owned]))
     check("I19 a version only on a specification line is environment",
           decide("GPU: RTX 4090\nDriver: 621.14\nGame crashes after the new season patch.")
           == "driver_version_environment_only")
@@ -1117,6 +1135,71 @@ def section_moved_comment() -> None:
           str(grd.get("report_text_excerpt")))
 
 
+# ------------------------------------------------------------------------------------------------
+def section_title_names() -> None:
+    print("\n[T] a user topic's title naming members: stored through the same name removal as comment text")
+    created = 1794600000                                    # 2026-11-13, after both releases
+    handle, poster, listed = "@Zorbix_Handle9", "Quillan_Fenwick5", "Ostrava_Listed2"
+    plain = fixture("topic_592907.json")["data"]["topic"]["title"]
+    named = f"{handle} and {poster} ({listed}): {plain}"
+    # The poster's display name is in the topic response; the other name only in the listing entry.
+    listing = copy.deepcopy(fixture("community13_topics.json"))
+    for entry in listing["data"]["topics"]:
+        if entry["id"] == 592907:
+            entry["title"] = named
+            entry["lastComment"] = dict(entry.get("lastComment") or {}, user={
+                "id": "9101", "displayName": listed, "aclactions": {"officialreply": False}})
+    topic = copy.deepcopy(fixture("topic_592907.json"))
+    topic["data"]["topic"]["title"] = named
+    topic["data"]["topic"]["user"] = dict(topic["data"]["topic"]["user"], displayName=poster)
+    report = {"id": 3640101, "createdStamp": created, "updatedStamp": created, "lastActivityStamp": created,
+              "isVisible": 1, "isGhosted": 0, "status": "default", "replyCount": 0, "isOfficialReply": 0,
+              "topic": {"id": 592907}, "comments": [],
+              "user": {"id": "9102", "displayName": "Reporter_Delta6", "aclactions": {"officialreply": False}},
+              "body": "Game Ready 621.24 crashes in every game since updating."}
+    comments = copy.deepcopy(fixture("comments_592907.json"))
+    comments["data"]["comments"] = [report] + comments["data"]["comments"]
+    comments["pagination"]["_totalRows"] += 1
+    with_comment = {(API, "/forums-api/1.0/topics/comments", "592907"): lambda url: _respond(200, comments)}
+    with_names = {**with_comment,
+                  (API, "/forums-api/1.0/communities/topics", "13"): lambda url: _respond(200, listing),
+                  (API, "/forums-api/1.0/topics", "592907"): lambda url: _respond(200, topic)}
+    with wire(with_comment) as (_fake, _p, _s):
+        run_both()
+        plain_decisions = decisions()
+    with tempfile.TemporaryDirectory() as tmp:
+        store = Path(tmp) / "consensus_evidence.yml"
+        store.write_text(yaml.safe_dump({"schema_version": 1, "evidence": []}), encoding="utf-8")
+        real_append = base.append_evidence_rows
+
+        def append(rows, path=None, **kw):
+            return real_append(rows, store, **kw)
+        quiet = [(base, "append_evidence_rows", append), (nf, "apply_consensus_writebacks", lambda pid, vs: {})]
+        with wire(with_names) as (_fake, _p, _s):
+            with patched(quiet):
+                run_both(write=True)
+                named_decisions = decisions()
+                stored = base.load_evidence(store)
+    rows = [r for r in stored if "/592907/" in str(r.get("source_url") or "")]
+    expected = f"@user and [name] ([name]): {plain}"
+    check("P1c the stored report_title and parent_title of every row from that topic carry no @handle or name",
+          rows and all(r.get("report_title") == r.get("parent_title") == expected for r in rows),
+          str(sorted({(r.get("report_title"), r.get("parent_title")) for r in rows}))[:300])
+    counted = [r for r in rows if r.get("counted")]
+    texts = " ".join(str(r.get(f) or "") for r in rows
+                     for f in ("report_text_excerpt", "matched_context", "report_title", "parent_title"))
+    check("P1d ...the counted row the promotion copies carries the scrubbed title, and no stored text names them",
+          [r["source_url"].rsplit("=", 1)[1] for r in counted] == ["3640101"]
+          and counted[0]["report_title"] == expected
+          and not any(n.lower() in texts.lower() for n in ("Zorbix_Handle9", poster, listed, "Reporter_Delta6")),
+          str([(r.get("source_url", "")[-16:], r.get("report_title")) for r in counted]))
+    topic_ids = {r["source_url"].rsplit("=", 1)[1] for r in rows}
+    moved = {k: (plain_decisions.get(k), v) for k, v in named_decisions.items()
+             if str(k[2]) in topic_ids and plain_decisions.get(k) != v}
+    check("P1e no decision reads the stored title: the same comments decide the same with and without the names",
+          rows and not moved and len([k for k in named_decisions if str(k[2]) in topic_ids]) == len(rows), str(moved))
+
+
 def run() -> int:
     print("=" * 74)
     print("NVIDIA GeForce forum evidence (default views, both driver families)")
@@ -1127,6 +1210,7 @@ def run() -> int:
     section_stops()
     section_wiring(results)
     section_moved_comment()
+    section_title_names()
     check("Z no socket was opened by the whole suite", _REFUSED[0] == 0, str(_REFUSED[0]))
     print()
     print("=" * 74)
