@@ -6450,9 +6450,12 @@ head already shows the occurrence. `base.first_post_excerpt_span` supplies the s
 - the head shows no accepted spelling of the version.
 
 The retired /t5 whole-thread path, the Premiere page scrapes, Reddit and every other collector keep the
-head. A window never reaches into a greeting and its name, an @handle and its display name, an e-mail
-address, a sign-off, a dash signature or (unless the version is there) the post's last 60 characters.
-These rules only shrink a window.
+head. A window is kept out of a greeting and its name, an @handle and its display name, an e-mail
+address, a recognised sign-off (the listed closing words), a dash signature of the form "-- Name" or
+"- First Last" at the post's end, and (unless the version is there) the post's last 60 characters.
+These rules only shrink a window, and they are not exhaustive: an unlisted or abbreviated sign-off
+mid-post, a signature longer than 60 characters, or a name inside the version's own sentence can still
+appear in a window.
 
 **Unchanged.** Acceptance: every gate reads the full in-memory text. Counts, labels, summaries, verdicts
 and maturity: replayed on a throwaway store, head versus window. Stored rows: append never rewrites one,
