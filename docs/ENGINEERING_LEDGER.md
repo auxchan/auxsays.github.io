@@ -45,6 +45,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-027 | Resolved | Evidence integrity | High | A collector dispatch used as a telemetry migration moved evidence, and "Acrobat DC Pro" was not Pro |
 | AUX-040 | Resolved | Build reproducibility | High | The deployed gem set was whatever rubygems served that minute — now a tracked, frozen lock |
 | AUX-028 | Resolved | Evidence coverage | Medium | OBS had one source family and a reserved slot that discovered nothing — the official forum is now the second |
+| AUX-107 | Resolved | Community evidence | Medium | GitHub collectors kept asking after GitHub refused, searched for URLs they threw away, and republished contributor handles |
 | AUX-100 | Resolved | Collector telemetry | High | One forum post holding only a video made every OBS forum health row partial, and the newest release was the one the budget never reached |
 | AUX-101 | Resolved | Publication | Medium | Search signals contradicted the page: entity-escaped JSON-LD, a noindex field nothing rendered, a mojibake title, phone cards wider than the screen |
 | AUX-048 | Resolved | Security | High | A page on the public domain asked visitors for a repository-write token |
@@ -2298,6 +2299,51 @@ refusal into QA and the writer, if a stored title or description holding literal
 escape_once writes (for example `&#38;`) blocks a deploy; and if a `robots:` policy is ever set through
 `_config.yml` defaults or on a post without a permalink, because the gate reads page front matter only.
 
+### AUX-107 — GitHub collectors kept asking after GitHub refused, searched for URLs they threw away, and republished contributor handles
+
+- **Status** Resolved · **Area** Community evidence · **Severity** Medium
+- **First seen** 2026-11-19 · **Resolved** 2026-11-19 (fix pending its first scheduled collection run)
+
+**What** The G48 review of GitHub's terms and API guidance against our GitHub collectors found: four separate
+transports to api.github.com, one unpaced (OBS) and one browser-shaped (`lib/http.py`, GitHub Releases); after
+a 403 or 429 the PowerPoint lane moved to its next query and OBS to its next version, and nothing read
+`retry-after` or `x-ratelimit-reset`; the open-web federation sent about 296 GitHub searches a run (about 80%
+of all our GitHub search traffic) whose every URL hydration discarded, with `errors=[]`; OBS spent a search on
+an empty second page per version; the PowerPoint candidate read the issue author's login and id; and 43
+ComfyUI records republished contributor `@handles` from GitHub release notes.
+
+**Repair**
+- `lib/github_api.py` is the one transport (OBS, OfficeDev, ComfyUI, GitHub Releases): truthful User-Agent,
+  `api.github.com` only, serial 2.1 s pacing, Link-header pagination. `rate_limited` (429; 403 with
+  remaining 0, `retry-after` or a rate-limit body), `access_denied` (401; a credential 403) and `http_403_error`
+  are told apart; the first stops every GitHub request for the rest of the process and the retry time GitHub
+  named (at least 60 s) goes into the health note. All three read `blocked`; a walk cut short reads `partial`.
+- OBS keeps its per-issue GET (the search index can lag an edit the role rules read), now paced; a refusal
+  aborts that version instead of evaluating a cut-short set. The PowerPoint symptom route's errors now reach
+  every record that reuses it.
+- `github_search` left `open_web_source.PROVIDERS`; `OPEN_WEB_MAX_REQUESTS` 24 -> 16 keeps Learn and Stack
+  Exchange at the same 8 queries. Registry entry `open_web_provider_issue_tracker_search` is `historical`.
+- `lib/contributor_credits.py` drops "by @name" credit fragments and "New Contributors" handle lines at ingest;
+  `migrate_strip_release_note_handles.py` (zero-network, idempotent) applied it to the 43 stored records.
+- A "Community sources" paragraph on `/privacy/`.
+
+**Evidence invariance** No evidence store changed. Replaying the stored corpus through the projection builders
+before and after gives identical outputs; a whole-tree hash shows the migration changed exactly the 43 ComfyUI
+records, and only their `official_patch_notes_body` and `release_summary`. `test_github_api_transport.py`
+(new) drives every caller over a fake wire.
+
+**Not done** The site publishes no contact channel, so the removal paragraph names none (owner decision).
+ComfyUI evidence-text minimisation is deferred (G1). GitHub changelog records keep the handles GitHub itself
+thanks in its posts. The earlier text stays in the public git history. A stop is per process, so the
+PowerPoint job, a separate process after OBS and ComfyUI, starts unstopped. Two tools no schedule runs keep
+their own GitHub requests: `revalidate_consensus_evidence.py --live-fetch` (dispatch only) and the one-off
+`fill_obs_report_dates.py`. Conditional requests (ETag) were not added: a run keeps no cache to send them from.
+
+**Reopen only if** a scheduled lane sends a request to api.github.com that bypasses `lib/github_api.get_json`; a request is sent
+after a refusal in the same process; a refused or cut-short GitHub collection reads `success` or `no_results`;
+`open_web_source.PROVIDERS` regains a GitHub provider; or a stored GitHub release record carries a
+"by @name" credit or a "New Contributors" handle line again.
+
 ### AUX-102 — The catalog said 30 products were monitored that no lane monitored, and nothing reported the gap
 
 - **Status** Resolved · **Area** Coverage governance · **Severity** High
@@ -3931,6 +3977,8 @@ entry per driver family, each with that family's own observed 621.14 and 621.24 
 assessment reports them as missing until the first scheduled run publishes them, and asks for each entry
 to be removed once that family's lane operates. The NVIDIA company summary no longer lists NVIDIA App,
 which neither product covers.
+
+Debt retired 2026-11-19: run 44502299432 (f5bd8e66) published both families' 621.14 and 621.24, so both entries were removed (D11 pins it).
 
 `lib/nvidia_driver_identity.report_family` is the attribution rule any future NVIDIA user-report
 path must use: a report naming only a version belongs to a family only inside that family's own

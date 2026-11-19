@@ -20,6 +20,7 @@ import re
 from typing import Any
 
 import collect_obs_reports as legacy_obs
+from lib import github_api
 
 from .base import CollectorContext, ProductCollector, load_method_health, method_health_row, utc_now
 from . import obs_forum_source as forum
@@ -171,7 +172,10 @@ def github_health(collector_status: int, result: dict[str, Any]) -> tuple[str, s
     """
     failed = collector_status != 0 or result.get("github_status") == "failed"
     if failed:
-        return "broken", str(result.get("github_error") or result.get("error") or "")
+        reason = str(result.get("github_error") or result.get("error") or "")
+        # GitHub refused (rate limit, access denial, other 403) and the transport stopped the run:
+        # the source is refusing us, which is `blocked`, not a defect of ours.
+        return ("blocked" if github_api.is_stop(reason) else "broken"), reason
     if int(result.get("github_accepted_count") or 0) > 0:
         return "success", ""
     return "no_results", ""
@@ -311,7 +315,8 @@ class ObsCollector(ProductCollector):
                     duplicate_existing_evidence=max(0, github_accepted - github_added),
                     blocked_reason=github_reason,
                     last_run=last_run,
-                    notes="obsproject/obs-studio GitHub Issues, exact version matching.",
+                    notes="obsproject/obs-studio GitHub Issues, exact version matching."
+                          + (f" {github_api.stop_note()}" if github_status == "blocked" else ""),
                 ),
                 method_health_row(
                     product_id=self.product_id,

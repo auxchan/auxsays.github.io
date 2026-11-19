@@ -164,7 +164,7 @@ The web AUXSAYS reads from will keep changing underneath it. The concrete change
 | feed removed | `rss_feed_poll`, `rss_search` | `html_link_enumeration`, `sitemap_walk` |
 | search index degrades or stops covering a corpus | `rss_search`, `open_web_search_api` | `paginated_listing_enumeration`, `sitemap_walk` — enumeration is bounded by *where*, not *what you ask* |
 | bot/CDN policy tightens | any direct fetch | `capability_probe` first; if it is reputation-based, there is no request shape that fixes it |
-| API authentication becomes mandatory | public API methods | none — only `api.github.com` may ever receive a credential, and that is an origin-scoped allowance in `lib/http.py`, not a general capability |
+| API authentication becomes mandatory | public API methods | none — only `api.github.com` may ever receive a credential, and that is an origin-scoped allowance in `lib/http.py` and `lib/github_api.py`, not a general capability |
 | pagination becomes infinite scroll | `paginated_listing_enumeration` | `json_api_listing` against whatever endpoint the scroll calls |
 | schema drift | any parser | the method's own `broken` health status — *not* `no_results` |
 

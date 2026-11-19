@@ -108,6 +108,11 @@ auxsays/scripts/tests/test_guarded_merge.py = 82
 auxsays/scripts/tests/test_powerpoint_same_author_context.py = 18
 auxsays/scripts/tests/test_powerpoint_github_officedev.py = 22
 auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
+# The one GitHub API transport (AUX-107): every caller over a fake wire -- refusals told apart, Retry-After
+# and x-ratelimit-reset honoured, no request after a refusal, blocked/partial never success, Link
+# pagination, truthful User-Agent; the open-web GitHub provider gone with nothing depending on it; and
+# contributor handles out of GitHub release notes, adapter and stored corpus agreeing byte for byte.
+auxsays/scripts/tests/test_github_api_transport.py = 109
 auxsays/scripts/tests/test_powerpoint_qna_tag_enumeration.py = 65
 auxsays/scripts/tests/test_acrobat_tiering.py = 136
 
@@ -654,7 +659,7 @@ auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
 # is), the deploy check on seeded contradictions (and on vendor record titles, which must never block),
 # real Liquid renders of the product, company and latest-signals templates, and the daily assessment's
 # flags, missing-capability reasons, detection latency and no-false-alarm cases.
-auxsays/scripts/tests/test_coverage_governance.py = 100
+auxsays/scripts/tests/test_coverage_governance.py = 101
 
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --

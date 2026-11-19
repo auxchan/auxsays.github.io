@@ -494,8 +494,10 @@ def run() -> int:
     for forbidden in ("duckduckgo", "mojeek", "marginalia", "brave", "startpage", "google", "bing"):
         check(f"J.1 no general web index is a production provider: {forbidden}",
               not any(forbidden in name for name in provider_names), str(provider_names))
+    # GitHub search left the federation in G49: every URL it returned was discarded, because
+    # hydration has no GitHub branch. OfficeDev issues have their own lane.
     check("J.2 the providers are endpoints this repo already queries in production",
-          set(provider_names) == {"learn_qna_search", "stack_exchange_search", "github_search"},
+          set(provider_names) == {"learn_qna_search", "stack_exchange_search"},
           str(provider_names))
     source = (ROOT / "scripts" / "patch_collectors" / "open_web_source.py").read_text(encoding="utf-8")
     check("J.3 the reason each index was rejected is recorded, not just the decision",
