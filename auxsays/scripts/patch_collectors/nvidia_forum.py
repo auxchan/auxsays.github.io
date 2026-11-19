@@ -182,9 +182,10 @@ _OTHER_OWNER = (r"(?:another|other|second|different|friend'?s|wife'?s|husband'?s
 _MACHINE_NOUN = r"(?:systems?|pcs?|machines?|computers?|rigs?|devices?|builds?|laptops?|notebooks?)"
 _OTHER_MACHINE_RE = re.compile(rf"\b{_OTHER_OWNER}\s+{_MACHINE_NOUN}\b", re.I)
 # What may sit between that machine noun and the notebook mention: a short description of the
-# same machine ("with an RTX 4070", "running a", "that has the") and nothing else.
+# same machine, introduced as one ("with an RTX 4070", "running a", "that has the") and nothing
+# else -- "another PC but the laptop crashes" names two machines.
 _MACHINE_DESCRIPTION_RE = re.compile(
-    r"\A\s+(?:(?:with|using|running|that\s+has|which\s+has|having)\s+)?(?:an?\s+|the\s+)?"
+    r"\A\s+(?:with|using|running|that\s+has|which\s+has|having)\s+(?:an?\s+|the\s+)?"
     r"(?:[\w+-]+\s+){0,4}\Z", re.I)
 
 # A specification line names a version as environment: a short label (driver, driver version, ver.)

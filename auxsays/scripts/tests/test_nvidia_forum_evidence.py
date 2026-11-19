@@ -438,6 +438,9 @@ def section_identity() -> None:
     check("I18e ...an unqualified 'the laptop' is a notebook report; someone else's ('my wife's laptop') is not",
           decide("Different games crash on the laptop since updating to 621.14.") == "notebook_driver_not_tracked"
           and decide("Since updating to 621.14 my desktop games crash. My wife's laptop is fine.") == "COUNT")
+    check("I18f another machine named earlier in the sentence does not make a LATER laptop someone else's",
+          decide("Since updating to 621.14 it works on another PC but the laptop crashes in every game.")
+          == "notebook_driver_not_tracked")
     check("I19 a version only on a specification line is environment",
           decide("GPU: RTX 4090\nDriver: 621.14\nGame crashes after the new season patch.")
           == "driver_version_environment_only")
@@ -469,6 +472,9 @@ def section_identity() -> None:
           decide("nvlddmkm.sys TDR crash on 621.14. Rolled back to 610.88 but it still crashes.")
           == "driver_module_crash_without_regression_evidence"
           and decide("nvlddmkm.sys TDR crash on 621.14. Rolled back to 610.88, still not working.")
+          == "driver_module_crash_without_regression_evidence")
+    check("I24e dated to this version, but a rollback with the same crash says it is not release-specific",
+          decide("nvlddmkm TDR crashes since updating to 621.14. Rolled back to the previous driver, same crash.")
           == "driver_module_crash_without_regression_evidence")
     check("I25b dating the crash to THIS version is evidence ('since updating from 617.42 to 621.14', 'new in')",
           decide("Since updating from 617.42 to 621.14 I get nvlddmkm TDR crashes.") == "COUNT"
