@@ -334,6 +334,15 @@ def section_fixture() -> dict:
           not [k for k in counted if k[0] == NSD])
     check("F19 the staff posts (release notes, staff replies) are never candidates",
           not any(c in (3632042, 3634302, 3634218) for _p, _v, c in got))
+    # None of the captured staff replies names a version, so pin the rule on one that does.
+    staff_topic = copy.deepcopy(fixture("topic_592433.json")["data"]["topic"])
+    staff_reply = {"id": 9, "createdStamp": 1794154118, "body": "Driver 621.14 crashes are being investigated.",
+                   "user": {"id": "1", "aclactions": {"officialreply": True}}, "isOfficialReply": 1, "comments": []}
+    user_reply = dict(staff_reply, id=10, user={"id": "2", "aclactions": {"officialreply": False}}, isOfficialReply=0)
+    items = nf._items_for(dict(nf.thread_profile(staff_topic["title"], True), title=staff_topic["title"]),
+                          staff_topic, [staff_reply, user_reply], 13, "game-ready-drivers")
+    check("F19b a staff comment naming the version is still not a candidate; the same text by a user is",
+          [i["comment_id"] for i in items] == [10], str([i["comment_id"] for i in items]))
     health = {(pid, r["version"]): r["method_health"][0] for pid, res in results.items() for r in res}
     check("F20 one canonical health row per record per family",
           len(health) == 4 and all(h["status"] in HEALTH_STATUSES for h in health.values())
@@ -646,7 +655,11 @@ def section_stops() -> None:
     }
     for label, override in schema_breaks.items():
         with wire(override) as (fake, _p, _s):
-            res = run_both(write=False)
+            try:
+                res = run_both(write=False)
+            except Exception as exc:  # noqa: BLE001 -- a crash is not the fail-closed stop
+                res = {"crash": [{"accepted_count": 0, "rejected_count": 0,
+                                  "method_health": [{"status": "crashed", "blocked_reason": repr(exc)[:80]}]}]}
         statuses = {r["method_health"][0]["status"] for rr in res.values() for r in rr}
         reasons = {r["method_health"][0]["blocked_reason"] for rr in res.values() for r in rr}
         rows = sum(r["accepted_count"] + r["rejected_count"] for rr in res.values() for r in rr)
@@ -818,6 +831,30 @@ def section_wiring(fixture_results: dict) -> None:
                 second = run_both(write=True)
                 stored_again = base.load_evidence(store)
                 n_second = len(fake.seen)
+        # A third cycle where the 621.14 thread gained ONE comment, which identity excludes
+        # (environment only): the accepted rows are all already held, the only new row is excluded.
+        topic3 = copy.deepcopy(fixture("topic_592433.json"))
+        topic3["data"]["topic"]["lastComment"]["id"] = 3639999
+        topic3["data"]["topic"]["lastActivityStamp"] = 1795300000
+        comments3 = copy.deepcopy(fixture("comments_592433.json"))
+        newcomer = dict(copy.deepcopy(comments3["data"]["comments"][0]), id=3639999, createdStamp=1795290000,
+                        comments=[], replyCount=0,
+                        body="GPU: RTX 4080\nDriver: 621.14\nMy shooter stutters since its own season patch.")
+        comments3["data"]["comments"] = [newcomer] + comments3["data"]["comments"][:24]
+        comments3["pagination"]["_totalRows"] += 1
+        age_state(state_path)
+        with wire({(API, "/forums-api/1.0/topics", "592433"): lambda url: _respond(200, topic3),
+                   (API, "/forums-api/1.0/topics/comments", "592433"): lambda url: _respond(200, comments3)},
+                  state_path=state_path) as (fake, _p, _s):
+            with patched([(base, "append_evidence_rows", append),
+                          (nf, "apply_consensus_writebacks", lambda pid, vs: {v: True for v in vs})]):
+                third = run_both(write=True)
+                stored_third = base.load_evidence(store)
+        h3 = next(r for r in third[GRD] if r["version"] == "621.14")["method_health"][0]
+        check("W18b a new EXCLUDED row is stored, never credited as a report this method added",
+              len(stored_third) == len(stored) + 2 and h3["evidence_rows_added"] == 0
+              and h3["duplicate_existing_evidence"] == h3["accepted_reports"] == 6
+              and h3["status"] == "success", f"{len(stored)}->{len(stored_third)} {h3}")
         counted = [r for r in stored if r["counted"]]
         check("W13 the first write stores every candidate: 10 counted, every excluded row with its reason",
               len(counted) == 10 and all(r.get("exclusion_reason") for r in stored if not r["counted"]),
