@@ -18,8 +18,8 @@ update_version: Connect Supabase, Box, Calendly, and more to Copilot
 update_logo_text: GIT
 update_published_at: '2026-11-18T22:04:50Z'
 update_last_checked: '2026-11-18T23:00:45Z'
-source_last_checked: '2026-11-19T10:06:11Z'
-official_body_last_checked: '2026-11-19T10:06:11Z'
+source_last_checked: '2026-11-19T23:18:32Z'
+official_body_last_checked: '2026-11-19T23:18:32Z'
 record_last_updated: '2026-11-19T10:06:11Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -92,6 +92,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-11-19T10:06:11Z'
+  url: https://github.blog/changelog/2026-11-18-connect-supabase-box-calendly-and-more-to-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-19T23:18:32Z'
   url: https://github.blog/changelog/2026-11-18-connect-supabase-box-calendly-and-more-to-copilot
   status: captured-from-rss-feed
   body_captured: true
