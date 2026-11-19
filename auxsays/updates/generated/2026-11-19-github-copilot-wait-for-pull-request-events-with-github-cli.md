@@ -17,8 +17,8 @@ update_version: Wait for pull request events with GitHub CLI
 update_logo_text: GIT
 update_published_at: '2026-11-19T00:00:13Z'
 update_last_checked: '2026-11-19T10:06:11Z'
-source_last_checked: '2026-11-19T10:06:11Z'
-official_body_last_checked: '2026-11-19T10:06:11Z'
+source_last_checked: '2026-11-19T23:18:32Z'
+official_body_last_checked: '2026-11-19T23:18:32Z'
 record_last_updated: '2026-11-19T10:06:11Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -82,6 +82,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-11-19T10:06:11Z'
+  url: https://github.blog/changelog/2026-11-18-wait-for-pull-request-events-with-github-cli
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-11-19T23:18:32Z'
   url: https://github.blog/changelog/2026-11-18-wait-for-pull-request-events-with-github-cli
   status: captured-from-rss-feed
   body_captured: true

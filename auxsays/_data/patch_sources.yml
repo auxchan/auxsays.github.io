@@ -62,8 +62,8 @@
   impact: Research, search-integrated AI, Android/Workspace workflows, and multimodal creation.
   watch_reason: Gemini changes affect search behavior, Workspace AI features, mobile creator workflows, and AI video/image
     pipelines.
-  source_url: https://gemini.google/updates/
-  source_label: Gemini updates
+  source_url: https://gemini.google/release-notes/
+  source_label: Gemini Apps release notes
   signal_notes: Watch consumer Gemini, Workspace Gemini, and Veo/Nano Banana-style creative updates separately.
   source_id: google-gemini
   logo_label: Gemini
@@ -654,8 +654,8 @@
   cadence: Medium
   impact: Live streaming alternatives, monetization, platform risk, and audience diversification.
   watch_reason: Kick matters for creators evaluating live-stream revenue, discoverability, and platform redundancy.
-  source_url: https://kick.com/blog
-  source_label: Kick blog
+  source_url: null
+  source_label: null
   signal_notes: Track monetization, content policy, streaming tools, mobile app changes, and creator dashboard changes.
   source_id: kick
   logo_label: Kick

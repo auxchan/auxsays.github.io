@@ -1,0 +1,380 @@
+{
+  "last_cycle": {
+    "at": "2026-11-19T21:42:09Z",
+    "outcome": "ok",
+    "requests": 16
+  },
+  "provenance": {
+    "collection_authorization": "owner risk acceptance; NVIDIA permission not established",
+    "collection_method": "forum default views",
+    "source_origin": "NVIDIA GeForce forum (user reports)"
+  },
+  "schema_version": 1,
+  "seeds_read": [
+    592433
+  ],
+  "source": "nvidia_geforce_forum",
+  "threads": {
+    "592433": {
+      "community_id": 13,
+      "community_slug": "game-ready-drivers",
+      "coverage": [
+        "older_comments_outside_window",
+        "replies_not_embedded"
+      ],
+      "created": 1793800802,
+      "first_read_at": "2026-11-19T21:42:45Z",
+      "gap_reasons": [],
+      "last_activity": 1794540130,
+      "last_read_at": "2026-11-19T21:42:45Z",
+      "staff": true,
+      "title": "GeForce GRD 621.14 Feedback Thread (Released 11/4/26)",
+      "title_versions": [
+        "621.14"
+      ],
+      "total_rows": 97,
+      "window": [
+        [
+          3633652,
+          1794540130
+        ],
+        [
+          3633608,
+          1794522610
+        ],
+        [
+          3633524,
+          1794492989
+        ],
+        [
+          3633521,
+          1794492482
+        ],
+        [
+          3633501,
+          1794485675
+        ],
+        [
+          3633489,
+          1794473251
+        ],
+        [
+          3633451,
+          1794437319
+        ],
+        [
+          3633448,
+          1794434975
+        ],
+        [
+          3633447,
+          1794434952
+        ],
+        [
+          3633362,
+          1794377564
+        ],
+        [
+          3633357,
+          1794369849
+        ],
+        [
+          3633356,
+          1794366356
+        ],
+        [
+          3633347,
+          1794353519
+        ],
+        [
+          3633323,
+          1794336992
+        ],
+        [
+          3633265,
+          1794314116
+        ],
+        [
+          3633210,
+          1794263413
+        ],
+        [
+          3633148,
+          1794220180
+        ],
+        [
+          3633145,
+          1794219471
+        ],
+        [
+          3633141,
+          1794218319
+        ],
+        [
+          3633092,
+          1794173778
+        ],
+        [
+          3633068,
+          1794154471
+        ],
+        [
+          3633067,
+          1794154268
+        ],
+        [
+          3633066,
+          1794154118
+        ],
+        [
+          3633062,
+          1794153267
+        ],
+        [
+          3633052,
+          1794147778
+        ]
+      ]
+    },
+    "592767": {
+      "community_id": 13,
+      "community_slug": "game-ready-drivers",
+      "coverage": [
+        "older_comments_outside_window",
+        "replies_not_embedded"
+      ],
+      "created": 1794493802,
+      "first_read_at": "2026-11-19T21:42:37Z",
+      "gap_reasons": [],
+      "last_activity": 1795118881,
+      "last_read_at": "2026-11-19T21:42:37Z",
+      "staff": true,
+      "title": "GeForce GRD 621.24 Feedback Thread (Released 11/12/26)",
+      "title_versions": [
+        "621.24"
+      ],
+      "total_rows": 82,
+      "window": [
+        [
+          3634731,
+          1795100264
+        ],
+        [
+          3634718,
+          1795091808
+        ],
+        [
+          3634701,
+          1795081975
+        ],
+        [
+          3634689,
+          1795077228
+        ],
+        [
+          3634683,
+          1795068913
+        ],
+        [
+          3634662,
+          1795053302
+        ],
+        [
+          3634646,
+          1795047492
+        ],
+        [
+          3634633,
+          1795040707
+        ],
+        [
+          3634627,
+          1795039337
+        ],
+        [
+          3634606,
+          1795033174
+        ],
+        [
+          3634585,
+          1795022896
+        ],
+        [
+          3634580,
+          1795019833
+        ],
+        [
+          3634576,
+          1795019132
+        ],
+        [
+          3634572,
+          1795016611
+        ],
+        [
+          3634571,
+          1795016581
+        ],
+        [
+          3634567,
+          1795015238
+        ],
+        [
+          3634566,
+          1795015097
+        ],
+        [
+          3634565,
+          1795015048
+        ],
+        [
+          3634470,
+          1794945012
+        ],
+        [
+          3634403,
+          1794920146
+        ],
+        [
+          3634344,
+          1794878508
+        ],
+        [
+          3634314,
+          1794858765
+        ],
+        [
+          3634284,
+          1794843482
+        ],
+        [
+          3634269,
+          1794835199
+        ],
+        [
+          3634223,
+          1794819347
+        ]
+      ]
+    },
+    "592907": {
+      "community_id": 13,
+      "community_slug": "game-ready-drivers",
+      "coverage": [
+        "replies_not_embedded"
+      ],
+      "created": 1794605793,
+      "first_read_at": "2026-11-19T21:42:53Z",
+      "gap_reasons": [],
+      "last_activity": 1795123138,
+      "last_read_at": "2026-11-19T21:42:53Z",
+      "staff": false,
+      "title": "Continuous writing of gigabytes to SSD to nvtopps file, 621.24",
+      "title_versions": [
+        "621.24"
+      ],
+      "total_rows": 15,
+      "window": [
+        [
+          3634751,
+          1795116297
+        ],
+        [
+          3634667,
+          1795062411
+        ],
+        [
+          3634652,
+          1795049058
+        ],
+        [
+          3634625,
+          1795038737
+        ],
+        [
+          3634607,
+          1795033834
+        ],
+        [
+          3634603,
+          1795031036
+        ],
+        [
+          3634600,
+          1795029797
+        ],
+        [
+          3634598,
+          1795027556
+        ],
+        [
+          3634579,
+          1795019294
+        ],
+        [
+          3634558,
+          1795002115
+        ],
+        [
+          3634549,
+          1794997300
+        ],
+        [
+          3634462,
+          1794940665
+        ],
+        [
+          3634324,
+          1794867900
+        ],
+        [
+          3634201,
+          1794791053
+        ],
+        [
+          3633914,
+          1794682189
+        ]
+      ]
+    },
+    "592933": {
+      "community_id": 13,
+      "community_slug": "game-ready-drivers",
+      "coverage": [],
+      "created": 1794652816,
+      "first_read_at": "2026-11-19T21:43:09Z",
+      "gap_reasons": [],
+      "last_activity": 1794908985,
+      "last_read_at": "2026-11-19T21:43:09Z",
+      "staff": false,
+      "title": "NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)",
+      "title_versions": [
+        "621.24"
+      ],
+      "total_rows": 1,
+      "window": [
+        [
+          3633888,
+          1794670680
+        ]
+      ]
+    },
+    "593067": {
+      "community_id": 13,
+      "community_slug": "game-ready-drivers",
+      "coverage": [],
+      "created": 1794941662,
+      "first_read_at": "2026-11-19T21:43:01Z",
+      "gap_reasons": [],
+      "last_activity": 1794941662,
+      "last_read_at": "2026-11-19T21:43:01Z",
+      "staff": false,
+      "title": "Advanced Shader Delivery BUG 621.24",
+      "title_versions": [
+        "621.24"
+      ],
+      "total_rows": 0,
+      "window": []
+    }
+  }
+}

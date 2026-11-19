@@ -107,8 +107,10 @@ entries:
   remediation_priority: P3
   blocking_reason: adapter_not_built
   next_action: >-
-    Measure the mapped Gemini updates page from a GitHub-hosted runner (reachability, terms, structure),
-    then build one fail-closed adapter and enable it, or record why it cannot be monitored.
+    Measure the mapped Gemini Apps release notes page from a GitHub-hosted runner (reachability, terms,
+    structure), then build one fail-closed adapter and enable it, or record why it cannot be monitored. The
+    page replaced a dead updates address on 2026-11-19 (AUX-112); its entries are dated and carry no app
+    version numbers.
   plan: not_planned
   review_by: "2026-12-18"
   ledger: AUX-102
@@ -188,8 +190,11 @@ entries:
   remediation_priority: P3
   blocking_reason: no_machine_readable_source
   next_action: >-
-    Only a manual watch of a low-value blog is mapped. Find an official Kick changelog suitable for automated
-    detection, or reconsider whether Kick belongs in the Core tier.
+    No official source is mapped: the former blog address answers 404, and on 2026-11-19 no changelog
+    or release-notes page for Kick's streaming platform was found to replace it (AUX-112). Kick's
+    developer-API changelog (docs.kick.com) records API changes, not product releases, and is not mapped.
+    Kick's terms also bar automated access. Find an official Kick release source, or decide whether Kick
+    belongs in the Core tier (an owner question, recorded in AUX-112 and not yet decided).
   plan: not_planned
   review_by: "2026-12-18"
   ledger: AUX-102

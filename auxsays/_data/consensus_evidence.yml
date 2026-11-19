@@ -79301,3 +79301,2727 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: comfyui-0-45-0-github-issue-17846
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17846
+  parent_title: '[Branch & Switch Doesn''t update when you change inputs in the same-run]'
+  report_title: '[Branch & Switch Doesn''t update when you change inputs in the same-run]'
+  report_text_excerpt: '[Branch & Switch Doesn''t update when you change inputs in the same-run] ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-...'
+  captured_at: '2026-11-19T21:19:36Z'
+  source_date: '2026-11-19'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...026, 00:00:00) [GCC 16.2.1 20260819 (Red Hat 16.2.1-2)] [INFO] ComfyUI version: 0.45.0 [INFO] comfy-aimdo version: 0.6.0 [INFO] comfy-kitchen version: 0.2.41 [INFO] c...'
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-calls-disconnects-dropped-ter
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-calls-disconnects--dropped--terminated-when-users-are-logged-into-multiple/1362060
+  parent_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_text_excerpt: 'Teams calls disconnects / dropped / terminated when users are logged into multiple devices Hi everyone,[Edit : see my response below, we don&apos;t think this is due to different versions, but due to a user being logged into teams on multiple devices]What I think we&apos;re...'
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2020-05-05'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-apple-watch-notifications-3072591
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/apple-watch-notifications/3072591
+  parent_title: Apple Watch Notifications
+  report_title: Apple Watch Notifications
+  report_text_excerpt: Apple Watch Notifications Whenever i receive a Teams call, my watch will visibly alert me but it will not vibrate. However, when i receive a Teams message my watch will vibrate. I keep my iPhone and watch on silent and just rely on the watch vibrations for all my alerts and it...
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2022-01-26'
+  target_release_date: '2026-11-05'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-calls-disconnects-dropped-ter
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-calls-disconnects--dropped--terminated-when-users-are-logged-into-multiple/1362060
+  parent_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_text_excerpt: 'Teams calls disconnects / dropped / terminated when users are logged into multiple devices Hi everyone,[Edit : see my response below, we don&apos;t think this is due to different versions, but due to a user being logged into teams on multiple devices]What I think we&apos;re...'
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2020-05-05'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26276-513-5241-9675-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-apple-watch-notifications-3072591
+  product_id: microsoft-teams
+  update_version: 26276.513.5241.9675
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/apple-watch-notifications/3072591
+  parent_title: Apple Watch Notifications
+  report_title: Apple Watch Notifications
+  report_text_excerpt: Apple Watch Notifications Whenever i receive a Teams call, my watch will visibly alert me but it will not vibrate. However, when i receive a Teams message my watch will vibrate. I keep my iPhone and watch on silent and just rely on the watch vibrations for all my alerts and it...
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2022-01-26'
+  target_release_date: '2026-10-22'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-calls-disconnects-dropped-ter
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-calls-disconnects--dropped--terminated-when-users-are-logged-into-multiple/1362060
+  parent_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_text_excerpt: 'Teams calls disconnects / dropped / terminated when users are logged into multiple devices Hi everyone,[Edit : see my response below, we don&apos;t think this is due to different versions, but due to a user being logged into teams on multiple devices]What I think we&apos;re...'
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2020-05-05'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1717-5229-7049-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-apple-watch-notifications-3072591
+  product_id: microsoft-teams
+  update_version: 26260.1717.5229.7049
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/apple-watch-notifications/3072591
+  parent_title: Apple Watch Notifications
+  report_title: Apple Watch Notifications
+  report_text_excerpt: Apple Watch Notifications Whenever i receive a Teams call, my watch will visibly alert me but it will not vibrate. However, when i receive a Teams message my watch will vibrate. I keep my iPhone and watch on silent and just rely on the watch vibrations for all my alerts and it...
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2022-01-26'
+  target_release_date: '2026-10-15'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-calls-disconnects-dropped-ter
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-calls-disconnects--dropped--terminated-when-users-are-logged-into-multiple/1362060
+  parent_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_text_excerpt: 'Teams calls disconnects / dropped / terminated when users are logged into multiple devices Hi everyone,[Edit : see my response below, we don&apos;t think this is due to different versions, but due to a user being logged into teams on multiple devices]What I think we&apos;re...'
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2020-05-05'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26260-1701-5139-3736-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-apple-watch-notifications-3072591
+  product_id: microsoft-teams
+  update_version: 26260.1701.5139.3736
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/apple-watch-notifications/3072591
+  parent_title: Apple Watch Notifications
+  report_title: Apple Watch Notifications
+  report_text_excerpt: Apple Watch Notifications Whenever i receive a Teams call, my watch will visibly alert me but it will not vibrate. However, when i receive a Teams message my watch will vibrate. I keep my iPhone and watch on silent and just rely on the watch vibrations for all my alerts and it...
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2022-01-26'
+  target_release_date: '2026-10-01'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-calls-disconnects-dropped-ter
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-calls-disconnects--dropped--terminated-when-users-are-logged-into-multiple/1362060
+  parent_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_text_excerpt: 'Teams calls disconnects / dropped / terminated when users are logged into multiple devices Hi everyone,[Edit : see my response below, we don&apos;t think this is due to different versions, but due to a user being logged into teams on multiple devices]What I think we&apos;re...'
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2020-05-05'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26246-1604-5133-838-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-apple-watch-notifications-3072591
+  product_id: microsoft-teams
+  update_version: 26246.1604.5133.838
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/apple-watch-notifications/3072591
+  parent_title: Apple Watch Notifications
+  report_title: Apple Watch Notifications
+  report_text_excerpt: Apple Watch Notifications Whenever i receive a Teams call, my watch will visibly alert me but it will not vibrate. However, when i receive a Teams message my watch will vibrate. I keep my iPhone and watch on silent and just rely on the watch vibrations for all my alerts and it...
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2022-01-26'
+  target_release_date: '2026-09-24'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-calls-disconnects-dropped-ter
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-calls-disconnects--dropped--terminated-when-users-are-logged-into-multiple/1362060
+  parent_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_text_excerpt: 'Teams calls disconnects / dropped / terminated when users are logged into multiple devices Hi everyone,[Edit : see my response below, we don&apos;t think this is due to different versions, but due to a user being logged into teams on multiple devices]What I think we&apos;re...'
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2020-05-05'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26225-1806-5074-1452-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-apple-watch-notifications-3072591
+  product_id: microsoft-teams
+  update_version: 26225.1806.5074.1452
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/apple-watch-notifications/3072591
+  parent_title: Apple Watch Notifications
+  report_title: Apple Watch Notifications
+  report_text_excerpt: Apple Watch Notifications Whenever i receive a Teams call, my watch will visibly alert me but it will not vibrate. However, when i receive a Teams message my watch will vibrate. I keep my iPhone and watch on silent and just rely on the watch vibrations for all my alerts and it...
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2022-01-26'
+  target_release_date: '2026-09-08'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-calls-disconnects-dropped-ter
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-calls-disconnects--dropped--terminated-when-users-are-logged-into-multiple/1362060
+  parent_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_text_excerpt: 'Teams calls disconnects / dropped / terminated when users are logged into multiple devices Hi everyone,[Edit : see my response below, we don&apos;t think this is due to different versions, but due to a user being logged into teams on multiple devices]What I think we&apos;re...'
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2020-05-05'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26213-1006-5014-9784-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-apple-watch-notifications-3072591
+  product_id: microsoft-teams
+  update_version: 26213.1006.5014.9784
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/apple-watch-notifications/3072591
+  parent_title: Apple Watch Notifications
+  report_title: Apple Watch Notifications
+  report_text_excerpt: Apple Watch Notifications Whenever i receive a Teams call, my watch will visibly alert me but it will not vibrate. However, when i receive a Teams message my watch will vibrate. I keep my iPhone and watch on silent and just rely on the watch vibrations for all my alerts and it...
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2022-01-26'
+  target_release_date: '2026-08-20'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-teams-calls-disconnects-dropped-ter
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/teams-calls-disconnects--dropped--terminated-when-users-are-logged-into-multiple/1362060
+  parent_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_title: Teams calls disconnects / dropped / terminated when users are logged into multiple devices
+  report_text_excerpt: 'Teams calls disconnects / dropped / terminated when users are logged into multiple devices Hi everyone,[Edit : see my response below, we don&apos;t think this is due to different versions, but due to a user being logged into teams on multiple devices]What I think we&apos;re...'
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2020-05-05'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: meeting join / connection failure
+  workflow_area: meetings
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-teams-26198-304-4946-9672-microsoft-tech-community-https-techcommunity-microsoft-com-discussions-microsoftteams-apple-watch-notifications-3072591
+  product_id: microsoft-teams
+  update_version: 26198.304.4946.9672
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoftteams/apple-watch-notifications/3072591
+  parent_title: Apple Watch Notifications
+  report_title: Apple Watch Notifications
+  report_text_excerpt: Apple Watch Notifications Whenever i receive a Teams call, my watch will visibly alert me but it will not vibrate. However, when i receive a Teams message my watch will vibrate. I keep my iPhone and watch on silent and just rely on the watch vibrations for all my alerts and it...
+  captured_at: '2026-11-19T21:21:22Z'
+  source_date: '2022-01-26'
+  target_release_date: '2026-08-03'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: missing_exact_patch_version_match
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6075715-question-6075715
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6075715/kb5132061-breaks-peachtree-accounting-8-crashes-wh
+  parent_title: KB5132061 breaks Peachtree Accounting 8 - crashes when entering items on invoices/POs - Microsoft Q&A
+  report_title: KB5132061 breaks Peachtree Accounting 8 - crashes when entering items on invoices/POs - Microsoft Q&A
+  report_text_excerpt: KB5132061 breaks Peachtree Accounting 8 - crashes when entering items on invoices/POs - Microsoft Q&A After installing the 2026-11 Security Update KB5132061 (build 26300.9974), Peachtree Accounting 8 (peachw.exe 8.0.0.21, from 2000) crashes every time an inventory item is...
+  captured_at: '2026-11-19T21:30:50Z'
+  source_date: '2026-11-18'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_kb: KB5132061
+  matched_os_build: '26300.9974'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6074869-question-6074869
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6074869/kb5132061-crashes-pc-reproducibly
+  parent_title: KB5132061 crashes PC reproducibly 😒 - Microsoft Q&A
+  report_title: KB5132061 crashes PC reproducibly 😒 - Microsoft Q&A
+  report_text_excerpt: 'KB5132061 crashes PC reproducibly 😒 - Microsoft Q&A Desktop PC: i7-9700 16 GB RAM 500 GB NVME SSD (boot drive), 350 GB free NVidia GTX 1660Ti GPU, connected to 24" monitor, DP>DP 1T HDD, 800GB free (data only) Win 11 Pro 26H2 All hardware drivers up-to-date Win 11 Pro 26H2...'
+  captured_at: '2026-11-19T21:30:50Z'
+  source_date: '2026-11-18'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5132061
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5132061
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6075362-question-6075362
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6075362/hardware-error-livekernelevent-141
+  parent_title: HARDWARE ERROR (LiveKernelEvent 141) - Microsoft Q&A
+  report_title: HARDWARE ERROR (LiveKernelEvent 141) - Microsoft Q&A
+  report_text_excerpt: 'HARDWARE ERROR (LiveKernelEvent 141) - Microsoft Q&A hello, can you help me with this hardware error. it happen about 1 month for now after updating some drivers + windows 26h2. here is the error : Source Windows Summary Hardware error Date ‎18/‎11/‎2026 20:27 Status Not...'
+  captured_at: '2026-11-19T21:30:50Z'
+  source_date: '2026-11-18'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: boot failure
+  workflow_area: startup / boot
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634576
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634576
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: RTX 4070ti CPU: i7-13700KF (3.40 GHz) RAM: 32gb Cyberpunk 2077 won''t launch at all with new drivers (621.24) I get the "Watchdog Timeout 120 Seconds" crash report. Rolling back to 621.14 fixes everything. As far as I can tell I do not have this issue with other games...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T16:25:32Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...00KF (3.40 GHz) RAM: 32gb Cyberpunk 2077 won''t launch at all with new drivers (621.24) I get the "Watchdog Timeout 120 Seconds" crash report. Rolling back to 621.14...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634403
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634403
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: '• GPU: NVIDIA GeForce RTX 5070 • CPU: AMD Ryzen 5 7500F • OS: Windows 11 (x64) • Problematic Driver: GeForce Game Ready 621.24 WHQL (clean install via DDU) • Last Known Good Driver: GeForce Game Ready 616.56 WHQL Issue Description: Severe framerate cap/regression (locked at...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-17T12:55:46Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...D Ryzen 5 7500F • OS: Windows 11 (x64) • Problematic Driver: GeForce Game Ready 621.24 WHQL (clean install via DDU) • Last Known Good Driver: GeForce Game Ready 616.5...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634731
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634731
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: i downloaded 621.01 and install it normal , for me it worked , nvlog.nvlgstg stay on the same size , i reinstalled 621.24 before to test it and it kept grow in size now is stable with 621.01 , i will use this until they make a fix . i did not use DDU or any program , just...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-19T14:57:44Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...normal , for me it worked , nvlog.nvlgstg stay on the same size , i reinstalled 621.24 before to test it and it kept grow in size now is stable with 621.01 , i will u...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634718
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634718
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: GeForce RTX 5080 CPU: AMD Ryzen 7 9850X3D Display Configuration: - Primary: ASUS TUF Gaming VG27AQZ – DisplayPort - Secondary: LG OLED42C54LA – HDMI Operating System: Windows 11 Pro 26H2 Driver Regression: Unknown Affected Applications/Games: Two nearly identical system...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-19T12:36:48Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_module_crash_without_regression_evidence
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...ed on November 14 with driver 621.14, and the second on November 19 with driver 621.24. Issue Description / Steps to Reproduce: I recently connected a new LG 42-inc...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634606
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634606
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: GPU GTX 5080 Ver. 621.24 Ram 32GB CPU Ryzen 7 7800X3D Ver. Driver Version 25.10.45.16-261009a-205305C OS Windows 11 Ver. 26H2 I ain't got no audio. I have tried everything. I have clean install of all drivers. A Windows update recovery. With and without FXsound being installed...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T20:19:34Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: GPU GTX 5080 Ver. 621.24 Ram 32GB CPU Ryzen 7 7800X3D Ver. Driver Version 25.10.45.16-261009a-205305C...
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634580
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634580
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Title: G-SYNC / VRR unnecessarily switches to frame doubling at around 60 FPS I have noticed an issue with NVIDIA G-SYNC / VRR where the refresh rate appears to switch to a frame-doubling mode when the frame rate drops to approximately 60 FPS. Instead of matching the refresh...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T16:37:13Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...behavior. System information: - GPU: MSI 5090 Suprim - NVIDIA Driver Version: 621.24 - Monitor: ASUS ROG Swift OLED PG32UCDP 4K 240hz - Display connection: Display...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634571
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634571
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Support DRR(Dynamic Refresh Rate)? I am using an RTX 4070 with an LS28AG700N monitor, which supports G-SYNC Compatible and a 144Hz refresh rate. However, the Dynamic Refresh Rate (DRR) option in Windows remains disabled (grayed out). This is not an issue specific to driver...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T15:43:01Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_attribution_disclaimed
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...remains disabled (grayed out). This is not an issue specific to driver version 621.24; I had assumed that discrete GPUs (dGPUs) simply did not support DRR. Yet, when...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634565
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634565
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: CRITICAL BUG Constant SSD writes, averaging 30Gb per HOUR. nvlog.nvlgstg GROWS AND GROWS! 621.14 - 621.24 are affected, 621.01 is clean. STAY AWAY FROM THIS DRIVER!
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T15:17:28Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...SSD writes, averaging 30Gb per HOUR. nvlog.nvlgstg GROWS AND GROWS! 621.14 - 621.24 are affected, 621.01 is clean. STAY AWAY FROM THIS DRIVER!'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634344
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634344
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: GPU Colorful igame RTX 5080 W OC ultra CPU i7-14700KF dual display 4K TV 60Hz (hdmi) and 1440p monitor 75Hz (DP) Windows 11 screen occasionally going to black after upgrading to 621.01 . I tried express install 617.42 but still happened. then i just clean installed to 621.24 ,...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-17T01:21:48Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_module_crash_without_regression_evidence
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...tried express install 617.42 but still happened. then i just clean installed to 621.24 , still do happen on occasions. today i just clean installed to 617.42 , hopefu...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634314
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634314
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Title: [BUG REPORT] Windows intermittently detects incorrect HDR peak brightness after startup (240 nits instead of 1038 nits) Hello NVIDIA team, I would like to report an intermittent HDR detection issue involving Windows 11, an RTX 5080, and an MSI QD-OLED monitor. System...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-16T19:52:45Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_attribution_disclaimed
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...abled * Operating system: Windows 11 26H2 (upgraded from 23H2) * NVIDIA driver: 621.24 WHQL Issue description: After Windows starts and HDR is enabled, Windows Adva...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633770
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3633770
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Continuous writing of gigabytes to SSD to nvtopps file, 621.24 Continuous writing of gigabytes to SSD over a short period of time from an NVIDIA-related service to the nvtopps file Issue with the latest driver 621.24 it writes about 30gb per 1h and during long sessions about...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-13T21:36:33Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Continuous writing of gigabytes to SSD to nvtopps file, 621.24 Continuous writing of gigabytes to SSD over a short period of time from an NVID...
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634625
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634625
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Happens for me too on 621.24. Fresh after restart. No game is running, just the browser with one tab I'm writing this in. Constant writing by NVDisplay.Container.exe at about 10-15MB/s and if I change window focus (Alt+tab or just click around) instantly writes hundreds of MB....
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T21:52:17Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Happens for me too on 621.24. Fresh after restart. No game is running, just the browser with one tab I'm wri...
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634607
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634607
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: 'A workaround that stops the nvlog.nvlgstg writes and keeps the NVIDIA App working, plus details that may help the team find the cause. System: RTX 4090, Windows 11, driver 621.24, WD SN850X 2TB. Measured at idle, using the I/O write counters for NVDisplay.Container.exe over...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T20:30:34Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...ls that may help the team find the cause. System: RTX 4090, Windows 11, driver 621.24, WD SN850X 2TB. Measured at idle, using the I/O write counters for NVDisplay.C...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634650
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634650
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: 'This fixed for me as well... Thank you @user System: RTX 4090, Windows 11, driver 621.24, PNY CS3030 500GB SSD. PC was online for two days straight. At Task Manager, I/O writes bytes for NVDisplay.Container was reporting 987.131.206.137 bytes. Almost 1TB in 2 days. Yikes. Now...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-19T00:30:22Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...is fixed for me as well... Thank you @user System: RTX 4090, Windows 11, driver 621.24, PNY CS3030 500GB SSD. PC was online for two days straight. At Task Manager, I...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634603
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634603
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: 'Not reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger. - GPU: NVIDIA GeForce RTX 5070 Ti (16 GB) - CPU: Intel Core i9-10850K (stock), 32 GB DDR4-3200, 500 GB NVMe - Display...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T19:43:56Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger. - GPU: NVI...'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634600
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634600
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: On 621.24 (RTX 5080), for the past 2 days I've been monitoring how much read/write bytes Nvidia services are doing. Only two that are notable. One nvcontainer.exe instance that has written just shy of 750MB in two days and one of the two NVDisplay.Container.exe processes that...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T19:23:17Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: On 621.24 (RTX 5080), for the past 2 days I've been monitoring how much read/write bytes...
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634324
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634324
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Same issue on my end. The nvlog.nvlgstg file itself is only ~14.5 mb, but it writes to it over and over and over. Clearly something is stuck in a loop and going very wrong, hopefully Nvidia can fix it? Until then, I'm reverting back to an older driver. (Windows 11 26H2, Asus...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-16T22:25:00Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '..., I''m reverting back to an older driver. (Windows 11 26H2, Asus 4070 TI Super, 621.24 driver after using 610.88 where the problem did not show up)'
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634201
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634201
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: I have similar issue with 621.24 Studio Ready drivers and all telemetry disabled in drivers. NVDisplay.Container.exe writing all the time huge amounts of i/o. Can be seen in task manager or in resource monitor. I'm running Zotac Twin Edge rtx 3070 8GB, 12600kf, asus b660 wifi...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-16T01:04:13Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: I have similar issue with 621.24 Studio Ready drivers and all telemetry disabled in drivers. NVDisplay.Containe...
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634466
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593067/advanced-shader-delivery-bug-62124/?comment=3634466
+  parent_title: Advanced Shader Delivery BUG 621.24
+  report_title: Advanced Shader Delivery BUG 621.24
+  report_text_excerpt: Advanced Shader Delivery BUG 621.24 Advanced Shader Delivery download loop on latest drive 621.24 Gaming Services through Xbox will constantly download shaders into the Xbox Games folder non stop throughout the day for any game that supports it. Using tons of bandwidth and...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-17T18:54:22Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Advanced Shader Delivery BUG 621.24 Advanced Shader Delivery download loop on latest drive 621.24 Gaming Services...
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3633860
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592933/nvidia-driver-62124-samsung-qe55q6fnatxxh-tv-no-longer-detected-via-hdmi-rtx-5070/?comment=3633860
+  parent_title: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)
+  report_title: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)
+  report_text_excerpt: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070) Hello NVIDIA community, I would like to report a display detection issue introduced with NVIDIA GeForce driver version 621.24. After updating from driver 621.14 to 621.24, my Samsung...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-14T10:40:16Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070) Hello NVIDIA...
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633489
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor:...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633451
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633451
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: Gigabyte GeForce RTX 4080 (16 GB) CPU: AMD Ryzen 7 5800X3D (Gigabyte B550 AORUS ELITE V2, BIOS F20a / AGESA 1.2.0.11), 16 GB DDR4-3333 (XMP). Issue also reproduced with Curve Optimizer disabled (stock CPU). Display Configuration: ASUS ROG Swift PG27UCDM (3840x2160, 240...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-11T22:48:39Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...00.9974 (Insider) Driver Regression: Yes. Last working driver: 610.88. Broken: 621.14 (clean install with DDU in both cases). Rolling back to 610.88 with DDU fixes i...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633448
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright....'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-11T22:09:35Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633356
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633356
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '**Title: RTX 4060 – Repeated 5+ Second Game Freezes in Cyberpunk 2077 and Enshrouded on Driver 621.14** Hello, Since updating to GeForce Game Ready Driver 621.14 WHQL, I have been experiencing severe intermittent freezes in games. **Issue description:** In both Cyberpunk 2077...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-11T03:05:56Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...60 – Repeated 5+ Second Game Freezes in Cyberpunk 2077 and Enshrouded on Driver 621.14** Hello, Since updating to GeForce Game Ready Driver 621.14 WHQL, I have been...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633066
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633066
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: NVIDIA GeForce RTX 4070 SUPER (VBIOS 95.04.69.00.c1, PCIe 4.0 x16) CPU: Intel Core i5-14600KF (14C/20T) Display Configuration: 1x LG UltraGear, connected via DisplayPort, 1920x1080 @ 144 Hz (single display) Operating System: Windows 11 Home 25H2 (build 26200.9711) Driver...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-08T16:08:38Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...System: Windows 11 Home 25H2 (build 26200.9711) Driver Regression: Yes, new in 621.14. Driver 621.01 (clean install) is NOT affected: nvlog.nvlgstg grows ~0.5 KB/min...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633062
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633062
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GeForce RTX Game Ready Driver 621.14 fucks up my system - No detection of second screen - Age of Empires III: Ultimate Edition crashes after 5 minutes with "game crashed: prohibited: procexp.exe". After rolling back the NVIDIA Game Ready Driver v617.71 everything works again....'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-08T15:54:27Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'GeForce RTX Game Ready Driver 621.14 fucks up my system - No detection of second screen - Age of Empires III: Ultima...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633052
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633052
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: I recently encountered a multi monitor wake up issue after updating my NVIDIA graphics driver to version 621.01 and then 621.14. I thought 621.14 would fix it but it won't. The problem is that when my monitors wakes up from lock screen, only my secondary monitor turns on....
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-08T14:22:58Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...ke up issue after updating my NVIDIA graphics driver to version 621.01 and then 621.14. I thought 621.14 would fix it but it won''t. The problem is that when my monito...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3634718
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634718
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: GeForce RTX 5080 CPU: AMD Ryzen 7 9850X3D Display Configuration: - Primary: ASUS TUF Gaming VG27AQZ – DisplayPort - Secondary: LG OLED42C54LA – HDMI Operating System: Windows 11 Pro 26H2 Driver Regression: Unknown Affected Applications/Games: Two nearly identical system...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-19T12:36:48Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...crashes involving `nvlddmkm.sys`. The first occurred on November 14 with driver 621.14, and the second on November 19 with driver 621.24. Issue Description / Steps t...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3634576
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634576
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: RTX 4070ti CPU: i7-13700KF (3.40 GHz) RAM: 32gb Cyberpunk 2077 won''t launch at all with new drivers (621.24) I get the "Watchdog Timeout 120 Seconds" crash report. Rolling back to 621.14 fixes everything. As far as I can tell I do not have this issue with other games...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T16:25:32Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...621.24) I get the "Watchdog Timeout 120 Seconds" crash report. Rolling back to 621.14 fixes everything. As far as I can tell I do not have this issue with other gam...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3634565
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634565
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: CRITICAL BUG Constant SSD writes, averaging 30Gb per HOUR. nvlog.nvlgstg GROWS AND GROWS! 621.14 - 621.24 are affected, 621.01 is clean. STAY AWAY FROM THIS DRIVER!
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T15:17:28Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...Constant SSD writes, averaging 30Gb per HOUR. nvlog.nvlgstg GROWS AND GROWS! 621.14 - 621.24 are affected, 621.01 is clean. STAY AWAY FROM THIS DRIVER!'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3634269
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634269
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: '**RTX 5070 Ti – Random black screen issue still not fixed (Driver 621.14)** Hello NVIDIA, I''m using an RTX 5070 Ti with driver version 621.14, and I''m still experiencing random black screen flickers. My screen suddenly goes completely black for a few seconds and then returns...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-16T13:19:59Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '**RTX 5070 Ti – Random black screen issue still not fixed (Driver 621.14)** Hello NVIDIA, I''m using an RTX 5070 Ti with driver version 621.14, and I''m...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633447
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633447
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: Hi everyone, I’m experiencing recurring freezes followed by automatic restarts on my PC while watching videos or live streams in Google Chrome. This has happened several times, including twice on the same day. The entire PC freezes and then restarts without any manual...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-11T22:09:12Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_module_crash_without_regression_evidence
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...- **Power supply:** Corsair RM1000x SHIFT, 1000 W. - **Current NVIDIA driver:** 621.14, confirmed using `nvidia-smi`. **Symptoms and troubleshooting so far:** - The...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633362
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633362
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Title: NVIDIA Driver Regression – G-SYNC Stuttering with Multiple Windows Open System: Windows 11, Gigabyte RTX 4090 Gaming OC, Intel i7-13700KF, dual ASUS ROG Swift OLED PG32UCWM monitors (4K 240 Hz, DisplayPort). NVIDIA driver version: 621.14 Issue: Following a recent NVIDIA...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-11T06:12:44Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...G Swift OLED PG32UCWM monitors (4K 240 Hz, DisplayPort). NVIDIA driver version: 621.14 Issue: Following a recent NVIDIA driver update, Oxygen Not Included (ONI) expe...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633347
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633347
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon. System: MSI Stealth 16 AI Studio A1VFG, RTX 4060 Laptop GPU (hybrid mode), Windows 11 Pro 25H2 (26200.9711). External monitor MSI G244F E2,...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-10T23:31:59Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon. System: MSI Stealth 16 AI Studio A1VFG, RT...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633323
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633323
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: BF6 new Season 5 latest Patch 2.1.2.0 Issues Major regress in performance in both DLAA and DLSS performance. DLAA looking at 100fps drop and DLSS looking at 50-80FPS and artifacts, stuttering, frame pacing. BF6 settings are the same as they have been in previous drivers. Using...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-10T18:56:32Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...tings are the same as they have been in previous drivers. Using latest drivers 621.14 Windows 11pro 10.0.26300 Build 26300 4090 anyone else playing latest season/pa...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633148
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633148
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: RTX 5060 Ti 16GB CPU: Core i7-11700F Display: TCL 25G64 (DisplayPort, 1920x1080, 144Hz) Operating System: Windows 11 Pro (26H2) Driver Regression: 621.14 NDIVIA Studio Driver Application: Reflections: an Unreal Engine Real-Time Ray Tracing Demonstration Issue: When...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-09T10:29:40Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_conflicts_with_thread
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...t, 1920x1080, 144Hz) Operating System: Windows 11 Pro (26H2) Driver Regression: 621.14 NDIVIA Studio Driver Application: Reflections: an Unreal Engine Real-Time Ray T...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633067
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633067
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: GPU RTX4080S CPU AMD Ryzen7 9800X3D OS Window11 621.14 make MH wilds flickering problem. I have to reversion to 610.88.
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-08T16:11:08Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: GPU RTX4080S CPU AMD Ryzen7 9800X3D OS Window11 621.14 make MH wilds flickering problem. I have to reversion to 610.88.
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3634758
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634758
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Same here. 4070Ti Super Driver Version 621.14. I went through the exact steps and it fixed it for me too. I can confirm it works.
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-19T21:18:58Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: Same here. 4070Ti Super Driver Version 621.14. I went through the exact steps and it fixed it for me too. I can confirm it wo...
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3634603
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634603
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: 'Not reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger. - GPU: NVIDIA GeForce RTX 5070 Ti (16 GB) - CPU: Intel Core i9-10850K (stock), 32 GB DDR4-3200, 500 GB NVMe - Display...'
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-18T19:43:56Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'Not reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger....'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633860
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592933/nvidia-driver-62124-samsung-qe55q6fnatxxh-tv-no-longer-detected-via-hdmi-rtx-5070/?comment=3633860
+  parent_title: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)
+  report_title: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)
+  report_text_excerpt: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070) Hello NVIDIA community, I would like to report a display detection issue introduced with NVIDIA GeForce driver version 621.24. After updating from driver 621.14 to 621.24, my Samsung...
+  captured_at: '2026-11-19T21:43:09Z'
+  source_date: '2026-11-14T10:40:16Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...ntroduced with NVIDIA GeForce driver version 621.24. After updating from driver 621.14 to 621.24, my Samsung QE55Q6FNATXXH television completely disappeared from Wind...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634731
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634731
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: i downloaded 621.01 and install it normal , for me it worked , nvlog.nvlgstg stay on the same size , i reinstalled 621.24 before to test it and it kept grow in size now is stable with 621.01 , i will use this until they make a fix . i did not use DDU or any program , just...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-19T14:57:44Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...normal , for me it worked , nvlog.nvlgstg stay on the same size , i reinstalled 621.24 before to test it and it kept grow in size now is stable with 621.01 , i will u...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634718
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634718
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: GeForce RTX 5080 CPU: AMD Ryzen 7 9850X3D Display Configuration: - Primary: ASUS TUF Gaming VG27AQZ – DisplayPort - Secondary: LG OLED42C54LA – HDMI Operating System: Windows 11 Pro 26H2 Driver Regression: Unknown Affected Applications/Games: Two nearly identical system...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-19T12:36:48Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...ed on November 14 with driver 621.14, and the second on November 19 with driver 621.24. Issue Description / Steps to Reproduce: I recently connected a new LG 42-inc...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634606
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634606
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: GPU GTX 5080 Ver. 621.24 Ram 32GB CPU Ryzen 7 7800X3D Ver. Driver Version 25.10.45.16-261009a-205305C OS Windows 11 Ver. 26H2 I ain't got no audio. I have tried everything. I have clean install of all drivers. A Windows update recovery. With and without FXsound being installed...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T20:19:34Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: GPU GTX 5080 Ver. 621.24 Ram 32GB CPU Ryzen 7 7800X3D Ver. Driver Version 25.10.45.16-261009a-205305C...
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634580
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634580
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Title: G-SYNC / VRR unnecessarily switches to frame doubling at around 60 FPS I have noticed an issue with NVIDIA G-SYNC / VRR where the refresh rate appears to switch to a frame-doubling mode when the frame rate drops to approximately 60 FPS. Instead of matching the refresh...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T16:37:13Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...behavior. System information: - GPU: MSI 5090 Suprim - NVIDIA Driver Version: 621.24 - Monitor: ASUS ROG Swift OLED PG32UCDP 4K 240hz - Display connection: Display...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634576
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634576
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: RTX 4070ti CPU: i7-13700KF (3.40 GHz) RAM: 32gb Cyberpunk 2077 won''t launch at all with new drivers (621.24) I get the "Watchdog Timeout 120 Seconds" crash report. Rolling back to 621.14 fixes everything. As far as I can tell I do not have this issue with other games...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T16:25:32Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...00KF (3.40 GHz) RAM: 32gb Cyberpunk 2077 won''t launch at all with new drivers (621.24) I get the "Watchdog Timeout 120 Seconds" crash report. Rolling back to 621.14...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634571
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634571
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Support DRR(Dynamic Refresh Rate)? I am using an RTX 4070 with an LS28AG700N monitor, which supports G-SYNC Compatible and a 144Hz refresh rate. However, the Dynamic Refresh Rate (DRR) option in Windows remains disabled (grayed out). This is not an issue specific to driver...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T15:43:01Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...remains disabled (grayed out). This is not an issue specific to driver version 621.24; I had assumed that discrete GPUs (dGPUs) simply did not support DRR. Yet, when...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634565
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634565
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: CRITICAL BUG Constant SSD writes, averaging 30Gb per HOUR. nvlog.nvlgstg GROWS AND GROWS! 621.14 - 621.24 are affected, 621.01 is clean. STAY AWAY FROM THIS DRIVER!
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T15:17:28Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...SSD writes, averaging 30Gb per HOUR. nvlog.nvlgstg GROWS AND GROWS! 621.14 - 621.24 are affected, 621.01 is clean. STAY AWAY FROM THIS DRIVER!'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634403
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634403
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: '• GPU: NVIDIA GeForce RTX 5070 • CPU: AMD Ryzen 5 7500F • OS: Windows 11 (x64) • Problematic Driver: GeForce Game Ready 621.24 WHQL (clean install via DDU) • Last Known Good Driver: GeForce Game Ready 616.56 WHQL Issue Description: Severe framerate cap/regression (locked at...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-17T12:55:46Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...D Ryzen 5 7500F • OS: Windows 11 (x64) • Problematic Driver: GeForce Game Ready 621.24 WHQL (clean install via DDU) • Last Known Good Driver: GeForce Game Ready 616.5...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634344
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634344
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: GPU Colorful igame RTX 5080 W OC ultra CPU i7-14700KF dual display 4K TV 60Hz (hdmi) and 1440p monitor 75Hz (DP) Windows 11 screen occasionally going to black after upgrading to 621.01 . I tried express install 617.42 but still happened. then i just clean installed to 621.24 ,...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-17T01:21:48Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...tried express install 617.42 but still happened. then i just clean installed to 621.24 , still do happen on occasions. today i just clean installed to 617.42 , hopefu...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634314
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634314
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'Title: [BUG REPORT] Windows intermittently detects incorrect HDR peak brightness after startup (240 nits instead of 1038 nits) Hello NVIDIA team, I would like to report an intermittent HDR detection issue involving Windows 11, an RTX 5080, and an MSI QD-OLED monitor. System...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-16T19:52:45Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...abled * Operating system: Windows 11 26H2 (upgraded from 23H2) * NVIDIA driver: 621.24 WHQL Issue description: After Windows starts and HDR is enabled, Windows Adva...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633770
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3633770
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Continuous writing of gigabytes to SSD to nvtopps file, 621.24 Continuous writing of gigabytes to SSD over a short period of time from an NVIDIA-related service to the nvtopps file Issue with the latest driver 621.24 it writes about 30gb per 1h and during long sessions about...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-13T21:36:33Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Continuous writing of gigabytes to SSD to nvtopps file, 621.24 Continuous writing of gigabytes to SSD over a short period of time from an NVID...
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634625
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634625
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Happens for me too on 621.24. Fresh after restart. No game is running, just the browser with one tab I'm writing this in. Constant writing by NVDisplay.Container.exe at about 10-15MB/s and if I change window focus (Alt+tab or just click around) instantly writes hundreds of MB....
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T21:52:17Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Happens for me too on 621.24. Fresh after restart. No game is running, just the browser with one tab I'm wri...
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634607
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634607
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: 'A workaround that stops the nvlog.nvlgstg writes and keeps the NVIDIA App working, plus details that may help the team find the cause. System: RTX 4090, Windows 11, driver 621.24, WD SN850X 2TB. Measured at idle, using the I/O write counters for NVDisplay.Container.exe over...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T20:30:34Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...ls that may help the team find the cause. System: RTX 4090, Windows 11, driver 621.24, WD SN850X 2TB. Measured at idle, using the I/O write counters for NVDisplay.C...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634650
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634650
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: 'This fixed for me as well... Thank you @user System: RTX 4090, Windows 11, driver 621.24, PNY CS3030 500GB SSD. PC was online for two days straight. At Task Manager, I/O writes bytes for NVDisplay.Container was reporting 987.131.206.137 bytes. Almost 1TB in 2 days. Yikes. Now...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-19T00:30:22Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...is fixed for me as well... Thank you @user System: RTX 4090, Windows 11, driver 621.24, PNY CS3030 500GB SSD. PC was online for two days straight. At Task Manager, I...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634603
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634603
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: 'Not reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger. - GPU: NVIDIA GeForce RTX 5070 Ti (16 GB) - CPU: Intel Core i9-10850K (stock), 32 GB DDR4-3200, 500 GB NVMe - Display...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T19:43:56Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger. - GPU: NVI...'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634600
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634600
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: On 621.24 (RTX 5080), for the past 2 days I've been monitoring how much read/write bytes Nvidia services are doing. Only two that are notable. One nvcontainer.exe instance that has written just shy of 750MB in two days and one of the two NVDisplay.Container.exe processes that...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T19:23:17Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: On 621.24 (RTX 5080), for the past 2 days I've been monitoring how much read/write bytes...
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634324
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634324
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Same issue on my end. The nvlog.nvlgstg file itself is only ~14.5 mb, but it writes to it over and over and over. Clearly something is stuck in a loop and going very wrong, hopefully Nvidia can fix it? Until then, I'm reverting back to an older driver. (Windows 11 26H2, Asus...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-16T22:25:00Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '..., I''m reverting back to an older driver. (Windows 11 26H2, Asus 4070 TI Super, 621.24 driver after using 610.88 where the problem did not show up)'
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634201
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634201
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: I have similar issue with 621.24 Studio Ready drivers and all telemetry disabled in drivers. NVDisplay.Container.exe writing all the time huge amounts of i/o. Can be seen in task manager or in resource monitor. I'm running Zotac Twin Edge rtx 3070 8GB, 12600kf, asus b660 wifi...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-16T01:04:13Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: I have similar issue with 621.24 Studio Ready drivers and all telemetry disabled in drivers. NVDisplay.Containe...
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634466
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/593067/advanced-shader-delivery-bug-62124/?comment=3634466
+  parent_title: Advanced Shader Delivery BUG 621.24
+  report_title: Advanced Shader Delivery BUG 621.24
+  report_text_excerpt: Advanced Shader Delivery BUG 621.24 Advanced Shader Delivery download loop on latest drive 621.24 Gaming Services through Xbox will constantly download shaders into the Xbox Games folder non stop throughout the day for any game that supports it. Using tons of bandwidth and...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-17T18:54:22Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Advanced Shader Delivery BUG 621.24 Advanced Shader Delivery download loop on latest drive 621.24 Gaming Services...
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3633860
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592933/nvidia-driver-62124-samsung-qe55q6fnatxxh-tv-no-longer-detected-via-hdmi-rtx-5070/?comment=3633860
+  parent_title: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)
+  report_title: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)
+  report_text_excerpt: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070) Hello NVIDIA community, I would like to report a display detection issue introduced with NVIDIA GeForce driver version 621.24. After updating from driver 621.14 to 621.24, my Samsung...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-14T10:40:16Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070) Hello NVIDIA...
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3634718
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634718
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: GeForce RTX 5080 CPU: AMD Ryzen 7 9850X3D Display Configuration: - Primary: ASUS TUF Gaming VG27AQZ – DisplayPort - Secondary: LG OLED42C54LA – HDMI Operating System: Windows 11 Pro 26H2 Driver Regression: Unknown Affected Applications/Games: Two nearly identical system...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-19T12:36:48Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...crashes involving `nvlddmkm.sys`. The first occurred on November 14 with driver 621.14, and the second on November 19 with driver 621.24. Issue Description / Steps t...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3634576
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634576
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'GPU: RTX 4070ti CPU: i7-13700KF (3.40 GHz) RAM: 32gb Cyberpunk 2077 won''t launch at all with new drivers (621.24) I get the "Watchdog Timeout 120 Seconds" crash report. Rolling back to 621.14 fixes everything. As far as I can tell I do not have this issue with other games...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T16:25:32Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...621.24) I get the "Watchdog Timeout 120 Seconds" crash report. Rolling back to 621.14 fixes everything. As far as I can tell I do not have this issue with other gam...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3634565
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634565
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: CRITICAL BUG Constant SSD writes, averaging 30Gb per HOUR. nvlog.nvlgstg GROWS AND GROWS! 621.14 - 621.24 are affected, 621.01 is clean. STAY AWAY FROM THIS DRIVER!
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T15:17:28Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...Constant SSD writes, averaging 30Gb per HOUR. nvlog.nvlgstg GROWS AND GROWS! 621.14 - 621.24 are affected, 621.01 is clean. STAY AWAY FROM THIS DRIVER!'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3634269
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634269
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: '**RTX 5070 Ti – Random black screen issue still not fixed (Driver 621.14)** Hello NVIDIA, I''m using an RTX 5070 Ti with driver version 621.14, and I''m still experiencing random black screen flickers. My screen suddenly goes completely black for a few seconds and then returns...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-16T13:19:59Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '**RTX 5070 Ti – Random black screen issue still not fixed (Driver 621.14)** Hello NVIDIA, I''m using an RTX 5070 Ti with driver version 621.14, and I''m...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633489
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor:...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633451
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633451
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: Gigabyte GeForce RTX 4080 (16 GB) CPU: AMD Ryzen 7 5800X3D (Gigabyte B550 AORUS ELITE V2, BIOS F20a / AGESA 1.2.0.11), 16 GB DDR4-3333 (XMP). Issue also reproduced with Curve Optimizer disabled (stock CPU). Display Configuration: ASUS ROG Swift PG27UCDM (3840x2160, 240...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-11T22:48:39Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...00.9974 (Insider) Driver Regression: Yes. Last working driver: 610.88. Broken: 621.14 (clean install with DDU in both cases). Rolling back to 610.88 with DDU fixes i...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633448
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright....'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-11T22:09:35Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633447
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633447
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: Hi everyone, I’m experiencing recurring freezes followed by automatic restarts on my PC while watching videos or live streams in Google Chrome. This has happened several times, including twice on the same day. The entire PC freezes and then restarts without any manual...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-11T22:09:12Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...- **Power supply:** Corsair RM1000x SHIFT, 1000 W. - **Current NVIDIA driver:** 621.14, confirmed using `nvidia-smi`. **Symptoms and troubleshooting so far:** - The...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633362
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633362
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Title: NVIDIA Driver Regression – G-SYNC Stuttering with Multiple Windows Open System: Windows 11, Gigabyte RTX 4090 Gaming OC, Intel i7-13700KF, dual ASUS ROG Swift OLED PG32UCWM monitors (4K 240 Hz, DisplayPort). NVIDIA driver version: 621.14 Issue: Following a recent NVIDIA...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-11T06:12:44Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...G Swift OLED PG32UCWM monitors (4K 240 Hz, DisplayPort). NVIDIA driver version: 621.14 Issue: Following a recent NVIDIA driver update, Oxygen Not Included (ONI) expe...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633356
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633356
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '**Title: RTX 4060 – Repeated 5+ Second Game Freezes in Cyberpunk 2077 and Enshrouded on Driver 621.14** Hello, Since updating to GeForce Game Ready Driver 621.14 WHQL, I have been experiencing severe intermittent freezes in games. **Issue description:** In both Cyberpunk 2077...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-11T03:05:56Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...60 – Repeated 5+ Second Game Freezes in Cyberpunk 2077 and Enshrouded on Driver 621.14** Hello, Since updating to GeForce Game Ready Driver 621.14 WHQL, I have been...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633347
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633347
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon. System: MSI Stealth 16 AI Studio A1VFG, RTX 4060 Laptop GPU (hybrid mode), Windows 11 Pro 25H2 (26200.9711). External monitor MSI G244F E2,...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-10T23:31:59Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon. System: MSI Stealth 16 AI Studio A1VFG, RT...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633323
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633323
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: BF6 new Season 5 latest Patch 2.1.2.0 Issues Major regress in performance in both DLAA and DLSS performance. DLAA looking at 100fps drop and DLSS looking at 50-80FPS and artifacts, stuttering, frame pacing. BF6 settings are the same as they have been in previous drivers. Using...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-10T18:56:32Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...tings are the same as they have been in previous drivers. Using latest drivers 621.14 Windows 11pro 10.0.26300 Build 26300 4090 anyone else playing latest season/pa...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633148
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633148
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: RTX 5060 Ti 16GB CPU: Core i7-11700F Display: TCL 25G64 (DisplayPort, 1920x1080, 144Hz) Operating System: Windows 11 Pro (26H2) Driver Regression: 621.14 NDIVIA Studio Driver Application: Reflections: an Unreal Engine Real-Time Ray Tracing Demonstration Issue: When...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-09T10:29:40Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_conflicts_with_thread
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...t, 1920x1080, 144Hz) Operating System: Windows 11 Pro (26H2) Driver Regression: 621.14 NDIVIA Studio Driver Application: Reflections: an Unreal Engine Real-Time Ray T...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633067
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633067
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: GPU RTX4080S CPU AMD Ryzen7 9800X3D OS Window11 621.14 make MH wilds flickering problem. I have to reversion to 610.88.
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-08T16:11:08Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: GPU RTX4080S CPU AMD Ryzen7 9800X3D OS Window11 621.14 make MH wilds flickering problem. I have to reversion to 610.88.
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633066
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633066
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: NVIDIA GeForce RTX 4070 SUPER (VBIOS 95.04.69.00.c1, PCIe 4.0 x16) CPU: Intel Core i5-14600KF (14C/20T) Display Configuration: 1x LG UltraGear, connected via DisplayPort, 1920x1080 @ 144 Hz (single display) Operating System: Windows 11 Home 25H2 (build 26200.9711) Driver...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-08T16:08:38Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...System: Windows 11 Home 25H2 (build 26200.9711) Driver Regression: Yes, new in 621.14. Driver 621.01 (clean install) is NOT affected: nvlog.nvlgstg grows ~0.5 KB/min...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633062
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633062
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GeForce RTX Game Ready Driver 621.14 fucks up my system - No detection of second screen - Age of Empires III: Ultimate Edition crashes after 5 minutes with "game crashed: prohibited: procexp.exe". After rolling back the NVIDIA Game Ready Driver v617.71 everything works again....'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-08T15:54:27Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'GeForce RTX Game Ready Driver 621.14 fucks up my system - No detection of second screen - Age of Empires III: Ultima...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633052
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633052
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: I recently encountered a multi monitor wake up issue after updating my NVIDIA graphics driver to version 621.01 and then 621.14. I thought 621.14 would fix it but it won't. The problem is that when my monitors wakes up from lock screen, only my secondary monitor turns on....
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-08T14:22:58Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...ke up issue after updating my NVIDIA graphics driver to version 621.01 and then 621.14. I thought 621.14 would fix it but it won''t. The problem is that when my monito...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3634758
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634758
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Same here. 4070Ti Super Driver Version 621.14. I went through the exact steps and it fixed it for me too. I can confirm it works.
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-19T21:18:58Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: Same here. 4070Ti Super Driver Version 621.14. I went through the exact steps and it fixed it for me too. I can confirm it wo...
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3634603
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634603
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: 'Not reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger. - GPU: NVIDIA GeForce RTX 5070 Ti (16 GB) - CPU: Intel Core i9-10850K (stock), 32 GB DDR4-3200, 500 GB NVMe - Display...'
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-18T19:43:56Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'Not reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger....'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633860
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592933/nvidia-driver-62124-samsung-qe55q6fnatxxh-tv-no-longer-detected-via-hdmi-rtx-5070/?comment=3633860
+  parent_title: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)
+  report_title: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)
+  report_text_excerpt: NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070) Hello NVIDIA community, I would like to report a display detection issue introduced with NVIDIA GeForce driver version 621.24. After updating from driver 621.14 to 621.24, my Samsung...
+  captured_at: '2026-11-19T21:43:59Z'
+  source_date: '2026-11-14T10:40:16Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...ntroduced with NVIDIA GeForce driver version 621.24. After updating from driver 621.14 to 621.24, my Samsung QE55Q6FNATXXH television completely disappeared from Wind...'
+- id: obs-studio-33-0-1-obs-forum-thread-196937
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-nvenc-test-crashes-in-nvcuda64-dll-rtx-4070-windows-build-26300.196937/
+  parent_title: OBS NVENC test crashes in nvcuda64.dll (RTX 4070, Windows build 26300)
+  report_title: OBS NVENC test crashes in nvcuda64.dll (RTX 4070, Windows build 26300)
+  report_text_excerpt: OBS 33.0.1 on Windows build 26300 with an RTX 4070. OBS’s obs-nvenc-test.exe crashes at startup. Event Viewer reports faulting module nvcuda64.dll, version 32.0.16.2124, exception 0xc0000005. I’
+  captured_at: '2026-11-19T21:47:41Z'
+  source_date: '2026-11-19'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-33-0-1-obs-forum-thread-196933
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-studio-33-0-1-%E2%80%93-black-screen-when-capturing-display-on-intel.196933/
+  parent_title: OBS Studio 33.0.1 – Black screen when capturing display on Intel
+  report_title: OBS Studio 33.0.1 – Black screen when capturing display on Intel
+  report_text_excerpt: OBS Studio 33.0.1 – Black screen when capturing display on Intel MacBook Pro (macOS 26.7.3)&#8203; Hello OBS Team, I'm experiencing an issue with OBS Studio on my Intel-based MacBook Pro. OBS is unable
+  captured_at: '2026-11-19T21:47:41Z'
+  source_date: '2026-11-19'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-obs-forum-thread-196933
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: obs_forum_thread
+  source_name: OBS Project Support Forum
+  source_url: https://obsproject.com/forum/threads/obs-studio-33-0-1-%E2%80%93-black-screen-when-capturing-display-on-intel.196933/
+  parent_title: OBS Studio 33.0.1 – Black screen when capturing display on Intel
+  report_title: OBS Studio 33.0.1 – Black screen when capturing display on Intel
+  report_text_excerpt: 'the screen capture source. Confirmed the correct display was selected. Tested OBS Studio 32.2.2, but this version crashed with an EXC_BAD_ACCESS (SIGSEGV) error. Expected behavior: OBS should capture and display my MacBook Pro screen normally. Actual behavior: The preview remain'
+  captured_at: '2026-11-19T21:52:23Z'
+  source_date: '2026-11-19'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
