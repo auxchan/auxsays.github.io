@@ -1,0 +1,62 @@
+{
+ "success": true,
+ "errors": [],
+ "data": {
+  "topic": {
+   "id": 592907,
+   "title": "Continuous writing of gigabytes to SSD to nvtopps file, 621.24",
+   "type": "support",
+   "isVisible": 1,
+   "status": "default",
+   "createdStamp": 1794605793,
+   "replyCount": 26,
+   "upvotes": 14,
+   "lastActivityStamp": 1795049195,
+   "isPinned": 0,
+   "isGhosted": 0,
+   "publishAt": 0,
+   "updatedStamp": 1795051282,
+   "hasOfficialReply": 0,
+   "user": {
+    "id": "1000",
+    "aclactions": {
+     "officialreply": false
+    }
+   },
+   "lastComment": {
+    "id": 3634654
+   },
+   "communities": [
+    {
+     "id": 13,
+     "title": "Game-Ready Drivers"
+    }
+   ],
+   "firstComment": {
+    "id": 3633770,
+    "createdStamp": 1794605793,
+    "updatedStamp": 0,
+    "lastActivityStamp": 1794605793,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "upvotes": 0,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1000",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Continuous writing of gigabytes to SSD over a short period of time from an NVIDIA-related service to the nvtopps file\n\nIssue with the latest driver 621.24\n\nit writes about 30gb per 1h and during long sessions about 70gb or even more.\nTelemetry is disabled in Nvidia app settings.\n\nI tried restarting the service and later the system, but nothing seems to be working."
+   }
+  }
+ }
+}

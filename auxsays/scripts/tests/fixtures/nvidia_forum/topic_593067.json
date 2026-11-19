@@ -1,0 +1,62 @@
+{
+ "success": true,
+ "errors": [],
+ "data": {
+  "topic": {
+   "id": 593067,
+   "title": "Advanced Shader Delivery BUG 621.24",
+   "type": "discussion",
+   "isVisible": 1,
+   "status": "default",
+   "createdStamp": 1794941662,
+   "replyCount": 0,
+   "upvotes": 2,
+   "lastActivityStamp": 1794941662,
+   "isPinned": 0,
+   "isGhosted": 0,
+   "publishAt": 0,
+   "updatedStamp": 1794995088,
+   "hasOfficialReply": 0,
+   "user": {
+    "id": "1007",
+    "aclactions": {
+     "officialreply": false
+    }
+   },
+   "lastComment": {
+    "id": 3634466
+   },
+   "communities": [
+    {
+     "id": 13,
+     "title": "Game-Ready Drivers"
+    }
+   ],
+   "firstComment": {
+    "id": 3634466,
+    "createdStamp": 1794941662,
+    "updatedStamp": 0,
+    "lastActivityStamp": 1794941662,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "upvotes": 0,
+    "topic": {
+     "id": 593067
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1007",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Advanced Shader Delivery download loop on latest drive 621.24 \nGaming Services through Xbox will constantly download shaders into the Xbox Games folder non stop throughout the day for any game that supports it. Using tons of bandwidth and lots of ssd writes. Upon reverting back to 617.42 this issue has stopped. The game in question was COD MW4 but on reddit I've read it also effects Gears Eday and Forza."
+   }
+  }
+ }
+}

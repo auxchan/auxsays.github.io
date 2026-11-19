@@ -171,6 +171,7 @@ SITES = [
     ("collect_obs_reports", "obs"),
     ("patch_collectors.microsoft_teams", "teams"),
     ("patch_collectors.comfyui", "comfyui"),
+    ("patch_collectors.nvidia_forum", "nvidia"),
 ]
 
 
@@ -413,8 +414,10 @@ def run() -> int:
                 acr_mod._index_generated_records = lambda: {}
                 acr_mod.run_dry_run = lambda **kw: [result]
                 mod.ROOT = root
-                call = (mod.apply_consensus_writeback("adobe-acrobat-pro", "26.2")
-                        if label == "acrobat" else mod.apply_consensus_writeback("26.2"))
+                # The two collectors registered once per product take the product as well.
+                call = (mod.apply_consensus_writeback("adobe-acrobat-pro", "26.2") if label == "acrobat"
+                        else mod.apply_consensus_writeback("nvidia-geforce-game-ready", "26.2")
+                        if label == "nvidia" else mod.apply_consensus_writeback("26.2"))
             except Exception as exc:  # noqa: BLE001
                 call = exc
             finally:

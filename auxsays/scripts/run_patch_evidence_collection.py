@@ -106,6 +106,11 @@ TEAMS_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_TEAMS_CONSENSUS"
 # default off here, set "true" on the scheduled --write step of obs-evidence-collection.yml.
 COMFYUI_CONSENSUS_PRODUCT_ID = "comfyui"
 COMFYUI_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_COMFYUI_CONSENSUS"
+# NVIDIA driver community evidence from the NVIDIA GeForce forum's default views. One collector
+# class registered once per driver family (Game Ready, Studio), the Acrobat shape; both share one
+# forum cycle per run. Default off here, set "true" on the scheduled --write step.
+NVIDIA_FORUM_PRODUCT_IDS = ("nvidia-geforce-game-ready", "nvidia-studio-driver")
+NVIDIA_FORUM_ENABLE_ENV = "AUXSAYS_ENABLE_NVIDIA_FORUM_CONSENSUS"
 
 
 def powerpoint_consensus_enabled(env: dict[str, str] | None = None) -> bool:
@@ -140,6 +145,14 @@ def comfyui_consensus_enabled(env: dict[str, str] | None = None) -> bool:
     "on", empty and absent all return False."""
     source = os.environ if env is None else env
     return str(source.get(COMFYUI_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
+
+
+def nvidia_forum_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for registering the NVIDIA forum collector (both families).
+
+    Explicit true-only, the same shape as every other gated collector."""
+    source = os.environ if env is None else env
+    return str(source.get(NVIDIA_FORUM_ENABLE_ENV, "")).strip().lower() == "true"
 
 
 def orchestrated_products(env: dict[str, str] | None = None) -> set[str]:
@@ -193,6 +206,10 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     if comfyui_consensus_enabled(env):
         from patch_collectors.comfyui import ComfyUICollector
         collectors[COMFYUI_CONSENSUS_PRODUCT_ID] = ComfyUICollector
+    if nvidia_forum_enabled(env):
+        from patch_collectors.nvidia_forum import NvidiaForumCollector
+        for pid in NVIDIA_FORUM_PRODUCT_IDS:
+            collectors[pid] = lambda p=pid: NvidiaForumCollector(p)
     # NO DOUBLE COLLECTION. A product driven by the orchestration graph is REMOVED from this
     # registry, so the legacy path cannot also collect it in the same run. Enforcing it here rather
     # than by workflow discipline means there is exactly one authoritative execution path per
@@ -337,6 +354,11 @@ def _extra_write_surface(product_id: str) -> list[Path]:
     if product_id in ("adobe-acrobat-reader", "adobe-acrobat-pro"):
         from patch_collectors.adobe_acrobat_community import TIER2_PATH, TIER3_PATH
         return [TIER2_PATH, TIER3_PATH]
+    if product_id in NVIDIA_FORUM_PRODUCT_IDS:
+        # The forum cycle's own state (last windows, refusal, cadence). Whichever family runs first
+        # in a run writes it; both declare it so either may.
+        from patch_collectors.nvidia_forum_source import STATE_PATH
+        return [STATE_PATH]
     return []
 
 

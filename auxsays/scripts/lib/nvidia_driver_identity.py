@@ -89,11 +89,12 @@ def listing_matches(product_id: Any, info: Mapping[str, Any]) -> tuple[bool, str
 
 
 # A family is NAMED only by words that name it. "Studio" alone is not enough -- "OBS Studio 33" is a
-# different product -- so Studio needs "Studio Driver", "NVIDIA Studio", "NSD" or a driver version
-# right after it. "GeForce" alone names neither family: both are GeForce drivers.
+# different product -- so Studio needs "Studio Driver" (or "Studio Ready driver", an older name
+# users still write: measured on the forum, comment 3634201), "NVIDIA Studio", "NSD" or a driver
+# version right after it. "GeForce" alone names neither family: both are GeForce drivers.
 _FAMILY_MENTIONS = {
     GAME_READY: re.compile(r"\bgame[\s-]*ready\b|\bgrd\b", re.I),
-    STUDIO: re.compile(r"\bstudio[\s-]*drivers?\b|\bnvidia\s+studio\b|\bnsd\b"
+    STUDIO: re.compile(r"\bstudio[\s-]*(?:ready[\s-]*)?drivers?\b|\bnvidia\s+studio\b|\bnsd\b"
                        r"|\bstudio\s+\d{3,4}\.\d{2}\b", re.I),
 }
 

@@ -1,0 +1,970 @@
+{
+ "success": true,
+ "errors": [],
+ "pagination": {
+  "_page": 1,
+  "_pageSize": 25,
+  "_totalPages": 4,
+  "_totalRows": 97
+ },
+ "anchor": {
+  "_anchorValue": "3633652",
+  "_anchorDirection": "+before",
+  "_anchorOffset": "0"
+ },
+ "data": {
+  "comments": [
+   {
+    "id": 3633652,
+    "createdStamp": 1794540130,
+    "updatedStamp": 1794594736,
+    "lastActivityStamp": 1794540130,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 1,
+    "upvotes": 0,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1033",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "this driver crashes my pc steam when i play where winds meet",
+    "comments": []
+   },
+   {
+    "id": 3633608,
+    "createdStamp": 1794522610,
+    "updatedStamp": 1794594745,
+    "lastActivityStamp": 1794522610,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 2,
+    "upvotes": 0,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1034",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "5080 and 9850 x3d last 3 drivers didnt work properly and make ue5 games crash with out of memory error.",
+    "comments": []
+   },
+   {
+    "id": 3633524,
+    "createdStamp": 1794492989,
+    "updatedStamp": 1794508337,
+    "lastActivityStamp": 1794494062,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 3,
+    "upvotes": -2,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1035",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "https://www.bild.de/politik/jensen-huang-tritt-zurueck-affaere-mit-mutmasslicher-spionin-bei-nvidia-6af5c4e450175c81de7a3c8f\n\nSanta Clara (California, USA) – A bombshell at AI giant Nvidia! CEO Jensen Huang (63) is stepping down with immediate effect following revelations of two extramarital affairs. The US chipmaker announced the news on Thursday. Chief Financial Officer Colette Kress (59) will assume his duties on an interim basis. This brings an end to the 33-year era of the man who transformed Nvidia into one of the most valuable companies in the world.\n\nThe resignation has also sent shockwaves through the stock market! Ahead of the US market opening on Thursday, Nvidia shares plummeted 10.53 percent to $155.43. Since the scandal broke, the chip giant has already lost hundreds of billions of euros in market capitalization.",
+    "comments": [
+     {
+      "id": 3633528,
+      "createdStamp": 1794494062,
+      "updatedStamp": 1794594771,
+      "lastActivityStamp": 1794494140,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 1,
+      "upvotes": 3,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633524
+      },
+      "user": {
+       "id": "1036",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Why the hell you post that in a driver thread? All news platforms are full of it, this is a driver thread and not for offtopic BS that has nothing to do with it",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3633521,
+    "createdStamp": 1794492482,
+    "updatedStamp": 1794497436,
+    "lastActivityStamp": 1794493443,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 2,
+    "isOfficialReply": 0,
+    "index": 4,
+    "upvotes": 1,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1035",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "This new Game Ready Driver provides the best gaming experience for Warhammer 40,000:\nDawn of War IV, and Assetto Corsa Rally, and the addition of DLSS 5 with 3D-Guided\nNeural Rendering to Where Winds Meet.\n\nhttps://us.download.nvidia.com/Windows/621.24/621.24-desktop-win10-win11-64bit-international-dch-whql.exe\n\nhttps://us.download.nvidia.com/Windows/621.24/621.24-geforce-win11-x64-release-notes.pdf\n\nFixed: Chaos Vantage: NVIDIA OptiX Denoiser may fail at high resolutions. [6953474]\nFixed: Windows Photos/Media Player: Incorrect colors with DJI D-Log H.265 video playback.",
+    "comments": [
+     {
+      "id": 3633526,
+      "createdStamp": 1794493443,
+      "updatedStamp": 1794494493,
+      "lastActivityStamp": 1794493443,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 2,
+      "upvotes": 2,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633521
+      },
+      "user": {
+       "id": "1036",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Of course they haven't fixed the V-Sync I knew it. They were able to reproduce the issue, but they still haven't fixed the V-Sync in BF6 and FH6 I guess. I have",
+      "comments": []
+     },
+     {
+      "id": 3633525,
+      "createdStamp": 1794493042,
+      "updatedStamp": 1794493052,
+      "lastActivityStamp": 1794493042,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 3,
+      "upvotes": 2,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633521
+      },
+      "user": {
+       "id": "1037",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "It seems the V-sync issue hasn't been fixed; it simply fails to cap the frame rate in some games..",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3633501,
+    "createdStamp": 1794485675,
+    "updatedStamp": 1794493958,
+    "lastActivityStamp": 1794492836,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 4,
+    "isOfficialReply": 0,
+    "index": 5,
+    "upvotes": 3,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1036",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "It looks like there will be a new driver today. Hopefully they finally fixed the V-Sync in BF6 and FH6.",
+    "comments": [
+     {
+      "id": 3633522,
+      "createdStamp": 1794492836,
+      "updatedStamp": 1794495202,
+      "lastActivityStamp": 1794495202,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 4,
+      "upvotes": 1,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633501
+      },
+      "user": {
+       "id": "1038",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "@user\nTried setting Background Application Max Framerate to 30 FPS but it made no difference. GPU Wattage still shoots up to max watts. The only workaround i ha",
+      "comments": []
+     },
+     {
+      "id": 3633517,
+      "createdStamp": 1794490523,
+      "updatedStamp": 1794490758,
+      "lastActivityStamp": 1794490758,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 5,
+      "upvotes": 1,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633501
+      },
+      "user": {
+       "id": "1036",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "@user\nYou can activate \"Background Application Max Framerate\" on a game by game basis and set the FPS limit to 30 or whatever, this way whenever you know you go",
+      "comments": []
+     },
+     {
+      "id": 3633516,
+      "createdStamp": 1794490292,
+      "updatedStamp": 1794490525,
+      "lastActivityStamp": 1794490292,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 6,
+      "upvotes": 0,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633501
+      },
+      "user": {
+       "id": "1039",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "howd you know?",
+      "comments": []
+     },
+     {
+      "id": 3633515,
+      "createdStamp": 1794489161,
+      "updatedStamp": 1794489194,
+      "lastActivityStamp": 1794489161,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 7,
+      "upvotes": 1,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633501
+      },
+      "user": {
+       "id": "1038",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Hopefully Nvidia also fixed the FPS Limit and Frame Generation turning Off issue whenever the game is paused causing GPU wattage to shoot up to max for no reaso",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3633489,
+    "createdStamp": 1794473251,
+    "updatedStamp": 1794488252,
+    "lastActivityStamp": 1794488252,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 6,
+    "upvotes": 2,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1040",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591391/geforce-grd-61742-feedback-thread-released-10626/3629850/\nSame issue as described then, but with GRD 621.14\n\nFor convenience: (edited for my system)\n\nGPU: NVIDIA GeForce RTX 4090\nMonitor: BenQ XL2730Z\nOperating system: Windows 11 Pro 26H2, build 26300.9974\nLast known-good driver: NVIDIA 610.88\nFirst failing driver: NVIDIA 616.56\n\nIssue: With newer NVIDIA drivers, Windows becomes unresponsive and the monitor goes black immediately before the lock screen or desktop initializes. DisplayPort at 60 Hz works, but switching to 144 Hz reproduces the failure. HDMI at 144 Hz works normally. Disconnecting DisplayPort and reconnecting through HDMI restores normal operation. The same DisplayPort cable works perfectly fine at 144 Hz on Linux with driver 615.71.09 and on Windows with driver 610.88.\nThis appears to be a driver regression affecting DisplayPort initialization or 144 Hz operation on the BenQ XL2730Z. Please investigate alongside the existing reports involving drivers 616.64, 616.92 and 617.42.  ",
+    "comments": [
+     {
+      "id": 3633513,
+      "createdStamp": 1794488252,
+      "updatedStamp": 1794488226,
+      "lastActivityStamp": 1794488252,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 8,
+      "upvotes": 1,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633489
+      },
+      "user": {
+       "id": "1041",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "617.42 i have same issue past this update (or even earlier) -    Display Port -   Alienware 21:9 2k 144 - HDR -",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3633451,
+    "createdStamp": 1794437319,
+    "updatedStamp": 1794492755,
+    "lastActivityStamp": 1794437319,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 7,
+    "upvotes": 3,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1042",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GPU: Gigabyte GeForce RTX 4080 (16 GB)\n\nCPU: AMD Ryzen 7 5800X3D (Gigabyte B550 AORUS ELITE V2, BIOS F20a / AGESA 1.2.0.11), 16 GB DDR4-3333 (XMP). Issue also reproduced with Curve Optimizer disabled (stock CPU).\n\nDisplay Configuration: ASUS ROG Swift PG27UCDM (3840x2160, 240 Hz, G-SYNC) via [DisplayPort]. [No other displays connected]\n\nOperating System: Windows 11 Pro 26H2, build 26300.9974 (Insider)\n\nDriver Regression: Yes. Last working driver: 610.88. Broken: 621.14 (clean install with DDU in both cases). Rolling back to 610.88 with DDU fixes it; updating to 621.14 again brings the issue back.\n\nAffected Applications/Games: S.T.A.L.K.E.R. 2: Heart of Chornobyl (Steam, Unreal Engine 5, DX12)\nIssue Description:\n1) On launch, the game stays on a black screen. Stalker2.log shows hundreds of \"LogD3D12RHI: Error: Failed to create pipeline state with combined hash ..., error 8007000e\" and \"Failed to create compute pipeline\" errors, all within ~40 ms during PSO precaching. This is not a real out-of-memory condition: at that moment the log reports ~7 GB of free physical memory and ~24 GB of free virtual memory.\n2) After clearing the shader caches (NVIDIA DXCache and D3DSCache) and logging off/on, the game compiles shaders and reaches the main menu, but freezes when opening Settings -> Display (image freezes while the GPU keeps rendering at high load). The game has to be killed via Task Manager.\n3) After killing it, every new launch goes back to the black screen with error 8007000e, even with no game processes left running and VRAM usage back to ~2 GB. Restarting the graphics driver (Win+Ctrl+Shift+B) and restarting Steam do not help; only logging off/on (or rebooting) allows the game to start again.\nThe same game works on another system with an RTX 4070 Laptop GPU on 621.14 and the same Windows build.\nNo WHEA or nvlddmkm errors are logged in Event Viewer.\n1. Clean install 621.14 with DDU.\n3. Open Settings -> Display -> game freezes.\n4. Kill the game and relaunch -> black screen, 8007000e errors in Stalker2.log.",
+    "comments": []
+   },
+   {
+    "id": 3633448,
+    "createdStamp": 1794434975,
+    "updatedStamp": 1794435095,
+    "lastActivityStamp": 1794434975,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 8,
+    "upvotes": 1,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1043",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration)\n\nTL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright. This lasts as long as the calibration is loaded. With no calibration loaded, nothing is wrong. 591.74 is correct in every case.\n\n* GPU: GeForce RTX 3060 Ti\n\n* CPU: Intel Core i7-10700KF\n\n* Display Configuration: Dell U2419H (DisplayPort) and Acer S240HL (HDMI). 8 bpc RGB, Output dynamic range set to Full.\n\n* Operating System: Windows 11 Home, build 26200\n\n* Driver Regression: Yes. Last good driver: 591.74. Bad: 621.14 (full A/B test below); also seen on 610.88 and 621.01. Not tested: 591.86, 596.21, 596.36, 610.47. All Game Ready drivers, standard package.\n* Affected Applications/Games: Any program that loads a display calibration through the gamma ramp (SetDeviceGammaRamp), e.g. DisplayCAL / ArgyllCMS and their calibration loaders. While the calibration is loaded, every app and game shows the raised black.\n* Issue Description:\nA/B test on the same day, same display, same calibration file and same steps (X-Rite i1 Display Pro colorimeter, ArgyllCMS, calibration loader closed). Black in cd/m2, white about 86 cd/m2.\n- My calibration loaded: Driver 591.74 = black 0.089, contrast 963:1. Driver 621.14 = black 0.143, contrast 598:1 (stays like this as long as the calibration is loaded).\n- Calibrated contrast report (dispcal -R): Driver 591.74 = 973:1. Driver 621.14 = 746:1.\n- Switching from my calibration back to a linear ramp: Driver 591.74 = black correct immediately. Driver 621.14 = black one level too high (0.116) for about 25 seconds, then correct.\n- No calibration loaded (dispcal -r, 3 runs): Driver 591.74 = 973:1. Driver 621.14 = 972-974:1. No difference.\n- The raised black matches output level 1 or level 2 exactly (same brightness and color), so the driver outputs the wrong level, it is not noise.\n- In the 25 seconds after a switch, levels 8, 16, 250 and 254 are also one level too high. Levels 32 to 230 and white are not affected.\n- It depends on the shape of the calibration near black, not only on its first value: my calibration raises black even with its first value set to exactly 0, while a gamma 1.3 ramp did not raise black at all. It looks like the driver approximates the ramp nea",
+    "comments": []
+   },
+   {
+    "id": 3633447,
+    "createdStamp": 1794434952,
+    "updatedStamp": 1794434960,
+    "lastActivityStamp": 1794434952,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 9,
+    "upvotes": 1,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1044",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Hi everyone,\n\nI’m experiencing recurring freezes followed by automatic restarts on my PC while watching videos or live streams in Google Chrome. This has happened several times, including twice on the same day. The entire PC freezes and then restarts without any manual intervention.\n\n**System specifications:**\n\n- **CPU:** AMD Ryzen 7 9800X3D.\n- **Motherboard:** ASUS TUF GAMING B850-PLUS WIFI.\n- **BIOS:** 1681.\n- **GPU:** NVIDIA GeForce RTX 5080, 16 GB GDDR7.\n- **Power supply:** Corsair RM1000x SHIFT, 1000 W.\n- **Current NVIDIA driver:** 621.14, confirmed using `nvidia-smi`.\n\n**Symptoms and troubleshooting so far:**\n\n- The issue occurred with driver **617.42** and has continued with **621.14**.\n- I performed a clean driver installation using the NVIDIA installer, but **I have not used DDU yet**.\n- Chrome’s “Use graphics acceleration when available” setting is currently disabled. I cannot confirm whether it was disabled before all the previous crashes.\n**Crash dump findings:**\nThe dumps analyzed so far indicate **VIDEO_TDR_FAILURE (0x116)**, involving **nvlddmkm.sys**. I understand that this identifies a failure in the graphics timeout recovery process but does not, by itself, establish whether the underlying cause is the driver or hardware.\nHas anyone experienced similar restarts during video playback with an RTX 5080 and these driver versions? Would a cleanup with DDU be a reasonable next step, and what additional logs or tests would help distinguish a driver issue from a GPU, power supply, or other hardware problem?",
+    "comments": []
+   },
+   {
+    "id": 3633362,
+    "createdStamp": 1794377564,
+    "updatedStamp": 1794388570,
+    "lastActivityStamp": 1794388570,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 10,
+    "upvotes": 4,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1045",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Title: NVIDIA Driver Regression – G-SYNC Stuttering with Multiple Windows Open\n\nSystem: Windows 11, Gigabyte RTX 4090 Gaming OC, Intel i7-13700KF, dual ASUS ROG Swift OLED PG32UCWM monitors (4K 240 Hz, DisplayPort). NVIDIA driver version: 621.14\n\nIssue: Following a recent NVIDIA driver update, Oxygen Not Included (ONI) experiences severe intermittent stuttering when another application is open on the secondary monitor. During WASD camera movement, the game periodically freezes or hitches before suddenly catching up. The issue occurs with unrelated applications, including Chrome (even with an empty tab) and Windows Photos.\n\nReproduction: Enable G-SYNC, launch ONI on the primary monitor, open Chrome or Windows Photos on the secondary monitor, and continuously scroll the game camera using WASD. Closing the secondary application immediately eliminates the stuttering.\nTroubleshooting: Disabling G-SYNC completely resolves the issue. Disabling Chrome hardware acceleration has no effect. Disabling Windows Multi-Plane Overlay (MPO) and restarting also has no effect. Verifying game files and reverting from the ONI beta to the stable version did not resolve it.\nSuspected Cause: The issue appears to be an NVIDIA driver issue involving G-SYNC frame presentation when multiple application windows are open. The problem began following a driver update and is reproducible across unrelated secondary applications.\nPlease investigate this potential driver regression affecting multi-monitor G-SYNC configurations.",
+    "comments": []
+   },
+   {
+    "id": 3633357,
+    "createdStamp": 1794369849,
+    "updatedStamp": 1794381939,
+    "lastActivityStamp": 1794369849,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 11,
+    "upvotes": 2,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1046",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Still won't work with WoW Forever, still only get flashing white screen like reported for 621.01.",
+    "comments": []
+   },
+   {
+    "id": 3633356,
+    "createdStamp": 1794366356,
+    "updatedStamp": 1794442156,
+    "lastActivityStamp": 1794442156,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 12,
+    "upvotes": 1,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1047",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "**Title: RTX 4060 – Repeated 5+ Second Game Freezes in Cyberpunk 2077 and Enshrouded on Driver 621.14**\n\nHello,\n\nSince updating to GeForce Game Ready Driver 621.14 WHQL, I have been experiencing severe intermittent freezes in games.\n\n**Issue description:**\n\nIn both Cyberpunk 2077 and Enshrouded, the game suddenly freezes completely for approximately 5 seconds or longer. After that, the game resumes normally, without crashing or closing.\n\nThe problem occurs repeatedly during gameplay. After recovering from one freeze, everything works normally for some time, but then another freeze happens. This cycle continues throughout the gaming session.\n\nThis is particularly frustrating because the freezes are long enough to completely interrupt gameplay.\n**Games affected:**\n- Driver: GeForce Game Ready Driver 621.14 WHQL\nThe freezes started after updating to driver 621.14. I did not experience this behavior before the driver update.\nThe games do not crash. They simply become completely unresponsive for 5+ seconds and then continue running as if nothing happened.\nCould this be a driver-related issue? I would appreciate it if NVIDIA could investigate possible GPU driver stalls or synchronization problems.\nHas anyone else with an RTX 40-series GPU experienced similar freezes on driver 621.14?\nI have also found reports from other users in this feedback thread describing DirectX 12 pipeline creation failures, shader compilation hangs, and game freezes on driver 621.14.\nMy issue appears to be slightly different: both Cyberpunk 2077 and Enshrouded completely freeze for 5 seconds or longer, then recover and continue running normally. The same issue happens again after some time.\nSince this affects multiple games, I suspect a possible driver-level issue rather than a game-specific problem.\nI would appreciate confirmation from NVIDIA whether this behavior is being investigated.",
+    "comments": [
+     {
+      "id": 3633455,
+      "createdStamp": 1794442156,
+      "updatedStamp": 1794442190,
+      "lastActivityStamp": 1794442156,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 9,
+      "upvotes": 1,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633356
+      },
+      "user": {
+       "id": "1048",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "It's because the GPU is crashing and restarting itself.  \"My GPU is running with a custom undervolt and frequency curve.\" - did you try at stock settings?  If y",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3633347,
+    "createdStamp": 1794353519,
+    "updatedStamp": 1794381944,
+    "lastActivityStamp": 1794353519,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 13,
+    "upvotes": 2,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1049",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Follow-up to my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon.\n\nSystem: MSI Stealth 16 AI Studio A1VFG, RTX 4060 Laptop GPU (hybrid mode), Windows 11 Pro 25H2 (26200.9711). External monitor MSI G244F E2, 1920x1080 @ 180 Hz, SDR, connected by HDMI directly to the RTX 4060, RGB full range, 8 bpc.\n\nWith 621.01 and 621.14:\n- Windows Auto Color Management (ACM) OFF on the external monitor: the whole monitor turns washed out (lifted blacks and midtones) as soon as a Chromium browser (Brave) is opened. Screenshots look correct.\n- Ruled out: Chromium video overlays (--disable_direct_composition_video_overlays has no effect), MPO (OverlayTestMode=5 was already set), legacy gamma ramp (identity ramp, same result), NVIDIA Control Panel reference mode, output range/format (AVI InfoFrame identical with 616.56).\nSame machine with 617.42 and ACM OFF on that monitor: no washout at all, including fullscreen Independent Flip and Brave startup. I rolled back to 617.42 as a workaround.\nSide note: with 616.56 or 617.42 and ACM ON, that external monitor looks too dark, which is why ACM stays off there.",
+    "comments": []
+   },
+   {
+    "id": 3633323,
+    "createdStamp": 1794336992,
+    "updatedStamp": 1794349800,
+    "lastActivityStamp": 1794349800,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 14,
+    "upvotes": 1,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1050",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "BF6 new Season 5 latest Patch 2.1.2.0 Issues\n\nMajor regress in performance in both DLAA  and DLSS performance.\nDLAA looking at 100fps drop and DLSS looking at 50-80FPS and artifacts, stuttering, frame pacing.\nBF6 settings are the same as they have been in previous drivers.\n\nUsing latest drivers 621.14\nWindows 11pro 10.0.26300 Build 26300\n4090\n\nanyone else playing latest season/patch have any issues ?",
+    "comments": []
+   },
+   {
+    "id": 3633265,
+    "createdStamp": 1794314116,
+    "updatedStamp": 1794340929,
+    "lastActivityStamp": 1794331274,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 15,
+    "upvotes": 2,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1051",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Same issue on the 62x branch, RTX 5060 8 GB + Delta Force (UE 4.24):\n\n- First-launch shader compile completes, but the background PSO warm-up never\n  advances: OverallProgress stays at 0-15%, PSO cache dir 257 MB vs 2620 MB on 617.42.\n- Textures then stream in extremely slowly and the game hangs (CrashType=Hang,\n  bIsOOM=0).\n- Rolling back to 617.42 fixes it completely; reproduced twice with clean installs.\n\nFull report + evidence: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592772/rtx-5060-62114-delta-force-pso-warm-up-never-comp/\n\nAlso seen in the Monsterverse and sarasanshuman threads (freeze 1-2 s after the\nlatest driver), possibly related.\nSame signature as the two freeze reports above.",
+    "comments": [
+     {
+      "id": 3633319,
+      "createdStamp": 1794331274,
+      "updatedStamp": 1794386102,
+      "lastActivityStamp": 1794331357,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 10,
+      "upvotes": 2,
+      "topic": {
+       "id": 592433
+      },
+      "parent": {
+       "id": 3633265
+      },
+      "user": {
+       "id": "1052",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Same with me also had to drop back to 617.42.\nI'm thinking Display port coding in driver of 620 series, seems HDMI Hookups are non issue on my other machines, just my Display port ones graphics choppy and black screen",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3633210,
+    "createdStamp": 1794263413,
+    "updatedStamp": 1794340985,
+    "lastActivityStamp": 1794326668,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 16,
+    "upvotes": 4,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1038",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Found a new bug! \n\nFrame Generation turns off every time you pause any game. GPU suddenly starts using max watts for no reason and temperature rises whenever th",
+    "comments": []
+   },
+   {
+    "id": 3633148,
+    "createdStamp": 1794220180,
+    "updatedStamp": 1794408892,
+    "lastActivityStamp": 1794220180,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 17,
+    "upvotes": 2,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1053",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GPU: RTX 5060 Ti 16GB\nCPU: Core i7-11700F\nDisplay: TCL 25G64 (DisplayPort, 1920x1080, 144Hz)\nOperating System: Windows 11 Pro (26H2)\nDriver Regression: 621.14 NDIVIA Studio Driver\nApplication: Reflections: an Unreal Engine Real-Time Ray Tracing Demonstration\nIssue:\nWhen running the aforementioned demo, the screen appears dark.\nThis has been the case since the previous driver version (621.01).\nI am currently using version 610.88, with which the display appears correctly.",
+    "comments": []
+   },
+   {
+    "id": 3633145,
+    "createdStamp": 1794219471,
+    "updatedStamp": 1794233479,
+    "lastActivityStamp": 1794225035,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 18,
+    "upvotes": 2,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1054",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "This driver is fine zero issue on my RTX4080 FE either black screen or flicker! \nTested some games 007, Clive Barker's Hellraiser Revival other games are fine.\n",
+    "comments": []
+   },
+   {
+    "id": 3633141,
+    "createdStamp": 1794218319,
+    "updatedStamp": 1794456495,
+    "lastActivityStamp": 1794224291,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 19,
+    "upvotes": 3,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1052",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Driver Still Causing Black Screen with Multi-Monitor, PC was just sitting Idle no gaming stopped screen save and Monitors started like power cycling going black, I went back to 617.42 with clean install option not one issue. I did try Clean Install with Newest driver but no go. I also tried Newest Studio Drivers also no go and also Clean Install.\n\n2 Thunderbolt Monitors\n1 HDMI\nLaptop Monitor\nall external running 2560x1440 60hz\nSeems Driver and ThunderBolt is issue as HDMI doesnt go Black this time",
+    "comments": []
+   },
+   {
+    "id": 3633092,
+    "createdStamp": 1794173778,
+    "updatedStamp": 1794209335,
+    "lastActivityStamp": 1794173778,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 20,
+    "upvotes": 2,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1055",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GPU:\nASUS PRIME GeForce RTX 5080 OC\nCPU:\nAMD Ryzen 7 7800X3D\nMotherboard:\nGigabyte X870E Aorus Pro\nPower Supply:\nASUS TUF Gaming 1000W Gold (ATX 3.0, fully modu",
+    "comments": []
+   },
+   {
+    "id": 3633068,
+    "createdStamp": 1794154471,
+    "updatedStamp": 1794813523,
+    "lastActivityStamp": 1794154471,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 21,
+    "upvotes": 8,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1056",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "BOOT UP STILL BLACK SCREEN (CANT LOGIN) ON MY DOUGH 4K 144HZ MONITOR - TDRS ARE STILL THE CAUSE OF THIS SINCE AFTER 610.88.\n\nGPU: Zotac 5080\nCPU: 7800x3d\n\nDisplay Configuration: Dough Spectrum 4k 144hz monitor on a display port connection. Does it on HDMI too. \nOS: Windows 11 64 bit.\n\nDriver Regression: All drivers have this after 610.88.\n\nAffected Applications/Games: Windows 11 bootup.\n\nIssue Description: Cant boot into windows because the I get TDR errors at the login screen so nothing shows up as video. Reliability History shows the following:\n\nProblem Event Name:\tLiveKernelEvent\nCode:\t1b8\nParameter 1:\taaaaaaaaaaaaaaaa\nParameter 2:\taaaaaaaaaaaaaaaa\nParameter 3:\taaaaaaaaaaaaaaaa\nOS Version:\t10.0.26300.2.0.0.768.101\nI get a list of those TDRs w/ any dirver but 610.88. And whats funny is that windows DEFAULTS to this driver when i DDU the newer ones, so its as if Microsoft knows that there are issues w/ driver after it. Once windows self installs this driver, it works and i get video at login again. There are also random TDRs i get from time to time, but they are very few. Mostly its solid.\nSteps to Reproduce: Install any driver after 610.88 then just reboot w/ the effected monitor. It doesnt do this on all monitors. My 1440p 144hz display seems to work ok, but it effects the 4k 144hz for some reason. The DP configuration is bugged somewhere.",
+    "comments": []
+   },
+   {
+    "id": 3633067,
+    "createdStamp": 1794154268,
+    "updatedStamp": 1794213293,
+    "lastActivityStamp": 1794154268,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 22,
+    "upvotes": 3,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1057",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GPU RTX4080S\nCPU AMD Ryzen7 9800X3D\nOS Window11\n621.14 make MH wilds flickering problem. I have to reversion to 610.88.",
+    "comments": []
+   },
+   {
+    "id": 3633066,
+    "createdStamp": 1794154118,
+    "updatedStamp": 1795009197,
+    "lastActivityStamp": 1794157354,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 23,
+    "upvotes": 6,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1058",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GPU: NVIDIA GeForce RTX 4070 SUPER (VBIOS 95.04.69.00.c1, PCIe 4.0 x16)\n\nCPU: Intel Core i5-14600KF (14C/20T)\n\nDisplay Configuration: 1x LG UltraGear, connected via DisplayPort, 1920x1080 @ 144 Hz (single display)\n\nOperating System: Windows 11 Home 25H2 (build 26200.9711)\n\nDriver Regression: Yes, new in 621.14. Driver 621.01 (clean install) is NOT affected: nvlog.nvlgstg grows ~0.5 KB/min and NVDisplay.Container.exe writes < 2 MB per 5 min, vs ~325 KB/min growth and 515 MB per 5 min on 621.14 under the same conditions.\n\nAffected Applications/Games: None specific. It happens at the desktop with no games running (only a web browser with 2 tabs open). It is not tied to any game.\n\nIssue Description:\nNVDisplay.Container.exe (service \"NVIDIA Display Container LS\") continuously rewrites the binary log file\nC:\\ProgramData\\NVIDIA Corporation\\nvtopps\\nct\\nvlog.nvlgstg, causing heavy SSD writes while the PC is idle.\n- Resource Monitor showed NVDisplay.Container.exe writing 4.6–5.2 MB/s to this file, with no game running.\n- The file grows quickly after being cleared (0 → 2.6 MB in about 8 minutes) and reached about 20 MB. The write volume increases as the file grows.\n- Over a 5-minute idle measurement, NVDisplay.Container.exe accounted for 515 MB of write I/O. After stopping the service, deleting nvlog.nvlgstg and restarting the service, it dropped to 48 MB (-91%), and total writes to the C: drive dropped from 270 MB to 145 MB.\n- The SSD's SMART \"Data Units Written\" counter matches the writes Windows reports, so these are real writes to the NVMe drive.\nThis causes unnecessary SSD wear (about 3 GB/hour from this process alone at idle). A similar issue with nvtopps.db3 was fixed in driver 471.96 in 2021.\n1. Install driver 621.14 with the NVIDIA App (default settings; no NVIDIA Control Panel changes).\n3. Open Resource Monitor > Disk and sort by Write (B/s): NVDisplay.Container.exe keeps writing several MB/s to C:\\ProgramData\\NVIDIA Corporation\\...\n4. Check C:\\ProgramData\\NVIDIA Corporation\\nvtopps\\nct\\nvlog.nvlgstg: it is modified every few seconds and keeps growing.\n5. Workaround that confirms the source: stop the \"NVIDIA Display Container LS\" service, delete nvlog.nvlgstg, and restart the service. Writes drop by about 91% until the file grows again.",
+    "comments": []
+   },
+   {
+    "id": 3633062,
+    "createdStamp": 1794153267,
+    "updatedStamp": 1794314904,
+    "lastActivityStamp": 1794233545,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 2,
+    "isOfficialReply": 0,
+    "index": 24,
+    "upvotes": -1,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1059",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "GeForce RTX  Game Ready Driver 621.14 fucks up my system\n- No detection of second screen\n- Age of Empires III: Ultimate Edition crashes after 5 minutes with \"game crashed: prohibited: procexp.exe\". \n\nAfter rolling back the NVIDIA Game Ready Driver v617.71 everything works again. \n- You could at least apologize leaving alone not only with your hardware for the AI bubble, but also with you crappy drivers",
+    "comments": []
+   },
+   {
+    "id": 3633052,
+    "createdStamp": 1794147778,
+    "updatedStamp": 1794456574,
+    "lastActivityStamp": 1794330524,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 2,
+    "isOfficialReply": 0,
+    "index": 25,
+    "upvotes": 3,
+    "topic": {
+     "id": 592433
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1060",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "I recently encountered a multi monitor wake up issue after updating my NVIDIA graphics driver to version 621.01 and then 621.14. I thought 621.14 would fix it but it won't. The problem is that when my monitors wakes up from lock screen, only my secondary monitor turns on. However, primary monitor, which is connected via DisplayPort, remains black and fails to wake up. To get the main monitor to work, I have to manually go to Settings > System > Display and re-enable Extend these displays or Windows + CTRL + Shift + B. I think I fixed issue by troubleshooting by just returning to older graphics driver version, and it is 617.42. I did not have this issue a few weeks ago on older driver version\ns until the driver version 621.01 at October 21, 2026. Well, rolling it back to driver version 617.42 completely resolves the issue, and both monitors now wake up normally from lock screen. So, my question is that if there there might be a problem in version 621.01 and 621.14 regarding DisplayPort power management or signal handling during wake up states in multi monitor setups? Or it just me... I again rolled it back to driver version of 617.42, works fine now. I have NVIDIA GeForce RTX 3060 Ti, my primary monitor is ASUS VG2791R and my secondary monitor is LG 27M47VQ. Just wanted to report this bug so it can be investigated in future driver releases.",
+    "comments": []
+   }
+  ]
+ }
+}

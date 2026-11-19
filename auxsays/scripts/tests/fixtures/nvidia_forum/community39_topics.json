@@ -1,0 +1,495 @@
+{
+ "success": true,
+ "errors": [],
+ "pagination": {
+  "_page": 1,
+  "_pageSize": 15,
+  "_totalPages": 67,
+  "_totalRows": 1000
+ },
+ "data": {
+  "topics": [
+   {
+    "id": 587435,
+    "title": "Regression in 610.xx drivers with Samsung ViewFinity S9 (5K DisplayPort mode)",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1782111580,
+    "replyCount": 4,
+    "upvotes": 3,
+    "lastActivityStamp": 1795028064,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1795028064,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1018",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634599
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 580784,
+    "title": "[BUG] RTX 4090 LiveKernelEvent 0x141 & 0x1B8 Crashes on Windows 11 25H2 (Build 26200) with MSI B650M",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1767915702,
+    "replyCount": 1,
+    "upvotes": 1,
+    "lastActivityStamp": 1794665967,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794665967,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1019",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3633877
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 590188,
+    "title": "RTX 50-series + HAGS + Remote Desktop = black screen, dxgkrnl 0x193 LiveKernelEvent (driver 616.56)",
+    "type": "discussion",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1788183673,
+    "replyCount": 2,
+    "upvotes": 2,
+    "lastActivityStamp": 1794576341,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794576341,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1020",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3633707
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 586563,
+    "title": "latest 610.47 Studio driver.",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1779883452,
+    "replyCount": 2,
+    "upvotes": 1,
+    "lastActivityStamp": 1793136765,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1793136765,
+    "hasOfficialReply": 1,
+    "user": {
+     "id": "1021",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3631638
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 588913,
+    "title": "BSOD 0x7F double-fault — kernel-stack overflow from unbounded recursion in nvlddmkm.sys (610.62) on",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1785317555,
+    "replyCount": 2,
+    "upvotes": 3,
+    "lastActivityStamp": 1791590772,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1791590772,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1022",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3628858
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 590759,
+    "title": "DisplayPort No Signal / Black Screen after Sleep Mode (NVIDIA Driver 616.92)",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1789403037,
+    "replyCount": 3,
+    "upvotes": 3,
+    "lastActivityStamp": 1791214214,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1791214214,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1023",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3628244
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 591287,
+    "title": "D3D11On12 issue",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1790752898,
+    "replyCount": 1,
+    "upvotes": 0,
+    "lastActivityStamp": 1790782520,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1790789429,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1024",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3627590
+    },
+    "communities": [
+     {
+      "id": 5,
+      "title": "GeForce Graphics Cards"
+     },
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     },
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 556533,
+    "title": "GeForce drivers causing black screen",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1738338760,
+    "replyCount": 134,
+    "upvotes": 60,
+    "lastActivityStamp": 1790191223,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1791278569,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1025",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3626550
+    },
+    "communities": [
+     {
+      "id": 5,
+      "title": "GeForce Graphics Cards"
+     },
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     },
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 572326,
+    "title": "5060 ti 16GB vs 5070 12GB for video editing",
+    "type": "discussion",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1753791482,
+    "replyCount": 1,
+    "upvotes": 1,
+    "lastActivityStamp": 1789996956,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1791278560,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1026",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 0
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 496688,
+    "title": "DRM driver doesn't advertise the 4k 60 Hz monitor modes the Xorg driver does.",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1656707529,
+    "replyCount": 4,
+    "upvotes": 1,
+    "lastActivityStamp": 1789935106,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1789935106,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1027",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3626078
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 590622,
+    "title": "Studio Driver 616.92 Broke DP Output on my 4060",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1789060987,
+    "replyCount": 2,
+    "upvotes": 1,
+    "lastActivityStamp": 1789920296,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1791571289,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1028",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3626037
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 590509,
+    "title": "Bug report",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1788793112,
+    "replyCount": 0,
+    "upvotes": 1,
+    "lastActivityStamp": 1788793112,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1788793119,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1029",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3624386
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 590446,
+    "title": "RTX5080 is slow when Neural Engine is ON, Davinci Resolve Fusion",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1788649922,
+    "replyCount": 0,
+    "upvotes": 1,
+    "lastActivityStamp": 1788649922,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1788649963,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1030",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3624152
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 590044,
+    "title": "Garmma crashing issues occasionally",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1787868507,
+    "replyCount": 0,
+    "upvotes": 1,
+    "lastActivityStamp": 1787868507,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1787868560,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1031",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3622349
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   },
+   {
+    "id": 589027,
+    "title": "Crashes with 610.62 and 610.88 Studio Drivers",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1785494160,
+    "replyCount": 3,
+    "upvotes": -1,
+    "lastActivityStamp": 1787124169,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1787124169,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1032",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3621008
+    },
+    "communities": [
+     {
+      "id": 39,
+      "title": "Studio Drivers"
+     }
+    ]
+   }
+  ]
+ }
+}

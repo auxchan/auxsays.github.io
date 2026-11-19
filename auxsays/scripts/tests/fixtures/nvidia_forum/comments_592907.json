@@ -1,0 +1,645 @@
+{
+ "success": true,
+ "errors": [],
+ "pagination": {
+  "_page": 1,
+  "_pageSize": 25,
+  "_totalPages": 1,
+  "_totalRows": 13
+ },
+ "anchor": {
+  "_anchorValue": "3634654",
+  "_anchorDirection": "+before",
+  "_anchorOffset": "0"
+ },
+ "data": {
+  "comments": [
+   {
+    "id": 3634652,
+    "createdStamp": 1795049058,
+    "updatedStamp": 1795049615,
+    "lastActivityStamp": 1795049615,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 1,
+    "upvotes": 1,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1000",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "this command can disable it, but it also can disable something useful\n\nlogman stop NVIDIA-NVTOPPS-FILTER -ets\nit resets after reboot\nI've reported it to NVIDIA ",
+    "comments": []
+   },
+   {
+    "id": 3634625,
+    "createdStamp": 1795038737,
+    "updatedStamp": 1795048599,
+    "lastActivityStamp": 1795040578,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 2,
+    "isOfficialReply": 0,
+    "index": 2,
+    "upvotes": 2,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1088",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Happens for me too on 621.24.\nFresh after restart. No game is running, just the browser with one tab I'm writing this in.\nConstant writing by NVDisplay.Container.exe at about 10-15MB/s and if I change window focus (Alt+tab or just click around) instantly writes hundreds of MB. I switch windows a lot so it sums up to huge amounts fast.\nIt's been just few minutes since I restarted and it's already nearing 10GB total writes, all to that one file nvlog.nvlgstg. It sits at about ~20MB size and doesn't seem to grow, but the size in explorer blinks to 0B every second or so, so it looks like it's being completely rewritten constantly.",
+    "comments": [
+     {
+      "id": 3634632,
+      "createdStamp": 1795040578,
+      "updatedStamp": 1795040556,
+      "lastActivityStamp": 1795040578,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 5,
+      "upvotes": 1,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634625
+      },
+      "user": {
+       "id": "1088",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Open task manager and go to details tab. Right click on any header and choose to select columns. In the selection window look for I/O writes (in bytes) and enab",
+      "comments": []
+     },
+     {
+      "id": 3634630,
+      "createdStamp": 1795039864,
+      "updatedStamp": 1795039897,
+      "lastActivityStamp": 1795039864,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 6,
+      "upvotes": 1,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634625
+      },
+      "user": {
+       "id": "1089",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "where and how to check the NVDisplay.Container.exe write?",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634607,
+    "createdStamp": 1795033834,
+    "updatedStamp": 1795048671,
+    "lastActivityStamp": 1795048671,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 4,
+    "isOfficialReply": 0,
+    "index": 3,
+    "upvotes": 4,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1090",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "A workaround that stops the nvlog.nvlgstg writes and keeps the NVIDIA App working, plus details that may help the team find the cause.\n\nSystem: RTX 4090, Windows 11, driver 621.24, WD SN850X 2TB.\n\nMeasured at idle, using the I/O write counters for NVDisplay.Container.exe over 60-second windows: 2.0–2.7 GB per minute (about 120–160 GB/h) after roughly 43 h of uptime. It rewrites the same ~20 MB C:\\ProgramData\\NVIDIA Corporation\\nvtopps\\nct\\nvlog.nvlgstg in a loop. Turning off logging in the NVIDIA App changed nothing. A fresh service restart starts lower (about 1 GB/min) but climbs as the file grows.\n\nRoot cause, from the container's own log: only one plugin writes this file, _nvtopps.dll (\"NvTopps_Plugin\"), and the container loads it as an OPTIONAL plugin.\nThen restart the \"NVIDIA Display Container LS\" service, or reboot. %ProgramData%\\NVIDIA\\NVDisplay.ContainerLocalSystem.log then shows \"Disable loading of plugin ...\\_nvtopps.dll\". Writes went to 0 MB per minute, nvlog.nvlgstg is no longer created, the service stays on Automatic, and the NVIDIA App works (refresh-rate change tested). To undo it, delete the _nvtopps key. A driver reinstall may reset it.\nThe read-only trick didn't work here: on restart the container renamed the read-only file to nvlog_0.nvlog and created a fresh nvlog.nvlgstg.\nIt would be great to get a fix in the next driver.",
+    "comments": [
+     {
+      "id": 3634651,
+      "createdStamp": 1795048671,
+      "updatedStamp": 1795048776,
+      "lastActivityStamp": 1795048776,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 2,
+      "upvotes": 1,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634607
+      },
+      "user": {
+       "id": "1000",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "this command can disable it, but it also can disable something useful\nlogman stop NVIDIA-NVTOPPS-FILTER -ets\nit resets after reboot",
+      "comments": []
+     },
+     {
+      "id": 3634650,
+      "createdStamp": 1795048222,
+      "updatedStamp": 1795048457,
+      "lastActivityStamp": 1795048457,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 3,
+      "upvotes": 1,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634607
+      },
+      "user": {
+       "id": "1091",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "This fixed for me as well... Thank you @user System: RTX 4090, Windows 11, driver 621.24, PNY CS3030 500GB SSD.\n\nPC was online for two days straight. At Task Manager, I/O writes bytes for NVDisplay.Container was reporting 987.131.206.137 bytes. Almost 1TB in 2 days. Yikes. Now wondering if this is related to my SSD health status dropping FAST over the last few months, currently sitting at 12%. Dropped from 44% in the benning of the year.",
+      "comments": []
+     },
+     {
+      "id": 3634641,
+      "createdStamp": 1795044273,
+      "updatedStamp": 1795044311,
+      "lastActivityStamp": 1795044273,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 4,
+      "upvotes": 1,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634607
+      },
+      "user": {
+       "id": "1092",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "If I use this/type it into the PowerShell:\n\nNew-Item 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\NVDisplay.ContainerLocalSystem\\Parameters\\LocalSystem\\_nvtopps' -F",
+      "comments": []
+     },
+     {
+      "id": 3634628,
+      "createdStamp": 1795039477,
+      "updatedStamp": 1795039484,
+      "lastActivityStamp": 1795039477,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 7,
+      "upvotes": 1,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634607
+      },
+      "user": {
+       "id": "1093",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Thank you for this, at least your steps will stop further blood loss from this gaping hole of a problem.\n\nnVidia, you really have outdone yourselves here. On to",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634603,
+    "createdStamp": 1795031036,
+    "updatedStamp": 1795031134,
+    "lastActivityStamp": 1795031134,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 4,
+    "upvotes": 1,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1094",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Not reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger.\n\n- GPU: NVIDIA GeForce RTX 5070 Ti (16 GB)\n- CPU: Intel Core i9-10850K (stock), 32 GB DDR4-3200, 500 GB NVMe\n- Display Configuration: 1x MSI MAG 275UPD E14 (27\"), 3840x2160, DisplayPort, G-SYNC on\n- Operating System: Windows 11\n- Driver Regression: none observed. 621.14 (clean install, 2026-11-04) and 621.24 (Express upgrade over 621.14, then a reboot) both behave like the 621.01 rate reported as unaffected in this thread.\n- Affected Applications/Games: none. Tested at the desktop idle, with the NVIDIA overlay open, in Edge with a YouTube video playing, alt-tabbing, and (on 621.14) in a game.\n- Issue Description: I tried to reproduce the reported continuous rewriting of C:\\ProgramData\\NVIDIA Corporation\\nvtopps\\nct\\nvlog.nvlgstg.\n  621.14: about 45 min of gaming with the overlay on and frequent alt-tabbing. The file stayed at 1.1 MB, last modified 9:46 AM, unchanged throughout. NVIDIA Container processes: 0 MB/s disk.\n  621.24: the installer reset the file to 17 KB. After the reboot: 19 KB at 10:44, 26 KB at 11:00 (about 0.4 KB/min) across idle, the overlay, Edge + YouTube and alt-tabbing. Each small increase coincided with an application launching. NVDisplay.Container.exe did not appear among Resource Monitor's disk writers at any point. The only NVIDIA write observed: nvcontainer.exe (NVIDIA App) at about 50 KB/s while the overlay was open; the log did not change.\n  Possible differences from the detailed affected report earlier in this thread (an RTX 4070 SUPER with a single 1080p 144 Hz DisplayPort display): GPU generation (50-series here), 4K resolution, G-SYNC on, and a clean install of 621.14. Offered as leads, not conclusions.\n- Steps to Reproduce (what I did): 1) Note the size and Date modified of nvlog.nvlgstg. 2) Idle at the desktop 5+ min. 3) Open the NVIDIA overlay; alt-tab repeatedly. 4) Open Edge, play a YouTube video, alt-tab. 5) Re-check the file (F5) and Resource Monitor > Disk. NVIDIA Control Panel / App: default settings, overlay enabled.",
+    "comments": []
+   },
+   {
+    "id": 3634600,
+    "createdStamp": 1795029797,
+    "updatedStamp": 1795049195,
+    "lastActivityStamp": 1795049195,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 5,
+    "upvotes": 1,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1095",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "On 621.24 (RTX 5080), for the past 2 days I've been monitoring how much read/write bytes Nvidia services are doing. Only two that are notable. One nvcontainer.exe instance that has written just shy of 750MB in two days and one of the two NVDisplay.Container.exe processes that has written 502MB in two days.\n\nBeen playing a bunch of games in this 2 day period as well as normal browsing and YT videos.\nI have two monitors, and rarely alt-tab. The second monitor is idle most of the time (maybe that's why the other NVDisplay.Container.exe has only 3MB on the clock so far... or could be unrelated)\nWill keep an eye on it to see if it suddenly goes to hundreds of GBs as people are seeing.",
+    "comments": [
+     {
+      "id": 3634654,
+      "createdStamp": 1795049195,
+      "updatedStamp": 1795049210,
+      "lastActivityStamp": 1795049210,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 1,
+      "upvotes": 1,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634600
+      },
+      "user": {
+       "id": "1000",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "I have second pc with 4050 and on this one I have old driver it stays at 5-10mb even after long session of 5-8hours",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634598,
+    "createdStamp": 1795027556,
+    "updatedStamp": 1795027560,
+    "lastActivityStamp": 1795027556,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 6,
+    "upvotes": 1,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1066",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "I made C:\\ProgramData\\NVIDIA Corporation\\nvtopps\\nct\\nvlog.nvlgstg read-only and it stops but i have to do it evrey time i start my pc since it makes a new log ",
+    "comments": []
+   },
+   {
+    "id": 3634579,
+    "createdStamp": 1795019294,
+    "updatedStamp": 1795019328,
+    "lastActivityStamp": 1795019294,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 7,
+    "upvotes": 1,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1096",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Telemetry disabled, Overlay disabled, and it still wrote 90GB/day on my machine. 4070ti",
+    "comments": []
+   },
+   {
+    "id": 3634558,
+    "createdStamp": 1795002115,
+    "updatedStamp": 1795022339,
+    "lastActivityStamp": 1795022339,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 2,
+    "isOfficialReply": 0,
+    "index": 8,
+    "upvotes": 1,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1097",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "How do you check if it's constantly writing?",
+    "comments": [
+     {
+      "id": 3634584,
+      "createdStamp": 1795022339,
+      "updatedStamp": 1795022346,
+      "lastActivityStamp": 1795022339,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 9,
+      "upvotes": 1,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634558
+      },
+      "user": {
+       "id": "1097",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "I don't seem to even have NVDisplay.Container.exe on my resmon, the highest I have is system fluctuating between 80k to 300k B/Sec, so I'm assuming I'm fine?",
+      "comments": []
+     },
+     {
+      "id": 3634578,
+      "createdStamp": 1795019231,
+      "updatedStamp": 1795049216,
+      "lastActivityStamp": 1795019231,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 10,
+      "upvotes": 3,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634558
+      },
+      "user": {
+       "id": "1096",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "Open Task manager, go to the Details tab > Right click a column title > select columns > Find and select I/O write bytes in the list. See how much NVDisplay.Container.exe has written since boot. Mine was 184GB after 2 days. Rolled back to 621.01 driver and the problem disappeared.",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634549,
+    "createdStamp": 1794997300,
+    "updatedStamp": 1795034449,
+    "lastActivityStamp": 1795034449,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 9,
+    "upvotes": 2,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1098",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "you can set the read-only flag on C:\\ProgramData\\NVIDIA Corporation\\nvtopps\\nct\\nvlog.nvlgstg and that seems to stop it fine\n",
+    "comments": [
+     {
+      "id": 3634611,
+      "createdStamp": 1795034449,
+      "updatedStamp": 1795034452,
+      "lastActivityStamp": 1795034449,
+      "isVisible": 1,
+      "isGhosted": 0,
+      "status": "default",
+      "replyCount": 0,
+      "isOfficialReply": 0,
+      "index": 8,
+      "upvotes": 1,
+      "topic": {
+       "id": 592907
+      },
+      "parent": {
+       "id": 3634549
+      },
+      "user": {
+       "id": "1099",
+       "aclactions": {
+        "officialreply": false
+       }
+      },
+      "body": "It works only in actual session. After reboot it comes back with two files: nvlog.nvlgstg (new with the the same bug) and nvlog_0.nvlog (old with read-only flag",
+      "comments": []
+     }
+    ]
+   },
+   {
+    "id": 3634462,
+    "createdStamp": 1794940665,
+    "updatedStamp": 1794940669,
+    "lastActivityStamp": 1794940665,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 0,
+    "index": 10,
+    "upvotes": 1,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1007",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Do you have any games on your PC that support advanced shader delivery? Like Gears, Forza, COD mw4? ",
+    "comments": []
+   },
+   {
+    "id": 3634324,
+    "createdStamp": 1794867900,
+    "updatedStamp": 1795049485,
+    "lastActivityStamp": 1794940679,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 11,
+    "upvotes": 1,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1100",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Same issue on my end.  The nvlog.nvlgstg file itself is only ~14.5 mb, but it writes to it over and over and over. Clearly something is stuck in a loop and going very wrong, hopefully Nvidia can fix it? Until then, I'm reverting back to an older driver.\n\n(Windows 11 26H2, Asus 4070 TI Super, 621.24 driver after using 610.88 where the problem did not show up)",
+    "comments": []
+   },
+   {
+    "id": 3634201,
+    "createdStamp": 1794791053,
+    "updatedStamp": 1794968219,
+    "lastActivityStamp": 1794940689,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 12,
+    "upvotes": 1,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1101",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "I have similar issue with 621.24 Studio Ready drivers and all telemetry disabled in drivers.\n\nNVDisplay.Container.exe writing all the time huge amounts of i/o. Can be seen in task manager or in resource monitor.\n\nI'm running Zotac Twin Edge rtx 3070 8GB, 12600kf, asus b660 wifi plus d4, 16gb ram, Kingston NV2 2TB NVME\n\nStopped and put Manual Startup type for NVIDIA Display Container LS -service as a workaround to stop i/o writes.",
+    "comments": []
+   },
+   {
+    "id": 3633914,
+    "createdStamp": 1794682189,
+    "updatedStamp": 1794940699,
+    "lastActivityStamp": 1794940699,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 1,
+    "isOfficialReply": 0,
+    "index": 13,
+    "upvotes": 0,
+    "topic": {
+     "id": 592907
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1000",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "body": "Each time you press the Alt+Tab key combination to switch to another program, it adds approximately 500 MB to 1 GB of disk writes.",
+    "comments": []
+   }
+  ]
+ }
+}
