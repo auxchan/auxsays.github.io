@@ -38,6 +38,15 @@ permalink: /privacy/
     </article>
 
     <article class="methodology-card">
+      <h2>Community sources</h2>
+      <p>To judge whether an update is causing problems, AUXSAYS reads public reports about specific software versions, including issues in public GitHub repositories. For each report it records, AUXSAYS keeps a link to it, its dates, its title and a short excerpt used to check which version it describes, and AUXSAYS's own labels for it. AUXSAYS does not keep the author's username or picture, and a patch page shows only a link to the report with a description AUXSAYS wrote.</p>
+      <p>Release notes that AUXSAYS copies from a project's GitHub releases are kept without the account names GitHub adds to credit each change.</p>
+      {% comment %}OWNER DECISION: the site publishes no contact channel yet. Name one in the next sentence before
+      relying on it as the removal path.{% endcomment %}
+      <p>If you wrote a report that AUXSAYS links to and want the link removed, AUXSAYS will remove it on request. A way to send that request will be listed here.</p>
+    </article>
+
+    <article class="methodology-card">
       <h2>Other requests</h2>
       <p>The site is hosted on GitHub Pages. Most pages load an animation library from cdnjs.cloudflare.com; the error page and the article category and tag pages load fonts and styles from Google Fonts and jsDelivr instead. Like any website, these services receive the usual information your browser sends with a request, including your IP address.</p>
     </article>

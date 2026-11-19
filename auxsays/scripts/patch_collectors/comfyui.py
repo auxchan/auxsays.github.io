@@ -48,6 +48,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from lib import evidence_classification as ec
+from lib import github_api
 from lib.target_outcome import AFFECTED, classify_target_outcome, target_is_contradicted
 from patch_collectors import base
 from patch_collectors import github_officedev_source as github
@@ -446,8 +447,12 @@ def enumerate_issues(since: str, errors: list[dict[str, Any]], *,
     """Every issue (never a pull request) created on or after `since`, newest first, one pass.
 
     Returns (issues, telemetry). Transport failures are appended to `errors` with the shared GitHub
-    taxonomy (`rate_limited` for 403/429, `http_<code>_error`, `network_unreachable`,
-    `payload_parse_failed`), so method health can tell a refused walk from an empty window.
+    taxonomy (`rate_limited`, `access_denied`, `http_403_error`, `http_<code>_error`,
+    `network_unreachable`, `payload_parse_failed`), so method health can tell a refused walk from an
+    empty window.
+
+    The walk ends where GitHub's pagination contract says it ends -- no rel="next" in the Link
+    header -- not where a page happens to be shorter than the requested size.
     """
     fetcher = fetch or github.request_json
     issues: list[dict[str, Any]] = []
@@ -481,7 +486,8 @@ def enumerate_issues(since: str, errors: list[dict[str, Any]], *,
                 continue
             seen.add(number)
             issues.append(item)
-        if len(items) < PER_PAGE:
+        if not github_api.has_next_page(_meta, payload, page=page, per_page=PER_PAGE,
+                                        result_cap=SEARCH_RESULT_CAP):
             break
     if telemetry["total_count"] > SEARCH_RESULT_CAP:
         telemetry["truncated"] = True
@@ -541,7 +547,7 @@ def method_status(errors: list[dict[str, Any]], telemetry: dict[str, Any], accep
     if not walked:
         # GitHub signals secondary rate limits with 403, so 403 and 429 are refusals however they
         # arrive (the shared transport maps both to rate_limited; a raw HTTPError names its code).
-        if any(r in ("rate_limited", "http_403_error", "http_429_error") for r in reasons):
+        if any(github_api.is_stop(r) or r == "http_429_error" for r in reasons):
             return "blocked"
         if any(r == BUDGET_STOP_REASON for r in reasons):
             return "partial"
@@ -648,7 +654,8 @@ class ComfyUICollector(base.ProductCollector):
                 blocked_reason=blocked, last_run=captured_at,
                 notes=(f"{REPO} GitHub issues created since {since}, opening posts only; "
                        f"{len(issues)} issues walked, {len(candidates)} name {version}, "
-                       f"accepted {len(accepted)}, excluded {len(rejected)}."))]
+                       f"accepted {len(accepted)}, excluded {len(rejected)}."
+                       + (f" {github_api.stop_note()}" if errors and github_api.stop_state() else "")))]
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
                 "version": version,

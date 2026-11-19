@@ -1,10 +1,17 @@
-"""GitHub releases adapter."""
+"""GitHub releases adapter.
+
+Requests go through the one GitHub API transport (lib/github_api.py): a truthful User-Agent, paced,
+api.github.com only, and the first refusal stops every later GitHub request in the run. Release
+bodies keep the change text and every link, but not the contributors' account handles
+(lib/contributor_credits.py).
+"""
 from __future__ import annotations
 
 from typing import Any
 
-from lib.http import fetch_json
-from lib.normalize import format_asset_size, first_nonempty, normalize_date
+from lib import github_api
+from lib.contributor_credits import strip_contributor_credits
+from lib.normalize import format_asset_size, first_nonempty, normalize_date, normalize_release_notes_body
 
 def _asset_url(asset: dict[str, Any]) -> str:
     return first_nonempty(asset.get("browser_download_url"), asset.get("url"))
@@ -30,6 +37,23 @@ def _split_checksums(body: str, selector: str | None = "## Checksums") -> tuple[
         return before.rstrip(), (selector + "\n\n" + after.strip()).strip()
     return body.strip(), ""
 
+def fetch_json(api_url: str) -> Any:
+    """The release listing, or a RuntimeError worded like every other official-source failure."""
+    try:
+        payload, _meta = github_api.get_json(api_url, endpoint_family="github_releases")
+    except github_api.GitHubError as exc:
+        kind = f"HTTP {exc.status}" if exc.status else "Failed"
+        raise RuntimeError(f"{kind} while fetching official GitHub source — {exc.reason}") from exc
+    return payload
+
+
+def release_body(raw_body: str) -> str:
+    """The release-notes text AUXSAYS keeps: normalised exactly as the record writer normalises it,
+    then without contributor handles. Shared with the one-off migration of existing records, so a
+    record migrated from its stored body and one refreshed from GitHub cannot disagree."""
+    return strip_contributor_credits(normalize_release_notes_body(raw_body)).strip()
+
+
 def fetch(source: dict[str, Any], limit: int = 2) -> list[dict[str, Any]]:
     ingestion = source.get("ingestion", {})
     api_url = ingestion.get("api_url")
@@ -45,6 +69,7 @@ def fetch(source: dict[str, Any], limit: int = 2) -> list[dict[str, Any]]:
             continue
         version = first_nonempty(release.get("tag_name"), release.get("name")).lstrip("v")
         body, checksums = _split_checksums(release.get("body") or "", ingestion.get("checksum_selector"))
+        body = release_body(body)
         asset = _preferred_asset(release.get("assets") or [], source["product_id"])
         file_size = format_asset_size(asset.get("size")) if asset else ""
         file_note = f"{asset.get('name')}. Platform assets vary." if asset else ""
