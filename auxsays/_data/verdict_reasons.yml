@@ -19,6 +19,12 @@
 # Counts, sentiment and theme-derived severity never decide a verdict. A new TEST FIRST or WAIT
 # currently needs a new reviewed entry here; a deterministic corroboration signal is follow-up work.
 #
+# REVIEWERS, distinct reporters (AUX-109). Two cited rows with an identical excerpt count as one
+# reporter. New Acrobat Pro / Reader and Premiere opening-post rows store their excerpt centred on the
+# version when the post's first 280 characters do not show it; older rows keep the first 280. So a
+# cross-post cited once from an older row and once from a newer one no longer has identical excerpts:
+# check by reading the two posts, not by comparing excerpts, before citing both.
+#
 # Seeded 2026-11-10 from the GROWTH-3 spec v3 calibration (sections 7 and 9), kept only where the
 # counted rows on the page support it today.
 schema_version: 1
