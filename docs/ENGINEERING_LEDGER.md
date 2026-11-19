@@ -5503,8 +5503,9 @@ report the store already holds, counted or not.
 - A second run changes nothing.
 - `test_withdraw_g55_adobe_role_rows.py` pins it with 42 checks, fixture counts only. It includes the scope guard:
   an unrelated Adobe product, a changed scope, an unlisted identity of either product and a granted identity with
-  any one field changed are each refused, by the manifest reader and by the planner separately. Each half of the
-  guard has its own mutant, and each mutant is killed by its own check.
+  any one field changed are each refused by the manifest reader, which every run goes through, and the planner, on
+  its own, refuses an unlisted identity of either product under every scope. Each half of the guard has its own
+  mutant, and each mutant is killed by its own check.
 
 **Reopen only if** either row counts again; the Acrobat Reader 15.010.20056 control or either must-stay row stops
 counting without its own audited withdrawal; or a manifest withdraws an Acrobat Reader or Premiere Pro row that the
