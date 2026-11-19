@@ -1,0 +1,46 @@
+{%- comment -%}
+  A PATCH TITLE NAMES ITS PRODUCT ONCE (G43, AUX-104).
+
+  WHY. The writer stores a title as the product label, a space and the vendor's own headline
+  (lib/write_update_record.py, public_titles). When the vendor's headline starts with the label's
+  last word or words, the stored title reads the product twice: "GitHub / Copilot Copilot Student
+  GPT-5.3-Codex removal from model picker", "Figma Figma for Zoom GA". 46 records had that shape on
+  2026-11-18 (36 GitHub Copilot changelog entries, 10 Figma).
+
+  WHAT IT DOES. Given a title and the product label, it finds the longest run of the label's own
+  trailing words that is repeated straight after the label, followed by a space or by nothing, and
+  prints that run once. Every other title comes back exactly as it went in, so no other page's title
+  changes. The stored records are not edited; the repeated label is removed only where it is shown.
+
+  WHERE IT IS USED. The Patch Feed cards (aux-updates.html) and the homepage list (aux-home.html).
+  The patch page (aux-update.html) applies the same rule to its heading and source citation with a
+  written-out copy, because the top of that layout must hold no include tag (several suites render
+  it standalone up to its first include); patch-search-meta.html reads the heading back for the
+  search title, og:title and the JSON-LD headline, so all of them change together.
+  test_publication_hygiene TT5 renders the copy and this file over the same titles.
+
+  In: include.title, include.product. Out: patch_display_title. It prints nothing.
+{%- endcomment -%}
+{%- assign patch_display_title = include.title -%}
+{%- assign pdt_title = include.title | default: '' -%}
+{%- assign pdt_product = include.product | default: '' | strip -%}
+{%- if pdt_title != '' and pdt_product != '' -%}
+  {%- assign pdt_words = pdt_product | split: ' ' -%}
+  {%- assign pdt_count = pdt_words.size -%}
+  {%- for pdt_take in (1..pdt_count) reversed -%}
+    {%- assign pdt_from = pdt_count | minus: pdt_take -%}
+    {%- assign pdt_tail = pdt_words | slice: pdt_from, pdt_take | join: ' ' -%}
+    {%- capture pdt_doubled -%}{{ pdt_product }} {{ pdt_tail }}{%- endcapture -%}
+    {%- if pdt_title == pdt_doubled -%}
+      {%- assign patch_display_title = pdt_product -%}
+      {%- break -%}
+    {%- endif -%}
+    {%- assign pdt_prefix = pdt_doubled | append: ' ' -%}
+    {%- assign pdt_start = pdt_title | slice: 0, pdt_prefix.size -%}
+    {%- if pdt_start == pdt_prefix -%}
+      {%- assign pdt_rest = pdt_title | slice: pdt_prefix.size, pdt_title.size -%}
+      {%- assign patch_display_title = pdt_product | append: ' ' | append: pdt_rest -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}

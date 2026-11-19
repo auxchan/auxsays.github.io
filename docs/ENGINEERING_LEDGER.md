@@ -95,6 +95,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
 | AUX-082 | Resolved | Compliance | Medium | The published Systems Monitor bundle shipped its dependencies without their licence notices |
+| AUX-104 | Resolved | Presentation | Low | The Windows 11 page scrolled sideways on phones, and 46 patch titles printed their product name twice |
 | AUX-085 | Resolved | Test integrity | Medium | A Systems Monitor test timing race failed a site deploy after every test had passed |
 | AUX-073 | Deferred | Coverage | Low | Windows Learn opening-post hydration (L1) shelved by owner decision O1; never merged |
 | AUX-063 | Resolved | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline — closed by AUX-067 for the thread-50506 shape |
@@ -109,6 +110,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
 | AUX-078 | Resolved | Evidence integrity | Medium | A Microsoft Q&A question re-found under an edited title was counted twice on one patch |
 | AUX-089 | Resolved | Publication | Medium | Search titles and descriptions of every patch page hid the decision behind "official update breakdown" |
+| AUX-102 | Resolved | Coverage governance | High | The catalog said 30 products were monitored that no lane monitored, and nothing reported the gap |
 
 ---
 
@@ -2162,6 +2164,50 @@ mean the limit has moved from reach to acceptance.
 matcher fix and the veto covering what it newly exposes are **one change** -- ship them together,
 and measure the veto alone to prove it is a counterweight and not a deletion.
 
+### AUX-104 — The Windows 11 page scrolled sideways on phones, and 46 patch titles printed their product name twice
+
+- **Status** Resolved · **Area** Presentation · **Severity** Low
+- **First seen** 2026-11-18 (G39 review, LOW-6 and the GitHub title) · **Resolved** 2026-11-18 (G43; production
+  check: the first Pages deploy after merge)
+
+**Symptom** At a 375 px phone width `/updates/microsoft/microsoft-windows-11/` was 441 px wide, and so were the
+OBS product page and the Microsoft company page. 46 records showed their product label twice in the heading, the
+search title, og/twitter titles, the JSON-LD headline, the source citation and the Patch Feed card: 36 "GitHub /
+Copilot Copilot ..." (for example "GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker") and
+10 "Figma Figma ...". 57 built pages carried it: the 46 patch pages and the 11 Patch Feed pages.
+
+**Cause** In the phone layout a patch-history row puts each value beside its label, and the Monitoring value
+"No accepted patch-specific reports" is a `white-space: nowrap` pill (261 px). That row set the table's narrowest
+width, and `.patch-intel-shell` (a grid with an automatic track) grew to it, as the feed cards did in AUX-101. The
+titles: `lib/write_update_record.public_titles` stores "<product label> <vendor headline>", and these vendors'
+headlines start with the label's own last word.
+
+**Fix** Two rules inside the existing `@media (max-width: 860px)` block: the product-page track may shrink to
+the page, and the Monitoring pill wraps inside itself. `_includes/patch-display-title.html` prints a repeated
+label once (the longest repeated run of the label's trailing words, followed by a space or nothing) and returns
+every other title unchanged. Both Patch Feed card branches and the homepage list use it. The patch page applies a
+written-out copy to its heading and citation, because the top of `aux-update.html` must hold no include tag:
+three suites render it standalone up to its first include (TT5 renders the copy and the include over the same
+titles). `patch-search-meta.html` reads the heading back, so the search title and JSON-LD headline change with
+it. Stored records, the writer and every evidence, count and verdict field are unchanged.
+
+**Measured** Built-file diff against main 75c4ea5c, both built with one fixed build time: 58 files, the
+stylesheet and the 57 title pages, and every changed line is the label printed once. QA `--publish-strict` 0/0;
+`verify_published_payload`, `verify_feed_discovery` and `verify_publication_hygiene` clean. Document width at 375
+px: Windows 11, OBS and Microsoft pages 441 -> 375; at 320 px 441 -> 320. Desktop (1440 px) geometry of every
+element is identical on the pages whose text did not change. `test_publication_hygiene.py` 32 -> 38,
+`test_patch_decision_authority.py` 211 -> 213.
+
+**Not fixed** At 320 px some patch-history tables are still a few pixels to about 45 px wider than their box
+(a verdict and its scope, or a version and its build, beside the label). They scroll inside their own
+`overflow-x: auto` wrapper; the page does not. The writer still stores the doubled titles; only the display
+removes the repeat.
+
+**Reopen only if** a product, company or version page is wider than the screen at 375 px; a stored title that
+repeats its label is shown with the repeat; a title that does not repeat its label renders differently from the
+stored text; or a patch page's JSON-LD headline differs from its title. Reopen the 320 px residual if a 320 px
+page itself scrolls sideways, or if phone analytics show 320 px traffic worth a layout change.
+
 ### AUX-100 — One forum post holding only a video made every OBS forum health row partial, and the newest release was the one the budget never reached
 
 - **Status** Resolved · **Area** Collector telemetry · **Severity** High
@@ -2249,6 +2295,109 @@ title shows the cp1252 pattern again; or a feed card at 375 px is wider than its
 refusal into QA and the writer, if a stored title or description holding literal entity text other than the five
 escape_once writes (for example `&#38;`) blocks a deploy; and if a `robots:` policy is ever set through
 `_config.yml` defaults or on a post without a permalink, because the gate reads page front matter only.
+
+### AUX-102 — The catalog said 30 products were monitored that no lane monitored, and nothing reported the gap
+
+- **Status** Resolved · **Area** Coverage governance · **Severity** High
+- **First seen** 2026-11-18 (two press stories about NVIDIA GeForce 621.14 / 621.24, on which AUXSAYS had
+  nothing) · **Resolved** 2026-11-18 (production check: the first Pages deploy after merge)
+
+**Symptom** On main d6e691cc, 30 of 47 catalog products had no enabled official lane, 18 of them Core
+(NVIDIA, AMD, Steam, Photoshop, After Effects, Lightroom Classic, Media Encoder, Unreal, ChatGPT, Gemini,
+Claude, Midjourney, Runway, Perplexity, LottieFiles, Twitch, YouTube, Kick), and 29 of the 30 carried the
+catalog label "Monitoring active". The pills were already derived (AUX-039), but the prose was not: 27
+company pages said "<Company> is tracked by AUXSAYS", 31 product pages said the product "is tracked for ...
+public release signals" over a "STAGED / official source mapped" card, and the hub counted "tracked
+software". Nothing could have produced a record for NVIDIA 621.14 (2026-11-04) or 621.24 (2026-11-12),
+and nothing reported that, so the first sign was the press, about ten days after the first user report.
+
+**Cause** Catalog inclusion had no coupling to collection. A product entered `patch_products.yml` with
+hand-written coverage fields and a disabled source; a disabled lane writes no telemetry, so its silence
+looked like a quiet product; a broken enabled lane (Netlify) was labelled correctly and alarmed nobody;
+and `patch_backfill_queue.yml` held 37 `queued` rows that nothing reads. One "monitoring" word stood for
+four capabilities: official release detection, community report discovery, patch consensus and
+product-level issue signals.
+
+**Fix**
+- `build_coverage_projection.py` (deploy-time, git-ignored `_data/coverage_state.yml`) derives per product
+  the official state (the AUX-039 authority, unchanged), the community state (from method health, with the
+  per-patch authority's healthy statuses and freshness window) and one closed label: "Official updates
+  monitored", "Official updates monitored; community reports not monitored", "Monitoring temporarily
+  impaired", "Monitoring planned; not active", "Not currently monitored". Only a healthy official lane is
+  affirmative; a switched-off lane is not monitored (never "broken"); an enabled lane that is not healthy is
+  impaired. Companies aggregate with counts.
+- Product, company, latest-signals and hub pages take every coverage word from it. The retired catalog
+  fields (`coverage_state`, `coverage_status_label`, `ingestion_status`, `current_status_label`,
+  `ingestion_active`, `dossier_note`) are deleted, and company summaries no longer say "is tracked". The
+  33 company pages' own meta descriptions (what a search result shows) no longer say "<Company> is
+  tracked as part of the AUXSAYS Patch Feed intelligence layer" or "<Company> tracking focuses on".
+- `_data/coverage_debt.yml` is the reviewed baseline: one entry per Core gap with a remediation priority,
+  a blocking reason, a next action, a plan and a review date. NVIDIA is the one `planned` entry and lists
+  the two releases a person verified on NVIDIA's pages.
+- `assess_coverage.py` runs in `pages.yml` (daily schedule) as a continue-on-error job summary plus a
+  90-day artifact: Core gaps with their next step, impaired enabled lanes, lanes or chains that stopped
+  running, verified releases missing from the store, community methods that do not work, backfill nothing
+  executes, debt past review or resolved. It never commits and never stops a deploy, and a crash says so in
+  the job summary instead of leaving it empty. Every product row also carries a closed reason code for each
+  capability that is missing (official ingestion, community discovery, product-level issue detection) and
+  its release-to-discovery latency, measured only from source timestamps (the vendor's release time and
+  the time ingestion first recorded the release; a day-only release date gives a range) and otherwise
+  `unknown` or, for a verified release the store lacks, `not_discovered`. A Core lane that failed once
+  after a recent success is reported as impaired, not as a Core gap; a persistent failure is both.
+- `ci/verify_coverage_claims.py` runs after the build: it refuses a pill that disagrees with the
+  projection, the "Coverage status unknown" fallback pill, a retired claim phrase in an unmonitored page's
+  or the hub's coverage prose or meta description or in catalog text, a static coverage field back in the
+  catalog, and a NEW
+  Core product whose lane is switched off with no debt entry. Existing debt and runtime impairment never
+  block. The phrase rules read only the template prose the layouts mark `data-coverage-prose`, never the
+  vendor-written record titles on the same pages: a changelog titled "Monitoring active sessions in the
+  audit log" must not stop a deploy (review round 1 reproduced exactly that against the first version,
+  which scanned the whole page). A page with no marked prose, or a marked region that never closes, is
+  refused rather than read as clean.
+- The product-level early-warning contract is defined, not built:
+  [`docs/PRODUCT_LEVEL_SIGNALS_CONTRACT.md`](PRODUCT_LEVEL_SIGNALS_CONTRACT.md).
+
+Unchanged: every collector, source, threshold, verdict, evidence row and live decision; the AUX-039
+official projection and its states.
+
+**Measured** On main 75c4ea5c's data the 47 products read: 7 official and community monitored, 8 official
+only, 2 impaired (Premiere Pro, Netlify), 1 planned (NVIDIA), 29 not monitored. The new deploy check fails
+main's deploy-order build with 293 errors (82 catalog claim fields, 18 Core gaps with no debt entry, 47
+product pages with no coverage pill, 146 claim phrases on unmonitored pages); the branch build is clean, and
+on it a seeded "monitored" pill, a seeded "is tracked for" sentence and a seeded new Core product without a
+debt entry are each refused. It also found the orphaned "Creative Cloud / Firefly" product page (not in the
+catalog, in the sitemap, claiming tracking), now removed. Built-file diff: 104 files, all coverage labels,
+prose, pill styles, the orphan's sitemap line or build timestamps. Evidence store and verdict projection
+byte-identical; live set unchanged. The assessment on that data: 19 Core gaps (all with debt entries),
+2 impaired enabled lanes, NVIDIA 621.14 and 621.24 missing from the store, 37 backfill rows with no
+executor. `test_coverage_governance.py` (100 checks, blocking); every source mutant in both rounds is
+caught by a named check.
+
+**Not shown by this** Whether an enabled lane is missing releases it should have found: no permitted
+independent official reference exists for any product except the two NVIDIA releases recorded by hand.
+Partial rot (AUX-003 family) stays invisible. The assessment cannot see that `pages.yml` itself stopped
+running.
+
+**Follow-up: detection latency (open)** Release-to-discovery is measured for the newest record of each
+product only, and discovery-to-publication is `unknown` everywhere because nothing records when a record
+first went live. To make detection latency observable across releases: record a first-publication time
+per record (for example the deploy that first served it), keep a per-release latency history instead of the
+newest record alone, and, once product-level issue detection exists (see the contract), add
+first-user-report-to-discovery from source-native report timestamps. Until then an unknown time stays
+`unknown`, never a number.
+
+**Follow-up: automatic fallback execution (open)** When an enabled collector is blocked, broken, stale or
+low-confidence, no compatible permitted fallback method executes automatically; the assessment only
+surfaces the gap (`enabled_lane_impaired`, `missing_capabilities`). Building that execution is deliberately
+not in this change (no platform rewrite). The natural home is the role routing in `lib/method_routing.py`
+(AUX-025): register a permitted fallback per source, run it when the primary is impaired, and report a
+gap only when none exists. A fallback never widens which sources are permitted.
+
+**Reopen only if** a deployed product or company page shows a coverage label the projection does not
+give it; a page for a product with no operating official lane says "is tracked", "Monitoring active" or
+"official source mapped"; a Core product is added with its lane switched off and the deploy does not
+refuse it; a deploy is refused because an enabled lane is failing or because of a vendor record's text;
+`test_coverage_governance.py` reports anything but its governed count; or the assessment stops appearing in the Pages job summary.
 
 ### AUX-029 — Patch Decision Authority v2, Phase 1
 

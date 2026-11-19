@@ -31,6 +31,7 @@
     "auxsays/scripts/tests/test_collector_write_authority.py": 0.4,
     "auxsays/scripts/tests/test_consensus_live_gate.py": 386.3,
     "auxsays/scripts/tests/test_consensus_sample_honesty.py": 4.7,
+    "auxsays/scripts/tests/test_coverage_governance.py": 10.0,
     "auxsays/scripts/tests/test_css_design_tokens.py": 0.1,
     "auxsays/scripts/tests/test_davinci_archive_policy.py": 10.4,
     "auxsays/scripts/tests/test_davinci_bare_version_identity.py": 17.2,

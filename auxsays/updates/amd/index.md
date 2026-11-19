@@ -2,6 +2,6 @@
 layout: aux-patch-company
 title: AMD Patch Intelligence
 company_id: amd
-description: AMD is tracked as part of the AUXSAYS Patch Feed intelligence layer.
+description: 'AMD software in the AUXSAYS Patch Feed, with its official update sources and coverage status.'
 permalink: /updates/amd/
 ---

@@ -172,15 +172,15 @@ layout: aux-base
 
   {% if patch_companies and patch_companies.size > 0 and feed_page == 1 %}
   <section class="panel patch-source-radar reveal-up reveal-delay-1" id="patch-source-radar">
-    <div class="patch-source-radar-head">
+    <div class="patch-source-radar-head" data-coverage-prose>
       <div>
         <div class="eyebrow">Company Radar</div>
         <h2 class="patch-source-title">Creator-critical companies to monitor</h2>
         <p class="patch-source-subtitle">Companies are the top-level tracking layer. Open a company to see its software, then open a software page to review patches and official release history.</p>
       </div>
       <div class="patch-radar-stat-grid" aria-label="Patch source summary">
-        <span><strong>{{ patch_companies.size }}</strong><em>tracked companies</em></span>
-        <span><strong>{{ patch_products.size }}</strong><em>tracked software</em></span>
+        <span><strong>{{ patch_companies.size }}</strong><em>companies</em></span>
+        <span><strong>{{ patch_products.size }}</strong><em>software products</em></span>
         <span><strong>3-tier</strong><em>company → software → patches</em></span>
       </div>
     </div>
@@ -225,9 +225,9 @@ layout: aux-base
           <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image">
             <img src="{% if company.logo_path contains "://" %}{{ company.logo_path }}{% else %}{{ company.logo_path | relative_url }}{% endif %}" alt="{{ company.company_name }} logo" loading="lazy">
           </span>
-          <span class="patch-source-meta">
+          <span class="patch-source-meta" data-coverage-prose>
             <strong><a href="{{ company.company_url | relative_url }}">{{ company.company_name }}</a></strong>
-            <em>{{ company_products.size }} tracked software item{% if company_products.size != 1 %}s{% endif %}</em>
+            <em>{{ company_products.size }} software product{% if company_products.size != 1 %}s{% endif %}</em>
           </span>
           <span class="patch-source-priority patch-source-priority--company">{{ priority_display_label }}</span>
         </div>
@@ -241,7 +241,7 @@ layout: aux-base
           {% if company_products.size > 4 %}<span class="patch-watch-tag-more">+{{ company_products.size | minus: 4 }} more</span>{% endif %}
         </div>
         <p>{{ company.summary }}</p>
-        <p class="patch-source-reason">Hierarchy: {{ company.company_name }} → software → patches/updates{% if company_update_count > 0 %} • {{ company_update_count }} tracked patch record{% if company_update_count != 1 %}s{% endif %}{% endif %}.</p>
+        <p class="patch-source-reason" data-coverage-prose>Hierarchy: {{ company.company_name }} → software → patches/updates{% if company_update_count > 0 %} • {{ company_update_count }} tracked patch record{% if company_update_count != 1 %}s{% endif %}{% endif %}.</p>
         <div class="patch-card-links patch-source-card-links">
           {% if company.company_url %}<a class="patch-source-link patch-source-link--primary" href="{{ company.company_url | relative_url }}">View company →</a>{% endif %}
           {% assign first_official_source = company.official_sources | first %}
@@ -258,7 +258,7 @@ layout: aux-base
       <h2>Your watchlist is empty.</h2>
       <p>Choose the software you actually use and AUXSAYS will show its patch intelligence first.
         Use the <strong>Watch product</strong> control on any product below, or on a product page.</p>
-      <a class="patch-source-link patch-source-link--primary" href="{{ '/updates/' | relative_url }}#patch-source-grid">Browse tracked software →</a>
+      <a class="patch-source-link patch-source-link--primary" href="{{ '/updates/' | relative_url }}#patch-source-grid">Browse software →</a>
     </div>
     <div data-watchlist-empty="no-matches" hidden>
       <h2>No current patches for your watched products.</h2>
@@ -338,7 +338,7 @@ layout: aux-base
         {% assign card_title = it_product %}
         {% else %}
         {% assign card_title = item.title %}
-        {% endif %}
+        {% endif %}{% include patch-display-title.html title=card_title product=it_product %}{% assign card_title = patch_display_title | default: card_title %}
         <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ card_title }}</a></h2>
         <p class="patch-card-summary">{{ item.description }}</p>
         {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
@@ -442,7 +442,7 @@ layout: aux-base
           {% assign card_title = it_product %}
           {% else %}
           {% assign card_title = item.title %}
-          {% endif %}
+          {% endif %}{% include patch-display-title.html title=card_title product=it_product %}{% assign card_title = patch_display_title | default: card_title %}
           <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ card_title }}</a></h2>
           <p class="patch-card-summary">{{ item.description }}</p>
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}

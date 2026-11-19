@@ -283,7 +283,9 @@ auxsays/scripts/tests/test_davinci_archive_check.py = 76
 # and its description states the count only as a count, never "from N reports", "live consensus of
 # N" or "on early evidence" (S5-S8, S12-S16 and S19 reworded; S26 over every reasoned case), and
 # mutant X8 (the old title) is caught.
-auxsays/scripts/tests/test_patch_decision_authority.py = 211
+# 211 -> 213 (G43): a stored title that repeats its product label shows the label once in the heading,
+# the citation, the search title and the JSON-LD headline (S27), and an unaffected title is shown as stored (S28).
+auxsays/scripts/tests/test_patch_decision_authority.py = 213
 # GROWTH-3 (owner decisions 1-3, 2026-11-06) moved the verdict policy into lib/patch_decision.decide:
 # an official withdrawal (AVOID), Microsoft's monthly security classification (SECURITY UPDATE), or a
 # reviewed reason entry the page's counted rows still support (WAIT / TEST FIRST); else INSUFFICIENT
@@ -434,7 +436,11 @@ auxsays/scripts/tests/test_feed_discovery.py = 73
 # live marker to aux-update.html). [JL] pins the include's JSON escapes by bytes (they were once no-ops), [RB] renders
 # aux-base's robots block with the Liquid gem (ruby + liquid required), [CSS] the phone-width card rules,
 # [W] the pages.yml step.
-auxsays/scripts/tests/test_publication_hygiene.py = 32
+# 32 -> 38 (G43): CSS2 the phone-width product-page rules (Windows 11 was 441 px on a 375 px phone) sit in the
+# 860px block only; [TT] renders the title include with the Liquid gem (the repeated label shown once, every
+# other title byte-identical, no output of its own), pins its call sites, and renders aux-update.html's
+# written-out copy over the same titles (TT5).
+auxsays/scripts/tests/test_publication_hygiene.py = 38
 # The published Systems Monitor bundle is minified without its dependencies' licence comments, so
 # THIRD_PARTY_NOTICES.txt ships beside it (AUX-082). Runs the REAL Node scripts (node required, its
 # absence a failure): the committed file names exactly the lockfile's production set; regeneration over
@@ -622,6 +628,14 @@ auxsays/scripts/tests/test_writer_queue_concurrency.py = 72
 # and this repo's Windows dev setup both provide; it reports and fails if bash is absent
 # rather than passing vacuously.
 auxsays/scripts/tests/test_writer_queue_reaper_behaviour.py = 25
+# AUX-102: AUXSAYS never claims to monitor what it does not monitor. 30 of 47 catalog products had no
+# operating official lane while the catalog said "Monitoring active" and their pages said "is tracked".
+# Pins the coverage projection (official and community capabilities, five plain labels, fail closed), the
+# debt gate (a NEW switched-off Core product without a debt entry is refused; runtime impairment never
+# is), the deploy check on seeded contradictions (and on vendor record titles, which must never block),
+# real Liquid renders of the product, company and latest-signals templates, and the daily assessment's
+# flags, missing-capability reasons, detection latency and no-false-alarm cases.
+auxsays/scripts/tests/test_coverage_governance.py = 100
 
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
