@@ -34,6 +34,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-017 | Deferred | Official ingestion | Medium | Photoshop activation blocker is an edge filter, not an egress failure |
 | AUX-018 | Resolved | Official ingestion | Medium | Microsoft Teams official ingestion activated, forward-only |
 | AUX-019 | Resolved | Community evidence | Medium | Microsoft Teams community evidence activated |
+| AUX-103 | Resolved | Community evidence | Medium | ComfyUI had an official lane and no community evidence at all |
 | AUX-020 | Deferred | Evidence acceptance | Medium | PowerPoint's release-date gate reads the feed's last-activity stamp |
 | AUX-021 | Resolved | Presentation | High | Same-day releases on one servicing line were ordered by array position |
 | AUX-022 | Resolved | Evidence authority | High | Premiere evidence was maintained by hand, and two of its five rows could not stand |
@@ -940,6 +941,69 @@ on every record.
 **Reopen only if** a counted Microsoft Teams report is attributed to a participant who did not write
 it, to a foreign product state, or to a build in a non-failing role; or if the two counters
 (`reconcile_record_counts` and `apply_consensus_to_records`) disagree for this product again.
+
+---
+
+### AUX-103 — ComfyUI had an official lane and no community evidence at all
+
+- **Status** Resolved · **Area** Community evidence · **Severity** Medium
+
+**Scope** ComfyUI's own public GitHub issues (`Comfy-Org/ComfyUI`), and nothing else. A report counts
+only when its opening post establishes the exact core release a tracked record covers, describes a
+concrete problem, and was written on or after that release. Patch targets come from the existing
+generated records. Method id and source type are the ones OBS already uses for its own repository's
+issues (`github_issues` / `github_issue`), now catalogued in `lib/acquisition_methods.py`.
+
+**Discovery is one walk by creation date, not a query per version** Measured: GitHub's tokenizer
+treats the `v` prefix as part of a version token, so searching for the bare number found 78 of the
+115 issues in the window that name one of the ten newest releases. One paginated walk of every issue
+created in the run's window finds all of them for every record together, in about eight requests,
+and reads `created_at`, which a later comment never moves.
+
+**Identity is the adapter's job, and it is the hard part** The issue forms ask no version question.
+A version-shaped number in a ComfyUI issue is very often not the core version: Python packages,
+custom-node packs, the frontend and template packages, the Desktop app and third-party standalone
+builds all carry numbers that can equal a release's. The core release is therefore read only from
+the version output ComfyUI itself prints, or from the reporter naming ComfyUI beside the number. A
+git checkout between releases prints the previous release number, so a build reported past the tag
+(ComfyUI-Manager's describe output, or a development commit named as the build) is refused, and so
+is an install whose companion packages ComfyUI itself reports as older than the release requires.
+A failure whose traceback runs through a custom-node pack, and a maintainer-labelled feature request
+or custom-node issue, are the ecosystem, not the release. One person filing the same report twice is
+one report. Every exclusion is stored as an uncounted row with its reason.
+
+**The acceptance authority is unchanged** After identity, rows go through the shared
+`base.apply_acceptance_gates` and the shared `lib.target_outcome` role check, exactly as stored rows
+of other products do. No threshold, vocabulary or acceptance rule of ComfyUI's own exists. Counted
+rows carry the derived sentiment the promotion requires (the AUX-019 rule), and the collector writes
+freshness only; counts and projections come from reconciliation and the new scoped promotion step.
+
+**Measured before building** Issues created 2026-09-29 to 2026-11-19: 368. Through the shipped
+decision path: 115 candidates for the ten newest releases, 60 accepted across nine of them; refused
+as not the core identity 23, as a build past the tag 23, custom node in the failure path 5, and one
+each for concreteness, date, a mixed install and a repost. Every accepted row was read.
+
+**Five write-mode gates registered** Ownership (`comfyui` owns `github_issues` / `github_issue`),
+registration (`AUXSAYS_ENABLE_COMFYUI_CONSENSUS`, true on the scheduled step), the writeback
+`--allow` for ComfyUI records, `CONSENSUS_PROMOTION_PRODUCTS` with its scoped step after
+reconciliation and before the first QA, and the runtime budget (the walk and the record loop stop
+at the collector's finalize deadline). ComfyUI has no branch in `_record_coherence_fields`, so
+promotion writes no verdict prose; pages move to the pilot maturity with the verdict unchanged.
+
+**Known limits** The shared concreteness vocabulary refused one genuine regression report; list and
+range forms ("ComfyUI vA and vB", "vA and above") attach only to the version the product name sits
+beside. Patch tags with no GitHub Release (v0.45.1 to v0.45.6 and similar) have no record, so 28
+issues in the window that declare only such a version cannot attach anywhere: an official-lane
+coverage gap, not this lane's.
+
+**Verification** `test_comfyui_github_issues.py` replays nineteen captured issues to their recorded
+decisions and drives the write path, the real ownership validators and the promotion agreement.
+Production proof: pending the first natural scheduled run after merge.
+
+**Reopen only if** a counted ComfyUI row's version is not the reporter's core release (a package,
+custom-node, frontend, Desktop or untagged build), a counted row's failure runs through a custom
+node, or the ComfyUI walk reports `success` or `no_results` on a run whose search was refused,
+truncated or stopped by the budget.
 
 ---
 

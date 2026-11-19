@@ -102,6 +102,10 @@ POWERPOINT_CONSENSUS_PRODUCT_ID = "microsoft-powerpoint"
 POWERPOINT_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_POWERPOINT_CONSENSUS"
 TEAMS_CONSENSUS_PRODUCT_ID = "microsoft-teams"
 TEAMS_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_TEAMS_CONSENSUS"
+# ComfyUI community evidence from its own public GitHub issues. Same registration shape as Teams:
+# default off here, set "true" on the scheduled --write step of obs-evidence-collection.yml.
+COMFYUI_CONSENSUS_PRODUCT_ID = "comfyui"
+COMFYUI_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_COMFYUI_CONSENSUS"
 
 
 def powerpoint_consensus_enabled(env: dict[str, str] | None = None) -> bool:
@@ -127,6 +131,15 @@ def teams_consensus_enabled(env: dict[str, str] | None = None) -> bool:
     bool(os.getenv(...)) pitfall where the string "false" is truthy."""
     source = os.environ if env is None else env
     return str(source.get(TEAMS_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
+
+
+def comfyui_consensus_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for registering the ComfyUI GitHub-issues collector.
+
+    Explicit true-only, the same shape as every other gated collector: "false", "0", "1", "yes",
+    "on", empty and absent all return False."""
+    source = os.environ if env is None else env
+    return str(source.get(COMFYUI_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
 
 
 def orchestrated_products(env: dict[str, str] | None = None) -> set[str]:
@@ -177,6 +190,9 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     if teams_consensus_enabled(env):
         from patch_collectors.microsoft_teams import TeamsCommunityCollector
         collectors[TEAMS_CONSENSUS_PRODUCT_ID] = TeamsCommunityCollector
+    if comfyui_consensus_enabled(env):
+        from patch_collectors.comfyui import ComfyUICollector
+        collectors[COMFYUI_CONSENSUS_PRODUCT_ID] = ComfyUICollector
     # NO DOUBLE COLLECTION. A product driven by the orchestration graph is REMOVED from this
     # registry, so the legacy path cannot also collect it in the same run. Enforcing it here rather
     # than by workflow discipline means there is exactly one authoritative execution path per

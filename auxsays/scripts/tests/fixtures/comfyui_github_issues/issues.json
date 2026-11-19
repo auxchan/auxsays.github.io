@@ -1,0 +1,543 @@
+{
+ "source": "Comfy-Org/ComfyUI GitHub issues, captured 2026-11-18 (G42); bodies trimmed, author accounts replaced by opaque numbers (only equality is kept)",
+ "cases": [
+  {
+   "label": "accepted: startup-log core declaration, crash",
+   "record_version": "0.44.0",
+   "record_published_at": "2026-11-04T01:12:27Z",
+   "expected": {
+    "candidate": true,
+    "counted": true,
+    "exclusion_reason": null,
+    "match_basis": "core_version_declaration",
+    "source_date": "2026-11-09"
+   },
+   "issue": {
+    "number": 17626,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17626",
+    "title": "[Bug] Video loading crashes with AIMDO host buffer mmap failure and float32 reshape error",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\nComfyUI should successfully decode and load video frames using the built-in video loading functionality\n\nIf AIMDO cannot reserve virtual address space for the video frame host buffer, ComfyUI should gracefully fall back to a regular frame buffer without crashing.\n\nThe decoded video frames should be converted to the appropriate data type and returned as valid image tensors.\n\n### Actual Behavior\n\nWhen loading a video file in ComfyUI, AIMDO fails to reserve approximately 1.48 TiB of virtual address space:\n\n[ERROR] aimdo: /project/src-posix/hostbuf-plat.c:25:ERROR:hostbuf_reserve_address_space: mmap reserve failed for 162302\n...\n[INFO] ComfyUI version: 0.44.0\nImmediately afterward, video frame processing crashes with:\nThe failure occurs inside the core ComfyUI video loading implementation:\nSpecifically, the error occurs in HostFrames.append() when executing:\n[INFO] pytorch version: 2.13.0+cu132\n[INFO] Python version: 3.12.15 | packaged by Anaconda, Inc. | (main, Oct  1 2026, 20:20:25) [GCC 14.3.0]\n[INFO] comfy-aimdo version: 0.6.0\n[INFO] comfy-kitchen version: 0.2.41\n[INFO] comfyui-frontend-package version: 1.58.5\n[INFO] comfyui-workflow-templates version: 0.11.103\n[INFO] comfyui-embedded-docs version: 0.5.16\nDynamic VRAM: AIMDO host-buffer path is active in the failing execution\nStart ComfyUI on a RunPod Ubuntu 24.04 environment with AIMDO/Dynamic VRAM enabled.\nOpen a workflow that uses ComfyUI's built-in video loading functionality (Load Image / VideoFromFile).\nSelect the video file that triggers the issue. The error reports a decoded frame shape of (1280, 680, 3).\nObserve the AIMDO host-buffer reservation error.\nComfyUI then throws a ValueError while reshaping the decoded video frame buffer.\n[ERROR] aimdo: /project/src-posix/hostbuf-plat.c:25:ERROR:hostbuf_reserve_address_space: mmap reserve failed for 1623028490240 bytes\n[ERROR] !!! Exception during processing !!! cannot reshape array of size 652800 into shape (1280,680,3)\n[ERROR] Traceback (most recent call last):\n  File \"/home/user/ComfyUI/execution.py\", line 556, in execute\n  File \"/home/user/ComfyUI/execution.py\", line 353, in get_output_data\n  File \"/home/user/ComfyUI/execution.py\", line 327, in _async_map_node_over_list\n  File \"/home/user/ComfyUI/execution.py\", line 315, in process_inputs\n  File \"/home/user/ComfyUI/nodes.py\", line 1770, in load_image\n  File \"/home/user/ComfyUI/comfy_api/latest/_input_impl/video_types.py\", line 809, in get_components\n  File \"/home/user/ComfyUI/comfy_api/latest/_input_impl/video_types.py\", line 782, in get_components_internal\n  File \"/home/user/ComfyUI/comfy_api/latest/_input_impl/video_types.py\", line 239, in frames_to_tensor\n  File \"/home/user/ComfyUI/comfy_api/latest/_input_impl/video_types.py\", line 165, in append",
+    "created_at": "2026-11-09T07:32:14Z",
+    "updated_at": "2026-11-13T15:09:40Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1000
+    }
+   }
+  },
+  {
+   "label": "accepted: reporter names ComfyUI v0.44.0 in prose",
+   "record_version": "0.44.0",
+   "record_published_at": "2026-11-04T01:12:27Z",
+   "expected": {
+    "candidate": true,
+    "counted": true,
+    "exclusion_reason": null,
+    "match_basis": "core_version_text",
+    "source_date": "2026-11-09"
+   },
+   "issue": {
+    "number": 17628,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17628",
+    "title": "[Bug] Qwen Image 2.1 outputs purple noise after a short period of inactivity",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\nAn appropriate image is generated based on the prompt, regardless of how much time passes between generations.\n\n### Actual Behavior\n\nAn image is generated of purple noise after a short period of inactivity.\n\n<img width=\"1080\" height=\"1920\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/9085e6a9-39c3-4378-b179-c01271b78f1e\" />\n\n### Steps to Reproduce\n\n1.) Launch Koboldcpp v1.124.2 and SillyTavern v1.19.0 on Arch Linux, using a system with the following specifications:\n- Operating System: Arch Linux\n- Motherboard: Gigabyte Z790 UD AC\n- Graphics: AMD Radeon RX 7900XT\n- Processor: Intel Core i7-13700KF\n- Memory:\n...\n2.) Run ComfyUI v0.44.0 with a Qwen Image 2.1 workflow, and install/enable/configure the Image Generation extension for SillyTavern.\n3.) Use STscript in SillyTavern to have the LLM running in Koboldcpp generate a prompt to be sent to ComfyUI/Qwen-Image-2.1. Observe an image output.\n[failure_log.txt](https://github.com/user-attachments/files/34567793/failure_log.txt)",
+    "created_at": "2026-11-09T07:42:44Z",
+    "updated_at": "2026-11-09T07:51:20Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1001
+    }
+   }
+  },
+  {
+   "label": "accepted: frontend error-report system information block",
+   "record_version": "0.38.0",
+   "record_published_at": "2026-09-29T21:46:45Z",
+   "expected": {
+    "candidate": true,
+    "counted": true,
+    "exclusion_reason": null,
+    "match_basis": "core_version_declaration",
+    "source_date": "2026-10-05"
+   },
+   "issue": {
+    "number": 16786,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/16786",
+    "title": "RemeshMesh not supported for torch.int64",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\nWorkflows should either support Mac Silicon (Macbook Pro M5), or be disabled if they are not supported by the current machine. it is confusing to run a workflow and then have it fail because it does not support NVIDIA CUDA or another requirement.\n\n\n\n### Actual Behavior\n\nCurrently running `3d_pixal3d_trellis2_image_to_model` workflow it appears to work and then fails with an error: `RemeshMesh not supported for torch.int64`. There is no indication this is due to unsupported hardware or software.\n\n### Steps to Reproduce\n\n1. Install latest ComfyUI on an M-series Macbook Pro\n2. Click Templates -> Pixal3D & TRELLIS.2: Image t\n...\n- **ComfyUI Version:** 0.38.0\n2026-10-04T17:27:37.791213 - \u001b[32m[INFO]\u001b[0m ComfyUI version: 0.38.0\n2026-10-04T17:27:38.450716 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: /Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/custom_nodes/websocket_image_save.py\n3. Wait for error to occur and view logs.\n# ComfyUI Error Report\n## Error Details\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/execution.py\", line 547, in execute\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/execution.py\", line 352, in get_output_data\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/execution.py\", line 326, in _async_map_node_over_list\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/execution.py\", line 314, in process_inputs\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/comfy_api/internal/__init__.py\", line 149, in wrapped_func\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/comfy_api/latest/_io.py\", line 2208, in EXECUTE_NORMALIZED\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/comfy_extras/nodes_mesh_postprocess.py\", line 2479, in execute\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/comfy_extras/nodes_mesh_postprocess.py\", line 2233, in _process_mesh_batch\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/comfy_extras/nodes_mesh_postprocess.py\", line 2211, in process_single\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/comfy_extras/nodes_mesh_postprocess.py\", line 2461, in _fn\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/comfy_extras/mesh3d/postprocess/remesh.py\", line 1130, in remesh_narrow_band_dc\n  File \"/Users/user/ComfyUI-Installs/ComfyUI/ComfyUI/comfy_extras/mesh3d/postprocess/remesh.py\", line 714, in _filter_components\n- **Arguments:** ComfyUI/main.py --feature-flag show_signin_button=true --enable-manager --extra-model-paths-config /Users/user/Library/Application Support/Comfy Desktop/instance-model-paths/inst-1788555585762.yaml --input-directory /Users/user/ComfyUI-Shared/input --output-directory /Users/user/ComfyUI-Shared/output\n- **Python Version:** 3.13.12 (main, Feb 12 2026, 01:06:02) [Clang 21.1.4 ]\n- **PyTorch Version:** 2.12.1\n2026-10-04T17:27:35.848787 - \u001b[32m[INFO]\u001b[0m Adding extra search path checkpoints /Users/user/ComfyUI-Shared/models/checkpoints\n2026-10-04T17:27:35.848817 - \u001b[32m[INFO]\u001b[0m Adding extra search path classifiers /Users/user/ComfyUI-Shared/models/classifiers\n2026-10-04T17:27:35.848832 - \u001b[32m[INFO]\u001b[0m Adding extra search path clip_vision /Users/user/ComfyUI-Shared/models/clip_vision\n2026-10-04T17:27:35.848842 - \u001b[32m[INFO]\u001b[0m Adding extra search path configs /Users/user/ComfyUI-Shared/models/configs\n2026-10-04T17:27:35.848850 - \u001b[32m[INFO]\u001b[0m Adding extra search path controlnet /Users/user/ComfyUI-Shared/models/controlnet\n2026-10-04T17:27:35.848857 - \u001b[32m[INFO]\u001b[0m Adding extra search path controlnet /Users/user/ComfyUI-Shared/models/t2i_adapter\n2026-10-04T17:27:35.848864 - \u001b[32m[INFO]\u001b[0m Adding extra search path diffusers /Users/user/ComfyUI-Shared/models/diffusers\n2026-10-04T17:27:35.848871 - \u001b[32m[INFO]\u001b[0m Adding extra search path diffusion_models /Users/user/ComfyUI-Shared/models/diffusion_models\n2026-10-04T17:27:35.848877 - \u001b[32m[INFO]\u001b[0m Adding extra search path embeddings /Users/user/ComfyUI-Shared/models/embeddings\n2026-10-04T17:27:35.848883 - \u001b[32m[INFO]\u001b[0m Adding extra search path gligen /Users/user/ComfyUI-Shared/models/gligen\n2026-10-04T17:27:35.848889 - \u001b[32m[INFO]\u001b[0m Adding extra search path hypernetworks /Users/user/ComfyUI-Shared/models/hypernetworks\n2026-10-04T17:27:35.848895 - \u001b[32m[INFO]\u001b[0m Adding extra search path latent_upscale_models /Users/user/ComfyUI-Shared/models/latent_upscale_models\n2026-10-04T17:27:35.848901 - \u001b[32m[INFO]\u001b[0m Adding extra search path loras /Users/user/ComfyUI-Shared/models/loras\n2026-10-04T17:27:35.848906 - \u001b[32m[INFO]\u001b[0m Adding extra search path model_patches /Users/user/ComfyUI-Shared/models/model_patches\n2026-10-04T17:27:35.848912 - \u001b[32m[INFO]\u001b[0m Adding extra search path audio_encoders /Users/user/ComfyUI-Shared/models/audio_encoders\n2026-10-04T17:27:35.848917 - \u001b[32m[INFO]\u001b[0m Adding extra search path photomaker /Users/user/ComfyUI-Shared/models/photomaker\n2026-10-04T17:27:35.848923 - \u001b[32m[INFO]\u001b[0m Adding extra search path style_models /Users/user/ComfyUI-Shared/models/style_models\n2026-10-04T17:27:35.848929 - \u001b[32m[INFO]\u001b[0m Adding extra search path text_encoders /Users/user/ComfyUI-Shared/models/text_encoders\n2026-10-04T17:27:35.848935 - \u001b[32m[INFO]\u001b[0m Adding extra search path upscale_models /Users/user/ComfyUI-Shared/models/upscale_models",
+    "created_at": "2026-10-05T00:43:19Z",
+    "updated_at": "2026-10-05T00:43:19Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1002
+    }
+   }
+  },
+  {
+   "label": "accepted: first of a same-author repost pair",
+   "record_version": "0.43.0",
+   "record_published_at": "2026-10-27T02:40:46Z",
+   "expected": {
+    "candidate": true,
+    "counted": true,
+    "exclusion_reason": null,
+    "match_basis": "core_version_text",
+    "source_date": "2026-10-28"
+   },
+   "issue": {
+    "number": 17415,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17415",
+    "title": "[Bug] HostBuffer.truncate failed during pin eviction on AMD ROCm (Windows) - comfy-aimdo 0.6.0 + comfy-kitchen 0.2.40, MiniMaxH3 dynamic VRAM",
+    "body": "## TL;DR\n\nDynamic VRAM dies with `RuntimeError: HostBuffer.truncate failed` when the pinned-memory pool fills up. I instrumented the exact failure point. Two findings that may be useful:\n\n1. Growing `MAX_PINNED_MEMORY` makes it worse, not better — a larger budget lets the hostbuf grow larger (8 GB -> 19 GB), and `truncate()` on the tail of that larger hostbuf fails sooner (6 surviving evictions -> 1).\n2. The failure is always the same size (~125 MB) at the tail of the hostbuf, always `registered=True`, always a `Linear` module in subset `weights-fast`.\n\nThis is likely the same defect as #15591 (open, reported on comfy-kitchen 0.2.31 / NVIDIA). It is still present on 0.2.40 and on AMD ROCm.\n\n## Environment\n\n- ComfyUI: 0.43.0\n- comfy-aimdo: 0.6.0\n- comfy-kitchen: 0.2.40\n- PyTorch: 2.11.0+rocm7.13.0 (cp313, local wheel)\n- Python: 3.13.9 (embedded)\n- OS: Windows 11 Pro build 26200\n- GPU: AMD\n...\n- Driver: 32.0.32015.2008 (2026-09-28)\n[ERROR] !!! Exception during processing !!! aimdo memory compile error\nRuntimeError: HostBuffer.truncate failed\nRuntimeError: aimdo memory compile error\ntorch.AcceleratorError: CUDA error: unspecified launch failure  (hipErrorLaunchFailure)\nStack is identical to #15591. After the exception, `reset_cast_buffers` / `offload_stream.synchronize()` reports the HIP error and the process dies. On this machine the GPU sometimes drops to `ConfigManagerErrorCode=31` afterwards (twice today).\n22:04:32 TRUNCATE_FAIL subset=weights-fast module=Linear pin_size=125.10MB\n         err=RuntimeError('HostBuffer.truncate failed')\nSurvived 6 budget warnings over ~90 s before failing.\n22:35:19 TRUNCATE_FAIL subset=weights-fast module=Linear pin_size=125.02MB\nFailed on the first budget warning. Same task, same machine, minutes apart.\n- Pinned at failure: 26,036.8 MB (99.7%) -> 31,274.6 MB (99.8%)\n2. `hostbuf.truncate()` failure correlates with hostbuf size, not with the shortfall. Exp 1 had shortfalls between 4.0 and 92.3 MB and succeeded 6 times; Exp 2 failed with a 39.6 MB shortfall on a 19 GB hostbuf.\n3. The reclaim target is always a ~125 MB tail block with `registered=True`, so `truncate()` must `cudaHostUnregister` before shrinking. `hostbuf_size - target_offset` matches `pin_size` exactly every time, so the offset arithmetic in `partially_unload_ram()` looks correct — the failure is inside the C call `lib.hostbuf_truncate()`.\n4. The same task also succeeded twice on this machine with identical params, so it is not deterministic — but once the pool is saturated, failure appears inevitable within the prompt.\n3. Was the fix for #15591 (reported against 0.2.31) shipped in a comfy-kitchen release? We are on 0.2.40 and still see the identical trace on ROCm.\n`--disable-dynamic-vram` (legacy) is expected to bypass the pin pool entirely; I have not yet benchmarked it on this machine and will update.",
+    "created_at": "2026-10-28T14:47:08Z",
+    "updated_at": "2026-10-28T14:47:08Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [],
+    "user": {
+     "id": 1003
+    }
+   }
+  },
+  {
+   "label": "duplicate: same author, same title, filed again",
+   "record_version": "0.43.0",
+   "record_published_at": "2026-10-27T02:40:46Z",
+   "expected": {
+    "candidate": true,
+    "counted": true,
+    "exclusion_reason": null,
+    "match_basis": "core_version_text",
+    "source_date": "2026-10-28"
+   },
+   "issue": {
+    "number": 17416,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17416",
+    "title": "[Bug] HostBuffer.truncate failed during pin eviction on AMD ROCm (Windows) - comfy-aimdo 0.6.0 + comfy-kitchen 0.2.40, MiniMaxH3 dynamic VRAM",
+    "body": "## TL;DR\n\nDynamic VRAM dies with `RuntimeError: HostBuffer.truncate failed` when the pinned-memory pool fills up. I instrumented the exact failure point. Two findings that may be useful:\n\n1. Growing `MAX_PINNED_MEMORY` makes it worse, not better — a larger budget lets the hostbuf grow larger (8 GB -> 19 GB), and `truncate()` on the tail of that larger hostbuf fails sooner (6 surviving evictions -> 1).\n2. The failure is always the same size (~125 MB) at the tail of the hostbuf, always `registered=True`, always a `Linear` module in subset `weights-fast`.\n\nThis is likely the same defect as #15591 (open, reported on comfy-kitchen 0.2.31 / NVIDIA). It is still present on 0.2.40 and on AMD ROCm.\n\n## Environment\n\n- ComfyUI: 0.43.0\n- comfy-aimdo: 0.6.0\n- comfy-kitchen: 0.2.40\n- PyTorch: 2.11.0+rocm7.13.0 (cp313, local wheel)\n- Python: 3.13.9 (embedded)\n- OS: Windows 11 Pro build 26200\n- GPU: AMD\n...\n- Driver: 32.0.32015.2008 (2026-09-28)\n[ERROR] !!! Exception during processing !!! aimdo memory compile error\nRuntimeError: HostBuffer.truncate failed\nRuntimeError: aimdo memory compile error\ntorch.AcceleratorError: CUDA error: unspecified launch failure  (hipErrorLaunchFailure)\nStack is identical to #15591. After the exception, `reset_cast_buffers` / `offload_stream.synchronize()` reports the HIP error and the process dies. On this machine the GPU sometimes drops to `ConfigManagerErrorCode=31` afterwards (twice today).\n22:04:32 TRUNCATE_FAIL subset=weights-fast module=Linear pin_size=125.10MB\n         err=RuntimeError('HostBuffer.truncate failed')\nSurvived 6 budget warnings over ~90 s before failing.\n22:35:19 TRUNCATE_FAIL subset=weights-fast module=Linear pin_size=125.02MB\nFailed on the first budget warning. Same task, same machine, minutes apart.\n- Pinned at failure: 26,036.8 MB (99.7%) -> 31,274.6 MB (99.8%)\n2. `hostbuf.truncate()` failure correlates with hostbuf size, not with the shortfall. Exp 1 had shortfalls between 4.0 and 92.3 MB and succeeded 6 times; Exp 2 failed with a 39.6 MB shortfall on a 19 GB hostbuf.\n3. The reclaim target is always a ~125 MB tail block with `registered=True`, so `truncate()` must `cudaHostUnregister` before shrinking. `hostbuf_size - target_offset` matches `pin_size` exactly every time, so the offset arithmetic in `partially_unload_ram()` looks correct — the failure is inside the C call `lib.hostbuf_truncate()`.\n4. The same task also succeeded twice on this machine with identical params, so it is not deterministic — but once the pool is saturated, failure appears inevitable within the prompt.\n3. Was the fix for #15591 (reported against 0.2.31) shipped in a comfy-kitchen release? We are on 0.2.40 and still see the identical trace on ROCm.\n`--disable-dynamic-vram` (legacy) is expected to bypass the pin pool entirely; I have not yet benchmarked it on this machine and will update.",
+    "created_at": "2026-10-28T14:48:15Z",
+    "updated_at": "2026-10-28T14:48:15Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [],
+    "user": {
+     "id": 1003
+    }
+   }
+  },
+  {
+   "label": "identity unknown: only a Python package (llvmlite) carries the number",
+   "record_version": "0.46.0",
+   "record_published_at": "2026-11-18T22:55:32Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "version_not_core_identity",
+    "match_basis": "",
+    "source_date": "2026-10-07"
+   },
+   "issue": {
+    "number": 16848,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/16848",
+    "title": "v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。",
+    "body": "### Custom Node Testing\n\n- [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\n出现错误后还会造成其他工作流版面变乱。\n\n从 json加载的原始版本\n\n<img width=\"559\" height=\"366\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/6c45a4c6-e15d-4466-bd66-def9c4c9161c\" />\n\n从图片里加载，错误的版面\n<img width=\"625\" height=\"738\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/ac3fd6fb-d84a-4eb3-8049-6ee21ef36c4d\" />\n\n### Actual Behavior\n\n版面变乱，0.38.0以前的版本没用这个问题。\n<img width=\"625\" height=\"738\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/2f175923-01f4-4107-9095-60a737a36361\" />\n\n### Steps to Reproduce\n\n[00、整合模板01.json](https://github.com/user-attachments/files/33159332/00.01.json)\n使用工作流生成图片后，将生成的图片拖入ComfyUI就出现。\n\n##\n...\nComfyUI Version: de0125d9aefc225ec1a6f787a3a806730b772678 (2026-10-07 02:49:02)\n    - llvmlite 0.46.0 \n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Easy-Use\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\rgthree-comfy\n\u001b[32m[INFO]\u001b[0m   12.5 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Manager\n\u001b[32m[INFO]\u001b[0m ComfyUI version: 0.39.1\n[ComfyUI-Easy-Use] web root: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Easy-Use\\web_version/v2 Loaded\n\u001b[32m[INFO]\u001b[0m ### ComfyUI Version: v0.39.1 | Released on '2026-10-06'\n[D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux] | INFO -> Using ckpts path: D:\\Aools\\ComfyUI-Public\\models\\controlnet_aux\\ckpts\n[D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux] | INFO -> Using symlinks: False\n[D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux] | INFO -> Using ort providers: ['CUDAExecutionProvider', 'CPUExecutionProvider']\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\websocket_image_save.py\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI_Noise\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-PainterI2V\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-H3-IMG-Gen-SatoDive\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Chinese-Translation\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Krea2TextEncoder\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-krea2edit\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI_KleinTiledUpscaler\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-krea2-conditioning\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Inpaint-CropAndStitch\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI_InstantID\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Qwen-Image-Integrated-KSampler\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-GGUF\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-TiledDiffusion\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI_IPAdapter_plus\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\Comfyui_TTP_Toolset\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-MiniMax-H3-Edit\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\WhatDreamsCost-ComfyUI\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Custom-Scripts\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI_essentials\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-VOSR2\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-MiniMax-H3-Image-Studio\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Frame-Interpolation\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI_UltimateSDUpscale\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-SexStyle\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Advanced-ControlNet\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-KJNodes\n\u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\n\u001b[32m[INFO]\u001b[0m    0.1 seconds: D:\\Aools\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-llama-cpp_vlm",
+    "created_at": "2026-10-07T13:48:19Z",
+    "updated_at": "2026-10-07T13:48:19Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1004
+    }
+   }
+  },
+  {
+   "label": "identity unknown: Desktop app and third-party standalone build versions",
+   "record_version": "0.42.1",
+   "record_published_at": "2026-10-19T01:33:54Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "version_not_core_identity",
+    "match_basis": "",
+    "source_date": "2026-11-10"
+   },
+   "issue": {
+    "number": 17657,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17657",
+    "title": "Intel Arc B580 (XPU): SDXL 1024x1024 sampling returns all-NaN latents and black images (torch 2.13.0+xpu)",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\nA normal generated image, and a latent tensor with finite values.\n\n### Actual Behavior\n\nAt **1024x1024 with an SDXL (Illustrious-family) checkpoint**, `KSampler` sometimes returns a latent that is **100% NaN**. `VAEDecode` then returns NaN pixels, and `SaveImage` / `PreviewImage` converts them to 0 via `.astype(np.uint8)`, producing a **completely black PNG** instead of an error.\n\nThe only log signal is:\n\n```text\n/path/to/ComfyUI/nodes.py:1708: RuntimeWarning: invalid value encountered in cast\n  img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))\n```\n\nThis warning is emitted only **once per process** (Python's def\n...\n| Instance | standalone `linux-intel-xpu`, release `v0.42.1-env1` (baseTag `v0.44.2`) |\n1. Start ComfyUI on the Intel Arc (XPU) environment **without** `--use-split-cross-attention` (default PyTorch attention).\n4. Restart ComfyUI with `--use-split-cross-attention` and run the same command:\n[INFO] pytorch version: 2.13.0+xpu\n/path/to/ComfyUI/nodes.py:1708: RuntimeWarning: invalid value encountered in cast\n[ERROR] !!! Exception during processing !!!\nlevel_zero backend failed with error: 20 (UR_RESULT_ERROR_DEVICE_LOST)\nRuntimeError: level_zero backend failed with error: 20 (UR_RESULT_ERROR_DEVICE_LOST)\nand later an XPU OOM. The NaN issue reproduces after a fresh ComfyUI process start, so device-lost is not required, but the Level Zero instability may make it worse.\n| ComfyUI | 0.44.2 |\n| Desktop app | ComfyUI Desktop 1.1.9 |\n| torchvision / torchaudio | 0.28.0+xpu / 2.11.0+xpu |\n| comfy-kitchen / comfy-aimdo | 0.2.40 / 0.6.0 |\nThe instance manifest originally pinned `torch 2.12.1+xpu`, but the installed environment was upgraded to `2.13.0+xpu`.\n| ComfyUI attention setting | Resolution | Test | Runs | Latents with NaN |\n### Workaround that works here\nto the ComfyUI launch arguments, then restart ComfyUI. In ComfyUI Desktop: **Instance → Launch Settings → Startup Arguments**. In a manual install, pass it to `main.py`.\nThis is slower than the default SDPA path, but it produced 0/6 NaN latents and valid images in my tests.\nThe instance was upgraded from `torch 2.12.1+xpu` to `2.13.0+xpu`. I did not test a rollback, but if the regression is in the 2.13 XPU SDPA kernel, rolling back to `2.12.1+xpu` may also help. If maintainers confirm the root cause is in PyTorch, this may need to be cross-posted to `pytorch/pytorch` (XPU backend).\n1. Detect non-finite values after sampling / VAE decode and raise a clear error instead of silently writing a black image.",
+    "created_at": "2026-11-10T14:41:25Z",
+    "updated_at": "2026-11-10T14:41:25Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1005
+    }
+   }
+  },
+  {
+   "label": "untagged build: ComfyUI-Manager git describe 27 commits past the tag",
+   "record_version": "0.44.0",
+   "record_published_at": "2026-11-04T01:12:27Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "core_version_untagged_build",
+    "match_basis": "",
+    "source_date": "2026-11-07"
+   },
+   "issue": {
+    "number": 17592,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17592",
+    "title": "help with trellis2",
+    "body": "### Custom Node Testing\n\n- [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Your question\n\nim a complete beginner in this ,\nNode threw an error during execution.\n\n\n# ComfyUI Error Report\n## Error Details\n- **Node ID:** 39\n- **Node Type:** Trellis2LoadModel\n- **Exception Type:** huggingface_hub.errors.RepositoryNotFoundError\n- **Exception Message:** huggingface_hub.errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-6aef23a4-7e8434873deaa6aa027ab53d;66f192a3-4116-49f3-9f6c-5ce2d8c0dbf3)\n\nRepository Not Found for url: https://huggingface.co/F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\models\\microsoft/TRELLIS.2-4B/resolve/main/pipeline.json.\nPlease make sure you specified the correct `repo_\n...\n  File \"F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-Trellis2\\nodes.py\", line 551, in process\n  File \"F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-Trellis2\\trellis2\\pipelines\\trellis2_image_to_3d.py\", line 219, in from_pretrained\n  File \"F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-Trellis2\\trellis2\\pipelines\\base.py\", line 34, in from_pretrained\n- **ComfyUI Version:** 0.44.0\n2026-11-07T21:11:20.537794 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-Easy-Use\n2026-11-07T21:11:20.537794 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\rgthree-comfy\n2026-11-07T21:11:20.537794 - \u001b[32m[INFO]\u001b[0m    2.4 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui-manager\n2026-11-07T21:11:27.166074 - \u001b[32m[INFO]\u001b[0m ComfyUI version: 0.44.0\n2026-11-07T21:11:32.887100 - \u001b[34m[ComfyUI-Easy-Use] web root: \u001b[0mF:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-Easy-Use\\web_version/v2 \u001b[92mLoaded\u001b[0m2026-11-07T21:11:32.887100 - \n2026-11-07T21:11:33.370541 - \u001b[32m[INFO]\u001b[0m ### ComfyUI Version: v0.44.0-27-g1332fabf | Released on '2026-11-06'\n2026-11-07T21:11:35.291215 - \u001b[36;20m[F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux] | INFO -> Using ckpts path: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\\ckpts\u001b[0m\n2026-11-07T21:11:35.291215 - \u001b[36;20m[F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux] | INFO -> Using symlinks: False\u001b[0m\n2026-11-07T21:11:35.292215 - \u001b[36;20m[F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux] | INFO -> Using ort providers: ['CUDAExecutionProvider', 'DirectMLExecutionProvider', 'OpenVINOExecutionProvider', 'ROCMExecutionProvider', 'MIGraphXExecutionProvider', 'CPUExecutionProvider']\u001b[0m\n2026-11-07T21:11:36.126921 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\EZi_Console_Filter.py\n2026-11-07T21:11:36.126921 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\websocket_image_save.py\n2026-11-07T21:11:36.126921 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui-krea2edit\n2026-11-07T21:11:36.126921 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui-inpaint-cropandstitch\n2026-11-07T21:11:36.126921 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-SCAIL-Pose\n2026-11-07T21:11:36.126921 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-TiledDiffusion\n2026-11-07T21:11:36.126921 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-GGUF\n2026-11-07T21:11:36.126921 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-MelBandRoFormer\n2026-11-07T21:11:36.126921 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\controlaltai-nodes\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\rgthree-comfy\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui-kjnodes\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.1 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui-videohelpersuite\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.1 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-QwenVL\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.2 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui_layerstyle\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.2 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\qwen3-tts-comfyui\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.2 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-RMBG\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.2 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-WanVideoWrapper\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.3 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\ComfyUI-WanAnimatePreprocess\n2026-11-07T21:11:36.127923 - \u001b[32m[INFO]\u001b[0m    0.3 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\custom_nodes\\comfyui-easy-sam3\n2026-11-07T21:11:36.128921 - \u001b[32m[INFO]\u001b[0m    0.3 seconds: F:\\ComfyUI-Easy-Install\\ComfyUI-Easy-Install\\ComfyUI\\cust",
+    "created_at": "2026-11-07T13:14:37Z",
+    "updated_at": "2026-11-07T13:14:37Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "User Support"
+     }
+    ],
+    "user": {
+     "id": 1006
+    }
+   }
+  },
+  {
+   "label": "untagged build: master @ <sha> (v0.45.0)",
+   "record_version": "0.45.0",
+   "record_published_at": "2026-11-10T21:42:42Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "core_version_untagged_build",
+    "match_basis": "",
+    "source_date": "2026-11-12"
+   },
+   "issue": {
+    "number": 17723,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17723",
+    "title": "Adaptive Projected Guidance changes the result at cfg 1.0",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\nAt cfg 1.0 the negative prompt is not evaluated, so the APG node should leave the positive prediction unchanged. The node already has a guard for this case (`if len(args[\"conds_out\"]) == 1: return args[\"conds_out\"]` in comfy_extras/nodes_apg.py), and TCFG and FreSca skip the same case.\n\n### Actual Behavior\n\nAt cfg 1.0, `sampling_function` sets `uncond_ = None`, but `calc_cond_batch` still returns two outputs, the second being `torch.zeros_like(x)`. The APG guard checks `len(conds_out) == 1`, which never happens, so APG uses the zero tensor as the negative prediction and modifies the result.\n\nThis affects any APG-patched \n...\nmaster @ c5751c81 (v0.45.0), macOS arm64, Python 3.12.13, torch 2.15.0 CPU.\n# Run from the ComfyUI checkout root:  PYTHONPATH=. python repro_apg_cfg1.py\nRun from the ComfyUI root with `PYTHONPATH=. python repro_apg_cfg1.py`.\nThe script imports only `comfy` modules and the `APG` node; no custom nodes are loaded.\nA fix with a regression test is ready. Could this issue be assigned to me? I can then open a pull request.",
+    "created_at": "2026-11-12T17:00:15Z",
+    "updated_at": "2026-11-12T17:00:15Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [],
+    "user": {
+     "id": 1007
+    }
+   }
+  },
+  {
+   "label": "accepted: ran the release; master named only as a code reference",
+   "record_version": "0.45.0",
+   "record_published_at": "2026-11-10T21:42:42Z",
+   "expected": {
+    "candidate": true,
+    "counted": true,
+    "exclusion_reason": null,
+    "match_basis": "core_version_declaration",
+    "source_date": "2026-11-11"
+   },
+   "issue": {
+    "number": 17704,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17704",
+    "title": "Dynamic VRAM: a LoRA patch on a module without comfy_cast_weights is silently dropped (Qwen-Image 2.1 txt_in.text_norm)",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists (every run below used `--disable-all-custom-nodes`)\n\n### Expected Behavior\n\nA LoRA / model patch (`diff` or `set`) on a model weight is applied the same way with dynamic VRAM on and off, or a message says that it could not be applied.\n\n### Actual Behavior\n\nWith dynamic VRAM on (the default), a patch on a parameter of a module that has no `comfy_cast_weights` attribute is never applied, and nothing is logged. The load line even reports `0 patches attached`. With `--disable-dynamic-vram` the same patch is applied.\n\nQwen-Image 2.1 has such a module: `txt_in.text_norm` is `ZeroCenteredRMSNorm`, a plain `nn.Module` with an `nn.Parameter` (`comfy/ldm/qwen_image21/model.py` L21-36). A patch on a neighbouring cast module (`txt_in.in_layer`, a comfy ops `Linear`) is applied in both modes, so this is specific\n...\n1. ComfyUI 0.45.0, started with `--disable-all-custom-nodes`. Models: `qwen_image_2.1_bf16.safetensors`, `qwen3vl_8b_bf16.safetensors`, `qwen_image_2.1_vae_bf16.safetensors`.\n**Where it happens.** `comfy/model_patcher.py`, `ModelPatcherDynamic.load`, at v0.45.0 (the class is unchanged on master `b2f6707`). For a module with `comfy_cast_weights`, patches are either attached as a `LowVramPatch` (`setup_p\n[INFO] ComfyUI version: 0.45.0\n[INFO] Found comfy_kitchen backend ascend: {'available': False, 'disabled': False, 'unavailable_reason': \"torch-npu is not installed: No module named 'torch_npu'\", 'capabilities': []}\n[INFO] pytorch version: 2.16.0a0+gitd457273\n[INFO] Python version: 3.14.10 (main, Oct 26 2026, 14:09:22) [Clang 23.1.3 ]\n[INFO] comfy-aimdo version: 0.6.0\n[INFO] comfy-kitchen version: 0.2.41\n[INFO] comfyui-frontend-package version: 1.61.0.dev1\n[INFO] comfyui-workflow-templates version: 0.11.106\n[INFO] comfyui-embedded-docs version: 0.5.16\n[INFO] [Prompt Server] web root: ~/ComfyUI/venv/lib/python3.14/site-packages/comfyui_frontend_package/static\n[INFO] Skipping loading of custom nodes\n[INFO] ComfyUI is developed by Comfy Org. We also offer commercial products to deploy ComfyUI as scalable cloud endpoints. Visit platform.comfy.org/ascii for more information.\n[INFO] To see the GUI go to: http://127.0.0.1:8190\n[WARNING] Dynamic vram disabled with argument. If you have any issues with dynamic vram enabled please give us a detailed reports as this argument will be removed soon. If you use gguf we recommend keeping dynamic vram enabled and using native ComfyUI model formats instead. ComfyUI native formats like fp8, int8 and w4a8 will be faster even if they are larger than your memory.\n- Linux, RTX 5090 (32 GB), Python 3.14, PyTorch 2.16.0a0 (built from source), comfy-aimdo 0.6.0.",
+    "created_at": "2026-11-11T23:03:05Z",
+    "updated_at": "2026-11-12T05:55:03Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [],
+    "user": {
+     "id": 1008
+    }
+   }
+  },
+  {
+   "label": "frontend version: installed frontend package older than the release requires",
+   "record_version": "0.43.0",
+   "record_published_at": "2026-10-27T02:40:46Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "release_packages_not_as_shipped",
+    "match_basis": "",
+    "source_date": "2026-10-30"
+   },
+   "issue": {
+    "number": 17435,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17435",
+    "title": "ComfyUI Qwen Image 2.1 generation stalls with no error (UI still responsive)",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\nI never faced this issue before with qwen 2.1, but today, after a few successful runs, generation sometimes stalls during sampling. ComfyUI doesn't crash and no error or traceback appears in the console. The UI stays responsive (I can export the workflow, change settings, etc.), but generation never progresses. GPU utilization drops to idle in Task Manager when this happens (see the attached video).\n\nIn the log below, runs 1 and 2 completed, and run 3 stalled at step 2/25 of sampling. I don't have a clean repro currently, but I will provide one later if I find it.\n\nEnvironment: Windows, RTX 3070 (8GB VRAM), 48GB RAM, Nig\n...\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\rgthree-comfy\n[INFO] ComfyUI version: 0.43.0\nInstalled comfyui-frontend-package version 1.39.19 is lower than the recommended version 1.57.6.\nInstalled comfyui-workflow-templates version 0.11.66 is lower than the recommended version 0.11.98.\nInstalled comfyui-embedded-docs version 0.5.12 is lower than the recommended version 0.5.15.\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\websocket_image_save.py\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComfyUI-MemoryVisualization\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComfyUI-Inpaint-CropAndStitch\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\Skimmed_CFG\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComfyUI-RBG-SmartSeedVariance\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComfyUI-OpenPose-Studio\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\comfyui-custom-scripts\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComfyUI-OpenAI-Compatible-API\n[INFO] 0.0 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComfyUI_essentials\n[INFO] 0.1 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComfyUI-KJNodes\n[INFO] 0.1 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComyUI-MyOwnCustomNode\n[INFO] 0.5 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComfyUI-VideoHelperSuite\n[INFO] 0.7 seconds: F:\\AI\\ComfyUI\\custom_nodes\\RES4LYF\n[INFO] 0.8 seconds: F:\\AI\\ComfyUI\\custom_nodes\\ComfyUI-Upscaler-Tensorrt\nhtly ComfyUI, PyTorch 2.14.0+cu130\n[WARNING] On windows we are currently forcing single GPU mode in ComfyUI due to a Nvidia related issue, if you want to disable this use: --cuda-device all\n[WARNING] --disable-api-nodes is deprecated and will be removed in a future version. It currently behaves like --offline. Use --offline to keep the frontend offline, or --disable-partner-nodes to only disable partner nodes.\n[INFO] Adding extra search path hypernetworks F:\\AI\\comfy-models\\models\\hypernetworks\nPrestartup times for custom nodes:\n[INFO] Found comfy_kitchen backend ascend: {'available': False, 'disabled': False, 'unavailable_reason': \"torch-npu is not installed: No module named 'torch_npu'\", 'capabilities': []}\n[INFO] pytorch version: 2.14.0+cu130\n[INFO] Python version: 3.12.10 (tags/v3.12.10:0cc8128, Apr 8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]\n[INFO] comfy-aimdo version: 0.6.0\n[INFO] comfy-kitchen version: 0.2.40\nPlease install the updated requirements.txt file by running:\nF:\\AI\\ComfyUI\\venv\\Scripts\\python.exe -m pip install -r F:\\AI\\ComfyUI\\requirements.txt\nIf you are on the portable package you can run: update\\update_comfyui.bat to solve this problem.\n[INFO] [Prompt Server] web root: F:\\AI\\ComfyUI\\venv\\Lib\\site-packages\\comfyui_frontend_package\\static\nF:\\AI\\ComfyUI\\venv\\Lib\\site-packages\\torch\\jit\\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.\n[comfyui-openpose-studio] Loaded 41 JSON pose files successfully.\n### Loading: ComfyUI-RBG-SmartSeedVariance ###\n[ComfyUI-Upscaler-Tensorrt|INFO] - Loaded config: load_upscaler_config.json\nImport times for custom nodes:\n[INFO] ComfyUI is developed by Comfy Org. We also offer commercial products to deploy ComfyUI as scalable cloud endpoints. Visit platform.comfy.org/ascii for more information.\n[INFO] To see the GUI go to: http://127.0.0.1:8188",
+    "created_at": "2026-10-30T00:04:45Z",
+    "updated_at": "2026-11-06T11:48:34Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1009
+    }
+   }
+  },
+  {
+   "label": "frontend assets report on a build 3 commits past the tag",
+   "record_version": "0.42.0",
+   "record_published_at": "2026-10-18T22:10:38Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "core_version_untagged_build",
+    "match_basis": "",
+    "source_date": "2026-10-19"
+   },
+   "issue": {
+    "number": 17190,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17190",
+    "title": "Web server returns 404 for static frontend assets when packages are installed as symlinks",
+    "body": "### Custom Node Testing\n\n- [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\nNavigating to http://127.0.0.1:8000/ loads GUI.\n\n### Actual Behavior\n\nNavigating to http://127.0.0.1:8000/ displays ComfyUI logo and nothing else. All static assets fail to load.\n\nBrowser console log:\n\n```\nGET http://127.0.0.1:8000/api/userdata/user.css net::ERR_ABORTED 404 (Not Found)\n(index):1  GET http://127.0.0.1:8000/user.css net::ERR_ABORTED 404 (Not Found)\n(index):1  GET http://127.0.0.1:8000/materialdesignicons.min.css net::ERR_ABORTED 404 (Not Found)\n(index):1  GET http://127.0.0.1:8000/assets/index-BK-6hEfU.js net::ERR_ABORTED 404 (Not Found)\n(index):1  GET http://127.0.0.1:8000/assets/rolldown-runtime-CM1DJQSe\n...\n[INFO]    0.0 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\rgthree-comfy\n[INFO]    0.0 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\comfyui-easy-use\n[INFO] ComfyUI version: 0.42.0\n[INFO] ### ComfyUI Version: v0.42.0-3-g8f04fd6e | Released on '2026-10-19'\n[ComfyUI-Easy-Use] web root: C:\\Apps\\ComfyUI.Data\\custom_nodes\\comfyui-easy-use\\web_version/v2 Loaded\n[C:\\Apps\\ComfyUI_x_Data\\custom_nodes\\comfyui_controlnet_aux] | INFO -> Using ckpts path: C:\\Apps\\ComfyUI.Data\\custom_nodes\\comfyui_controlnet_aux\\ckpts\n[C:\\Apps\\ComfyUI_x_Data\\custom_nodes\\comfyui_controlnet_aux] | INFO -> Using symlinks: False\n[C:\\Apps\\ComfyUI_x_Data\\custom_nodes\\comfyui_controlnet_aux] | INFO -> Using ort providers: ['CUDAExecutionProvider', 'DirectMLExecutionProvider', 'OpenVINOExecutionProvider', 'ROCMExecutionProvider', 'CPUExecutionProvider', 'CoreMLExecutionProvider']\nWAS Node Suite Warning: `ffmpeg_bin_path` is not set in `C:\\Apps\\ComfyUI.Data\\custom_nodes\\was-ns\\was_suite_config.json` config file. Will attempt to use system ffmpeg binaries if available.\n[INFO]    0.0 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\ComfyUI-GGUF\n[INFO]    0.0 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\comfyui_essentials\n[INFO]    0.0 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\ComfyUI-RadialAttn\n[INFO]    0.0 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\comfyui-kjnodes\n[INFO]    0.1 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\ComfyUI-YOLO\n[INFO]    0.3 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\was-ns\n[INFO]    0.3 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\comfyui-videohelpersuite\n[INFO]    0.6 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\comfyui_controlnet_aux\n[INFO]    0.9 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\ComfyUI-WanVideoWrapper\n[INFO]    6.8 seconds: C:\\Apps\\ComfyUI.Data\\custom_nodes\\comfyui-easy-use\n(index):1  GET http://127.0.0.1:8000/assets/vendor-datadog-CS-2l-KQ.js net::ERR_ABORTED 404 (Not Found)\n(index):21  GET http://127.0.0.1:8000/assets/manifest-P9przInP.json 404 (Not Found)\n(index):1 Manifest fetch from http://127.0.0.1:8000/assets/manifest-P9przInP.json failed, code 404\nmanifest-P9przInP.json:1  GET http://127.0.0.1:8000/assets/manifest-P9przInP.json 404 (Not Found)\n1. Configure ComfyUI to use uv\n3. Get ComfyUI to install packages (in my case, I got to this state by updating from an older version)\n4. Launch ComfyUI\n5. Open http://127.0.0.1:8000 in browser (to access DevTools console)\n[WARNING] On windows we are currently forcing single GPU mode in ComfyUI due to a Nvidia related issue, if you want to disable this use: --cuda-device all\n[INFO] Adding extra search path checkpoints C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\checkpoints\n[INFO] Adding extra search path classifiers C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\classifiers\n[INFO] Adding extra search path clip_vision C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\clip_vision\n[INFO] Adding extra search path configs C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\configs\n[INFO] Adding extra search path controlnet C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\controlnet\n[INFO] Adding extra search path controlnet C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\t2i_adapter\n[INFO] Adding extra search path diffusers C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\diffusers\n[INFO] Adding extra search path diffusion_models C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\diffusion_models\n[INFO] Adding extra search path embeddings C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\embeddings\n[INFO] Adding extra search path gligen C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\gligen\n[INFO] Adding extra search path hypernetworks C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\hypernetworks\n[INFO] Adding extra search path latent_upscale_models C:\\Users\\user\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Shared\\models\\latent_upscale_models",
+    "created_at": "2026-10-19T09:33:53Z",
+    "updated_at": "2026-10-19T13:56:03Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1010
+    }
+   }
+  },
+  {
+   "label": "custom node: traceback runs through a custom-node pack",
+   "record_version": "0.44.0",
+   "record_published_at": "2026-11-04T01:12:27Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "custom_node_in_failure_path",
+    "match_basis": "core_version_declaration",
+    "source_date": "2026-11-15"
+   },
+   "issue": {
+    "number": 17766,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17766",
+    "title": "节点在执行的过程中报错(新手完全不懂代码求大佬指点）",
+    "body": "### Custom Node Testing\n\n- [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\n在用别人的工作流的时候，好不容易搞定了模型缺失的问题，结果启动的时候一直报错，用codex修复也没用，有没有大佬帮帮我qwq\n\n### Actual Behavior\n\n点运行的时候弹报错\n\n### Steps to Reproduce\n\n求大佬帮帮我\n\n### Debug Logs\n\n```powershell\n节点在执行过程中发生错误。\n\n\n# ComfyUI Error Report\n## Error Details\n- **Node ID:** 20\n- **Node Type:** PathchSageAttentionKJ\n- **Exception Type:** ModuleNotFoundError\n- **Exception Message:** ModuleNotFoundError: No module named 'sageattention'\n\n## Stack Trace\n\n  File \"D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\execution.py\", line 556, in execute\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, ex\n...\n  File \"D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-kjnodes\\nodes\\model_optimization_nodes.py\", line 130, in patch\n  File \"D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-kjnodes\\nodes\\model_optimization_nodes.py\", line 31, in get_sage_func\n- **ComfyUI Version:** 0.44.0\n2026-11-16T00:27:02.442038 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-easy-use\n2026-11-16T00:27:14.770784 - \u001b[32m[INFO]\u001b[0m ComfyUI version: 0.44.0\n2026-11-16T00:27:22.302502 - \u001b[34m[ComfyUI-Easy-Use] web root: \u001b[0mD:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-easy-use\\web_version/v2 \u001b[92mLoaded\u001b[0m2026-11-16T00:27:22.302504 - \n  File \"D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-kjnodes\\nodes\\triton_vae.py\", line 10, in <module>\n  File \"D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-kjnodes\\__init__.py\", line 392, in <module>\n  File \"D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-kjnodes\\nodes\\triton_vae.py\", line 13, in <module>\n2026-11-16T00:27:23.650286 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\websocket_image_save.py\n2026-11-16T00:27:23.650368 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\local_video_progress\n2026-11-16T00:27:23.650443 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\TE-Speed-MiniMaxH3\n2026-11-16T00:27:23.650546 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\uniblockswap\n2026-11-16T00:27:23.650619 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\Comfyui_Minimax_h3_latent_Upscaler\n2026-11-16T00:27:23.650684 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\ComfyUI-YishiqiNodes\n2026-11-16T00:27:23.650881 - \u001b[32m[INFO]\u001b[0m    0.1 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-kjnodes\n2026-11-16T00:27:23.651042 - \u001b[32m[INFO]\u001b[0m    0.1 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\ComfyUI_MiniMaxH3_Director\n2026-11-16T00:27:23.651178 - \u001b[32m[INFO]\u001b[0m    0.3 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-videohelpersuite\n2026-11-16T00:27:23.651337 - \u001b[32m[INFO]\u001b[0m    0.4 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\ComfyUI_Comfyroll_CustomNodes\n2026-11-16T00:27:23.651426 - \u001b[32m[INFO]\u001b[0m    0.5 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\ComfyUI-DaSiWa-Nodes\n2026-11-16T00:27:23.651552 - \u001b[32m[INFO]\u001b[0m    0.5 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-minimax-h3-audio-T8\n2026-11-16T00:27:23.651680 - \u001b[32m[INFO]\u001b[0m    5.0 seconds: D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui-easy-use\n  File \"D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\execution.py\", line 353, in get_output_data\n  File \"D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\execution.py\", line 327, in _async_map_node_over_list\n  File \"D:\\ComfyUI-H3\\ComfyUI_windows_portable\\ComfyUI\\execution.py\", line 315, in process_inputs\n- **Arguments:** ComfyUI\\main.py --windows-standalone-build --listen 127.0.0.1 --port 18317 --disable-auto-launch --disable-pinned-memory --vram-headroom 0.5 --input-directory D:\\Codex项目文件\\浮石渔港\\input --output-directory D:\\Codex项目文件\\浮石渔港\\output --user-directory D:\\Codex项目文件\\浮石渔港\\comfy-user --temp-directory D:\\Codex项目文件\\浮石渔港\\temp\n- **Python Version:** 3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]\n- **PyTorch Version:** 2.14.1+cu130\n2026-11-16T00:27:02.427200 - \u001b[1m\u001b[33m[WARNING]\u001b[0m On windows we are currently forcing single GPU mode in ComfyUI due to a Nvidia related issue, if you want to disable this use: --cuda-device all\nPrestartup times for custom nodes:\n2026-11-16T00:27:06.757386 - \u001b[32m[INFO]\u001b[0m Found comfy_kitchen backend ascend: {'available': False, 'disabled': False, 'unavailable_reason': \"torch-npu is not installed: No module named 'torch_npu'\", 'capabilities': []}\n2026-11-16T00:27:06.852880 - \u001b[32m[INFO]\u001b[0m pytorch version: 2.14.1+cu130\n2026-11-16T00:27:14.770710 - \u001b[32m[INFO]\u001b[0m Python version: 3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]\n2026-11-16T00:27:14.771641 - \u001b[32m[INFO]\u001b[0m comfy-aimdo version: 0.6.0\n2026-11-16T00:27:14.772661 - \u001b[32m[INFO]\u001b[0m comfy-kitchen version: 0.2.40\n2026-11-16T00:27:14.777252 - \u001b[32m[INFO]\u001b[0m comfyui-frontend-package version: 1.57.6\n2026-11-16T00:27:14.777423 - \u001b[32m[INFO]\u001b[0m comfyui-workflow-templates version: 0.11.101\n2026-11-16T00:27:14.777516 - \u001b[32m[INFO]\u001b[0m comfyui-embedded-docs version: 0.5.16\n2026-11-16T00:27:14.777594 - \u001b[32m[INFO]\u001b[0m comfy-aimdo version: 0.6.0\n2026-11-16T00:27:14.777671 - \u001b[32m[INFO]\u001b[0m comfy-kitchen version: 0.2.40",
+    "created_at": "2026-11-15T16:32:21Z",
+    "updated_at": "2026-11-15T16:40:23Z",
+    "state": "closed",
+    "state_reason": "completed",
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1011
+    }
+   }
+  },
+  {
+   "label": "custom node: traceback runs through a custom-node pack",
+   "record_version": "0.44.0",
+   "record_published_at": "2026-11-04T01:12:27Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "custom_node_in_failure_path",
+    "match_basis": "core_version_declaration",
+    "source_date": "2026-11-04"
+   },
+   "issue": {
+    "number": 17533,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17533",
+    "title": "backend crash when using the new idol workflow",
+    "body": "### Custom Node Testing\n\n- [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help)\n\n### Expected Behavior\n\nthe workflow should run normaly\n\n### Actual Behavior\n\nthe error appears few seconds after running the workflow\n\n### Steps to Reproduce\n\n1 open the workflow\n2 select an image  \n3 hit run\n4 ERROR and the backend crashes\n\n### Debug Logs\n\n```powershell\n[2026-11-04T11:47:40.589Z] [INFO] App started v1.1.8 pid=18140 platform=win32 crashDumps=C:\\Users\\user\\AppData\\Roaming\\Comfy Desktop\\Crashpad\n[2026-11-04T11:47:41.112Z] [INFO] [sac-state] init: state= not_applicable\n[2026-11-04T11:47:41.129Z] [INFO] [staff-targeting] init: persisted= false\n[2026-11-04T11:47:41.148Z] [INFO] [user-tier] init: persisted= unknown\n[2026-11-04\n...\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-easy-use\n[INFO] ComfyUI version: 0.44.0\n[ComfyUI-Easy-Use] web root: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-easy-use\\web_version/v2 Loaded\n  File \"I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-kjnodes\\nodes\\triton_vae.py\", line 10, in <module>\n  File \"I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-kjnodes\\__init__.py\", line 370, in <module>\n  File \"I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-kjnodes\\nodes\\triton_vae.py\", line 13, in <module>\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\websocket_image_save.py\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-model-downloader\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Hi3D\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-3d-turnaround-splitter\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-pid\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\Comfyui-Hi3d-T8\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-spectrum-minimax-h3\n[INFO]    0.1 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-kjnodes\n[INFO]    0.1 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-model-manager\n[INFO]    0.1 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\minimax-h3-seedance-music3-prompt-enhancer-t8\n[INFO]    0.1 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-minimax-music-production-toolkit\n[INFO]    0.2 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Crystools\n[INFO]    0.5 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-impact-pack\n[INFO]    2.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-easy-use\nResetting to origin/master�\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-kjnodes\n[INFO]    0.0 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-model-manager\n[INFO]    0.1 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\ComfyUI-Crystools\n[INFO]    0.2 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-impact-pack\n[INFO]    1.5 seconds: I:\\Comfyinstall\\ComfyUI\\ComfyUI\\custom_nodes\\comfyui-easy-use\n> I:\\Comfyinstall\\ComfyUI\\ComfyUI\\.venv\\Scripts\\python.exe -s ComfyUI\\main.py --feature-flag show_signin_button=true --feature-flag enable_telemetry=true --enable-assets --enable-manager --extra-model-paths-config \"C:\\Users\\user\\AppData\\Roaming\\Comfy Desktop\\instance-model-paths\\inst-1783163299567.yaml\" --input-directory H:\\input --output-directory H:\\output\n[WARNING] On windows we are currently forcing single GPU mode in ComfyUI due to a Nvidia related issue, if you want to disable this use: --cuda-device all\n[INFO] Adding extra search path checkpoints I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\checkpoints\n[INFO] Adding extra search path classifiers I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\classifiers\n[INFO] Adding extra search path clip_vision I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\clip_vision\n[INFO] Adding extra search path configs I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\configs\n[INFO] Adding extra search path controlnet I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\controlnet\n[INFO] Adding extra search path controlnet I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\t2i_adapter\n[INFO] Adding extra search path diffusers I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\diffusers\n[INFO] Adding extra search path diffusion_models I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\diffusion_models\n[INFO] Adding extra search path embeddings I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\embeddings\n[INFO] Adding extra search path gligen I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\gligen\n[INFO] Adding extra search path hypernetworks I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\hypernetworks\n[INFO] Adding extra search path latent_upscale_models I:\\Comfy-Desktop\\ComfyUI-Shared\\models\\latent_upscale_models",
+    "created_at": "2026-11-04T13:18:53Z",
+    "updated_at": "2026-11-18T01:48:38Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Potential Bug"
+     }
+    ],
+    "user": {
+     "id": 1012
+    }
+   }
+  },
+  {
+   "label": "ecosystem/feature: maintainer-labelled feature request",
+   "record_version": "0.39.1",
+   "record_published_at": "2026-10-06T00:00:00Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "feature_request_not_a_problem_report",
+    "match_basis": "core_version_declaration",
+    "source_date": "2026-10-07"
+   },
+   "issue": {
+    "number": 16840,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/16840",
+    "title": "ComfyUI 0.39.1 is forcing OneDrive to download all models referenced in extra_model_paths.yaml",
+    "body": "### Feature Idea\n\nHi,\n\nAfter updating to ComfyUI 0.39.1, I’m running into a new problem related to how model paths are scanned.\n\nMy setup:\n\nComfyUI version: 0.39.1\nOS: Windows 11\nModels stored on: OneDrive (some local, many cloud‑only)\nextra_model_paths.yaml: points to OneDrive folders containing multiple model subdirectories\n\nI keep all my models (checkpoints, LoRAs, VAE, etc.) on a OneDrive drive.\nNot all of these models are synchronized locally; many are stored as cloud‑only files.\nI’ve been using an extra_model_paths.yaml file for a long time to point ComfyUI to my OneDrive model folders.\nIn previous ComfyUI versions, this worked fine. ComfyUI would see the models that were available locally and didn’t try to pull down everything from OneDrive.\n\nSince updating to 0.39.1, ComfyUI now appears to scan all folders listed in extra_model_paths.yaml much more aggressively, and this triggers\n...\nIf I rename / disable extra_model_paths.yaml, ComfyUI runs fine and OneDrive stops trying to sync everything. The issue only appears when extra_model_paths.yaml is active and pointing to OneDrive-backed folders.\nCould you consider adjusting the directory scanning logic so it doesn’t trigger OneDrive to download every cloud‑only file, or providing a configuration option to limit how aggressively ComfyUI scans those paths (e.g., lazy discovery, or optional scan modes for network / cloud drives)?",
+    "created_at": "2026-10-07T10:22:03Z",
+    "updated_at": "2026-10-13T12:29:48Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [
+     {
+      "name": "Feature"
+     }
+    ],
+    "user": {
+     "id": 1013
+    }
+   }
+  },
+  {
+   "label": "ecosystem complaint: 'latest version', no exact release -> never a candidate",
+   "record_version": "0.44.0",
+   "record_published_at": "2026-11-04T01:12:27Z",
+   "expected": {
+    "candidate": false,
+    "counted": false,
+    "exclusion_reason": "missing_exact_patch_version_match",
+    "match_basis": "",
+    "source_date": "2026-10-22"
+   },
+   "issue": {
+    "number": 17278,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17278",
+    "title": "moss workflow cannot run ,after i update comfyui to latest v0.42.3",
+    "body": "moss workflow cannot run ,after i update comfyui to latest v0.42.3,also run into  same issue with some old workflow.\nwhen comfyui verision in v0.41.2, my old workflow work fine. \n\nmoss work flow show:\n\nNode threw an error during execution.\n\n\n# ComfyUI Error Report\n## Error Details\n- **Node ID:** 18:11\n- **Node Type:** TextGenerate\n- **Exception Type:** RuntimeError\n- **Exception Message:** RuntimeError: Unsupported Flash Attention tensor strides\n\n## Stack Trace\n```\n  File \"C:\\Users\\user\\ComfyUI-Installs\\ComfyUI\\ComfyUI\\execution.py\", line 548, in execute\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n...\n- **ComfyUI Version:** 0.42.3\n2026-10-22T09:22:47.809942 - WAS Node Suite 2026-10-22T09:22:47.809942 - Warning: 2026-10-22T09:22:47.809942 - `ffmpeg_bin_path` is not set in `E:\\Comfyui-cys\\custom_nodes\\was-node-suite-comfyui\\was_suite_config.json` config file. Will attempt to use system ffmpeg binaries if available.2026-10-22T09:22:47.809942 - \n2026-10-22T09:22:48.529925 - \u001b[32m[INFO]\u001b[0m    0.0 seconds (IMPORT FAILED): E:\\Comfyui-cys\\custom_nodes\\custom_nodes\n2026-10-22T09:22:48.529925 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-PainterI2V\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-PainterI2VforKJ\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\comfyui-mxtoolkit\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-qwenmultiangle\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds (IMPORT FAILED): E:\\Comfyui-cys\\custom_nodes\\ComfyUI_RH_QwenImageI2L\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\Comfyui_Minimax_h3_latent_Upscaler\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-SCAIL-Pose\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\Comfyui_TTP_Toolset\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI_MiniCPM-V-4_5\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-LocateAnything\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-PromptRelay\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-HY-Motion1\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-TiledDiffusion\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-EulerDiscreteScheduler\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-GGUF\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-VDN-H3\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-WanAnimatePreprocess\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\WhatDreamsCost-ComfyUI\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyMath\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-SAM-Audio\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-QwenVL\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-WanVaceAdvanced\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI_essentials\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\comfyui-frame-interpolation\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\comfyui-segment-anything-2\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI_Qwen3-VL-Instruct\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-Drama3\n2026-10-22T09:22:48.530917 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-FlashVSR_Ultra_Fast\n2026-10-22T09:22:48.531467 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-SolAttn_triton\n2026-10-22T09:22:48.531467 - \u001b[32m[INFO]\u001b[0m    0.0 seconds (IMPORT FAILED): E:\\Comfyui-cys\\custom_nodes\\ComfyUI_SongGeneration\n2026-10-22T09:22:48.531467 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\rgthree-comfy\n2026-10-22T09:22:48.531467 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-MatAnyone\n2026-10-22T09:22:48.531467 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\comfyui_controlnet_aux\n2026-10-22T09:22:48.531467 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-KJNodes\n2026-10-22T09:22:48.531467 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-MelBandRoFormer\n2026-10-22T09:22:48.531467 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\comfyui-cys-node\n2026-10-22T09:22:48.531467 - \u001b[32m[INFO]\u001b[0m    0.0 seconds: E:\\Comfyui-cys\\custom_nodes\\ComfyUI-LTXVideo",
+    "created_at": "2026-10-22T02:05:59Z",
+    "updated_at": "2026-11-17T18:13:56Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [],
+    "user": {
+     "id": 1014
+    }
+   }
+  },
+  {
+   "label": "last-activity date: created before the release, edited later to name it",
+   "record_version": "0.44.0",
+   "record_published_at": "2026-11-04T01:12:27Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "source_date_before_or_unverified_against_release",
+    "match_basis": "core_version_text",
+    "source_date": "2026-11-03"
+   },
+   "issue": {
+    "number": 17515,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17515",
+    "title": "SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang",
+    "body": "\nNative SeedVR2 video upscaling (x2) crashes with `CUDA error: an illegal memory access was encountered` once the input video passes a certain total size. It depends on frames x resolution, not on VRAM in use: 193 frames at 704x1088 pass, 241 crash, and 289 at 352x544 pass. It reproduces every time, at the same point: about 1 s after the SeedVR2 model loads, at the start of the first sampling step. Smaller jobs in the same process, before and after, run fine.\n\nIt reproduces on Windows (portable build) and on Linux (Ubuntu 24.04 under WSL2, ComfyUI from git with the Linux PyTorch wheel). It happens on ComfyUI v0.43.0 and v0.44.0, with both an int8 and an fp8 checkpoint, and on two drivers. No launch flag fixes it. The only setting that makes it pass is `CUDA_LAUNCH_BLOCKING=1`, which points to a stream-ordering race (details below).\n\nOn Windows, after some crashes the Python process can't\n...\n- ComfyUI from git at v0.43.0 (426f5ee), v0.44.0 (2c75dc1b) and v0.37.4 (8ff6dc38), each with its own venv\n| 704x1088 | 241 on Linux (WSL2), ComfyUI **v0.44.0** | **Crash**, 185 s, same illegal memory access | 32.1 GB |\n**Versions:** still present in v0.44.0. Before #16530 (v0.38.0), the same job OOMs cleanly instead, needing about 56 GiB. So the crash only becomes reachable with the lower-memory code from #16530 onward. That makes the memory-saving paths added there worth checking first, but it isn't proof that #16530 introduced it.\n- **Fixed in a newer release:** v0.44.0 still crashes.\n be ended (`taskkill /F` fails) and keeps holding 12-14 GB of VRAM and `comfyui.db`, so ComfyUI can't start again until Windows restarts.\n- ComfyUI v0.43.0 (portable, git 426f5ee), frontend 1.57.4\n- comfy-aimdo 0.6.0, comfy-kitchen 0.2.40\n- PyTorch 2.14.1+cu130 Linux wheel, Python 3.13. comfy-aimdo and comfy-kitchen as pinned in each version's `requirements.txt`\n- Default launch, plus `--port`, `--input-directory`, `--output-directory` and `--extra-model-paths-config`. No custom nodes\n3. Queue it. After VAE encode (about 2.5 min), the crash comes about 1 s after `Model SeedVR2 prepared for dynamic VRAM loading. 7944MB Staged.`\n## Results (same source clip, ComfyUI restarted before every run; Windows unless the row says Linux)\n| 704x1088 | 97 | Pass, 190 s (twice, including right after a crash) | 23-27 GB |\n| 704x1088 | 241 | **Crash**, 152 s | 32.1 GB |\n| 704x1088 | 289 | **Crash**, 3 of 3 runs, 162-167 s | 8.5-14 GB |\n| 704x1088 | 289 with `--disable-dynamic-vram` | **Crash**, 2 of 2 runs | 13.5 GB |\n| 704x1088 | 241 with `--disable-cuda-graphs` | **Crash**, 1 of 1 run | 11.9 GB |\n| 704x1088 | 241 on driver 617.42 (clean install) | **Crash**, 1 of 1 run, 167 s, same 511 driver events | 32.1 GB |\n| 704x1088 | 241 with `--disable-async-offload`, driver 617.42 | **Crash**, 186 s, same 511 driver events | 32.1 GB |\n| 704x1088 | 241 with `--disable-cuda-malloc` (native allocator), driver 617.42 | **Crash**, 135 s, same 511 driver events. Caught as an execution error, with the stack ending in `comfy_kitchen` `int8_linear` | 14.6 GB |\n| 704x1088 | 241 with `COMFY_KITCHEN_DISABLE_CUTLASS=1` (cuBLAS int8 path), driver 617.42 | **Crash**, 165 s, same 511 driver events, same `int8_linear` line (`cuda/__init__.py:2390`, the `torch.empty` for the int32 output). The process then hung | 13.7 GB |\n| 704x1088 | 241 with `--disable-pinned-memory`, driver 617.42 | **Crash**, 287 s, same 511 driver events, as sampling started | 32.1 GB |\n| 704x1088 | 241 with an fp8 e4m3fn SeedVR2 7B checkpoint (manual cast to bf16, no comfy-kitchen int8), driver 617.42 | **Crash**, 152 s, same 511 driver events, as sampling started | 32.1 GB |\n| 704x1088 | 241 on Linux: WSL2 Ubuntu 24.04, ComfyUI v0.43.0 from git, PyTorch 2.14.1+cu130 Linux wheel, same workflow | **Crash**, 234 s, `c10::AcceleratorError` illegal memory access, then `CUDA_ERROR_ILLEGAL_ADDRESS` from `cuMemFreeAsync`, and 500 nvlddmkm events on the host | 32.1 GB |\n| 704x1088 | 241 on Linux (WSL2), ComfyUI **v0.37.4**, before #16530 \"Optimize Seedvr2\" | No crash. A clean CUDA OOM at KSampler: about 56 GiB requested on a 31.8 GiB device | 32.1 GB |\n| 704x1088 | 408-413 | **Crash**, 2 earlier runs | not recorded |\n`--disable-cuda-graphs` is the workaround from #14714, which has the same error on RTX 5090 with Wan 2.2. It didn't help here.\n## Error\nEach crash logs exactly 511 `nvlddmkm` events in the Windows System log in the same second, the same count every time. That's 170 sets of these three, spread evenly over all 11 GPCs, plus one event 153:\nError occurred on GPUID: 100      (event 153)\nComfyUI log:\nSticky error detected\ntorch.AcceleratorError: CUDA error: an illegal memory access was encountered\n  what():  CUDA error: an illegal memory access was encountered\nFatal Python error: Aborted\nAnother run ended in `comfy/ldm/seedvr/model.py:1033 _modulate`, then `comfy/ops.py:125 cast_to_input`. With `--disable-dynamic-vram`, the process then hung, and `__del__` logged `RuntimeError: HostBuffer.truncate failed` from `comfy_aimdo/host_buffer.py`.\n- **Heat or power:** crashes happen at 66-72 °C, cooler than passing runs. No HW slowdown or power-brake time, no WHEA errors, no TDRs.\n- **OOM:** passing runs used the full 32 GB, and failing runs crashed at 8.5-14 GB sampled.\n- **SageAttention length limit:** not installed.\n- **Driver regression:** the older driver 617.42 crashes identically to 621.01.\n- **Windows-only build:** the Linux PyTorch build and ComfyUI under WSL2 crash the same way. This used the same host driver; native Linux wasn't tested.",
+    "created_at": "2026-11-03T21:39:20Z",
+    "updated_at": "2026-11-03T21:39:20Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [],
+    "user": {
+     "id": 1015
+    }
+   }
+  },
+  {
+   "label": "role: the version the reporter names as working",
+   "record_version": "0.37.0",
+   "record_published_at": "2026-09-21T07:35:01Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "version_role_working",
+    "match_basis": "core_version_text",
+    "source_date": "2026-09-30"
+   },
+   "issue": {
+    "number": 16665,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/16665",
+    "title": "Qwen Image 2.1 CPU/INT8 cache fails in v0.38.0 with `aimdo memory compile error` (works in v0.37.0)",
+    "body": "### Summary\n\nAfter upgrading from ComfyUI v0.37.0 to v0.38.0, a Qwen Image 2.1 two-reference image edit workflow using `QwenImage21Cache(device=\"cpu\", dtype=\"int8\")` fails at the start of sampling with `RuntimeError: aimdo memory compile error`. The same workflow succeeds on v0.37.0. On v0.38.0 it also succeeds when started with `--disable-comfy-compiler`. I reproduced the failure twice, including after a clean process restart.\n\n### Environment\n\n- Windows 11, one NVIDIA RTX 4090 (24 GB)\n- ComfyUI v0.38.0, tag commit `6b747c0428c343e1417219641db93a4fb7cb69ae`\n- Python 3.13.14; PyTorch `2.13.0+cu130`; `comfy-aimdo 0.5.5`; `comfy-kitchen 0.2.36`\n- Community Qwen Image 2.1 UC FP8 diffusion checkpoint, INT8 Qwen3-VL text encoder, BF16 VAE\n- Native `UNETLoader` workflow; ComfyUI-GGUF is installed but is not used by the failing graph\n\n### Steps to reproduce\n\n1. Load a Qwen Image 2.1 FP8 diffusi\n...\nThe CPU/INT8 cached edit graph should complete as it does on v0.37.0, or fall back gracefully if this cache mode is incompatible with the new compiler/prefetch path.\n- Exact workflow on v0.37.0: **passes** (about 17 s in our run).\non checkpoint, its text encoder and VAE using native ComfyUI nodes.\n3. Sample at 768 x 768, 20 steps, Euler/simple, CFG 1. The failure occurs at 0% sampling; the specific image contents and prompt are not relevant to the error.\n4. Restart ComfyUI and run again. The same error occurs.\nRuntimeError: aimdo memory compile error\n    broken = self.pop()\n    broken = self._call(control.lib.malloc_graph_pop) == 2\n    raise RuntimeError(\"aimdo memory compile error\")\nThe log immediately before the error reports `Comfy model compiler graph breaks: 0, rogues: 4`.\n- v0.38.0 text-to-image and two-reference edit with default cache: **pass**.\n- v0.38.0 CPU/INT8 cache with compiler enabled: **fails twice** at 0%.\n- v0.38.0 CPU/INT8 cache with `--disable-comfy-compiler`: **passes** (13.09 s on the first run, 7.07 s warm). These timings are not directly comparable because cache state differs.\nThis points to an interaction with the compiler/prefetch/malloc-graph path, but the Python stack alone does not establish the underlying C-level cause. I did not observe a missing-weight or tensor-shape error. Disabling the compiler is only a workaround because it also disables related optimization features.\nIs CPU/INT8 `QwenImage21Cache` intended to work with the new compiler path in v0.38.0? I can provide a sanitized API workflow or additional logs if needed.",
+    "created_at": "2026-09-30T01:43:44Z",
+    "updated_at": "2026-09-30T04:00:11Z",
+    "state": "closed",
+    "state_reason": "completed",
+    "labels": [],
+    "user": {
+     "id": 1016
+    }
+   }
+  },
+  {
+   "label": "not concrete under the shared vocabulary (measured miss)",
+   "record_version": "0.44.0",
+   "record_published_at": "2026-11-04T01:12:27Z",
+   "expected": {
+    "candidate": true,
+    "counted": false,
+    "exclusion_reason": "not_a_real_issue_report",
+    "match_basis": "core_version_text",
+    "source_date": "2026-11-04"
+   },
+   "issue": {
+    "number": 17523,
+    "html_url": "https://github.com/Comfy-Org/ComfyUI/issues/17523",
+    "title": "Updated to ComfyUI v0.44.0: Krea2Turbo images with same seed/parameters now have major detail loss",
+    "body": "I'm using SwarmUI. I updated to ComfyUI v0.44.0 and now all of my old images created with Krea2 Turbo lose all details and the images aren't identical with the same seed and parameters. I load an image and click \"Reuse Parameters\" so same seed, settings, loras, checkpoint, etc. and you can see the difference in the images below not being identical and the details are gone.\n\nThis is only happening with **Krea2 Turbo**, not Krea2 Raw. I reverted back to **v0.43.0** and now the details are back in the images and everything is normal.\n\nBefore update:\n<img width=\"1000\" height=\"1778\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/df561e09-90ac-4650-b42f-7d2a27486bcb\" />\n\nAfter update:\n<img width=\"1000\" height=\"1778\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/f84d8d19-d5d6-4cfb-a146-8e7b8dd33b7e\" />\n\nAnyone else experiencing this with Krea2 Turbo?",
+    "created_at": "2026-11-04T07:44:24Z",
+    "updated_at": "2026-11-07T15:33:54Z",
+    "state": "open",
+    "state_reason": null,
+    "labels": [],
+    "user": {
+     "id": 1017
+    }
+   }
+  }
+ ]
+}
