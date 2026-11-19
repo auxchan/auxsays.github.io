@@ -151,6 +151,8 @@ SITES = [
      lambda m: m.apply_consensus_writeback("1.0"), "teams"),
     ("patch_collectors.comfyui",
      lambda m: m.apply_consensus_writeback("1.0"), "comfyui"),
+    ("patch_collectors.nvidia_forum",
+     lambda m: m.apply_consensus_writeback("nvidia-geforce-game-ready", "1.0"), "nvidia"),
 ]
 
 
@@ -516,7 +518,9 @@ def run() -> int:
                         # dry run's canonical resolution exactly as the others do.
                         "microsoft_teams.py",
                         # ComfyUI GitHub-issues evidence: the same Teams-shaped writeback.
-                        "comfyui.py"}, str(idx_users))
+                        "comfyui.py",
+                        # NVIDIA forum evidence: the ComfyUI-shaped writeback, per family.
+                        "nvidia_forum.py"}, str(idx_users))
 
     acr_src = (_SCRIPTS / "apply_consensus_to_records.py").read_text(encoding="utf-8")
     check("doctrine: the index parameter is typed as the identity TRIPLE everywhere",

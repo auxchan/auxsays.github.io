@@ -58,6 +58,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-044 | Resolved | Public truthfulness | High | Promoting a page to live consensus would have hidden its collection warnings |
 | AUX-037 | Deferred | Canonical patch identity | Medium | Elgato platform identity crashes the write path — the platform segment reads as a build segment |
 | AUX-045 | Resolved | Evidence integrity | Medium | A counted row could not show the evidence for its own version match |
+| AUX-106 | Resolved | Community evidence | High | NVIDIA drivers had no community evidence; their reports live on NVIDIA's own forum |
 | AUX-046 | Resolved | Official ingestion | High | Four Elgato products had no records because the HTML pages challenge the runner |
 | AUX-105 | Resolved | Official ingestion | High | NVIDIA drivers had no official lane, and one catalog product stood for three products |
 | AUX-039 | Resolved | Published claims | High | The site claimed to monitor 29 products it was not monitoring, and 27 companies with zero healthy products |
@@ -84,6 +85,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
 | AUX-090 | Resolved | Publication | Medium | Every OBS report on a patch page read "date not recorded", though each source states when it was posted |
 | AUX-098 | Resolved | Evidence integrity | Medium | Fourteen reports that one person had posted twice were each counted as two reports |
+| AUX-108 | Deferred | Evidence integrity | Medium | Five reports counted against a version they were not about: the build a device fell back to, the version an author upgraded from, a version only asked about (rows withdrawn; the attribution fix deferred behind named triggers) |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
@@ -110,6 +112,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-077 | Resolved | Evidence integrity | Medium | Learn Q&A fetchers followed a redirect to any host and would have parsed that page as the Learn thread |
 | AUX-072 | Resolved | Evidence integrity | High | Eight stored Windows rows stayed counted after AUX-067 refused their shape |
+| AUX-110 | Resolved | Evidence integrity | Medium | Two Acrobat Reader reports of a real problem on the update were withdrawn as "the version works" |
 | AUX-074 | Resolved | Collector ownership | Medium | Five owned methods that no collector ever ran kept all 398 Acrobat and Premiere identities from certifying |
 | AUX-078 | Resolved | Evidence integrity | Medium | A Microsoft Q&A question re-found under an edited title was counted twice on one patch |
 | AUX-089 | Resolved | Publication | Medium | Search titles and descriptions of every patch page hid the decision behind "official update breakdown" |
@@ -272,6 +275,72 @@ foreign-product veto (row 41) is rejected here by identity, but the veto gap its
 **Reopen only if** a counted Windows row has a title that names another update and neither the record's
 build nor KB (outside a stated affected range), or the exception ever keeps a range that starts above the
 target or is on another train.
+
+---
+
+### AUX-110 — Two Acrobat Reader reports of a real problem on the update were withdrawn as "the version works"
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-19 (a false-negative audit of the Acrobat role veto) · **Resolved** 2026-11-19
+
+**Symptom** Two stored Acrobat Reader reports describe a problem that began with the update they name, and both
+were stored `counted: false` with `exclusion_reason: version_named_but_working`. On 18.009.20044 the veto read
+the version followed by "I work" (the start of "I work in IT support") as the version working. On 19.021.20047
+it read "All users were working", which is about the earlier build the users upgraded from. Pages 18.009.20044
+and 19.021.20047 each showed one report fewer than they have.
+
+**Cause** The #104 role veto (`lib.target_outcome.target_is_contradicted`) matches working cues by proximity, and
+these two sentences put a working word next to the target version. Nothing could undo a stored withdrawal: the
+withdrawal tools only go true -> false, the label-only recompute never writes `counted`, and the evidence-loss
+guard does not police re-acceptance. The veto itself is not changed (no blanket contraction fix): other phrasings
+it refuses correctly would move with it.
+
+**Scope** Only rows that two fresh blind adjudicators both labelled CORRECT ("a concrete problem attributable to
+the exact named version") on a shuffled, label-free packet of stored text whose brief named no row and no
+hypothesis; both labelled all 11 controls as expected. 25.001.21111 (thread 1548715) was also labelled CORRECT
+twice but is HELD: the second build that triggered its veto (`multiple_builds_named_target_not_blamed`) lies past
+the stored excerpt, so the labels could not judge what the gate decided. The other role-vetoed Reader rows stay
+withdrawn, including 19.012.20040 on the same thread (the build the users upgraded from).
+
+**Fix** `readmit_adjudicated_rows.py`, the first audited re-admission, is `withdraw_live_citation_rows.py`
+(AUX-088) inverted and imported rather than copied: five-field selection, pinned before/after block hashes, a
+two-line edit (`counted: false -> true`, `exclusion_reason: <reason> -> null`), a field-by-field proof, dry run
+by default, `--write --confirm-write`, all or nothing, idempotent. It is closed on every axis: Acrobat Reader only;
+one from-reason (`version_named_but_working`); two CORRECT labels with reasons from two different named
+adjudicators on one packet entry; the held row refused; a re-admitted row must enter the authoritative counted
+population, and one whose report is already counted on the patch under another row refuses. The store write goes
+through `single_writer.guarded_write` with the fingerprint it read, and `--expected-store-sha256` refuses a store
+other than the one pinned. `--regenerate` runs only the lane's two scoped Reader writers. The manifest is
+`scripts/audit/acrobat_reader_readmission.json`; the run audit is `..._2026-11-19.json`.
+Re-admitted as stored, 1511973 would have published "install/update failure"; the post reports PDFs failing to
+open after the update. `recompute_evidence_classification.py --correction-manifest` corrects it to the shipped
+Acrobat classifier's own answer on the retained text ("unspecified Acrobat issue", "Acrobat workflow", medium):
+a pinned manifest (`scripts/audit/acrobat_reader_label_correction.json`) names the row, its stored labels and the
+new ones, which must equal the classifier's answer; only theme, area and severity move, through the tool's single
+write site. The re-admission manifest records that change as the block's successor, so a second run of either tool
+is a no-op.
+
+**Measured** Store: 7 lines (2+2 re-admission, 3 labels), every row kept, the sibling and the held row
+byte-identical, no evidence loss. Counted Reader rows 166 -> 168: 18.009.20044 4 -> 5, 19.021.20047 1 -> 2, no
+other patch moves. Only the two records change: counts, accepted sources, evidence samples, the count prose, one
+"User report count updated to N." event each. On 18.009.20044 the theme list becomes "crash or launch failure,
+unspecified acrobat issue, and signing/certificate failure"; 19.021.20047's sentence moves from "one report does not
+show a pattern" to "no problem in them is confirmed as reported independently by two or more users". Label
+(Negative), confidence (Low), maturity (pilot), the verdict (INSUFFICIENT DATA), the verdict projection and the
+live set are unchanged. `test_readmit_adjudicated_rows.py` pins it (72 checks; five mutants, each killed by its
+named check).
+
+**Residual** The shipped veto still refuses both rows on their stored text, so any later check that replays it
+over stored rows must read this manifest as its exemption list; the suite pins that on stored text the veto refuses
+exactly these two among every counted Acrobat row. #104 judged the full post, not the 280-character excerpt: its
+cue order (affected, then rollback, before working) shows the full text held no affected or rollback cue for the
+target, but says nothing about what else the post said past the cut. The evidence-loss guard cannot catch a wrong
+re-admission; precision rests on the manifest, at PR time. Before merge, re-run the tool and the scoped writers on
+current main with `--expected-store-sha256`.
+
+**Reopen only if** either row stops counting without its own audited withdrawal, a row is re-admitted without two
+CORRECT labels from two adjudicators, 25.001.21111 counts before its context is recovered through an authorised
+procedure, or a replay of the veto over stored rows flags a counted row this manifest does not name.
 
 ---
 
@@ -3777,6 +3846,77 @@ that existed when it was written. The Systems Monitor output is assembled by a s
 so the local verification of AUX-038 never saw it. Verify a new deploy-gate rule against the full
 production build, not the Jekyll output alone.
 
+### AUX-106 — NVIDIA drivers had no community evidence; their reports live on NVIDIA's own forum
+
+- **Status** Resolved · **Area** Community evidence · **Severity** High
+- **First seen** 2026-11-18 · **Resolved** 2026-11-19 (fix pending its first scheduled collection run)
+
+AUX-105 gave both NVIDIA driver families an official lane, which can only ever say INSUFFICIENT DATA:
+no community source existed. The measured independent sources are unusable (G44/G45). The SSD-write
+defect of 621.14/621.24 was reported on the NVIDIA GeForce forum about 9 days before the press
+(comment 3633066, 2026-11-08 16:08Z, inside the feedback thread's latest-25 window from posting on).
+
+**Repair.** One collector, `patch_collectors/nvidia_forum.py`, registered once per family
+(`AUXSAYS_ENABLE_NVIDIA_FORUM_CONSENSUS`), and its source, `patch_collectors/nvidia_forum_source.py`:
+
+- **Only the forum's two default views**, through the calls its own pages make: a community's pinned
+  and 15 most recently active topics, and a topic's latest 25 top-level comments with the replies the
+  forum embeds. `permitted_request` refuses page 2+, the oldest sort, comment anchors, reply expansion,
+  search, user pages, the all-communities listing and every other host before anything is sent. Both
+  robots files are re-read each cycle; the www page a call stands for must be allowed.
+- **One cycle per 12 hours** (state file, whatever the 6-hourly cron), at most 16 requests and 5
+  threads, 4 s apart, honest client name, no retries; both families share it. A thread whose last
+  activity has not moved is not re-read.
+- **Stops**: 401/403/429/451, a challenge, HTML for JSON or a refusing body suspend the method,
+  persisted in `_data/nvidia_forum_state.json`, until a reviewed change sets
+  `ACCESS_REFUSAL_CLEARED_AT` (after the refusal, already passed, once). Any redirect, the same host
+  included (an empty lib.http `redirect_hosts` bound, refused before the hop), a schema change or an
+  unreadable or disallowing robots policy store nothing that cycle. Nothing stored is ever removed by a stop.
+- **Identity**: a comment is a candidate only when its OWN text names a tracked version (links and
+  quotes removed). Family from a staff feedback thread whose title names exactly one version and one
+  family, for that version only, or from the reporter naming it; the other family named vetoes; with
+  no family the row is stored `driver_family_unassigned` for both and counted for neither (the
+  shared-component case). Notebook reports (first person always, and "another laptop" too; another
+  person's only through a possessive owner, "a friend's laptop", or inside an other-machine phrase's
+  description when the same sentence says it works on that machine, "works on another system with an
+  RTX 4070 Laptop GPU"; "On my second system with an RTX 4070 Laptop GPU, since ..." is the reporter's
+  notebook), versions on a specification line only, disclaimed attribution, module crashes
+  without regression evidence for the record's own version (dated to it or contrasted with a working
+  version, and not begun on or persisting on another) and fine-only posts are excluded with their
+  reasons. Then `base.apply_acceptance_gates` and `lib.target_outcome` unchanged; the date is the
+  comment's own creation time; the URL is the forum's own link to that comment; the row is keyed on the
+  comment (a comment moved to another thread is never a second row); members' @handles and display
+  names are removed from stored text, from the stored thread titles the promotion copies, and from a
+  user topic's title in the state file (a staff feedback thread's title is kept as posted: its family
+  is read back from it). **Residual:** the stored link keeps the forum's own slug of the thread title,
+  so a name in a title survives there in slug form. It is kept until a permitted live check shows a
+  link without the slug still reaches the comment; personal information is not fully removed while
+  it remains.
+- **Coverage gaps** (GPT G47 s2): each read thread's last window (comment ids and creation times) is
+  kept; no overlap with the previous newest gone, a boundary tie, a comment appearing inside the span
+  already read, or more new comments than the window shows reports `partial` /
+  `possible_missed_comments` with the reason in the notes and the state. Never a count; never a page
+  read to repair it. Notes always say only the window is visible.
+- **Wiring**: method registry (`nvidia_forum_default_views`), method routing (one primary per family;
+  `disabled` there switches all requests off), ownership, promotion products and a scoped promotion
+  step per family, the writeback allow-list (records are named `*geforce-game-ready-driver*` and
+  `*nvidia-studio-driver*`, plus the state file), the transaction surface.
+
+Measured on the captured windows (offline replay through the shipped path): Game Ready 621.14 counts 7
+(the measurement's critic counted 8; 3633067 has no word the shared concreteness vocabulary accepts),
+621.24 counts 2 (3634344, a module crash that began on 621.01 and persisted on 617.42, is investigated);
+Studio counts none; every SSD-topic comment is unassigned.
+
+Pinned by `test_nvidia_forum_evidence.py` (blocking, offline, real lib.http over a fake transport).
+
+**Not done here:** notebook driver products; any second NVIDIA community; the product-level early
+signal for unassigned reports (G44 s5).
+
+**Reopen only if** a comment is counted for both families, a request outside the default views is
+sent, a request is made after a recorded refusal without a later, already-passed clearing time, any
+redirect is followed, a health note claims comprehensive monitoring, or the
+first scheduled run after merge is refused (then record what the runner was told, and stop).
+
 ### AUX-045 — a counted row could not show the evidence for its own version match
 
 - **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
@@ -5216,6 +5356,89 @@ suite's scope check now refuses any scope beyond the two declared ones (81).
 **Reopen only if** any of the fourteen counts again, an original stops counting without its own audited
 withdrawal, a held-out pair is withdrawn without two labels naming the same original, or a same-time capture is
 decided by anything but the source's own post number.
+
+---
+### AUX-108 — Five reports counted against a version they were not about: the build a device fell back to, the version an author upgraded from, a version only asked about (rows withdrawn; the attribution fix deferred behind named triggers)
+
+- **Status** Deferred (the five rows are withdrawn; any change to how a report's versions are attributed waits for
+  a trigger below) · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-19 (an audit of the role each named version plays in a counted report; two blind
+  adjudications) · **Data corrected** 2026-11-19
+
+**Symptom** A report often names more than one version, and each plays a different role: the version with the
+problem, the one the device fell back to, the one the author upgraded from, one that works, one only asked about.
+An audit of every counted row found five rows counted against a version whose role was not "the version with the
+problem":
+- Windows 11 25H2 26200.9168: an Insider build kept failing to install, and the device returned to 26200.9168;
+- DaVinci Resolve 21: the author upgraded from 21 to 21.1 and the problem began on 21.1 (the same post stays
+  counted on 21.1, where it belongs);
+- DaVinci Resolve 21.1 and 21: one question asking whether 21.1 is stable enough to install, from someone still on
+  20.3.1 who ran neither version and repeats what other posts said about 21;
+- DaVinci Resolve 20: a post that says everything works and asks about a display detail.
+
+**Scope** Only rows that two independent blind adjudications both labelled incorrect. Each adjudicator read only
+the stored text, in a shuffled packet that mixed the candidates with counted controls, without the audit's labels
+or the other adjudicator's. A sixth candidate (DaVinci 20.2.1) was held out before adjudication, because its
+stored excerpt is cut mid-post and the source cannot be re-read; it stays counted. One random control (DaVinci
+21.0.4) was also labelled incorrect by both; it was not a candidate, so it is recorded for its own review and stays
+counted. No acceptance rule, threshold or vocabulary changed.
+
+**Fix (data)** `withdraw_live_citation_rows.py` (AUX-088, unchanged) withdraws the five from a fourth pinned
+manifest, `scripts/audit/live_citation_withdrawal_v4.json`, which records both blind labels beside each row and the
+audit's label as provenance only. The rest is AUX-088's: five-field selection, pinned block hashes, three lines
+for the Windows row and two per DaVinci row, every row kept with `counted: false` and the reason both reviews
+support (`version_is_rollback_target`, `identity_not_the_subject`, `not_a_real_issue_report`), all or nothing,
+idempotent. The four records were regenerated only by the scoped lane writers. A scheduled collector that sees one
+of these reports again does not re-admit it: every Windows and DaVinci lane persists through the store's append
+guard, which refuses a report whose id or URL the store already holds for that version, counted or not, and a
+withdrawal keeps the row.
+
+**Selection** PR #79 withdrew rows chosen only by running the shipped rule, never by hand. These five were chosen
+by independent human adjudication instead, as AUX-088 and AUX-098 were: once every rule change was measured and
+ruled out, two blind adjudications pinned per row are the selection that remains. That supersedes #79's stance
+for this case; it does not break it.
+
+**Measured** Counted rows: Windows 553 -> 552, DaVinci 335 -> 331, OBS unchanged; every row kept; store diff 11
+lines. Pages: 25H2 26200.9168 20 -> 19; DaVinci 20 33 -> 32 (evidence strength High -> Medium, the only public
+label change), 21 75 -> 73, 21.1 14 -> 13. No verdict, maturity, consensus label or live decision changes; each
+record loses exactly its withdrawn sources and gains one "User report count updated to N." event. A second run of
+the tool changes nothing. `test_withdraw_g51_role_rows.py` pins it (36 checks, fixture counts only); the DaVinci
+bucket suite's stored-row check accepts exactly this manifest's withdrawal and still fails on any other uncounted
+row (34).
+
+**Why deferred** Every attribution change measured would have removed these rows only by also dropping real
+reports, by missing them, or by adding wording lists that nothing counterbalances in the lanes that would need
+them. The data correction removes the five rows both reviews confirmed; the remaining risk is in the mechanism and
+in the still-counted rows named under Current impact.
+
+**Current impact** Still counted: DaVinci 20.2.1 (held out) and the DaVinci 21.0.4 control, each awaiting its own
+audited review, and two measured rows of this class outside the withdrawal tool's product scope, Premiere Pro
+26.2.2 and Acrobat Reader 15.020.20039, taken up at the next Adobe audited withdrawal once that tool's scope
+widens to cover them. About a quarter of
+counted rows store too little text around the version to judge its role; that is an auditability gap, tracked by
+the version-centred evidence work, not proof of wrong counting.
+
+**Revisit trigger** Reopen the code question when any of these appears:
+- **Shared role check:** an independently adjudicated false count of this class in a lane where the shared role
+  check is already wired, together with a structurally different approach (not reworded phrasings) that passes the
+  frozen bar of at least 40 novel keep probes written before the patch is seen, with no wrong refusal.
+- **False negative:** an independently adjudicated real report that the role check refused (two Acrobat Reader
+  rows are already reproduced) also opens an investigation of a structurally sound repair of the shared check,
+  under the same bar. A check that suppresses real reports overstates a release's safety as readily as a false
+  count overstates its risk. Those rows are adjudicated and restored on their own path, not behind this item.
+- **Windows:** a second independently adjudicated case of this class; then measure a targeted check over every
+  counted Windows row, with no real report lost.
+- **DaVinci:** collection resumes with enough stored text around the version to judge its role.
+- **NVIDIA:** post-merge evidence supports a narrowly scoped check on the feedback form's structured driver fields.
+- Any fix must keep counting a report whose author went back to a version and found the problem still there; no
+  blanket rule.
+
+**Work that this item must not block** The NVIDIA forum lane's merge, the version-centred evidence capture, and
+the separate adjudication of the Acrobat Reader rows the role check refused.
+
+**Reopen only if** (the data correction) any of the five counts again; the held-out row or the control is withdrawn
+without two blind labels of its own; or the 21.1 report of the upgrade post, or the 26200.9168 report of the update
+failing to install, stops counting without its own audited withdrawal.
 
 ---
 ### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks

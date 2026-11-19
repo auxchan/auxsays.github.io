@@ -161,7 +161,7 @@ auxsays/scripts/tests/test_learn_report_identity.py = 99
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
-auxsays/scripts/tests/test_collector_write_authority.py = 120
+auxsays/scripts/tests/test_collector_write_authority.py = 128
 auxsays/scripts/tests/test_davinci_bare_version_identity.py = 58
 # Budget-bounded collectors must walk the corpus newest-first. DaVinci did not, so every
 # scheduled run spent its 1200s budget on 2014-2018 records and the newest release had never
@@ -177,7 +177,7 @@ auxsays/scripts/tests/test_collector_traversal_order.py = 16
 auxsays/scripts/tests/test_dependency_reproducibility.py = 21
 auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
-auxsays/scripts/tests/test_method_health_append_delta.py = 58
+auxsays/scripts/tests/test_method_health_append_delta.py = 61
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
 # +2 (C3.6): a stored live claim the deploy-time projection does not list is still hedged (AUX-055).
 auxsays/scripts/tests/test_consensus_sample_honesty.py = 90
@@ -220,7 +220,7 @@ auxsays/scripts/tests/test_monitoring_health.py = 38
 # emitted set == owned, disabled rows make no call and executing rows do, states match the plan or
 # pinned table, refusal is never relabelled, no H7/H0 reason, every AUXSAYS_* name classified. Six
 # self-tests prove each check fails on its defect (the five pairs reintroduced fail B1).
-auxsays/scripts/tests/test_owned_method_lifecycle.py = 316
+auxsays/scripts/tests/test_owned_method_lifecycle.py = 392
 
 # A stored live claim renders as live only while it certifies at deploy time (AUX-055). Five Liquid
 # copies each turned the stored maturity words into "Live consensus", and the words outlive the
@@ -386,7 +386,7 @@ auxsays/scripts/tests/test_verdict_reason_producer.py = 113
 auxsays/scripts/tests/test_producer_shadow.py = 26
 auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
 auxsays/scripts/tests/test_ownership_reason_codes.py = 48
-auxsays/scripts/tests/test_patch_index_identity.py = 103
+auxsays/scripts/tests/test_patch_index_identity.py = 113
 auxsays/scripts/tests/test_patch_page_hierarchy.py = 262
 # The patch page's freshness notice said "Collection blocked." about one failed visit long after the
 # monitoring card beside it said COLLECTION STALE (AUX-084): it read method-health rows with no
@@ -475,6 +475,14 @@ auxsays/scripts/tests/test_learn_fetch_same_origin.py = 115
 # request reaches a host the lookup redirected to), and the patch-ingest.yml gate under which a FAILED
 # run that recorded a new refusal still commits its state (simulated step by step).
 auxsays/scripts/tests/test_nvidia_driver_lookup.py = 137
+# NVIDIA driver community evidence from the GeForce forum's default views (AUX-106): captured responses
+# replayed through the real lib.http transport to their recorded decisions for BOTH driver families (family
+# from a qualifying staff title or the reporter only; shared-component reports unassigned in both; notebook,
+# environment-only, disclaimed, module-crash and fine-only posts excluded), the coverage-gap contract, every
+# forbidden request shape refused before it is sent, refusal/schema/robots stops, ANY redirect refused before
+# the hop (same host included), the 12-hour cadence, the write-mode gates against a temporary store, one
+# comment served under two threads stored once, and no member's name in fixtures, stored text or stored titles.
+auxsays/scripts/tests/test_nvidia_forum_evidence.py = 175
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
@@ -554,7 +562,7 @@ auxsays/scripts/tests/test_ingestion_run_health.py = 128
 # record without a title identity and a source date, and no inherited announcement URL.
 auxsays/scripts/tests/test_premiere_source_truth.py = 49
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
-auxsays/scripts/tests/test_windows_count_authority.py = 108
+auxsays/scripts/tests/test_windows_count_authority.py = 116
 auxsays/scripts/tests/test_windows_evidence_recovery.py = 92
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 # AUX-067: a build-only identity whose TITLE is about another KB or build is not a report on the build
@@ -568,6 +576,15 @@ auxsays/scripts/tests/test_windows_identity_not_the_subject.py = 82
 # byte-identical, all-or-nothing refusal on any drift, idempotent. Run as the bare script on frozen
 # verbatim fixtures; never reads or writes the live store beyond hashing it.
 auxsays/scripts/tests/test_withdraw_windows_identity_not_the_subject_rows.py = 44
+# AUX-110: the first audited RE-ADMISSION (counted false -> true): two Acrobat Reader rows the role veto withdrew as
+# "version named but working" that two fresh blind adjudicators both labelled CORRECT, through the AUX-088 mechanism
+# inverted (five-field selection, pinned block hashes, two lines per row, Reader only, one from-reason, two CORRECT
+# labels from two named adjudicators, the held row refused, a report already counted on the patch refused, all or
+# nothing, idempotent, two scoped Reader writers), plus recompute_evidence_classification.py's pinned correction of
+# one row's theme (the shipped classifier's own answer only, recorded as the re-admitted block's successor). Bare
+# scripts on a synthetic-text fixture; the live store is read only, and on its stored text the shipped veto refuses
+# exactly the manifest's rows among the counted Acrobat rows.
+auxsays/scripts/tests/test_readmit_adjudicated_rows.py = 72
 # AUX-079: the audited withdrawal of ten Windows rows both adjudicators judged off-topic (Track B) and four
 # later captures of a Q&A question already counted on the same patch (Track C, keep-first, derived). The
 # AUX-072 mechanism: five-field selection, pinned block hashes, three lines per row with each track's own
@@ -602,6 +619,15 @@ auxsays/scripts/tests/test_fill_obs_report_dates.py = 47
 # did not agree on stay counted. Bare script on frozen fixtures whose free text is synthetic; the live store is
 # read only for the pins.
 auxsays/scripts/tests/test_withdraw_duplicate_reports.py = 52
+# AUX-108: the audited withdrawal of five reports counted against a version they are not about (the build a device
+# rolled back to, the version an author upgraded from, a question or a post that reports no problem), through the
+# AUX-088 tool with a fourth manifest. Each row needs two blind INCORRECT labels from two different named reviewers
+# that both support its reason (the first audit is provenance only); the held-out row and the two rows that must
+# stay counted are not entries; no overlap with the AUX-072/079/088/090/098 manifests; exactly 11 lines, every row
+# kept, all-or-nothing, idempotent; a withdrawn report seen again is refused by the append guard; fixture-based
+# count deltas only, never a live-corpus count. Bare script on frozen fixtures whose free text is synthetic; the
+# live store is read only for the five pins and the kept rows.
+auxsays/scripts/tests/test_withdraw_g51_role_rows.py = 36
 # AUX-092: the OBS producer now stores that same day on every NEW row. source_date = the UTC day of the
 # creation stamp the release-date gate already reads (an issue's created_at, the opening post's own <time>),
 # directly after captured_at, no key when the stamp gives no UTC day; equal to every AUX-090 pin. A frozen

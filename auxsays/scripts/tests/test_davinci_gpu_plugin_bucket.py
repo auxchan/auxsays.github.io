@@ -22,7 +22,9 @@ of this item. Offline: frozen rows, a temporary store, and one read of the shipp
 """
 from __future__ import annotations
 
+import hashlib
 import itertools
+import json
 import re
 import subprocess
 import sys
@@ -41,6 +43,7 @@ import yaml  # noqa: E402
 import apply_consensus_to_records as writer                          # noqa: E402
 import build_consensus_from_evidence as builder                      # noqa: E402
 import recompute_evidence_classification as rc                       # noqa: E402
+import withdraw_windows_identity_not_the_subject_rows as aux072      # noqa: E402
 from patch_collectors import davinci                                 # noqa: E402
 
 DV = "blackmagic-davinci"
@@ -120,6 +123,35 @@ UNRESOLVED_TENTH = "1os2u3c-ai-multicam-smartswitch-the-gpu-failed-to"
 def load_store_rows() -> list[dict]:
     return yaml.load((ROOT / "_data" / "consensus_evidence.yml").read_bytes().decode("utf-8"),
                      Loader=yaml.SafeLoader)["evidence"]
+
+
+# AUX-108: one of the nine rows (the 21 row of post 1wazcmw) was later withdrawn by an audited withdrawal: two
+# blind reviews found 21 is only the version the author upgraded FROM. F2 still requires every one of the nine to
+# count, EXCEPT a row that exact manifest withdraws: counted false, the manifest's own reason, and the stored block
+# at the manifest's pinned after-hash. Any other non-counted row still fails F2.
+AUX108_MANIFEST = SCRIPTS / "audit" / "live_citation_withdrawal_v4.json"
+SELECTOR = ("product_id", "update_version", "target_build", "id", "source_url")
+
+
+def five_field(row: dict) -> tuple[str, ...]:
+    return tuple(str(row.get(key) or "") for key in SELECTOR)
+
+
+def audited_withdrawal_holds(row: dict, block_hashes: dict[tuple[str, ...], list[str]]) -> bool:
+    """True only for a row the AUX-108 manifest withdraws, stored exactly as that manifest pins it."""
+    entries = json.loads(AUX108_MANIFEST.read_text(encoding="utf-8"))["entries"]
+    pinned = [e for e in entries if e.get("role") == "withdraw" and five_field(e) == five_field(row)]
+    return (len(pinned) == 1 and row.get("counted") is False
+            and row.get("exclusion_reason") == pinned[0]["exclusion_reason"]
+            and block_hashes.get(five_field(row)) == [pinned[0]["block_sha256_after"]])
+
+
+def store_block_hashes() -> dict[tuple[str, ...], list[str]]:
+    text = (ROOT / "_data" / "consensus_evidence.yml").read_bytes().decode("utf-8")
+    out: dict[tuple[str, ...], list[str]] = {}
+    for lo, hi, stored in aux072.store_blocks(text):
+        out.setdefault(five_field(stored), []).append(hashlib.sha256(text[lo:hi].encode("utf-8")).hexdigest())
+    return out
 
 
 def run_suite() -> int:
@@ -221,10 +253,17 @@ def run_suite() -> int:
     check(f"F1 the nine corrected stored rows no longer carry the performance theme ({matched} rows incl. sibling versions)",
           matched >= 9 and not wrong, str(wrong))
     nine = [r for f in CORRECTED_NINE for r in find(f)]
-    check("F2 the correction touched theme/area/severity only: all nine are still counted, negative, medium",
-          all(r["counted"] is True and r["sentiment"] == "negative" and r["severity"] == "medium" for r in nine),
+    hashes = store_block_hashes()
+
+    def kept(r: dict) -> bool:
+        return r["counted"] is True or audited_withdrawal_holds(r, hashes)
+    check("F2 the correction touched theme/area/severity only: all nine are still counted (or withdrawn by "
+          "AUX-108's audited manifest, exactly as pinned), negative, medium",
+          all(kept(r) and r["sentiment"] == "negative" and r["severity"] == "medium" for r in nine),
           str([(r["id"][-30:], r["counted"], r["sentiment"], r["severity"]) for r in nine if not (
-              r["counted"] is True and r["sentiment"] == "negative" and r["severity"] == "medium")]))
+              kept(r) and r["sentiment"] == "negative" and r["severity"] == "medium")]))
+    print(f"  INFO  rows of the nine withdrawn by AUX-108's audited manifest: "
+          f"{[r['update_version'] + ' ' + r['id'][-30:] for r in nine if r['counted'] is not True]}")
     tenth = find(UNRESOLVED_TENTH)
     print(f"  INFO  unresolved tenth row ({UNRESOLVED_TENTH}): {[(r['issue_theme'], r['severity']) for r in tenth]}")
 

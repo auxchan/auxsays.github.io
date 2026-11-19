@@ -1,0 +1,175 @@
+{
+ "entries": [
+  {
+   "role": "withdraw",
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "id": "microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5976649-windows-insider-build-26220-9022-keeps",
+   "source_url": "https://learn.microsoft.com/en-us/answers/questions/5976649/windows-insider-build-26220-9022-keeps-failing-to",
+   "block_sha256_before_run": "ab08554d9b0117a40b252ad4ab701b545d5d6675b8bf918385792a85e47c6179",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "version_is_rollback_target"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "21",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wazcmw-davinci-resolve-211-your-gpu-memory-is-fu",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1wazcmw/davinci_resolve_211_your_gpu_memory_is_full/",
+   "block_sha256_before_run": "4cbed1c520cc7b05e58e9aba86bb838530a08524df802b191915136f8671a3e5",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "identity_not_the_subject"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "21.1",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wbshk6-is-resolve-211-finally-stable-enough-to-u",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1wbshk6/is_resolve_211_finally_stable_enough_to_update/",
+   "block_sha256_before_run": "96f409e2d235344aefa2664e28523863bc7f496f317e1749486a41970b665485",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "not_a_real_issue_report"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "20",
+   "target_build": "",
+   "id": "blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1utwlro-small-red-section-at-the-beginning-of-the",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1utwlro/small_red_section_at_the_beginning_of_the_render/",
+   "block_sha256_before_run": "6d978ab376e2f2240ccc159b553a3d6bdddf5c8c4ebce8a7a9601575995768e9",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "not_a_real_issue_report"
+  },
+  {
+   "role": "withdraw",
+   "product_id": "blackmagic-davinci",
+   "update_version": "21",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wbshk6-is-resolve-211-finally-stable-enough-to-u",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1wbshk6/is_resolve_211_finally_stable_enough_to_update/",
+   "block_sha256_before_run": "8e1b7fe7b31228efce3fa09d1d6980f23f66ce358bedaa473e0c2ab146a92a0f",
+   "counted_before_run": true,
+   "action": "withdraw",
+   "exclusion_reason": "not_a_real_issue_report"
+  }
+ ],
+ "withdrawn_now": 5,
+ "counted_population": {
+  "microsoft-windows-11": [
+   553,
+   552
+  ],
+  "obs-studio": [
+   309,
+   309
+  ],
+  "blackmagic-davinci": [
+   335,
+   331
+  ]
+ },
+ "per_patch": [
+  {
+   "product_id": "blackmagic-davinci",
+   "update_version": "20",
+   "target_build": "",
+   "before": 33,
+   "after": 32
+  },
+  {
+   "product_id": "blackmagic-davinci",
+   "update_version": "21",
+   "target_build": "",
+   "before": 75,
+   "after": 73
+  },
+  {
+   "product_id": "blackmagic-davinci",
+   "update_version": "21.1",
+   "target_build": "",
+   "before": 14,
+   "after": 13
+  },
+  {
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "before": 20,
+   "after": 19
+  }
+ ],
+ "newly_counted_rows": [],
+ "same_report_rows_on_other_identities": [
+  {
+   "product_id": "blackmagic-davinci",
+   "update_version": "21.1",
+   "target_build": "",
+   "id": "blackmagic-davinci-21-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1wazcmw-davinci-resolve-211-your-gpu-memory-is-fu",
+   "source_url": "https://www.reddit.com/r/davinciresolve/comments/1wazcmw/davinci_resolve_211_your_gpu_memory_is_full/",
+   "counted": true,
+   "exclusion_reason": null,
+   "unchanged": true
+  }
+ ],
+ "product_scope": [
+  "microsoft-windows-11",
+  "obs-studio",
+  "blackmagic-davinci"
+ ],
+ "generated_at": "2026-11-19T11:42:38Z",
+ "exclusion_reasons": [
+  "duplicate_existing_evidence",
+  "identity_not_the_subject",
+  "not_a_real_issue_report",
+  "version_is_rollback_target",
+  "version_named_but_working"
+ ],
+ "store_sha256_before": "eaa16062ddec3f84049faf720343185b212cfcc591a39ee1cae5281f3ffe6f92",
+ "store_sha256_after": "09b69ee7ac4ed1ac069af5426f2459c1d81d83ff7db6ec203ecd49f57182c1cb",
+ "manifest_sha256": "6394217b309b02fddf0b89ee1fe0773e01e26552c2b00a4ae3d8c48b0a705bc3",
+ "baseline_sha256": "b378fa62c22c9e6a7e7de5e6383d799349d9fc1c1eed9ddd4059f7bfb9192248",
+ "written": true,
+ "writers": [
+  {
+   "command": "build_consensus_from_evidence.py --product-id microsoft-windows-11 --product-id obs-studio --product-id blackmagic-davinci --reconcile-only",
+   "returncode": 0,
+   "output": [
+    "Reconciled report counts on 4 record(s) to final counted evidence (scoped to blackmagic-davinci, microsoft-windows-11, obs-studio).",
+    "  2025-05-28-davinci-resolve-20.md: blackmagic-davinci 20 33 -> 32",
+    "  2026-04-14-davinci-resolve-21.md: blackmagic-davinci 21 75 -> 73",
+    "  2026-08-11-windows-11-25h2-26200-9168.md: microsoft-windows-11 25H2 20 -> 19",
+    "  2026-09-08-davinci-resolve-21-1.md: blackmagic-davinci 21.1 14 -> 13"
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id microsoft-windows-11 --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 60 group(s); 60 would write; 0 blocked; 552 included; 60 excluded."
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id obs-studio --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 14 group(s); 14 would write; 0 blocked; 309 included; 25 excluded."
+   ]
+  },
+  {
+   "command": "apply_consensus_to_records.py --product-id blackmagic-davinci --write-all --confirm-write",
+   "returncode": 0,
+   "output": [
+    "[apply_consensus_to_records] write_back: 28 group(s); 28 would write; 0 blocked; 331 included; 5 excluded."
+   ]
+  }
+ ],
+ "parent_commit": "f5bd8e66b7504467f92eef6adde051295dd571d5"
+}

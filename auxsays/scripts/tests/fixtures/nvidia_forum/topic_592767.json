@@ -1,0 +1,62 @@
+{
+ "success": true,
+ "errors": [],
+ "data": {
+  "topic": {
+   "id": 592767,
+   "title": "GeForce GRD 621.24 Feedback Thread (Released 11/12/26)",
+   "type": "discussion",
+   "isVisible": 1,
+   "status": "default",
+   "createdStamp": 1794493802,
+   "replyCount": 183,
+   "upvotes": -1,
+   "lastActivityStamp": 1795053302,
+   "isPinned": 1,
+   "isGhosted": 0,
+   "publishAt": 1794493800,
+   "updatedStamp": 1795053302,
+   "hasOfficialReply": 1,
+   "user": {
+    "id": "1015",
+    "aclactions": {
+     "officialreply": true
+    }
+   },
+   "lastComment": {
+    "id": 3634662
+   },
+   "communities": [
+    {
+     "id": 13,
+     "title": "Game-Ready Drivers"
+    }
+   ],
+   "firstComment": {
+    "id": 3633244,
+    "createdStamp": 1794297084,
+    "updatedStamp": 1794374964,
+    "lastActivityStamp": 1794374964,
+    "isVisible": 1,
+    "isGhosted": 0,
+    "status": "default",
+    "replyCount": 0,
+    "isOfficialReply": 1,
+    "upvotes": 0,
+    "topic": {
+     "id": 592767
+    },
+    "parent": {
+     "id": 0
+    },
+    "user": {
+     "id": "1015",
+     "aclactions": {
+      "officialreply": true
+     }
+    },
+    "body": "Our new GeForce RTX and RTX Spark Game Ready Driver includes optimizations and enhancements for Warhammer 40,000: Dawn of War IV, for the addition of DLSS 5 with 3D-Guided Neural Rendering to Where Winds Meet, and for the addition of DLSS 4.5 Dynamic Multi Frame Generation to Assetto Corsa Rally.\n\nD"
+   }
+  }
+ }
+}

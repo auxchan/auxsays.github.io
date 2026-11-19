@@ -1,0 +1,495 @@
+{
+ "success": true,
+ "errors": [],
+ "pagination": {
+  "_page": 1,
+  "_pageSize": 15,
+  "_totalPages": 67,
+  "_totalRows": 1000
+ },
+ "data": {
+  "topics": [
+   {
+    "id": 592907,
+    "title": "Continuous writing of gigabytes to SSD to nvtopps file, 621.24",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794605793,
+    "replyCount": 26,
+    "upvotes": 14,
+    "lastActivityStamp": 1795049195,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1795051282,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1000",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634654
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 593066,
+    "title": "Uncorrectable SRAM Error",
+    "type": "discussion",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794940614,
+    "replyCount": 4,
+    "upvotes": 1,
+    "lastActivityStamp": 1795042405,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1795042405,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1001",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634637
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 590980,
+    "title": "Severe Wavy Artifacts and Screen Tearing with NVIDIA DLSS Multi Frame Generation (MFG)",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1789931586,
+    "replyCount": 99,
+    "upvotes": 26,
+    "lastActivityStamp": 1795040809,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1795040809,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1002",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634634
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 593070,
+    "title": "Severe flickering and graphical corruption in Chromium/Electron apps on RTX 3060 Ti",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794953850,
+    "replyCount": 2,
+    "upvotes": 1,
+    "lastActivityStamp": 1795026571,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1795026571,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1003",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634595
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 592963,
+    "title": "Sony Vegas rendering not working",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794691198,
+    "replyCount": 3,
+    "upvotes": -3,
+    "lastActivityStamp": 1795025541,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1795025541,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1004",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634590
+    },
+    "communities": [
+     {
+      "id": 5,
+      "title": "GeForce Graphics Cards"
+     },
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     },
+     {
+      "id": 20,
+      "title": "GFN - General Chat"
+     }
+    ]
+   },
+   {
+    "id": 593061,
+    "title": "RTX 5080 ROG Astral OC – GPU Fans Stuck at 30% After Recent NVIDIA Driver Updates",
+    "type": "discussion",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794938436,
+    "replyCount": 1,
+    "upvotes": 2,
+    "lastActivityStamp": 1794981479,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794981634,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1005",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634523
+    },
+    "communities": [
+     {
+      "id": 5,
+      "title": "GeForce Graphics Cards"
+     },
+     {
+      "id": 8,
+      "title": "Gaming PCs"
+     },
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 587727,
+    "title": "[BUG REPORT] RTX 5060 — Persistent VIDEO_TDR_FAILURE (0x116) nvlddmkm.sys — Same Offset Every Crash",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1782768608,
+    "replyCount": 28,
+    "upvotes": 9,
+    "lastActivityStamp": 1794961611,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794989798,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1006",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 0
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 593067,
+    "title": "Advanced Shader Delivery BUG 621.24",
+    "type": "discussion",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794941662,
+    "replyCount": 0,
+    "upvotes": 2,
+    "lastActivityStamp": 1794941662,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794995088,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1007",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634466
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 592915,
+    "title": "RTX 5080 – nvlddmkm Event ID 153 and LiveKernelEvent 141 crashes in Valorant",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794626109,
+    "replyCount": 1,
+    "upvotes": 2,
+    "lastActivityStamp": 1794940515,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794940515,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1008",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634460
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 243184,
+    "title": "Where to download a very very old driver?",
+    "type": "discussion",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1478870912,
+    "replyCount": 7,
+    "upvotes": 1,
+    "lastActivityStamp": 1794937796,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1795041362,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1009",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634442
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 592109,
+    "title": "Any GeForce drivers besides 537.58 causes Windows 11 stutters and crashing",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1792723389,
+    "replyCount": 12,
+    "upvotes": 1,
+    "lastActivityStamp": 1794932841,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794932841,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1010",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634426
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 592746,
+    "title": "Micro-stuttering",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794229509,
+    "replyCount": 3,
+    "upvotes": 1,
+    "lastActivityStamp": 1794931330,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794931330,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1011",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634424
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 592843,
+    "title": "RTX 5090 GameRock OC – Repeated VIDEO_TDR_FAILURE (0x116), nvlddmkm.sys, black screens and system re",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794470820,
+    "replyCount": 3,
+    "upvotes": 2,
+    "lastActivityStamp": 1794927542,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794989817,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1012",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 0
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 576457,
+    "title": "Image scaling gets applied to Windows desktop and makes everything blurry",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1760601041,
+    "replyCount": 5,
+    "upvotes": 0,
+    "lastActivityStamp": 1794911364,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794911364,
+    "hasOfficialReply": 1,
+    "user": {
+     "id": "1013",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634393
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   },
+   {
+    "id": 592933,
+    "title": "NVIDIA Driver 621.24 – Samsung QE55Q6FNATXXH TV no longer detected via HDMI (RTX 5070)",
+    "type": "support",
+    "isVisible": 1,
+    "status": "default",
+    "createdStamp": 1794652816,
+    "replyCount": 2,
+    "upvotes": 1,
+    "lastActivityStamp": 1794908985,
+    "isPinned": 0,
+    "isGhosted": 0,
+    "publishAt": 0,
+    "updatedStamp": 1794909035,
+    "hasOfficialReply": 0,
+    "user": {
+     "id": "1014",
+     "aclactions": {
+      "officialreply": false
+     }
+    },
+    "lastComment": {
+     "id": 3634385
+    },
+    "communities": [
+     {
+      "id": 13,
+      "title": "Game-Ready Drivers"
+     }
+    ]
+   }
+  ]
+ }
+}
