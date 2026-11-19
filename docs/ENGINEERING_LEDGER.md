@@ -2242,7 +2242,7 @@ catalog, in the sitemap, claiming tracking), now removed. Built-file diff: 104 f
 prose, pill styles, the orphan's sitemap line or build timestamps. Evidence store and verdict projection
 byte-identical; live set unchanged. The assessment on that data: 19 Core gaps (all with debt entries),
 2 impaired enabled lanes, NVIDIA 621.14 and 621.24 missing from the store, 37 backfill rows with no
-executor. `test_coverage_governance.py` (97 checks, blocking); every source mutant in both rounds is
+executor. `test_coverage_governance.py` (98 checks, blocking); every source mutant in both rounds is
 caught by a named check.
 
 **Not shown by this** Whether an enabled lane is missing releases it should have found: no permitted

@@ -279,8 +279,10 @@ def check_site(site: Path, catalog: list[dict], companies_cat: list[dict], produ
         if pid is None and cid is None and path != hub:
             continue
         # Phrase rules read the template's marked coverage prose only, never vendor-written records.
+        # Regions are joined with a separator no phrase contains, so two neighbouring regions can
+        # never form a phrase between them.
         regions, closed = coverage_prose(text)
-        prose = " ".join(regions)
+        prose = " | ".join(regions)
         stats["prose_regions"] += len(regions)
         if not regions:
             errors.append(f"PROSE {rel}: the page carries no marked coverage prose ({PROSE_ATTR}), so "

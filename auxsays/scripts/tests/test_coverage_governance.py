@@ -616,6 +616,16 @@ def section_e() -> None:
         '<p>outside</p><span data-coverage-prose>E</span>')
     check("E16 marked prose balances nested tags, skips scripts and leaves unmarked text out",
           regions == ["A B C D", "E"] and closed, regions)
+
+    def neighbours(pages):
+        pages["updates/darkco/dark/index.html"] = pages["updates/darkco/dark/index.html"].replace(
+            "</body>", marked("Each DARK release record is tracked") + marked("for every build") + "</body>")
+        pages["updates/index.html"] = pages["updates/index.html"].replace(
+            "</body>", marked("<em>12</em> tracked") + marked("software products") + "</body>")
+    split = run_gate(neighbours)
+    check("E17 two neighbouring marked regions never form a claim phrase between them", not split, split)
+
+
 # ------------------------------------------------------------------------------------------------
 # [F] real Liquid renders of the shipped layouts
 # ------------------------------------------------------------------------------------------------
