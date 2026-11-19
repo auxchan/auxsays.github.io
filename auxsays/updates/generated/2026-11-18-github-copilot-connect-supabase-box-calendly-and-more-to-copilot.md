@@ -18,9 +18,9 @@ update_version: Connect Supabase, Box, Calendly, and more to Copilot
 update_logo_text: GIT
 update_published_at: '2026-11-18T22:04:50Z'
 update_last_checked: '2026-11-18T23:00:45Z'
-source_last_checked: '2026-11-18T23:00:45Z'
-official_body_last_checked: '2026-11-18T23:00:45Z'
-record_last_updated: '2026-11-18T23:00:45Z'
+source_last_checked: '2026-11-19T10:06:11Z'
+official_body_last_checked: '2026-11-19T10:06:11Z'
+record_last_updated: '2026-11-19T10:06:11Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
@@ -91,18 +91,24 @@ official_source_attempts:
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
+- at: '2026-11-19T10:06:11Z'
+  url: https://github.blog/changelog/2026-11-18-connect-supabase-box-calendly-and-more-to-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: "You can now connect eight more services to Copilot using GitHub-verified MCP servers, or connectors,\
-  \ available in public preview.\n\n\n New services you can connect\n\n Box : Search and manage content, and use Box AI.\n\
-  \ Buildkite : Work with pipelines and builds.\n Calendly : Manage scheduling and meetings.\n ClickUp : Track tasks and projects.\n\
-  \ Mixpanel : Explore product analytics.\n Supabase : Work with projects and databases.\n Webflow : Manage sites and content.\n\
-  \ Wix : Manage sites and business tools.\n\n For example, you can ask Copilot why your latest Buildkite build failed and\
-  \ have it fix the code in the same session, or have it check your Supabase schema before it writes a migration. You can\
-  \ still also connect to services like Slack, Figma, and Sentry.\n\n\n Connect these services once, and you can use them\
-  \ across Copilot.\n\n\n Connect a service\n You connect these services the same way as any other connector:\n\n\n\n Copilot\
-  \ app : Open Customize and select Connect on the service you want.\n Copilot CLI : Run /mcp , switch to the Connectors tab,\
-  \ and select Connect on the service you want.\n VS Code : Open the Agents window, go to Customizations , and connect the\
-  \ service you want.\n github.com : Browse services on the Copilot customization page and select the service you want.\n\n\
-  \ Availability\n Connectors are in public preview for all Copilot plans. With Copilot Business or Copilot Enterprise, an\
+  \ available in public preview. They join more than 25 services you can already connect, like Slack, Figma, and Sentry. To\
+  \ see the full list, open Customize in the Copilot app or browse the Copilot customization page .\n\n\n New services you\
+  \ can connect\n\n Box : Search and manage content, and use Box AI.\n Buildkite : Work with pipelines and builds.\n Calendly\
+  \ : Manage scheduling and meetings.\n ClickUp : Track tasks and projects.\n Mixpanel : Explore product analytics.\n Supabase\
+  \ : Work with projects and databases.\n Webflow : Manage sites and content.\n Wix : Manage sites and business tools.\n\n\
+  \ For example, you can ask Copilot why your latest Buildkite build failed and have it fix the code in the same session,\
+  \ or have it check your Supabase schema before it writes a migration.\n\n\n Connect these services once, and you can use\
+  \ them across Copilot.\n\n\n Connect a service\n You connect these services the same way as any other connector:\n\n\n\n\
+  \ Copilot app : Open Customize and select Connect on the service you want.\n Copilot CLI : Run /mcp , switch to the Connectors\
+  \ tab, and select Connect on the service you want.\n VS Code : Open the Agents window, go to Customizations , and connect\
+  \ the service you want.\n github.com : Browse services on the Copilot customization page and select the service you want.\n\
+  \n Availability\n Connectors are in public preview for all Copilot plans. With Copilot Business or Copilot Enterprise, an\
   \ admin needs to enable the Editor preview features policy. If your enterprise’s MCP allowlist lists connectors individually\
   \ rather than with a wildcard, an admin also needs to add the new connectors to it. Some services also need to be enabled\
   \ by an admin on their side, such as allowing Box MCP access.\n\n\n See all supported connectors , and share feedback in\
