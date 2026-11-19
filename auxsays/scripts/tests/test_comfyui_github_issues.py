@@ -442,6 +442,13 @@ def section_wiring(cases: list[dict]) -> None:
             stored = base.load_evidence(store)
             second = comfy.ComfyUICollector().collect(ctx)
             stored_again = base.load_evidence(store)
+            # A third run where the only NEW issue is one the authority excludes for 0.43.0.
+            newcomer = issue(99001, "Sampler crashes on start", "[INFO] pip list\n- yapf 0.43.0\n",
+                             created="2026-11-12T00:00:00Z", author=7)
+            fetch3, _c3 = pages_from(pool + [newcomer])
+            with patched([(comfy.github, "request_json", fetch3)]):
+                third = comfy.ComfyUICollector().collect(ctx)
+            stored_third = base.load_evidence(store)
         res43 = next(r for r in first if r["version"] == "0.43.0")
         repost = next((r for r in stored if r["source_url"].endswith("/17416")), {})
         check("W13 the repost is stored excluded and names the issue it repeats",
@@ -465,6 +472,10 @@ def section_wiring(cases: list[dict]) -> None:
         h2 = next(r for r in second if r["version"] == "0.43.0")["method_health"][0]
         check("W19 and its health says the store already held them",
               h2["evidence_rows_added"] == 0 and h2["duplicate_existing_evidence"] == h2["accepted_reports"], str(h2))
+        h3 = next(r for r in third if r["version"] == "0.43.0")["method_health"][0]
+        check("W19b a new EXCLUDED row is stored but never credited as a report this method added",
+              len(stored_third) == len(stored) + 1 and h3["evidence_rows_added"] == 0
+              and h3["duplicate_existing_evidence"] == h3["accepted_reports"] > 0, str(h3))
         check("W20 the collector hands accepted patches to the shared writeback, and only those",
               sorted(set(writebacks)) == ["0.43.0", "0.44.0"], str(writebacks))
         check("W21 every health row is canonical and one per record per run",

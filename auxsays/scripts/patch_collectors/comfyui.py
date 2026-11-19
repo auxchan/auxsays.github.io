@@ -204,9 +204,8 @@ def resolve_identity(text: str, version: str) -> dict[str, Any]:
     if not spans:
         result["reason"] = "missing_exact_patch_version_match"
         return result
-    if any(ahead > 0 for ahead in declared.get(version, [])):
-        result["reason"] = "core_version_untagged_build"
-        return result
+    # A describe suffix is checked at every occurrence below, which includes the one inside a
+    # ComfyUI-Manager line ("v0.44.0-27-g1332fab"): one rule for prose and declarations alike.
     core_named = False
     for start, end in spans:
         if _UNTAGGED_SUFFIX_RE.match(body[end:end + 60]) or _development_build(body, start, end):
