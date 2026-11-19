@@ -108,7 +108,8 @@ _DECLARATION_PREFIX_SEGMENT_RE = re.compile(
     r"|\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}"          # 2026-10-30T21:52:08.393092
     r"|\b(?i:info|debug|warning|warn|error)\b"    # a log level
     r"|\A[\w.-]+[ \t]+\|")                        # docker compose: "comfyui  | "
-_DECLARATION_TAIL_RE = re.compile(r"\A[\s*_`.+]*(?:\Z|[|(]|,\s*commit\b|x\b)", re.I)
+_DECLARATION_TAIL_RE = re.compile(
+    r"\A[\s*_`.+]*(?:\Z|\|\s*released\s+on\b|\([^()\n]*\)[\s*_`.]*\Z|,\s*commit\b|x\b)", re.I)
 _LETTER_RE = re.compile(r"[A-Za-z]")
 
 # The reporter's own words naming the core right before the version: "ComfyUI v0.45.0",

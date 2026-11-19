@@ -308,6 +308,16 @@ def section_prose(cases: list[dict]) -> None:
     noisy = comfy.declared_core_versions("[1]" * 20000 + " so ComfyUI version: 0.44.0")
     check("P6 a long line of bracket segments is read promptly and is not a declaration",
           noisy == {} and time.monotonic() - began < 5, f"{noisy} {time.monotonic() - began:.2f}s")
+    # G42 review 2 F1: a parenthetical qualifier followed by more prose ("(portable) worked fine...")
+    # is the reporter's sentence, not a declaration line; only a closed parenthetical ending the line is.
+    working = dict(real, body=real["body"] + "\n\nComfyUI version 0.43.0 (portable) worked fine before updating.\n")
+    w44 = comfy.evaluate_issue(R044, working, CAPTURED)
+    w43 = comfy.evaluate_issue(r043, working, CAPTURED)
+    check("P7 a 'ComfyUI version 0.43.0 (portable) worked fine' sentence is prose: the report stays on 0.44.0",
+          w44.get("counted") is True, str(w44.get("exclusion_reason")))
+    check("P7b ...and the previously working version is refused by the shared role reading",
+          w43.get("counted") is False and w43.get("exclusion_reason") == "version_role_working",
+          f"{w43.get('counted')} {w43.get('exclusion_reason')} {w43.get('match_basis')}")
 
 
 # ------------------------------------------------------------------------------------------------
