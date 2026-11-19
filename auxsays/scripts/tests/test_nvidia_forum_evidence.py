@@ -459,6 +459,20 @@ def section_identity() -> None:
              "Since updating to 621.14 my desktop games crash. Their laptop is fine.")
     check("I18h ...a laptop is another person's only through a possessive owner (friend's, his, her, their)",
           all(decide(t) == "COUNT" for t in owned), str([decide(t) for t in owned]))
+    described = ("Same here on another machine with an RTX 4060 Laptop GPU: since 621.14 every game crashes on launch.",
+                 "On my second system with an RTX 4070 Laptop GPU, since 621.14 every game crashes on launch.",
+                 "Another PC running an RTX 4060 Laptop GPU here, since 621.14 every game crashes on launch.",
+                 "My other rig with a 4080 laptop GPU: since 621.14 every game crashes on launch.")
+    check("I18i a described other machine with a laptop GPU is the reporter's notebook unless the sentence "
+          "says it works on it (VERIFY_3 S01-S04)",
+          all(decide(t) == "notebook_driver_not_tracked" for t in described), str([decide(t) for t in described]))
+    works_on = ("It works on another system with an RTX 4070 Laptop GPU, but on my desktop since 621.14 every game "
+                "crashes on launch.",
+                "Since 621.14 every game crashes on launch on my desktop. It works on another system with an RTX 4070 "
+                "Laptop GPU.")
+    check("I18j ...and 'it works on another system with a Laptop GPU' still leaves the desktop report counted "
+          "(VERIFY_3 P08, S05)",
+          all(decide(t) == "COUNT" for t in works_on), str([decide(t) for t in works_on]))
     check("I19 a version only on a specification line is environment",
           decide("GPU: RTX 4090\nDriver: 621.14\nGame crashes after the new season patch.")
           == "driver_version_environment_only")
@@ -1175,11 +1189,31 @@ def section_title_names() -> None:
         def append(rows, path=None, **kw):
             return real_append(rows, store, **kw)
         quiet = [(base, "append_evidence_rows", append), (nf, "apply_consensus_writebacks", lambda pid, vs: {})]
-        with wire(with_names) as (_fake, _p, _s):
+        with wire(with_names) as (_fake, state_path, _s):
             with patched(quiet):
                 run_both(write=True)
                 named_decisions = decisions()
                 stored = base.load_evidence(store)
+                read_state = state_path.read_text(encoding="utf-8")
+        # The same topic DEFERRED (no thread read this cycle): its state entry is written from the
+        # listing alone, so the names it can remove are the listing entry's (poster and last commenter).
+        # The entries are observed as the cycle writes them, before the real retention prune runs.
+        deferred_listing = copy.deepcopy(listing)
+        for entry in deferred_listing["data"]["topics"]:
+            if entry["id"] == 592907:
+                entry["user"] = dict(entry.get("user") or {}, displayName=poster)
+        written: list[str] = []
+        real_prune = src.prune_threads
+
+        def prune(state, keep, now=None):
+            written.append(json.dumps(state, ensure_ascii=False))
+            return real_prune(state, keep, now)
+        with wire({(API, "/forums-api/1.0/communities/topics", "13"): lambda url: _respond(200, deferred_listing)}) \
+                as (_fake, state_path, _s):
+            with patched(quiet + [(src, "MAX_THREADS_PER_CYCLE", 0), (src, "prune_threads", prune)]):
+                run_both(write=True)
+                deferred_state = (written or ["{}"])[0]
+                deferred_saved = state_path.read_text(encoding="utf-8")
     rows = [r for r in stored if "/592907/" in str(r.get("source_url") or "")]
     expected = f"@user and [name] ([name]): {plain}"
     check("P1c the stored report_title and parent_title of every row from that topic carry no @handle or name",
@@ -1198,6 +1232,27 @@ def section_title_names() -> None:
              if str(k[2]) in topic_ids and plain_decisions.get(k) != v}
     check("P1e no decision reads the stored title: the same comments decide the same with and without the names",
           rows and not moved and len([k for k in named_decisions if str(k[2]) in topic_ids]) == len(rows), str(moved))
+    raw_titles = {fixture(p.name)["data"]["topic"]["title"] for p in FIX.glob("topic_*.json")}
+    raw_titles |= {t["title"] for p in FIX.glob("community*_*.json") for t in fixture(p.name)["data"]["topics"]}
+    needles = ("zorbix_handle9", poster.lower(), listed.lower(), "reporter_delta6")
+
+    def state_scan(text: str) -> tuple[dict, list, list]:
+        threads = json.loads(text)["threads"]
+        staff = [(tid, e.get("title")) for tid, e in threads.items() if e.get("staff")]
+        return threads.get("592907") or {}, staff, [n for n in needles if n in text.lower()]
+    entry, staff, leaks = state_scan(read_state)
+    check("P1f the state file keeps a READ user topic's title through the same name removal (0 names or handles "
+          "in the file); a staff thread's title stays as read, for its family",
+          entry.get("title") == expected and entry.get("staff") is False and not leaks
+          and staff and all(title in raw_titles for _tid, title in staff),
+          f"{entry.get('title')!r} leaks={leaks} staff={staff}")
+    entry, staff, leaks = state_scan(deferred_state)
+    saved_leaks = [n for n in needles if n in deferred_saved.lower()]
+    check("P1g ...and a DEFERRED user topic's title through the listing entry's names (0 names or handles in the "
+          "state written or saved); a deferred staff thread's title stays as listed",
+          entry.get("title") == expected and entry.get("last_activity") is None and not leaks and not saved_leaks
+          and staff and all(title in raw_titles for _tid, title in staff),
+          f"{entry.get('title')!r} leaks={leaks}/{saved_leaks} staff={staff}")
 
 
 def run() -> int:

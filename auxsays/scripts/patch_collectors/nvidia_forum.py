@@ -182,10 +182,13 @@ _OWN_NOTEBOOK_LEAD_RE = re.compile(r"\b(?:my|our)\s+(?:(?![\w.-]+'s\b)[\w.+-]+\s
 #   1. the notebook word owned by another PERSON, through a possessive ("a friend's laptop", "my
 #      wife's laptop", "his/her laptop", "their laptop");
 #   2. an other-machine phrase -- "another"/"a different"/a possessive qualifying a machine noun --
-#      whose own description holds the notebook mention ("works on another system with an RTX 4070
-#      Laptop GPU", comment 3633451).
+#      whose own description holds the notebook mention, AND the same sentence says, immediately
+#      before the phrase, that it works or runs on (or with) that machine ("works on another system
+#      with an RTX 4070 Laptop GPU", comment 3633451).
 # "another laptop", "a different laptop", "other laptop users" are NOT shape 1: nothing says whose
 # laptop it is, and it is usually the reporter's own ("Another laptop user here: since 621.14 ...").
+# Nor is a described other machine without that works-on cue shape 2: "On my second system with an
+# RTX 4070 Laptop GPU, since 621.14 every game crashes" is the reporter's own notebook.
 # An "other" or "different" qualifying anything else ("other users", "different games") is neither
 # shape and turns nothing off.
 _POSSESSIVE_OWNER = (r"(?:friend'?s|wife'?s|husband'?s|partner'?s|brother'?s|sister'?s|son'?s|daughter'?s"
@@ -200,6 +203,11 @@ _POSSESSIVE_PHRASE_RE = re.compile(rf"{_POSSESSIVE_OWNER}\s", re.I)
 _MACHINE_DESCRIPTION_RE = re.compile(
     r"\A\s+(?:with|using|running|that\s+has|which\s+has|having)\s+(?:an?\s+|the\s+)?"
     r"(?:[\w+-]+\s+){0,4}\Z", re.I)
+# The works-on cue that must end the sentence's text before that other-machine phrase ("It works on
+# another system ...", "runs fine with a different PC ...").
+_WORKS_ON_RE = re.compile(
+    r"\b(?:works?|worked|working|runs?|ran|running)\s+(?:fine\s+|well\s+|perfectly\s+)?(?:on|with)\s+"
+    r"(?:an?\s+|the\s+)?\Z", re.I)
 
 # A specification line names a version as environment: a short label (driver, driver version, ver.)
 # immediately before the number, inside its own comma/sentence segment, with no defect word in the
@@ -322,8 +330,9 @@ def _notebook_is_other_machine(text: str, sentence_start: int, start: int, end: 
             if _POSSESSIVE_PHRASE_RE.match(phrase.group(0)):
                 return True
             continue
-        if phrase.end() <= start and _MACHINE_DESCRIPTION_RE.match(text[phrase.end():start]):
-            return True                     # "another system with an RTX 4070 Laptop GPU"
+        if phrase.end() <= start and _MACHINE_DESCRIPTION_RE.match(text[phrase.end():start]) \
+                and _WORKS_ON_RE.search(text[sentence_start:phrase.start()]):
+            return True                     # "works on another system with an RTX 4070 Laptop GPU"
     return False
 
 
@@ -587,6 +596,13 @@ def _records() -> dict[str, list[base.PatchRecord]]:
     return _RECORDS
 
 
+def state_title(title: str, staff: bool, names: Iterable[str]) -> str:
+    """The title a thread's state entry keeps. A staff thread's raw title (thread_profile reads it
+    back to re-establish a remembered feedback thread's family); a user topic's title through the
+    same name removal as its stored evidence title (nothing reads it back for a decision)."""
+    return title if staff else clean_text(title, names)
+
+
 def _items_for(thread: dict[str, Any], topic: dict[str, Any], comments: list[dict[str, Any]],
                community_id: int, community_slug: str, names: Iterable[str] | None = None) -> list[dict[str, Any]]:
     """Every user-authored, visible comment the default view shows, as candidates. Every forum
@@ -746,7 +762,8 @@ def run_cycle(context: base.CollectorContext, versions: set[str], *, keep_versio
             if entry is None and thread.get("title"):
                 state.setdefault("threads", {})[str(thread["topic_id"])] = {
                     "community_id": thread["community_id"], "community_slug": thread["community_slug"],
-                    "title": thread["title"], "staff": thread["staff"],
+                    "title": state_title(thread["title"], thread["staff"], thread.get("listing_names") or ()),
+                    "staff": thread["staff"],
                     "title_versions": thread["title_versions"], "created": thread.get("created") or 0,
                     "last_activity": None, "window": []}
         src.prune_threads(state, set(keep_versions or versions), current)
@@ -802,16 +819,18 @@ def _read_thread(transport: src.Transport, policies: dict[str, Any], thread: dic
         coverage.append("older_comments_outside_window")
     if any(int(c.get("replyCount") or 0) > len(c.get("comments") or []) for c in comments):
         coverage.append("replies_not_embedded")
-    entry = {"community_id": community_id, "community_slug": community_slug, "title": topic["title"],
+    # Every forum member of the topic, its comments and its listing entry: removed from each
+    # comment's text (_items_for), from the stored title (evaluate_comment) and from a user topic's
+    # title in the state file, the same removal for all. Held for this cycle only, never written to
+    # the state file.
+    names = sorted(display_names(topic, comments) | set(thread.get("listing_names") or ()))
+    entry = {"community_id": community_id, "community_slug": community_slug,
+             "title": state_title(topic["title"], profile["staff"], names),
              "staff": profile["staff"], "title_versions": profile["title_versions"],
              "created": int(topic["createdStamp"]), "last_activity": last_activity, "total_rows": total,
              "window": window, "last_read_at": base.utc_now(),
              "first_read_at": stored.get("first_read_at") or base.utc_now(),
              "gap_reasons": gap, "coverage": coverage}
-    # Every forum member of the topic, its comments and its listing entry: removed from each
-    # comment's text (_items_for) and from the stored title (evaluate_comment), the same removal for
-    # both. Held for this cycle only, never written to the state file.
-    names = sorted(display_names(topic, comments) | set(thread.get("listing_names") or ()))
     return dict(merged, outcome="read",
                 items=_items_for(merged, topic, comments, community_id, community_slug, names),
                 gap=gap, coverage=coverage, state_entry=entry, names=names)

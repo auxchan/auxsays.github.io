@@ -3763,13 +3763,20 @@ defect of 621.14/621.24 was reported on the NVIDIA GeForce forum about 9 days be
   no family the row is stored `driver_family_unassigned` for both and counted for neither (the
   shared-component case). Notebook reports (first person always, and "another laptop" too; another
   person's only through a possessive owner, "a friend's laptop", or inside an other-machine phrase's
-  description), versions on a specification line only, disclaimed attribution, module crashes
+  description when the same sentence says it works on that machine, "works on another system with an
+  RTX 4070 Laptop GPU"; "On my second system with an RTX 4070 Laptop GPU, since ..." is the reporter's
+  notebook), versions on a specification line only, disclaimed attribution, module crashes
   without regression evidence for the record's own version (dated to it or contrasted with a working
   version, and not begun on or persisting on another) and fine-only posts are excluded with their
   reasons. Then `base.apply_acceptance_gates` and `lib.target_outcome` unchanged; the date is the
   comment's own creation time; the URL is the forum's own link to that comment; the row is keyed on the
   comment (a comment moved to another thread is never a second row); members' @handles and display
-  names are removed from stored text and from the stored thread titles the promotion copies.
+  names are removed from stored text, from the stored thread titles the promotion copies, and from a
+  user topic's title in the state file (a staff feedback thread's title is kept as posted: its family
+  is read back from it). **Residual:** the stored link keeps the forum's own slug of the thread title,
+  so a name in a title survives there in slug form. It is kept until a permitted live check shows a
+  link without the slug still reaches the comment; personal information is not fully removed while
+  it remains.
 - **Coverage gaps** (GPT G47 s2): each read thread's last window (comment ids and creation times) is
   kept; no overlap with the previous newest gone, a boundary tie, a comment appearing inside the span
   already read, or more new comments than the window shows reports `partial` /
