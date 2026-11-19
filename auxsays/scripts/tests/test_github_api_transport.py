@@ -388,15 +388,18 @@ def section_callers() -> None:
               "html_url": f"https://github.com/obsproject/obs-studio/issues/{n}", "title": "x", "body": "y",
               "created_at": "2026-11-01T00:00:00Z"} for n in (101, 102, 103)]
     with Harness([("search/issues", ok({"total_count": 3, "items": items}, {"Link": ""}))]) as h:
-        found = obs.search_issues("32.1.2", None, 5)
+        found: list = []
+        exc = raised(lambda: found.extend(obs.search_issues("32.1.2", None, 5)))
         check("C3.1 OBS: a version with fewer hits than a page costs ONE search (no empty page 2)",
-              len(found) == 3 and len(h.wire.requests) == 1, f"{len(h.wire.requests)}")
+              exc is None and len(found) == 3 and len(h.wire.requests) == 1, f"{len(h.wire.requests)} {exc!r}")
     with Harness([("page=1", ok({"total_count": 4, "items": items}, {"Link": f'<{API}/x?page=2>; rel="next"'})),
                   ("page=2", ok({"total_count": 4, "items": [{**items[0], "url": items[0]["url"] + "9"}]},
                                 {"Link": ""}))]) as h:
-        found = obs.search_issues("32.1.2", None, 5)
+        found = []
+        exc = raised(lambda: found.extend(obs.search_issues("32.1.2", None, 5)))
         check("C3.2 OBS follows rel=next and stops where GitHub says the results end",
-              len(found) == 4 and len(h.wire.requests) == 2, f"{len(found)} {len(h.wire.requests)}")
+              exc is None and len(found) == 4 and len(h.wire.requests) == 2,
+              f"{len(found)} {len(h.wire.requests)} {exc!r}")
     check("C3.3 OBS no longer has its own transport or browser/beta User-Agent",
           "AUXSAYS-OBS-Report-Beta" not in (SCRIPTS / "collect_obs_reports.py").read_text(encoding="utf-8")
           and "urlopen" not in (SCRIPTS / "collect_obs_reports.py").read_text(encoding="utf-8"))
@@ -596,6 +599,8 @@ def section_handles() -> None:
         ("H3.6 a vendor's own thanks is attribution and stays", "Thank you to @wiggin15 for the feedback."),
         ("H3.7 a decorator stays", "* Support @torch.compile on the sampler"),
         ("H3.8 'by' + a package is not a credit", "* Replaced by @scope/pkg in the loader"),
+        ("H3.10 a handle right before a PR link is a credit only after 'by'",
+         "* Thank @alice ([PR #9](https://x/pull/9))"),
     )
     for label, text in kept:
         check(label, cc.strip_contributor_credits(text) == text, repr(cc.strip_contributor_credits(text)))

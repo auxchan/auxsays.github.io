@@ -112,7 +112,7 @@ auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
 # and x-ratelimit-reset honoured, no request after a refusal, blocked/partial never success, Link
 # pagination, truthful User-Agent; the open-web GitHub provider gone with nothing depending on it; and
 # contributor handles out of GitHub release notes, adapter and stored corpus agreeing byte for byte.
-auxsays/scripts/tests/test_github_api_transport.py = 108
+auxsays/scripts/tests/test_github_api_transport.py = 109
 auxsays/scripts/tests/test_powerpoint_qna_tag_enumeration.py = 65
 auxsays/scripts/tests/test_acrobat_tiering.py = 136
 
