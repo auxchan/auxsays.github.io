@@ -19,7 +19,7 @@ update_published_at: '2025-05-28T00:00:00Z'
 update_last_checked: '2026-07-22T08:47:09Z'
 source_last_checked: '2026-07-22T08:47:09Z'
 official_body_last_checked: '2026-07-22T08:47:09Z'
-record_last_updated: '2026-11-04T07:59:57.323368Z'
+record_last_updated: '2026-11-19T11:44:54.629138Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,23 +27,23 @@ update_status: current
 update_feed_title: DaVinci Resolve 20
 update_detail_title: DaVinci Resolve 20
 update_consensus_label: Negative
-update_report_count: 33
-update_consensus_confidence: High
-quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 20 has 33 user reports found.'
+update_report_count: 32
+update_consensus_confidence: Medium
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 20 has 32 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20 in its official support downloads feed.
 release_summary: This software update installs the final release of DaVinci Resolve Studio 20 which adds support
   for over 100 new features and AI tools such as AI IntelliScript, AI Animated Subtitles, AI Multicam SmartSwitch
   and AI Audio Assistant, as well as keyframe editing, voice over palette, multi layer compositing tools, new optical
   flow vector tools and major updates to Magic Mask and depth map. This version requires a DaVinci Resolve Studio
   license dongle or software activation code.
-consensus_report: '33 user reports found for DaVinci Resolve 20. Current reports mention render/export failures,
-  startup or application crashes, and performance slowdowns. Current reports are Reddit-heavy, so production users
+consensus_report: '32 user reports found for DaVinci Resolve 20. Current reports mention startup or application
+  crashes, render/export failures, and performance slowdowns. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 33
+confirmed_patch_specific_report_count: 32
 evidence_last_checked: '2026-11-04T00:18:43Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
@@ -96,6 +96,9 @@ status_events:
 - at: '2026-11-04T01:07:09.863672Z'
   label: User reports found
   note: User report count updated to 33.
+- at: '2026-11-19T11:44:54.629138Z'
+  label: User reports found
+  note: User report count updated to 32.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -148,18 +151,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20. 33 user reports are matched to this exact update,
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 20. 32 user reports are matched to this exact update,
   but no problem in them is confirmed as reported independently by two or more users. If one matches your setup,
   test before relying on this update.'
 evidence_samples:
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1ssp7xa/davinci_resolve_gpu_render_failing_everywhere/
-  source_title: DaVinci Resolve GPU render failing everywhere (iMac Pro Vega 56). Losing my mind, tried everything
-  counted: true
-  version_matched: '20'
-  patch_version_matched: true
-  issue: render/export failures in application stability
-  outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1ta80h5/win_11_davinci_resolve_issue/
   source_title: Win 11 DaVinci Resolve issue
@@ -167,6 +162,14 @@ evidence_samples:
   version_matched: '20'
   patch_version_matched: true
   issue: startup or application crashes in application stability
+  outcome: high
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ssp7xa/davinci_resolve_gpu_render_failing_everywhere/
+  source_title: DaVinci Resolve GPU render failing everywhere (iMac Pro Vega 56). Losing my mind, tried everything
+  counted: true
+  version_matched: '20'
+  patch_version_matched: true
+  issue: render/export failures in application stability
   outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1uctwky/got_tuxedo_drivers_davinci_resolve_studio_fully/
@@ -434,15 +437,6 @@ accepted_report_sources:
   workflow_area: render/export
 - source_name: r/davinciresolve
   source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1utwlro/small_red_section_at_the_beginning_of_the_render/
-  source_title: Small red section at the beginning of the Render Cache line — just a technical curiosity
-  source_date: '2026-07-11'
-  version_matched: DaVinci Resolve Studio 20
-  patch_version_matched: true
-  issue: render/export failures
-  workflow_area: render/export
-- source_name: r/davinciresolve
-  source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1wgm2a5/cannot_for_the_life_of_me_get_a_clean_export_in/
   source_title: Cannot for the life of me get a clean export in Resolve.
   source_date: '2026-09-15'
@@ -499,7 +493,7 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 33 user reports are matched to this exact update, but no problem in them
+update_decision_body: 'No verdict yet: 32 user reports are matched to this exact update, but no problem in them
   is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
   this update.'
 practical_recommendations:

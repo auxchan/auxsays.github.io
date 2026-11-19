@@ -19,7 +19,7 @@ update_published_at: '2026-09-08T00:00:00Z'
 update_last_checked: '2026-09-08T06:44:15Z'
 source_last_checked: '2026-10-27T01:21:03Z'
 official_body_last_checked: '2026-10-27T01:21:03Z'
-record_last_updated: '2026-11-05T08:04:12.013702Z'
+record_last_updated: '2026-11-19T11:45:14.552812Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,9 +27,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21.1
 update_detail_title: DaVinci Resolve 21.1
 update_consensus_label: Negative
-update_report_count: 14
+update_report_count: 13
 update_consensus_confidence: Low-Medium
-quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21.1 has 14 user reports found.'
+quick_verdict: 'INSUFFICIENT DATA: DaVinci Resolve 21.1 has 13 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.1 Update in its official support downloads feed.
 release_summary: This software update expands still photography and camera support on the Photo page, as well as
   adding enhanced multicam controls and an updated trim editor. In addition, there are over 25 new Krokodove shape
@@ -38,14 +38,14 @@ release_summary: This software update expands still photography and camera suppo
   Studio 21.1 adds new individual MultiMaster trims on the color page, integration with AI assistants and 20 new
   scripting APIs with built-in console support. This version requires a DaVinci Resolve Studio license dongle, Blackmagic
   Cloud license or software activation code.
-consensus_report: '14 user reports found for DaVinci Resolve 21.1. Current reports mention startup or application
+consensus_report: '13 user reports found for DaVinci Resolve 21.1. Current reports mention startup or application
   crashes, installation problems, and render/export failures. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 14
+confirmed_patch_specific_report_count: 13
 evidence_last_checked: '2026-10-10T06:35:33Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
@@ -74,6 +74,9 @@ status_events:
 - at: '2026-10-10T07:35:10.248736Z'
   label: User reports found
   note: User report count updated to 14.
+- at: '2026-11-19T11:45:14.552812Z'
+  label: User reports found
+  note: User report count updated to 13.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -148,7 +151,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21.1. 14 user reports are matched to this exact update,
+update_consensus_summary: 'INSUFFICIENT DATA: DaVinci Resolve 21.1. 13 user reports are matched to this exact update,
   but no problem in them is confirmed as reported independently by two or more users. If one matches your setup,
   test before relying on this update.'
 evidence_samples:
@@ -185,8 +188,8 @@ evidence_samples:
   issue: render/export failures
   outcome: medium
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1wbshk6/is_resolve_211_finally_stable_enough_to_update/
-  source_title: Is Resolve 21.1 finally stable enough to update from 20?
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1wjrlst/resolve_211_immediately_crashes/
+  source_title: Resolve 21.1 immediately crashes
   counted: true
   version_matched: '21.1'
   patch_version_matched: true
@@ -221,15 +224,6 @@ accepted_report_sources:
   patch_version_matched: true
   issue: installation problems
   workflow_area: installation
-- source_name: r/davinciresolve
-  source_type: reddit community report
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1wbshk6/is_resolve_211_finally_stable_enough_to_update/
-  source_title: Is Resolve 21.1 finally stable enough to update from 20?
-  source_date: '2026-09-09'
-  version_matched: '21.1'
-  patch_version_matched: true
-  issue: startup or application crashes in application stability
-  workflow_area: application stability
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1wbm7je/setup_ai_assistant_in_davinci_resolve_211/
@@ -324,7 +318,7 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: INSUFFICIENT DATA
-update_decision_body: 'No verdict yet: 14 user reports are matched to this exact update, but no problem in them
+update_decision_body: 'No verdict yet: 13 user reports are matched to this exact update, but no problem in them
   is confirmed as reported independently by two or more users. If one matches your setup, test before relying on
   this update.'
 practical_recommendations:

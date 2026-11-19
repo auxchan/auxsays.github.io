@@ -1,0 +1,39 @@
+[
+ {
+  "file": "2025-05-28-davinci-resolve-20.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "blackmagic-davinci",
+   "update_version": "20"
+  }
+ },
+ {
+  "file": "2026-04-14-davinci-resolve-21.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "blackmagic-davinci",
+   "update_version": "21"
+  }
+ },
+ {
+  "file": "2026-08-11-windows-11-25h2-26200-9168.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "microsoft-windows-11",
+   "update_version": "25H2",
+   "target_build": "26200.9168",
+   "target_kb": "KB5121003",
+   "target_os_build": "26200.9168",
+   "target_feature_version": "25H2",
+   "target_release_date": "2026-08-11T00:00:00Z"
+  }
+ },
+ {
+  "file": "2026-09-08-davinci-resolve-21-1.md",
+  "front_matter": {
+   "update_entry": true,
+   "product_id": "blackmagic-davinci",
+   "update_version": "21.1"
+  }
+ }
+]
