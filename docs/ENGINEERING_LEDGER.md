@@ -93,6 +93,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-075 | Resolved | CI governance | Medium | The DaVinci archive build check asserted the one-time migration, so it failed on every pull request after it ran |
 | AUX-062 | Deferred | Evidence integrity | Low | Three classifier misses the sprint measured but did not fix |
 | AUX-080 | Resolved | Publication | Medium | Patch pages reprinted community thread titles as link text, and the forum test fixtures held recorded post text |
+| AUX-109 | Resolved | Evidence integrity | Medium | A new Adobe row's 280-character excerpt could leave out the version it was counted for |
 | AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
@@ -6423,6 +6424,62 @@ host. These are vendor documentation pages, not Q&A threads, and they are unchan
 Learn Q&A fetch path does not go through `learn_fetch_policy.open_url`, a health row names a refusal
 for a redirect that stayed on Learn's own question, tag or search pages, or the official documentation
 residual is taken up (it needs its own item and its own per-source path list).
+
+---
+
+### AUX-109 — A new Adobe row's 280-character excerpt could leave out the version it was counted for
+
+- **Status** Resolved · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-19 · **Resolved** 2026-11-19 (fix pending its first natural collection run)
+
+`report_text_excerpt` is the report's first 280 characters. When the reporter names the version further
+in, the stored row cannot show the occurrence its own match rests on: the G51 corpus audit counted 132
+such Acrobat rows and 3 Premiere rows. OBS already centres its excerpt, and ComfyUI, DaVinci and the
+NVIDIA forum collector keep a centred `matched_context`, so this is the Adobe gap.
+
+**Repair, new rows only.** `base.excerpt_at` positions the SAME field and the SAME cap around the
+accepted occurrence: 90 characters of lead, word-aligned edges, a placeholder at each cut end. It
+returns today's head byte for byte when there is no span, the post is 280 characters or shorter, or the
+head already shows the occurrence. `base.first_post_excerpt_span` supplies the span only when all hold:
+
+- the candidate is marked `FIRST_POST_ONLY`, which only the two opening-post builders set (Acrobat
+  `_topic_to_candidate`, Premiere `topic_candidate`);
+- the span re-derived by `exact_version_match_span` over the same joined text and spellings agrees with
+  acceptance's decision;
+- the occurrence is in the body (a title is stored whole);
+- the head shows no accepted spelling of the version.
+
+The retired /t5 whole-thread path, the Premiere page scrapes, Reddit and every other collector keep the
+head. A window never reaches into a greeting and its name, an @handle and its display name, an e-mail
+address, a sign-off, a dash signature or (unless the version is there) the post's last 60 characters.
+These rules only shrink a window.
+
+**Unchanged.** Acceptance: every gate reads the full in-memory text. Counts, labels, summaries, verdicts
+and maturity: replayed on a throwaway store, head versus window. Stored rows: append never rewrites one,
+and ownership validation refuses a modified row. No field is added, no length grows, nothing is
+backfilled.
+
+**Residuals.**
+
+- The shadow verdict-reason producer reads the excerpt. Read through a window, an install row can lose or
+  gain Exit Code 7, an installer code or another Acrobat version. `PUBLIC_AUTO_ACTIVATION` stays OFF with
+  the dependency recorded beside it, so activation needs its own approval covering it. Editing the
+  producer's source also makes the next deploy a shadow `rules_change`.
+- `verdict_reasons.support_problems` reads identical excerpts as one reporter, so a head-rule copy and a
+  window-rule copy of one cross-post no longer compare equal (fail-open). No live entry is exposed: every
+  cited row is stored. The reviewed file's header tells reviewers.
+- A display name the rules cannot recognise can still enter a window: one inside the version's own
+  sentence, or an unpunctuated trailing name. The head carries the same exposure today.
+- `withdraw_acrobat_wrong_edition_rows.py` reads stored excerpts. Re-baseline it before re-running it on
+  rows written after this change.
+- Windows and Teams are held for the Microsoft Learn / Tech Community rights decisions. PowerPoint is
+  skipped: its orchestrator re-reads a rejected row's excerpt as acceptance input.
+
+Pinned by `tests/test_version_centred_excerpt.py` (69 checks).
+
+**Reopen if** a counted Acrobat or Premiere row written after this change from an opening-post candidate
+names its version in the body, its head did not show it, and its excerpt omits it; or any acceptance
+decision, count or verdict differs between the head and the window for one input.
 
 ---
 

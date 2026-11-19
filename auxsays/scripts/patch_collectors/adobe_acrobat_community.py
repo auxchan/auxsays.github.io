@@ -176,6 +176,7 @@ def _set_active_budget(budget: Any) -> None:
 from .base import (
     CollectorContext,
     EVIDENCE_PATH,
+    FIRST_POST_ONLY,
     PatchRecord,
     ProductCollector,
     ROOT,
@@ -184,6 +185,7 @@ from .base import (
     counted_rows,
     date_part,
     exact_version_match,
+    first_post_excerpt_span,
     generated_records,
     load_front_matter_and_body,
     make_evidence_row,
@@ -844,6 +846,9 @@ def _topic_to_candidate(topic: dict[str, Any]) -> dict[str, Any] | None:
         # reports without inferring it from wording.
         "author_rank": str((first_post.get("author") or {}).get("rank", {}).get("name") or "")
         if isinstance(first_post.get("author"), dict) else "",
+        # `report_text` is the opening post alone, so a new row's excerpt may be centred on the
+        # version it names (AUX-109). The retired /t5 thread path reads whole pages and never sets it.
+        FIRST_POST_ONLY: True,
     }
 
 
@@ -927,6 +932,7 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
     # rollback. One copy of each distinct part says exactly what the reporter said.
     seen_parts: set[str] = set()
     parts: list[str] = []
+    named_parts: list[tuple[str, str]] = []
     for field in ("parent_title", "report_title", "report_text"):
         value = str(candidate.get(field) or "").strip()
         key = " ".join(value.lower().split())
@@ -934,6 +940,7 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
             continue
         seen_parts.add(key)
         parts.append(value)
+        named_parts.append((field, value))
     report_text = " ".join(parts)
     matched, matched_version, basis = exact_version_match(
         report_text, record.update_version, aliases=acrobat_version_aliases(record.update_version))
@@ -966,6 +973,12 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
         title=str(candidate.get("report_title") or candidate.get("parent_title") or ""))
     source_date = date_part(candidate.get("source_date"))
     source_type = str(candidate.get("source_type") or ADOBE_COMMUNITY_SOURCE_TYPE)
+    # Where the stored excerpt sits (AUX-109): around the occurrence acceptance just accepted, for an
+    # opening-post candidate whose head does not already show it. Decides nothing -- no gate below
+    # reads the excerpt -- and None keeps today's head excerpt.
+    excerpt_span = first_post_excerpt_span(
+        candidate, named_parts, report_text, record.update_version,
+        acrobat_version_aliases(record.update_version), accepted=(matched, matched_version, basis))
 
     row = make_evidence_row(
         product_id=product_id,
@@ -997,6 +1010,7 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
         # -- while append_evidence_rows still keys dedup by (product_id, version, url) so each
         # applicable product stores exactly one row and counts it once.
         row_id=f"acrobat-{slug(record.update_version)}-{slug(source_type)}-{slug(str(candidate.get('source_url') or ''))}",
+        excerpt_span=excerpt_span,
     )
     source_date_pass = row.get("source_date_pass")
     if not source_date:

@@ -109,6 +109,16 @@ PRODUCER_VERSION = "5"
 # THE ONE ACTIVATION SWITCH. TEMPORARY: OFF until the owner approves public auto-activation
 # (AUTH_V2_35 D-A). Flipping it is a reviewed one-line change, never an environment variable or a
 # workflow input, so no deploy can turn it on by itself.
+# EXCERPT DEPENDENCY (AUX-109), recorded for that approval. This producer reads `report_text_excerpt`:
+# `_txt` / `_stripped`, the same-log and shared-passage independence cues, `acrobat_install_row`, and
+# the `excerpts_sha256` input. Since AUX-109 a NEW Acrobat Pro / Reader or Premiere opening-post row
+# stores that excerpt centred on its accepted version whenever the post's first 280 characters do not
+# show it. The head-versus-window replay changes this producer's reading of such rows: read through
+# the window, an install row can lose or gain Exit Code 7, an installer code or another Acrobat
+# version. Stored rows keep their head excerpts, so a head copy and a window copy of one post no
+# longer compare equal either. Turning this switch on therefore needs its own approval covering this
+# dependency (AUX-109 does not give it); test_version_centred_excerpt H2/H3 pin the switch OFF and
+# this note beside it.
 PUBLIC_AUTO_ACTIVATION = False
 
 VENDOR_CLASS = "vendor_confirmed_serious"

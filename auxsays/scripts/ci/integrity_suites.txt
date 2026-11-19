@@ -619,6 +619,15 @@ auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 # since a second search can land on a different occurrence. Forward-only; no stored row changes.
 auxsays/scripts/tests/test_matched_span_retention.py = 20
 
+# AUX-109. A NEW Adobe opening-post row (Acrobat Pro / Reader, Premiere) stores its excerpt -- same
+# field, same 280-character cap -- around the version it was accepted for, when the head does not
+# show it; every other row is byte-identical. Pins: the helper's invariants, the call sites (title,
+# alias, both joins, whole-thread candidates keep the head), excerpt independence three ways, the
+# other collectors untouched, no backfill on a throwaway store with counts/verdicts/maturity equal,
+# the privacy rules, and the shadow producer's switch OFF with the excerpt dependency beside it.
+# Reads the live store and records; writes only to a temporary directory.
+auxsays/scripts/tests/test_version_centred_excerpt.py = 69
+
 # --- writer-lane governance and the methodology Notes render -----------------------
 # Both were added with the writer-queue repair, and both are proven non-vacuous by MEASUREMENT
 # rather than assertion. Against the pre-fix tree (HEAD workflows, no reaper, patch-ingest still
