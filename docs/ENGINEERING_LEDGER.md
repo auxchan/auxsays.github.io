@@ -85,6 +85,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-088 | Resolved | Evidence integrity | High | Twenty community reports cited on the live pages were credited to an update they were not about |
 | AUX-090 | Resolved | Publication | Medium | Every OBS report on a patch page read "date not recorded", though each source states when it was posted |
 | AUX-098 | Resolved | Evidence integrity | Medium | Fourteen reports that one person had posted twice were each counted as two reports |
+| AUX-108 | Deferred | Evidence integrity | Medium | Five reports counted against a version they were not about: the build a device fell back to, the version an author upgraded from, a version only asked about (rows withdrawn; the attribution fix deferred behind named triggers) |
 | AUX-092 | Resolved | Publication | Medium | Every new OBS report would again read "date not recorded": the collector never stored the date it checks |
 | AUX-093 | Resolved | Verdict policy | High | 234 of 236 pages with user reports said WAIT because of their product or a negative tone |
 | AUX-094 | Resolved | Verdict policy | Low | The page could print an official verdict the decision code did not give, and QA could not see it |
@@ -5354,6 +5355,89 @@ suite's scope check now refuses any scope beyond the two declared ones (81).
 **Reopen only if** any of the fourteen counts again, an original stops counting without its own audited
 withdrawal, a held-out pair is withdrawn without two labels naming the same original, or a same-time capture is
 decided by anything but the source's own post number.
+
+---
+### AUX-108 — Five reports counted against a version they were not about: the build a device fell back to, the version an author upgraded from, a version only asked about (rows withdrawn; the attribution fix deferred behind named triggers)
+
+- **Status** Deferred (the five rows are withdrawn; any change to how a report's versions are attributed waits for
+  a trigger below) · **Area** Evidence integrity · **Severity** Medium
+- **First seen** 2026-11-19 (an audit of the role each named version plays in a counted report; two blind
+  adjudications) · **Data corrected** 2026-11-19
+
+**Symptom** A report often names more than one version, and each plays a different role: the version with the
+problem, the one the device fell back to, the one the author upgraded from, one that works, one only asked about.
+An audit of every counted row found five rows counted against a version whose role was not "the version with the
+problem":
+- Windows 11 25H2 26200.9168: an Insider build kept failing to install, and the device returned to 26200.9168;
+- DaVinci Resolve 21: the author upgraded from 21 to 21.1 and the problem began on 21.1 (the same post stays
+  counted on 21.1, where it belongs);
+- DaVinci Resolve 21.1 and 21: one question asking whether 21.1 is stable enough to install, from someone still on
+  20.3.1 who ran neither version and repeats what other posts said about 21;
+- DaVinci Resolve 20: a post that says everything works and asks about a display detail.
+
+**Scope** Only rows that two independent blind adjudications both labelled incorrect. Each adjudicator read only
+the stored text, in a shuffled packet that mixed the candidates with counted controls, without the audit's labels
+or the other adjudicator's. A sixth candidate (DaVinci 20.2.1) was held out before adjudication, because its
+stored excerpt is cut mid-post and the source cannot be re-read; it stays counted. One random control (DaVinci
+21.0.4) was also labelled incorrect by both; it was not a candidate, so it is recorded for its own review and stays
+counted. No acceptance rule, threshold or vocabulary changed.
+
+**Fix (data)** `withdraw_live_citation_rows.py` (AUX-088, unchanged) withdraws the five from a fourth pinned
+manifest, `scripts/audit/live_citation_withdrawal_v4.json`, which records both blind labels beside each row and the
+audit's label as provenance only. The rest is AUX-088's: five-field selection, pinned block hashes, three lines
+for the Windows row and two per DaVinci row, every row kept with `counted: false` and the reason both reviews
+support (`version_is_rollback_target`, `identity_not_the_subject`, `not_a_real_issue_report`), all or nothing,
+idempotent. The four records were regenerated only by the scoped lane writers. A scheduled collector that sees one
+of these reports again does not re-admit it: every Windows and DaVinci lane persists through the store's append
+guard, which refuses a report whose id or URL the store already holds for that version, counted or not, and a
+withdrawal keeps the row.
+
+**Selection** PR #79 withdrew rows chosen only by running the shipped rule, never by hand. These five were chosen
+by independent human adjudication instead, as AUX-088 and AUX-098 were: once every rule change was measured and
+ruled out, two blind adjudications pinned per row are the selection that remains. That supersedes #79's stance
+for this case; it does not break it.
+
+**Measured** Counted rows: Windows 553 -> 552, DaVinci 335 -> 331, OBS unchanged; every row kept; store diff 11
+lines. Pages: 25H2 26200.9168 20 -> 19; DaVinci 20 33 -> 32 (evidence strength High -> Medium, the only public
+label change), 21 75 -> 73, 21.1 14 -> 13. No verdict, maturity, consensus label or live decision changes; each
+record loses exactly its withdrawn sources and gains one "User report count updated to N." event. A second run of
+the tool changes nothing. `test_withdraw_g51_role_rows.py` pins it (36 checks, fixture counts only); the DaVinci
+bucket suite's stored-row check accepts exactly this manifest's withdrawal and still fails on any other uncounted
+row (34).
+
+**Why deferred** Every attribution change measured would have removed these rows only by also dropping real
+reports, by missing them, or by adding wording lists that nothing counterbalances in the lanes that would need
+them. The data correction removes the five rows both reviews confirmed; the remaining risk is in the mechanism and
+in the still-counted rows named under Current impact.
+
+**Current impact** Still counted: DaVinci 20.2.1 (held out) and the DaVinci 21.0.4 control, each awaiting its own
+audited review, and two measured rows of this class outside the withdrawal tool's product scope, Premiere Pro
+26.2.2 and Acrobat Reader 15.020.20039, taken up at the next Adobe audited withdrawal once that tool's scope
+widens to cover them. About a quarter of
+counted rows store too little text around the version to judge its role; that is an auditability gap, tracked by
+the version-centred evidence work, not proof of wrong counting.
+
+**Revisit trigger** Reopen the code question when any of these appears:
+- **Shared role check:** an independently adjudicated false count of this class in a lane where the shared role
+  check is already wired, together with a structurally different approach (not reworded phrasings) that passes the
+  frozen bar of at least 40 novel keep probes written before the patch is seen, with no wrong refusal.
+- **False negative:** an independently adjudicated real report that the role check refused (two Acrobat Reader
+  rows are already reproduced) also opens an investigation of a structurally sound repair of the shared check,
+  under the same bar. A check that suppresses real reports overstates a release's safety as readily as a false
+  count overstates its risk. Those rows are adjudicated and restored on their own path, not behind this item.
+- **Windows:** a second independently adjudicated case of this class; then measure a targeted check over every
+  counted Windows row, with no real report lost.
+- **DaVinci:** collection resumes with enough stored text around the version to judge its role.
+- **NVIDIA:** post-merge evidence supports a narrowly scoped check on the feedback form's structured driver fields.
+- Any fix must keep counting a report whose author went back to a version and found the problem still there; no
+  blanket rule.
+
+**Work that this item must not block** The NVIDIA forum lane's merge, the version-centred evidence capture, and
+the separate adjudication of the Acrobat Reader rows the role check refused.
+
+**Reopen only if** (the data correction) any of the five counts again; the held-out row or the control is withdrawn
+without two blind labels of its own; or the 21.1 report of the upgrade post, or the 26200.9168 report of the update
+failing to install, stops counting without its own audited withdrawal.
 
 ---
 ### AUX-092 — Every new OBS report would again read "date not recorded": the collector never stored the date it checks
