@@ -24,46 +24,6 @@
 # YAML date becomes a value json.dumps refuses (test_patch_decision_hierarchy failed on it).
 schema_version: 1
 entries:
-# NVIDIA's drivers are two products (AUX-105): Game Ready and Studio drivers share version numbers and
-# never share evidence, so each family has its own entry and its own observed releases.
-- product_id: nvidia-geforce-game-ready
-  remediation_priority: P1
-  blocking_reason: vendor_terms_unresolved
-  next_action: >-
-    The official lane is enabled (AUX-105); its first scheduled ingestion run is the probe. When that run
-    publishes this family's 621.14 and 621.24, remove this entry. If NVIDIA refuses the collection runners,
-    the lane suspends itself until a reviewed config change.
-  plan: planned
-  review_by: "2026-12-18"
-  ledger: AUX-105
-  observed_official_releases:
-  - version: "621.14"
-    released: "2026-11-04"
-    family: GeForce Game Ready Driver
-    reference: https://www.nvidia.com/en-us/drivers/details/283968/
-  - version: "621.24"
-    released: "2026-11-12"
-    family: GeForce Game Ready Driver
-    reference: https://www.nvidia.com/en-us/drivers/details/285320/
-- product_id: nvidia-studio-driver
-  remediation_priority: P1
-  blocking_reason: vendor_terms_unresolved
-  next_action: >-
-    The official lane is enabled (AUX-105); its first scheduled ingestion run is the probe. When that run
-    publishes this family's 621.14 and 621.24, remove this entry. If NVIDIA refuses the collection runners,
-    the lane suspends itself until a reviewed config change.
-  plan: planned
-  review_by: "2026-12-18"
-  ledger: AUX-105
-  observed_official_releases:
-  - version: "621.14"
-    released: "2026-11-04"
-    family: NVIDIA Studio Driver
-    reference: https://www.nvidia.com/en-us/drivers/details/283966/
-  - version: "621.24"
-    released: "2026-11-12"
-    family: NVIDIA Studio Driver
-    reference: https://www.nvidia.com/en-us/drivers/details/285317/
 - product_id: adobe-premiere-pro
   remediation_priority: P1
   blocking_reason: source_blocks_automation

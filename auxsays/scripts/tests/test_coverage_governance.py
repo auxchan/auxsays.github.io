@@ -409,17 +409,7 @@ def section_d() -> None:
     entries = cov.load_debt()
     catalog = {cov.product_id_of(p) for p in yaml.safe_load(
         (_AUX / "_data" / "patch_products.yml").read_text(encoding="utf-8"))}
-    # NVIDIA's drivers are two products (AUX-105): Game Ready and Studio share version numbers, so each
-    # family's gap carries ITS OWN observed releases, and no reference may name the other family's driver.
     by_pid = {e.get("product_id"): e for e in entries}
-    own_pages = {"nvidia-geforce-game-ready": {"283968", "285320"}, "nvidia-studio-driver": {"283966", "285317"}}
-
-    def family_gap_ok(pid: str) -> bool:
-        entry = by_pid.get(pid) or {}
-        releases = entry.get("observed_official_releases") or []
-        pages = {str(r.get("reference") or "").rstrip("/").rsplit("/", 1)[-1] for r in releases}
-        return (entry.get("plan") == "planned" and {r.get("version") for r in releases} >= {"621.14", "621.24"}
-                and pages == own_pages[pid])
     # JSON-safe too: offline render harnesses (test_patch_decision_hierarchy's site_payload) serialise
     # every _data file, and an unquoted YAML date there is a datetime.date json.dumps refuses.
     try:
@@ -427,11 +417,33 @@ def section_d() -> None:
         json_safe = True
     except TypeError:
         json_safe = False
-    check("D9 the reviewed debt file is valid and JSON-safe, and each NVIDIA driver family's gap carries its "
-          "plan and its own releases (the retired bundled `nvidia` id is gone)",
-          not cov.debt_errors(entries, catalog) and json_safe and "nvidia" not in by_pid
-          and all(family_gap_ok(pid) for pid in own_pages),
+    check("D9 the reviewed debt file is valid and JSON-safe (the retired bundled `nvidia` id is gone)",
+          not cov.debt_errors(entries, catalog) and json_safe and "nvidia" not in by_pid,
           (cov.debt_errors(entries, catalog)[:3], json_safe, sorted(p for p in by_pid if "nvidia" in str(p))))
+    # NVIDIA's drivers are two products (AUX-105). Each family's debt entry said: when the first scheduled
+    # run publishes this family's 621.14 and 621.24, remove this entry. Run 44502299432 (commit f5bd8e66)
+    # published all four records, so both entries were removed. Pinned the other way round now: neither
+    # family carries debt, and both official lanes stay switched on by CONFIGURATION (a source, enabled,
+    # with a schedule -- the branches of build_monitoring_projection.derive_state that do not depend on a
+    # run). Runtime health is deliberately not asserted here: a failing lane changes the label, never a
+    # test. Switching a lane off again is refused by the deploy gate (D1) unless a reviewed debt entry
+    # comes back with it, and then this check names the entry to reconcile.
+    families = ("nvidia-geforce-game-ready", "nvidia-studio-driver")
+    sources = {str(s.get("product_id")): s for s in official.load_yaml(official.SOURCES_PATH) or []
+               if isinstance(s, dict)}
+
+    def lane_switched_on(pid: str) -> bool:
+        src = sources.get(pid)
+        if not src or not src.get("enabled"):
+            return False
+        ing = src.get("ingestion") or {}
+        return official.recency_window(
+            official.parse_cadence(ing.get("polling_frequency") or src.get("polling_frequency")),
+            ing.get("monitoring_recency_hours") or src.get("monitoring_recency_hours")) is not None
+    check("D11 neither NVIDIA driver family carries coverage debt any more, and both are catalogued with "
+          "their official lane switched on (AUX-105: the first scheduled run published 621.14 and 621.24)",
+          all(pid not in by_pid and pid in catalog and lane_switched_on(pid) for pid in families),
+          {pid: (pid in by_pid, pid in catalog, lane_switched_on(pid)) for pid in families})
 
 
 _REAL: dict = {}

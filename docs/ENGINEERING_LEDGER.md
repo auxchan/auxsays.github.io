@@ -3906,6 +3906,8 @@ assessment reports them as missing until the first scheduled run publishes them,
 to be removed once that family's lane operates. The NVIDIA company summary no longer lists NVIDIA App,
 which neither product covers.
 
+Debt retired 2026-11-19: run 44502299432 (f5bd8e66) published both families' 621.14 and 621.24, so both entries were removed (D11 pins it).
+
 `lib/nvidia_driver_identity.report_family` is the attribution rule any future NVIDIA user-report
 path must use: a report naming only a version belongs to a family only inside that family's own
 feedback thread, and an explicit mention of the other family vetoes it.
