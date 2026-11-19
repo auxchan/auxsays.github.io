@@ -628,6 +628,17 @@ auxsays/scripts/tests/test_withdraw_duplicate_reports.py = 52
 # count deltas only, never a live-corpus count. Bare script on frozen fixtures whose free text is synthetic; the
 # live store is read only for the five pins and the kept rows.
 auxsays/scripts/tests/test_withdraw_g51_role_rows.py = 36
+# AUX-111: the audited withdrawal of two Adobe reports counted against a version they are not about (the Premiere
+# Pro version a project was created in, the Acrobat Reader version an update started from), through the AUX-088
+# tool with a fifth manifest and a third product scope, exactly (Acrobat Reader, Premiere Pro). The scope guard is
+# pinned on its own: an unrelated Adobe product (Acrobat Pro, even the same report on the same version; Photoshop),
+# a scope that adds, drops or reorders a product, an unlisted identity of a granted product, or a granted identity
+# with any one field changed refuses, in the manifest reader AND the planner, under every scope; a granted row needs
+# two blind INCORRECT labels in the tool itself; the older scopes and manifests are unchanged. Exactly 4 lines,
+# every row kept, all-or-nothing, idempotent; a withdrawn report seen again is refused by the append guard;
+# fixture-based count deltas only. Bare script on frozen fixtures whose free text is synthetic; the live store is
+# read only for the two pins and the kept rows.
+auxsays/scripts/tests/test_withdraw_g55_adobe_role_rows.py = 42
 # AUX-092: the OBS producer now stores that same day on every NEW row. source_date = the UTC day of the
 # creation stamp the release-date gate already reads (an issue's created_at, the opening post's own <time>),
 # directly after captured_at, no key when the stamp gives no UTC day; equal to every AUX-090 pin. A frozen

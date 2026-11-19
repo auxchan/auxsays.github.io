@@ -1,0 +1,302 @@
+schema_version: 1
+evidence:
+- id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-installation-acrobat-dc-failed-on-el-capitan-10-11-3-5943
+  product_id: adobe-acrobat-reader
+  update_version: 15.010.20056
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/installation-acrobat-dc-failed-on-el-capitan-10-11-3-594365
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  captured_at: '2026-09-09T02:25:01Z'
+  source_date: '2016-01-20'
+  target_release_date: '2016-01-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20056
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-624-adobe-acrobat-reader-dc-crash-on-launch-673695
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/adobe-acrobat-reader-dc-crash-on-launch-673695
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-12-12'
+  target_release_date: '2016-10-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-from-version-26-2-i-can-t-tweak-the-properties-panel-p
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/from-version-26-2-i-can-t-tweak-the-properties-panel-premiere-keeps-crashing-1635805
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: application crash or hang in application stability.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: application crash or hang in application stability.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: application crash or hang in application stability.'
+  captured_at: '2026-10-07T11:24:51Z'
+  source_date: '2026-08-07'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: application crash or hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-premiere-pro-27-fewer-audio-channels-error-when-relink
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-27-fewer-audio-channels-error-when-relinking-projects-from-version-26-2-2-workaround-found-1656474
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: media decode or audio/video issue in media playback.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: media decode or audio/video issue in media playback.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: media decode or audio/video issue in media playback.'
+  captured_at: '2026-11-16T22:40:44Z'
+  source_date: '2026-11-16'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-failed-to-patch-from-15-020-20039-to-15-020-2042-1510656
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/failed-to-patch-from-15-020-20039-to-15-020-2042-1510656
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-08-09'
+  target_release_date: '2016-10-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-010-20064-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-19-010-20064-crashes-on-startup-on-rds-15163
+  product_id: adobe-acrobat-reader
+  update_version: 19.010.20064
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-19-010-20064-crashes-on-startup-on-rds-1516326
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: crash or launch failure in application stability.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: crash or launch failure in application stability.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: crash or launch failure in application stability.'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-12-11'
+  target_release_date: '2018-12-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.010.20064
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-pixel-aspect-ratio-getting-wrongly-interpreted-after-2
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/pixel-aspect-ratio-getting-wrongly-interpreted-after-26-2-and-still-on-26-3-1630083
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: media decode or audio/video issue in media playback.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: media decode or audio/video issue in media playback.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: media decode or audio/video issue in media playback.'
+  captured_at: '2026-10-15T17:43:06Z'
+  source_date: '2026-06-30'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-2-adobe-community-bug-report-https-community-adobe-com-bug-reports-728-pr-26-2-2-keyframe-handles-bug-1627000
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/pr-26-2-2-keyframe-handles-bug-1627000
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: media decode or audio/video issue in media playback.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: media decode or audio/video issue in media playback.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: media decode or audio/video issue in media playback.'
+  captured_at: '2026-10-07T11:31:25Z'
+  source_date: '2026-06-08'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-26-001-21529-adobe-community-bug-report-https-community-adobe-com-questions-9-e-sign-acrobat-pro-desktop-crashes-every-time-i-try-to-add
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21529
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/e-sign-acrobat-pro-desktop-crashes-every-time-i-try-to-add-a-signature-field-1561796
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: signing/certificate failure in e-signatures.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: signing/certificate failure in e-signatures.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: signing/certificate failure in e-signatures.'
+  captured_at: '2026-07-19T19:48:48Z'
+  source_date: '2026-05-15'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21529
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uz2e4k-exporting-video-always-replicates-same-pe
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uz2e4k/exporting_video_always_replicates_same_pesky/
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: render/export failure in render/export.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: render/export failure in render/export.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: render/export failure in render/export.'
+  captured_at: '2026-07-22T12:25:42Z'
+  source_date: '2026-07-17'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-pro-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-failed-to-patch-from-15-020-20039-to-15-020-2042-1510656-synthetic-fixture-twin
+  product_id: adobe-acrobat-pro
+  update_version: 15.020.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/failed-to-patch-from-15-020-20039-to-15-020-2042-1510656
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: install/update failure in deployment.'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-08-09'
+  target_release_date: '2016-10-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: adobe-photoshop-27-1-synthetic-fixture-row-aux111
+  product_id: adobe-photoshop
+  update_version: '27.1'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-1/synthetic-fixture-row-aux111-0000001
+  parent_title: 'Synthetic fixture text (AUX-111), not recorded source text: application crash or hang in application stability.'
+  report_title: 'Synthetic fixture text (AUX-111), not recorded source text: application crash or hang in application stability.'
+  report_text_excerpt: 'Synthetic fixture text (AUX-111), not recorded source text: application crash or hang in application stability.'
+  captured_at: '2026-10-07T11:24:51Z'
+  source_date: '2026-08-07'
+  target_release_date: '2026-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '27.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: application crash or hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1

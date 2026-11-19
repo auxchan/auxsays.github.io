@@ -12022,8 +12022,8 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat reader
   applicability: adobe-acrobat-reader
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: version_named_but_working
   issue_theme: install/update failure
   workflow_area: deployment
   platform: windows
@@ -74617,8 +74617,8 @@ evidence:
   patch_version_matched: true
   matched_version: 26.2.2
   match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: version_named_but_working
   issue_theme: media decode or audio/video issue
   workflow_area: media playback
   platform: unknown
