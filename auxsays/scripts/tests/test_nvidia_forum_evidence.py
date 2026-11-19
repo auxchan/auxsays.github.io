@@ -480,6 +480,9 @@ def section_gap() -> None:
     check("G12 window_of keeps visible top-level comments only, ordered by creation",
           src.window_of([{"id": 2, "createdStamp": 5}, {"id": 3, "createdStamp": 9, "isGhosted": 1},
                          {"id": 1, "createdStamp": 7}]) == [[1, 7], [2, 5]])
+    check("G12b a thread read before with NO visible comment is a read window: only the totals speak",
+          cmp([], [], 0, 0) == [] and cmp([], [[1, 1]], 0, 30) == ["more_new_comments_than_the_window_shows"]
+          and cmp([], [[1, 1]], 0, 1) == [])
 
     # Through the collector: cycle 1 reads the captured windows; cycle 2 (12.5 h later) serves a
     # 621.14 thread whose window no longer overlaps; cycle 3 serves it unchanged again.
@@ -535,8 +538,10 @@ def section_gap() -> None:
             third_requests = list(fake.seen)
         h3 = next(r for r in third[GRD] if r["version"] == "621.14")["method_health"][0]
         check("G18 the next cycle, overlapping again, is healthy (no stale gap)", h3["status"] != "partial", str(h3))
-        check("G19 an unchanged listed thread is not re-read (no comments request for it)",
-              not [u for u in third_requests if "topics/comments" in u and "id=592907" in u], str(len(third_requests)))
+        check("G19 an unchanged listed thread is not re-read (no topic or comments request for it)",
+              not [u for u in third_requests if "id=592907" in u or "id=592767" in u], str(len(third_requests)))
+        check("G19b ...including one whose window was empty when read (593067 has no comment)",
+              not [u for u in third_requests if "id=593067" in u], str([u for u in third_requests if "593067" in u]))
 
 
 # ------------------------------------------------------------------------------------------------

@@ -373,12 +373,23 @@ def evaluate_comment(product_id: str, record: base.PatchRecord, tracked_versions
 # --- the cycle: one per process, shared by both family collectors --------------------------------------
 
 _CYCLE: dict[str, Any] | None = None
+# Both families' records, read once per process: every scan parses every generated record's front
+# matter, and the two collectors of one run would otherwise scan the corpus eight times.
+_RECORDS: dict[str, list[base.PatchRecord]] | None = None
 
 
 def reset_cycle() -> None:
     """Forget this process's cycle. Tests only; production runs one cycle per process."""
-    global _CYCLE
+    global _CYCLE, _RECORDS
     _CYCLE = None
+    _RECORDS = None
+
+
+def _records() -> dict[str, list[base.PatchRecord]]:
+    global _RECORDS
+    if _RECORDS is None:
+        _RECORDS = {pid: base.generated_records(pid) for pid in PRODUCTS}
+    return _RECORDS
 
 
 def _items_for(thread: dict[str, Any], topic: dict[str, Any], comments: list[dict[str, Any]],
@@ -504,8 +515,9 @@ def run_cycle(context: base.CollectorContext, versions: set[str], *, keep_versio
                 cycle["deferred"].append(thread)
                 continue
             stored = (state.get("threads") or {}).get(str(thread["topic_id"])) or {}
-            if thread.get("listed_activity") is not None and stored.get("window") \
-                    and int(stored.get("last_activity") or -1) == thread["listed_activity"]:
+            # Read before (an empty window is still a read window) and no activity since: no request.
+            if thread.get("listed_activity") is not None and stored.get("last_activity") is not None \
+                    and int(stored["last_activity"]) == thread["listed_activity"]:
                 read.append(dict(thread, outcome="unchanged", items=[], gap=[], coverage=[]))
                 continue
             read.append(_read_thread(transport, policies, thread, stored, versions))
@@ -572,7 +584,8 @@ def _read_thread(transport: src.Transport, policies: dict[str, Any], thread: dic
         # A seed or remembered thread whose title no longer names a tracked version.
         return dict(merged, outcome="not_tracked", items=[], gap=[], coverage=[])
     last_activity = int(topic["lastActivityStamp"])
-    if stored.get("window") and int(stored.get("last_activity") or -1) == last_activity:
+    read_before = stored.get("last_activity") is not None
+    if read_before and int(stored["last_activity"]) == last_activity:
         return dict(merged, outcome="unchanged", items=[], gap=[], coverage=[])
     last_comment = int(topic["lastComment"]["id"])
     transport.anchors[tid] = last_comment
@@ -584,11 +597,11 @@ def _read_thread(transport: src.Transport, policies: dict[str, Any], thread: dic
     except src.TransportError as exc:
         return dict(merged, outcome="failed", detail=str(exc), items=[], gap=[], coverage=[])
     window = src.window_of(comments)
-    gap = src.compare_windows(stored.get("window") or None, window,
+    gap = src.compare_windows(list(stored.get("window") or []) if read_before else None, window,
                               stored.get("total_rows"), total)
     coverage: list[str] = []
     expected = min(src.COMMENT_PAGE_SIZE, total)
-    if len([c for c in comments]) < expected:
+    if len(comments) < expected:
         coverage.append("incomplete_window")
     if total > len(comments):
         coverage.append("older_comments_outside_window")
@@ -689,9 +702,10 @@ class NvidiaForumCollector(base.ProductCollector):
 
     def collect(self, context: base.CollectorContext) -> list[dict[str, Any]]:
         target = getattr(context, "target_versions", None)
-        records = base.newest_first(base.generated_records(self.product_id, target))
-        tracked = {r.update_version for r in base.generated_records(self.product_id)}
-        everything = [r for pid in PRODUCTS for r in base.generated_records(pid)]
+        known = _records()
+        records = base.newest_first([r for r in known[self.product_id] if not target or r.update_version in target])
+        tracked = {r.update_version for r in known[self.product_id]}
+        everything = [r for pid in PRODUCTS for r in known[pid]]
         versions = {r.update_version for r in everything if not target or r.update_version in target}
         cycle = run_cycle(context, versions, keep_versions={r.update_version for r in everything})
         if context.write and cycle.get("state") is not None and cycle.get("ran") and not cycle.get("saved"):

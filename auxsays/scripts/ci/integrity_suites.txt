@@ -476,7 +476,7 @@ auxsays/scripts/tests/test_nvidia_driver_lookup.py = 137
 # environment-only, disclaimed, module-crash and fine-only posts excluded), the coverage-gap contract, every
 # forbidden request shape refused before it is sent, refusal/schema/redirect/robots stops, the 12-hour
 # cadence, and the write-mode gates against a temporary store.
-auxsays/scripts/tests/test_nvidia_forum_evidence.py = 136
+auxsays/scripts/tests/test_nvidia_forum_evidence.py = 138
 auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 167
 auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
 auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68

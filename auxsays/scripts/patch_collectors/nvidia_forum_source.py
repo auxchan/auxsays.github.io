@@ -500,17 +500,23 @@ def compare_windows(previous: list[list[int]] | None, current: list[list[int]],
     Order-independent (only ids and creation times are compared, so a reordered response decides
     the same), edit-independent (an edit moves neither), and tie-aware. Never a count, never content.
     """
-    if not previous:
+    if previous is None:
         return []
     prev = {int(i): int(t) for i, t in previous}
     cur = {int(i): int(t) for i, t in current}
+    reasons: list[str] = []
+    if previous_total is not None and current_total is not None \
+            and current_total - previous_total > len(set(cur) - set(prev)):
+        reasons.append("more_new_comments_than_the_window_shows")
+    if not prev:
+        # No visible comment when last read: only the totals can say anything.
+        return reasons
     if not cur:
-        return ["window_now_empty"]
+        return ["window_now_empty"] + reasons
     newest_id = max(prev, key=lambda i: (prev[i], i))
     newest_at = prev[newest_id]
     oldest_seen = min(prev.values())
     cur_oldest = min(cur.values())
-    reasons: list[str] = []
     overlap = set(prev) & set(cur)
     if not overlap and newest_id not in cur:
         reasons.append("no_overlap_and_previous_newest_gone")
@@ -523,10 +529,6 @@ def compare_windows(previous: list[list[int]] | None, current: list[list[int]],
         # A comment created inside the span the last window covered, but not in it then: the
         # window is not purely arrival-ordered, so others like it may sit beyond it.
         reasons.append("comments_appeared_inside_previous_span")
-    if previous_total is not None and current_total is not None:
-        new_visible = len(set(cur) - set(prev))
-        if current_total - previous_total > new_visible:
-            reasons.append("more_new_comments_than_the_window_shows")
     return reasons
 
 
