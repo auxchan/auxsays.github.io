@@ -2,7 +2,24 @@ schema_version: 1
 note: Update-linked user reports. These are REAL community reports about a PowerPoint update whose exact
   build was never stated. They are shown to readers and are deliberately NOT counted toward consensus.
 reports:
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
+  classification: unresolved
+  confirmation_state: not_confirmed
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  report_date: '2026-11-19'
+  report_excerpt: 'Office desktop version: Microsoft 365, Current Channel, 20527.20196. Host: powerpoint
+    Office desktop version: Microsoft 365, Current Channel, 16.0.20527.20196 PowerPoint for Windows: custom
+    keyboard shortcuts are not invoked when focus is in the slide thumbnail pane # Provide...'
+  report_id: microsoft-powerpoint:dc2f4042ea6419c5
+  report_title: 'PowerPoint for Windows: custom keyboard shortcuts are not invoked when focus is in the
+    slide thumbnail pane'
+  source_family: OfficeDev GitHub issues
+  source_report_id: '7074'
+  source_type: github_officedev_issue
+  source_url: https://github.com/OfficeDev/office-js/issues/7074
+  strict_exclusion_reason: missing_powerpoint_version
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -17,7 +34,40 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6076075/powerpoint-not-working
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
+  classification: unresolved
+  confirmation_state: not_confirmed
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  report_date: '2026-11-19'
+  report_excerpt: 'Office desktop version: Microsoft 365 Apps, build 20527.20196 (x64). Host: powerpoint
+    Office desktop version: Microsoft 365 Apps, build 16.0.20527.20196 (x64) PowerPoint on Windows: OfficeRuntime.auth
+    is undefined in the OnDocumentOpened event-based runtime (SSO not possible)...'
+  report_id: microsoft-powerpoint:60fc50354410fcbf
+  report_title: 'PowerPoint on Windows: OfficeRuntime.auth is undefined in the OnDocumentOpened event-based
+    runtime (SSO not possible)'
+  source_family: OfficeDev GitHub issues
+  source_report_id: '7072'
+  source_type: github_officedev_issue
+  source_url: https://github.com/OfficeDev/office-js/issues/7072
+  strict_exclusion_reason: missing_powerpoint_version
+- captured_at: '2026-11-19T23:13:54Z'
+  classification: unresolved
+  confirmation_state: not_confirmed
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  report_date: '2026-11-18'
+  report_excerpt: POWER POINT IS NOT WORKING - Microsoft Q&A MY POWER POINT IS NOT WORKING WHAT IS THE
+    PROBLEM ITS NOT TAKING REPAIR ALSO WHAT IS THE ISSUSE OF MY POWER POINT| Hi @Guru Charan singh A I'm
+    sorry to hear you're experiencing issues with PowerPoint. Could you please provide a bit...
+  report_id: microsoft-powerpoint:a8ae94d568182e31
+  report_title: POWER POINT IS NOT WORKING - Microsoft Q&A
+  source_family: Microsoft Q&A
+  source_report_id: '6074357'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6074357/power-point-is-not-working
+  strict_exclusion_reason: missing_powerpoint_version
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -38,22 +88,6 @@ reports:
   product_id: microsoft-powerpoint
   promotion_eligible: true
   report_date: '2026-11-17'
-  report_excerpt: POWER POINT IS NOT WORKING - Microsoft Q&A MY POWER POINT IS NOT WORKING WHAT IS THE
-    PROBLEM ITS NOT TAKING REPAIR ALSO WHAT IS THE ISSUSE OF MY POWER POINT| Hi @Guru Charan singh A I'm
-    sorry to hear you're experiencing issues with PowerPoint. Could you please provide a bit...
-  report_id: microsoft-powerpoint:a8ae94d568182e31
-  report_title: POWER POINT IS NOT WORKING - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '6074357'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/6074357/power-point-is-not-working
-  strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
-  classification: unresolved
-  confirmation_state: not_confirmed
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  report_date: '2026-11-17'
   report_excerpt: iPadOS 27.2.1 will not display full slide in PPT on external monitor - Microsoft Q&A
     They are unlikely to contact you, but they do fix problems when there are enough reports.| Microsoft
     has not announced a PowerPoint update date for this iPadOS-specific HDMI problem; update...
@@ -64,7 +98,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6073242/ipados-27-2-1-will-not-display-full-slide-in-ppt-o
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -80,7 +114,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6073732/the-sun-button-in-powerpoint-is-not-working
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -95,7 +129,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6072652/powerpoint-not-open
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -111,7 +145,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6073231/the-powerpoint-presentation-button-is-not-working
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -128,7 +162,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5618252/keystroke-to-mute-a-playing-video-in-powerpoint-an
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -144,7 +178,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6052122/powerpoint-wont-save-to-pdf-or-save-sometimes
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -159,7 +193,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6070180/powerpoint-is-not-openining
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -175,7 +209,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6070877/i-cannot-open-the-powerpoint-file-an-error-occurre
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -191,7 +225,7 @@ reports:
   source_type: github_officedev_issue
   source_url: https://github.com/OfficeDev/office-js/issues/7054
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -208,7 +242,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6067337/my-power-point-is-not-working-i-have-tried-to-get
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -224,7 +258,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6066522/i-cant-open-powerpoint-it-is-showing-error-message
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -240,7 +274,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6065967/unable-to-open-powerpoint-on-my-school-acc
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -273,7 +307,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5973911/videos-not-playing-in-powerpoint-live
   strict_exclusion_reason: missing_exact_build
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -289,7 +323,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6058519/powerpoint-slides-are-not-opening
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -304,7 +338,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6057918/error-on-my-powerpoint
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -320,7 +354,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/1410588/can-t-export-pptx-to-pdf
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -336,7 +370,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6055765/powerpoint-needs-to-playback-music
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -404,7 +438,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6045986/external-hyperlinks-assigned-to-images-are-not-cli
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -421,7 +455,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6049633/powerpoint-for-mac-presenter-view-layout-changed-a
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -437,7 +471,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6050306/power-point-freezes
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -454,7 +488,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6048515/just-signed-up-for-updated-microsoft-365-but-still
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -470,7 +504,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6048747/urgent-issue-with-powerpoint
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -485,7 +519,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6048478/power-point-not-working
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -519,7 +553,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/6040067/office-online-viewer-view-officeapps-live-com-fail
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1361,7 +1395,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5947549/powerpoint-copilot-not-able-to-connect-to-image-se
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-15T21:29:39Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1376,7 +1410,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5915246/power-point-and-microsoft-office-not-working
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1408,7 +1442,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5910460/i-cant-open-my-power-point-presentation
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1523,7 +1557,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5778776/video-lagging-in-power-point
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1540,7 +1574,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://stackoverflow.com/questions/79867745/powerpoint-vsto-add-in-is-very-slow-when-creating-multiple-textboxes-after-openi
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1557,7 +1591,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5706825/powerpoint-vsto-add-in-is-very-slow-when-creating
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1574,7 +1608,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://superuser.com/questions/1933442/powerpoint-reset-reapplying-layout-moves-certain-text-boxes-horizontally-to
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1590,7 +1624,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://stackoverflow.com/questions/79802566/vba-powerpoint-sendkeys-fails-to-take-a-screenshot
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1606,7 +1640,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5566725/about-the-microsoft-power-point-app
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1622,7 +1656,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://stackoverflow.com/questions/79759151/powerpoint-vba-display-the-icons-task-pane-on-macos
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1639,7 +1673,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://stackoverflow.com/questions/79746502/is-there-any-way-or-method-to-convert-pdf-file-in-powerpoint-file-using-core-not
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1655,7 +1689,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://stackoverflow.com/questions/79740832/last-save-time-property-is-not-updated-when-powerpoint-file-is-saved-in-sharepoi
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1671,7 +1705,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://stackoverflow.com/questions/79678508/set-shapes-language-in-powerpoint-365-for-macos
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1687,7 +1721,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://stackoverflow.com/questions/79606751/apache-poi-4-1-2-powerpoint-file-corrupt-on-open-worked-with-apache-poi-3-17
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1703,7 +1737,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://superuser.com/questions/1888803/how-can-i-quickly-convert-a-large-pdf-file-with-many-pages-into-a-powerpoint-pp
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1720,7 +1754,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://stackoverflow.com/questions/79421749/powerpoint-vba-code-is-inconsistent-when-running-in-attempt-to-export-ole-object
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1736,7 +1770,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://superuser.com/questions/1873586/changing-the-navigating-tabbing-order-of-objects-in-powerpoint
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1784,7 +1818,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5424377/power-point-crashes-when-i-try-to-present-a-presen
   strict_exclusion_reason: vague_latest_update
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1800,7 +1834,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://superuser.com/questions/1863734/hanging-indents-not-working-in-powerpoint
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1816,7 +1850,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5356962/office-for-mac-and-my-ppt-files-are-damaged
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1832,7 +1866,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://superuser.com/questions/1862205/finding-ghost-fonts-in-powerpoint-to-replace-them
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1849,7 +1883,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5373559/error-message-were-sorry-something-went-wrong-that
   strict_exclusion_reason: vague_latest_update
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1865,7 +1899,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5366687/powerpoint-crashing-on-windows-11-when-starting-an
   strict_exclusion_reason: vague_latest_update
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1881,7 +1915,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://superuser.com/questions/1861349/powerpoint-not-using-embedded-fonts-from-pptx-file
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1901,7 +1935,7 @@ reports:
   associated_target_build: '18025.20096'
   associated_update_version: '2409'
   association_basis: report_date_inside_release_window
-  captured_at: '2026-11-19T09:59:01Z'
+  captured_at: '2026-11-19T23:13:54Z'
   classification: update_linked
   confirmation_state: not_confirmed
   issue_summary: export failure
@@ -1939,7 +1973,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5343336/powerpoint-2013-is-not-working-key
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1972,7 +2006,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5351747/in-a-specific-ppt-folder-it-is-impossible-to-open
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -1988,7 +2022,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5359638/compare-feature-in-powerpoint-not-working-as-inten
   strict_exclusion_reason: bare_version_no_context
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2005,7 +2039,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://stackoverflow.com/questions/78811272/powerpoint-emits-an-error-when-trying-to-save-a-file-that-opens-without-problems
   strict_exclusion_reason: missing_exact_build
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2021,7 +2055,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://superuser.com/questions/1842885/cant-write-in-a-textbox-i-have-designed-in-powerpoint-slidemaster
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2037,7 +2071,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://superuser.com/questions/1841749/powerpoint-crashes-tried-everything-i-know
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2053,7 +2087,7 @@ reports:
   source_type: stack_exchange_question
   source_url: https://superuser.com/questions/1841269/what-is-the-fastest-way-to-apply-all-default-table-properties-to-a-pasted-table
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2111,7 +2145,7 @@ reports:
     look
   update_link_reason: Reporter says the problem began after an Office or PowerPoint update.
   update_link_signal: explicit_update_attribution
-- captured_at: '2026-11-01T08:40:50Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2128,7 +2162,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5276706/power-point-embedded-with-power-bi-doesnt-go-to-sl
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2176,7 +2210,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5252446/cannot-open-power-point-file-it-is-not-blocked
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2242,7 +2276,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5222159/i-cannot-save-a-power-point-presentation-because-i
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2323,7 +2357,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5221349/ms-office-365-update-on-mac-not-working-for-power
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2339,7 +2373,7 @@ reports:
   source_type: github_officedev_issue
   source_url: https://github.com/OfficeDev/office-js/issues/2756
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2404,7 +2438,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5148885/power-point-freezes-and-causes-alt-tab-to-slow-dow
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2452,7 +2486,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5093593/power-point-performance-on-mac-os
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2468,7 +2502,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5094442/365-power-point-worksheet-object-edit-vs-open-not
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2500,7 +2534,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5105450/power-point-start-inking-is-enabled-but-does-not-w
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2581,7 +2615,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5054077/embedding-video-after-latest-power-point-update
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2630,7 +2664,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5032799/how-to-remove-error-message-powerpoint-found-a-pro
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2679,7 +2713,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5030713/problem-with-font-rendering-on-word-and-powerpoint
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2695,7 +2729,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5017197/ppt-files-not-opening-using-double-click-on-the-fi
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2743,7 +2777,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5003017/powerpoint-365-problem-with-copy-a-slide-with-vba
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2759,7 +2793,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/4988904/power-point-wont-save-or-save-as
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2839,7 +2873,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/4957650/power-point-presentation-keeps-shutting-down
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2952,7 +2986,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/4870485/combining-diacritics-positioned-incorrectly-in-pow
   strict_exclusion_reason: vague_latest_update
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2968,7 +3002,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/4885196/problem-adding-comments-to-power-point-2013
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -2985,7 +3019,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/4875657/power-point-with-audio-plays-fine-in-ppt-but-gets
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-10-31T01:14:18Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -3129,7 +3163,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/4801893/no-text-converter-is-installed-for-this-type-of-fi
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
@@ -3162,7 +3196,7 @@ reports:
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/4766879/want-to-retreive-a-power-point-file-lost-after-err
   strict_exclusion_reason: missing_powerpoint_version
-- captured_at: '2026-11-19T09:59:01Z'
+- captured_at: '2026-11-19T23:13:54Z'
   classification: unresolved
   confirmation_state: not_confirmed
   product_id: microsoft-powerpoint
