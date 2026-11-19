@@ -626,7 +626,7 @@ auxsays/scripts/tests/test_matched_span_retention.py = 20
 # other collectors untouched, no backfill on a throwaway store with counts/verdicts/maturity equal,
 # the privacy rules, and the shadow producer's switch OFF with the excerpt dependency beside it.
 # Reads the live store and records; writes only to a temporary directory.
-auxsays/scripts/tests/test_version_centred_excerpt.py = 69
+auxsays/scripts/tests/test_version_centred_excerpt.py = 70
 
 # --- writer-lane governance and the methodology Notes render -----------------------
 # Both were added with the writer-queue repair, and both are proven non-vacuous by MEASUREMENT

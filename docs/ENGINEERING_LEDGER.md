@@ -6475,7 +6475,7 @@ backfilled.
 - Windows and Teams are held for the Microsoft Learn / Tech Community rights decisions. PowerPoint is
   skipped: its orchestrator re-reads a rejected row's excerpt as acceptance input.
 
-Pinned by `tests/test_version_centred_excerpt.py` (69 checks).
+Pinned by `tests/test_version_centred_excerpt.py` (70 checks).
 
 **Reopen if** a counted Acrobat or Premiere row written after this change from an opening-post candidate
 names its version in the body, its head did not show it, and its excerpt omits it; or any acceptance

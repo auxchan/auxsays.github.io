@@ -601,36 +601,43 @@ def part_i() -> None:
     keeps_out("I4 a sign-off and the name after it stay out",
               FILLER * 3 + f"After updating to {V} the form tool crashes. Thanks in advance, Maria Lopez",
               "Maria", "Thanks")
-    keeps_out("I5 a dash signature stays out",
-              FILLER * 3 + f"After updating to {V} the form tool crashes when signing -- Bob Jones", "Bob")
-    keeps_out("I6 an unrecognised sign-off after the version's sentence stays out (the tail rule)",
+    # The version's own sentence runs into the tail here, so the tail rule alone would let the
+    # signature through: the dash rule is what keeps it out.
+    keeps_out("I5 a dash signature closing the version's own sentence stays out",
+              FILLER * 3 + f"After updating to {V} the form tool crashes every time I sign a contract in the "
+              "office on the second floor -- Bob Jones.", "Bob")
+    # Far from the post's end, so only the sign-off rule stops the window at "thanks".
+    keeps_out("I6 a thanks to a named person after the version stays out",
+              FILLER * 3 + f"After updating to {V} the form tool crashes every time, thanks to Maria Lopez for "
+              "checking it on her desk. " + FILLER, "Maria")
+    keeps_out("I7 an unrecognised sign-off after the version's sentence stays out (the tail rule)",
               FILLER * 3 + f"After updating to {V} the form tool crashes. Bob from accounting", "Bob")
-    keeps_out("I7 a signature block in the post's last characters stays out when the version is earlier",
+    keeps_out("I8 a signature block in the post's last characters stays out when the version is earlier",
               FILLER * 4 + f"After updating to {V} the form tool crashes. " + FILLER
               + "Regards, Maria Lopez, IT, Contoso Ltd.", "Maria", "Contoso")
-    keeps_out("I8 a 'Sent from my' line stays out",
+    keeps_out("I9 a 'Sent from my' line stays out",
               FILLER * 3 + f"After updating to {V} the form tool crashes. Sent from my phone", "phone")
-    keeps_out("I9 a sign-off with no sentence end before it stays out",
+    keeps_out("I10 a sign-off with no sentence end before it stays out",
               FILLER * 3 + f"After updating to {V} the form tool crashes cheers Bob", "Bob")
-    keeps_out("I10 an @mention after the version stays out",
+    keeps_out("I11 an @mention after the version stays out",
               FILLER * 3 + f"After updating to {V} the form tool crashes, same as @kim_r reported on her desk. "
               + FILLER, "kim_r")
-    keeps_out("I11 a sign-off BEFORE a postscript that names the version stays out",
+    keeps_out("I12 a sign-off BEFORE a postscript that names the version stays out",
               FILLER * 3 + f"The form tool crashes when I sign. Thanks, Maria Lopez. Edit: the version is {V} on "
               "every desk here. " + FILLER, "Maria", "Thanks")
-    keeps_out("I12 ... also when no sentence end separates that sign-off from the version",
+    keeps_out("I13 ... also when no sentence end separates that sign-off from the version",
               FILLER * 3 + f"The form tool crashes when I sign. Regards Maria Lopez PS version {V} on every desk "
               "here. " + FILLER, "Maria", "Regards")
     t = FILLER * 3 + f"Contact {V}@example.com for the crash log please, the tool crashes."
     s, e = span(t, V)
-    check("I13 an occurrence inside an e-mail address keeps the head (no window is cut through it)",
+    check("I14 an occurrence inside an e-mail address keeps the head (no window is cut through it)",
           base.excerpt_at(t, s, e) == base.excerpt(t))
     t = f"Hi Maria, Adobe Acrobat Reader {V} crashes. " + FILLER
     s, e = span(t, V)
-    check("I14 out of scope, stated: a head the change does not touch is stored as today, names included",
+    check("I15 out of scope, stated: a head the change does not touch is stored as today, names included",
           base.excerpt_at(t, s, e) == base.excerpt(t) and "Maria" in base.excerpt(t))
     t = FILLER * 2 + f"After updating to {V} the form tool crashes and I see an error. " + FILLER
-    check("I15 a window with nothing to keep out still uses (almost) the whole cap",
+    check("I16 a window with nothing to keep out still uses (almost) the whole cap",
           V in win(t) and len(win(t)) >= 260, str(len(win(t))))
 
 
