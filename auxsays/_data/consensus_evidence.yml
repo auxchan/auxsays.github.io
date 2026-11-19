@@ -75693,3 +75693,3611 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: comfyui-0-46-0-github-issue-16848
+  product_id: comfyui
+  update_version: 0.46.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-11-18'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.46.0
+  matched_field: report_text
+  matched_context: '...ark 1.3.1 - lazy_loader 0.4 - llama_cpp_python 0.3.42 - llvmlite 0.46.0 - loguru 0.7.3 - lxml 6.0.2 - mako 1.3.10 - manifold3d 3.3....'
+- id: comfyui-0-45-0-github-issue-17814
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17814
+  parent_title: 'TextGenerateV2 with a Qwen3.5 w4a8 text encoder fails on Turing: "Expected query, key, and value to have the same dtype" (bf16 query vs fp32 KV cache)'
+  report_title: 'TextGenerateV2 with a Qwen3.5 w4a8 text encoder fails on Turing: "Expected query, key, and value to have the same dtype" (bf16 query vs fp32 KV cache)'
+  report_text_excerpt: 'TextGenerateV2 with a Qwen3.5 w4a8 text encoder fails on Turing: "Expected query, key, and value to have the same dtype" (bf16 query vs fp32 KV cache) Running the prompt enhancer (TextGenerateV2) in the `image_moss_image_t2i` template fails on an RTX 2070 Super. Normal image...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-18'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...tion.forward` (line 540) → `scaled_dot_product_attention`. **Setup** - ComfyUI 0.45.0 (ee34406f5), PyTorch 2.11.0+cu128, Windows - RTX 2070 Super, 8GB (Turing, so `s...'
+- id: comfyui-0-45-0-github-issue-17807
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17807
+  parent_title: 'PH3ImageConditioning: sporadic `execution_error` in ~19% of batch runs — identical re-runs succeed'
+  report_title: 'PH3ImageConditioning: sporadic `execution_error` in ~19% of batch runs — identical re-runs succeed'
+  report_text_excerpt: 'PH3ImageConditioning: sporadic `execution_error` in ~19% of batch runs — identical re-runs succeed ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-18'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...dditional data would be most useful. ``` ### Other ### Environment - ComfyUI 0.45.0 (isolated instance, port 8196), Windows - P-H3-Image, full model, int8 convrot...'
+- id: comfyui-0-45-0-github-issue-17753
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17753
+  parent_title: 'ROCm: uploading mmap-backed quantized weights creates large private CPU-memory copies'
+  report_title: 'ROCm: uploading mmap-backed quantized weights creates large private CPU-memory copies'
+  report_text_excerpt: 'ROCm: uploading mmap-backed quantized weights creates large private CPU-memory copies ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-14'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: linux
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...o workflow, with all custom nodes disabled. Measurements on unmodified ComfyUI v0.45.0 showed approximately: - 19.43 GiB of private anonymous memory in the UNet file...'
+- id: comfyui-0-45-0-github-issue-17739
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17739
+  parent_title: 'Windows: repeated psutil.virtual_memory() queries dominate slow generation; query latency drops ~20× after reboot'
+  report_title: 'Windows: repeated psutil.virtual_memory() queries dominate slow generation; query latency drops ~20× after reboot'
+  report_text_excerpt: 'Windows: repeated psutil.virtual_memory() queries dominate slow generation; query latency drops ~20× after reboot ### Summary On Windows, generation intermittently becomes extremely slow while GPU utilization/power are low. During one slow interval, a 10-second py-spy capture...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...X 1650 - Embedded Python 3.12.10 - PyTorch 2.7.1+cu128 - psutil 7.0.0 - ComfyUI 0.45.0 during the 10-second capture; slowdown was also observed before updating, on 0....'
+- id: comfyui-0-45-0-github-issue-17736
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17736
+  parent_title: 'SeedVR2 VAE on ROCm: the fp16 channels-last path is about 3x slower and 2-3x larger than the standard-layout path when MIOpen is off'
+  report_title: 'SeedVR2 VAE on ROCm: the fp16 channels-last path is about 3x slower and 2-3x larger than the standard-layout path when MIOpen is off'
+  report_text_excerpt: 'SeedVR2 VAE on ROCm: the fp16 channels-last path is about 3x slower and 2-3x larger than the standard-layout path when MIOpen is off ### Current behavior - On ROCm with MIOpen off (the default on RDNA3 and newer) and without `--fast fp16_accumulation`, the SeedVR2 VAE''s fp16...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...Strix Halo, Radeon 8060S (gfx1151), 105 GiB GPU-visible memory, Linux, ComfyUI v0.45.0, torch 2.14.0+rocm10.1.0, comfy-kitchen 0.2.41, MIOpen off. `comfy.sd.VAE` with...'
+- id: comfyui-0-45-0-github-issue-17732
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17732
+  parent_title: RAM pressure cache evicts the running workflow's loaded models when they aren't dynamic (e.g. --highvram), so every prompt reloads them from disk
+  report_title: RAM pressure cache evicts the running workflow's loaded models when they aren't dynamic (e.g. --highvram), so every prompt reloads them from disk
+  report_text_excerpt: 'RAM pressure cache evicts the running workflow''s loaded models when they aren''t dynamic (e.g. --highvram), so every prompt reloads them from disk ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (reproduced below with `--disable-all-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...AM [INFO] Device: cuda:0 AMD Radeon RX 7800 XT : native [INFO] ComfyUI version: 0.45.0 [INFO] Using RAM pressure cache. [INFO] got prompt [INFO] CLIP/text encoder mod...'
+- id: comfyui-0-45-0-github-issue-17713
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17713
+  parent_title: 'MiniMax H3: token refiner gets fp32 q/k beside a bf16 v (sage refuses it), and preprocess_text_embeds drops transformer_options'
+  report_title: 'MiniMax H3: token refiner gets fp32 q/k beside a bf16 v (sage refuses it), and preprocess_text_embeds drops transformer_options'
+  report_text_excerpt: 'MiniMax H3: token refiner gets fp32 q/k beside a bf16 v (sage refuses it), and preprocess_text_embeds drops transformer_options # MiniMax H3: the token refiner hands attention fp32 q/k beside a bf16 v, and `preprocess_text_embeds` drops `transformer_options` ComfyUI 0.45.0...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...ide a bf16 v, and `preprocess_text_embeds` drops `transformer_options` ComfyUI 0.45.0 (`a592c0a65`), torch 2.16.0a0+rocm10.3.0a20261110 (gfx1101), sageattention 2.2....'
+- id: comfyui-0-45-0-github-issue-17704
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17704
+  parent_title: 'Dynamic VRAM: a LoRA patch on a module without comfy_cast_weights is silently dropped (Qwen-Image 2.1 txt_in.text_norm)'
+  report_title: 'Dynamic VRAM: a LoRA patch on a module without comfy_cast_weights is silently dropped (Qwen-Image 2.1 txt_in.text_norm)'
+  report_text_excerpt: 'Dynamic VRAM: a LoRA patch on a module without comfy_cast_weights is silently dropped (Qwen-Image 2.1 txt_in.text_norm) ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (every run below used `--disable-all-custom-nodes`) ### Expected...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: linux
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...patches attached` for the `in_layer` patch. ### Steps to Reproduce 1. ComfyUI 0.45.0, started with `--disable-all-custom-nodes`. Models: `qwen_image_2.1_bf16.safete...'
+- id: comfyui-0-45-0-github-issue-17703
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17703
+  parent_title: 'MiniMax H3: MLP runs fc1 on all tokens at once (6.3 GB at 15 s 1344x768), OOM on 12 GB; token-chunked MLP gives identical output'
+  report_title: 'MiniMax H3: MLP runs fc1 on all tokens at once (6.3 GB at 15 s 1344x768), OOM on 12 GB; token-chunked MLP gives identical output'
+  report_text_excerpt: 'MiniMax H3: MLP runs fc1 on all tokens at once (6.3 GB at 15 s 1344x768), OOM on 12 GB; token-chunked MLP gives identical output `MLP.forward` (`comfy/ldm/minimax/model.py`) runs `fc1` on every token at once: `comfy.ops.linear_input_act(self.fc2, self.fc1(x), "swiglu")`. `fc1`...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...`norm1` stays referenced while `norm2`''s `h` is built). Environment: ComfyUI v0.45.0 (code also checked unchanged on master b2f6707443), comfy-aimdo 0.6.0, comfy-ki...'
+- id: comfyui-0-45-0-github-issue-17702
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17702
+  parent_title: 'Dynamic VRAM: second offload stream''s cast buffer first grows after block 0''s activations, "VRAM grow failed: 424159232 bytes" on 15 s FastH3 I2V/R2V'
+  report_title: 'Dynamic VRAM: second offload stream''s cast buffer first grows after block 0''s activations, "VRAM grow failed: 424159232 bytes" on 15 s FastH3 I2V/R2V'
+  report_text_excerpt: 'Dynamic VRAM: second offload stream''s cast buffer first grows after block 0''s activations, "VRAM grow failed: 424159232 bytes" on 15 s FastH3 I2V/R2V With Dynamic VRAM, each async offload stream gets its own aimdo cast buffer (`get_aimdo_cast_buffer` in...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...rch_alloc=541MB torch_reserved=576MB cuda_free=148MB ``` Environment: ComfyUI v0.45.0 (code also checked unchanged on master b2f6707443), comfy-aimdo 0.6.0, comfy-ki...'
+- id: comfyui-0-45-0-github-issue-17701
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17701
+  parent_title: 'MiniMax H3: malloc graph keeps its VRAM between sampling steps, so step 2 OOMs on model_output.float() with ~28 MB free'
+  report_title: 'MiniMax H3: malloc graph keeps its VRAM between sampling steps, so step 2 OOMs on model_output.float() with ~28 MB free'
+  report_text_excerpt: 'MiniMax H3: malloc graph keeps its VRAM between sampling steps, so step 2 OOMs on model_output.float() with ~28 MB free `MiniMaxH3Model.forward` (`comfy/ldm/minimax/model.py`) calls `comfy.model_prefetch.malloc_graph_begin()` around the blocks, but `cleanup_malloc_graph()`...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: linux
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...showed `vbar_mb=0`, so the memory was not model weights. Environment: ComfyUI v0.45.0 (code also checked unchanged on master b2f6707443), comfy-aimdo 0.6.0, comfy-ki...'
+- id: comfyui-0-45-0-github-issue-17700
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17700
+  parent_title: 'MiniMax H3 VSA: RoPE table cache misses every step, so step 2 of a long sparse-attention run OOMs in vsa_rope_freqs'
+  report_title: 'MiniMax H3 VSA: RoPE table cache misses every step, so step 2 of a long sparse-attention run OOMs in vsa_rope_freqs'
+  report_text_excerpt: 'MiniMax H3 VSA: RoPE table cache misses every step, so step 2 of a long sparse-attention run OOMs in vsa_rope_freqs `SparseAttnPatch.vsa_rope_freqs` (`comfy_extras/nodes_sparse_attention.py`) caches the padded RoPE table keyed on `weakref(rope_freqs)`: ```python hit =...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...evice 0 would exceed allowed memory. (out of memory) ``` Environment: ComfyUI v0.45.0 (code also checked unchanged on master b2f6707443), comfy-aimdo 0.6.0, comfy-ki...'
+- id: comfyui-0-45-0-github-issue-17690
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17690
+  parent_title: 'Dynamic VRAM applies LoRAs in the weight''s dtype: on bf16 models, part of the LoRA rounds away'
+  report_title: 'Dynamic VRAM applies LoRAs in the weight''s dtype: on bf16 models, part of the LoRA rounds away'
+  report_text_excerpt: 'Dynamic VRAM applies LoRAs in the weight''s dtype: on bf16 models, part of the LoRA rounds away **What happens** With dynamic VRAM on (the default), a LoRA on a bf16-compute model is applied weaker than with `--disable-dynamic-vram`. The same workflow, seed and LoRA give...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-11'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.45.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...oes) and cast the result back, instead of `weight.dtype`. **Version** ComfyUI 0.45.0 (4d64a8b, 11 Nov 2026), Windows, RTX 5090, PyTorch CUDA build. Reproduced with...'
+- id: comfyui-0-45-0-github-issue-17728
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17728
+  parent_title: Expose committed tokens during generation, so custom nodes can stream text without disabling MTP
+  report_title: Expose committed tokens during generation, so custom nodes can stream text without disabling MTP
+  report_text_excerpt: 'Expose committed tokens during generation, so custom nodes can stream text without disabling MTP _Before submitting_ - _Latest version: my local install is 0.43.0, but everything below was checked against master at 0.45.0 — line numbers and quoted code are from there, not from...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...my local install is 0.43.0, but everything below was checked against master at 0.45.0 — line numbers and quoted code are from there, not from my copy._ - _Not alrea...'
+- id: comfyui-0-45-0-github-issue-17723
+  product_id: comfyui
+  update_version: 0.45.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17723
+  parent_title: Adaptive Projected Guidance changes the result at cfg 1.0
+  report_title: Adaptive Projected Guidance changes the result at cfg 1.0
+  report_text_excerpt: 'Adaptive Projected Guidance changes the result at cfg 1.0 ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-12'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: macos
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.45.0
+  matched_field: report_text
+  matched_context: '...(eta=0.0, norm_threshold=5.0, momentum=0.5): x0=1.0000 ``` master @ c5751c81 (v0.45.0), macOS arm64, Python 3.12.13, torch 2.15.0 CPU. ### Other The cause is the g...'
+- id: comfyui-0-44-0-github-issue-17628
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17628
+  parent_title: '[Bug] Qwen Image 2.1 outputs purple noise after a short period of inactivity'
+  report_title: '[Bug] Qwen Image 2.1 outputs purple noise after a short period of inactivity'
+  report_text_excerpt: '[Bug] Qwen Image 2.1 outputs purple noise after a short period of inactivity ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.44.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...rocessor: Intel Core i7-13700KF - Memory: 128GB DDR5 5600MT/s 2.) Run ComfyUI v0.44.0 with a Qwen Image 2.1 workflow, and install/enable/configure the Image Generati...'
+- id: comfyui-0-44-0-github-issue-17626
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17626
+  parent_title: '[Bug] Video loading crashes with AIMDO host buffer mmap failure and float32 reshape error'
+  report_title: '[Bug] Video loading crashes with AIMDO host buffer mmap failure and float32 reshape error'
+  report_text_excerpt: '[Bug] Video loading crashes with AIMDO host buffer mmap failure and float32 reshape error ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.44.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...onda, Inc. | (main, Oct 1 2026, 20:20:25) [GCC 14.3.0] [INFO] ComfyUI version: 0.44.0 [INFO] comfy-aimdo version: 0.6.0 [INFO] comfy-kitchen version: 0.2.41 [INFO] c...'
+- id: comfyui-0-44-0-github-issue-17552
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17552
+  parent_title: Execution cache silently replays stale outputs when a reference image file changes (autogrow images inputs are not folded into downstream cache signatures)
+  report_title: Execution cache silently replays stale outputs when a reference image file changes (autogrow images inputs are not folded into downstream cache signatures)
+  report_text_excerpt: 'Execution cache silently replays stale outputs when a reference image file changes (autogrow images inputs are not folded into downstream cache signatures) ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists — the repro graph below contains...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-05'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.44.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: linux
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...Steps to Reproduce (minimal, core-only, ~40 s of GPU) Environment: ComfyUI **v0.44.0** (Python 3.12.3), Linux, CUDA (NVIDIA RTX PRO 6000 Blackwell Workstation Editi...'
+- id: comfyui-0-44-0-github-issue-17545
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17545
+  parent_title: Crash when using UNetSelfAttentionMultiply node with pinned memory enabled
+  report_title: Crash when using UNetSelfAttentionMultiply node with pinned memory enabled
+  report_text_excerpt: 'Crash when using UNetSelfAttentionMultiply node with pinned memory enabled ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-05'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.44.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...ion: 3.11.13 (main, Jun 5 2025, 13:12:00) [GCC 11.2.0] [INFO] ComfyUI version: 0.44.0 [INFO] comfy-aimdo version: 0.6.0 [INFO] comfy-kitchen version: 0.2.40 [INFO] c...'
+- id: comfyui-0-44-0-github-issue-17766
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17766
+  parent_title: 节点在执行的过程中报错(新手完全不懂代码求大佬指点）
+  report_title: 节点在执行的过程中报错(新手完全不懂代码求大佬指点）
+  report_text_excerpt: '节点在执行的过程中报错(新手完全不懂代码求大佬指点） ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help) ###...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-15'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.44.0
+  match_basis: core_version_declaration
+  counted: false
+  exclusion_reason: custom_node_in_failure_path
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...om sageattention import sageattn ## System Information - **ComfyUI Version:** 0.44.0 - **Arguments:** ComfyUI\main.py --windows-standalone-build --listen 127.0.0.1...'
+- id: comfyui-0-44-0-github-issue-17637
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17637
+  parent_title: Marigold V2 blueprints in `blueprints/` still use `ModelSamplingAuraFlow` sampling `flow`; albedo blueprint outputs near-uniform grey
+  report_title: Marigold V2 blueprints in `blueprints/` still use `ModelSamplingAuraFlow` sampling `flow`; albedo blueprint outputs near-uniform grey
+  report_text_excerpt: 'Marigold V2 blueprints in `blueprints/` still use `ModelSamplingAuraFlow` sampling `flow`; albedo blueprint outputs near-uniform grey ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...(`086099f`). The three blueprint files are byte-identical (sha256) in v0.43.1, v0.44.0, v0.44.2 and master at `fca60fe` (2026-11-09). - On the same install, the bundl...'
+- id: comfyui-0-44-0-github-issue-17616
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17616
+  parent_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_text_excerpt: 'Version mismatch in older stable releases (including v0.14.2 Windows portable) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...ersion.py) (May 3, commit `52baf57d`) declares `0.20.1`. Later tags, through `v0.44.0`, appear consistent. So this looks like a recurring historical release issue ra...'
+- id: comfyui-0-44-0-github-issue-17612
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17612
+  parent_title: '[BUG][v0.43.0 and above] Flux2 fused VAE + `--fast fp16_accumulation` crashes on Turing/sm_75 (CUTLASS `Mma<16,8,16>` / CUDA 719)'
+  report_title: '[BUG][v0.43.0 and above] Flux2 fused VAE + `--fast fp16_accumulation` crashes on Turing/sm_75 (CUTLASS `Mma<16,8,16>` / CUDA 719)'
+  report_text_excerpt: '[BUG][v0.43.0 and above] Flux2 fused VAE + `--fast fp16_accumulation` crashes on Turing/sm_75 (CUTLASS `Mma<16,8,16>` / CUDA 719) # Flux2 fused VAE + `--fast fp16_accumulation` crashes on Turing/sm_75 (CUTLASS `Mma<16,8,16>` / CUDA 719) ## Summary On **NVIDIA TITAN RTX...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...| 0.2.40 / 0.6.0 | on | **crash** | | v0.43.0 | 0.2.40 / 0.6.0 | off | OK | | v0.44.0 | 0.2.41 / 0.6.0 | on | **crash** | Same machine. Not a controlled single-seed...'
+- id: comfyui-0-44-0-github-issue-17610
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17610
+  parent_title: 'TextGenerate crashes on Qwen3-VL 8B since #17361: linear(): argument ''weight'' must be Tensor, not NoneType'
+  report_title: 'TextGenerate crashes on Qwen3-VL 8B since #17361: linear(): argument ''weight'' must be Tensor, not NoneType'
+  report_text_excerpt: 'TextGenerate crashes on Qwen3-VL 8B since #17361: linear(): argument ''weight'' must be Tensor, not NoneType ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists Tested on a clean checkout of 1332fabfc, started with `python main.py --disable-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...Behavior `TextGenerate` returns the generated text, as it did before #17361 (v0.44.0 / 2c75dc1b). ### Actual Behavior `TextGenerate` fails on the first generation...'
+- id: comfyui-0-44-0-github-issue-17597
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17597
+  parent_title: Unload leaks int8_convrot (comfy-kitchen) weights — VRAM/RAM never released, next job OOMs (ROCm; plain fp8/fp16 unloads cleanly)
+  report_title: Unload leaks int8_convrot (comfy-kitchen) weights — VRAM/RAM never released, next job OOMs (ROCm; plain fp8/fp16 unloads cleanly)
+  report_text_excerpt: 'Unload leaks int8_convrot (comfy-kitchen) weights — VRAM/RAM never released, next job OOMs (ROCm; plain fp8/fp16 unloads cleanly) ## Environment - GPU: RX 7900 XTX (gfx1100), ROCm 6.4, torch 2.9.1+rocm6.4 - OS: Nobara Fedora (kernel 7.3.1) - ComfyUI **v0.41.0 and v0.44.0 —...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-07'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: linux
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...torch 2.9.1+rocm6.4 - OS: Nobara Fedora (kernel 7.3.1) - ComfyUI **v0.41.0 and v0.44.0 — both reproduce** - comfy-aimdo 0.5.6 and 0.6.0 — both reproduce - Repro model...'
+- id: comfyui-0-44-0-github-issue-17593
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17593
+  parent_title: Asset scan aborts with SQLITE_CANTOPEN on a transient WAL handle race (no retry in _write_in_batches)
+  report_title: Asset scan aborts with SQLITE_CANTOPEN on a transient WAL handle race (no retry in _write_in_batches)
+  report_text_excerpt: 'Asset scan aborts with SQLITE_CANTOPEN on a transient WAL handle race (no retry in _write_in_batches) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-07'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...an succeeds. ### Actual Behavior ComfyUI启动时发生了这个行为！ ### Steps to Reproduce v0.44.0时发生过，我交给Agent修复过，但是ComfyUI 从 v0.44.0 → v0.44.2，这个问题又出现了！日志里反复提到"assets","unable...'
+- id: comfyui-0-44-0-github-issue-17592
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17592
+  parent_title: help with trellis2
+  report_title: help with trellis2
+  report_text_excerpt: 'help with trellis2 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help) ### Your...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-07'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...ror raise head_call_error ``` ## System Information - **ComfyUI Version:** 0.44.0 - **Arguments:** ComfyUI\main.py --windows-standalone-build --use-flash-attenti...'
+- id: comfyui-0-44-0-github-issue-17537
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17537
+  parent_title: 'MiniMax-H3 latent upscaler model issue RuntimeError: shape mismatch: value tensor of shape [450, 96] cannot be broadcast to indexing result of shape [1058, 96] is:issue'
+  report_title: 'MiniMax-H3 latent upscaler model issue RuntimeError: shape mismatch: value tensor of shape [450, 96] cannot be broadcast to indexing result of shape [1058, 96] is:issue'
+  report_text_excerpt: 'MiniMax-H3 latent upscaler model issue RuntimeError: shape mismatch: value tensor of shape [450, 96] cannot be broadcast to indexing result of shape [1058, 96] is:issue ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.44.0
+  match_basis: core_version_declaration
+  counted: false
+  exclusion_reason: custom_node_in_failure_path
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...~~~~~~~~~~~~~~^^^^^^^^^^^^^ ## System Information - **ComfyUI Version:** 0.44.0 - **Arguments:** ComfyUI\main.py --feature-flag show_signin_button=true --featu...'
+- id: comfyui-0-44-0-github-issue-17533
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17533
+  parent_title: backend crash when using the new idol workflow
+  report_title: backend crash when using the new idol workflow
+  report_text_excerpt: 'backend crash when using the new idol workflow ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled)...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.44.0
+  match_basis: core_version_declaration
+  counted: false
+  exclusion_reason: custom_node_in_failure_path
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...ain, Feb 12 2026, 00:38:53) [MSC v.1944 64 bit (AMD64)] [INFO] ComfyUI version: 0.44.0 [INFO] comfy-aimdo version: 0.6.0 [INFO] comfy-kitchen version: 0.2.40 [INFO] c...'
+- id: comfyui-0-44-0-github-issue-17523
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17523
+  parent_title: 'Updated to ComfyUI v0.44.0: Krea2Turbo images with same seed/parameters now have major detail loss'
+  report_title: 'Updated to ComfyUI v0.44.0: Krea2Turbo images with same seed/parameters now have major detail loss'
+  report_text_excerpt: 'Updated to ComfyUI v0.44.0: Krea2Turbo images with same seed/parameters now have major detail loss I''m using SwarmUI. I updated to ComfyUI v0.44.0 and now all of my old images created with Krea2 Turbo lose all details and the images aren''t identical with the same seed and...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.44.0
+  match_basis: core_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: 'Updated to ComfyUI v0.44.0: Krea2Turbo images with same seed/parameters now have major detail loss I''m usi...'
+- id: comfyui-0-44-0-github-issue-17515
+  product_id: comfyui
+  update_version: 0.44.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17515
+  parent_title: 'SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang'
+  report_title: 'SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang'
+  report_text_excerpt: 'SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang Native SeedVR2 video upscaling (x2) crashes with `CUDA error: an illegal memory access was encountered` once the input video passes a certain total size. It...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-11-04'
+  source_date_pass: false
+  patch_version_matched: true
+  matched_version: 0.44.0
+  match_basis: core_version_text
+  counted: false
+  exclusion_reason: source_date_before_or_unverified_against_release
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.44.0
+  matched_field: report_text
+  matched_context: '...fyUI from git with the Linux PyTorch wheel). It happens on ComfyUI v0.43.0 and v0.44.0, with both an int8 and an fp8 checkpoint, and on two drivers. No launch flag fi...'
+- id: comfyui-0-43-0-github-issue-17656
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17656
+  parent_title: 'Dynamic VRAM (comfy-aimdo 0.6.0) on Windows/AMD: ~2.4 GB of freshly loaded MOSSImage weights occasionally land in shared GPU memory despite ~6 GB free VRAM, sampling becomes ~5x slower (random, ~12% of runs)'
+  report_title: 'Dynamic VRAM (comfy-aimdo 0.6.0) on Windows/AMD: ~2.4 GB of freshly loaded MOSSImage weights occasionally land in shared GPU memory despite ~6 GB free VRAM, sampling becomes ~5x slower (random, ~12% of runs)'
+  report_text_excerpt: 'Dynamic VRAM (comfy-aimdo 0.6.0) on Windows/AMD: ~2.4 GB of freshly loaded MOSSImage weights occasionally land in shared GPU memory despite ~6 GB free VRAM, sampling becomes ~5x slower (random, ~12% of runs) # Environment - ComfyUI 0.43.0, Windows 10 Pro (10.0.19045), Python...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...RAM, sampling becomes ~5x slower (random, ~12% of runs) # Environment - ComfyUI 0.43.0, Windows 10 Pro (10.0.19045), Python 3.12.9 - PyTorch 2.14.0+rocm10.1.0, ROCm v...'
+- id: comfyui-0-43-0-github-issue-17559
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17559
+  parent_title: 'Bug Report: comfy_aimdo (aimdo.dll) Stack Overflow and Silent Process Termination during Heavy Video Generation (MiniMax/LTX)'
+  report_title: 'Bug Report: comfy_aimdo (aimdo.dll) Stack Overflow and Silent Process Termination during Heavy Video Generation (MiniMax/LTX)'
+  report_text_excerpt: 'Bug Report: comfy_aimdo (aimdo.dll) Stack Overflow and Silent Process Termination during Heavy Video Generation (MiniMax/LTX) SHORT ISSUE: Description When running heavy video generation workloads (such as MiniMax or LTX) on NVIDIA RTX 50-series hardware (specifically tested...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-05'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...Portable Build) GPU: NVIDIA GeForce RTX 5060 Ti (16GB VRAM) ComfyUI Version: 0.43.0 comfy-aimdo Version: 0.6.0 System Memory & Paging: Distributed Windows Page...'
+- id: comfyui-0-43-0-github-issue-17516
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17516
+  parent_title: RemeshMesh clips meshes outside a fixed [-0.5, 0.5] cube (breaks Hunyuan3D 2.1 output)
+  report_title: RemeshMesh clips meshes outside a fixed [-0.5, 0.5] cube (breaks Hunyuan3D 2.1 output)
+  report_text_excerpt: 'RemeshMesh clips meshes outside a fixed [-0.5, 0.5] cube (breaks Hunyuan3D 2.1 output) ### What happens `RemeshMesh` (comfy_extras/nodes_mesh_postprocess.py) always passes a fixed domain to `remesh_narrow_band_dc`: ```python # Fixed [-0.5,0.5] cube domain (matches...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...with `DecimateMesh` alone on the same mesh: that one is whole. Seen on ComfyUI 0.43.0. The same lines are on master (they came with #16805). ### Workaround Scale th...'
+- id: comfyui-0-43-0-github-issue-17515
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17515
+  parent_title: 'SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang'
+  report_title: 'SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang'
+  report_text_excerpt: 'SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang Native SeedVR2 video upscaling (x2) crashes with `CUDA error: an illegal memory access was encountered` once the input video passes a certain total size. It...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...er WSL2, ComfyUI from git with the Linux PyTorch wheel). It happens on ComfyUI v0.43.0 and v0.44.0, with both an int8 and an fp8 checkpoint, and on two drivers. No la...'
+- id: comfyui-0-43-0-github-issue-17500
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17500
+  parent_title: Sub-quadratic attention is ~10x slower on long sequences on RDNA2 (gfx1030) because the key passed to bmm is non-contiguous
+  report_title: Sub-quadratic attention is ~10x slower on long sequences on RDNA2 (gfx1030) because the key passed to bmm is non-contiguous
+  report_text_excerpt: 'Sub-quadratic attention is ~10x slower on long sequences on RDNA2 (gfx1030) because the key passed to bmm is non-contiguous ### Summary `attention_sub_quad()` hands `efficient_dot_product_attention()` a key tensor that is a strided view (`permute(...).reshape(...)` in the...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...m10.0.0 (HIP 7.15.26333), AMD `whl-next` wheels with `device-gfx1030` - ComfyUI 0.43.0 (bb878b9e); the same code is on current `master` (`comfy/ldm/modules/attention....'
+- id: comfyui-0-43-0-github-issue-17495
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17495
+  parent_title: 'Windows: web UI hangs after ~2h (Proactor self-pipe WinError 121) and after rapid asset browsing (native sendfile)'
+  report_title: 'Windows: web UI hangs after ~2h (Proactor self-pipe WinError 121) and after rapid asset browsing (native sendfile)'
+  report_text_excerpt: 'Windows: web UI hangs after ~2h (Proactor self-pipe WinError 121) and after rapid asset browsing (native sendfile) ### Summary On Windows, the ComfyUI web server can become unresponsive in two different situations: 1. After roughly 2 hours of runtime/idle, pages become slow...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...appen without a ComfyUI crash. ### Environment - Windows 11 (26200) - ComfyUI 0.43.0, portable and Desktop `.venv` - Python 3.13.14, aiohttp 3.14.3 - Default `Proac...'
+- id: comfyui-0-43-0-github-issue-17494
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17494
+  parent_title: '"python" process at 100% CPU usage when idle'
+  report_title: '"python" process at 100% CPU usage when idle'
+  report_text_excerpt: '"python" process at 100% CPU usage when idle ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-02'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: linux
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...sion: 3.13.5 (main, Jun 13 2026, 14:18:01) [GCC 14.2.0] [INFO] ComfyUI version: 0.43.0 [INFO] comfy-aimdo version: 0.6.0 [INFO] comfy-kitchen version: 0.2.40 [INFO] c...'
+- id: comfyui-0-43-0-github-issue-17415
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17415
+  parent_title: '[Bug] HostBuffer.truncate failed during pin eviction on AMD ROCm (Windows) - comfy-aimdo 0.6.0 + comfy-kitchen 0.2.40, MiniMaxH3 dynamic VRAM'
+  report_title: '[Bug] HostBuffer.truncate failed during pin eviction on AMD ROCm (Windows) - comfy-aimdo 0.6.0 + comfy-kitchen 0.2.40, MiniMaxH3 dynamic VRAM'
+  report_text_excerpt: '[Bug] HostBuffer.truncate failed during pin eviction on AMD ROCm (Windows) - comfy-aimdo 0.6.0 + comfy-kitchen 0.2.40, MiniMaxH3 dynamic VRAM ## TL;DR Dynamic VRAM dies with `RuntimeError: HostBuffer.truncate failed` when the pinned-memory pool fills up. I instrumented the...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...IA). It is still present on 0.2.40 and on AMD ROCm. ## Environment - ComfyUI: 0.43.0 - comfy-aimdo: 0.6.0 - comfy-kitchen: 0.2.40 - PyTorch: 2.11.0+rocm7.13.0 (cp31...'
+- id: comfyui-0-43-0-github-issue-17399
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17399
+  parent_title: why its error?
+  report_title: why its error?
+  report_text_excerpt: 'why its error? ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help) ### Your...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...~~~~~~~~~~~~~^^^^^^^^^^ ``` ## System Information - **ComfyUI Version:** 0.43.0 - **Arguments:** ComfyUI\main.py --feature-flag show_signin_button=true --featu...'
+- id: comfyui-0-43-0-github-issue-17728
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17728
+  parent_title: Expose committed tokens during generation, so custom nodes can stream text without disabling MTP
+  report_title: Expose committed tokens during generation, so custom nodes can stream text without disabling MTP
+  report_text_excerpt: 'Expose committed tokens during generation, so custom nodes can stream text without disabling MTP _Before submitting_ - _Latest version: my local install is 0.43.0, but everything below was checked against master at 0.45.0 — line numbers and quoted code are from there, not from...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...thout disabling MTP _Before submitting_ - _Latest version: my local install is 0.43.0, but everything below was checked against master at 0.45.0 — line numbers and q...'
+- id: comfyui-0-43-0-github-issue-17612
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17612
+  parent_title: '[BUG][v0.43.0 and above] Flux2 fused VAE + `--fast fp16_accumulation` crashes on Turing/sm_75 (CUTLASS `Mma<16,8,16>` / CUDA 719)'
+  report_title: '[BUG][v0.43.0 and above] Flux2 fused VAE + `--fast fp16_accumulation` crashes on Turing/sm_75 (CUTLASS `Mma<16,8,16>` / CUDA 719)'
+  report_text_excerpt: '[BUG][v0.43.0 and above] Flux2 fused VAE + `--fast fp16_accumulation` crashes on Turing/sm_75 (CUTLASS `Mma<16,8,16>` / CUDA 719) # Flux2 fused VAE + `--fast fp16_accumulation` crashes on Turing/sm_75 (CUTLASS `Mma<16,8,16>` / CUDA 719) ## Summary On **NVIDIA TITAN RTX...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '[BUG][v0.43.0 and above] Flux2 fused VAE + `--fast fp16_accumulation` crashes on Turing/sm_75...'
+- id: comfyui-0-43-0-github-issue-17523
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17523
+  parent_title: 'Updated to ComfyUI v0.44.0: Krea2Turbo images with same seed/parameters now have major detail loss'
+  report_title: 'Updated to ComfyUI v0.44.0: Krea2Turbo images with same seed/parameters now have major detail loss'
+  report_text_excerpt: 'Updated to ComfyUI v0.44.0: Krea2Turbo images with same seed/parameters now have major detail loss I''m using SwarmUI. I updated to ComfyUI v0.44.0 and now all of my old images created with Krea2 Turbo lose all details and the images aren''t identical with the same seed and...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-04'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...is is only happening with **Krea2 Turbo**, not Krea2 Raw. I reverted back to **v0.43.0** and now the details are back in the images and everything is normal. Before...'
+- id: comfyui-0-43-0-github-issue-17471
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17471
+  parent_title: 'RemeshMesh node fails with "ValueError: data must be finite, check for nan or inf values" on Pixal3D/TRELLIS2 workflow (AMD GPU)'
+  report_title: 'RemeshMesh node fails with "ValueError: data must be finite, check for nan or inf values" on Pixal3D/TRELLIS2 workflow (AMD GPU)'
+  report_text_excerpt: 'RemeshMesh node fails with "ValueError: data must be finite, check for nan or inf values" on Pixal3D/TRELLIS2 workflow (AMD GPU) ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-01'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...128, Apr 8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)] [INFO] ComfyUI version: 0.43.0 [INFO] comfy-aimdo version: 0.6.0 [INFO] comfy-kitchen version: 0.2.40 [INFO] c...'
+- id: comfyui-0-43-0-github-issue-17435
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17435
+  parent_title: ComfyUI Qwen Image 2.1 generation stalls with no error (UI still responsive)
+  report_title: ComfyUI Qwen Image 2.1 generation stalls with no error (UI still responsive)
+  report_text_excerpt: 'ComfyUI Qwen Image 2.1 generation stalls with no error (UI still responsive) ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: release_packages_not_as_shipped
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...8128, Apr 8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)] [INFO] ComfyUI version: 0.43.0 [INFO] comfy-aimdo version: 0.6.0 [INFO] comfy-kitchen version: 0.2.40 [INFO] c...'
+- id: comfyui-0-43-0-github-issue-17429
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17429
+  parent_title: 'MiniMax Sol-H3-VAE: faint seams on the 128-px attention-window grid (visible on smooth skin)'
+  report_title: 'MiniMax Sol-H3-VAE: faint seams on the 128-px attention-window grid (visible on smooth skin)'
+  report_text_excerpt: 'MiniMax Sol-H3-VAE: faint seams on the 128-px attention-window grid (visible on smooth skin) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...-latent block, shift handling). ### Debug Logs ```powershell ComfyUI version: 0.43.0 (master fd7639f47) pytorch version: 2.13.0+cu130, Python 3.13.12, Windows Devic...'
+- id: comfyui-0-43-0-github-issue-17416
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17416
+  parent_title: '[Bug] HostBuffer.truncate failed during pin eviction on AMD ROCm (Windows) - comfy-aimdo 0.6.0 + comfy-kitchen 0.2.40, MiniMaxH3 dynamic VRAM'
+  report_title: '[Bug] HostBuffer.truncate failed during pin eviction on AMD ROCm (Windows) - comfy-aimdo 0.6.0 + comfy-kitchen 0.2.40, MiniMaxH3 dynamic VRAM'
+  report_text_excerpt: '[Bug] HostBuffer.truncate failed during pin eviction on AMD ROCm (Windows) - comfy-aimdo 0.6.0 + comfy-kitchen 0.2.40, MiniMaxH3 dynamic VRAM ## TL;DR Dynamic VRAM dies with `RuntimeError: HostBuffer.truncate failed` when the pinned-memory pool fills up. I instrumented the...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-28'
+  target_release_date: '2026-10-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.43.0
+  match_basis: core_version_text
+  counted: false
+  exclusion_reason: same_report_reposted_of_issue_17415
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '...IA). It is still present on 0.2.40 and on AMD ROCm. ## Environment - ComfyUI: 0.43.0 - comfy-aimdo: 0.6.0 - comfy-kitchen: 0.2.40 - PyTorch: 2.11.0+rocm7.13.0 (cp31...'
+- id: comfyui-0-43-0-github-issue-16848
+  product_id: comfyui
+  update_version: 0.43.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-10-27'
+  source_date_pass: false
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.43.0
+  matched_field: report_text
+  matched_context: '....1 - xxhash 3.6.0 - xx_sent_ud_sm 3.8.0 - yacs 0.1.8 - yapf 0.43.0 - yarl 1.22.0 - zhipuai 2.1.5.20250825 - zipp 3.23.0 Git: D:\Ao...'
+- id: comfyui-0-42-1-github-issue-17422
+  product_id: comfyui
+  update_version: 0.42.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17422
+  parent_title: RuntimeError HIPBLAS_STATUS_INVALID_VALUE hipblasLtMatmulAlgoGetHeuristic on RX 6750 GRE, comfy-kitchen int8_linear
+  report_title: RuntimeError HIPBLAS_STATUS_INVALID_VALUE hipblasLtMatmulAlgoGetHeuristic on RX 6750 GRE, comfy-kitchen int8_linear
+  report_text_excerpt: 'RuntimeError HIPBLAS_STATUS_INVALID_VALUE hipblasLtMatmulAlgoGetHeuristic on RX 6750 GRE, comfy-kitchen int8_linear ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-29'
+  target_release_date: '2026-10-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.1
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.1
+  matched_field: report_text
+  matched_context: '...AMD RX 6750 GRE 10GB (gfx1031) + ROCm 7.14. ### Environment - ComfyUI version: 0.42.1 - comfy-kitchen: 0.2.39 - comfy-aimdo: 0.5.6 - GPU: AMD Radeon RX 6750 GRE 10GB...'
+- id: comfyui-0-42-1-github-issue-17327
+  product_id: comfyui
+  update_version: 0.42.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17327
+  parent_title: '[Regression][Ascend NPU] RMSNorm.cast_weight conflicts with torch_npu during model loading'
+  report_title: '[Regression][Ascend NPU] RMSNorm.cast_weight conflicts with torch_npu during model loading'
+  report_text_excerpt: '[Regression][Ascend NPU] RMSNorm.cast_weight conflicts with torch_npu during model loading ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.1
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.1
+  matched_field: report_text
+  matched_context: '...o Ascend NPU without a method-dispatch error. ### Actual Behavior On ComfyUI v0.42.1, model loading fails with: AttributeError: ''torch.device'' object has no attrib...'
+- id: comfyui-0-42-1-github-issue-17326
+  product_id: comfyui
+  update_version: 0.42.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17326
+  parent_title: mp4 workflows importable/draggable mkv not; no warning given about mkv not supporting embedded wfs
+  report_title: mp4 workflows importable/draggable mkv not; no warning given about mkv not supporting embedded wfs
+  report_text_excerpt: 'mp4 workflows importable/draggable mkv not; no warning given about mkv not supporting embedded wfs ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.1
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.1
+  matched_field: report_text
+  matched_context: '...: 3.13.15 (main, Aug 14 2026, 15:34:59) [Clang 22.1.3 ] [INFO] ComfyUI version: 0.42.1 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.39 [INFO] c...'
+- id: comfyui-0-42-1-github-issue-17657
+  product_id: comfyui
+  update_version: 0.42.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17657
+  parent_title: 'Intel Arc B580 (XPU): SDXL 1024x1024 sampling returns all-NaN latents and black images (torch 2.13.0+xpu)'
+  report_title: 'Intel Arc B580 (XPU): SDXL 1024x1024 sampling returns all-NaN latents and black images (torch 2.13.0+xpu)'
+  report_text_excerpt: 'Intel Arc B580 (XPU): SDXL 1024x1024 sampling returns all-NaN latents and black images (torch 2.13.0+xpu) ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-10-19'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: linux
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.1
+  matched_field: report_text
+  matched_context: '...| ComfyUI Desktop 1.1.9 | | Instance | standalone `linux-intel-xpu`, release `v0.42.1-env1` (baseTag `v0.44.2`) | | Python | 3.13.12 | | PyTorch | 2.13.0+xpu | | tor...'
+- id: comfyui-0-42-1-github-issue-17187
+  product_id: comfyui
+  update_version: 0.42.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17187
+  parent_title: Silent prompt-conditioning corruption in reference-image edits after the 2026-10-18 update (Qwen-Image-2.1 + INT8-ConvRot Qwen3-VL text encoder, 8 GB GPU, dynamic VRAM)
+  report_title: Silent prompt-conditioning corruption in reference-image edits after the 2026-10-18 update (Qwen-Image-2.1 + INT8-ConvRot Qwen3-VL text encoder, 8 GB GPU, dynamic VRAM)
+  report_text_excerpt: 'Silent prompt-conditioning corruption in reference-image edits after the 2026-10-18 update (Qwen-Image-2.1 + INT8-ConvRot Qwen3-VL text encoder, 8 GB GPU, dynamic VRAM) ## Summary After updating to master `8f04fd6e` (`comfyui_version.py` = 0.42.0, pulled by Comfy Desktop on...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-10-19'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.1
+  matched_field: report_text
+  matched_context: '...s** #17178''s `synchronize()`, so that fix alone does not cover this case — and v0.42.1 (which is 0.42.0 + #17178) would not fix it either. I did not bisect further be...'
+- id: comfyui-0-42-0-github-issue-17436
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17436
+  parent_title: MIOpen (cudnn) is disabled by default on RDNA3 and newer, convolutions fall back to the slow path
+  report_title: MIOpen (cudnn) is disabled by default on RDNA3 and newer, convolutions fall back to the slow path
+  report_text_excerpt: 'MIOpen (cudnn) is disabled by default on RDNA3 and newer, convolutions fall back to the slow path ### Current behavior - `comfy/model_management.py` sets `torch.backends.cudnn.enabled = False` for every AMD arch not in `AMD_RDNA2_AND_OLDER_ARCH`, unless...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-30'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...VAEDecodeTiled 256/64/32/8, bf16 VAE, Linux, median of 3 ABAB pairs. - ComfyUI 0.42.0, torch 2.15.0a0+rocm10.1.0a20260907, MIOpen 3.6.1, `MIOPEN_DEBUG_CONV_DIRECT=0`...'
+- id: comfyui-0-42-0-github-issue-17370
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17370
+  parent_title: 'Pinned-memory steal race comes back under torch.compile with Dynamic VRAM (copies on the compute stream aren''t covered by #17297)'
+  report_title: 'Pinned-memory steal race comes back under torch.compile with Dynamic VRAM (copies on the compute stream aren''t covered by #17297)'
+  report_text_excerpt: 'Pinned-memory steal race comes back under torch.compile with Dynamic VRAM (copies on the compute stream aren''t covered by #17297) ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists The race is in core code and reproduces with no custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-26'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: linux
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...: 3.13.14 (main, Jul 18 2026, 17:02:37) [Clang 22.1.3 ] [INFO] ComfyUI version: 0.42.0 [INFO] comfy-aimdo version: 0.6.0 [INFO] comfy-kitchen version: 0.2.40 [INFO] c...'
+- id: comfyui-0-42-0-github-issue-17325
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17325
+  parent_title: Process commit grows ~4 GB per prompt during model swapping; ends in a 0xC0000005 native crash
+  report_title: Process commit grows ~4 GB per prompt during model swapping; ends in a 0xC0000005 native crash
+  report_text_excerpt: Process commit grows ~4 GB per prompt during model swapping; ends in a 0xC0000005 native crash > **Provenance note.** This report was written during several hours of hands-on debugging by the > owner of the machine (a human) together with **DeepSeek Flash 4.1**, which helped...
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...ts me a full machine > restart almost every night. ## Environment - ComfyUI **0.42.0**, Windows standalone build - Python 3.13.12 embedded, **torch 2.13.0+cu130** -...'
+- id: comfyui-0-42-0-github-issue-17264
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17264
+  parent_title: MPS OOM in KSampler while dequantizing INT8 ConvRot weights on Apple Silicon (M4 Pro)
+  report_title: MPS OOM in KSampler while dequantizing INT8 ConvRot weights on Apple Silicon (M4 Pro)
+  report_text_excerpt: 'MPS OOM in KSampler while dequantizing INT8 ConvRot weights on Apple Silicon (M4 Pro) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-21'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...b 12 2026, 01:06:02) [Clang 21.1.4 ] [2026-10-21 09:31:26.709] ComfyUI version: 0.42.0 [2026-10-21 09:31:26.710] comfy-aimdo version: 0.5.6 [2026-10-21 09:31:26.710]...'
+- id: comfyui-0-42-0-github-issue-17248
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17248
+  parent_title: Error when using int8 on Qwen3 VL vision.
+  report_title: Error when using int8 on Qwen3 VL vision.
+  report_text_excerpt: 'Error when using int8 on Qwen3 VL vision. ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-21'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...repo. Using a BF16 or FP6 scaled version of the clip works. ComfyUI version: 0.42.0 comfy-aimdo version: 0.5.6 comfy-kitchen version: 0.2.39 comfyui-frontend-packa...'
+- id: comfyui-0-42-0-github-issue-17245
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17245
+  parent_title: Pasting Image to Load Image node no longer loads image, creates new Load Image.
+  report_title: Pasting Image to Load Image node no longer loads image, creates new Load Image.
+  report_text_excerpt: 'Pasting Image to Load Image node no longer loads image, creates new Load Image. ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...e. ### Debug Logs ```powershell n/a ``` ### Other After updating to ComfyUI 0.42.0,, issue began.'
+- id: comfyui-0-42-0-github-issue-17198
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17198
+  parent_title: Qwen 2.1 Image Edit workflow crashes on a Blackwell GPU when xformers is installed
+  report_title: Qwen 2.1 Image Edit workflow crashes on a Blackwell GPU when xformers is installed
+  report_text_excerpt: 'Qwen 2.1 Image Edit workflow crashes on a Blackwell GPU when xformers is installed ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...4.7 (main, Sep 26 2026, 18:07:20) [GCC 14.3.1 20260604] [INFO] ComfyUI version: 0.42.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.39 [INFO] c...'
+- id: comfyui-0-42-0-github-issue-17739
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17739
+  parent_title: 'Windows: repeated psutil.virtual_memory() queries dominate slow generation; query latency drops ~20× after reboot'
+  report_title: 'Windows: repeated psutil.virtual_memory() queries dominate slow generation; query latency drops ~20× after reboot'
+  report_text_excerpt: 'Windows: repeated psutil.virtual_memory() queries dominate slow generation; query latency drops ~20× after reboot ### Summary On Windows, generation intermittently becomes extremely slow while GPU utilization/power are low. During one slow interval, a 10-second py-spy capture...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-13'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '....0 during the 10-second capture; slowdown was also observed before updating, on 0.42.0 - Launched through SwarmUI; Swarm custom nodes enabled - Relevant arguments dur...'
+- id: comfyui-0-42-0-github-issue-17573
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17573
+  parent_title: 'ROCm gfx1100: Comfy model compiler + auto-detected fast_disk adds ~30 s per sampling step; either --disable-comfy-compiler or --disable-fast-disk fixes it'
+  report_title: 'ROCm gfx1100: Comfy model compiler + auto-detected fast_disk adds ~30 s per sampling step; either --disable-comfy-compiler or --disable-fast-disk fixes it'
+  report_text_excerpt: 'ROCm gfx1100: Comfy model compiler + auto-detected fast_disk adds ~30 s per sampling step; either --disable-comfy-compiler or --disable-fast-disk fixes it ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: linux
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...sion: 3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0] [INFO] ComfyUI version: 0.42.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.39 [INFO] S...'
+- id: comfyui-0-42-0-github-issue-17572
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17572
+  parent_title: 'ROCm gfx1100: contiguous-k/v SDPA workaround is gfx1151-only, MiniMax H3 sampling 2.2x slower on RX 7900 XTX'
+  report_title: 'ROCm gfx1100: contiguous-k/v SDPA workaround is gfx1151-only, MiniMax H3 sampling 2.2x slower on RX 7900 XTX'
+  report_text_excerpt: 'ROCm gfx1100: contiguous-k/v SDPA workaround is gfx1151-only, MiniMax H3 sampling 2.2x slower on RX 7900 XTX ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-06'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: linux
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...sion: 3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0] [INFO] ComfyUI version: 0.42.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.39 [INFO] S...'
+- id: comfyui-0-42-0-github-issue-17352
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17352
+  parent_title: Blur and Sharpen crash when the filter radius reaches an image side
+  report_title: Blur and Sharpen crash when the filter radius reaches an image side
+  report_text_excerpt: 'Blur and Sharpen crash when the filter radius reaches an image side ### Expected behavior Blur Image and Sharpen Image should process nonempty images even when the chosen radius is greater than or equal to an image side. A 1x1 constant RGB image should retain its color and...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-26'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...# Actual behavior On current master `fe298e4e20f1ff26d30e8639267bbd0b57811390` (0.42.0), both nodes raise `RuntimeError: Padding size should be less than the correspo...'
+- id: comfyui-0-42-0-github-issue-17312
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17312
+  parent_title: '[Withdrawn] Fibo 2 crashes under Windows commit exhaustion (inactive pagefile)'
+  report_title: '[Withdrawn] Fibo 2 crashes under Windows commit exhaustion (inactive pagefile)'
+  report_text_excerpt: '[Withdrawn] Fibo 2 crashes under Windows commit exhaustion (inactive pagefile) > **Withdrawn by reporter — system-wide memory commitment exhaustion found.** > > Further investigation found that only a 1 GB Windows pagefile was active. The configured ~90 GB pagefile on J: was...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-23'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.42.0
+  match_basis: core_version_text
+  counted: false
+  exclusion_reason: custom_node_in_failure_path
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...ith `--cuda-device 0`; AIMDO initializes only the RTX 4090 in the log - ComfyUI 0.42.0 at `87ed5a066` (native Fibo 2 support); this report concerns that exact revisio...'
+- id: comfyui-0-42-0-github-issue-17305
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17305
+  parent_title: macOS unified-memory OOM during YuE2 ABC/music generation (rc=137 after 88GB compressor balloon)
+  report_title: macOS unified-memory OOM during YuE2 ABC/music generation (rc=137 after 88GB compressor balloon)
+  report_text_excerpt: 'macOS unified-memory OOM during YuE2 ABC/music generation (rc=137 after 88GB compressor balloon) ## macOS unified-memory OOM during YuE2 ABC/music generation (rc=137 after 88GB compressor balloon) **Hardware:** Mac Studio M1 Ultra 192GB unified memory **OS:** macOS 15.7...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: macos
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...io M1 Ultra 192GB unified memory **OS:** macOS 15.7 (Sequoia) **ComfyUI:** v0.42.0 (commit `1a82e6d`, master pulled 2026-10-22) **Regression range:** Known-good...'
+- id: comfyui-0-42-0-github-issue-17302
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17302
+  parent_title: '[xpu] 3d_pixal3d_multi_views workflow: "Trellis2 coords can''t be empty"'
+  report_title: '[xpu] 3d_pixal3d_multi_views workflow: "Trellis2 coords can''t be empty"'
+  report_text_excerpt: '[xpu] 3d_pixal3d_multi_views workflow: "Trellis2 coords can''t be empty" ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...481, Feb 3 2026, 18:22:25) [MSC v.1944 64 bit (AMD64)] [INFO] ComfyUI version: 0.42.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.39 [INFO] c...'
+- id: comfyui-0-42-0-github-issue-17214
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17214
+  parent_title: 'LoadImage: padding corrupts the last column of odd-width lossy WebP'
+  report_title: 'LoadImage: padding corrupts the last column of odd-width lossy WebP'
+  report_text_excerpt: 'LoadImage: padding corrupts the last column of odd-width lossy WebP **Custom Node Testing** Not checked: this is a standalone PyAV reproduction. It loads neither ComfyUI nor custom nodes. **Expected Behavior** Alignment padding followed by cropping should preserve the original...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: linux
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...this report’s scope. **Other** Source inspected: ComfyUI `b1a247c9`, version 0.42.0. Standalone reproduction: Linux, libavcodec 63.1.102, libavfilter 12.1.102, lib...'
+- id: comfyui-0-42-0-github-issue-17213
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17213
+  parent_title: LoadImage drops reflections from JPEG EXIF orientations 2, 4, 5 and 7
+  report_title: LoadImage drops reflections from JPEG EXIF orientations 2, 4, 5 and 7
+  report_text_excerpt: 'LoadImage drops reflections from JPEG EXIF orientations 2, 4, 5 and 7 **Custom Node Testing** Not checked: this is a standalone PyAV reproduction. It loads neither ComfyUI nor custom nodes. I also checked ComfyUI''s own `LoadImage` at `b1a247c9` with no custom nodes installed...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: linux
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...9 8 90 False 0.06 ``` **Other** Source inspected: ComfyUI `b1a247c9`, version 0.42.0. Standalone reproduction: Linux, libavcodec 63.1.102. Found and reproduced wit...'
+- id: comfyui-0-42-0-github-issue-17190
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17190
+  parent_title: Web server returns 404 for static frontend assets when packages are installed as symlinks
+  report_title: Web server returns 404 for static frontend assets when packages are installed as symlinks
+  report_text_excerpt: 'Web server returns 404 for static frontend assets when packages are installed as symlinks ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...ain, Aug 18 2025, 19:17:54) [MSC v.1944 64 bit (AMD64)] [INFO] ComfyUI version: 0.42.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.39 [INFO] c...'
+- id: comfyui-0-42-0-github-issue-17187
+  product_id: comfyui
+  update_version: 0.42.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17187
+  parent_title: Silent prompt-conditioning corruption in reference-image edits after the 2026-10-18 update (Qwen-Image-2.1 + INT8-ConvRot Qwen3-VL text encoder, 8 GB GPU, dynamic VRAM)
+  report_title: Silent prompt-conditioning corruption in reference-image edits after the 2026-10-18 update (Qwen-Image-2.1 + INT8-ConvRot Qwen3-VL text encoder, 8 GB GPU, dynamic VRAM)
+  report_text_excerpt: 'Silent prompt-conditioning corruption in reference-image edits after the 2026-10-18 update (Qwen-Image-2.1 + INT8-ConvRot Qwen3-VL text encoder, 8 GB GPU, dynamic VRAM) ## Summary After updating to master `8f04fd6e` (`comfyui_version.py` = 0.42.0, pulled by Comfy Desktop on...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-10-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.42.0
+  matched_field: report_text
+  matched_context: '...c VRAM) ## Summary After updating to master `8f04fd6e` (`comfyui_version.py` = 0.42.0, pulled by Comfy Desktop on 2026-10-18 19:14 EDT), my Qwen-Image-2.1 **referenc...'
+- id: comfyui-0-41-0-github-issue-17597
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17597
+  parent_title: Unload leaks int8_convrot (comfy-kitchen) weights — VRAM/RAM never released, next job OOMs (ROCm; plain fp8/fp16 unloads cleanly)
+  report_title: Unload leaks int8_convrot (comfy-kitchen) weights — VRAM/RAM never released, next job OOMs (ROCm; plain fp8/fp16 unloads cleanly)
+  report_text_excerpt: 'Unload leaks int8_convrot (comfy-kitchen) weights — VRAM/RAM never released, next job OOMs (ROCm; plain fp8/fp16 unloads cleanly) ## Environment - GPU: RX 7900 XTX (gfx1100), ROCm 6.4, torch 2.9.1+rocm6.4 - OS: Nobara Fedora (kernel 7.3.1) - ComfyUI **v0.41.0 and v0.44.0 —...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-07'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.41.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '..., ROCm 6.4, torch 2.9.1+rocm6.4 - OS: Nobara Fedora (kernel 7.3.1) - ComfyUI **v0.41.0 and v0.44.0 — both reproduce** - comfy-aimdo 0.5.6 and 0.6.0 — both reproduce -...'
+- id: comfyui-0-41-0-github-issue-17188
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17188
+  parent_title: 'RuntimeError: CUDA error: HIPBLAS_STATUS_INVALID_VALUE when calling `hipblasLtMatmulAlgoGetHeuristic'
+  report_title: 'RuntimeError: CUDA error: HIPBLAS_STATUS_INVALID_VALUE when calling `hipblasLtMatmulAlgoGetHeuristic'
+  report_text_excerpt: 'RuntimeError: CUDA error: HIPBLAS_STATUS_INVALID_VALUE when calling `hipblasLtMatmulAlgoGetHeuristic ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.41.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...ain, Oct 1 2026, 20:25:10) [MSC v.1942 64 bit (AMD64)] [INFO] ComfyUI version: 0.41.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.38 [INFO] c...'
+- id: comfyui-0-41-0-github-issue-17167
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17167
+  parent_title: Generate Text node causes coredump if passed a list with multiple strings as prompt
+  report_title: Generate Text node causes coredump if passed a list with multiple strings as prompt
+  report_text_excerpt: 'Generate Text node causes coredump if passed a list with multiple strings as prompt ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-18'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.41.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...onda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0] [INFO] ComfyUI version: 0.41.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.38 [INFO] c...'
+- id: comfyui-0-41-0-github-issue-17115
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17115
+  parent_title: 'TextGenerate with mtp=auto: CUDA illegal memory access during decode (Flux 3 prompt upsampler, RTX 3090 Ti) — crash also kills the prompt_worker thread'
+  report_title: 'TextGenerate with mtp=auto: CUDA illegal memory access during decode (Flux 3 prompt upsampler, RTX 3090 Ti) — crash also kills the prompt_worker thread'
+  report_text_excerpt: 'TextGenerate with mtp=auto: CUDA illegal memory access during decode (Flux 3 prompt upsampler, RTX 3090 Ti) — crash also kills the prompt_worker thread ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.41.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...0 Ti (VRAM: 24563 MB) DynamicVRAM support detected and enabled ComfyUI version: 0.41.0 comfy-aimdo version: 0.5.6 comfy-kitchen version: 0.2.38 comfyui-frontend-packa...'
+- id: comfyui-0-41-0-github-issue-17362
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17362
+  parent_title: '[Windows/RTX 4070] Suspected Anima initialization regression on 0.41; rollback to 0.26 restores performance with DynamicVRAM enabled'
+  report_title: '[Windows/RTX 4070] Suspected Anima initialization regression on 0.41; rollback to 0.26 restores performance with DynamicVRAM enabled'
+  report_text_excerpt: '[Windows/RTX 4070] Suspected Anima initialization regression on 0.41; rollback to 0.26 restores performance with DynamicVRAM enabled ### Custom Node Testing - [ ] I have reproduced this with all custom nodes disabled. This is a **suspected performance regression with rollback...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-26'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...nds, particularly after running several images. A captured session on ComfyUI `0.41.0-6-ge087d8f6c` with `comfy-aimdo 0.5.5` shows: - Main 35-step sampler: **8m21s*...'
+- id: comfyui-0-41-0-github-issue-17187
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17187
+  parent_title: Silent prompt-conditioning corruption in reference-image edits after the 2026-10-18 update (Qwen-Image-2.1 + INT8-ConvRot Qwen3-VL text encoder, 8 GB GPU, dynamic VRAM)
+  report_title: Silent prompt-conditioning corruption in reference-image edits after the 2026-10-18 update (Qwen-Image-2.1 + INT8-ConvRot Qwen3-VL text encoder, 8 GB GPU, dynamic VRAM)
+  report_text_excerpt: 'Silent prompt-conditioning corruption in reference-image edits after the 2026-10-18 update (Qwen-Image-2.1 + INT8-ConvRot Qwen3-VL text encoder, 8 GB GPU, dynamic VRAM) ## Summary After updating to master `8f04fd6e` (`comfyui_version.py` = 0.42.0, pulled by Comfy Desktop on...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-19'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...No error, no OOM, no crash — just wrong conditioning. Reverting to `bab80ef7` (0.41.0) immediately restores correct behaviour. **comfy-kitchen 0.2.39 is ruled out**...'
+- id: comfyui-0-41-0-github-issue-17174
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17174
+  parent_title: 'MOSS-Image bboxes template: `character_boxes` value has no effect'
+  report_title: 'MOSS-Image bboxes template: `character_boxes` value has no effect'
+  report_text_excerpt: 'MOSS-Image bboxes template: `character_boxes` value has no effect The shipped template `image_moss_image_t2i_bboxes.json` sets `MOSSImageLayoutPrompt`''s `character_boxes` to `"1"`, but box 1 is a text box, so no element is ever labelled `character`. The knight — the template''s...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-18'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: macos
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...metic. ### Environment - ComfyUI `446ef4e005fc7134d53ce6869ebd77d2134cd39c` (v0.41.0) - comfyui-workflow-templates 0.11.89 / comfyui-workflow-templates-json 0.1.115...'
+- id: comfyui-0-41-0-github-issue-17164
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17164
+  parent_title: Rename-only node replacements discard supplied prompt inputs
+  report_title: Rename-only node replacements discard supplied prompt inputs
+  report_text_excerpt: 'Rename-only node replacements discard supplied prompt inputs ### Custom Node Testing - [x] Reproduced with all custom nodes disabled ### Expected Behavior The built-in `Preview3DAnimation` → `Preview3D` replacement should preserve `model_file`, allowing an older API prompt to...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-18'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...eproduce Verified on master `ce42de5f64ac1d421e304ab7b6c0b3d2f0dde1f6`, ComfyUI 0.41.0, Python 3.12.14 and PyTorch 2.14.1+cpu. No model weights or custom nodes are ne...'
+- id: comfyui-0-41-0-github-issue-17119
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17119
+  parent_title: 'MOSS-Image native single-file path outputs pure noise: RoPE convention + timestep scaling mismatch vs training'
+  report_title: 'MOSS-Image native single-file path outputs pure noise: RoPE convention + timestep scaling mismatch vs training'
+  report_text_excerpt: 'MOSS-Image native single-file path outputs pure noise: RoPE convention + timestep scaling mismatch vs training ## MOSS-Image native single-file path outputs pure noise (RoPE convention + timestep scaling mismatch vs training) ### Summary The native ComfyUI path for MOSS-Image...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...exact Chinese text rendering matching the prompt). ### Environment - ComfyUI v0.41.0, master `5cc4b87` (2026-10-16), Windows, RTX 4090 24GB - Weights: `Comfy-Org/MO...'
+- id: comfyui-0-41-0-github-issue-17103
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17103
+  parent_title: Unable to Run Multiple Instances on Windows Portable
+  report_title: Unable to Run Multiple Instances on Windows Portable
+  report_text_excerpt: Unable to Run Multiple Instances on Windows Portable Hi folks, First of all, thanks for all the work you're continuously doing for the open source community! I have 2 GPUs on Windows (portable) and often run two ComfyUI instances, one generating images while the other GPU does...
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...one generating images while the other GPU does video. Since updating to ComfyUI 0.41.0 (v0.41.0-7-gfc04da91b), only one instance can start, because `user\comfyui.db`...'
+- id: comfyui-0-41-0-github-issue-17092
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17092
+  parent_title: YuE2 AR stage memory explosion past ~4096 tokens on Apple Silicon (MPS) — regression in v0.40.x+
+  report_title: YuE2 AR stage memory explosion past ~4096 tokens on Apple Silicon (MPS) — regression in v0.40.x+
+  report_text_excerpt: 'YuE2 AR stage memory explosion past ~4096 tokens on Apple Silicon (MPS) — regression in v0.40.x+ ## Environment - Apple Silicon Mac Studio (MPS backend), Python 3.14, PyTorch mainline - YuE2 music model via native nodes (`YuE2GenerateMusic` / ABC encode + AR generate) ##...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: macos
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '....x (we are pinned to the Oct-11 tip of that line) - **Known bad:** v0.40.0 and v0.41.0 — diffing v0.39-tip..master shows no changes to `comfy_extras/nodes_yue2.py`, b...'
+- id: comfyui-0-41-0-github-issue-17080
+  product_id: comfyui
+  update_version: 0.41.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17080
+  parent_title: Load Audio rejects standard unsigned 8-bit PCM WAV files
+  report_title: Load Audio rejects standard unsigned 8-bit PCM WAV files
+  report_text_excerpt: 'Load Audio rejects standard unsigned 8-bit PCM WAV files ### Expected Behavior Load Audio should load a standard unsigned 8-bit PCM WAV and return float32 samples centered on silence. The PCM midpoint is 128, so bytes 0,64,128,192,255 correspond to -1,-0.5,0,0.5,0.9921875....'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-10-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.41.0
+  matched_field: report_text
+  matched_context: '...# Steps to Reproduce Current master 5a665890ded5020c282f63c4ea2dd9e083e025ff (v0.41.0). Create this file in ComfyUI''s input directory and select it in Load Audio: `...'
+- id: comfyui-0-40-0-github-issue-17098
+  product_id: comfyui
+  update_version: 0.40.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17098
+  parent_title: 'RTX 5060 Ti (sm_120): quantized models (Qwen-Image, MiniMax H3) output pure noise via comfy-kitchen kernels — SD1.5 fp16 works fine'
+  report_title: 'RTX 5060 Ti (sm_120): quantized models (Qwen-Image, MiniMax H3) output pure noise via comfy-kitchen kernels — SD1.5 fp16 works fine'
+  report_text_excerpt: 'RTX 5060 Ti (sm_120): quantized models (Qwen-Image, MiniMax H3) output pure noise via comfy-kitchen kernels — SD1.5 fp16 works fine ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.40.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.40.0
+  matched_field: report_text
+  matched_context: '...3.13.14 (embedded, Windows standalone build) - PyTorch: 2.14.0+cu130 - ComfyUI: 0.40.0 - comfy-kitchen: 0.2.37 - comfy-aimdo: 0.5.6 - comfyui-frontend-package: 1.55.1...'
+- id: comfyui-0-40-0-github-issue-17063
+  product_id: comfyui
+  update_version: 0.40.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17063
+  parent_title: '[gfx1151 / Strix Halo] MiniMax H3 (int8_convrot) fails with "CUDA error: out of memory" at first sampling step when Dynamic VRAM is enabled; works with --disable-dynamic-vram'
+  report_title: '[gfx1151 / Strix Halo] MiniMax H3 (int8_convrot) fails with "CUDA error: out of memory" at first sampling step when Dynamic VRAM is enabled; works with --disable-dynamic-vram'
+  report_text_excerpt: '[gfx1151 / Strix Halo] MiniMax H3 (int8_convrot) fails with "CUDA error: out of memory" at first sampling step when Dynamic VRAM is enabled; works with --disable-dynamic-vram ## Summary On an AMD Ryzen AI Max+ 395 (Strix Halo, gfx1151, 128 GB unified memory) with ROCm, running...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.40.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.40.0
+  matched_field: report_text
+  matched_context: '...am` makes the exact same workflow run successfully. ## Environment - ComfyUI: 0.40.0 - comfyui-frontend-package: 1.55.17 - comfy-aimdo: 0.5.6 - comfy-kitchen: 0.2.3...'
+- id: comfyui-0-40-0-github-issue-17014
+  product_id: comfyui
+  update_version: 0.40.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17014
+  parent_title: 'SeedVR2 FP8 outputs a black image with --fast fp16_accumulation: FP16 overflows to infinity'
+  report_title: 'SeedVR2 FP8 outputs a black image with --fast fp16_accumulation: FP16 overflows to infinity'
+  report_text_excerpt: 'SeedVR2 FP8 outputs a black image with --fast fp16_accumulation: FP16 overflows to infinity ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.40.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.40.0
+  matched_field: report_text
+  matched_context: '...4.7 (main, Aug 10 2026, 07:46:56) [GCC 16.1.1 20260728] [INFO] ComfyUI version: 0.40.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.37 [INFO] c...'
+- id: comfyui-0-40-0-github-issue-17295
+  product_id: comfyui
+  update_version: 0.40.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17295
+  parent_title: 'Feature Request: OpenTelemetry support for traces, metrics and logs'
+  report_title: 'Feature Request: OpenTelemetry support for traces, metrics and logs'
+  report_text_excerpt: 'Feature Request: OpenTelemetry support for traces, metrics and logs ### Feature Idea Opt-in OpenTelemetry instrumentation in core, exporting all three signals over OTLP, so ComfyUI can be monitored with any OTel-compatible backend: an OpenTelemetry Collector, Grafana...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-22'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.40.0
+  matched_field: report_text
+  matched_context: '...ined by trace id in an existing Grafana stack. I checked the behavior above on v0.40.0 and on current master.'
+- id: comfyui-0-40-0-github-issue-17092
+  product_id: comfyui
+  update_version: 0.40.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17092
+  parent_title: YuE2 AR stage memory explosion past ~4096 tokens on Apple Silicon (MPS) — regression in v0.40.x+
+  report_title: YuE2 AR stage memory explosion past ~4096 tokens on Apple Silicon (MPS) — regression in v0.40.x+
+  report_text_excerpt: 'YuE2 AR stage memory explosion past ~4096 tokens on Apple Silicon (MPS) — regression in v0.40.x+ ## Environment - Apple Silicon Mac Studio (MPS backend), Python 3.14, PyTorch mainline - YuE2 music model via native nodes (`YuE2GenerateMusic` / ABC encode + AR generate) ##...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-16'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: macos
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.40.0
+  matched_field: report_text
+  matched_context: '...96 AR tokens, i.e. full-length songs) work fine on v0.39.x but reliably die on v0.40.0+ mid-render: - The compressor memory ballooner during the AR stage grows ~+25GB...'
+- id: comfyui-0-40-0-github-issue-17021
+  product_id: comfyui
+  update_version: 0.40.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17021
+  parent_title: Hong
+  report_title: Hong
+  report_text_excerpt: 'Hong ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help) ### Expected Behavior...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.40.0
+  match_basis: core_version_declaration
+  counted: false
+  exclusion_reason: custom_node_in_failure_path
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.40.0
+  matched_field: report_text
+  matched_context: '...ngStore-DaYLCj6f.js:140:78666 ``` ## System Information - **ComfyUI Version:** v0.40.0 - **Arguments:** - **OS:** - **Python Version:** - **Embedded Python:** fals...'
+- id: comfyui-0-40-0-github-issue-17012
+  product_id: comfyui
+  update_version: 0.40.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17012
+  parent_title: TrimAudioDuration retains the entire source waveform allocation
+  report_title: TrimAudioDuration retains the entire source waveform allocation
+  report_text_excerpt: 'TrimAudioDuration retains the entire source waveform allocation ### Expected Behavior A short `TrimAudioDuration` output should own storage sized for the selected samples, so retaining it does not keep the entire source waveform alive after the input is released. ### Actual...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-10-13'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.40.0
+  matched_field: report_text
+  matched_context: '...### Steps to Reproduce On master `e0a32bce84f4603f2b61b16b50f8958e68fd6171` (v0.40.0), run this directly against the built-in node. No custom nodes, models, or serv...'
+- id: comfyui-0-39-0-github-issue-17499
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17499
+  parent_title: Full PC freezes/BSOD during SDXL generation — RTX 3060 8 GB, NVIDIA 0x116
+  report_title: Full PC freezes/BSOD during SDXL generation — RTX 3060 8 GB, NVIDIA 0x116
+  report_text_excerpt: 'Full PC freezes/BSOD during SDXL generation — RTX 3060 8 GB, NVIDIA 0x116 ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...dows 11 26H2, build 26300.9818 - NVIDIA Studio Driver 617.42 - ComfyUI portable 0.39.0 - Python 3.13.12; PyTorch 2.11.0+cu130 - comfy-aimdo 0.5.6; comfy-kitchen 0.2.3...'
+- id: comfyui-0-39-0-github-issue-16991
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16991
+  parent_title: '[Intel XPU] Qwen3-VL DeepStack multi-image boolean indexing selects wrong token count (1059 vs 2061); CPU-index workaround'
+  report_title: '[Intel XPU] Qwen3-VL DeepStack multi-image boolean indexing selects wrong token count (1059 vs 2061); CPU-index workaround'
+  report_text_excerpt: '[Intel XPU] Qwen3-VL DeepStack multi-image boolean indexing selects wrong token count (1059 vs 2061); CPU-index workaround ### Summary Qwen-Image 2.1 / Qwen3-VL **two-reference-image** conditioning fails on Intel XPU in ComfyUI 0.39.0 because PyTorch 2.14.1+xpu silently...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-13'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: out of memory
+  workflow_area: GPU and system memory
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...1 / Qwen3-VL **two-reference-image** conditioning fails on Intel XPU in ComfyUI 0.39.0 because PyTorch 2.14.1+xpu silently returns the wrong number of entries for a b...'
+- id: comfyui-0-39-0-github-issue-16971
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16971
+  parent_title: 'Detect Edges (Canny): whole batch in one kornia call - 134 MB VRAM per 720p frame, and slower per frame the larger the batch'
+  report_title: 'Detect Edges (Canny): whole batch in one kornia call - 134 MB VRAM per 720p frame, and slower per frame the larger the batch'
+  report_text_excerpt: 'Detect Edges (Canny): whole batch in one kornia call - 134 MB VRAM per 720p frame, and slower per frame the larger the batch **Node:** Detect Edges (Canny), `comfy_extras/nodes_canny.py` — unchanged on master as of 2026-10-12. `Canny.execute` moves the whole IMAGE batch to the...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-12'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...ne. ### Measured RTX 4060 Laptop 8 GB, Windows 11, torch 2.9.0+cu130, ComfyUI 0.39.0. Input: real portraits, 1280×720; `low_threshold` 0.4, `high_threshold` 0.8. |...'
+- id: comfyui-0-39-0-github-issue-16964
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16964
+  parent_title: 'Select CLIP Device: text encoder still runs on the old offloaded model, so generation on gpu:1 is ~7x slower'
+  report_title: 'Select CLIP Device: text encoder still runs on the old offloaded model, so generation on gpu:1 is ~7x slower'
+  report_text_excerpt: 'Select CLIP Device: text encoder still runs on the old offloaded model, so generation on gpu:1 is ~7x slower ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-11'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)] [INFO] ComfyUI version: 0.39.0 [INFO] comfy-aimdo version: 0.5.5 [INFO] comfy-kitchen version: 0.2.37 [INFO] c...'
+- id: comfyui-0-39-0-github-issue-16946
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16946
+  parent_title: '[Windows][RTX 3060 12GB] MiniMax-H3 repeatedly freezes entire PC; no recent dump, NVFP4 encoder/offload log ends abruptly'
+  report_title: '[Windows][RTX 3060 12GB] MiniMax-H3 repeatedly freezes entire PC; no recent dump, NVFP4 encoder/offload log ends abruptly'
+  report_text_excerpt: '[Windows][RTX 3060 12GB] MiniMax-H3 repeatedly freezes entire PC; no recent dump, NVFP4 encoder/offload log ends abruptly ### Summary Repeated complete-PC freezes while running MiniMax-H3 on Windows 11 with a **single RTX 3060 12 GB and 64 GB system RAM**. Recovery requires...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-10'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...h nvidia-smi) - System RAM: 65452 MB as reported in the ComfyUI log - ComfyUI **0.39.0**, commit `b0b743566f65daafc423b4fea8a2fbda94b3384a` - Python embedded **3.13.1...'
+- id: comfyui-0-39-0-github-issue-16924
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16924
+  parent_title: crash when using hooks on anima
+  report_title: crash when using hooks on anima
+  report_text_excerpt: 'crash when using hooks on anima ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-10'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...944, Dec 5 2025, 16:26:58) [MSC v.1944 64 bit (AMD64)] [INFO] ComfyUI version: 0.39.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.37 [INFO] c...'
+- id: comfyui-0-39-0-github-issue-16912
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16912
+  parent_title: 'Custom-node stable-id collision: silent, warning-free overwrite persists across restarts'
+  report_title: 'Custom-node stable-id collision: silent, warning-free overwrite persists across restarts'
+  report_text_excerpt: 'Custom-node stable-id collision: silent, warning-free overwrite persists across restarts ### Custom Node Testing - [x] Not applicable to this report — the defect is in Core''s own custom-node loading path, not in a specific third-party node''s logic. Reproduced with two minimal,...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...o Reproduce Exact build used: Core `d91ed5f5b7fa60fa18464c2ad7c80254da2f0f29` (0.39.0), frontend package `1.55.14`, Python 3.12.3, CPU. 1. Install a custom-node pac...'
+- id: comfyui-0-39-0-github-issue-16896
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16896
+  parent_title: 'Save Checkpoint - TypeError: empty() received an invalid combination of arguments'
+  report_title: 'Save Checkpoint - TypeError: empty() received an invalid combination of arguments'
+  report_text_excerpt: 'Save Checkpoint - TypeError: empty() received an invalid combination of arguments ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...with red outline around Save Checkpoint node. ### Steps to Reproduce ComfyUI 0.39.0 1. Add "Save Checkpoint" module and connect appropriate wiring 2. Click Run 3....'
+- id: comfyui-0-39-0-github-issue-16827
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16827
+  parent_title: '[Bug] TRELLIS.2 fp8 weights crash at model init: `unet_dtype` returns fp8 despite `supported_inference_dtypes=[bf16, fp32]`'
+  report_title: '[Bug] TRELLIS.2 fp8 weights crash at model init: `unet_dtype` returns fp8 despite `supported_inference_dtypes=[bf16, fp32]`'
+  report_text_excerpt: '[Bug] TRELLIS.2 fp8 weights crash at model init: `unet_dtype` returns fp8 despite `supported_inference_dtypes=[bf16, fp32]` ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-06'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...eps to Reproduce 1. ComfyUI commit: b0b743566f65daafc423b4fea8a2fbda94b3384a (v0.39.0, 2026-10-05) Install: ComfyUI Windows portable, fresh checkout, started with...'
+- id: comfyui-0-39-0-github-issue-16963
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16963
+  parent_title: 'SAM 3D Body: BVH export writes a garbled rest skeleton (parent-local OFFSETs), breaking retargeting; plus fp16 hand-refinement dtype crash'
+  report_title: 'SAM 3D Body: BVH export writes a garbled rest skeleton (parent-local OFFSETs), breaking retargeting; plus fp16 hand-refinement dtype crash'
+  report_text_excerpt: 'SAM 3D Body: BVH export writes a garbled rest skeleton (parent-local OFFSETs), breaking retargeting; plus fp16 hand-refinement dtype crash ### Summary `build_bvh` in `comfy_extras/sam3d_body/export/bvh.py` writes the MHR rig''s parent-local `translation_offsets` as BVH...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-11'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...separate section at the end. ### Environment - ComfyUI: master at 7f7fd918 (v0.39.0-41) plus unrelated local patches. Both files involved here, `comfy_extras/sam3d...'
+- id: comfyui-0-39-0-github-issue-16900
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16900
+  parent_title: Streamed weights get corrupted when _steal_pin hands out a pin whose async copy is still queued
+  report_title: Streamed weights get corrupted when _steal_pin hands out a pin whose async copy is still queued
+  report_text_excerpt: 'Streamed weights get corrupted when _steal_pin hands out a pin whose async copy is still queued ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists ### Expected Behavior A model whose weights stream through pinned memory computes with its...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...: 3.13.14 (main, Jul 18 2026, 17:02:37) [Clang 22.1.3 ] [INFO] ComfyUI version: 0.39.0 [INFO] comfy-aimdo version: 0.5.6 [INFO] comfy-kitchen version: 0.2.37 [INFO] c...'
+- id: comfyui-0-39-0-github-issue-16886
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16886
+  parent_title: 'StartLoop: is_first/is_last baked as inputs into each LoopIteration copy invalidate the cache of surviving iterations when loop length changes'
+  report_title: 'StartLoop: is_first/is_last baked as inputs into each LoopIteration copy invalidate the cache of surviving iterations when loop length changes'
+  report_text_excerpt: 'StartLoop: is_first/is_last baked as inputs into each LoopIteration copy invalidate the cache of surviving iterations when loop length changes ## TL;DR > `_expand_loop` bakes `is_first`/`is_last` as plain literal inputs into every `LoopIteration` copy...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...## Environment - ComfyUI: master `46493d824fd7eac25a741e505159e4c9e0ef0ebd` (v0.39.0-29), verified 2026-10-08 - OS: Windows 10, portable install - Reproducible with...'
+- id: comfyui-0-39-0-github-issue-16885
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16885
+  parent_title: RAM-pressure cache evicts expanded loop children between prompts before the loop can re-expand, so cache_iterations never hits (works with --cache-classic)
+  report_title: RAM-pressure cache evicts expanded loop children between prompts before the loop can re-expand, so cache_iterations never hits (works with --cache-classic)
+  report_text_excerpt: 'RAM-pressure cache evicts expanded loop children between prompts before the loop can re-expand, so cache_iterations never hits (works with --cache-classic) ## TL;DR > With the default RAM-pressure cache, results of expanded `StartLoop`/`EndLoop` bodies (and subgraphs) are...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-09'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: core_version_untagged_build
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...## Environment - ComfyUI: master `46493d824fd7eac25a741e505159e4c9e0ef0ebd` (v0.39.0-29), verified 2026-10-08 - OS: Windows 10 (portable install), Python 3.12 embed...'
+- id: comfyui-0-39-0-github-issue-16838
+  product_id: comfyui
+  update_version: 0.39.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16838
+  parent_title: qwen2.1 / minimax h3 etc.. is crash
+  report_title: qwen2.1 / minimax h3 etc.. is crash
+  report_text_excerpt: 'qwen2.1 / minimax h3 etc.. is crash ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-10-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.39.0
+  match_basis: core_version_declaration
+  counted: false
+  exclusion_reason: custom_node_in_failure_path
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.39.0
+  matched_field: report_text
+  matched_context: '...or("aimdo memory compile error") ## System Information - **ComfyUI Version:** 0.39.0 - **Arguments:** ComfyUI\main.py --windows-standalone-build --cuda-malloc --dis...'
+- id: comfyui-0-38-0-github-issue-17624
+  product_id: comfyui
+  update_version: 0.38.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17624
+  parent_title: MiniMax H3 partial load crashes with access violation on Windows + ROCm (gfx1100, RX 7900 XTX)
+  report_title: MiniMax H3 partial load crashes with access violation on Windows + ROCm (gfx1100, RX 7900 XTX)
+  report_text_excerpt: 'MiniMax H3 partial load crashes with access violation on Windows + ROCm (gfx1100, RX 7900 XTX) **Environment** - OS: Windows 10 Pro 22H2 (19045) - GPU: AMD Radeon RX 7900 XTX (gfx1100), 24 GB - torch 2.13.0 + ROCm 7.15 (hip 7.15), Python 3.13 - ComfyUI: v0.38.0, commit...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-09'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.38.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.38.0
+  matched_field: report_text
+  matched_context: '...(gfx1100), 24 GB - torch 2.13.0 + ROCm 7.15 (hip 7.15), Python 3.13 - ComfyUI: v0.38.0, commit 651ca296a73cd21c12a57eb8741d52e40dc6528f - Launch args: --use-pytorch-c...'
+- id: comfyui-0-38-0-github-issue-16786
+  product_id: comfyui
+  update_version: 0.38.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16786
+  parent_title: RemeshMesh not supported for torch.int64
+  report_title: RemeshMesh not supported for torch.int64
+  report_text_excerpt: 'RemeshMesh not supported for torch.int64 ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-05'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.38.0
+  match_basis: core_version_declaration
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: macos
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.38.0
+  matched_field: report_text
+  matched_context: '...^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ## System Information - **ComfyUI Version:** 0.38.0 - **Arguments:** ComfyUI/main.py --feature-flag show_signin_button=true --enabl...'
+- id: comfyui-0-38-0-github-issue-17515
+  product_id: comfyui
+  update_version: 0.38.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17515
+  parent_title: 'SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang'
+  report_title: 'SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang'
+  report_text_excerpt: 'SeedVR2: CUDA illegal memory access (MMU NACK) above a total video size on RTX 5090, reproducible, process can hang Native SeedVR2 video upscaling (x2) crashes with `CUDA error: an illegal memory access was encountered` once the input video passes a certain total size. It...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-03'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.38.0
+  matched_field: report_text
+  matched_context: '.... It didn''t help here. **Versions:** still present in v0.44.0. Before #16530 (v0.38.0), the same job OOMs cleanly instead, needing about 56 GiB. So the crash only be...'
+- id: comfyui-0-38-0-github-issue-16848
+  product_id: comfyui
+  update_version: 0.38.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.38.0
+  matched_field: report_text
+  matched_context: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have trie...'
+- id: comfyui-0-37-0-github-issue-17060
+  product_id: comfyui
+  update_version: 0.37.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17060
+  parent_title: '[AMD/ROCm RDNA3] SIGSEGV when sampling MXFP8 models - emulated path dequantizes on every forward'
+  report_title: '[AMD/ROCm RDNA3] SIGSEGV when sampling MXFP8 models - emulated path dequantizes on every forward'
+  report_text_excerpt: '[AMD/ROCm RDNA3] SIGSEGV when sampling MXFP8 models - emulated path dequantizes on every forward ### Environment * **ComfyUI**: 0.37.0 * **comfy-kitchen**: 0.2.35 * **PyTorch**: 2.12.0+rocm7.2 * **ROCm**: 7.2.4 * **GPU**: AMD Radeon RX 7900 XTX — gfx1100 (RDNA3), 24 GiB *...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-15'
+  target_release_date: '2026-09-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.37.0
+  match_basis: core_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: 0.37.0
+  matched_field: report_text
+  matched_context: '...ls - emulated path dequantizes on every forward ### Environment * **ComfyUI**: 0.37.0 * **comfy-kitchen**: 0.2.35 * **PyTorch**: 2.12.0+rocm7.2 * **ROCm**: 7.2.4 * *...'
+- id: comfyui-0-37-0-github-issue-17552
+  product_id: comfyui
+  update_version: 0.37.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17552
+  parent_title: Execution cache silently replays stale outputs when a reference image file changes (autogrow images inputs are not folded into downstream cache signatures)
+  report_title: Execution cache silently replays stale outputs when a reference image file changes (autogrow images inputs are not folded into downstream cache signatures)
+  report_text_excerpt: 'Execution cache silently replays stale outputs when a reference image file changes (autogrow images inputs are not folded into downstream cache signatures) ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists — the repro graph below contains...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-05'
+  target_release_date: '2026-09-21'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: linux
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.37.0
+  matched_field: report_text
+  matched_context: '...VIDIA RTX PRO 6000 Blackwell Workstation Edition, 96 GB). Also reproduced on **v0.37.0**. 1. Upload an image to the input directory: `POST /upload/image` → `ref.png`...'
+- id: comfyui-0-37-0-github-issue-17105
+  product_id: comfyui
+  update_version: 0.37.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17105
+  parent_title: SAM3_Detect ignores the presence score, so prompts for absent objects mask whatever is in the image
+  report_title: SAM3_Detect ignores the presence score, so prompts for absent objects mask whatever is in the image
+  report_text_excerpt: 'SAM3_Detect ignores the presence score, so prompts for absent objects mask whatever is in the image ### Custom Node Testing The defect is in core code (`comfy_extras/nodes_sam3.py`, `comfy/ldm/sam3/detector.py`), and the lines involved are unchanged on current master. Observed...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-09-21'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.37.0
+  matched_field: report_text
+  matched_context: '...ctor.py`), and the lines involved are unchanged on current master. Observed on v0.37.0. ### Expected Behavior `SAM3_Detect` with a text prompt naming an object that...'
+- id: comfyui-0-37-0-github-issue-17015
+  product_id: comfyui
+  update_version: 0.37.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17015
+  parent_title: Slow generation H3 Oct 12
+  report_title: Slow generation H3 Oct 12
+  report_text_excerpt: 'Slow generation H3 Oct 12 ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if you need help) ###...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-14'
+  target_release_date: '2026-09-21'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.37.0
+  matched_field: report_text
+  matched_context: '...es up to 40mins to higher sometimes stuck with no errors, i tried git checkout v0.37.0 no luck, feels the same , even updated to 0.40 but feels the same gens take mor...'
+- id: comfyui-0-37-0-github-issue-16848
+  product_id: comfyui
+  update_version: 0.37.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-09-21'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.37.0
+  matched_field: report_text
+  matched_context: '...- pyzbar 0.1.9 - py_cpuinfo 9.0.0 - qrcode 8.2 - referencing 0.37.0 - regex 2026.1.15 - rembg 2.0.72 - requests 2.32.5 - rich 1...'
+- id: comfyui-0-36-0-github-issue-16848
+  product_id: comfyui
+  update_version: 0.36.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-09-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.36.0
+  matched_field: report_text
+  matched_context: '...cord 0.6.0 - deepdiff 8.6.1 - deep_translator 1.11.4 - diffusers 0.36.0 - dill 0.4.0 - diskcache 5.6.3 - distro 1.9.0 - docutils 0....'
+- id: comfyui-0-30-0-github-issue-17618
+  product_id: comfyui
+  update_version: 0.30.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17618
+  parent_title: 'LTXVImgToVideo: first-frame anchoring broken in v0.44.x — first ~30 frames render black (regression vs v0.30.0)'
+  report_title: 'LTXVImgToVideo: first-frame anchoring broken in v0.44.x — first ~30 frames render black (regression vs v0.30.0)'
+  report_text_excerpt: 'LTXVImgToVideo: first-frame anchoring broken in v0.44.x — first ~30 frames render black (regression vs v0.30.0) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: declared_core_version_differs
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.30.0
+  matched_field: report_text
+  matched_context: '...ame anchoring broken in v0.44.x — first ~30 frames render black (regression vs v0.30.0) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the iss...'
+- id: comfyui-0-30-0-github-issue-16848
+  product_id: comfyui
+  update_version: 0.30.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-08-03'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.30.0
+  matched_field: report_text
+  matched_context: '...ts 2.32.5 - rich 14.2.0 - rotary_embedding_torch 0.8.9 - rpds_py 0.30.0 - rsa 4.9.1 - rtree 1.4.1 - sacremoses 0.1.1 - safetensors...'
+- id: comfyui-0-29-0-github-issue-17217
+  product_id: comfyui
+  update_version: 0.29.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17217
+  parent_title: 'ERROR: Could not install packages due to an OSError: Missing dependencies for SOCKS support.'
+  report_title: 'ERROR: Could not install packages due to an OSError: Missing dependencies for SOCKS support.'
+  report_text_excerpt: 'ERROR: Could not install packages due to an OSError: Missing dependencies for SOCKS support. ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-20'
+  target_release_date: '2026-07-29'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.29.0
+  matched_field: report_text
+  matched_context: '...ython_embeded\Lib\site-packages (from -r ..\ComfyUI\requirements.txt (line 6)) (0.29.0+cu130) Requirement already satisfied: numpy>=1.25.0 in K:\SelfContained Program...'
+- id: comfyui-0-28-0-github-issue-17657
+  product_id: comfyui
+  update_version: 0.28.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17657
+  parent_title: 'Intel Arc B580 (XPU): SDXL 1024x1024 sampling returns all-NaN latents and black images (torch 2.13.0+xpu)'
+  report_title: 'Intel Arc B580 (XPU): SDXL 1024x1024 sampling returns all-NaN latents and black images (torch 2.13.0+xpu)'
+  report_text_excerpt: 'Intel Arc B580 (XPU): SDXL 1024x1024 sampling returns all-NaN latents and black images (torch 2.13.0+xpu) ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-10'
+  target_release_date: '2026-07-15'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: linux
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.28.0
+  matched_field: report_text
+  matched_context: '...`) | | Python | 3.13.12 | | PyTorch | 2.13.0+xpu | | torchvision / torchaudio | 0.28.0+xpu / 2.11.0+xpu | | XPU runtime | 20260000 | | comfy-kitchen / comfy-aimdo | 0...'
+- id: comfyui-0-26-0-github-issue-17362
+  product_id: comfyui
+  update_version: 0.26.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17362
+  parent_title: '[Windows/RTX 4070] Suspected Anima initialization regression on 0.41; rollback to 0.26 restores performance with DynamicVRAM enabled'
+  report_title: '[Windows/RTX 4070] Suspected Anima initialization regression on 0.41; rollback to 0.26 restores performance with DynamicVRAM enabled'
+  report_text_excerpt: '[Windows/RTX 4070] Suspected Anima initialization regression on 0.41; rollback to 0.26 restores performance with DynamicVRAM enabled ### Custom Node Testing - [ ] I have reproduced this with all custom nodes disabled. This is a **suspected performance regression with rollback...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-26'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 0.26.0
+  match_basis: core_version_declaration
+  counted: false
+  exclusion_reason: multiple_core_versions_declared
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.26.0
+  matched_field: report_text
+  matched_context: '...orted problem. Rolling back the core **and its corresponding dependencies** to `0.26.0 / aimdo 0.4.10 / kitchen 0.2.10` restored normal behavior according to the user...'
+- id: comfyui-0-26-0-github-issue-16848
+  product_id: comfyui
+  update_version: 0.26.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.26.0
+  matched_field: report_text
+  matched_context: '...- sageattention 2.2.0+cu130torch2.9.0 - sam_2 1.0 - scikit_image 0.26.0 - scikit_learn 1.8.0 - scipy 1.17.0 - segment_anything 1.0...'
+- id: comfyui-0-23-0-github-issue-16848
+  product_id: comfyui
+  update_version: 0.23.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-06-01'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.23.0
+  matched_field: report_text
+  matched_context: '...zer 3.4.4 - click 8.3.1 - clip_interrogator 0.6.0 - cloudpathlib 0.23.0 - colorama 0.4.6 - coloredlogs 15.0.1 - colorlog 6.10.1 - c...'
+- id: comfyui-0-21-1-github-issue-16848
+  product_id: comfyui
+  update_version: 0.21.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-05-13'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.21.1
+  matched_field: report_text
+  matched_context: '...und 1.3.4 - trimesh 4.11.1 - triton_windows 3.6.0.post26 - typer 0.21.1 - typer_config 1.5.1 - typer_slim 0.21.1 - typing_extensions 4.1...'
+- id: comfyui-0-20-1-github-issue-17616
+  product_id: comfyui
+  update_version: 0.20.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17616
+  parent_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_text_excerpt: 'Version mismatch in older stable releases (including v0.14.2 Windows portable) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-04-27'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.20.1
+  matched_field: report_text
+  matched_context: '...g/ComfyUI/blob/v0.20.2/comfyui_version.py) (May 3, commit `52baf57d`) declares `0.20.1`. Later tags, through `v0.44.0`, appear consistent. So this looks like a recur...'
+- id: comfyui-0-18-2-github-issue-17616
+  product_id: comfyui
+  update_version: 0.18.2
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17616
+  parent_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_text_excerpt: 'Version mismatch in older stable releases (including v0.14.2 Windows portable) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-03-25'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.18.2
+  matched_field: report_text
+  matched_context: '...omfyUI/blob/v0.18.3/comfyui_version.py) (March 26, commit `173e1aa2`) declares `0.18.2`. - [`[v0.20.2](https://github.com/Comfy-Org/ComfyUI/blob/v0.20.2/comfyui_versi...'
+- id: comfyui-0-18-1-github-issue-16848
+  product_id: comfyui
+  update_version: 0.18.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-03-23'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.18.1
+  matched_field: report_text
+  matched_context: '...pen_clip_torch 3.3.0 - orderly_set 5.5.0 - packaging 25.0 - peft 0.18.1 - piexif 1.1.3 - pillow 12.3.0 - pip 25.3 - pixeloe 0.1.4...'
+- id: comfyui-0-17-1-github-issue-16848
+  product_id: comfyui
+  update_version: 0.17.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-03-13'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.17.1
+  matched_field: report_text
+  matched_context: '...- ftfy 6.3.1 - fvcore 0.1.5.post20221221 - gdown 5.2.1 - gguf 0.17.1 - gitdb 4.0.12 - gitpython 3.1.46 - glfw 2.10.0 - googleapi...'
+- id: comfyui-0-17-0-github-issue-17604
+  product_id: comfyui
+  update_version: 0.17.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17604
+  parent_title: Merge List of Tiles to Image corrupts borders with FP16 intermediates
+  report_title: Merge List of Tiles to Image corrupts borders with FP16 intermediates
+  report_text_excerpt: 'Merge List of Tiles to Image corrupts borders with FP16 intermediates ### Custom Node Testing This standalone reproduction imports and calls only built-in nodes. No custom nodes, models, server or GUI are initialized. ### Expected Behavior `EmptyImage -> Convert Image Color...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-03-13'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: wrong or corrupted output
+  workflow_area: generation output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.17.0
+  matched_field: report_text
+  matched_context: '...omfy-aimdo": "0.6.0", "numpy": "2.5.4", "pytest": "9.1.1", "ruff": "0.17.0", "comfyui-frontend-package": "1.58.5", "comfyui-workflow-templates": "...'
+- id: comfyui-0-16-0-github-issue-17116
+  product_id: comfyui
+  update_version: 0.16.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17116
+  parent_title: 'comfy_kitchen bug: infer_schema(func): Parameter stride has unsupported type list[int]'
+  report_title: 'comfy_kitchen bug: infer_schema(func): Parameter stride has unsupported type list[int]'
+  report_text_excerpt: 'comfy_kitchen bug: infer_schema(func): Parameter stride has unsupported type list[int] ### Custom Node Testing - [x] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-17'
+  target_release_date: '2026-03-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: crash or freeze
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.16.0
+  matched_field: report_text
+  matched_context: '...2.3.1 h11 0.16.0 hf-xet 1.7.0 httpcore2...'
+- id: comfyui-0-16-0-github-issue-16848
+  product_id: comfyui
+  update_version: 0.16.0
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/16848
+  parent_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_title: v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。
+  report_text_excerpt: 'v0.38.0版本后生成的图片拖入ComfyUI界面，全是乱的，原始版面（元数据）丢失。 ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-with-all-custom-nodes-disabled) if...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-10-07'
+  target_release_date: '2026-03-05'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.16.0
+  matched_field: report_text
+  matched_context: '...undingdino_py 0.4.0 - grpcio 1.78.0 - grpcio_status 1.71.2 - h11 0.16.0 - h2 4.3.0 - hf_xet 1.4.0 - hpack 4.1.0 - httpcore 1.0.9...'
+- id: comfyui-0-14-2-github-issue-17616
+  product_id: comfyui
+  update_version: 0.14.2
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17616
+  parent_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_text_excerpt: 'Version mismatch in older stable releases (including v0.14.2 Windows portable) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-02-18'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.14.2
+  matched_field: report_text
+  matched_context: 'Version mismatch in older stable releases (including v0.14.2 Windows portable) ### Custom Node Testing - [ ] I have tried disabling custom...'
+- id: comfyui-0-14-1-github-issue-17616
+  product_id: comfyui
+  update_version: 0.14.1
+  source_type: github_issue
+  source_name: Comfy-Org/ComfyUI
+  source_url: https://github.com/Comfy-Org/ComfyUI/issues/17616
+  parent_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_title: Version mismatch in older stable releases (including v0.14.2 Windows portable)
+  report_text_excerpt: 'Version mismatch in older stable releases (including v0.14.2 Windows portable) ### Custom Node Testing - [ ] I have tried disabling custom nodes and the issue persists (see [how to disable custom nodes](https://docs.comfy.org/troubleshooting/custom-node-issues#step-1%3A-test-...'
+  captured_at: '2026-11-19T08:06:33Z'
+  source_date: '2026-11-08'
+  target_release_date: '2026-02-17'
+  source_date_pass: true
+  patch_version_matched: false
+  matched_version: ''
+  match_basis: ''
+  counted: false
+  exclusion_reason: version_not_core_identity
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: 0.14.1
+  matched_field: report_text
+  matched_context: '...8…597c`). Inside the archive: - `ComfyUI/comfyui_version.py`: `__version__ = "0.14.1"` - `ComfyUI/pyproject.toml`: `version = "0.14.1"` - `ComfyUI/.git/HEAD`: point...'
+- id: obs-studio-33-0-1-github-issue-14230
+  product_id: obs-studio
+  update_version: 33.0.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14230
+  parent_title: Preview and projector framerate periodically degrades
+  report_title: Preview and projector framerate periodically degrades
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 33.0.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/QtUxO2mKsz0ClCBT ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The O'
+  captured_at: '2026-11-19T08:34:03Z'
+  source_date: '2026-11-19'
+  patch_version_matched: true
+  matched_version: 33.0.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-14229
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/14229
+  parent_title: Crash in obs_output_get_width when obs-websocket handles GetOutputList after outputs are stopped
+  report_title: Crash in obs_output_get_width when obs-websocket handles GetOutputList after outputs are stopped
+  report_text_excerpt: 'ws 11 26H2, build 26300.9974. NVIDIA RTX 5070, driver 32.0.16.1088 ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/MtmOKF2D0z5B7c0V ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/m9BTr'
+  captured_at: '2026-11-19T08:36:29Z'
+  source_date: '2026-11-19'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
