@@ -1543,7 +1543,7 @@ SOURCE_PROBE = "$${{ gate_source_url }}|{{ gate_source_label }}|{{ gate_source_c
 def _source_line_block() -> str:
     """The patch page's source line, sliced VERBATIM from aux-update.html (the shipped template)."""
     layout = (_AUX / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
-    start = layout.index("{%- if decision_source_url != '' %}")
+    start = layout.index("{%- if decision_source_url and decision_source_url != '' %}")
     end = layout.index("{%- endif %}", start) + len("{%- endif %}")
     return layout[start:end]
 
@@ -1581,24 +1581,28 @@ def check_avoid_source_link() -> None:
           and len(sample_others) > 0 and all(probe.get(f"o{i}") == "||" for i in range(len(sample_others))),
           str(probe)[:400])
     block = _source_line_block()
-    cases = {"avoid": {"rec": {}, "cnt": 0}, "none": {"rec": {}, "cnt": 0}}
+    cases = {"avoid": {"rec": {}, "cnt": 0}, "none": {"rec": {}, "cnt": 0}, "unset": {"rec": {}, "cnt": 0}}
     vars_avoid = ("{% assign decision_source_url = '" + entry["official_url"] + "' %}"
                   "{% assign decision_source_label = 'Microsoft support article for KB5079391' %}"
                   "{% assign decision_source_checked = '" + entry["verified_at"] + "' %}")
     vars_none = ("{% assign decision_source_url = '' %}{% assign decision_source_label = '' %}"
                  "{% assign decision_source_checked = '' %}")
     rendered = {}
-    for name, prefix in (("avoid", vars_avoid), ("none", vars_none)):
+    # "unset": no assignment at all. An unset variable is nil and `nil != ''` is TRUE in Liquid, so a
+    # bare inequality printed an empty href wherever the include had not run (caught by
+    # test_publication_title_minimisation R6, which renders the layout with includes removed).
+    for name, prefix in (("avoid", vars_avoid), ("none", vars_none), ("unset", "")):
         got = render_gate({name: cases[name]}, {}, prefix + block + "@@", suffix="") or {}
         rendered[name] = got.get(name, "")
     expect = (f'<p class="update-decision-source">Source: <a href="{entry["official_url"]}">'
               f'Microsoft support article for KB5079391</a>, checked Nov 6, 2026.</p>')
     avoid_html = rendered["avoid"].split("@@")[0].strip()
     none_html = rendered["none"].split("@@")[0].strip()
+    unset_html = rendered["unset"].split("@@")[0].strip()
     check("G66-S3 the shipped page template prints exactly one plain link line -- the article URL, the AUXSAYS "
-          "label and the verified date -- and prints nothing when the page has no source",
-          avoid_html == expect and none_html == "" and "<script" not in avoid_html,
-          f"{avoid_html!r} / {none_html!r}")
+          "label and the verified date -- and prints nothing when the page has no source, set or unset",
+          avoid_html == expect and none_html == "" and unset_html == "" and "<script" not in avoid_html,
+          f"{avoid_html!r} / {none_html!r} / {unset_html!r}")
     decision = (_AUX / "_includes" / "patch-decision.html").read_text(encoding="utf-8")
     check("G66-S4 the page reads the link from the gate (the projection), not from the lifecycle file or a record",
           "{% assign decision_source_url = gate_source_url %}" in decision
