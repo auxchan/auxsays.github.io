@@ -3962,44 +3962,98 @@ back unread:
   longest-waiting first, then everything else in the old order. A failed read keeps the thread owed
   (`thread_read_failed`) and sends it to the end of the queue. The request ceiling and the thread cap are unchanged:
   the queue only orders the work.
-- An owed thread leaves the queue in one of two ways:
+- An owed thread leaves the queue in one of three ways:
   - it is read, or found unchanged;
-  - it is invalidated, and the reason is kept in `deferred_invalidated` (the last 20). The reasons are: its own
-    topic view answers 404 or 410 (`thread_gone`); its title names no tracked version; or no record is left for
-    the versions it names.
+  - it is invalidated, and the reason is kept in `deferred_invalidated` (the last 20). The reasons are: its title
+    names no tracked version, or no record is left for the versions it names;
+  - it is quarantined (below).
 - Telemetry, with no new evidence state:
   - every health note a cycle writes after reading its state file gives the forum-wide queue depth and the oldest
-    deferral, plus any invalidations that cycle and their reasons;
+    deferral, the number of quarantined threads and their reasons, plus any invalidations that cycle and their
+    reasons;
   - the `nvidia_forum_cycle` runtime event carries the same numbers;
   - a deferred seed whose title is unknown reports partial for every version;
   - a seed read by any path is recorded as read.
 
+**Stall correction** (GPT G62 R1, before merge). Owed work is read first and in a stable order, so as first built,
+one queued thread whose own view raised a stop stopped every cycle that reached it, discarded that cycle's other
+reads, and came first again the next cycle: one unreadable thread could stop all forum collection for good. A
+refusal from it suspended the whole method again after every clearing. Now a queued thread's own failure is its
+own:
+- A queued thread whose topic view answers 404 or 410 is quarantined as `thread_unreadable`. Its identity and
+  reason stay in the state file, and it is never retried automatically. It is no longer deleted.
+- A queued thread the listing does not show this cycle (other than a seed never read, whose title is not known
+  yet) is handled thread by thread:
+  - success:false (a JSON answer with no refusal in it): when another thread was read in full in the same cycle,
+    which confirms the failure is the thread's own, it is quarantined as `thread_invalid_response` and the cycle
+    goes on, keeping and counting the other threads' rows. Unconfirmed, it stays queued.
+  - HTTP 401/403/451, and the other refusals the access rules name except a rate limit (a challenge, an HTML page,
+    a refusing body): the method is suspended exactly as before and that cycle's reads are discarded as before.
+    The refused thread is also quarantined (`access_refused`), so it is not asked again once a reviewed change
+    clears the refusal.
+  - HTTP 429: the method is suspended as before, and the thread stays queued in its place.
+  - A timeout, a 5xx, another response shape (such as another topic's id, as after a merge) or a redirect
+    (refused before the hop, nothing sent there): it stays queued (`thread_read_failed`) and goes to the end of
+    the queue. It is never classified as invalid. It takes at most one thread slot and two requests a cycle, so it
+    cannot stop the others. (Before this correction a timeout or a 5xx already did this; another shape or a
+    redirect stopped the cycle.)
+- A listed thread and a seed never read keep the stops every thread had before the queue existed.
+- A quarantined entry keeps its window, the reason, the time and its first deferral. It is never selected by any
+  path (not even while listed), never pruned, and never invalidated. Only a reviewed change releases it: an entry
+  in `nvidia_forum_source.QUARANTINE_RELEASES` naming the topic id, the quarantine's recorded time and a reason.
+  The next cycle puts the thread back at the end of the queue and logs the release in `quarantine_released` (the
+  last 20). One entry releases one quarantine, once.
+
 `evaluate_comment` is unchanged, and so are every acceptance rule, threshold, schedule and ceiling; the health-status
 vocabulary gains no status. Replayed on the captured windows, the decisions are identical (9 counted). Pinned by
-`test_nvidia_forum_evidence.py` section Q (175 to 204 governed checks; each of 22 single-fix mutants fails a named
-check, and so does each of 2 telemetry mutants: the oldest age taken from the requeue time, and a depth that drops
-owed threads read before):
+`test_nvidia_forum_evidence.py` sections Q and QS (175 to 225 governed checks). Each of 22 single-fix mutants of the
+queue fails a named check, and so does each of 2 telemetry mutants (the oldest age taken from the requeue time, and
+a depth that drops owed threads read before). Each of the stall correction's 31 single-fix mutants fails a named
+check too. The suite covers:
 - three exhausted cycles (request ceiling, thread cap, time budget), with the threads unlisted and never read;
 - then reads in queue order;
 - the store ends with exactly one unconstrained cycle's rows and decisions: 9 counted, none twice, none credited
-  twice.
+  twice;
+- a poisoned queued thread (success:false): quarantined while the same cycle reads and counts the other threads;
+  never asked again, even while listed; kept when its version loses its record; released; then the store equals
+  one unconstrained cycle's;
+- 401, 403 and 451 one by one, an HTML page and a 429;
+- a 503, a timeout and a 502, then another topic's id, a redirect and a body that is not JSON, three cycles each
+  without a stop;
+- an unconfirmed and then a confirmed success:false;
+- a listed thread and a seed never read keeping their stops;
+- a 410; the prune; the release path.
 
 **Residual**
-- A queued thread whose own topic view raises a stop stops each cycle that reaches it, and that cycle's other reads
-  are discarded with it; owed work is reached first and in a stable order, so this repeats every cycle. A redirect
-  or a schema change (including a topic answering with another id, as after a merge) reports broken. An access
-  refusal (401/403/429/451, an HTML page, a challenge) suspends the whole lane (blocked) until a reviewed change
-  clears it, and the same thread is first again afterwards. Before this change only listed, remembered or seed
-  threads were read; a queued user topic is now read after it may have been hidden, moved or merged. The forum's
-  answer for a deleted topic is unmeasured: only 404/410 invalidates.
+- A listed queued thread and a seed never read keep their stops. Success:false, another shape or a redirect from
+  their own view stops each cycle that reaches it (broken, that cycle's other reads discarded), and a refusal
+  suspends the method with the thread still queued in its place. For a listed thread this lasts while the listing
+  shows it. A seed never read is offered every cycle until it is read, as before this change. Neither production
+  seed is in that state: both were read in the first production cycle.
+- A queued thread that keeps failing with a timeout, a 5xx, another shape, a redirect or an unconfirmed
+  success:false is never quarantined automatically. It stays queued and is retried at most once a cycle, at the end
+  of the queue, for as long as it fails. Each retry uses one thread slot and up to two requests.
+- A robots rule that disallows one queued thread's page stops each cycle that reaches it (`robots_policy`), as for
+  any thread. A2 covers response classes only. No current rule names a topic page: the forum's rules are page-number
+  queries.
+- A quarantined thread stays out of selection until a reviewed change releases it, even if the listing shows it
+  with new activity. Its versions report partial only in the cycle that quarantined it. After that, the
+  forum-wide count and reasons are in every health note. A deleted topic that is released answers 404 again and is
+  quarantined again: there is no disposal path other than a release, so its small entry stays in the state file.
+- A 404 or 410 quarantines any queued thread, listed or not. A forum-wide change that made every topic view answer
+  404 would quarantine each queued thread it reaches, and each would need a release.
+- The forum's answer for a deleted topic is still unmeasured.
 - A thread whose first read fails is still not queued, as before. It reports partial / `thread_read_failed`.
 - An unchanged listed thread still takes a thread slot.
 
 **Reopen only if** any of these happens:
-- a thread deferred in a finished cycle is missing from the next saved state with neither a read nor a
-  `deferred_invalidated` record;
+- a thread deferred in a finished cycle is missing from the next saved state with neither a read, a
+  `deferred_invalidated` record nor a quarantine;
 - an owed thread is overtaken by a thread deferred after it, other than after its own failed read;
-- a cycle stops or is suspended while reading a queued thread.
+- a queued thread the listing does not show, other than a seed never read, stops a cycle with a schema or
+  source-authority stop;
+- a thread quarantined for a refusal is asked again, or suspends the method again, without a release;
+- a quarantined thread is requested, or leaves the state file, without a `quarantine_released` record.
 
 ### AUX-045 — a counted row could not show the evidence for its own version match
 
