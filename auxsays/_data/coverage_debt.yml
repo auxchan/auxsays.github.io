@@ -28,8 +28,15 @@ entries:
   remediation_priority: P1
   blocking_reason: source_blocks_automation
   next_action: >-
-    Find an official Adobe release source that answers the collection runners. Until then the lane reads
-    only a pinned announcement of one release and the page says monitoring is impaired.
+    Reachable, not complete: the pinned 26.2.2 page answers, HelpX refuses the runners, and nothing
+    discovers any release after 26.2.2. Reachability: the lane is enabled and runs on schedule, and its
+    pinned fallback (the Adobe Community announcement of 26.2.2) answers, so the collector is not disabled.
+    Source blockage: HelpX, the official release-notes index, has refused the collection runners (HTTP
+    403) since 2026-09-08, so the lane reads partial and the page says monitoring is impaired. Discovery
+    completeness: the lane has no discovery stage, so no release after 26.2.2 reaches the patch store; a
+    successful pinned fetch is not healthy coverage. Next step, once the owner decides on Adobe Community
+    collection: automated discovery over the official Announcements board that finds future releases, not
+    another hand-pinned page. Keep the 26.2.2 pin until a validated replacement keeps its coverage.
   plan: not_planned
   review_by: "2026-12-18"
   ledger: AUX-087

@@ -101,6 +101,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-062 | Resolved | Evidence integrity | Low | DaVinci "gpu" read as a performance cue and a DaVinci-only "plugin issues" bucket; the Windows and OBS-crash misses stay deferred |
 | AUX-063 | Deferred | Evidence acceptance | Medium | The Windows authority can attribute a report to the patch whose build is only the reporter's baseline |
 | AUX-064 | Deferred | Compliance | High | Reddit collection is switched off for lack of written authorisation; 326 stored Reddit rows await a retention and publication-rights review |
+| AUX-113 | Deferred | Compliance | High | Adobe Community collection (Acrobat Pro, Acrobat Reader, Premiere Pro) continues with its rights under Adobe's terms unresolved |
 | AUX-082 | Resolved | Compliance | Medium | The published Systems Monitor bundle shipped its dependencies without their licence notices |
 | AUX-104 | Resolved | Presentation | Low | The Windows 11 page scrolled sideways on phones, and 46 patch titles printed their product name twice |
 | AUX-085 | Resolved | Test integrity | Medium | A Systems Monitor test timing race failed a site deploy after every test had passed |
@@ -109,7 +110,7 @@ Working rule for what blocks a lane and what gets ledgered: see *Progress-first 
 | AUX-081 | Resolved | Collector telemetry | High | A new patch's never-run Reddit policy row had no last_run, and the validator refused every writeback for every product |
 | AUX-067 | Resolved | Evidence acceptance | High | A Windows report whose title is about another update counted against the build it merely quoted |
 | AUX-068 | Resolved | Observability | Low | PowerPoint Learn Q&A health rows said `fetches=200` and nothing about the 200 ceiling, thread population or exhaustion |
-| AUX-087 | Deferred | Coverage | Medium | Premiere Pro release discovery is source-blocked, and the lane read healthy while HelpX refused it |
+| AUX-087 | Open | Coverage | Medium | Premiere Pro releases after 26.2.2 are not discovered: the lane has no release discovery, and HelpX refuses CI |
 | AUX-071 | Resolved | Test integrity | High | Archiving DaVinci shrank the live corpus below a suite's budget, and every pull request's CI went red |
 | AUX-069 | Resolved | Deploy hygiene | Low | `source_health.yml` was a stale tracked copy of a deploy-generated snapshot |
 | AUX-077 | Resolved | Evidence integrity | Medium | Learn Q&A fetchers followed a redirect to any host and would have parsed that page as the Learn thread |
@@ -2496,6 +2497,12 @@ caught by a named check.
 independent official reference exists for any product except the two NVIDIA releases recorded by hand.
 Partial rot (AUX-003 family) stays invisible. The assessment cannot see that `pages.yml` itself stopped
 running.
+
+**Recorded 2026-11-19: reachable is not complete** Premiere Pro is the measured case of the gap above: a
+lane scheduled every cycle, answered by its fallback and read `healthy` from 2026-05-21 to 2026-11-06 (536
+of 538 checks; the other two were degraded), about five and a half months, while it could never discover a
+release after 26.2.2. Scheduling, reachability, source blockage and discovery completeness are separate
+facts; see AUX-087, "For coverage assessments". Recorded as a distinction, not built as a new monitor.
 
 **Follow-up: detection latency (open)** Release-to-discovery is measured for the newest record of each
 product only, and discovery-to-publication is `unknown` everywhere because nothing records when a record
@@ -6373,22 +6380,22 @@ reviews.
 
 ---
 
-### AUX-087 — Premiere Pro release discovery is source-blocked, and the lane read healthy while HelpX refused it
+### AUX-087 — Premiere Pro releases after 26.2.2 are not discovered: the lane has no release discovery, and HelpX refuses CI
 
-- **Status** Deferred (discovery is SOURCE-BLOCKED; the reporting fix is resolved) · **Area** Coverage · **Severity** Medium
-- **First seen** 2026-11-06 · **Reporting fixed** 2026-11-06 (`fix/premiere-source-truth`)
+- **Status** Open: reopened 2026-11-19, held for owner decisions (no record-producing step is approved) · **Area** Coverage · **Severity** Medium
+- **First seen** 2026-11-06 · **Reporting fixed** 2026-11-06 (`fix/premiere-source-truth`) · **Reopened**
+  2026-11-19 (read-only diagnosis; no collector, record, evidence row, count or verdict changed)
 
-**Symptom** Premiere Pro 26.5, 26.5.1 and 26.5.2 have shipped, and AUXSAYS has no record of them. The
-official lane still reported `healthy` / "Fetch succeeded." (run 42194448565: one candidate, the pinned
-26.2.2 announcement), and the product page said "Official updates monitored".
+**Symptom** The newest Premiere Pro record is 26.2.2. Until 2026-11-06 the official lane reported
+`healthy` / "Fetch succeeded." (run 42194448565: one candidate, the pinned 26.2.2 announcement), and the
+product page said "Official updates monitored". Releases after 26.2.2 that AUXSAYS lacks: 26.3 and 27.0
+(each has a vendor post on the Announcements board), and 26.5, 26.5.1, 26.5.2 and 26.5.3, which stay
+unresolved (see below).
 
-**Cause** Since 2026-09-08 (run 34252632666) HelpX has refused CI at once with HTTP 403 "Access Denied".
-Before that date, every run spent about 25 s on a HelpX timeout. `_fetch_first_available` threw that
-error away whenever the pinned announcement answered. No other official route reachable from CI lists
-26.5.x:
-- every other Adobe official route is already `blocked` in `lib/acquisition_methods.py`;
-- the public Premiere Announcements board has had no release post since 26.3 (2026-06-17);
-- 26.5 appears only as a non-public product-update entry, and 26.5.1 and 26.5.2 only in user reports.
+**Cause (as first recorded)** Since 2026-09-08 (run 34252632666) HelpX has refused CI at once with HTTP
+403 "Access Denied". Before that date, every run spent about 25 s on a HelpX timeout.
+`_fetch_first_available` threw that error away whenever the pinned announcement answered. Every other
+Adobe official route is already `blocked` in `lib/acquisition_methods.py`.
 
 **Fixed here (reporting only)**
 - The HelpX error survives the fallback. The source records `partial`: never `healthy`, never "Fetch
@@ -6402,21 +6409,110 @@ error away whenever the pinned announcement answered. No other official route re
 - No request, source or record changed. The 26.2.2 record comes out byte-identical under the old and the
   new code. Test: `test_premiere_source_truth.py` (49 checks).
 
-**Why deferred** No approved official method that carries Premiere release identity is reachable from
-production. Getting past the HelpX refusal would be a bypass, and user reports are not an official source.
+**Reopened 2026-11-19** Revisit trigger 2 below was met in part on 2026-11-10: a vendor post announcing
+Premiere 27.0 appeared on the Announcements board. The lane never fetched it. The first run after the post
+(42731476232, 42 minutes later) and every run since refreshed 26.2.2 instead. Measured, read-only:
+- **Scheduling is not a cause.** 271 ingest runs since 2026-09-01, no calendar day missed; the largest gap
+  is 15 h 42 min.
+- **Version filtering is not a cause.** The ingest applies only its seen and limit windows, and the
+  adapter's only token filter is beta/mobile/iOS/Android.
+- **Root cause, two parts.** The lane has no release discovery: its official input is exactly two pages,
+  HelpX and one hand-pinned announcement (26.2.2, pinned 2026-05-20), and the first that answers wins.
+  And HelpX, the official index of every release, refuses CI, so the pin always wins. CI has created one
+  Premiere record ever (26.2, 2026-04-30); 26.2.2 was added by hand and is only refreshed.
+- **The board, read through the keyless chain the community lane already uses.** Vendor posts exist for
+  26.3 ("What's New in Adobe Premiere 26.3 - June 2026") and 27.0 ("Welcome to Adobe Premiere 27.0!",
+  posted 2026-11-10 per the board's topic data, which is not a verified release date). Neither was fetched.
+- **26.5, 26.5.1, 26.5.2 and 26.5.3 stay unresolved.** HelpX is reported to list them, but it refuses CI
+  and nothing here confirms that; the board has no vendor post for any of them; user reports name 26.5.1,
+  26.5.2 and 26.5.3, and those are evidence, not an official source. No release date is inferred for any
+  of them.
 
-**Current impact** The newest Premiere record stays 26.2.2. After the next ingestion run, the product reads
-as blocked rather than monitored, and the Adobe company card counts 2 of 7 products monitored instead of 3.
+**Held, not done**
+- **27.0 is not created.** A bare re-pin to its post yields no record (the title carries no date, and the
+  fail-closed rule drops it, correctly). 27.0 is never created from an unverified date, or with a summary
+  carrying the page's script text. A 27.0 record, however it is produced, would also enrol 27.0 in the
+  community lane's per-record searches (Algolia queries 6 to 9 per cycle), which the no-expansion condition
+  of AUX-113 does not allow. One hand pin replaced by another is rejected: that keeps the manual dependency
+  that caused this.
+- **The 26.2.2 pin stays** until a validated automated replacement keeps its coverage.
+- **26.3 is held.** The lane reads one page per run, and its only date is the title's month.
 
-**Revisit trigger** Reopen only if one of these happens:
+**Extraction defects, state at `19a1ee7a`** Fixed 2026-11-06: an unknown version inheriting the 26.2
+link; a dateless page dated today. Open: the body extraction can publish page script as the summary of a
+community-hosted record (a blocker for any new record from that page family); the version-heading pattern
+can span elements and take a reply's date (harmless only while the fetched bytes carry no h1-h4); the HelpX
+parser has never seen a real HelpX page from CI, so the registry now lists it `blocked`, not `active`;
+month-only dates publish as day 01 (do not replace them with a post date: one counted report predates its
+announcement post by three days).
+
+**For coverage assessments (AUX-102)** A collector can be scheduled, reachable through a fallback and
+apparently healthy while it systematically misses releases. This lane ran every cycle, its fallback page
+answered, and it read `healthy` from 2026-05-21 to 2026-11-06 (536 of 538 checks; the other two were
+degraded), about five and a half months, while it could only ever see one release. Scheduling,
+reachability, source blockage and discovery completeness are separate facts, and an assessment that
+establishes the first two has said nothing about the last. `_data/coverage_debt.yml` now states the three
+for Premiere. This records the distinction; it is not a mandate for a monitoring framework. Today the only
+completeness check is a release a person verified on the vendor's own pages (`observed_official_releases`).
+
+**Why held** No record-producing step is approved. Getting past the HelpX refusal would be a bypass, user
+reports are not an official source, and the only automated replacement (a listing of the Announcements
+board) waits on the Adobe Community rights decision (AUX-113).
+
+**Current impact** The newest Premiere record stays 26.2.2, and the page reads "Monitoring temporarily
+impaired". The coverage debt entry and the registry state the gap; nothing else changed.
+
+**Next step** After the owner's decision (AUX-113): an automated discovery method over the official
+Announcements board that finds future releases, never a succession of re-pinned pages; then the two open
+extraction defects above; then 27.0.
+
+**Revisit trigger** (kept from 2026-11-06; the second was met in part on 2026-11-10)
 - an official Adobe route that carries Premiere release identity (version and date) answers HTTP 200 from
   CI;
 - Adobe resumes public Premiere release posts on the Announcements board.
 
-A listing over that board alone would yield 26.3 only.
+A listing over that board alone would yield 26.3 and 27.0 only.
 
 **Work that this item must not block** GROWTH-1B and all other ingestion. The pinned 26.2.2 fallback stays
 as it is.
+
+---
+
+### AUX-113 — Adobe Community collection continues with its rights under Adobe's terms unresolved
+
+- **Status** Deferred (owner decision pending) · **Area** Compliance · **Severity** High
+- **First seen** 2026-11-19 (terms review before adding another Adobe product)
+
+**Finding** Adobe's General Terms of Use (effective 2025-10-03) count discussion forums as "Services". On a
+plain reading:
+- s6.18 bars data mining or similar data gathering and extraction methods in connection with the Services;
+- s6.6 bars access through anything other than an interface Adobe provides or permits.
+
+They cover the three Adobe Community lanes AUXSAYS runs: Acrobat Pro, Acrobat Reader and Premiere Pro (the
+keyless search and topic chain, the Premiere known-URL recheck, the switched-off search and bug-tab methods,
+and the Premiere official lane's one pinned announcement page on the same host). robots.txt does not
+disallow the endpoints the running methods use (it does disallow the switched-off bug-tab walk's sort
+parameter), and that settles nothing about the terms. Not legal advice.
+
+**Position until the owner decides** Rights status **unresolved**: not a clearance, and an owner risk
+acceptance would not be permission from Adobe.
+- The lanes continue unchanged, as a temporary position.
+- No expansion of their methods or scope (this holds the Premiere 27.0 bridge, AUX-087).
+- The no-evasion safeguards stay.
+- A method is suspended if Adobe objects to it or blocks it.
+
+The registry records it as `rights_status: unresolved` on every method whose requests go to Adobe
+Community (`lib/acquisition_methods.py`, pinned by R23 in `test_acquisition_method_registry.py`).
+
+**Why deferred** The choice is the owner's: accept the risk for these lanes (with or without a new Adobe
+product), pause them, or ask Adobe first.
+
+**Current impact** None on collection, evidence, counts or verdicts. A new Adobe Community product
+(Lightroom Classic) waits on the same decision.
+
+**Revisit trigger** The owner decides; Adobe objects to or blocks a lane; or Adobe's terms change.
+
+**Work that this item must not block** Existing Acrobat and Premiere collection, which continues unchanged.
 
 ---
 
