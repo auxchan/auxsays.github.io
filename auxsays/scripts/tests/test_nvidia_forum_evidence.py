@@ -1360,7 +1360,9 @@ def section_deferred_queue() -> None:
         # collectors would stop before writing their health rows).
         with patched([(nf, "_budget_expired", lambda: True)]):
             return real_run_cycle(*args, **kwargs)
-    start = datetime.now(timezone.utc).replace(microsecond=0)
+    # A clock with a fractional second, as production's datetime.now() always has: the old prune
+    # expression only failed when the retention horizon was fractional.
+    start = datetime.now(timezone.utc).replace(microsecond=250000)
 
     # The reference: one unconstrained cycle over the same captured windows.
     with tempfile.TemporaryDirectory() as tmp:
@@ -1536,9 +1538,18 @@ def section_deferred_queue() -> None:
               and {h["status"] for h in _health(ress)} == {"blocked"}
               and all("Deferred-thread queue (whole forum): 4 waiting" in h["notes"] for h in _health(ress)),
               _health(ress)[0]["notes"][-160:])
+        refused = lane.state()
+        refused["access_refused"] = {"at": "2026-11-19T00:00:00Z", "detail": "HTTP 403"}
+        lane.state_path.write_text(json.dumps(refused), encoding="utf-8")
+        resr, _cr, _readr, seenr = lane.cycle()
+        check("Q25 ...and so does a suspended cycle, which returns before any request",
+              not seenr and {h["blocked_reason"] for h in _health(resr)} == {"access_refused"}
+              and json.dumps(lane.state()["threads"], sort_keys=True) == threads_before
+              and all("Deferred-thread queue (whole forum): 4 waiting" in h["notes"] for h in _health(resr)),
+              _health(resr)[0]["notes"][-160:])
 
-    # The retention prune, directly.
-    now = datetime(2027, 3, 1, tzinfo=timezone.utc)
+    # The retention prune, directly, at a fractional second (production's clock always has one).
+    now = datetime(2027, 3, 1, 0, 0, 0, 500000, tzinfo=timezone.utc)
     fresh = int((now - timedelta(days=1)).timestamp())
     stale = int((now - timedelta(days=60)).timestamp())
     marker = {"reason": "thread_cap", "first_deferred_at": "2027-01-01T00:00:00Z",
@@ -1563,9 +1574,10 @@ def section_deferred_queue() -> None:
     small = {"threads": {"5": {"title_versions": ["621.24"], "last_activity": None, "window": []},
                          "6": {"title_versions": ["621.24"], "last_activity": fresh, "window": [[7, 7]]}}}
     src.prune_threads(small, {"621.24"}, now)
+    horizon = (now - timedelta(days=src.THREAD_RETENTION_DAYS)).timestamp()
     check("Q23 ...and an entry never read is not dropped for lacking a last activity (the old "
-          "int(None or horizon) >= horizon was False for every such entry)",
-          set(small["threads"]) == {"5", "6"}, str(sorted(small["threads"])))
+          "int(None or horizon) >= horizon was False for every such entry at a fractional horizon)",
+          set(small["threads"]) == {"5", "6"} and int(horizon) < horizon, str(sorted(small["threads"])))
     st_log = {"threads": {str(t): {"deferred": dict(marker)} for t in range(30)}}
     for t in range(30):
         nf._invalidate(st_log, {"at": "2027-03-01T00:00:00Z", "invalidated": []}, str(t), "thread_gone")

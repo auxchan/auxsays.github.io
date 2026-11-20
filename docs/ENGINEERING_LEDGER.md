@@ -3973,7 +3973,7 @@ releases' early reports.
 
 `evaluate_comment` is unchanged, and so are every acceptance rule, threshold, status, schedule and ceiling. Replayed
 on the captured windows, the decisions are identical (9 counted). Pinned by `test_nvidia_forum_evidence.py` section
-Q (175 to 200 governed checks):
+Q (175 to 201 governed checks; each of 22 single-fix mutants fails a named check):
 - three exhausted cycles (request ceiling, thread cap, time budget), with the threads unlisted and never read;
 - then reads in queue order;
 - the store ends with exactly one unconstrained cycle's rows and decisions: 9 counted, none twice, none credited
