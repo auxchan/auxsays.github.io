@@ -82025,3 +82025,3684 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-teams-26288-2004-5269-3420-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-6076394-microsoft-teams-ctrl-v-image-paste-iss
+  product_id: microsoft-teams
+  update_version: 26288.2004.5269.3420
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6076394/microsoft-teams-ctrl-v-image-paste-issue-images-au
+  parent_title: Microsoft Teams Ctrl+V Image Paste Issue – Images Automatically Converted to PNG Attachments Instead of Inline Images (Version 26288.2004.5269.3420) - Microsoft Q&A
+  report_title: Microsoft Teams Ctrl+V Image Paste Issue – Images Automatically Converted to PNG Attachments Instead of Inline Images (Version 26288.2004.5269.3420) - Microsoft Q&A
+  report_text_excerpt: Microsoft Teams Ctrl+V Image Paste Issue – Images Automatically Converted to PNG Attachments Instead of Inline Images (Version 26288.2004.5269.3420) Hello Microsoft Support Team and Community, I am experiencing an issue with Microsoft Teams where screenshots and copied images...
+  captured_at: '2026-11-20T21:03:58Z'
+  source_date: '2026-11-19'
+  target_release_date: '2026-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26288.2004.5269.3420
+  match_basis: 26288.2004.5269.3420
+  counted: false
+  exclusion_reason: platform_web
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6076858-question-6076858
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6076858/window-11-version-26h2-file-corruption-with-wpd-fi
+  parent_title: Window 11, Version 26H2 File Corruption with .WPD File Types - Microsoft Q&A
+  report_title: Window 11, Version 26H2 File Corruption with .WPD File Types - Microsoft Q&A
+  report_text_excerpt: Window 11, Version 26H2 File Corruption with .WPD File Types - Microsoft Q&A This afternoon we noticed an issue with opening .wpd files withing Microsoft Word or any other application on our Windows 11 device other than Word Perfect where it was created. We attempted multiple...
+  captured_at: '2026-11-20T21:10:44Z'
+  source_date: '2026-11-19'
+  target_release_date: '2026-11-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9974'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9974'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9974'
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6076716-question-6076716
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6076716/unable-to-download-and-install-windows-update
+  parent_title: Unable to Download and Install Windows Update - Microsoft Q&A
+  report_title: Unable to Download and Install Windows Update - Microsoft Q&A
+  report_text_excerpt: Unable to Download and Install Windows Update - Microsoft Q&A I am unable to download and install the Windows 11 update KB5127936 (2026-10 Preview Update, OS Build 26300.9818). Windows Update shows the status as "Pending download," but the download does not start. The...
+  captured_at: '2026-11-20T21:11:23Z'
+  source_date: '2026-11-19'
+  target_release_date: '2026-10-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9818'
+  match_basis: exact_os_build
+  matched_kb: KB5127936
+  matched_os_build: '26300.9818'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9818'
+
+- id: microsoft-windows-11-26h2-microsoft-learn-qna-learn-6076798-question-6076798
+  product_id: microsoft-windows-11
+  update_version: 26H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/6076798/windows-11-26h2-setup-fails-to-detect-hardware-on
+  parent_title: Windows 11 26H2 Setup fails to detect hardware on Dell Latitude 5300 2-in-1 - Microsoft Q&A
+  report_title: Windows 11 26H2 Setup fails to detect hardware on Dell Latitude 5300 2-in-1 - Microsoft Q&A
+  report_text_excerpt: Windows 11 26H2 Setup fails to detect hardware on Dell Latitude 5300 2-in-1 - Microsoft Q&A I'm experiencing an installation issue with Windows 11 26H2 on my Dell Latitude 5300 2-in-1. I previously used Windows 11 26H2 successfully on this exact laptop for approximately one to...
+  captured_at: '2026-11-20T21:13:17Z'
+  source_date: '2026-11-19'
+  target_release_date: '2026-09-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26300.9457'
+  match_basis: exact_os_build
+  matched_os_build: '26300.9457'
+  matched_feature_version: 26H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26300.9457'
+
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634822
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634822
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Anyone else experiencing flickering, black screens, or performance issues with 621.24? It would be helpful to hear how it performs across different GPU models and setups before deciding whether to update or roll back.
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-20T10:51:44Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Anyone else experiencing flickering, black screens, or performance issues with 621.24? It would be helpful to hear how it performs across different GPU models and se...
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634767
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634767
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 621.24. Hey Nvidia. Fix your shitty driver that is actively damaging my SSDs via constant writes through the nvcontainer. This is verifiable through the resource monitor. Hotfix now. What will you ruin next?
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-19T23:56:24Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: 621.24. Hey Nvidia. Fix your shitty driver that is actively damaging my SSDs via cons...
+- id: nvidia-geforce-game-ready-621-24-nvidia-forum-comment-3634110
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3634110
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Hi,Reproducible hard crashes (instant reboot, Kernel-Power 41) on a dual-RTX 5060 Ti desktop (MSI cards). The signature is byte-identical on every crash: Bugcheck 0x00000113 (0x00000019, 0x00000002, 0x000010DE, 0x00002D04) = VIDEO_DXGKRNL_FATAL_ERROR, subtype 0x19...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-15T03:02:20Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...signature seen on 616.92 and 621.14 (and earlier). I also reported this in the 621.24 thread; I updated to 621.24 today and am monitoring.- Windows 11 build 26300, f...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633631
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3633631
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'GPU: MSI RTX 4080 Super Suprim X Motherboard: MSI X870E Carbon WiFi CPU: AMD Ryzen 9 9950X3D RAM: 64GB G.Skill Flare X5 DDR5 System Drive: 2GB Samsung 9100 Pro NVMe Monitor: Alienwear AW3425DW 3440x1440 OS: Windows 11 Pro 25H2 After updating from NVIDIA driver 616.92 to...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-13T00:01:08Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...3440x1440 OS: Windows 11 Pro 25H2 After updating from NVIDIA driver 616.92 to 621.14, both Forza Motorsport and Forza Horizon 6, which previously worked normally, b...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3632481
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632481
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'New Driver NVIDIA GeForce 621.14 WHQL Download : [link] Release Notes : [link] It seem to still support Windows 10'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-04T12:29:04Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'New Driver NVIDIA GeForce 621.14 WHQL Download : [link] Release Notes : [link] It seem to still support Window...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3634110
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3634110
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Hi,Reproducible hard crashes (instant reboot, Kernel-Power 41) on a dual-RTX 5060 Ti desktop (MSI cards). The signature is byte-identical on every crash: Bugcheck 0x00000113 (0x00000019, 0x00000002, 0x000010DE, 0x00002D04) = VIDEO_DXGKRNL_FATAL_ERROR, subtype 0x19...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-15T03:02:20Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '..._2D04&SUBSYS_53511462), vBIOS 98.06.4e.00.8f- Same signature seen on 616.92 and 621.14 (and earlier). I also reported this in the 621.24 thread; I updated to 621.24 t...'
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3634779
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3634779
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: Maybe the issue is with the driver itself. I installed the version 621.14 (HD Audio 1.4.6.6) and then rolled back the HD Audio driver to 1.4.5.7, through Windows properties, but the issue persisted. The only way to resolve is to install version 610.88 or older. I'm stuck in...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-20T03:23:02Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: Maybe the issue is with the driver itself. I installed the version 621.14 (HD Audio 1.4.6.6) and then rolled back the HD Audio driver to 1.4.5.7, through...
+- id: nvidia-geforce-game-ready-621-14-nvidia-forum-comment-3633352
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3633352
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: I am experiencing the same issue and also had to roll back to driver version 610.88 / HD Audio 1.4.5.7. The problem first appeared after upgrading to driver version 616.92, coinciding with the NVIDIA HD Audio driver update to version 1.4.6.3. The issue has persisted across...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-11T01:29:19Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...e has persisted across subsequent driver releases, including the latest version 621.14, which uses HD Audio 1.4.6.6. I have been using the following audio setup for...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3632159
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632159
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '[Bug report] Star Citizen crashes (0xC0000005) on a mixed AMD + NVIDIA system with every NVIDIA driver 600+ – 596.36 works Summary On a PC where Star Citizen runs on an AMD RX 9070 XT and an NVIDIA RTX card is installed as a second GPU (no display, compute only), the game...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-31T22:51:58Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...10.88: installed automatically by Windows, not tested in game 617.42: crash 621.01: crash (even though its notes list a Star Citizen Vulkan fix [6680590]) 621.1...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3631831
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631831
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: i have rtx 4070 and i want to play stalker 2 game with new 621.01 i get black screen or game wont start shader compilation goes freeze.
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-29T00:32:18Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: i have rtx 4070 and i want to play stalker 2 game with new 621.01 i get black screen or game wont start shader compilation goes freeze.
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3634731
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634731
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: i downloaded 621.01 and install it normal , for me it worked , nvlog.nvlgstg stay on the same size , i reinstalled 621.24 before to test it and it kept grow in size now is stable with 621.01 , i will use this until they make a fix . i did not use DDU or any program , just...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-19T14:57:44Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: i downloaded 621.01 and install it normal , for me it worked , nvlog.nvlgstg stay on the same size...
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3634756
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634756
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: I have reverted back to 621.01 and that has fixed it! Nvidia and their hell bent mission with AI are getting lazy af, They think they can program everything with AI including their drivers, I have never seen so many poor driver sets in the last 12 months or so and that doesn't...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-19T20:08:01Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: I have reverted back to 621.01 and that has fixed it! Nvidia and their hell bent mission with AI are getting l...
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3633448
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright....'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-11T22:09:35Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...good driver: 591.74. Bad: 621.14 (full A/B test below); also seen on 610.88 and 621.01. Not tested: 591.86, 596.21, 596.36, 610.47. All Game Ready drivers, standard p...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3633357
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633357
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: Still won't work with WoW Forever, still only get flashing white screen like reported for 621.01.
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-11T04:04:09Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...t work with WoW Forever, still only get flashing white screen like reported for 621.01.'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3633347
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633347
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon. System: MSI Stealth 16 AI Studio A1VFG, RTX 4060 Laptop GPU (hybrid mode), Windows 11 Pro 25H2 (26200.9711). External monitor MSI G244F E2,...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-10T23:31:59Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: Follow-up to my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed dow...
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3633148
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633148
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: RTX 5060 Ti 16GB CPU: Core i7-11700F Display: TCL 25G64 (DisplayPort, 1920x1080, 144Hz) Operating System: Windows 11 Pro (26H2) Driver Regression: 621.14 NDIVIA Studio Driver Application: Reflections: an Unreal Engine Real-Time Ray Tracing Demonstration Issue: When...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-09T10:29:40Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...screen appears dark. This has been the case since the previous driver version (621.01). I am currently using version 610.88, with which the display appears correctly...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3633066
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633066
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: NVIDIA GeForce RTX 4070 SUPER (VBIOS 95.04.69.00.c1, PCIe 4.0 x16) CPU: Intel Core i5-14600KF (14C/20T) Display Configuration: 1x LG UltraGear, connected via DisplayPort, 1920x1080 @ 144 Hz (single display) Operating System: Windows 11 Home 25H2 (build 26200.9711) Driver...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-08T16:08:38Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...11 Home 25H2 (build 26200.9711) Driver Regression: Yes, new in 621.14. Driver 621.01 (clean install) is NOT affected: nvlog.nvlgstg grows ~0.5 KB/min and NVDisplay....'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3632473
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632473
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '@user staff – RTX 4080 / 621.01 / Samsung Odyssey OLED G9 G95SD (fw 2231.1), DisplayPort 1.4 (DSC) 5120x1440 @ 240 Hz. After the Windows display-off timeout, the monitor wakes to "No Signal" while Windows keeps running (it falls back to 1024x768, so the monitor is no longer...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-04T11:41:54Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '@user staff – RTX 4080 / 621.01 / Samsung Odyssey OLED G9 G95SD (fw 2231.1), DisplayPort 1.4 (DSC) 5120x1440 @...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3632404
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632404
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: the hotfix 621.12 resolves the mw4 issue i had where it looked like a cartoon oily painting with driver 621.01
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-03T14:45:00Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...es the mw4 issue i had where it looked like a cartoon oily painting with driver 621.01'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3632315
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632315
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'GPU: GEFORCE RTX 4080 CPU: i7 14700KF Monitor: Asus ROG PG27AQN OS: Windows 11 Pro x64 Driver: 621.01 Game: S.T.A.L.K.E.R 2 Issue: Same as above the game doesn’t load. Stuck on blank black screen with white mouse pointer. Tried previous driver. Works fine.'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-02T18:25:54Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...X 4080 CPU: i7 14700KF Monitor: Asus ROG PG27AQN OS: Windows 11 Pro x64 Driver: 621.01 Game: S.T.A.L.K.E.R 2 Issue: Same as above the game doesn’t load. Stuck on blan...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3632267
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632267
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '5080 9800x3d 1080p 144hz Windows 11 26H2 Starts with 621.01 Google Chrome First, video playback in Google Chrome begins to stutter (hardware acceleration is enabled), then the screen goes black for one second before returning, then this event appears in Events: Event ID: 153...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-02T09:57:09Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_module_crash_without_regression_evidence
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: 5080 9800x3d 1080p 144hz Windows 11 26H2 Starts with 621.01 Google Chrome First, video playback in Google Chrome begins to stutter (hardw...
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3632207
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632207
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '- GPU: NVIDIA GeForce RTX 5050 Laptop GPU (8 GB GDDR7, up to 115 W TGP) - CPU: Intel Core i5-14450HX - Display Configuration: MSI Katana 15 HX B14WEK-104IN built-in 15.6-inch FHD IPS display. No external monitor/TV was reported. - Operating System: Windows 11 Home Single...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-01T17:41:02Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...iver Regression: Yes. The issue started after updating to NVIDIA driver version 621.01 through the NVIDIA App. NVIDIA driver version 617.42 is working correctly and d...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3632149
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632149
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'External HDMI monitor washed out (lifted blacks/midtones) after 621.01 - fixed by rolling back to 616.56 System: MSI Stealth 16 (MS-15F4), Intel Core Ultra 9 + RTX 4060 Laptop GPU (both displays driven by the RTX 4060), Windows 11 Pro 25H2 (build 26200). Updated from 616.56 to...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-31T19:28:54Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: 'External HDMI monitor washed out (lifted blacks/midtones) after 621.01 - fixed by rolling back to 616.56 System: MSI Stealth 16 (MS-15F4), Intel Core...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3632373
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632373
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: I´ve noticed similar issues with my rtx 5080, Not bluescreen, but error logs shows clearly that 153 is occuring, I notice it when playing videos in chrome, and stutter that wasn't there before in games i play. I can see that the amperage and temps are significantly higher on...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-03T08:27:59Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: not_a_real_issue_report
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...an see that the amperage and temps are significantly higher on my card with the 621.01 driver than the 610.62. Just reverted it back and all seem fine again.'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3631956
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631956
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: The game devs of Phantom Blade Zero recommend to not use this driver and instead go back to 617.42. "Nvidia latest 621.01 driver was discovered to have instability issues and the Devs recommend the previous driver 617.42 which was found to be the most ideal".
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-30T02:52:40Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...recommend to not use this driver and instead go back to 617.42. "Nvidia latest 621.01 driver was discovered to have instability issues and the Devs recommend the pre...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3631937
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631937
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: Also had a crash (DPC) watchdog violation 0x133. Checked Windows maintenance and noticed the first event on the day (10/22/2026) of the 621.01 install and then (3) more on (10/26/2026). And (2) more on (10/28/2026) all showing the following event...A problem with your hardware...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-29T22:03:57Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_module_crash_without_regression_evidence
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...Windows maintenance and noticed the first event on the day (10/22/2026) of the 621.01 install and then (3) more on (10/26/2026). And (2) more on (10/28/2026) all sho...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3631922
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631922
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '**RTX 5070 Laptop GPU: freezes, LiveKernelEvent 117/141 and VIDEO_TDR_FAILURE 116 on driver 621.01** **System** - Lenovo Legion 5 15IAX10, type 83F0 - Intel Core Ultra 9 275HX - NVIDIA GeForce RTX 5070 Laptop GPU, 8GB - 32GB RAM - Windows 11 Pro, build 26200.9711 - BIOS...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-29T19:04:38Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...aptop GPU: freezes, LiveKernelEvent 117/141 and VIDEO_TDR_FAILURE 116 on driver 621.01** **System** - Lenovo Legion 5 15IAX10, type 83F0 - Intel Core Ultra 9 275HX -...'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3634770
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634770
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Same issue here. Wrote maybe 90gb within a few hours. Downgraded to 621.01 and it went down to maybe 10mb per 5 hours
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-20T00:45:21Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: Same issue here. Wrote maybe 90gb within a few hours. Downgraded to 621.01 and it went down to maybe 10mb per 5 hours
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3634761
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634761
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Nvidia should get sued for this. They litteraly burn SSD-s. And this happens also for 621.12. No fix in sight or even an acknowledgment of the issue. 621.01 is fine.
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-19T22:08:51Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...appens also for 621.12. No fix in sight or even an acknowledgment of the issue. 621.01 is fine.'
+- id: nvidia-geforce-game-ready-621-01-nvidia-forum-comment-3634603
+  product_id: nvidia-geforce-game-ready
+  update_version: '621.01'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634603
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: 'Not reproducible here: NVDisplay.Container.exe / nvlog.nvlgstg writes on 621.14 and 621.24. A non-affected data point, posted to help narrow down the trigger. - GPU: NVIDIA GeForce RTX 5070 Ti (16 GB) - CPU: Intel Core i9-10850K (stock), 32 GB DDR4-3200, 500 GB NVMe - Display...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-18T19:43:56Z'
+  target_release_date: '2026-10-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.01'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.01'
+  matched_field: report_text
+  matched_context: '...4) and 621.24 (Express upgrade over 621.14, then a reboot) both behave like the 621.01 rate reported as unaffected in this thread. - Affected Applications/Games: none...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633156
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3633156
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: I was surprised to read this, as I did same. Clean install 617.42 and all will be good. I tried Newest Game Ready and Studio both Clean Install on Multi Monitor, Black Screened after a bit.
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-09T11:47:37Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: I was surprised to read this, as I did same. Clean install 617.42 and all will be good. I tried Newest Game Ready and Studio both Clean Install o...
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633489
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...investigate alongside the existing reports involving drivers 616.64, 616.92 and 617.42.'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633513
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633513
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 617.42 i have same issue past this update (or even earlier) - Display Port - Alienware 21:9 2k 144 - HDR -
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-12T12:57:32Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: 617.42 i have same issue past this update (or even earlier) - Display Port - Alie...
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633447
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633447
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: Hi everyone, I’m experiencing recurring freezes followed by automatic restarts on my PC while watching videos or live streams in Google Chrome. This has happened several times, including twice on the same day. The entire PC freezes and then restarts without any manual...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-11T22:09:12Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '.... **Symptoms and troubleshooting so far:** - The issue occurred with driver **617.42** and has continued with **621.14**. - The incidents I have noticed have occurr...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633347
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633347
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon. System: MSI Stealth 16 AI Studio A1VFG, RTX 4060 Laptop GPU (hybrid mode), Windows 11 Pro 25H2 (26200.9711). External monitor MSI G244F E2,...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-10T23:31:59Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '..., output range/format (AVI InfoFrame identical with 616.56). Same machine with 617.42 and ACM OFF on that monitor: no washout at all, including fullscreen Independen...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633265
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633265
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Same issue on the 62x branch, RTX 5060 8 GB + Delta Force (UE 4.24): - First-launch shader compile completes, but the background PSO warm-up never advances: OverallProgress stays at 0-15%, PSO cache dir 257 MB vs 2620 MB on 617.42. - Textures then stream in extremely slowly...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-10T12:35:16Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...advances: OverallProgress stays at 0-15%, PSO cache dir 257 MB vs 2620 MB on 617.42. - Textures then stream in extremely slowly and the game hangs (CrashType=Hang,...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633319
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633319
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: Same with me also had to drop back to 617.42. I'm thinking Display port coding in driver of 620 series, seems HDMI Hookups are non issue on my other machines, just my Display port ones graphics choppy and black screen
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-10T17:21:14Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: Same with me also had to drop back to 617.42. I'm thinking Display port coding in driver of 620 series, seems HDMI Hookups a...
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633141
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633141
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: Driver Still Causing Black Screen with Multi-Monitor, PC was just sitting Idle no gaming stopped screen save and Monitors started like power cycling going black, I went back to 617.42 with clean install option not one issue. I did try Clean Install with Newest driver but no...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-09T09:58:39Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...screen save and Monitors started like power cycling going black, I went back to 617.42 with clean install option not one issue. I did try Clean Install with Newest dr...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3633764
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3633764
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: for me all drivers 621.xx crashing MSFS2024 in VR while flying (ground or airborne) in VR, the VR screen freeze and my system make a reboot , randomly and not at any specific location or time back to 617.42 and all is working again @user, please testing your drivers also in...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-13T20:18:34Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...stem make a reboot , randomly and not at any specific location or time back to 617.42 and all is working again @user, please testing your drivers also in VR!!! it’s...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3632207
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632207
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '- GPU: NVIDIA GeForce RTX 5050 Laptop GPU (8 GB GDDR7, up to 115 W TGP) - CPU: Intel Core i5-14450HX - Display Configuration: MSI Katana 15 HX B14WEK-104IN built-in 15.6-inch FHD IPS display. No external monitor/TV was reported. - Operating System: Windows 11 Home Single...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-01T17:41:02Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...g to NVIDIA driver version 621.01 through the NVIDIA App. NVIDIA driver version 617.42 is working correctly and does not show the graphical artifacting issue. This ap...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3632159
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632159
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '[Bug report] Star Citizen crashes (0xC0000005) on a mixed AMD + NVIDIA system with every NVIDIA driver 600+ – 596.36 works Summary On a PC where Star Citizen runs on an AMD RX 9070 XT and an NVIDIA RTX card is installed as a second GPU (no display, compute only), the game...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-31T22:51:58Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...ng sessions) 610.88: installed automatically by Windows, not tested in game 617.42: crash 621.01: crash (even though its notes list a Star Citizen Vulkan fix [6...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3631979
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631979
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'Specs CPU: Intel Core i5-12400f GPU: MSI RTX 5060 Ti16GB Mainboard: Asus Prime H610M-A D4 RAM: 32 GB DDR4 @ 3200Mhz Win 11 26H2 with newest updates Monitor: AOC Q26G2S/EU GSYNC compatible @user Hz I get random frame stutters in CS 2 (especially when doing faster mouse...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-30T09:40:56Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...PS stay the same. Probably micro-stutters. Playing with GSYNC. Reverted back to 617.42 and everything is stable as it should be. @user staff: could this be due to usi...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3632284
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632284
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: I can play anything I want on my rig currently. I know the i5 12400f isnt the newest or fastest but it does what it does for my needs. And since I dont have the problems with 617.42 I suppose its a driver error.
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-02T13:28:54Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...but it does what it does for my needs. And since I dont have the problems with 617.42 I suppose its a driver error.'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3631956
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631956
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: The game devs of Phantom Blade Zero recommend to not use this driver and instead go back to 617.42. "Nvidia latest 621.01 driver was discovered to have instability issues and the Devs recommend the previous driver 617.42 which was found to be the most ideal".
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-30T02:52:40Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...s of Phantom Blade Zero recommend to not use this driver and instead go back to 617.42. "Nvidia latest 621.01 driver was discovered to have instability issues and the...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3631922
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631922
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '**RTX 5070 Laptop GPU: freezes, LiveKernelEvent 117/141 and VIDEO_TDR_FAILURE 116 on driver 621.01** **System** - Lenovo Legion 5 15IAX10, type 83F0 - Intel Core Ultra 9 275HX - NVIDIA GeForce RTX 5070 Laptop GPU, 8GB - 32GB RAM - Windows 11 Pro, build 26200.9711 - BIOS...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-10-29T19:04:38Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...hether new kernel timeouts occurred on that version. - Currently switching to **617.42** for comparison. Results pending. - Brave also developed a separate startup-cl...'
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3632722
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632722
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: Same on my 4090... (617.42 was fine).
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-05T15:17:29Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: Same on my 4090... (617.42 was fine).
+- id: nvidia-geforce-game-ready-617-42-nvidia-forum-comment-3634840
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634840
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: I installed 617.42 Studio Driver and it seems ok. No constant io writes happening.
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-20T14:17:29Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: I installed 617.42 Studio Driver and it seems ok. No constant io writes happening.
+- id: nvidia-geforce-game-ready-617-14-nvidia-forum-comment-3632473
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632473
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '@user staff – RTX 4080 / 621.01 / Samsung Odyssey OLED G9 G95SD (fw 2231.1), DisplayPort 1.4 (DSC) 5120x1440 @ 240 Hz. After the Windows display-off timeout, the monitor wakes to "No Signal" while Windows keeps running (it falls back to 1024x768, so the monitor is no longer...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-04T11:41:54Z'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.14'
+  matched_field: report_text
+  matched_context: '...n connected via DisplayPort after updating to R615 drivers", listed as fixed in 617.14) is not fixed for this monitor. Full details: [link]'
+- id: nvidia-geforce-game-ready-617-14-nvidia-forum-comment-3632461
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632461
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: After updating the driver all versions of World of Warcraft launch with a white flashing screen. Tried both Wow Classic Era and WoW Forever. The game appears to be running fine otherwise, as I can hear the sound playing. Reverting to previous driver 617.14 resolved the issue....
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-04T09:29:32Z'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.14'
+  matched_field: report_text
+  matched_context: '...fine otherwise, as I can hear the sound playing. Reverting to previous driver 617.14 resolved the issue. Ryzen 9 9950X3D GeForce RTX 5090 Windows 11 Pro 26H2 I''m...'
+- id: nvidia-geforce-game-ready-617-14-nvidia-forum-comment-3627407
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3627407
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Title: RTX 3060 Laptop — 0x116 VIDEO_TDR_FAILURE + 0x50 in nvlddmkm.sys (regression since 616.92, also on 617.14) System: - Dell G15 5511 - NVIDIA GeForce RTX 3060 Laptop GPU (hybrid with Intel UHD Graphics) - Windows 10 Home Single Language, 10.0.26200, BIOS 1.44.0 - RAM:...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-29T19:54:15Z'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.14'
+  matched_field: report_text
+  matched_context: '...x116 VIDEO_TDR_FAILURE + 0x50 in nvlddmkm.sys (regression since 616.92, also on 617.14) System: - Dell G15 5511 - NVIDIA GeForce RTX 3060 Laptop GPU (hybrid with Int...'
+- id: nvidia-geforce-game-ready-617-14-nvidia-forum-comment-3626252
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626252
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'New Driver Release v617.14. Release Notes: [link] [link]'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-22T12:26:59Z'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.14'
+  matched_field: report_text
+  matched_context: 'New Driver Release v617.14. Release Notes: [link] [link]'
+- id: nvidia-geforce-game-ready-617-14-nvidia-forum-comment-3626330
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626330
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: Hi Manuel, as posted by blueneukdae disabling MPO did indeed fix this issue for me, with driver version 617.14, while by default 617.14 still had issues. I ran the diagnostic tool you linked before disabling MPO and will send over the result to the email address you mentioned...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-22T17:19:08Z'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.14'
+  matched_field: report_text
+  matched_context: '...blueneukdae disabling MPO did indeed fix this issue for me, with driver version 617.14, while by default 617.14 still had issues. I ran the diagnostic tool you linked...'
+- id: nvidia-geforce-game-ready-617-14-nvidia-forum-comment-3626782
+  product_id: nvidia-geforce-game-ready
+  update_version: '617.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626782
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: Same problem with 5070 TI, DDU then install of 617.14. (Crashes updating from 610.88). Working until I change refresh rate, system crash. 144hz change in windows settings or Nvidia control panel lead to system crash, 120 does not… I can also run custom resolution at 143hz…...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-25T01:08:05Z'
+  target_release_date: '2026-09-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.14'
+  matched_field: report_text
+  matched_context: Same problem with 5070 TI, DDU then install of 617.14. (Crashes updating from 610.88). Working until I change refresh rate, system cr...
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3626225
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626225
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: '[Bug Report] HITMAN WOA CTD with Exception 0x80000003 - regression between 616.64 and 616.92 GPU: ASUS ROG Strix GeForce RTX 4090 24GB CPU: AMD Ryzen 9 9950X3D2 Display Configuration: AOC AGON Pro AG274UXP 4K (DisplayPort) Operating System: Windows 11 Pro 64-bit (Build 26100)...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-22T05:37:52Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...eport] HITMAN WOA CTD with Exception 0x80000003 - regression between 616.64 and 616.92 GPU: ASUS ROG Strix GeForce RTX 4090 24GB CPU: AMD Ryzen 9 9950X3D2 Display Co...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3626182
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626182
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Chrome hardware acceleration causing stuttering and freezing in video players while using an RTX 5090 with 616.92. System: CPU: AMD Ryzen 9 9950x3d GPU: NVIDIA GeForce RTX 5090 OS: Windows 11 [26200.9457] NVIDIA driver: 616.92 Chrome: 153.0.8010.53 Issue: With Chrome hardware...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-21T18:56:37Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...n causing stuttering and freezing in video players while using an RTX 5090 with 616.92. System: CPU: AMD Ryzen 9 9950x3d GPU: NVIDIA GeForce RTX 5090 OS: Windows 11...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3626130
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626130
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: '[616.92] HDMI audio cuts off after silence – regression in HD Audio Driver 1.4.6.3 GPU: GeForce RTX 5070 Ti CPU: AMD Ryzen 7 9800X3D Display Configuration: RTX 5070 Ti → HDMI → Samsung S90D TV → HDMI eARC → OREI HDA-927 eARC audio extractor → HDMI → Denon AVR-X1200W The RTX...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-21T06:22:46Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: negative
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '[616.92] HDMI audio cuts off after silence – regression in HD Audio Driver 1.4.6.3 GPU...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3634862
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634862
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'REPORT GPU: RTX 2050 (notebook) CPU: Intel i5-12450H, Driver 7084 and 4146 MSI Katana 17 B12UCX Windows 11 (26300.9711) Issue occurred on: 610.78 (OEM/manufacturer driver), and all NVIDIA versions 610.xx, 616.xx, 621.xx that I have installed. Affected games: Genshin Impact,...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-20T16:45:27Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: power or thermal limit
+  workflow_area: power and thermals
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...ies, the CPU temperature frequently spiked up to 85 degrees Celsius. In version 616.92, heavy disk writes are observed from the "Nvidia.container" process, loading th...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3633489
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...0Z. Please investigate alongside the existing reports involving drivers 616.64, 616.92 and 617.42.'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3633631
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3633631
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'GPU: MSI RTX 4080 Super Suprim X Motherboard: MSI X870E Carbon WiFi CPU: AMD Ryzen 9 9950X3D RAM: 64GB G.Skill Flare X5 DDR5 System Drive: 2GB Samsung 9100 Pro NVMe Monitor: Alienwear AW3425DW 3440x1440 OS: Windows 11 Pro 25H2 After updating from NVIDIA driver 616.92 to...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-13T00:01:08Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...r AW3425DW 3440x1440 OS: Windows 11 Pro 25H2 After updating from NVIDIA driver 616.92 to 621.14, both Forza Motorsport and Forza Horizon 6, which previously worked n...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3634110
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3634110
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Hi,Reproducible hard crashes (instant reboot, Kernel-Power 41) on a dual-RTX 5060 Ti desktop (MSI cards). The signature is byte-identical on every crash: Bugcheck 0x00000113 (0x00000019, 0x00000002, 0x000010DE, 0x00002D04) = VIDEO_DXGKRNL_FATAL_ERROR, subtype 0x19...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-15T03:02:20Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_module_crash_without_regression_evidence
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...EN_10DE&DEV_2D04&SUBSYS_53511462), vBIOS 98.06.4e.00.8f- Same signature seen on 616.92 and 621.14 (and earlier). I also reported this in the 621.24 thread; I updated...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3627407
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3627407
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Title: RTX 3060 Laptop — 0x116 VIDEO_TDR_FAILURE + 0x50 in nvlddmkm.sys (regression since 616.92, also on 617.14) System: - Dell G15 5511 - NVIDIA GeForce RTX 3060 Laptop GPU (hybrid with Intel UHD Graphics) - Windows 10 Home Single Language, 10.0.26200, BIOS 1.44.0 - RAM:...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-29T19:54:15Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...3060 Laptop — 0x116 VIDEO_TDR_FAILURE + 0x50 in nvlddmkm.sys (regression since 616.92, also on 617.14) System: - Dell G15 5511 - NVIDIA GeForce RTX 3060 Laptop GPU...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3626224
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626224
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: '[Bug Report] DWM crashes on exclusive fullscreen transition (dwmcore.dll+0xd68e8, 0x889800d3) - regression from R550 to R555, still present in 616.92 SUMMARY - Entering exclusive fullscreen kills dwm.exe within 2-5 seconds. - dwmcore.dll receives DXGI_ERROR_DEVICE_REMOVED from...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-22T05:23:03Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_both_named
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...mcore.dll+0xd68e8, 0x889800d3) - regression from R550 to R555, still present in 616.92 SUMMARY - Entering exclusive fullscreen kills dwm.exe within 2-5 seconds. - dw...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3626180
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626180
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Summary: Forza Horizon 6 crashes (game error FHE01, sometimes also FHC video card crash) when DLSS Frame Generation and G-SYNC are both enabled on an RTX 5060 Laptop GPU. Stable when either one is turned off. System: - Laptop: Lenovo LOQ 15IRX10 (83JE), BIOS R3CN44WW - CPU:...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-21T18:11:09Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...GPU, 8 GB - RAM: 16 GB DDR5 - OS: Windows 11 Home 25H2, build 26200 - Driver: [616.92 – confirm in NVIDIA App], clean install - Display: built-in 15.6" 1920x1080 144...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3626177
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626177
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Summary: Forza Horizon 6 crashes (game error FHE01, sometimes also FHC video card crash) when DLSS Frame Generation and G-SYNC are both enabled on an RTX 5060 Laptop GPU. Stable when either one is turned off. System: - Laptop: Lenovo LOQ 15IRX10 (83JE), BIOS R3CN44WW - CPU:...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-21T18:09:14Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...GPU, 8 GB - RAM: 16 GB DDR5 - OS: Windows 11 Home 25H2, build 26200 - Driver: [616.92 – confirm in NVIDIA App], clean install - Display: built-in 15.6" 1920x1080 144...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3626164
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626164
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'I found a reproducible input bug involving NVIDIA LocalSystem Container. System: Windows 11, build 26200.9457 NVIDIA GeForce RTX 4060 Ti NVIDIA driver 616.92 Keychron keyboard, USB VID/PID 3434:0E20 US English keyboard layout The ] key works normally at the Windows login...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-21T13:59:15Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...System: Windows 11, build 26200.9457 NVIDIA GeForce RTX 4060 Ti NVIDIA driver 616.92 Keychron keyboard, USB VID/PID 3434:0E20 US English keyboard layout The ] key...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3633352
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3633352
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: I am experiencing the same issue and also had to roll back to driver version 610.88 / HD Audio 1.4.5.7. The problem first appeared after upgrading to driver version 616.92, coinciding with the NVIDIA HD Audio driver update to version 1.4.6.3. The issue has persisted across...
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-11-11T01:29:19Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: multiple_tracked_versions_named
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...HD Audio 1.4.5.7. The problem first appeared after upgrading to driver version 616.92, coinciding with the NVIDIA HD Audio driver update to version 1.4.6.3. The issu...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3626012
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626012
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'GPU: GIGABYTE GeForce RTX 5090 (subsystem 1458:416E), 32 GB GDDR7, VBIOS 98.02.2e.00.c9 CPU: Intel Core Ultra 9 285K (24C/24T) Other: Gigabyte Z890 AORUS MASTER, 64 GB DDR5-6000 (2×32 GB Team Group UD5-6000) Display Configuration: - ASUS ROG Swift PG27AQWP-W — DisplayPort...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-20T12:05:51Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...ashed while exiting the game - 2026-09-19 — driver 616.64 - 2026-09-20 — driver 616.92, crashed immediately on game launch Additionally, on 2026-09-17 the system ha...'
+- id: nvidia-geforce-game-ready-616-92-nvidia-forum-comment-3625959
+  product_id: nvidia-geforce-game-ready
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3625959
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'RTX 5090 Laptop (MSI Raider A18 HX A9WJG), Windows 11 25H2, driver 610.88. Follow-up to my report in the 610.88 thread (comment 3624673). Same bugcheck, parameters byte-identical every time, now 9 times in 48 days plus one GPU drop-off-bus: 0x113 VIDEO_DXGKRNL_FATAL_ERROR...'
+  captured_at: '2026-11-20T21:29:41Z'
+  source_date: '2026-09-19T15:24:36Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...tall. Still on 610.88 because 616.56 caused colour flicker on this panel. Does 616.92 (or a hotfix) change anything for 0x19 deferred-destruction crashes on Blackwel...'
+
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634822
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634822
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: Anyone else experiencing flickering, black screens, or performance issues with 621.24? It would be helpful to hear how it performs across different GPU models and setups before deciding whether to update or roll back.
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-20T10:51:44Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: Anyone else experiencing flickering, black screens, or performance issues with 621.24? It would be helpful to hear how it performs across different GPU models and se...
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634767
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634767
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 621.24. Hey Nvidia. Fix your shitty driver that is actively damaging my SSDs via constant writes through the nvcontainer. This is verifiable through the resource monitor. Hotfix now. What will you ruin next?
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-19T23:56:24Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: 621.24. Hey Nvidia. Fix your shitty driver that is actively damaging my SSDs via cons...
+- id: nvidia-studio-driver-621-24-nvidia-forum-comment-3634110
+  product_id: nvidia-studio-driver
+  update_version: '621.24'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3634110
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Hi,Reproducible hard crashes (instant reboot, Kernel-Power 41) on a dual-RTX 5060 Ti desktop (MSI cards). The signature is byte-identical on every crash: Bugcheck 0x00000113 (0x00000019, 0x00000002, 0x000010DE, 0x00002D04) = VIDEO_DXGKRNL_FATAL_ERROR, subtype 0x19...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-15T03:02:20Z'
+  target_release_date: '2026-11-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.24'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.24'
+  matched_field: report_text
+  matched_context: '...signature seen on 616.92 and 621.14 (and earlier). I also reported this in the 621.24 thread; I updated to 621.24 today and am monitoring.- Windows 11 build 26300, f...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633631
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3633631
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'GPU: MSI RTX 4080 Super Suprim X Motherboard: MSI X870E Carbon WiFi CPU: AMD Ryzen 9 9950X3D RAM: 64GB G.Skill Flare X5 DDR5 System Drive: 2GB Samsung 9100 Pro NVMe Monitor: Alienwear AW3425DW 3440x1440 OS: Windows 11 Pro 25H2 After updating from NVIDIA driver 616.92 to...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-13T00:01:08Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...3440x1440 OS: Windows 11 Pro 25H2 After updating from NVIDIA driver 616.92 to 621.14, both Forza Motorsport and Forza Horizon 6, which previously worked normally, b...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3632481
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632481
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'New Driver NVIDIA GeForce 621.14 WHQL Download : [link] Release Notes : [link] It seem to still support Windows 10'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-04T12:29:04Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: 'New Driver NVIDIA GeForce 621.14 WHQL Download : [link] Release Notes : [link] It seem to still support Window...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3634110
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3634110
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Hi,Reproducible hard crashes (instant reboot, Kernel-Power 41) on a dual-RTX 5060 Ti desktop (MSI cards). The signature is byte-identical on every crash: Bugcheck 0x00000113 (0x00000019, 0x00000002, 0x000010DE, 0x00002D04) = VIDEO_DXGKRNL_FATAL_ERROR, subtype 0x19...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-15T03:02:20Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '..._2D04&SUBSYS_53511462), vBIOS 98.06.4e.00.8f- Same signature seen on 616.92 and 621.14 (and earlier). I also reported this in the 621.24 thread; I updated to 621.24 t...'
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3634779
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3634779
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: Maybe the issue is with the driver itself. I installed the version 621.14 (HD Audio 1.4.6.6) and then rolled back the HD Audio driver to 1.4.5.7, through Windows properties, but the issue persisted. The only way to resolve is to install version 610.88 or older. I'm stuck in...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-20T03:23:02Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: Maybe the issue is with the driver itself. I installed the version 621.14 (HD Audio 1.4.6.6) and then rolled back the HD Audio driver to 1.4.5.7, through...
+- id: nvidia-studio-driver-621-14-nvidia-forum-comment-3633352
+  product_id: nvidia-studio-driver
+  update_version: '621.14'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3633352
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: I am experiencing the same issue and also had to roll back to driver version 610.88 / HD Audio 1.4.5.7. The problem first appeared after upgrading to driver version 616.92, coinciding with the NVIDIA HD Audio driver update to version 1.4.6.3. The issue has persisted across...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-11T01:29:19Z'
+  target_release_date: '2026-11-04'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '621.14'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '621.14'
+  matched_field: report_text
+  matched_context: '...e has persisted across subsequent driver releases, including the latest version 621.14, which uses HD Audio 1.4.6.6. I have been using the following audio setup for...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633489
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...investigate alongside the existing reports involving drivers 616.64, 616.92 and 617.42.'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633513
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633513
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 617.42 i have same issue past this update (or even earlier) - Display Port - Alienware 21:9 2k 144 - HDR -
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-12T12:57:32Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: 617.42 i have same issue past this update (or even earlier) - Display Port - Alie...
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633447
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633447
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: Hi everyone, I’m experiencing recurring freezes followed by automatic restarts on my PC while watching videos or live streams in Google Chrome. This has happened several times, including twice on the same day. The entire PC freezes and then restarts without any manual...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-11T22:09:12Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '.... **Symptoms and troubleshooting so far:** - The issue occurred with driver **617.42** and has continued with **621.14**. - The incidents I have noticed have occurr...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633347
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633347
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon. System: MSI Stealth 16 AI Studio A1VFG, RTX 4060 Laptop GPU (hybrid mode), Windows 11 Pro 25H2 (26200.9711). External monitor MSI G244F E2,...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-10T23:31:59Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '..., output range/format (AVI InfoFrame identical with 616.56). Same machine with 617.42 and ACM OFF on that monitor: no washout at all, including fullscreen Independen...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633265
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633265
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Same issue on the 62x branch, RTX 5060 8 GB + Delta Force (UE 4.24): - First-launch shader compile completes, but the background PSO warm-up never advances: OverallProgress stays at 0-15%, PSO cache dir 257 MB vs 2620 MB on 617.42. - Textures then stream in extremely slowly...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-10T12:35:16Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...advances: OverallProgress stays at 0-15%, PSO cache dir 257 MB vs 2620 MB on 617.42. - Textures then stream in extremely slowly and the game hangs (CrashType=Hang,...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633319
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633319
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: Same with me also had to drop back to 617.42. I'm thinking Display port coding in driver of 620 series, seems HDMI Hookups are non issue on my other machines, just my Display port ones graphics choppy and black screen
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-10T17:21:14Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: Same with me also had to drop back to 617.42. I'm thinking Display port coding in driver of 620 series, seems HDMI Hookups a...
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633141
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633141
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: Driver Still Causing Black Screen with Multi-Monitor, PC was just sitting Idle no gaming stopped screen save and Monitors started like power cycling going black, I went back to 617.42 with clean install option not one issue. I did try Clean Install with Newest driver but no...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-09T09:58:39Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: notebook_driver_not_tracked
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...screen save and Monitors started like power cycling going black, I went back to 617.42 with clean install option not one issue. I did try Clean Install with Newest dr...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633764
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3633764
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: for me all drivers 621.xx crashing MSFS2024 in VR while flying (ground or airborne) in VR, the VR screen freeze and my system make a reboot , randomly and not at any specific location or time back to 617.42 and all is working again @user, please testing your drivers also in...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-13T20:18:34Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...stem make a reboot , randomly and not at any specific location or time back to 617.42 and all is working again @user, please testing your drivers also in VR!!! it’s...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3632207
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632207
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '- GPU: NVIDIA GeForce RTX 5050 Laptop GPU (8 GB GDDR7, up to 115 W TGP) - CPU: Intel Core i5-14450HX - Display Configuration: MSI Katana 15 HX B14WEK-104IN built-in 15.6-inch FHD IPS display. No external monitor/TV was reported. - Operating System: Windows 11 Home Single...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-01T17:41:02Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...g to NVIDIA driver version 621.01 through the NVIDIA App. NVIDIA driver version 617.42 is working correctly and does not show the graphical artifacting issue. This ap...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3632159
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632159
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '[Bug report] Star Citizen crashes (0xC0000005) on a mixed AMD + NVIDIA system with every NVIDIA driver 600+ – 596.36 works Summary On a PC where Star Citizen runs on an AMD RX 9070 XT and an NVIDIA RTX card is installed as a second GPU (no display, compute only), the game...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-10-31T22:51:58Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...ng sessions) 610.88: installed automatically by Windows, not tested in game 617.42: crash 621.01: crash (even though its notes list a Star Citizen Vulkan fix [6...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3631979
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631979
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'Specs CPU: Intel Core i5-12400f GPU: MSI RTX 5060 Ti16GB Mainboard: Asus Prime H610M-A D4 RAM: 32 GB DDR4 @ 3200Mhz Win 11 26H2 with newest updates Monitor: AOC Q26G2S/EU GSYNC compatible @user Hz I get random frame stutters in CS 2 (especially when doing faster mouse...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-10-30T09:40:56Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: performance or stutter
+  workflow_area: performance
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...PS stay the same. Probably micro-stutters. Playing with GSYNC. Reverted back to 617.42 and everything is stable as it should be. @user staff: could this be due to usi...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3632284
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632284
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: I can play anything I want on my rig currently. I know the i5 12400f isnt the newest or fastest but it does what it does for my needs. And since I dont have the problems with 617.42 I suppose its a driver error.
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-02T13:28:54Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...but it does what it does for my needs. And since I dont have the problems with 617.42 I suppose its a driver error.'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3631956
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631956
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: The game devs of Phantom Blade Zero recommend to not use this driver and instead go back to 617.42. "Nvidia latest 621.01 driver was discovered to have instability issues and the Devs recommend the previous driver 617.42 which was found to be the most ideal".
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-10-30T02:52:40Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...s of Phantom Blade Zero recommend to not use this driver and instead go back to 617.42. "Nvidia latest 621.01 driver was discovered to have instability issues and the...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3633156
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3633156
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: I was surprised to read this, as I did same. Clean install 617.42 and all will be good. I tried Newest Game Ready and Studio both Clean Install on Multi Monitor, Black Screened after a bit.
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-09T11:47:37Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: I was surprised to read this, as I did same. Clean install 617.42 and all will be good. I tried Newest Game Ready and Studio both Clean Install o...
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3631922
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3631922
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '**RTX 5070 Laptop GPU: freezes, LiveKernelEvent 117/141 and VIDEO_TDR_FAILURE 116 on driver 621.01** **System** - Lenovo Legion 5 15IAX10, type 83F0 - Intel Core Ultra 9 275HX - NVIDIA GeForce RTX 5070 Laptop GPU, 8GB - 32GB RAM - Windows 11 Pro, build 26200.9711 - BIOS...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-10-29T19:04:38Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: '...hether new kernel timeouts occurred on that version. - Currently switching to **617.42** for comparison. Results pending. - Brave also developed a separate startup-cl...'
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3632722
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632722
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: Same on my 4090... (617.42 was fine).
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-05T15:17:29Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: Same on my 4090... (617.42 was fine).
+- id: nvidia-studio-driver-617-42-nvidia-forum-comment-3634840
+  product_id: nvidia-studio-driver
+  update_version: '617.42'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634840
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: I installed 617.42 Studio Driver and it seems ok. No constant io writes happening.
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-20T14:17:29Z'
+  target_release_date: '2026-10-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '617.42'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: version_role_working
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '617.42'
+  matched_field: report_text
+  matched_context: I installed 617.42 Studio Driver and it seems ok. No constant io writes happening.
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3634862
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634862
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: 'REPORT GPU: RTX 2050 (notebook) CPU: Intel i5-12450H, Driver 7084 and 4146 MSI Katana 17 B12UCX Windows 11 (26300.9711) Issue occurred on: 610.78 (OEM/manufacturer driver), and all NVIDIA versions 610.xx, 616.xx, 621.xx that I have installed. Affected games: Genshin Impact,...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-20T16:45:27Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: power or thermal limit
+  workflow_area: power and thermals
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...ies, the CPU temperature frequently spiked up to 85 degrees Celsius. In version 616.92, heavy disk writes are observed from the "Nvidia.container" process, loading th...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3633489
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...0Z. Please investigate alongside the existing reports involving drivers 616.64, 616.92 and 617.42.'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3633631
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3633631
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'GPU: MSI RTX 4080 Super Suprim X Motherboard: MSI X870E Carbon WiFi CPU: AMD Ryzen 9 9950X3D RAM: 64GB G.Skill Flare X5 DDR5 System Drive: 2GB Samsung 9100 Pro NVMe Monitor: Alienwear AW3425DW 3440x1440 OS: Windows 11 Pro 25H2 After updating from NVIDIA driver 616.92 to...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-13T00:01:08Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...r AW3425DW 3440x1440 OS: Windows 11 Pro 25H2 After updating from NVIDIA driver 616.92 to 621.14, both Forza Motorsport and Forza Horizon 6, which previously worked n...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3634110
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3634110
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Hi,Reproducible hard crashes (instant reboot, Kernel-Power 41) on a dual-RTX 5060 Ti desktop (MSI cards). The signature is byte-identical on every crash: Bugcheck 0x00000113 (0x00000019, 0x00000002, 0x000010DE, 0x00002D04) = VIDEO_DXGKRNL_FATAL_ERROR, subtype 0x19...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-15T03:02:20Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...EN_10DE&DEV_2D04&SUBSYS_53511462), vBIOS 98.06.4e.00.8f- Same signature seen on 616.92 and 621.14 (and earlier). I also reported this in the 621.24 thread; I updated...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3627407
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3627407
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Title: RTX 3060 Laptop — 0x116 VIDEO_TDR_FAILURE + 0x50 in nvlddmkm.sys (regression since 616.92, also on 617.14) System: - Dell G15 5511 - NVIDIA GeForce RTX 3060 Laptop GPU (hybrid with Intel UHD Graphics) - Windows 10 Home Single Language, 10.0.26200, BIOS 1.44.0 - RAM:...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-29T19:54:15Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...3060 Laptop — 0x116 VIDEO_TDR_FAILURE + 0x50 in nvlddmkm.sys (regression since 616.92, also on 617.14) System: - Dell G15 5511 - NVIDIA GeForce RTX 3060 Laptop GPU...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3626225
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626225
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: '[Bug Report] HITMAN WOA CTD with Exception 0x80000003 - regression between 616.64 and 616.92 GPU: ASUS ROG Strix GeForce RTX 4090 24GB CPU: AMD Ryzen 9 9950X3D2 Display Configuration: AOC AGON Pro AG274UXP 4K (DisplayPort) Operating System: Windows 11 Pro 64-bit (Build 26100)...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-22T05:37:52Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...eport] HITMAN WOA CTD with Exception 0x80000003 - regression between 616.64 and 616.92 GPU: ASUS ROG Strix GeForce RTX 4090 24GB CPU: AMD Ryzen 9 9950X3D2 Display Co...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3626224
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626224
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: '[Bug Report] DWM crashes on exclusive fullscreen transition (dwmcore.dll+0xd68e8, 0x889800d3) - regression from R550 to R555, still present in 616.92 SUMMARY - Entering exclusive fullscreen kills dwm.exe within 2-5 seconds. - dwmcore.dll receives DXGI_ERROR_DEVICE_REMOVED from...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-22T05:23:03Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_both_named
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...mcore.dll+0xd68e8, 0x889800d3) - regression from R550 to R555, still present in 616.92 SUMMARY - Entering exclusive fullscreen kills dwm.exe within 2-5 seconds. - dw...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3626182
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626182
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Chrome hardware acceleration causing stuttering and freezing in video players while using an RTX 5090 with 616.92. System: CPU: AMD Ryzen 9 9950x3d GPU: NVIDIA GeForce RTX 5090 OS: Windows 11 [26200.9457] NVIDIA driver: 616.92 Chrome: 153.0.8010.53 Issue: With Chrome hardware...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-21T18:56:37Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...n causing stuttering and freezing in video players while using an RTX 5090 with 616.92. System: CPU: AMD Ryzen 9 9950x3d GPU: NVIDIA GeForce RTX 5090 OS: Windows 11...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3626180
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626180
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Summary: Forza Horizon 6 crashes (game error FHE01, sometimes also FHC video card crash) when DLSS Frame Generation and G-SYNC are both enabled on an RTX 5060 Laptop GPU. Stable when either one is turned off. System: - Laptop: Lenovo LOQ 15IRX10 (83JE), BIOS R3CN44WW - CPU:...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-21T18:11:09Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...GPU, 8 GB - RAM: 16 GB DDR5 - OS: Windows 11 Home 25H2, build 26200 - Driver: [616.92 – confirm in NVIDIA App], clean install - Display: built-in 15.6" 1920x1080 144...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3626177
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626177
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Summary: Forza Horizon 6 crashes (game error FHE01, sometimes also FHC video card crash) when DLSS Frame Generation and G-SYNC are both enabled on an RTX 5060 Laptop GPU. Stable when either one is turned off. System: - Laptop: Lenovo LOQ 15IRX10 (83JE), BIOS R3CN44WW - CPU:...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-21T18:09:14Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...GPU, 8 GB - RAM: 16 GB DDR5 - OS: Windows 11 Home 25H2, build 26200 - Driver: [616.92 – confirm in NVIDIA App], clean install - Display: built-in 15.6" 1920x1080 144...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3626164
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626164
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'I found a reproducible input bug involving NVIDIA LocalSystem Container. System: Windows 11, build 26200.9457 NVIDIA GeForce RTX 4060 Ti NVIDIA driver 616.92 Keychron keyboard, USB VID/PID 3434:0E20 US English keyboard layout The ] key works normally at the Windows login...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-21T13:59:15Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...System: Windows 11, build 26200.9457 NVIDIA GeForce RTX 4060 Ti NVIDIA driver 616.92 Keychron keyboard, USB VID/PID 3434:0E20 US English keyboard layout The ] key...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3626130
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626130
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: '[616.92] HDMI audio cuts off after silence – regression in HD Audio Driver 1.4.6.3 GPU: GeForce RTX 5070 Ti CPU: AMD Ryzen 7 9800X3D Display Configuration: RTX 5070 Ti → HDMI → Samsung S90D TV → HDMI eARC → OREI HDA-927 eARC audio extractor → HDMI → Denon AVR-X1200W The RTX...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-21T06:22:46Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '[616.92] HDMI audio cuts off after silence – regression in HD Audio Driver 1.4.6.3 GPU...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3633352
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3633352
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: I am experiencing the same issue and also had to roll back to driver version 610.88 / HD Audio 1.4.5.7. The problem first appeared after upgrading to driver version 616.92, coinciding with the NVIDIA HD Audio driver update to version 1.4.6.3. The issue has persisted across...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-11T01:29:19Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...HD Audio 1.4.5.7. The problem first appeared after upgrading to driver version 616.92, coinciding with the NVIDIA HD Audio driver update to version 1.4.6.3. The issu...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3626012
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626012
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'GPU: GIGABYTE GeForce RTX 5090 (subsystem 1458:416E), 32 GB GDDR7, VBIOS 98.02.2e.00.c9 CPU: Intel Core Ultra 9 285K (24C/24T) Other: Gigabyte Z890 AORUS MASTER, 64 GB DDR5-6000 (2×32 GB Team Group UD5-6000) Display Configuration: - ASUS ROG Swift PG27AQWP-W — DisplayPort...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-20T12:05:51Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...ashed while exiting the game - 2026-09-19 — driver 616.64 - 2026-09-20 — driver 616.92, crashed immediately on game launch Additionally, on 2026-09-17 the system ha...'
+- id: nvidia-studio-driver-616-92-nvidia-forum-comment-3625959
+  product_id: nvidia-studio-driver
+  update_version: '616.92'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3625959
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'RTX 5090 Laptop (MSI Raider A18 HX A9WJG), Windows 11 25H2, driver 610.88. Follow-up to my report in the 610.88 thread (comment 3624673). Same bugcheck, parameters byte-identical every time, now 9 times in 48 days plus one GPU drop-off-bus: 0x113 VIDEO_DXGKRNL_FATAL_ERROR...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-19T15:24:36Z'
+  target_release_date: '2026-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.92'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.92'
+  matched_field: report_text
+  matched_context: '...tall. Still on 610.88 because 616.56 caused colour flicker on this panel. Does 616.92 (or a hotfix) change anything for 0x19 deferred-destruction crashes on Blackwel...'
+- id: nvidia-studio-driver-616-56-nvidia-forum-comment-3633489
+  product_id: nvidia-studio-driver
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...d 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56 Issue: With newer NVIDIA drivers, Windows becomes unresponsive and the monitor...'
+- id: nvidia-studio-driver-616-56-nvidia-forum-comment-3633347
+  product_id: nvidia-studio-driver
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633347
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Follow-up to my report in the 621.01 thread (external monitor washed out). Still present in 621.14, now narrowed down with PresentMon. System: MSI Stealth 16 AI Studio A1VFG, RTX 4060 Laptop GPU (hybrid mode), Windows 11 Pro 25H2 (26200.9711). External monitor MSI G244F E2,...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-10T23:31:59Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...Control Panel reference mode, output range/format (AVI InfoFrame identical with 616.56). Same machine with 617.42 and ACM OFF on that monitor: no washout at all, inc...'
+- id: nvidia-studio-driver-616-56-nvidia-forum-comment-3632149
+  product_id: nvidia-studio-driver
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632149
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: 'External HDMI monitor washed out (lifted blacks/midtones) after 621.01 - fixed by rolling back to 616.56 System: MSI Stealth 16 (MS-15F4), Intel Core Ultra 9 + RTX 4060 Laptop GPU (both displays driven by the RTX 4060), Windows 11 Pro 25H2 (build 26200). Updated from 616.56 to...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-10-31T19:28:54Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...tor washed out (lifted blacks/midtones) after 621.01 - fixed by rolling back to 616.56 System: MSI Stealth 16 (MS-15F4), Intel Core Ultra 9 + RTX 4060 Laptop GPU (bo...'
+- id: nvidia-studio-driver-616-56-nvidia-forum-comment-3625959
+  product_id: nvidia-studio-driver
+  update_version: '616.56'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3625959
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'RTX 5090 Laptop (MSI Raider A18 HX A9WJG), Windows 11 25H2, driver 610.88. Follow-up to my report in the 610.88 thread (comment 3624673). Same bugcheck, parameters byte-identical every time, now 9 times in 48 days plus one GPU drop-off-bus: 0x113 VIDEO_DXGKRNL_FATAL_ERROR...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-19T15:24:36Z'
+  target_release_date: '2026-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '616.56'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '616.56'
+  matched_field: report_text
+  matched_context: '...(51 C), WHEA/AER (zero events), clean driver install. Still on 610.88 because 616.56 caused colour flicker on this panel. Does 616.92 (or a hotfix) change anything...'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3634719
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592767/geforce-grd-62124-feedback-thread-released-111226/?comment=3634719
+  parent_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_title: GeForce GRD 621.24 Feedback Thread (Released 11/12/26)
+  report_text_excerpt: agreed, i was happy with 581.94 until stupid windows updated me to 610.88
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-19T12:40:58Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: agreed, i was happy with 581.94 until stupid windows updated me to 610.88
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633489
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633489
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: '[link] Same issue as described then, but with GRD 621.14 For convenience: (edited for my system) GPU: NVIDIA GeForce RTX 4090 Monitor: BenQ XL2730Z Operating system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-12T08:47:31Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: black screen or display loss
+  workflow_area: display output
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...ng system: Windows 11 Pro 26H2, build 26300.9974 Last known-good driver: NVIDIA 610.88 First failing driver: NVIDIA 616.56 Issue: With newer NVIDIA drivers, Windows...'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633451
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633451
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: Gigabyte GeForce RTX 4080 (16 GB) CPU: AMD Ryzen 7 5800X3D (Gigabyte B550 AORUS ELITE V2, BIOS F20a / AGESA 1.2.0.11), 16 GB DDR4-3333 (XMP). Issue also reproduced with Curve Optimizer disabled (stock CPU). Display Configuration: ASUS ROG Swift PG27UCDM (3840x2160, 240...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-11T22:48:39Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...26H2, build 26300.9974 (Insider) Driver Regression: Yes. Last working driver: 610.88. Broken: 621.14 (clean install with DDU in both cases). Rolling back to 610.88...'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633448
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633448
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'Display calibration raises black by 1-2 levels on driver 621.14 (contrast 598:1 vs 963:1 on driver 591.74, same calibration) TL;DR: On drivers after 591.74, while a display calibration (gamma ramp / video LUT) is loaded, black and near-black are shown 1-2 levels too bright....'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-11T22:09:35Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_is_other
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: windows
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...Yes. Last good driver: 591.74. Bad: 621.14 (full A/B test below); also seen on 610.88 and 621.01. Not tested: 591.86, 596.21, 596.36, 610.47. All Game Ready drivers,...'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633148
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633148
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'GPU: RTX 5060 Ti 16GB CPU: Core i7-11700F Display: TCL 25G64 (DisplayPort, 1920x1080, 144Hz) Operating System: Windows 11 Pro (26H2) Driver Regression: 621.14 NDIVIA Studio Driver Application: Reflections: an Unreal Engine Real-Time Ray Tracing Demonstration Issue: When...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-09T10:29:40Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_version_environment_only
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...e case since the previous driver version (621.01). I am currently using version 610.88, with which the display appears correctly.'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633068
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633068
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: 'BOOT UP STILL BLACK SCREEN (CANT LOGIN) ON MY DOUGH 4K 144HZ MONITOR - TDRS ARE STILL THE CAUSE OF THIS SINCE AFTER 610.88. GPU: Zotac 5080 CPU: 7800x3d Display Configuration: Dough Spectrum 4k 144hz monitor on a display port connection. Does it on HDMI too. OS: Windows 11 64...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-08T16:14:31Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...IN) ON MY DOUGH 4K 144HZ MONITOR - TDRS ARE STILL THE CAUSE OF THIS SINCE AFTER 610.88. GPU: Zotac 5080 CPU: 7800x3d Display Configuration: Dough Spectrum 4k 144hz...'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633067
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592433/geforce-grd-62114-feedback-thread-released-11426/?comment=3633067
+  parent_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_title: GeForce GRD 621.14 Feedback Thread (Released 11/4/26)
+  report_text_excerpt: GPU RTX4080S CPU AMD Ryzen7 9800X3D OS Window11 621.14 make MH wilds flickering problem. I have to reversion to 610.88.
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-08T16:11:08Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...X3D OS Window11 621.14 make MH wilds flickering problem. I have to reversion to 610.88.'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3632159
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632159
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: '[Bug report] Star Citizen crashes (0xC0000005) on a mixed AMD + NVIDIA system with every NVIDIA driver 600+ – 596.36 works Summary On a PC where Star Citizen runs on an AMD RX 9070 XT and an NVIDIA RTX card is installed as a second GPU (no display, compute only), the game...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-10-31T22:51:58Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...ssion: yes. 596.36: OK (main menu and in game, tested twice, long sessions) 610.88: installed automatically by Windows, not tested in game 617.42: crash 621.0...'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3632019
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/591981/geforce-grd-62101-feedback-thread-released-102126/?comment=3632019
+  parent_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_title: GeForce GRD 621.01 Feedback Thread (Released 10/21/26)
+  report_text_excerpt: IM in the same boat. Ive had this since any driver after 610.88. And i have a 5080 btw.
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-10-30T17:04:27Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: IM in the same boat. Ive had this since any driver after 610.88. And i have a 5080 btw.
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3626225
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626225
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: '[Bug Report] HITMAN WOA CTD with Exception 0x80000003 - regression between 616.64 and 616.92 GPU: ASUS ROG Strix GeForce RTX 4090 24GB CPU: AMD Ryzen 9 9950X3D2 Display Configuration: AOC AGON Pro AG274UXP 4K (DisplayPort) Operating System: Windows 11 Pro 64-bit (Build 26100)...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-22T05:37:52Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...Yes. Issue is present on driver 616.92. Last working driver version is 616.64 (610.88 also verified fully working). Affected Applications/Games: HITMAN World of Assa...'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3626130
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626130
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: '[616.92] HDMI audio cuts off after silence – regression in HD Audio Driver 1.4.6.3 GPU: GeForce RTX 5070 Ti CPU: AMD Ryzen 7 9800X3D Display Configuration: RTX 5070 Ti → HDMI → Samsung S90D TV → HDMI eARC → OREI HDA-927 eARC audio extractor → HDMI → Denon AVR-X1200W The RTX...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-21T06:22:46Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: windows
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...64-bit, clean installation Driver Regression: Yes. Last known working driver: 610.88 NVIDIA High Definition Audio driver with 610.88: 1.4.5.2 Affected driver: 616....'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3634779
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3634779
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: Maybe the issue is with the driver itself. I installed the version 621.14 (HD Audio 1.4.6.6) and then rolled back the HD Audio driver to 1.4.5.7, through Windows properties, but the issue persisted. The only way to resolve is to install version 610.88 or older. I'm stuck in...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-20T03:23:02Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...erties, but the issue persisted. The only way to resolve is to install version 610.88 or older. I''m stuck in this version because this behavior is very annoying. Wh...'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633352
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3633352
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: I am experiencing the same issue and also had to roll back to driver version 610.88 / HD Audio 1.4.5.7. The problem first appeared after upgrading to driver version 616.92, coinciding with the NVIDIA HD Audio driver update to version 1.4.6.3. The issue has persisted across...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-11T01:29:19Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: I am experiencing the same issue and also had to roll back to driver version 610.88 / HD Audio 1.4.5.7. The problem first appeared after upgrading to driver versio...
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3626042
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626042
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: I'm using an RTX 3060 12GB. I'm currently using version 610.88 Can I update now? This had never happened before.. After installing the driver recently, due to a screen flickering issue I thought it might be because the graphics card had a problem I had it serviced, but it...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-20T16:51:30Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: I'm using an RTX 3060 12GB. I'm currently using version 610.88 Can I update now? This had never happened before.. After installing the driver...
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3633560
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3633560
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: I updated the driver, but due to screen flickering and other issues, I reinstalled it with 610.88.
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-12T18:00:55Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: flicker or wrong colors
+  workflow_area: rendering
+  platform: unknown
+  severity: medium
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...he driver, but due to screen flickering and other issues, I reinstalled it with 610.88.'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3632053
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3632053
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: what are you saying? currently using 610.88 and its the issue?
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-10-30T22:12:28Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: ''
+  workflow_area: ''
+  platform: unknown
+  severity: ''
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: what are you saying? currently using 610.88 and its the issue?
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3626021
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626021
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'Hello NVIDIA Team, I also have a problem with the recent driver version. GPU: ASUS RTX 5090 Astral OC CPU: AMD Ryzen 9 9950X3D Display Configuration: BenQ XL2730 (DisplayPort) and BenQ XL2411K (DisplayPort) Operating System: Windows 11 Pro 10.0.26200 Driver Regression: I don''t...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-20T13:14:17Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...when these problems started, but driver 619.92 definitely has the issue, while 610.88 does not. Affected Applications/Games: General system usage. When I tried to c...'
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3626782
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3626782
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: Same problem with 5070 TI, DDU then install of 617.14. (Crashes updating from 610.88). Working until I change refresh rate, system crash. 144hz change in windows settings or Nvidia control panel lead to system crash, 120 does not… I can also run custom resolution at 143hz…...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-25T01:08:05Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: unknown
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: Same problem with 5070 TI, DDU then install of 617.14. (Crashes updating from 610.88). Working until I change refresh rate, system crash. 144hz change in windows se...
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3625959
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/590373/geforce-grd-61692-feedback-thread-released-9926/?comment=3625959
+  parent_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_title: GeForce GRD 616.92 Feedback Thread (Released 9/9/26)
+  report_text_excerpt: 'RTX 5090 Laptop (MSI Raider A18 HX A9WJG), Windows 11 25H2, driver 610.88. Follow-up to my report in the 610.88 thread (comment 3624673). Same bugcheck, parameters byte-identical every time, now 9 times in 48 days plus one GPU drop-off-bus: 0x113 VIDEO_DXGKRNL_FATAL_ERROR...'
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-09-19T15:24:36Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: crash or driver reset
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: RTX 5090 Laptop (MSI Raider A18 HX A9WJG), Windows 11 25H2, driver 610.88. Follow-up to my report in the 610.88 thread (comment 3624673). Same bugcheck,...
+- id: nvidia-studio-driver-610-88-nvidia-forum-comment-3634324
+  product_id: nvidia-studio-driver
+  update_version: '610.88'
+  source_type: nvidia_forum_comment
+  source_name: NVIDIA GeForce forum (user reports)
+  source_url: https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/592907/continuous-writing-of-gigabytes-to-ssd-to-nvtopps-file-62124/?comment=3634324
+  parent_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_title: Continuous writing of gigabytes to SSD to nvtopps file, 621.24
+  report_text_excerpt: Same issue on my end. The nvlog.nvlgstg file itself is only ~14.5 mb, but it writes to it over and over and over. Clearly something is stuck in a loop and going very wrong, hopefully Nvidia can fix it? Until then, I'm reverting back to an older driver. (Windows 11 26H2, Asus...
+  captured_at: '2026-11-20T21:31:20Z'
+  source_date: '2026-11-16T22:25:00Z'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '610.88'
+  match_basis: exact_version_text
+  counted: false
+  exclusion_reason: driver_family_unassigned
+  issue_theme: excessive disk writes
+  workflow_area: storage
+  platform: windows
+  severity: high
+  sentiment: ''
+  source_weight: 1
+  matched_text: '610.88'
+  matched_field: report_text
+  matched_context: '...older driver. (Windows 11 26H2, Asus 4070 TI Super, 621.24 driver after using 610.88 where the problem did not show up)'
