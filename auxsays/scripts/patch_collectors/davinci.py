@@ -878,6 +878,50 @@ def version_aliases(version: str) -> list[str]:
     return deduped
 
 
+# AUX-117 (G67). Two methods read only the Blackmagic Design forum, and that forum refuses automated
+# requests. Measured over every method-health row committed from 2026-08-01 to 2026-11-19 (333
+# passes, 6,725 executions of each method): vendor_forum_search was blocked on 6,725 of 6,725, nearly
+# all by an AWS WAF challenge served in place of forum content; known_watchlist never had one
+# Blackmagic probe answer (its only `partial` results came from the Reddit watchlist URLs, which the
+# Reddit access policy has skipped since 2026-11-04). Together they sent about 161 refused requests
+# per pass. They are switched OFF, not deleted: the adapters below stay, unused, so the methods can be
+# restored if the forum starts answering automated requests.
+#
+# Switching them off does not make a page healthier. A `disabled` row is neither healthy nor failing
+# (lib/monitoring_health), so a page whose only working community source is Creative COW now reads
+# INSUFFICIENT COVERAGE -- a shortfall the blocked rows were hiding behind MONITORING DEGRADED.
+REFUSED_SOURCE_DISABLED_METHODS = frozenset({"known_watchlist", "vendor_forum_search"})
+REFUSED_SOURCE_DISABLED_REASON = "blackmagic_forum_refuses_automated_requests"
+REFUSED_SOURCE_DISABLED_NOTE = (
+    "Not run. The Blackmagic Design forum has refused AUXSAYS's automated requests since at least "
+    "2026-08-01: it returns an access challenge (AWS WAF) instead of forum content. This method is "
+    "switched off rather than being refused on every run. Nothing it could not read was counted as a "
+    "report. It can be restored if the forum starts answering automated requests."
+)
+
+
+def refused_source_disabled_row(record: PatchRecord, method_id: str, source_type: str,
+                                 captured_at: str) -> dict[str, Any]:
+    """The health row of a method switched off because its source refuses automated requests.
+
+    `disabled` with zero counters and the refusal as its reason. `last_run` is the time this record was
+    walked: the record WAS reached, and the validator requires a timestamp on every row except a
+    Reddit access-policy row. Built here, never through `method_status`."""
+    return method_health_row(
+        product_id=PRODUCT_ID,
+        update_version=record.update_version,
+        method_id=method_id,
+        source_type=source_type,
+        status="disabled",
+        candidates_found=0,
+        accepted_reports=0,
+        rejected_reports=0,
+        blocked_reason=REFUSED_SOURCE_DISABLED_REASON,
+        last_run=captured_at,
+        notes=REFUSED_SOURCE_DISABLED_NOTE,
+    )
+
+
 def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     captured_at = utc_now()
     accepted: list[dict[str, Any]] = []
@@ -895,6 +939,15 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
 
     reddit_unauthorised = not reddit_access_authorized()
     for method_id, source_type, method in method_stack:
+        if method_id in REFUSED_SOURCE_DISABLED_METHODS:
+            # AUX-117: the Blackmagic forum refuses automated requests, so these two methods are
+            # switched off. NOTHING is requested -- the adapter is not called at all, unlike the
+            # web_search branch below, which labels its row `disabled` after calling its adapter.
+            # The row is built by its own function, never through `method_status`: that returns
+            # `no_results` (healthy) for a method with no candidates and no errors, which would
+            # publish a source nobody reads as a working one.
+            health.append(refused_source_disabled_row(record, method_id, source_type, captured_at))
+            continue
         if method_id == "reddit_search" and reddit_unauthorised:
             # AUX D2: no written Reddit data-access authorisation, so nothing is requested. The row
             # says `disabled` for POLICY, never no_results/success, and carries no last_run of its
